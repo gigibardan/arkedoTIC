@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { School, BookOpen, Clock, Star, Award, Sparkles, User, ArrowRight, CheckCircle2, Lock } from 'lucide-react';
+import { School, BookOpen, Clock, Star, Award, Sparkles, User, ArrowRight, CheckCircle2, Lock, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 
@@ -9,6 +9,7 @@ interface CoursesCatalogProps {
   onStartLesson1: () => void;
   currentLevel: number;
   score: number;
+  onOpenTeacherPortal?: () => void;
 }
 
 export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
@@ -17,6 +18,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onStartLesson1,
   currentLevel,
   score,
+  onOpenTeacherPortal,
 }) => {
   const { t } = useLanguage();
   const [nameInput, setNameInput] = useState<string>(studentName);
@@ -363,6 +365,22 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Teacher Area Discrete Portal Link */}
+      {onOpenTeacherPortal && (
+        <div className="pt-4 border-t border-slate-800/80 flex justify-end">
+          <button
+            onClick={() => {
+              sounds.playClick();
+              onOpenTeacherPortal();
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-950/80 hover:bg-slate-850 text-slate-400 hover:text-amber-300 border border-slate-800 hover:border-amber-500/40 text-xs font-mono font-semibold transition cursor-pointer"
+          >
+            <ShieldCheck className="w-4 h-4 text-amber-400" />
+            <span>{t.teacherPortalNav} (/profesor)</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

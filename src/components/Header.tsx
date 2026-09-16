@@ -8,11 +8,12 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson';
+  currentView: 'catalog' | 'lesson' | 'teacher';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
   onEditStudentName?: () => void;
+  onNavigateToTeacher?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -25,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   studentName,
   elapsedSeconds,
   onEditStudentName,
+  onNavigateToTeacher,
 }) => {
   const { lang, setLang, t } = useLanguage();
 
@@ -44,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 sm:gap-4">
         {/* Left Side: Back button or Logo */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {currentView === 'lesson' ? (
+          {currentView !== 'catalog' ? (
             <button
               onClick={() => {
                 sounds.playClick();
@@ -72,7 +74,11 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <h1 className="text-sm sm:text-lg font-black text-white tracking-wide font-heading truncate">
-              {currentView === 'lesson' ? t.appTitle : t.catalogTitle}
+              {currentView === 'lesson'
+                ? t.appTitle
+                : currentView === 'teacher'
+                ? t.teacherPortalNav
+                : t.catalogTitle}
             </h1>
           </div>
         </div>

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { Award, Printer, RotateCcw, Star, Clock } from 'lucide-react';
+import { Award, Printer, RotateCcw, Star, Clock, CheckCircle2 } from 'lucide-react';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { logStudentResult } from '../lib/resultsService';
 
 interface VictoryScreenProps {
   score: number;
@@ -23,6 +24,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const [studentName, setStudentName] = useState<string>(
     initialStudentName.trim() || t.vDiplomaDefaultName
   );
+  const [isLoggedToFirebase, setIsLoggedToFirebase] = useState<boolean>(false);
+  const hasLoggedRef = useRef<boolean>(false);
 
   const formatCompletionTime = (sec: number) => {
     const mins = Math.floor(sec / 60);
@@ -33,6 +36,24 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   useEffect(() => {
     sounds.playVictory();
+    
+    // Automatically log results to Firebase Firestore
+    if (!hasLoggedRef.current) {
+      hasLoggedRef.current = true;
+      const finalName = initialStudentName.trim() || studentName.trim() || 'Elev Anonim';
+      logStudentResult(
+        finalName,
+        'Misiunea Arborele Secret (Manual pag. 27-30)',
+        score,
+        maxScore,
+        elapsedSeconds
+      ).then((docId) => {
+        if (docId) {
+          setIsLoggedToFirebase(true);
+        }
+      });
+    }
+
     // Launch festive confetti
     try {
       confetti({
@@ -117,6 +138,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
             </div>
           </div>
         )}
+      </div>
+
+      {/* Cloud Sync Status */}
+      <div className="flex justify-center mb-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-slate-900/80 border border-emerald-500/40 text-xs font-mono text-emerald-300 shadow-sm">
+          <CheckCircle2 className={`w-4 h-4 text-emerald-400 ${isLoggedToFirebase ? '' : 'animate-spin'}`} />
+          <span>{isLoggedToFirebase ? t.vCloudSaved : t.vCloudSaving}</span>
+        </div>
       </div>
 
       {/* Autoevaluation from manual page 30 */}

@@ -10,12 +10,19 @@ import { Level3_MoveShortcuts } from './components/Level3_MoveShortcuts';
 import { Level4_CopyRenameProps } from './components/Level4_CopyRenameProps';
 import { Level5_RecycleBin } from './components/Level5_RecycleBin';
 import { VictoryScreen } from './components/VictoryScreen';
+import { TeacherPortal } from './components/TeacherPortal';
 import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
 
 function GameContent() {
   const { t } = useLanguage();
-  const [view, setView] = useState<'catalog' | 'lesson'>('catalog');
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher'>(() => {
+    // Check if initial URL or hash points to /profesor
+    if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
+      return 'teacher';
+    }
+    return 'catalog';
+  });
   const [currentLevel, setCurrentLevel] = useState<GameLevel>(1);
   const [score, setScore] = useState<number>(0);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -62,6 +69,30 @@ function GameContent() {
       if (interval) clearInterval(interval);
     };
   }, [isTimerRunning, view, currentLevel]);
+
+  // Listen to browser navigation popstate or hash changes for /profesor
+  useEffect(() => {
+    const handleUrlChange = () => {
+      if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
+        setView('teacher');
+      }
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
+
+  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher') => {
+    setView(newView);
+    if (newView === 'teacher') {
+      window.history.pushState({}, '', '/profesor');
+    } else if (newView === 'catalog') {
+      window.history.pushState({}, '', '/');
+    }
+  };
 
   const handleToggleSound = () => {
     const newState = !soundEnabled;
@@ -131,21 +162,25 @@ function GameContent() {
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
         currentView={view}
-        onNavigateToCatalog={() => setView('catalog')}
+        onNavigateToCatalog={() => navigateToView('catalog')}
         studentName={studentName}
         elapsedSeconds={elapsedSeconds}
-        onEditStudentName={() => setView('catalog')}
+        onEditStudentName={() => navigateToView('catalog')}
+        onNavigateToTeacher={() => navigateToView('teacher')}
       />
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
-        {view === 'catalog' ? (
+        {view === 'teacher' ? (
+          <TeacherPortal onBackToHome={() => navigateToView('catalog')} />
+        ) : view === 'catalog' ? (
           <CoursesCatalog
             studentName={studentName}
             onSetStudentName={handleSetStudentName}
             onStartLesson1={handleStartLesson1}
             currentLevel={currentLevel}
             score={score}
+            onOpenTeacherPortal={() => navigateToView('teacher')}
           />
         ) : (
           <>
