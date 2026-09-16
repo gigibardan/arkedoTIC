@@ -44,8 +44,8 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const getLessonTitle = () => {
-    if (missionId === 'hardware') return 'Modulul 1: Sisteme de calcul & Hardware';
-    if (missionId === 'files') return 'Modulul 2: Arborele Secret de Fișiere';
+    if (missionId === 'hardware') return t.hwCourseTitle;
+    if (missionId === 'files') return t.lesson1CardTitle;
     return t.appTitle;
   };
 
@@ -65,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <ArrowLeft className="w-4 h-4 text-emerald-400" />
               <span className="hidden sm:inline">{t.backToCourses}</span>
-              <span className="inline sm:hidden text-[11px]">Cursuri</span>
+              <span className="inline sm:hidden text-[11px]">{lang === 'ro' ? 'Cursuri' : 'Courses'}</span>
             </button>
           ) : (
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-teal-600 via-emerald-500 to-cyan-400 flex items-center justify-center text-lg sm:text-2xl shadow-lg shadow-teal-500/20 ring-2 ring-emerald-400/30 shrink-0">

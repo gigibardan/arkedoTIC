@@ -17,12 +17,15 @@ import {
 } from 'lucide-react';
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface FLevel2Props {
   onComplete: () => void;
 }
 
 export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
+  const { t, lang } = useLanguage();
+
   // Task 1: Extension Matching
   const [matchedExtensions, setMatchedExtensions] = useState<Record<string, 'text' | 'image' | 'audio' | 'video'>>({});
   
@@ -42,12 +45,12 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
   // Task 1 Logic
   const extensionsList = [
-    { ext: '.txt', category: 'text', label: 'Document text simplu' },
-    { ext: '.jpg', category: 'image', label: 'Fotografie / Imagine' },
-    { ext: '.mp3', category: 'audio', label: 'Fișier audio (muzică)' },
-    { ext: '.mp4', category: 'video', label: 'Fișier video (film)' },
-    { ext: '.png', category: 'image', label: 'Grafică / Imagine fără fundal' },
-    { ext: '.wav', category: 'audio', label: 'Înregistrare de sunet' },
+    { ext: '.txt', category: 'text', label: lang === 'en' ? 'Plain text document' : 'Document text simplu' },
+    { ext: '.jpg', category: 'image', label: lang === 'en' ? 'Photograph / Image' : 'Fotografie / Imagine' },
+    { ext: '.mp3', category: 'audio', label: lang === 'en' ? 'Audio file (music)' : 'Fișier audio (muzică)' },
+    { ext: '.mp4', category: 'video', label: lang === 'en' ? 'Video file (movie)' : 'Fișier video (film)' },
+    { ext: '.png', category: 'image', label: lang === 'en' ? 'Graphics / Transparent image' : 'Grafică / Imagine fără fundal' },
+    { ext: '.wav', category: 'audio', label: lang === 'en' ? 'Sound recording' : 'Înregistrare de sunet' },
   ];
 
   const handleMatchExt = (ext: string, cat: 'text' | 'image' | 'audio' | 'video') => {
@@ -71,11 +74,36 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
   // Task 2 Names
   const filenameTestItems = [
-    { id: '1', name: 'Proiect_TIC.docx', isValid: true, reason: 'Corect! Folosește doar litere și caracterul _.' },
-    { id: '2', name: 'Nota:10.txt', isValid: false, reason: 'Interzis! Conține caracterul „:”.' },
-    { id: '3', name: 'Vara*2026.jpg', isValid: false, reason: 'Interzis! Conține caracterul „*”.' },
-    { id: '4', name: 'Muzica/Rock.mp3', isValid: false, reason: 'Interzis! Conține caracterul „/”.' },
-    { id: '5', name: 'Referat Istorie.txt', isValid: true, reason: 'Corect! Spațiile sunt permise în Windows.' },
+    {
+      id: '1',
+      name: 'Proiect_TIC.docx',
+      isValid: true,
+      reason: lang === 'en' ? 'Valid! Uses only letters and the _ character.' : 'Corect! Folosește doar litere și caracterul _.'
+    },
+    {
+      id: '2',
+      name: 'Nota:10.txt',
+      isValid: false,
+      reason: lang === 'en' ? 'Forbidden! Contains the ":" character.' : 'Interzis! Conține caracterul „:”.'
+    },
+    {
+      id: '3',
+      name: 'Vara*2026.jpg',
+      isValid: false,
+      reason: lang === 'en' ? 'Forbidden! Contains the "*" character.' : 'Interzis! Conține caracterul „*”.'
+    },
+    {
+      id: '4',
+      name: 'Muzica/Rock.mp3',
+      isValid: false,
+      reason: lang === 'en' ? 'Forbidden! Contains the "/" character.' : 'Interzis! Conține caracterul „/”.'
+    },
+    {
+      id: '5',
+      name: 'Referat Istorie.txt',
+      isValid: true,
+      reason: lang === 'en' ? 'Valid! Spaces are allowed in Windows.' : 'Corect! Spațiile sunt permise în Windows.'
+    },
   ];
 
   const handleInspectName = (id: string, userChoice: boolean) => {
@@ -137,13 +165,15 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-5">
         <div>
           <span className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs uppercase tracking-wider border border-emerald-500/30">
-            Nivelul 2 din 7 • Memorarea & Organizarea Datelor
+            {lang === 'en' ? 'Level 2 of 7 • Data Storage & Organization' : 'Nivelul 2 din 7 • Memorarea & Organizarea Datelor'}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-white mt-1.5 font-heading">
-            Fișiere, Extensii & Calea C:\ (Path) 📑
+            {lang === 'en' ? 'Files, Extensions & The C:\\ Path 📑' : 'Fișiere, Extensii & Calea C:\\ (Path) 📑'}
           </h2>
           <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
-            Conform manualului (pag. 25–26), datele se stochează în <strong>fișiere</strong> grupate în <strong>foldere</strong> (directoare). Învață regula extensiilor, caracterele interzise și construiește calea completă către fișier folosind bara oblică inversă (\)!
+            {lang === 'en'
+              ? 'According to the textbook (p. 25–26), data is stored in files organized within folders (directories). Learn extension rules, forbidden characters, and assemble full file paths using the backslash (\\) character!'
+              : 'Conform manualului (pag. 25–26), datele se stochează în fișiere grupate în foldere (directoare). Învață regula extensiilor, caracterele interzise și construiește calea completă către fișier folosind bara oblică inversă (\\)!'}
           </p>
         </div>
         <div className="hidden sm:flex text-4xl p-3 bg-slate-900/60 rounded-2xl border border-slate-700 text-teal-400">
@@ -153,10 +183,12 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
       {/* Teacher Tip from Textbook (p. 25-26) */}
       <TeacherTip
-        title="Formula secretă a unui fișier și regula caracterelor interzise"
-        tip="Numele unui fișier are structura: nume_propriu-zis . extensie (ex: jazz.mp3). Numele poate avea maxim 255 de caractere și NU poate conține cele 9 caractere rezervate: \ / : * ? ” < > | . Calea către un fișier pornește din rădăcină (C:\) și separă fiecare folder prin caracterul backslash (\)!"
+        title={lang === 'en' ? 'File naming formula and forbidden characters rule' : 'Formula secretă a unui fișier și regula caracterelor interzise'}
+        tip={lang === 'en'
+          ? 'A file name has the structure: name . extension (e.g., jazz.mp3). The name can have up to 255 characters and CANNOT contain any of the 9 reserved characters: \\ / : * ? " < > | . The path starts at root (C:\\) and separates each folder with a backslash (\\)!'
+          : 'Numele unui fișier are structura: nume_propriu-zis . extensie (ex: jazz.mp3). Numele poate avea maxim 255 de caractere și NU poate conține cele 9 caractere rezervate: \\ / : * ? ” < > | . Calea către un fișier pornește din rădăcină (C:\\) și separă fiecare folder prin caracterul backslash (\\)!'}
         bookPage="25–26"
-        extraAdvice="Un folder poate conține zeci de fișiere, însă un fișier NU poate conține niciodată un folder!"
+        extraAdvice={lang === 'en' ? 'A folder can hold dozens of files, but a file can NEVER contain a folder!' : 'Un folder poate conține zeci de fișiere, însă un fișier NU poate conține niciodată un folder!'}
       />
 
       {/* 4 Interactive Modules */}
@@ -172,22 +204,24 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 1
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Inspectorul de Extensii & Tipuri de Date (pag. 25)
+                {lang === 'en' ? 'Extensions & Data Types Inspector (p. 25)' : 'Inspectorul de Extensii & Tipuri de Date (pag. 25)'}
               </h3>
             </div>
             {isTask1Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Toate extensiile identificate!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'All extensions identified!' : 'Toate extensiile identificate!'}
               </span>
             ) : (
               <span className="text-xs text-slate-400 font-mono">
-                {Object.keys(matchedExtensions).length} / 6 asociate
+                {Object.keys(matchedExtensions).length} / 6 {lang === 'en' ? 'matched' : 'asociate'}
               </span>
             )}
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 mb-4">
-            Extensia din spatele punctului indică sistemului de operare tipul de date. Asociază fiecare extensie la categoria corespunzătoare din manual:
+            {lang === 'en'
+              ? 'The extension after the dot tells the OS the file format. Match each extension to its correct category:'
+              : 'Extensia din spatele punctului indică sistemului de operare tipul de date. Asociază fiecare extensie la categoria corespunzătoare din manual:'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -208,7 +242,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     </span>
                     {matched && (
                       <span className="text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-md flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> Corect
+                        <CheckCircle2 className="w-3 h-3" /> {lang === 'en' ? 'Correct' : 'Corect'}
                       </span>
                     )}
                   </div>
@@ -235,7 +269,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                           : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                       }`}
                     >
-                      <Image className="w-3 h-3 text-emerald-400" /> Imagine
+                      <Image className="w-3 h-3 text-emerald-400" /> {lang === 'en' ? 'Image' : 'Imagine'}
                     </button>
 
                     <button
@@ -276,20 +310,20 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 2
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Detectorul de Nume & Caractere Interzise (pag. 25)
+                {lang === 'en' ? 'File Names & Forbidden Characters Detector (p. 25)' : 'Detectorul de Nume & Caractere Interzise (pag. 25)'}
               </h3>
             </div>
             {isTask2Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Toate numele verificate!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'All names verified!' : 'Toate numele verificate!'}
               </span>
             ) : (
-              <span className="text-xs text-slate-400 font-mono">În evaluare</span>
+              <span className="text-xs text-slate-400 font-mono">{lang === 'en' ? 'Evaluating' : 'În evaluare'}</span>
             )}
           </div>
 
           <div className="bg-amber-950/30 border border-amber-500/40 rounded-xl p-3 mb-4 text-xs text-amber-200">
-            <strong>Reține regula de aur din manual (pag. 25):</strong> Numele unui fișier sau folder <strong>NU poate conține</strong> niciunul din cele 9 caractere rezervate:{' '}
+            <strong>{lang === 'en' ? 'Golden rule from textbook (p. 25):' : 'Reține regula de aur din manual (pag. 25):'}</strong> {lang === 'en' ? 'A file or folder name CANNOT contain any of the 9 reserved characters:' : 'Numele unui fișier sau folder NU poate conține niciunul din cele 9 caractere rezervate:'}{' '}
             <code className="bg-slate-950 px-2 py-0.5 rounded font-mono font-bold text-rose-400 text-sm">
               \ / : * ? " &lt; &gt; |
             </code>
@@ -323,7 +357,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       )}
                       {hasFailed && (
                         <div className="text-[11px] text-rose-400 font-sans mt-0.5">
-                          ✗ Reîncearcă! Amintește-ți caracterele interzise (\ / : * ? " &lt; &gt; |).
+                          {lang === 'en' ? '✗ Try again! Remember the forbidden characters (\\ / : * ? " < > |).' : '✗ Reîncearcă! Amintește-ți caracterele interzise (\\ / : * ? " < > |).'}
                         </div>
                       )}
                     </div>
@@ -338,7 +372,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                           : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
                       }`}
                     >
-                      ✓ Nume Valid
+                      {lang === 'en' ? '✓ Valid Name' : '✓ Nume Valid'}
                     </button>
 
                     <button
@@ -349,7 +383,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                           : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
                       }`}
                     >
-                      ✗ Conține Caractere Interzise
+                      {lang === 'en' ? '✗ Has Forbidden Chars' : '✗ Conține Caractere Interzise'}
                     </button>
                   </div>
                 </div>
@@ -368,20 +402,22 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 3
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Calea (Path) către fișier cu separatorul Backslash (\) (pag. 26 Fig. 2)
+                {lang === 'en' ? 'File Path & Backslash (\\) Separator (p. 26 Fig. 2)' : 'Calea (Path) către fișier cu separatorul Backslash (\\) (pag. 26 Fig. 2)'}
               </h3>
             </div>
             {isTask3Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Cale Corect Asamblată!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Path correctly assembled!' : 'Cale Corect Asamblată!'}
               </span>
             ) : (
-              <span className="text-xs text-slate-400 font-mono">În lucru</span>
+              <span className="text-xs text-slate-400 font-mono">{lang === 'en' ? 'In progress' : 'În lucru'}</span>
             )}
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 mb-3">
-            Manualul (pag. 26) explică: Calea pornește de la <strong>rădăcină (C:)</strong> și descrie drumul prin fiecare ramificație până la fișierul dorit, separată de caracterul <strong>\ (bară oblică inversă)</strong>.
+            {lang === 'en'
+              ? 'The textbook (p. 26) explains: The path starts from the root (C:) and describes the route through every branch to the target file, separated by the \\ (backslash) character.'
+              : 'Manualul (pag. 26) explică: Calea pornește de la rădăcină (C:) și descrie drumul prin fiecare ramificație până la fișierul dorit, separată de caracterul \\ (bară oblică inversă).'}
           </p>
 
           {/* Path Simulator Output Box */}
@@ -389,14 +425,14 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             <div className="flex items-center justify-between mb-2">
               <div className="text-xs text-slate-400 font-mono flex items-center gap-1.5">
                 <Compass className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Calea asamblată de tine:</span>
+                <span>{lang === 'en' ? 'Your assembled path:' : 'Calea asamblată de tine:'}</span>
               </div>
               {selectedPathTokens.length > 0 && (
                 <button
                   onClick={handleResetTokens}
                   className="text-xs text-rose-400 hover:text-rose-300 underline cursor-pointer"
                 >
-                  Resetează Calea
+                  {lang === 'en' ? 'Reset Path' : 'Resetează Calea'}
                 </button>
               )}
             </div>
@@ -404,7 +440,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             <div className="bg-slate-900 px-3.5 py-3 rounded-lg border border-slate-700/80 font-mono text-sm sm:text-base flex flex-wrap items-center gap-1 text-emerald-400 min-h-[46px]">
               {selectedPathTokens.length === 0 ? (
                 <span className="text-slate-500 text-xs font-sans">
-                  Apasă pe segmentele de mai jos în ordinea corectă pentru a recrea: C:\Lucru\MUZICA\jazz.mp3
+                  {lang === 'en'
+                    ? 'Click the segments below in the correct order to recreate: C:\\Lucru\\MUZICA\\jazz.mp3'
+                    : 'Apasă pe segmentele de mai jos în ordinea corectă pentru a recrea: C:\\Lucru\\MUZICA\\jazz.mp3'}
                 </span>
               ) : (
                 selectedPathTokens.map((token, index) => (
@@ -424,7 +462,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
               <div className="mt-3 p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-xs text-emerald-300 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>
-                  Excelent! Ai recreat fidel calea din manual:{' '}
+                  {lang === 'en' ? 'Excellent! You successfully built the path: ' : 'Excelent! Ai recreat fidel calea din manual: '}
                   <strong className="font-mono text-emerald-200">C:\Lucru\MUZICA\jazz.mp3</strong>
                 </span>
               </div>
@@ -433,7 +471,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
           {/* Tokens to click */}
           <div className="text-xs text-slate-400 mb-2 font-medium">
-            Alege componentele în ordinea de la rădăcină spre fișier:
+            {lang === 'en' ? 'Choose components in root-to-file order:' : 'Alege componentele în ordinea de la rădăcină spre fișier:'}
           </div>
           <div className="flex flex-wrap gap-2">
             {availableTokens.map((tok) => {
@@ -466,15 +504,15 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 4
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Testul Fulger Adevărat sau Fals (Manual pag. 26 Exercițiul 2 & 3)
+                {lang === 'en' ? 'Quick True or False Quiz (Textbook p. 26 Exercises 2 & 3)' : 'Testul Fulger Adevărat sau Fals (Manual pag. 26 Exercițiul 2 & 3)'}
               </h3>
             </div>
             {isTask4Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Validat cu succes!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Successfully passed!' : 'Validat cu succes!'}
               </span>
             ) : (
-              <span className="text-xs text-slate-400 font-mono">3 întrebări</span>
+              <span className="text-xs text-slate-400 font-mono">3 {lang === 'en' ? 'questions' : 'întrebări'}</span>
             )}
           </div>
 
@@ -482,7 +520,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             {/* Q1 */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="text-xs text-slate-300">
-                <strong className="text-white">a)</strong> Un fișier poate conține mai multe foldere?
+                <strong className="text-white">a)</strong> {lang === 'en' ? 'Can a single file contain multiple folders?' : 'Un fișier poate conține mai multe foldere?'}
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -496,7 +534,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                   }`}
                 >
-                  Adevărat
+                  {lang === 'en' ? 'True' : 'Adevărat'}
                 </button>
                 <button
                   onClick={() => {
@@ -509,7 +547,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                   }`}
                 >
-                  Fals (Corect!)
+                  {lang === 'en' ? 'False (Correct!)' : 'Fals (Corect!)'}
                 </button>
               </div>
             </div>
@@ -517,7 +555,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             {/* Q2 */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="text-xs text-slate-300">
-                <strong className="text-white">b)</strong> Un folder poate conține mai multe fișiere?
+                <strong className="text-white">b)</strong> {lang === 'en' ? 'Can a folder contain multiple files?' : 'Un folder poate conține mai multe fișiere?'}
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -531,7 +569,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                   }`}
                 >
-                  Adevărat (Corect!)
+                  {lang === 'en' ? 'True (Correct!)' : 'Adevărat (Corect!)'}
                 </button>
                 <button
                   onClick={() => {
@@ -544,7 +582,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                   }`}
                 >
-                  Fals
+                  {lang === 'en' ? 'False' : 'Fals'}
                 </button>
               </div>
             </div>
@@ -552,7 +590,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             {/* Q3 Fill blank */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="text-xs text-slate-300">
-                <strong className="text-white">c)</strong> Datele sunt memorate în format electronic în:
+                <strong className="text-white">c)</strong> {lang === 'en' ? 'Electronic data is stored inside:' : 'Datele sunt memorate în format electronic în:'}
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -566,7 +604,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                   }`}
                 >
-                  📄 Fișiere (Corect!)
+                  📄 {lang === 'en' ? 'Files (Correct!)' : 'Fișiere (Corect!)'}
                 </button>
                 <button
                   onClick={() => {
@@ -579,7 +617,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                       : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
                   }`}
                 >
-                  🔌 Cabluri
+                  🔌 {lang === 'en' ? 'Cables' : 'Cabluri'}
                 </button>
               </div>
             </div>
@@ -592,10 +630,10 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
         <div className="text-xs text-slate-400">
           {allCompleted ? (
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" /> Toate cele 4 provocări sunt rezolvate! (+15 pct)
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'All 4 challenges completed! (+15 pts)' : 'Toate cele 4 provocări sunt rezolvate! (+15 pct)'}
             </span>
           ) : (
-            <span>Completează cerințele din cele 4 provocări de mai sus pentru a continua spre crearea arborelui de foldere.</span>
+            <span>{lang === 'en' ? 'Complete the requirements in the 4 challenges above to continue.' : 'Completează cerințele din cele 4 provocări de mai sus pentru a continua spre crearea arborelui de foldere.'}</span>
           )}
         </div>
 
@@ -608,9 +646,10 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
           }`}
         >
-          <span>Treci la Nivelul 3: Construirea Arborelui Secret ▶</span>
+          <span>{lang === 'en' ? 'Proceed to Level 3: Building the Secret Tree ▶' : 'Treci la Nivelul 3: Construirea Arborelui Secret ▶'}</span>
         </button>
       </div>
     </div>
   );
 };
+

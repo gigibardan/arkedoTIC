@@ -24,12 +24,15 @@ import {
 } from 'lucide-react';
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface FLevel1Props {
   onComplete: () => void;
 }
 
 export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
+  const { t, lang } = useLanguage();
+
   // Step completion trackers
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [powerSubmenuOpen, setPowerSubmenuOpen] = useState(false);
@@ -99,13 +102,15 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-5">
         <div>
           <span className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs uppercase tracking-wider border border-emerald-500/30">
-            Nivelul 1 din 7 • Sistemul de Operare & Desktop
+            {lang === 'en' ? 'Level 1 of 7 • Operating System & Desktop' : 'Nivelul 1 din 7 • Sistemul de Operare & Desktop'}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-white mt-1.5 font-heading">
-            Sistemul de Operare & Interfața Windows 10 🖥️
+            {lang === 'en' ? 'Operating System & Windows 10 Interface 🖥️' : 'Sistemul de Operare & Interfața Windows 10 🖥️'}
           </h2>
           <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
-            Conform manualului (pag. 22–24), sistemul de operare este ansamblul de programe fără de care calculatorul nu poate funcționa. Explorează Desktop-ul, Meniul de Start (Power), diferența dintre Mod Text și Interfață Grafică, precum și butoanele unei ferestre!
+            {lang === 'en'
+              ? 'According to the textbook (p. 22–24), the operating system is the set of programs essential for the computer to run. Explore the Desktop, Start Menu (Power), Text Mode vs Graphical Interface, and window control buttons!'
+              : 'Conform manualului (pag. 22–24), sistemul de operare este ansamblul de programe fără de care calculatorul nu poate funcționa. Explorează Desktop-ul, Meniul de Start (Power), diferența dintre Mod Text și Interfață Grafică, precum și butoanele unei ferestre!'}
           </p>
         </div>
         <div className="hidden sm:flex text-4xl p-3 bg-slate-900/60 rounded-2xl border border-slate-700 text-teal-400">
@@ -115,10 +120,12 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
 
       {/* Teacher Tip from Textbook (p. 22-24) */}
       <TeacherTip
-        title="Ce face Sistemul de Operare și cum îl controlăm?"
-        tip="Cele 4 funcții esențiale ale SO (pag. 22): 1. Controlează componentele hardware; 2. Oferă interfața grafică; 3. Administrează datele; 4. Gestionează aplicațiile. Pe desktop găsim bara de activități (taskbar), pictogramele și Meniul de Start cu opțiunile de alimentare (Shut down, Restart, Sleep)."
+        title={lang === 'en' ? 'What does the OS do and how do we control it?' : 'Ce face Sistemul de Operare și cum îl controlăm?'}
+        tip={lang === 'en'
+          ? 'The 4 essential functions of the OS (p. 22): 1. Controls hardware components; 2. Provides graphical user interface; 3. Manages files and data; 4. Executes applications. On the desktop we have the taskbar, icons, and Start Menu with Power options (Shut down, Restart, Sleep).'
+          : 'Cele 4 funcții esențiale ale SO (pag. 22): 1. Controlează componentele hardware; 2. Oferă interfața grafică; 3. Administrează datele; 4. Gestionează aplicațiile. Pe desktop găsim bara de activități (taskbar), pictogramele și Meniul de Start cu opțiunile de alimentare (Shut down, Restart, Sleep).'}
         bookPage="22–24"
-        extraAdvice="Scurtătura de la tastatură pentru a închide instant o fereastră activă este combinația Alt + F4!"
+        extraAdvice={lang === 'en' ? 'The keyboard shortcut to instantly close an active window is Alt + F4!' : 'Scurtătura de la tastatură pentru a închide instant o fereastră activă este combinația Alt + F4!'}
       />
 
       {/* 3 Step Interactive Sections */}
@@ -134,20 +141,22 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                 1
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Simulatorul Desktop Windows 10 & Butoanele de Alimentare (pag. 22–23)
+                {lang === 'en' ? 'Windows 10 Desktop Simulator & Power Buttons (p. 22–23)' : 'Simulatorul Desktop Windows 10 & Butoanele de Alimentare (pag. 22–23)'}
               </h3>
             </div>
             {isStep1Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Etapă Finalizată!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Stage Completed!' : 'Etapă Finalizată!'}
               </span>
             ) : (
-              <span className="text-xs text-slate-400 font-mono">În lucru</span>
+              <span className="text-xs text-slate-400 font-mono">{lang === 'en' ? 'In progress' : 'În lucru'}</span>
             )}
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 mb-4">
-            Interacționează direct cu desktop-ul virtual de mai jos: deschide <strong>Meniul de Start</strong>, explorează <strong>Bara de activități</strong> și găsește <strong>Recycle Bin</strong>!
+            {lang === 'en'
+              ? 'Interact directly with the virtual desktop below: open the Start Menu, explore the Taskbar, and find the Recycle Bin!'
+              : 'Interacționează direct cu desktop-ul virtual de mai jos: deschide Meniul de Start, explorează Bara de activități și găsește Recycle Bin!'}
           </p>
 
           {/* Virtual Desktop Canvas */}
@@ -161,7 +170,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   🖥️
                 </div>
                 <span className="text-[11px] text-white text-center font-medium drop-shadow leading-tight">
-                  Acest PC
+                  {lang === 'en' ? 'This PC' : 'Acest PC'}
                 </span>
               </div>
 
@@ -176,7 +185,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                     ? 'bg-emerald-500/30 border-emerald-400 ring-2 ring-emerald-400/50'
                     : 'hover:bg-white/10 border-transparent'
                 }`}
-                title="Coșul de reciclare (Recycle Bin) - pag. 22"
+                title={lang === 'en' ? 'Recycle Bin - p. 22' : 'Coșul de reciclare (Recycle Bin) - pag. 22'}
               >
                 <div className="w-10 h-10 rounded-lg bg-emerald-600/30 border border-emerald-400/40 flex items-center justify-center text-xl shadow">
                   🗑️
@@ -185,7 +194,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   Recycle Bin
                 </span>
                 {recycleBinFound && (
-                  <span className="text-[9px] bg-emerald-500 text-white font-bold px-1 rounded">Găsit ✓</span>
+                  <span className="text-[9px] bg-emerald-500 text-white font-bold px-1 rounded">{lang === 'en' ? 'Found ✓' : 'Găsit ✓'}</span>
                 )}
               </div>
 
@@ -195,7 +204,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   📁
                 </div>
                 <span className="text-[11px] text-white text-center font-medium drop-shadow leading-tight">
-                  Teme TIC
+                  {lang === 'en' ? 'ICT Homework' : 'Teme TIC'}
                 </span>
               </div>
 
@@ -205,7 +214,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   🌐
                 </div>
                 <span className="text-[11px] text-white text-center font-medium drop-shadow leading-tight">
-                  Browser Web
+                  {lang === 'en' ? 'Web Browser' : 'Browser Web'}
                 </span>
               </div>
             </div>
@@ -214,7 +223,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
             {startMenuOpen && (
               <div className="absolute bottom-12 left-2 w-64 sm:w-72 bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-xl shadow-2xl p-3 text-xs z-30 animate-in fade-in slide-in-from-bottom-2">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
-                  <span className="font-bold text-slate-200">Meniul de Start (Windows 10)</span>
+                  <span className="font-bold text-slate-200">{lang === 'en' ? 'Start Menu (Windows 10)' : 'Meniul de Start (Windows 10)'}</span>
                   <button
                     onClick={() => {
                       setStartMenuOpen(false);
@@ -231,10 +240,10 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                     <span>🎨</span> <span>Paint (Windows Accessories)</span>
                   </div>
                   <div className="p-1.5 rounded hover:bg-slate-800 text-slate-300 flex items-center gap-2">
-                    <span>📝</span> <span>Notepad (Editor Text)</span>
+                    <span>📝</span> <span>Notepad ({lang === 'en' ? 'Text Editor' : 'Editor Text'})</span>
                   </div>
                   <div className="p-1.5 rounded hover:bg-slate-800 text-slate-300 flex items-center gap-2">
-                    <span>⚙️</span> <span>Setări (Settings)</span>
+                    <span>⚙️</span> <span>{lang === 'en' ? 'Settings' : 'Setări (Settings)'}</span>
                   </div>
                 </div>
 
@@ -249,7 +258,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   >
                     <div className="flex items-center gap-2">
                       <Power className="w-4 h-4" />
-                      <span>Alimentare (Power)</span>
+                      <span>{lang === 'en' ? 'Power Options' : 'Alimentare (Power)'}</span>
                     </div>
                     <span>{powerSubmenuOpen ? '▲' : '▼'}</span>
                   </button>
@@ -258,16 +267,16 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   {powerSubmenuOpen && (
                     <div className="mt-2 space-y-1 bg-slate-950 p-2 rounded-lg border border-slate-800">
                       <div className="text-[10px] text-slate-400 font-semibold mb-1">
-                        Opțiuni din manual (pag. 23 Fig. 2):
+                        {lang === 'en' ? 'Options from textbook (p. 23 Fig. 2):' : 'Opțiuni din manual (pag. 23 Fig. 2):'}
                       </div>
                       <div className="text-[11px] text-slate-300 flex items-center gap-1.5">
-                        <span className="text-amber-400 font-bold">• Sleep (Repaus):</span> Consum redus
+                        <span className="text-amber-400 font-bold">• Sleep:</span> {lang === 'en' ? 'Low power standby' : 'Consum redus'}
                       </div>
                       <div className="text-[11px] text-slate-300 flex items-center gap-1.5">
-                        <span className="text-rose-400 font-bold">• Shut down:</span> Oprire definitivă
+                        <span className="text-rose-400 font-bold">• Shut down:</span> {lang === 'en' ? 'Complete power off' : 'Oprire definitivă'}
                       </div>
                       <div className="text-[11px] text-slate-300 flex items-center gap-1.5">
-                        <span className="text-cyan-400 font-bold">• Restart:</span> Repornire SO
+                        <span className="text-cyan-400 font-bold">• Restart:</span> {lang === 'en' ? 'Reboots the OS' : 'Repornire SO'}
                       </div>
                     </div>
                   )}
@@ -319,11 +328,11 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                     ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
                     : 'hover:bg-slate-800/80 border-transparent text-slate-300'
                 }`}
-                title="Bara de instrumente utile din dreapta (pag. 23)"
+                title={lang === 'en' ? 'System tray tools (p. 23)' : 'Bara de instrumente utile din dreapta (pag. 23)'}
               >
-                <div className="flex items-center gap-1" title="Tastatură Română cu diacritice">
+                <div className="flex items-center gap-1" title={lang === 'en' ? 'Keyboard language' : 'Tastatură Română cu diacritice'}>
                   <Keyboard className="w-3.5 h-3.5 text-cyan-400" />
-                  <span className="font-bold font-mono text-[11px]">RO</span>
+                  <span className="font-bold font-mono text-[11px]">{lang === 'en' ? 'EN' : 'RO'}</span>
                 </div>
                 <Wifi className="w-3.5 h-3.5 text-slate-400" />
                 <Volume2 className="w-3.5 h-3.5 text-slate-400" />
@@ -341,7 +350,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
             {/* Scenario 1 */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
               <div className="text-xs text-slate-300 font-semibold mb-2">
-                ❓ <strong>Situația 1:</strong> Pleci de la calculator pentru 10 minute în pauză. Ce opțiune din butonul Power alegi pentru consum redus (pag. 23)?
+                ❓ <strong>{lang === 'en' ? 'Scenario 1:' : 'Situația 1:'}</strong> {lang === 'en' ? 'You step away from the computer for a 10-minute break. Which Power option do you choose for energy saving (p. 23)?' : 'Pleci de la calculator pentru 10 minute în pauză. Ce opțiune din butonul Power alegi pentru consum redus (pag. 23)?'}
               </div>
               <div className="grid grid-cols-3 gap-2 text-xs">
                 {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
@@ -360,7 +369,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                         : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
                     }`}
                   >
-                    {opt === 'sleep' && '🌙 Sleep (Repaus)'}
+                    {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
                     {opt === 'shutdown' && '🛑 Shut down'}
                     {opt === 'restart' && '🔄 Restart'}
                   </button>
@@ -368,7 +377,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
               </div>
               {powerScenario1 === 'sleep' && (
                 <p className="text-[11px] text-emerald-400 mt-2 font-medium">
-                  ✓ Corect! Sleep pune PC-ul în mod de consum redus de energie când plecăm pentru puțin timp.
+                  {lang === 'en' ? '✓ Correct! Sleep puts the computer in low power mode during short breaks.' : '✓ Corect! Sleep pune PC-ul în mod de consum redus de energie când plecăm pentru puțin timp.'}
                 </p>
               )}
             </div>
@@ -376,7 +385,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
             {/* Scenario 2 */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
               <div className="text-xs text-slate-300 font-semibold mb-2">
-                ❓ <strong>Situația 2:</strong> La terminarea orelor în laboratorul de informatică, ce opțiune alegi pentru oprirea definitivă (pag. 23)?
+                ❓ <strong>{lang === 'en' ? 'Scenario 2:' : 'Situația 2:'}</strong> {lang === 'en' ? 'At the end of class in the computer lab, which option do you select for complete power off (p. 23)?' : 'La terminarea orelor în laboratorul de informatică, ce opțiune alegi pentru oprirea definitivă (pag. 23)?'}
               </div>
               <div className="grid grid-cols-3 gap-2 text-xs">
                 {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
@@ -395,7 +404,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                         : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
                     }`}
                   >
-                    {opt === 'sleep' && '🌙 Sleep (Repaus)'}
+                    {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
                     {opt === 'shutdown' && '🛑 Shut down'}
                     {opt === 'restart' && '🔄 Restart'}
                   </button>
@@ -403,7 +412,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
               </div>
               {powerScenario2 === 'shutdown' && (
                 <p className="text-[11px] text-emerald-400 mt-2 font-medium">
-                  ✓ Corect! Shut down (Închidere) oprește definitiv calculatorul și sistemul de operare.
+                  {lang === 'en' ? '✓ Correct! Shut down safely terminates all software and turns off the PC.' : '✓ Corect! Shut down (Închidere) oprește definitiv calculatorul și sistemul de operare.'}
                 </p>
               )}
             </div>
@@ -420,30 +429,32 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                 2
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Clasificare: Sisteme de Operare vs Aplicații (Exercițiul 4 din manual pag. 24)
+                {lang === 'en' ? 'Classification: Operating Systems vs Applications (Textbook p. 24 Ex. 4)' : 'Clasificare: Sisteme de Operare vs Aplicații (Exercițiul 4 din manual pag. 24)'}
               </h3>
             </div>
             {isStep2Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Correct!' : 'Corect!'}
               </span>
             ) : (
-              <span className="text-xs text-slate-400 font-mono">Selectează exact cele 2 SO</span>
+              <span className="text-xs text-slate-400 font-mono">{lang === 'en' ? 'Select exactly the 2 OSs' : 'Selectează exact cele 2 SO'}</span>
             )}
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 mb-3">
-            Manualul (pag. 22 și 24 ex. 4) explică: Programele utilizator (aplicațiile) se instalează <em>după</em> sistemul de operare. Din lista de mai jos, <strong>selectează doar cele care sunt SISTEME DE OPERARE</strong> (nu aplicații de desen, text sau redare video):
+            {lang === 'en'
+              ? 'The textbook (p. 22 & 24 ex. 4) explains: User programs (apps) are installed after the OS. From the list below, select ONLY those that are OPERATING SYSTEMS (not drawing, text, or video apps):'
+              : 'Manualul (pag. 22 și 24 ex. 4) explică: Programele utilizator (aplicațiile) se instalează după sistemul de operare. Din lista de mai jos, selectează doar cele care sunt SISTEME DE OPERARE (nu aplicații de desen, text sau redare video):'}
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
             {[
-              { id: 'Paint', label: 'Paint', icon: '🎨', type: 'app', note: 'Program de desenat (Aplicație)' },
-              { id: 'Media Player', label: 'Media Player', icon: '🎵', type: 'app', note: 'Redare muzică/video (Aplicație)' },
-              { id: 'Notepad', label: 'Notepad', icon: '📝', type: 'app', note: 'Editor de text simplu (Aplicație)' },
-              { id: 'Windows', label: 'Windows', icon: '🪟', type: 'os', note: 'Sistem de operare cu interfață grafică!' },
-              { id: 'WordPad', label: 'WordPad', icon: '📄', type: 'app', note: 'Editor de text formatat (Aplicație)' },
-              { id: 'MS-DOS', label: 'MS-DOS', icon: '⬛', type: 'os', note: 'Sistem de operare cu interfață în mod text!' },
+              { id: 'Paint', label: 'Paint', icon: '🎨', type: 'app', note: lang === 'en' ? 'Drawing app (Application)' : 'Program de desenat (Aplicație)' },
+              { id: 'Media Player', label: 'Media Player', icon: '🎵', type: 'app', note: lang === 'en' ? 'Audio/video player (Application)' : 'Redare muzică/video (Aplicație)' },
+              { id: 'Notepad', label: 'Notepad', icon: '📝', type: 'app', note: lang === 'en' ? 'Plain text editor (Application)' : 'Editor de text simplu (Aplicație)' },
+              { id: 'Windows', label: 'Windows', icon: '🪟', type: 'os', note: lang === 'en' ? 'GUI Operating System!' : 'Sistem de operare cu interfață grafică!' },
+              { id: 'WordPad', label: 'WordPad', icon: '📄', type: 'app', note: lang === 'en' ? 'Rich text editor (Application)' : 'Editor de text formatat (Aplicație)' },
+              { id: 'MS-DOS', label: 'MS-DOS', icon: '⬛', type: 'os', note: lang === 'en' ? 'Command-line text OS!' : 'Sistem de operare cu interfață în mod text!' },
             ].map((item) => {
               const isSelected = selectedOS.includes(item.id);
               const isTargetOS = item.type === 'os';
@@ -468,7 +479,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                           : 'bg-rose-500 text-white'
                         : 'bg-slate-800 text-slate-400'
                     }`}>
-                      {isSelected ? (isTargetOS ? 'Sistem de Operare ✓' : 'Aplicație (Greșit) ✗') : 'Selectează'}
+                      {isSelected ? (isTargetOS ? (lang === 'en' ? 'OS ✓' : 'Sistem de Operare ✓') : (lang === 'en' ? 'App (Wrong) ✗' : 'Aplicație (Greșit) ✗')) : (lang === 'en' ? 'Select' : 'Selectează')}
                     </span>
                   </div>
                   <div className="font-bold text-sm text-white font-heading">{item.label}</div>
@@ -481,8 +492,10 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
           <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
             <Terminal className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-cyan-300 font-mono">Mod Text vs Grafic (pag. 22):</strong>{' '}
-              Sistemele precum <strong>MS-DOS</strong> sau <strong>FreeDOS</strong> funcționează în mod text (comenzi scrise), pe când <strong>Windows</strong>, <strong>Mac OS</strong> și <strong>Android</strong> folosesc interfață grafică (ferestre, pictograme, culori, mouse).
+              <strong className="text-cyan-300 font-mono">{lang === 'en' ? 'Text Mode vs GUI (p. 22):' : 'Mod Text vs Grafic (pag. 22):'}</strong>{' '}
+              {lang === 'en'
+                ? 'Systems like MS-DOS or FreeDOS operate in text mode (typed commands), whereas Windows, macOS, and Android use graphical user interfaces (windows, icons, colors, mouse).'
+                : 'Sistemele precum MS-DOS sau FreeDOS funcționează în mod text (comenzi scrise), pe când Windows, Mac OS și Android folosesc interfață grafică (ferestre, pictograme, culori, mouse).'}
             </div>
           </div>
         </div>
@@ -497,20 +510,22 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                 3
               </span>
               <h3 className="text-base sm:text-lg font-bold text-white font-heading">
-                Elementele unei Ferestre & Taste Rapide (pag. 23–24)
+                {lang === 'en' ? 'Window Elements & Shortcut Keys (p. 23–24)' : 'Elementele unei Ferestre & Taste Rapide (pag. 23–24)'}
               </h3>
             </div>
             {isStep3Done ? (
               <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Validat!
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Validated!' : 'Validat!'}
               </span>
             ) : (
-              <span className="text-xs text-slate-400 font-mono">În lucru</span>
+              <span className="text-xs text-slate-400 font-mono">{lang === 'en' ? 'In progress' : 'În lucru'}</span>
             )}
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 mb-4">
-            În Windows, programele rulează în <strong>ferestre</strong> (dreptunghiuri pe ecran). Testează butoanele de control din colțul din dreapta-sus al ferestrei de mai jos:
+            {lang === 'en'
+              ? 'In Windows, programs run inside windows (rectangular areas on screen). Test the control buttons in the top right corner of the window below:'
+              : 'În Windows, programele rulează în ferestre (dreptunghiuri pe ecran). Testează butoanele de control din colțul din dreapta-sus al ferestrei de mai jos:'}
           </p>
 
           {/* Interactive Window Sandbox */}
@@ -519,7 +534,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
             {windowState === 'minimized' ? (
               <div className="text-center p-4">
                 <div className="text-sm text-slate-400 mb-3">
-                  ⬇️ Fereastra a fost minimizată pe Bara de Activități (taskbar)!
+                  {lang === 'en' ? '⬇️ The window was minimized to the Taskbar!' : '⬇️ Fereastra a fost minimizată pe Bara de Activități (taskbar)!'}
                 </div>
                 <button
                   onClick={() => {
@@ -528,7 +543,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   }}
                   className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg flex items-center gap-2 mx-auto cursor-pointer"
                 >
-                  <span>📝 Click pe pictograma Notepad de pe taskbar pentru restaurare</span>
+                  <span>📝 {lang === 'en' ? 'Click Notepad icon on taskbar to restore' : 'Click pe pictograma Notepad de pe taskbar pentru restaurare'}</span>
                 </button>
               </div>
             ) : (
@@ -543,7 +558,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                 <div className="bg-slate-800/90 px-3 py-2 border-b border-slate-700 flex items-center justify-between text-xs select-none">
                   <div className="flex items-center gap-2">
                     <FileText className="w-3.5 h-3.5 text-cyan-400" />
-                    <span className="font-bold text-slate-200">Notepad - ZiuaPamantului.txt</span>
+                    <span className="font-bold text-slate-200">Notepad - EarthDay.txt</span>
                   </div>
 
                   {/* Window Control Buttons (pag. 24 Fig. 3) */}
@@ -556,7 +571,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                         setWindowState('minimized');
                       }}
                       className="w-7 h-6 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/80 rounded transition cursor-pointer"
-                      title="1. Butonul de minimizare (-) aduce fereastra la nivel de pictogramă pe taskbar"
+                      title={lang === 'en' ? '1. Minimize button (-)' : '1. Butonul de minimizare (-) aduce fereastra la nivel de pictogramă pe taskbar'}
                     >
                       <span className="font-bold text-sm">─</span>
                     </button>
@@ -569,7 +584,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                         setWindowState(windowState === 'maximized' ? 'normal' : 'maximized');
                       }}
                       className="w-7 h-6 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/80 rounded transition cursor-pointer"
-                      title="2. Butonul de maximizare / restaurare"
+                      title={lang === 'en' ? '2. Maximize / Restore button' : '2. Butonul de maximizare / restaurare'}
                     >
                       {windowState === 'maximized' ? (
                         <Copy className="w-3 h-3" />
@@ -585,7 +600,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                         setTestedClose(true);
                       }}
                       className="w-7 h-6 flex items-center justify-center text-slate-400 hover:text-white hover:bg-rose-600 rounded transition cursor-pointer"
-                      title="3. Butonul de închidere (X) - Închide fereastra"
+                      title={lang === 'en' ? '3. Close button (X)' : '3. Butonul de închidere (X) - Închide fereastra'}
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -594,12 +609,12 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
 
                 {/* Content Area */}
                 <div className="p-3.5 flex-1 bg-slate-950/90 text-xs font-mono text-emerald-400 leading-relaxed overflow-hidden">
-                  <div>1  22 Aprilie</div>
-                  <div>2  La mulți ani Pământ!</div>
+                  <div>1  22 Aprilie / April 22</div>
+                  <div>2  {lang === 'en' ? 'Happy Earth Day!' : 'La mulți ani Pământ!'}</div>
                   <div className="text-slate-500 mt-2">
                     {windowState === 'maximized'
-                      ? '✓ Fereastra este acum MAXIMIZATĂ pe tot ecranul!'
-                      : 'ℹ️ Trage de colțuri sau apasă pe pătratul de sus pentru maximizare.'}
+                      ? (lang === 'en' ? '✓ The window is now MAXIMIZED across the entire area!' : '✓ Fereastra este acum MAXIMIZATĂ pe tot ecranul!')
+                      : (lang === 'en' ? 'ℹ️ Drag corners or click maximize square above.' : 'ℹ️ Trage de colțuri sau apasă pe pătratul de sus pentru maximizare.')}
                   </div>
                 </div>
               </div>
@@ -611,7 +626,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
             {/* Alt+F4 Question */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
               <div className="text-xs text-slate-300 font-semibold mb-2">
-                ❓ <strong>Manual pag. 24:</strong> Ce combinație de taste de la tastatură închide instant fereastra curentă?
+                ❓ <strong>{lang === 'en' ? 'Textbook p. 24:' : 'Manual pag. 24:'}</strong> {lang === 'en' ? 'Which keyboard shortcut instantly closes the active window?' : 'Ce combinație de taste de la tastatură închide instant fereastra curentă?'}
               </div>
               <div className="grid grid-cols-3 gap-2 text-xs font-mono">
                 {[
@@ -640,7 +655,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
               </div>
               {altF4Answer === 'alt_f4' && (
                 <p className="text-[11px] text-emerald-400 mt-2 font-medium font-sans">
-                  ✓ Corect! Alt + F4 închide aplicația activă.
+                  {lang === 'en' ? '✓ Correct! Alt + F4 closes the active application.' : '✓ Corect! Alt + F4 închide aplicația activă.'}
                 </p>
               )}
             </div>
@@ -648,7 +663,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
             {/* Știați că - Solitaire & Mouse Question */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
               <div className="text-xs text-slate-300 font-semibold mb-2">
-                💡 <strong>Știați că? (Manual pag. 23):</strong> De ce erau incluse jocuri precum Solitaire și Minesweeper în primele versiuni de Windows?
+                💡 <strong>{lang === 'en' ? 'Did you know? (Textbook p. 23):' : 'Știați că? (Manual pag. 23):'}</strong> {lang === 'en' ? 'Why were games like Solitaire and Minesweeper bundled in early Windows?' : 'De ce erau incluse jocuri precum Solitaire și Minesweeper în primele versiuni de Windows?'}
               </div>
               <div className="space-y-1.5 text-xs">
                 <button
@@ -662,7 +677,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
                   }`}
                 >
-                  ✓ Pentru a-i învăța pe oameni să folosească mouse-ul și operația de drag & drop
+                  {lang === 'en' ? '✓ To teach users how to use the mouse and master drag & drop' : '✓ Pentru a-i învăța pe oameni să folosească mouse-ul și operația de drag & drop'}
                 </button>
                 <button
                   onClick={() => {
@@ -675,7 +690,7 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
                   }`}
                 >
-                  ✗ Pentru a testa placa video 3D
+                  {lang === 'en' ? '✗ To benchmark 3D graphics hardware' : '✗ Pentru a testa placa video 3D'}
                 </button>
               </div>
             </div>
@@ -688,10 +703,10 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
         <div className="text-xs text-slate-400">
           {allCompleted ? (
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" /> Toate cele 3 etape ale Nivelului 1 sunt complete! (+10 pct)
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'All 3 stages of Level 1 are complete! (+10 pts)' : 'Toate cele 3 etape ale Nivelului 1 sunt complete! (+10 pct)'}
             </span>
           ) : (
-            <span>Rezolvă cerințele din cele 3 etape de mai sus pentru a debloca Nivelul 2.</span>
+            <span>{lang === 'en' ? 'Complete the requirements in the 3 stages above to unlock Level 2.' : 'Rezolvă cerințele din cele 3 etape de mai sus pentru a debloca Nivelul 2.'}</span>
           )}
         </div>
 
@@ -704,9 +719,10 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
           }`}
         >
-          <span>Treci la Nivelul 2: Extensii & Calea C:\ ▶</span>
+          <span>{lang === 'en' ? 'Proceed to Level 2: Extensions & C:\\ Path ▶' : 'Treci la Nivelul 2: Extensii & Calea C:\\ ▶'}</span>
         </button>
       </div>
     </div>
   );
 };
+

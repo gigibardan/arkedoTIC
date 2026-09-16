@@ -10,7 +10,7 @@ interface ProgressBarProps {
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
 const FILES_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 
-const HARDWARE_STAGES = [
+const HARDWARE_STAGES_RO = [
   { emoji: '🛡️', name: 'Inspector Protecție & Ergonomie (pag. 10-12)' },
   { emoji: '⏳', name: 'Crononaut: Istoria Calculatoarelor (pag. 13-14)' },
   { emoji: '🖥️', name: 'Tehnician Asamblor Unitate Centrală (pag. 15-17)' },
@@ -19,7 +19,16 @@ const HARDWARE_STAGES = [
   { emoji: '🏆', name: 'Tehnician Hardware Certificat!' },
 ];
 
-const HARDWARE_MILESTONES = [
+const HARDWARE_STAGES_EN = [
+  { emoji: '🛡️', name: 'Safety & Ergonomics Inspector (pp. 10-12)' },
+  { emoji: '⏳', name: 'Chrononaut: History of Computing (pp. 13-14)' },
+  { emoji: '🖥️', name: 'PC Tower Assembly Technician (pp. 15-17)' },
+  { emoji: '🔌', name: 'Peripherals Expert: Input / Output (pp. 15-16)' },
+  { emoji: '💾', name: 'Bits Master: Storage & Self-Eval (pp. 18-20)' },
+  { emoji: '🏆', name: 'Certified Hardware Technician!' },
+];
+
+const HARDWARE_MILESTONES_RO = [
   'N1: Norme',
   'N2: Istorie',
   'N3: Unitate',
@@ -27,7 +36,15 @@ const HARDWARE_MILESTONES = [
   'N5: Biți',
 ];
 
-const FILES_STAGES = [
+const HARDWARE_MILESTONES_EN = [
+  'L1: Safety',
+  'L2: History',
+  'L3: PC Tower',
+  'L4: Peripherals',
+  'L5: Bits',
+];
+
+const FILES_STAGES_RO = [
   { emoji: '🖥️', name: 'Inspector SO & Desktop (pag. 22-24)' },
   { emoji: '📑', name: 'Arhitect Date, Extensii & Calea C:\\ (pag. 25-26)' },
   { emoji: '📁', name: 'Constructor Arbore de Foldere (pag. 27-28)' },
@@ -38,7 +55,18 @@ const FILES_STAGES = [
   { emoji: '🏆', name: 'Arhitect Fișiere & SO Certificat!' },
 ];
 
-const FILES_MILESTONES = [
+const FILES_STAGES_EN = [
+  { emoji: '🖥️', name: 'OS & Desktop Inspector (pp. 22-24)' },
+  { emoji: '📑', name: 'Data Architect, Extensions & Path C:\\ (pp. 25-26)' },
+  { emoji: '📁', name: 'Folder Tree Constructor (pp. 27-28)' },
+  { emoji: '🎯', name: 'Multi-Selection & Search Expert (p. 28)' },
+  { emoji: '⚡', name: 'Move & Shortcuts Master (p. 29)' },
+  { emoji: '🔍', name: 'Copy & F2 Rename Technician (p. 29)' },
+  { emoji: '🗑️', name: 'Recycle Bin & Restore Guardian (p. 30)' },
+  { emoji: '🏆', name: 'Certified File & OS Architect!' },
+];
+
+const FILES_MILESTONES_RO = [
   'N1: Interfață SO',
   'N2: Extensii & Cale',
   'N3: Structură',
@@ -48,12 +76,26 @@ const FILES_MILESTONES = [
   'N7: Coș Reciclare',
 ];
 
+const FILES_MILESTONES_EN = [
+  'L1: OS Interface',
+  'L2: Extensions & Path',
+  'L3: Structure',
+  'L4: Search',
+  'L5: Move',
+  'L6: Copy & F2',
+  'L7: Recycle Bin',
+];
+
 export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId = 'files' }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const isHardware = courseId === 'hardware';
-  const stages = isHardware ? HARDWARE_STAGES : FILES_STAGES;
-  const milestones = isHardware ? HARDWARE_MILESTONES : FILES_MILESTONES;
+  const stages = isHardware
+    ? (lang === 'en' ? HARDWARE_STAGES_EN : HARDWARE_STAGES_RO)
+    : (lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO);
+  const milestones = isHardware
+    ? (lang === 'en' ? HARDWARE_MILESTONES_EN : HARDWARE_MILESTONES_RO)
+    : (lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO);
   const percents = isHardware ? HARDWARE_STAGE_PERCENTS : FILES_STAGE_PERCENTS;
   const maxLevels = isHardware ? 5 : 7;
 
@@ -70,7 +112,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
           </div>
           <div>
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">
-              {isHardware ? 'Evoluție Tehnician Hardware TIC' : 'Evoluție Arhitect Fișiere & Sistem de Operare'}
+              {isHardware
+                ? (lang === 'en' ? 'ICT Hardware Technician Progress' : 'Evoluție Tehnician Hardware TIC')
+                : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : 'text-emerald-400'}`}>
               {currentStage.name}

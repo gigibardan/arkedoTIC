@@ -15,7 +15,7 @@ interface DemoFile {
   type: 'doc' | 'img' | 'music';
 }
 
-const initialFiles: DemoFile[] = [
+const FILES_RO: DemoFile[] = [
   { id: '1', name: 'referat_plante.docx', size: '24 KB', type: 'doc' },
   { id: '2', name: 'desen_arbore_secret.jpg', size: '1.2 MB', type: 'img' },
   { id: '3', name: 'proiect_istorie.docx', size: '45 KB', type: 'doc' },
@@ -23,8 +23,17 @@ const initialFiles: DemoFile[] = [
   { id: '5', name: 'schema_clasa5.jpg', size: '890 KB', type: 'img' },
 ];
 
+const FILES_EN: DemoFile[] = [
+  { id: '1', name: 'plants_essay.docx', size: '24 KB', type: 'doc' },
+  { id: '2', name: 'secret_tree_drawing.jpg', size: '1.2 MB', type: 'img' },
+  { id: '3', name: 'history_project.docx', size: '45 KB', type: 'doc' },
+  { id: '4', name: 'game_music.mp3', size: '3.4 MB', type: 'music' },
+  { id: '5', name: 'class5_diagram.jpg', size: '890 KB', type: 'img' },
+];
+
 export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const initialFiles = lang === 'en' ? FILES_EN : FILES_RO;
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchSuccess, setSearchSuccess] = useState<boolean>(false);
@@ -52,7 +61,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const query = searchQuery.toLowerCase();
-    if (query.includes('arbore') || query.includes('tree') || query.includes('desen') || query.includes('drawing')) {
+    if (query.includes('arbore') || query.includes('tree') || query.includes('desen') || query.includes('draw') || query.includes('secret')) {
       sounds.playCorrect();
       setSearchSuccess(true);
     } else {

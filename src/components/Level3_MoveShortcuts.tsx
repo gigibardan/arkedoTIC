@@ -9,7 +9,7 @@ interface Level3Props {
 }
 
 export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [isCut, setIsCut] = useState<boolean>(false);
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [forbiddenQuiz, setForbiddenQuiz] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
       <TeacherTip
         title={t.l3TipTitle}
         tip={t.l3TipText}
-        bookPage="28 și 30"
+        bookPage={lang === 'en' ? '28 & 30' : '28 și 30'}
         extraAdvice={t.l3TipExtra}
       />
 
@@ -102,7 +102,9 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-slate-400">Dimensiune: 15.4 MB • Application</div>
+                    <div className="text-xs text-slate-400">
+                      {lang === 'en' ? 'Size: 15.4 MB • Application' : 'Dimensiune: 15.4 MB • Aplicație'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -152,7 +154,9 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
                       super_mario.exe
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     </div>
-                    <div className="text-xs text-emerald-300/80">/Baza Secreta/Jocuri/</div>
+                    <div className="text-xs text-emerald-300/80">
+                      {lang === 'en' ? '/Secret Base/Games/' : '/Baza Secreta/Jocuri/'}
+                    </div>
                   </div>
                 </div>
               </div>

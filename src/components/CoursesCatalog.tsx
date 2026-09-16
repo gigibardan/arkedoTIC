@@ -44,7 +44,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onResetActiveMission,
   onOpenTeacherPortal,
 }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [nameInput, setNameInput] = useState<string>(studentName);
   const [isEditingName, setIsEditingName] = useState<boolean>(!studentName);
   const [nameError, setNameError] = useState<boolean>(false);
@@ -99,9 +99,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   };
 
   const getMissionTitle = (id: 'hardware' | 'files' | null) => {
-    if (id === 'hardware') return 'Modulul 1: Sisteme de calcul & Hardware (Manual pag. 10-20)';
-    if (id === 'files') return 'Modulul 2: Arborele Secret de Fișiere (Manual pag. 27-30)';
-    return 'Nicio misiune activă';
+    if (id === 'hardware') {
+      return lang === 'en'
+        ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
+        : 'Modulul 1: Sisteme de calcul & Hardware (Manual pag. 10-20)';
+    }
+    if (id === 'files') {
+      return lang === 'en'
+        ? 'Module 2: The Secret File Tree (Textbook p. 27-30)'
+        : 'Modulul 2: Arborele Secret de Fișiere (Manual pag. 27-30)';
+    }
+    return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
 
   return (
@@ -119,7 +127,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
-            Explorează modulele interactive concepute conform Programei Școlare Naționale și Manualelor TIC pentru Clasele a V-a și a VI-a. Fiecare misiune conține exerciții practice, sfaturi de la profesor și o diplomă oficială!
+            {lang === 'en'
+              ? 'Explore interactive modules designed according to the ICT curriculum for Grades 5 and 6. Each mission contains hands-on exercises, teacher tips, and an official merit certificate!'
+              : 'Explorează modulele interactive concepute conform Programei Școlare Naționale și Manualelor TIC pentru Clasele a V-a și a VI-a. Fiecare misiune conține exerciții practice, sfaturi de la profesor și o diplomă oficială!'}
           </p>
 
           {/* Student Profile Registration Card */}
@@ -160,7 +170,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                       onClick={() => handleAttemptStart(activeMissionId)}
                       className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95"
                     >
-                      <span>Reia Misiunea ({activeMissionId === 'hardware' ? 'Hardware' : 'Fișiere'})</span>
+                      <span>{lang === 'en' ? `Resume Mission (${activeMissionId === 'hardware' ? 'Hardware' : 'Files'})` : `Reia Misiunea (${activeMissionId === 'hardware' ? 'Hardware' : 'Fișiere'})`}</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   )}
@@ -220,11 +230,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-teal-400" />
             <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
-              Misiuni Practice TIC Clasa a V-a
+              {lang === 'en' ? 'Practical ICT Missions for 5th & 6th Grade' : 'Misiuni Practice TIC Clasa a V-a'}
             </h2>
           </div>
           <span className="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-            2 Misiuni Interactive Disponibile
+            {lang === 'en' ? '2 Interactive Missions Available' : '2 Misiuni Interactive Disponibile'}
           </span>
         </div>
 
@@ -246,28 +256,30 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 <div className="flex items-center gap-2">
                   {activeMissionId === 'hardware' && activeMissionLevel > 1 && (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      În Curs (Nivel {activeMissionLevel}/5)
+                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/5)` : `În Curs (Nivel ${activeMissionLevel}/5)`}
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> NOU • MODULUL 1
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1' : 'NOU • MODULUL 1'}
                   </span>
                 </div>
               </div>
 
               <div className="text-[11px] font-bold uppercase tracking-wider text-teal-400 mb-1 font-mono">
-                Manual pag. 10–20 • Unitatea 1
+                {lang === 'en' ? 'Textbook p. 10–20 • Unit 1' : 'Manual pag. 10–20 • Unitatea 1'}
               </div>
 
               <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-teal-300 transition-colors">
-                Sisteme de calcul și comunicații
+                {lang === 'en' ? 'Computing & Communication Systems' : 'Sisteme de calcul și comunicații'}
               </h3>
               <div className="text-xs font-semibold text-slate-300 mb-3">
-                Arhitectură PC, Ergonomie, Istorie & Calculul Capacității
+                {lang === 'en' ? 'PC Architecture, Ergonomics, History & Capacity Math' : 'Arhitectură PC, Ergonomie, Istorie & Calculul Capacității'}
               </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                Învață normele de protecția muncii și ergonomie în laborator, explorează axa timpului (1642 Pascalina → 1981 IBM PC), montează componentele unității centrale (CPU, RAM, Placă de bază), sortează perifericele și rezolvă problema stocării în biți din manual!
+                {lang === 'en'
+                  ? 'Learn safety and ergonomics in the computer lab, explore the timeline (1642 Pascaline → 1981 IBM PC), assemble central unit components (CPU, RAM, Motherboard), sort peripherals, and solve the binary capacity math from the textbook!'
+                  : 'Învață normele de protecția muncii și ergonomie în laborator, explorează axa timpului (1642 Pascalina → 1981 IBM PC), montează componentele unității centrale (CPU, RAM, Placă de bază), sortează perifericele și rezolvă problema stocării în biți din manual!'}
               </p>
 
               {/* Badges / Highlights */}
@@ -276,10 +288,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> 100 Puncte (Nota 10)
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-teal-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-teal-400" /> Diplomă Tehnician Hardware
+                  <Award className="w-3 h-3 text-teal-400" /> {lang === 'en' ? 'Hardware Technician Certificate' : 'Diplomă Tehnician Hardware'}
                 </span>
               </div>
             </div>
@@ -288,10 +300,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               <div className="text-xs text-slate-400 font-mono">
                 {activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
                   <span className="text-teal-400 font-bold">
-                    Progres: Nivel {activeMissionLevel}/5 ({activeMissionScore} pct)
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/5 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/5 (${activeMissionScore} pct)`}
                   </span>
                 ) : (
-                  <span>5 Niveluri interactive</span>
+                  <span>{lang === 'en' ? '5 Interactive Levels' : '5 Niveluri interactive'}</span>
                 )}
               </div>
               <button
@@ -300,8 +312,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               >
                 <span>
                   {activeMissionId === 'hardware' && activeMissionLevel > 1
-                    ? 'Continuă Misiunea Hardware'
-                    : 'Începe Misiunea 1'}
+                    ? (lang === 'en' ? 'Resume Hardware Mission' : 'Continuă Misiunea Hardware')
+                    : (lang === 'en' ? 'Start Mission 1' : 'Începe Misiunea 1')}
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -324,28 +336,30 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 <div className="flex items-center gap-2">
                   {activeMissionId === 'files' && activeMissionLevel > 1 && (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      În Curs (Nivel {activeMissionLevel}/7)
+                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> MODULUL 2
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 2' : 'MODULUL 2'}
                   </span>
                 </div>
               </div>
 
               <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 mb-1 font-mono">
-                Manual pag. 22–30 • Unitatea 2
+                {lang === 'en' ? 'Textbook p. 22–30 • Unit 2' : 'Manual pag. 22–30 • Unitatea 2'}
               </div>
 
               <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors">
-                Misiunea Arborele Secret de Fișiere & SO
+                {lang === 'en' ? 'The Secret File Tree & OS Mission' : 'Misiunea Arborele Secret de Fișiere & SO'}
               </h3>
               <div className="text-xs font-semibold text-slate-300 mb-3">
-                Interfață Windows 10, Extensii, Structură C:\, Comenzi Rapide & Recycle Bin
+                {lang === 'en' ? 'Windows 10 Interface, Extensions, C:\\ Structure, Shortcuts & Recycle Bin' : 'Interfață Windows 10, Extensii, Structură C:\\, Comenzi Rapide & Recycle Bin'}
               </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                Explorează interfața sistemului de operare (pag. 22–24), învață regula extensiilor și calea către fișiere (pag. 25–26), construiește structura ierarhică de directoare (pag. 27–28), găsește fișierele secrete cu masca (*.docx), mută documente cu taste rapide, gestionează proprietățile și restaurează datele din Recycle Bin!
+                {lang === 'en'
+                  ? 'Explore the operating system interface (p. 22–24), learn extension rules and file paths (p. 25–26), build hierarchical directory structures (p. 27–28), find secret files using patterns (*.docx), move files with shortcuts, inspect properties, and restore items from the Recycle Bin!'
+                  : 'Explorează interfața sistemului de operare (pag. 22–24), învață regula extensiilor și calea către fișiere (pag. 25–26), construiește structura ierarhică de directoare (pag. 27–28), găsește fișierele secrete cu masca (*.docx), mută documente cu taste rapide, gestionează proprietățile și restaurează datele din Recycle Bin!'}
               </p>
 
               {/* Badges / Highlights */}
@@ -354,10 +368,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> 100 Puncte (Nota 10)
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-emerald-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-emerald-400" /> Diplomă Arhitect Fișiere & SO
+                  <Award className="w-3 h-3 text-emerald-400" /> {lang === 'en' ? 'File Architect & OS Certificate' : 'Diplomă Arhitect Fișiere & SO'}
                 </span>
               </div>
             </div>
@@ -366,10 +380,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               <div className="text-xs text-slate-400 font-mono">
                 {activeMissionId === 'files' && activeMissionLevel > 1 ? (
                   <span className="text-emerald-400 font-bold">
-                    Progres: Nivel {activeMissionLevel}/7 ({activeMissionScore} pct)
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
                 ) : (
-                  <span>7 Provocări practice</span>
+                  <span>{lang === 'en' ? '7 Practical Challenges' : '7 Provocări practice'}</span>
                 )}
               </div>
               <button
@@ -378,8 +392,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               >
                 <span>
                   {activeMissionId === 'files' && activeMissionLevel > 1
-                    ? 'Continuă Misiunea Fișiere'
-                    : 'Începe Misiunea 2'}
+                    ? (lang === 'en' ? 'Resume Files Mission' : 'Continuă Misiunea Fișiere')
+                    : (lang === 'en' ? 'Start Mission 2' : 'Începe Misiunea 2')}
                 </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -412,9 +426,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
 
             <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500 font-mono">
-              <span>Modulul 3 • Clasa a V-a</span>
+              <span>{lang === 'en' ? 'Module 3 • 5th Grade' : 'Modulul 3 • Clasa a V-a'}</span>
               <span className="px-3 py-1 rounded-lg bg-slate-800/80 text-slate-400">
-                În pregătire ⏳
+                {lang === 'en' ? 'In preparation ⏳' : 'În pregătire ⏳'}
               </span>
             </div>
           </div>
@@ -445,9 +459,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
 
             <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500 font-mono">
-              <span>Modulul 4 • Clasa a V-a</span>
+              <span>{lang === 'en' ? 'Module 4 • 5th Grade' : 'Modulul 4 • Clasa a V-a'}</span>
               <span className="px-3 py-1 rounded-lg bg-slate-800/80 text-slate-400">
-                În pregătire ⏳
+                {lang === 'en' ? 'In preparation ⏳' : 'În pregătire ⏳'}
               </span>
             </div>
           </div>
@@ -463,10 +477,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               onOpenTeacherPortal();
             }}
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800/40 text-[11px] font-medium transition cursor-pointer"
-            title="Acces securizat pentru cadre didactice (catalog & notare)"
+            title={lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces securizat pentru cadre didactice (catalog & notare)'}
           >
             <span className="text-slate-600 text-xs">🔒</span>
-            <span>Acces cadre didactice (catalog & notare)</span>
+            <span>{lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces cadre didactice (catalog & notare)'}</span>
           </button>
         </div>
       )}

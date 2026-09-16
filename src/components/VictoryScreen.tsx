@@ -24,7 +24,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   onReset,
   onBackToCatalog,
 }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [studentName, setStudentName] = useState<string>(
     initialStudentName.trim() || t.vDiplomaDefaultName
   );
@@ -33,14 +33,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   const isHardware = courseId === 'hardware';
   const courseDbTitle = isHardware
-    ? 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)'
-    : 'Misiunea Arborele Secret (Manual pag. 27-30)';
+    ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
+    : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
     const mins = Math.floor(sec / 60);
     const remainingSec = sec % 60;
-    if (mins === 0) return `${remainingSec} sec`;
-    return `${mins} min ${remainingSec} sec`;
+    if (mins === 0) return `${remainingSec} ${lang === 'en' ? 'sec' : 'sec'}`;
+    return `${mins} ${lang === 'en' ? 'min' : 'min'} ${remainingSec} ${lang === 'en' ? 'sec' : 'sec'}`;
   };
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     // Automatically log results to Firebase Firestore
     if (!hasLoggedRef.current) {
       hasLoggedRef.current = true;
-      const finalName = initialStudentName.trim() || studentName.trim() || 'Elev Anonim';
+      const finalName = initialStudentName.trim() || studentName.trim() || (lang === 'en' ? 'Anonymous Student' : 'Elev Anonim');
       logStudentResult(
         finalName,
         courseDbTitle,
@@ -109,12 +109,16 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       </div>
 
       <h2 className="text-3xl sm:text-5xl font-black text-white mt-2 font-heading tracking-tight">
-        {isHardware ? 'Felicitări, Tehnician Hardware & TIC!' : t.vTitle}
+        {isHardware
+          ? (lang === 'en' ? 'Congratulations, Hardware & ICT Technician!' : 'Felicitări, Tehnician Hardware & TIC!')
+          : t.vTitle}
       </h2>
 
       <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mt-3 mb-6 leading-relaxed">
         {isHardware
-          ? 'Ai finalizat cu succes evaluarea completă a Unității 1: cunoști regulile de securitate, ergonomia, istoria calculatoarelor, piesele unității centrale și calculul biților!'
+          ? (lang === 'en'
+              ? 'You successfully passed the complete evaluation for Unit 1: you mastered lab safety, ergonomics, computer history, PC tower components, and digital bits calculation!'
+              : 'Ai finalizat cu succes evaluarea completă a Unității 1: cunoști regulile de securitate, ergonomia, istoria calculatoarelor, piesele unității centrale și calculul biților!')
           : t.vDesc}
       </p>
 
@@ -194,42 +198,42 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
         </div>
       </div>
 
-      {/* Badges Earned Grid (All 5 levels) */}
+      {/* Badges Earned Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 max-w-3xl mx-auto mb-8 text-left">
         {isHardware ? (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
               <span className="text-2xl">🛡️</span>
               <div>
-                <div className="text-xs font-bold text-white">Inspector TIC</div>
-                <div className="text-[10px] text-emerald-400">Norme & Ergonomie</div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Lab Inspector' : 'Inspector TIC'}</div>
+                <div className="text-[10px] text-emerald-400">{lang === 'en' ? 'Safety & Health' : 'Norme & Ergonomie'}</div>
               </div>
             </div>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
               <span className="text-2xl">⏳</span>
               <div>
-                <div className="text-xs font-bold text-white">Crononaut</div>
-                <div className="text-[10px] text-teal-400">1642 - Pascalina</div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Chrononaut' : 'Crononaut'}</div>
+                <div className="text-[10px] text-teal-400">{lang === 'en' ? '1642 - Pascaline' : '1642 - Pascalina'}</div>
               </div>
             </div>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
               <span className="text-2xl">🖥️</span>
               <div>
-                <div className="text-xs font-bold text-white">Asamblor PC</div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'PC Assembler' : 'Asamblor PC'}</div>
                 <div className="text-[10px] text-cyan-400">CPU, RAM, Mobo</div>
               </div>
             </div>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
               <span className="text-2xl">🔌</span>
               <div>
-                <div className="text-xs font-bold text-white">Triere Flux</div>
-                <div className="text-[10px] text-purple-400">Intrare / Ieșire</div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Flow Sorter' : 'Triere Flux'}</div>
+                <div className="text-[10px] text-purple-400">{lang === 'en' ? 'Input / Output' : 'Intrare / Ieșire'}</div>
               </div>
             </div>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
               <span className="text-2xl">🎯</span>
               <div>
-                <div className="text-xs font-bold text-white">Maestru Biți</div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Bits Master' : 'Maestru Biți'}</div>
                 <div className="text-[10px] text-rose-400">1 TB = 1024 GB</div>
               </div>
             </div>
@@ -311,7 +315,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               onChange={(e) => setStudentName(e.target.value)}
               placeholder={t.vDiplomaDefaultName}
               className="w-full text-center text-xl sm:text-3xl font-black text-emerald-700 bg-amber-50/70 border-b-2 border-emerald-500 focus:outline-none focus:border-emerald-700 py-1.5 px-3 rounded-lg"
-              title="Apasă pentru a edita numele tău pe diplomă"
+              title={lang === 'en' ? 'Click to edit your name on the certificate' : 'Apasă pentru a edita numele tău pe diplomă'}
             />
           </div>
 
@@ -348,7 +352,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
             onClick={onBackToCatalog}
             className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95 shadow-md shadow-emerald-600/30"
           >
-            <span>Înapoi la Catalog Cursuri</span>
+            <span>{t.backToCourses}</span>
           </button>
         )}
 

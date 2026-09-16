@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
-import { Calculator, Award, CheckCircle2, HelpCircle, HardDrive, Sparkles, ChevronRight } from 'lucide-react';
+import { Calculator, Award, CheckCircle2, HardDrive, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface HLevel5Props {
   onComplete: () => void;
 }
 
 export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
+  const { lang, t } = useLanguage();
+
   // Task 1: Capacity math problem (pag. 20, ex. 3)
-  // Step 1: 1 TB in GB? (1024)
   const [step1GB, setStep1GB] = useState<string>('');
-  // Step 2: Total in GB? (1024 + 512 = 1536)
   const [step2TotalGB, setStep2TotalGB] = useState<string>('');
-  // Step 3: Selected final answer in MB: 1572864
   const [step3MB, setStep3MB] = useState<string | null>(null);
 
   // Task 2: Magnetic storage device identification (pag. 20, ex. 2)
@@ -52,6 +52,33 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
     }
   };
 
+  const storageDevices = [
+    {
+      id: 'ssd',
+      icon: '🔲',
+      title: lang === 'en' ? 'SSD (Solid-State Drive)' : 'SSD (Solid-State)',
+      desc: lang === 'en' ? 'Flash Memory Chips' : 'Cipuri Flash / Semiconductori'
+    },
+    {
+      id: 'hdd',
+      icon: '🧲',
+      title: lang === 'en' ? 'HDD (Hard Disk Drive)' : 'HDD (Discul Dur)',
+      desc: lang === 'en' ? 'Rotating magnetic platters ✓' : 'Discuri magnetice rotative ✓'
+    },
+    {
+      id: 'usb',
+      icon: '🔌',
+      title: lang === 'en' ? 'USB Flash Drive' : 'Stick USB',
+      desc: lang === 'en' ? 'Flash Memory Chips' : 'Cipuri Flash / Semiconductori'
+    },
+    {
+      id: 'cd',
+      icon: '💿',
+      title: lang === 'en' ? 'CD / DVD Optical Disc' : 'Disc CD / DVD',
+      desc: lang === 'en' ? 'Optical / Laser Beam' : 'Optic / Rază Laser'
+    },
+  ];
+
   return (
     <div className="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-4 sm:p-7 shadow-2xl backdrop-blur">
       {/* Level Header */}
@@ -59,27 +86,31 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-black uppercase tracking-wider font-mono">
-              Nivelul 5 din 5 • Autoevaluare & Final
+              {lang === 'en' ? 'Level 5 of 5 • Final Assessment' : 'Nivelul 5 din 5 • Autoevaluare & Final'}
             </span>
-            <span className="text-xs text-slate-400 font-semibold">• Manual pag. 18–20</span>
+            <span className="text-xs text-slate-400 font-semibold">• {t.bookPagePrefix} 18–20</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
-            Marea Provocare a Biților & Rebusul TIC 🎯
+            {lang === 'en' ? 'The Grand Bit Challenge & ICT Riddle 🎯' : 'Marea Provocare a Biților & Rebusul TIC 🎯'}
           </h2>
         </div>
         <div className="text-right shrink-0">
           <span className="text-xs font-bold text-amber-400 font-mono bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-xl">
-            Recompensă: +20 puncte (100 Max)
+            {lang === 'en' ? 'Reward: +20 points (100 Max)' : 'Recompensă: +20 puncte (100 Max)'}
           </span>
         </div>
       </div>
 
       {/* Teacher Pro Tip */}
       <TeacherTip
-        title="Sfat de Profesionist: De ce 1 KB = 1024 Bytes și nu 1000?"
-        tip="• În viața obișnuită lucrăm în sistem zecimal (1 kilometru = 1000 metri), dar în calculatoare totul se bazează pe puteri ale lui 2 (2¹⁰ = 1024)! Așadar: 1 Byte = 8 biți, 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB, 1 TB = 1024 GB!"
+        title={lang === 'en' ? 'Teacher Pro Tip: Why is 1 KB = 1024 Bytes and not 1000?' : 'Sfat de Profesionist: De ce 1 KB = 1024 Bytes și nu 1000?'}
+        tip={lang === 'en'
+          ? '• In daily life we use base-10 decimals (1 kilometer = 1000 meters), but inside computers everything is built on powers of 2 (2¹⁰ = 1024)! Hence: 1 Byte = 8 bits, 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB, 1 TB = 1024 GB!'
+          : '• În viața obișnuită lucrăm în sistem zecimal (1 kilometru = 1000 metri), dar în calculatoare totul se bazează pe puteri ale lui 2 (2¹⁰ = 1024)! Așadar: 1 Byte = 8 biți, 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB, 1 TB = 1024 GB!'}
         bookPage="19–20"
-        extraAdvice="Când un producător vinde un SSD de 1 TB cu 1.000.000 MB, Windows calculează binar (împarte la 1024), de aceea apar circa 931 GB disponibili!"
+        extraAdvice={lang === 'en'
+          ? 'When a manufacturer sells a 1 TB SSD labeled 1,000,000 MB, Windows calculates in binary (dividing by 1024), which is why ~931 GB is shown as available!'
+          : 'Când un producător vinde un SSD de 1 TB cu 1.000.000 MB, Windows calculează binar (împarte la 1024), de aceea apar circa 931 GB disponibili!'}
       />
 
       {/* Task 1: The official textbook math problem (pag. 20, ex. 3) */}
@@ -87,29 +118,31 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
         <div className="flex items-center justify-between gap-2 mb-2">
           <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
             <Calculator className="w-5 h-5 text-rose-400" />
-            <span>Provocarea 1: Problema din manual (pag. 20, ex. 3)</span>
+            <span>{lang === 'en' ? 'Challenge 1: Problem from textbook (p. 20, ex. 3)' : 'Provocarea 1: Problema din manual (pag. 20, ex. 3)'}</span>
           </h3>
           <span className="text-xs font-mono text-rose-300 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30">
-            Calcul Binar
+            {lang === 'en' ? 'Binary Math' : 'Calcul Binar'}
           </span>
         </div>
 
         <p className="text-xs sm:text-sm text-slate-200 leading-relaxed mb-4">
-          „Un calculator dispune de un <strong>HDD de 1 TB</strong> și de un <strong>SSD de 512 GB</strong>. Care este capacitatea de stocare totală pentru acel calculator, exprimată în <strong>MB</strong>?”
+          {lang === 'en'
+            ? '“A computer is equipped with a 1 TB HDD and a 512 GB SSD. What is the total storage capacity of this computer expressed in MB?”'
+            : '„Un calculator dispune de un 1 TB HDD și de un 512 GB SSD. Care este capacitatea de stocare totală pentru acel calculator, exprimată în MB?”'}
         </p>
 
         {/* Guided Step-by-Step interactive inputs */}
         <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col gap-3.5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
             <span className="text-slate-300">
-              <strong>Pasul 1:</strong> Câți GB conține 1 TB conform manualului pag. 19?
+              <strong>{lang === 'en' ? 'Step 1:' : 'Pasul 1:'}</strong> {lang === 'en' ? 'How many GB are in 1 TB according to textbook p. 19?' : 'Câți GB conține 1 TB conform manualului pag. 19?'}
             </span>
             <div className="flex items-center gap-2 shrink-0">
               <input
                 type="number"
                 value={step1GB}
                 onChange={(e) => setStep1GB(e.target.value)}
-                placeholder="Introdu GB..."
+                placeholder={lang === 'en' ? 'Enter GB...' : 'Introdu GB...'}
                 className={`w-32 bg-slate-900 border px-3 py-1.5 rounded-lg text-xs text-white font-mono focus:outline-none ${
                   step1GB === '1024'
                     ? 'border-emerald-500 text-emerald-400'
@@ -123,7 +156,7 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
             <span className="text-slate-300">
-              <strong>Pasul 2:</strong> Capacitatea totală adunată în GB (1024 GB + 512 GB):
+              <strong>{lang === 'en' ? 'Step 2:' : 'Pasul 2:'}</strong> {lang === 'en' ? 'Total combined storage in GB (1024 GB + 512 GB):' : 'Capacitatea totală adunată în GB (1024 GB + 512 GB):'}
             </span>
             <div className="flex items-center gap-2 shrink-0">
               <input
@@ -144,12 +177,12 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
 
           <div className="pt-3 border-t border-slate-800">
             <span className="text-xs text-slate-300 block mb-2 font-semibold">
-              <strong>Pasul 3:</strong> Înmulțim 1536 GB cu 1024 pentru a afla capacitatea totală în MB:
+              <strong>{lang === 'en' ? 'Step 3:' : 'Pasul 3:'}</strong> {lang === 'en' ? 'Multiply 1536 GB by 1024 to determine total MB:' : 'Înmulțim 1536 GB cu 1024 pentru a afla capacitatea totală în MB:'}
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {[
-                { id: '1500000', label: '1.500.000 MB (calcul zecimal rotunjit)' },
-                { id: '1572864', label: '1.572.864 MB (1536 × 1024) ✓' },
+                { id: '1500000', label: lang === 'en' ? '1,500,000 MB (decimal rounded)' : '1.500.000 MB (calcul zecimal rotunjit)' },
+                { id: '1572864', label: lang === 'en' ? '1,572,864 MB (1536 × 1024) ✓' : '1.572.864 MB (1536 × 1024) ✓' },
                 { id: '2048000', label: '2.048.000 MB' },
               ].map(opt => (
                 <button
@@ -178,19 +211,16 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
       <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6">
         <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2 mb-2">
           <HardDrive className="w-5 h-5 text-amber-400" />
-          <span>Provocarea 2: Dispozitivul de stocare magnetic (pag. 20, ex. 2)</span>
+          <span>{lang === 'en' ? 'Challenge 2: Magnetic storage device (p. 20, ex. 2)' : 'Provocarea 2: Dispozitivul de stocare magnetic (pag. 20, ex. 2)'}</span>
         </h3>
         <p className="text-xs sm:text-sm text-slate-200 mb-3">
-          Care dintre aceste medii de stocare folosește discuri magnetice rotative cu capete de citire?
+          {lang === 'en'
+            ? 'Which of these storage media uses rotating magnetic platters with read/write heads?'
+            : 'Care dintre aceste medii de stocare folosește discuri magnetice rotative cu capete de citire?'}
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {[
-            { id: 'ssd', icon: '🔲', title: 'SSD (Solid-State)', desc: 'Cipuri Flash / Semiconductori' },
-            { id: 'hdd', icon: '🧲', title: 'HDD (Discul Dur)', desc: 'Discuri magnetice rotative ✓' },
-            { id: 'usb', icon: '🔌', title: 'Stick USB', desc: 'Cipuri Flash / Semiconductori' },
-            { id: 'cd', icon: '💿', title: 'Disc CD / DVD', desc: 'Optic / Rază Laser' },
-          ].map(dev => (
+          {storageDevices.map(dev => (
             <button
               key={dev.id}
               onClick={() => {
@@ -217,10 +247,12 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
       <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6">
         <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2 mb-2">
           <Sparkles className="w-5 h-5 text-teal-400" />
-          <span>Provocarea 3: Rebusul din manual (pag. 20, rebus vertical)</span>
+          <span>{lang === 'en' ? 'Challenge 3: Crossword riddle from textbook (p. 20, vertical clue)' : 'Provocarea 3: Rebusul din manual (pag. 20, rebus vertical)'}</span>
         </h3>
         <p className="text-xs sm:text-sm text-slate-200 mb-3">
-          „Dispozitivul de intrare pentru indicare și selecție pe ecran, numit după un mic animal în limba engleză:”
+          {lang === 'en'
+            ? '“The pointing and selection input device named after a small rodent in English:”'
+            : '„Dispozitivul de intrare pentru indicare și selecție pe ecran, numit după un mic animal în limba engleză:”'}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -234,9 +266,11 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
           />
 
           <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
-            <span>Indiciu: 5 litere (M - O - U - S - E)</span>
+            <span>{lang === 'en' ? 'Hint: 5 letters (M - O - U - S - E)' : 'Indiciu: 5 litere (M - O - U - S - E)'}</span>
             {isRiddleValid && (
-              <span className="text-emerald-400 font-bold ml-2">✓ Corect: MOUSE!</span>
+              <span className="text-emerald-400 font-bold ml-2">
+                {lang === 'en' ? '✓ Correct: MOUSE!' : '✓ Corect: MOUSE!'}
+              </span>
             )}
           </div>
         </div>
@@ -247,10 +281,10 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
         <div className="text-xs text-slate-400">
           {completed ? (
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" /> Ai obținut 100/100 Puncte! Diploma se generează acum...
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'You earned 100/100 Points! Generating diploma...' : 'Ai obținut 100/100 Puncte! Diploma se generează acum...'}
             </span>
           ) : (
-            <span>Completează calculul capacității, alege dispozitivul magnetic și scrie cuvântul din rebus.</span>
+            <span>{lang === 'en' ? 'Calculate storage capacity, choose magnetic device, and solve the riddle.' : 'Completează calculul capacității, alege dispozitivul magnetic și scrie cuvântul din rebus.'}</span>
           )}
         </div>
 
@@ -264,7 +298,7 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
           }`}
         >
           <Award className="w-5 h-5 text-amber-300" />
-          <span>{completed ? 'Misiune Încheiată!' : 'Finalizează Misiunea & Revendică Diploma'}</span>
+          <span>{completed ? (lang === 'en' ? 'Mission Finished!' : 'Misiune Încheiată!') : (lang === 'en' ? 'Complete Mission & Claim Diploma' : 'Finalizează Misiunea & Revendică Diploma')}</span>
         </button>
       </div>
     </div>

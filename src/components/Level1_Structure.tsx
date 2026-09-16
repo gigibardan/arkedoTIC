@@ -9,7 +9,7 @@ interface Level1Props {
 }
 
 export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   // Simulator state
   const [currentPath, setCurrentPath] = useState<'desktop' | 'baza_secreta'>('desktop');
@@ -106,7 +106,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
 
           {/* Breadcrumb Path Bar */}
           <div className="bg-slate-950/70 px-4 py-2.5 text-xs flex items-center gap-2 text-slate-300 border-b border-slate-800 font-mono">
-            <span className="text-slate-400">📍 Cale:</span>
+            <span className="text-slate-400">{lang === 'en' ? '📍 Path:' : '📍 Cale:'}</span>
             <div className="flex items-center gap-1 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700/80 text-emerald-400">
               <HardDrive className="w-3 h-3 text-slate-400" />
               <span>{currentPath === 'desktop' ? t.l1PathDesktop : t.l1PathInside}</span>
@@ -121,13 +121,13 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                   <div
                     onClick={handleOpenRoot}
                     className="flex flex-col items-center p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-800 cursor-pointer border-2 border-emerald-500/50 hover:border-emerald-400 transition transform hover:scale-105 shadow-lg w-32 text-center group"
-                    title="Click pentru a deschide folderul"
+                    title={lang === 'en' ? 'Click to open folder' : 'Click pentru a deschide folderul'}
                   >
                     <div className="text-5xl group-hover:scale-110 transition drop-shadow">
                       📁
                     </div>
                     <span className="text-xs font-bold mt-2 text-emerald-300 truncate w-full">
-                      Baza Secreta
+                      {lang === 'en' ? 'Secret Base' : 'Baza Secreta'}
                     </span>
                     <span className="text-[10px] text-amber-300 font-medium mt-0.5">
                       {t.l1RootHint}
@@ -146,16 +146,16 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                 {hasJocuri ? (
                   <div className="flex flex-col items-center p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/50 shadow-md w-32 text-center animate-fade">
                     <div className="text-5xl drop-shadow">🎮</div>
-                    <span className="text-xs font-bold mt-2 text-cyan-300">Jocuri</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5">Subfolder</span>
+                    <span className="text-xs font-bold mt-2 text-cyan-300">{lang === 'en' ? 'Games' : 'Jocuri'}</span>
+                    <span className="text-[10px] text-slate-400 mt-0.5">{lang === 'en' ? 'Subfolder' : 'Subfolder'}</span>
                   </div>
                 ) : null}
 
                 {hasTeme ? (
                   <div className="flex flex-col items-center p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/50 shadow-md w-32 text-center animate-fade">
                     <div className="text-5xl drop-shadow">📚</div>
-                    <span className="text-xs font-bold mt-2 text-amber-300">Teme</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5">Subfolder</span>
+                    <span className="text-xs font-bold mt-2 text-amber-300">{lang === 'en' ? 'Homework' : 'Teme'}</span>
+                    <span className="text-[10px] text-slate-400 mt-0.5">{lang === 'en' ? 'Subfolder' : 'Subfolder'}</span>
                   </div>
                 ) : null}
 
@@ -223,7 +223,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               </h3>
             </div>
             <p className="text-xs text-slate-400 mb-4">
-              Ierarhie directoare / Directory tree:
+              {lang === 'en' ? 'Directory Hierarchy Tree:' : 'Ierarhie directoare:'}
             </p>
 
             {/* Tree nodes */}
@@ -234,17 +234,17 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               </div>
               <div className="ml-4 pl-3 border-l-2 border-slate-700 space-y-2">
                 <div className={`flex items-center gap-2 ${hasRootFolder ? 'text-emerald-400 font-bold' : 'text-slate-500'}`}>
-                  <span>└── 📁 Baza Secreta</span>
+                  <span>└── 📁 {lang === 'en' ? 'Secret Base' : 'Baza Secreta'}</span>
                   {hasRootFolder && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
                 </div>
 
                 <div className="ml-4 pl-3 border-l-2 border-slate-700 space-y-1.5">
                   <div className={`flex items-center gap-2 ${hasJocuri ? 'text-cyan-400 font-bold' : 'text-slate-500'}`}>
-                    <span>├── 🎮 Jocuri</span>
+                    <span>├── 🎮 {lang === 'en' ? 'Games' : 'Jocuri'}</span>
                     {hasJocuri && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />}
                   </div>
                   <div className={`flex items-center gap-2 ${hasTeme ? 'text-amber-400 font-bold' : 'text-slate-500'}`}>
-                    <span>└── 📚 Teme</span>
+                    <span>└── 📚 {lang === 'en' ? 'Homework' : 'Teme'}</span>
                     {hasTeme && <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />}
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
           <div className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-start gap-2">
             <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
             <span>
-              <strong>ARKEDO:</strong> Un folder este un recipient digital pentru fișiere bine organizate!
+              <strong>ARKEDO:</strong> {lang === 'en' ? 'A folder is a digital container for well-organized files!' : 'Un folder este un recipient digital pentru fișiere bine organizate!'}
             </span>
           </div>
         </div>

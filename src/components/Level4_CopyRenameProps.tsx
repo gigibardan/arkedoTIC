@@ -9,7 +9,7 @@ interface Level4Props {
 }
 
 export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [copied, setCopied] = useState<boolean>(false);
   const [renamedName, setRenamedName] = useState<string>('test1.txt');
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
@@ -78,7 +78,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
       <TeacherTip
         title={t.l4TipTitle}
         tip={t.l4TipText}
-        bookPage="28 și 30"
+        bookPage={lang === 'en' ? '28 & 30' : '28 și 30'}
         extraAdvice={t.l4TipExtra}
       />
 
@@ -92,7 +92,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                 {t.l4FolderTemeTitle}
               </span>
               <span className="text-[11px] text-purple-400 font-mono">
-                {copied ? '2 files' : '1 file'}
+                {copied ? (lang === 'en' ? '2 files' : '2 fișiere') : (lang === 'en' ? '1 file' : '1 fișier')}
               </span>
             </div>
 
@@ -223,7 +223,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-900">
                   <span className="text-slate-500">{t.l4PropsSize}</span>
-                  <span className="text-amber-300 font-bold">12.0 KB (12,288 octeți)</span>
+                  <span className="text-amber-300 font-bold">{lang === 'en' ? '12.0 KB (12,288 bytes)' : '12.0 KB (12,288 octeți)'}</span>
                 </div>
                 <div className="flex justify-between py-1">
                   <span className="text-slate-500">{t.l4PropsCreated}</span>

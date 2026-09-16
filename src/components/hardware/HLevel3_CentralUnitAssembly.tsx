@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
-import { Cpu, HardDrive, Zap, Layers, CheckCircle2, ArrowRight, Sparkles, HelpCircle } from 'lucide-react';
+import { Cpu, Zap, CheckCircle2, ArrowRight, HelpCircle } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface HLevel3Props {
   onComplete: () => void;
@@ -16,7 +17,7 @@ interface ComponentPart {
   detail: string;
 }
 
-const PARTS: ComponentPart[] = [
+const PARTS_RO: ComponentPart[] = [
   {
     id: 'mobo',
     name: 'Placa de bază (Motherboard)',
@@ -59,17 +60,63 @@ const PARTS: ComponentPart[] = [
   },
 ];
 
+const PARTS_EN: ComponentPart[] = [
+  {
+    id: 'mobo',
+    name: 'Motherboard',
+    slotNumber: 2,
+    icon: '🟩',
+    role: 'The primary circuit board holding the CPU, RAM modules, and interconnecting all internal components.',
+    detail: 'Textbook p. 17, point 2',
+  },
+  {
+    id: 'cpu',
+    name: 'Microprocessor (CPU)',
+    slotNumber: 1,
+    icon: '🧠',
+    role: 'The brain of the computer: executes arithmetic, logic, and orchestrates all hardware instructions.',
+    detail: 'Textbook p. 17, point 1',
+  },
+  {
+    id: 'ram',
+    name: 'RAM Memory',
+    slotNumber: 3,
+    icon: '⚡',
+    role: 'Temporary working memory storing volatile data needed immediately by active applications.',
+    detail: 'Textbook p. 17, point 3',
+  },
+  {
+    id: 'psu',
+    name: 'Power Supply Unit (PSU)',
+    slotNumber: 5,
+    icon: '🔌',
+    role: 'Converts wall AC electricity into regulated DC power required by internal computer hardware.',
+    detail: 'Textbook p. 17, point 5',
+  },
+  {
+    id: 'storage',
+    name: 'SSD / HDD (Permanent Storage)',
+    slotNumber: 7,
+    icon: '💾',
+    role: 'Non-volatile storage where Windows, files, documents, and games are safely preserved without power.',
+    detail: 'Textbook p. 17, point 7',
+  },
+];
+
 export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete }) => {
+  const { lang, t } = useLanguage();
+
   // Array of installed part IDs
   const [installedParts, setInstalledParts] = useState<string[]>([]);
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
 
   // Exercise from textbook pag. 17, ex. 3:
-  // "Pentru a păstra o fotografie pe calculator o salvăm în: A) memoria RAM, B) HDD/SSD"
   const [quizStorageAnswer, setQuizStorageAnswer] = useState<string | null>(null);
   
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+
+  const parts = lang === 'en' ? PARTS_EN : PARTS_RO;
 
   const handleInstall = (partId: string) => {
     sounds.playCorrect();
@@ -79,7 +126,7 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
     setSelectedPartId(partId);
   };
 
-  const isAllInstalled = PARTS.every(p => installedParts.includes(p.id));
+  const isAllInstalled = parts.every(p => installedParts.includes(p.id));
   const isQuizCorrect = quizStorageAnswer === 'ssd';
 
   const canValidate = isAllInstalled && quizStorageAnswer !== null;
@@ -101,7 +148,7 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
     }
   };
 
-  const activePart = PARTS.find(p => p.id === selectedPartId) || PARTS[0];
+  const activePart = parts.find(p => p.id === selectedPartId) || parts[0];
 
   return (
     <div className="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-4 sm:p-7 shadow-2xl backdrop-blur">
@@ -110,27 +157,31 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-black uppercase tracking-wider font-mono">
-              Nivelul 3 din 5 • Modulul Hardware
+              {lang === 'en' ? 'Level 3 of 5 • Hardware Module' : 'Nivelul 3 din 5 • Modulul Hardware'}
             </span>
-            <span className="text-xs text-slate-400 font-semibold">• Manual pag. 15–17</span>
+            <span className="text-xs text-slate-400 font-semibold">• {t.bookPagePrefix} 15–17</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
-            Laboratorul Tehnic: Asamblează Unitatea Centrală 🖥️
+            {lang === 'en' ? 'Tech Lab: Assemble the Central Processing Unit 🖥️' : 'Laboratorul Tehnic: Asamblează Unitatea Centrală 🖥️'}
           </h2>
         </div>
         <div className="text-right shrink-0">
           <span className="text-xs font-bold text-amber-400 font-mono bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-xl">
-            Recompensă: +20 puncte
+            {lang === 'en' ? 'Reward: +20 points' : 'Recompensă: +20 puncte'}
           </span>
         </div>
       </div>
 
       {/* Teacher Tip Component */}
       <TeacherTip
-        title="Sfat de Profesionist: RAM vs. SSD (Masa de lucru vs. Dulapul)"
-        tip="• Memoria RAM este biroul de lucru: cât timp lucrezi la un desen, foaia stă pe birou. Dacă se stinge lumina (se ia curentul), tot ce era pe birou se pierde! • Discul SSD/HDD este dulapul de arhivă: când apeși Ctrl+S, foaia e pusă în dosar în dulap și rămâne în siguranță chiar și fără curent!"
+        title={lang === 'en' ? 'Teacher Pro Tip: RAM vs. SSD (Work Desk vs. Storage Closet)' : 'Sfat de Profesionist: RAM vs. SSD (Masa de lucru vs. Dulapul)'}
+        tip={lang === 'en'
+          ? '• RAM is your desk: while drawing, your paper rests on your desk. If power goes out, everything on the desk vanishes! • SSD/HDD is the archival cabinet: when you press Ctrl+S, the file is tucked into the drawer safely even without power!'
+          : '• Memoria RAM este biroul de lucru: cât timp lucrezi la un desen, foaia stă pe birou. Dacă se stinge lumina (se ia curentul), tot ce era pe birou se pierde! • Discul SSD/HDD este dulapul de arhivă: când apeși Ctrl+S, foaia e pusă în dosar în dulap și rămâne în siguranță chiar și fără curent!'}
         bookPage="17"
-        extraAdvice="Microprocesorul generează multă căldură la calcul: are nevoie mereu de pastă termoconductoare și un radiator cu ventilator (cooler)!"
+        extraAdvice={lang === 'en'
+          ? 'Microprocessors generate heavy heat during computation: always apply thermal paste and a heatsink with a fan (cooler)!'
+          : 'Microprocesorul generează multă căldură la calcul: are nevoie mereu de pastă termoconductoare și un radiator cu ventilator (cooler)!'}
       />
 
       {/* Assembly Workbench Section */}
@@ -138,10 +189,10 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
         <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
             <Cpu className="w-5 h-5 text-cyan-400" />
-            <span>Misiunea 1: Instalează componentele vitale în carcasă (Fig. 5, pag. 17)</span>
+            <span>{lang === 'en' ? 'Mission 1: Install vital parts into the PC chassis (Fig. 5, p. 17)' : 'Misiunea 1: Instalează componentele vitale în carcasă (Fig. 5, pag. 17)'}</span>
           </h3>
           <span className="text-xs font-mono text-cyan-300 bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-700">
-            {installedParts.length}/{PARTS.length} montate
+            {installedParts.length}/{parts.length} {lang === 'en' ? 'mounted' : 'montate'}
           </span>
         </div>
 
@@ -150,13 +201,13 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
           {/* Chassis Visual Representation */}
           <div className="lg:col-span-7 bg-slate-950/90 border-2 border-slate-700 rounded-2xl p-4 sm:p-5 relative shadow-inner flex flex-col justify-between min-h-[300px]">
             <div className="flex items-center justify-between text-xs font-mono text-slate-400 pb-2 border-b border-slate-800">
-              <span className="font-bold text-slate-200">CARCASĂ PC • VEDERE INTERIOARĂ</span>
+              <span className="font-bold text-slate-200">{lang === 'en' ? 'PC CHASSIS • INTERNAL VIEW' : 'CARCASĂ PC • VEDERE INTERIOARĂ'}</span>
               <span>STAND-BY • 230V</span>
             </div>
 
             {/* Slots diagram */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 my-4">
-              {PARTS.map((part) => {
+              {parts.map((part) => {
                 const isInstalled = installedParts.includes(part.id);
                 const isSelected = selectedPartId === part.id;
 
@@ -177,7 +228,7 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
                   >
                     <div className="flex items-center justify-between w-full text-[10px] font-mono text-slate-400">
                       <span>SLOT #{part.slotNumber}</span>
-                      {isInstalled && <span className="text-emerald-400 font-bold">MONTAT ✓</span>}
+                      {isInstalled && <span className="text-emerald-400 font-bold">{lang === 'en' ? 'MOUNTED ✓' : 'MONTAT ✓'}</span>}
                     </div>
 
                     <div className="text-2xl my-1">
@@ -211,9 +262,9 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
           {/* Component Inventory & Install Controls */}
           <div className="lg:col-span-5 flex flex-col gap-2.5">
             <div className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono mb-1">
-              Banc de Lucru Tehnician:
+              {lang === 'en' ? 'Technician Workbench:' : 'Banc de Lucru Tehnician:'}
             </div>
-            {PARTS.map((part) => {
+            {parts.map((part) => {
               const isInstalled = installedParts.includes(part.id);
 
               return (
@@ -244,12 +295,12 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
                     {isInstalled ? (
                       <>
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Instalat</span>
+                        <span>{lang === 'en' ? 'Installed' : 'Instalat'}</span>
                       </>
                     ) : (
                       <>
                         <Zap className="w-3.5 h-3.5" />
-                        <span>Montează</span>
+                        <span>{lang === 'en' ? 'Mount' : 'Montează'}</span>
                       </>
                     )}
                   </button>
@@ -264,10 +315,12 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
       <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6">
         <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2 mb-2">
           <HelpCircle className="w-5 h-5 text-cyan-400" />
-          <span>Misiunea 2: Întrebare tehnică din manual (pag. 17, Ex. 3b)</span>
+          <span>{lang === 'en' ? 'Mission 2: Technical question from textbook (p. 17, Ex. 3b)' : 'Misiunea 2: Întrebare tehnică din manual (pag. 17, Ex. 3b)'}</span>
         </h3>
         <p className="text-xs sm:text-sm text-slate-200 mb-3">
-          „Pentru a păstra definitiv o fotografie sau un proiect pe calculator, unde trebuie să o salvăm?”
+          {lang === 'en'
+            ? '“To permanently preserve a photo or project on a computer, where must we save it?”'
+            : '„Pentru a păstra definitiv o fotografie sau un proiect pe calculator, unde trebuie să o salvăm?”'}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -282,9 +335,11 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
                 : 'bg-slate-950 hover:bg-slate-900 text-slate-300 border-slate-800'
             }`}
           >
-            <div className="font-bold text-white mb-1">A) În memoria RAM</div>
+            <div className="font-bold text-white mb-1">
+              {lang === 'en' ? 'A) In RAM Memory' : 'A) În memoria RAM'}
+            </div>
             <div className="text-[11px] text-slate-400">
-              (Memoria de lucru temporară care se șterge la stingerea PC-ului)
+              {lang === 'en' ? '(Volatile working memory erased upon shutdown)' : '(Memoria de lucru temporară care se șterge la stingerea PC-ului)'}
             </div>
           </button>
 
@@ -299,16 +354,20 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
                 : 'bg-slate-950 hover:bg-slate-900 text-slate-300 border-slate-800'
             }`}
           >
-            <div className="font-bold text-white mb-1">B) Pe HDD / SSD (Memorie permanentă) ✓</div>
+            <div className="font-bold text-white mb-1">
+              {lang === 'en' ? 'B) On HDD / SSD (Permanent Storage) ✓' : 'B) Pe HDD / SSD (Memorie permanentă) ✓'}
+            </div>
             <div className="text-[11px] text-slate-400">
-              (Discul de stocare magnetic sau flash unde datele rămân în siguranță)
+              {lang === 'en' ? '(Magnetic or flash drive where files remain preserved)' : '(Discul de stocare magnetic sau flash unde datele rămân în siguranță)'}
             </div>
           </button>
         </div>
 
         {showErrors && quizStorageAnswer === 'ram' && (
           <p className="text-xs text-rose-400 font-bold mt-2">
-            Greșit! Memoria RAM este volatilă: dacă iei curentul, datele se pierd! Fotografiile se salvează pe HDD/SSD!
+            {lang === 'en'
+              ? 'Incorrect! RAM is volatile: when powered off, data vanishes! Photos are saved to HDD/SSD!'
+              : 'Greșit! Memoria RAM este volatilă: dacă iei curentul, datele se pierd! Fotografiile se salvează pe HDD/SSD!'}
           </p>
         )}
       </div>
@@ -318,10 +377,10 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
         <div className="text-xs text-slate-400">
           {completed ? (
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" /> Unitate Centrală asamblată cu succes! +20 puncte adăugate.
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'Central unit assembled successfully! +20 points added.' : 'Unitate Centrală asamblată cu succes! +20 puncte adăugate.'}
             </span>
           ) : (
-            <span>Instalează toate cele 5 componente și răspunde la întrebarea tehnică.</span>
+            <span>{lang === 'en' ? 'Install all 5 components and answer the technical question.' : 'Instalează toate cele 5 componente și răspunde la întrebarea tehnică.'}</span>
           )}
         </div>
 
@@ -334,7 +393,7 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
               : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-600/30 active:scale-95'
           }`}
         >
-          <span>{completed ? 'Nivel Finalizat ✓' : 'Validează & Mergi la Nivelul 4 (+20 pct)'}</span>
+          <span>{completed ? (lang === 'en' ? 'Level Completed ✓' : 'Nivel Finalizat ✓') : (lang === 'en' ? 'Validate & Go to Level 4 (+20 pts)' : 'Validează & Mergi la Nivelul 4 (+20 pct)')}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

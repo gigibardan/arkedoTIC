@@ -12,7 +12,7 @@ interface TeacherPortalProps {
 const TEACHER_HARDCODED_PASSWORD = 'Ark3do!';
 
 export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem('arkedo_teacher_auth') === 'true';
   });
@@ -98,7 +98,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div>
             <label className="block text-xs font-mono text-slate-300 uppercase tracking-wider mb-2 font-bold">
-              Parolă Acces Profesor
+              {lang === 'en' ? 'Teacher Access Password' : 'Parolă Acces Profesor'}
             </label>
             <div className="relative">
               <input
@@ -152,15 +152,15 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold font-mono">
-              <ShieldCheck className="w-3.5 h-3.5" /> Panou Securizat Cadru Didactic
+              <ShieldCheck className="w-3.5 h-3.5" /> {lang === 'en' ? 'Secure Faculty Portal' : 'Panou Securizat Cadru Didactic'}
             </div>
             {isCloudConnected ? (
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold font-mono">
-                <Cloud className="w-3.5 h-3.5" /> Sincronizat Firestore
+                <Cloud className="w-3.5 h-3.5" /> {lang === 'en' ? 'Firestore Cloud Synced' : 'Sincronizat Firestore'}
               </div>
             ) : (
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-mono">
-                <HardDrive className="w-3.5 h-3.5 text-cyan-400" /> Catalog Local Securizat
+                <HardDrive className="w-3.5 h-3.5 text-cyan-400" /> {lang === 'en' ? 'Local Secure Gradebook' : 'Catalog Local Securizat'}
               </div>
             )}
           </div>
@@ -251,7 +251,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         <div className="p-5 border-b border-slate-800 flex items-center justify-between">
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Award className="w-4 h-4 text-emerald-400" />
-            <span>Evidență Note & Realizări</span>
+            <span>{lang === 'en' ? 'Grades & Submissions Registry' : 'Evidență Note & Realizări'}</span>
           </h3>
           <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
             Firebase: Firestore Cloud
@@ -261,7 +261,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         {loading ? (
           <div className="p-12 text-center text-slate-400 flex flex-col items-center gap-3">
             <RefreshCw className="w-6 h-6 text-emerald-400 animate-spin" />
-            <p className="text-xs font-mono">Se încarcă datele din baza de date...</p>
+            <p className="text-xs font-mono">{lang === 'en' ? 'Loading records from database...' : 'Se încarcă datele din baza de date...'}</p>
           </div>
         ) : results.length === 0 ? (
           <div className="p-12 text-center text-slate-400">
@@ -304,14 +304,14 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                       ⏱️ {formatSeconds(r.elapsedSeconds)}
                     </td>
                     <td className="py-3.5 px-4 font-mono text-slate-400 text-xs">
-                      {r.dateFormatted || 'Recent'}
+                      {r.dateFormatted || (lang === 'en' ? 'Recent' : 'Recent')}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => handleDelete(r.id)}
                         disabled={deletingId === r.id}
                         className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
-                        title="Șterge rând"
+                        title={lang === 'en' ? 'Delete entry' : 'Șterge rând'}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
