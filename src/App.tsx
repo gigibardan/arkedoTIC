@@ -5,7 +5,9 @@ import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
 import { CoursesCatalog } from './components/CoursesCatalog';
 
-// Files Mission (Unitatea 2 - Manual pag. 27-30)
+// Files Mission (Unitatea 2 - Manual pag. 22-30)
+import { FLevel1_OSInterface } from './components/files/FLevel1_OSInterface';
+import { FLevel2_DataMemory } from './components/files/FLevel2_DataMemory';
 import { Level1_Structure } from './components/Level1_Structure';
 import { Level2_SelectionSearch } from './components/Level2_SelectionSearch';
 import { Level3_MoveShortcuts } from './components/Level3_MoveShortcuts';
@@ -234,26 +236,34 @@ function GameContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Files level progression
+  // Files level progression (7 levels + victory level 8)
   const handleFilesComplete1 = () => {
-    setFilesScore(20);
+    setFilesScore(10);
     setFilesLevel(2);
   };
   const handleFilesComplete2 = () => {
-    setFilesScore(40);
+    setFilesScore(25);
     setFilesLevel(3);
   };
   const handleFilesComplete3 = () => {
-    setFilesScore(60);
+    setFilesScore(40);
     setFilesLevel(4);
   };
   const handleFilesComplete4 = () => {
-    setFilesScore(80);
+    setFilesScore(55);
     setFilesLevel(5);
   };
   const handleFilesComplete5 = () => {
-    setFilesScore(100);
+    setFilesScore(70);
     setFilesLevel(6);
+  };
+  const handleFilesComplete6 = () => {
+    setFilesScore(85);
+    setFilesLevel(7);
+  };
+  const handleFilesComplete7 = () => {
+    setFilesScore(100);
+    setFilesLevel(8);
     setIsTimerRunning(false);
   };
 
@@ -349,21 +359,27 @@ function GameContent() {
             {activeMission === 'files' && (
               <div className="flex-1">
                 {filesLevel === 1 && (
-                  <Level1_Structure onComplete={handleFilesComplete1} />
+                  <FLevel1_OSInterface onComplete={handleFilesComplete1} />
                 )}
                 {filesLevel === 2 && (
-                  <Level2_SelectionSearch onComplete={handleFilesComplete2} />
+                  <FLevel2_DataMemory onComplete={handleFilesComplete2} />
                 )}
                 {filesLevel === 3 && (
-                  <Level3_MoveShortcuts onComplete={handleFilesComplete3} />
+                  <Level1_Structure onComplete={handleFilesComplete3} />
                 )}
                 {filesLevel === 4 && (
-                  <Level4_CopyRenameProps onComplete={handleFilesComplete4} />
+                  <Level2_SelectionSearch onComplete={handleFilesComplete4} />
                 )}
                 {filesLevel === 5 && (
-                  <Level5_RecycleBin onComplete={handleFilesComplete5} />
+                  <Level3_MoveShortcuts onComplete={handleFilesComplete5} />
                 )}
                 {filesLevel === 6 && (
+                  <Level4_CopyRenameProps onComplete={handleFilesComplete6} />
+                )}
+                {filesLevel === 7 && (
+                  <Level5_RecycleBin onComplete={handleFilesComplete7} />
+                )}
+                {filesLevel === 8 && (
                   <VictoryScreen
                     score={filesScore}
                     maxScore={maxScore}
@@ -381,7 +397,7 @@ function GameContent() {
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && currentLevel <= 5 && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7)) && (
         <div className="sticky bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}

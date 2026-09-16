@@ -1,4 +1,4 @@
-export type GameLevel = 1 | 2 | 3 | 4 | 5 | 6; // 6 is Victory screen
+export type GameLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8; // 6 is hardware victory, 8 is files victory
 
 export type Language = 'ro' | 'en';
 

@@ -78,8 +78,8 @@ export const translations = {
     bookPagePrefix: 'Manual pag.',
     rememberLabel: 'Reține pentru test:',
 
-    // Level 1
-    l1Tag: 'Nivelul 1 din 5 • Structura Arborescentă',
+    // Level 1 (now level 3 of 7 in Files)
+    l1Tag: 'Nivelul 3 din 7 • Structura Arborescentă',
     l1Title: 'File Explorer & Structura Arborescentă 📁',
     l1Desc: 'Conform manualului de informatică (pagina 27), datele de pe calculator sunt organizate într-o structură arborescentă (ca un copac cu ramuri și frunze). Creează folderul principal Baza Secreta, iar în interiorul său creează două ramuri (subfoldere): Jocuri și Teme.',
     l1TipTitle: 'Cum pornim rapid programul File Explorer?',
@@ -104,11 +104,11 @@ export const translations = {
     l1Chk1: 'Pasul 1: Am creat pe Desktop folderul principal "Baza Secreta" (Click dreapta ➔ Nou / New ➔ Folder).',
     l1Chk2: 'Pasul 2: Am deschis folderul (dublu-click) și am creat subfolderul "Jocuri" 🎮 pentru salvările jocurilor.',
     l1Chk3: 'Pasul 3: În același folder am creat și al doilea subfolder "Teme" 📚 pentru proiectele școlare.',
-    l1RewardText: 'Recompensă: +20 Puncte și insigna Arhitect de Foldere',
-    l1FinishBtn: 'Finalizează Nivelul 1',
+    l1RewardText: 'Recompensă: +15 Puncte și insigna Arhitect de Foldere',
+    l1FinishBtn: 'Finalizează Nivelul 3',
 
-    // Level 2
-    l2Tag: 'Nivelul 2 din 5 • Selecția Multiplă & Căutarea',
+    // Level 2 (now level 4 of 7)
+    l2Tag: 'Nivelul 4 din 7 • Selecția Multiplă & Căutarea',
     l2Title: 'Magia Selecției Multiple & Căutarea Rapidă 🎯',
     l2Desc: 'În manualul de informatică (pagina 29), învățăm cum să selectăm rapid mai multe fișiere deodată (cu tastele Ctrl, Shift sau Ctrl + A) și cum să găsim un fișier pierdut folosind caseta de căutare (Search).',
     l2TipTitle: 'Trucurile secrete de selecție în Windows (Manual pag. 29)',
@@ -124,7 +124,7 @@ export const translations = {
     l2SelectedCounter: 'Fișiere selectate:',
     l2AllSelectedMessage: '🎉 Toate fișierele sunt selectate!',
     l2SelectHint: 'Folosește Ctrl+Click sau butonul de Ctrl+A',
-    l2ObjectivesTitle: 'Obiectivele Nivelului 2:',
+    l2ObjectivesTitle: 'Obiectivele Nivelului 4:',
     l2Obj1: 'Selectează toate cele 5 fișiere (Ctrl+A)',
     l2Obj2: 'Folosește căutarea pentru cuvântul "arbore"',
     l2QuizTitle: 'Verificare din manual (pag. 29):',
@@ -132,11 +132,11 @@ export const translations = {
     l2QuizOptionA: 'A) Ctrl + A (Select All)',
     l2QuizOptionB: 'B) Ctrl + C (Copy)',
     l2QuizOptionC: 'C) Alt + F4 (Close)',
-    l2RewardText: 'Recompensă: +20 Puncte și insigna Maestru al Selecției',
-    l2FinishBtn: 'Finalizează Nivelul 2',
+    l2RewardText: 'Recompensă: +15 Puncte și insigna Maestru al Selecției',
+    l2FinishBtn: 'Finalizează Nivelul 4',
 
-    // Level 3
-    l3Tag: 'Nivelul 3 din 5 • Mutarea & Caractere Interzise',
+    // Level 3 (now level 5 of 7)
+    l3Tag: 'Nivelul 5 din 7 • Mutarea & Caractere Interzise',
     l3Title: 'Mutarea Fulger: Foarfeca Digitală ⚡️',
     l3Desc: 'Conform manualului (pagina 28 și 30), mutarea unui fișier înseamnă decuparea lui din locul vechi și mutarea în noua destinație. Folosește Ctrl + X și Ctrl + V pentru a muta fișierul de joc în folderul corect!',
     l3TipTitle: 'Ce se întâmplă la Mutare și ce caractere sunt interzise? (Manual pag. 28 & 30)',
@@ -162,11 +162,11 @@ export const translations = {
     l3QuizOptBSubDef: 'Fără semne interzise',
     l3QuizOptC: 'C) Imagini_partea2*',
     l3QuizOptCSub: 'Conține asterisc (*)',
-    l3RewardText: 'Recompensă: +20 Puncte și insigna Maestru Scurtături',
-    l3FinishBtn: 'Finalizează Nivelul 3',
+    l3RewardText: 'Recompensă: +15 Puncte și insigna Maestru Scurtături',
+    l3FinishBtn: 'Finalizează Nivelul 5',
 
-    // Level 4
-    l4Tag: 'Nivelul 4 din 5 • Copiere, Redenumire & Extensii',
+    // Level 4 (now level 6 of 7)
+    l4Tag: 'Nivelul 6 din 7 • Copiere, Redenumire & Extensii',
     l4Title: 'Copierea, Tasta F2 și Secretele Extensiilor 🔍',
     l4Desc: 'Conform manualului (paginile 28 și 30), copierea creează o dublură de siguranță, tasta rapidă F2 redenumește fișierul, iar extensia (.txt, .docx, .jpg) indică tipul fișierului și programul cu care se deschide!',
     l4TipTitle: 'Ce ne arată extensia unui fișier? (Manual pag. 28 & 30)',
@@ -198,11 +198,11 @@ export const translations = {
     l4QuizOptB: 'B) Numărul de pagini al documentului',
     l4StepHint: '👉 Pasul următor: Apasă butonul „Tasta F2 (Rename)” și dă fișierului numele proiect_secret.txt!',
     l4StepDone: '✓ Super! Fișierul a fost duplicat și redenumit!',
-    l4RewardText: 'Recompensă: +20 Puncte și insigna Detectiv Fișiere',
-    l4FinishBtn: 'Finalizează Nivelul 4',
+    l4RewardText: 'Recompensă: +15 Puncte și insigna Detectiv Fișiere',
+    l4FinishBtn: 'Finalizează Nivelul 6',
 
-    // Level 5
-    l5Tag: 'Nivelul 5 din 5 • Salvarea Datelor & Coșul de Reciclare',
+    // Level 5 (now level 7 of 7)
+    l5Tag: 'Nivelul 7 din 7 • Salvarea Datelor & Coșul de Reciclare',
     l5Title: 'Salvarea din Coșul de Reciclare (Recycle Bin) 🗑️',
     l5Desc: 'Un accident informatic s-a produs! Folderul cu proiectul școlar a fost șters din greșeală și a ajuns în Coșul de Reciclare. Aplică ce ai învățat în manual (pagina 29) pentru a-l Restaura (Restore) intact!',
     l5TipTitle: 'Coșul de Reciclare este plasa ta de siguranță! (Manual pag. 29)',
@@ -227,8 +227,8 @@ export const translations = {
     l5QuizOptASub: 'Dăm click dreapta pe fișier și alegem comanda Restaurează (Restore).',
     l5QuizOptB: 'B) NU, se pierde instantaneu',
     l5QuizOptBSub: 'Calculatorul îl arde imediat din memorie.',
-    l5AllDoneNote: '🎉 Excelent! Ai stăpânit toate cele 5 abilități din manual!',
-    l5RewardText: 'Recompensă: +20 Puncte și insigna Gardianul Datelor',
+    l5AllDoneNote: '🎉 Excelent! Ai stăpânit toate cele 7 provocări din manual!',
+    l5RewardText: 'Recompensă: +15 Puncte și insigna Gardianul Datelor',
     l5FinishBtn: 'Revendică Autoevaluarea & Diploma (Nota 10)',
 
     // Victory Screen
@@ -456,8 +456,8 @@ export const translations = {
     bookPagePrefix: 'Textbook p.',
     rememberLabel: 'Remember for the test:',
 
-    // Level 1
-    l1Tag: 'Level 1 of 5 • Tree Structure',
+    // Level 1 (now level 3 of 7 in Files)
+    l1Tag: 'Level 3 of 7 • Tree Structure',
     l1Title: 'File Explorer & Tree Structure 📁',
     l1Desc: 'According to the computer science textbook (page 27), computer data is organized in a tree-like hierarchy (like a tree with branches and leaves). Create the root folder Secret Base, and inside it create two branches (subfolders): Games and Homework.',
     l1TipTitle: 'How do we quickly launch File Explorer?',
@@ -482,11 +482,11 @@ export const translations = {
     l1Chk1: 'Step 1: Created the root folder "Secret Base" on Desktop (Right click ➔ New ➔ Folder).',
     l1Chk2: 'Step 2: Opened the folder (double-click) and created subfolder "Games" 🎮 for saved games.',
     l1Chk3: 'Step 3: In the same folder, created the second subfolder "Homework" 📚 for school projects.',
-    l1RewardText: 'Reward: +20 Points and Folder Architect Badge',
-    l1FinishBtn: 'Complete Level 1',
+    l1RewardText: 'Reward: +15 Points and Folder Architect Badge',
+    l1FinishBtn: 'Complete Level 3',
 
-    // Level 2
-    l2Tag: 'Level 2 of 5 • Multi-Selection & Search',
+    // Level 2 (now level 4 of 7)
+    l2Tag: 'Level 4 of 7 • Multi-Selection & Search',
     l2Title: 'The Magic of Multi-Selection & Quick Search 🎯',
     l2Desc: 'In the computer science textbook (page 29), we learn how to select multiple files at once (using Ctrl, Shift, or Ctrl + A) and how to quickly find misplaced files using the Search box.',
     l2TipTitle: 'Secret selection tricks in Windows (Textbook p. 29)',
@@ -502,7 +502,7 @@ export const translations = {
     l2SelectedCounter: 'Selected files:',
     l2AllSelectedMessage: '🎉 All files are selected!',
     l2SelectHint: 'Use Ctrl+Click or the Ctrl+A button',
-    l2ObjectivesTitle: 'Level 2 Objectives:',
+    l2ObjectivesTitle: 'Level 4 Objectives:',
     l2Obj1: 'Select all 5 files (Ctrl+A)',
     l2Obj2: 'Use search for the word "tree" or "arbore"',
     l2QuizTitle: 'Textbook check (p. 29):',
@@ -510,11 +510,11 @@ export const translations = {
     l2QuizOptionA: 'A) Ctrl + A (Select All)',
     l2QuizOptionB: 'B) Ctrl + C (Copy)',
     l2QuizOptionC: 'C) Alt + F4 (Close)',
-    l2RewardText: 'Reward: +20 Points and Selection Master Badge',
-    l2FinishBtn: 'Complete Level 2',
+    l2RewardText: 'Reward: +15 Points and Selection Master Badge',
+    l2FinishBtn: 'Complete Level 4',
 
-    // Level 3
-    l3Tag: 'Level 3 of 5 • Moving & Forbidden Characters',
+    // Level 3 (now level 5 of 7)
+    l3Tag: 'Level 5 of 7 • Moving & Forbidden Characters',
     l3Title: 'Lightning Move: The Digital Scissors ⚡️',
     l3Desc: 'According to the textbook (pages 28 and 30), moving a file means cutting it from its old location and placing it in the new destination. Use Ctrl + X and Ctrl + V to move the game file into the correct folder!',
     l3TipTitle: 'What happens during Move and what characters are forbidden? (Textbook pp. 28 & 30)',
@@ -540,11 +540,11 @@ export const translations = {
     l3QuizOptBSubDef: 'No forbidden characters',
     l3QuizOptC: 'C) Images_part2*',
     l3QuizOptCSub: 'Contains forbidden asterisk (*)',
-    l3RewardText: 'Reward: +20 Points and Shortcut Master Badge',
-    l3FinishBtn: 'Complete Level 3',
+    l3RewardText: 'Reward: +15 Points and Shortcut Master Badge',
+    l3FinishBtn: 'Complete Level 5',
 
-    // Level 4
-    l4Tag: 'Level 4 of 5 • Copy, Rename & Extensions',
+    // Level 4 (now level 6 of 7)
+    l4Tag: 'Level 6 of 7 • Copy, Rename & Extensions',
     l4Title: 'Copying, F2 Key & File Extension Secrets 🔍',
     l4Desc: 'According to the textbook (pages 28 and 30), copying creates a safe duplicate, the F2 shortcut key renames the file directly, and the extension (.txt, .docx, .jpg) indicates the file type and default opening app!',
     l4TipTitle: 'What does a file extension tell us? (Textbook pp. 28 & 30)',
@@ -576,11 +576,11 @@ export const translations = {
     l4QuizOptB: 'B) The number of pages in the document',
     l4StepHint: '👉 Next step: Click the "F2 Key (Rename)" button and name the file secret_project.txt!',
     l4StepDone: '✓ Great! The file was duplicated and renamed!',
-    l4RewardText: 'Reward: +20 Points and File Detective Badge',
-    l4FinishBtn: 'Complete Level 4',
+    l4RewardText: 'Reward: +15 Points and File Detective Badge',
+    l4FinishBtn: 'Complete Level 6',
 
-    // Level 5
-    l5Tag: 'Level 5 of 5 • Data Recovery & Recycle Bin',
+    // Level 5 (now level 7 of 7)
+    l5Tag: 'Level 7 of 7 • Data Recovery & Recycle Bin',
     l5Title: 'Saving from the Recycle Bin 🗑️',
     l5Desc: 'A computer mishap occurred! The school project folder was deleted by accident and ended up in the Recycle Bin. Apply what you learned in the textbook (page 29) to Restore it intact!',
     l5TipTitle: 'The Recycle Bin is your safety net! (Textbook p. 29)',
@@ -605,8 +605,8 @@ export const translations = {
     l5QuizOptASub: 'Right click on the file and select Restore.',
     l5QuizOptB: 'B) NO, it vanishes instantly',
     l5QuizOptBSub: 'The computer burns it from memory immediately.',
-    l5AllDoneNote: '🎉 Excellent! You have mastered all 5 skills from the textbook!',
-    l5RewardText: 'Reward: +20 Points and Data Guardian Badge',
+    l5AllDoneNote: '🎉 Excellent! You have mastered all 7 challenges from the textbook!',
+    l5RewardText: 'Reward: +15 Points and Data Guardian Badge',
     l5FinishBtn: 'Claim Autoevaluation & Diploma (Grade A+ / 10)',
 
     // Victory Screen
