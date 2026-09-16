@@ -4,7 +4,7 @@ export const translations = {
   ro: {
     // Header & Navigation
     schoolName: 'Școala ARKEDO',
-    subjectGrade: 'Informatică • Clasa a V-a',
+    subjectGrade: 'Informatică • Clasele V - VI',
     appTitle: 'Misiunea Arborele Secret',
     pts: 'pct',
     soundOn: 'Oprește sunetul',
@@ -16,11 +16,12 @@ export const translations = {
     changeName: 'Schimbă numele',
     timerLabel: 'Timp test',
     timerBottomPrefix: '⏱️ Cronometru test:',
-    footerText: 'Mini-joc educațional creat pentru elevii de clasa a V-a de la Școala ARKEDO 🌳 • Managementul Fișierelor și Folderelor (Manual pag. 27-30)',
+    footerText: 'Informația este bazată pe manualul de clasa a V-a și a VI-a de TIC.',
+    poweredBy: 'Powered by Gigi',
 
     // Courses Catalog / Home Page
     catalogTitle: 'TIC – Tehnologia Informației și a Comunicațiilor',
-    catalogBadge: 'Școala ARKEDO • Clasa a V-a',
+    catalogBadge: 'Școala ARKEDO • Clasele V - VI',
     catalogSub: 'Platformă educațională digitală cu module practice și teste interactive aliniate la programa școlară.',
     studentPromptTitle: '👋 Bun venit în laboratorul digital TIC!',
     studentPromptSub: 'Introdu numele tău de elev înainte de a începe lecția. Îți va apărea sus în antet și va fi tipărit direct pe diploma ta de merit!',
@@ -34,7 +35,7 @@ export const translations = {
     lesson1CardTitle: 'Misiunea Arborele Secret 🌳',
     lesson1CardSub: 'Managementul Fișierelor și Folderelor',
     lesson1CardDesc: 'Învață structura arborescentă din File Explorer, selecția cu Ctrl+A, căutarea fișierelor, mutarea cu Ctrl+X / Ctrl+V, copierea cu Ctrl+C, redenumirea rapidă F2 și salvarea din Coșul de Reciclare.',
-    lesson1Grade: 'Clasa a V-a • Manual pag. 27-30',
+    lesson1Grade: 'Clasele V - VI • Manual pag. 27-30',
     lesson1Duration: '~15-20 min',
     lesson1Points: '100 Puncte',
     lesson1BtnStart: 'Începe Misiunea ▶',
@@ -382,7 +383,7 @@ export const translations = {
   en: {
     // Header & Navigation
     schoolName: 'ARKEDO School',
-    subjectGrade: 'Computer Science • 5th Grade',
+    subjectGrade: 'Computer Science • Grades 5 - 6',
     appTitle: 'Secret Tree Mission',
     pts: 'pts',
     soundOn: 'Mute sound',
@@ -394,11 +395,12 @@ export const translations = {
     changeName: 'Change name',
     timerLabel: 'Test Time',
     timerBottomPrefix: '⏱️ Test stopwatch:',
-    footerText: 'Educational mini-game created for 5th grade students at ARKEDO School 🌳 • File and Folder Management (Textbook pp. 27-30)',
+    footerText: 'Information is based on the 5th and 6th grade ICT textbooks.',
+    poweredBy: 'Powered by Gigi',
 
     // Courses Catalog / Home Page
     catalogTitle: 'ICT – Information & Communications Technology',
-    catalogBadge: 'ARKEDO School • 5th Grade',
+    catalogBadge: 'ARKEDO School • Grades 5 - 6',
     catalogSub: 'Interactive digital platform with practical challenges aligned with the computer science curriculum.',
     studentPromptTitle: '👋 Welcome to the ICT digital lab!',
     studentPromptSub: 'Enter your student name before starting the lesson. It will greet you in the header and be printed on your official Certificate of Merit!',
@@ -412,7 +414,7 @@ export const translations = {
     lesson1CardTitle: 'Secret Tree Mission 🌳',
     lesson1CardSub: 'File & Folder Management',
     lesson1CardDesc: 'Master hierarchical folder structures in File Explorer, multi-selection with Ctrl+A, search, moving with Ctrl+X / Ctrl+V, copying with Ctrl+C, fast renaming with F2, and Recycle Bin recovery.',
-    lesson1Grade: '5th Grade • Textbook pp. 27-30',
+    lesson1Grade: 'Grades 5 - 6 • Textbook pp. 27-30',
     lesson1Duration: '~15-20 min',
     lesson1Points: '100 Points',
     lesson1BtnStart: 'Start Mission ▶',

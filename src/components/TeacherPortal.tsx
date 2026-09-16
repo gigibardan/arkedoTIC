@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, LogOut, RefreshCw, Trash2, Award, Clock, Users, Trophy, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { Lock, LogOut, RefreshCw, Trash2, Award, Clock, Users, Trophy, ShieldCheck, ArrowLeft, Cloud, HardDrive } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { getStudentResults, deleteStudentResult, StudentResult } from '../lib/resultsService';
+import { isCloudConnected } from '../lib/firebase';
 import { sounds } from '../utils/audio';
 
 interface TeacherPortalProps {
@@ -149,8 +150,19 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
       {/* Top Banner with Navigation */}
       <div className="bg-slate-900 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold font-mono mb-2">
-            <ShieldCheck className="w-3.5 h-3.5" /> Panou Securizat Cadru Didactic
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold font-mono">
+              <ShieldCheck className="w-3.5 h-3.5" /> Panou Securizat Cadru Didactic
+            </div>
+            {isCloudConnected ? (
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold font-mono">
+                <Cloud className="w-3.5 h-3.5" /> Sincronizat Firestore
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 text-[11px] font-mono">
+                <HardDrive className="w-3.5 h-3.5 text-cyan-400" /> Catalog Local Securizat
+              </div>
+            )}
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
             {t.teacherPortalTitle}

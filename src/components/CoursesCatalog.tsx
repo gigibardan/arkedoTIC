@@ -119,7 +119,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
-            Explorează modulele interactive concepute conform Programei Școlare Naționale și Manualului TIC de clasa a V-a. Fiecare misiune conține exerciții practice, sfaturi de la profesor și o diplomă oficială!
+            Explorează modulele interactive concepute conform Programei Școlare Naționale și Manualelor TIC pentru Clasele a V-a și a VI-a. Fiecare misiune conține exerciții practice, sfaturi de la profesor și o diplomă oficială!
           </p>
 
           {/* Student Profile Registration Card */}

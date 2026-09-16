@@ -300,7 +300,7 @@ function GameContent() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
+      <main className="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex flex-col gap-5 sm:gap-6">
         {view === 'teacher' ? (
           <TeacherPortal onBackToHome={() => navigateToView('catalog')} />
         ) : view === 'catalog' ? (
@@ -429,10 +429,18 @@ function GameContent() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-4 px-4 text-center text-xs text-slate-500 bg-slate-950/40 mt-auto">
-        <p className="max-w-xl mx-auto leading-relaxed">
-          {t.footerText}
-        </p>
+      <footer className="border-t border-slate-800/80 py-4 px-4 bg-slate-950/60 mt-auto">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <p className="text-slate-400 text-center sm:text-left leading-relaxed">
+            {t.footerText}
+          </p>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-teal-500/30 text-teal-300 font-mono font-bold text-[11px] shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+              {t.poweredBy}
+            </span>
+          </div>
+        </div>
       </footer>
     </div>
   );
