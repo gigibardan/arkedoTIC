@@ -12,6 +12,7 @@ interface HeaderProps {
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
+  missionId?: 'hardware' | 'files' | null;
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
 }
@@ -25,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateToCatalog,
   studentName,
   elapsedSeconds,
+  missionId = null,
   onEditStudentName,
   onNavigateToTeacher,
 }) => {
@@ -39,6 +41,12 @@ export const Header: React.FC<HeaderProps> = ({
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const getLessonTitle = () => {
+    if (missionId === 'hardware') return 'Modulul 1: Sisteme de calcul & Hardware';
+    if (missionId === 'files') return 'Modulul 2: Arborele Secret de Fișiere';
+    return t.appTitle;
   };
 
   return (
@@ -59,8 +67,8 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="hidden xs:inline">{t.backToCourses}</span>
             </button>
           ) : (
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-teal-400 flex items-center justify-center text-xl sm:text-2xl shadow-lg shadow-emerald-500/20 ring-2 ring-emerald-400/30 shrink-0">
-              🌳
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-teal-600 via-emerald-500 to-cyan-400 flex items-center justify-center text-xl sm:text-2xl shadow-lg shadow-teal-500/20 ring-2 ring-emerald-400/30 shrink-0">
+              💻
             </div>
           )}
 
@@ -75,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             <h1 className="text-sm sm:text-lg font-black text-white tracking-wide font-heading truncate">
               {currentView === 'lesson'
-                ? t.appTitle
+                ? getLessonTitle()
                 : currentView === 'teacher'
                 ? t.teacherPortalNav
                 : t.catalogTitle}

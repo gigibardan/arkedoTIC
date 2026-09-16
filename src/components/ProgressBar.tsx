@@ -4,15 +4,37 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
+  courseId?: 'hardware' | 'files';
 }
 
 const STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel }) => {
+const HARDWARE_STAGES = [
+  { emoji: '🛡️', name: 'Inspector Protecție & Ergonomie (pag. 10-12)' },
+  { emoji: '⏳', name: 'Crononaut: Istoria Calculatoarelor (pag. 13-14)' },
+  { emoji: '🖥️', name: 'Tehnician Asamblor Unitate Centrală (pag. 15-17)' },
+  { emoji: '🔌', name: 'Expert Periferice: Intrare / Ieșire (pag. 15-16)' },
+  { emoji: '💾', name: 'Maestru Biți: Stocare & Autoevaluare (pag. 18-20)' },
+  { emoji: '🏆', name: 'Tehnician Hardware Certificat!' },
+];
+
+const HARDWARE_MILESTONES = [
+  'N1: Norme',
+  'N2: Istorie',
+  'N3: Unitate',
+  'N4: Periferice',
+  'N5: Biți',
+];
+
+export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId = 'files' }) => {
   const { t } = useLanguage();
 
-  const stageIndex = Math.min(Math.max(currentLevel - 1, 0), t.stages.length - 1);
-  const currentStage = t.stages[stageIndex];
+  const isHardware = courseId === 'hardware';
+  const stages = isHardware ? HARDWARE_STAGES : t.stages;
+  const milestones = isHardware ? HARDWARE_MILESTONES : t.milestones;
+
+  const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
+  const currentStage = stages[stageIndex];
   const currentPercent = STAGE_PERCENTS[stageIndex] || 20;
 
   return (
@@ -23,10 +45,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel }) => {
             {currentStage.emoji}
           </div>
           <div>
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-              {t.treeProgressTitle}
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">
+              {isHardware ? 'Evoluție Tehnician Hardware TIC' : t.treeProgressTitle}
             </div>
-            <div className="text-base sm:text-lg font-black text-emerald-400 font-heading">
+            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : 'text-emerald-400'}`}>
               {currentStage.name}
             </div>
           </div>
@@ -45,31 +67,33 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel }) => {
       {/* Progress Bar Container */}
       <div className="relative w-full bg-slate-900/90 rounded-full h-4 p-0.5 overflow-hidden border border-slate-700 shadow-inner">
         <div
-          className="bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 h-full rounded-full transition-all duration-700 ease-out shadow-sm"
+          className={`h-full rounded-full transition-all duration-700 ease-out shadow-sm ${
+            isHardware
+              ? 'bg-gradient-to-r from-teal-500 via-cyan-400 to-indigo-500'
+              : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
+          }`}
           style={{ width: `${currentPercent}%` }}
         />
       </div>
 
       {/* Level Milestones below */}
       <div className="grid grid-cols-5 gap-1.5 sm:gap-2 mt-3 pt-2 text-center text-[10px] sm:text-xs font-semibold text-slate-400">
-        <span className={currentLevel >= 1 ? 'text-emerald-400 font-bold' : ''}>
-          {t.milestones[0]}
+        <span className={currentLevel >= 1 ? (isHardware ? 'text-teal-400 font-bold' : 'text-emerald-400 font-bold') : ''}>
+          {milestones[0]}
         </span>
-        <span className={currentLevel >= 2 ? 'text-teal-400 font-bold' : ''}>
-          {t.milestones[1]}
+        <span className={currentLevel >= 2 ? (isHardware ? 'text-teal-300 font-bold' : 'text-teal-400 font-bold') : ''}>
+          {milestones[1]}
         </span>
-        <span className={currentLevel >= 3 ? 'text-cyan-400 font-bold' : ''}>
-          {t.milestones[2]}
+        <span className={currentLevel >= 3 ? (isHardware ? 'text-cyan-400 font-bold' : 'text-cyan-400 font-bold') : ''}>
+          {milestones[2]}
         </span>
-        <span className={currentLevel >= 4 ? 'text-purple-400 font-bold' : ''}>
-          {t.milestones[3]}
+        <span className={currentLevel >= 4 ? (isHardware ? 'text-purple-400 font-bold' : 'text-purple-400 font-bold') : ''}>
+          {milestones[3]}
         </span>
-        <span className={currentLevel >= 5 ? 'text-rose-400 font-bold' : ''}>
-          {t.milestones[4]}
+        <span className={currentLevel >= 5 ? (isHardware ? 'text-rose-400 font-bold' : 'text-rose-400 font-bold') : ''}>
+          {milestones[4]}
         </span>
       </div>
     </div>
   );
 };
-
-

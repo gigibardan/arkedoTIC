@@ -10,7 +10,9 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
+  courseId?: 'hardware' | 'files';
   onReset: () => void;
+  onBackToCatalog?: () => void;
 }
 
 export const VictoryScreen: React.FC<VictoryScreenProps> = ({
@@ -18,7 +20,9 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   maxScore,
   studentName: initialStudentName = '',
   elapsedSeconds = 0,
+  courseId = 'files',
   onReset,
+  onBackToCatalog,
 }) => {
   const { t } = useLanguage();
   const [studentName, setStudentName] = useState<string>(
@@ -26,6 +30,11 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   );
   const [isLoggedToFirebase, setIsLoggedToFirebase] = useState<boolean>(false);
   const hasLoggedRef = useRef<boolean>(false);
+
+  const isHardware = courseId === 'hardware';
+  const courseDbTitle = isHardware
+    ? 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)'
+    : 'Misiunea Arborele Secret (Manual pag. 27-30)';
 
   const formatCompletionTime = (sec: number) => {
     const mins = Math.floor(sec / 60);
@@ -43,7 +52,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       const finalName = initialStudentName.trim() || studentName.trim() || 'Elev Anonim';
       logStudentResult(
         finalName,
-        'Misiunea Arborele Secret (Manual pag. 27-30)',
+        courseDbTitle,
         score,
         maxScore,
         elapsedSeconds
@@ -88,9 +97,9 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   return (
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
-      {/* Decorative Tree & Glow */}
+      {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        🌳✨
+        {isHardware ? '💻⚡' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -100,11 +109,13 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       </div>
 
       <h2 className="text-3xl sm:text-5xl font-black text-white mt-2 font-heading tracking-tight">
-        {t.vTitle}
+        {isHardware ? 'Felicitări, Tehnician Hardware & TIC!' : t.vTitle}
       </h2>
 
       <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mt-3 mb-6 leading-relaxed">
-        {t.vDesc}
+        {isHardware
+          ? 'Ai finalizat cu succes evaluarea completă a Unității 1: cunoști regulile de securitate, ergonomia, istoria calculatoarelor, piesele unității centrale și calculul biților!'
+          : t.vDesc}
       </p>
 
       {/* Score Summary Box */}
@@ -185,45 +196,83 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
       {/* Badges Earned Grid (All 5 levels) */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 max-w-3xl mx-auto mb-8 text-left">
-        <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
-          <span className="text-2xl">📁</span>
-          <div>
-            <div className="text-xs font-bold text-white">{t.vBadge1Title}</div>
-            <div className="text-[10px] text-emerald-400">{t.vBadge1Sub}</div>
-          </div>
-        </div>
-
-        <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
-          <span className="text-2xl">🎯</span>
-          <div>
-            <div className="text-xs font-bold text-white">{t.vBadge2Title}</div>
-            <div className="text-[10px] text-teal-400">{t.vBadge2Sub}</div>
-          </div>
-        </div>
-
-        <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
-          <span className="text-2xl">⚡️</span>
-          <div>
-            <div className="text-xs font-bold text-white">{t.vBadge3Title}</div>
-            <div className="text-[10px] text-cyan-400">{t.vBadge3Sub}</div>
-          </div>
-        </div>
-
-        <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
-          <span className="text-2xl">🔍</span>
-          <div>
-            <div className="text-xs font-bold text-white">{t.vBadge4Title}</div>
-            <div className="text-[10px] text-purple-400">{t.vBadge4Sub}</div>
-          </div>
-        </div>
-
-        <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
-          <span className="text-2xl">🛡️</span>
-          <div>
-            <div className="text-xs font-bold text-white">{t.vBadge5Title}</div>
-            <div className="text-[10px] text-rose-400">{t.vBadge5Sub}</div>
-          </div>
-        </div>
+        {isHardware ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🛡️</span>
+              <div>
+                <div className="text-xs font-bold text-white">Inspector TIC</div>
+                <div className="text-[10px] text-emerald-400">Norme & Ergonomie</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">⏳</span>
+              <div>
+                <div className="text-xs font-bold text-white">Crononaut</div>
+                <div className="text-[10px] text-teal-400">1642 - Pascalina</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🖥️</span>
+              <div>
+                <div className="text-xs font-bold text-white">Asamblor PC</div>
+                <div className="text-[10px] text-cyan-400">CPU, RAM, Mobo</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔌</span>
+              <div>
+                <div className="text-xs font-bold text-white">Triere Flux</div>
+                <div className="text-[10px] text-purple-400">Intrare / Ieșire</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🎯</span>
+              <div>
+                <div className="text-xs font-bold text-white">Maestru Biți</div>
+                <div className="text-[10px] text-rose-400">1 TB = 1024 GB</div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📁</span>
+              <div>
+                <div className="text-xs font-bold text-white">{t.vBadge1Title}</div>
+                <div className="text-[10px] text-emerald-400">{t.vBadge1Sub}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎯</span>
+              <div>
+                <div className="text-xs font-bold text-white">{t.vBadge2Title}</div>
+                <div className="text-[10px] text-teal-400">{t.vBadge2Sub}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">⚡️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{t.vBadge3Title}</div>
+                <div className="text-[10px] text-cyan-400">{t.vBadge3Sub}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔍</span>
+              <div>
+                <div className="text-xs font-bold text-white">{t.vBadge4Title}</div>
+                <div className="text-[10px] text-purple-400">{t.vBadge4Sub}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🛡️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{t.vBadge5Title}</div>
+                <div className="text-[10px] text-rose-400">{t.vBadge5Sub}</div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Printable ARKEDO Diploma */}
@@ -236,7 +285,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                🌳
+                {isHardware ? '💻' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -246,7 +295,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
-            {t.vDiplomaTitle}
+            {isHardware ? t.hwDiplomaTitle : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
             {t.vDiplomaDept}
@@ -267,7 +316,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
-            {t.vDiplomaText}
+            {isHardware ? t.hwDiplomaText : t.vDiplomaText}
           </p>
 
           {/* Signatures & Date */}
@@ -293,6 +342,15 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <Printer className="w-4 h-4" />
           <span>{t.vBtnPrint}</span>
         </button>
+
+        {onBackToCatalog && (
+          <button
+            onClick={onBackToCatalog}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95 shadow-md shadow-emerald-600/30"
+          >
+            <span>Înapoi la Catalog Cursuri</span>
+          </button>
+        )}
 
         <button
           onClick={onReset}

@@ -287,6 +287,96 @@ export const translations = {
     teacherTotalStudents: 'Total Elevi Finalizați',
     teacherAvgScore: 'Punctaj Mediu',
     teacherAvgTime: 'Timp Mediu Lucru',
+
+    // Mission In-Progress Guard Modal
+    missionGuardTitle: '⚠️ Misiune în Desfășurare!',
+    missionGuardDesc: 'Ai deja începută o misiune activă. Profesorul te sfătuiește să finalizezi o misiune înainte de a începe alta pentru a obține diploma și nota 10!',
+    missionGuardActiveInfo: 'Misiune curentă:',
+    missionGuardResumeBtn: 'Continuă Misiunea În Curs',
+    missionGuardResetBtn: 'Abandonează și Începe Noua Misiune',
+    missionGuardCancelBtn: 'Rămâi în Catalog',
+
+    // Knowledge Pills (Pastile de Cunoaștere TIC)
+    pillsBarTitle: '💡 Pastile de Cunoaștere TIC (Apasă pe bule să afli secretele!)',
+    pillsBarSub: 'Repere esențiale din manualul de clasa a V-a (pag. 10-20)',
+    pillClose: 'Închide',
+
+    // Hardware Mission Header & Levels
+    hwCourseTitle: 'Misiunea Arhitectura unui PC & Ergonomie',
+    hwCourseSub: 'Sisteme de calcul și comunicații • Manual pag. 10-20',
+    hwMilestones: ['Reguli & Ergonomie', 'Axa Timpului', 'Unitate Centrală', 'Periferice', 'Biți & Rebus'],
+
+    // Hardware Level 1
+    hwL1Title: 'Inspectorul Laboratorului & Ergonomia TIC 🛡️',
+    hwL1Desc: 'Înainte de a porni calculatorul, trebuie să cunoști regulile de aur ale laboratorului de informatică și cum să-ți protejezi sănătatea (Manual pag. 10-12)!',
+    hwL1TeacherTipTitle: 'Sfat de Profesionist de la Profesor: Regula 20-20-20 & Lichidele!',
+    hwL1TeacherTipText: '• Ochii tăi sunt prețioși: la fiecare 20 de minute, privește la o distanță de 6 metri (20 feet) timp de 20 de secunde pentru a relaxa mușchii oculari și a preveni miopia! • În laborator, lichidele și alimentele sunt STRICT interzise: o singură picătură de suc vărsată pe tastatură sau în unitate poate produce un scurtcircuit!',
+    hwL1TeacherTipExtra: 'Coatele și genunchii trebuie să stea la un unghi confortabil de aproximativ 90°, iar monitorul la 45–70 cm distanță!',
+    hwL1RulesSection: '1. Sortează acțiunile: Ce este Permis vs. Ce este Strict Interzis în laborator?',
+    hwL1DropAllowed: '🟢 Permis & Responsabil',
+    hwL1DropForbidden: '🔴 Strict Interzis',
+    hwL1QuizErgo1: '2. La ce distanță optimă trebuie așezat monitorul față de ochi (pag. 11)?',
+    hwL1QuizErgo2: '3. Cum trebuie ținut capul când privim ecranul unui telefon sau al unei tablete (pag. 11-12)?',
+    hwL1OptErgo2A: 'Drept, ridicând dispozitivul la nivelul ochilor',
+    hwL1OptErgo2B: 'Aplecat mult înainte spre piept',
+    hwL1CompleteBtn: 'Validează & Mergi la Nivelul 2 (+20 pct)',
+
+    // Hardware Level 2
+    hwL2Title: 'Călătoria în Timp: Istoria Calculatoarelor ⏳',
+    hwL2Desc: 'De la prima mașină mecanică de calcul cu roți dințate până la smartphone-ul din buzunar, călătorește prin marile momente din istoria TIC (Manual pag. 13-14)!',
+    hwL2TeacherTipTitle: 'Sfat de Profesionist: De ce folosesc calculatoarele doar 0 și 1?',
+    hwL2TeacherTipText: '• Tot ce vezi pe ecran (poze, muzică, jocuri) este descompus în cifre de 0 și 1 (sistem binar). • Cipurile electronice folosesc tranzistori microscopici care se comportă ca niște întrerupătoare: APRINS (1) când trece curent, sau STINS (0) când nu trece curent. Este cea mai simplă și sigură metodă din univers!',
+    hwL2TeacherTipExtra: 'Blaise Pascal a inventat Pascalina în 1642 când avea doar 19 ani, ca să-și ajute tatăl colector de taxe la adunări și scăderi!',
+    hwL2TimelineSection: 'Ordonează sau asociază fiecare invenție cu anul ei istoric:',
+    hwL2Quiz1Title: 'Întrebare din manual (pag. 14):',
+    hwL2Quiz1Q: 'Pascalina creată în 1642 de Blaise Pascal era un calculator...',
+    hwL2Quiz1OptA: 'Mecanic (cu roți dințate)',
+    hwL2Quiz1OptB: 'Electronic (cu circuite)',
+    hwL2Quiz1OptC: 'Multimedia (cu ecran tactil)',
+    hwL2CompleteBtn: 'Validează & Mergi la Nivelul 3 (+20 pct)',
+
+    // Hardware Level 3
+    hwL3Title: 'Laboratorul Tehnic: Asamblează Unitatea Centrală 🖥️',
+    hwL3Desc: 'Deschide carcasa calculatorului și instalează cele 5 componente electronice vitale în locurile potrivite, exact ca în figura 5 din manualul de clasa a V-a (pag. 17)!',
+    hwL3TeacherTipTitle: 'Sfat de Profesionist: RAM vs. SSD/HDD (Masa de lucru vs. Dulapul)',
+    hwL3TeacherTipText: '• Memoria RAM este „masa de lucru temporară”: când lucrezi la un referat sau un desen, fișierul stă deschis în RAM. Dacă iei curentul și nu ai salvat, RAM-ul se golește instantaneu! • Discul (SSD sau HDD) este „dulapul de arhivă permanentă”: când apeși Ctrl+S (Salvare), fișierul este scris pe SSD și rămâne acolo pentru totdeauna!',
+    hwL3TeacherTipExtra: 'Microprocesorul (CPU) este creierul calculatorului. El execută miliarde de operații pe secundă și are nevoie de pastă termică și ventilator ca să nu se supraîncălzească!',
+    hwL3AssemblePrompt: 'Apasă pe fiecare componentă de mai jos și monteaz-o în locația corespunzătoare:',
+    hwL3ComponentCpu: 'Microprocesorul (CPU) - Creierul',
+    hwL3ComponentMobo: 'Placa de Bază (Motherboard)',
+    hwL3ComponentRam: 'Memoria RAM (Lucru temporar)',
+    hwL3ComponentPsu: 'Sursa de Alimentare (Energie)',
+    hwL3ComponentStorage: 'Discul de Stocare (SSD / HDD)',
+    hwL3CompleteBtn: 'Carcasă Asamblată! Mergi la Nivelul 4 (+20 pct)',
+
+    // Hardware Level 4
+    hwL4Title: 'Trierea Perifericelor: Intrare, Ieșire, Intrare-Ieșire 🔌',
+    hwL4Desc: 'Perifericele asigură puntea dintre om și unitatea centrală. Clasifică corect dispozitivele după direcția fluxului de date (Manual pag. 15-16)!',
+    hwL4TeacherTipTitle: 'Sfat de Profesionist: Cum deosebești rapid fluxul de informație?',
+    hwL4TeacherTipText: '• INTRARE (In): Datele pleacă de la TINE și intră ÎN calculator (scrii pe tastatură, vorbești în microfon, miști mouse-ul). • IEȘIRE (Out): Datele pleacă DIN calculator și ajung la TINE (vezi pe monitor, asculți în boxe, citești pe hârtia imprimată). • INTRARE-IEȘIRE: Face AMBELE lucruri! Un ecran tactil afișează imaginea (ieșire) și îți simte atingerile (intrare)!',
+    hwL4TeacherTipExtra: 'Scanerul este exact opusul imprimantei: imprimanta scoate textul pe hârtie, iar scanerul îl citește de pe hârtie și îl introduce în calculator!',
+    hwL4CatInput: '📥 Periferice de INTRARE',
+    hwL4CatOutput: '📤 Periferice de IEȘIRE',
+    hwL4CatInOut: '🔄 Periferice de INTRARE-IEȘIRE',
+    hwL4CompleteBtn: 'Toate Perifericele Sortate! Mergi la Nivelul 5 (+20 pct)',
+
+    // Hardware Level 5
+    hwL5Title: 'Marea Provocare a Biților & Rebusul TIC 🎯',
+    hwL5Desc: 'Rezolvă exercițiile de autoevaluare din manualul de clasa a V-a (pag. 20): calculul capacității în MB, recunoașterea discurilor și celebrul rebus cu nume de animal!',
+    hwL5TeacherTipTitle: 'Sfat de Profesionist: De ce 1 KB = 1024 Bytes și nu 1000?',
+    hwL5TeacherTipText: '• În viața de zi cu zi lucrăm în sistem zecimal (1 kg = 1000 grame), dar în calculatoare totul este binar (baza 2). 2¹⁰ = 1024! De aceea 1 KB = 1024 B, 1 MB = 1024 KB, iar 1 GB = 1024 MB! • La un test sau olimpiadă de TIC, ține minte mereu puterea lui 2!',
+    hwL5TeacherTipExtra: 'Când cumperi un hard disk pe care scrie 1 TB, producătorul socotește 1.000.000 MB, însă sistemul de operare împarte la 1024, de aceea afișează circa 931 GB reali!',
+    hwL5Task1Title: 'Provocarea 1: Problema din manual (pag. 20, ex. 3):',
+    hwL5Task1Desc: 'Un calculator dispune de un HDD de 1 TB și de un SSD de 512 GB. Care este capacitatea totală exprimată în MB?',
+    hwL5Task2Title: 'Provocarea 2: Dispozitivul de stocare magnetic (pag. 20, ex. 2):',
+    hwL5Task2Desc: 'Care dintre aceste componente stochează datele folosind discuri magnetice rotative?',
+    hwL5Task3Title: 'Provocarea 3: Rebusul din manual (pag. 20, ex. 3):',
+    hwL5Task3Desc: 'Ce dispozitiv periferic de intrare, esențial pentru click și indicare, poartă numele unui mic animal în limba engleză?',
+    hwL5FinishBtn: 'Finalizează Misiunea & Obține Diploma de Tehnician TIC (Nota 10)',
+
+    // Hardware Diploma
+    hwDiplomaTitle: 'DIPLOMĂ DE TEHNICIAN HARDWARE & SIGURANȚĂ TIC',
+    hwDiplomaText: 'Pentru performanța remarcabilă în "Misiunea Sisteme de Calcul & Comunicații 💻⚡" (Manual pag. 10-20), stăpânirea deplină a normelor de securitate și ergonomie, cunoașterea evoluției istorice a calculatoarelor, asamblarea componentelor unității centrale (CPU, RAM, Placă de bază, Stocare), clasificarea perifericelor și calculul capacităților de stocare.',
   },
 
   en: {
@@ -575,6 +665,96 @@ export const translations = {
     teacherTotalStudents: 'Total Submissions',
     teacherAvgScore: 'Average Score',
     teacherAvgTime: 'Average Time',
+
+    // Mission In-Progress Guard Modal
+    missionGuardTitle: '⚠️ Mission in Progress!',
+    missionGuardDesc: 'You already have an active mission underway. Your teacher recommends completing one mission before beginning another to earn your diploma and grade!',
+    missionGuardActiveInfo: 'Active mission:',
+    missionGuardResumeBtn: 'Continue Current Mission',
+    missionGuardResetBtn: 'Abandon & Start New Mission',
+    missionGuardCancelBtn: 'Return to Catalog',
+
+    // Knowledge Pills (Pastile de Cunoaștere TIC)
+    pillsBarTitle: '💡 ICT Knowledge Pills (Click bubbles to discover tech secrets!)',
+    pillsBarSub: 'Core concepts from 5th Grade Computer Science (pages 10-20)',
+    pillClose: 'Close',
+
+    // Hardware Mission Header & Levels
+    hwCourseTitle: 'Mission PC Architecture & Ergonomics',
+    hwCourseSub: 'Computer & Communication Systems • Textbook pages 10-20',
+    hwMilestones: ['Lab Rules & Health', 'Timeline', 'Central Unit', 'Peripherals', 'Bits & Quiz'],
+
+    // Hardware Level 1
+    hwL1Title: 'Lab Inspector & ICT Ergonomics 🛡️',
+    hwL1Desc: 'Before powering on the PC, discover the essential computer lab safety rules and proper ergonomic posture (Textbook pages 10-12)!',
+    hwL1TeacherTipTitle: 'Teacher Pro Tip: The 20-20-20 Rule & Drinks!',
+    hwL1TeacherTipText: '• Your eyes are precious: every 20 minutes, look at an object 20 feet (6 meters) away for 20 seconds to prevent eyestrain and myopia! • Food and beverages are strictly banned near computers: a single spilled drop can short-circuit the power supply!',
+    hwL1TeacherTipExtra: 'Keep elbows and knees at a comfortable 90° angle, and position your monitor 45–70 cm away!',
+    hwL1RulesSection: '1. Sort actions: What is Allowed vs. What is Strictly Forbidden in the lab?',
+    hwL1DropAllowed: '🟢 Allowed & Responsible',
+    hwL1DropForbidden: '🔴 Strictly Forbidden',
+    hwL1QuizErgo1: '2. What is the optimal distance between eyes and monitor (page 11)?',
+    hwL1QuizErgo2: '3. How should your head be positioned when using a tablet or phone (pages 11-12)?',
+    hwL1OptErgo2A: 'Straight, raising the device to eye level',
+    hwL1OptErgo2B: 'Bent forward towards your chest',
+    hwL1CompleteBtn: 'Validate & Proceed to Level 2 (+20 pts)',
+
+    // Hardware Level 2
+    hwL2Title: 'Time Travel: History of Computing ⏳',
+    hwL2Desc: 'From the first mechanical gear calculator to the modern smartphone in your pocket, explore the milestones of computing (Pages 13-14)!',
+    hwL2TeacherTipTitle: 'Teacher Pro Tip: Why do computers only speak in 0 and 1?',
+    hwL2TeacherTipText: '• Everything on screen (photos, games, sound) breaks down into binary 0s and 1s. • Silicon chips use microscopic transistors that act like light switches: ON (1) when current flows, or OFF (0) when current stops. It is the most robust way to calculate!',
+    hwL2TeacherTipExtra: 'Blaise Pascal invented the Pascaline in 1642 when he was only 19 years old to help his father compute tax calculations!',
+    hwL2TimelineSection: 'Match each historical invention with its milestone year:',
+    hwL2Quiz1Title: 'Textbook question (page 14):',
+    hwL2Quiz1Q: 'The Pascaline built in 1642 by Blaise Pascal was a...',
+    hwL2Quiz1OptA: 'Mechanical calculator (using gears)',
+    hwL2Quiz1OptB: 'Electronic computer (circuits)',
+    hwL2Quiz1OptC: 'Multimedia system (touchscreen)',
+    hwL2CompleteBtn: 'Validate & Proceed to Level 3 (+20 pts)',
+
+    // Hardware Level 3
+    hwL3Title: 'Hardware Lab: Assemble the PC Tower 🖥️',
+    hwL3Desc: 'Open the computer chassis and install the 5 vital electronic parts in their correct positions, following Figure 5 from page 17!',
+    hwL3TeacherTipTitle: 'Teacher Pro Tip: RAM vs. SSD/HDD (Desk vs. Archive Cabinet)',
+    hwL3TeacherTipText: '• RAM is your "temporary desktop": while typing a project, it stays loaded in RAM. If the power cuts out and you did not save, RAM wipes instantly! • The drive (SSD/HDD) is your "permanent file cabinet": pressing Ctrl+S writes to disk forever!',
+    hwL3TeacherTipExtra: 'The CPU is the brain of the computer. It executes billions of cycles per second and requires thermal paste and a cooler to prevent overheating!',
+    hwL3AssemblePrompt: 'Click each component below to mount it into the chassis:',
+    hwL3ComponentCpu: 'Microprocessor (CPU) - The Brain',
+    hwL3ComponentMobo: 'Motherboard',
+    hwL3ComponentRam: 'RAM Memory (Working memory)',
+    hwL3ComponentPsu: 'Power Supply Unit (PSU)',
+    hwL3ComponentStorage: 'Storage Drive (SSD / HDD)',
+    hwL3CompleteBtn: 'Chassis Assembled! Proceed to Level 4 (+20 pts)',
+
+    // Hardware Level 4
+    hwL4Title: 'Sort Peripherals: Input, Output, Input-Output 🔌',
+    hwL4Desc: 'Peripherals bridge user and computer. Categorize each device according to data flow direction (Pages 15-16)!',
+    hwL4TeacherTipTitle: 'Teacher Pro Tip: How to determine data flow direction?',
+    hwL4TeacherTipText: '• INPUT: Data flows from YOU into the PC (typing on keyboard, talking into microphone, moving mouse). • OUTPUT: Data flows from PC to YOU (seeing on screen, hearing speakers, printed paper). • INPUT-OUTPUT: Does BOTH! A touchscreen shows picture (output) and detects fingers (input)!',
+    hwL4TeacherTipExtra: 'A scanner is the exact inverse of a printer: a printer prints digital content on paper, while a scanner reads paper into the PC!',
+    hwL4CatInput: '📥 INPUT Peripherals',
+    hwL4CatOutput: '📤 OUTPUT Peripherals',
+    hwL4CatInOut: '🔄 INPUT-OUTPUT Peripherals',
+    hwL4CompleteBtn: 'All Peripherals Sorted! Proceed to Level 5 (+20 pts)',
+
+    // Hardware Level 5
+    hwL5Title: 'The Great Bits Challenge & ICT Crossword 🎯',
+    hwL5Desc: 'Solve the textbook page 20 evaluation problems: calculate capacity in MB, recognize magnetic disks, and solve the animal-named peripheral riddle!',
+    hwL5TeacherTipTitle: 'Teacher Pro Tip: Why 1 KB = 1024 Bytes instead of 1000?',
+    hwL5TeacherTipText: '• In everyday life we use decimal (1 kg = 1000 g), but computers are strictly binary (base 2). 2¹⁰ = 1024! Thus 1 KB = 1024 B, 1 MB = 1024 KB, and 1 GB = 1024 MB! • Remember powers of 2 for competitions and exams!',
+    hwL5TeacherTipExtra: 'When you buy a 1 TB hard disk, Windows divides by 1024 to show binary capacity (~931 GB real space)!',
+    hwL5Task1Title: 'Challenge 1: Textbook problem (page 20, ex. 3):',
+    hwL5Task1Desc: 'A computer features a 1 TB HDD and a 512 GB SSD. What is the total storage capacity expressed in MB?',
+    hwL5Task2Title: 'Challenge 2: Magnetic storage device (page 20, ex. 2):',
+    hwL5Task2Desc: 'Which of these storage media records data onto spinning magnetic platters?',
+    hwL5Task3Title: 'Challenge 3: Textbook riddle (page 20, ex. 3):',
+    hwL5Task3Desc: 'Which essential input device for pointing and clicking is named after a small animal?',
+    hwL5FinishBtn: 'Complete Mission & Claim ICT Hardware Diploma (Grade 10)',
+
+    // Hardware Diploma
+    hwDiplomaTitle: 'CERTIFICATE OF HARDWARE TECHNICIAN & ICT SAFETY',
+    hwDiplomaText: 'For distinguished achievement in "Computer Systems & Communications Mission 💻⚡" (Textbook pages 10-20), mastering lab safety, ergonomic posture, timeline of computing history, central unit hardware assembly, peripheral categorization, and digital storage calculations.',
   },
 } as const;
 

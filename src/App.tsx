@@ -4,11 +4,21 @@ import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
 import { CoursesCatalog } from './components/CoursesCatalog';
+
+// Files Mission (Unitatea 2 - Manual pag. 27-30)
 import { Level1_Structure } from './components/Level1_Structure';
 import { Level2_SelectionSearch } from './components/Level2_SelectionSearch';
 import { Level3_MoveShortcuts } from './components/Level3_MoveShortcuts';
 import { Level4_CopyRenameProps } from './components/Level4_CopyRenameProps';
 import { Level5_RecycleBin } from './components/Level5_RecycleBin';
+
+// Hardware Mission (Unitatea 1 - Manual pag. 10-20)
+import { HLevel1_ErgonomyRules } from './components/hardware/HLevel1_ErgonomyRules';
+import { HLevel2_HistoryTimeline } from './components/hardware/HLevel2_HistoryTimeline';
+import { HLevel3_CentralUnitAssembly } from './components/hardware/HLevel3_CentralUnitAssembly';
+import { HLevel4_PeripheralsSort } from './components/hardware/HLevel4_PeripheralsSort';
+import { HLevel5_BitsQuiz } from './components/hardware/HLevel5_BitsQuiz';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { sounds } from './utils/audio';
@@ -17,14 +27,65 @@ import { Clock, Star, User } from 'lucide-react';
 function GameContent() {
   const { t } = useLanguage();
   const [view, setView] = useState<'catalog' | 'lesson' | 'teacher'>(() => {
-    // Check if initial URL or hash points to /profesor
     if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
       return 'teacher';
     }
     return 'catalog';
   });
-  const [currentLevel, setCurrentLevel] = useState<GameLevel>(1);
-  const [score, setScore] = useState<number>(0);
+
+  // Current selected mission
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | null>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_active_mission');
+      if (saved === 'hardware' || saved === 'files') return saved;
+    } catch {
+      // Ignore
+    }
+    return null;
+  });
+
+  // Hardware mission progress
+  const [hwLevel, setHwLevel] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_hw_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [hwScore, setHwScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_hw_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [hwElapsedSeconds, setHwElapsedSeconds] = useState<number>(0);
+
+  // Files mission progress
+  const [filesLevel, setFilesLevel] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_files_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [filesScore, setFilesScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_files_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [filesElapsedSeconds, setFilesElapsedSeconds] = useState<number>(0);
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   
   // Student Name persistence
@@ -36,10 +97,7 @@ function GameContent() {
     }
   });
 
-  // Test Stopwatch / Cronometru
-  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
-
   const maxScore = 100;
 
   // Persist student name to localStorage
@@ -52,25 +110,47 @@ function GameContent() {
     }
   };
 
-  // Automatically scroll to the very top whenever the level or view changes!
+  // Persist active mission & levels
+  useEffect(() => {
+    try {
+      if (activeMission) localStorage.setItem('arkedo_active_mission', activeMission);
+      localStorage.setItem('arkedo_hw_level', String(hwLevel));
+      localStorage.setItem('arkedo_hw_score', String(hwScore));
+      localStorage.setItem('arkedo_files_level', String(filesLevel));
+      localStorage.setItem('arkedo_files_score', String(filesScore));
+    } catch {
+      // Ignore
+    }
+  }, [activeMission, hwLevel, hwScore, filesLevel, filesScore]);
+
+  // Current active level & score
+  const currentLevel = activeMission === 'hardware' ? hwLevel : filesLevel;
+  const currentScore = activeMission === 'hardware' ? hwScore : filesScore;
+  const currentElapsedSeconds = activeMission === 'hardware' ? hwElapsedSeconds : filesElapsedSeconds;
+
+  // Automatically scroll to top on view or level change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentLevel, view]);
+  }, [currentLevel, view, activeMission]);
 
   // Timer interval effect
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (isTimerRunning && view === 'lesson' && currentLevel <= 5) {
       interval = setInterval(() => {
-        setElapsedSeconds((prev) => prev + 1);
+        if (activeMission === 'hardware') {
+          setHwElapsedSeconds((prev) => prev + 1);
+        } else {
+          setFilesElapsedSeconds((prev) => prev + 1);
+        }
       }, 1000);
     }
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel]);
+  }, [isTimerRunning, view, currentLevel, activeMission]);
 
-  // Listen to browser navigation popstate or hash changes for /profesor
+  // Listen to browser navigation
   useEffect(() => {
     const handleUrlChange = () => {
       if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
@@ -101,48 +181,87 @@ function GameContent() {
     if (newState) sounds.playClick();
   };
 
-  const handleStartLesson1 = () => {
+  // Launch or resume a mission
+  const handleSelectMission = (missionId: 'hardware' | 'files') => {
+    setActiveMission(missionId);
     setView('lesson');
+    setIsTimerRunning(true);
+    sounds.playClick();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleResetActiveMission = () => {
+    if (activeMission === 'hardware') {
+      setHwLevel(1);
+      setHwScore(0);
+      setHwElapsedSeconds(0);
+    } else if (activeMission === 'files') {
+      setFilesLevel(1);
+      setFilesScore(0);
+      setFilesElapsedSeconds(0);
+    }
+  };
+
+  // Hardware level progression
+  const handleHwComplete1 = () => {
+    setHwScore(20);
+    setHwLevel(2);
+  };
+  const handleHwComplete2 = () => {
+    setHwScore(40);
+    setHwLevel(3);
+  };
+  const handleHwComplete3 = () => {
+    setHwScore(60);
+    setHwLevel(4);
+  };
+  const handleHwComplete4 = () => {
+    setHwScore(80);
+    setHwLevel(5);
+  };
+  const handleHwComplete5 = () => {
+    setHwScore(100);
+    setHwLevel(6);
+    setIsTimerRunning(false);
+  };
+
+  const handleResetHardware = () => {
+    sounds.playClick();
+    setHwScore(0);
+    setHwLevel(1);
+    setHwElapsedSeconds(0);
     setIsTimerRunning(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleLevel1Complete = () => {
-    setScore(20);
-    setCurrentLevel(2);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Files level progression
+  const handleFilesComplete1 = () => {
+    setFilesScore(20);
+    setFilesLevel(2);
+  };
+  const handleFilesComplete2 = () => {
+    setFilesScore(40);
+    setFilesLevel(3);
+  };
+  const handleFilesComplete3 = () => {
+    setFilesScore(60);
+    setFilesLevel(4);
+  };
+  const handleFilesComplete4 = () => {
+    setFilesScore(80);
+    setFilesLevel(5);
+  };
+  const handleFilesComplete5 = () => {
+    setFilesScore(100);
+    setFilesLevel(6);
+    setIsTimerRunning(false);
   };
 
-  const handleLevel2Complete = () => {
-    setScore(40);
-    setCurrentLevel(3);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLevel3Complete = () => {
-    setScore(60);
-    setCurrentLevel(4);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLevel4Complete = () => {
-    setScore(80);
-    setCurrentLevel(5);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleLevel5Complete = () => {
-    setScore(100);
-    setCurrentLevel(6);
-    setIsTimerRunning(false); // Stop timer on victory!
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleResetGame = () => {
+  const handleResetFiles = () => {
     sounds.playClick();
-    setScore(0);
-    setCurrentLevel(1);
-    setElapsedSeconds(0);
+    setFilesScore(0);
+    setFilesLevel(1);
+    setFilesElapsedSeconds(0);
     setIsTimerRunning(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -154,17 +273,18 @@ function GameContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-white relative">
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col selection:bg-teal-500 selection:text-white relative">
       {/* Top Header */}
       <Header
-        score={score}
+        score={currentScore}
         maxScore={maxScore}
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
         currentView={view}
+        missionId={activeMission}
         onNavigateToCatalog={() => navigateToView('catalog')}
         studentName={studentName}
-        elapsedSeconds={elapsedSeconds}
+        elapsedSeconds={currentElapsedSeconds}
         onEditStudentName={() => navigateToView('catalog')}
         onNavigateToTeacher={() => navigateToView('teacher')}
       />
@@ -177,48 +297,85 @@ function GameContent() {
           <CoursesCatalog
             studentName={studentName}
             onSetStudentName={handleSetStudentName}
-            onStartLesson1={handleStartLesson1}
-            currentLevel={currentLevel}
-            score={score}
+            onSelectMission={handleSelectMission}
+            activeMissionId={activeMission}
+            activeMissionLevel={currentLevel}
+            activeMissionScore={currentScore}
+            elapsedSeconds={currentElapsedSeconds}
+            onResetActiveMission={handleResetActiveMission}
             onOpenTeacherPortal={() => navigateToView('teacher')}
           />
         ) : (
           <>
-            {/* Tree Evolution Progress */}
-            <ProgressBar currentLevel={currentLevel} />
+            {/* Mission Evolution Progress */}
+            <ProgressBar
+              currentLevel={currentLevel}
+              courseId={activeMission === 'hardware' ? 'hardware' : 'files'}
+            />
 
-            {/* Level Views */}
-            <div className="flex-1">
-              {currentLevel === 1 && (
-                <Level1_Structure onComplete={handleLevel1Complete} />
-              )}
+            {/* Level Views for HARDWARE */}
+            {activeMission === 'hardware' && (
+              <div className="flex-1">
+                {hwLevel === 1 && (
+                  <HLevel1_ErgonomyRules onComplete={handleHwComplete1} />
+                )}
+                {hwLevel === 2 && (
+                  <HLevel2_HistoryTimeline onComplete={handleHwComplete2} />
+                )}
+                {hwLevel === 3 && (
+                  <HLevel3_CentralUnitAssembly onComplete={handleHwComplete3} />
+                )}
+                {hwLevel === 4 && (
+                  <HLevel4_PeripheralsSort onComplete={handleHwComplete4} />
+                )}
+                {hwLevel === 5 && (
+                  <HLevel5_BitsQuiz onComplete={handleHwComplete5} />
+                )}
+                {hwLevel === 6 && (
+                  <VictoryScreen
+                    score={hwScore}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={hwElapsedSeconds}
+                    courseId="hardware"
+                    onReset={handleResetHardware}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
 
-              {currentLevel === 2 && (
-                <Level2_SelectionSearch onComplete={handleLevel2Complete} />
-              )}
-
-              {currentLevel === 3 && (
-                <Level3_MoveShortcuts onComplete={handleLevel3Complete} />
-              )}
-
-              {currentLevel === 4 && (
-                <Level4_CopyRenameProps onComplete={handleLevel4Complete} />
-              )}
-
-              {currentLevel === 5 && (
-                <Level5_RecycleBin onComplete={handleLevel5Complete} />
-              )}
-
-              {currentLevel === 6 && (
-                <VictoryScreen
-                  score={score}
-                  maxScore={maxScore}
-                  studentName={studentName}
-                  elapsedSeconds={elapsedSeconds}
-                  onReset={handleResetGame}
-                />
-              )}
-            </div>
+            {/* Level Views for FILES / ARBORELE SECRET */}
+            {activeMission === 'files' && (
+              <div className="flex-1">
+                {filesLevel === 1 && (
+                  <Level1_Structure onComplete={handleFilesComplete1} />
+                )}
+                {filesLevel === 2 && (
+                  <Level2_SelectionSearch onComplete={handleFilesComplete2} />
+                )}
+                {filesLevel === 3 && (
+                  <Level3_MoveShortcuts onComplete={handleFilesComplete3} />
+                )}
+                {filesLevel === 4 && (
+                  <Level4_CopyRenameProps onComplete={handleFilesComplete4} />
+                )}
+                {filesLevel === 5 && (
+                  <Level5_RecycleBin onComplete={handleFilesComplete5} />
+                )}
+                {filesLevel === 6 && (
+                  <VictoryScreen
+                    score={filesScore}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={filesElapsedSeconds}
+                    courseId="files"
+                    onReset={handleResetFiles}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
@@ -226,12 +383,12 @@ function GameContent() {
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
       {view === 'lesson' && currentLevel <= 5 && (
         <div className="sticky bottom-3 z-30 flex justify-center px-4 pointer-events-none">
-          <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-emerald-500/20">
+          <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
             {studentName && (
               <div className="flex items-center gap-1.5 text-slate-300 border-r border-slate-700 pr-3 font-sans">
-                <User className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="font-bold text-emerald-300 max-w-[110px] truncate">
+                <User className="w-3.5 h-3.5 text-teal-400" />
+                <span className="font-bold text-teal-300 max-w-[110px] truncate">
                   {studentName}
                 </span>
               </div>
@@ -242,14 +399,14 @@ function GameContent() {
               <Clock className="w-4 h-4 text-cyan-400 animate-pulse" />
               <span className="text-slate-400 hidden sm:inline">{t.timerLabel}:</span>
               <strong className="text-sm font-black text-cyan-200">
-                {formatTimer(elapsedSeconds)}
+                {formatTimer(currentElapsedSeconds)}
               </strong>
             </div>
 
             {/* Score pill */}
             <div className="flex items-center gap-1.5 text-amber-300 border-l border-slate-700 pl-3">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span className="font-bold">{score}/{maxScore} {t.pts}</span>
+              <span className="font-bold">{currentScore}/{maxScore} {t.pts}</span>
             </div>
           </div>
         </div>
