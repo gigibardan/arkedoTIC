@@ -1,0 +1,6 @@
+{
+  "name": "ARKEDO: Misiunea Arborele Secret 🌳",
+  "description": "Mini-joc educativ și interactiv de informatică pentru elevii de clasa a V-a de la școala ARKEDO, despre organizarea fișierelor și folderelor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
