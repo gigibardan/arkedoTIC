@@ -3,6 +3,7 @@ import { Scissors, Clipboard, CheckCircle2, ChevronRight, AlertTriangle } from '
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { useArky } from '../context/ArkyContext';
 
 interface Level3Props {
   onComplete: () => void;
@@ -10,6 +11,7 @@ interface Level3Props {
 
 export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
   const { t, lang } = useLanguage();
+  const arky = useArky();
   const [isCut, setIsCut] = useState<boolean>(false);
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [forbiddenQuiz, setForbiddenQuiz] = useState<string | null>(null);
@@ -23,14 +25,17 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
     if (!isCut) return;
     sounds.playCorrect();
     setIsMoved(true);
+    arky.triggerSuccess();
   };
 
   const handleQuizAnswer = (ans: string) => {
     setForbiddenQuiz(ans);
     if (ans === 'valid_name') {
       sounds.playCorrect();
+      arky.triggerSuccess();
     } else {
       sounds.playWrong();
+      arky.triggerError();
     }
   };
 

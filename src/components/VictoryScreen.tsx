@@ -3,6 +3,8 @@ import confetti from 'canvas-confetti';
 import { Award, Printer, RotateCcw, Star, Clock, CheckCircle2 } from 'lucide-react';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { useArky } from '../context/ArkyContext';
+import { MascotaArky } from './MascotaArky';
 import { logStudentResult } from '../lib/resultsService';
 
 interface VictoryScreenProps {
@@ -25,6 +27,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   onBackToCatalog,
 }) => {
   const { t, lang } = useLanguage();
+  const arky = useArky();
   const [studentName, setStudentName] = useState<string>(
     initialStudentName.trim() || t.vDiplomaDefaultName
   );
@@ -45,6 +48,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   useEffect(() => {
     sounds.playVictory();
+    arky.triggerFinished();
     
     // Automatically log results to Firebase Firestore
     if (!hasLoggedRef.current) {
@@ -277,6 +281,19 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
             </div>
           </>
         )}
+      </div>
+
+      {/* Arky Master Graduate Inline Greeting */}
+      <div className="max-w-2xl mx-auto mb-8">
+        <MascotaArky 
+          state="finished" 
+          position="inline" 
+          customMessage={
+            lang === 'en'
+              ? 'Mission Accomplished! You are officially an ARKEDO Master of Files & Tech! Print your diploma below! 🏆🎓'
+              : 'Misiune îndeplinită cu succes! Ești oficial un Maestru ARKEDO în Fișiere și Tehnologie! Printează diploma de mai jos! 🏆🎓'
+          }
+        />
       </div>
 
       {/* Printable ARKEDO Diploma */}

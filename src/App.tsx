@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { GameLevel } from './types';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { ArkyProvider, useArky } from './context/ArkyContext';
+import { MascotaArky } from './components/MascotaArky';
 import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
 import { CoursesCatalog } from './components/CoursesCatalog';
@@ -28,6 +30,7 @@ import { Clock, Star, User } from 'lucide-react';
 
 function GameContent() {
   const { t } = useLanguage();
+  const arky = useArky();
   const [view, setView] = useState<'catalog' | 'lesson' | 'teacher'>(() => {
     if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
       return 'teacher';
@@ -189,6 +192,7 @@ function GameContent() {
     setView('lesson');
     setIsTimerRunning(true);
     sounds.playClick();
+    arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -202,29 +206,35 @@ function GameContent() {
       setFilesScore(0);
       setFilesElapsedSeconds(0);
     }
+    arky.triggerIdle();
   };
 
   // Hardware level progression
   const handleHwComplete1 = () => {
     setHwScore(20);
     setHwLevel(2);
+    arky.triggerSuccess();
   };
   const handleHwComplete2 = () => {
     setHwScore(40);
     setHwLevel(3);
+    arky.triggerSuccess();
   };
   const handleHwComplete3 = () => {
     setHwScore(60);
     setHwLevel(4);
+    arky.triggerSuccess();
   };
   const handleHwComplete4 = () => {
     setHwScore(80);
     setHwLevel(5);
+    arky.triggerSuccess();
   };
   const handleHwComplete5 = () => {
     setHwScore(100);
     setHwLevel(6);
     setIsTimerRunning(false);
+    arky.triggerFinished();
   };
 
   const handleResetHardware = () => {
@@ -233,6 +243,7 @@ function GameContent() {
     setHwLevel(1);
     setHwElapsedSeconds(0);
     setIsTimerRunning(true);
+    arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -240,31 +251,38 @@ function GameContent() {
   const handleFilesComplete1 = () => {
     setFilesScore(10);
     setFilesLevel(2);
+    arky.triggerSuccess();
   };
   const handleFilesComplete2 = () => {
     setFilesScore(25);
     setFilesLevel(3);
+    arky.triggerSuccess();
   };
   const handleFilesComplete3 = () => {
     setFilesScore(40);
     setFilesLevel(4);
+    arky.triggerSuccess();
   };
   const handleFilesComplete4 = () => {
     setFilesScore(55);
     setFilesLevel(5);
+    arky.triggerSuccess();
   };
   const handleFilesComplete5 = () => {
     setFilesScore(70);
     setFilesLevel(6);
+    arky.triggerSuccess();
   };
   const handleFilesComplete6 = () => {
     setFilesScore(85);
     setFilesLevel(7);
+    arky.triggerSuccess();
   };
   const handleFilesComplete7 = () => {
     setFilesScore(100);
     setFilesLevel(8);
     setIsTimerRunning(false);
+    arky.triggerFinished();
   };
 
   const handleResetFiles = () => {
@@ -273,6 +291,7 @@ function GameContent() {
     setFilesLevel(1);
     setFilesElapsedSeconds(0);
     setIsTimerRunning(true);
+    arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -449,7 +468,10 @@ function GameContent() {
 export default function App() {
   return (
     <LanguageProvider>
-      <GameContent />
+      <ArkyProvider>
+        <GameContent />
+        <MascotaArky />
+      </ArkyProvider>
     </LanguageProvider>
   );
 }

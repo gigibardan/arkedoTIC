@@ -17,6 +17,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useArky } from '../context/ArkyContext';
 import { sounds } from '../utils/audio';
 import { KnowledgePills } from './hardware/KnowledgePills';
 import { MissionGuardModal } from './MissionGuardModal';
@@ -45,6 +46,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenTeacherPortal,
 }) => {
   const { t, lang } = useLanguage();
+  const arky = useArky();
   const [nameInput, setNameInput] = useState<string>(studentName);
   const [isEditingName, setIsEditingName] = useState<boolean>(!studentName);
   const [nameError, setNameError] = useState<boolean>(false);
@@ -61,8 +63,18 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       setIsEditingName(false);
       setNameError(false);
       sounds.playCorrect();
+      arky.triggerSuccess(
+        lang === 'en'
+          ? `Welcome aboard, ${trimmed}! Let's conquer the digital world! 🚀`
+          : `Bun venit la bord, ${trimmed}! Hai să cucerim lumea digitală! 🚀`
+      );
     } else {
       setNameError(true);
+      arky.triggerError(
+        lang === 'en'
+          ? "Oops! Please enter your name so Arky can put it on your diploma! ✍️"
+          : "Hopa! Scrie-ți numele pentru ca Arky să-l poată pune pe diplomă! ✍️"
+      );
     }
   };
 
@@ -72,6 +84,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       setNameError(true);
       setIsEditingName(true);
       sounds.playWrong();
+      arky.triggerError(
+        lang === 'en'
+          ? "Hold on! Tell Arky your name first before starting the mission! 🤖"
+          : "Stai puțin! Spune-i lui Arky numele tău înainte de a începe misiunea! 🤖"
+      );
       return;
     }
     if (nameInput.trim() && !studentName) {

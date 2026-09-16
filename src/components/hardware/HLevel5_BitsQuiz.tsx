@@ -3,6 +3,7 @@ import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { Calculator, Award, CheckCircle2, HardDrive, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { useArky } from '../../context/ArkyContext';
 
 interface HLevel5Props {
   onComplete: () => void;
@@ -10,6 +11,7 @@ interface HLevel5Props {
 
 export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
   const { lang, t } = useLanguage();
+  const arky = useArky();
 
   // Task 1: Capacity math problem (pag. 20, ex. 3)
   const [step1GB, setStep1GB] = useState<string>('');
@@ -39,16 +41,19 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
     if (!canValidate) {
       sounds.playWrong();
       setShowErrors(true);
+      arky.triggerError();
       return;
     }
 
     if (isMathValid && isMagneticValid && isRiddleValid) {
       sounds.playVictory();
       setCompleted(true);
+      arky.triggerSuccess();
       onComplete();
     } else {
       sounds.playWrong();
       setShowErrors(true);
+      arky.triggerError();
     }
   };
 

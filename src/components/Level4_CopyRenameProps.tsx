@@ -3,6 +3,7 @@ import { Copy, Edit3, Info, CheckCircle2, ChevronRight, FileText, HelpCircle } f
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { useArky } from '../context/ArkyContext';
 
 interface Level4Props {
   onComplete: () => void;
@@ -10,6 +11,7 @@ interface Level4Props {
 
 export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) => {
   const { t, lang } = useLanguage();
+  const arky = useArky();
   const [copied, setCopied] = useState<boolean>(false);
   const [renamedName, setRenamedName] = useState<string>('test1.txt');
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
@@ -20,6 +22,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
   const handleCopy = () => {
     sounds.playCorrect();
     setCopied(true);
+    arky.triggerSuccess();
   };
 
   const handleStartRename = () => {
@@ -32,8 +35,10 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
       sounds.playCorrect();
       setIsRenaming(false);
       setHasRenamedWithF2(true);
+      arky.triggerSuccess();
     } else {
       sounds.playWrong();
+      arky.triggerError();
     }
   };
 
@@ -41,8 +46,10 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
     setExtensionAnswer(ans);
     if (ans === 'type_program') {
       sounds.playCorrect();
+      arky.triggerSuccess();
     } else {
       sounds.playWrong();
+      arky.triggerError();
     }
   };
 
