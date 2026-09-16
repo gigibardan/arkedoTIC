@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Scissors, Clipboard, ArrowRight, CheckCircle2, ChevronRight, AlertTriangle, FileCode } from 'lucide-react';
+import { Scissors, Clipboard, CheckCircle2, ChevronRight, AlertTriangle } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Level3Props {
   onComplete: () => void;
 }
 
 export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
+  const { t } = useLanguage();
   const [isCut, setIsCut] = useState<boolean>(false);
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [forbiddenQuiz, setForbiddenQuiz] = useState<string | null>(null);
@@ -45,14 +47,13 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-5">
         <div>
           <span className="px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-400 font-bold text-xs uppercase tracking-wider border border-cyan-500/30">
-            Nivelul 3 din 5 • Mutarea & Caractere Interzise
+            {t.l3Tag}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-white mt-1.5 font-heading">
-            Mutarea Fulger: Foarfeca Digitală ⚡️
+            {t.l3Title}
           </h2>
           <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
-            Conform manualului (pagina 28 și 30), mutarea unui fișier înseamnă decuparea lui din locul vechi și mutarea în noua destinație.
-            Folosește <strong className="text-cyan-400">Ctrl + X</strong> și <strong className="text-emerald-400">Ctrl + V</strong> pentru a muta fișierul de joc în folderul corect!
+            {t.l3Desc}
           </p>
         </div>
         <div className="hidden sm:flex text-4xl p-3 bg-slate-900/60 rounded-2xl border border-slate-700 text-cyan-400">
@@ -62,10 +63,10 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
 
       {/* Teacher Tip from Textbook (p. 28 & 30) */}
       <TeacherTip
-        title="Ce se întâmplă la Mutare și ce caractere sunt interzise? (Manual pag. 28 & 30)"
-        tip="• La mutare (Cut/Decupare), fișierul NU rămâne în locul de plecare! Scurtătura Ctrl + X se numește așa pentru că tasta X seamănă cu o foarfecă deschisă ✂️! • În Windows, numele unui folder sau fișier NU are voie să conțină caractere speciale: < > : &quot; / \\ | ? * !"
+        title={t.l3TipTitle}
+        tip={t.l3TipText}
         bookPage="28 și 30"
-        extraAdvice="Dacă încerci să scrii semnul întrebării (?) sau asterisc (*) într-un nume de fișier, Windows va afișa un mesaj de avertizare!"
+        extraAdvice={t.l3TipExtra}
       />
 
       {/* Simulator: Interactive Cut and Paste */}
@@ -75,9 +76,9 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
-                🖥️ Locație Sursă: Desktop
+                {t.l3SourceTitle}
               </span>
-              <span className="text-[11px] text-cyan-400 font-mono">1 element</span>
+              <span className="text-[11px] text-cyan-400 font-mono">{t.l3OneElement}</span>
             </div>
 
             {!isMoved ? (
@@ -97,17 +98,17 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
                       super_mario.exe
                       {isCut && (
                         <span className="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">
-                          Decupat (În Clipboard)
+                          {t.l3InClipboard}
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-slate-400">Dimensiune: 15.4 MB • Fișier Aplicație</div>
+                    <div className="text-xs text-slate-400">Dimensiune: 15.4 MB • Application</div>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="p-8 text-center border-2 border-dashed border-slate-800 rounded-xl text-slate-500 text-xs">
-                Fișierul a fost decupat și mutat cu succes! Nu mai există pe Desktop.
+                {t.l3CutSuccess}
               </div>
             )}
           </div>
@@ -116,14 +117,14 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
             <button
               onClick={handleCut}
               disabled={isCut || isMoved}
-              className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 ${
+              className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
                 isCut || isMoved
                   ? 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
                   : 'bg-slate-800 hover:bg-slate-750 text-cyan-300 border border-cyan-500/50 shadow hover:border-cyan-400'
               }`}
             >
               <Scissors className="w-4 h-4" />
-              <span>{isCut ? '✓ Decupat (Ctrl + X apăsat)' : 'Pasul 1: Decupează fișierul (Ctrl + X)'}</span>
+              <span>{isCut ? t.l3BtnCutDone : t.l3BtnCut}</span>
             </button>
           </div>
         </div>
@@ -133,10 +134,10 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
-                📁 Destinație: Baza Secreta &gt; Jocuri
+                {t.l3DestTitle}
               </span>
               <span className="text-[11px] text-emerald-400 font-mono">
-                {isMoved ? '1 element' : 'Folder Gol'}
+                {isMoved ? t.l3OneElement : t.l3EmptyFolder}
               </span>
             </div>
 
@@ -151,13 +152,13 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
                       super_mario.exe
                       <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     </div>
-                    <div className="text-xs text-emerald-300/80">Locație nouă: /Baza Secreta/Jocuri/</div>
+                    <div className="text-xs text-emerald-300/80">/Baza Secreta/Jocuri/</div>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="p-8 text-center border-2 border-dashed border-slate-800 rounded-xl text-slate-500 text-xs">
-                Așteaptă lipirea fișierului decupat (folosește butonul de mai jos).
+                {t.l3PasteWait}
               </div>
             )}
           </div>
@@ -173,7 +174,7 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
               }`}
             >
               <Clipboard className="w-4 h-4" />
-              <span>{isMoved ? '✓ Lipit cu succes!' : 'Pasul 2: Lipește aici (Ctrl + V)'}</span>
+              <span>{isMoved ? t.l3BtnPasteDone : t.l3BtnPaste}</span>
             </button>
           </div>
         </div>
@@ -183,49 +184,49 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
       <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 mb-6">
         <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider mb-1 flex items-center gap-2 font-heading">
           <AlertTriangle className="w-4 h-4 text-amber-400" />
-          Exercițiul 3 din manual (pag. 30): Nume Valide și Caractere Interzise
+          {t.l3QuizTitle}
         </h3>
         <p className="text-xs text-slate-300 mb-3">
-          Care dintre următoarele este un nume <strong>CORECT</strong> de folder conform regulilor Windows?
+          {t.l3QuizQuestion}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             onClick={() => handleQuizAnswer('invalid_brackets')}
-            className={`p-3 rounded-xl border text-xs font-mono text-left transition ${
+            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer ${
               forbiddenQuiz === 'invalid_brackets'
                 ? 'bg-rose-950/70 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
             }`}
           >
-            <div className="font-bold text-white mb-1">A) Imagini_partea&lt;2&gt;</div>
-            <div className="text-[11px] text-slate-400">Conține caracterele &lt; și &gt;</div>
+            <div className="font-bold text-white mb-1">{t.l3QuizOptA}</div>
+            <div className="text-[11px] text-slate-400">{t.l3QuizOptASub}</div>
           </button>
 
           <button
             onClick={() => handleQuizAnswer('valid_name')}
-            className={`p-3 rounded-xl border text-xs font-mono text-left transition ${
+            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer ${
               forbiddenQuiz === 'valid_name'
                 ? 'bg-emerald-950/70 border-emerald-500 text-emerald-200 ring-2 ring-emerald-400'
                 : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
             }`}
           >
-            <div className="font-bold text-white mb-1">B) Imagini_partea2</div>
+            <div className="font-bold text-white mb-1">{t.l3QuizOptB}</div>
             <div className="text-[11px] text-emerald-400">
-              {forbiddenQuiz === 'valid_name' ? '✓ Corect! Nu conține semne interzise.' : 'Fără semne interzise'}
+              {forbiddenQuiz === 'valid_name' ? t.l3QuizOptBSub : t.l3QuizOptBSubDef}
             </div>
           </button>
 
           <button
             onClick={() => handleQuizAnswer('invalid_star')}
-            className={`p-3 rounded-xl border text-xs font-mono text-left transition ${
+            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer ${
               forbiddenQuiz === 'invalid_star'
                 ? 'bg-rose-950/70 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
             }`}
           >
-            <div className="font-bold text-white mb-1">C) Imagini_partea2*</div>
-            <div className="text-[11px] text-slate-400">Conține asterisc (*)</div>
+            <div className="font-bold text-white mb-1">{t.l3QuizOptC}</div>
+            <div className="text-[11px] text-slate-400">{t.l3QuizOptCSub}</div>
           </button>
         </div>
       </div>
@@ -233,7 +234,7 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
       {/* Complete Button */}
       <div className="flex items-center justify-between pt-2">
         <div className="text-xs text-slate-400">
-          Recompensă: <span className="text-amber-400 font-bold">+20 Puncte</span> și insigna <span className="text-cyan-400 font-bold">Maestru Scurtături</span>
+          {t.l3RewardText}
         </div>
         <button
           onClick={handleFinish}
@@ -244,10 +245,11 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
               : 'bg-slate-700 text-slate-400 cursor-not-allowed'
           }`}
         >
-          <span>Finalizează Nivelul 3</span>
+          <span>{t.l3FinishBtn}</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>
   );
 };
+

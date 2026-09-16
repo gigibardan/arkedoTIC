@@ -3,13 +3,14 @@
  * cu toate cele 5 nivele din manualul de informatica clasa a V-a (pag. 27-30).
  */
 
-export function generateStandaloneHtml(): string {
+export function generateStandaloneHtml(lang: 'ro' | 'en' = 'ro'): string {
+  const isEn = lang === 'en';
   return `<!DOCTYPE html>
-<html lang="ro">
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARKEDO: Misiunea Arborele Secret 🌳</title>
+  <title>${isEn ? 'ARKEDO: Secret Tree Mission 🌳' : 'ARKEDO: Misiunea Arborele Secret 🌳'}</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,12 +40,12 @@ export function generateStandaloneHtml(): string {
           <div>
             <div class="flex items-center gap-2">
               <span class="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider">
-                Școala ARKEDO
+                ${isEn ? 'ARKEDO School' : 'Școala ARKEDO'}
               </span>
-              <span class="text-xs text-slate-400 font-semibold hidden sm:inline">Informatică • Clasa a V-a</span>
+              <span class="text-xs text-slate-400 font-semibold hidden sm:inline">${isEn ? 'Computer Science • 5th Grade' : 'Informatică • Clasa a V-a'}</span>
             </div>
             <h1 class="text-lg sm:text-xl font-bold text-white tracking-wide font-heading">
-              Misiunea Arborele Secret
+              ${isEn ? 'Secret Tree Mission' : 'Misiunea Arborele Secret'}
             </h1>
           </div>
         </div>
@@ -53,9 +54,9 @@ export function generateStandaloneHtml(): string {
           <div class="bg-slate-900/90 px-3.5 py-1.5 rounded-xl border border-slate-700 flex items-center gap-2 shadow-inner">
             <span class="text-amber-400 text-xl">⭐️</span>
             <span id="score-display" class="font-black text-amber-300 text-xl font-heading">0</span>
-            <span class="text-slate-400 text-xs font-semibold">/ 100 pct</span>
+            <span class="text-slate-400 text-xs font-semibold">/ 100 ${isEn ? 'pts' : 'pct'}</span>
           </div>
-          <button id="btn-sound" class="p-2.5 rounded-xl bg-slate-750 hover:bg-slate-700 text-slate-200 border border-slate-600 transition" title="Sunet">
+          <button id="btn-sound" class="p-2.5 rounded-xl bg-slate-750 hover:bg-slate-700 text-slate-200 border border-slate-600 transition" title="Sound">
             🔊
           </button>
         </div>
@@ -953,7 +954,7 @@ export function generateStandaloneHtml(): string {
               </p>
               <div class="mt-6 pt-3 border-t border-amber-300 flex justify-between text-xs text-slate-700 font-bold">
                 <span>Profesor de Informatică</span>
-                <span>\${new Date().toLocaleDateString('ro-RO')}</span>
+                <span>17.09.2026</span>
               </div>
             </div>
           </div>

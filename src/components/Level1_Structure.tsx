@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { Folder, FolderPlus, ArrowLeft, CheckCircle2, ChevronRight, HardDrive, Laptop, Sparkles } from 'lucide-react';
+import { FolderPlus, ArrowLeft, CheckCircle2, ChevronRight, HardDrive, Laptop, Sparkles } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Level1Props {
   onComplete: () => void;
 }
 
 export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
+  const { t } = useLanguage();
+
   // Simulator state
   const [currentPath, setCurrentPath] = useState<'desktop' | 'baza_secreta'>('desktop');
   const [hasRootFolder, setHasRootFolder] = useState<boolean>(false);
   const [hasJocuri, setHasJocuri] = useState<boolean>(false);
   const [hasTeme, setHasTeme] = useState<boolean>(false);
-  const [isTreeExpanded, setIsTreeExpanded] = useState<boolean>(true);
   const [shortcutWinEUsed, setShortcutWinEUsed] = useState<boolean>(false);
 
   // Checkbox steps
@@ -30,7 +32,6 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
   const handleOpenRoot = () => {
     sounds.playClick();
     setCurrentPath('baza_secreta');
-    setIsTreeExpanded(true);
   };
 
   const handleBackToDesktop = () => {
@@ -64,14 +65,13 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-5">
         <div>
           <span className="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs uppercase tracking-wider border border-emerald-500/30">
-            Nivelul 1 din 5 • Structura Arborescentă
+            {t.l1Tag}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-white mt-1.5 font-heading">
-            File Explorer & Structura Arborescentă 📁
+            {t.l1Title}
           </h2>
           <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
-            Conform manualului de informatică (pagina 27), datele de pe calculator sunt organizate într-o <strong className="text-emerald-400">structură arborescentă</strong> (ca un copac cu ramuri și frunze). 
-            Creează folderul principal <strong className="text-emerald-300 font-mono">Baza Secreta</strong>, iar în interiorul său creează două ramuri (subfoldere): <strong className="text-cyan-300 font-mono">Jocuri</strong> și <strong className="text-amber-300 font-mono">Teme</strong>.
+            {t.l1Desc}
           </p>
         </div>
         <div className="hidden sm:flex text-4xl p-3 bg-slate-900/60 rounded-2xl border border-slate-700 text-emerald-400">
@@ -81,10 +81,10 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
 
       {/* Teacher Tip from Textbook (p. 27 & 28) */}
       <TeacherTip
-        title="Cum pornim rapid programul File Explorer?"
-        tip="Sistemul de operare Windows are programul implicit numit File Explorer (cu pictograma ca un dosar galben cu clemă albastră). Scurtătura secretă de la tastatură pentru a-l deschide este tasta Windows (fereastră) + tasta E!"
+        title={t.l1TipTitle}
+        tip={t.l1TipText}
         bookPage="27"
-        extraAdvice="În coloana din stânga a File Explorer, simbolul „>” sau „+” expandează folderul, iar simbolul „v” îl compactează!"
+        extraAdvice={t.l1TipExtra}
       />
 
       {/* Main Grid: Interactive OS Simulator & Tree Preview */}
@@ -105,19 +105,11 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
           </div>
 
           {/* Breadcrumb Path Bar */}
-          <div className="bg-slate-950/70 px-4 py-2.5 text-xs flex items-center gap-2 text-slate-300 border-b border-slate-800">
+          <div className="bg-slate-950/70 px-4 py-2.5 text-xs flex items-center gap-2 text-slate-300 border-b border-slate-800 font-mono">
             <span className="text-slate-400">📍 Cale:</span>
-            <div className="flex items-center gap-1 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700/80 font-mono text-emerald-400">
+            <div className="flex items-center gap-1 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700/80 text-emerald-400">
               <HardDrive className="w-3 h-3 text-slate-400" />
-              <span>Acest Calculator</span>
-              <ChevronRight className="w-3 h-3 text-slate-500" />
-              <span>Desktop</span>
-              {currentPath === 'baza_secreta' && (
-                <>
-                  <ChevronRight className="w-3 h-3 text-slate-500" />
-                  <span className="text-cyan-300 font-bold">Baza Secreta</span>
-                </>
-              )}
+              <span>{currentPath === 'desktop' ? t.l1PathDesktop : t.l1PathInside}</span>
             </div>
           </div>
 
@@ -138,16 +130,13 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                       Baza Secreta
                     </span>
                     <span className="text-[10px] text-amber-300 font-medium mt-0.5">
-                      (Click pt. a intra)
+                      {t.l1RootHint}
                     </span>
                   </div>
                 ) : (
                   <div className="w-full flex flex-col items-center justify-center py-10 text-center text-slate-500">
                     <FolderPlus className="w-12 h-12 stroke-[1.5] text-slate-600 mb-2" />
-                    <p className="text-sm font-medium">Desktop-ul este gol.</p>
-                    <p className="text-xs text-slate-500">
-                      Apasă butonul verde de mai jos pentru a crea folderul "Baza Secreta".
-                    </p>
+                    <p className="text-sm font-medium">{t.l1EmptyDesktop}</p>
                   </div>
                 )}
               </>
@@ -172,7 +161,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
 
                 {!hasJocuri && !hasTeme && (
                   <div className="w-full py-8 text-center text-slate-500 text-xs">
-                    Ești în interiorul folderului "Baza Secreta". Adaugă cele două subfoldere folosind butoanele de mai jos!
+                    {t.l1InsideEmpty}
                   </div>
                 )}
               </div>
@@ -185,9 +174,9 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               {currentPath === 'desktop' && !hasRootFolder && (
                 <button
                   onClick={handleCreateRoot}
-                  className="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5"
+                  className="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5 cursor-pointer"
                 >
-                  <FolderPlus className="w-4 h-4" /> Creează folderul "Baza Secreta"
+                  <FolderPlus className="w-4 h-4" /> {t.l1BtnRoot}
                 </button>
               )}
 
@@ -196,17 +185,17 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                   {!hasJocuri && (
                     <button
                       onClick={handleCreateJocuri}
-                      className="bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5"
+                      className="bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5 cursor-pointer"
                     >
-                      <FolderPlus className="w-4 h-4" /> Adaugă "Jocuri" 🎮
+                      <FolderPlus className="w-4 h-4" /> {t.l1BtnJocuri}
                     </button>
                   )}
                   {!hasTeme && (
                     <button
                       onClick={handleCreateTeme}
-                      className="bg-amber-600 hover:bg-amber-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5"
+                      className="bg-amber-600 hover:bg-amber-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5 cursor-pointer"
                     >
-                      <FolderPlus className="w-4 h-4" /> Adaugă "Teme" 📚
+                      <FolderPlus className="w-4 h-4" /> {t.l1BtnTeme}
                     </button>
                   )}
                 </>
@@ -216,9 +205,9 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
             {currentPath === 'baza_secreta' && (
               <button
                 onClick={handleBackToDesktop}
-                className="text-xs text-slate-300 hover:text-white px-3 py-1.5 bg-slate-700/80 hover:bg-slate-700 rounded-lg flex items-center gap-1.5 transition"
+                className="text-xs text-slate-300 hover:text-white px-3 py-1.5 bg-slate-700/80 hover:bg-slate-700 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
               >
-                <ArrowLeft className="w-3.5 h-3.5" /> Înapoi pe Desktop
+                <ArrowLeft className="w-3.5 h-3.5" /> {t.l1BtnBack}
               </button>
             )}
           </div>
@@ -230,18 +219,18 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
             <div className="flex items-center gap-2 mb-3">
               <span className="text-xl">🌳</span>
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                Schema Arborelui Tău
+                {t.treeProgressTitle}
               </h3>
             </div>
             <p className="text-xs text-slate-400 mb-4">
-              Iată cum trebuie să arate structura ierarhică de directoare:
+              Ierarhie directoare / Directory tree:
             </p>
 
             {/* Tree nodes */}
             <div className="font-mono text-xs space-y-2 bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
               <div className="flex items-center gap-2 text-slate-400">
                 <Laptop className="w-4 h-4 text-slate-500" />
-                <span>Desktop (Locație rădăcină)</span>
+                <span>Desktop (Root)</span>
               </div>
               <div className="ml-4 pl-3 border-l-2 border-slate-700 space-y-2">
                 <div className={`flex items-center gap-2 ${hasRootFolder ? 'text-emerald-400 font-bold' : 'text-slate-500'}`}>
@@ -266,7 +255,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
           <div className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-start gap-2">
             <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
             <span>
-              <strong>Sfat de la prof:</strong> Un folder este un recipient digital în care păstrăm fișiere organizate, ca să nu le pierdem!
+              <strong>ARKEDO:</strong> Un folder este un recipient digital pentru fișiere bine organizate!
             </span>
           </div>
         </div>
@@ -275,9 +264,9 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
       {/* Provocare scurtătură Win+E din manual (pag. 27) */}
       <div className="bg-slate-900/90 border border-slate-700 rounded-2xl p-4 sm:p-5 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-0.5">Întrebare din manual (pag. 27):</div>
-          <div className="text-sm font-bold text-white">Cum deschizi File Explorer rapid de la tastatură?</div>
-          <div className="text-xs text-slate-400 mt-0.5">Apasă pe butonul corect pentru a debloca validarea nivelului:</div>
+          <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-0.5">{t.l1WinEQuizTitle}</div>
+          <div className="text-sm font-bold text-white">{t.l1WinEQuizQuestion}</div>
+          <div className="text-xs text-slate-400 mt-0.5">{t.l1WinEQuizSub}</div>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -285,18 +274,18 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               sounds.playCorrect();
               setShortcutWinEUsed(true);
             }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer ${
               shortcutWinEUsed
                 ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 shadow-md'
                 : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-600'
             }`}
           >
-            {shortcutWinEUsed ? '✓ Corect: Win + E' : 'Apasă tasta ⊞ Windows + E'}
+            {shortcutWinEUsed ? t.l1WinEOptionCorrect : t.l1WinEOptionDefault}
           </button>
 
           <button
             onClick={() => sounds.playWrong()}
-            className="px-3 py-2 rounded-xl text-xs font-mono bg-slate-800/60 hover:bg-slate-800 text-slate-400 border border-slate-700"
+            className="px-3 py-2 rounded-xl text-xs font-mono bg-slate-800/60 hover:bg-slate-800 text-slate-400 border border-slate-700 cursor-pointer"
           >
             Alt + Tab
           </button>
@@ -306,10 +295,10 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
       {/* Checklist (Interactive: can be checked by simulator or by student on their real PC) */}
       <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-5 mb-6">
         <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-2">
-          <span>📋</span> Lista de verificare a misiunii (Bifează pașii realizați):
+          <span>📋</span> {t.l1ChecklistTitle}
         </h3>
         <p className="text-xs text-slate-400 mb-3">
-          Poți bifa pașii direct în simulatorul de mai sus sau pe calculatorul tău fizic din laboratorul ARKEDO:
+          {t.l1ChecklistSub}
         </p>
 
         <div className="space-y-3">
@@ -325,7 +314,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               className="mt-0.5 w-4 h-4 rounded text-emerald-500 focus:ring-0 cursor-pointer"
             />
             <span className="text-xs sm:text-sm text-slate-200">
-              <strong>Pasul 1:</strong> Am creat pe Desktop folderul principal <strong>"Baza Secreta"</strong> (Click dreapta ➔ Nou / New ➔ Folder).
+              {t.l1Chk1}
             </span>
           </label>
 
@@ -341,7 +330,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               className="mt-0.5 w-4 h-4 rounded text-emerald-500 focus:ring-0 cursor-pointer"
             />
             <span className="text-xs sm:text-sm text-slate-200">
-              <strong>Pasul 2:</strong> Am deschis folderul (dublu-click) și am creat subfolderul <strong>"Jocuri"</strong> 🎮 pentru salvările jocurilor.
+              {t.l1Chk2}
             </span>
           </label>
 
@@ -357,7 +346,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               className="mt-0.5 w-4 h-4 rounded text-emerald-500 focus:ring-0 cursor-pointer"
             />
             <span className="text-xs sm:text-sm text-slate-200">
-              <strong>Pasul 3:</strong> În același folder am creat și al doilea subfolder <strong>"Teme"</strong> 📚 pentru proiectele școlare.
+              {t.l1Chk3}
             </span>
           </label>
         </div>
@@ -366,7 +355,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
       {/* Complete Button */}
       <div className="flex items-center justify-between pt-2">
         <div className="text-xs text-slate-400">
-          Recompensă: <span className="text-amber-400 font-bold">+20 Puncte</span> și insigna <span className="text-emerald-400 font-bold">Arhitect de Foldere</span>
+          {t.l1RewardText}
         </div>
         <button
           onClick={handleFinish}
@@ -377,10 +366,11 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
               : 'bg-slate-700 text-slate-400 cursor-not-allowed'
           }`}
         >
-          <span>Finalizează Nivelul 1</span>
+          <span>{t.l1FinishBtn}</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>
   );
 };
+

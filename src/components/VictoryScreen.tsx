@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Award, Printer, RotateCcw, Star, Download, School, CheckCircle2, ShieldCheck, Heart } from 'lucide-react';
+import { Award, Printer, RotateCcw, Star, Download } from 'lucide-react';
 import { sounds } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface VictoryScreenProps {
   score: number;
@@ -16,12 +17,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   onReset,
   onOpenExportModal,
 }) => {
-  const [studentName, setStudentName] = useState<string>('Elevul/Eleva Curajoasă');
-  const currentDate = new Date().toLocaleDateString('ro-RO', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  const { t } = useLanguage();
+  const [studentName, setStudentName] = useState<string>(t.vDiplomaDefaultName);
 
   useEffect(() => {
     sounds.playVictory();
@@ -66,16 +63,16 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
       <div className="flex justify-center mb-2">
         <span className="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs sm:text-sm uppercase font-black tracking-widest border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
-          <Award className="w-4 h-4 text-emerald-400" /> MISIUNE ÎNDEPLINITĂ CU SUCCES!
+          <Award className="w-4 h-4 text-emerald-400" /> {t.vBadgeMission}
         </span>
       </div>
 
       <h2 className="text-3xl sm:text-5xl font-black text-white mt-2 font-heading tracking-tight">
-        Felicitări din partea Școlii ARKEDO!
+        {t.vTitle}
       </h2>
 
       <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mt-3 mb-6 leading-relaxed">
-        Ai deblocat toate secretele sistemului de operare, ai salvat Arborele Secret și ai demonstrat abilități remarcabile de viitor informatician!
+        {t.vDesc}
       </p>
 
       {/* Score Summary Box */}
@@ -89,10 +86,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
         </div>
         <div className="text-left border-l border-slate-700 pl-4">
           <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-            Scor Test (Manual pag. 30)
+            {t.vScoreLabel}
           </div>
           <div className="text-2xl font-black text-amber-300 font-heading">
-            {score} / {maxScore} Puncte (Nota 10)
+            {score} / {maxScore} ({t.vScorePerfect})
           </div>
         </div>
       </div>
@@ -101,36 +98,33 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       <div className="max-w-xl mx-auto bg-slate-900/90 border border-slate-700 rounded-2xl p-5 mb-8 text-left">
         <div className="flex justify-between items-center mb-2.5 border-b border-slate-800 pb-2">
           <span className="text-xs font-bold text-amber-400 uppercase tracking-wider font-mono">
-            📝 Autoevaluare (Manual pag. 30)
+            {t.vAutoevalTitle}
           </span>
           <span className="text-xs text-emerald-400 font-bold font-mono">
-            Timp realizare: ~15-20 min
+            {t.vAutoevalTime}
           </span>
         </div>
         <p className="text-xs sm:text-sm text-slate-300 mb-3">
-          Cum te simți după ce ai rezolvat acest test și ai salvat Arborele Secret?
+          {t.vAutoevalQuestion}
         </p>
         <div className="grid grid-cols-3 gap-2.5">
           <button
             onClick={() => sounds.playCorrect()}
             className="p-3 rounded-xl bg-emerald-950/60 hover:bg-emerald-950 border border-emerald-500/80 text-emerald-200 text-xs font-bold text-center transition flex flex-col items-center gap-1 cursor-pointer"
           >
-            <span className="text-2xl">🤩</span>
-            <span>Încântat!</span>
+            <span>{t.vFeelExcited}</span>
           </button>
           <button
             onClick={() => sounds.playClick()}
             className="p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold text-center transition flex flex-col items-center gap-1 cursor-pointer"
           >
-            <span className="text-2xl">🙂</span>
-            <span>Mulțumit</span>
+            <span>{t.vFeelPleased}</span>
           </button>
           <button
             onClick={() => sounds.playClick()}
             className="p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold text-center transition flex flex-col items-center gap-1 cursor-pointer"
           >
-            <span className="text-2xl">🙁</span>
-            <span>Nemulțumit</span>
+            <span>{t.vFeelSad}</span>
           </button>
         </div>
       </div>
@@ -140,40 +134,40 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
         <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
           <span className="text-2xl">📁</span>
           <div>
-            <div className="text-xs font-bold text-white">Arhitect</div>
-            <div className="text-[10px] text-emerald-400">Structură arbore</div>
+            <div className="text-xs font-bold text-white">{t.vBadge1Title}</div>
+            <div className="text-[10px] text-emerald-400">{t.vBadge1Sub}</div>
           </div>
         </div>
 
         <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
           <span className="text-2xl">🎯</span>
           <div>
-            <div className="text-xs font-bold text-white">Selecție</div>
-            <div className="text-[10px] text-teal-400">Ctrl+A & Search</div>
+            <div className="text-xs font-bold text-white">{t.vBadge2Title}</div>
+            <div className="text-[10px] text-teal-400">{t.vBadge2Sub}</div>
           </div>
         </div>
 
         <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
           <span className="text-2xl">⚡️</span>
           <div>
-            <div className="text-xs font-bold text-white">Mutare</div>
-            <div className="text-[10px] text-cyan-400">Ctrl+X & Reguli</div>
+            <div className="text-xs font-bold text-white">{t.vBadge3Title}</div>
+            <div className="text-[10px] text-cyan-400">{t.vBadge3Sub}</div>
           </div>
         </div>
 
         <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
           <span className="text-2xl">🔍</span>
           <div>
-            <div className="text-xs font-bold text-white">Detectiv</div>
-            <div className="text-[10px] text-purple-400">Ctrl+C, F2, .txt</div>
+            <div className="text-xs font-bold text-white">{t.vBadge4Title}</div>
+            <div className="text-[10px] text-purple-400">{t.vBadge4Sub}</div>
           </div>
         </div>
 
         <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
           <span className="text-2xl">🛡️</span>
           <div>
-            <div className="text-xs font-bold text-white">Gardian</div>
-            <div className="text-[10px] text-rose-400">Restore Recycle</div>
+            <div className="text-xs font-bold text-white">{t.vBadge5Title}</div>
+            <div className="text-[10px] text-rose-400">{t.vBadge5Sub}</div>
           </div>
         </div>
       </div>
@@ -191,20 +185,20 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 🌳
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
-                Școala ARKEDO
+                {t.schoolName}
               </span>
             </div>
             <div className="text-3xl">🏅</div>
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
-            DIPLOMĂ DE MERIT
+            {t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
-            Departamentul de Informatică și Tehnologie Digitală
+            {t.vDiplomaDept}
           </p>
 
-          <p className="text-xs text-slate-500 mt-4">Această diplomă se conferă elevului / elevei:</p>
+          <p className="text-xs text-slate-500 mt-4">{t.vDiplomaAwardTo}</p>
 
           {/* Student Name Input / Display */}
           <div className="my-3">
@@ -212,25 +206,25 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               type="text"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
-              placeholder="Scrie numele tău aici..."
+              placeholder={t.vDiplomaDefaultName}
               className="w-full text-center text-xl sm:text-3xl font-black text-emerald-700 bg-amber-50/70 border-b-2 border-emerald-500 focus:outline-none focus:border-emerald-700 py-1.5 px-3 rounded-lg"
               title="Apasă pentru a edita numele tău pe diplomă"
             />
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
-            Pentru finalizarea impecabilă a provocării <strong>"ARKEDO: Misiunea Arborele Secret 🌳"</strong> și stăpânirea deplină a managementului fișierelor și folderelor (crearea structurilor ierarhice, comenzi rapide Ctrl+X/Ctrl+V, copiere cu Ctrl+C, redenumire rapidă F2 și restaurare din Coșul de Reciclare).
+            {t.vDiplomaText}
           </p>
 
           {/* Signatures & Date */}
           <div className="mt-8 pt-5 border-t border-amber-300 flex items-center justify-between text-xs text-slate-700">
             <div className="text-left">
-              <div className="font-extrabold text-slate-900">Profesor de Informatică</div>
-              <div className="text-[11px] text-slate-600">Școala ARKEDO</div>
+              <div className="font-extrabold text-slate-900">{t.vDiplomaTeacher}</div>
+              <div className="text-[11px] text-slate-600">{t.schoolName}</div>
             </div>
             <div className="text-right">
-              <div className="font-extrabold text-slate-900">{currentDate}</div>
-              <div className="text-[11px] text-slate-600">Clasa a V-a</div>
+              <div className="font-extrabold text-slate-900">{t.vDiplomaDate}</div>
+              <div className="text-[11px] text-slate-600">ARKEDO TIC</div>
             </div>
           </div>
         </div>
@@ -243,7 +237,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-6 py-3 rounded-2xl transition shadow-lg flex items-center gap-2 font-heading cursor-pointer active:scale-95"
         >
           <Printer className="w-4 h-4" />
-          <span>Tipărește Diploma (PDF/Print)</span>
+          <span>{t.vBtnPrint}</span>
         </button>
 
         <button
@@ -251,7 +245,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           className="bg-slate-700 hover:bg-slate-600 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95"
         >
           <RotateCcw className="w-4 h-4" />
-          <span>Resetează Misiunea</span>
+          <span>{t.vBtnReset}</span>
         </button>
 
         <button
@@ -259,9 +253,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95"
         >
           <Download className="w-4 h-4" />
-          <span>Descarcă index.html Offline</span>
+          <span>{t.vBtnOffline}</span>
         </button>
       </div>
     </div>
   );
 };
+

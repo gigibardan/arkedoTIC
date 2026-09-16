@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Copy, Download, Check, Code, FileCode } from 'lucide-react';
+import { X, Copy, Download, Check, FileCode } from 'lucide-react';
 import { generateStandaloneHtml } from '../utils/standaloneHtml';
 import { sounds } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface StandaloneExportModalProps {
   isOpen: boolean;
@@ -12,11 +13,12 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { lang, t } = useLanguage();
   const [copied, setCopied] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
-  const htmlCode = generateStandaloneHtml();
+  const htmlCode = generateStandaloneHtml(lang);
 
   const handleCopy = () => {
     sounds.playCorrect();
@@ -31,7 +33,7 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'index.html';
+    link.download = `index_${lang}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -49,10 +51,10 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
             </div>
             <div>
               <h3 className="text-lg font-bold text-white font-heading">
-                Export Fișier Autonom: index.html
+                {t.modalTitle}
               </h3>
               <p className="text-xs text-slate-400">
-                Fișier 100% autonom (HTML + CSS + JS) pentru laboratorul ARKEDO fără conexiune specială
+                {t.modalSub}
               </p>
             </div>
           </div>
@@ -67,7 +69,7 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
         {/* Modal Body: Code Preview & Instructions */}
         <div className="p-6 flex-1 overflow-y-auto space-y-4">
           <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 text-xs text-emerald-300 leading-relaxed">
-            🎓 <strong>Pentru profesorul de informatică:</strong> Acest fișier conține toate cele 5 nivele interactive aliniate la manualul de informatică (pag. 27-30), sfaturile profesorului, sinteza audio Web Audio API, animațiile și diploma de merit printabilă. Îl poți descărca direct ca <code>index.html</code> și salva pe stick-uri USB sau în rețeaua școlii. Elevii îl pot deschide cu dublu-click în orice browser (Chrome, Edge, Firefox)!
+            {t.modalTeacherNote}
           </div>
 
           <div className="relative">
@@ -80,7 +82,7 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
         {/* Modal Footer */}
         <div className="bg-slate-850 px-6 py-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <span className="text-xs text-slate-400 font-mono">
-            Mărime: ~18 KB • UTF-8 • Gata de utilizare
+            {t.modalSizeInfo}
           </span>
 
           <div className="flex items-center gap-3">
@@ -89,7 +91,7 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
               className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-bold transition flex items-center gap-2"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? 'Copiat în Clipboard!' : 'Copiază Codul'}</span>
+              <span>{copied ? t.modalBtnCopied : t.modalBtnCopy}</span>
             </button>
 
             <button
@@ -97,7 +99,7 @@ export const StandaloneExportModal: React.FC<StandaloneExportModalProps> = ({
               className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-2 shadow-lg shadow-emerald-600/30"
             >
               <Download className="w-4 h-4" />
-              <span>Descarcă fișierul index.html</span>
+              <span>{t.modalBtnDownload}</span>
             </button>
           </div>
         </div>

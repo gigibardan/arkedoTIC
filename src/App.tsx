@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GameLevel } from './types';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
 import { Level1_Structure } from './components/Level1_Structure';
@@ -11,7 +12,8 @@ import { VictoryScreen } from './components/VictoryScreen';
 import { StandaloneExportModal } from './components/StandaloneExportModal';
 import { sounds } from './utils/audio';
 
-export default function App() {
+function GameContent() {
+  const { t } = useLanguage();
   const [currentLevel, setCurrentLevel] = useState<GameLevel>(1);
   const [score, setScore] = useState<number>(0);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -108,9 +110,8 @@ export default function App() {
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 py-4 px-4 text-center text-xs text-slate-500 bg-slate-950/40">
-        <p className="max-w-xl mx-auto">
-          Mini-joc educațional creat pentru elevii de clasa a V-a de la{' '}
-          <strong className="text-emerald-400">Școala ARKEDO</strong> 🌳 • Managementul Fișierelor și Folderelor (Manual pag. 27-30)
+        <p className="max-w-xl mx-auto leading-relaxed">
+          {t.footerText}
         </p>
       </footer>
 
@@ -122,4 +123,13 @@ export default function App() {
     </div>
   );
 }
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <GameContent />
+    </LanguageProvider>
+  );
+}
+
 

@@ -1,5 +1,7 @@
 export type GameLevel = 1 | 2 | 3 | 4 | 5 | 6; // 6 is Victory screen
 
+export type Language = 'ro' | 'en';
+
 export interface Badge {
   id: string;
   title: string;

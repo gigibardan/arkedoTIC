@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { MousePointerClick, Search, CheckCircle2, ChevronRight, Sparkles, Folder, FileText, Image, Music } from 'lucide-react';
+import { MousePointerClick, Search, CheckCircle2, ChevronRight, FileText, Image, Music } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Level2Props {
   onComplete: () => void;
@@ -23,6 +24,7 @@ const initialFiles: DemoFile[] = [
 ];
 
 export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) => {
+  const { t } = useLanguage();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchSuccess, setSearchSuccess] = useState<boolean>(false);
@@ -49,7 +51,8 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.toLowerCase().includes('arbore') || searchQuery.toLowerCase().includes('desen')) {
+    const query = searchQuery.toLowerCase();
+    if (query.includes('arbore') || query.includes('tree') || query.includes('desen') || query.includes('drawing')) {
       sounds.playCorrect();
       setSearchSuccess(true);
     } else {
@@ -73,15 +76,13 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-5">
         <div>
           <span className="px-3 py-1 rounded-lg bg-teal-500/20 text-teal-400 font-bold text-xs uppercase tracking-wider border border-teal-500/30">
-            Nivelul 2 din 5 • Selecția Multiplă & Căutarea
+            {t.l2Tag}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-white mt-1.5 font-heading">
-            Magia Selecției Multiple & Căutarea Rapidă 🎯
+            {t.l2Title}
           </h2>
           <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
-            În manualul de informatică (pagina 29), învățăm cum să selectăm rapid mai multe fișiere deodată
-            (cu tastele <strong className="text-emerald-300">Ctrl</strong>, <strong className="text-cyan-300">Shift</strong> sau <strong className="text-amber-300">Ctrl + A</strong>)
-            și cum să găsim un fișier pierdut folosind caseta de căutare (Search).
+            {t.l2Desc}
           </p>
         </div>
         <div className="hidden sm:flex text-4xl p-3 bg-slate-900/60 rounded-2xl border border-slate-700 text-teal-400">
@@ -91,10 +92,10 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
 
       {/* Teacher Tip from Textbook (p. 29) */}
       <TeacherTip
-        title="Trucurile secrete de selecție în Windows (Manual pag. 29)"
-        tip="• Pentru fișiere neadiacente (răsfirate): ții apăsată tasta CTRL și dai click pe fiecare fișier dorit! • Pentru fișiere adiacente (unul după altul): dai click pe primul, ții apăsată tasta SHIFT și dai click pe ultimul! • Pentru a selecta TOATE fișierele dintr-o dată: folosești scurtătura CTRL + A!"
+        title={t.l2TipTitle}
+        tip={t.l2TipText}
         bookPage="29"
-        extraAdvice="Caseta de căutare (Search) din colțul din dreapta-sus te ajută să găsești un fișier chiar dacă ai uitat în ce subfolder l-ai pus!"
+        extraAdvice={t.l2TipExtra}
       />
 
       {/* Main Interactive Stage */}
@@ -106,16 +107,16 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
             <div className="flex items-center gap-2">
               <button
                 onClick={handleSelectAll}
-                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 shadow"
+                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 shadow cursor-pointer"
               >
-                <span>✓ Selectează Tot (Ctrl + A)</span>
+                <span>{t.l2BtnSelectAll}</span>
               </button>
               {selectedIds.length > 0 && (
                 <button
                   onClick={handleClearSelection}
-                  className="px-2.5 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-650 text-slate-300 text-xs transition"
+                  className="px-2.5 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-650 text-slate-300 text-xs transition cursor-pointer"
                 >
-                  Anulează ({selectedIds.length})
+                  {t.l2BtnCancelSelection} ({selectedIds.length})
                 </button>
               )}
             </div>
@@ -128,15 +129,15 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Caută în folder (ex: arbore)..."
+                  placeholder={t.l2SearchPlaceholder}
                   className="w-full bg-slate-950/80 border border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 font-mono"
                 />
               </div>
               <button
                 type="submit"
-                className="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold rounded-xl transition font-heading"
+                className="px-3 py-1.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold rounded-xl transition font-heading cursor-pointer"
               >
-                Găsește
+                {t.l2BtnSearch}
               </button>
             </form>
           </div>
@@ -144,14 +145,14 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
           {/* Files List View */}
           <div className="p-4 bg-slate-950/70 divide-y divide-slate-800/80 space-y-2">
             <div className="text-[11px] text-slate-400 font-mono flex justify-between px-3 pb-1">
-              <span>Nume fișier (Dă click pentru selecție cu Ctrl)</span>
-              <span>Dimensiune</span>
+              <span>{t.l2FileListHeaderName}</span>
+              <span>{t.l2FileListHeaderSize}</span>
             </div>
 
             {initialFiles.map((file) => {
               const isSelected = selectedIds.includes(file.id);
               const isSearchedMatch =
-                searchSuccess && file.name.toLowerCase().includes('arbore');
+                searchSuccess && (file.name.toLowerCase().includes('arbore') || file.name.toLowerCase().includes('desen'));
 
               return (
                 <div
@@ -190,7 +191,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                         </div>
                         {isSearchedMatch && (
                           <span className="text-[10px] text-amber-300 font-bold">
-                            ⭐ Fișier găsit prin Căutare (Search)!
+                            {t.l2SearchMatchBadge}
                           </span>
                         )}
                       </div>
@@ -207,14 +208,14 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
 
           <div className="bg-slate-900 px-4 py-2.5 border-t border-slate-800 text-xs flex justify-between items-center text-slate-400">
             <span>
-              Fișiere selectate:{' '}
+              {t.l2SelectedCounter}:{' '}
               <strong className="text-teal-300">{selectedIds.length}</strong> /{' '}
               {initialFiles.length}
             </span>
             <span className="text-[11px]">
               {selectedIds.length === initialFiles.length
-                ? '🎉 Toate fișierele sunt selectate!'
-                : 'Folosește Ctrl+Click sau butonul de Ctrl+A'}
+                ? t.l2AllSelectedMessage
+                : t.l2SelectHint}
             </span>
           </div>
         </div>
@@ -225,7 +226,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
           <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-teal-400 mb-3 flex items-center gap-2">
               <MousePointerClick className="w-4 h-4" />
-              Obiectivele Nivelului 2:
+              {t.l2ObjectivesTitle}
             </h3>
 
             <div className="space-y-3 text-xs">
@@ -243,7 +244,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                       : 'text-slate-500'
                   }`}
                 />
-                <span>Selectează toate cele 5 fișiere (Ctrl+A)</span>
+                <span>{t.l2Obj1}</span>
               </div>
 
               <div
@@ -258,7 +259,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                     searchSuccess ? 'text-emerald-400' : 'text-slate-500'
                   }`}
                 />
-                <span>Folosește căutarea pentru cuvântul "arbore"</span>
+                <span>{t.l2Obj2}</span>
               </div>
             </div>
           </div>
@@ -266,10 +267,10 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
           {/* Quick Quiz from manual p. 29 */}
           <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4">
             <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
-              Verificare din manual (pag. 29):
+              {t.l2QuizTitle}
             </h3>
             <p className="text-xs text-slate-300 mb-3">
-              Ce scurtătură de la tastatură selectează <strong>toate</strong> fișierele și folderele dintr-o mișcare?
+              {t.l2QuizQuestion}
             </p>
 
             <div className="space-y-2">
@@ -278,14 +279,14 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                   sounds.playCorrect();
                   setShortcutAnswer('ctrl_a');
                 }}
-                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition flex items-center justify-between ${
+                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition flex items-center justify-between cursor-pointer ${
                   shortcutAnswer === 'ctrl_a'
                     ? 'bg-emerald-600 text-white font-bold ring-2 ring-emerald-400'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700'
                 }`}
               >
                 <span>A) Ctrl + A (Select All)</span>
-                {shortcutAnswer === 'ctrl_a' && <span>✓ Corect</span>}
+                {shortcutAnswer === 'ctrl_a' && <span>✓</span>}
               </button>
 
               <button
@@ -293,7 +294,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                   sounds.playWrong();
                   setShortcutAnswer('ctrl_c');
                 }}
-                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition ${
+                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition cursor-pointer ${
                   shortcutAnswer === 'ctrl_c'
                     ? 'bg-rose-950/70 border border-rose-500 text-rose-300'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700'
@@ -307,7 +308,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                   sounds.playWrong();
                   setShortcutAnswer('alt_f4');
                 }}
-                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition ${
+                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition cursor-pointer ${
                   shortcutAnswer === 'alt_f4'
                     ? 'bg-rose-950/70 border border-rose-500 text-rose-300'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700'
@@ -323,7 +324,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
       {/* Complete Button */}
       <div className="flex items-center justify-between pt-2">
         <div className="text-xs text-slate-400">
-          Recompensă: <span className="text-amber-400 font-bold">+20 Puncte</span> și insigna <span className="text-teal-400 font-bold">Maestru al Selecției</span>
+          {t.l2RewardText}
         </div>
         <button
           onClick={handleFinish}
@@ -334,10 +335,11 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
               : 'bg-slate-700 text-slate-400 cursor-not-allowed'
           }`}
         >
-          <span>Finalizează Nivelul 2</span>
+          <span>{t.l2FinishBtn}</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>
   );
 };
+
