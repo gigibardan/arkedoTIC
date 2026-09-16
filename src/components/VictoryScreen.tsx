@@ -1,24 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Award, Printer, RotateCcw, Star, Download } from 'lucide-react';
+import { Award, Printer, RotateCcw, Star, Clock } from 'lucide-react';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 
 interface VictoryScreenProps {
   score: number;
   maxScore: number;
+  studentName?: string;
+  elapsedSeconds?: number;
   onReset: () => void;
-  onOpenExportModal: () => void;
 }
 
 export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   score,
   maxScore,
+  studentName: initialStudentName = '',
+  elapsedSeconds = 0,
   onReset,
-  onOpenExportModal,
 }) => {
   const { t } = useLanguage();
-  const [studentName, setStudentName] = useState<string>(t.vDiplomaDefaultName);
+  const [studentName, setStudentName] = useState<string>(
+    initialStudentName.trim() || t.vDiplomaDefaultName
+  );
+
+  const formatCompletionTime = (sec: number) => {
+    const mins = Math.floor(sec / 60);
+    const remainingSec = sec % 60;
+    if (mins === 0) return `${remainingSec} sec`;
+    return `${mins} min ${remainingSec} sec`;
+  };
 
   useEffect(() => {
     sounds.playVictory();
@@ -76,22 +87,36 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       </p>
 
       {/* Score Summary Box */}
-      <div className="inline-flex items-center gap-4 bg-slate-900/90 border border-amber-500/40 px-6 py-3.5 rounded-2xl mb-6 shadow-inner">
-        <div className="flex text-amber-400 text-2xl gap-1">
-          <Star className="w-6 h-6 fill-amber-400" />
-          <Star className="w-6 h-6 fill-amber-400" />
-          <Star className="w-6 h-6 fill-amber-400" />
-          <Star className="w-6 h-6 fill-amber-400" />
-          <Star className="w-6 h-6 fill-amber-400" />
-        </div>
-        <div className="text-left border-l border-slate-700 pl-4">
-          <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-            {t.vScoreLabel}
+      <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-slate-900/90 border border-amber-500/40 px-6 py-3.5 rounded-2xl mb-6 shadow-inner">
+        <div className="flex items-center gap-4">
+          <div className="flex text-amber-400 text-2xl gap-1">
+            <Star className="w-6 h-6 fill-amber-400" />
+            <Star className="w-6 h-6 fill-amber-400" />
+            <Star className="w-6 h-6 fill-amber-400" />
+            <Star className="w-6 h-6 fill-amber-400" />
+            <Star className="w-6 h-6 fill-amber-400" />
           </div>
-          <div className="text-2xl font-black text-amber-300 font-heading">
-            {score} / {maxScore} ({t.vScorePerfect})
+          <div className="text-left border-l border-slate-700 pl-4">
+            <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+              {t.vScoreLabel}
+            </div>
+            <div className="text-2xl font-black text-amber-300 font-heading">
+              {score} / {maxScore} ({t.vScorePerfect})
+            </div>
           </div>
         </div>
+
+        {elapsedSeconds > 0 && (
+          <div className="text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
+            <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{t.vDurationLabel}</span>
+            </div>
+            <div className="text-lg font-black text-cyan-300 font-mono">
+              {formatCompletionTime(elapsedSeconds)}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Autoevaluation from manual page 30 */}
@@ -246,14 +271,6 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
         >
           <RotateCcw className="w-4 h-4" />
           <span>{t.vBtnReset}</span>
-        </button>
-
-        <button
-          onClick={onOpenExportModal}
-          className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95"
-        >
-          <Download className="w-4 h-4" />
-          <span>{t.vBtnOffline}</span>
         </button>
       </div>
     </div>
