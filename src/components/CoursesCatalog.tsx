@@ -15,12 +15,29 @@ import {
   Lightbulb,
   ShieldCheck,
   RotateCcw,
+  BadgeCheck,
+  Gamepad2,
+  Cloud,
+  FileText,
+  Volume2,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
 import { sounds } from '../utils/audio';
 import { KnowledgePills } from './hardware/KnowledgePills';
 import { MissionGuardModal } from './MissionGuardModal';
+import { ARKY_IMAGES } from '../assets/arkyImages';
+
+const AVATARS = [
+  { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
+  { emoji: '🤖', labelRo: 'Robot', labelEn: 'Robot' },
+  { emoji: '🚀', labelRo: 'Astronaut', labelEn: 'Astronaut' },
+  { emoji: '💻', labelRo: 'Hacker Etic', labelEn: 'Coder' },
+  { emoji: '⚡', labelRo: 'Campion', labelEn: 'Champion' },
+  { emoji: '🔬', labelRo: 'Cercetător', labelEn: 'Scientist' },
+  { emoji: '🌟', labelRo: 'Explorator', labelEn: 'Explorer' },
+  { emoji: '🎮', labelRo: 'Gamer', labelEn: 'Gamer' },
+];
 
 interface CoursesCatalogProps {
   studentName: string;
@@ -51,9 +68,55 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   const [isEditingName, setIsEditingName] = useState<boolean>(!studentName);
   const [nameError, setNameError] = useState<boolean>(false);
 
+  // Student Avatar State
+  const [selectedAvatar, setSelectedAvatar] = useState<string>(() => {
+    try {
+      return localStorage.getItem('arkedo_student_avatar') || '🎓';
+    } catch {
+      return '🎓';
+    }
+  });
+
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
   const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | null>(null);
+
+  // Arky Hero Speech Bubble & Click Tips
+  const [arkyTipIndex, setArkyTipIndex] = useState<number>(0);
+  const arkyTips = lang === 'en' ? [
+    "Tap me anytime for a secret tech fact! 🤖✨",
+    "Win + E opens File Explorer in a single blink! ⚡",
+    "Ctrl + A selects everything at once. Super fast! 🎯",
+    "Remember: RAM is your desk, SSD is your permanent shelf! 💾",
+    "The 20-20-20 rule keeps your eyes fresh during long sessions! 👀",
+    "Never type ? or * in filenames—Windows reserves them for search! 🛑",
+    "Shift + Click selects adjacent items; Ctrl + Click selects scattered items! 🖱️",
+  ] : [
+    "Apasă pe mine oricând pentru un secret tehnologic! 🤖✨",
+    "Win + E deschide File Explorer într-o secundă! ⚡",
+    "Ctrl + A selectează toate fișierele dintr-o mișcare! 🎯",
+    "Reține: RAM este masa de lucru, SSD este dulapul permanent! 💾",
+    "Regula 20-20-20 îți relaxează ochii: 20 secunde la 6 metri distanță! 👀",
+    "Nu folosi niciodată ? sau * în nume de fișiere—sunt caractere rezervate! 🛑",
+    "Shift + Click selectează fișiere legate; Ctrl + Click pe cele răsfirate! 🖱️",
+  ];
+
+  const handleSelectAvatar = (emoji: string) => {
+    setSelectedAvatar(emoji);
+    sounds.playClick();
+    try {
+      localStorage.setItem('arkedo_student_avatar', emoji);
+    } catch {
+      // Ignore
+    }
+  };
+
+  const handleArkyHeroClick = () => {
+    sounds.playCorrect();
+    const nextIndex = (arkyTipIndex + 1) % arkyTips.length;
+    setArkyTipIndex(nextIndex);
+    arky.triggerSuccess(arkyTips[nextIndex]);
+  };
 
   const handleSaveName = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -65,8 +128,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       sounds.playCorrect();
       arky.triggerSuccess(
         lang === 'en'
-          ? `Welcome aboard, ${trimmed}! Let's conquer the digital world! 🚀`
-          : `Bun venit la bord, ${trimmed}! Hai să cucerim lumea digitală! 🚀`
+          ? `Welcome aboard, ${trimmed}! Your digital pass is ready! 🚀`
+          : `Bun venit la bord, ${trimmed}! Legitimația ta digitală este activă! 🚀`
       );
     } else {
       setNameError(true);
@@ -142,109 +205,246 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   return (
     <div className="flex flex-col gap-8 pb-10">
       {/* Hero Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-teal-950/50 border border-slate-700/80 rounded-3xl p-6 sm:p-10 shadow-2xl">
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 text-teal-300 text-xs sm:text-sm font-bold border border-teal-500/30 mb-4 shadow-sm">
-            <School className="w-4 h-4" />
-            <span>{t.catalogBadge}</span>
-          </div>
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-teal-950/60 border border-teal-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl">
+        {/* Background ambient lighting */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
+        <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white font-heading tracking-tight leading-tight mb-3">
-            {t.catalogTitle}
-          </h1>
-
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl mb-6">
-            {lang === 'en'
-              ? 'Explore interactive modules designed according to the ICT curriculum for Grades 5 and 6. Each mission contains hands-on exercises, teacher tips, and an official merit certificate!'
-              : 'Explorează modulele interactive concepute conform Programei Școlare Naționale și Manualelor TIC pentru Clasele a V-a și a VI-a. Fiecare misiune conține exerciții practice, sfaturi de la profesor și o diplomă oficială!'}
-          </p>
-
-          {/* Student Profile Registration Card */}
-          <div className="bg-slate-900/90 backdrop-blur border-2 border-teal-500/40 rounded-2xl p-4 sm:p-5 shadow-xl max-w-xl">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-teal-400 mb-2">
-              <User className="w-4 h-4" />
-              <span>{t.studentGreetingBadge}</span>
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left Column: Branding, Title, and Student ID Card */}
+          <div className="lg:col-span-8 flex flex-col gap-5">
+            {/* School & Grade Badge */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 text-teal-300 text-xs sm:text-sm font-bold border border-teal-500/40 shadow-sm backdrop-blur">
+                <School className="w-4 h-4 text-teal-400" />
+                <span>{t.catalogBadge}</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{lang === 'en' ? 'Curriculum 2026 Ready' : 'Conform Programei Școlare'}</span>
+              </div>
             </div>
 
-            {studentName && !isEditingName ? (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-lg shadow">
-                    🎓
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400">{t.helloStudent},</div>
-                    <div className="text-base sm:text-lg font-black text-white font-heading">
-                      {studentName}
-                    </div>
-                  </div>
+            {/* Main Title & Subtitle */}
+            <div>
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white font-heading tracking-tight leading-tight">
+                {t.catalogTitle}
+              </h1>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed mt-2.5 max-w-2xl">
+                {lang === 'en'
+                  ? 'Explore interactive modules with hands-on practice, teacher pro tips, sound effects, and official merit diplomas!'
+                  : 'Platformă educațională digitală cu provocări practice, sfaturi de la profesor, simulatoare de sistem de operare și diplome oficiale de merit!'}
+              </p>
+            </div>
+
+            {/* Student Digital ID Pass / Registration Card */}
+            <div className="bg-slate-900/90 backdrop-blur border-2 border-teal-500/40 rounded-2xl p-4 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
+              {/* Pass Top Bar */}
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3.5">
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-teal-400">
+                  <BadgeCheck className="w-4 h-4 text-teal-400" />
+                  <span>{lang === 'en' ? 'ARKEDO Student Access Pass' : 'Legitimație Elev • Laborator TIC'}</span>
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      setNameInput(studentName);
-                      setIsEditingName(true);
-                      sounds.playClick();
-                    }}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition border border-slate-700 cursor-pointer"
-                  >
-                    {t.studentNameChangeBtn}
-                  </button>
-
-                  {activeMissionId && (
-                    <button
-                      onClick={() => handleAttemptStart(activeMissionId)}
-                      className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95"
-                    >
-                      <span>{lang === 'en' ? `Resume Mission (${activeMissionId === 'hardware' ? 'Hardware' : 'Files'})` : `Reia Misiunea (${activeMissionId === 'hardware' ? 'Hardware' : 'Fișiere'})`}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  )}
+                <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>{studentName ? (lang === 'en' ? 'VERIFIED' : 'ACTIVAT') : (lang === 'en' ? 'PENDING' : 'NECONFIRMAT')}</span>
                 </div>
               </div>
-            ) : (
-              <form onSubmit={handleSaveName} className="flex flex-col gap-2.5">
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {t.studentPromptSub}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="text"
-                    value={nameInput}
-                    onChange={(e) => {
-                      setNameInput(e.target.value);
-                      if (nameError) setNameError(false);
-                    }}
-                    placeholder={t.studentNamePlaceholder}
-                    className={`flex-1 bg-slate-950/90 border px-3.5 py-2.5 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 font-medium ${
-                      nameError
-                        ? 'border-rose-500 focus:ring-rose-500/40'
-                        : 'border-slate-700 focus:ring-teal-500/40'
-                    }`}
-                    autoFocus
-                  />
-                  <button
-                    type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-teal-600/30 shrink-0 cursor-pointer"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>{t.studentNameSaveBtn}</span>
-                  </button>
-                </div>
-                {nameError && (
-                  <p className="text-xs text-rose-400 font-semibold">
-                    {t.enterNameAlert}
-                  </p>
-                )}
-              </form>
-            )}
-          </div>
-        </div>
 
-        {/* Decorative Graphics */}
-        <div className="absolute -bottom-8 -right-8 text-9xl opacity-10 pointer-events-none select-none">
-          💻⚡
+              {studentName && !isEditingName ? (
+                /* Profile view when name is registered */
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
+                    {/* Avatar Display */}
+                    <div className="relative group">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500/30 via-slate-800 to-emerald-500/30 border-2 border-teal-400/50 flex items-center justify-center text-3xl shadow-lg shadow-teal-900/40">
+                        {selectedAvatar}
+                      </div>
+                      <button
+                        onClick={() => setIsEditingName(true)}
+                        className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-slate-800 border border-slate-600 text-[10px] flex items-center justify-center text-slate-300 hover:text-white cursor-pointer"
+                        title={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
+                      >
+                        ✏️
+                      </button>
+                    </div>
+
+                    <div>
+                      <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
+                        <span>{t.helloStudent},</span>
+                        <span className="text-[11px] font-mono text-teal-400/80 bg-teal-950/50 px-1.5 py-0.5 rounded border border-teal-500/20">
+                          {lang === 'en' ? 'Rank: Digital Cadet' : 'Grad: Cadet TIC'}
+                        </span>
+                      </div>
+                      <div className="text-lg sm:text-xl font-black text-white font-heading tracking-wide">
+                        {studentName}
+                      </div>
+                      <div className="text-xs text-slate-400 mt-0.5">
+                        {lang === 'en' ? 'Ready for challenges & diplomas' : 'Gata pentru rezolvarea provocărilor'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                    <button
+                      onClick={() => {
+                        setNameInput(studentName);
+                        setIsEditingName(true);
+                        sounds.playClick();
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition border border-slate-700 cursor-pointer shadow-sm"
+                    >
+                      {t.studentNameChangeBtn}
+                    </button>
+
+                    {activeMissionId && (
+                      <button
+                        onClick={() => handleAttemptStart(activeMissionId)}
+                        className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95 animate-pulse"
+                      >
+                        <span>{lang === 'en' ? 'Resume Mission' : 'Reia Misiunea'}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                /* Profile creation / editing form */
+                <form onSubmit={handleSaveName} className="flex flex-col gap-3.5">
+                  <div>
+                    <p className="text-xs font-medium text-slate-300 mb-2">
+                      {lang === 'en'
+                        ? '1. Choose your explorer avatar:'
+                        : '1. Alege avatarul tău de explorator:'}
+                    </p>
+                    {/* Horizontal Avatar Selector */}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
+                      {AVATARS.map((av) => {
+                        const isSelected = selectedAvatar === av.emoji;
+                        return (
+                          <button
+                            key={av.emoji}
+                            type="button"
+                            onClick={() => handleSelectAvatar(av.emoji)}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all cursor-pointer shrink-0 ${
+                              isSelected
+                                ? 'bg-teal-500 text-white ring-2 ring-teal-300 shadow-md scale-110'
+                                : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700'
+                            }`}
+                            title={lang === 'en' ? av.labelEn : av.labelRo}
+                          >
+                            {av.emoji}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-medium text-slate-300 mb-1.5">
+                      {lang === 'en'
+                        ? '2. Enter your student name (printed on official diplomas):'
+                        : '2. Introdu numele tău de elev (va fi imprimat pe diploma de merit):'}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <div className="relative flex-1">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                          <User className="w-4 h-4" />
+                        </div>
+                        <input
+                          type="text"
+                          value={nameInput}
+                          onChange={(e) => {
+                            setNameInput(e.target.value);
+                            if (nameError) setNameError(false);
+                          }}
+                          placeholder={t.studentNamePlaceholder}
+                          className={`w-full bg-slate-950/90 border pl-9 pr-3.5 py-2.5 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 font-medium ${
+                            nameError
+                              ? 'border-rose-500 focus:ring-rose-500/40'
+                              : 'border-slate-700 focus:ring-teal-500/40'
+                          }`}
+                          autoFocus
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-teal-600/30 shrink-0 cursor-pointer active:scale-95"
+                      >
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>{t.studentNameSaveBtn}</span>
+                      </button>
+                    </div>
+                    {nameError && (
+                      <p className="text-xs text-rose-400 font-semibold mt-1.5">
+                        {t.enterNameAlert}
+                      </p>
+                    )}
+                  </div>
+                </form>
+              )}
+            </div>
+
+            {/* Quick Hero Highlights / Feature Pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+              <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
+                <Gamepad2 className="w-4 h-4 text-teal-400 shrink-0" />
+                <span>{lang === 'en' ? '4 Hands-On Missions' : '4 Misiuni Interactive'}</span>
+              </div>
+              <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
+                <Award className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>{lang === 'en' ? 'Merit Diplomas (PDF)' : 'Diplome Oficiale de Merit'}</span>
+              </div>
+              <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
+                <Cloud className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span>{lang === 'en' ? 'Live Cloud Gradebook' : 'Catalog Digital Profesor'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Mascota Arky Live Companion */}
+          <div className="lg:col-span-4 flex flex-col items-center justify-center relative">
+            {/* Arky Speech Bubble */}
+            <div className="relative bg-slate-900/95 border-2 border-teal-400/60 rounded-2xl p-3.5 sm:p-4 text-center shadow-xl mb-3 backdrop-blur max-w-xs transition-all">
+              <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-teal-400 uppercase tracking-wider mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Arky TIC Assistant</span>
+              </div>
+              <p className="text-xs sm:text-sm font-medium text-slate-100 leading-snug">
+                {!studentName
+                  ? (lang === 'en'
+                      ? 'Hey! I am Arky! Choose an avatar and enter your name to unlock the lab! 🤖'
+                      : 'Salut! Sunt Arky! Alege-ți un avatar și scrie-ți numele pentru a debloca laboratorul! 🤖')
+                  : arkyTips[arkyTipIndex]}
+              </p>
+              {/* Speech bubble arrow pointer */}
+              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-teal-400/60"></div>
+            </div>
+
+            {/* Arky Mascot with Glow & Tap Interactivity */}
+            <button
+              type="button"
+              onClick={handleArkyHeroClick}
+              className="group relative cursor-pointer focus:outline-none transition-transform active:scale-95"
+              title={lang === 'en' ? 'Tap Arky for a secret tip!' : 'Apasă pe Arky pentru un sfat secret!'}
+            >
+              {/* Ambient Glow */}
+              <div className="absolute inset-0 bg-gradient-to-t from-teal-500/25 to-emerald-500/20 rounded-full blur-2xl group-hover:from-teal-400/40 group-hover:to-emerald-400/30 transition-all"></div>
+
+              <img
+                src={studentName ? ARKY_IMAGES.success : ARKY_IMAGES.idle}
+                alt="Arky Mascota"
+                className="relative z-10 w-48 sm:w-56 h-auto object-contain drop-shadow-[0_15px_25px_rgba(20,184,166,0.35)] group-hover:scale-105 transition-all duration-300"
+              />
+
+              {/* Tap badge prompt */}
+              <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full bg-slate-900/90 border border-teal-500/50 text-[11px] font-bold text-teal-300 shadow-md whitespace-nowrap opacity-90 group-hover:opacity-100 group-hover:border-teal-300 flex items-center gap-1.5 transition-all">
+                <Volume2 className="w-3 h-3 text-teal-400 animate-pulse" />
+                <span>{lang === 'en' ? 'Tap Arky!' : 'Apasă pe Arky!'}</span>
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 

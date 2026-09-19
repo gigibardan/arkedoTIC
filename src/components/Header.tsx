@@ -100,10 +100,18 @@ export const Header: React.FC<HeaderProps> = ({
           {studentName && (
             <div
               onClick={onEditStudentName}
-              className="hidden lg:flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700/80 text-xs font-semibold text-slate-200 shadow-inner cursor-pointer transition"
+              className="hidden lg:flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700/80 text-xs font-semibold text-slate-200 shadow-inner cursor-pointer transition group"
               title={t.changeName}
             >
-              <User className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-sm group-hover:scale-110 transition-transform">
+                {(() => {
+                  try {
+                    return localStorage.getItem('arkedo_student_avatar') || '🎓';
+                  } catch {
+                    return '🎓';
+                  }
+                })()}
+              </span>
               <span className="text-slate-400">{t.helloStudent},</span>
               <span className="font-bold text-emerald-300 max-w-[100px] truncate">
                 {studentName}
