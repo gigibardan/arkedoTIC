@@ -403,7 +403,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/40 hover:border-indigo-400 text-xs text-indigo-300 font-bold transition cursor-pointer active:scale-95 text-left"
               >
                 <Gamepad2 className="w-4 h-4 text-indigo-400 shrink-0 animate-pulse" />
-                <span>{lang === 'en' ? 'Arcade Games (8)' : 'Jocuri Arcade TIC (8)'}</span>
+                <span>{lang === 'en' ? 'Arcade Games (9)' : 'Jocuri Arcade TIC (9)'}</span>
               </button>
               <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
                 <Award className="w-4 h-4 text-amber-400 shrink-0" />
@@ -826,16 +826,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '8 Mini-Games' : '8 Mini-Jocuri'}
+                  {lang === 'en' ? '9 Mini-Games' : '9 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'Labirint Algoritmic, Firewall Defender, Cyber-Safe, Biți & Typing' : 'Labirintul Algoritmic, Scut Firewall, Detectiv Cyber-Safe, Biți 0-1 & Tastatură'}
+                {lang === 'en' ? 'PC Builder, Labirint Algoritmic, Firewall Defender, Cyber-Safe & 2048' : 'Constructor PC, Labirint Algoritmic, Scut Firewall, Detectiv Cyber-Safe & 2048'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Program maze algorithms with loops, block malware packets in the firewall, encode binary bits, and investigate cyber threats!'
-                  : 'Programează algoritmi cu bucle, blochează virușii în firewall, decodifică biții 0 și 1 și investighează atacurile phishing!'}
+                  ? 'Assemble PC hardware on motherboards, program maze algorithms, block malware in the firewall, and investigate cyber threats!'
+                  : 'Montează componente pe placa de bază, programează algoritmi cu bucle, blochează virușii în firewall și investighează atacurile phishing!'}
               </p>
             </div>
           </div>

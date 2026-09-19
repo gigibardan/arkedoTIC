@@ -9,6 +9,7 @@ import { FileOrganizerGame } from './FileOrganizerGame';
 import { BinaryFactoryGame } from './BinaryFactoryGame';
 import { AlgorithmMazeGame } from './AlgorithmMazeGame';
 import { FirewallDefenderGame } from './FirewallDefenderGame';
+import { PCBuilderGame } from './PCBuilderGame';
 import {
   Gamepad2,
   Keyboard,
@@ -26,6 +27,7 @@ import {
   Flame,
   HardDrive,
   School,
+  Cpu,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -33,7 +35,7 @@ interface ArcadeHubProps {
   onBackToCatalog: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
   const { lang } = useLanguage();
@@ -104,6 +106,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const pcBuilderHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_pcbuilder') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -122,6 +132,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
   if (activeGame === '2048') {
     return <Game2048Binary onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'pcbuilder') {
+    return <PCBuilderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'detective') {
@@ -193,7 +207,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                8 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
+                9 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
               </div>
             </div>
           </div>
@@ -201,7 +215,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       </div>
 
       {/* Mini-Games Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {/* Game 1: Speed Typing */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-cyan-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
@@ -331,7 +345,50 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 4: Cyber-Safe Detective */}
+        {/* Game 4: PC Builder (Constructorul de PC-uri - Misiunea Hardware) */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-blue-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                <Cpu className="w-6 h-6" />
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{pcBuilderHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-blue-500/10 text-blue-300 text-[10px] font-bold uppercase tracking-wider mb-2">
+              {lang === 'en' ? 'Hardware & Architecture' : 'Sisteme de Calcul & Hardware'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-blue-300 transition-colors">
+              {lang === 'en' ? 'PC Builder: Hardware Mission' : 'Constructorul de PC-uri'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Mount CPU, RAM, GPU, SSD, and PSU into correct motherboard slots. Avoid short circuits and boot up your PC!'
+                : 'Trage CPU-ul, plăcuțele RAM, placa video, SSD-ul și sursa în sloturile corecte. Evită scurtcircuitele și pornește PC-ul!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-mono">🖥️ 3 Niveluri & POST</span>
+            <button
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('pcbuilder');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Assemble' : 'Asamblează'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 5: Cyber-Safe Detective */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -460,7 +517,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 7: Algorithm Maze Robot */}
+        {/* Game 8: Algorithm Maze Robot */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -503,7 +560,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 8: Firewall Defender */}
+        {/* Game 9: Firewall Defender */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-red-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
