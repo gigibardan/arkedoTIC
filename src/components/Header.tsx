@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User } from 'lucide-react';
+import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 
@@ -8,13 +8,14 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
   missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | null;
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
+  onNavigateToArcade?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
   missionId = null,
   onEditStudentName,
   onNavigateToTeacher,
+  onNavigateToArcade,
 }) => {
   const { lang, setLang, t } = useLanguage();
 
@@ -49,6 +51,13 @@ export const Header: React.FC<HeaderProps> = ({
     if (missionId === 'internet1') return t.internet1CourseTitle;
     if (missionId === 'internet2') return t.internet2CourseTitle;
     return t.appTitle;
+  };
+
+  const getHeaderTitle = () => {
+    if (currentView === 'lesson') return getLessonTitle();
+    if (currentView === 'teacher') return t.teacherPortalNav;
+    if (currentView === 'arcade') return lang === 'en' ? 'ARKEDO Arcade Lab' : 'Laboratorul Arcade TIC';
+    return t.catalogTitle;
   };
 
   return (
@@ -85,11 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </div>
             <h1 className="text-xs sm:text-base md:text-lg font-black text-white tracking-wide font-heading truncate leading-tight mt-0.5">
-              {currentView === 'lesson'
-                ? getLessonTitle()
-                : currentView === 'teacher'
-                ? t.teacherPortalNav
-                : t.catalogTitle}
+              {getHeaderTitle()}
             </h1>
           </div>
         </div>
@@ -167,6 +172,29 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-slate-500 text-[10px] hidden sm:inline">/{maxScore}</span>
               </div>
             </div>
+          )}
+
+          {/* Arcade Button */}
+          {onNavigateToArcade && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                if (currentView === 'arcade') {
+                  onNavigateToCatalog();
+                } else {
+                  onNavigateToArcade();
+                }
+              }}
+              className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl transition border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
+                currentView === 'arcade'
+                  ? 'bg-indigo-600 text-white border-indigo-400 shadow-indigo-500/20'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:text-white'
+              }`}
+              title={lang === 'en' ? 'Arcade Mini-Games' : 'Mini-Jocuri Arcade'}
+            >
+              <Gamepad2 className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'arcade' ? 'text-white' : 'text-indigo-400'}`} />
+              <span className="hidden lg:inline">{lang === 'en' ? 'Arcade' : 'Jocuri'}</span>
+            </button>
           )}
 
           {/* Sound Toggle */}

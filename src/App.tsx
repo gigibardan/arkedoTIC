@@ -32,15 +32,19 @@ import { Module3BFlow } from './components/internet2/Module3BFlow';
 
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
+import { ArcadeHub } from './components/minigames/ArcadeHub';
 import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
 
 function GameContent() {
   const { t } = useLanguage();
   const arky = useArky();
-  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher'>(() => {
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade'>(() => {
     if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
       return 'teacher';
+    }
+    if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
+      return 'arcade';
     }
     return 'catalog';
   });
@@ -242,6 +246,8 @@ function GameContent() {
     const handleUrlChange = () => {
       if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
         setView('teacher');
+      } else if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
+        setView('arcade');
       }
     };
     window.addEventListener('popstate', handleUrlChange);
@@ -252,10 +258,12 @@ function GameContent() {
     };
   }, []);
 
-  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher') => {
+  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade') => {
     setView(newView);
     if (newView === 'teacher') {
       window.history.pushState({}, '', '/profesor');
+    } else if (newView === 'arcade') {
+      window.history.pushState({}, '', '/arcade');
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
     }
@@ -456,12 +464,18 @@ function GameContent() {
         elapsedSeconds={currentElapsedSeconds}
         onEditStudentName={() => navigateToView('catalog')}
         onNavigateToTeacher={() => navigateToView('teacher')}
+        onNavigateToArcade={() => navigateToView('arcade')}
       />
 
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex flex-col gap-5 sm:gap-6">
         {view === 'teacher' ? (
           <TeacherPortal onBackToHome={() => navigateToView('catalog')} />
+        ) : view === 'arcade' ? (
+          <ArcadeHub
+            studentName={studentName}
+            onBackToCatalog={() => navigateToView('catalog')}
+          />
         ) : view === 'catalog' ? (
           <CoursesCatalog
             studentName={studentName}
@@ -473,6 +487,7 @@ function GameContent() {
             elapsedSeconds={currentElapsedSeconds}
             onResetActiveMission={handleResetActiveMission}
             onOpenTeacherPortal={() => navigateToView('teacher')}
+            onOpenArcade={() => navigateToView('arcade')}
           />
         ) : (
           <>
