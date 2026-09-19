@@ -826,16 +826,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '9 Mini-Games' : '9 Mini-Jocuri'}
+                  {lang === 'en' ? '10 Mini-Games' : '10 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'PC Builder, Labirint Algoritmic, Firewall Defender, Cyber-Safe & 2048' : 'Constructor PC, Labirint Algoritmic, Scut Firewall, Detectiv Cyber-Safe & 2048'}
+                {lang === 'en' ? 'Pixeli RGB, PC Builder, Labirint Algoritmic, Firewall Defender & 2048' : 'Pixeli RGB, Constructor PC, Labirint Algoritmic, Scut Firewall & 2048'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Assemble PC hardware on motherboards, program maze algorithms, block malware in the firewall, and investigate cyber threats!'
-                  : 'Montează componente pe placa de bază, programează algoritmi cu bucle, blochează virușii în firewall și investighează atacurile phishing!'}
+                  ? 'Master RGB light mixing & pixel art, assemble PC motherboards, program maze algorithms, block malware in the firewall, and investigate cyber threats!'
+                  : 'Stăpânește sinteza luminii RGB și arta pixelilor, montează componente PC, programează algoritmi cu bucle și blochează virușii în firewall!'}
               </p>
             </div>
           </div>

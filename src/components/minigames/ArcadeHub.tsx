@@ -10,6 +10,7 @@ import { BinaryFactoryGame } from './BinaryFactoryGame';
 import { AlgorithmMazeGame } from './AlgorithmMazeGame';
 import { FirewallDefenderGame } from './FirewallDefenderGame';
 import { PCBuilderGame } from './PCBuilderGame';
+import { RGBPixelMasterGame } from './RGBPixelMasterGame';
 import {
   Gamepad2,
   Keyboard,
@@ -28,6 +29,7 @@ import {
   HardDrive,
   School,
   Cpu,
+  Palette,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -35,7 +37,7 @@ interface ArcadeHubProps {
   onBackToCatalog: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
   const { lang } = useLanguage();
@@ -114,6 +116,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const rgbHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_rgb_pixels') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -136,6 +146,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
   if (activeGame === 'pcbuilder') {
     return <PCBuilderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'rgb_pixel') {
+    return <RGBPixelMasterGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'detective') {
@@ -207,7 +221,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                9 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
+                10 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
               </div>
             </div>
           </div>
@@ -598,6 +612,49 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               className="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-red-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Defend' : 'Apără'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 10: RGB Pixel Master (Grafică Digitală 2D & Pixeli) */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-purple-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border-2 border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                <Palette className="w-6 h-6" />
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-purple-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{rgbHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-purple-500/10 text-purple-300 text-[10px] font-bold uppercase tracking-wider mb-2">
+              {lang === 'en' ? '2D Graphics & Colors' : 'Grafică Digitală & Pixeli'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-purple-300 transition-colors">
+              {lang === 'en' ? 'RGB Pixel Master' : 'Maestrul Pixelilor RGB'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Synthesize RGB sub-pixels (Red, Green, Blue 0-255), recreate retro pixel art sprites, and decode resolution & formats!'
+                : 'Experimentează sinteza luminii RGB (0-255), reconstruiește mozaicuri pixel art și rezolvă misiunile de rezoluție și formate!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-mono">🎨 3 Moduri TIC</span>
+            <button
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('rgb_pixel');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Paint' : 'Pictează'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
