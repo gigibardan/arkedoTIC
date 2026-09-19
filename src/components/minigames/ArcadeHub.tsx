@@ -4,11 +4,13 @@ import { sounds } from '../../utils/audio';
 import { TypingGame } from './TypingGame';
 import { MouseAgilityGame } from './MouseAgilityGame';
 import { Game2048Binary } from './Game2048Binary';
+import { CyberSafeDetective } from './CyberSafeDetective';
 import {
   Gamepad2,
   Keyboard,
   MousePointer,
   Binary,
+  ShieldAlert,
   Trophy,
   Sparkles,
   ArrowRight,
@@ -24,7 +26,7 @@ interface ArcadeHubProps {
   onBackToCatalog: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'detective';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
   const { lang } = useLanguage();
@@ -55,6 +57,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const cyberHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -73,6 +83,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
   if (activeGame === '2048') {
     return <Game2048Binary onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'detective') {
+    return <CyberSafeDetective onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   return (
@@ -124,7 +138,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                3 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
+                4 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
               </div>
             </div>
           </div>
@@ -132,13 +146,56 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       </div>
 
       {/* Mini-Games Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Game 1: Speed Typing */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-cyan-500/60 rounded-3xl p-6 shadow-xl flex flex-col justify-between gap-5 transition-all duration-300 group hover:-translate-y-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Game 1: Cyber-Safe Detective */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
-                <Keyboard className="w-7 h-7" />
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+                <ShieldAlert className="w-6 h-6" />
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{cyberHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/10 text-rose-300 text-[10px] font-bold uppercase tracking-wider mb-2">
+              {lang === 'en' ? 'Cyber Security' : 'Securitate Digitală'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-rose-300 transition-colors">
+              {lang === 'en' ? 'Cyber-Safe Detective' : 'Detectivul Cyber-Safe'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Investigate emails, SMS, popups, and messages. Detect phishing, scam prizes, and safe school notices!'
+                : 'Analizează e-mailuri, SMS-uri, mesaje de jocuri și pop-up-uri. Depistează atacurile phishing și capcanele online!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-mono">🔍 8 Cazuri</span>
+            <button
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('detective');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Investigate' : 'Anchetă'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 2: Speed Typing */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-cyan-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                <Keyboard className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
@@ -146,42 +203,42 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               </div>
             </div>
 
-            <div className="inline-block px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 text-[11px] font-bold uppercase tracking-wider mb-2">
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 text-[10px] font-bold uppercase tracking-wider mb-2">
               {lang === 'en' ? 'Typing Sprint' : 'Viteză la Tastatură'}
             </div>
 
-            <h3 className="text-xl font-black text-white font-heading group-hover:text-cyan-300 transition-colors">
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-cyan-300 transition-colors">
               {lang === 'en' ? 'Speed Typing TIC' : 'Vitezomanul Tastaturii'}
             </h3>
 
-            <p className="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
               {lang === 'en'
-                ? 'Type curriculum computer science words under time pressure. Tracks words-per-minute (WPM), accuracy, and combos.'
-                : 'Tastează termeni reali din TIC (procesor, memorie, folder, rețea) contra cronometru. Măsoară WPM, acuratețea și combo-ul.'}
+                ? 'Type curriculum computer science words under time pressure. Tracks words-per-minute (WPM) and combos.'
+                : 'Tastează termeni reali din TIC (procesor, memorie, folder, rețea) contra cronometru. Măsoară WPM și acuratețea.'}
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[11px] text-slate-400 font-mono">⏱️ 30s / 60s Sprint</span>
+            <span className="text-[11px] text-slate-400 font-mono">⏱️ 30s / 60s</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 setActiveGame('typing');
               }}
-              className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
+              className="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Play Now' : 'Joacă Acum'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Game 2: Mouse Agility */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-6 shadow-xl flex flex-col justify-between gap-5 transition-all duration-300 group hover:-translate-y-1">
+        {/* Game 3: Mouse Agility */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                <MousePointer className="w-7 h-7" />
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                <MousePointer className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
@@ -189,42 +246,42 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               </div>
             </div>
 
-            <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 text-[11px] font-bold uppercase tracking-wider mb-2">
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 text-[10px] font-bold uppercase tracking-wider mb-2">
               {lang === 'en' ? 'Precision & Reflexes' : 'Coordonare & Reflexe'}
             </div>
 
-            <h3 className="text-xl font-black text-white font-heading group-hover:text-emerald-300 transition-colors">
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors">
               {lang === 'en' ? 'Mouse Master' : 'Maestrul Mouse-ului'}
             </h3>
 
-            <p className="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
               {lang === 'en'
-                ? 'Sharpen your mouse skills: single left-click, fast double-click, context right-click, and file drag & drop into folders.'
+                ? 'Sharpen mouse skills: single left-click, fast double-click, context right-click, and file drag & drop into folders.'
                 : 'Exersează comenzile esențiale: Click Stânga, Dublu-Click Rapid, Click Dreapta pe dosare și Glisare Drag & Drop!'}
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[11px] text-slate-400 font-mono">⏱️ 45s Provocare</span>
+            <span className="text-[11px] text-slate-400 font-mono">⏱️ 45s</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 setActiveGame('mouse');
               }}
-              className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Play Now' : 'Joacă Acum'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Game 3: 2048 Binary */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-amber-500/60 rounded-3xl p-6 shadow-xl flex flex-col justify-between gap-5 transition-all duration-300 group hover:-translate-y-1">
+        {/* Game 4: 2048 Binary */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-amber-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-                <Binary className="w-7 h-7" />
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                <Binary className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
@@ -232,32 +289,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               </div>
             </div>
 
-            <div className="inline-block px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-300 text-[11px] font-bold uppercase tracking-wider mb-2">
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-300 text-[10px] font-bold uppercase tracking-wider mb-2">
               {lang === 'en' ? 'Binary Logic' : 'Gândire & Logică Binară'}
             </div>
 
-            <h3 className="text-xl font-black text-white font-heading group-hover:text-amber-300 transition-colors">
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-amber-300 transition-colors">
               {lang === 'en' ? '2048 Binary Bytes' : '2048 Binar TIC'}
             </h3>
 
-            <p className="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
               {lang === 'en'
-                ? 'Slide and merge powers of 2 (2 B, 4 B, 8 B... up to 1024 B = 1 KB and 2048 B). Educational fun based on textbook memory units.'
-                : 'Unește puterile lui 2: 2 B, 4 B, 8 B... până când formezi 1024 B (1 Kilobyte) și atingi 2048 B! Include ghidul unităților de stocare.'}
+                ? 'Slide and merge powers of 2 (2 B, 4 B, 8 B... up to 1024 B = 1 KB and 2048 B). Based on textbook memory units.'
+                : 'Unește puterile lui 2: 2 B, 4 B, 8 B... până când formezi 1024 B (1 Kilobyte) și atingi 2048 B!'}
             </p>
           </div>
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[11px] text-slate-400 font-mono">🧠 Puzzle Logic</span>
+            <span className="text-[11px] text-slate-400 font-mono">🧠 Puzzle</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 setActiveGame('2048');
               }}
-              className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
+              className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Play Now' : 'Joacă Acum'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

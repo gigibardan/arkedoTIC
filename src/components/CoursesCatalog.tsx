@@ -403,7 +403,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/40 hover:border-indigo-400 text-xs text-indigo-300 font-bold transition cursor-pointer active:scale-95 text-left"
               >
                 <Gamepad2 className="w-4 h-4 text-indigo-400 shrink-0 animate-pulse" />
-                <span>{lang === 'en' ? 'Arcade Games (3)' : 'Jocuri Arcade TIC (3)'}</span>
+                <span>{lang === 'en' ? 'Arcade Games (4)' : 'Jocuri Arcade TIC (4)'}</span>
               </button>
               <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
                 <Award className="w-4 h-4 text-amber-400 shrink-0" />
@@ -463,47 +463,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
       {/* Interactive Knowledge Pills Section */}
       <KnowledgePills />
-
-      {/* Arcade Mini-Games Banner Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border-2 border-indigo-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0">
-              <Gamepad2 className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 font-mono">
-                  {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '3 Mini-Games' : '3 Mini-Jocuri'}
-                </span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'Speed Typing, Mouse Agility & 2048 Binary' : 'Vitezomanul Tastaturii, Reflexe Mouse & 2048 Binar'}
-              </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
-                {lang === 'en'
-                  ? 'Compete for the highest WPM, test your mouse precision commands, and merge powers of 2 up to 1024 B (1 KB)!'
-                  : 'Antrenează-ți viteza de tastare cu termeni TIC, precizia comenzilor cu mouse-ul și puterile lui 2 până la 1024 B (1 KB)!'}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              onOpenArcade?.();
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0 active:scale-95"
-          >
-            <span>{lang === 'en' ? 'Open Arcade' : 'Deschide Jocuri Arcade'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
 
       {/* Courses & Lessons Section */}
       <div>
@@ -851,6 +810,47 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Arcade Mini-Games Banner Section (Placed below missions) */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border-2 border-indigo-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0">
+              <Gamepad2 className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 font-mono">
+                  {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
+                  {lang === 'en' ? '4 Mini-Games' : '4 Mini-Jocuri'}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                {lang === 'en' ? 'Cyber-Safe Detective, Typing, Mouse & 2048' : 'Detectiv Cyber-Safe, Vitezomanul Tastaturii, Reflexe & 2048'}
+              </h3>
+              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                {lang === 'en'
+                  ? 'Investigate phishing threats, test typing WPM, sharpen mouse precision, and merge binary powers of 2!'
+                  : 'Depistează atacurile phishing, antrenează-ți viteza de tastare cu termeni TIC, precizia mouse-ului și puterile lui 2!'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenArcade?.();
+            }}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0 active:scale-95"
+          >
+            <span>{lang === 'en' ? 'Open Arcade' : 'Deschide Jocuri Arcade'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
