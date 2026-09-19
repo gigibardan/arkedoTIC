@@ -378,6 +378,12 @@ export const translations = {
     // Hardware Diploma
     hwDiplomaTitle: 'DIPLOMĂ DE TEHNICIAN HARDWARE & SIGURANȚĂ TIC',
     hwDiplomaText: 'Pentru performanța remarcabilă în "Misiunea Sisteme de Calcul & Comunicații 💻⚡" (Manual pag. 10-20), stăpânirea deplină a normelor de securitate și ergonomie, cunoașterea evoluției istorice a calculatoarelor, asamblarea componentelor unității centrale (CPU, RAM, Placă de bază, Stocare), clasificarea perifericelor și calculul capacităților de stocare.',
+
+    // Internet 1 (Module 3A) Diploma & Titles
+    internet1CourseTitle: 'Misiunea 3A: Internet, Rețele & World Wide Web',
+    internet1CourseSub: 'Noțiuni de bază, Servicii, Navigare Web & Securitate • Manual pag. 32-36',
+    internet1DiplomaTitle: 'DIPLOMĂ DE EXPLORATOR INTERNET & SIGURANȚĂ WEB',
+    internet1DiplomaText: 'Pentru rezultate deosebite în "Misiunea 3A: Internet, Rețele & World Wide Web 🌐🛡️" (Manual pag. 32-36), înțelegerea rețelelor de calculatoare și a protocolului TCP/IP, stăpânirea serviciilor Internet (Email, WWW, FTP, Telnet, IRC), rezolvarea rebusului tematic, descifrarea anatomiei unei adrese URL, utilizarea eficientă a browserului și asumarea celor 3 reguli de aur ale securității cibernetice.',
   },
 
   en: {
@@ -757,6 +763,12 @@ export const translations = {
     // Hardware Diploma
     hwDiplomaTitle: 'CERTIFICATE OF HARDWARE TECHNICIAN & ICT SAFETY',
     hwDiplomaText: 'For distinguished achievement in "Computer Systems & Communications Mission 💻⚡" (Textbook pages 10-20), mastering lab safety, ergonomic posture, timeline of computing history, central unit hardware assembly, peripheral categorization, and digital storage calculations.',
+
+    // Internet 1 (Module 3A) Diploma & Titles
+    internet1CourseTitle: 'Mission 3A: Internet, Networks & World Wide Web',
+    internet1CourseSub: 'Network Basics, Services, Web Navigation & Cybersecurity • Textbook pp. 32-36',
+    internet1DiplomaTitle: 'CERTIFICATE OF INTERNET & WEB SAFETY EXPLORER',
+    internet1DiplomaText: 'For outstanding performance in "Mission 3A: Internet, Networks & World Wide Web 🌐🛡️" (Textbook pages 32-36), understanding computer networks and TCP/IP protocol, mastering internet services (Email, WWW, FTP, Telnet, IRC), solving the digital crossword, decoding URL anatomy, proficiently using web browsers, and upholding the 3 golden rules of cybersecurity.',
   },
 } as const;
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { Award, Printer, RotateCcw, Star, Clock, CheckCircle2 } from 'lucide-react';
+import { Award, Printer, RotateCcw, Star, Clock, CheckCircle2, Lightbulb, Sparkles } from 'lucide-react';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
+import { useHints } from '../context/HintContext';
 import { MascotaArky } from './MascotaArky';
 import { logStudentResult } from '../lib/resultsService';
 
@@ -12,7 +13,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files';
+  courseId?: 'hardware' | 'files' | 'internet1';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -28,6 +29,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 }) => {
   const { t, lang } = useLanguage();
   const arky = useArky();
+  const { hintsCount } = useHints();
   const [studentName, setStudentName] = useState<string>(
     initialStudentName.trim() || t.vDiplomaDefaultName
   );
@@ -35,8 +37,11 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const hasLoggedRef = useRef<boolean>(false);
 
   const isHardware = courseId === 'hardware';
+  const isInternet1 = courseId === 'internet1';
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
+    : isInternet1
+    ? (lang === 'en' ? 'Internet & Web Basics Mission 3A (Textbook pp. 32-36)' : 'Misiunea 3A Internet, Rețele & Web (Manual pag. 32-36)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
@@ -103,7 +108,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -115,6 +120,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       <h2 className="text-3xl sm:text-5xl font-black text-white mt-2 font-heading tracking-tight">
         {isHardware
           ? (lang === 'en' ? 'Congratulations, Hardware & ICT Technician!' : 'Felicitări, Tehnician Hardware & TIC!')
+          : isInternet1
+          ? (lang === 'en' ? 'Congratulations, Cyber & Web Explorer!' : 'Felicitări, Explorator Web & Cyber!')
           : t.vTitle}
       </h2>
 
@@ -123,11 +130,16 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You successfully passed the complete evaluation for Unit 1: you mastered lab safety, ergonomics, computer history, PC tower components, and digital bits calculation!'
               : 'Ai finalizat cu succes evaluarea completă a Unității 1: cunoști regulile de securitate, ergonomia, istoria calculatoarelor, piesele unității centrale și calculul biților!')
+          : isInternet1
+          ? (lang === 'en'
+              ? 'You mastered the essentials of computer networks, Internet services (Email, WWW, FTP, Telnet, IRC), URL addresses, web browser navigation, and cybersecurity protection!'
+              : 'Ai parcurs cu succes Modulul 3A: rețele de calculatoare, servicii internet (Email, WWW, FTP, Telnet, IRC), anatomia adreselor URL, utilizarea browserului și scutul de securitate cibernetică!')
           : t.vDesc}
       </p>
 
-      {/* Score Summary Box */}
+      {/* Score & Statistics Summary Box */}
       <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-slate-900/90 border border-amber-500/40 px-6 py-3.5 rounded-2xl mb-6 shadow-inner">
+        {/* Score */}
         <div className="flex items-center gap-4">
           <div className="flex text-amber-400 text-2xl gap-1">
             <Star className="w-6 h-6 fill-amber-400" />
@@ -146,6 +158,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
         </div>
 
+        {/* Duration */}
         {elapsedSeconds > 0 && (
           <div className="text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
             <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
@@ -157,7 +170,27 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
             </div>
           </div>
         )}
+
+        {/* Hints Used Metric */}
+        <div className="text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
+          <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
+            <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+            <span>{lang === 'en' ? 'Hints Used' : 'Indicii folosite'}</span>
+          </div>
+          <div className="text-lg font-black font-mono">
+            {hintsCount === 0 ? (
+              <span className="text-emerald-300 flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5" /> 0 ({lang === 'en' ? 'Autonomous' : 'Autonom'})
+              </span>
+            ) : (
+              <span className="text-amber-300">
+                {hintsCount} {hintsCount === 1 ? (lang === 'en' ? 'hint' : 'indiciu') : (lang === 'en' ? 'hints' : 'indicii')}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
+
 
       {/* Cloud Sync Status */}
       <div className="flex justify-center mb-6">
@@ -242,6 +275,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isInternet1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🌐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Net Pioneer' : 'Pionier Rețele'}</div>
+                <div className="text-[10px] text-teal-400">TCP/IP & ARPANET</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📡</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Services Pro' : 'Servicii Web'}</div>
+                <div className="text-[10px] text-cyan-400">Email, WWW, FTP</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧩</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Riddle Master' : 'Rebus Master'}</div>
+                <div className="text-[10px] text-purple-400">TELNET Secret</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧭</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Web Pilot' : 'Pilot Web'}</div>
+                <div className="text-[10px] text-emerald-400">URL & Browser</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🛡️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cyber Shield' : 'Scut Cibernetic'}</div>
+                <div className="text-[10px] text-rose-400">Parole & Antivirus</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -306,7 +377,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -316,7 +387,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
-            {isHardware ? t.hwDiplomaTitle : t.vDiplomaTitle}
+            {isHardware ? t.hwDiplomaTitle : isInternet1 ? t.internet1DiplomaTitle : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
             {t.vDiplomaDept}
@@ -337,7 +408,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
-            {isHardware ? t.hwDiplomaText : t.vDiplomaText}
+            {isHardware ? t.hwDiplomaText : isInternet1 ? t.internet1DiplomaText : t.vDiplomaText}
           </p>
 
           {/* Signatures & Date */}

@@ -4,11 +4,50 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files';
+  courseId?: 'hardware' | 'files' | 'internet1';
 }
 
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
 const FILES_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const INTERNET1_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
+
+const INTERNET1_STAGES_RO = [
+  { emoji: '🌐', name: 'Explorator Rețele & Protocol TCP/IP (pag. 32-33)' },
+  { emoji: '📡', name: 'Operator Servicii Internet: Email, WWW, FTP (pag. 32)' },
+  { emoji: '🧩', name: 'Dezlegător Rebus Digital & Coloana Secretă (pag. 33)' },
+  { emoji: '🧭', name: 'Navigator Web & Anatomie URL (pag. 34)' },
+  { emoji: '💻', name: 'Pilot Browser Chrome & Butoane de Navigare (pag. 35-36)' },
+  { emoji: '🛡️', name: 'Gardian Securitate Cibernetică & Scut Antivirus (pag. 35-36)' },
+  { emoji: '🏆', name: 'Explorator Internet & Web Certificat!' },
+];
+
+const INTERNET1_STAGES_EN = [
+  { emoji: '🌐', name: 'Network Explorer & TCP/IP Protocol (pp. 32-33)' },
+  { emoji: '📡', name: 'Internet Services Operator: Email, WWW, FTP (p. 32)' },
+  { emoji: '🧩', name: 'Digital Crossword Solver & Secret Column (p. 33)' },
+  { emoji: '🧭', name: 'Web Navigator & URL Anatomy (p. 34)' },
+  { emoji: '💻', name: 'Browser Pilot & Navigation Controls (pp. 35-36)' },
+  { emoji: '🛡️', name: 'Cybersecurity Guardian & Antivirus Shield (pp. 35-36)' },
+  { emoji: '🏆', name: 'Certified Internet & Web Explorer!' },
+];
+
+const INTERNET1_MILESTONES_RO = [
+  'P1: Rețele',
+  'P2: Servicii',
+  'P3: Rebus',
+  'P4: URL Web',
+  'P5: Browser',
+  'P6: Siguranță',
+];
+
+const INTERNET1_MILESTONES_EN = [
+  'P1: Networks',
+  'P2: Services',
+  'P3: Crossword',
+  'P4: Web URL',
+  'P5: Browser',
+  'P6: Safety',
+];
 
 const HARDWARE_STAGES_RO = [
   { emoji: '🛡️', name: 'Inspector Protecție & Ergonomie (pag. 10-12)' },
@@ -90,18 +129,28 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const { t, lang } = useLanguage();
 
   const isHardware = courseId === 'hardware';
-  const stages = isHardware
-    ? (lang === 'en' ? HARDWARE_STAGES_EN : HARDWARE_STAGES_RO)
-    : (lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO);
-  const milestones = isHardware
-    ? (lang === 'en' ? HARDWARE_MILESTONES_EN : HARDWARE_MILESTONES_RO)
-    : (lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO);
-  const percents = isHardware ? HARDWARE_STAGE_PERCENTS : FILES_STAGE_PERCENTS;
-  const maxLevels = isHardware ? 5 : 7;
+  const isInternet1 = courseId === 'internet1';
+
+  let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
+  let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
+  let percents = FILES_STAGE_PERCENTS;
+  let maxLevels = 7;
+
+  if (isHardware) {
+    stages = lang === 'en' ? HARDWARE_STAGES_EN : HARDWARE_STAGES_RO;
+    milestones = lang === 'en' ? HARDWARE_MILESTONES_EN : HARDWARE_MILESTONES_RO;
+    percents = HARDWARE_STAGE_PERCENTS;
+    maxLevels = 5;
+  } else if (isInternet1) {
+    stages = lang === 'en' ? INTERNET1_STAGES_EN : INTERNET1_STAGES_RO;
+    milestones = lang === 'en' ? INTERNET1_MILESTONES_EN : INTERNET1_MILESTONES_RO;
+    percents = INTERNET1_STAGE_PERCENTS;
+    maxLevels = 6;
+  }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
   const currentStage = stages[stageIndex];
-  const currentPercent = percents[stageIndex] || (isHardware ? 20 : 14);
+  const currentPercent = percents[stageIndex] || (isHardware ? 20 : isInternet1 ? 16 : 14);
 
   return (
     <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur">
@@ -114,9 +163,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">
               {isHardware
                 ? (lang === 'en' ? 'ICT Hardware Technician Progress' : 'Evoluție Tehnician Hardware TIC')
+                : isInternet1
+                ? (lang === 'en' ? 'Internet & Web Explorer Progress' : 'Evoluție Explorator Internet & Web TIC')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
-            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : 'text-emerald-400'}`}>
+            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : 'text-emerald-400'}`}>
               {currentStage.name}
             </div>
           </div>
@@ -138,6 +189,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
           className={`h-full rounded-full transition-all duration-700 ease-out shadow-sm ${
             isHardware
               ? 'bg-gradient-to-r from-teal-500 via-cyan-400 to-indigo-500'
+              : isInternet1
+              ? 'bg-gradient-to-r from-teal-500 via-emerald-400 to-cyan-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -146,7 +199,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
 
       {/* Level Milestones below */}
       <div className={`grid gap-1 sm:gap-1.5 mt-3 pt-2 text-center text-[10px] sm:text-xs font-semibold text-slate-400 ${
-        isHardware ? 'grid-cols-5' : 'grid-cols-4 sm:grid-cols-7'
+        isHardware ? 'grid-cols-5' : isInternet1 ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-4 sm:grid-cols-7'
       }`}>
         {milestones.map((m, idx) => {
           const lvl = idx + 1;
@@ -158,6 +211,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 isActive
                   ? isHardware
                     ? 'text-teal-300 font-bold'
+                    : isInternet1
+                    ? 'text-cyan-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}
