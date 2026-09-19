@@ -403,7 +403,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/40 hover:border-indigo-400 text-xs text-indigo-300 font-bold transition cursor-pointer active:scale-95 text-left"
               >
                 <Gamepad2 className="w-4 h-4 text-indigo-400 shrink-0 animate-pulse" />
-                <span>{lang === 'en' ? 'Arcade Games (4)' : 'Jocuri Arcade TIC (4)'}</span>
+                <span>{lang === 'en' ? 'Arcade Games (8)' : 'Jocuri Arcade TIC (8)'}</span>
               </button>
               <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
                 <Award className="w-4 h-4 text-amber-400 shrink-0" />
@@ -826,16 +826,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '4 Mini-Games' : '4 Mini-Jocuri'}
+                  {lang === 'en' ? '8 Mini-Games' : '8 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'Cyber-Safe Detective, Typing, Mouse & 2048' : 'Detectiv Cyber-Safe, Vitezomanul Tastaturii, Reflexe & 2048'}
+                {lang === 'en' ? 'Labirint Algoritmic, Firewall Defender, Cyber-Safe, Biți & Typing' : 'Labirintul Algoritmic, Scut Firewall, Detectiv Cyber-Safe, Biți 0-1 & Tastatură'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Investigate phishing threats, test typing WPM, sharpen mouse precision, and merge binary powers of 2!'
-                  : 'Depistează atacurile phishing, antrenează-ți viteza de tastare cu termeni TIC, precizia mouse-ului și puterile lui 2!'}
+                  ? 'Program maze algorithms with loops, block malware packets in the firewall, encode binary bits, and investigate cyber threats!'
+                  : 'Programează algoritmi cu bucle, blochează virușii în firewall, decodifică biții 0 și 1 și investighează atacurile phishing!'}
               </p>
             </div>
           </div>
