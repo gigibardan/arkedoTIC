@@ -489,7 +489,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[11px] text-slate-400 font-mono">🤖 4 Niveluri TIC</span>
+            <span className="text-[11px] text-slate-400 font-mono">🤖 5 Niveluri TIC</span>
             <button
               onClick={() => {
                 sounds.playClick();
