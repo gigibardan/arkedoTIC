@@ -3,6 +3,8 @@ import { FolderPlus, ArrowLeft, CheckCircle2, ChevronRight, HardDrive, Laptop, S
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { AnswerExplanation } from './common/AnswerExplanation';
+import { QuestionHint } from './common/QuestionHint';
 
 interface Level1Props {
   onComplete: () => void;
@@ -262,34 +264,50 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
       </div>
 
       {/* Provocare scurtătură Win+E din manual (pag. 27) */}
-      <div className="bg-slate-900/90 border border-slate-700 rounded-2xl p-4 sm:p-5 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-0.5">{t.l1WinEQuizTitle}</div>
-          <div className="text-sm font-bold text-white">{t.l1WinEQuizQuestion}</div>
-          <div className="text-xs text-slate-400 mt-0.5">{t.l1WinEQuizSub}</div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => {
-              sounds.playCorrect();
-              setShortcutWinEUsed(true);
-            }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer ${
-              shortcutWinEUsed
-                ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 shadow-md'
-                : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-600'
-            }`}
-          >
-            {shortcutWinEUsed ? t.l1WinEOptionCorrect : t.l1WinEOptionDefault}
-          </button>
+      <div className="bg-slate-900/90 border border-slate-700 rounded-2xl p-4 sm:p-5 mb-5 flex flex-col gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-0.5">{t.l1WinEQuizTitle}</div>
+            <div className="text-sm font-bold text-white">{t.l1WinEQuizQuestion}</div>
+            <div className="text-xs text-slate-400 mt-0.5">{t.l1WinEQuizSub}</div>
+          </div>
+          <div className="flex flex-wrap gap-2 shrink-0">
+            <button
+              onClick={() => {
+                sounds.playCorrect();
+                setShortcutWinEUsed(true);
+              }}
+              className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer ${
+                shortcutWinEUsed
+                  ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 shadow-md'
+                  : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-600'
+              }`}
+            >
+              {shortcutWinEUsed ? t.l1WinEOptionCorrect : t.l1WinEOptionDefault}
+            </button>
 
-          <button
-            onClick={() => sounds.playWrong()}
-            className="px-3 py-2 rounded-xl text-xs font-mono bg-slate-800/60 hover:bg-slate-800 text-slate-400 border border-slate-700 cursor-pointer"
-          >
-            Alt + Tab
-          </button>
+            <button
+              onClick={() => sounds.playWrong()}
+              className="px-3 py-2 rounded-xl text-xs font-mono bg-slate-800/60 hover:bg-slate-800 text-slate-400 border border-slate-700 cursor-pointer"
+            >
+              Alt + Tab
+            </button>
+          </div>
         </div>
+
+        <QuestionHint
+          id="q-l1-wine"
+          hintRo="Tasta Windows (cu sigla Windows) combinată cu litera 'E' (de la Explorer) deschide File Explorer pe orice PC!"
+          hintEn="Windows Key paired with letter 'E' (for Explorer) launches File Explorer instantly on Windows!"
+        />
+
+        {shortcutWinEUsed && (
+          <AnswerExplanation
+            isCorrect={true}
+            explanationRo="Excelent! Win + E este comanda rapidă oficială din manual (pag. 27) care deschide fereastra File Explorer pentru navigarea prin foldere și unități de stocare."
+            explanationEn="Spot on! Win + E is the official shortcut (p. 27) that instantly launches File Explorer to navigate folders and storage drives."
+          />
+        )}
       </div>
 
       {/* Checklist (Interactive: can be checked by simulator or by student on their real PC) */}

@@ -18,6 +18,8 @@ import {
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { useLanguage } from '../../context/LanguageContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
+import { QuestionHint } from '../common/QuestionHint';
 
 interface FLevel2Props {
   onComplete: () => void;
@@ -218,11 +220,19 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             )}
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-300 mb-4">
+          <p className="text-xs sm:text-sm text-slate-300 mb-2">
             {lang === 'en'
               ? 'The extension after the dot tells the OS the file format. Match each extension to its correct category:'
               : 'Extensia din spatele punctului indică sistemului de operare tipul de date. Asociază fiecare extensie la categoria corespunzătoare din manual:'}
           </p>
+
+          <div className="mb-4">
+            <QuestionHint
+              id="q-flevel2-ext"
+              hintRo=".txt este text simplu, .jpg/.png sunt imagini, .mp3/.wav sunt sunete/muzică, iar .mp4 este film/video (Manual pag. 25)."
+              hintEn=".txt is plain text, .jpg/.png are pictures, .mp3/.wav are audio tracks, and .mp4 is video/movie (p. 25)."
+            />
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {extensionsList.map((item) => {
@@ -322,11 +332,19 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             )}
           </div>
 
-          <div className="bg-amber-950/30 border border-amber-500/40 rounded-xl p-3 mb-4 text-xs text-amber-200">
+          <div className="bg-amber-950/30 border border-amber-500/40 rounded-xl p-3 mb-3 text-xs text-amber-200">
             <strong>{lang === 'en' ? 'Golden rule from textbook (p. 25):' : 'Reține regula de aur din manual (pag. 25):'}</strong> {lang === 'en' ? 'A file or folder name CANNOT contain any of the 9 reserved characters:' : 'Numele unui fișier sau folder NU poate conține niciunul din cele 9 caractere rezervate:'}{' '}
             <code className="bg-slate-950 px-2 py-0.5 rounded font-mono font-bold text-rose-400 text-sm">
               \ / : * ? " &lt; &gt; |
             </code>
+          </div>
+
+          <div className="mb-4">
+            <QuestionHint
+              id="q-flevel2-forbidden"
+              hintRo="Uită-te cu atenție la semne: : (două puncte), * (steluță), / (slash), \ (backslash), ? (semnul întrebării), < > (mai mic/mare), | (bara verticală) sau ghilimele sunt strict interzise!"
+              hintEn="Check carefully for reserved symbols: : * / \ ? < > | and double quotes are strictly forbidden in file and folder names!"
+            />
           </div>
 
           <div className="space-y-2.5">
@@ -414,11 +432,19 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             )}
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-300 mb-3">
+          <p className="text-xs sm:text-sm text-slate-300 mb-2">
             {lang === 'en'
               ? 'The textbook (p. 26) explains: The path starts from the root (C:) and describes the route through every branch to the target file, separated by the \\ (backslash) character.'
               : 'Manualul (pag. 26) explică: Calea pornește de la rădăcină (C:) și descrie drumul prin fiecare ramificație până la fișierul dorit, separată de caracterul \\ (bară oblică inversă).'}
           </p>
+
+          <div className="mb-4">
+            <QuestionHint
+              id="q-flevel2-path"
+              hintRo="Începe cu unitatea de stocare rădăcină (C:), apoi dosarul principal (Lucru), subfolderul (MUZICA) și în final fișierul căutat (jazz.mp3)."
+              hintEn="Start from root drive (C:), then main directory (Lucru), subfolder (MUZICA), and finally target file (jazz.mp3)."
+            />
+          </div>
 
           {/* Path Simulator Output Box */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-4">
@@ -518,108 +544,159 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
           <div className="space-y-3">
             {/* Q1 */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="text-xs text-slate-300">
-                <strong className="text-white">a)</strong> {lang === 'en' ? 'Can a single file contain multiple folders?' : 'Un fișier poate conține mai multe foldere?'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="text-xs text-slate-300">
+                  <strong className="text-white">a)</strong> {lang === 'en' ? 'Can a single file contain multiple folders?' : 'Un fișier poate conține mai multe foldere?'}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => {
+                      sounds.playWrong();
+                      setTfAnswers((prev) => ({ ...prev, fileHasFolders: true }));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                      tfAnswers.fileHasFolders === true
+                        ? 'bg-rose-600 border-rose-400 text-white'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {lang === 'en' ? 'True' : 'Adevărat'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      sounds.playCorrect();
+                      setTfAnswers((prev) => ({ ...prev, fileHasFolders: false }));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                      tfAnswers.fileHasFolders === false
+                        ? 'bg-emerald-600 border-emerald-400 text-white'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {lang === 'en' ? 'False' : 'Fals'}
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    sounds.playWrong();
-                    setTfAnswers((prev) => ({ ...prev, fileHasFolders: true }));
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
-                    tfAnswers.fileHasFolders === true
-                      ? 'bg-rose-600 border-rose-400 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  {lang === 'en' ? 'True' : 'Adevărat'}
-                </button>
-                <button
-                  onClick={() => {
-                    sounds.playCorrect();
-                    setTfAnswers((prev) => ({ ...prev, fileHasFolders: false }));
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+              {tfAnswers.fileHasFolders !== undefined && (
+                <AnswerExplanation
+                  isCorrect={tfAnswers.fileHasFolders === false}
+                  explanationRo={
                     tfAnswers.fileHasFolders === false
-                      ? 'bg-emerald-600 border-emerald-400 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  {lang === 'en' ? 'False (Correct!)' : 'Fals (Corect!)'}
-                </button>
-              </div>
+                      ? 'Corect! Un fișier reprezintă o colecție de date și NU poate conține foldere (Manual pag. 25).'
+                      : 'Incorect! Doar folderele (directoarele) pot conține alte foldere sau fișiere, niciodată invers!'
+                  }
+                  explanationEn={
+                    tfAnswers.fileHasFolders === false
+                      ? 'Correct! A file stores data and can never contain directories.'
+                      : 'Incorrect! Only folders can contain other folders or files, never the other way around.'
+                  }
+                />
+              )}
             </div>
 
             {/* Q2 */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="text-xs text-slate-300">
-                <strong className="text-white">b)</strong> {lang === 'en' ? 'Can a folder contain multiple files?' : 'Un folder poate conține mai multe fișiere?'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="text-xs text-slate-300">
+                  <strong className="text-white">b)</strong> {lang === 'en' ? 'Can a folder contain multiple files?' : 'Un folder poate conține mai multe fișiere?'}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => {
+                      sounds.playCorrect();
+                      setTfAnswers((prev) => ({ ...prev, folderHasFiles: true }));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                      tfAnswers.folderHasFiles === true
+                        ? 'bg-emerald-600 border-emerald-400 text-white'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {lang === 'en' ? 'True' : 'Adevărat'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      sounds.playWrong();
+                      setTfAnswers((prev) => ({ ...prev, folderHasFiles: false }));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                      tfAnswers.folderHasFiles === false
+                        ? 'bg-rose-600 border-rose-400 text-white'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {lang === 'en' ? 'False' : 'Fals'}
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    sounds.playCorrect();
-                    setTfAnswers((prev) => ({ ...prev, folderHasFiles: true }));
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+              {tfAnswers.folderHasFiles !== undefined && (
+                <AnswerExplanation
+                  isCorrect={tfAnswers.folderHasFiles === true}
+                  explanationRo={
                     tfAnswers.folderHasFiles === true
-                      ? 'bg-emerald-600 border-emerald-400 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  {lang === 'en' ? 'True (Correct!)' : 'Adevărat (Corect!)'}
-                </button>
-                <button
-                  onClick={() => {
-                    sounds.playWrong();
-                    setTfAnswers((prev) => ({ ...prev, folderHasFiles: false }));
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
-                    tfAnswers.folderHasFiles === false
-                      ? 'bg-rose-600 border-rose-400 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  {lang === 'en' ? 'False' : 'Fals'}
-                </button>
-              </div>
+                      ? 'Corect! Un folder (director) este un container organizatoric destinat să grupeze fișiere și subfoldere.'
+                      : 'Incorect! Rolul principal al folderelor este tocmai de a adăposti și organiza fișierele.'
+                  }
+                  explanationEn={
+                    tfAnswers.folderHasFiles === true
+                      ? 'Correct! Folders are containers designed to group files and subfolders together.'
+                      : 'Incorrect! The primary purpose of folders is to hold and organize files.'
+                  }
+                />
+              )}
             </div>
 
             {/* Q3 Fill blank */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="text-xs text-slate-300">
-                <strong className="text-white">c)</strong> {lang === 'en' ? 'Electronic data is stored inside:' : 'Datele sunt memorate în format electronic în:'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="text-xs text-slate-300">
+                  <strong className="text-white">c)</strong> {lang === 'en' ? 'Electronic data is stored inside:' : 'Datele sunt memorate în format electronic în:'}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => {
+                      sounds.playCorrect();
+                      setTfAnswers((prev) => ({ ...prev, fillBlankFile: 'fisiere' }));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                      tfAnswers.fillBlankFile === 'fisiere'
+                        ? 'bg-emerald-600 border-emerald-400 text-white'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    📄 {lang === 'en' ? 'Files' : 'Fișiere'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      sounds.playWrong();
+                      setTfAnswers((prev) => ({ ...prev, fillBlankFile: 'cabluri' }));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                      tfAnswers.fillBlankFile === 'cabluri'
+                        ? 'bg-rose-600 border-rose-400 text-white'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    🔌 {lang === 'en' ? 'Cables' : 'Cabluri'}
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => {
-                    sounds.playCorrect();
-                    setTfAnswers((prev) => ({ ...prev, fillBlankFile: 'fisiere' }));
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+              {tfAnswers.fillBlankFile !== undefined && (
+                <AnswerExplanation
+                  isCorrect={tfAnswers.fillBlankFile === 'fisiere'}
+                  explanationRo={
                     tfAnswers.fillBlankFile === 'fisiere'
-                      ? 'bg-emerald-600 border-emerald-400 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  📄 {lang === 'en' ? 'Files (Correct!)' : 'Fișiere (Corect!)'}
-                </button>
-                <button
-                  onClick={() => {
-                    sounds.playWrong();
-                    setTfAnswers((prev) => ({ ...prev, fillBlankFile: 'cabluri' }));
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
-                    tfAnswers.fillBlankFile === 'cabluri'
-                      ? 'bg-rose-600 border-rose-400 text-white'
-                      : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  🔌 {lang === 'en' ? 'Cables' : 'Cabluri'}
-                </button>
-              </div>
+                      ? 'Excelent! În mediul digital, datele (text, muzică, video, imagini) sunt stocate exclusiv în fișiere (Manual pag. 25).'
+                      : 'Incorect! Cablurile doar transmit semnale electrice, datele fiind memorate în fișiere.'
+                  }
+                  explanationEn={
+                    tfAnswers.fillBlankFile === 'fisiere'
+                      ? 'Spot on! In computing, data (text, music, video, photos) is recorded inside files.'
+                      : 'Incorrect! Cables only transmit electrical signals, while files store data.'
+                  }
+                />
+              )}
             </div>
           </div>
         </div>

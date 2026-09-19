@@ -3,6 +3,7 @@ import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
 
 interface HLevel4Props {
   onComplete: () => void;
@@ -17,6 +18,10 @@ interface DeviceItem {
   type: PeripheralType;
   hint: string;
   bookDetail: string;
+  pillCorrectRo: string;
+  pillCorrectEn: string;
+  pillWrongRo: string;
+  pillWrongEn: string;
 }
 
 const DEVICES_RO: DeviceItem[] = [
@@ -27,6 +32,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'input',
     hint: 'Introduci litere, cifre și comenzi în calculator.',
     bookDetail: 'Principalul dispozitiv de intrare (pag. 16)',
+    pillCorrectRo: 'Corect! Tastatura trimite coduri binare de la utilizator spre memoria calculatorului la fiecare tastă apăsată.',
+    pillCorrectEn: 'Correct! The keyboard transmits binary keycodes from the user into computer memory.',
+    pillWrongRo: 'Incorect! Tastatura este exclusiv de INTRARE deoarece trimite date de la utilizator spre calculator.',
+    pillWrongEn: 'Incorrect! The keyboard is strictly an INPUT device sending user signals into the PC.',
   },
   {
     id: 'mouse',
@@ -35,6 +44,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'input',
     hint: 'Deplasează cursorul și trimite click-uri.',
     bookDetail: 'Dispozitiv de intrare pentru indicare și selecție (pag. 16)',
+    pillCorrectRo: 'Corect! Senzorul optic al mouse-ului transmite coordonatele X/Y și click-urile spre procesor.',
+    pillCorrectEn: 'Correct! Optical mouse sensors transmit X/Y motion and button clicks directly to the CPU.',
+    pillWrongRo: 'Incorect! Mouse-ul este un dispozitiv de INTRARE (indicare și comandă).',
+    pillWrongEn: 'Incorrect! The mouse is an INPUT pointing device.',
   },
   {
     id: 'scanner',
@@ -43,6 +56,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'input',
     hint: 'Citește texte/poze de pe hârtie și le introduce în PC.',
     bookDetail: 'Opusul imprimantei (pag. 16)',
+    pillCorrectRo: 'Corect! Scanerul digitalizează documente fizice de pe hârtie și le introduce ca fișiere imagine în PC.',
+    pillCorrectEn: 'Correct! Scanners digitize physical paper sheets into digital image files for the PC.',
+    pillWrongRo: 'Incorect! Scanerul este de INTRARE (introduce imaginea din lumea reală în calculator).',
+    pillWrongEn: 'Incorrect! Scanners are INPUT devices transferring paper visuals into digital data.',
   },
   {
     id: 'monitor',
@@ -51,6 +68,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'output',
     hint: 'Afișează imaginile și rezultatele prelucrării datelor.',
     bookDetail: 'Cel mai cunoscut dispozitiv de ieșire (pag. 16)',
+    pillCorrectRo: 'Corect! Monitorul primește semnal video de la placa grafică și îl afișează pe ecran pentru utilizator.',
+    pillCorrectEn: 'Correct! Monitors receive graphic pixel signals from GPU and display them for user viewing.',
+    pillWrongRo: 'Incorect! Un monitor standard (fără touchscreen) este exclusiv dispozitiv de IEȘIRE.',
+    pillWrongEn: 'Incorrect! A standard non-touch monitor is strictly an OUTPUT device.',
   },
   {
     id: 'printer',
@@ -59,6 +80,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'output',
     hint: 'Tipărește pe hârtie datele furnizate de calculator.',
     bookDetail: 'Dispozitiv de ieșire (pag. 16)',
+    pillCorrectRo: 'Corect! Imprimanta scoate informația digitală pe suport fizic de hârtie (dispozitiv de IEȘIRE).',
+    pillCorrectEn: 'Correct! Printers transfer processed digital documents onto paper (OUTPUT).',
+    pillWrongRo: 'Incorect! Imprimanta simplă este dispozitiv de IEȘIRE.',
+    pillWrongEn: 'Incorrect! Standard printers are strictly OUTPUT peripherals.',
   },
   {
     id: 'speakers',
@@ -67,6 +92,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'output',
     hint: 'Redau muzica, vocile și coloana sonoră.',
     bookDetail: 'Dispozitiv de ieșire pentru sunet (pag. 16)',
+    pillCorrectRo: 'Corect! Difuzoarele transformă impulsurile electrice de la placa de sunet în unde acustice audibile (IEȘIRE).',
+    pillCorrectEn: 'Correct! Speakers translate digital audio signals into audible acoustic waves (OUTPUT).',
+    pillWrongRo: 'Incorect! Boxele sunt dispozitive de IEȘIRE pentru semnal audio.',
+    pillWrongEn: 'Incorrect! Speakers are OUTPUT audio peripherals.',
   },
   {
     id: 'touchscreen',
@@ -75,6 +104,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'inout',
     hint: 'Afișează imaginea (ieșire) și detectează atingerea degetului (intrare).',
     bookDetail: 'Dispozitiv de intrare-ieșire (pag. 16)',
+    pillCorrectRo: 'Excelent! Afișează interfața (ieșire) și înregistrează atingerile degetelor ca date de comandă (intrare).',
+    pillCorrectEn: 'Excellent! It renders visual output while registering capacitive finger touch gestures as input.',
+    pillWrongRo: 'Incorect! Deoarece afișează imaginea ȘI preia comenzile tactile, este dispozitiv de INTRARE-IEȘIRE!',
+    pillWrongEn: 'Incorrect! Because it outputs visuals AND accepts touch inputs, it is an INPUT-OUTPUT device!',
   },
   {
     id: 'headset',
@@ -83,6 +116,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'inout',
     hint: 'Microfonul introduce vocea, iar căștile redau sunetul.',
     bookDetail: 'Dispozitiv de intrare-ieșire cu dublu rol (pag. 16)',
+    pillCorrectRo: 'Corect! Microfonul integrat este pentru INTRARE, iar difuzoarele căștilor sunt pentru IEȘIRE.',
+    pillCorrectEn: 'Correct! The integrated microphone serves as INPUT while headphone drivers provide audio OUTPUT.',
+    pillWrongRo: 'Incorect! Combinând difuzoarele de ieșire cu microfonul de intrare, formează un ansamblu de INTRARE-IEȘIRE.',
+    pillWrongEn: 'Incorrect! Combining output speakers with an input microphone makes it an INPUT-OUTPUT device.',
   },
   {
     id: 'multifunctional',
@@ -91,6 +128,10 @@ const DEVICES_RO: DeviceItem[] = [
     type: 'inout',
     hint: 'Scanează documente (intrare) și tipărește pe hârtie (ieșire).',
     bookDetail: 'Dispozitiv combinat de intrare-ieșire (pag. 16)',
+    pillCorrectRo: 'Corect! Modulul scaner introduce imagini în PC (intrare), iar imprimanta tipărește (ieșire).',
+    pillCorrectEn: 'Correct! The scanner digitizes into PC (input) and the printer prints pages (output).',
+    pillWrongRo: 'Incorect! Multifuncționalul integrează atât scanerul de intrare, cât și imprimanta de ieșire.',
+    pillWrongEn: 'Incorrect! All-in-one machines combine input scanning and output printing.',
   },
 ];
 
@@ -102,6 +143,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'input',
     hint: 'Enters letters, numbers, and commands into the computer.',
     bookDetail: 'Primary input device (p. 16)',
+    pillCorrectRo: 'Corect! Tastatura trimite coduri binare de la utilizator spre memoria calculatorului la fiecare tastă apăsată.',
+    pillCorrectEn: 'Correct! The keyboard transmits binary keycodes from the user into computer memory.',
+    pillWrongRo: 'Incorect! Tastatura este exclusiv de INTRARE deoarece trimite date de la utilizator spre calculator.',
+    pillWrongEn: 'Incorrect! The keyboard is strictly an INPUT device sending user signals into the PC.',
   },
   {
     id: 'mouse',
@@ -110,6 +155,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'input',
     hint: 'Controls on-screen pointer and sends clicks.',
     bookDetail: 'Pointing and selection input peripheral (p. 16)',
+    pillCorrectRo: 'Corect! Senzorul optic al mouse-ului transmite coordonatele X/Y și click-urile spre procesor.',
+    pillCorrectEn: 'Correct! Optical mouse sensors transmit X/Y motion and button clicks directly to the CPU.',
+    pillWrongRo: 'Incorect! Mouse-ul este un dispozitiv de INTRARE (indicare și comandă).',
+    pillWrongEn: 'Incorrect! The mouse is an INPUT pointing device.',
   },
   {
     id: 'scanner',
@@ -118,6 +167,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'input',
     hint: 'Digitizes text/photos from paper and feeds them into the PC.',
     bookDetail: 'The opposite of a printer (p. 16)',
+    pillCorrectRo: 'Corect! Scanerul digitalizează documente fizice de pe hârtie și le introduce ca fișiere imagine în PC.',
+    pillCorrectEn: 'Correct! Scanners digitize physical paper sheets into digital image files for the PC.',
+    pillWrongRo: 'Incorect! Scanerul este de INTRARE (introduce imaginea din lumea reală în calculator).',
+    pillWrongEn: 'Incorrect! Scanners are INPUT devices transferring paper visuals into digital data.',
   },
   {
     id: 'monitor',
@@ -126,6 +179,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'output',
     hint: 'Displays visuals and processing results to the user.',
     bookDetail: 'Most widely used output device (p. 16)',
+    pillCorrectRo: 'Corect! Monitorul primește semnal video de la placa grafică și îl afișează pe ecran pentru utilizator.',
+    pillCorrectEn: 'Correct! Monitors receive graphic pixel signals from GPU and display them for user viewing.',
+    pillWrongRo: 'Incorect! Un monitor standard (fără touchscreen) este exclusiv dispozitiv de IEȘIRE.',
+    pillWrongEn: 'Incorrect! A standard non-touch monitor is strictly an OUTPUT device.',
   },
   {
     id: 'printer',
@@ -134,6 +191,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'output',
     hint: 'Prints hard-copy documents and images onto paper.',
     bookDetail: 'Output peripheral (p. 16)',
+    pillCorrectRo: 'Corect! Imprimanta scoate informația digitală pe suport fizic de hârtie (dispozitiv de IEȘIRE).',
+    pillCorrectEn: 'Correct! Printers transfer processed digital documents onto paper (OUTPUT).',
+    pillWrongRo: 'Incorect! Imprimanta simplă este dispozitiv de IEȘIRE.',
+    pillWrongEn: 'Incorrect! Standard printers are strictly OUTPUT peripherals.',
   },
   {
     id: 'speakers',
@@ -142,6 +203,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'output',
     hint: 'Broadcast audio, music, voices, and game effects.',
     bookDetail: 'Sound output peripheral (p. 16)',
+    pillCorrectRo: 'Corect! Difuzoarele transformă impulsurile electrice de la placa de sunet în unde acustice audibile (IEȘIRE).',
+    pillCorrectEn: 'Correct! Speakers translate digital audio signals into audible acoustic waves (OUTPUT).',
+    pillWrongRo: 'Incorect! Boxele sunt dispozitive de IEȘIRE pentru semnal audio.',
+    pillWrongEn: 'Incorrect! Speakers are OUTPUT audio peripherals.',
   },
   {
     id: 'touchscreen',
@@ -150,6 +215,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'inout',
     hint: 'Displays graphic content (output) while sensing finger touches (input).',
     bookDetail: 'Input-Output peripheral (p. 16)',
+    pillCorrectRo: 'Excelent! Afișează interfața (ieșire) și înregistrează atingerile degetelor ca date de comandă (intrare).',
+    pillCorrectEn: 'Excellent! It renders visual output while registering capacitive finger touch gestures as input.',
+    pillWrongRo: 'Incorect! Deoarece afișează imaginea ȘI preia comenzile tactile, este dispozitiv de INTRARE-IEȘIRE!',
+    pillWrongEn: 'Incorrect! Because it outputs visuals AND accepts touch inputs, it is an INPUT-OUTPUT device!',
   },
   {
     id: 'headset',
@@ -158,6 +227,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'inout',
     hint: 'Microphone captures speech (in), headphones deliver audio (out).',
     bookDetail: 'Dual-role Input-Output peripheral (p. 16)',
+    pillCorrectRo: 'Corect! Microfonul integrat este pentru INTRARE, iar difuzoarele căștilor sunt pentru IEȘIRE.',
+    pillCorrectEn: 'Correct! The integrated microphone serves as INPUT while headphone drivers provide audio OUTPUT.',
+    pillWrongRo: 'Incorect! Combinând difuzoarele de ieșire cu microfonul de intrare, formează un ansamblu de INTRARE-IEȘIRE.',
+    pillWrongEn: 'Incorrect! Combining output speakers with an input microphone makes it an INPUT-OUTPUT device.',
   },
   {
     id: 'multifunctional',
@@ -166,6 +239,10 @@ const DEVICES_EN: DeviceItem[] = [
     type: 'inout',
     hint: 'Scans paper sheets (input) and prints documents (output).',
     bookDetail: 'Combined Input-Output unit (p. 16)',
+    pillCorrectRo: 'Corect! Modulul scaner introduce imagini în PC (intrare), iar imprimanta tipărește (ieșire).',
+    pillCorrectEn: 'Correct! The scanner digitizes into PC (input) and the printer prints pages (output).',
+    pillWrongRo: 'Incorect! Multifuncționalul integrează atât scanerul de intrare, cât și imprimanta de ieșire.',
+    pillWrongEn: 'Incorrect! All-in-one machines combine input scanning and output printing.',
   },
 ];
 
@@ -257,8 +334,9 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
           {devices.map((dev) => {
             const currentChoice = assignments[dev.id];
-            const isError = showErrors && currentChoice !== dev.type;
-            const isCorrect = currentChoice === dev.type;
+            const isAssigned = currentChoice !== undefined;
+            const isCorrect = isAssigned && currentChoice === dev.type;
+            const isError = showErrors && isAssigned && !isCorrect;
 
             return (
               <div
@@ -266,8 +344,10 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
                 className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-2.5 ${
                   isError
                     ? 'bg-rose-950/40 border-rose-500'
-                    : isCorrect
-                    ? 'bg-slate-900 border-emerald-500/60'
+                    : isAssigned
+                    ? isCorrect
+                      ? 'bg-slate-900 border-emerald-500/60'
+                      : 'bg-amber-950/30 border-amber-500/50'
                     : 'bg-slate-900/70 border-slate-700/80 hover:border-slate-600'
                 }`}
               >
@@ -324,10 +404,12 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
                   </button>
                 </div>
 
-                {isError && (
-                  <p className="text-[10px] text-rose-400 font-bold">
-                    {lang === 'en' ? 'Attention: check the explanation on textbook p. 16!' : 'Atenție: verifică explicația din manual pag. 16!'}
-                  </p>
+                {isAssigned && (
+                  <AnswerExplanation
+                    isCorrect={isCorrect}
+                    explanationRo={isCorrect ? dev.pillCorrectRo : dev.pillWrongRo}
+                    explanationEn={isCorrect ? dev.pillCorrectEn : dev.pillWrongEn}
+                  />
                 )}
               </div>
             );

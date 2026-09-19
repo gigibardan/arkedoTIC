@@ -4,6 +4,8 @@ import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
+import { AnswerExplanation } from './common/AnswerExplanation';
+import { QuestionHint } from './common/QuestionHint';
 
 interface Level4Props {
   onComplete: () => void;
@@ -249,9 +251,17 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                 <HelpCircle className="w-3.5 h-3.5" />
                 {t.l4QuizTitle}
               </h4>
-              <p className="text-xs text-slate-300 mb-2.5">
+              <p className="text-xs text-slate-300 mb-2">
                 {t.l4QuizQuestion}
               </p>
+
+              <div className="mb-3">
+                <QuestionHint
+                  id="q-l4-ext"
+                  hintRo="Extensia (.docx, .jpg, .mp3 etc.) semnalează sistemului de operare cu ce program trebuie deschis fișierul și ce format de date are."
+                  hintEn="The extension (.docx, .jpg, .mp3 etc.) tells Windows which application opens the file and what data type it contains."
+                />
+              </div>
 
               <div className="space-y-2">
                 <button
@@ -279,6 +289,24 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                   <span>{t.l4QuizOptB}</span>
                 </button>
               </div>
+
+              {extensionAnswer && (
+                <div className="mt-3">
+                  <AnswerExplanation
+                    isCorrect={extensionAnswer === 'type_program'}
+                    explanationRo={
+                      extensionAnswer === 'type_program'
+                        ? 'Corect! Extensia indică tipul de date stocat și programul implicit asociat pentru deschidere (Manual pag. 30).'
+                        : 'Incorect! Dimensiunea unui fișier este măsurată în octeți (KB/MB) în Proprietăți, în timp ce extensia arată tipul și programul asociat.'
+                    }
+                    explanationEn={
+                      extensionAnswer === 'type_program'
+                        ? 'Correct! The extension specifies the file type and which default app handles it (p. 30).'
+                        : 'Incorrect! File size is shown in bytes/KB in Properties, while the extension defines the data format.'
+                    }
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

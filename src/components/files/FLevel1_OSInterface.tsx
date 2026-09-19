@@ -25,6 +25,8 @@ import {
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { useLanguage } from '../../context/LanguageContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
+import { QuestionHint } from '../common/QuestionHint';
 
 interface FLevel1Props {
   onComplete: () => void;
@@ -348,72 +350,110 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
           {/* Scenarios Check from Textbook (pag. 23 Fig. 2) */}
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
             {/* Scenario 1 */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-300 font-semibold mb-2">
-                ❓ <strong>{lang === 'en' ? 'Scenario 1:' : 'Situația 1:'}</strong> {lang === 'en' ? 'You step away from the computer for a 10-minute break. Which Power option do you choose for energy saving (p. 23)?' : 'Pleci de la calculator pentru 10 minute în pauză. Ce opțiune din butonul Power alegi pentru consum redus (pag. 23)?'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="text-xs text-slate-300 font-semibold mb-2">
+                  ❓ <strong>{lang === 'en' ? 'Scenario 1:' : 'Situația 1:'}</strong> {lang === 'en' ? 'You step away from the computer for a 10-minute break. Which Power option do you choose for energy saving (p. 23)?' : 'Pleci de la calculator pentru 10 minute în pauză. Ce opțiune din butonul Power alegi pentru consum redus (pag. 23)?'}
+                </div>
+                <QuestionHint
+                  id="q-flevel1-power1"
+                  hintRo="Pentru o pauză scurtă nu dorim să închidem toate aplicațiile deschise, ci să economisim curent (mod Sleep/Repaus)."
+                  hintEn="For a brief break, we don't want to close open windows, just save electricity (Sleep mode)."
+                />
+                <div className="grid grid-cols-3 gap-2 text-xs mt-2">
+                  {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        if (opt === 'sleep') sounds.playCorrect();
+                        else sounds.playWrong();
+                        setPowerScenario1(opt);
+                      }}
+                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
+                        powerScenario1 === opt
+                          ? opt === 'sleep'
+                            ? 'bg-emerald-600 border-emerald-400 text-white'
+                            : 'bg-rose-600 border-rose-400 text-white'
+                          : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
+                      {opt === 'shutdown' && '🛑 Shut down'}
+                      {opt === 'restart' && '🔄 Restart'}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      if (opt === 'sleep') sounds.playCorrect();
-                      else sounds.playWrong();
-                      setPowerScenario1(opt);
-                    }}
-                    className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
-                      powerScenario1 === opt
-                        ? opt === 'sleep'
-                          ? 'bg-emerald-600 border-emerald-400 text-white'
-                          : 'bg-rose-600 border-rose-400 text-white'
-                        : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
-                    {opt === 'shutdown' && '🛑 Shut down'}
-                    {opt === 'restart' && '🔄 Restart'}
-                  </button>
-                ))}
-              </div>
-              {powerScenario1 === 'sleep' && (
-                <p className="text-[11px] text-emerald-400 mt-2 font-medium">
-                  {lang === 'en' ? '✓ Correct! Sleep puts the computer in low power mode during short breaks.' : '✓ Corect! Sleep pune PC-ul în mod de consum redus de energie când plecăm pentru puțin timp.'}
-                </p>
+              {powerScenario1 && (
+                <div className="mt-2">
+                  <AnswerExplanation
+                    isCorrect={powerScenario1 === 'sleep'}
+                    explanationRo={
+                      powerScenario1 === 'sleep'
+                        ? 'Excelent! Modul Sleep (Repaus) reduce consumul de energie electrică menținând sesiunea în RAM pentru reluare instantanee.'
+                        : 'Nu chiar. Pentru pauze scurte alegem Sleep (Repaus), deoarece Shut down închide complet calculatorul și pierzi timpul la repornire.'
+                    }
+                    explanationEn={
+                      powerScenario1 === 'sleep'
+                        ? 'Spot on! Sleep mode preserves active state in RAM with minimal power draw for instant wake.'
+                        : 'Not quite. For short breaks choose Sleep. Shut down powers off completely.'
+                    }
+                  />
+                </div>
               )}
             </div>
 
             {/* Scenario 2 */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-300 font-semibold mb-2">
-                ❓ <strong>{lang === 'en' ? 'Scenario 2:' : 'Situația 2:'}</strong> {lang === 'en' ? 'At the end of class in the computer lab, which option do you select for complete power off (p. 23)?' : 'La terminarea orelor în laboratorul de informatică, ce opțiune alegi pentru oprirea definitivă (pag. 23)?'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="text-xs text-slate-300 font-semibold mb-2">
+                  ❓ <strong>{lang === 'en' ? 'Scenario 2:' : 'Situația 2:'}</strong> {lang === 'en' ? 'At the end of class in the computer lab, which option do you select for complete power off (p. 23)?' : 'La terminarea orelor în laboratorul de informatică, ce opțiune alegi pentru oprirea definitivă (pag. 23)?'}
+                </div>
+                <QuestionHint
+                  id="q-flevel1-power2"
+                  hintRo="La plecarea din clasă oprim complet stația de lucru pentru siguranță și zero consum (Shut down / Închidere)."
+                  hintEn="When leaving the school lab, completely power off the PC for safety and zero power usage (Shut down)."
+                />
+                <div className="grid grid-cols-3 gap-2 text-xs mt-2">
+                  {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
+                    <button
+                      key={opt}
+                      onClick={() => {
+                        if (opt === 'shutdown') sounds.playCorrect();
+                        else sounds.playWrong();
+                        setPowerScenario2(opt);
+                      }}
+                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
+                        powerScenario2 === opt
+                          ? opt === 'shutdown'
+                            ? 'bg-emerald-600 border-emerald-400 text-white'
+                            : 'bg-rose-600 border-rose-400 text-white'
+                          : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
+                      {opt === 'shutdown' && '🛑 Shut down'}
+                      {opt === 'restart' && '🔄 Restart'}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
-                  <button
-                    key={opt}
-                    onClick={() => {
-                      if (opt === 'shutdown') sounds.playCorrect();
-                      else sounds.playWrong();
-                      setPowerScenario2(opt);
-                    }}
-                    className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
-                      powerScenario2 === opt
-                        ? opt === 'shutdown'
-                          ? 'bg-emerald-600 border-emerald-400 text-white'
-                          : 'bg-rose-600 border-rose-400 text-white'
-                        : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
-                    {opt === 'shutdown' && '🛑 Shut down'}
-                    {opt === 'restart' && '🔄 Restart'}
-                  </button>
-                ))}
-              </div>
-              {powerScenario2 === 'shutdown' && (
-                <p className="text-[11px] text-emerald-400 mt-2 font-medium">
-                  {lang === 'en' ? '✓ Correct! Shut down safely terminates all software and turns off the PC.' : '✓ Corect! Shut down (Închidere) oprește definitiv calculatorul și sistemul de operare.'}
-                </p>
+              {powerScenario2 && (
+                <div className="mt-2">
+                  <AnswerExplanation
+                    isCorrect={powerScenario2 === 'shutdown'}
+                    explanationRo={
+                      powerScenario2 === 'shutdown'
+                        ? 'Corect! Shut down (Închidere) oprește definitiv sistemul de operare și alimentarea cu energie a tuturor componentelor (Manual pag. 23).'
+                        : 'Incorect. La terminarea orelor calculatorul trebuie oprit complet prin comanda Shut down (Închidere).'
+                    }
+                    explanationEn={
+                      powerScenario2 === 'shutdown'
+                        ? 'Correct! Shut down completely turns off the operating system and powers down all internal components (p. 23).'
+                        : 'Incorrect. At the end of the lab session, turn off the computer completely via Shut down.'
+                    }
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -624,75 +664,118 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
           {/* Questions from Textbook (pag. 24) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Alt+F4 Question */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-300 font-semibold mb-2">
-                ❓ <strong>{lang === 'en' ? 'Textbook p. 24:' : 'Manual pag. 24:'}</strong> {lang === 'en' ? 'Which keyboard shortcut instantly closes the active window?' : 'Ce combinație de taste de la tastatură închide instant fereastra curentă?'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="text-xs text-slate-300 font-semibold mb-2">
+                  ❓ <strong>{lang === 'en' ? 'Textbook p. 24:' : 'Manual pag. 24:'}</strong> {lang === 'en' ? 'Which keyboard shortcut instantly closes the active window?' : 'Ce combinație de taste de la tastatură închide instant fereastra curentă?'}
+                </div>
+                <QuestionHint
+                  id="q-flevel1-altf4"
+                  hintRo="Tasta Alt combinată cu una dintre tastele funcționale de sus (F1-F12). Închide instantaneu orice aplicație activă!"
+                  hintEn="The Alt key paired with one of the top functional keys (F1-F12). Instantly closes any running foreground app!"
+                />
+                <div className="grid grid-cols-3 gap-2 text-xs font-mono mt-2">
+                  {[
+                    { id: 'ctrl_s', label: 'Ctrl + S' },
+                    { id: 'alt_f4', label: 'Alt + F4' },
+                    { id: 'win_d', label: 'Win + D' },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        if (item.id === 'alt_f4') sounds.playCorrect();
+                        else sounds.playWrong();
+                        setAltF4Answer(item.id);
+                      }}
+                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
+                        altF4Answer === item.id
+                          ? item.id === 'alt_f4'
+                            ? 'bg-emerald-600 border-emerald-400 text-white'
+                            : 'bg-rose-600 border-rose-400 text-white'
+                          : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-                {[
-                  { id: 'ctrl_s', label: 'Ctrl + S' },
-                  { id: 'alt_f4', label: 'Alt + F4' },
-                  { id: 'win_d', label: 'Win + D' },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      if (item.id === 'alt_f4') sounds.playCorrect();
-                      else sounds.playWrong();
-                      setAltF4Answer(item.id);
-                    }}
-                    className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
-                      altF4Answer === item.id
-                        ? item.id === 'alt_f4'
-                          ? 'bg-emerald-600 border-emerald-400 text-white'
-                          : 'bg-rose-600 border-rose-400 text-white'
-                        : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-              {altF4Answer === 'alt_f4' && (
-                <p className="text-[11px] text-emerald-400 mt-2 font-medium font-sans">
-                  {lang === 'en' ? '✓ Correct! Alt + F4 closes the active application.' : '✓ Corect! Alt + F4 închide aplicația activă.'}
-                </p>
+              {altF4Answer && (
+                <div className="mt-2">
+                  <AnswerExplanation
+                    isCorrect={altF4Answer === 'alt_f4'}
+                    explanationRo={
+                      altF4Answer === 'alt_f4'
+                        ? 'Superb! Alt + F4 este comanda universală de închidere rapidă a ferestrei active (Manual pag. 24).'
+                        : 'Incorect. Ctrl+S salvează fișierul, Win+D minimizează totul, iar Alt+F4 închide fereastra.'
+                    }
+                    explanationEn={
+                      altF4Answer === 'alt_f4'
+                        ? 'Spot on! Alt + F4 is the universal keyboard shortcut for closing the active window.'
+                        : 'Incorrect. Ctrl+S saves, Win+D shows desktop, while Alt+F4 closes the active window.'
+                    }
+                  />
+                </div>
               )}
             </div>
 
             {/* Știați că - Solitaire & Mouse Question */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-              <div className="text-xs text-slate-300 font-semibold mb-2">
-                💡 <strong>{lang === 'en' ? 'Did you know? (Textbook p. 23):' : 'Știați că? (Manual pag. 23):'}</strong> {lang === 'en' ? 'Why were games like Solitaire and Minesweeper bundled in early Windows?' : 'De ce erau incluse jocuri precum Solitaire și Minesweeper în primele versiuni de Windows?'}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+              <div>
+                <div className="text-xs text-slate-300 font-semibold mb-2">
+                  💡 <strong>{lang === 'en' ? 'Did you know? (Textbook p. 23):' : 'Știați că? (Manual pag. 23):'}</strong> {lang === 'en' ? 'Why were games like Solitaire and Minesweeper bundled in early Windows?' : 'De ce erau incluse jocuri precum Solitaire și Minesweeper în primele versiuni de Windows?'}
+                </div>
+                <QuestionHint
+                  id="q-flevel1-solitaire"
+                  hintRo="În anii '90, oamenii erau obișnuiți doar cu tastatura. Jocurile i-au ajutat să învețe click-stânga, click-dreapta și tragerea cu mouse-ul!"
+                  hintEn="In the 1990s, users were only used to keyboards. Bundled games playfully trained left-click, right-click, and drag-and-drop gestures!"
+                />
+                <div className="space-y-1.5 text-xs mt-2">
+                  <button
+                    onClick={() => {
+                      sounds.playCorrect();
+                      setTriviaSolitaireAnswer(true);
+                    }}
+                    className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer ${
+                      triviaSolitaireAnswer === true
+                        ? 'bg-emerald-600/30 border-emerald-400 text-emerald-300 font-bold'
+                        : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    {lang === 'en' ? '✓ To teach users how to use the mouse and master drag & drop' : '✓ Pentru a-i învăța pe oameni să folosească mouse-ul și operația de drag & drop'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      sounds.playWrong();
+                      setTriviaSolitaireAnswer(false);
+                    }}
+                    className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer ${
+                      triviaSolitaireAnswer === false
+                        ? 'bg-rose-600/30 border-rose-400 text-rose-300'
+                        : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    {lang === 'en' ? '✗ To benchmark 3D graphics hardware' : '✗ Pentru a testa placa video 3D'}
+                  </button>
+                </div>
               </div>
-              <div className="space-y-1.5 text-xs">
-                <button
-                  onClick={() => {
-                    sounds.playCorrect();
-                    setTriviaSolitaireAnswer(true);
-                  }}
-                  className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer ${
-                    triviaSolitaireAnswer === true
-                      ? 'bg-emerald-600/30 border-emerald-400 text-emerald-300 font-bold'
-                      : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  {lang === 'en' ? '✓ To teach users how to use the mouse and master drag & drop' : '✓ Pentru a-i învăța pe oameni să folosească mouse-ul și operația de drag & drop'}
-                </button>
-                <button
-                  onClick={() => {
-                    sounds.playWrong();
-                    setTriviaSolitaireAnswer(false);
-                  }}
-                  className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer ${
-                    triviaSolitaireAnswer === false
-                      ? 'bg-rose-600/30 border-rose-400 text-rose-300'
-                      : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                  }`}
-                >
-                  {lang === 'en' ? '✗ To benchmark 3D graphics hardware' : '✗ Pentru a testa placa video 3D'}
-                </button>
-              </div>
+              {triviaSolitaireAnswer !== null && (
+                <div className="mt-2">
+                  <AnswerExplanation
+                    isCorrect={triviaSolitaireAnswer === true}
+                    explanationRo={
+                      triviaSolitaireAnswer === true
+                        ? 'Exact! Solitaire a fost creat de Microsoft special pentru a deprinde utilizatorii cu mișcarea fluentă a mouse-ului și gestul de prindere și eliberare (drag-and-drop).'
+                        : 'Greșit! În anii 1990 nu existau plăci 3D dedicate; jocurile Solitaire și Minesweeper aveau scop educațional pentru învățarea mouse-ului.'
+                    }
+                    explanationEn={
+                      triviaSolitaireAnswer === true
+                        ? 'Exactly! Microsoft included Solitaire to playfully teach mouse coordination and drag-and-drop mechanics.'
+                        : 'Incorrect! Solitaire was designed as an interactive training tool for mouse usage in early Windows.'
+                    }
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -3,6 +3,8 @@ import { MousePointerClick, Search, CheckCircle2, ChevronRight, FileText, Image,
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { AnswerExplanation } from './common/AnswerExplanation';
+import { QuestionHint } from './common/QuestionHint';
 
 interface Level2Props {
   onComplete: () => void;
@@ -278,9 +280,17 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
             <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">
               {t.l2QuizTitle}
             </h3>
-            <p className="text-xs text-slate-300 mb-3">
+            <p className="text-xs text-slate-300 mb-2">
               {t.l2QuizQuestion}
             </p>
+
+            <div className="mb-3">
+              <QuestionHint
+                id="q-l2-ctrl-a"
+                hintRo="Pentru a selecta totul ('All' în engleză) combinăm tasta Ctrl cu prima literă a cuvântului All (Ctrl + A)."
+                hintEn="To select everything ('All'), combine Ctrl with the first letter of All (Ctrl + A)."
+              />
+            </div>
 
             <div className="space-y-2">
               <button
@@ -326,6 +336,24 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
                 <span>C) Alt + F4 (Close)</span>
               </button>
             </div>
+
+            {shortcutAnswer && (
+              <div className="mt-3">
+                <AnswerExplanation
+                  isCorrect={shortcutAnswer === 'ctrl_a'}
+                  explanationRo={
+                    shortcutAnswer === 'ctrl_a'
+                      ? 'Corect! Ctrl + A selectează instantaneu toate fișierele dintr-un folder (Manual pag. 29).'
+                      : 'Incorect. Ctrl+C copiază selecția, Alt+F4 închide aplicația, iar comanda de selectare completă este Ctrl+A.'
+                  }
+                  explanationEn={
+                    shortcutAnswer === 'ctrl_a'
+                      ? 'Correct! Ctrl + A instantly selects all files inside the current directory (p. 29).'
+                      : 'Incorrect. Ctrl+C is copy, Alt+F4 closes the window, and Select All is Ctrl+A.'
+                  }
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -3,6 +3,8 @@ import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { Clock, CheckCircle2, HelpCircle, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
+import { QuestionHint } from '../common/QuestionHint';
 
 interface HLevel2Props {
   onComplete: () => void;
@@ -15,6 +17,8 @@ interface TimelineEvent {
   description: string;
   icon: string;
   type: 'mechanical' | 'electronic' | 'personal' | 'smartphone';
+  factRo: string;
+  factEn: string;
 }
 
 const EVENTS_RO: TimelineEvent[] = [
@@ -25,6 +29,8 @@ const EVENTS_RO: TimelineEvent[] = [
     description: 'Primul calculator mecanic, folosit pentru adunări și scăderi cu roți dințate.',
     icon: '⚙️',
     type: 'mechanical',
+    factRo: 'În 1642, Pascalina a deschis era calculului automatizat folosind roți dințate de la 0 la 9.',
+    factEn: 'In 1642, Pascaline launched mechanical calculation with 0-9 geared wheels.',
   },
   {
     year: 1946,
@@ -33,6 +39,8 @@ const EVENTS_RO: TimelineEvent[] = [
     description: 'Primul calculator electronic de uz general, numeric (digital). Cântărea 30 tone!',
     icon: '⚡',
     type: 'electronic',
+    factRo: 'Finalizat în 1946, ENIAC folosea tuburi electronice și efectua 5000 adunări/secundă.',
+    factEn: 'Finished in 1946, ENIAC used vacuum tubes and performed 5,000 additions per second.',
   },
   {
     year: 1981,
@@ -41,6 +49,8 @@ const EVENTS_RO: TimelineEvent[] = [
     description: 'Primul calculator personal (PC) modern care a ajuns pe birourile din întreaga lume.',
     icon: '🖥️',
     type: 'personal',
+    factRo: 'În august 1981, lansarea IBM PC a democratizat informatica pe biroul fiecărui elev și birou.',
+    factEn: 'In August 1981, the IBM PC launch brought personal desktop computing into schools and homes.',
   },
   {
     year: 1994,
@@ -49,6 +59,8 @@ const EVENTS_RO: TimelineEvent[] = [
     description: 'Primul telefon inteligent (smartphone) cu ecran tactil, calendar și e-mail.',
     icon: '📱',
     type: 'smartphone',
+    factRo: 'În 1994, IBM Simon a combinat telefonia mobilă cu ecranul tactil monocrom și e-mailul.',
+    factEn: 'In 1994, IBM Simon merged cellular communication with touchscreen UI and email.',
   },
 ];
 
@@ -60,6 +72,8 @@ const EVENTS_EN: TimelineEvent[] = [
     description: 'The first mechanical calculator, operating geared wheels for addition and subtraction.',
     icon: '⚙️',
     type: 'mechanical',
+    factRo: 'În 1642, Pascalina a deschis era calculului automatizat folosind roți dințate de la 0 la 9.',
+    factEn: 'In 1642, Pascaline launched mechanical calculation with 0-9 geared wheels.',
   },
   {
     year: 1946,
@@ -68,6 +82,8 @@ const EVENTS_EN: TimelineEvent[] = [
     description: 'The first electronic, general-purpose digital computer. Weighed 30 tons!',
     icon: '⚡',
     type: 'electronic',
+    factRo: 'Finalizat în 1946, ENIAC folosea tuburi electronice și efectua 5000 adunări/secundă.',
+    factEn: 'Finished in 1946, ENIAC used vacuum tubes and performed 5,000 additions per second.',
   },
   {
     year: 1981,
@@ -76,6 +92,8 @@ const EVENTS_EN: TimelineEvent[] = [
     description: 'The iconic modern personal computer (PC) that brought computing onto desks worldwide.',
     icon: '🖥️',
     type: 'personal',
+    factRo: 'În august 1981, lansarea IBM PC a democratizat informatica pe biroul fiecărui elev și birou.',
+    factEn: 'In August 1981, the IBM PC launch brought personal desktop computing into schools and homes.',
   },
   {
     year: 1994,
@@ -84,6 +102,8 @@ const EVENTS_EN: TimelineEvent[] = [
     description: 'The first smartphone featuring a touchscreen, calendar, notes, and mobile email.',
     icon: '📱',
     type: 'smartphone',
+    factRo: 'În 1994, IBM Simon a combinat telefonia mobilă cu ecranul tactil monocrom și e-mailul.',
+    factEn: 'In 1994, IBM Simon merged cellular communication with touchscreen UI and email.',
   },
 ];
 
@@ -180,6 +200,7 @@ export const HLevel2_HistoryTimeline: React.FC<HLevel2Props> = ({ onComplete }) 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {events.map((item, idx) => {
             const selectedYear = matchedYears[idx];
+            const isAssigned = selectedYear !== undefined && selectedYear !== null;
             const isCorrect = selectedYear === item.year;
             const isError = showErrors && !isCorrect;
 
@@ -189,8 +210,10 @@ export const HLevel2_HistoryTimeline: React.FC<HLevel2Props> = ({ onComplete }) 
                 className={`p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
                   isError
                     ? 'bg-rose-950/40 border-rose-500'
-                    : isCorrect
+                    : isAssigned && isCorrect
                     ? 'bg-emerald-950/30 border-emerald-500/60'
+                    : isAssigned
+                    ? 'bg-amber-950/30 border-amber-500/50'
                     : 'bg-slate-900/80 border-slate-700/80'
                 }`}
               >
@@ -234,10 +257,21 @@ export const HLevel2_HistoryTimeline: React.FC<HLevel2Props> = ({ onComplete }) 
                       );
                     })}
                   </div>
-                  {isError && (
-                    <p className="text-[11px] text-rose-400 font-semibold mt-2">
-                      {lang === 'en' ? 'Check figure 1 on textbook page 13!' : 'Verifică figura 1 din manual pag. 13!'}
-                    </p>
+
+                  {isAssigned && (
+                    <AnswerExplanation
+                      isCorrect={isCorrect}
+                      explanationRo={
+                        isCorrect
+                          ? `Exact! ${item.factRo}`
+                          : `Anul ${selectedYear} nu corespunde cu ${item.name}. Anul corect din manual (pag. 13) este ${item.year}.`
+                      }
+                      explanationEn={
+                        isCorrect
+                          ? `Exactly! ${item.factEn}`
+                          : `The year ${selectedYear} is not matching ${item.name}. The official textbook year (p. 13) is ${item.year}.`
+                      }
+                    />
                   )}
                 </div>
               </div>
@@ -255,65 +289,115 @@ export const HLevel2_HistoryTimeline: React.FC<HLevel2Props> = ({ onComplete }) 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1: Pascalina type */}
-          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl">
-            <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-3">
-              {lang === 'en' ? '1. The 1642 Pascaline was what type of calculator?' : '1. Pascalina din 1642 era un calculator:'}
-            </p>
-            <div className="flex flex-col gap-2">
-              {[
-                { id: 'electronic', label: lang === 'en' ? 'Electronic (with screen & chips)' : 'Electronic (cu ecran și circuite)' },
-                { id: 'mecanic', label: lang === 'en' ? 'Mechanical (with gears and cranks) ✓' : 'Mecanic (cu roți dințate și manivele) ✓' },
-                { id: 'multimedia', label: lang === 'en' ? 'Multimedia (with speakers and video)' : 'Multimedia (cu difuzoare și video)' },
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => {
-                    sounds.playClick();
-                    setQPascalina(opt.id);
-                  }}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
-                    qPascalina === opt.id
-                      ? opt.id === 'mecanic'
-                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold'
-                        : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
+          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+            <div>
+              <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-2">
+                {lang === 'en' ? '1. The 1642 Pascaline was what type of calculator?' : '1. Pascalina din 1642 era un calculator:'}
+              </p>
+
+              <QuestionHint
+                id="q-pascalina-type"
+                hintRo="În secolul al XVII-lea nu existau circuite electrice sau ecrane; funcționa exclusiv cu rotițe și pârghii!"
+                hintEn="In the 17th century there was no electricity or silicon; it operated purely on geared teeth and levers!"
+              />
+
+              <div className="flex flex-col gap-2 mt-2">
+                {[
+                  { id: 'electronic', label: lang === 'en' ? 'Electronic (with screen & chips)' : 'Electronic (cu ecran și circuite)' },
+                  { id: 'mecanic', label: lang === 'en' ? 'Mechanical (with gears and cranks) ✓' : 'Mecanic (cu roți dințate și manivele) ✓' },
+                  { id: 'multimedia', label: lang === 'en' ? 'Multimedia (with speakers and video)' : 'Multimedia (cu difuzoare și video)' },
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      sounds.playClick();
+                      setQPascalina(opt.id);
+                    }}
+                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
+                      qPascalina === opt.id
+                        ? opt.id === 'mecanic'
+                          ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
+                          : 'bg-rose-950/40 text-rose-300 border-rose-500'
+                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {qPascalina && (
+              <AnswerExplanation
+                isCorrect={qPascalina === 'mecanic'}
+                explanationRo={
+                  qPascalina === 'mecanic'
+                    ? 'Corect! Pascalina era un dispozitiv pur mecanic bazat pe roți dințate rotative. Primul calculator electronic a fost abia ENIAC în 1946 (Manual pag. 13).'
+                    : 'Greșit! În anul 1642 nu existau tranzistoare sau ecrane; Pascalina funcționa mecanic cu roți dințate.'
+                }
+                explanationEn={
+                  qPascalina === 'mecanic'
+                    ? 'Spot on! The Pascaline was entirely mechanical using rotating geared wheels. The first electronic computer was ENIAC in 1946.'
+                    : 'Incorrect! In 1642 there were no electronic microchips; it relied purely on mechanical cogwheels.'
+                }
+              />
+            )}
           </div>
 
           {/* Question 2: Century */}
-          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl">
-            <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-3">
-              {lang === 'en' ? '2. The personal computer (IBM PC in 1981) emerged in which century?' : '2. Calculatorul personal (IBM PC în 1981) a apărut în secolul:'}
-            </p>
-            <div className="flex flex-col gap-2">
-              {[
-                { id: 'XIX', label: lang === 'en' ? '19th Century (1800s)' : 'Secolul XIX (anii 1800)' },
-                { id: 'XX', label: lang === 'en' ? '20th Century (the year 1981) ✓' : 'Secolul XX (anul 1981) ✓' },
-                { id: 'XXI', label: lang === 'en' ? '21st Century (after the year 2000)' : 'Secolul XXI (după anul 2000)' },
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => {
-                    sounds.playClick();
-                    setQCentury(opt.id);
-                  }}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
-                    qCentury === opt.id
-                      ? opt.id === 'XX'
-                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold'
-                        : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
+          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+            <div>
+              <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-2">
+                {lang === 'en' ? '2. The personal computer (IBM PC in 1981) emerged in which century?' : '2. Calculatorul personal (IBM PC în 1981) a apărut în secolul:'}
+              </p>
+
+              <QuestionHint
+                id="q-pc-century"
+                hintRo="Anul 1981 face parte din intervalul anilor 1901–2000, adică secolul al XX-lea!"
+                hintEn="The year 1981 belongs to the span 1901–2000, which is the 20th century!"
+              />
+
+              <div className="flex flex-col gap-2 mt-2">
+                {[
+                  { id: 'XIX', label: lang === 'en' ? '19th Century (1800s)' : 'Secolul XIX (anii 1800)' },
+                  { id: 'XX', label: lang === 'en' ? '20th Century (the year 1981) ✓' : 'Secolul XX (anul 1981) ✓' },
+                  { id: 'XXI', label: lang === 'en' ? '21st Century (after the year 2000)' : 'Secolul XXI (după anul 2000)' },
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      sounds.playClick();
+                      setQCentury(opt.id);
+                    }}
+                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
+                      qCentury === opt.id
+                        ? opt.id === 'XX'
+                          ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
+                          : 'bg-rose-950/40 text-rose-300 border-rose-500'
+                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {qCentury && (
+              <AnswerExplanation
+                isCorrect={qCentury === 'XX'}
+                explanationRo={
+                  qCentury === 'XX'
+                    ? 'Excelent! Anul 1981 aparține secolului al XX-lea (1901-2000). Secolul XXI a început abia în anul 2001.'
+                    : 'Incorect! Anul 1981 se încadrează în secolul XX (1901–2000).'
+                }
+                explanationEn={
+                  qCentury === 'XX'
+                    ? 'Great! 1981 belongs to the 20th century (1901-2000). The 21st century started in 2001.'
+                    : 'Incorrect! 1981 falls into the 20th century (1901-2000).'
+                }
+              />
+            )}
           </div>
         </div>
       </div>

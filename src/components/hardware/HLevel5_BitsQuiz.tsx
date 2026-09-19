@@ -4,6 +4,8 @@ import { sounds } from '../../utils/audio';
 import { Calculator, Award, CheckCircle2, HardDrive, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
+import { QuestionHint } from '../common/QuestionHint';
 
 interface HLevel5Props {
   onComplete: () => void;
@@ -62,25 +64,33 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
       id: 'ssd',
       icon: '🔲',
       title: lang === 'en' ? 'SSD (Solid-State Drive)' : 'SSD (Solid-State)',
-      desc: lang === 'en' ? 'Flash Memory Chips' : 'Cipuri Flash / Semiconductori'
+      desc: lang === 'en' ? 'Flash Memory Chips' : 'Cipuri Flash / Semiconductori',
+      pillRo: 'SSD-ul folosește memorii Flash (semiconductori), nu discuri magnetice!',
+      pillEn: 'SSD uses solid-state flash silicon, not magnetic platters!',
     },
     {
       id: 'hdd',
       icon: '🧲',
       title: lang === 'en' ? 'HDD (Hard Disk Drive)' : 'HDD (Discul Dur)',
-      desc: lang === 'en' ? 'Rotating magnetic platters ✓' : 'Discuri magnetice rotative ✓'
+      desc: lang === 'en' ? 'Rotating magnetic platters ✓' : 'Discuri magnetice rotative ✓',
+      pillRo: 'Corect! HDD-ul are platane din aluminiu/sticlă acoperite cu strat ferromagnetic care se rotesc la 7200 RPM.',
+      pillEn: 'Correct! HDDs use aluminum/glass platters coated with a ferromagnetic film spinning at 7200 RPM.',
     },
     {
       id: 'usb',
       icon: '🔌',
       title: lang === 'en' ? 'USB Flash Drive' : 'Stick USB',
-      desc: lang === 'en' ? 'Flash Memory Chips' : 'Cipuri Flash / Semiconductori'
+      desc: lang === 'en' ? 'Flash Memory Chips' : 'Cipuri Flash / Semiconductori',
+      pillRo: 'Stick-ul USB utilizează memorie Flash NAND, la fel ca SSD-urile!',
+      pillEn: 'USB flash drives use NAND silicon chips, exactly like SSDs!',
     },
     {
       id: 'cd',
       icon: '💿',
       title: lang === 'en' ? 'CD / DVD Optical Disc' : 'Disc CD / DVD',
-      desc: lang === 'en' ? 'Optical / Laser Beam' : 'Optic / Rază Laser'
+      desc: lang === 'en' ? 'Optical / Laser Beam' : 'Optic / Rază Laser',
+      pillRo: 'CD-urile și DVD-urile sunt medii de stocare OPTICE (citite cu laser), nu magnetice!',
+      pillEn: 'CDs and DVDs are OPTICAL storage media read by laser diodes, not magnetic!',
     },
   ];
 
@@ -130,14 +140,20 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
           </span>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-200 leading-relaxed mb-4">
+        <p className="text-xs sm:text-sm text-slate-200 leading-relaxed mb-3">
           {lang === 'en'
             ? '“A computer is equipped with a 1 TB HDD and a 512 GB SSD. What is the total storage capacity of this computer expressed in MB?”'
             : '„Un calculator dispune de un 1 TB HDD și de un 512 GB SSD. Care este capacitatea de stocare totală pentru acel calculator, exprimată în MB?”'}
         </p>
 
+        <QuestionHint
+          id="q-tb-math"
+          hintRo="Reține scara: 1 TB = 1024 GB. Aduni 1024 + 512 = 1536 GB. Apoi înmulțești 1536 × 1024 pentru a afla valoarea în MB!"
+          hintEn="Remember the binary step: 1 TB = 1024 GB. Sum 1024 + 512 = 1536 GB. Then multiply 1536 × 1024 to convert to MB!"
+        />
+
         {/* Guided Step-by-Step interactive inputs */}
-        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col gap-3.5">
+        <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 flex flex-col gap-3.5 mt-2">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
             <span className="text-slate-300">
               <strong>{lang === 'en' ? 'Step 1:' : 'Pasul 1:'}</strong> {lang === 'en' ? 'How many GB are in 1 TB according to textbook p. 19?' : 'Câți GB conține 1 TB conform manualului pag. 19?'}
@@ -199,7 +215,7 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
                   className={`p-2.5 rounded-xl text-xs font-mono font-bold transition border text-left cursor-pointer ${
                     step3MB === opt.id
                       ? opt.id === '1572864'
-                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 shadow'
+                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 ring-1 ring-emerald-400 shadow'
                         : 'bg-rose-950/40 text-rose-300 border-rose-500'
                       : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
                   }`}
@@ -209,6 +225,22 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
               ))}
             </div>
           </div>
+
+          {step3MB && (
+            <AnswerExplanation
+              isCorrect={step3MB === '1572864'}
+              explanationRo={
+                step3MB === '1572864'
+                  ? 'Matematică digitală impecabilă! 1 TB = 1024 GB, 1024 + 512 = 1536 GB. În MB: 1536 × 1024 = 1.572.864 MB (Manual pag. 20).'
+                  : 'Incorect! În informatică transformările folosesc factorul 1024 (2¹⁰), nu 1000. Calcul: 1536 GB × 1024 = 1.572.864 MB.'
+              }
+              explanationEn={
+                step3MB === '1572864'
+                  ? 'Flawless binary math! 1 TB = 1024 GB, 1024 + 512 = 1536 GB. In MB: 1536 × 1024 = 1,572,864 MB (p. 20).'
+                  : 'Incorrect! Binary conversions multiply by 1024 (2¹⁰), not 1000. Calculation: 1536 GB × 1024 = 1,572,864 MB.'
+              }
+            />
+          )}
         </div>
       </div>
 
@@ -218,13 +250,19 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
           <HardDrive className="w-5 h-5 text-amber-400" />
           <span>{lang === 'en' ? 'Challenge 2: Magnetic storage device (p. 20, ex. 2)' : 'Provocarea 2: Dispozitivul de stocare magnetic (pag. 20, ex. 2)'}</span>
         </h3>
-        <p className="text-xs sm:text-sm text-slate-200 mb-3">
+        <p className="text-xs sm:text-sm text-slate-200 mb-2">
           {lang === 'en'
             ? 'Which of these storage media uses rotating magnetic platters with read/write heads?'
             : 'Care dintre aceste medii de stocare folosește discuri magnetice rotative cu capete de citire?'}
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <QuestionHint
+          id="q-magnetic-hint"
+          hintRo="SSD-urile și stick-urile folosesc cipuri flash, CD-urile folosesc laser optic. Hard disk-ul clasic (HDD) este singurul cu platane magnetice!"
+          hintEn="SSDs and flash sticks use silicon flash cells, CDs use optical laser. The Hard Disk Drive (HDD) is the only magnetic platter device!"
+        />
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
           {storageDevices.map(dev => (
             <button
               key={dev.id}
@@ -246,6 +284,18 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
             </button>
           ))}
         </div>
+
+        {selectedMagneticDevice && (
+          <AnswerExplanation
+            isCorrect={selectedMagneticDevice === 'hdd'}
+            explanationRo={
+              storageDevices.find(d => d.id === selectedMagneticDevice)?.pillRo || ''
+            }
+            explanationEn={
+              storageDevices.find(d => d.id === selectedMagneticDevice)?.pillEn || ''
+            }
+          />
+        )}
       </div>
 
       {/* Task 3: Riddle from textbook crossword (pag. 20, ex. 3) */}
@@ -254,13 +304,19 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
           <Sparkles className="w-5 h-5 text-teal-400" />
           <span>{lang === 'en' ? 'Challenge 3: Crossword riddle from textbook (p. 20, vertical clue)' : 'Provocarea 3: Rebusul din manual (pag. 20, rebus vertical)'}</span>
         </h3>
-        <p className="text-xs sm:text-sm text-slate-200 mb-3">
+        <p className="text-xs sm:text-sm text-slate-200 mb-2">
           {lang === 'en'
             ? '“The pointing and selection input device named after a small rodent in English:”'
             : '„Dispozitivul de intrare pentru indicare și selecție pe ecran, numit după un mic animal în limba engleză:”'}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+        <QuestionHint
+          id="q-mouse-riddle"
+          hintRo="Douglas Engelbart a inventat acest dispozitiv din lemn în 1964; firul care ieșea semăna cu coada unui șoarece (în engleză: M-O-U-S-E)!"
+          hintEn="Douglas Engelbart invented this device in 1964; its cord resembled a mouse's tail (M-O-U-S-E)!"
+        />
+
+        <div className="flex flex-col sm:flex-row items-center gap-3 mt-3">
           <input
             type="text"
             maxLength={10}
@@ -279,6 +335,22 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
             )}
           </div>
         </div>
+
+        {riddleWord.trim().length >= 5 && (
+          <AnswerExplanation
+            isCorrect={isRiddleValid}
+            explanationRo={
+              isRiddleValid
+                ? 'Felicitări! MOUSE (șoarece) a fost denumit așa deoarece firul de conectare semăna cu coada unui șoricel.'
+                : 'Cuvântul căutat are 5 litere și este denumirea în limba engleză a șoarecelui: MOUSE.'
+            }
+            explanationEn={
+              isRiddleValid
+                ? 'Spot on! The MOUSE was named because its rear cable resembled a mouse tail.'
+                : 'The solution is the 5-letter English word for rodent: MOUSE.'
+            }
+          />
+        )}
       </div>
 
       {/* Validation / Final Victory Button */}

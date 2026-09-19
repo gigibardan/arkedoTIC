@@ -3,6 +3,8 @@ import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { Cpu, Zap, CheckCircle2, ArrowRight, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
+import { QuestionHint } from '../common/QuestionHint';
 
 interface HLevel3Props {
   onComplete: () => void;
@@ -15,6 +17,8 @@ interface ComponentPart {
   icon: string;
   role: string;
   detail: string;
+  pillRo: string;
+  pillEn: string;
 }
 
 const PARTS_RO: ComponentPart[] = [
@@ -25,6 +29,8 @@ const PARTS_RO: ComponentPart[] = [
     icon: '🟩',
     role: 'Cea mai mare placă electronică ce găzduiește CPU-ul, memoria și conectează toate componentele.',
     detail: 'Manual pag. 17, punctul 2',
+    pillRo: 'Placa de bază conține trasee de cupru (magistrale) prin care componentele comunică la frecvențe de gigahertzi.',
+    pillEn: 'The motherboard features copper traces (system buses) routing high-frequency signals between components.',
   },
   {
     id: 'cpu',
@@ -33,6 +39,8 @@ const PARTS_RO: ComponentPart[] = [
     icon: '🧠',
     role: 'Creierul calculatorului: execută calcule, comenzi și controlează toate celelalte componente.',
     detail: 'Manual pag. 17, punctul 1',
+    pillRo: 'Conține Unitatea de Comandă și Control (UCC) și Unitatea Aritmetico-Logică (UAL), procesând miliarde de instrucțiuni pe secundă.',
+    pillEn: 'Contains the Control Unit (CU) and Arithmetic Logic Unit (ALU), processing billions of instructions per second.',
   },
   {
     id: 'ram',
@@ -41,6 +49,8 @@ const PARTS_RO: ComponentPart[] = [
     icon: '⚡',
     role: 'Memoria de lucru temporară unde sunt stocate datele imediat necesare aplicațiilor rulate.',
     detail: 'Manual pag. 17, punctul 3',
+    pillRo: 'RAM este memorie volatilă: extrem de rapidă, dar se golește complet la oprirea calculatorului.',
+    pillEn: 'RAM is volatile high-speed memory that gets completely cleared when power is turned off.',
   },
   {
     id: 'psu',
@@ -49,6 +59,8 @@ const PARTS_RO: ComponentPart[] = [
     icon: '🔌',
     role: 'Asigură energia electrică necesară funcționării întregii unități centrale.',
     detail: 'Manual pag. 17, punctul 5',
+    pillRo: 'Transformă curentul alternativ de la priză (230V) în curent continuu de joasă tensiune (12V, 5V, 3.3V) pentru circuite.',
+    pillEn: 'Converts 230V AC household power into safe regulated DC voltages (12V, 5V, 3.3V) for PC chips.',
   },
   {
     id: 'storage',
@@ -57,6 +69,8 @@ const PARTS_RO: ComponentPart[] = [
     icon: '💾',
     role: 'Memoria permanentă unde se păstrează Windows-ul, fișierele și pozele chiar și după oprirea PC-ului.',
     detail: 'Manual pag. 17, punctul 7',
+    pillRo: 'SSD-ul folosește cipuri flash rapide și silențioase, păstrând datele intacte zeci de ani fără alimentare electrică.',
+    pillEn: 'SSDs use solid-state flash cells, preserving user data safely for years without needing power.',
   },
 ];
 
@@ -68,6 +82,8 @@ const PARTS_EN: ComponentPart[] = [
     icon: '🟩',
     role: 'The primary circuit board holding the CPU, RAM modules, and interconnecting all internal components.',
     detail: 'Textbook p. 17, point 2',
+    pillRo: 'Placa de bază conține trasee de cupru (magistrale) prin care componentele comunică la frecvențe de gigahertzi.',
+    pillEn: 'The motherboard features copper traces (system buses) routing high-frequency signals between components.',
   },
   {
     id: 'cpu',
@@ -76,6 +92,8 @@ const PARTS_EN: ComponentPart[] = [
     icon: '🧠',
     role: 'The brain of the computer: executes arithmetic, logic, and orchestrates all hardware instructions.',
     detail: 'Textbook p. 17, point 1',
+    pillRo: 'Conține Unitatea de Comandă și Control (UCC) și Unitatea Aritmetico-Logică (UAL), procesând miliarde de instrucțiuni pe secundă.',
+    pillEn: 'Contains the Control Unit (CU) and Arithmetic Logic Unit (ALU), processing billions of instructions per second.',
   },
   {
     id: 'ram',
@@ -84,6 +102,8 @@ const PARTS_EN: ComponentPart[] = [
     icon: '⚡',
     role: 'Temporary working memory storing volatile data needed immediately by active applications.',
     detail: 'Textbook p. 17, point 3',
+    pillRo: 'RAM este memorie volatilă: extrem de rapidă, dar se golește complet la oprirea calculatorului.',
+    pillEn: 'RAM is volatile high-speed memory that gets completely cleared when power is turned off.',
   },
   {
     id: 'psu',
@@ -92,6 +112,8 @@ const PARTS_EN: ComponentPart[] = [
     icon: '🔌',
     role: 'Converts wall AC electricity into regulated DC power required by internal computer hardware.',
     detail: 'Textbook p. 17, point 5',
+    pillRo: 'Transformă curentul alternativ de la priză (230V) în curent continuu de joasă tensiune (12V, 5V, 3.3V) pentru circuite.',
+    pillEn: 'Converts 230V AC household power into safe regulated DC voltages (12V, 5V, 3.3V) for PC chips.',
   },
   {
     id: 'storage',
@@ -100,6 +122,8 @@ const PARTS_EN: ComponentPart[] = [
     icon: '💾',
     role: 'Non-volatile storage where Windows, files, documents, and games are safely preserved without power.',
     detail: 'Textbook p. 17, point 7',
+    pillRo: 'SSD-ul folosește cipuri flash rapide și silențioase, păstrând datele intacte zeci de ani fără alimentare electrică.',
+    pillEn: 'SSDs use solid-state flash cells, preserving user data safely for years without needing power.',
   },
 ];
 
@@ -253,9 +277,19 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
                   {activePart.detail}
                 </span>
               </div>
-              <p className="text-slate-300 leading-relaxed">
+              <p className="text-slate-300 leading-relaxed mb-2">
                 {activePart.role}
               </p>
+
+              {installedParts.includes(activePart.id) && (
+                <AnswerExplanation
+                  isCorrect={true}
+                  explanationRo={activePart.pillRo}
+                  explanationEn={activePart.pillEn}
+                  customBadgeRo="Pilulă Componentă:"
+                  customBadgeEn="Component Pill:"
+                />
+              )}
             </div>
           </div>
 
@@ -317,13 +351,19 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
           <HelpCircle className="w-5 h-5 text-cyan-400" />
           <span>{lang === 'en' ? 'Mission 2: Technical question from textbook (p. 17, Ex. 3b)' : 'Misiunea 2: Întrebare tehnică din manual (pag. 17, Ex. 3b)'}</span>
         </h3>
-        <p className="text-xs sm:text-sm text-slate-200 mb-3">
+        <p className="text-xs sm:text-sm text-slate-200 mb-2 font-medium">
           {lang === 'en'
             ? '“To permanently preserve a photo or project on a computer, where must we save it?”'
             : '„Pentru a păstra definitiv o fotografie sau un proiect pe calculator, unde trebuie să o salvăm?”'}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <QuestionHint
+          id="q-ram-vs-storage"
+          hintRo="Gândește-te la diferența dintre masa de lucru (RAM) și dulapul cu dosare (HDD/SSD). Dacă se oprește curentul, ce memorie nu își pierde conținutul?"
+          hintEn="Think of the difference between a desk (RAM) and an archival file cabinet (HDD/SSD). Which one retains data without power?"
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
           <button
             onClick={() => {
               sounds.playClick();
@@ -350,7 +390,7 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
             }}
             className={`p-3 rounded-xl text-xs font-semibold text-left transition border cursor-pointer ${
               quizStorageAnswer === 'ssd'
-                ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold'
+                ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
                 : 'bg-slate-950 hover:bg-slate-900 text-slate-300 border-slate-800'
             }`}
           >
@@ -363,12 +403,20 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
           </button>
         </div>
 
-        {showErrors && quizStorageAnswer === 'ram' && (
-          <p className="text-xs text-rose-400 font-bold mt-2">
-            {lang === 'en'
-              ? 'Incorrect! RAM is volatile: when powered off, data vanishes! Photos are saved to HDD/SSD!'
-              : 'Greșit! Memoria RAM este volatilă: dacă iei curentul, datele se pierd! Fotografiile se salvează pe HDD/SSD!'}
-          </p>
+        {quizStorageAnswer && (
+          <AnswerExplanation
+            isCorrect={quizStorageAnswer === 'ssd'}
+            explanationRo={
+              quizStorageAnswer === 'ssd'
+                ? 'Excelent! HDD-ul și SSD-ul reprezintă memoria externă/secundară permanentă (nevolatilă). Fișierele salvate pe SSD rămân în siguranță chiar dacă scoți PC-ul din priză.'
+                : 'Incorect! Memoria RAM este volatilă: când calculatorul este oprit, tot conținutul ei dispare instantaneu. Pentru păstrare permanentă se folosește discul SSD sau HDD (Manual pag. 17-18).'
+            }
+            explanationEn={
+              quizStorageAnswer === 'ssd'
+                ? 'Spot on! HDDs and SSDs provide non-volatile permanent storage. Files written to SSD remain secure even when power is turned off.'
+                : 'Incorrect! RAM is volatile: when the PC turns off, RAM clears out. Permanent retention requires writing to an SSD or HDD (p. 17-18).'
+            }
+          />
         )}
       </div>
 

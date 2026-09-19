@@ -3,6 +3,8 @@ import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
 import { CheckCircle2, AlertTriangle, ShieldCheck, ArrowRight, Eye } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { AnswerExplanation } from '../common/AnswerExplanation';
+import { QuestionHint } from '../common/QuestionHint';
 
 interface HLevel1Props {
   onComplete: () => void;
@@ -14,6 +16,8 @@ interface RuleCard {
   isAllowed: boolean;
   bookRuleNumber?: number;
   category: 'food' | 'electric' | 'hardware' | 'software' | 'clean' | 'report';
+  explanationRo: string;
+  explanationEn: string;
 }
 
 const RULES_RO: RuleCard[] = [
@@ -23,6 +27,8 @@ const RULES_RO: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 4,
     category: 'food',
+    explanationRo: 'Strict interzis! Firimiturile atrag insecte și blochează tastele, iar o singură picătură de lichid vărsată pe carcasă provoacă scurtcircuit și arde componentele electronice (Manual pag. 10).',
+    explanationEn: 'Strictly forbidden! Food crumbs jam keyboard keys, and liquid spills cause electrical short circuits that destroy computer electronics (p. 10).',
   },
   {
     id: 'r2',
@@ -30,6 +36,8 @@ const RULES_RO: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 5,
     category: 'electric',
+    explanationRo: 'Strict interzis! Cablurile electrice transportă tensiune periculoasă (230V). Doar profesorul sau tehnicianul are voie să umble la prize și tabloul de siguranțe.',
+    explanationEn: 'Strictly forbidden! Live cables carry hazardous 230V electricity. Only the teacher or authorized technician may handle wall sockets and power cords.',
   },
   {
     id: 'r3',
@@ -37,6 +45,8 @@ const RULES_RO: RuleCard[] = [
     isAllowed: true,
     bookRuleNumber: 3,
     category: 'report',
+    explanationRo: 'Excelent și obligatoriu! Dacă observi un fir dezizolat, fum, un miros suspect sau ecranul nu pornește, anunță profesorul fără să încerci să repari singur.',
+    explanationEn: 'Mandatory and responsible! Immediately alert the instructor whenever noticing frayed wires, strange smells, or hardware faults.',
   },
   {
     id: 'r4',
@@ -44,6 +54,8 @@ const RULES_RO: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 8,
     category: 'software',
+    explanationRo: 'Strict interzis! Descărcarea programelor neverificate poate infecta rețeaua școlii cu viruși și malware, încălcând politica de securitate.',
+    explanationEn: 'Strictly forbidden! Unauthorized software downloads can compromise the school network with viruses and malware.',
   },
   {
     id: 'r5',
@@ -51,6 +63,8 @@ const RULES_RO: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 7,
     category: 'hardware',
+    explanationRo: 'Strict interzis! Deconectarea forțată a perifericelor poate deteriora mufele USB/PS2 de pe placa de bază și dereglează configurarea postului de lucru.',
+    explanationEn: 'Strictly forbidden! Swapping peripherals damages connector pins and disrupts assigned workstation configurations.',
   },
   {
     id: 'r6',
@@ -58,6 +72,8 @@ const RULES_RO: RuleCard[] = [
     isAllowed: true,
     bookRuleNumber: 12,
     category: 'clean',
+    explanationRo: 'Corect! Așezarea scaunelor la birou și lăsarea suprafețelor curate previne accidentele și respectă munca colegilor din orele următoare.',
+    explanationEn: 'Spot on! Pushing chairs in and keeping desks tidy prevents tripping hazards and ensures a safe workspace for all classes.',
   },
 ];
 
@@ -68,6 +84,8 @@ const RULES_EN: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 4,
     category: 'food',
+    explanationRo: 'Strict interzis! Firimiturile atrag insecte și blochează tastele, iar o singură picătură de lichid vărsată pe carcasă provoacă scurtcircuit și arde componentele electronice (Manual pag. 10).',
+    explanationEn: 'Strictly forbidden! Food crumbs jam keyboard keys, and liquid spills cause electrical short circuits that destroy computer electronics (p. 10).',
   },
   {
     id: 'r2',
@@ -75,6 +93,8 @@ const RULES_EN: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 5,
     category: 'electric',
+    explanationRo: 'Strict interzis! Cablurile electrice transportă tensiune periculoasă (230V). Doar profesorul sau tehnicianul are voie să umble la prize și tabloul de siguranțe.',
+    explanationEn: 'Strictly forbidden! Live cables carry hazardous 230V electricity. Only the teacher or authorized technician may handle wall sockets and power cords.',
   },
   {
     id: 'r3',
@@ -82,6 +102,8 @@ const RULES_EN: RuleCard[] = [
     isAllowed: true,
     bookRuleNumber: 3,
     category: 'report',
+    explanationRo: 'Excelent și obligatoriu! Dacă observi un fir dezizolat, fum, un miros suspect sau ecranul nu pornește, anunță profesorul fără să încerci să repari singur.',
+    explanationEn: 'Mandatory and responsible! Immediately alert the instructor whenever noticing frayed wires, strange smells, or hardware faults.',
   },
   {
     id: 'r4',
@@ -89,6 +111,8 @@ const RULES_EN: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 8,
     category: 'software',
+    explanationRo: 'Strict interzis! Descărcarea programelor neverificate poate infecta rețeaua școlii cu viruși și malware, încălcând politica de securitate.',
+    explanationEn: 'Strictly forbidden! Unauthorized software downloads can compromise the school network with viruses and malware.',
   },
   {
     id: 'r5',
@@ -96,6 +120,8 @@ const RULES_EN: RuleCard[] = [
     isAllowed: false,
     bookRuleNumber: 7,
     category: 'hardware',
+    explanationRo: 'Strict interzis! Deconectarea forțată a perifericelor poate deteriora mufele USB/PS2 de pe placa de bază și dereglează configurarea postului de lucru.',
+    explanationEn: 'Strictly forbidden! Swapping peripherals damages connector pins and disrupts assigned workstation configurations.',
   },
   {
     id: 'r6',
@@ -103,6 +129,8 @@ const RULES_EN: RuleCard[] = [
     isAllowed: true,
     bookRuleNumber: 12,
     category: 'clean',
+    explanationRo: 'Corect! Așezarea scaunelor la birou și lăsarea suprafețelor curate previne accidentele și respectă munca colegilor din orele următoare.',
+    explanationEn: 'Spot on! Pushing chairs in and keeping desks tidy prevents tripping hazards and ensures a safe workspace for all classes.',
   },
 ];
 
@@ -203,10 +231,9 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           {rules.map((rule) => {
             const currentChoice = classifications[rule.id];
-            const isWrong = showErrors && (
-              (rule.isAllowed && currentChoice !== 'allowed') ||
-              (!rule.isAllowed && currentChoice !== 'forbidden')
-            );
+            const isAssigned = currentChoice !== undefined;
+            const isCorrect = isAssigned && (rule.isAllowed ? currentChoice === 'allowed' : currentChoice === 'forbidden');
+            const isWrong = showErrors && !isCorrect;
 
             return (
               <div
@@ -214,8 +241,10 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
                 className={`p-3.5 sm:p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
                   isWrong
                     ? 'bg-rose-950/40 border-rose-500'
-                    : currentChoice
-                    ? 'bg-slate-900/90 border-slate-700'
+                    : isAssigned
+                    ? isCorrect
+                      ? 'bg-slate-900/90 border-emerald-500/50'
+                      : 'bg-amber-950/30 border-amber-500/50'
                     : 'bg-slate-900/50 border-slate-700/60 hover:border-slate-600'
                 }`}
               >
@@ -254,12 +283,15 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
                   </button>
                 </div>
 
-                {isWrong && (
-                  <p className="text-[11px] text-rose-400 font-bold">
-                    {rule.isAllowed
-                      ? (lang === 'en' ? 'This action is safe and permitted!' : 'Această activitate este responsabilă și permisă!')
-                      : (lang === 'en' ? 'Warning! According to lab rules, this action is strictly forbidden!' : 'Atenție! Conform regulamentului din manual, această acțiune este strict interzisă!')}
-                  </p>
+                {/* Educational Pill on Choice */}
+                {isAssigned && (
+                  <AnswerExplanation
+                    isCorrect={isCorrect}
+                    explanationRo={rule.explanationRo}
+                    explanationEn={rule.explanationEn}
+                    customBadgeRo={isCorrect ? 'Regulă confirmată ✓' : 'Atenție la regulă!'}
+                    customBadgeEn={isCorrect ? 'Rule confirmed ✓' : 'Rule warning!'}
+                  />
                 )}
               </div>
             );
@@ -276,74 +308,114 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1: Monitor distance */}
-          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl">
-            <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-3">
-              {lang === 'en' ? '1. What is the optimal distance between eyes and monitor?' : '1. La ce distanță optimă trebuie așezat monitorul față de ochi?'}
-            </p>
-            <div className="flex flex-col gap-2">
-              {[
-                { id: '10-20', label: lang === 'en' ? '10 – 20 cm (very close, pressed against screen)' : '10 – 20 cm (foarte aproape, lipit de ecran)' },
-                { id: '45-70', label: lang === 'en' ? '45 – 70 cm (top edge at eye level)' : '45 – 70 cm (partea de sus la nivelul ochilor)' },
-                { id: '150-200', label: lang === 'en' ? '1.5 – 2 meters (far side of the room)' : '1,5 – 2 metri (la celălalt capăt al camerei)' },
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => {
-                    sounds.playClick();
-                    setMonitorDistance(opt.id);
-                  }}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
-                    monitorDistance === opt.id
-                      ? opt.id === '45-70'
-                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold'
-                        : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            {showErrors && monitorDistance !== '45-70' && (
-              <p className="text-[11px] text-rose-400 mt-2 font-semibold">
-                {lang === 'en' ? 'The textbook (p. 11) specifies exactly 45 – 70 cm!' : 'Manualul (pag. 11) precizează exact 45 – 70 cm!'}
+          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+            <div>
+              <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-2">
+                {lang === 'en' ? '1. What is the optimal distance between eyes and monitor?' : '1. La ce distanță optimă trebuie așezat monitorul față de ochi?'}
               </p>
+
+              <QuestionHint
+                id="q-monitor-dist"
+                hintRo="Conform manualului de TIC (pag. 11), distanța ideală este egală cu lungimea brațului întins: între 45 și 70 cm!"
+                hintEn="According to the textbook (p. 11), the ideal distance is approximately an arm's length: 45 to 70 cm!"
+              />
+
+              <div className="flex flex-col gap-2 mt-2">
+                {[
+                  { id: '10-20', label: lang === 'en' ? '10 – 20 cm (very close, pressed against screen)' : '10 – 20 cm (foarte aproape, lipit de ecran)' },
+                  { id: '45-70', label: lang === 'en' ? '45 – 70 cm (top edge at eye level) ✓' : '45 – 70 cm (partea de sus la nivelul ochilor) ✓' },
+                  { id: '150-200', label: lang === 'en' ? '1.5 – 2 meters (far side of the room)' : '1,5 – 2 metri (la celălalt capăt al camerei)' },
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      sounds.playClick();
+                      setMonitorDistance(opt.id);
+                    }}
+                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
+                      monitorDistance === opt.id
+                        ? opt.id === '45-70'
+                          ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
+                          : 'bg-rose-950/40 text-rose-300 border-rose-500'
+                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {monitorDistance && (
+              <AnswerExplanation
+                isCorrect={monitorDistance === '45-70'}
+                explanationRo={
+                  monitorDistance === '45-70'
+                    ? 'Perfect! 45-70 cm permite citirea confortabilă fără forțarea mușchilor oculari, iar marginea de sus a ecranului la nivelul ochilor menține gâtul drept.'
+                    : 'Incorect! O distanță sub 45 cm obosește ochii prin focalizare forțată, iar peste 1 m forțează aplecarea corpului înainte. Standardul medical este 45-70 cm (pag. 11).'
+                }
+                explanationEn={
+                  monitorDistance === '45-70'
+                    ? 'Spot on! 45-70 cm allows comfortable reading without eye strain, keeping the neck naturally aligned.'
+                    : 'Incorrect! Less than 45 cm strains eye lenses; more than 1 m causes neck hunching. Optimal range is 45-70 cm (p. 11).'
+                }
+              />
             )}
           </div>
 
           {/* Question 2: Head posture on mobile */}
-          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl">
-            <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-3">
-              {lang === 'en' ? '2. How should you position your neck when using a phone or tablet?' : '2. Cum trebuie ținut capul când utilizăm telefonul sau tableta?'}
-            </p>
-            <div className="flex flex-col gap-2">
-              {[
-                { id: 'straight', label: lang === 'en' ? 'Straight head, raising device to eye level' : 'Capul drept, ridicând dispozitivul la nivel confortabil' },
-                { id: 'bent', label: lang === 'en' ? 'Hunched forward towards chest' : 'Aplecat mult înainte spre piept' },
-                { id: 'lying', label: lang === 'en' ? 'Lying flat with screen below chin' : 'Culcat pe birou cu ecranul sub bărbie' },
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => {
-                    sounds.playClick();
-                    setHeadPosture(opt.id);
-                  }}
-                  className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
-                    headPosture === opt.id
-                      ? opt.id === 'straight'
-                        ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold'
-                        : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                      : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            {showErrors && headPosture !== 'straight' && (
-              <p className="text-[11px] text-rose-400 mt-2 font-semibold">
-                {lang === 'en' ? 'To prevent spine fatigue, keep head straight (p. 11-12)!' : 'Pentru a preveni durerile cervicale, capul se ține drept (pag. 11-12)!'}
+          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+            <div>
+              <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-2">
+                {lang === 'en' ? '2. How should you position your neck when using a phone or tablet?' : '2. Cum trebuie ținut capul când utilizăm telefonul sau tableta?'}
               </p>
+
+              <QuestionHint
+                id="q-phone-posture"
+                hintRo="Aplecarea gâtului la 60° pune o presiune de 27 kg pe coloana cervicală! Ridică dispozitivul spre ochi."
+                hintEn="Tilting your neck by 60° exerts 27 kg of pressure on cervical vertebrae! Raise the device to eye level."
+              />
+
+              <div className="flex flex-col gap-2 mt-2">
+                {[
+                  { id: 'straight', label: lang === 'en' ? 'Straight head, raising device to eye level ✓' : 'Capul drept, ridicând dispozitivul la nivel confortabil ✓' },
+                  { id: 'bent', label: lang === 'en' ? 'Hunched forward towards chest' : 'Aplecat mult înainte spre piept' },
+                  { id: 'lying', label: lang === 'en' ? 'Lying flat with screen below chin' : 'Culcat pe birou cu ecranul sub bărbie' },
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    onClick={() => {
+                      sounds.playClick();
+                      setHeadPosture(opt.id);
+                    }}
+                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
+                      headPosture === opt.id
+                        ? opt.id === 'straight'
+                          ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
+                          : 'bg-rose-950/40 text-rose-300 border-rose-500'
+                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {headPosture && (
+              <AnswerExplanation
+                isCorrect={headPosture === 'straight'}
+                explanationRo={
+                  headPosture === 'straight'
+                    ? 'Foarte bine! Ținerea capului drept și ridicarea telefonului protejează coloana și previne durerile cronice de gât și umeri.'
+                    : 'Incorect! Aplecarea capului multiplică greutatea exercitată asupra coloanei vertebrale (efectul „text neck”). Ridică mereu telefonul spre privire!'
+                }
+                explanationEn={
+                  headPosture === 'straight'
+                    ? 'Excellent! Keeping your head upright and raising your phone preserves spinal health and prevents text-neck syndrome.'
+                    : 'Incorrect! Hunching forward subjects cervical vertebrae to immense tension. Always lift the device closer to eye level!'
+                }
+              />
             )}
           </div>
         </div>

@@ -4,6 +4,8 @@ import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
+import { AnswerExplanation } from './common/AnswerExplanation';
+import { QuestionHint } from './common/QuestionHint';
 
 interface Level3Props {
   onComplete: () => void;
@@ -195,9 +197,17 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           <AlertTriangle className="w-4 h-4 text-amber-400" />
           {t.l3QuizTitle}
         </h3>
-        <p className="text-xs text-slate-300 mb-3">
+        <p className="text-xs text-slate-300 mb-2">
           {t.l3QuizQuestion}
         </p>
+
+        <div className="mb-3">
+          <QuestionHint
+            id="q-l3-forbidden"
+            hintRo="Semnele < > (paranteze unghiulare) și * (steluță) sunt strict interzise în denumirile de fișiere din Windows. Cratima (-) și cifrele sunt permise!"
+            hintEn="Angle brackets < > and asterisk * are strictly prohibited in Windows file names. Hyphens (-) and numbers are allowed!"
+          />
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
@@ -238,6 +248,24 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
             <div className="text-[11px] text-slate-400">{t.l3QuizOptCSub}</div>
           </button>
         </div>
+
+        {forbiddenQuiz && (
+          <div className="mt-3">
+            <AnswerExplanation
+              isCorrect={forbiddenQuiz === 'valid_name'}
+              explanationRo={
+                forbiddenQuiz === 'valid_name'
+                  ? 'Corect! Denumirea nu conține niciun caracter interzis, folosind doar litere, cratimă și extensia corespunzătoare (Manual pag. 30).'
+                  : 'Incorect! Caracterele < > și * fac parte din cele 9 caractere rezervate de sistem și nu pot fi folosite în denumiri.'
+              }
+              explanationEn={
+                forbiddenQuiz === 'valid_name'
+                  ? 'Correct! The file name contains only allowed characters, hyphens, and a valid extension (p. 30).'
+                  : 'Incorrect! Symbols < > and * are among the 9 reserved system characters and cannot be used.'
+              }
+            />
+          </div>
+        )}
       </div>
 
       {/* Complete Button */}

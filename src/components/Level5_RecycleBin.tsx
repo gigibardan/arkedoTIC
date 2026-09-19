@@ -3,6 +3,8 @@ import { Trash2, RotateCcw, CheckCircle2, ChevronRight, HelpCircle } from 'lucid
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { AnswerExplanation } from './common/AnswerExplanation';
+import { QuestionHint } from './common/QuestionHint';
 
 interface Level5Props {
   onComplete: () => void;
@@ -175,9 +177,17 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
               <HelpCircle className="w-4 h-4" />
               {t.l5QuizTitle}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-200 mb-3 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-200 mb-2 leading-relaxed">
               {t.l5QuizQuestion}
             </p>
+
+            <div className="mb-3">
+              <QuestionHint
+                id="q-l5-recycle"
+                hintRo="Coșul de reciclare (Recycle Bin) stochează temporar fișierele șterse de pe hard disk, permițând restaurarea lor în locația inițială cu comanda 'Restore'."
+                hintEn="Recycle Bin temporarily holds deleted files from the hard drive, allowing you to restore them to their original spot via 'Restore'."
+              />
+            </div>
 
             <div className="space-y-2.5">
               <button
@@ -210,6 +220,24 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
                 </div>
               </button>
             </div>
+
+            {quizAnswer && (
+              <div className="mt-3">
+                <AnswerExplanation
+                  isCorrect={quizAnswer === 'yes_recycle_bin'}
+                  explanationRo={
+                    quizAnswer === 'yes_recycle_bin'
+                      ? 'Corect! Fișierele șterse de pe hard disk ajung în Recycle Bin și pot fi recuperate oricând până la golirea coșului (Manual pag. 29).'
+                      : 'Incorect! Doar dacă golești Recycle Bin sau ștergi de pe stick USB fișierul este eliminat definitiv.'
+                  }
+                  explanationEn={
+                    quizAnswer === 'yes_recycle_bin'
+                      ? 'Correct! Files deleted from hard drives are kept in the Recycle Bin and can be restored at any time until emptied (p. 29).'
+                      : 'Incorrect! Files are only permanently lost if you empty the Recycle Bin or delete from removable drives.'
+                  }
+                />
+              </div>
+            )}
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
