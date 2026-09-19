@@ -13,7 +13,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -38,10 +38,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   const isHardware = courseId === 'hardware';
   const isInternet1 = courseId === 'internet1';
+  const isInternet2 = courseId === 'internet2';
+
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
     : isInternet1
     ? (lang === 'en' ? 'Internet & Web Basics Mission 3A (Textbook pp. 32-36)' : 'Misiunea 3A Internet, Rețele & Web (Manual pag. 32-36)')
+    : isInternet2
+    ? (lang === 'en' ? 'Advanced Search & Digital Identity Mission 3B (Textbook pp. 38-48)' : 'Misiunea 3B Căutare Avansată, Comunicare & Identitate (Manual pag. 38-48)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
@@ -108,7 +112,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -122,6 +126,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Hardware & ICT Technician!' : 'Felicitări, Tehnician Hardware & TIC!')
           : isInternet1
           ? (lang === 'en' ? 'Congratulations, Cyber & Web Explorer!' : 'Felicitări, Explorator Web & Cyber!')
+          : isInternet2
+          ? (lang === 'en' ? 'Congratulations, Digital Citizenship & Security Expert!' : 'Felicitări, Expert în Comunicare & Securitate Digitală!')
           : t.vTitle}
       </h2>
 
@@ -134,6 +140,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered the essentials of computer networks, Internet services (Email, WWW, FTP, Telnet, IRC), URL addresses, web browser navigation, and cybersecurity protection!'
               : 'Ai parcurs cu succes Modulul 3A: rețele de calculatoare, servicii internet (Email, WWW, FTP, Telnet, IRC), anatomia adreselor URL, utilizarea browserului și scutul de securitate cibernetică!')
+          : isInternet2
+          ? (lang === 'en'
+              ? 'You mastered advanced search engines and boolean filters, source credibility and Fake News detection, professional email composition, netiquette, academic citation, and fortress passwords with 2FA!'
+              : 'Ai parcurs cu brio Modulul 3B: motoare de căutare și operatori booleeni, evaluarea critică a surselor și detectarea Fake News, compunerea e-mailurilor (Cc, Bcc), netichetă, citarea surselor fără plagiat și parole de neclintit cu 2FA!')
           : t.vDesc}
       </p>
 
@@ -313,6 +323,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isInternet2 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔍</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Search Master' : 'Maestru Căutare'}</div>
+                <div className="text-[10px] text-teal-400">AND, OR, NOT, ""</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🕵️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Fact Checker' : 'Detectiv Fake News'}</div>
+                <div className="text-[10px] text-cyan-400">CRAAP Test</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">✉️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Email Pro' : 'Expert E-mail'}</div>
+                <div className="text-[10px] text-purple-400">Cc, Bcc & @</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🤝</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Netiquette Lead' : 'Lider Netichetă'}</div>
+                <div className="text-[10px] text-emerald-400">No Caps & Empathy</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🔐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? '2FA Shield' : 'Scut 2FA'}</div>
+                <div className="text-[10px] text-rose-400">12+ Caractere</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -377,7 +425,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -387,7 +435,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
-            {isHardware ? t.hwDiplomaTitle : isInternet1 ? t.internet1DiplomaTitle : t.vDiplomaTitle}
+            {isHardware ? t.hwDiplomaTitle : isInternet1 ? t.internet1DiplomaTitle : isInternet2 ? t.internet2DiplomaTitle : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
             {t.vDiplomaDept}
@@ -408,7 +456,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
-            {isHardware ? t.hwDiplomaText : isInternet1 ? t.internet1DiplomaText : t.vDiplomaText}
+            {isHardware ? t.hwDiplomaText : isInternet1 ? t.internet1DiplomaText : isInternet2 ? t.internet2DiplomaText : t.vDiplomaText}
           </p>
 
           {/* Signatures & Date */}

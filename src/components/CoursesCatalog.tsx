@@ -25,8 +25,8 @@ import { MissionGuardModal } from './MissionGuardModal';
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -53,7 +53,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | null>(null);
 
   const handleSaveName = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -78,7 +78,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -96,7 +96,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
 
     // CHECK IN-PROGRESS GUARD:
-    // If user has an active mission in progress (level > 1 and level <= 5) and tries to start a DIFFERENT mission
+    // If user has an active mission in progress (level > 1 and level <= 6) and tries to start a DIFFERENT mission
     const hasMissionInProgress =
       activeMissionId !== null &&
       activeMissionId !== targetMission &&
@@ -115,7 +115,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -130,6 +130,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Module 3A: Internet, Networks & World Wide Web (Textbook p. 32-36)'
         : 'Modulul 3A: Internet, Rețele & World Wide Web (Manual pag. 32-36)';
+    }
+    if (id === 'internet2') {
+      return lang === 'en'
+        ? 'Module 3B: Advanced Search, Communication & Digital Identity (Textbook p. 38-48)'
+        : 'Modulul 3B: Căutare Avansată, Comunicare & Identitate Digitală (Manual pag. 38-48)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -491,7 +496,76 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Card 4: COMING SOON - Editare Text */}
+          {/* Card 4: ACTIVE MISSION 3B - Căutare Avansată, Comunicare & Identitate Digitală */}
+          <div className="relative group bg-slate-900/80 border border-slate-700/80 hover:border-indigo-500/80 rounded-3xl p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl border border-indigo-500/30">
+                  🔍✉️
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? '6 Interactive Levels' : '6 Niveluri Interactive'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-indigo-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 38–48 • Mission 3B' : 'Manual pag. 38–48 • Misiunea 3B'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-indigo-300 transition-colors">
+                {lang === 'en' ? 'Advanced Search, Communication & Digital Identity' : 'Căutare Avansată, Comunicare & Identitate Digitală'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Search Operators, Source Evaluation, Email (Cc, Bcc), Netiquette, Copyright & Fortress Passwords' : 'Operatori Căutare, Evaluare Surse, E-mail (Cc, Bcc), Netichetă, Plagiat & Parole Blindate'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Master Google search operators (AND, OR, NOT, ""), critically evaluate source credibility (CRAAP test & Fake News detection), construct professional emails (Cc, Bcc, attachments), practice netiquette ethics, respect copyright & cite sources without plagiarism, and fortress your digital identity with 2FA passwords!'
+                  : 'Stăpânește căutarea avansată cu operatori booleeni (" ", site:, filetype:), evaluează critic sursele de pe net și recunoaște știrile false, compune e-mailuri profesioniste (Cc, Bcc, @), respectă normele de netichetă și combaterea cyberbullying-ului, evită plagiatul prin citare și creează parole blindate cu 2FA!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-indigo-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-indigo-400" /> {lang === 'en' ? 'Digital Citizenship Certificate' : 'Diplomă Cetățean Digital'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
+                  <span className="text-indigo-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/6 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/6 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? 'Theory + Smart Simulator' : 'Teorie + Simulator Inteligent'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('internet2')}
+                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'internet2' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Internet 3B' : 'Continuă Misiunea 3B')
+                    : (lang === 'en' ? 'Start Mission 3B' : 'Începe Misiunea 3B')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 5: COMING SOON - Editare Text */}
           <div className="relative bg-slate-900/50 border border-slate-800 rounded-3xl p-6 opacity-85 hover:opacity-100 transition flex flex-col justify-between">
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
@@ -573,7 +647,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | null): number {
+function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
@@ -581,6 +655,10 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
   if (missionId === 'internet1') {
     const internetScores = [0, 15, 30, 45, 60, 80, 100];
     return internetScores[Math.min(level - 1, 6)] || 0;
+  }
+  if (missionId === 'internet2') {
+    const internet2Scores = [0, 15, 30, 45, 60, 80, 100];
+    return internet2Scores[Math.min(level - 1, 6)] || 0;
   }
   const filesScores = [0, 10, 25, 40, 55, 70, 85, 100];
   return filesScores[Math.min(level - 1, 7)] || 0;

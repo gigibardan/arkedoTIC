@@ -12,7 +12,7 @@ interface HeaderProps {
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
-  missionId?: 'hardware' | 'files' | 'internet1' | null;
+  missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | null;
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
 }
@@ -47,6 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (missionId === 'hardware') return t.hwCourseTitle;
     if (missionId === 'files') return t.lesson1CardTitle;
     if (missionId === 'internet1') return t.internet1CourseTitle;
+    if (missionId === 'internet2') return t.internet2CourseTitle;
     return t.appTitle;
   };
 

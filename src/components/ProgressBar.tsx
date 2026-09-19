@@ -4,12 +4,51 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2';
 }
 
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
 const FILES_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const INTERNET1_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
+const INTERNET2_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
+
+const INTERNET2_STAGES_RO = [
+  { emoji: '🔍', name: 'Maestru Motoare de Căutare & Operatori (pag. 38-39)' },
+  { emoji: '🕵️', name: 'Detectiv Surse Credibile & Fake News (pag. 40-41)' },
+  { emoji: '✉️', name: 'Arhitect E-mail: Cc, Bcc, Semnătură & @ (pag. 42-43)' },
+  { emoji: '🤝', name: 'Inspector Netichetă & Conduită Digitală (pag. 43-44)' },
+  { emoji: '📚', name: 'Cercetător Onest: Drepturi de Autor & Citare (pag. 45-46)' },
+  { emoji: '🔐', name: 'Gardian Identitate: Parole Blindate & 2FA (pag. 47-48)' },
+  { emoji: '🏆', name: 'Expert Comunicare & Securitate Digitală!' },
+];
+
+const INTERNET2_STAGES_EN = [
+  { emoji: '🔍', name: 'Search Engines & Boolean Operators Master (pp. 38-39)' },
+  { emoji: '🕵️', name: 'Source Credibility & Fake News Detective (pp. 40-41)' },
+  { emoji: '✉️', name: 'Email Architect: Cc, Bcc, Signature & @ (pp. 42-43)' },
+  { emoji: '🤝', name: 'Netiquette Inspector & Digital Ethics (pp. 43-44)' },
+  { emoji: '📚', name: 'Honest Researcher: Copyright & Citation (pp. 45-46)' },
+  { emoji: '🔐', name: 'Identity Guardian: Fortress Passwords & 2FA (pp. 47-48)' },
+  { emoji: '🏆', name: 'Certified Digital Citizenship & Security Expert!' },
+];
+
+const INTERNET2_MILESTONES_RO = [
+  'P1: Căutare',
+  'P2: Evaluare',
+  'P3: E-mail',
+  'P4: Netichetă',
+  'P5: Drepturi',
+  'P6: Parole',
+];
+
+const INTERNET2_MILESTONES_EN = [
+  'P1: Search',
+  'P2: Evaluation',
+  'P3: Email',
+  'P4: Netiquette',
+  'P5: Copyright',
+  'P6: Passwords',
+];
 
 const INTERNET1_STAGES_RO = [
   { emoji: '🌐', name: 'Explorator Rețele & Protocol TCP/IP (pag. 32-33)' },
@@ -130,6 +169,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
 
   const isHardware = courseId === 'hardware';
   const isInternet1 = courseId === 'internet1';
+  const isInternet2 = courseId === 'internet2';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -146,11 +186,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? INTERNET1_MILESTONES_EN : INTERNET1_MILESTONES_RO;
     percents = INTERNET1_STAGE_PERCENTS;
     maxLevels = 6;
+  } else if (isInternet2) {
+    stages = lang === 'en' ? INTERNET2_STAGES_EN : INTERNET2_STAGES_RO;
+    milestones = lang === 'en' ? INTERNET2_MILESTONES_EN : INTERNET2_MILESTONES_RO;
+    percents = INTERNET2_STAGE_PERCENTS;
+    maxLevels = 6;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
   const currentStage = stages[stageIndex];
-  const currentPercent = percents[stageIndex] || (isHardware ? 20 : isInternet1 ? 16 : 14);
+  const currentPercent = percents[stageIndex] || (isHardware ? 20 : (isInternet1 || isInternet2) ? 16 : 14);
 
   return (
     <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur">
@@ -165,9 +210,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'ICT Hardware Technician Progress' : 'Evoluție Tehnician Hardware TIC')
                 : isInternet1
                 ? (lang === 'en' ? 'Internet & Web Explorer Progress' : 'Evoluție Explorator Internet & Web TIC')
+                : isInternet2
+                ? (lang === 'en' ? 'Digital Citizenship & Security Progress' : 'Evoluție Comunicare & Securitate Digitală')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
-            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : 'text-emerald-400'}`}>
+            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : isInternet2 ? 'text-indigo-400' : 'text-emerald-400'}`}>
               {currentStage.name}
             </div>
           </div>
@@ -191,6 +238,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-teal-500 via-cyan-400 to-indigo-500'
               : isInternet1
               ? 'bg-gradient-to-r from-teal-500 via-emerald-400 to-cyan-400'
+              : isInternet2
+              ? 'bg-gradient-to-r from-indigo-500 via-purple-400 to-cyan-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -199,7 +248,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
 
       {/* Level Milestones below */}
       <div className={`grid gap-1 sm:gap-1.5 mt-3 pt-2 text-center text-[10px] sm:text-xs font-semibold text-slate-400 ${
-        isHardware ? 'grid-cols-5' : isInternet1 ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-4 sm:grid-cols-7'
+        isHardware ? 'grid-cols-5' : (isInternet1 || isInternet2) ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-4 sm:grid-cols-7'
       }`}>
         {milestones.map((m, idx) => {
           const lvl = idx + 1;
@@ -213,6 +262,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-teal-300 font-bold'
                     : isInternet1
                     ? 'text-cyan-300 font-bold'
+                    : isInternet2
+                    ? 'text-indigo-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

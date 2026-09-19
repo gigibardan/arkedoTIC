@@ -384,6 +384,12 @@ export const translations = {
     internet1CourseSub: 'Noțiuni de bază, Servicii, Navigare Web & Securitate • Manual pag. 32-36',
     internet1DiplomaTitle: 'DIPLOMĂ DE EXPLORATOR INTERNET & SIGURANȚĂ WEB',
     internet1DiplomaText: 'Pentru rezultate deosebite în "Misiunea 3A: Internet, Rețele & World Wide Web 🌐🛡️" (Manual pag. 32-36), înțelegerea rețelelor de calculatoare și a protocolului TCP/IP, stăpânirea serviciilor Internet (Email, WWW, FTP, Telnet, IRC), rezolvarea rebusului tematic, descifrarea anatomiei unei adrese URL, utilizarea eficientă a browserului și asumarea celor 3 reguli de aur ale securității cibernetice.',
+
+    // Internet 2 (Module 3B) Diploma & Titles
+    internet2CourseTitle: 'Misiunea 3B: Căutare Avansată, Comunicare & Identitate Digitală',
+    internet2CourseSub: 'Motoare de căutare, Evaluarea surselor, Email, Netichetă, Plagiat & Parole blindate • Manual pag. 38-48',
+    internet2DiplomaTitle: 'DIPLOMĂ DE EXPERT ÎN COMUNICARE DIGITALĂ & SECURITATE',
+    internet2DiplomaText: 'Pentru excelență în "Misiunea 3B: Căutare Avansată, Comunicare & Identitate Digitală 🔍✉️" (Manual pag. 38-48), stăpânirea operatorilor de căutare booleană și filtrare, evaluarea critică a credibilității informațiilor și recunoașterea știrilor false (Fake News), anatomia căsuței de e-mail (Cc, Bcc, @), respectarea regulilor de netichetă și combaterea cyberbullying-ului, evitarea plagiatului prin citare academică și protejarea identității online prin parole complexe și autentificare în 2 pași (2FA).',
   },
 
   en: {
@@ -769,6 +775,12 @@ export const translations = {
     internet1CourseSub: 'Network Basics, Services, Web Navigation & Cybersecurity • Textbook pp. 32-36',
     internet1DiplomaTitle: 'CERTIFICATE OF INTERNET & WEB SAFETY EXPLORER',
     internet1DiplomaText: 'For outstanding performance in "Mission 3A: Internet, Networks & World Wide Web 🌐🛡️" (Textbook pages 32-36), understanding computer networks and TCP/IP protocol, mastering internet services (Email, WWW, FTP, Telnet, IRC), solving the digital crossword, decoding URL anatomy, proficiently using web browsers, and upholding the 3 golden rules of cybersecurity.',
+
+    // Internet 2 (Module 3B) Diploma & Titles
+    internet2CourseTitle: 'Mission 3B: Advanced Search, Communication & Digital Identity',
+    internet2CourseSub: 'Search Engines, Source Evaluation, Email Anatomy, Netiquette, Plagiarism & Fortress Passwords • Textbook pp. 38-48',
+    internet2DiplomaTitle: 'CERTIFICATE OF DIGITAL CITIZENSHIP & CYBERSECURITY EXPERT',
+    internet2DiplomaText: 'For excellence in "Mission 3B: Advanced Search, Communication & Digital Identity 🔍✉️" (Textbook pages 38-48), mastering boolean search operators and filters, critically evaluating source credibility and detecting Fake News, understanding email anatomy (Cc, Bcc, @), upholding netiquette ethics and anti-cyberbullying protocols, preventing plagiarism through academic citation, and safeguarding digital identity with fortress passwords and 2FA.',
   },
 } as const;
 
