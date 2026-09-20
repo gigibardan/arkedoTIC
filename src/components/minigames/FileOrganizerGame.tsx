@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   Folder,
   FolderOpen,
@@ -138,6 +139,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
         setHighScore(score);
         try {
           localStorage.setItem('arkedo_highscore_files', String(score));
+          updateActiveArcadeScore('files', score);
         } catch {
           // ignore
         }

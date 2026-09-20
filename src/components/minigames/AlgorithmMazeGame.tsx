@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   Play,
   RotateCcw,
@@ -470,6 +471,7 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
           setHighScore(newScore);
           try {
             localStorage.setItem('arkedo_highscore_maze', String(newScore));
+            updateActiveArcadeScore('maze', newScore);
           } catch {
             // ignore
           }

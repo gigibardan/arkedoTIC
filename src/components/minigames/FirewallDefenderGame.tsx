@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   ShieldCheck,
   ShieldAlert,
@@ -217,6 +218,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           setHighScore(score);
           try {
             localStorage.setItem('arkedo_highscore_firewall', String(score));
+            updateActiveArcadeScore('firewall', score);
           } catch {
             // ignore
           }

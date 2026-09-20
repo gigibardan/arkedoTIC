@@ -5,5 +5,9 @@ service cloud.firestore {
     match /rezultate_tic/{document} {
       allow read, write: if true;
     }
+    // Conturile elevilor, punctaje mini-jocuri, progres lectii si clasamente
+    match /elevi/{document} {
+      allow read, write: if true;
+    }
   }
 }

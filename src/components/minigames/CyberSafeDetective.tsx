@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   ShieldAlert,
   ShieldCheck,
@@ -349,6 +350,7 @@ export const CyberSafeDetective: React.FC<CyberSafeDetectiveProps> = ({ onBack, 
         setHighScore(score);
         try {
           localStorage.setItem('arkedo_highscore_cyber', String(score));
+          updateActiveArcadeScore('detective', score);
         } catch {
           // Ignore
         }

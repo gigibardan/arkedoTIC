@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, LogOut, RefreshCw, Trash2, Award, Clock, Users, Trophy, ShieldCheck, ArrowLeft, Cloud, HardDrive } from 'lucide-react';
+import { 
+  Lock, 
+  LogOut, 
+  RefreshCw, 
+  Trash2, 
+  Award, 
+  Clock, 
+  Users, 
+  Trophy, 
+  ShieldCheck, 
+  ArrowLeft, 
+  Cloud, 
+  HardDrive,
+  FileText,
+  UserCheck,
+  HelpCircle,
+  KeyRound
+} from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { getStudentResults, deleteStudentResult, StudentResult } from '../lib/resultsService';
 import { isCloudConnected } from '../lib/firebase';
 import { sounds } from '../utils/audio';
+import { TeacherStudentManagement } from './TeacherStudentManagement';
+import { TeacherHelpGuide } from './TeacherHelpGuide';
 
 interface TeacherPortalProps {
   onBackToHome: () => void;
@@ -16,6 +35,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem('arkedo_teacher_auth') === 'true';
   });
+  const [activeTab, setActiveTab] = useState<'gradebook' | 'students' | 'guide'>('gradebook');
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [authError, setAuthError] = useState<boolean>(false);
   const [results, setResults] = useState<StudentResult[]>([]);
@@ -201,128 +221,191 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         </div>
       </div>
 
-      {/* Metrics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <Users className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
-              {t.teacherTotalStudents}
-            </div>
-            <div className="text-2xl font-black text-white font-heading mt-0.5">
-              {totalCount}
-            </div>
-          </div>
-        </div>
+      {/* Teacher Navigation Tabs */}
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start">
+        <button
+          onClick={() => {
+            setActiveTab('gradebook');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+            activeTab === 'gradebook'
+              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <Award className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Catalog / Gradebook' : 'Catalog Note & Misiuni'}</span>
+        </button>
 
-        <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
-            <Trophy className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
-              {t.teacherAvgScore}
-            </div>
-            <div className="text-2xl font-black text-amber-300 font-heading mt-0.5">
-              {avgScore} / 100
-            </div>
-          </div>
-        </div>
+        <button
+          onClick={() => {
+            setActiveTab('students');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+            activeTab === 'students'
+              ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <UserCheck className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Student Accounts & Reset' : 'Gestiune Conturi Elevi & Parole'}</span>
+        </button>
 
-        <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-            <Clock className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
-              {t.teacherAvgTime}
-            </div>
-            <div className="text-2xl font-black text-cyan-300 font-heading mt-0.5 font-mono">
-              {formatSeconds(avgSeconds)}
-            </div>
-          </div>
-        </div>
+        <button
+          onClick={() => {
+            setActiveTab('guide');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+            activeTab === 'guide'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <HelpCircle className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Teacher Guide & System Docs' : 'Ghid Profesor & Documentație Notare'}</span>
+        </button>
       </div>
 
-      {/* Results Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Award className="w-4 h-4 text-emerald-400" />
-            <span>{lang === 'en' ? 'Grades & Submissions Registry' : 'Evidență Note & Realizări'}</span>
-          </h3>
-          <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
-            Firebase: Firestore Cloud
-          </span>
-        </div>
+      {/* Tab 1: Gradebook View */}
+      {activeTab === 'gradebook' && (
+        <>
+          {/* Metrics Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+                  {t.teacherTotalStudents}
+                </div>
+                <div className="text-2xl font-black text-white font-heading mt-0.5">
+                  {totalCount}
+                </div>
+              </div>
+            </div>
 
-        {loading ? (
-          <div className="p-12 text-center text-slate-400 flex flex-col items-center gap-3">
-            <RefreshCw className="w-6 h-6 text-emerald-400 animate-spin" />
-            <p className="text-xs font-mono">{lang === 'en' ? 'Loading records from database...' : 'Se încarcă datele din baza de date...'}</p>
+            <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <Trophy className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+                  {t.teacherAvgScore}
+                </div>
+                <div className="text-2xl font-black text-amber-300 font-heading mt-0.5">
+                  {avgScore} / 100
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                <Clock className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+                  {t.teacherAvgTime}
+                </div>
+                <div className="text-2xl font-black text-cyan-300 font-heading mt-0.5 font-mono">
+                  {formatSeconds(avgSeconds)}
+                </div>
+              </div>
+            </div>
           </div>
-        ) : results.length === 0 ? (
-          <div className="p-12 text-center text-slate-400">
-            <div className="text-4xl mb-3">📋</div>
-            <p className="text-sm font-semibold max-w-md mx-auto leading-relaxed">
-              {t.teacherNoResults}
-            </p>
+
+          {/* Results Table */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Award className="w-4 h-4 text-emerald-400" />
+                <span>{lang === 'en' ? 'Grades & Submissions Registry' : 'Evidență Note & Realizări'}</span>
+              </h3>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
+                Firebase: Firestore Cloud
+              </span>
+            </div>
+
+            {loading ? (
+              <div className="p-12 text-center text-slate-400 flex flex-col items-center gap-3">
+                <RefreshCw className="w-6 h-6 text-emerald-400 animate-spin" />
+                <p className="text-xs font-mono">{lang === 'en' ? 'Loading records from database...' : 'Se încarcă datele din baza de date...'}</p>
+              </div>
+            ) : results.length === 0 ? (
+              <div className="p-12 text-center text-slate-400">
+                <div className="text-4xl mb-3">📋</div>
+                <p className="text-sm font-semibold max-w-md mx-auto leading-relaxed">
+                  {t.teacherNoResults}
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs sm:text-sm">
+                  <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 font-mono uppercase text-[11px]">
+                    <tr>
+                      <th className="py-3 px-4 font-bold">{t.teacherTableStudent}</th>
+                      <th className="py-3 px-4 font-bold">{t.teacherTableCourse}</th>
+                      <th className="py-3 px-4 font-bold">{t.teacherTableScore}</th>
+                      <th className="py-3 px-4 font-bold">{t.teacherTableDuration}</th>
+                      <th className="py-3 px-4 font-bold">{t.teacherTableDate}</th>
+                      <th className="py-3 px-4 font-bold text-right">{t.teacherTableActions}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/80 text-slate-200">
+                    {results.map((r, idx) => (
+                      <tr key={r.id || idx} className="hover:bg-slate-850/50 transition">
+                        <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs font-mono shrink-0">
+                            {idx + 1}
+                          </span>
+                          <span>{r.studentName}</span>
+                        </td>
+                        <td className="py-3.5 px-4 text-slate-300 font-medium">
+                          {r.courseTitle}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 text-xs font-mono">
+                            ⭐ {r.score} / {r.maxScore}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-cyan-300 text-xs">
+                          ⏱️ {formatSeconds(r.elapsedSeconds)}
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-slate-400 text-xs">
+                          {r.dateFormatted || (lang === 'en' ? 'Recent' : 'Recent')}
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <button
+                            onClick={() => handleDelete(r.id)}
+                            disabled={deletingId === r.id}
+                            className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
+                            title={lang === 'en' ? 'Delete entry' : 'Șterge rând'}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 font-mono uppercase text-[11px]">
-                <tr>
-                  <th className="py-3 px-4 font-bold">{t.teacherTableStudent}</th>
-                  <th className="py-3 px-4 font-bold">{t.teacherTableCourse}</th>
-                  <th className="py-3 px-4 font-bold">{t.teacherTableScore}</th>
-                  <th className="py-3 px-4 font-bold">{t.teacherTableDuration}</th>
-                  <th className="py-3 px-4 font-bold">{t.teacherTableDate}</th>
-                  <th className="py-3 px-4 font-bold text-right">{t.teacherTableActions}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/80 text-slate-200">
-                {results.map((r, idx) => (
-                  <tr key={r.id || idx} className="hover:bg-slate-850/50 transition">
-                    <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs font-mono shrink-0">
-                        {idx + 1}
-                      </span>
-                      <span>{r.studentName}</span>
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-300 font-medium">
-                      {r.courseTitle}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 text-xs font-mono">
-                        ⭐ {r.score} / {r.maxScore}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-cyan-300 text-xs">
-                      ⏱️ {formatSeconds(r.elapsedSeconds)}
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-slate-400 text-xs">
-                      {r.dateFormatted || (lang === 'en' ? 'Recent' : 'Recent')}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <button
-                        onClick={() => handleDelete(r.id)}
-                        disabled={deletingId === r.id}
-                        className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
-                        title={lang === 'en' ? 'Delete entry' : 'Șterge rând'}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+        </>
+      )}
+
+      {/* Tab 2: Students Accounts Management */}
+      {activeTab === 'students' && (
+        <TeacherStudentManagement />
+      )}
+
+      {/* Tab 3: System Help & Colleague Guide */}
+      {activeTab === 'guide' && (
+        <TeacherHelpGuide />
+      )}
     </div>
   );
 };

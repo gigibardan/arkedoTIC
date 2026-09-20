@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   Binary,
   Zap,
@@ -126,6 +127,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
           setHighScore(finalScore);
           try {
             localStorage.setItem('arkedo_highscore_binary_factory', String(finalScore));
+            updateActiveArcadeScore('binary_factory', finalScore);
           } catch {
             // ignore
           }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   Cpu,
   HardDrive,
@@ -421,6 +422,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
       setHighScore(finalScore);
       try {
         localStorage.setItem('arkedo_highscore_pcbuilder', String(finalScore));
+        updateActiveArcadeScore('pcbuilder', finalScore);
       } catch {
         // ignore
       }

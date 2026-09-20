@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   Keyboard,
   RotateCcw,
@@ -126,6 +127,7 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
           // Ignore
         }
       }
+      updateActiveArcadeScore('typing', finalWpm);
 
       if (finalWpm >= 35) {
         arky.triggerSuccess(

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   ArrowLeft,
   Palette,
@@ -581,6 +582,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
         const next = prev + 200;
         try {
           localStorage.setItem('arkedo_highscore_rgb_pixels', String(next));
+          updateActiveArcadeScore('rgb_pixel', next);
         } catch {}
         return next;
       });

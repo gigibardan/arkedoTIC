@@ -24,6 +24,9 @@ import {
   MousePointer,
   Binary,
   Trophy,
+  LogIn,
+  LogOut,
+  KeyRound,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -31,6 +34,9 @@ import { sounds } from '../utils/audio';
 import { KnowledgePills } from './hardware/KnowledgePills';
 import { MissionGuardModal } from './MissionGuardModal';
 import { ARKY_IMAGES } from '../assets/arkyImages';
+import { LeaderboardSection } from './LeaderboardSection';
+import { AuthModal } from './AuthModal';
+import { getActiveStudent, logoutStudent, StudentProfile } from '../lib/studentAuthService';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -87,6 +93,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
   const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | null>(null);
 
+  // Student Cloud Auth Modal State
+  const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
+  const [activeAccount, setActiveAccount] = useState<StudentProfile | null>(() => getActiveStudent());
+
   // Arky Hero Speech Bubble & Click Tips
   const [arkyTipIndex, setArkyTipIndex] = useState<number>(0);
   const arkyTips = lang === 'en' ? [
@@ -122,6 +133,36 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     const nextIndex = (arkyTipIndex + 1) % arkyTips.length;
     setArkyTipIndex(nextIndex);
     arky.triggerSuccess(arkyTips[nextIndex]);
+  };
+
+  const handleAuthSuccess = (profile: StudentProfile) => {
+    setActiveAccount(profile);
+    onSetStudentName(profile.username);
+    setNameInput(profile.username);
+    setSelectedAvatar(profile.avatar || '🎓');
+    try {
+      localStorage.setItem('arkedo_student_avatar', profile.avatar || '🎓');
+    } catch {
+      // Ignore
+    }
+    setIsEditingName(false);
+    sounds.playCorrect();
+    arky.triggerSuccess(
+      lang === 'en'
+        ? `Welcome, ${profile.username}! Account synchronized across the lab!`
+        : `Bun venit, ${profile.username}! Contul tău a fost sincronizat pe acest calculator!`
+    );
+  };
+
+  const handleLogout = () => {
+    logoutStudent();
+    setActiveAccount(null);
+    sounds.playClick();
+    arky.triggerIdle(
+      lang === 'en'
+        ? 'Signed out successfully. Next cadet can sign in!'
+        : 'Te-ai deconectat cu succes. Următorul elev se poate conecta!'
+    );
   };
 
   const handleSaveName = (e?: React.FormEvent) => {
@@ -251,9 +292,47 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <BadgeCheck className="w-4 h-4 text-teal-400" />
                   <span>{lang === 'en' ? 'ARKEDO Student Access Pass' : 'Legitimație Elev • Laborator TIC'}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>{studentName ? (lang === 'en' ? 'VERIFIED' : 'ACTIVAT') : (lang === 'en' ? 'PENDING' : 'NECONFIRMAT')}</span>
+                <div className="flex items-center gap-2">
+                  {activeAccount ? (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-1 text-[11px] font-mono text-rose-400 hover:text-rose-300 bg-rose-950/50 hover:bg-rose-900/50 px-2 py-0.5 rounded-full border border-rose-500/30 transition cursor-pointer"
+                      title={lang === 'en' ? 'Sign out' : 'Deconectează contul'}
+                    >
+                      <LogOut className="w-3 h-3" />
+                      <span>{lang === 'en' ? 'Sign Out' : 'Ieșire'}</span>
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => {
+                          setAuthModalMode('login');
+                          setAuthModalOpen(true);
+                          sounds.playClick();
+                        }}
+                        className="flex items-center gap-1 text-[11px] font-bold text-teal-300 hover:text-white bg-teal-950/70 hover:bg-teal-900/70 px-2.5 py-0.5 rounded-full border border-teal-500/40 transition cursor-pointer"
+                      >
+                        <LogIn className="w-3 h-3 text-teal-400" />
+                        <span>{lang === 'en' ? 'Sign In' : 'Autentificare'}</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setAuthModalMode('register');
+                          setAuthModalOpen(true);
+                          sounds.playClick();
+                        }}
+                        className="flex items-center gap-1 text-[11px] font-bold text-amber-300 hover:text-white bg-amber-950/60 hover:bg-amber-900/60 px-2.5 py-0.5 rounded-full border border-amber-500/40 transition cursor-pointer"
+                      >
+                        <KeyRound className="w-3 h-3 text-amber-400" />
+                        <span>{lang === 'en' ? 'New Pass' : 'Cont Nou'}</span>
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>{studentName ? (lang === 'en' ? 'VERIFIED' : 'ACTIVAT') : (lang === 'en' ? 'PENDING' : 'NECONFIRMAT')}</span>
+                  </div>
                 </div>
               </div>
 
@@ -403,7 +482,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/40 hover:border-indigo-400 text-xs text-indigo-300 font-bold transition cursor-pointer active:scale-95 text-left"
               >
                 <Gamepad2 className="w-4 h-4 text-indigo-400 shrink-0 animate-pulse" />
-                <span>{lang === 'en' ? 'Arcade Games (9)' : 'Jocuri Arcade TIC (9)'}</span>
+                <span>{lang === 'en' ? 'Arcade Games (10)' : 'Jocuri Arcade TIC (10)'}</span>
               </button>
               <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
                 <Award className="w-4 h-4 text-amber-400 shrink-0" />
@@ -854,6 +933,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       </div>
 
+      {/* Public Classroom Leaderboard Section */}
+      <LeaderboardSection
+        currentStudentName={studentName}
+        onOpenArcade={onOpenArcade}
+        onOpenLoginModal={() => {
+          setAuthModalMode('login');
+          setAuthModalOpen(true);
+        }}
+      />
+
       {/* Discreet Teacher Portal Link (for instructors only) */}
       {onOpenTeacherPortal && (
         <div className="pt-2 pb-1 border-t border-slate-800/60 flex items-center justify-center">
@@ -870,6 +959,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </button>
         </div>
       )}
+
+      {/* Student Cloud Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
+        initialMode={authModalMode}
+      />
 
       {/* Mission In-Progress Guard Modal */}
       <MissionGuardModal

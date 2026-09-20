@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   Binary,
   RotateCcw,
@@ -216,6 +217,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
           setHighScore(newScore);
           try {
             localStorage.setItem('arkedo_highscore_2048', String(newScore));
+            updateActiveArcadeScore('game2048', newScore);
           } catch {
             // Ignore
           }

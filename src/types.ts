@@ -35,3 +35,45 @@ export interface GameState {
   level5Completed: boolean;
 }
 
+export interface ArcadeScores {
+  typing: number;
+  mouse: number;
+  game2048: number;
+  pcbuilder: number;
+  detective: number;
+  files: number;
+  binary_factory: number;
+  maze: number;
+  firewall: number;
+  rgb_pixel: number;
+  totalArcade: number;
+}
+
+export interface LessonMissionState {
+  completed: boolean;
+  level: number;
+  score: number;
+  elapsedSeconds: number;
+}
+
+export interface LessonsProgress {
+  hardware: LessonMissionState;
+  files: LessonMissionState;
+  internet1: LessonMissionState;
+  internet2: LessonMissionState;
+  totalLessonScore: number;
+}
+
+export interface StudentProfile {
+  id: string;
+  username: string;
+  usernameLower: string;
+  passwordHash: string;
+  avatar: string;
+  arcadeScores: ArcadeScores;
+  lessonsProgress: LessonsProgress;
+  totalXP: number;
+  createdAt: string;
+  lastActiveAt: string;
+}
+

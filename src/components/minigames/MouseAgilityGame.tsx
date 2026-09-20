@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   MousePointer,
   RotateCcw,
@@ -154,6 +155,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
           // Ignore
         }
       }
+      updateActiveArcadeScore('mouse', score);
 
       if (score >= 1200) {
         arky.triggerSuccess(

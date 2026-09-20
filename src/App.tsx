@@ -35,6 +35,7 @@ import { TeacherPortal } from './components/TeacherPortal';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
 import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
+import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthService';
 
 function GameContent() {
   const { t } = useLanguage();
@@ -79,7 +80,15 @@ function GameContent() {
     }
     return 0;
   });
-  const [hwElapsedSeconds, setHwElapsedSeconds] = useState<number>(0);
+  const [hwElapsedSeconds, setHwElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_hw_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
 
   // Files mission progress
   const [filesLevel, setFilesLevel] = useState<GameLevel>(() => {
@@ -100,7 +109,15 @@ function GameContent() {
     }
     return 0;
   });
-  const [filesElapsedSeconds, setFilesElapsedSeconds] = useState<number>(0);
+  const [filesElapsedSeconds, setFilesElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_files_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
 
   // Internet 1 (Mission 3A) progress
   const [internet1Level, setInternet1Level] = useState<number>(() => {
@@ -121,7 +138,15 @@ function GameContent() {
     }
     return 0;
   });
-  const [internet1ElapsedSeconds, setInternet1ElapsedSeconds] = useState<number>(0);
+  const [internet1ElapsedSeconds, setInternet1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_internet1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
 
   // Internet 2 (Mission 3B) progress
   const [internet2Level, setInternet2Level] = useState<number>(() => {
@@ -142,7 +167,15 @@ function GameContent() {
     }
     return 0;
   });
-  const [internet2ElapsedSeconds, setInternet2ElapsedSeconds] = useState<number>(0);
+  const [internet2ElapsedSeconds, setInternet2ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_internet2_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   
@@ -180,10 +213,20 @@ function GameContent() {
       localStorage.setItem('arkedo_internet1_score', String(internet1Score));
       localStorage.setItem('arkedo_internet2_level', String(internet2Level));
       localStorage.setItem('arkedo_internet2_score', String(internet2Score));
+      localStorage.setItem('arkedo_hw_elapsed', String(hwElapsedSeconds));
+      localStorage.setItem('arkedo_files_elapsed', String(filesElapsedSeconds));
+      localStorage.setItem('arkedo_internet1_elapsed', String(internet1ElapsedSeconds));
+      localStorage.setItem('arkedo_internet2_elapsed', String(internet2ElapsedSeconds));
     } catch {
       // Ignore
     }
-  }, [activeMission, hwLevel, hwScore, filesLevel, filesScore, internet1Level, internet1Score, internet2Level, internet2Score]);
+  }, [
+    activeMission, 
+    hwLevel, hwScore, hwElapsedSeconds,
+    filesLevel, filesScore, filesElapsedSeconds,
+    internet1Level, internet1Score, internet1ElapsedSeconds,
+    internet2Level, internet2Score, internet2ElapsedSeconds
+  ]);
 
   // Current active level & score
   const currentLevel = activeMission === 'hardware' 
@@ -319,6 +362,7 @@ function GameContent() {
       setInternet1Level(7); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      updateActiveLessonProgress('internet1', true, 7, updatedTotal, internet1ElapsedSeconds);
     }
   };
 
@@ -344,6 +388,7 @@ function GameContent() {
       setInternet2Level(7); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      updateActiveLessonProgress('internet2', true, 7, updatedTotal, internet2ElapsedSeconds);
     }
   };
 
@@ -383,6 +428,7 @@ function GameContent() {
     setHwLevel(6);
     setIsTimerRunning(false);
     arky.triggerFinished();
+    updateActiveLessonProgress('hardware', true, 6, 100, hwElapsedSeconds);
   };
 
   const handleResetHardware = () => {
@@ -431,6 +477,7 @@ function GameContent() {
     setFilesLevel(8);
     setIsTimerRunning(false);
     arky.triggerFinished();
+    updateActiveLessonProgress('files', true, 8, 100, filesElapsedSeconds);
   };
 
   const handleResetFiles = () => {
