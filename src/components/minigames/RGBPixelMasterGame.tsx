@@ -1357,6 +1357,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     <div
                       key={`canvas-cell-${idx}`}
                       onClick={() => applyPixelPaint(idx)}
+                      onTouchStart={() => applyPixelPaint(idx)}
                       onMouseEnter={() => {
                         if (isMouseDown) applyPixelPaint(idx);
                       }}

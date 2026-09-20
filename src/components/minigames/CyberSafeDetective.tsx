@@ -402,36 +402,36 @@ export const CyberSafeDetective: React.FC<CyberSafeDetectiveProps> = ({ onBack, 
   return (
     <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10 select-none">
       {/* Top Header / Navigation */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="order-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
         >
           <ArrowLeft className="w-4 h-4 text-emerald-400" />
-          <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
+          <span>{lang === 'en' ? 'Arcade' : 'Înapoi'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-center">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
-            <ShieldAlert className="w-5 h-5" />
+        <div className="order-3 sm:order-2 w-full sm:w-auto flex items-center gap-2 text-left sm:text-center justify-start sm:justify-center">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
+            <ShieldAlert className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-xs sm:text-base font-black text-white font-heading">
               {lang === 'en' ? 'Cyber-Safe Detective' : 'Detectivul Cyber-Safe'}
             </h1>
-            <p className="text-[11px] text-rose-400 font-mono">
+            <p className="text-[10px] sm:text-[11px] text-rose-400 font-mono">
               {lang === 'en' ? 'Identify Phishing, Scams & Safe Digital Messages' : 'Depistează Phishingul, Capcanele & Mesajele Sigure'}
             </p>
           </div>
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono font-bold">
-          <Trophy className="w-4 h-4 text-amber-400" />
-          <span>Record: {highScore} pts</span>
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono font-bold shrink-0">
+          <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>{highScore} pts</span>
         </div>
       </div>
 
@@ -601,10 +601,10 @@ export const CyberSafeDetective: React.FC<CyberSafeDetectiveProps> = ({ onBack, 
                 {lang === 'en' ? scenario.explanationEn : scenario.explanationRo}
               </p>
 
-              <div className="pt-2 flex justify-end">
+              <div className="pt-2 flex justify-stretch sm:justify-end">
                 <button
                   onClick={handleNextScenario}
-                  className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-indigo-600/30 flex items-center gap-2 cursor-pointer active:scale-95"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <span>
                     {currentIndex + 1 < SCENARIOS.length

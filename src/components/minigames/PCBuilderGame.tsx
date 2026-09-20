@@ -461,36 +461,36 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
   return (
     <div className="flex flex-col gap-5 max-w-6xl mx-auto w-full pb-10 select-none">
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="order-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
         >
           <ArrowLeft className="w-4 h-4 text-emerald-400" />
-          <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
+          <span>{lang === 'en' ? 'Arcade' : 'Înapoi'}</span>
         </button>
 
-        <div className="flex items-center gap-2.5 text-center">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+        <div className="order-3 sm:order-2 w-full sm:w-auto flex items-center gap-2.5 text-left sm:text-center justify-start sm:justify-center">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
             <Cpu className="w-5 h-5" />
           </div>
-          <div className="text-left sm:text-center">
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
-              {lang === 'en' ? 'PC Builder: Hardware Mission' : 'Constructorul de PC-uri (Misiunea Hardware)'}
+          <div>
+            <h1 className="text-xs sm:text-base font-black text-white font-heading">
+              {lang === 'en' ? 'PC Builder: Hardware Mission' : 'Constructorul de PC-uri'}
             </h1>
-            <p className="text-[11px] text-blue-400 font-mono">
-              {lang === 'en' ? 'Mount CPU, RAM, GPU & SSD onto Motherboard • Avoid Short Circuits!' : 'Montează CPU, RAM, GPU și SSD pe Placa de Bază • Evită Scurtcircuitul!'}
+            <p className="text-[10px] sm:text-[11px] text-blue-400 font-mono">
+              {lang === 'en' ? 'Mount CPU, RAM, GPU & SSD onto Motherboard' : 'Montează CPU, RAM, GPU și SSD pe Placa de Bază'}
             </p>
           </div>
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-mono font-bold">
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-mono font-bold shrink-0">
           <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
-          <span>Record: {highScore} pts</span>
+          <span>{highScore} pts</span>
         </div>
       </div>
 
@@ -567,25 +567,69 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
 
           {/* Main Workshop Grid: Motherboard Stage & Component Conveyor Belt */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Mobile Fast Component Selector Strip (Visible on mobile/tablet < lg) */}
+            <div className="lg:hidden col-span-1 flex flex-col gap-2 p-3 rounded-2xl bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-300">
+                <span className="flex items-center gap-1.5">
+                  <Wrench className="w-3.5 h-3.5 text-blue-400" />
+                  {lang === 'en' ? 'Parts to Install:' : 'Piese de montat:'} ({conveyorItems.length})
+                </span>
+                {selectedConveyorItem && (
+                  <span className="text-[10px] text-amber-400 font-bold animate-pulse">
+                    {ALL_COMPONENTS[selectedConveyorItem].nameRo} ➔ {lang === 'en' ? 'Tap slot!' : 'Atinge slotul!'}
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1.5 pt-0.5 no-scrollbar">
+                {conveyorItems.map((slotKey) => {
+                  const info = ALL_COMPONENTS[slotKey];
+                  const isSelected = selectedConveyorItem === slotKey;
+                  return (
+                    <button
+                      key={slotKey}
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        setSelectedConveyorItem(slotKey);
+                        setHoveredComponent(info);
+                      }}
+                      className={`shrink-0 px-3 py-2 rounded-xl border flex items-center gap-2 transition-all cursor-pointer active:scale-95 ${
+                        isSelected
+                          ? 'bg-blue-600/30 border-blue-400 text-white ring-2 ring-blue-400/50 shadow-lg shadow-blue-500/20'
+                          : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      <span className="text-lg">{info.icon}</span>
+                      <div className="text-left">
+                        <div className="text-xs font-bold leading-tight">{info.nameRo}</div>
+                        <div className="text-[9px] text-slate-400 font-mono">{info.categoryRo}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Left/Center: The Motherboard (PCB Stage) */}
-            <div className="lg:col-span-8 flex flex-col bg-slate-950/95 border-2 border-slate-800 rounded-3xl p-5 shadow-2xl relative overflow-hidden">
+            <div className="lg:col-span-8 flex flex-col bg-slate-950/95 border-2 border-slate-800 rounded-3xl p-3 sm:p-5 shadow-2xl relative overflow-hidden">
               {/* Motherboard Header & Status */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-4">
                 <div className="flex items-center gap-2">
-                  <CircuitBoard className="w-5 h-5 text-blue-400" />
+                  <CircuitBoard className="w-5 h-5 text-blue-400 shrink-0" />
                   <span className="text-xs font-black text-white font-mono tracking-wider uppercase">
-                    Placă de Bază ATX • Arkedo-Z790 Pro Gaming
+                    Placă de Bază ATX • Arkedo-Z790
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-emerald-400 font-bold">
+                <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/30">
                   Montate: {Object.keys(placedSlots).length} / {currentLevel.requiredComponents.length} piese
                 </span>
               </div>
 
               {/* Visual Motherboard Layout */}
-              <div className="relative w-full aspect-[4/3] max-w-[620px] mx-auto bg-emerald-950/20 border-2 border-emerald-500/30 rounded-2xl p-4 flex flex-col justify-between shadow-inner">
-                {/* Motherboard Trace Lines Background Decoration */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
+              <div className="overflow-x-auto pb-1 -mx-1 px-1 sm:mx-0 sm:px-0">
+                <div className="relative w-full min-w-[310px] min-h-[440px] sm:min-h-0 sm:aspect-[4/3] max-w-[620px] mx-auto bg-emerald-950/20 border-2 border-emerald-500/30 rounded-2xl p-3 sm:p-4 flex flex-col justify-between shadow-inner">
+                  {/* Motherboard Trace Lines Background Decoration */}
+                  <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
                 {/* Top Section: CPU Socket & Cooler Mount + RAM Slots */}
                 <div className="flex items-start justify-between gap-3 relative z-10">
@@ -841,24 +885,25 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                   </div>
                 </div>
               </div>
+            </div>
 
               {/* Power-On Boot Master Button */}
-              <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between gap-4">
-                <div className="text-xs text-slate-400 font-mono">
+              <div className="mt-4 pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="text-xs text-slate-400 font-mono text-center sm:text-left">
                   {isAllPlaced ? (
-                    <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4" />
+                    <span className="text-emerald-400 font-bold flex items-center justify-center sm:justify-start gap-1.5">
+                      <Sparkles className="w-4 h-4 shrink-0" />
                       Toate componentele sunt montate! Apasă butonul de pornire!
                     </span>
                   ) : (
-                    <span>Selectează o piesă de pe banda rulantă, apoi apasă pe slotul ei corespunzător.</span>
+                    <span>Alege o piesă de pe bandă și atinge slotul ei corespunzător.</span>
                   )}
                 </div>
 
                 <button
                   onClick={startBootSequence}
                   disabled={!isAllPlaced || isBooting || isBootSuccess}
-                  className={`px-6 py-3 rounded-2xl font-black text-xs sm:text-sm transition flex items-center gap-2 cursor-pointer shadow-lg active:scale-95 ${
+                  className={`w-full sm:w-auto px-6 py-3 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 ${
                     isAllPlaced && !isBootSuccess
                       ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-emerald-500/30 animate-pulse'
                       : isBootSuccess
@@ -866,8 +911,8 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                       : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
                   }`}
                 >
-                  <Power className="w-4 h-4" />
-                  <span>{isBooting ? 'Secvență POST în Curs...' : isBootSuccess ? 'PC Pornit (POST OK) ✅' : 'POWER ON (Bootează PC) 🟢'}</span>
+                  <Power className="w-4 h-4 shrink-0" />
+                  <span>{isBooting ? 'Secvență POST...' : isBootSuccess ? 'PC Pornit (POST OK) ✅' : 'POWER ON (Bootează) 🟢'}</span>
                 </button>
               </div>
 

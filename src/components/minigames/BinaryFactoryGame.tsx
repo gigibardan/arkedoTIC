@@ -162,36 +162,36 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
   return (
     <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10 select-none">
       {/* Top Header */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="order-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
         >
           <ArrowLeft className="w-4 h-4 text-emerald-400" />
-          <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
+          <span>{lang === 'en' ? 'Arcade' : 'Înapoi'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-center">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md">
-            <Binary className="w-5 h-5" />
+        <div className="order-3 sm:order-2 w-full sm:w-auto flex items-center gap-2 text-left sm:text-center justify-start sm:justify-center">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md shrink-0">
+            <Binary className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-xs sm:text-base font-black text-white font-heading">
               {lang === 'en' ? 'Binary Bit Factory' : 'Decodorul Binar (Fabrica de Biți)'}
             </h1>
-            <p className="text-[11px] text-amber-400 font-mono">
+            <p className="text-[10px] sm:text-[11px] text-amber-400 font-mono">
               {lang === 'en' ? 'Convert Numbers between Decimal & Binary Switches' : 'Comută Biții 0 și 1 pentru a Obține Numărul Zecimal'}
             </p>
           </div>
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
-          <Trophy className="w-4 h-4 text-amber-400" />
-          <span>Record: {highScore} pts</span>
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold shrink-0">
+          <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>{highScore} pts</span>
         </div>
       </div>
 
@@ -312,14 +312,14 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
             )}
 
             {/* The Interactive Bulbs Row */}
-            <div className={`grid gap-2 sm:gap-3 ${difficulty === 'easy' ? 'grid-cols-4' : 'grid-cols-4 sm:grid-cols-8'}`}>
+            <div className={`grid gap-1.5 sm:gap-3 ${difficulty === 'easy' ? 'grid-cols-4' : 'grid-cols-4 sm:grid-cols-8'}`}>
               {currentWeights.map((weight, idx) => {
                 const isActive = bits[idx];
                 return (
                   <button
                     key={weight}
                     onClick={() => toggleBit(idx)}
-                    className={`p-3 sm:p-4 rounded-2xl border-2 flex flex-col items-center justify-between gap-3 transition-all transform active:scale-95 cursor-pointer shadow-lg ${
+                    className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-between gap-1.5 sm:gap-3 transition-all transform active:scale-95 cursor-pointer shadow-md sm:shadow-lg ${
                       isActive
                         ? 'bg-gradient-to-b from-amber-500/20 to-amber-600/30 border-amber-400 shadow-amber-500/20 ring-2 ring-amber-400/40'
                         : 'bg-slate-950/80 border-slate-800 hover:border-slate-700 text-slate-500'
@@ -327,32 +327,32 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
                   >
                     {/* Weight Label (Power of 2) */}
                     <div className="flex flex-col items-center">
-                      <span className={`text-base sm:text-xl font-black font-mono ${isActive ? 'text-amber-300' : 'text-slate-400'}`}>
+                      <span className={`text-sm sm:text-xl font-black font-mono ${isActive ? 'text-amber-300' : 'text-slate-400'}`}>
                         +{weight}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-500">2^{currentWeights.length - 1 - idx}</span>
+                      <span className="text-[8px] sm:text-[10px] font-mono text-slate-500">2^{currentWeights.length - 1 - idx}</span>
                     </div>
 
                     {/* Bulb Visual Icon */}
                     <div
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all ${
+                      className={`w-7 h-7 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all ${
                         isActive
-                          ? 'bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/50 scale-110 animate-pulse'
+                          ? 'bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/50 scale-105 sm:scale-110 animate-pulse'
                           : 'bg-slate-900 text-slate-600 border border-slate-800'
                       }`}
                     >
-                      <Lightbulb className={`w-5 h-5 sm:w-6 sm:h-6 ${isActive ? 'fill-current' : ''}`} />
+                      <Lightbulb className={`w-3.5 h-3.5 sm:w-6 sm:h-6 ${isActive ? 'fill-current' : ''}`} />
                     </div>
 
                     {/* Binary Digit (0 or 1) */}
                     <div
-                      className={`px-3 py-0.5 rounded-full font-mono text-xs font-black border ${
+                      className={`px-1.5 sm:px-3 py-0.5 rounded-full font-mono text-[9px] sm:text-xs font-black border ${
                         isActive
                           ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
                           : 'bg-slate-900 border-slate-800 text-slate-600'
                       }`}
                     >
-                      {isActive ? 'BIT 1' : 'BIT 0'}
+                      {isActive ? '1' : '0'}
                     </div>
                   </button>
                 );
@@ -360,9 +360,9 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
             </div>
 
             {/* Binary String Representation */}
-            <div className="mt-2 p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-400">{lang === 'en' ? 'Binary Representation:' : 'Valoare Binară Rezultată:'}</span>
-              <span className="text-sm font-black text-amber-400 tracking-widest bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">
+            <div className="mt-2 p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 text-xs font-mono">
+              <span className="text-slate-400">{lang === 'en' ? 'Binary Result:' : 'Valoare Binară:'}</span>
+              <span className="text-xs sm:text-sm font-black text-amber-400 tracking-widest bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">
                 {bits.map((b) => (b ? '1' : '0')).join('')}
                 <span className="text-[10px] text-slate-500 ml-1.5">(baza 2)</span>
               </span>
@@ -370,25 +370,25 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
           </div>
 
           {/* Action Row: Reset & Validate */}
-          <div className="flex items-center justify-between gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
             <button
               onClick={resetAllBits}
-              className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white font-bold text-xs sm:text-sm transition border border-slate-700 cursor-pointer active:scale-95"
+              className="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white font-bold text-xs sm:text-sm transition border border-slate-700 cursor-pointer active:scale-95 flex items-center justify-center"
             >
-              <RotateCcw className="w-4 h-4 inline mr-1.5 text-slate-400" />
-              <span>{lang === 'en' ? 'Clear All Bits (0000)' : 'Resetează Biții (0000)'}</span>
+              <RotateCcw className="w-4 h-4 mr-1.5 text-slate-400 shrink-0" />
+              <span>{lang === 'en' ? 'Clear All Bits' : 'Resetează Biții (0000)'}</span>
             </button>
 
             <button
               onClick={handleCheckAnswer}
               disabled={currentSum !== targetNumber}
-              className={`px-8 py-3.5 rounded-2xl font-black text-sm sm:text-base transition shadow-xl flex items-center gap-2 cursor-pointer active:scale-95 ${
+              className={`w-full sm:w-auto px-8 py-3.5 rounded-2xl font-black text-sm sm:text-base transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
                 currentSum === targetNumber
                   ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/30 animate-bounce'
                   : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
               }`}
             >
-              <CheckCircle2 className="w-5 h-5" />
+              <CheckCircle2 className="w-5 h-5 shrink-0" />
               <span>{lang === 'en' ? 'Validate Binary ➔' : 'Validează Conversia ➔'}</span>
             </button>
           </div>

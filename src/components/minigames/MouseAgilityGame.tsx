@@ -56,6 +56,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
 
   // Drag item position if in drag mode
   const [dragState, setDragState] = useState<{ isDragging: boolean; x: number; y: number } | null>(null);
+  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
 
   // High score
   const [highScore, setHighScore] = useState<number>(() => {
@@ -109,6 +110,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
 
     setCurrentTarget(newTarget);
     setDragState(null);
+    setIsFileSelected(false);
   };
 
   const startGame = () => {
@@ -266,36 +268,36 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
   return (
     <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10 select-none">
       {/* Top Header / Back Navigation */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="order-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
         >
           <ArrowLeft className="w-4 h-4 text-emerald-400" />
-          <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
+          <span>{lang === 'en' ? 'Arcade' : 'Înapoi'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-center">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md">
-            <MousePointer className="w-5 h-5" />
+        <div className="order-3 sm:order-2 w-full sm:w-auto flex items-center gap-2 text-left sm:text-center justify-start sm:justify-center">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
+            <MousePointer className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-xs sm:text-base font-black text-white font-heading">
               {lang === 'en' ? 'Mouse Agility & Precision' : 'Maestrul Mouse-ului & Reflexe'}
             </h1>
-            <p className="text-[11px] text-emerald-400 font-mono">
-              {lang === 'en' ? 'Master Left, Right, Double-Click and Drag & Drop' : 'Antrenează Click Stânga, Dreapta, Dublu-Click și Glisare'}
+            <p className="text-[10px] sm:text-[11px] text-emerald-400 font-mono">
+              {lang === 'en' ? 'Master Left, Right, Double-Click and Drag & Drop' : 'Click Stânga, Dreapta, Dublu-Click și Glisare'}
             </p>
           </div>
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
-          <Trophy className="w-4 h-4 text-amber-400" />
-          <span>Record: {highScore} pts</span>
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold shrink-0">
+          <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>{highScore} pts</span>
         </div>
       </div>
 
@@ -408,7 +410,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             ref={arenaRef}
             onClick={handleArenaClick}
             onContextMenu={(e) => e.preventDefault()} // Disable default context menu in the entire arena
-            className="w-full h-[420px] bg-slate-950/90 border-2 border-slate-800 rounded-2xl relative overflow-hidden cursor-crosshair shadow-inner"
+            className="w-full h-[340px] sm:h-[420px] bg-slate-950/90 border-2 border-slate-800 rounded-2xl relative overflow-hidden cursor-crosshair shadow-inner"
           >
             {/* Grid Lines Pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px] opacity-25 pointer-events-none"></div>
@@ -417,26 +419,36 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             {currentTarget && (
               <>
                 {currentTarget.type === 'drag' ? (
-                  /* Drag and Drop special interaction */
+                  /* Drag and Drop special interaction with touch tap-to-select fallback */
                   <>
                     {/* Draggable File Source */}
                     <div
                       draggable
                       onDragStart={handleDragStart}
-                      onClick={(e) => e.stopPropagation()}
-                      className="absolute z-20 cursor-grab active:cursor-grabbing p-3 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-700 border-2 border-cyan-300 shadow-xl flex flex-col items-center justify-center text-center text-white transition-transform hover:scale-110 active:scale-95 animate-pulse"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsFileSelected(true);
+                        sounds.playClick();
+                      }}
+                      className={`absolute z-20 cursor-grab active:cursor-grabbing p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-700 border-2 shadow-xl flex flex-col items-center justify-center text-center text-white transition-all hover:scale-110 active:scale-95 ${
+                        isFileSelected
+                          ? 'border-amber-400 ring-4 ring-amber-400/50 scale-105 animate-pulse shadow-amber-500/40'
+                          : 'border-cyan-300 animate-pulse'
+                      }`}
                       style={{
                         left: `${currentTarget.x}%`,
                         top: `${currentTarget.y}%`,
                         transform: 'translate(-50%, -50%)',
                       }}
                     >
-                      <FileText className="w-8 h-8 text-cyan-200" />
-                      <span className="text-[11px] font-bold mt-1 max-w-[100px] truncate">
+                      <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-cyan-200" />
+                      <span className="text-[10px] sm:text-[11px] font-bold mt-1 max-w-[90px] sm:max-w-[100px] truncate">
                         Document.docx
                       </span>
-                      <span className="text-[9px] font-mono bg-slate-900/80 px-1.5 py-0.5 rounded text-cyan-300 mt-0.5">
-                        {lang === 'en' ? 'Trage aici ➔' : 'Trage spre folder'}
+                      <span className="text-[8px] sm:text-[9px] font-mono bg-slate-900/80 px-1.5 py-0.5 rounded text-cyan-300 mt-0.5">
+                        {isFileSelected
+                          ? (lang === 'en' ? 'Tap folder ➔' : 'Atinge folderul ➔')
+                          : (lang === 'en' ? 'Drag / Tap' : 'Trage / Atinge')}
                       </span>
                     </div>
 
@@ -444,17 +456,30 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                     <div
                       onDragOver={handleDragOver}
                       onDrop={handleDropOnFolder}
-                      onClick={(e) => e.stopPropagation()}
-                      className="absolute z-10 p-4 rounded-3xl bg-amber-500/20 border-2 border-dashed border-amber-400 shadow-2xl flex flex-col items-center justify-center text-amber-300 text-center animate-bounce"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isFileSelected || currentTarget?.type === 'drag') {
+                          sounds.playCorrect();
+                          registerSuccess(250);
+                          setIsFileSelected(false);
+                        }
+                      }}
+                      className={`absolute z-10 p-3 sm:p-4 rounded-3xl bg-amber-500/20 border-2 border-dashed shadow-2xl flex flex-col items-center justify-center text-amber-300 text-center cursor-pointer transition-all ${
+                        isFileSelected
+                          ? 'border-amber-300 bg-amber-500/30 scale-110 animate-bounce ring-4 ring-amber-400/40'
+                          : 'border-amber-400 animate-bounce'
+                      }`}
                       style={{
-                        right: '12%',
-                        bottom: '15%',
+                        right: '10%',
+                        bottom: '12%',
                       }}
                     >
-                      <Folder className="w-12 h-12 text-amber-400 fill-amber-400/40" />
-                      <span className="text-xs font-bold mt-1">Dosar TIC 📁</span>
-                      <span className="text-[10px] text-amber-200 font-mono">
-                        {lang === 'en' ? 'Drop here!' : 'Plasează aici!'}
+                      <Folder className="w-9 h-9 sm:w-12 sm:h-12 text-amber-400 fill-amber-400/40" />
+                      <span className="text-[10px] sm:text-xs font-bold mt-1">Dosar TIC 📁</span>
+                      <span className="text-[9px] sm:text-[10px] text-amber-200 font-mono">
+                        {isFileSelected
+                          ? (lang === 'en' ? 'Tap to Drop!' : 'Atinge pt plasare!')
+                          : (lang === 'en' ? 'Drop here!' : 'Plasează aici!')}
                       </span>
                     </div>
                   </>
@@ -463,7 +488,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                   <div
                     onClick={handleTargetLeftClick}
                     onContextMenu={handleTargetRightClick}
-                    className={`absolute z-20 p-3 sm:p-4 rounded-2xl border-2 shadow-xl flex flex-col items-center justify-center text-center cursor-pointer transition-all hover:scale-105 active:scale-95 ${
+                    className={`absolute z-20 p-2.5 sm:p-4 rounded-2xl border-2 shadow-xl flex flex-col items-center justify-center text-center cursor-pointer transition-all hover:scale-105 active:scale-95 ${
                       currentTarget.type === 'double_click'
                         ? 'bg-gradient-to-br from-amber-600 to-orange-700 border-amber-300 text-white'
                         : currentTarget.type === 'right_click'
@@ -476,16 +501,29 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                       transform: 'translate(-50%, -50%)',
                     }}
                   >
-                    <div className="text-2xl sm:text-3xl drop-shadow">{currentTarget.icon}</div>
-                    <div className="text-xs sm:text-sm font-black mt-1 uppercase tracking-wide">
+                    <div className="text-xl sm:text-3xl drop-shadow">{currentTarget.icon}</div>
+                    <div className="text-[11px] sm:text-sm font-black mt-1 uppercase tracking-wide">
                       {lang === 'en' ? currentTarget.labelEn : currentTarget.labelRo}
                     </div>
-                    <div className="text-[10px] font-mono opacity-90 mt-0.5">
+                    <div className="text-[9px] sm:text-[10px] font-mono opacity-90 mt-0.5">
                       {currentTarget.type === 'double_click' &&
                         (currentTarget.clicksCount === 1 ? 'Încă 1 click rapid! ⚡' : '2 x Click!')}
-                      {currentTarget.type === 'right_click' && 'Apasă butonul DREAPTA!'}
-                      {currentTarget.type === 'click' && 'Click Stânga simplu!'}
+                      {currentTarget.type === 'right_click' && (lang === 'en' ? 'Right Click' : 'Click Dreapta')}
+                      {currentTarget.type === 'click' && (lang === 'en' ? 'Left Click' : 'Click Stânga')}
                     </div>
+                    {currentTarget.type === 'right_click' && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          sounds.playCorrect();
+                          registerSuccess(150);
+                        }}
+                        className="mt-1 px-2 py-0.5 rounded-lg bg-purple-900/90 hover:bg-purple-800 text-[9px] font-mono font-bold text-white border border-purple-300 shadow-md active:scale-90"
+                      >
+                        {lang === 'en' ? 'Right-Click 🖱️' : 'Click Dreapta 🖱️'}
+                      </button>
+                    )}
                   </div>
                 )}
               </>
