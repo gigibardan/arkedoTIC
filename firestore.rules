@@ -9,5 +9,9 @@ service cloud.firestore {
     match /elevi/{document} {
       allow read, write: if true;
     }
+    // Camere de duel multiplayer 1v1 in timp real
+    match /duel_rooms/{document} {
+      allow read, write: if true;
+    }
   }
 }

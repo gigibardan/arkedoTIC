@@ -33,6 +33,7 @@ import { Module3BFlow } from './components/internet2/Module3BFlow';
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
+import { DuelArena } from './components/DuelArena';
 import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
 import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthService';
@@ -40,12 +41,15 @@ import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthS
 function GameContent() {
   const { t } = useLanguage();
   const arky = useArky();
-  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade'>(() => {
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel'>(() => {
     if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
       return 'teacher';
     }
     if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
       return 'arcade';
+    }
+    if (window.location.pathname.includes('/duel') || window.location.hash.includes('duel')) {
+      return 'duel';
     }
     return 'catalog';
   });
@@ -291,6 +295,8 @@ function GameContent() {
         setView('teacher');
       } else if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
         setView('arcade');
+      } else if (window.location.pathname.includes('/duel') || window.location.hash.includes('duel')) {
+        setView('duel');
       }
     };
     window.addEventListener('popstate', handleUrlChange);
@@ -301,12 +307,14 @@ function GameContent() {
     };
   }, []);
 
-  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade') => {
+  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel') => {
     setView(newView);
     if (newView === 'teacher') {
       window.history.pushState({}, '', '/profesor');
     } else if (newView === 'arcade') {
       window.history.pushState({}, '', '/arcade');
+    } else if (newView === 'duel') {
+      window.history.pushState({}, '', '/duel');
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
     }
@@ -512,6 +520,7 @@ function GameContent() {
         onEditStudentName={() => navigateToView('catalog')}
         onNavigateToTeacher={() => navigateToView('teacher')}
         onNavigateToArcade={() => navigateToView('arcade')}
+        onNavigateToDuel={() => navigateToView('duel')}
       />
 
       {/* Main Container */}
@@ -522,6 +531,12 @@ function GameContent() {
           <ArcadeHub
             studentName={studentName}
             onBackToCatalog={() => navigateToView('catalog')}
+            onOpenDuel={() => navigateToView('duel')}
+          />
+        ) : view === 'duel' ? (
+          <DuelArena
+            studentName={studentName}
+            onBack={() => navigateToView('catalog')}
           />
         ) : view === 'catalog' ? (
           <CoursesCatalog
@@ -535,6 +550,7 @@ function GameContent() {
             onResetActiveMission={handleResetActiveMission}
             onOpenTeacherPortal={() => navigateToView('teacher')}
             onOpenArcade={() => navigateToView('arcade')}
+            onOpenDuel={() => navigateToView('duel')}
           />
         ) : (
           <>

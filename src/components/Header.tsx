@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2 } from 'lucide-react';
+import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2, Swords } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 
@@ -8,7 +8,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -16,6 +16,7 @@ interface HeaderProps {
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
   onNavigateToArcade?: () => void;
+  onNavigateToDuel?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,6 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
   onEditStudentName,
   onNavigateToTeacher,
   onNavigateToArcade,
+  onNavigateToDuel,
 }) => {
   const { lang, setLang, t } = useLanguage();
 
@@ -57,6 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'lesson') return getLessonTitle();
     if (currentView === 'teacher') return t.teacherPortalNav;
     if (currentView === 'arcade') return lang === 'en' ? 'ARKEDO Arcade Lab' : 'Laboratorul Arcade TIC';
+    if (currentView === 'duel') return lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor TIC 1v1';
     return t.catalogTitle;
   };
 
@@ -172,6 +175,29 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-slate-500 text-[10px] hidden sm:inline">/{maxScore}</span>
               </div>
             </div>
+          )}
+
+          {/* Duel Arena 1v1 Button */}
+          {onNavigateToDuel && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                if (currentView === 'duel') {
+                  onNavigateToCatalog();
+                } else {
+                  onNavigateToDuel();
+                }
+              }}
+              className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl transition border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
+                currentView === 'duel'
+                  ? 'bg-rose-600 text-white border-rose-400 shadow-rose-500/20'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:text-white'
+              }`}
+              title={lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
+            >
+              <Swords className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'duel' ? 'text-white' : 'text-rose-400'}`} />
+              <span className="hidden lg:inline">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
+            </button>
           )}
 
           {/* Arcade Button */}

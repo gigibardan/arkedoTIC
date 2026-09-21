@@ -36,16 +36,18 @@ import {
   Layers,
   FileDown,
   Biohazard,
+  Swords,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
   studentName?: string;
   onBackToCatalog: () => void;
+  onOpenDuel?: () => void;
 }
 
 type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper';
 
-export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
+export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
   const [activeGame, setActiveGame] = useState<ActiveGame>('hub');
 
@@ -238,6 +240,19 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 <Gamepad2 className="w-4 h-4 text-indigo-400" />
                 <span>{lang === 'en' ? 'ARKEDO Arcade Lab' : 'Laboratorul Arcade TIC'}</span>
               </div>
+
+              {onOpenDuel && (
+                <button
+                  onClick={() => {
+                    sounds.playClick();
+                    onOpenDuel();
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white border border-rose-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-lg shadow-rose-600/30"
+                >
+                  <Swords className="w-4 h-4 text-amber-300 animate-pulse" />
+                  <span>{lang === 'en' ? 'Duel Arena 1v1' : 'Arena Duel 1v1'}</span>
+                </button>
+              )}
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-black text-white font-heading tracking-tight">
@@ -263,12 +278,56 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                10 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
+                13 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Featured 1v1 Realtime Duel Arena Card */}
+      {onOpenDuel && (
+        <div className="relative overflow-hidden bg-gradient-to-r from-rose-950/70 via-slate-900 to-amber-950/60 border-2 border-rose-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-amber-400/40">
+                <Swords className="w-6 h-6 animate-pulse" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
+                    MULTIPLAYER 1V1
+                  </span>
+                  <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
+                  </span>
+                </div>
+                <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                  {lang === 'en' ? 'Duel Arena: Challenge a Classmate!' : 'Arena Duel: Provoacă un Coleg de Bancă!'}
+                </h3>
+                <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                  {lang === 'en'
+                    ? 'Pick Cyber Sprint (Typing Race) or Quiz Blitz (TIC trivia) and compete head-to-head with live score sync.'
+                    : 'Alege Cyber Sprint (cursă de tastare) sau Quiz Blitz (cultură TIC) și concurează 1 la 1 cu sincronizare instantanee.'}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                sounds.playClick();
+                onOpenDuel();
+              }}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer shrink-0 active:scale-95"
+            >
+              <Swords className="w-4 h-4" />
+              <span>{lang === 'en' ? 'Launch Duel 1v1' : 'Lansează Duel 1v1'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

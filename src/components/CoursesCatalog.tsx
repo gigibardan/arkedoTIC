@@ -33,6 +33,7 @@ import {
   AlertCircle,
   Edit3,
   Info,
+  Swords,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -74,6 +75,7 @@ interface CoursesCatalogProps {
   onResetActiveMission: () => void;
   onOpenTeacherPortal?: () => void;
   onOpenArcade?: () => void;
+  onOpenDuel?: () => void;
 }
 
 export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
@@ -87,6 +89,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onResetActiveMission,
   onOpenTeacherPortal,
   onOpenArcade,
+  onOpenDuel,
 }) => {
   const { t, lang } = useLanguage();
   const arky = useArky();
@@ -1092,7 +1095,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
 
             {/* Quick Hero Highlights / Feature Anchor Buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
               {/* 1. Misiuni Practice */}
               <button
                 id="hero-badge-misiuni"
@@ -1104,16 +1107,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
-                className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-teal-950/40 hover:bg-teal-900/60 border border-teal-500/40 hover:border-teal-300 text-xs text-teal-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-teal-500/20"
+                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-teal-950/40 hover:bg-teal-900/60 border border-teal-500/40 hover:border-teal-300 text-xs text-teal-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-teal-500/20"
                 title={lang === 'en' ? 'Jump to Practical Missions' : 'Mergi la Misiuni Practice'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 group-hover:scale-110 transition-transform">
                     <BookOpen className="w-3.5 h-3.5" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Practical Missions' : 'Misiuni Practice'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Missions' : 'Misiuni'}</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-teal-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-3 h-3 text-teal-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
 
               {/* 2. Jocuri Arcade */}
@@ -1124,19 +1127,39 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   sounds.playClick();
                   onOpenArcade?.();
                 }}
-                className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
+                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
                 title={lang === 'en' ? 'Open Arcade Games (13 Mini-Games)' : 'Deschide Jocurile Arcade (13 Mini-Jocuri)'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Arcade Games (13)' : 'Jocuri Arcade (13)'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Arcade (13)' : 'Arcade (13)'}</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-3 h-3 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
 
-              {/* 3. Clasamente */}
+              {/* 3. Duel 1v1 Arena */}
+              <button
+                id="hero-badge-duel"
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  onOpenDuel?.();
+                }}
+                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-rose-950/50 hover:bg-rose-900/70 border border-rose-500/50 hover:border-rose-300 text-xs text-rose-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-rose-500/20"
+                title={lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-rose-500/25 border border-rose-400/40 flex items-center justify-center text-rose-300 shrink-0 group-hover:scale-110 transition-transform">
+                    <Swords className="w-3.5 h-3.5 animate-pulse" />
+                  </div>
+                  <span className="truncate">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
+                </div>
+                <ArrowRight className="w-3 h-3 text-rose-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+              </button>
+
+              {/* 4. Clasamente */}
               <button
                 id="hero-badge-clasament"
                 type="button"
@@ -1147,16 +1170,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
-                className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/40 hover:border-amber-300 text-xs text-amber-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-amber-500/20"
+                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/40 hover:border-amber-300 text-xs text-amber-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-amber-500/20"
                 title={lang === 'en' ? 'Jump to Leaderboard' : 'Mergi la Clasamente Elevi'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Trophy className="w-3.5 h-3.5" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Classroom Leaderboard' : 'Clasamente'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Top Elevi' : 'Top Elevi'}</span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-3 h-3 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
             </div>
           </div>
@@ -1555,6 +1578,49 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Duel 1v1 Arena Banner Section */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-rose-950/60 to-slate-900 border-2 border-rose-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-amber-400/30">
+              <Swords className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-rose-400 font-mono">
+                  {lang === 'en' ? 'Live Multiplayer Duel' : 'Duel Multiplayer 1v1 în Direct'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/30 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  Cloud Realtime
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                {lang === 'en' ? 'ARKEDO Duel Arena — 1v1 Classmate Battles' : 'Arena Duelurilor TIC — Concurs 1v1 între Colegi pe Calculatoare Diferite'}
+              </h3>
+              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                {lang === 'en'
+                  ? 'Create a game room with a 4-letter code or join your classmate’s challenge! Cyber Sprint typing race and Quiz Blitz live competition.'
+                  : 'Creează o cameră cu cod de 4 litere sau intră în provocarea colegului tău! Cursă de tastare rapidă Cyber Sprint și bătălia creierelor Quiz Blitz.'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenDuel?.();
+            }}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer shrink-0 active:scale-95"
+          >
+            <Swords className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Enter Duel Arena' : 'Intră în Arena Duel 1v1'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 

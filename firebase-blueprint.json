@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "RezultatTic": {
+      "title": "RezultatTic",
+      "description": "Rezultatele testelor trimise de elevi",
+      "type": "object",
+      "properties": {
+        "studentName": { "type": "string" },
+        "grade": { "type": "string" },
+        "score": { "type": "number" },
+        "total": { "type": "number" },
+        "percentage": { "type": "number" },
+        "date": { "type": "string" }
+      }
+    },
+    "Elev": {
+      "title": "Elev",
+      "description": "Profilul elevului cu scoruri arcade si progres lectii",
+      "type": "object",
+      "properties": {
+        "studentName": { "type": "string" },
+        "avatar": { "type": "string" },
+        "totalScore": { "type": "number" },
+        "arcadeScores": { "type": "object" },
+        "completedLessons": { "type": "array" }
+      }
+    },
+    "DuelRoom": {
+      "title": "DuelRoom",
+      "description": "Camere de duel multiplayer 1v1 intre elevi in timp real",
+      "type": "object",
+      "properties": {
+        "roomCode": { "type": "string" },
+        "mode": { "type": "string" },
+        "status": { "type": "string" },
+        "host": { "type": "object" },
+        "guest": { "type": "object" },
+        "winner": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["roomCode", "mode", "status", "host"]
+    }
+  },
+  "firestore": {
+    "/rezultate_tic/{resultId}": {
+      "schema": "RezultatTic",
+      "description": "Rezultate teste elevi"
+    },
+    "/elevi/{studentId}": {
+      "schema": "Elev",
+      "description": "Profiluri elevi si clasamente"
+    },
+    "/duel_rooms/{roomId}": {
+      "schema": "DuelRoom",
+      "description": "Camere de duel multiplayer in timp real"
+    }
+  }
+}
