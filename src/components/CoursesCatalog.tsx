@@ -1125,13 +1125,13 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   onOpenArcade?.();
                 }}
                 className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
-                title={lang === 'en' ? 'Open Arcade Games (12 Mini-Games)' : 'Deschide Jocurile Arcade (12 Mini-Jocuri)'}
+                title={lang === 'en' ? 'Open Arcade Games (13 Mini-Games)' : 'Deschide Jocurile Arcade (13 Mini-Jocuri)'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Arcade Games (12)' : 'Jocuri Arcade (12)'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Arcade Games (13)' : 'Jocuri Arcade (13)'}</span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1571,16 +1571,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '12 Mini-Games' : '12 Mini-Jocuri'}
+                  {lang === 'en' ? '13 Mini-Games' : '13 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'File-Drop (Tetris), Byte Slider 3×3, Pixeli RGB, PC Builder & 2048' : 'File-Drop (Tetris Fișiere), Byte Slider 3×3, Pixeli RGB, Constructor PC & 2048'}
+                {lang === 'en' ? 'Cyber-Safe Sweeper, File-Drop (Tetris), Byte Slider, Pixeli RGB & PC Builder' : 'Căutătorul de Viruși (Minesweeper), File-Drop (Tetris), Byte Slider & Pixeli RGB'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Master file extensions with Tetris drop mechanics, RGB light mixing & pixel art, assemble PC motherboards, and block malware in the firewall!'
-                  : 'Stăpânește extensiile de fișiere cu Tetris File-Drop, sinteza luminii RGB, asamblarea PC-urilor, labirintul algoritmic și blocarea virușilor în firewall!'}
+                  ? 'Master cybersecurity with Virus Sweeper, sort file extensions with Tetris drop, mix RGB pixel lights, assemble PC motherboards, and block malware in the firewall!'
+                  : 'Stăpânește securitatea cibernetică cu Căutătorul de Viruși, extensiile de fișiere cu Tetris File-Drop, sinteza luminii RGB, asamblarea PC-urilor și firewall-ul!'}
               </p>
             </div>
           </div>

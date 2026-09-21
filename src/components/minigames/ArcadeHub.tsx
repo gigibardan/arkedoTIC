@@ -13,6 +13,7 @@ import { PCBuilderGame } from './PCBuilderGame';
 import { RGBPixelMasterGame } from './RGBPixelMasterGame';
 import { ByteSliderGame } from './ByteSliderGame';
 import { FileDropGame } from './FileDropGame';
+import { VirusSweeperGame } from './VirusSweeperGame';
 import {
   Gamepad2,
   Keyboard,
@@ -34,6 +35,7 @@ import {
   Palette,
   Layers,
   FileDown,
+  Biohazard,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -41,7 +43,7 @@ interface ArcadeHubProps {
   onBackToCatalog: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
   const { lang } = useLanguage();
@@ -144,6 +146,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const virusSweeperHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_virus_sweeper') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -178,6 +188,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
   if (activeGame === 'file_drop') {
     return <FileDropGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'virus_sweeper') {
+    return <VirusSweeperGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'detective') {
@@ -775,6 +789,53 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               className="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-sky-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Drop' : 'Joacă'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 13: Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+                <Biohazard className="w-6 h-6 animate-pulse" />
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{virusSweeperHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/10 text-rose-300 text-[10px] font-bold uppercase tracking-wider mb-2">
+              {lang === 'en' ? 'Cyber Minesweeper' : 'Căutătorul de Viruși'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Virus Sweeper (Cyber-Safe)' : 'Căutătorul de Viruși (Minesweeper)'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Classic Minesweeper reimagined for cybersecurity! Scan safe network nodes, calculate adjacent infection clues, place Antivirus Shields on Trojans, and deploy Sonar pings!'
+                : 'Mecanica clasică Minesweeper adaptată pentru securitate online! Scanează nodurile de rețea sigure, calculează virușii adiacenți din cifre și plasează Scuturi Antivirus pe stațiile infectate!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-mono">🛡️ Scut + Sonar + Buffer</span>
+            <button
+              id="arcade-btn-start-virus-sweeper"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('virus_sweeper');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Sweep' : 'Joacă'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

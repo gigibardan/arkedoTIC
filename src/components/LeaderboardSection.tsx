@@ -529,11 +529,19 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {selectedStudentForDetails.arcadeScores?.file_drop || 0} pts
                   </span>
                 </div>
+
+                {/* 13. Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center col-span-2">
+                  <span className="text-slate-400">☣️ Cyber-Safe (Căutătorul de Viruși)</span>
+                  <span className="font-mono font-bold text-rose-400">
+                    {selectedStudentForDetails.arcadeScores?.virus_sweeper || 0} pts
+                  </span>
+                </div>
               </div>
 
               <div className="mt-3 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex justify-between items-center text-xs">
                 <span className="font-bold text-indigo-300">
-                  {lang === 'en' ? 'Total Arcade Games Score:' : 'Punctaj Total Mini-Jocuri (12):'}
+                  {lang === 'en' ? 'Total Arcade Games Score:' : 'Punctaj Total Mini-Jocuri (13):'}
                 </span>
                 <span className="font-mono font-black text-sm text-indigo-200">
                   {selectedStudentForDetails.arcadeScores?.totalArcade || 0} pts
