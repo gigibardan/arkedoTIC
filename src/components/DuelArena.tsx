@@ -20,7 +20,18 @@ import {
   Clock,
   LogOut,
   ArrowLeft,
-  Volume2
+  Volume2,
+  ShieldCheck,
+  ShieldX,
+  Cpu,
+  Mail,
+  AlertTriangle,
+  FileCode,
+  HardDrive,
+  CheckCircle2,
+  XCircle,
+  Wrench,
+  CheckCheck
 } from 'lucide-react';
 import {
   DuelGameMode,
@@ -33,8 +44,11 @@ import {
   updateDuelProgress,
   setRoomPlaying,
   subscribeToDuelRoom,
-  leaveDuelRoom
+  leaveDuelRoom,
+  CyberShieldItem,
+  PCRushPart
 } from '../lib/duelService';
+import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
@@ -112,6 +126,17 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [quizScore, setQuizScore] = useState(0);
   const [streak, setStreak] = useState(0);
+
+  // Local Gameplay States - Cyber Shield
+  const [shieldIndex, setShieldIndex] = useState(0);
+  const [shieldScore, setShieldScore] = useState(0);
+  const [shieldStreak, setShieldStreak] = useState(0);
+  const [shieldFeedback, setShieldFeedback] = useState<{ isCorrect: boolean; explanation: string; action: 'block' | 'allow' } | null>(null);
+
+  // Local Gameplay States - Hardware PC Rush
+  const [assembledParts, setAssembledParts] = useState<string[]>([]);
+  const [pcScore, setPcScore] = useState(0);
+  const [pcMistake, setPcMistake] = useState<string | null>(null);
 
   // Countdown timer before match start
   const [countdown, setCountdown] = useState<number | null>(null);
@@ -262,6 +287,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             myName
           );
 
+          recordStudentDuelResult(true, 'cyber_sprint', finalScore);
+
           if (onAwardXP) {
             onAwardXP(200, 'Victorie în Duelul Cyber Sprint 1v1!');
           }
@@ -323,6 +350,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           myName
         );
 
+        recordStudentDuelResult(true, 'quiz_blitz', newScore);
+
         if (onAwardXP) {
           onAwardXP(250, 'Campioni în Quiz Blitz 1v1 TIC!');
         }
@@ -337,12 +366,146 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     }, 900);
   };
 
+  // Cyber Shield Logic (Phishing/Threats defense)
+  const shieldItems: CyberShieldItem[] = currentRoom?.shieldItems || [];
+  const currentShieldItem = shieldItems[shieldIndex];
+
+  const handleShieldDecision = (action: 'block' | 'allow') => {
+    if (!currentShieldItem || shieldFeedback !== null || hasFinishedLocal || !currentRoom) return;
+
+    const isCorrect = (currentShieldItem.isThreat && action === 'block') || (!currentShieldItem.isThreat && action === 'allow');
+
+    if (isCorrect) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+    }
+
+    const newStreak = isCorrect ? shieldStreak + 1 : 0;
+    setShieldStreak(newStreak);
+
+    const pointsGained = isCorrect ? 150 + newStreak * 30 : 0;
+    const newScore = shieldScore + pointsGained;
+    setShieldScore(newScore);
+
+    setShieldFeedback({
+      isCorrect,
+      explanation: currentShieldItem.explanation,
+      action
+    });
+
+    setTimeout(() => {
+      setShieldFeedback(null);
+      const nextShieldIdx = shieldIndex + 1;
+      const progressPercent = Math.min(100, Math.round((nextShieldIdx / shieldItems.length) * 100));
+
+      if (nextShieldIdx >= shieldItems.length) {
+        sounds.playVictory();
+        setHasFinishedLocal(true);
+        const myName = isHost ? currentRoom.host.name : (currentRoom.guest?.name || 'Elev');
+        const myId = isHost ? currentRoom.host.id : currentRoom.guest?.id;
+
+        updateDuelProgress(
+          currentRoom.roomCode,
+          isHost,
+          { progress: 100, score: newScore, finishedAt: Date.now() },
+          myId,
+          myName
+        );
+
+        recordStudentDuelResult(true, 'cyber_shield', newScore);
+
+        if (onAwardXP) {
+          onAwardXP(300, 'Scut Impenetrabil în Cyber Shield 1v1!');
+        }
+      } else {
+        setShieldIndex(nextShieldIdx);
+        updateDuelProgress(currentRoom.roomCode, isHost, {
+          progress: progressPercent,
+          score: newScore,
+          currentStageIndex: nextShieldIdx
+        });
+      }
+    }, 1100);
+  };
+
+  // Hardware PC Rush Logic (Sequential PC Building conveyor)
+  const pcParts: PCRushPart[] = currentRoom?.pcPartsOrder || [];
+  const expectedStep = assembledParts.length + 1;
+  const currentExpectedPart = pcParts.find((p) => p.stepOrder === expectedStep);
+
+  const handleAssemblePart = (part: PCRushPart) => {
+    if (assembledParts.includes(part.id) || hasFinishedLocal || !currentRoom) return;
+
+    if (part.stepOrder === expectedStep) {
+      // Correct sequence
+      sounds.playCorrect();
+      setPcMistake(null);
+      const updatedAssembled = [...assembledParts, part.id];
+      setAssembledParts(updatedAssembled);
+
+      const newScore = pcScore + 150;
+      setPcScore(newScore);
+
+      const progressPercent = Math.min(100, Math.round((updatedAssembled.length / pcParts.length) * 100));
+
+      if (updatedAssembled.length >= pcParts.length) {
+        // Assembled full computer!
+        sounds.playVictory();
+        setHasFinishedLocal(true);
+        const finalScore = newScore + 100;
+        const myName = isHost ? currentRoom.host.name : (currentRoom.guest?.name || 'Elev');
+        const myId = isHost ? currentRoom.host.id : currentRoom.guest?.id;
+
+        updateDuelProgress(
+          currentRoom.roomCode,
+          isHost,
+          { progress: 100, score: finalScore, finishedAt: Date.now() },
+          myId,
+          myName
+        );
+
+        recordStudentDuelResult(true, 'pc_rush', finalScore);
+
+        if (onAwardXP) {
+          onAwardXP(350, 'Asamblare PC Fulger în Hardware PC Rush 1v1!');
+        }
+      } else {
+        updateDuelProgress(currentRoom.roomCode, isHost, {
+          progress: progressPercent,
+          score: newScore,
+          currentStageIndex: updatedAssembled.length
+        });
+      }
+    } else {
+      // Mistake: Wrong assembly order!
+      sounds.playWrong();
+      setPcMistake(`Greșit! Înainte de "${part.name}", trebuie să montezi "${currentExpectedPart?.name}"!`);
+      setTimeout(() => setPcMistake(null), 2000);
+    }
+  };
+
   // Determine opponent and me
   const me: DuelPlayer | null = isHost ? currentRoom?.host || null : (currentRoom?.guest || null);
   const opponent: DuelPlayer | null = isHost ? currentRoom?.guest || null : (currentRoom?.host || null);
 
   const isMeWinner = currentRoom?.winnerId === me?.id;
   const isOpponentWinner = currentRoom?.winnerId === opponent?.id;
+
+  const getModeTitle = (mode?: DuelGameMode) => {
+    switch (mode) {
+      case 'cyber_sprint':
+        return '⚡ Cyber Sprint (Cursă Tastare)';
+      case 'quiz_blitz':
+        return '🧠 Quiz Blitz (Bătălia Creierelor)';
+      case 'cyber_shield':
+        return '🛡️ Cyber Shield (Apărare Phishing)';
+      case 'pc_rush':
+        return '🔧 Hardware PC Rush (Asamblare)';
+      default:
+        return '⚔️ Duel 1v1 TIC';
+    }
+  };
 
   return (
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 select-none font-sans">
@@ -446,6 +609,54 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     5 întrebări fulger de hardware, securitate și algoritmi. Punctaj bonus pentru răspunsuri ultrarapide!
                   </p>
                 </button>
+
+                {/* Mode 3: Cyber Shield (Phishing defense) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('cyber_shield')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'cyber_shield'
+                      ? 'bg-rose-950/80 border-rose-400 ring-2 ring-rose-500/30 shadow-md'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Cyber Shield 🛡️</h4>
+                      <span className="text-[10px] text-rose-300 font-medium">Apărare Anti-Phishing 1v1</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Analizează email-urile și link-urile primite în timp real! Blochează atacurile hackerilor și permite mesajele sigure.
+                  </p>
+                </button>
+
+                {/* Mode 4: Hardware PC Rush */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('pc_rush')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'pc_rush'
+                      ? 'bg-cyan-950/80 border-cyan-400 ring-2 ring-cyan-500/30 shadow-md'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center">
+                      <Cpu className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Hardware PC Rush 🔧</h4>
+                      <span className="text-[10px] text-cyan-300 font-medium">Asamblare PC în Viteză</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Asamblează calculatorul în ordinea corectă pas cu pas (CPU, Cooler, RAM, SSD, GPU, Sursă)! Cine montează primul?
+                  </p>
+                </button>
               </div>
 
               {/* Host / Create Button */}
@@ -484,17 +695,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           </div>
 
           {/* Join Room Box */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 space-y-4">
             <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col justify-between h-full">
               <div>
                 <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-2">
                   <Users className="w-4 h-4 text-cyan-400" />
-                  {lang === 'en' ? '2. Have a Room Code?' : '2. Ai Primit un Cod de Meci?'}
+                  {lang === 'en' ? '2. Or Join an Existing Duel:' : '2. Sau Conectează-te la un Coleg:'}
                 </h3>
-                <p className="text-xs text-slate-400 mb-4">
-                  {lang === 'en'
-                    ? 'Enter the 4-letter code displayed on your classmate\'s computer screen.'
-                    : 'Introdu codul de 4 litere afișat pe ecranul colegului tău pentru a te conecta.'}
+                <p className="text-xs text-slate-400 mb-5">
+                  Cere-i colegului de bancă codul camerei create de el (4 caractere) și intră direct în arenă!
                 </p>
 
                 <div className="space-y-3">
@@ -546,7 +755,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="text-7xl font-black text-amber-400 font-mono animate-bounce drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
                 {countdown === 0 ? 'START! 🚀' : countdown}
               </div>
-              <p className="text-xs text-slate-400 mt-4">Pregătește tastatura!</p>
+              <p className="text-xs text-slate-400 mt-4">Pregătește-te pentru victorie!</p>
             </div>
           )}
 
@@ -554,7 +763,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-800">
             <div>
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                {currentRoom.mode === 'cyber_sprint' ? '⚡ Cyber Sprint (Cursă de Tastare)' : '🧠 Quiz Blitz (Întrebări Fulger)'}
+                {getModeTitle(currentRoom.mode)}
               </span>
               <h3 className="text-2xl font-black text-white">Lobby Pregătire Meci 1v1</h3>
             </div>
@@ -647,6 +856,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-800">
             <button
               onClick={() => {
+                sounds.playClick();
                 leaveDuelRoom(currentRoom.roomCode, isHost);
                 setCurrentRoom(null);
                 setViewState('lobby');
@@ -724,7 +934,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             </div>
           </div>
 
-          {/* MODE SPECIFIC GAMEPLAY */}
+          {/* MODE 1: CYBER SPRINT GAMEPLAY */}
           {currentRoom.mode === 'cyber_sprint' && (
             <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
               {/* Words Text Container */}
@@ -764,6 +974,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             </div>
           )}
 
+          {/* MODE 2: QUIZ BLITZ GAMEPLAY */}
           {currentRoom.mode === 'quiz_blitz' && currentQ && (
             <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
               <div className="flex justify-between items-center text-xs font-bold text-slate-400">
@@ -808,6 +1019,183 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* MODE 3: CYBER SHIELD GAMEPLAY (Phishing / Threats) */}
+          {currentRoom.mode === 'cyber_shield' && currentShieldItem && (
+            <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 border-2 border-rose-500/40 shadow-2xl space-y-6">
+              <div className="flex justify-between items-center text-xs font-bold text-slate-400">
+                <span className="text-rose-300 font-mono flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-rose-400" />
+                  Scenariul de Securitate {shieldIndex + 1} din {shieldItems.length}
+                </span>
+                <span className="text-amber-400 flex items-center gap-1 font-mono">
+                  <Flame className="w-4 h-4" /> Streak: x{shieldStreak} (+{shieldScore} XP)
+                </span>
+              </div>
+
+              {/* Simulated Email / Message Card */}
+              <div className="p-5 sm:p-6 rounded-2xl bg-slate-950 border-2 border-slate-800 relative overflow-hidden shadow-inner">
+                <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-800 text-xs">
+                  <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span className="text-slate-400">De la:</span>
+                  <span className="font-mono font-bold text-white truncate">{currentShieldItem.sender}</span>
+                </div>
+
+                <h4 className="text-base sm:text-lg font-black text-amber-200 font-heading mb-2">
+                  {currentShieldItem.subject}
+                </h4>
+
+                <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                  {currentShieldItem.body}
+                </p>
+
+                {currentShieldItem.linkOrAttachment && (
+                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2 text-xs font-mono">
+                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span className="text-slate-400">Link / Atașament:</span>
+                    <span className="text-rose-300 font-bold truncate underline">{currentShieldItem.linkOrAttachment}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Feedback Alert if choice made */}
+              {shieldFeedback && (
+                <div className={`p-4 rounded-2xl border-2 flex items-center gap-3 animate-fadeIn text-sm ${
+                  shieldFeedback.isCorrect 
+                    ? 'bg-emerald-950/80 border-emerald-400 text-emerald-200' 
+                    : 'bg-rose-950/80 border-rose-400 text-rose-200'
+                }`}>
+                  {shieldFeedback.isCorrect ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-rose-400 shrink-0" />}
+                  <div>
+                    <span className="font-black block">{shieldFeedback.isCorrect ? 'DECIZIE CORECTĂ! +150 XP' : 'DECIZIE GREȘITĂ!'}</span>
+                    <p className="text-xs mt-0.5 opacity-90">{shieldFeedback.explanation}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons: BLOCK THREAT vs ALLOW SAFE */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <button
+                  type="button"
+                  disabled={shieldFeedback !== null}
+                  onClick={() => handleShieldDecision('block')}
+                  className="p-4 rounded-2xl bg-gradient-to-r from-rose-700 to-red-600 hover:from-rose-600 hover:to-red-500 text-white font-black text-base shadow-lg shadow-rose-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
+                >
+                  <ShieldX className="w-5 h-5" />
+                  🚨 BLOCHEAZĂ ATACUL (Phishing/Virus)
+                </button>
+
+                <button
+                  type="button"
+                  disabled={shieldFeedback !== null}
+                  onClick={() => handleShieldDecision('allow')}
+                  className="p-4 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-600 hover:from-emerald-600 hover:to-teal-500 text-white font-black text-base shadow-lg shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
+                >
+                  <ShieldCheck className="w-5 h-5" />
+                  ✅ PERMITE (Mesaj Sigur / Oficial)
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* MODE 4: HARDWARE PC RUSH GAMEPLAY */}
+          {currentRoom.mode === 'pc_rush' && (
+            <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 border-2 border-cyan-500/40 shadow-2xl space-y-6">
+              <div className="flex justify-between items-center text-xs font-bold text-slate-400">
+                <span className="text-cyan-300 font-mono flex items-center gap-1.5">
+                  <Cpu className="w-4 h-4 text-cyan-400" />
+                  Asamblare PC în Viteză (Pasul {expectedStep} din {pcParts.length})
+                </span>
+                <span className="text-emerald-400 font-mono">
+                  Componente Montate: {assembledParts.length}/{pcParts.length} (+{pcScore} XP)
+                </span>
+              </div>
+
+              {/* Motherboard / Case Target Diagram */}
+              <div className="p-5 rounded-2xl bg-slate-950 border-2 border-cyan-500/30 shadow-inner space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-bold">
+                    🖥️ Placă de Bază & Carcasă (Socketuri Active)
+                  </h4>
+                  <span className="text-[11px] text-amber-300 font-mono bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
+                    Următorul pas necesar: {currentExpectedPart?.slotLabel}
+                  </span>
+                </div>
+
+                {/* Slots Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  {pcParts.map((p) => {
+                    const isMounted = assembledParts.includes(p.id);
+                    const isNextTarget = p.stepOrder === expectedStep;
+
+                    return (
+                      <div
+                        key={p.id}
+                        className={`p-3 rounded-xl border flex items-center gap-3 transition-all ${
+                          isMounted
+                            ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
+                            : isNextTarget
+                            ? 'bg-cyan-950/60 border-cyan-400 text-cyan-200 ring-2 ring-cyan-400/40 animate-pulse'
+                            : 'bg-slate-900/60 border-slate-800 text-slate-500 opacity-60'
+                        }`}
+                      >
+                        <span className="text-2xl">{isMounted ? '✅' : p.icon}</span>
+                        <div className="min-w-0">
+                          <span className="text-[10px] font-mono text-slate-400 block truncate">
+                            {p.slotLabel}
+                          </span>
+                          <span className="text-xs font-bold truncate block">
+                            {isMounted ? p.name : `[Slot ${p.stepOrder} Liber]`}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Error Notice if wrong step */}
+              {pcMistake && (
+                <div className="p-3.5 rounded-xl bg-rose-950/90 border border-rose-500 text-rose-200 text-xs flex items-center gap-2 animate-shake">
+                  <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span className="font-bold">{pcMistake}</span>
+                </div>
+              )}
+
+              {/* Available Parts Shelf to click and install */}
+              <div>
+                <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-3">
+                  📦 Raftul cu Piese Disponibile (Apasă pe piesa corectă pentru instalare):
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {pcParts.map((part) => {
+                    const isInstalled = assembledParts.includes(part.id);
+
+                    return (
+                      <button
+                        key={part.id}
+                        type="button"
+                        disabled={isInstalled}
+                        onClick={() => handleAssemblePart(part)}
+                        className={`p-4 rounded-2xl border-2 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-3 ${
+                          isInstalled
+                            ? 'bg-slate-950/40 border-slate-900 opacity-40 cursor-not-allowed'
+                            : 'bg-slate-950 hover:bg-slate-800 border-cyan-500/50 hover:border-cyan-300 text-white shadow-md'
+                        }`}
+                      >
+                        <span className="text-3xl shrink-0">{part.icon}</span>
+                        <div className="min-w-0 flex-1">
+                          <h5 className="text-xs sm:text-sm font-bold truncate">{part.name}</h5>
+                          <span className="text-[10px] font-mono text-cyan-300 block truncate">{part.specs}</span>
+                          <span className="text-[10px] text-slate-400 block truncate mt-0.5">{part.hint}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -861,6 +1249,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 setCurrentWordIdx(0);
                 setCurrentQIndex(0);
                 setQuizScore(0);
+                setShieldIndex(0);
+                setShieldScore(0);
+                setAssembledParts([]);
+                setPcScore(0);
               }}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-sm shadow-lg shadow-indigo-500/25 transition-all cursor-pointer flex items-center justify-center gap-2"
             >

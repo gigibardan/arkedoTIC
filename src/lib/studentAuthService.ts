@@ -627,6 +627,61 @@ export async function resetStudentPassword(
   return { success: true };
 }
 
+// RECORD DUEL RESULT & STATS
+export async function recordStudentDuelResult(
+  isWinner: boolean,
+  mode: string,
+  pointsEarned: number
+): Promise<void> {
+  const current = getActiveStudent();
+  if (!current) return;
+
+  const prevStats = current.duelStats || {
+    wins: 0,
+    losses: 0,
+    matchesPlayed: 0,
+    duelPoints: 0,
+    cyberSprintWins: 0,
+    quizBlitzWins: 0,
+    cyberShieldWins: 0,
+    pcRushWins: 0
+  };
+
+  const updatedStats = {
+    wins: prevStats.wins + (isWinner ? 1 : 0),
+    losses: prevStats.losses + (isWinner ? 0 : 1),
+    matchesPlayed: prevStats.matchesPlayed + 1,
+    duelPoints: Math.max(0, (prevStats.duelPoints || 0) + (isWinner ? pointsEarned : Math.round(pointsEarned / 4))),
+    cyberSprintWins: (prevStats.cyberSprintWins || 0) + (isWinner && mode === 'cyber_sprint' ? 1 : 0),
+    quizBlitzWins: (prevStats.quizBlitzWins || 0) + (isWinner && mode === 'quiz_blitz' ? 1 : 0),
+    cyberShieldWins: (prevStats.cyberShieldWins || 0) + (isWinner && mode === 'cyber_shield' ? 1 : 0),
+    pcRushWins: (prevStats.pcRushWins || 0) + (isWinner && mode === 'pc_rush' ? 1 : 0)
+  };
+
+  const totalXP = (current.totalXP || 0) + (isWinner ? pointsEarned : Math.round(pointsEarned / 4));
+
+  const updatedProfile: StudentProfile = {
+    ...current,
+    duelStats: updatedStats,
+    totalXP,
+    lastActiveAt: new Date().toISOString()
+  };
+
+  saveActiveStudentLocally(updatedProfile);
+
+  if (isCloudConnected && db && current.id) {
+    try {
+      await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+        duelStats: updatedStats,
+        totalXP,
+        lastActiveAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn('Eroare update duel stats Firestore:', err);
+    }
+  }
+}
+
 // GET ALL STUDENTS FOR LEADERBOARD & TEACHER
 export async function getAllStudents(): Promise<StudentProfile[]> {
   if (isCloudConnected && db) {

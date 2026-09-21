@@ -11,7 +11,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-export type DuelGameMode = 'cyber_sprint' | 'quiz_blitz' | 'file_battle';
+export type DuelGameMode = 'cyber_sprint' | 'quiz_blitz' | 'cyber_shield' | 'pc_rush' | 'file_battle';
 
 export interface DuelPlayer {
   id: string; // Unique client device/session id
@@ -22,6 +22,7 @@ export interface DuelPlayer {
   progress: number; // 0 to 100%
   currentWordIndex?: number;
   currentQuestionIndex?: number;
+  currentStageIndex?: number;
   finishedAt?: number;
   lastActive: number;
 }
@@ -34,6 +35,28 @@ export interface QuizQuestionItem {
   explanation: string;
 }
 
+export interface CyberShieldItem {
+  id: number;
+  sender: string;
+  subject: string;
+  body: string;
+  linkOrAttachment?: string;
+  isThreat: boolean; // true = Phishing / Malware / Fake; false = Safe / Official
+  threatType?: string; // e.g. 'Phishing Link', 'Malware .exe', 'Parolă Cerută', 'Mesaj Sigur de la Școală'
+  explanation: string;
+}
+
+export interface PCRushPart {
+  id: string;
+  name: string;
+  slot: string; // 'cpu' | 'cooler' | 'ram1' | 'ram2' | 'gpu' | 'ssd' | 'psu'
+  slotLabel: string;
+  icon: string;
+  specs: string;
+  stepOrder: number; // 1 to 6
+  hint: string;
+}
+
 export interface DuelRoomData {
   id: string; // Document ID (usually room code uppercase)
   roomCode: string; // e.g. "TIC-84", "CYBER7"
@@ -44,6 +67,8 @@ export interface DuelRoomData {
   guest: DuelPlayer | null;
   textSnippet?: string; // For Cyber Sprint typing
   questions?: QuizQuestionItem[]; // For Quiz Blitz
+  shieldItems?: CyberShieldItem[]; // For Cyber Shield
+  pcPartsOrder?: PCRushPart[]; // For Hardware PC Rush
   fileQueue?: Array<{ name: string; ext: string; folder: string }>; // For File Battle
   winnerId?: string | 'tie';
   winnerName?: string;
@@ -128,6 +153,168 @@ export const DUEL_QUIZ_QUESTIONS: QuizQuestionItem[] = [
     options: ['Roșu, Galben, Albastru', 'Roșu, Verde, Albastru', 'Roz, Gri, Negru', 'Cyan, Magenta, Galben'],
     correctIndex: 1,
     explanation: 'RGB vine de la Red (Roșu), Green (Verde) și Blue (Albastru).'
+  },
+  {
+    id: 7,
+    q: 'Care dispozitiv este atât de intrare, cât și de ieșire?',
+    options: ['Tastatura', 'Monitorul Touchscreen', 'Boxele', 'Mouse-ul optic'],
+    correctIndex: 1,
+    explanation: 'Ecranul tactil afișează imagini (ieșire) și primește atingeri cu degetul (intrare).'
+  },
+  {
+    id: 8,
+    q: 'Ce rol are memoria RAM într-un sistem de calcul?',
+    options: ['Stocare permanentă', 'Memorie de lucru ultrarapidă temporară', 'Alimentare cu energie', 'Răcirea carcasei'],
+    correctIndex: 1,
+    explanation: 'RAM păstrează programele și datele deschise în timp ce calculatorul funcționează.'
+  }
+];
+
+// Cyber Shield Scenarios (Phishing vs Safe)
+export const DUEL_CYBER_SHIELD_ITEMS: CyberShieldItem[] = [
+  {
+    id: 1,
+    sender: 'security@ro-bancaa-alert.xyz',
+    subject: '🚨 URGENT: Contul tău a fost blocat!',
+    body: 'Contul bancar va fi suspendat în 10 minute dacă nu confirmi parola și CNP-ul făcând click pe butonul de mai jos.',
+    linkOrAttachment: 'http://verificare-card-urgent.net/login',
+    isThreat: true,
+    threatType: 'Phishing Bancar',
+    explanation: 'Domeniu fals (.xyz, .net), sentiment de panică falsă și cerere directă de parolă.'
+  },
+  {
+    id: 2,
+    sender: 'secretariat@scoala-arkedo.edu.ro',
+    subject: '📚 Orarul cursurilor TIC pentru semestrul 2',
+    body: 'Bună ziua! Vă trimitem atașat noul tabel cu laboratoarele de informatică pentru clasa a V-a.',
+    linkOrAttachment: 'Orar_TIC_Clasa5.pdf',
+    isThreat: false,
+    threatType: 'Email Școlar Sigur',
+    explanation: 'Adresă oficială .edu.ro, conținut legitim și fișier de tip document .pdf sigur.'
+  },
+  {
+    id: 3,
+    sender: 'giveaway@free-robux-fortnite.club',
+    subject: '🎁 Ai câștigat 10.000 V-Bucks & Robux GRATIS!',
+    body: 'Felicitări! Ești al 1.000-lea vizitator. Descarcă generatorul gratuit și instalează-l pentru monede!',
+    linkOrAttachment: 'Free_Robux_Generator_2026.exe',
+    isThreat: true,
+    threatType: 'Troian / Malware Executabil',
+    explanation: 'Fișierul .exe de la o sursă necunoscută este malware/virus ascuns!'
+  },
+  {
+    id: 4,
+    sender: 'noreply@google.com',
+    subject: 'Cod de verificare securitate Google',
+    body: 'Codul tău de verificare în 2 pași este 492810. Dacă nu ai solicitat tu acest cod, ignoră mesajul.',
+    linkOrAttachment: 'https://myaccount.google.com/security',
+    isThreat: false,
+    threatType: 'Notificare 2FA Oficială',
+    explanation: 'Email legitim de la domeniul oficial google.com pentru autentificare în 2 pași.'
+  },
+  {
+    id: 5,
+    sender: 'admin@insta-unfollowers-tracker.top',
+    subject: '⚠️ Vezi cine ți-a dat unfollow pe Instagram!',
+    body: 'Introdu numele de utilizator și parola contului tău pentru a debloca raportul complet secret.',
+    linkOrAttachment: 'http://insta-hack-spy.top/auth',
+    isThreat: true,
+    threatType: 'Furt de Conturi Social Media',
+    explanation: 'Aplicațiile terțe care îți cer parola sunt capcane de phishing pentru a fura conturi.'
+  },
+  {
+    id: 6,
+    sender: 'profesor.geografie@scoala.ro',
+    subject: 'Harta interactivă pentru test',
+    body: 'Dragi elevi, găsiți link-ul către harta oficială pentru recapitularea de mâine.',
+    linkOrAttachment: 'https://geografie.edu.ro/harti',
+    isThreat: false,
+    threatType: 'Material Didactic Sigur',
+    explanation: 'Link securizat HTTPS pe domeniul educațional național.'
+  },
+  {
+    id: 7,
+    sender: 'lottery-intl@win-billion-cash.biz',
+    subject: '💰 Ați moștenit 500.000 EUR din Elveția',
+    body: 'Pentru a transfera fondurile în contul dvs., trimiteți o taxă notarială de 50 EUR prin crypto.',
+    linkOrAttachment: 'http://transfer-fonduri-securizat.biz',
+    isThreat: true,
+    threatType: 'Scam Financiar (Înșelătorie)',
+    explanation: 'Nicio loterie sau bancă reală nu cere plăți în avans pentru a debloca presupuse premii.'
+  },
+  {
+    id: 8,
+    sender: 'support@discord.com',
+    subject: 'Confirmare activare cont Discord',
+    body: 'Bine ai venit pe serverul educațional al clasei! Apasă pentru a verifica adresa de email.',
+    linkOrAttachment: 'https://discord.com/verify',
+    isThreat: false,
+    threatType: 'Verificare Serviciu Sigur',
+    explanation: 'Domeniu oficial discord.com cu certificat SSL valid.'
+  }
+];
+
+// Hardware PC Rush Parts Definition
+export const DUEL_PC_PARTS: PCRushPart[] = [
+  {
+    id: 'cpu',
+    name: 'Procesor Central (CPU)',
+    slot: 'cpu',
+    slotLabel: 'Socket Procesor (LGA)',
+    icon: '🧠',
+    specs: 'Octa-Core 4.2 GHz',
+    stepOrder: 1,
+    hint: 'Pasul 1: Se instalează mai întâi creierul PC-ului direct în socket-ul plăcii de bază.'
+  },
+  {
+    id: 'cooler',
+    name: 'Cooler & Pastă Termică',
+    slot: 'cooler',
+    slotLabel: 'Sistem Răcire CPU',
+    icon: '❄️',
+    specs: 'Ventilator Silențios 120mm',
+    stepOrder: 2,
+    hint: 'Pasul 2: Se montează deasupra procesorului pentru a preveni supraîncălzirea.'
+  },
+  {
+    id: 'ram',
+    name: 'Memorie RAM Dual-Channel',
+    slot: 'ram',
+    slotLabel: 'Sloturi DIMM RAM (DDR5)',
+    icon: '⚡',
+    specs: '16GB DDR5 5600MHz',
+    stepOrder: 3,
+    hint: 'Pasul 3: Se clipsează în sloturile DIMM pentru memorie de lucru ultrarapidă.'
+  },
+  {
+    id: 'ssd',
+    name: 'Unitate Stocare NVMe SSD',
+    slot: 'ssd',
+    slotLabel: 'Slot M.2 PCIe Gen4',
+    icon: '💾',
+    specs: '1TB NVMe (7000 MB/s)',
+    stepOrder: 4,
+    hint: 'Pasul 4: Se fixează în slotul M.2 pentru sistemul de operare și fișiere.'
+  },
+  {
+    id: 'gpu',
+    name: 'Placă Video Dedicată (GPU)',
+    slot: 'gpu',
+    slotLabel: 'Slot PCIe x16 (Grafică)',
+    icon: '🎮',
+    specs: '8GB GDDR6 Ray-Tracing',
+    stepOrder: 5,
+    hint: 'Pasul 5: Se introduce ferm în slotul lung PCIe pentru randare grafică 3D.'
+  },
+  {
+    id: 'psu',
+    name: 'Sursă de Alimentare (PSU)',
+    slot: 'psu',
+    slotLabel: 'Conectori Alimentare 24-Pin',
+    icon: '🔌',
+    specs: '650W 80+ Gold Modular',
+    stepOrder: 6,
+    hint: 'Pasul 6: Alimentează toate componentele cu energie electrică stabilă!'
   }
 ];
 
@@ -149,11 +336,14 @@ export async function createDuelRoom(
     progress: 0,
     currentWordIndex: 0,
     currentQuestionIndex: 0,
+    currentStageIndex: 0,
     lastActive: Date.now()
   };
 
   const textSnippet = CYBER_SPRINT_TEXTS[Math.floor(Math.random() * CYBER_SPRINT_TEXTS.length)];
   const shuffledQuestions = [...DUEL_QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
+  const shuffledShieldItems = [...DUEL_CYBER_SHIELD_ITEMS].sort(() => Math.random() - 0.5).slice(0, 6);
+  const pcParts = [...DUEL_PC_PARTS];
 
   const roomData: DuelRoomData = {
     id: code,
@@ -165,6 +355,8 @@ export async function createDuelRoom(
     guest: null,
     textSnippet,
     questions: shuffledQuestions,
+    shieldItems: shuffledShieldItems,
+    pcPartsOrder: pcParts,
     createdAt: Date.now(),
     updatedAt: Date.now()
   };

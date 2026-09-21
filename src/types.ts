@@ -67,6 +67,17 @@ export interface LessonsProgress {
   totalLessonScore: number;
 }
 
+export interface DuelStats {
+  wins: number;
+  losses: number;
+  matchesPlayed: number;
+  duelPoints: number;
+  cyberSprintWins?: number;
+  quizBlitzWins?: number;
+  cyberShieldWins?: number;
+  pcRushWins?: number;
+}
+
 export interface StudentProfile {
   id: string;
   username: string;
@@ -75,6 +86,7 @@ export interface StudentProfile {
   avatar: string;
   arcadeScores: ArcadeScores;
   lessonsProgress: LessonsProgress;
+  duelStats?: DuelStats;
   totalXP: number;
   createdAt: string;
   lastActiveAt: string;

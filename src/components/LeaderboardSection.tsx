@@ -15,7 +15,12 @@ import {
   Info, 
   User, 
   CheckCircle2, 
-  Layers
+  Layers,
+  Swords,
+  ShieldCheck,
+  Cpu,
+  Keyboard,
+  HelpCircle
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { StudentProfile } from '../types';
@@ -26,14 +31,16 @@ interface LeaderboardSectionProps {
   currentStudentName: string;
   onOpenArcade?: () => void;
   onOpenLoginModal?: () => void;
+  onOpenDuel?: () => void;
 }
 
-type TabType = 'total' | 'arcade' | 'lessons';
+type TabType = 'total' | 'arcade' | 'lessons' | 'duels';
 
 export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
   currentStudentName,
   onOpenArcade,
-  onOpenLoginModal
+  onOpenLoginModal,
+  onOpenDuel
 }) => {
   const { lang } = useLanguage();
   const [activeTab, setActiveTab] = useState<TabType>('total');
@@ -64,8 +71,13 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
     if (activeTab === 'arcade') {
       return (b.arcadeScores?.totalArcade || 0) - (a.arcadeScores?.totalArcade || 0);
     }
-    // lessons
-    return (b.lessonsProgress?.totalLessonScore || 0) - (a.lessonsProgress?.totalLessonScore || 0);
+    if (activeTab === 'lessons') {
+      return (b.lessonsProgress?.totalLessonScore || 0) - (a.lessonsProgress?.totalLessonScore || 0);
+    }
+    // duels
+    const aDuel = (a.duelStats?.wins || 0) * 100 + (a.duelStats?.duelPoints || 0);
+    const bDuel = (b.duelStats?.wins || 0) * 100 + (b.duelStats?.duelPoints || 0);
+    return bDuel - aDuel;
   });
 
   const filteredStudents = sortedStudents.filter((s) => 
@@ -82,13 +94,17 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
     if (activeTab === 'arcade') {
       return student.arcadeScores?.totalArcade || 0;
     }
-    return student.lessonsProgress?.totalLessonScore || 0;
+    if (activeTab === 'lessons') {
+      return student.lessonsProgress?.totalLessonScore || 0;
+    }
+    return (student.duelStats?.wins || 0);
   };
 
   const getTabLabel = () => {
     if (activeTab === 'total') return lang === 'en' ? 'Total XP' : 'Total XP';
     if (activeTab === 'arcade') return lang === 'en' ? 'Arcade Pts' : 'Puncte Arcade';
-    return lang === 'en' ? 'Lesson Pts' : 'Puncte Lecții';
+    if (activeTab === 'lessons') return lang === 'en' ? 'Lesson Pts' : 'Puncte Lecții';
+    return lang === 'en' ? 'Victories 1v1' : 'Victorii 1v1';
   };
 
   return (
@@ -165,6 +181,21 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
               >
                 <BookOpen className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'Lessons' : 'Lecții'}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveTab('duels');
+                  sounds.playClick();
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  activeTab === 'duels'
+                    ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Swords className="w-3.5 h-3.5 text-amber-300" />
+                <span>{lang === 'en' ? 'Duels 1v1' : 'Dueluri 1v1'}</span>
               </button>
             </div>
 
@@ -358,7 +389,10 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                           )}
                         </div>
                         <div className="text-[10px] text-slate-500 font-mono">
-                          {student.arcadeScores?.totalArcade ? `${student.arcadeScores.totalArcade} pts arcade` : '0 arcade'} • {student.lessonsProgress?.totalLessonScore ? `${student.lessonsProgress.totalLessonScore} pts lecții` : '0 lecții'}
+                          {activeTab === 'duels'
+                            ? `⚔️ ${student.duelStats?.matchesPlayed || 0} meciuri • 🏆 ${student.duelStats?.wins || 0} victorii • +${student.duelStats?.duelPoints || 0} XP`
+                            : `${student.arcadeScores?.totalArcade ? `${student.arcadeScores.totalArcade} pts arcade` : '0 arcade'} • ${student.lessonsProgress?.totalLessonScore ? `${student.lessonsProgress.totalLessonScore} pts lecții` : '0 lecții'}`
+                          }
                         </div>
                       </div>
                     </div>
@@ -610,6 +644,59 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   </div>
                   <span className="font-mono font-bold text-teal-300">
                     {computeLessonXP(selectedStudentForDetails.lessonsProgress?.internet2 || {})} pts
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Breakdown of Duel Arena Statistics */}
+            <div className="border-t border-slate-800 pt-4">
+              <h4 className="text-xs font-mono uppercase tracking-wider text-rose-400 mb-3 flex items-center gap-1.5">
+                <Swords className="w-4 h-4 text-amber-400" />
+                <span>{lang === 'en' ? 'Arena Duels 1v1 Record' : 'Palmares Arena Dueluri 1v1'}</span>
+              </h4>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Total Victorii</span>
+                  <span className="font-mono font-black text-amber-400 text-base">
+                    🏆 {selectedStudentForDetails.duelStats?.wins || 0}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Meciuri Totale</span>
+                  <span className="font-mono font-bold text-slate-300 text-base">
+                    ⚔️ {selectedStudentForDetails.duelStats?.matchesPlayed || 0}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Cyber Sprint</span>
+                  <span className="font-mono font-bold text-indigo-400 text-base">
+                    ⚡ {selectedStudentForDetails.duelStats?.cyberSprintWins || 0}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Quiz Blitz</span>
+                  <span className="font-mono font-bold text-purple-400 text-base">
+                    🧠 {selectedStudentForDetails.duelStats?.quizBlitzWins || 0}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Cyber Shield</span>
+                  <span className="font-mono font-bold text-rose-400 text-base">
+                    🛡️ {selectedStudentForDetails.duelStats?.cyberShieldWins || 0}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Hardware PC Rush</span>
+                  <span className="font-mono font-bold text-cyan-400 text-base">
+                    🔧 {selectedStudentForDetails.duelStats?.pcRushWins || 0}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center col-span-2">
+                  <span className="text-slate-400 text-[10px] block font-semibold">Puncte Duel Câștigate</span>
+                  <span className="font-mono font-black text-emerald-400 text-base">
+                    +{selectedStudentForDetails.duelStats?.duelPoints || 0} XP
                   </span>
                 </div>
               </div>
