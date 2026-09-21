@@ -49,6 +49,7 @@ export interface ArcadeScores {
   byte_slider?: number;
   file_drop?: number;
   virus_sweeper?: number;
+  cyber_dino?: number;
   totalArcade: number;
 }
 

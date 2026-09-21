@@ -14,6 +14,7 @@ import { RGBPixelMasterGame } from './RGBPixelMasterGame';
 import { ByteSliderGame } from './ByteSliderGame';
 import { FileDropGame } from './FileDropGame';
 import { VirusSweeperGame } from './VirusSweeperGame';
+import { CyberDinoRunner } from './CyberDinoRunner';
 import {
   Gamepad2,
   Keyboard,
@@ -37,6 +38,7 @@ import {
   FileDown,
   Biohazard,
   Swords,
+  Footprints,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -45,7 +47,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -156,6 +158,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const cyberDinoHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_dino') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -163,6 +173,15 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       return '🎓';
     }
   })();
+
+  if (activeGame === 'cyber_dino') {
+    return (
+      <CyberDinoRunner
+        onBack={() => setActiveGame('hub')}
+        studentName={studentName}
+      />
+    );
+  }
 
   if (activeGame === 'typing') {
     return <TypingGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
@@ -278,7 +297,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                13 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
+                14 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
               </div>
             </div>
           </div>
@@ -897,6 +916,54 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <span>{lang === 'en' ? 'Sweep' : 'Joacă'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
+          </div>
+        </div>
+
+        {/* Game 14: Cyber Dino: Matrix Rush (Adaptarea complexă Google Dino) */}
+        <div className="bg-slate-900/90 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden sm:col-span-2 lg:col-span-3 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-teal-950/40">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-3xl text-white shadow-lg shrink-0 ring-2 ring-emerald-400/40 group-hover:scale-105 transition-transform">
+                🦖
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/40 uppercase">
+                    NO INTERNET CHROME EDITION
+                  </span>
+                  <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
+                    <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{cyberDinoHighScore} pts</span>
+                  </span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-black text-white font-heading group-hover:text-emerald-300 transition-colors flex items-center gap-2">
+                  <span>Cyber Dino: Matrix Rush (Dinozaurul Chrome TIC)</span>
+                  <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
+                </h3>
+                <p className="text-slate-300 text-xs mt-1 leading-relaxed max-w-3xl">
+                  {lang === 'en'
+                    ? 'Spectacular cyberpunk adaptation of the classic Google Chrome Dino runner! Jump motherboard capacitors, duck under Wi-Fi drones, blast EMP lasers, activate overclock speed boosts and defeat the Glitch Titan Boss!'
+                    : 'Adaptare spectaculoasă și complexă a celebrului joc Google Chrome cu dinozaurul! Sari peste condensatori și cactuși firewall, alunecă sub drone Wi-Fi aeriene, trage cu lasere EMP, activează Turbo Overclock și învinge Titanul Glitch!'}
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full md:w-auto flex md:flex-col items-center md:items-end justify-between gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
+              <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri + Lasere + Boss</span>
+              <button
+                id="arcade-btn-start-cyber-dino"
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  setActiveGame('cyber_dino');
+                }}
+                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-sm font-black transition flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/25 cursor-pointer active:scale-95"
+              >
+                <span>{lang === 'en' ? 'Play Cyber Dino' : 'Joacă Cyber Dino'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
