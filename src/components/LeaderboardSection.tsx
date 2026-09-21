@@ -515,17 +515,25 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 </div>
 
                 {/* 11. Byte Slider 3x3 */}
-                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center col-span-2">
-                  <span className="text-slate-400">🧩 Byte Slider 3×3 (Unități de Date)</span>
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <span className="text-slate-400">🧩 Byte Slider 3×3</span>
                   <span className="font-mono font-bold text-emerald-400">
                     {selectedStudentForDetails.arcadeScores?.byte_slider || 0} pts
+                  </span>
+                </div>
+
+                {/* 12. File-Drop (Tetris cu Fișiere) */}
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <span className="text-slate-400">⚡ File-Drop (Tetris)</span>
+                  <span className="font-mono font-bold text-sky-400">
+                    {selectedStudentForDetails.arcadeScores?.file_drop || 0} pts
                   </span>
                 </div>
               </div>
 
               <div className="mt-3 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex justify-between items-center text-xs">
                 <span className="font-bold text-indigo-300">
-                  {lang === 'en' ? 'Total Arcade Games Score:' : 'Punctaj Total Mini-Jocuri (11):'}
+                  {lang === 'en' ? 'Total Arcade Games Score:' : 'Punctaj Total Mini-Jocuri (12):'}
                 </span>
                 <span className="font-mono font-black text-sm text-indigo-200">
                   {selectedStudentForDetails.arcadeScores?.totalArcade || 0} pts

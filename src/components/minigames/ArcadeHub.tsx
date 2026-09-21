@@ -12,6 +12,7 @@ import { FirewallDefenderGame } from './FirewallDefenderGame';
 import { PCBuilderGame } from './PCBuilderGame';
 import { RGBPixelMasterGame } from './RGBPixelMasterGame';
 import { ByteSliderGame } from './ByteSliderGame';
+import { FileDropGame } from './FileDropGame';
 import {
   Gamepad2,
   Keyboard,
@@ -32,6 +33,7 @@ import {
   Cpu,
   Palette,
   Layers,
+  FileDown,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -39,7 +41,7 @@ interface ArcadeHubProps {
   onBackToCatalog: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
   const { lang } = useLanguage();
@@ -134,6 +136,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const fileDropHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_file_drop') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -164,6 +174,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
   if (activeGame === 'byte_slider') {
     return <ByteSliderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'file_drop') {
+    return <FileDropGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'detective') {
@@ -714,6 +728,53 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Slide' : 'Rezolvă'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 12: File-Drop (Tetris cu Fișiere & Extensii) */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-sky-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-sky-500/15 border-2 border-sky-500/30 flex items-center justify-center text-sky-400 group-hover:scale-110 transition-transform">
+                <FileDown className="w-6 h-6" />
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-sky-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{fileDropHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-sky-500/10 text-sky-300 text-[10px] font-bold uppercase tracking-wider mb-2">
+              {lang === 'en' ? 'Tetris File Sorter' : 'Tetris cu Fișiere & Extensii'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'File-Drop (Tetris)' : 'File-Drop (Tetris Fișiere)'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Hyper-addictive Tetris mechanics! Guide falling files (.docx, .png, .mp3, viruses) into the right folders. Stack, trigger line clears, and neutralize malware!'
+                : 'Mecanică captivantă stil Tetris! Potrivește fișierele (.docx, .png, .mp3, .zip, viruși .exe) în folderele corecte înainte să cadă la bază. Curăță folderele și fă combo-uri!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-mono">⚡ 5 Foldere + Stack</span>
+            <button
+              id="arcade-btn-start-file-drop"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('file_drop');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-sky-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Drop' : 'Joacă'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

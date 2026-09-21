@@ -29,7 +29,8 @@ export const ARCADE_GAME_KEYS = [
   'maze',
   'firewall',
   'rgb_pixel',
-  'byte_slider'
+  'byte_slider',
+  'file_drop'
 ] as const;
 
 export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
@@ -44,6 +45,7 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   firewall: 0,
   rgb_pixel: 0,
   byte_slider: 0,
+  file_drop: 0,
   totalArcade: 0
 };
 
@@ -88,7 +90,8 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     (scores.maze || 0) +
     (scores.firewall || 0) +
     (scores.rgb_pixel || 0) +
-    (scores.byte_slider || 0)
+    (scores.byte_slider || 0) +
+    (scores.file_drop || 0)
   );
 }
 
@@ -200,6 +203,7 @@ export async function registerStudent(
     firewall: Number(localStorage.getItem('arkedo_highscore_firewall') || '0'),
     rgb_pixel: Number(localStorage.getItem('arkedo_highscore_rgb_pixels') || '0'),
     byte_slider: Number(localStorage.getItem('arkedo_highscore_byte_slider') || '0'),
+    file_drop: Number(localStorage.getItem('arkedo_highscore_file_drop') || '0'),
     totalArcade: 0
   };
   currentArcadeScores.totalArcade = computeTotalArcade(currentArcadeScores);
@@ -348,6 +352,7 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
       if (profile.arcadeScores.firewall) localStorage.setItem('arkedo_highscore_firewall', String(profile.arcadeScores.firewall));
       if (profile.arcadeScores.rgb_pixel) localStorage.setItem('arkedo_highscore_rgb_pixels', String(profile.arcadeScores.rgb_pixel));
       if (profile.arcadeScores.byte_slider) localStorage.setItem('arkedo_highscore_byte_slider', String(profile.arcadeScores.byte_slider));
+      if (profile.arcadeScores.file_drop) localStorage.setItem('arkedo_highscore_file_drop', String(profile.arcadeScores.file_drop));
     }
 
     // Lessons progress

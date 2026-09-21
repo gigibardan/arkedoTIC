@@ -47,6 +47,7 @@ export interface ArcadeScores {
   firewall: number;
   rgb_pixel: number;
   byte_slider?: number;
+  file_drop?: number;
   totalArcade: number;
 }
 
