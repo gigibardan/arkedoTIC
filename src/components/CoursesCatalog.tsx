@@ -1091,27 +1091,73 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               )}
             </div>
 
-            {/* Quick Hero Highlights / Feature Pills */}
+            {/* Quick Hero Highlights / Feature Anchor Buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+              {/* 1. Misiuni Practice */}
               <button
+                id="hero-badge-misiuni"
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  const target = document.getElementById('sectiune-misiuni-practice');
+                  if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-teal-950/40 hover:bg-teal-900/60 border border-teal-500/40 hover:border-teal-300 text-xs text-teal-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-teal-500/20"
+                title={lang === 'en' ? 'Jump to Practical Missions' : 'Mergi la Misiuni Practice'}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 group-hover:scale-110 transition-transform">
+                    <BookOpen className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="truncate">{lang === 'en' ? 'Practical Missions' : 'Misiuni Practice'}</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-teal-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+              </button>
+
+              {/* 2. Jocuri Arcade */}
+              <button
+                id="hero-badge-arcade"
                 type="button"
                 onClick={() => {
                   sounds.playClick();
                   onOpenArcade?.();
                 }}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/40 hover:border-indigo-400 text-xs text-indigo-300 font-bold transition cursor-pointer active:scale-95 text-left"
+                className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
+                title={lang === 'en' ? 'Open Arcade Games (10 Mini-Games)' : 'Deschide Jocurile Arcade (10 Mini-Jocuri)'}
               >
-                <Gamepad2 className="w-4 h-4 text-indigo-400 shrink-0 animate-pulse" />
-                <span>{lang === 'en' ? 'Arcade Games (10)' : 'Jocuri Arcade TIC (10)'}</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
+                    <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
+                  </div>
+                  <span className="truncate">{lang === 'en' ? 'Arcade Games (10)' : 'Jocuri Arcade (10)'}</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
-              <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
-                <Award className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>{lang === 'en' ? 'Merit Diplomas (PDF)' : 'Diplome Oficiale de Merit'}</span>
-              </div>
-              <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
-                <Cloud className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>{lang === 'en' ? 'Live Cloud Gradebook' : 'Catalog Digital Profesor'}</span>
-              </div>
+
+              {/* 3. Clasamente */}
+              <button
+                id="hero-badge-clasament"
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  const target = document.getElementById('sectiune-clasamente');
+                  if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/40 hover:border-amber-300 text-xs text-amber-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-amber-500/20"
+                title={lang === 'en' ? 'Jump to Leaderboard' : 'Mergi la Clasamente Elevi'}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 group-hover:scale-110 transition-transform">
+                    <Trophy className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="truncate">{lang === 'en' ? 'Classroom Leaderboard' : 'Clasamente'}</span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
+              </button>
             </div>
           </div>
 
@@ -1164,7 +1210,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       <KnowledgePills />
 
       {/* Courses & Lessons Section */}
-      <div>
+      <div id="sectiune-misiuni-practice" className="scroll-mt-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-teal-400" />
@@ -1554,14 +1600,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       </div>
 
       {/* Public Classroom Leaderboard Section */}
-      <LeaderboardSection
-        currentStudentName={studentName}
-        onOpenArcade={onOpenArcade}
-        onOpenLoginModal={() => {
-          setAuthModalMode('login');
-          setAuthModalOpen(true);
-        }}
-      />
+      <div id="sectiune-clasamente" className="scroll-mt-6">
+        <LeaderboardSection
+          currentStudentName={studentName}
+          onOpenArcade={onOpenArcade}
+          onOpenLoginModal={() => {
+            setAuthModalMode('login');
+            setAuthModalOpen(true);
+          }}
+        />
+      </div>
 
       {/* Discreet Teacher Portal Link (for instructors only) */}
       {onOpenTeacherPortal && (
