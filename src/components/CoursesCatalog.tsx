@@ -1125,13 +1125,13 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   onOpenArcade?.();
                 }}
                 className="group flex items-center justify-between gap-2.5 px-3.5 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
-                title={lang === 'en' ? 'Open Arcade Games (10 Mini-Games)' : 'Deschide Jocurile Arcade (10 Mini-Jocuri)'}
+                title={lang === 'en' ? 'Open Arcade Games (11 Mini-Games)' : 'Deschide Jocurile Arcade (11 Mini-Jocuri)'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Arcade Games (10)' : 'Jocuri Arcade (10)'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Arcade Games (11)' : 'Jocuri Arcade (11)'}</span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1571,11 +1571,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '10 Mini-Games' : '10 Mini-Jocuri'}
+                  {lang === 'en' ? '11 Mini-Games' : '11 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'Pixeli RGB, PC Builder, Labirint Algoritmic, Firewall Defender & 2048' : 'Pixeli RGB, Constructor PC, Labirint Algoritmic, Scut Firewall & 2048'}
+                {lang === 'en' ? 'Byte Slider 3×3, Pixeli RGB, PC Builder, Labirint Algoritmic & 2048' : 'Byte Slider 3×3, Pixeli RGB, Constructor PC, Labirint & 2048'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'

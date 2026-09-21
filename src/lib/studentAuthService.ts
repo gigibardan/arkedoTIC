@@ -17,7 +17,7 @@ export type { StudentProfile, ArcadeScores, LessonsProgress };
 const STUDENTS_COLLECTION = 'elevi';
 const LOCAL_PROFILE_KEY = 'arkedo_active_student_profile';
 
-// Standard 10 games IDs
+// Standard 11 games IDs
 export const ARCADE_GAME_KEYS = [
   'typing',
   'mouse',
@@ -28,7 +28,8 @@ export const ARCADE_GAME_KEYS = [
   'binary_factory',
   'maze',
   'firewall',
-  'rgb_pixel'
+  'rgb_pixel',
+  'byte_slider'
 ] as const;
 
 export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
@@ -42,6 +43,7 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   maze: 0,
   firewall: 0,
   rgb_pixel: 0,
+  byte_slider: 0,
   totalArcade: 0
 };
 
@@ -85,7 +87,8 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     (scores.binary_factory || 0) +
     (scores.maze || 0) +
     (scores.firewall || 0) +
-    (scores.rgb_pixel || 0)
+    (scores.rgb_pixel || 0) +
+    (scores.byte_slider || 0)
   );
 }
 
@@ -196,6 +199,7 @@ export async function registerStudent(
     maze: Number(localStorage.getItem('arkedo_highscore_maze') || '0'),
     firewall: Number(localStorage.getItem('arkedo_highscore_firewall') || '0'),
     rgb_pixel: Number(localStorage.getItem('arkedo_highscore_rgb_pixels') || '0'),
+    byte_slider: Number(localStorage.getItem('arkedo_highscore_byte_slider') || '0'),
     totalArcade: 0
   };
   currentArcadeScores.totalArcade = computeTotalArcade(currentArcadeScores);
@@ -343,6 +347,7 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
       if (profile.arcadeScores.maze) localStorage.setItem('arkedo_highscore_maze', String(profile.arcadeScores.maze));
       if (profile.arcadeScores.firewall) localStorage.setItem('arkedo_highscore_firewall', String(profile.arcadeScores.firewall));
       if (profile.arcadeScores.rgb_pixel) localStorage.setItem('arkedo_highscore_rgb_pixels', String(profile.arcadeScores.rgb_pixel));
+      if (profile.arcadeScores.byte_slider) localStorage.setItem('arkedo_highscore_byte_slider', String(profile.arcadeScores.byte_slider));
     }
 
     // Lessons progress

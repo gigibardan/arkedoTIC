@@ -11,6 +11,7 @@ import { AlgorithmMazeGame } from './AlgorithmMazeGame';
 import { FirewallDefenderGame } from './FirewallDefenderGame';
 import { PCBuilderGame } from './PCBuilderGame';
 import { RGBPixelMasterGame } from './RGBPixelMasterGame';
+import { ByteSliderGame } from './ByteSliderGame';
 import {
   Gamepad2,
   Keyboard,
@@ -30,6 +31,7 @@ import {
   School,
   Cpu,
   Palette,
+  Layers,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -37,7 +39,7 @@ interface ArcadeHubProps {
   onBackToCatalog: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog }) => {
   const { lang } = useLanguage();
@@ -124,6 +126,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const byteSliderHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_byte_slider') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -150,6 +160,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
   if (activeGame === 'rgb_pixel') {
     return <RGBPixelMasterGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'byte_slider') {
+    return <ByteSliderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'detective') {
@@ -655,6 +669,51 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Paint' : 'Pictează'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 11: Byte Slider 3x3 (Puzzle-ul Unităților de Date & Jocul 15) */}
+        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                <Layers className="w-6 h-6" />
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{byteSliderHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 text-[10px] font-bold uppercase tracking-wider mb-2">
+              {lang === 'en' ? 'Sliding Puzzle 3×3' : 'Puzzle 3×3 & Unități de Date'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors">
+              {lang === 'en' ? 'Byte Slider 3×3' : 'Byte Slider 3×3 (Jocul 15)'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Classic 15-puzzle adapted for CS! Slide adjacent tiles to order data units: Bit, Byte, KB, MB, GB, TB, PB, and EB with soft shuffle.'
+                : 'Jocul clasic 15 adaptat pentru TIC! Glisează piesele adiacente pentru a ordona unitățile de la Bit la Exabyte, cu amestecare inteligentă garantat rezolvabilă.'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-slate-400 font-mono">🧩 8 Unități + Liber</span>
+            <button
+              id="arcade-btn-start-byte-slider"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('byte_slider');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Slide' : 'Rezolvă'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

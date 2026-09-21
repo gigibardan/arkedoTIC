@@ -46,6 +46,7 @@ export interface ArcadeScores {
   maze: number;
   firewall: number;
   rgb_pixel: number;
+  byte_slider?: number;
   totalArcade: number;
 }
 
