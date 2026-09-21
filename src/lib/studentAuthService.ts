@@ -548,6 +548,37 @@ export async function updateStudentUsername(
   return { success: true };
 }
 
+// UPDATE AVATAR BY STUDENT
+export async function updateStudentAvatar(
+  studentId: string | undefined,
+  avatar: string
+): Promise<{ success: boolean; error?: string }> {
+  if (isCloudConnected && db && studentId) {
+    try {
+      await updateDoc(doc(db, STUDENTS_COLLECTION, studentId), {
+        avatar,
+        lastActiveAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn('Eroare update avatar Firestore:', err);
+    }
+  }
+
+  const current = getActiveStudent();
+  if (current && (!studentId || current.id === studentId)) {
+    current.avatar = avatar;
+    saveActiveStudentLocally(current);
+  } else {
+    try {
+      localStorage.setItem('arkedo_student_avatar', avatar);
+    } catch {
+      // Ignore
+    }
+  }
+
+  return { success: true };
+}
+
 export const updateStudentUsernameByTeacher = updateStudentUsername;
 
 // RESET PASSWORD BY TEACHER (OR STUDENT IF ALLOWED)

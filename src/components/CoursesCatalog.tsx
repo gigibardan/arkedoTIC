@@ -27,6 +27,12 @@ import {
   LogIn,
   LogOut,
   KeyRound,
+  Eye,
+  EyeOff,
+  AlertTriangle,
+  AlertCircle,
+  Edit3,
+  Info,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -36,7 +42,15 @@ import { MissionGuardModal } from './MissionGuardModal';
 import { ARKY_IMAGES } from '../assets/arkyImages';
 import { LeaderboardSection } from './LeaderboardSection';
 import { AuthModal } from './AuthModal';
-import { getActiveStudent, logoutStudent, StudentProfile } from '../lib/studentAuthService';
+import {
+  getActiveStudent,
+  logoutStudent,
+  loginStudent,
+  registerStudent,
+  updateStudentUsername,
+  updateStudentAvatar,
+  StudentProfile,
+} from '../lib/studentAuthService';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -76,9 +90,36 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 }) => {
   const { t, lang } = useLanguage();
   const arky = useArky();
-  const [nameInput, setNameInput] = useState<string>(studentName);
-  const [isEditingName, setIsEditingName] = useState<boolean>(!studentName);
+  const [activeAccount, setActiveAccount] = useState<StudentProfile | null>(() => getActiveStudent());
+  const [nameInput, setNameInput] = useState<string>(studentName || activeAccount?.username || '');
+  const [isEditingName, setIsEditingName] = useState<boolean>(!studentName && !activeAccount);
   const [nameError, setNameError] = useState<boolean>(false);
+
+  // In-card pass interaction modes: 'login' | 'register' | 'guest'
+  const [passMode, setPassMode] = useState<'login' | 'register' | 'guest'>('login');
+
+  // In-card login state
+  const [loginUsername, setLoginUsername] = useState<string>('');
+  const [loginPassword, setLoginPassword] = useState<string>('');
+  const [showLoginPassword, setShowLoginPassword] = useState<boolean>(false);
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
+  const [loginError, setLoginError] = useState<string>('');
+
+  // In-card register state
+  const [registerUsername, setRegisterUsername] = useState<string>('');
+  const [registerPassword, setRegisterPassword] = useState<string>('');
+  const [showRegisterPassword, setShowRegisterPassword] = useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
+  const [registerError, setRegisterError] = useState<string>('');
+
+  // In-card rename state (for updating student name)
+  const [isRenaming, setIsRenaming] = useState<boolean>(false);
+  const [renameInput, setRenameInput] = useState<string>('');
+  const [renameError, setRenameError] = useState<string>('');
+  const [renameLoading, setRenameLoading] = useState<boolean>(false);
+
+  // Quick avatar selector toggle
+  const [isSelectingAvatar, setIsSelectingAvatar] = useState<boolean>(false);
 
   // Student Avatar State
   const [selectedAvatar, setSelectedAvatar] = useState<string>(() => {
@@ -96,7 +137,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   // Student Cloud Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
-  const [activeAccount, setActiveAccount] = useState<StudentProfile | null>(() => getActiveStudent());
 
   // Arky Hero Speech Bubble & Click Tips
   const [arkyTipIndex, setArkyTipIndex] = useState<number>(0);
@@ -118,13 +158,18 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     "Shift + Click selectează fișiere legate; Ctrl + Click pe cele răsfirate! 🖱️",
   ];
 
-  const handleSelectAvatar = (emoji: string) => {
+  const handleSelectAvatar = async (emoji: string) => {
     setSelectedAvatar(emoji);
     sounds.playClick();
-    try {
-      localStorage.setItem('arkedo_student_avatar', emoji);
-    } catch {
-      // Ignore
+    if (activeAccount?.id) {
+      await updateStudentAvatar(activeAccount.id, emoji);
+      setActiveAccount((prev) => (prev ? { ...prev, avatar: emoji } : null));
+    } else {
+      try {
+        localStorage.setItem('arkedo_student_avatar', emoji);
+      } catch {
+        // Ignore
+      }
     }
   };
 
@@ -146,6 +191,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       // Ignore
     }
     setIsEditingName(false);
+    setIsRenaming(false);
     sounds.playCorrect();
     arky.triggerSuccess(
       lang === 'en'
@@ -157,11 +203,152 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   const handleLogout = () => {
     logoutStudent();
     setActiveAccount(null);
+    onSetStudentName('');
+    setNameInput('');
+    setIsEditingName(true);
+    setIsRenaming(false);
+    setIsSelectingAvatar(false);
+    setPassMode('login');
     sounds.playClick();
     arky.triggerIdle(
       lang === 'en'
-        ? 'Signed out successfully. Next cadet can sign in!'
+        ? 'Signed out successfully. Next student can sign in!'
         : 'Te-ai deconectat cu succes. Următorul elev se poate conecta!'
+    );
+  };
+
+  const handleInCardLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    const cleanUser = loginUsername.trim();
+    if (!cleanUser) {
+      setLoginError(lang === 'en' ? 'Please enter your username!' : 'Introdu numele tău de elev!');
+      sounds.playWrong();
+      return;
+    }
+    if (!loginPassword.trim()) {
+      setLoginError(lang === 'en' ? 'Please enter your password!' : 'Introdu parola contului!');
+      sounds.playWrong();
+      return;
+    }
+
+    setLoginLoading(true);
+    try {
+      const res = await loginStudent(cleanUser, loginPassword.trim());
+      if (!res.success || !res.profile) {
+        setLoginError(res.error || (lang === 'en' ? 'Login failed!' : 'Autentificarea a eșuat!'));
+        sounds.playWrong();
+      } else {
+        handleAuthSuccess(res.profile);
+        setLoginPassword('');
+        setLoginError('');
+      }
+    } catch {
+      setLoginError(lang === 'en' ? 'Connection error. Try again!' : 'Eroare de conexiune. Încearcă din nou!');
+      sounds.playWrong();
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleInCardRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRegisterError('');
+    const cleanUser = registerUsername.trim();
+    if (cleanUser.length < 2) {
+      setRegisterError(lang === 'en' ? 'Name must be at least 2 characters!' : 'Numele trebuie să aibă minim 2 caractere!');
+      sounds.playWrong();
+      return;
+    }
+    if (registerPassword.trim().length < 3) {
+      setRegisterError(lang === 'en' ? 'Password must be at least 3 characters!' : 'Parola trebuie să aibă minim 3 caractere!');
+      sounds.playWrong();
+      return;
+    }
+
+    setRegisterLoading(true);
+    try {
+      const res = await registerStudent(cleanUser, registerPassword.trim(), selectedAvatar);
+      if (!res.success || !res.profile) {
+        setRegisterError(res.error || (lang === 'en' ? 'Registration failed!' : 'Înregistrarea a eșuat!'));
+        sounds.playWrong();
+      } else {
+        handleAuthSuccess(res.profile);
+        setRegisterPassword('');
+        setRegisterError('');
+      }
+    } catch {
+      setRegisterError(lang === 'en' ? 'Connection error. Try again!' : 'Eroare de conexiune. Încearcă din nou!');
+      sounds.playWrong();
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
+
+  const handleInCardGuestSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = nameInput.trim();
+    if (clean.length > 0) {
+      onSetStudentName(clean);
+      setIsEditingName(false);
+      setNameError(false);
+      sounds.playCorrect();
+      arky.triggerSuccess(
+        lang === 'en'
+          ? `Welcome, ${clean}! You are in Guest Mode (local storage).`
+          : `Bun venit, ${clean}! Ești în Mod Vizitator (salvare locală).`
+      );
+    } else {
+      setNameError(true);
+      sounds.playWrong();
+    }
+  };
+
+  const handleStartRename = () => {
+    setRenameInput(studentName || activeAccount?.username || '');
+    setRenameError('');
+    setIsRenaming(true);
+    sounds.playClick();
+  };
+
+  const handleSaveRename = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = renameInput.trim();
+    if (clean.length < 2) {
+      setRenameError(lang === 'en' ? 'Name must be at least 2 characters!' : 'Numele trebuie să aibă cel puțin 2 caractere!');
+      sounds.playWrong();
+      return;
+    }
+
+    if (activeAccount?.id) {
+      setRenameLoading(true);
+      setRenameError('');
+      try {
+        const res = await updateStudentUsername(activeAccount.id, clean);
+        if (!res.success) {
+          setRenameError(res.error || (lang === 'en' ? 'Name already taken or error.' : 'Numele este deja folosit de alt elev!'));
+          sounds.playWrong();
+          setRenameLoading(false);
+          return;
+        }
+        setActiveAccount((prev) => (prev ? { ...prev, username: clean, usernameLower: clean.toLowerCase() } : null));
+      } catch {
+        setRenameError(lang === 'en' ? 'Connection error.' : 'Eroare de conexiune.');
+        sounds.playWrong();
+        setRenameLoading(false);
+        return;
+      }
+      setRenameLoading(false);
+    }
+
+    onSetStudentName(clean);
+    setNameInput(clean);
+    setIsRenaming(false);
+    sounds.playCorrect();
+    arky.triggerSuccess(
+      lang === 'en'
+        ? `Name updated to "${clean}"!`
+        : `Numele a fost actualizat la „${clean}”!`
     );
   };
 
@@ -285,189 +472,622 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
 
             {/* Student Digital ID Pass / Registration Card */}
-            <div className="bg-slate-900/90 backdrop-blur border-2 border-teal-500/40 rounded-2xl p-4 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
-              {/* Pass Top Bar */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3.5">
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-teal-400">
-                  <BadgeCheck className="w-4 h-4 text-teal-400" />
-                  <span>{lang === 'en' ? 'ARKEDO Student Access Pass' : 'Legitimație Elev • Laborator TIC'}</span>
+            <div className="bg-slate-900/95 backdrop-blur border-2 border-teal-500/40 rounded-3xl p-4 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
+              {/* Subtle tech background glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
+
+              {/* Pass Top Bar: Title UNUL SUB ALTUL + Status Badge (NO wrapping) */}
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5 mb-4">
+                {/* Vertically stacked title */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 shadow-sm">
+                    <BadgeCheck className="w-5 h-5 text-teal-400" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs sm:text-sm font-black tracking-wider text-teal-300 uppercase font-heading leading-tight">
+                      {lang === 'en' ? 'Student Access Pass' : 'Legitimație Elev'}
+                    </span>
+                    <span className="text-[11px] font-mono font-medium text-slate-400">
+                      {lang === 'en' ? 'Computer Lab Station' : 'Laborator TIC'}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
+
+                {/* Right side: Status Badge & Exit button */}
+                <div className="flex items-center gap-2 self-start sm:self-auto">
                   {activeAccount ? (
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-1 text-[11px] font-mono text-rose-400 hover:text-rose-300 bg-rose-950/50 hover:bg-rose-900/50 px-2 py-0.5 rounded-full border border-rose-500/30 transition cursor-pointer"
-                      title={lang === 'en' ? 'Sign out' : 'Deconectează contul'}
-                    >
-                      <LogOut className="w-3 h-3" />
-                      <span>{lang === 'en' ? 'Sign Out' : 'Ieșire'}</span>
-                    </button>
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-500/40 shadow-sm">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span>{lang === 'en' ? 'CLOUD ACTIVE' : 'CONT ACTIVAT (CLOUD)'}</span>
+                    </div>
+                  ) : studentName ? (
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-300 bg-amber-950/80 px-3 py-1 rounded-full border border-amber-500/40 shadow-sm">
+                      <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                      <span>{lang === 'en' ? 'GUEST (LOCAL)' : 'MOD VIZITATOR (LOCAL)'}</span>
+                    </div>
                   ) : (
-                    <div className="flex items-center gap-1.5">
-                      <button
-                        onClick={() => {
-                          setAuthModalMode('login');
-                          setAuthModalOpen(true);
-                          sounds.playClick();
-                        }}
-                        className="flex items-center gap-1 text-[11px] font-bold text-teal-300 hover:text-white bg-teal-950/70 hover:bg-teal-900/70 px-2.5 py-0.5 rounded-full border border-teal-500/40 transition cursor-pointer"
-                      >
-                        <LogIn className="w-3 h-3 text-teal-400" />
-                        <span>{lang === 'en' ? 'Sign In' : 'Autentificare'}</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setAuthModalMode('register');
-                          setAuthModalOpen(true);
-                          sounds.playClick();
-                        }}
-                        className="flex items-center gap-1 text-[11px] font-bold text-amber-300 hover:text-white bg-amber-950/60 hover:bg-amber-900/60 px-2.5 py-0.5 rounded-full border border-amber-500/40 transition cursor-pointer"
-                      >
-                        <KeyRound className="w-3 h-3 text-amber-400" />
-                        <span>{lang === 'en' ? 'New Pass' : 'Cont Nou'}</span>
-                      </button>
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400 bg-slate-950/90 px-3 py-1 rounded-full border border-slate-700/80 shadow-sm">
+                      <span className="w-2 h-2 rounded-full bg-slate-500"></span>
+                      <span>{lang === 'en' ? 'NOT LOGGED IN' : 'NECONFIRMAT'}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>{studentName ? (lang === 'en' ? 'VERIFIED' : 'ACTIVAT') : (lang === 'en' ? 'PENDING' : 'NECONFIRMAT')}</span>
-                  </div>
+                  {(activeAccount || studentName) && (
+                    <button
+                      onClick={handleLogout}
+                      type="button"
+                      className="flex items-center gap-1 text-[11px] font-mono font-bold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900/90 px-2.5 py-1 rounded-full border border-rose-500/40 transition cursor-pointer shadow-sm"
+                      title={lang === 'en' ? 'Sign out' : 'Deconectează contul'}
+                    >
+                      <LogOut className="w-3 h-3" />
+                      <span>{lang === 'en' ? 'Exit' : 'Ieșire'}</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {studentName && !isEditingName ? (
-                /* Profile view when name is registered */
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    {/* Avatar Display */}
-                    <div className="relative group">
-                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500/30 via-slate-800 to-emerald-500/30 border-2 border-teal-400/50 flex items-center justify-center text-3xl shadow-lg shadow-teal-900/40">
-                        {selectedAvatar}
-                      </div>
-                      <button
-                        onClick={() => setIsEditingName(true)}
-                        className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-slate-800 border border-slate-600 text-[10px] flex items-center justify-center text-slate-300 hover:text-white cursor-pointer"
-                        title={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
-                      >
-                        ✏️
-                      </button>
-                    </div>
-
-                    <div>
-                      <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-                        <span>{t.helloStudent},</span>
-                        <span className="text-[11px] font-mono text-teal-400/80 bg-teal-950/50 px-1.5 py-0.5 rounded border border-teal-500/20">
-                          {lang === 'en' ? 'Rank: Digital Cadet' : 'Grad: Cadet TIC'}
+              {/* CARD BODY */}
+              {(activeAccount || (studentName && !isEditingName)) ? (
+                /* Profile view when logged in or guest name confirmed */
+                <div className="relative z-10 flex flex-col gap-4">
+                  {/* Inline Renaming Panel */}
+                  {isRenaming ? (
+                    <form onSubmit={handleSaveRename} className="p-4 rounded-2xl bg-slate-950/90 border border-teal-500/40 flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-teal-300 flex items-center gap-1.5">
+                          <Edit3 className="w-4 h-4" />
+                          {lang === 'en' ? 'Change your student name:' : 'Schimbă numele tău de elev:'}
                         </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsRenaming(false);
+                            setRenameError('');
+                          }}
+                          className="text-[11px] text-slate-400 hover:text-white"
+                        >
+                          ✕ {lang === 'en' ? 'Cancel' : 'Anulează'}
+                        </button>
                       </div>
-                      <div className="text-lg sm:text-xl font-black text-white font-heading tracking-wide">
-                        {studentName}
+
+                      {activeAccount && (
+                        <p className="text-[11px] text-slate-400">
+                          {lang === 'en'
+                            ? 'We check in real-time that the new name is not already taken by another student.'
+                            : 'Verificăm în timp real ca noul nume să nu fie deja folosit de alt elev.'}
+                        </p>
+                      )}
+
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <input
+                          type="text"
+                          value={renameInput}
+                          onChange={(e) => {
+                            setRenameInput(e.target.value);
+                            if (renameError) setRenameError('');
+                          }}
+                          placeholder={lang === 'en' ? 'Enter new name...' : 'Scrie noul nume...'}
+                          className="flex-1 bg-slate-900 border border-slate-700 focus:border-teal-400 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none"
+                          autoFocus
+                        />
+                        <button
+                          type="submit"
+                          disabled={renameLoading}
+                          className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>{renameLoading ? (lang === 'en' ? 'Saving...' : 'Se salvează...') : (lang === 'en' ? 'Save New Name' : 'Salvează Numele')}</span>
+                        </button>
                       </div>
-                      <div className="text-xs text-slate-400 mt-0.5">
-                        {lang === 'en' ? 'Ready for challenges & diplomas' : 'Gata pentru rezolvarea provocărilor'}
+
+                      {renameError && (
+                        <div className="text-xs text-rose-400 font-bold flex items-center gap-1.5 bg-rose-950/60 p-2.5 rounded-xl border border-rose-500/40">
+                          <AlertCircle className="w-4 h-4 shrink-0" />
+                          <span>{renameError}</span>
+                        </div>
+                      )}
+                    </form>
+                  ) : (
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        {/* Avatar Display with quick change toggle */}
+                        <div className="relative group">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500/30 via-slate-800 to-emerald-500/30 border-2 border-teal-400/50 flex items-center justify-center text-3xl shadow-lg shadow-teal-900/40">
+                            {selectedAvatar}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsSelectingAvatar(!isSelectingAvatar);
+                              sounds.playClick();
+                            }}
+                            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-800 border border-teal-400/60 text-xs flex items-center justify-center text-teal-300 hover:text-white cursor-pointer shadow"
+                            title={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
+                          >
+                            ✏️
+                          </button>
+                        </div>
+
+                        <div>
+                          <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5 flex-wrap">
+                            <span>{t.helloStudent},</span>
+                            <span className="text-[11px] font-mono text-teal-400/90 bg-teal-950/70 px-2 py-0.5 rounded-full border border-teal-500/30 font-bold">
+                              {lang === 'en' ? 'Rank: Digital Cadet' : 'Grad: Cadet TIC'}
+                            </span>
+                            {activeAccount ? (
+                              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                ☁️ Cloud Synced
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-mono text-amber-400 bg-amber-950/50 px-1.5 py-0.5 rounded border border-amber-500/20">
+                                💻 Local PC Only
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-lg sm:text-xl font-black text-white font-heading tracking-wide flex items-center gap-2">
+                            <span>{studentName || activeAccount?.username}</span>
+                          </div>
+                          <div className="text-xs text-slate-400 mt-0.5">
+                            {activeAccount
+                              ? (lang === 'en' ? 'All scores and diplomas automatically saved.' : 'Punctajele și diplomele sunt salvate în cloud.')
+                              : (lang === 'en' ? 'Guest session on this PC. Ready for challenges!' : 'Sesiune vizitator pe acest calculator.')}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                        <button
+                          type="button"
+                          onClick={handleStartRename}
+                          className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold transition border border-slate-700 cursor-pointer shadow-sm flex items-center gap-1.5"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{t.studentNameChangeBtn}</span>
+                        </button>
+
+                        {activeMissionId && (
+                          <button
+                            type="button"
+                            onClick={() => handleAttemptStart(activeMissionId)}
+                            className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95 animate-pulse"
+                          >
+                            <span>{lang === 'en' ? 'Resume Mission' : 'Reia Misiunea'}</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     </div>
-                  </div>
+                  )}
 
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                    <button
-                      onClick={() => {
-                        setNameInput(studentName);
-                        setIsEditingName(true);
-                        sounds.playClick();
-                      }}
-                      className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition border border-slate-700 cursor-pointer shadow-sm"
-                    >
-                      {t.studentNameChangeBtn}
-                    </button>
-
-                    {activeMissionId && (
-                      <button
-                        onClick={() => handleAttemptStart(activeMissionId)}
-                        className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95 animate-pulse"
-                      >
-                        <span>{lang === 'en' ? 'Resume Mission' : 'Reia Misiunea'}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                /* Profile creation / editing form */
-                <form onSubmit={handleSaveName} className="flex flex-col gap-3.5">
-                  <div>
-                    <p className="text-xs font-medium text-slate-300 mb-2">
-                      {lang === 'en'
-                        ? '1. Choose your explorer avatar:'
-                        : '1. Alege avatarul tău de explorator:'}
-                    </p>
-                    {/* Horizontal Avatar Selector */}
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none">
-                      {AVATARS.map((av) => {
-                        const isSelected = selectedAvatar === av.emoji;
-                        return (
+                  {/* Quick Avatar Selector Drawer if open */}
+                  {isSelectingAvatar && (
+                    <div className="p-3 bg-slate-950/90 rounded-2xl border border-slate-800 flex flex-col gap-2">
+                      <div className="flex items-center justify-between text-xs font-medium text-slate-300">
+                        <span>{lang === 'en' ? 'Choose an avatar:' : 'Alege un nou avatar:'}</span>
+                        <button
+                          type="button"
+                          onClick={() => setIsSelectingAvatar(false)}
+                          className="text-slate-400 hover:text-white text-xs"
+                        >
+                          ✕ {lang === 'en' ? 'Done' : 'Închide'}
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        {AVATARS.map((av) => (
                           <button
                             key={av.emoji}
                             type="button"
                             onClick={() => handleSelectAvatar(av.emoji)}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all cursor-pointer shrink-0 ${
-                              isSelected
-                                ? 'bg-teal-500 text-white ring-2 ring-teal-300 shadow-md scale-110'
-                                : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700'
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition cursor-pointer shrink-0 ${
+                              selectedAvatar === av.emoji
+                                ? 'bg-teal-500 text-white ring-2 ring-teal-300 scale-110 shadow-md'
+                                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
                             }`}
                             title={lang === 'en' ? av.labelEn : av.labelRo}
                           >
                             {av.emoji}
                           </button>
-                        );
-                      })}
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div>
-                    <p className="text-xs font-medium text-slate-300 mb-1.5">
-                      {lang === 'en'
-                        ? '2. Enter your student name (printed on official diplomas):'
-                        : '2. Introdu numele tău de elev (va fi imprimat pe diploma de merit):'}
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <div className="relative flex-1">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                          <User className="w-4 h-4" />
-                        </div>
-                        <input
-                          type="text"
-                          value={nameInput}
-                          onChange={(e) => {
-                            setNameInput(e.target.value);
-                            if (nameError) setNameError(false);
-                          }}
-                          placeholder={t.studentNamePlaceholder}
-                          className={`w-full bg-slate-950/90 border pl-9 pr-3.5 py-2.5 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 font-medium ${
-                            nameError
-                              ? 'border-rose-500 focus:ring-rose-500/40'
-                              : 'border-slate-700 focus:ring-teal-500/40'
-                          }`}
-                          autoFocus
-                        />
+                  {/* Encouragement for Guests to Create an Account */}
+                  {!activeAccount && (
+                    <div className="mt-1 pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-amber-200/90 bg-amber-950/30 -mx-1 p-2.5 rounded-xl border border-amber-500/20">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>
+                          {lang === 'en'
+                            ? 'Scores are saved only if you sign in. Create an account to rank on the classroom board!'
+                            : 'Punctajul se salvează doar dacă ai cont. Creează cont pentru a intra în clasament!'}
+                        </span>
                       </div>
                       <button
-                        type="submit"
-                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-teal-600/30 shrink-0 cursor-pointer active:scale-95"
+                        type="button"
+                        onClick={() => {
+                          setIsEditingName(true);
+                          setPassMode('register');
+                          setRegisterUsername(studentName);
+                          sounds.playClick();
+                        }}
+                        className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg shadow transition cursor-pointer self-start sm:self-auto shrink-0"
                       >
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>{t.studentNameSaveBtn}</span>
+                        {lang === 'en' ? 'Create Account' : 'Creează Cont'}
                       </button>
                     </div>
-                    {nameError && (
-                      <p className="text-xs text-rose-400 font-semibold mt-1.5">
-                        {t.enterNameAlert}
-                      </p>
-                    )}
+                  )}
+                </div>
+              ) : (
+                /* Choice Form: Autentificare / Cont Nou / Fără Cont */
+                <div className="relative z-10 flex flex-col gap-3.5">
+                  {/* The 3 Prominent Option Buttons */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {/* Autentificare */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPassMode('login');
+                        setLoginError('');
+                        setRegisterError('');
+                        sounds.playClick();
+                      }}
+                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+                        passMode === 'login'
+                          ? 'bg-gradient-to-b from-teal-500 to-teal-600 text-white border-teal-300 shadow-lg shadow-teal-500/30 scale-[1.02]'
+                          : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-800 hover:border-teal-500/50'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-1 ${
+                        passMode === 'login' ? 'bg-white/20 text-white' : 'bg-teal-500/15 text-teal-400'
+                      }`}>
+                        <LogIn className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-black uppercase tracking-wide">
+                        {lang === 'en' ? 'Sign In' : 'Autentificare'}
+                      </span>
+                      <span className={`text-[10px] mt-0.5 ${passMode === 'login' ? 'text-teal-100 font-medium' : 'text-slate-400'}`}>
+                        {lang === 'en' ? 'I have an account' : 'Am deja cont'}
+                      </span>
+                    </button>
+
+                    {/* Cont Nou */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPassMode('register');
+                        setLoginError('');
+                        setRegisterError('');
+                        sounds.playClick();
+                      }}
+                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+                        passMode === 'register'
+                          ? 'bg-gradient-to-b from-amber-500 to-amber-600 text-slate-950 border-amber-300 shadow-lg shadow-amber-500/30 scale-[1.02]'
+                          : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-800 hover:border-amber-500/50'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-1 ${
+                        passMode === 'register' ? 'bg-black/15 text-slate-950' : 'bg-amber-500/15 text-amber-400'
+                      }`}>
+                        <KeyRound className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-black uppercase tracking-wide">
+                        {lang === 'en' ? 'New Account' : 'Cont Nou'}
+                      </span>
+                      <span className={`text-[10px] mt-0.5 ${passMode === 'register' ? 'text-amber-950 font-bold' : 'text-slate-400'}`}>
+                        {lang === 'en' ? 'Save scores in cloud' : 'Salvare punctaj cloud'}
+                      </span>
+                    </button>
+
+                    {/* Fără Cont */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPassMode('guest');
+                        setLoginError('');
+                        setRegisterError('');
+                        sounds.playClick();
+                      }}
+                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+                        passMode === 'guest'
+                          ? 'bg-slate-800 text-white border-slate-500 shadow-md scale-[1.02]'
+                          : 'bg-slate-950/80 hover:bg-slate-800 text-slate-400 border-slate-800 hover:border-slate-600'
+                      }`}
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center mb-1 text-slate-300">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-black uppercase tracking-wide">
+                        {lang === 'en' ? 'No Account' : 'Fără Cont'}
+                      </span>
+                      <span className="text-[10px] text-slate-400 mt-0.5">
+                        {lang === 'en' ? 'Temporary guest' : 'Mod Vizitator local'}
+                      </span>
+                    </button>
                   </div>
-                </form>
+
+                  {/* MODE 1: LOGIN FORM */}
+                  {passMode === 'login' && (
+                    <form onSubmit={handleInCardLogin} className="flex flex-col gap-3 p-3.5 bg-slate-950/60 rounded-2xl border border-teal-500/20">
+                      <div className="flex items-start gap-2 text-xs text-teal-200/90 mb-1">
+                        <Info className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
+                        <span>
+                          {lang === 'en'
+                            ? 'Your score is saved only if you sign in with your account. Recommended: Sign in or create an account.'
+                            : 'Punctajul va fi salvat doar dacă te autentifici cu contul tău. Recomandare: autentificare sau cont nou.'}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <User className="w-4 h-4" />
+                          </div>
+                          <input
+                            type="text"
+                            value={loginUsername}
+                            onChange={(e) => {
+                              setLoginUsername(e.target.value);
+                              if (loginError) setLoginError('');
+                            }}
+                            placeholder={lang === 'en' ? 'Student username...' : 'Nume elev (ex: Andrei_Popa)...'}
+                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
+                            autoFocus
+                          />
+                        </div>
+
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <Lock className="w-4 h-4" />
+                          </div>
+                          <input
+                            type={showLoginPassword ? 'text' : 'password'}
+                            value={loginPassword}
+                            onChange={(e) => {
+                              setLoginPassword(e.target.value);
+                              if (loginError) setLoginError('');
+                            }}
+                            placeholder={lang === 'en' ? 'Password...' : 'Parola contului...'}
+                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowLoginPassword(!showLoginPassword)}
+                            className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white"
+                          >
+                            {showLoginPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      {loginError && (
+                        <div className="text-xs text-rose-400 font-bold flex items-center gap-1.5 bg-rose-950/60 p-2 rounded-xl border border-rose-500/40">
+                          <AlertCircle className="w-4 h-4 shrink-0" />
+                          <span>{loginError}</span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between gap-3 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPassMode('register');
+                            setLoginError('');
+                            sounds.playClick();
+                          }}
+                          className="text-xs text-teal-400 hover:text-teal-300 underline underline-offset-2 cursor-pointer"
+                        >
+                          {lang === 'en' ? "Don't have an account? Create one!" : 'Nu ai cont? Creează cont nou!'}
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={loginLoading}
+                          className="px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-1.5 shadow-md shadow-teal-500/30 cursor-pointer disabled:opacity-50"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span>{loginLoading ? (lang === 'en' ? 'Connecting...' : 'Se conectează...') : (lang === 'en' ? 'Sign In to Station' : 'Conectează-te la Calculator')}</span>
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* MODE 2: REGISTER FORM WITH DUPLICATE USERNAME CHECK */}
+                  {passMode === 'register' && (
+                    <form onSubmit={handleInCardRegister} className="flex flex-col gap-3 p-3.5 bg-slate-950/60 rounded-2xl border border-amber-500/20">
+                      <div className="flex items-start gap-2 text-xs text-amber-200/90 mb-1">
+                        <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <span>
+                          {lang === 'en'
+                            ? 'Create your free account. Your scores at all 10 arcade games and lesson progress follow you on any PC in the lab!'
+                            : 'Creează contul tău: punctajele la cele 10 jocuri și progresul la lecții se salvează automat și te urmează pe orice calculator din laborator!'}
+                        </span>
+                      </div>
+
+                      {/* 1. Choose Avatar */}
+                      <div>
+                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                          {lang === 'en' ? '1. Choose your explorer avatar:' : '1. Alege avatarul tău de explorator:'}
+                        </p>
+                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                          {AVATARS.map((av) => (
+                            <button
+                              key={av.emoji}
+                              type="button"
+                              onClick={() => handleSelectAvatar(av.emoji)}
+                              className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg transition cursor-pointer shrink-0 ${
+                                selectedAvatar === av.emoji
+                                  ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 scale-110 shadow-md font-bold'
+                                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                              }`}
+                              title={lang === 'en' ? av.labelEn : av.labelRo}
+                            >
+                              {av.emoji}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 2. Choose Username & Password */}
+                      <div>
+                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                          {lang === 'en' ? '2. Username and simple password:' : '2. Nume de elev și parolă simplă:'}
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                              <User className="w-4 h-4" />
+                            </div>
+                            <input
+                              type="text"
+                              value={registerUsername}
+                              onChange={(e) => {
+                                setRegisterUsername(e.target.value);
+                                if (registerError) setRegisterError('');
+                              }}
+                              placeholder={lang === 'en' ? 'Choose unique name...' : 'Alege nume (ex: Maria_Popescu)...'}
+                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                              autoFocus
+                            />
+                          </div>
+
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                              <Lock className="w-4 h-4" />
+                            </div>
+                            <input
+                              type={showRegisterPassword ? 'text' : 'password'}
+                              value={registerPassword}
+                              onChange={(e) => {
+                                setRegisterPassword(e.target.value);
+                                if (registerError) setRegisterError('');
+                              }}
+                              placeholder={lang === 'en' ? 'Choose password (min 3)...' : 'Alege o parolă (ex: 1234)...'}
+                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white"
+                            >
+                              {showRegisterPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {registerError && (
+                        <div className="text-xs text-rose-300 font-bold flex items-start gap-2 bg-rose-950/70 p-2.5 rounded-xl border border-rose-500/50">
+                          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                          <span>{registerError}</span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between gap-3 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPassMode('login');
+                            setRegisterError('');
+                            sounds.playClick();
+                          }}
+                          className="text-xs text-amber-400 hover:text-amber-300 underline underline-offset-2 cursor-pointer"
+                        >
+                          {lang === 'en' ? 'Already have an account? Sign in!' : 'Ai deja cont? Autentifică-te!'}
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={registerLoading}
+                          className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer disabled:opacity-50"
+                        >
+                          <KeyRound className="w-4 h-4" />
+                          <span>{registerLoading ? (lang === 'en' ? 'Creating...' : 'Se creează...') : (lang === 'en' ? 'Create My Account' : 'Creează Contul Meu')}</span>
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* MODE 3: GUEST FORM (FĂRĂ CONT) */}
+                  {passMode === 'guest' && (
+                    <form onSubmit={handleInCardGuestSubmit} className="flex flex-col gap-3 p-3.5 bg-slate-950/60 rounded-2xl border border-slate-700/50">
+                      {/* Notice as requested: punctajul va fi salvat doar daca te autentifici cu contul tau. recomandare autentificare */}
+                      <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/40 flex items-start gap-2.5 text-xs text-amber-200/90">
+                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-amber-300">
+                            {lang === 'en' ? 'Guest Mode Notice:' : 'Atenție Mod Vizitator:'}
+                          </span>{' '}
+                          {lang === 'en'
+                            ? 'Your score is only saved temporarily on this PC. For permanent saving and classroom ranking, signing in with an account is recommended!'
+                            : 'Punctajul va fi salvat doar dacă te autentifici cu contul tău! În modul vizitator, progresul este temporar doar pe acest calculator.'}
+                        </div>
+                      </div>
+
+                      {/* 1. Choose Avatar */}
+                      <div>
+                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                          {lang === 'en' ? '1. Choose your explorer avatar:' : '1. Alege avatarul tău de explorator:'}
+                        </p>
+                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                          {AVATARS.map((av) => (
+                            <button
+                              key={av.emoji}
+                              type="button"
+                              onClick={() => handleSelectAvatar(av.emoji)}
+                              className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg transition cursor-pointer shrink-0 ${
+                                selectedAvatar === av.emoji
+                                  ? 'bg-teal-500 text-white ring-2 ring-teal-300 scale-110 shadow-md font-bold'
+                                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                              }`}
+                              title={lang === 'en' ? av.labelEn : av.labelRo}
+                            >
+                              {av.emoji}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 2. Guest Name Input */}
+                      <div>
+                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                          {lang === 'en' ? '2. Enter your temporary student name:' : '2. Introdu numele tău temporar de elev:'}
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <div className="relative flex-1">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                              <User className="w-4 h-4" />
+                            </div>
+                            <input
+                              type="text"
+                              value={nameInput}
+                              onChange={(e) => {
+                                setNameInput(e.target.value);
+                                if (nameError) setNameError(false);
+                              }}
+                              placeholder={t.studentNamePlaceholder}
+                              className={`w-full bg-slate-900 border pl-9 pr-3.5 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none ${
+                                nameError ? 'border-rose-500 focus:ring-1 focus:ring-rose-500' : 'border-slate-700 focus:border-teal-400'
+                              }`}
+                              autoFocus
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            className="px-5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow shrink-0 cursor-pointer"
+                          >
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                            <span>{lang === 'en' ? 'Confirm (Guest)' : 'Confirmă Numele (Vizitator)'}</span>
+                          </button>
+                        </div>
+                        {nameError && (
+                          <p className="text-xs text-rose-400 font-semibold mt-1.5">
+                            {t.enterNameAlert}
+                          </p>
+                        )}
+                      </div>
+                    </form>
+                  )}
+                </div>
               )}
             </div>
 
