@@ -695,8 +695,8 @@ export const VirusSweeperGame: React.FC<VirusSweeperGameProps> = ({ onBack, stud
   return (
     <div className="flex flex-col gap-5 max-w-5xl mx-auto pb-12 animate-fadeIn select-none">
       {/* Top Header Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-900/90 border border-indigo-500/30 rounded-3xl p-5 sm:p-6 backdrop-blur shadow-xl">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 bg-slate-900/90 border border-indigo-500/30 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 backdrop-blur shadow-xl">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <button
             id="virus-sweeper-btn-back"
             type="button"
@@ -704,7 +704,7 @@ export const VirusSweeperGame: React.FC<VirusSweeperGameProps> = ({ onBack, stud
               sounds.playClick();
               onBack();
             }}
-            className="px-3.5 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+            className="px-3 py-2 rounded-xl sm:rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 sm:gap-2 cursor-pointer active:scale-95"
           >
             <ArrowLeft className="w-4 h-4 text-sky-400" />
             <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
@@ -712,66 +712,68 @@ export const VirusSweeperGame: React.FC<VirusSweeperGameProps> = ({ onBack, stud
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
                 Cyber-Safe Minesweeper
               </span>
-              <span className="text-xs text-slate-400 hidden sm:inline">
+              <span className="text-xs text-slate-400 hidden md:inline">
                 {lang === 'en' ? 'Network Virus Sweeper' : 'Căutătorul de Viruși & Malware'}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2">
+            <h1 className="text-base sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2">
               <span>Cyber-Safe (Căutătorul de Viruși)</span>
-              <ShieldAlert className="w-5 h-5 text-rose-400 animate-pulse" />
+              <ShieldAlert className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400 animate-pulse" />
             </h1>
           </div>
         </div>
 
         {/* Action Controls & High Score */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            id="virus-sweeper-btn-intel"
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              setShowIntelModal(true);
-            }}
-            className="px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
-          >
-            <Biohazard className="w-4 h-4 text-rose-400" />
-            <span className="hidden sm:inline">Enciclopedie Viruși</span>
-          </button>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button
+              id="virus-sweeper-btn-intel"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setShowIntelModal(true);
+              }}
+              className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <Biohazard className="w-4 h-4 text-rose-400" />
+              <span className="hidden sm:inline">Enciclopedie Viruși</span>
+            </button>
 
-          <button
-            id="virus-sweeper-btn-guide"
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              setShowGuideModal(true);
-            }}
-            className="px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
-          >
-            <HelpCircle className="w-4 h-4 text-amber-400" />
-            <span className="hidden sm:inline">Reguli & Ghid</span>
-          </button>
+            <button
+              id="virus-sweeper-btn-guide"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setShowGuideModal(true);
+              }}
+              className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <HelpCircle className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">Reguli & Ghid</span>
+            </button>
 
-          <button
-            id="virus-sweeper-btn-restart"
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              resetGame(difficulty);
-            }}
-            className="px-3 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-indigo-600/30 cursor-pointer active:scale-95"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Reset</span>
-          </button>
+            <button
+              id="virus-sweeper-btn-restart"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                resetGame(difficulty);
+              }}
+              className="px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-indigo-600/30 cursor-pointer active:scale-95"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Reset</span>
+            </button>
+          </div>
 
           {/* High Score */}
-          <div className="px-3 py-1.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
+          <div className="px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
             <Trophy className="w-4 h-4 text-amber-400" />
             <div className="flex flex-col text-right">
-              <span className="text-[10px] text-slate-400 font-mono leading-none">Record</span>
+              <span className="text-[9px] sm:text-[10px] text-slate-400 font-mono leading-none">Record</span>
               <span className="font-mono font-black text-amber-300">{highScore} XP</span>
             </div>
           </div>
@@ -779,7 +781,7 @@ export const VirusSweeperGame: React.FC<VirusSweeperGameProps> = ({ onBack, stud
       </div>
 
       {/* Difficulty Selector Tabs */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
         {(Object.keys(DIFFICULTIES) as DifficultyLevel[]).map((diffKey) => {
           const diff = DIFFICULTIES[diffKey];
           const isSelected = difficulty === diffKey;

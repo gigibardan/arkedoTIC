@@ -205,9 +205,9 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10 select-none">
+    <div className="flex flex-col gap-4 sm:gap-6 max-w-4xl mx-auto w-full pb-10 select-none px-2 sm:px-0">
       {/* Top Header */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
           onClick={() => {
             sounds.playClick();
@@ -220,14 +220,14 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
         </button>
 
         <div className="flex items-center gap-2 text-center">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
-            <Folder className="w-5 h-5" />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
+            <Folder className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
             <h1 className="text-sm sm:text-base font-black text-white font-heading">
               {lang === 'en' ? 'File Organizer Express' : 'Sortatorul de Extensii & Fișiere'}
             </h1>
-            <p className="text-[11px] text-blue-400 font-mono">
+            <p className="text-[10px] sm:text-[11px] text-blue-400 font-mono hidden sm:block">
               {lang === 'en' ? 'Match File Extensions with Correct Directory Folders' : 'Clasifică Extensiile în Dosarele Corespunzătoare'}
             </p>
           </div>

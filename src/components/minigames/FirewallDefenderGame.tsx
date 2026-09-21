@@ -303,9 +303,9 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10 select-none">
+    <div className="flex flex-col gap-4 sm:gap-6 max-w-4xl mx-auto w-full pb-10 select-none px-2 sm:px-0">
       {/* Top Header */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
           onClick={() => {
             sounds.playClick();
@@ -318,14 +318,14 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
         </button>
 
         <div className="flex items-center gap-2 text-center">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-red-600 flex items-center justify-center text-white shadow-md">
-            <ShieldCheck className="w-5 h-5" />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-red-600 flex items-center justify-center text-white shadow-md shrink-0">
+            <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
             <h1 className="text-sm sm:text-base font-black text-white font-heading">
               {lang === 'en' ? 'Firewall Defender (Cyber Shield)' : 'Scutul Antivirus & Firewall Defender'}
             </h1>
-            <p className="text-[11px] text-rose-400 font-mono">
+            <p className="text-[10px] sm:text-[11px] text-rose-400 font-mono hidden sm:block">
               {lang === 'en' ? 'Inspect Traffic Packets & Block Inbound Cyber Threats' : 'Inspectează Pachetele de Rețea și Blochează Virușii'}
             </p>
           </div>
@@ -510,10 +510,10 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           </div>
 
           {/* Big Firewall Decision Buttons */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <button
               onClick={() => handleDecision(true)}
-              className="py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="py-3.5 sm:py-4 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <CheckCircle2 className="w-5 h-5" />
               <span>{lang === 'en' ? 'ALLOW (Safe Traffic)' : 'PERMITE (Trafic Curat)'}</span>
@@ -521,7 +521,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
 
             <button
               onClick={() => handleDecision(false)}
-              className="py-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="py-3.5 sm:py-4 px-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <ShieldAlert className="w-5 h-5" />
               <span>{lang === 'en' ? 'BLOCK (Malware / Attack)' : 'BLOCHEAZĂ (Virus / Atac)'}</span>

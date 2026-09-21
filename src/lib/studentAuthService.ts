@@ -81,12 +81,20 @@ export async function hashPassword(plainText: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Calculate total arcade score safely
+// Calculate total arcade score safely & equitably
 export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
+  // Normalize typing WPM to fair competitive arcade points (1 WPM = 25 pts, e.g. 60 WPM = 1,500 pts)
+  const rawTyping = scores.typing || 0;
+  const typingPoints = rawTyping <= 250 ? rawTyping * 25 : rawTyping;
+
+  // Normalize 2048 to prevent standard tile merge score inflation (scales ~20,000 raw down to ~2,000 pts)
+  const raw2048 = scores.game2048 || 0;
+  const game2048Points = raw2048 > 3000 ? Math.round(raw2048 / 10) : raw2048;
+
   return (
-    (scores.typing || 0) +
+    typingPoints +
     (scores.mouse || 0) +
-    (scores.game2048 || 0) +
+    game2048Points +
     (scores.pcbuilder || 0) +
     (scores.detective || 0) +
     (scores.files || 0) +
@@ -102,22 +110,22 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
 }
 
 // Calculate smart lesson score
-// Base score 100 per completed lesson, plus bonus for real reading time (minimum 90s to maximum 600s)
+// Base score 400 per completed lesson, plus bonus for real reading time (minimum 90s to maximum 600s)
 export function computeLessonXP(lesson: { completed?: boolean; score?: number; elapsedSeconds?: number }): number {
   if (!lesson || !lesson.completed) {
-    return Math.min(lesson?.score || 0, 50); // Partial credit up to 50 for in-progress
+    return Math.min(lesson?.score || 0, 150); // Partial credit up to 150 for in-progress
   }
-  const base = lesson.score || 100;
+  const base = Math.max(lesson.score || 0, 400);
   const sec = lesson.elapsedSeconds || 0;
   
-  // Anti-speedrun check: if completed in under 25s for an entire 5-level lesson, no mastery bonus
+  // Anti-speedrun check: if completed with steady, reflective reading pace
   let timeBonus = 0;
   if (sec >= 90 && sec <= 600) {
-    // Steady, reflective reading pace: bonus 25 pts
-    timeBonus = 25;
+    // Steady, reflective reading pace: bonus 100 pts
+    timeBonus = 100;
   } else if (sec > 40 && sec < 90) {
-    // Quick pace: bonus 10 pts
-    timeBonus = 10;
+    // Quick pace: bonus 50 pts
+    timeBonus = 50;
   }
 
   return base + timeBonus;

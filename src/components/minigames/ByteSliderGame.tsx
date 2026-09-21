@@ -403,8 +403,8 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
   return (
     <div className="flex flex-col gap-6 max-w-5xl mx-auto pb-12 animate-fadeIn">
       {/* Top Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-900/90 border border-indigo-500/30 rounded-3xl p-5 sm:p-6 backdrop-blur shadow-xl">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 bg-slate-900/90 border border-indigo-500/30 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 backdrop-blur shadow-xl">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <button
             id="byte-slider-btn-back"
             type="button"
@@ -412,7 +412,7 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
               sounds.playClick();
               onBack();
             }}
-            className="px-3.5 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+            className="px-3 py-2 rounded-xl sm:rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 sm:gap-2 cursor-pointer active:scale-95"
           >
             <ArrowLeft className="w-4 h-4 text-emerald-400" />
             <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
@@ -420,59 +420,61 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 Puzzle 3×3 TIC
               </span>
               <span className="text-xs text-slate-400 hidden sm:inline">
                 {lang === 'en' ? 'Data Units Slider' : 'Glisorul Unităților de Date'}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2">
+            <h1 className="text-base sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2">
               <span>Byte Slider 3×3</span>
-              <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 animate-pulse" />
             </h1>
           </div>
         </div>
 
         {/* Action Controls & Highscore */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            id="byte-slider-btn-cheat"
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              setShowCheatSheet((prev) => !prev);
-            }}
-            className={`px-3 py-2 rounded-2xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 ${
-              showCheatSheet
-                ? 'bg-amber-500/20 border-amber-400 text-amber-200'
-                : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
-            }`}
-            title={lang === 'en' ? 'Educational Reference Scale' : 'Scara de referință & Ordinea corectă'}
-          >
-            <HelpCircle className="w-4 h-4 text-amber-400" />
-            <span className="hidden sm:inline">{lang === 'en' ? 'Order Guide' : 'Ghid Ordine'}</span>
-          </button>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button
+              id="byte-slider-btn-cheat"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setShowCheatSheet((prev) => !prev);
+              }}
+              className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 ${
+                showCheatSheet
+                  ? 'bg-amber-500/20 border-amber-400 text-amber-200'
+                  : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
+              }`}
+              title={lang === 'en' ? 'Educational Reference Scale' : 'Scara de referință & Ordinea corectă'}
+            >
+              <HelpCircle className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">{lang === 'en' ? 'Order Guide' : 'Ghid Ordine'}</span>
+            </button>
 
-          <button
-            id="byte-slider-btn-restart"
-            type="button"
-            disabled={isShuffling}
-            onClick={() => {
-              sounds.playClick();
-              performSoftShuffle();
-            }}
-            className="px-3.5 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white border border-indigo-400 text-xs font-black transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md shadow-indigo-600/30"
-          >
-            <RotateCcw className={`w-4 h-4 ${isShuffling ? 'animate-spin' : ''}`} />
-            <span>{isShuffling ? (lang === 'en' ? 'Shuffling...' : 'Amestecare...') : (lang === 'en' ? 'Soft Shuffle' : 'Joc Nou')}</span>
-          </button>
+            <button
+              id="byte-slider-btn-restart"
+              type="button"
+              disabled={isShuffling}
+              onClick={() => {
+                sounds.playClick();
+                performSoftShuffle();
+              }}
+              className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white border border-indigo-400 text-xs font-black transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md shadow-indigo-600/30"
+            >
+              <RotateCcw className={`w-4 h-4 ${isShuffling ? 'animate-spin' : ''}`} />
+              <span>{isShuffling ? (lang === 'en' ? 'Shuffling...' : 'Amestecare...') : (lang === 'en' ? 'Soft Shuffle' : 'Joc Nou')}</span>
+            </button>
+          </div>
 
           {/* High Score Badge */}
-          <div className="px-3 py-1.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
+          <div className="px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
             <Trophy className="w-4 h-4 text-amber-400" />
             <div className="flex flex-col text-right">
-              <span className="text-[10px] text-slate-400 font-mono leading-none">Record</span>
+              <span className="text-[9px] sm:text-[10px] text-slate-400 font-mono leading-none">Record</span>
               <span className="font-mono font-black text-amber-300">{highScore} pts</span>
             </div>
           </div>

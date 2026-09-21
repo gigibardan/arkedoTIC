@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
+import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 
 interface CyberDinoRunnerProps {
   studentName?: string;
@@ -745,9 +746,14 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
                   setHighScore(finalScore);
                   try {
                     localStorage.setItem('arkedo_highscore_cyber_dino', String(finalScore));
+                    updateActiveArcadeScore('cyber_dino', finalScore);
                   } catch {
                     // Ignore storage limit
                   }
+                } else {
+                  try {
+                    updateActiveArcadeScore('cyber_dino', finalScore);
+                  } catch {}
                 }
 
                 const xpGained = Math.floor(finalScore / 2) + eng.bitsEarned * 5;
@@ -1328,24 +1334,24 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
   }, [gameState, selectedSkin, highScore, onSaveScore, onAwardXP, gameMode, campaignLevel, playRetroSound, currentBiome]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-3 sm:p-6 select-none font-sans">
+    <div id="cyber-dino-runner-root" className="w-full max-w-5xl mx-auto p-2 sm:p-6 select-none font-sans">
       {/* Top Header Card */}
-      <div className="flex items-center justify-between gap-4 mb-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-indigo-950/90 border border-emerald-500/40 shadow-xl backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/20 ring-2 ring-emerald-400/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-3 sm:mb-4 p-3 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-indigo-950/90 border border-emerald-500/40 shadow-xl backdrop-blur-sm">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white text-xl sm:text-2xl shadow-lg shadow-emerald-500/20 ring-2 ring-emerald-400/40 shrink-0">
             🦖
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-black text-white tracking-tight font-heading">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h2 className="text-base sm:text-xl font-black text-white tracking-tight font-heading">
                 CYBER DINO: MATRIX RUSH
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black border border-emerald-500/40 uppercase tracking-wider flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] sm:text-[10px] font-black border border-emerald-500/40 uppercase tracking-wider flex items-center gap-1">
                 <WifiOff className="w-3 h-3 text-rose-400" />
-                No Internet Chrome Arcade
+                Chrome Arcade TIC
               </span>
             </div>
-            <p className="text-xs text-slate-300">
+            <p className="text-[11px] sm:text-xs text-slate-300 hidden sm:block">
               {lang === 'en'
                 ? 'Conquer the matrix grid, jump capacitors, duck Wi-Fi drones and defeat glitch titans!'
                 : 'Aleargă prin Matrix, sari peste condensatori, alunecă sub drone Wi-Fi și învinge boșii glitch!'}
@@ -1354,85 +1360,94 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
         </div>
 
         {/* Action controls right */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setSoundMuted(!soundMuted)}
-            className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer"
-            title="Sunet ON/OFF"
-          >
-            {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
-          </button>
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-300">
+            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <span>Record: {highScore}</span>
+          </div>
 
-          <button
-            onClick={() => {
-              sounds.playClick();
-              onBack();
-            }}
-            className="p-2.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-slate-300 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
-          >
-            <ArrowLeft className="w-4 h-4 text-rose-400" />
-            <span className="hidden sm:inline">{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Arcade'}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSoundMuted(!soundMuted)}
+              className="p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer"
+              title="Sunet ON/OFF"
+            >
+              {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onBack();
+              }}
+              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-slate-200 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+            >
+              <ArrowLeft className="w-4 h-4 text-rose-400" />
+              <span>{lang === 'en' ? 'Arcade Hub' : 'Înapoi la Jocuri'}</span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Main Game Stage Container */}
-      <div className="relative rounded-3xl bg-slate-950 border-2 border-slate-800 shadow-2xl overflow-hidden">
+      <div className="relative rounded-2xl sm:rounded-3xl bg-slate-950 border-2 border-slate-800 shadow-2xl overflow-hidden min-h-[260px] sm:min-h-[340px]">
         {/* HUD Live Stats Bar */}
-        <div className="absolute top-3 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+        <div className="absolute top-2 left-2 right-2 sm:top-3 sm:left-4 sm:right-4 z-10 flex flex-wrap items-center justify-between gap-1.5 pointer-events-none">
           {/* Left HUD: Score & HighScore */}
-          <div className="flex items-center gap-3 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-lg">
-            <div className="flex items-center gap-1.5 font-mono">
-              <span className="text-[10px] uppercase font-bold text-slate-400">Scor:</span>
-              <span className="text-lg font-black text-emerald-400">{score.toString().padStart(5, '0')}</span>
+          <div className="flex items-center gap-2 sm:gap-3 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg">
+            <div className="flex items-center gap-1 font-mono">
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400">Scor:</span>
+              <span className="text-sm sm:text-lg font-black text-emerald-400">{score.toString().padStart(5, '0')}</span>
             </div>
-            <div className="h-4 w-px bg-slate-700" />
-            <div className="flex items-center gap-1 font-mono text-xs">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <div className="h-3 sm:h-4 w-px bg-slate-700" />
+            <div className="flex items-center gap-1 font-mono text-[11px] sm:text-xs">
+              <Trophy className="w-3 h-3 text-amber-400" />
               <span className="text-amber-300 font-bold">{highScore.toString().padStart(5, '0')}</span>
             </div>
           </div>
 
           {/* Center HUD: Biome & Boss Warning */}
           {bossWarning && (
-            <div className="px-4 py-1.5 rounded-xl bg-rose-950/90 border-2 border-rose-500 text-rose-200 text-xs font-black animate-pulse flex items-center gap-1.5 shadow-lg">
-              <Flame className="w-4 h-4 text-amber-400" />
-              ⚠️ ATENȚIE: TITANUL GLITCH ATACĂ!
+            <div className="px-3 py-1 rounded-xl bg-rose-950/90 border border-rose-500 text-rose-200 text-[10px] sm:text-xs font-black animate-pulse flex items-center gap-1 shadow-lg">
+              <Flame className="w-3.5 h-3.5 text-amber-400" />
+              <span>ATAC TITAN GLITCH!</span>
             </div>
           )}
 
           {/* Right HUD: Bits & Ammo & Powerups */}
-          <div className="flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-800 shadow-lg">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg">
             {/* Bits */}
-            <div className="flex items-center gap-1 font-mono text-xs text-emerald-300 font-bold">
+            <div className="flex items-center gap-1 font-mono text-[11px] sm:text-xs text-emerald-300 font-bold">
               <span>🪙</span>
               <span>{bitsCollected}</span>
             </div>
 
             {/* Ammo */}
-            <div className="flex items-center gap-1 font-mono text-xs text-cyan-300 font-bold ml-1">
+            <div className="flex items-center gap-1 font-mono text-[11px] sm:text-xs text-cyan-300 font-bold">
               <span>⚡</span>
               <span>{ammo}</span>
             </div>
 
             {/* Shield Icon */}
             {hasShield && (
-              <span className="text-xs bg-sky-500/20 text-sky-300 px-1.5 py-0.5 rounded border border-sky-400 font-bold animate-pulse">
-                🛡️ Scut
+              <span className="text-[10px] bg-sky-500/20 text-sky-300 px-1 py-0.5 rounded border border-sky-400 font-bold">
+                🛡️
               </span>
             )}
 
             {/* Overclock Icon */}
             {isOverclocked && (
-              <span className="text-xs bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-400 font-bold animate-pulse">
-                🔥 Turbo
+              <span className="text-[10px] bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded border border-amber-400 font-bold">
+                🔥
               </span>
             )}
 
             {/* Magnet Icon */}
             {magnetActive && (
-              <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-400 font-bold animate-pulse">
-                🧲 Magnet
+              <span className="text-[10px] bg-purple-500/20 text-purple-300 px-1 py-0.5 rounded border border-purple-400 font-bold">
+                🧲
               </span>
             )}
           </div>
@@ -1441,8 +1456,14 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
         {/* HTML5 Canvas Stage */}
         <canvas
           ref={canvasRef}
-          className="w-full h-auto block bg-slate-950 cursor-pointer"
-          style={{ imageRendering: 'pixelated', maxHeight: '420px' }}
+          className="w-full h-auto block bg-slate-950 cursor-pointer aspect-[800/320]"
+          style={{ imageRendering: 'pixelated' }}
+          onTouchStart={(e) => {
+            if (gameState === 'playing') {
+              e.preventDefault();
+              triggerJump();
+            }
+          }}
           onClick={() => {
             if (gameState === 'playing') {
               triggerJump();
@@ -1452,69 +1473,71 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
 
         {/* OVERLAY: MENU STATE */}
         {gameState === 'menu' && (
-          <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-md z-20 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-4xl mb-3 shadow-xl ring-4 ring-emerald-500/30">
+          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md z-20 flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-fadeIn overflow-y-auto">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-2xl sm:text-4xl mb-2 shadow-xl ring-4 ring-emerald-500/30 shrink-0">
               🦖
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-heading mb-1">
+            <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight font-heading mb-1">
               CYBER DINO: MATRIX RUSH
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-md mb-6 leading-relaxed">
-              Inspirat din celebrul joc Google Chrome cu dinozauri, adaptat în laboratorul de TIC cu lasere, boost-uri turbo și boși cibernetici!
+            <p className="text-[11px] sm:text-xs text-slate-300 max-w-md mb-3 sm:mb-4 leading-relaxed">
+              Jocul legendar cu dinozauri din Chrome, adaptat pentru laboratorul TIC cu lasere, boost-uri și boși glitch!
             </p>
 
             {/* Game Mode Selector */}
-            <div className="flex flex-wrap gap-2.5 mb-6 justify-center">
+            <div className="flex flex-wrap gap-2 mb-3 sm:mb-4 justify-center w-full max-w-lg">
               <button
                 type="button"
                 onClick={() => setGameMode('endless')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   gameMode === 'endless'
-                    ? 'bg-emerald-600 border-emerald-400 text-white shadow-lg'
+                    ? 'bg-emerald-600 border-emerald-400 text-white shadow-lg ring-2 ring-emerald-400/40'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                🏃 Modul Clasic Infinit
+                🏃 Mod Clasic Infinit
               </button>
 
               <button
                 type="button"
                 onClick={() => setGameMode('campaign')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   gameMode === 'campaign'
-                    ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg'
+                    ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg ring-2 ring-indigo-400/40'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                🎯 Modul Campanie & Boss
+                🎯 Campanie & Boss
               </button>
 
               <button
                 type="button"
                 onClick={() => setGameMode('hardcore')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   gameMode === 'hardcore'
-                    ? 'bg-rose-600 border-rose-400 text-white shadow-lg'
+                    ? 'bg-rose-600 border-rose-400 text-white shadow-lg ring-2 ring-rose-400/40'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                ⚡ Hardcore Matrix (Viteză Max)
+                ⚡ Hardcore Viteză Max
               </button>
             </div>
 
             {/* Dino Skin Picker */}
-            <div className="flex items-center gap-3 mb-6 bg-slate-900/80 px-4 py-2 rounded-2xl border border-slate-800">
-              <span className="text-xs text-slate-400 font-bold">Skin:</span>
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mb-4 bg-slate-900/80 px-3 py-1.5 rounded-2xl border border-slate-800">
+              <span className="text-[11px] text-slate-400 font-bold mr-1">Costum:</span>
               <button
+                type="button"
                 onClick={() => setSelectedSkin('classic')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
                   selectedSkin === 'classic' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400' : 'text-slate-400'
                 }`}
               >
-                🦖 Classic
+                🦖 Clasic
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedSkin('mecha')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
                   selectedSkin === 'mecha' ? 'bg-slate-500/20 text-slate-300 border border-slate-400' : 'text-slate-400'
@@ -1523,6 +1546,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
                 🤖 Mecha
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedSkin('hacker')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
                   selectedSkin === 'hacker' ? 'bg-green-500/20 text-green-300 border border-green-400' : 'text-slate-400'
@@ -1531,6 +1555,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
                 👾 Hacker
               </button>
               <button
+                type="button"
                 onClick={() => setSelectedSkin('neon')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
                   selectedSkin === 'neon' ? 'bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400' : 'text-slate-400'
@@ -1540,26 +1565,27 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               </button>
             </div>
 
-            {/* Play Button */}
+            {/* Play Button - Highly Prominent */}
             <button
+              id="cyber-dino-start-game-btn"
               type="button"
               onClick={() => startNewGame(gameMode, campaignLevel)}
-              className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm tracking-wide shadow-xl shadow-emerald-500/30 transition-all active:scale-95 flex items-center gap-2.5 cursor-pointer"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm sm:text-base tracking-wide shadow-xl shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer"
             >
               <Play className="w-5 h-5 fill-white" />
-              <span>START CURSĂ [SPACE / TAP]</span>
+              <span>START CURSĂ [APASĂ AICI / SPACE]</span>
             </button>
           </div>
         )}
 
         {/* OVERLAY: PAUSED STATE */}
         {gameState === 'paused' && (
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 animate-fadeIn">
-            <h3 className="text-2xl font-black text-white mb-4">JOCUL ESTE ÎN PAUZĂ</h3>
+          <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 animate-fadeIn">
+            <h3 className="text-xl sm:text-2xl font-black text-white mb-4">JOCUL ESTE ÎN PAUZĂ</h3>
             <button
               type="button"
               onClick={() => setGameState('playing')}
-              className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center gap-2 cursor-pointer shadow-lg"
+              className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
             >
               <Play className="w-4 h-4 fill-white" />
               <span>Continuă Cursa (Apasă P)</span>
@@ -1569,40 +1595,40 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
 
         {/* OVERLAY: GAME OVER STATE */}
         {gameState === 'gameover' && (
-          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-20 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
-            <div className="w-14 h-14 rounded-2xl bg-rose-950/80 border-2 border-rose-500 flex items-center justify-center text-3xl mb-2 text-rose-400 shadow-xl">
+          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md z-20 flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-fadeIn overflow-y-auto">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-rose-950/80 border-2 border-rose-500 flex items-center justify-center text-2xl sm:text-3xl mb-2 text-rose-400 shadow-xl shrink-0">
               💥
             </div>
-            <h3 className="text-2xl font-black text-rose-400 font-heading mb-1">
+            <h3 className="text-lg sm:text-2xl font-black text-rose-400 font-heading mb-1">
               404: IMPACT DETECTAT!
             </h3>
-            <p className="text-xs text-slate-400 mb-4">Dinozaurul Arky a lovit un obstacol în Matrix!</p>
+            <p className="text-xs text-slate-400 mb-3 sm:mb-4">Dinozaurul Arky a lovit un obstacol în Matrix!</p>
 
             {/* Results Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-lg w-full mb-5 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-lg w-full mb-4 text-xs font-mono">
+              <div className="p-2 sm:p-3 rounded-xl bg-slate-900 border border-slate-800">
                 <span className="text-slate-400 block text-[10px]">Scor Final:</span>
-                <span className="text-base font-black text-emerald-400">{score} pts</span>
+                <span className="text-sm sm:text-base font-black text-emerald-400">{score} pts</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="p-2 sm:p-3 rounded-xl bg-slate-900 border border-slate-800">
                 <span className="text-slate-400 block text-[10px]">Biți Colectați:</span>
-                <span className="text-base font-black text-amber-400">🪙 {gameStats.bitsCount}</span>
+                <span className="text-sm sm:text-base font-black text-amber-400">🪙 {gameStats.bitsCount}</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="p-2 sm:p-3 rounded-xl bg-slate-900 border border-slate-800">
                 <span className="text-slate-400 block text-[10px]">Distruși / EMP:</span>
-                <span className="text-base font-black text-cyan-400">⚡ {gameStats.obstaclesDestroyed}</span>
+                <span className="text-sm sm:text-base font-black text-cyan-400">⚡ {gameStats.obstaclesDestroyed}</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="p-2 sm:p-3 rounded-xl bg-slate-900 border border-slate-800">
                 <span className="text-slate-400 block text-[10px]">XP Câștigat:</span>
-                <span className="text-base font-black text-indigo-300">+{gameStats.xpEarned} XP</span>
+                <span className="text-sm sm:text-base font-black text-indigo-300">+{gameStats.xpEarned} XP</span>
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2.5 justify-center w-full max-w-md">
               <button
                 type="button"
                 onClick={() => startNewGame(gameMode, campaignLevel)}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
+                className="flex-1 min-w-[140px] px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Reîncearcă [SPACE]</span>
@@ -1611,7 +1637,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setGameState('menu')}
-                className="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer"
+                className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer active:scale-95"
               >
                 Meniu Principal
               </button>
@@ -1621,14 +1647,14 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
 
         {/* OVERLAY: VICTORY STATE (Campaign Boss Defeated) */}
         {gameState === 'victory' && (
-          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-20 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-4xl mb-2 text-amber-400 shadow-xl">
+          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md z-20 flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-fadeIn overflow-y-auto">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-3xl sm:text-4xl mb-2 text-amber-400 shadow-xl shrink-0">
               🏆
             </div>
-            <h3 className="text-2xl font-black text-amber-300 font-heading mb-1">
+            <h3 className="text-lg sm:text-2xl font-black text-amber-300 font-heading mb-1">
               VICTORIE! TITANUL GLITCH A FOST ANIHILAT!
             </h3>
-            <p className="text-xs text-slate-300 mb-5 max-w-md">
+            <p className="text-xs text-slate-300 mb-4 max-w-md">
               Ai restabilit conexiunea la rețea și ai salvat laboratorul de TIC! Ai primit +350 XP bonus de campion!
             </p>
 
@@ -1643,8 +1669,8 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
         )}
       </div>
 
-      {/* Touch & Mobile On-Screen Controls */}
-      <div className="mt-4 grid grid-cols-3 gap-3">
+      {/* Touch & Mobile On-Screen Controls - High Reliability */}
+      <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 touch-manipulation">
         <button
           type="button"
           onTouchStart={(e) => {
@@ -1652,10 +1678,10 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             triggerJump();
           }}
           onClick={triggerJump}
-          className="p-3.5 rounded-2xl bg-slate-900 active:bg-emerald-800 border-2 border-slate-800 active:border-emerald-400 text-white flex flex-col items-center justify-center gap-1 cursor-pointer transition-all shadow-md"
+          className="min-h-[52px] sm:min-h-[64px] p-3 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-slate-900 to-slate-950 active:from-emerald-900 active:to-emerald-950 border-2 border-slate-800 active:border-emerald-400 text-white flex sm:flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
         >
           <ChevronUp className="w-6 h-6 text-emerald-400" />
-          <span className="text-xs font-black uppercase">SARI (SPACE / ↑)</span>
+          <span className="text-xs sm:text-sm font-black uppercase tracking-wider">SARI (SPACE / TAP)</span>
         </button>
 
         <button
@@ -1670,10 +1696,10 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
           }}
           onMouseDown={() => setDuckState(true)}
           onMouseUp={() => setDuckState(false)}
-          className="p-3.5 rounded-2xl bg-slate-900 active:bg-cyan-800 border-2 border-slate-800 active:border-cyan-400 text-white flex flex-col items-center justify-center gap-1 cursor-pointer transition-all shadow-md"
+          className="min-h-[52px] sm:min-h-[64px] p-3 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-slate-900 to-slate-950 active:from-cyan-900 active:to-cyan-950 border-2 border-slate-800 active:border-cyan-400 text-white flex sm:flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
         >
           <ChevronDown className="w-6 h-6 text-cyan-400" />
-          <span className="text-xs font-black uppercase">ALUNECĂ (↓ / S)</span>
+          <span className="text-xs sm:text-sm font-black uppercase tracking-wider">ALUNECĂ (S / ↓)</span>
         </button>
 
         <button
@@ -1683,21 +1709,21 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             triggerShoot();
           }}
           onClick={triggerShoot}
-          className="p-3.5 rounded-2xl bg-slate-900 active:bg-pink-800 border-2 border-slate-800 active:border-pink-400 text-white flex flex-col items-center justify-center gap-1 cursor-pointer transition-all shadow-md"
+          className="min-h-[52px] sm:min-h-[64px] p-3 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-slate-900 to-slate-950 active:from-pink-900 active:to-pink-950 border-2 border-slate-800 active:border-pink-400 text-white flex sm:flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
         >
           <Crosshair className="w-6 h-6 text-pink-400" />
-          <span className="text-xs font-black uppercase">TRAGE EMP (F / E)</span>
+          <span className="text-xs sm:text-sm font-black uppercase tracking-wider">TRAGE EMP (F / E)</span>
         </button>
       </div>
 
       {/* Game Guide & Controls Reference Card */}
-      <div className="mt-5 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="mt-4 p-3 sm:p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="flex items-start gap-2.5">
           <Keyboard className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold text-slate-200 block mb-0.5">Comenzi Tastatură:</span>
+            <span className="font-bold text-slate-200 block mb-0.5">Comenzi Tastatură / Touch:</span>
             <p className="text-[11px] leading-relaxed">
-              [SPACE] sau [↑] = Salt • [↓] sau [S] = Alunecare sub drone • [F] sau [E] = Laser EMP • [P] = Pauză
+              [SPACE] / Atingere = Salt • [↓] / Alunecare = Ferire drone • [F] = Laser EMP
             </p>
           </div>
         </div>
@@ -1707,7 +1733,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
           <div>
             <span className="font-bold text-slate-200 block mb-0.5">Power-up-uri Speciale:</span>
             <p className="text-[11px] leading-relaxed">
-              🛡️ Scutul absoarbe o lovitură • ⚡ Turbo Overclock distruge totul în cale • 🧲 Magnetul atrage biții de aur!
+              🛡️ Scutul absoarbe lovituri • ⚡ Turbo distruge obstacole • 🧲 Magnetul atrage biții
             </p>
           </div>
         </div>
@@ -1717,7 +1743,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
           <div>
             <span className="font-bold text-slate-200 block mb-0.5">Punctaj & XP:</span>
             <p className="text-[11px] leading-relaxed">
-              Scorul se sincronizează automat în profilul tău de elev și în Clasamentul General Arcade!
+              Scorul se sincronizează automat în profilul tău de elev și în Clasamentul General!
             </p>
           </div>
         </div>

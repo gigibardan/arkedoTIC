@@ -472,7 +472,11 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
                   <span className="text-slate-400">⌨️ Typing Sprint</span>
                   <span className="font-mono font-bold text-cyan-300">
-                    {selectedStudentForDetails.arcadeScores?.typing || 0} WPM
+                    {selectedStudentForDetails.arcadeScores?.typing || 0} WPM (
+                    {(selectedStudentForDetails.arcadeScores?.typing || 0) <= 250
+                      ? (selectedStudentForDetails.arcadeScores?.typing || 0) * 25
+                      : selectedStudentForDetails.arcadeScores?.typing || 0}{' '}
+                    pts)
                   </span>
                 </div>
 
@@ -488,7 +492,10 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
                   <span className="text-slate-400">🔢 2048 Bitwise</span>
                   <span className="font-mono font-bold text-amber-400">
-                    {selectedStudentForDetails.arcadeScores?.game2048 || 0} pts
+                    {(selectedStudentForDetails.arcadeScores?.game2048 || 0) > 3000
+                      ? Math.round((selectedStudentForDetails.arcadeScores?.game2048 || 0) / 10)
+                      : selectedStudentForDetails.arcadeScores?.game2048 || 0}{' '}
+                    pts
                   </span>
                 </div>
 
