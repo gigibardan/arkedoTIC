@@ -32,7 +32,8 @@ export const ARCADE_GAME_KEYS = [
   'byte_slider',
   'file_drop',
   'virus_sweeper',
-  'cyber_dino'
+  'cyber_dino',
+  'voxel_architect'
 ] as const;
 
 export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
@@ -50,6 +51,8 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   file_drop: 0,
   virus_sweeper: 0,
   cyber_dino: 0,
+  redstone_lab: 0,
+  voxel_architect: 0,
   totalArcade: 0
 };
 
@@ -106,7 +109,8 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     (scores.file_drop || 0) +
     (scores.virus_sweeper || 0) +
     (scores.cyber_dino || 0) +
-    (scores.redstone_lab || 0)
+    (scores.redstone_lab || 0) +
+    (scores.voxel_architect || 0)
   );
 }
 

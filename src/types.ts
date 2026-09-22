@@ -51,6 +51,7 @@ export interface ArcadeScores {
   virus_sweeper?: number;
   cyber_dino?: number;
   redstone_lab?: number;
+  voxel_architect?: number;
   totalArcade: number;
 }
 

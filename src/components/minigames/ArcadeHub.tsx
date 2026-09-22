@@ -16,6 +16,7 @@ import { FileDropGame } from './FileDropGame';
 import { VirusSweeperGame } from './VirusSweeperGame';
 import { CyberDinoRunner } from './CyberDinoRunner';
 import { RedstoneLogicLab } from './RedstoneLogicLab';
+import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
 import {
   Gamepad2,
   Keyboard,
@@ -49,7 +50,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -176,6 +177,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const voxelArchitectHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_voxel_architect') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -183,6 +192,15 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       return '🎓';
     }
   })();
+
+  if (activeGame === 'voxel_architect') {
+    return (
+      <MinecraftVoxelArchitect
+        onBack={() => setActiveGame('hub')}
+        studentName={studentName}
+      />
+    );
+  }
 
   if (activeGame === 'redstone_lab') {
     return (
@@ -1037,6 +1055,58 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               className="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Sweep' : 'Joacă'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 16: Minecraft Voxel Logic Architect (Arhitectul de Calculatoare Voxel) - Placed as the LAST ultimate game */}
+        <div className="bg-gradient-to-b from-stone-900 via-emerald-950/20 to-stone-900 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20">
+                🧱
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-950 border border-stone-800 text-[11px] font-mono text-emerald-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{voxelArchitectHighScore} XP</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Minecraft Voxel' : 'Lumea Voxel TIC'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+                💎 Sandbox + 8 Capitole
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Voxel Logic Architect (Minecraft CS)' : 'Voxel Architect: Calculatoare Minecraft'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'The ultimate complex Minecraft Computer Science game! Mine ores, build logic buses, wire flip-flop RAM latches, construct 4-bit ALU adders, and run command blocks in sandbox or story mode!'
+                : 'Cel mai complex joc Minecraft de Arhitectură Hardware! Extrage resurse, construiește porți logice, asamblează memorii RAM (RS-Latch), sumatoare ALU pe 4 biți și programează blocuri de comandă!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-stone-800 flex items-center justify-between">
+            <span className="text-[11px] text-emerald-400 font-mono">⚡ 15 PWR + Porți Logice</span>
+            <button
+              id="arcade-btn-start-voxel-architect"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('voxel_architect');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-stone-950 font-black text-xs font-mono transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Build World' : 'Construiește'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
