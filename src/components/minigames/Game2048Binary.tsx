@@ -52,6 +52,10 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
   const [hasWon, setHasWon] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [highestTile, setHighestTile] = useState<number>(2);
+  const [hasReceived2048Bonus, setHasReceived2048Bonus] = useState<boolean>(false);
+  const [showVictoryModal, setShowVictoryModal] = useState<boolean>(false);
+  const [bonusToast, setBonusToast] = useState<{ text: string; sub: string } | null>(null);
+  const milestonesRef = useRef<Set<number>>(new Set());
 
   // High score
   const [highScore, setHighScore] = useState<number>(() => {
@@ -63,6 +67,15 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
   });
 
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Auto-dismiss bonus toast announcement
+  useEffect(() => {
+    if (!bonusToast) return;
+    const timer = setTimeout(() => {
+      setBonusToast(null);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [bonusToast]);
 
   function getInitialBoard(): Board {
     const emptyBoard: Board = Array(GRID_SIZE)
@@ -96,10 +109,14 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
     setHasWon(false);
     setIsGameOver(false);
     setHighestTile(2);
+    setHasReceived2048Bonus(false);
+    setShowVictoryModal(false);
+    setBonusToast(null);
+    milestonesRef.current.clear();
     arky.triggerIdle();
   };
 
-  // Slide and merge row to the left
+  // Slide and merge row to the left with elevated point gains for high difficulty
   const slideAndMergeRow = (row: number[], currentScore: number) => {
     // 1. Filter out zeros
     let nonZeros = row.filter((val) => val !== 0);
@@ -111,7 +128,8 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
       if (i + 1 < nonZeros.length && nonZeros[i] === nonZeros[i + 1]) {
         const mergedVal = nonZeros[i] * 2;
         mergedRow.push(mergedVal);
-        pointsGained += mergedVal;
+        // Elevated point scaling for high difficulty: 1.5x merged value
+        pointsGained += Math.round(mergedVal * 1.5);
         i += 2;
       } else {
         mergedRow.push(nonZeros[i]);
@@ -190,24 +208,48 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
         }
         setHighestTile(maxTileFound);
 
+        // Synthesis milestone bonuses
+        if (maxTileFound >= 512 && !milestonesRef.current.has(512)) {
+          milestonesRef.current.add(512);
+          newScore += 200;
+          setBonusToast({
+            text: '+200 PUNCTE BONUS!',
+            sub: lang === 'en' ? '512 B (½ KB) block synthesized!' : 'Blocul 512 B (½ KB) sintetizat!',
+          });
+        }
+
         // 1024 B / 1 KB Milestone!
-        if (maxTileFound >= 1024 && !hasWon) {
-          if (maxTileFound >= 2048) {
-            setHasWon(true);
-            sounds.playVictory();
-            arky.triggerFinished(
-              lang === 'en'
-                ? 'VICTORY! You synthesized 2048 B (2 Kilobytes)! 🏆🎉'
-                : 'VICTORIE! Ai atins 2048 B (2 Kilobytes)! O minune a memoriei binare! 🏆🎉'
-            );
-          } else if (maxTileFound === 1024) {
-            sounds.playLevelUp();
-            arky.triggerSuccess(
-              lang === 'en'
-                ? 'Awesome! 1024 Bytes = 1 Kilobyte synthesized! 💾✨'
-                : 'Excelent! Ai format 1024 Bytes = 1 Kilobyte (KB)! 💾✨'
-            );
-          }
+        if (maxTileFound >= 1024 && !milestonesRef.current.has(1024)) {
+          milestonesRef.current.add(1024);
+          newScore += 500;
+          sounds.playLevelUp();
+          setBonusToast({
+            text: '+500 PUNCTE BONUS (1 KB)!',
+            sub: lang === 'en' ? '1024 Bytes = 1 Kilobyte synthesized!' : '1024 Bytes = 1 Kilobyte atins!',
+          });
+          arky.triggerSuccess(
+            lang === 'en'
+              ? 'Awesome! 1024 Bytes = 1 Kilobyte synthesized (+500 bonus pts)! 💾✨'
+              : 'Excelent! Ai format 1024 Bytes = 1 Kilobyte (KB) (+500 puncte bonus)! 💾✨'
+          );
+        }
+
+        // 2048 B / 2 KB Grand Victory Milestone (+3000 EXTRA POINTS BONUS)
+        if (maxTileFound >= 2048 && !hasReceived2048Bonus) {
+          newScore += 3000;
+          setHasReceived2048Bonus(true);
+          setHasWon(true);
+          setShowVictoryModal(true);
+          setBonusToast({
+            text: '⭐ +3.000 PUNCTE BONUS EXTRA PENTRU 2048 B! ⭐',
+            sub: lang === 'en' ? 'Full victory! 2 KB binary memory reached!' : 'Victorie deplină! Ai sintetizat 2 KB de memorie binară!',
+          });
+          sounds.playVictory();
+          arky.triggerFinished(
+            lang === 'en'
+              ? 'VICTORY! You conquered the high difficulty, synthesized 2048 B (2 KB), and earned +3,000 EXTRA BONUS POINTS! 🏆🎉'
+              : 'VICTORIE! Ai învins dificultatea ridicată, ai sintetizat 2048 B (2 KB) și ai primit un BONUS EXTRA de +3.000 de puncte! 🏆🎉'
+          );
         }
 
         setBoard(newBoard);
@@ -230,7 +272,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
         }
       }
     },
-    [board, score, isGameOver, highestTile, hasWon, highScore, lang, arky]
+    [board, score, isGameOver, highestTile, hasWon, hasReceived2048Bonus, highScore, lang, arky]
   );
 
   function checkGameOver(b: Board): boolean {
@@ -340,9 +382,9 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
         {/* Left Side: Game Board (8 cols) */}
         <div className="lg:col-span-8 bg-slate-900/95 border-2 border-amber-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl relative flex flex-col items-center">
           {/* Top Score Bar & Controls */}
-          <div className="w-full flex items-center justify-between gap-3 mb-5">
-            <div className="flex items-center gap-2">
-              <div className="bg-slate-950 px-4 py-2 rounded-2xl border border-slate-800 text-center">
+          <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="bg-slate-950 px-3.5 py-2 rounded-2xl border border-slate-800 text-center">
                 <div className="text-[10px] text-slate-400 uppercase font-bold">Scor Curent</div>
                 <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono">{score}</div>
               </div>
@@ -351,6 +393,27 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
                 <div className="text-[10px] text-slate-400 uppercase font-bold">Max Memorie</div>
                 <div className="text-base sm:text-lg font-black text-teal-300 font-mono">
                   {TILE_INFO[highestTile]?.label || `${highestTile} B`}
+                </div>
+              </div>
+
+              <div
+                className={`px-3 py-2 rounded-2xl border text-center transition-all ${
+                  hasReceived2048Bonus
+                    ? 'bg-emerald-950/70 border-emerald-500/60 shadow-lg shadow-emerald-500/20 text-emerald-300'
+                    : 'bg-slate-950 border-amber-500/30 text-amber-300'
+                }`}
+              >
+                <div className="text-[10px] uppercase font-bold tracking-wider">Bonus Victoria 2048</div>
+                <div className="text-xs sm:text-sm font-black font-mono flex items-center justify-center gap-1">
+                  {hasReceived2048Bonus ? (
+                    <span className="text-emerald-400 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5" /> +3.000 pts acordate!
+                    </span>
+                  ) : (
+                    <span className="text-amber-300 flex items-center gap-1">
+                      ⭐ +3.000 pts extra la 2048 B
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -364,6 +427,17 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
               <span className="hidden sm:inline">Reset</span>
             </button>
           </div>
+
+          {/* Animated Bonus Toast Announcement */}
+          {bonusToast && (
+            <div className="w-full max-w-[380px] mb-3 py-2 px-3.5 rounded-2xl bg-gradient-to-r from-amber-500/25 via-emerald-500/25 to-amber-500/25 border-2 border-amber-400 text-center animate-bounce shadow-xl flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-xs font-black text-amber-200 font-heading">{bonusToast.text}</span>
+                <span className="text-[10px] text-emerald-300 font-mono">{bonusToast.sub}</span>
+              </div>
+            </div>
+          )}
 
           {/* 4x4 Game Board */}
           <div
@@ -403,6 +477,55 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
                   </div>
                 );
               })
+            )}
+
+            {/* Victory / 2048 Bonus Modal */}
+            {showVictoryModal && (
+              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center p-5 text-center gap-3 animate-fadeIn z-20 border-4 border-amber-400 shadow-2xl">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 via-orange-500 to-rose-500 flex items-center justify-center text-white shadow-xl animate-bounce">
+                  <Trophy className="w-7 h-7 text-amber-100" />
+                </div>
+
+                <div>
+                  <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    ⭐ BONUS DEBLOCAT: +3.000 PUNCTE
+                  </span>
+                  <h3 className="text-lg sm:text-xl font-black text-white font-heading mt-1.5">
+                    {lang === 'en' ? '2048 B (2 KB) SYNTHESIZED!' : '2048 B (2 KB) ATINS!'}
+                  </h3>
+                  <p className="text-xs text-amber-200 mt-1 max-w-xs mx-auto">
+                    {lang === 'en'
+                      ? 'You conquered the high difficulty! A massive +3,000 bonus points was awarded to your score!'
+                      : 'Ai doborât dificultatea ridicată! Ai primit un BONUS SPECIAL de +3.000 puncte extra adăugat la scor!'}
+                  </p>
+                </div>
+
+                <div className="bg-slate-900 border border-amber-500/40 rounded-2xl px-5 py-2 text-center">
+                  <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">Scor Total cu Bonus</div>
+                  <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono">{score} pts</div>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
+                  <button
+                    onClick={() => {
+                      sounds.playClick();
+                      setShowVictoryModal(false);
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+                    <span>{lang === 'en' ? 'Keep Playing (to 4096)' : 'Continuă Jocul (Spre 4096)'}</span>
+                  </button>
+
+                  <button
+                    onClick={resetGame}
+                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition border border-slate-700 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{lang === 'en' ? 'New Game' : 'Joc Nou'}</span>
+                  </button>
+                </div>
+              </div>
             )}
 
             {/* Game Over Overlay */}
@@ -511,6 +634,20 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
                   ? 'Tip: When two 512 B tiles touch, they synthesize exactly 1 KB (1024 B)!'
                   : 'Sfat: Când două blocuri de 512 B se unesc, formează exact 1 Kilobyte (1024 B)!'}
               </span>
+            </div>
+
+            <div className="mt-3 p-3.5 rounded-2xl bg-amber-500/15 border-2 border-amber-500/40 text-xs text-amber-200 leading-relaxed flex items-start gap-2.5 shadow-lg">
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-amber-300 font-heading block mb-1">
+                  {lang === 'en' ? '⭐ Higher Difficulty & +3,000 Bonus:' : '⭐ Dificultate Mărită & Bonus +3.000 pts:'}
+                </strong>
+                <span className="text-slate-300 text-[11px] leading-normal">
+                  {lang === 'en'
+                    ? 'Every merge grants 1.5x points to reward tactical difficulty. Whoever completes the synthesis and reaches 2048 B (2 KB) receives an EXTRA +3,000 BONUS points!'
+                    : 'Fiecare fuziune oferă 1.5x punctaj pentru a răsplăti dificultatea ridicată. Cine atinge și sintetizează blocul 2048 B (2 KB) primește un BONUS EXTRA de +3.000 de puncte în scor și în clasamentul școlii!'}
+                </span>
+              </div>
             </div>
           </div>
         </div>

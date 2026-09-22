@@ -449,8 +449,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               </div>
             </div>
 
-            <div className="inline-block px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-300 text-[10px] font-bold uppercase tracking-wider mb-2">
-              {lang === 'en' ? 'Binary Logic' : 'Gândire & Logică Binară'}
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Binary Logic' : 'Gândire & Logică Binară'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                ⭐ +3.000 pts Bonus 2048
+              </div>
             </div>
 
             <h3 className="text-lg font-black text-white font-heading group-hover:text-amber-300 transition-colors">
@@ -459,8 +464,8 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
             <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
               {lang === 'en'
-                ? 'Slide and merge powers of 2 (2 B, 4 B, 8 B... up to 1024 B = 1 KB and 2048 B). Based on textbook memory units.'
-                : 'Unește puterile lui 2: 2 B, 4 B, 8 B... până când formezi 1024 B (1 Kilobyte) și atingi 2048 B!'}
+                ? 'Slide & merge powers of 2. Enhanced points for higher difficulty + a HUGE 3,000 pts extra bonus for synthesizing 2048 B (2 KB)!'
+                : 'Unește puterile lui 2: 2 B, 4 B... Punctaj mărit pentru dificultate ridicată și un BONUS EXTRA de +3.000 puncte pentru cine atinge 2048 B!'}
             </p>
           </div>
 
@@ -522,7 +527,56 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 5: Cyber-Safe Detective */}
+        {/* Game 5: Cyber Dino: Matrix Rush (Dinozaurul Chrome TIC) */}
+        <div className="bg-slate-900/90 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-emerald-950/30 to-slate-900">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                🦖
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{cyberDinoHighScore} pts</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Arcade Runner' : 'Chrome Edition'}
+              </div>
+              <span className="text-[10px] text-teal-400 font-mono font-bold">⚡ Viteză Progresivă</span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+              <span>Cyber Dino: Matrix Rush</span>
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Cyberpunk runner inspired by Google Dino! Jump capacitors, duck Wi-Fi drones, collect bits and blast glitch bosses with progressive speed!'
+                : 'Adaptarea cyberpunk a jocului Google Dino! Sari peste condensatori, alunecă sub drone Wi-Fi, colectează biți și accelerează progresiv prin Matrix!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri & Lasere</span>
+            <button
+              id="arcade-btn-start-cyber-dino"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('cyber_dino');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Run' : 'Joacă'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 6: Cyber-Safe Detective */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -565,7 +619,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 5: File Organizer Express */}
+        {/* Game 7: File Organizer Express */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-blue-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -608,7 +662,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 6: Binary Bit Factory */}
+        {/* Game 8: Binary Bit Factory */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-amber-400/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -651,7 +705,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 8: Algorithm Maze Robot */}
+        {/* Game 9: Algorithm Maze Robot */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -694,7 +748,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 9: Firewall Defender */}
+        {/* Game 10: Firewall Defender */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-red-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -737,7 +791,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 10: RGB Pixel Master (Grafică Digitală 2D & Pixeli) */}
+        {/* Game 11: RGB Pixel Master (Grafică Digitală 2D & Pixeli) */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-purple-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -780,7 +834,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 11: Byte Slider 3x3 (Puzzle-ul Unităților de Date & Jocul 15) */}
+        {/* Game 12: Byte Slider 3x3 (Puzzle-ul Unităților de Date & Jocul 15) */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -825,7 +879,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 12: File-Drop (Tetris cu Fișiere & Extensii) */}
+        {/* Game 13: File-Drop (Tetris cu Fișiere & Extensii) */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-sky-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-28 h-28 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
@@ -872,7 +926,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 13: Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
+        {/* Game 14: Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-28 h-28 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
@@ -916,54 +970,6 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <span>{lang === 'en' ? 'Sweep' : 'Joacă'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
-          </div>
-        </div>
-
-        {/* Game 14: Cyber Dino: Matrix Rush (Adaptarea complexă Google Dino) */}
-        <div className="bg-slate-900/90 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden sm:col-span-2 lg:col-span-3 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-teal-950/40">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-start gap-3.5">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-3xl text-white shadow-lg shrink-0 ring-2 ring-emerald-400/40 group-hover:scale-105 transition-transform">
-                🦖
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/40 uppercase">
-                    NO INTERNET CHROME EDITION
-                  </span>
-                  <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
-                    <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{cyberDinoHighScore} pts</span>
-                  </span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-black text-white font-heading group-hover:text-emerald-300 transition-colors flex items-center gap-2">
-                  <span>Cyber Dino: Matrix Rush (Dinozaurul Chrome TIC)</span>
-                  <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
-                </h3>
-                <p className="text-slate-300 text-xs mt-1 leading-relaxed max-w-3xl">
-                  {lang === 'en'
-                    ? 'Spectacular cyberpunk adaptation of the classic Google Chrome Dino runner! Jump motherboard capacitors, duck under Wi-Fi drones, blast EMP lasers, activate overclock speed boosts and defeat the Glitch Titan Boss!'
-                    : 'Adaptare spectaculoasă și complexă a celebrului joc Google Chrome cu dinozaurul! Sari peste condensatori și cactuși firewall, alunecă sub drone Wi-Fi aeriene, trage cu lasere EMP, activează Turbo Overclock și învinge Titanul Glitch!'}
-                </p>
-              </div>
-            </div>
-
-            <div className="w-full md:w-auto flex md:flex-col items-center md:items-end justify-between gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
-              <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri + Lasere + Boss</span>
-              <button
-                id="arcade-btn-start-cyber-dino"
-                type="button"
-                onClick={() => {
-                  sounds.playClick();
-                  setActiveGame('cyber_dino');
-                }}
-                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-sm font-black transition flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/25 cursor-pointer active:scale-95"
-              >
-                <span>{lang === 'en' ? 'Play Cyber Dino' : 'Joacă Cyber Dino'}</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
           </div>
         </div>
       </div>

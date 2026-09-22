@@ -87,9 +87,9 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
   const rawTyping = scores.typing || 0;
   const typingPoints = rawTyping <= 250 ? rawTyping * 25 : rawTyping;
 
-  // Normalize 2048 to prevent standard tile merge score inflation (scales ~20,000 raw down to ~2,000 pts)
+  // 2048 Bitwise: increased score to properly reward high difficulty + 3000 pts victory bonus
   const raw2048 = scores.game2048 || 0;
-  const game2048Points = raw2048 > 3000 ? Math.round(raw2048 / 10) : raw2048;
+  const game2048Points = raw2048;
 
   return (
     typingPoints +

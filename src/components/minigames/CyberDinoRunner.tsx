@@ -140,13 +140,16 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
     xpEarned: 0,
   });
 
+  // Dynamic progressive speed state for HUD
+  const [currentDisplaySpeed, setCurrentDisplaySpeed] = useState('8.5');
+
   // Game Core Mutable References (for 60fps canvas loop)
   const engineRef = useRef({
     running: false,
     score: 0,
     distance: 0,
-    speed: 6.5,
-    baseSpeed: 6.5,
+    speed: 8.5,
+    baseSpeed: 8.5,
     groundY: 260,
     
     // Dino physics
@@ -383,7 +386,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
   const startNewGame = useCallback((mode: GameMode = 'endless', level = 1) => {
     const eng = engineRef.current;
     const isHardcore = mode === 'hardcore';
-    const initSpeed = isHardcore ? 9.5 : 6.5;
+    const initSpeed = isHardcore ? 11.5 : 8.5;
 
     eng.running = true;
     eng.score = 0;
@@ -442,6 +445,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
     setCampaignLevel(level);
     setBossWarning(false);
     setBossActive(false);
+    setCurrentDisplaySpeed(initSpeed.toFixed(1));
     setGameState('playing');
 
     sounds.playClick();
@@ -512,9 +516,15 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
         eng.score = currentScore;
         setScore(currentScore);
 
-        // Gradually increase speed
-        if (eng.speed < 15.5) {
-          eng.speed = eng.baseSpeed + Math.min(8, eng.distance / 1200);
+        // Progressive speed: starts snappy at default 8.5 (or 11.5 hardcore) and smoothly accelerates as the game evolves
+        const maxSpeedCap = gameMode === 'hardcore' ? 18.0 : 16.5;
+        if (eng.speed < maxSpeedCap) {
+          eng.speed = Math.min(maxSpeedCap, eng.baseSpeed + (eng.distance / 350));
+        }
+
+        // Keep HUD speed meter fresh every 20 frames
+        if (eng.distance % 20 === 0) {
+          setCurrentDisplaySpeed(eng.speed.toFixed(1));
         }
 
         // Active Speed with Overclock
@@ -640,9 +650,9 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             frame: 0
           });
 
-          // Randomize next obstacle interval based on speed
-          const minGap = Math.max(35, 75 - Math.floor(effectiveSpeed * 2.5));
-          const maxGap = minGap + 45;
+          // Randomize next obstacle interval based on speed to ensure fair jumpable distance
+          const minGap = Math.max(40, 85 - Math.floor(effectiveSpeed * 2.2));
+          const maxGap = minGap + 40;
           eng.nextObstacleTimer = Math.floor(Math.random() * (maxGap - minGap)) + minGap;
         }
 
@@ -1395,7 +1405,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
       <div className="relative rounded-2xl sm:rounded-3xl bg-slate-950 border-2 border-slate-800 shadow-2xl overflow-hidden min-h-[260px] sm:min-h-[340px]">
         {/* HUD Live Stats Bar */}
         <div className="absolute top-2 left-2 right-2 sm:top-3 sm:left-4 sm:right-4 z-10 flex flex-wrap items-center justify-between gap-1.5 pointer-events-none">
-          {/* Left HUD: Score & HighScore */}
+          {/* Left HUD: Score & HighScore & Dynamic Speed */}
           <div className="flex items-center gap-2 sm:gap-3 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg">
             <div className="flex items-center gap-1 font-mono">
               <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400">Scor:</span>
@@ -1405,6 +1415,11 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             <div className="flex items-center gap-1 font-mono text-[11px] sm:text-xs">
               <Trophy className="w-3 h-3 text-amber-400" />
               <span className="text-amber-300 font-bold">{highScore.toString().padStart(5, '0')}</span>
+            </div>
+            <div className="h-3 sm:h-4 w-px bg-slate-700" />
+            <div className="flex items-center gap-1 font-mono text-[10px] sm:text-xs text-cyan-300 font-bold" title="Viteză dinamică progresivă">
+              <Zap className="w-3 h-3 text-cyan-400 animate-pulse" />
+              <span>{currentDisplaySpeed}x</span>
             </div>
           </div>
 
@@ -1670,7 +1685,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
       </div>
 
       {/* Touch & Mobile On-Screen Controls - High Reliability */}
-      <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 touch-manipulation">
+      <div className="mt-3 sm:mt-4 grid grid-cols-3 gap-2 sm:gap-3 touch-manipulation">
         <button
           type="button"
           onTouchStart={(e) => {
@@ -1678,10 +1693,10 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             triggerJump();
           }}
           onClick={triggerJump}
-          className="min-h-[52px] sm:min-h-[64px] p-3 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-slate-900 to-slate-950 active:from-emerald-900 active:to-emerald-950 border-2 border-slate-800 active:border-emerald-400 text-white flex sm:flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
+          className="min-h-[52px] sm:min-h-[64px] p-2 sm:p-3 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 active:from-emerald-900 active:to-emerald-950 border-2 border-slate-800 active:border-emerald-400 text-white flex flex-col items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all shadow-md active:scale-95"
         >
-          <ChevronUp className="w-6 h-6 text-emerald-400" />
-          <span className="text-xs sm:text-sm font-black uppercase tracking-wider">SARI (SPACE / TAP)</span>
+          <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
+          <span className="text-[10px] sm:text-xs md:text-sm font-black uppercase tracking-wider text-center">SARI (SPACE)</span>
         </button>
 
         <button
@@ -1696,10 +1711,10 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
           }}
           onMouseDown={() => setDuckState(true)}
           onMouseUp={() => setDuckState(false)}
-          className="min-h-[52px] sm:min-h-[64px] p-3 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-slate-900 to-slate-950 active:from-cyan-900 active:to-cyan-950 border-2 border-slate-800 active:border-cyan-400 text-white flex sm:flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
+          className="min-h-[52px] sm:min-h-[64px] p-2 sm:p-3 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 active:from-cyan-900 active:to-cyan-950 border-2 border-slate-800 active:border-cyan-400 text-white flex flex-col items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all shadow-md active:scale-95"
         >
-          <ChevronDown className="w-6 h-6 text-cyan-400" />
-          <span className="text-xs sm:text-sm font-black uppercase tracking-wider">ALUNECĂ (S / ↓)</span>
+          <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
+          <span className="text-[10px] sm:text-xs md:text-sm font-black uppercase tracking-wider text-center">ALUNECĂ (↓)</span>
         </button>
 
         <button
@@ -1709,10 +1724,10 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             triggerShoot();
           }}
           onClick={triggerShoot}
-          className="min-h-[52px] sm:min-h-[64px] p-3 rounded-2xl bg-gradient-to-r sm:bg-gradient-to-b from-slate-900 to-slate-950 active:from-pink-900 active:to-pink-950 border-2 border-slate-800 active:border-pink-400 text-white flex sm:flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-md active:scale-95"
+          className="min-h-[52px] sm:min-h-[64px] p-2 sm:p-3 rounded-2xl bg-gradient-to-b from-slate-900 to-slate-950 active:from-pink-900 active:to-pink-950 border-2 border-slate-800 active:border-pink-400 text-white flex flex-col items-center justify-center gap-1 sm:gap-2 cursor-pointer transition-all shadow-md active:scale-95"
         >
-          <Crosshair className="w-6 h-6 text-pink-400" />
-          <span className="text-xs sm:text-sm font-black uppercase tracking-wider">TRAGE EMP (F / E)</span>
+          <Crosshair className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400" />
+          <span className="text-[10px] sm:text-xs md:text-sm font-black uppercase tracking-wider text-center">EMP (F)</span>
         </button>
       </div>
 
