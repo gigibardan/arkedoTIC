@@ -125,7 +125,22 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
   const [isOverclocked, setIsOverclocked] = useState(false);
   const [magnetActive, setMagnetActive] = useState(false);
   const [currentBiome, setCurrentBiome] = useState<BiomeType>('motherboard');
-  const [soundMuted, setSoundMuted] = useState(false);
+  // Sync with global header sound toggle
+  const [soundMuted, setSoundMuted] = useState<boolean>(() => !sounds.enabled);
+
+  useEffect(() => {
+    setSoundMuted(!sounds.enabled);
+    const handleSoundChange = (e: Event) => {
+      const customEvent = e as CustomEvent<boolean>;
+      if (typeof customEvent.detail === 'boolean') {
+        setSoundMuted(!customEvent.detail);
+      }
+    };
+    window.addEventListener('arkedo_sound_change', handleSoundChange);
+    return () => {
+      window.removeEventListener('arkedo_sound_change', handleSoundChange);
+    };
+  }, []);
   const [campaignLevel, setCampaignLevel] = useState(1);
   const [bossWarning, setBossWarning] = useState(false);
   const [bossHealth, setBossHealth] = useState(100);
@@ -220,89 +235,10 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
     }
   });
 
-  // Simple Synthesized Web Audio Sound Effects for retro feel
+  // Synthesized Web Audio Sound Effects - strictly respecting global and in-game mute states
   const playRetroSound = useCallback((type: 'jump' | 'duck' | 'coin' | 'powerup' | 'shoot' | 'hit' | 'gameover' | 'boss_alert') => {
-    if (soundMuted) return;
-    try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      const now = ctx.currentTime;
-
-      if (type === 'jump') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(450, now + 0.12);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
-        osc.start(now);
-        osc.stop(now + 0.12);
-      } else if (type === 'duck') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(120, now + 0.08);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-        osc.start(now);
-        osc.stop(now + 0.08);
-      } else if (type === 'coin') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(587.33, now); // D5
-        osc.frequency.setValueAtTime(880, now + 0.06); // A5
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      } else if (type === 'powerup') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.linearRampToValueAtTime(880, now + 0.25);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } else if (type === 'shoot') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(880, now);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.1);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'hit') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.18);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
-        osc.start(now);
-        osc.stop(now + 0.18);
-      } else if (type === 'gameover') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.5);
-        gain.gain.setValueAtTime(0.35, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-        osc.start(now);
-        osc.stop(now + 0.5);
-      } else if (type === 'boss_alert') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.setValueAtTime(330, now + 0.1);
-        osc.frequency.setValueAtTime(440, now + 0.2);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-        osc.start(now);
-        osc.stop(now + 0.35);
-      }
-    } catch {
-      // Audio context might be restricted before interaction
-    }
+    if (!sounds.enabled || soundMuted) return;
+    sounds.playRetro(type);
   }, [soundMuted]);
 
   // Spawn Particles Function
@@ -1379,9 +1315,13 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => setSoundMuted(!soundMuted)}
+              onClick={() => {
+                const nextMuted = !soundMuted;
+                setSoundMuted(nextMuted);
+                sounds.setEnabled(!nextMuted);
+              }}
               className="p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer"
-              title="Sunet ON/OFF"
+              title={soundMuted ? (lang === 'en' ? 'Unmute Sound' : 'Activează Sunetul (MUTE)') : (lang === 'en' ? 'Mute Sound' : 'Dezactivează Sunetul (ON)')}
             >
               {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
             </button>

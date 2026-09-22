@@ -181,7 +181,21 @@ function GameContent() {
     return 0;
   });
 
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
+
+  // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
+  useEffect(() => {
+    const handleSoundChange = (e: Event) => {
+      const customEvent = e as CustomEvent<boolean>;
+      if (typeof customEvent.detail === 'boolean') {
+        setSoundEnabled(customEvent.detail);
+      }
+    };
+    window.addEventListener('arkedo_sound_change', handleSoundChange);
+    return () => {
+      window.removeEventListener('arkedo_sound_change', handleSoundChange);
+    };
+  }, []);
   
   // Student Name persistence
   const [studentName, setStudentName] = useState<string>(() => {
@@ -323,7 +337,7 @@ function GameContent() {
   const handleToggleSound = () => {
     const newState = !soundEnabled;
     setSoundEnabled(newState);
-    sounds.enabled = newState;
+    sounds.setEnabled(newState);
     if (newState) sounds.playClick();
   };
 
