@@ -457,64 +457,64 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-6xl mx-auto pb-12 select-none animate-fadeIn">
+    <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 pb-12 select-none animate-fadeIn overflow-x-hidden">
       {/* Top Header Bar */}
-      <div className="bg-gradient-to-r from-stone-900 via-stone-850 to-stone-950 border-2 border-stone-700/80 rounded-3xl p-5 sm:p-7 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-stone-900 via-stone-850 to-stone-950 border-2 border-stone-700/80 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
         {/* Glowing Redstone Dust Particle Accents */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-rose-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 flex items-center gap-4">
+        <div className="relative z-10 flex items-start sm:items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <button
             onClick={onBack}
-            className="p-3 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white border border-stone-600 transition shadow-md cursor-pointer group"
+            className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white border border-stone-600 transition shadow-md cursor-pointer group shrink-0"
             title={isEn ? 'Back to Arcade' : 'Înapoi la Jocuri'}
           >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-0.5 transition-transform" />
           </button>
 
-          <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1.5">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-mono font-bold uppercase tracking-wider">
-                <Zap className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
-                <span>Minecraft Redstone Lab</span>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+              <span className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider">
+                <Zap className="w-3 h-3 text-rose-400 animate-pulse" />
+                <span>Minecraft Redstone</span>
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[11px] font-mono">
-                {isEn ? `Level ${currentLevelIndex + 1} of ${REDSTONE_LEVELS.length}` : `Nivelul ${currentLevelIndex + 1} din ${REDSTONE_LEVELS.length}`}
+              <span className="px-2 sm:px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[10px] sm:text-[11px] font-mono">
+                {isEn ? `Level ${currentLevelIndex + 1} / ${REDSTONE_LEVELS.length}` : `Nivelul ${currentLevelIndex + 1} / ${REDSTONE_LEVELS.length}`}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white font-heading tracking-tight flex items-center gap-2.5">
-              <span>{isEn ? level.titleEn : level.titleRo}</span>
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-white font-heading tracking-tight break-words">
+              {isEn ? level.titleEn : level.titleRo}
             </h2>
-            <p className="text-xs sm:text-sm text-stone-400 mt-0.5">
+            <p className="text-[11px] sm:text-xs md:text-sm text-stone-400 mt-0.5 break-words">
               {isEn ? level.subtitleEn : level.subtitleRo}
             </p>
           </div>
         </div>
 
         {/* Stats & Controls */}
-        <div className="relative z-10 flex flex-wrap items-center gap-3">
+        <div className="relative z-10 flex items-center justify-between sm:justify-start gap-2 sm:gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-stone-800">
           {/* Diamonds Collected */}
-          <div className="px-3.5 py-2 rounded-2xl bg-cyan-950/60 border border-cyan-500/40 flex items-center gap-2 shadow-inner">
-            <span className="text-xl">💎</span>
+          <div className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-cyan-950/60 border border-cyan-500/40 flex items-center gap-1.5 sm:gap-2 shadow-inner">
+            <span className="text-base sm:text-xl">💎</span>
             <div>
-              <div className="text-[10px] font-mono text-cyan-300 uppercase leading-none font-bold">
+              <div className="text-[9px] sm:text-[10px] font-mono text-cyan-300 uppercase leading-none font-bold">
                 {isEn ? 'Diamonds' : 'Diamante'}
               </div>
-              <div className="text-sm font-black text-cyan-100 font-mono">
+              <div className="text-xs sm:text-sm font-black text-cyan-100 font-mono">
                 {totalDiamonds}
               </div>
             </div>
           </div>
 
           {/* XP Score */}
-          <div className="px-3.5 py-2 rounded-2xl bg-amber-950/60 border border-amber-500/40 flex items-center gap-2 shadow-inner">
-            <Trophy className="w-4 h-4 text-amber-400" />
+          <div className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-amber-950/60 border border-amber-500/40 flex items-center gap-1.5 sm:gap-2 shadow-inner">
+            <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <div>
-              <div className="text-[10px] font-mono text-amber-300 uppercase leading-none font-bold">
-                Redstone XP
+              <div className="text-[9px] sm:text-[10px] font-mono text-amber-300 uppercase leading-none font-bold">
+                XP
               </div>
-              <div className="text-sm font-black text-amber-100 font-mono">
+              <div className="text-xs sm:text-sm font-black text-amber-100 font-mono">
                 {totalScore}
               </div>
             </div>
@@ -522,7 +522,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
           <button
             onClick={() => setSoundMuted(!soundMuted)}
-            className="p-2.5 rounded-2xl bg-stone-800 hover:bg-stone-750 text-stone-300 border border-stone-700 transition cursor-pointer"
+            className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-750 text-stone-300 border border-stone-700 transition cursor-pointer"
             title={soundMuted ? 'Unmute' : 'Mute'}
           >
             {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
@@ -531,7 +531,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
       </div>
 
       {/* Level Selection Bar */}
-      <div className="bg-stone-900 border border-stone-800 rounded-2xl p-3 flex items-center gap-2 overflow-x-auto shadow-lg">
+      <div className="w-full bg-stone-900 border border-stone-800 rounded-2xl p-2 sm:p-2.5 flex items-center gap-1.5 sm:gap-2 overflow-x-auto shadow-lg max-w-full">
         {REDSTONE_LEVELS.map((lvl, idx) => {
           const isCurrent = idx === currentLevelIndex;
           const isDone = completedLevels.includes(lvl.id);
@@ -543,7 +543,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 setCurrentLevelIndex(idx);
                 if (!soundMuted) sounds.playClick();
               }}
-              className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer border ${
+              className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-mono font-bold transition flex items-center gap-1 sm:gap-1.5 shrink-0 cursor-pointer border ${
                 isCurrent
                   ? 'bg-rose-600 text-white border-rose-400 shadow-md shadow-rose-600/30 ring-2 ring-rose-500/30'
                   : isDone
@@ -552,9 +552,9 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               }`}
             >
               {isDone ? (
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" />
               ) : (
-                <span className="w-4 h-4 rounded-full bg-stone-800 flex items-center justify-center text-[10px]">
+                <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-stone-800 flex items-center justify-center text-[9px] sm:text-[10px]">
                   {lvl.id}
                 </span>
               )}
@@ -565,10 +565,10 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
       </div>
 
       {/* Main Interactive Circuit Workspace */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 w-full">
         {/* Left: Circuit Board & Simulation (8 cols) */}
-        <div className="lg:col-span-8 flex flex-col gap-4">
-          <div className="bg-stone-900 border-2 border-stone-700 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[460px]">
+        <div className="lg:col-span-8 flex flex-col gap-4 w-full">
+          <div className="bg-stone-900 border-2 border-stone-700 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col justify-between w-full">
             {/* Voxel Grid Background Pattern */}
             <div 
               className="absolute inset-0 opacity-15 pointer-events-none" 
@@ -580,25 +580,25 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
             />
 
             {/* Mission Objective Header inside canvas */}
-            <div className="relative z-10 bg-stone-950/80 border border-stone-800 p-4 rounded-2xl flex items-start gap-3 backdrop-blur-sm">
-              <div className="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0 mt-0.5">
-                <Lightbulb className="w-5 h-5" />
+            <div className="relative z-10 bg-stone-950/80 border border-stone-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex items-start gap-2.5 sm:gap-3 backdrop-blur-sm">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0 mt-0.5">
+                <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-wider">
                   {isEn ? 'Mission Goal' : 'Obiectivul Circuitului'}
                 </div>
-                <p className="text-sm font-semibold text-white mt-0.5 leading-relaxed">
+                <p className="text-xs sm:text-sm font-semibold text-white mt-0.5 leading-relaxed break-words">
                   {isEn ? level.goalEn : level.goalRo}
                 </p>
               </div>
             </div>
 
             {/* Visual Redstone Circuit Representation */}
-            <div className="relative z-10 my-8 flex flex-col md:flex-row items-center justify-between gap-6 px-2 sm:px-6">
+            <div className="relative z-10 my-5 sm:my-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6 px-1 sm:px-4 w-full">
               {/* Inputs Column (Levers / Switches) */}
-              <div className="flex flex-col gap-4 w-full md:w-auto">
-                <div className="text-xs font-mono text-stone-400 uppercase tracking-wider font-bold mb-1 flex items-center gap-1.5">
+              <div className="flex flex-col gap-2.5 sm:gap-4 w-full md:w-auto flex-1">
+                <div className="text-[11px] sm:text-xs font-mono text-stone-400 uppercase tracking-wider font-bold mb-0.5 sm:mb-1 flex items-center gap-1.5">
                   <Sliders className="w-3.5 h-3.5 text-amber-400" />
                   <span>{isEn ? 'Input Levers' : 'Pârghii de Intrare'}</span>
                 </div>
@@ -609,25 +609,25 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                     <div
                       key={inp.id}
                       onClick={() => toggleInput(idx)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-4 shadow-lg active:scale-98 ${
+                      className={`p-2.5 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-2.5 sm:gap-4 shadow-lg active:scale-98 w-full ${
                         isActive
                           ? 'bg-gradient-to-r from-rose-950/90 to-stone-900 border-rose-500 shadow-rose-600/20'
                           : 'bg-stone-950/80 border-stone-700 hover:border-stone-500'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold border ${
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl font-bold border shrink-0 ${
                           isActive 
                             ? 'bg-rose-600 border-rose-400 text-white shadow-md shadow-rose-600/50' 
                             : 'bg-stone-800 border-stone-700 text-stone-400'
                         }`}>
                           {isActive ? '⚡' : '🔘'}
                         </div>
-                        <div>
-                          <div className="font-bold text-white text-xs sm:text-sm">
+                        <div className="min-w-0 flex-1">
+                          <div className="font-bold text-white text-xs sm:text-sm truncate">
                             {inp.label}
                           </div>
-                          <div className={`text-[10px] font-mono font-bold ${
+                          <div className={`text-[9px] sm:text-[10px] font-mono font-bold ${
                             isActive ? 'text-rose-400' : 'text-stone-500'
                           }`}>
                             {isActive ? (isEn ? 'SIGNAL: 1 (ON)' : 'SEMNAL: 1 (ACTIV)') : (isEn ? 'SIGNAL: 0 (OFF)' : 'SEMNAL: 0 (OPRIT)')}
@@ -636,11 +636,11 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                       </div>
 
                       {/* Minecraft Style Toggle Switch Visual */}
-                      <div className={`w-12 h-6 rounded-full p-1 transition-colors ${
+                      <div className={`w-10 sm:w-12 h-5 sm:h-6 rounded-full p-0.5 sm:p-1 transition-colors shrink-0 ${
                         isActive ? 'bg-rose-600' : 'bg-stone-800'
                       }`}>
                         <div className={`w-4 h-4 rounded-full bg-white shadow-md transform transition-transform ${
-                          isActive ? 'translate-x-6' : 'translate-x-0'
+                          isActive ? 'translate-x-5 sm:translate-x-6' : 'translate-x-0'
                         }`} />
                       </div>
                     </div>
@@ -649,18 +649,18 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               </div>
 
               {/* Center: Logic Gate Block / Mechanism */}
-              <div className="flex flex-col items-center justify-center my-2">
+              <div className="flex flex-col items-center justify-center my-1 sm:my-2 shrink-0">
                 {/* Flowing Wire from inputs to Gate */}
-                <div className={`px-4 py-3 rounded-2xl border-2 shadow-2xl flex flex-col items-center gap-2 relative ${
+                <div className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-2 shadow-2xl flex flex-col items-center gap-1.5 sm:gap-2 relative ${
                   isOutputActive
                     ? 'bg-gradient-to-b from-stone-900 via-rose-950 to-stone-900 border-rose-500 shadow-rose-600/30 ring-2 ring-rose-500/20'
                     : 'bg-stone-950 border-stone-700'
                 }`}>
-                  <div className="text-[10px] font-mono uppercase font-bold text-stone-400">
+                  <div className="text-[9px] sm:text-[10px] font-mono uppercase font-bold text-stone-400">
                     {level.gateType} GATE
                   </div>
                   
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl border-2 transition-all ${
+                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-2xl sm:text-3xl border-2 transition-all ${
                     isOutputActive 
                       ? 'bg-rose-600/20 border-rose-500 text-rose-400 shadow-lg shadow-rose-600/40 animate-pulse'
                       : 'bg-stone-800/40 border-stone-700 text-stone-500'
@@ -677,7 +677,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                     {level.gateType === 'DIRECT' && '⚡'}
                   </div>
 
-                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                  <span className={`text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
                     isOutputActive 
                       ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                       : 'bg-stone-800 text-stone-400'
@@ -688,18 +688,18 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               </div>
 
               {/* Right: Output Device (Lamp / Iron Door / Chest / Piston) */}
-              <div className="flex flex-col items-center w-full md:w-auto">
-                <div className="text-xs font-mono text-stone-400 uppercase tracking-wider font-bold mb-2 flex items-center gap-1.5">
+              <div className="flex flex-col items-center w-full md:w-44 lg:w-48 shrink-0">
+                <div className="text-[11px] sm:text-xs font-mono text-stone-400 uppercase tracking-wider font-bold mb-1.5 sm:mb-2 flex items-center gap-1.5">
                   <Unlock className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>{isEn ? 'Output Mechanism' : 'Mecanism / Recompensă'}</span>
+                  <span>{isEn ? 'Output Mechanism' : 'Mecanism Ieșire'}</span>
                 </div>
 
-                <div className={`w-40 sm:w-48 p-5 rounded-3xl border-2 flex flex-col items-center justify-center text-center transition-all duration-300 shadow-xl ${
+                <div className={`w-full p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl border-2 flex flex-col items-center justify-center text-center transition-all duration-300 shadow-xl ${
                   isOutputActive
                     ? 'bg-gradient-to-b from-emerald-950/80 to-stone-900 border-emerald-500 shadow-emerald-600/30'
                     : 'bg-stone-950/90 border-stone-800'
                 }`}>
-                  <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl mb-3 border-2 transition-all ${
+                  <div className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center text-3xl sm:text-4xl mb-2 sm:mb-3 border-2 transition-all ${
                     isOutputActive
                       ? 'bg-emerald-500/20 border-emerald-400 shadow-lg shadow-emerald-500/40 scale-105'
                       : 'bg-stone-900 border-stone-700 text-stone-600'
@@ -716,10 +716,10 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                     {level.gateType === 'MASTER_VAULT' && (isOutputActive ? '🏆' : '🗝️')}
                   </div>
 
-                  <div className="font-black text-white text-sm">
+                  <div className="font-black text-white text-xs sm:text-sm">
                     {isOutputActive ? (isEn ? 'ACTIVATED!' : 'DEBLOCAT!') : (isEn ? 'LOCKED / OFF' : 'BLOCAT / STINS')}
                   </div>
-                  <div className={`text-[11px] font-mono mt-0.5 font-bold ${
+                  <div className={`text-[10px] sm:text-[11px] font-mono mt-0.5 font-bold ${
                     isOutputActive ? 'text-emerald-400' : 'text-stone-500'
                   }`}>
                     {isOutputActive ? 'OUTPUT: 1' : 'OUTPUT: 0'}
@@ -730,19 +730,19 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
             {/* Bottom Status & Success Banner */}
             {isLevelSolved ? (
-              <div className="relative z-10 mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-stone-900 to-emerald-950/90 border-2 border-emerald-500/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-fadeIn">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 text-xl">
+              <div className="relative z-10 mt-3 sm:mt-4 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-950/90 via-stone-900 to-emerald-950/90 border-2 border-emerald-500/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-fadeIn">
+                <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 text-lg sm:text-xl">
                     💎
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5 flex-wrap">
                       <span>{isEn ? 'Circuit Solved!' : 'Circuit Rezolvat cu Succes!'}</span>
                       <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
                         +{level.rewardDiamonds} 💎 | +{level.xpPoints} XP
                       </span>
                     </h4>
-                    <p className="text-xs text-stone-300">
+                    <p className="text-[11px] sm:text-xs text-stone-300 break-words">
                       {isEn 
                         ? 'Great job engineer! The redstone logic condition was successfully met.' 
                         : 'Excelent! Condiția logică Redstone a fost îndeplinită impecabil.'}
@@ -753,26 +753,26 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 <button
                   onClick={handleNextLevel}
                   disabled={currentLevelIndex >= REDSTONE_LEVELS.length - 1}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50"
+                  className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
                 >
                   <span>{isEn ? 'Next Level' : 'Nivelul Următor'}</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="relative z-10 mt-4 flex items-center justify-between text-xs font-mono text-stone-400">
-                <div className="flex items-center gap-2">
+              <div className="relative z-10 mt-3 sm:mt-4 flex items-center justify-between gap-2 text-xs font-mono text-stone-400 flex-wrap">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   <button
                     onClick={() => setShowTruthTableModal(true)}
-                    className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
                   >
                     <Info className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>{isEn ? 'Truth Table' : 'Tabel de Adevăr'}</span>
+                    <span>{isEn ? 'Truth Table' : 'Tabel Adevăr'}</span>
                   </button>
 
                   <button
                     onClick={() => setShowHint(!showHint)}
-                    className="px-3 py-1.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
                     <span>{isEn ? 'Hint' : 'Indiciu'}</span>
@@ -781,7 +781,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
                 <button
                   onClick={handleResetCurrentLevel}
-                  className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>{isEn ? 'Reset' : 'Resetează'}</span>
@@ -792,22 +792,22 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
         </div>
 
         {/* Right: Educational Concept & Truth Table Panel (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col gap-4">
+        <div className="lg:col-span-4 flex flex-col gap-4 w-full">
           {/* Concept Explanation Card */}
-          <div className="bg-stone-900 border border-stone-800 rounded-3xl p-5 sm:p-6 shadow-xl flex flex-col gap-4">
+          <div className="bg-stone-900 border border-stone-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl flex flex-col gap-3 sm:gap-4 w-full">
             <div className="flex items-center gap-2 text-xs font-mono text-rose-400 font-bold uppercase tracking-wider">
               <Cpu className="w-4 h-4" />
               <span>{isEn ? 'Logic Gate Principle' : 'Principiul Porții Logice'}</span>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-stone-950 border border-stone-800 text-xs text-stone-300 leading-relaxed">
+            <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-stone-950 border border-stone-800 text-xs text-stone-300 leading-relaxed break-words">
               {isEn ? level.conceptEn : level.conceptRo}
             </div>
 
             {/* Hint Box if toggled */}
             {showHint && (
-              <div className="p-3.5 rounded-2xl bg-amber-950/50 border border-amber-500/40 text-amber-200 text-xs leading-relaxed animate-fadeIn flex items-start gap-2">
-                <span className="text-base">💡</span>
+              <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-amber-950/50 border border-amber-500/40 text-amber-200 text-xs leading-relaxed animate-fadeIn flex items-start gap-2 break-words">
+                <span className="text-base shrink-0">💡</span>
                 <div>
                   <strong className="block text-amber-300 font-bold mb-0.5">{isEn ? 'Teacher Tip:' : 'Sfatul Profesorului:'}</strong>
                   {isEn ? level.hintEn : level.hintRo}
@@ -816,13 +816,13 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
             )}
 
             {/* Compact Live Truth Table */}
-            <div>
+            <div className="w-full">
               <div className="text-xs font-mono text-stone-400 font-bold uppercase mb-2 flex items-center justify-between">
                 <span>{isEn ? 'Live Truth Table' : 'Tabel de Adevăr Live'}</span>
                 <span className="text-[10px] text-stone-500">{level.gateType}</span>
               </div>
 
-              <div className="overflow-hidden rounded-xl border border-stone-800 bg-stone-950 text-xs font-mono">
+              <div className="overflow-x-auto rounded-xl border border-stone-800 bg-stone-950 text-xs font-mono w-full">
                 <table className="w-full text-left">
                   <thead className="bg-stone-900 border-b border-stone-800 text-stone-400 text-[10px]">
                     <tr>
@@ -870,20 +870,20 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
           </div>
 
           {/* Minecraft Rewards Banner */}
-          <div className="bg-gradient-to-br from-cyan-950/60 to-stone-900 border border-cyan-500/30 rounded-3xl p-5 shadow-xl flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">⛏️</span>
-              <div>
-                <h4 className="text-xs font-bold text-white uppercase font-mono">
+          <div className="bg-gradient-to-br from-cyan-950/60 to-stone-900 border border-cyan-500/30 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-xl flex items-center justify-between gap-3 w-full">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <span className="text-2xl sm:text-3xl shrink-0">⛏️</span>
+              <div className="min-w-0">
+                <h4 className="text-xs font-bold text-white uppercase font-mono truncate">
                   {isEn ? 'Redstone Engineer Badge' : 'Insignă Inginer Redstone'}
                 </h4>
-                <p className="text-[11px] text-stone-400 mt-0.5">
-                  {completedLevels.length} / {REDSTONE_LEVELS.length} {isEn ? 'Missions Completed' : 'Misiuni Finalizate'}
+                <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+                  {completedLevels.length} / {REDSTONE_LEVELS.length} {isEn ? 'Completed' : 'Misiuni Gata'}
                 </p>
               </div>
             </div>
 
-            <div className="text-right font-mono text-cyan-300 font-bold text-sm">
+            <div className="text-right font-mono text-cyan-300 font-bold text-xs sm:text-sm shrink-0">
               {Math.round((completedLevels.length / REDSTONE_LEVELS.length) * 100)}%
             </div>
           </div>
@@ -892,37 +892,37 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
       {/* Truth Table Full Modal */}
       {showTruthTableModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-stone-900 border-2 border-stone-700 rounded-3xl p-6 sm:p-7 shadow-2xl max-w-lg w-full relative">
-            <h3 className="text-lg font-black text-white font-heading mb-2 flex items-center gap-2">
-              <Cpu className="w-5 h-5 text-rose-400" />
-              <span>{isEn ? `Truth Table Guide: ${level.gateType}` : `Tabel de Adevăr & Logică: ${level.gateType}`}</span>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-stone-900 border-2 border-stone-700 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative">
+            <h3 className="text-base sm:text-lg font-black text-white font-heading mb-2 flex items-center gap-2">
+              <Cpu className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400 shrink-0" />
+              <span className="break-words">{isEn ? `Truth Table Guide: ${level.gateType}` : `Tabel de Adevăr & Logică: ${level.gateType}`}</span>
             </h3>
 
-            <p className="text-xs text-stone-300 mb-4 leading-relaxed">
+            <p className="text-xs text-stone-300 mb-3 sm:mb-4 leading-relaxed break-words">
               {isEn ? level.conceptEn : level.conceptRo}
             </p>
 
-            <div className="overflow-hidden rounded-2xl border border-stone-800 bg-stone-950 text-xs font-mono mb-4">
+            <div className="overflow-x-auto rounded-xl sm:rounded-2xl border border-stone-800 bg-stone-950 text-xs font-mono mb-4 w-full">
               <table className="w-full text-left">
-                <thead className="bg-stone-850 border-b border-stone-800 text-stone-400 text-[11px]">
+                <thead className="bg-stone-850 border-b border-stone-800 text-stone-400 text-[10px] sm:text-[11px]">
                   <tr>
                     {level.inputs.map((inp) => (
-                      <th key={inp.id} className="p-3 text-center">{inp.label} ({inp.id})</th>
+                      <th key={inp.id} className="p-2 sm:p-3 text-center">{inp.label} ({inp.id})</th>
                     ))}
-                    <th className="p-3 text-right">{isEn ? 'Result / Action' : 'Rezultat Ieșire'}</th>
+                    <th className="p-2 sm:p-3 text-right">{isEn ? 'Result' : 'Rezultat'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-850">
                   {level.truthTable.map((row, rIdx) => (
                     <tr key={rIdx} className="hover:bg-stone-900/50">
                       {row.inputs.map((val, vIdx) => (
-                        <td key={vIdx} className="p-3 text-center text-stone-200">
-                          {val ? '1 (ACTIV)' : '0 (OPRIT)'}
+                        <td key={vIdx} className="p-2 sm:p-3 text-center text-stone-200">
+                          {val ? '1 (ON)' : '0 (OFF)'}
                         </td>
                       ))}
-                      <td className="p-3 text-right font-bold text-emerald-400">
-                        {row.output ? '1 (UȘĂ DESCHISĂ)' : '0 (BLOCAT)'}
+                      <td className="p-2 sm:p-3 text-right font-bold text-emerald-400">
+                        {row.output ? '1 (DESCHIS)' : '0 (BLOCAT)'}
                       </td>
                     </tr>
                   ))}
@@ -933,7 +933,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
             <div className="flex justify-end">
               <button
                 onClick={() => setShowTruthTableModal(false)}
-                className="px-5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-white font-bold text-xs transition cursor-pointer"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-white font-bold text-xs transition cursor-pointer active:scale-95"
               >
                 {isEn ? 'Close Guide' : 'Închide Ghidul'}
               </button>
