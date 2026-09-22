@@ -1,6 +1,6 @@
 {
   "name": "ARKEDO: Misiunea Arborele Secret 🌳",
-  "description": "Platformă educativă și interactivă de TIC pentru elevii de clasele a V-a și a VI-a: Sisteme de calcul & Hardware, Organizarea fișierelor & SO, și Internet, Rețele & Securitate Web.",
+  "description": "Platformă educativă și interactivă de TIC pentru elevii de gimnaziu: Sisteme de calcul & Hardware, Organizarea fișierelor & SO, Internet & Securitate Web, Arcade Retro și Dueluri 1v1 în timp real (Cursa Algoritmilor Scratch, Cyber Sprint, Quiz Blitz, Cyber Shield, PC Rush).",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

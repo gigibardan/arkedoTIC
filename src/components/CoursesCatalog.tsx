@@ -1581,6 +1581,48 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       </div>
 
+      {/* Arcade Mini-Games Banner Section (Placed below missions) */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border-2 border-indigo-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0">
+              <Gamepad2 className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 font-mono">
+                  {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
+                  {lang === 'en' ? '15 Mini-Games' : '15 Mini-Jocuri'}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                {lang === 'en' ? '⛏️ Minecraft Redstone Lab, Cyber Dino, File-Drop & Pixeli RGB' : '⛏️ Laboratorul Redstone (Minecraft TIC), Cyber Dino Rush & File-Drop'}
+              </h3>
+              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                {lang === 'en'
+                  ? 'Build Minecraft Redstone circuits & logic gates, master Virus Sweeper, sprint in Cyber Dino Rush, sort file extensions with Tetris drop, and mix RGB pixels!'
+                  : 'Construiește circuite și porți logice Redstone în stil Minecraft, caută viruși, aleargă în Cyber Dino, sortează fișiere în Tetris File-Drop și asamblează calculatoare!'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenArcade?.();
+            }}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0 active:scale-95"
+          >
+            <Gamepad2 className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Open Arcade' : 'Deschide Jocuri Arcade'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
       {/* Duel 1v1 Arena Banner Section */}
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-rose-950/60 to-slate-900 border-2 border-rose-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -1603,8 +1645,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Create a game room with a 4-letter code or join your classmate’s challenge! Cyber Sprint typing race and Quiz Blitz live competition.'
-                  : 'Creează o cameră cu cod de 4 litere sau intră în provocarea colegului tău! Cursă de tastare rapidă Cyber Sprint și bătălia creierelor Quiz Blitz.'}
+                  ? 'Create a game room with a 4-letter code or join your classmate’s challenge! Block Coding Scratch Duel, Cyber Sprint typing race, and Quiz Blitz live competition.'
+                  : 'Creează o cameră cu cod de 4 litere sau intră în provocarea colegului tău! Cursa Algoritmilor Scratch, Cyber Sprint tastare rapidă și bătălia creierelor Quiz Blitz.'}
               </p>
             </div>
           </div>
@@ -1619,47 +1661,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           >
             <Swords className="w-4 h-4" />
             <span>{lang === 'en' ? 'Enter Duel Arena' : 'Intră în Arena Duel 1v1'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Arcade Mini-Games Banner Section (Placed below missions) */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border-2 border-indigo-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0">
-              <Gamepad2 className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 font-mono">
-                  {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '13 Mini-Games' : '13 Mini-Jocuri'}
-                </span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'Cyber-Safe Sweeper, File-Drop (Tetris), Byte Slider, Pixeli RGB & PC Builder' : 'Căutătorul de Viruși (Minesweeper), File-Drop (Tetris), Byte Slider & Pixeli RGB'}
-              </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
-                {lang === 'en'
-                  ? 'Master cybersecurity with Virus Sweeper, sort file extensions with Tetris drop, mix RGB pixel lights, assemble PC motherboards, and block malware in the firewall!'
-                  : 'Stăpânește securitatea cibernetică cu Căutătorul de Viruși, extensiile de fișiere cu Tetris File-Drop, sinteza luminii RGB, asamblarea PC-urilor și firewall-ul!'}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              onOpenArcade?.();
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0 active:scale-95"
-          >
-            <span>{lang === 'en' ? 'Open Arcade' : 'Deschide Jocuri Arcade'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

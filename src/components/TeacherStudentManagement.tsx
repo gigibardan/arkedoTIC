@@ -14,7 +14,12 @@ import {
   GraduationCap, 
   Clock, 
   Gamepad2,
-  AlertCircle
+  AlertCircle,
+  Sliders,
+  AlertTriangle,
+  Swords,
+  BookOpen,
+  Award
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -25,6 +30,7 @@ import {
 } from '../lib/studentAuthService';
 import { StudentProfile } from '../types';
 import { sounds } from '../utils/audio';
+import { TeacherScoreModal } from './TeacherScoreModal';
 
 export const TeacherStudentManagement: React.FC = () => {
   const { lang } = useLanguage();
@@ -39,6 +45,9 @@ export const TeacherStudentManagement: React.FC = () => {
   const [newUsernameInput, setNewUsernameInput] = useState<string>('');
   const [renameError, setRenameError] = useState<string | null>(null);
   const [renameSuccess, setRenameSuccess] = useState<string | null>(null);
+
+  // Score Inspector Modal state
+  const [selectedStudentForScores, setSelectedStudentForScores] = useState<StudentProfile | null>(null);
 
   // Resetting password modal state
   const [resettingStudent, setResettingStudent] = useState<StudentProfile | null>(null);
@@ -133,6 +142,18 @@ export const TeacherStudentManagement: React.FC = () => {
     }
   };
 
+  // Flag suspicious scores (Anti-Cheat)
+  const suspiciousStudents = students.filter((s) => {
+    const arc = s.arcadeScores || {};
+    return (
+      (arc.typing && arc.typing > 250) ||
+      (arc.cyber_dino && arc.cyber_dino > 50000) ||
+      (arc.game2048 && arc.game2048 > 200000) ||
+      (arc.mouse && arc.mouse > 50000) ||
+      (s.totalXP > 10000 && (!s.lessonsProgress || Object.keys(s.lessonsProgress).length === 0))
+    );
+  });
+
   const filteredStudents = students.filter((s) => 
     s.username.toLowerCase().includes(searchQuery.toLowerCase().trim())
   );
@@ -144,15 +165,15 @@ export const TeacherStudentManagement: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold font-mono mb-2">
             <Users className="w-3 h-3" />
-            <span>{isEn ? 'Student Directory & Credentials' : 'Registru Elevi & Gestiune Credențiale'}</span>
+            <span>{isEn ? 'Student Directory & Score Control' : 'Registru Elevi & Control Total Punctaje'}</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-            {isEn ? 'Classroom Student Accounts' : 'Conturi Elevi Laborator Informatică'}
+            {isEn ? 'Classroom Student Accounts & Anti-Cheat' : 'Conturi Elevi Laborator & Audit Anti-Cheat'}
           </h3>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
             {isEn 
-              ? 'Easily change names, reset forgotten passwords, or remove test accounts directly.' 
-              : 'Schimbați numele, resetați parolele uitate pe loc sau eliminați conturile vechi.'}
+              ? 'Inspect and edit any student score, reset cheated tasks, penalize or award bonuses, and reset passwords.' 
+              : 'Verificați și editați scorurile pe elev, corectați trișarea, aplicați penalizări sau acordați bonusuri de merit.'}
           </p>
         </div>
 
@@ -178,6 +199,30 @@ export const TeacherStudentManagement: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Anti-Cheat Anomaly Alert Banner if any detected */}
+      {suspiciousStudents.length > 0 && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-950/80 via-slate-900 to-rose-950/80 border-2 border-rose-500/50 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
+              <AlertTriangle className="w-5 h-5 animate-pulse" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                <span>{isEn ? 'Anti-Cheat Audit: Suspicious Activity Detected' : 'Audit Anti-Cheat: Scoruri Anormale Detectate'}</span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-500/30 text-rose-300 text-[10px] font-mono">
+                  {suspiciousStudents.length} {isEn ? 'Students Flagged' : 'Elevi suspectați'}
+                </span>
+              </h4>
+              <p className="text-xs text-slate-300 mt-0.5">
+                {isEn 
+                  ? 'Unusual speeds or highscores detected (e.g. typing >250 WPM or Cyber Dino >50,000). Click Inspect & Edit on the student to correct.' 
+                  : 'Viteze sau punctaje neverosimile detectate (ex. tastare >250 WPM sau Cyber Dino >50.000). Apăsați pe „Inspectează Scoruri” pentru a corecta.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {renameSuccess && (
         <div className="p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-2">
@@ -228,10 +273,10 @@ export const TeacherStudentManagement: React.FC = () => {
                 <tr>
                   <th className="py-3 px-4 font-bold">{isEn ? 'Student / Avatar' : 'Elev / Avatar'}</th>
                   <th className="py-3 px-4 font-bold">{isEn ? 'Total XP' : 'XP Total'}</th>
-                  <th className="py-3 px-4 font-bold">{isEn ? 'Arcade Score' : 'Scor Jocuri'}</th>
-                  <th className="py-3 px-4 font-bold">{isEn ? 'Lessons Progress' : 'Progres Lecții'}</th>
-                  <th className="py-3 px-4 font-bold">{isEn ? 'Last Active' : 'Ultima Activitate'}</th>
-                  <th className="py-3 px-4 font-bold text-right">{isEn ? 'Admin Actions' : 'Acțiuni Profesor'}</th>
+                  <th className="py-3 px-4 font-bold">{isEn ? 'Arcade Highscore' : 'Scor Jocuri'}</th>
+                  <th className="py-3 px-4 font-bold">{isEn ? 'Lessons' : 'Lecții TIC'}</th>
+                  <th className="py-3 px-4 font-bold">{isEn ? 'Duels (W/L)' : 'Duel 1v1 (V/Î)'}</th>
+                  <th className="py-3 px-4 font-bold text-right">{isEn ? 'Admin & Score Control' : 'Gestiune & Control Scoruri'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/80 text-slate-200">
@@ -244,8 +289,10 @@ export const TeacherStudentManagement: React.FC = () => {
                     s.lessonsProgress?.internet2?.completed
                   ].filter(Boolean).length;
 
+                  const isSuspicious = suspiciousStudents.some((susp) => susp.id === s.id);
+
                   return (
-                    <tr key={s.id || idx} className="hover:bg-slate-850/50 transition">
+                    <tr key={s.id || idx} className={`hover:bg-slate-850/50 transition ${isSuspicious ? 'bg-rose-950/20' : ''}`}>
                       {/* Name & Avatar */}
                       <td className="py-3.5 px-4 font-bold text-white">
                         {isEditingThis ? (
@@ -280,6 +327,12 @@ export const TeacherStudentManagement: React.FC = () => {
                             <div>
                               <div className="font-bold text-slate-100 flex items-center gap-1.5">
                                 <span>{s.username}</span>
+                                {isSuspicious && (
+                                  <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/40 flex items-center gap-0.5" title="Scoruri suspecte detectate">
+                                    <AlertTriangle className="w-3 h-3 text-rose-400" />
+                                    <span>Audit</span>
+                                  </span>
+                                )}
                                 <button
                                   onClick={() => handleStartRename(s)}
                                   className="text-slate-500 hover:text-teal-400 transition cursor-pointer p-0.5"
@@ -289,7 +342,7 @@ export const TeacherStudentManagement: React.FC = () => {
                                 </button>
                               </div>
                               <div className="text-[10px] font-mono text-slate-500">
-                                ID: {s.id?.slice(0, 10)}...
+                                ID: {s.id?.slice(0, 8)}...
                               </div>
                             </div>
                           </div>
@@ -320,21 +373,37 @@ export const TeacherStudentManagement: React.FC = () => {
                         </div>
                       </td>
 
-                      {/* Last Active */}
-                      <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400">
-                        {s.lastActiveAt ? new Date(s.lastActiveAt).toLocaleDateString() : (isEn ? 'Recent' : 'Recent')}
+                      {/* Duels */}
+                      <td className="py-3.5 px-4 font-mono text-xs text-rose-300">
+                        <div className="flex items-center gap-1">
+                          <Swords className="w-3.5 h-3.5 text-rose-400" />
+                          <span>{s.duelStats?.wins || 0}V / {s.duelStats?.losses || 0}Î</span>
+                        </div>
                       </td>
 
                       {/* Actions */}
                       <td className="py-3.5 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          {/* Score Inspector / Editor Modal trigger */}
+                          <button
+                            onClick={() => {
+                              setSelectedStudentForScores(s);
+                              sounds.playClick();
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-teal-950/60 hover:bg-teal-900/80 text-teal-300 border border-teal-500/40 text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-sm active:scale-95"
+                            title={isEn ? 'Inspect & Edit All Scores (Anti-Cheat)' : 'Inspectează & Modifică Toate Scorurile (Anti-Cheat)'}
+                          >
+                            <Sliders className="w-3 h-3 text-teal-400" />
+                            <span>{isEn ? 'Edit Scores' : 'Modifică Scoruri'}</span>
+                          </button>
+
                           <button
                             onClick={() => handleStartResetPassword(s)}
-                            className="px-2.5 py-1 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                            className="px-2 py-1 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                             title={isEn ? 'Reset password for this student' : 'Resetează parola pentru acest elev'}
                           >
                             <KeyRound className="w-3 h-3 text-amber-400" />
-                            <span>{isEn ? 'Reset Pass' : 'Reset Parolă'}</span>
+                            <span className="hidden xl:inline">{isEn ? 'Pass' : 'Parolă'}</span>
                           </button>
 
                           <button
@@ -428,6 +497,21 @@ export const TeacherStudentManagement: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Score Inspector / Editor Modal */}
+      {selectedStudentForScores && (
+        <TeacherScoreModal
+          student={selectedStudentForScores}
+          isOpen={!!selectedStudentForScores}
+          onClose={() => setSelectedStudentForScores(null)}
+          onSuccess={() => {
+            setSelectedStudentForScores(null);
+            fetchStudents();
+          }}
+          lang={lang}
+        />
+      )}
     </div>
   );
 };
+

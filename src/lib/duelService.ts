@@ -11,7 +11,39 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-export type DuelGameMode = 'cyber_sprint' | 'quiz_blitz' | 'cyber_shield' | 'pc_rush' | 'file_battle';
+export type DuelGameMode = 'cyber_sprint' | 'block_coding' | 'speed_crafting' | 'quiz_blitz' | 'cyber_shield' | 'pc_rush' | 'file_battle';
+
+export type CodeBlockType =
+  | 'start'
+  | 'move_forward'
+  | 'turn_left'
+  | 'turn_right'
+  | 'repeat_2'
+  | 'repeat_3'
+  | 'collect';
+
+export interface GridCoord {
+  x: number;
+  y: number;
+}
+
+export interface BlockCodingChallenge {
+  id: number;
+  level: number;
+  title: string;
+  story: string;
+  concept: string;
+  gridSize: { width: number; height: number };
+  startPos: GridCoord;
+  startDirection: 'N' | 'E' | 'S' | 'W';
+  targetPos: GridCoord;
+  targetName: string;
+  obstacles: GridCoord[];
+  collectibles: GridCoord[];
+  parBlocks: number;
+  allowedBlocks: CodeBlockType[];
+  hint: string;
+}
 
 export interface DuelPlayer {
   id: string; // Unique client device/session id
@@ -69,6 +101,7 @@ export interface DuelRoomData {
   questions?: QuizQuestionItem[]; // For Quiz Blitz
   shieldItems?: CyberShieldItem[]; // For Cyber Shield
   pcPartsOrder?: PCRushPart[]; // For Hardware PC Rush
+  codingChallenges?: BlockCodingChallenge[]; // For Cursa Algoritmilor (Block Coding Duel)
   fileQueue?: Array<{ name: string; ext: string; folder: string }>; // For File Battle
   winnerId?: string | 'tie';
   winnerName?: string;
@@ -318,6 +351,113 @@ export const DUEL_PC_PARTS: PCRushPart[] = [
   }
 ];
 
+// Block Coding Challenges for "Cursa Algoritmilor (Block Coding Duel)"
+export const DUEL_BLOCK_CODING_CHALLENGES: BlockCodingChallenge[] = [
+  {
+    id: 1,
+    level: 1,
+    title: 'Nivelul 1: Primul Script Liniar',
+    story: 'Arky a detectat Serverul Central la 4 pași distanță! Scrie algoritmul corect pentru a colecta steaua de date și a ajunge la destinație.',
+    concept: 'Secvențialitate & Pași Înainte',
+    gridSize: { width: 5, height: 5 },
+    startPos: { x: 0, y: 2 },
+    startDirection: 'E',
+    targetPos: { x: 4, y: 2 },
+    targetName: 'Serverul Central',
+    obstacles: [
+      { x: 2, y: 1 },
+      { x: 2, y: 3 }
+    ],
+    collectibles: [
+      { x: 2, y: 2 }
+    ],
+    parBlocks: 4,
+    allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'collect', 'repeat_2', 'repeat_3'],
+    hint: 'Apasă pe „Mergi în față” de 4 ori sau folosește bucla repetă pentru un traseu direct!'
+  },
+  {
+    id: 2,
+    level: 2,
+    title: 'Nivelul 2: Ocolirea Zidului Firewall',
+    story: 'Un firewall de securitate blochează drumul direct! Ghidează-l pe Arky făcând viraje precise la 90° pentru a ocoli obstacolele.',
+    concept: 'Viraje la 90° (Stânga / Dreapta)',
+    gridSize: { width: 5, height: 5 },
+    startPos: { x: 0, y: 4 },
+    startDirection: 'N',
+    targetPos: { x: 3, y: 1 },
+    targetName: 'Terminalul Școlii',
+    obstacles: [
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+      { x: 1, y: 3 },
+      { x: 2, y: 3 }
+    ],
+    collectibles: [
+      { x: 0, y: 2 },
+      { x: 3, y: 3 }
+    ],
+    parBlocks: 7,
+    allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'collect', 'repeat_2', 'repeat_3'],
+    hint: 'Mergi 2 pași spre Nord, virează la Dreapta (Est) 3 pași, apoi virează la Stânga (Nord) spre Terminal!'
+  },
+  {
+    id: 3,
+    level: 3,
+    title: 'Nivelul 3: Bucle & Structuri Repetitive',
+    story: 'Traseul are un tipar de scară repetitiv! Folosește blocul de buclă „Repetă de 3 ori” pentru a scurta scriptul și a depăși oponentul.',
+    concept: 'Bucle Scratch (Repetă de 3x)',
+    gridSize: { width: 6, height: 6 },
+    startPos: { x: 0, y: 5 },
+    startDirection: 'N',
+    targetPos: { x: 5, y: 0 },
+    targetName: 'Portalul Cuantic TIC',
+    obstacles: [
+      { x: 1, y: 4 },
+      { x: 2, y: 3 },
+      { x: 3, y: 2 },
+      { x: 4, y: 1 }
+    ],
+    collectibles: [
+      { x: 1, y: 5 },
+      { x: 3, y: 3 },
+      { x: 5, y: 1 }
+    ],
+    parBlocks: 6,
+    allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'repeat_2', 'repeat_3', 'collect'],
+    hint: 'Observă modelul de urcare: pas, viraj, pas, viraj! Buclele îți salvează timp prețios în duel.'
+  },
+  {
+    id: 4,
+    level: 4,
+    title: 'Nivelul 4: Labirintul Bug-urilor Hackerilor',
+    story: 'Misiunea finală de campion! Navighează prin rețeaua infectată de bug-uri, evită capcanele laser și activează Baza de Date Securizată.',
+    concept: 'Gândire Algoritmică Avansată',
+    gridSize: { width: 6, height: 6 },
+    startPos: { x: 0, y: 0 },
+    startDirection: 'E',
+    targetPos: { x: 5, y: 5 },
+    targetName: 'Baza de Date Criptată',
+    obstacles: [
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 1, y: 2 },
+      { x: 3, y: 2 },
+      { x: 3, y: 3 },
+      { x: 3, y: 4 },
+      { x: 4, y: 4 }
+    ],
+    collectibles: [
+      { x: 0, y: 2 },
+      { x: 2, y: 4 },
+      { x: 5, y: 3 }
+    ],
+    parBlocks: 10,
+    allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'repeat_2', 'repeat_3', 'collect'],
+    hint: 'Gândește întregul traseu înainte de rulare! O singură greșeală declanșează alarma de firewall.'
+  }
+];
+
 // Create Room (Host)
 export async function createDuelRoom(
   playerName: string,
@@ -344,6 +484,7 @@ export async function createDuelRoom(
   const shuffledQuestions = [...DUEL_QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
   const shuffledShieldItems = [...DUEL_CYBER_SHIELD_ITEMS].sort(() => Math.random() - 0.5).slice(0, 6);
   const pcParts = [...DUEL_PC_PARTS];
+  const codingChallenges = [...DUEL_BLOCK_CODING_CHALLENGES];
 
   const roomData: DuelRoomData = {
     id: code,
@@ -357,6 +498,7 @@ export async function createDuelRoom(
     questions: shuffledQuestions,
     shieldItems: shuffledShieldItems,
     pcPartsOrder: pcParts,
+    codingChallenges,
     createdAt: Date.now(),
     updatedAt: Date.now()
   };

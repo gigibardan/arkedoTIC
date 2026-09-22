@@ -177,29 +177,6 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           )}
 
-          {/* Duel Arena 1v1 Button */}
-          {onNavigateToDuel && (
-            <button
-              onClick={() => {
-                sounds.playClick();
-                if (currentView === 'duel') {
-                  onNavigateToCatalog();
-                } else {
-                  onNavigateToDuel();
-                }
-              }}
-              className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl transition border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
-                currentView === 'duel'
-                  ? 'bg-rose-600 text-white border-rose-400 shadow-rose-500/20'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:text-white'
-              }`}
-              title={lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
-            >
-              <Swords className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'duel' ? 'text-white' : 'text-rose-400'}`} />
-              <span className="hidden lg:inline">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
-            </button>
-          )}
-
           {/* Arcade Button */}
           {onNavigateToArcade && (
             <button
@@ -220,6 +197,29 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Gamepad2 className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'arcade' ? 'text-white' : 'text-indigo-400'}`} />
               <span className="hidden lg:inline">{lang === 'en' ? 'Arcade' : 'Jocuri'}</span>
+            </button>
+          )}
+
+          {/* Duel Arena 1v1 Button */}
+          {onNavigateToDuel && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                if (currentView === 'duel') {
+                  onNavigateToCatalog();
+                } else {
+                  onNavigateToDuel();
+                }
+              }}
+              className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl transition border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
+                currentView === 'duel'
+                  ? 'bg-rose-600 text-white border-rose-400 shadow-rose-500/20'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:text-white'
+              }`}
+              title={lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
+            >
+              <Swords className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'duel' ? 'text-white' : 'text-rose-400'}`} />
+              <span className="hidden lg:inline">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
             </button>
           )}
 

@@ -105,7 +105,8 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     (scores.byte_slider || 0) +
     (scores.file_drop || 0) +
     (scores.virus_sweeper || 0) +
-    (scores.cyber_dino || 0)
+    (scores.cyber_dino || 0) +
+    (scores.redstone_lab || 0)
   );
 }
 
@@ -653,6 +654,8 @@ export async function recordStudentDuelResult(
     matchesPlayed: 0,
     duelPoints: 0,
     cyberSprintWins: 0,
+    blockCodingWins: 0,
+    speedCraftingWins: 0,
     quizBlitzWins: 0,
     cyberShieldWins: 0,
     pcRushWins: 0
@@ -664,6 +667,8 @@ export async function recordStudentDuelResult(
     matchesPlayed: prevStats.matchesPlayed + 1,
     duelPoints: Math.max(0, (prevStats.duelPoints || 0) + (isWinner ? pointsEarned : Math.round(pointsEarned / 4))),
     cyberSprintWins: (prevStats.cyberSprintWins || 0) + (isWinner && mode === 'cyber_sprint' ? 1 : 0),
+    blockCodingWins: (prevStats.blockCodingWins || 0) + (isWinner && mode === 'block_coding' ? 1 : 0),
+    speedCraftingWins: (prevStats.speedCraftingWins || 0) + (isWinner && mode === 'speed_crafting' ? 1 : 0),
     quizBlitzWins: (prevStats.quizBlitzWins || 0) + (isWinner && mode === 'quiz_blitz' ? 1 : 0),
     cyberShieldWins: (prevStats.cyberShieldWins || 0) + (isWinner && mode === 'cyber_shield' ? 1 : 0),
     pcRushWins: (prevStats.pcRushWins || 0) + (isWinner && mode === 'pc_rush' ? 1 : 0)
@@ -733,4 +738,301 @@ export async function deleteStudentAccount(studentId: string): Promise<boolean> 
     }
   }
   return false;
+}
+
+// FULL PROFILE UPDATE (TEACHER ACTION)
+export async function updateStudentFullProfileByTeacher(
+  studentId: string,
+  updates: Partial<StudentProfile>
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const payload = {
+      ...updates,
+      lastActiveAt: new Date().toISOString()
+    };
+
+    // If currently logged in on this browser, update local profile too
+    const current = getActiveStudent();
+    if (current && current.id === studentId) {
+      const updatedLocal: StudentProfile = {
+        ...current,
+        ...payload
+      };
+      saveActiveStudentLocally(updatedLocal);
+    }
+
+    if (isCloudConnected && db) {
+      await updateDoc(doc(db, STUDENTS_COLLECTION, studentId), payload);
+    }
+    return { success: true };
+  } catch (err: any) {
+    console.error('Error updating student profile by teacher:', err);
+    return { success: false, error: err?.message || 'Eroare la actualizarea profilului' };
+  }
+}
+
+// UPDATE INDIVIDUAL SCORES (TEACHER ACTION)
+export async function updateStudentScoresByTeacher(
+  studentId: string,
+  scoresData: {
+    arcadeScores?: Partial<ArcadeScores>;
+    lessonsProgress?: Partial<LessonsProgress>;
+    duelStats?: Partial<StudentProfile['duelStats']>;
+    customXP?: number;
+  }
+): Promise<{ success: boolean; newTotalXP: number; error?: string }> {
+  try {
+    // Get existing student first
+    let student: StudentProfile | null = null;
+    if (isCloudConnected && db) {
+      const snap = await getDoc(doc(db, STUDENTS_COLLECTION, studentId));
+      if (snap.exists()) {
+        student = { id: snap.id, ...snap.data() } as StudentProfile;
+      }
+    }
+    if (!student) {
+      const current = getActiveStudent();
+      if (current && current.id === studentId) {
+        student = current;
+      }
+    }
+
+    if (!student) {
+      return { success: false, newTotalXP: 0, error: 'Elevul nu a fost găsit în baza de date' };
+    }
+
+    const newArcade: ArcadeScores = {
+      ...DEFAULT_ARCADE_SCORES,
+      ...(student.arcadeScores || {}),
+      ...(scoresData.arcadeScores || {})
+    };
+    newArcade.totalArcade = computeTotalArcade(newArcade);
+
+    const newLessons: LessonsProgress = {
+      ...DEFAULT_LESSONS_PROGRESS,
+      ...(student.lessonsProgress || {}),
+      ...(scoresData.lessonsProgress || {})
+    };
+    newLessons.totalLessonScore = computeTotalLessons(newLessons);
+
+    const newDuelStats = {
+      wins: 0,
+      losses: 0,
+      matchesPlayed: 0,
+      duelPoints: 0,
+      ...(student.duelStats || {}),
+      ...(scoresData.duelStats || {})
+    };
+
+    // Calculate total XP (or allow custom XP override if specified)
+    const calculatedXP = scoresData.customXP !== undefined
+      ? Math.max(0, scoresData.customXP)
+      : newLessons.totalLessonScore + newArcade.totalArcade + (newDuelStats.duelPoints || 0);
+
+    const updates: Partial<StudentProfile> = {
+      arcadeScores: newArcade,
+      lessonsProgress: newLessons,
+      duelStats: newDuelStats,
+      totalXP: calculatedXP,
+      lastActiveAt: new Date().toISOString()
+    };
+
+    const res = await updateStudentFullProfileByTeacher(studentId, updates);
+    return { success: res.success, newTotalXP: calculatedXP, error: res.error };
+  } catch (err: any) {
+    console.error('Error updating scores by teacher:', err);
+    return { success: false, newTotalXP: 0, error: err?.message || 'Eroare la salvarea scorurilor' };
+  }
+}
+
+// RESET SPECIFIC OR ALL ARCADE SCORES
+export async function resetStudentArcadeScores(
+  studentId: string,
+  gameKey?: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    let student: StudentProfile | null = null;
+    if (isCloudConnected && db) {
+      const snap = await getDoc(doc(db, STUDENTS_COLLECTION, studentId));
+      if (snap.exists()) student = { id: snap.id, ...snap.data() } as StudentProfile;
+    }
+    if (!student) {
+      const current = getActiveStudent();
+      if (current && current.id === studentId) student = current;
+    }
+
+    if (!student) return { success: false, error: 'Elevul nu a fost găsit' };
+
+    let updatedArcade: ArcadeScores = {
+      ...DEFAULT_ARCADE_SCORES,
+      ...(student.arcadeScores || {})
+    };
+
+    if (gameKey && gameKey in updatedArcade) {
+      (updatedArcade as any)[gameKey] = 0;
+    } else {
+      updatedArcade = { ...DEFAULT_ARCADE_SCORES };
+    }
+    updatedArcade.totalArcade = computeTotalArcade(updatedArcade);
+
+    const totalLessons = computeTotalLessons(student.lessonsProgress || {});
+    const duelPts = student.duelStats?.duelPoints || 0;
+    const newXP = totalLessons + updatedArcade.totalArcade + duelPts;
+
+    return await updateStudentFullProfileByTeacher(studentId, {
+      arcadeScores: updatedArcade,
+      totalXP: newXP
+    });
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Eroare la resetarea jocurilor' };
+  }
+}
+
+// RESET LESSON PROGRESS
+export async function resetStudentLessonProgress(
+  studentId: string,
+  missionKey?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'all'
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    let student: StudentProfile | null = null;
+    if (isCloudConnected && db) {
+      const snap = await getDoc(doc(db, STUDENTS_COLLECTION, studentId));
+      if (snap.exists()) student = { id: snap.id, ...snap.data() } as StudentProfile;
+    }
+    if (!student) {
+      const current = getActiveStudent();
+      if (current && current.id === studentId) student = current;
+    }
+
+    if (!student) return { success: false, error: 'Elevul nu a fost găsit' };
+
+    let updatedLessons: LessonsProgress = {
+      ...DEFAULT_LESSONS_PROGRESS,
+      ...(student.lessonsProgress || {})
+    };
+
+    if (missionKey && missionKey !== 'all') {
+      updatedLessons[missionKey] = { completed: false, level: 1, score: 0, elapsedSeconds: 0 };
+    } else {
+      updatedLessons = { ...DEFAULT_LESSONS_PROGRESS };
+    }
+    updatedLessons.totalLessonScore = computeTotalLessons(updatedLessons);
+
+    const totalArcade = computeTotalArcade(student.arcadeScores || {});
+    const duelPts = student.duelStats?.duelPoints || 0;
+    const newXP = updatedLessons.totalLessonScore + totalArcade + duelPts;
+
+    return await updateStudentFullProfileByTeacher(studentId, {
+      lessonsProgress: updatedLessons,
+      totalXP: newXP
+    });
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Eroare la resetarea progresului' };
+  }
+}
+
+// APPLY CHEATING PENALTY
+export async function applyCheatingPenalty(
+  studentId: string,
+  penaltyXP: number,
+  reason: string
+): Promise<{ success: boolean; newTotalXP: number; error?: string }> {
+  try {
+    let student: StudentProfile | null = null;
+    if (isCloudConnected && db) {
+      const snap = await getDoc(doc(db, STUDENTS_COLLECTION, studentId));
+      if (snap.exists()) student = { id: snap.id, ...snap.data() } as StudentProfile;
+    }
+    if (!student) {
+      const current = getActiveStudent();
+      if (current && current.id === studentId) student = current;
+    }
+
+    if (!student) return { success: false, newTotalXP: 0, error: 'Elevul nu a fost găsit' };
+
+    const currentXP = student.totalXP || 0;
+    const newXP = Math.max(0, currentXP - penaltyXP);
+
+    const res = await updateStudentFullProfileByTeacher(studentId, {
+      totalXP: newXP
+    });
+
+    return { success: res.success, newTotalXP: newXP, error: res.error };
+  } catch (err: any) {
+    return { success: false, newTotalXP: 0, error: err?.message || 'Eroare la aplicarea penalizării' };
+  }
+}
+
+// AWARD TEACHER BONUS XP
+export async function awardTeacherBonusXP(
+  studentId: string,
+  bonusXP: number,
+  reason: string
+): Promise<{ success: boolean; newTotalXP: number; error?: string }> {
+  try {
+    let student: StudentProfile | null = null;
+    if (isCloudConnected && db) {
+      const snap = await getDoc(doc(db, STUDENTS_COLLECTION, studentId));
+      if (snap.exists()) student = { id: snap.id, ...snap.data() } as StudentProfile;
+    }
+    if (!student) {
+      const current = getActiveStudent();
+      if (current && current.id === studentId) student = current;
+    }
+
+    if (!student) return { success: false, newTotalXP: 0, error: 'Elevul nu a fost găsit' };
+
+    const currentXP = student.totalXP || 0;
+    const newXP = currentXP + bonusXP;
+
+    const res = await updateStudentFullProfileByTeacher(studentId, {
+      totalXP: newXP
+    });
+
+    return { success: res.success, newTotalXP: newXP, error: res.error };
+  } catch (err: any) {
+    return { success: false, newTotalXP: 0, error: err?.message || 'Eroare la adăugarea bonusului' };
+  }
+}
+
+// RECALCULATE STUDENT XP FAIRLY
+export async function recalculateStudentXP(
+  studentId: string
+): Promise<{ success: boolean; newTotalXP: number; error?: string }> {
+  try {
+    let student: StudentProfile | null = null;
+    if (isCloudConnected && db) {
+      const snap = await getDoc(doc(db, STUDENTS_COLLECTION, studentId));
+      if (snap.exists()) student = { id: snap.id, ...snap.data() } as StudentProfile;
+    }
+    if (!student) {
+      const current = getActiveStudent();
+      if (current && current.id === studentId) student = current;
+    }
+
+    if (!student) return { success: false, newTotalXP: 0, error: 'Elevul nu a fost găsit' };
+
+    const fairArcade = computeTotalArcade(student.arcadeScores || {});
+    const fairLessons = computeTotalLessons(student.lessonsProgress || {});
+    const duelPoints = student.duelStats?.duelPoints || 0;
+    const fairTotalXP = fairArcade + fairLessons + duelPoints;
+
+    const res = await updateStudentFullProfileByTeacher(studentId, {
+      totalXP: fairTotalXP,
+      arcadeScores: {
+        ...DEFAULT_ARCADE_SCORES,
+        ...(student.arcadeScores || {}),
+        totalArcade: fairArcade
+      },
+      lessonsProgress: {
+        ...DEFAULT_LESSONS_PROGRESS,
+        ...(student.lessonsProgress || {}),
+        totalLessonScore: fairLessons
+      }
+    });
+
+    return { success: res.success, newTotalXP: fairTotalXP, error: res.error };
+  } catch (err: any) {
+    return { success: false, newTotalXP: 0, error: err?.message || 'Eroare la recalcularea XP-ului' };
+  }
 }

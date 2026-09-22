@@ -50,6 +50,7 @@ export interface ArcadeScores {
   file_drop?: number;
   virus_sweeper?: number;
   cyber_dino?: number;
+  redstone_lab?: number;
   totalArcade: number;
 }
 
@@ -74,6 +75,8 @@ export interface DuelStats {
   matchesPlayed: number;
   duelPoints: number;
   cyberSprintWins?: number;
+  blockCodingWins?: number;
+  speedCraftingWins?: number;
   quizBlitzWins?: number;
   cyberShieldWins?: number;
   pcRushWins?: number;

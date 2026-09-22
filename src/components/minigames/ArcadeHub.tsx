@@ -15,6 +15,7 @@ import { ByteSliderGame } from './ByteSliderGame';
 import { FileDropGame } from './FileDropGame';
 import { VirusSweeperGame } from './VirusSweeperGame';
 import { CyberDinoRunner } from './CyberDinoRunner';
+import { RedstoneLogicLab } from './RedstoneLogicLab';
 import {
   Gamepad2,
   Keyboard,
@@ -39,6 +40,7 @@ import {
   Biohazard,
   Swords,
   Footprints,
+  Boxes,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -47,7 +49,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -166,6 +168,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const redstoneLabHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_redstone_lab') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -173,6 +183,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       return '🎓';
     }
   })();
+
+  if (activeGame === 'redstone_lab') {
+    return (
+      <RedstoneLogicLab
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
 
   if (activeGame === 'cyber_dino') {
     return (
@@ -350,6 +368,54 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Featured Game: Minecraft Redstone Logic Lab */}
+        <div className="bg-gradient-to-br from-stone-900 via-stone-850 to-stone-950 border-2 border-rose-500/60 hover:border-rose-400 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden sm:col-span-2 lg:col-span-3">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-rose-600/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-rose-600/20 border-2 border-rose-500/50 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shadow-lg shadow-rose-600/20 shrink-0 text-2xl">
+                ⛏️
+              </div>
+              <div>
+                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] font-mono font-bold uppercase tracking-wider">
+                    ⭐ Minecraft TIC Edition
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[10px] font-mono">
+                    10 Misiuni Logice + Porți AND/OR/XOR/Binar
+                  </span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black text-white font-heading group-hover:text-rose-300 transition-colors">
+                  {lang === 'en' ? 'Redstone Logic Lab ⚡' : 'Laboratorul de Circuite Redstone ⛏️'}
+                </h3>
+                <p className="text-stone-300 text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
+                  {lang === 'en'
+                    ? 'Explore binary signals, redstone torches, inverters (NOT), security gates (AND, OR, XOR, NAND) and binary adders in an authentic voxel Minecraft environment!'
+                    : 'Explorează semnalele binare, torțele de redstone, invertoarele (NOT), porțile de securitate (AND, OR, XOR, NAND) și sumatoarele binare într-un laborator interactiv inspirat din Minecraft!'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-stone-800">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-stone-950 border border-stone-800 text-xs font-mono text-cyan-300">
+                <span>💎</span>
+                <span>{redstoneLabHighScore} XP</span>
+              </div>
+              <button
+                onClick={() => {
+                  sounds.playClick();
+                  setActiveGame('redstone_lab');
+                }}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white font-black text-xs sm:text-sm uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/40 cursor-pointer active:scale-95"
+              >
+                <span>{lang === 'en' ? 'Enter Lab' : 'Intră în Laborator'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Game 1: Speed Typing */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-cyan-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>

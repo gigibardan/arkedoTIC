@@ -161,3 +161,28 @@ export async function deleteStudentResult(id: string): Promise<boolean> {
   }
   return true;
 }
+
+/**
+ * Update/Edit a result document (Teacher action to fix or adjust grades/cheating)
+ */
+export async function updateStudentResult(
+  id: string,
+  updates: Partial<Omit<StudentResult, 'id'>>
+): Promise<boolean> {
+  // Update local storage
+  const currentLocal = getLocalResults();
+  const updatedLocal = currentLocal.map((r) => (r.id === id ? { ...r, ...updates } : r));
+  saveLocalResults(updatedLocal);
+
+  if (db && !id.startsWith('local_')) {
+    try {
+      const { updateDoc } = await import('firebase/firestore');
+      await updateDoc(doc(db, COLLECTION_NAME, id), updates);
+      return true;
+    } catch (err) {
+      console.error('Error updating result in Firestore:', err);
+      return false;
+    }
+  }
+  return true;
+}

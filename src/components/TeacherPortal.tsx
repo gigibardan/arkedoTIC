@@ -15,7 +15,12 @@ import {
   FileText,
   UserCheck,
   HelpCircle,
-  KeyRound
+  KeyRound,
+  Edit3,
+  Download,
+  Search,
+  AlertTriangle,
+  Filter
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { getStudentResults, deleteStudentResult, StudentResult } from '../lib/resultsService';
@@ -23,6 +28,7 @@ import { isCloudConnected } from '../lib/firebase';
 import { sounds } from '../utils/audio';
 import { TeacherStudentManagement } from './TeacherStudentManagement';
 import { TeacherHelpGuide } from './TeacherHelpGuide';
+import { TeacherSubmissionModal } from './TeacherSubmissionModal';
 
 interface TeacherPortalProps {
   onBackToHome: () => void;
@@ -41,6 +47,13 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
   const [results, setResults] = useState<StudentResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Search & Filter state for gradebook
+  const [searchGradeQuery, setSearchGradeQuery] = useState<string>('');
+  const [selectedCourseFilter, setSelectedCourseFilter] = useState<string>('all');
+
+  // Edit Submission Modal
+  const [selectedSubmission, setSelectedSubmission] = useState<StudentResult | null>(null);
 
   const fetchResults = async () => {
     setLoading(true);
@@ -95,10 +108,45 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
     return `${mins}m ${remaining}s`;
   };
 
+  // Export to CSV
+  const handleExportCSV = () => {
+    if (results.length === 0) return;
+    const headers = ['Nr', 'Nume Elev', 'Misiune / Curs', 'Punctaj', 'Punctaj Maxim', 'Timp (sec)', 'Data'];
+    const rows = results.map((r, i) => [
+      i + 1,
+      `"${r.studentName.replace(/"/g, '""')}"`,
+      `"${r.courseTitle.replace(/"/g, '""')}"`,
+      r.score,
+      r.maxScore || 100,
+      r.elapsedSeconds,
+      `"${r.dateFormatted || ''}"`
+    ]);
+    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `ARKEDO_Catalog_Note_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    sounds.playClick();
+  };
+
+  // Unique list of courses for filtering
+  const uniqueCourses = Array.from(new Set(results.map((r) => r.courseTitle).filter(Boolean)));
+
+  const filteredResults = results.filter((r) => {
+    const matchesSearch = r.studentName.toLowerCase().includes(searchGradeQuery.toLowerCase().trim()) ||
+                          r.courseTitle.toLowerCase().includes(searchGradeQuery.toLowerCase().trim());
+    const matchesCourse = selectedCourseFilter === 'all' || r.courseTitle === selectedCourseFilter;
+    return matchesSearch && matchesCourse;
+  });
+
   // Calculations for dashboard metrics
   const totalCount = results.length;
   const avgScore = totalCount > 0 ? Math.round(results.reduce((acc, r) => acc + (r.score || 0), 0) / totalCount) : 0;
   const avgSeconds = totalCount > 0 ? Math.round(results.reduce((acc, r) => acc + (r.elapsedSeconds || 0), 0) / totalCount) : 0;
+  const suspiciousGradeCount = results.filter((r) => r.elapsedSeconds < 15 && r.score >= 90).length;
 
   if (!isAuthenticated) {
     return (
@@ -222,13 +270,13 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
       </div>
 
       {/* Teacher Navigation Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start overflow-x-auto max-w-full">
         <button
           onClick={() => {
             setActiveTab('gradebook');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'gradebook'
               ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -243,14 +291,14 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
             setActiveTab('students');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'students'
               ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
           <UserCheck className="w-4 h-4" />
-          <span>{lang === 'en' ? 'Student Accounts & Reset' : 'Gestiune Conturi Elevi & Parole'}</span>
+          <span>{lang === 'en' ? 'Student Profiles & Score Control' : 'Gestiune Elevi & Control Scoruri'}</span>
         </button>
 
         <button
@@ -258,14 +306,14 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
             setActiveTab('guide');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
             activeTab === 'guide'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
           }`}
         >
           <HelpCircle className="w-4 h-4" />
-          <span>{lang === 'en' ? 'Teacher Guide & System Docs' : 'Ghid Profesor & Documentație Notare'}</span>
+          <span>{lang === 'en' ? 'Teacher Guide & Docs' : 'Ghid Profesor & Manual Notare'}</span>
         </button>
       </div>
 
@@ -273,7 +321,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
       {activeTab === 'gradebook' && (
         <>
           {/* Metrics Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
                 <Users className="w-6 h-6" />
@@ -315,6 +363,61 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                 </div>
               </div>
             </div>
+
+            <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+                  {lang === 'en' ? 'Cheating Flags' : 'Suspiciuni Trișare'}
+                </div>
+                <div className="text-2xl font-black text-rose-300 font-heading mt-0.5 font-mono">
+                  {suspiciousGradeCount}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Search, Filter & CSV Export Bar */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <input
+                  type="text"
+                  value={searchGradeQuery}
+                  onChange={(e) => setSearchGradeQuery(e.target.value)}
+                  placeholder={lang === 'en' ? 'Search student or course...' : 'Caută elev sau misiune...'}
+                  className="w-full bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                />
+              </div>
+
+              {uniqueCourses.length > 0 && (
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <select
+                    value={selectedCourseFilter}
+                    onChange={(e) => setSelectedCourseFilter(e.target.value)}
+                    className="bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-auto"
+                  >
+                    <option value="all">{lang === 'en' ? 'All Lessons / Courses' : 'Toate Misiunile'}</option>
+                    {uniqueCourses.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={handleExportCSV}
+              disabled={results.length === 0}
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{lang === 'en' ? 'Export CSV Report' : 'Exportă Catalog Excel/CSV'}</span>
+            </button>
           </div>
 
           {/* Results Table */}
@@ -322,10 +425,10 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Award className="w-4 h-4 text-emerald-400" />
-                <span>{lang === 'en' ? 'Grades & Submissions Registry' : 'Evidență Note & Realizări'}</span>
+                <span>{lang === 'en' ? `Grades & Submissions Registry (${filteredResults.length})` : `Evidență Note & Realizări (${filteredResults.length})`}</span>
               </h3>
               <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
-                Firebase: Firestore Cloud
+                Firestore: rezultate_tic
               </span>
             </div>
 
@@ -334,7 +437,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                 <RefreshCw className="w-6 h-6 text-emerald-400 animate-spin" />
                 <p className="text-xs font-mono">{lang === 'en' ? 'Loading records from database...' : 'Se încarcă datele din baza de date...'}</p>
               </div>
-            ) : results.length === 0 ? (
+            ) : filteredResults.length === 0 ? (
               <div className="p-12 text-center text-slate-400">
                 <div className="text-4xl mb-3">📋</div>
                 <p className="text-sm font-semibold max-w-md mx-auto leading-relaxed">
@@ -351,44 +454,69 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                       <th className="py-3 px-4 font-bold">{t.teacherTableScore}</th>
                       <th className="py-3 px-4 font-bold">{t.teacherTableDuration}</th>
                       <th className="py-3 px-4 font-bold">{t.teacherTableDate}</th>
-                      <th className="py-3 px-4 font-bold text-right">{t.teacherTableActions}</th>
+                      <th className="py-3 px-4 font-bold text-right">{lang === 'en' ? 'Actions & Edit' : 'Modificare & Ștergere'}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/80 text-slate-200">
-                    {results.map((r, idx) => (
-                      <tr key={r.id || idx} className="hover:bg-slate-850/50 transition">
-                        <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs font-mono shrink-0">
-                            {idx + 1}
-                          </span>
-                          <span>{r.studentName}</span>
-                        </td>
-                        <td className="py-3.5 px-4 text-slate-300 font-medium">
-                          {r.courseTitle}
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 text-xs font-mono">
-                            ⭐ {r.score} / {r.maxScore}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 font-mono text-cyan-300 text-xs">
-                          ⏱️ {formatSeconds(r.elapsedSeconds)}
-                        </td>
-                        <td className="py-3.5 px-4 font-mono text-slate-400 text-xs">
-                          {r.dateFormatted || (lang === 'en' ? 'Recent' : 'Recent')}
-                        </td>
-                        <td className="py-3.5 px-4 text-right">
-                          <button
-                            onClick={() => handleDelete(r.id)}
-                            disabled={deletingId === r.id}
-                            className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
-                            title={lang === 'en' ? 'Delete entry' : 'Șterge rând'}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    {filteredResults.map((r, idx) => {
+                      const isSuspicious = (r.elapsedSeconds < 15 && r.score >= 90) || r.score > (r.maxScore || 100);
+
+                      return (
+                        <tr key={r.id || idx} className={`hover:bg-slate-850/50 transition ${isSuspicious ? 'bg-rose-950/20' : ''}`}>
+                          <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs font-mono shrink-0">
+                              {idx + 1}
+                            </span>
+                            <div>
+                              <span>{r.studentName}</span>
+                              {isSuspicious && (
+                                <span className="ml-2 px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
+                                  ⚠️ Suspiciune Viteză
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-300 font-medium">
+                            {r.courseTitle}
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 text-xs font-mono">
+                              ⭐ {r.score} / {r.maxScore || 100}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 font-mono text-cyan-300 text-xs">
+                            ⏱️ {formatSeconds(r.elapsedSeconds)}
+                          </td>
+                          <td className="py-3.5 px-4 font-mono text-slate-400 text-xs">
+                            {r.dateFormatted || (lang === 'en' ? 'Recent' : 'Recent')}
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                onClick={() => {
+                                  setSelectedSubmission(r);
+                                  sounds.playClick();
+                                }}
+                                className="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-900/70 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                                title={lang === 'en' ? 'Edit score / time' : 'Modifică notă sau timp'}
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                                <span>{lang === 'en' ? 'Edit' : 'Modifică'}</span>
+                              </button>
+
+                              <button
+                                onClick={() => handleDelete(r.id)}
+                                disabled={deletingId === r.id}
+                                className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
+                                title={lang === 'en' ? 'Delete entry' : 'Șterge rând'}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -406,6 +534,21 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
       {activeTab === 'guide' && (
         <TeacherHelpGuide />
       )}
+
+      {/* Edit Submission Modal */}
+      {selectedSubmission && (
+        <TeacherSubmissionModal
+          result={selectedSubmission}
+          isOpen={!!selectedSubmission}
+          onClose={() => setSelectedSubmission(null)}
+          onSuccess={() => {
+            setSelectedSubmission(null);
+            fetchResults();
+          }}
+          lang={lang}
+        />
+      )}
     </div>
   );
 };
+

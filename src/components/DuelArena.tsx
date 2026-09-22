@@ -31,7 +31,9 @@ import {
   CheckCircle2,
   XCircle,
   Wrench,
-  CheckCheck
+  CheckCheck,
+  Puzzle,
+  Boxes
 } from 'lucide-react';
 import {
   DuelGameMode,
@@ -46,8 +48,11 @@ import {
   subscribeToDuelRoom,
   leaveDuelRoom,
   CyberShieldItem,
-  PCRushPart
+  PCRushPart,
+  BlockCodingChallenge
 } from '../lib/duelService';
+import { BlockCodingDuelGame } from './minigames/BlockCodingDuelGame';
+import { SpeedCraftingDuelGame } from './minigames/SpeedCraftingDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -137,6 +142,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const [assembledParts, setAssembledParts] = useState<string[]>([]);
   const [pcScore, setPcScore] = useState(0);
   const [pcMistake, setPcMistake] = useState<string | null>(null);
+
+  // Local Gameplay States - Block Coding Duel (Cursa Algoritmilor)
+  const [codingLevelIndex, setCodingLevelIndex] = useState(0);
+  const [codingScore, setCodingScore] = useState(0);
 
   // Countdown timer before match start
   const [countdown, setCountdown] = useState<number | null>(null);
@@ -485,6 +494,67 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     }
   };
 
+  // Block Coding Duel Handlers
+  const codingChallenges: BlockCodingChallenge[] = currentRoom?.codingChallenges || [];
+
+  const handleBlockCodingLevelComplete = (pointsEarned: number, nextLevelIndex: number) => {
+    if (!currentRoom || hasFinishedLocal) return;
+    const newScore = codingScore + pointsEarned;
+    setCodingScore(newScore);
+    setCodingLevelIndex(nextLevelIndex);
+    const totalCount = codingChallenges.length || 4;
+    const progressPercent = Math.min(100, Math.round((nextLevelIndex / totalCount) * 100));
+    updateDuelProgress(currentRoom.roomCode, isHost, {
+      progress: progressPercent,
+      score: newScore,
+      currentStageIndex: nextLevelIndex
+    });
+  };
+
+  const handleBlockCodingFinish = (finalScore: number) => {
+    if (!currentRoom || hasFinishedLocal) return;
+    setHasFinishedLocal(true);
+    setCodingScore(finalScore);
+    const myName = isHost ? currentRoom.host.name : (currentRoom.guest?.name || 'Elev');
+    const myId = isHost ? currentRoom.host.id : currentRoom.guest?.id;
+
+    updateDuelProgress(
+      currentRoom.roomCode,
+      isHost,
+      { progress: 100, score: finalScore, finishedAt: Date.now() },
+      myId,
+      myName
+    );
+
+    recordStudentDuelResult(true, 'block_coding', finalScore);
+
+    if (onAwardXP) {
+      onAwardXP(350, 'Maestru în Cursa Algoritmilor 1v1 (Scratch)!');
+    }
+  };
+
+  const handleSpeedCraftingFinish = () => {
+    if (!currentRoom || hasFinishedLocal) return;
+    setHasFinishedLocal(true);
+    const finalScore = 500;
+    const myName = isHost ? currentRoom.host.name : (currentRoom.guest?.name || 'Elev');
+    const myId = isHost ? currentRoom.host.id : currentRoom.guest?.id;
+
+    updateDuelProgress(
+      currentRoom.roomCode,
+      isHost,
+      { progress: 100, score: finalScore, finishedAt: Date.now() },
+      myId,
+      myName
+    );
+
+    recordStudentDuelResult(true, 'speed_crafting', finalScore);
+
+    if (onAwardXP) {
+      onAwardXP(400, 'Campion în Speed Crafting Duel 1v1 (Minecraft TIC)!');
+    }
+  };
+
   // Determine opponent and me
   const me: DuelPlayer | null = isHost ? currentRoom?.host || null : (currentRoom?.guest || null);
   const opponent: DuelPlayer | null = isHost ? currentRoom?.guest || null : (currentRoom?.host || null);
@@ -496,6 +566,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     switch (mode) {
       case 'cyber_sprint':
         return '⚡ Cyber Sprint (Cursă Tastare)';
+      case 'block_coding':
+        return '🧩 Cursa Algoritmilor (Block Coding Duel)';
+      case 'speed_crafting':
+        return '⛏️ Speed Crafting Duel (Minecraft TIC 1v1)';
       case 'quiz_blitz':
         return '🧠 Quiz Blitz (Bătălia Creierelor)';
       case 'cyber_shield':
@@ -586,7 +660,55 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </p>
                 </button>
 
-                {/* Mode 2: Quiz Blitz */}
+                {/* Mode 2: Speed Crafting Duel (Minecraft TIC 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('speed_crafting')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'speed_crafting'
+                      ? 'bg-amber-950/80 border-amber-400 ring-2 ring-amber-500/30 shadow-md'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
+                      <Boxes className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Speed Crafting ⛏️</h4>
+                      <span className="text-[10px] text-amber-300 font-medium">Duel Rețete TIC & Binar (Minecraft 3x3)</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Aranjează componentele pe masa de lucru 3x3 (CPU, RAM, SSD, cod binar, porți logice)! Primul la 5 diamante asamblate câștigă duelul!
+                  </p>
+                </button>
+
+                {/* Mode 3: Cursa Algoritmilor (Block Coding Duel - Tip Scratch) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('block_coding')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'block_coding'
+                      ? 'bg-emerald-950/80 border-emerald-400 ring-2 ring-emerald-500/30 shadow-md'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center">
+                      <Puzzle className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">Cursa Algoritmilor 🧩</h4>
+                      <span className="text-[10px] text-emerald-300 font-medium">Block Coding Duel (Tip Scratch)</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Asamblează logic scriptul (Start, Mergi în față, Viraje 90°, Repetă de 3 ori) pentru a-l ghida pe Arky prin matrice! Primul care ajunge la destinație fără să lovească un obstacol câștigă runda!
+                  </p>
+                </button>
+
+                {/* Mode 3: Quiz Blitz */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('quiz_blitz')}
@@ -974,7 +1096,40 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             </div>
           )}
 
-          {/* MODE 2: QUIZ BLITZ GAMEPLAY */}
+          {/* MODE 2: SPEED CRAFTING DUEL (MINECRAFT TIC 1v1) */}
+          {currentRoom.mode === 'speed_crafting' && (
+            <SpeedCraftingDuelGame
+              room={currentRoom}
+              currentPlayer={me || currentRoom.host}
+              opponent={opponent}
+              onVictory={handleSpeedCraftingFinish}
+            />
+          )}
+
+          {/* MODE 3: CURSA ALGORITMILOR (BLOCK CODING DUEL) */}
+          {currentRoom.mode === 'block_coding' && (
+            <BlockCodingDuelGame
+              challenges={currentRoom.codingChallenges}
+              currentLevelIndex={codingLevelIndex}
+              myScore={codingScore}
+              opponentProgress={opponent?.progress || 0}
+              opponentName={opponent?.name}
+              opponentAvatar={opponent?.avatar}
+              isHost={isHost}
+              lang={lang}
+              onLevelComplete={handleBlockCodingLevelComplete}
+              onFinishMatch={handleBlockCodingFinish}
+              onUpdateProgress={(progress, score, level) => {
+                updateDuelProgress(currentRoom.roomCode, isHost, {
+                  progress,
+                  score,
+                  currentStageIndex: level
+                });
+              }}
+            />
+          )}
+
+          {/* MODE 3: QUIZ BLITZ GAMEPLAY */}
           {currentRoom.mode === 'quiz_blitz' && currentQ && (
             <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
               <div className="flex justify-between items-center text-xs font-bold text-slate-400">
@@ -1253,6 +1408,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 setShieldScore(0);
                 setAssembledParts([]);
                 setPcScore(0);
+                setCodingLevelIndex(0);
+                setCodingScore(0);
               }}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black text-sm shadow-lg shadow-indigo-500/25 transition-all cursor-pointer flex items-center justify-center gap-2"
             >
