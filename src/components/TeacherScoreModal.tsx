@@ -226,6 +226,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   };
 
   const ARCADE_GAMES_METADATA = [
+    { key: 'roblox_clicker', name: isEn ? 'Roblox Blox Clicker (1v1)' : 'Roblox Blox Clicker Duel (1v1)', icon: '🟥', badge: isEn ? 'Roblox' : 'Roblox' },
     { key: 'voxel_architect', name: isEn ? 'Voxel Architect (Minecraft CS)' : 'Voxel Architect: Calculatoare Minecraft', icon: '🧱', badge: isEn ? 'Ultimate' : 'Complex' },
     { key: 'redstone_lab', name: isEn ? 'Redstone Logic Lab' : 'Circuite Redstone (Minecraft TIC)', icon: '⛏️', badge: isEn ? 'Minecraft' : 'Minecraft' },
     { key: 'cyber_dino', name: isEn ? 'Cyber Dino Rush' : 'Cyber Dino: Matrix Rush', icon: '🦖', badge: isEn ? 'New' : 'Nou' },

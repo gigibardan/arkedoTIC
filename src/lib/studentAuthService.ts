@@ -33,7 +33,9 @@ export const ARCADE_GAME_KEYS = [
   'file_drop',
   'virus_sweeper',
   'cyber_dino',
-  'voxel_architect'
+  'redstone_lab',
+  'voxel_architect',
+  'roblox_clicker'
 ] as const;
 
 export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
@@ -53,6 +55,7 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   cyber_dino: 0,
   redstone_lab: 0,
   voxel_architect: 0,
+  roblox_clicker: 0,
   totalArcade: 0
 };
 

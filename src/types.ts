@@ -52,6 +52,7 @@ export interface ArcadeScores {
   cyber_dino?: number;
   redstone_lab?: number;
   voxel_architect?: number;
+  roblox_clicker?: number;
   totalArcade: number;
 }
 
