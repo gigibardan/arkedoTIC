@@ -113,7 +113,8 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     (scores.virus_sweeper || 0) +
     (scores.cyber_dino || 0) +
     (scores.redstone_lab || 0) +
-    (scores.voxel_architect || 0)
+    (scores.voxel_architect || 0) +
+    (scores.roblox_clicker || 0)
   );
 }
 

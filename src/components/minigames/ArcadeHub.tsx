@@ -17,6 +17,7 @@ import { VirusSweeperGame } from './VirusSweeperGame';
 import { CyberDinoRunner } from './CyberDinoRunner';
 import { RedstoneLogicLab } from './RedstoneLogicLab';
 import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
+import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
 import {
   Gamepad2,
   Keyboard,
@@ -50,7 +51,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -185,6 +186,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const robloxClickerHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_roblox_clicker') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -192,6 +201,16 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       return '🎓';
     }
   })();
+
+  if (activeGame === 'roblox_clicker') {
+    return (
+      <RobloxClickerDuelGame
+        onBack={() => setActiveGame('hub')}
+        studentName={studentName || 'Elev Robloxian'}
+        studentAvatar={avatar}
+      />
+    );
+  }
 
   if (activeGame === 'voxel_architect') {
     return (
@@ -1055,6 +1074,58 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               className="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
             >
               <span>{lang === 'en' ? 'Sweep' : 'Joacă'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 15: Roblox Blox Clicker Champion (Hardware Clicker, Pet Gacha & Boss Raids) */}
+        <div className="bg-gradient-to-b from-slate-900 via-rose-950/30 to-slate-900 border-2 border-rose-500/60 hover:border-rose-400 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20">
+                🟥
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{robloxClickerHighScore} Blox</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/15 text-rose-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Roblox Clicker' : 'Roblox Clicker TIC'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 text-[10px] font-mono border border-amber-500/30">
+                🐾 Pets + Raid Boss
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Roblox Blox Clicker Champion' : 'Roblox Blox Clicker: Pet & Boss'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Hyper-engaging Roblox clicker simulator! Click the Blox, hatch legendary cyber pets with luck multipliers, upgrade hardware rigs, defeat Mega Malware Bosses, and sabotage rivals!'
+                : 'Clicker simulator în stil Roblox! Apasă pe Mega Blox, clocește pet-uri cibernetice legendare, cumpără upgrade-uri de hardware, învinge Boșii Malware și folosește sabotaje!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-rose-400 font-mono">⚡ Clicker + Gacha + PvP</span>
+            <button
+              id="arcade-btn-start-roblox-clicker"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('roblox_clicker');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs font-mono transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Play Clicker' : 'Joacă Clicker'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

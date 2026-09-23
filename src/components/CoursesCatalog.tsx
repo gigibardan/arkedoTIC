@@ -902,8 +902,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                         <span>
                           {lang === 'en'
-                            ? 'Create your free account. Your scores at all 10 arcade games and lesson progress follow you on any PC in the lab!'
-                            : 'Creează contul tău: punctajele la cele 10 jocuri și progresul la lecții se salvează automat și te urmează pe orice calculator din laborator!'}
+                            ? 'Create your free account. Your scores at all 16 arcade games and lesson progress follow you on any PC in the lab!'
+                            : 'Creează contul tău: punctajele la cele 16 jocuri și progresul la lecții se salvează automat și te urmează pe orice calculator din laborator!'}
                         </span>
                       </div>
 
@@ -1128,13 +1128,13 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   onOpenArcade?.();
                 }}
                 className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
-                title={lang === 'en' ? 'Open Arcade Games (13 Mini-Games)' : 'Deschide Jocurile Arcade (13 Mini-Jocuri)'}
+                title={lang === 'en' ? 'Open Arcade Games (16 Mini-Games)' : 'Deschide Jocurile Arcade (16 Mini-Jocuri)'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Arcade (13)' : 'Arcade (13)'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Arcade (16)' : 'Arcade (16)'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1594,16 +1594,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '15 Mini-Games' : '15 Mini-Jocuri'}
+                  {lang === 'en' ? '16 Mini-Games' : '16 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? '⛏️ Minecraft Redstone Lab, Cyber Dino, File-Drop & Pixeli RGB' : '⛏️ Laboratorul Redstone (Minecraft TIC), Cyber Dino Rush & File-Drop'}
+                {lang === 'en' ? '🟥 Roblox Blox Clicker, ⛏️ Minecraft Redstone, Cyber Dino & Voxel PC' : '🟥 Roblox Blox Clicker Duel, ⛏️ Laboratorul Redstone & Voxel Architect'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Build Minecraft Redstone circuits & logic gates, master Virus Sweeper, sprint in Cyber Dino Rush, sort file extensions with Tetris drop, and mix RGB pixels!'
-                  : 'Construiește circuite și porți logice Redstone în stil Minecraft, caută viruși, aleargă în Cyber Dino, sortează fișiere în Tetris File-Drop și asamblează calculatoare!'}
+                  ? 'Compete in Roblox Blox Clicker, build Minecraft Redstone circuits & Voxel PCs, sprint in Cyber Dino, sort file extensions in Tetris drop, and build computers!'
+                  : 'Concurează în Roblox Blox Clicker, construiește calculatoare Voxel 3D, circuite Redstone în stil Minecraft, aleargă în Cyber Dino și sortează fișiere în Tetris Drop!'}
               </p>
             </div>
           </div>
