@@ -539,57 +539,6 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 4: Redstone Logic Lab (Minecraft TIC Edition) - Placed 4th after 2048 with matching aligned card layout */}
-        <div className="bg-slate-900/90 border-2 border-rose-500/60 hover:border-rose-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-rose-950/25 to-slate-900">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-600/20">
-                ⛏️
-              </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{redstoneLabHighScore} XP</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-1.5 mb-2">
-              <div className="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/15 text-rose-300 text-[10px] font-bold uppercase tracking-wider">
-                {lang === 'en' ? 'Minecraft TIC' : 'Minecraft TIC'}
-              </div>
-              <div className="inline-block px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-300 text-[10px] font-mono border border-rose-500/30">
-                ⚡ 10 Porți & Circuite
-              </div>
-            </div>
-
-            <h3 className="text-lg font-black text-white font-heading group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
-              <span>{lang === 'en' ? 'Redstone Logic Lab' : 'Circuite Redstone'}</span>
-              <Zap className="w-4 h-4 text-rose-400 animate-pulse" />
-            </h3>
-
-            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
-              {lang === 'en'
-                ? 'Explore binary signals, redstone torches, NOT inverters, security gates (AND, OR, XOR, NAND) and binary adders in Minecraft!'
-                : 'Explorează semnalele binare, torțele de redstone, invertoarele (NOT), porțile de securitate (AND, OR, XOR) și sumatoarele binare!'}
-            </p>
-          </div>
-
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-            <span className="text-[11px] text-rose-400 font-mono">💎 Diamante & XP</span>
-            <button
-              id="arcade-btn-start-redstone-lab"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('redstone_lab');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Enter Lab' : 'Intră în Lab'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-
         {/* Game 4: PC Builder (Constructorul de PC-uri - Misiunea Hardware) */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-blue-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
@@ -768,7 +717,58 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
 
-        {/* Game 8: Binary Bit Factory */}
+        {/* Game 8: Redstone Logic Lab (Minecraft TIC Edition) - Position 8 */}
+        <div className="bg-slate-900/90 border-2 border-rose-500/60 hover:border-rose-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-rose-950/25 to-slate-900">
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-600/20">
+                ⛏️
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{redstoneLabHighScore} XP</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/15 text-rose-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Minecraft TIC' : 'Minecraft TIC'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-300 text-[10px] font-mono border border-rose-500/30">
+                ⚡ 12 Misiuni & Circuite
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Redstone Logic Lab' : 'Circuite Redstone'}</span>
+              <Zap className="w-4 h-4 text-rose-400 animate-pulse" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Master advanced binary electronics in Minecraft: repeaters, NOT torches, logic gates (AND, OR, XOR, NAND), RS-NOR latch RAM & Half-Adders!'
+                : 'Stăpânește electronica binară avansată în Minecraft: repetitoare cu temporizare, torțe NOT, porți logice, celule RAM RS-NOR și sumatoare ALU!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-rose-400 font-mono">💎 Diamante & XP</span>
+            <button
+              id="arcade-btn-start-redstone-lab"
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('redstone_lab');
+              }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Enter Lab' : 'Intră în Lab'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Game 9: Binary Bit Factory */}
         <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-amber-400/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
           <div>
             <div className="flex items-center justify-between mb-3">
