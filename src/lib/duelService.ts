@@ -613,7 +613,63 @@ export async function startDuelMatch(roomCode: string): Promise<void> {
   }
 }
 
-// Update player live score and progress
+// In-memory throttling cache to protect Firebase Spark plan quota (max 20,000 writes/day)
+interface PendingThrottledWrite {
+  timer: any;
+  data: Partial<DuelPlayer>;
+  roomCode: string;
+  isHost: boolean;
+}
+const pendingWrites = new Map<string, PendingThrottledWrite>();
+const lastWrittenTimes = new Map<string, number>();
+const lastWrittenPayloads = new Map<string, string>();
+const MIN_WRITE_INTERVAL_MS = 1000; // 1000ms strict throttle
+
+// Direct write helper to Firestore
+async function executeFirestoreUpdate(
+  roomCode: string,
+  isHost: boolean,
+  data: Partial<DuelPlayer>,
+  allFinishedWinnerId?: string,
+  winnerName?: string
+): Promise<void> {
+  if (!db) return;
+  const cleanCode = roomCode.trim().toUpperCase();
+  try {
+    const roomRef = doc(db, 'duel_rooms', cleanCode);
+    const updatePayload: Record<string, any> = {
+      updatedAt: Date.now()
+    };
+
+    if (isHost) {
+      for (const [k, v] of Object.entries(data)) {
+        updatePayload[`host.${k}`] = v;
+      }
+    } else {
+      for (const [k, v] of Object.entries(data)) {
+        updatePayload[`guest.${k}`] = v;
+      }
+    }
+
+    if (allFinishedWinnerId) {
+      updatePayload.status = 'finished';
+      updatePayload.winnerId = allFinishedWinnerId;
+      if (winnerName) {
+        updatePayload.winnerName = winnerName;
+      }
+    }
+
+    await updateDoc(roomRef, updatePayload);
+  } catch (err: any) {
+    if (err?.code === 'resource-exhausted' || err?.message?.includes('quota')) {
+      console.warn('⚠️ Cota zilnică Firebase Spark a fost atinsă. Meciul continuă local fără întrerupere.');
+    } else {
+      console.warn('Eroare update duel progress:', err);
+    }
+  }
+}
+
+// Update player live score and progress with strict throttling
 export async function updateDuelProgress(
   roomCode: string,
   isHost: boolean,
@@ -622,35 +678,62 @@ export async function updateDuelProgress(
   winnerName?: string
 ): Promise<void> {
   const cleanCode = roomCode.trim().toUpperCase();
+  const cacheKey = `${cleanCode}_${isHost ? 'host' : 'guest'}`;
 
-  if (db) {
-    try {
-      const roomRef = doc(db, 'duel_rooms', cleanCode);
-      const updatePayload: Record<string, any> = {
-        updatedAt: Date.now()
-      };
+  // Priority 1: Match Finish / Winner declared -> Write IMMEDIATELY, clear pending
+  if (allFinishedWinnerId) {
+    const pending = pendingWrites.get(cacheKey);
+    if (pending?.timer) {
+      clearTimeout(pending.timer);
+    }
+    pendingWrites.delete(cacheKey);
+    lastWrittenTimes.set(cacheKey, Date.now());
+    lastWrittenPayloads.set(cacheKey, JSON.stringify(data));
+    await executeFirestoreUpdate(cleanCode, isHost, data, allFinishedWinnerId, winnerName);
+    return;
+  }
 
-      if (isHost) {
-        for (const [k, v] of Object.entries(data)) {
-          updatePayload[`host.${k}`] = v;
+  // Priority 2: Intermediate progress updates -> deduplicate & throttle
+  const serialized = JSON.stringify(data);
+  if (serialized === lastWrittenPayloads.get(cacheKey)) {
+    // Data has not changed at all; skip Firestore write completely!
+    return;
+  }
+
+  const now = Date.now();
+  const lastTime = lastWrittenTimes.get(cacheKey) || 0;
+  const elapsed = now - lastTime;
+
+  if (elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
+    // We are past the 1000ms window and no write is scheduled: write immediately
+    lastWrittenTimes.set(cacheKey, now);
+    lastWrittenPayloads.set(cacheKey, serialized);
+    await executeFirestoreUpdate(cleanCode, isHost, data);
+  } else {
+    // Inside the 1000ms window: merge payload and schedule flush
+    const existing = pendingWrites.get(cacheKey);
+    const mergedData = { ...(existing?.data || {}), ...data };
+
+    if (existing?.timer) {
+      existing.data = mergedData;
+    } else {
+      const delay = Math.max(50, MIN_WRITE_INTERVAL_MS - elapsed);
+      const timer = setTimeout(async () => {
+        const item = pendingWrites.get(cacheKey);
+        pendingWrites.delete(cacheKey);
+        if (item) {
+          lastWrittenTimes.set(cacheKey, Date.now());
+          lastWrittenPayloads.set(cacheKey, JSON.stringify(item.data));
+          await executeFirestoreUpdate(item.roomCode, item.isHost, item.data);
         }
-      } else {
-        for (const [k, v] of Object.entries(data)) {
-          updatePayload[`guest.${k}`] = v;
-        }
-      }
+      }, delay);
 
-      if (allFinishedWinnerId) {
-        updatePayload.status = 'finished';
-        updatePayload.winnerId = allFinishedWinnerId;
-        if (winnerName) {
-          updatePayload.winnerName = winnerName;
-        }
-      }
-
-      await updateDoc(roomRef, updatePayload);
-    } catch (err) {
-      console.warn('Eroare update duel progress:', err);
+      pendingWrites.set(cacheKey, {
+        timer,
+        data: mergedData,
+        roomCode: cleanCode,
+        isHost
+      });
     }
   }
 }

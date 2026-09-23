@@ -787,79 +787,81 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
         </div>
       )}
 
-      {/* Main Responsive Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 w-full items-start">
-        {/* Left Column: Interactive Minecraft Circuit Workbench (8 cols on lg) */}
-        <div className="lg:col-span-8 flex flex-col gap-4 w-full min-w-0">
-          <div className="bg-stone-900 border-2 border-stone-700 rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-visible flex flex-col justify-between w-full">
-            {/* Minecraft Deepslate Pattern Background */}
-            <div 
-              className="absolute inset-0 opacity-10 rounded-3xl pointer-events-none" 
-              style={{
-                backgroundImage: `radial-gradient(#f43f5e 1.5px, transparent 1.5px), radial-gradient(#d97706 1.5px, #1c1917 1.5px)`,
-                backgroundSize: '28px 28px',
-                backgroundPosition: '0 0, 14px 14px'
-              }}
-            />
+      {/* Main Spacious Circuit Workbench (Full Width) */}
+      <div className="w-full flex flex-col gap-6">
+        {/* Interactive Minecraft Circuit Workbench */}
+        <div className="bg-stone-900 border-2 border-stone-700 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl relative overflow-visible flex flex-col justify-between w-full">
+          {/* Minecraft Deepslate Pattern Background */}
+          <div 
+            className="absolute inset-0 opacity-10 rounded-3xl pointer-events-none" 
+            style={{
+              backgroundImage: `radial-gradient(#f43f5e 1.5px, transparent 1.5px), radial-gradient(#d97706 1.5px, #1c1917 1.5px)`,
+              backgroundSize: '28px 28px',
+              backgroundPosition: '0 0, 14px 14px'
+            }}
+          />
 
-            {/* Circuit Mission Header */}
-            {!isSandboxMode ? (
-              <div className="relative z-10 bg-stone-950/90 border border-stone-800 p-3.5 sm:p-4 rounded-2xl flex items-start gap-3 backdrop-blur-sm shadow-md mb-4">
-                <div className="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0 mt-0.5 shadow-inner">
-                  <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-wider">
-                      {isEn ? 'Mission Objective' : 'Obiectivul Circuitului TIC'}
-                    </span>
-                    <span className="text-[10px] font-mono text-stone-500 bg-stone-900 px-2 py-0.5 rounded border border-stone-800">
-                      ID: {level.gateType}
-                    </span>
-                  </div>
-                  <p className="text-xs sm:text-sm font-semibold text-white mt-1 leading-relaxed break-words">
-                    {isEn ? level.goalEn : level.goalRo}
-                  </p>
-                </div>
+          {/* Circuit Mission Header */}
+          {!isSandboxMode ? (
+            <div className="relative z-10 bg-stone-950/90 border border-stone-800 p-4 sm:p-5 rounded-2xl flex items-start gap-3.5 backdrop-blur-sm shadow-md mb-6">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0 mt-0.5 shadow-inner">
+                <Lightbulb className="w-5 h-5" />
               </div>
-            ) : (
-              <div className="relative z-10 bg-amber-950/40 border border-amber-500/30 p-3.5 rounded-2xl mb-4 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <Wrench className="w-4 h-4 text-amber-400" />
-                  <span className="text-xs font-mono font-bold text-amber-300">
-                    {isEn ? 'Select Logic Gate:' : 'Alege Poarta Logică:'}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-xs font-mono text-rose-400 font-bold uppercase tracking-wider">
+                    {isEn ? 'Mission Objective' : 'Obiectivul Circuitului TIC'}
+                  </span>
+                  <span className="text-[11px] font-mono text-stone-400 bg-stone-900 px-2.5 py-0.5 rounded-lg border border-stone-800 font-bold">
+                    ID: {level.gateType}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {(['AND', 'OR', 'NOT', 'XOR', 'NAND', 'NOR'] as const).map((gate) => (
-                    <button
-                      key={gate}
-                      onClick={() => setSandboxGate(gate)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold cursor-pointer transition ${
-                        sandboxGate === gate
-                          ? 'bg-amber-500 text-stone-950 font-black shadow-md'
-                          : 'bg-stone-800 text-stone-300 hover:bg-stone-700'
-                      }`}
-                    >
-                      {gate}
-                    </button>
-                  ))}
-                </div>
+                <p className="text-sm sm:text-base font-semibold text-white mt-1.5 leading-relaxed break-words">
+                  {isEn ? level.goalEn : level.goalRo}
+                </p>
               </div>
-            )}
+            </div>
+          ) : (
+            <div className="relative z-10 bg-amber-950/40 border border-amber-500/30 p-4 rounded-2xl mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-amber-400" />
+                <span className="text-xs sm:text-sm font-mono font-bold text-amber-300">
+                  {isEn ? 'Select Logic Gate:' : 'Alege Poarta Logică:'}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                {(['AND', 'OR', 'NOT', 'XOR', 'NAND', 'NOR'] as const).map((gate) => (
+                  <button
+                    key={gate}
+                    onClick={() => setSandboxGate(gate)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition ${
+                      sandboxGate === gate
+                        ? 'bg-amber-500 text-stone-950 font-black shadow-md'
+                        : 'bg-stone-800 text-stone-300 hover:bg-stone-700'
+                    }`}
+                  >
+                    {gate}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-            {/* Interactive Circuit Diagram Container */}
-            <div className="relative z-10 my-2 sm:my-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 sm:gap-6 w-full">
-              {/* 1. INPUTS COLUMN */}
-              <div className="flex flex-col gap-2.5 flex-1 min-w-0">
-                <div className="text-[11px] font-mono text-stone-400 uppercase tracking-wider font-bold mb-0.5 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5">
-                    <Sliders className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{isEn ? 'Inputs & Switches' : 'Pârghii de Intrare'}</span>
-                  </span>
-                  <span className="text-[10px] text-stone-500 font-mono">0 / 1</span>
-                </div>
+          {/* Interactive Circuit Diagram Container (Spacious 3-Column Grid) */}
+          <div className="relative z-10 my-2 sm:my-4 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center w-full">
+            {/* 1. INPUTS COLUMN (Spacious Left) */}
+            <div className="md:col-span-5 lg:col-span-5 flex flex-col gap-3 w-full min-w-0">
+              <div className="pb-1.5 border-b border-stone-800 flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-xs font-mono text-amber-400 uppercase tracking-wider font-bold">
+                  <Sliders className="w-4 h-4" />
+                  <span>{isEn ? 'Inputs & Levers' : 'Pârghii de Intrare'}</span>
+                </span>
+                <span className="text-[11px] text-stone-400 font-mono bg-stone-950 px-2 py-0.5 rounded border border-stone-800">
+                  {!isSandboxMode ? `${levelInputs.filter(Boolean).length} / ${level.inputs.length} ACTIVE` : `${sandboxInputs.filter(Boolean).length} / 2 ACTIVE`}
+                </span>
+              </div>
 
+              <div className="flex flex-col gap-2.5 w-full">
                 {!isSandboxMode ? (
                   level.inputs.map((inp, idx) => {
                     const isActive = levelInputs[idx];
@@ -867,15 +869,15 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                       <div
                         key={inp.id}
                         onClick={() => toggleInput(idx)}
-                        className={`p-3 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 shadow-lg active:scale-98 w-full ${
+                        className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 sm:gap-4 shadow-lg active:scale-[0.99] w-full ${
                           isActive
-                            ? 'bg-gradient-to-r from-rose-950/80 via-stone-900 to-rose-950/60 border-rose-500 shadow-rose-600/25 ring-1 ring-rose-500/30'
-                            : 'bg-stone-950/90 border-stone-800 hover:border-stone-600'
+                            ? 'bg-gradient-to-r from-rose-950/90 via-stone-900 to-rose-950/70 border-rose-500 shadow-rose-600/25 ring-1 ring-rose-500/30'
+                            : 'bg-stone-950/90 border-stone-800 hover:border-stone-700'
                         }`}
                       >
-                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
                           {/* Realistic Minecraft Lever Visual */}
-                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg font-bold border shrink-0 transition-transform ${
+                          <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-xl font-bold border shrink-0 transition-transform ${
                             isActive 
                               ? 'bg-rose-600 border-rose-400 text-white shadow-md shadow-rose-600/50 scale-105' 
                               : 'bg-stone-850 border-stone-700 text-stone-500'
@@ -884,23 +886,27 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                           </div>
 
                           <div className="min-w-0 flex-1">
-                            <div className="font-bold text-white text-xs sm:text-sm truncate">
+                            {/* Complete label without truncation */}
+                            <div className="font-bold text-white text-xs sm:text-sm leading-snug break-words">
                               {isEn ? inp.labelEn : inp.labelRo}
                             </div>
-                            <div className={`text-[10px] font-mono font-bold ${
-                              isActive ? 'text-rose-400' : 'text-stone-500'
-                            }`}>
-                              {isActive ? (isEn ? 'SIGNAL: 1 (HIGH)' : 'SEMNAL: 1 (ACTIV)') : (isEn ? 'SIGNAL: 0 (LOW)' : 'SEMNAL: 0 (OPRIT)')}
+                            <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                              <span className={`w-2 h-2 rounded-full shrink-0 ${isActive ? 'bg-rose-400 animate-pulse' : 'bg-stone-600'}`} />
+                              <span className={`text-[11px] font-mono font-bold ${
+                                isActive ? 'text-rose-300' : 'text-stone-500'
+                              }`}>
+                                {isActive ? (isEn ? 'SIGNAL: 1 (ACTIVE / HIGH)' : 'SEMNAL: 1 (ACTIV)') : (isEn ? 'SIGNAL: 0 (INACTIVE / LOW)' : 'SEMNAL: 0 (OPRIT)')}
+                              </span>
                             </div>
                           </div>
                         </div>
 
                         {/* Physical Lever Toggle Switch */}
-                        <div className={`w-11 h-6 rounded-full p-0.5 transition-colors shrink-0 ${
+                        <div className={`w-12 h-6 rounded-full p-0.5 transition-colors shrink-0 ${
                           isActive ? 'bg-rose-600' : 'bg-stone-800'
                         }`}>
                           <div className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${
-                            isActive ? 'translate-x-5' : 'translate-x-0'
+                            isActive ? 'translate-x-6' : 'translate-x-0'
                           }`} />
                         </div>
                       </div>
@@ -918,293 +924,338 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                           setSandboxInputs(updated);
                           if (!soundMuted) sounds.playClick();
                         }}
-                        className={`p-3 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 shadow-lg active:scale-98 ${
+                        className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 shadow-lg active:scale-[0.99] ${
                           isActive
-                            ? 'bg-rose-950/80 border-rose-500'
+                            ? 'bg-rose-950/80 border-rose-500 shadow-rose-600/20'
                             : 'bg-stone-950 border-stone-800'
                         }`}
                       >
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">{isActive ? '⚡' : '🔘'}</span>
-                          <span className="text-xs font-bold text-white font-mono">
-                            {isEn ? `Input ${idx === 0 ? 'A' : 'B'}` : `Intrarea ${idx === 0 ? 'A' : 'B'}`}
-                          </span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{isActive ? '⚡' : '🔘'}</span>
+                          <div>
+                            <span className="text-xs sm:text-sm font-bold text-white font-mono block">
+                              {isEn ? `Input ${idx === 0 ? 'A' : 'B'}` : `Intrarea ${idx === 0 ? 'A' : 'B'}`}
+                            </span>
+                            <span className={`text-[10px] font-mono font-bold ${isActive ? 'text-rose-300' : 'text-stone-500'}`}>
+                              {isActive ? 'SEMNAL: 1' : 'SEMNAL: 0'}
+                            </span>
+                          </div>
                         </div>
-                        <div className={`w-10 h-5 rounded-full p-0.5 ${isActive ? 'bg-rose-600' : 'bg-stone-800'}`}>
-                          <div className={`w-4 h-4 rounded-full bg-white transition-transform ${isActive ? 'translate-x-5' : 'translate-x-0'}`} />
+                        <div className={`w-12 h-6 rounded-full p-0.5 ${isActive ? 'bg-rose-600' : 'bg-stone-800'}`}>
+                          <div className={`w-5 h-5 rounded-full bg-white transition-transform ${isActive ? 'translate-x-6' : 'translate-x-0'}`} />
                         </div>
                       </div>
                     );
                   })
                 )}
-
-                {/* Optional Redstone Repeater Block */}
-                {!isSandboxMode && level.hasRepeater && (
-                  <div 
-                    onClick={cycleRepeaterTicks}
-                    className="p-3 rounded-2xl bg-stone-950 border-2 border-amber-500/50 hover:border-amber-400 cursor-pointer shadow-md transition group"
-                  >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[10px] font-mono text-amber-300 font-bold uppercase flex items-center gap-1">
-                        <span>⏱️</span>
-                        <span>{isEn ? 'Redstone Repeater' : 'Repetitor Redstone'}</span>
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold">
-                        {repeaterTicks} Ticks ({repeaterTicks * 0.1}s)
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-1 bg-stone-900 p-1.5 rounded-xl border border-stone-800">
-                      {[1, 2, 3, 4].map((tick) => (
-                        <div
-                          key={tick}
-                          className={`flex-1 py-1 text-center rounded text-[10px] font-mono font-bold transition ${
-                            repeaterTicks === tick
-                              ? 'bg-amber-500 text-stone-950 shadow-md font-black'
-                              : 'text-stone-500 hover:text-stone-300'
-                          }`}
-                        >
-                          {tick}t
-                        </div>
-                      ))}
-                    </div>
-                    <div className="text-[9px] text-stone-400 mt-1 font-mono text-center group-hover:text-amber-300 transition-colors">
-                      {isEn ? 'Click to adjust delay ticks' : 'Apasă pentru a schimba întârzierea'}
-                    </div>
-                  </div>
-                )}
               </div>
 
-              {/* 2. CENTER: LOGIC SCHEMATIC & REDSTONE WIRE */}
-              <div className="flex flex-col items-center justify-center shrink-0 my-2 md:my-0">
-                {/* Glowing Redstone Dust Line */}
-                <div className={`w-16 h-1 rounded-full mb-2 transition-all ${
-                  signalPower > 0
-                    ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
-                    : 'bg-stone-800'
-                }`} />
-
-                {/* Main Logic Gate Block */}
-                <div className={`px-4 py-3 sm:px-5 sm:py-4 rounded-2xl border-2 shadow-2xl flex flex-col items-center gap-2 relative transition-all min-w-[120px] ${
-                  signalPower > 0
-                    ? 'bg-gradient-to-b from-stone-900 via-rose-950 to-stone-900 border-rose-500 shadow-rose-600/30 ring-2 ring-rose-500/20'
-                    : 'bg-stone-950 border-stone-700'
-                }`}>
-                  <div className="text-[10px] font-mono uppercase font-bold text-stone-400 flex items-center gap-1">
-                    <Cpu className="w-3 h-3 text-rose-400" />
-                    <span>{isSandboxMode ? sandboxGate : level.gateType.replace('_', ' ')}</span>
-                  </div>
-
-                  {/* Minecraft Block Icon */}
-                  <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl border-2 transition-all ${
-                    signalPower > 0 
-                      ? 'bg-rose-600/20 border-rose-400 text-rose-400 shadow-lg shadow-rose-600/50 scale-105 animate-pulse'
-                      : 'bg-stone-850/60 border-stone-700 text-stone-500'
-                  }`}>
-                    {isSandboxMode ? (
-                      sandboxGate === 'NOT' ? '🪓' :
-                      sandboxGate === 'AND' ? '🔒' :
-                      sandboxGate === 'OR' ? '🌉' :
-                      sandboxGate === 'XOR' ? '🏮' :
-                      sandboxGate === 'NAND' ? '💣' : '🛡️'
-                    ) : (
-                      level.gateType === 'INTERLOCK_NOT' ? '🪓' :
-                      level.gateType === 'AND_3WAY' ? '🔒' :
-                      level.gateType === 'OR_AND_COMBINED' ? '🌉' :
-                      level.gateType === 'XOR_PARITY' ? '🏮' :
-                      level.gateType === 'BINARY_DECODER_4BIT' ? '🔢' :
-                      level.gateType === 'REPEATER_SYNC' ? '⏱️' :
-                      level.gateType === 'NAND_SECURITY' ? '💣' :
-                      level.gateType === 'RS_NOR_LATCH' ? '💾' :
-                      level.gateType === 'HALF_ADDER' ? '🧮' :
-                      level.gateType === 'MUX_2TO1' ? '🔀' :
-                      level.gateType === 'MASTER_VAULT' ? '👑' : '💻'
-                    )}
-                  </div>
-
-                  {/* Power Gauge */}
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <Gauge className="w-3 h-3 text-stone-500" />
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
-                      signalPower > 0 
-                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 font-black'
-                        : 'bg-stone-800 text-stone-500'
-                    }`}>
-                      POW: {signalPower}
+              {/* Optional Redstone Repeater Block */}
+              {!isSandboxMode && level.hasRepeater && (
+                <div 
+                  onClick={cycleRepeaterTicks}
+                  className="p-3.5 rounded-2xl bg-stone-950 border-2 border-amber-500/50 hover:border-amber-400 cursor-pointer shadow-md transition group mt-1"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-mono text-amber-300 font-bold uppercase flex items-center gap-1.5">
+                      <span>⏱️</span>
+                      <span>{isEn ? 'Redstone Repeater' : 'Repetitor Redstone'}</span>
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold">
+                      {repeaterTicks} Ticks ({repeaterTicks * 0.1}s)
                     </span>
                   </div>
-                </div>
 
-                <div className={`w-16 h-1 rounded-full mt-2 transition-all ${
-                  signalPower > 0
-                    ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
-                    : 'bg-stone-800'
-                }`} />
-              </div>
-
-              {/* 3. RIGHT: OUTPUT ACTUATORS & REWARD MECHANISM (No Cutoff Guaranteed) */}
-              <div className="flex flex-col gap-2.5 flex-1 min-w-0">
-                <div className="text-[11px] font-mono text-stone-400 uppercase tracking-wider font-bold mb-0.5 flex items-center gap-1.5">
-                  <Unlock className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>{isEn ? 'Output Actuators' : 'Mecanisme Ieșire'}</span>
-                </div>
-
-                {/* Primary Output Block */}
-                <div className={`p-4 rounded-2xl border-2 flex items-center justify-between gap-3 transition-all duration-300 shadow-xl ${
-                  out1
-                    ? 'bg-gradient-to-r from-stone-900 to-emerald-950/80 border-emerald-500 shadow-emerald-600/30'
-                    : 'bg-stone-950/90 border-stone-800'
-                }`}>
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl border-2 transition-all shrink-0 ${
-                      out1
-                        ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-lg shadow-emerald-500/40 scale-105'
-                        : 'bg-stone-900 border-stone-700 text-stone-600'
-                    }`}>
-                      {out1 ? '💡' : '⚫'}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="font-bold text-white text-xs sm:text-sm truncate">
-                        {isEn ? level.output1LabelEn : level.output1LabelRo}
+                  <div className="flex items-center justify-between gap-1.5 bg-stone-900 p-2 rounded-xl border border-stone-800">
+                    {[1, 2, 3, 4].map((tick) => (
+                      <div
+                        key={tick}
+                        className={`flex-1 py-1 text-center rounded-lg text-xs font-mono font-bold transition ${
+                          repeaterTicks === tick
+                            ? 'bg-amber-500 text-stone-950 shadow-md font-black'
+                            : 'text-stone-500 hover:text-stone-300'
+                        }`}
+                      >
+                        {tick}t
                       </div>
-                      <div className={`text-[10px] font-mono font-bold mt-0.5 ${
-                        out1 ? 'text-emerald-400' : 'text-stone-500'
-                      }`}>
-                        {out1 ? (isEn ? 'ACTIVE (1)' : 'DEBLOCAT (1)') : (isEn ? 'LOCKED (0)' : 'BLOCAT / STINS (0)')}
-                      </div>
-                    </div>
+                    ))}
                   </div>
-
-                  <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold border shrink-0 ${
-                    out1 
-                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' 
-                      : 'bg-stone-850 text-stone-500 border-stone-800'
-                  }`}>
-                    {out1 ? 'Q: 1' : 'Q: 0'}
-                  </span>
-                </div>
-
-                {/* Optional Dual Output Block (for Adders & RS-NOR Latch) */}
-                {!isSandboxMode && level.isDualOutput && (
-                  <div className={`p-4 rounded-2xl border-2 flex items-center justify-between gap-3 transition-all duration-300 shadow-xl ${
-                    out2
-                      ? 'bg-gradient-to-r from-stone-900 to-cyan-950/80 border-cyan-500 shadow-cyan-600/30'
-                      : 'bg-stone-950/90 border-stone-800'
-                  }`}>
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl border-2 transition-all shrink-0 ${
-                        out2
-                          ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-lg shadow-cyan-500/40 scale-105'
-                          : 'bg-stone-900 border-stone-700 text-stone-600'
-                      }`}>
-                        {out2 ? '✨' : '🔘'}
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="font-bold text-white text-xs sm:text-sm truncate">
-                          {isEn ? level.output2LabelEn : level.output2LabelRo}
-                        </div>
-                        <div className={`text-[10px] font-mono font-bold mt-0.5 ${
-                          out2 ? 'text-cyan-400' : 'text-stone-500'
-                        }`}>
-                          {out2 ? (isEn ? 'OUTPUT: 1' : 'SEMNAL: 1') : (isEn ? 'OUTPUT: 0' : 'SEMNAL: 0')}
-                        </div>
-                      </div>
-                    </div>
-
-                    <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold border shrink-0 ${
-                      out2 
-                        ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' 
-                        : 'bg-stone-850 text-stone-500 border-stone-800'
-                    }`}>
-                      {out2 ? 'OUT: 1' : 'OUT: 0'}
-                    </span>
+                  <div className="text-[10px] text-stone-400 mt-1.5 font-mono text-center group-hover:text-amber-300 transition-colors">
+                    {isEn ? 'Click to cycle delay ticks (1t - 4t)' : 'Apasă pentru a schimba întârzierea (1t - 4t)'}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
-            {/* Bottom Victory Banner or Level Actions */}
-            {!isSandboxMode && (
-              isLevelSolved ? (
-                <div className="relative z-10 mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-stone-900 to-emerald-950/90 border-2 border-emerald-500/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 animate-fadeIn">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 text-xl">
-                      💎
+            {/* 2. CENTER: REDSTONE BUS & MAIN LOGIC GATE BLOCK */}
+            <div className="md:col-span-3 lg:col-span-3 flex flex-col items-center justify-center shrink-0 w-full my-3 md:my-0">
+              {/* Glowing Redstone Dust Line Inflow */}
+              <div className="w-full flex items-center justify-center gap-1 mb-2">
+                <div className={`h-1.5 flex-1 max-w-[60px] rounded-full transition-all ${
+                  signalPower > 0
+                    ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
+                    : 'bg-stone-800'
+                }`} />
+                <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                  signalPower > 0
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                    : 'bg-stone-900 text-stone-500 border-stone-800'
+                }`}>
+                  {signalPower > 0 ? 'BUS REDSTONE ACTIV' : 'FĂRĂ SEMNAL'}
+                </span>
+                <div className={`h-1.5 flex-1 max-w-[60px] rounded-full transition-all ${
+                  signalPower > 0
+                    ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
+                    : 'bg-stone-800'
+                }`} />
+              </div>
+
+              {/* Main Logic Gate Block */}
+              <div className={`w-full max-w-[220px] p-4 rounded-3xl border-2 shadow-2xl flex flex-col items-center gap-2.5 relative transition-all ${
+                signalPower > 0
+                  ? 'bg-gradient-to-b from-stone-900 via-rose-950/80 to-stone-900 border-rose-500 shadow-rose-600/30 ring-2 ring-rose-500/30'
+                  : 'bg-stone-950 border-stone-700'
+              }`}>
+                <div className="text-[11px] font-mono uppercase font-black text-center text-stone-300 tracking-wider flex items-center justify-center gap-1 w-full">
+                  <Cpu className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                  <span className="truncate">{isSandboxMode ? `POARTĂ ${sandboxGate}` : level.gateType.replace(/_/g, ' ')}</span>
+                </div>
+
+                {/* Minecraft Block Icon */}
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-4xl border-2 transition-all shadow-inner ${
+                  signalPower > 0 
+                    ? 'bg-rose-600/25 border-rose-400 text-rose-300 shadow-rose-600/60 scale-105 animate-pulse' 
+                    : 'bg-stone-850 border-stone-700 text-stone-500'
+                }`}>
+                  {isSandboxMode ? (
+                    sandboxGate === 'NOT' ? '🪓' :
+                    sandboxGate === 'AND' ? '🔒' :
+                    sandboxGate === 'OR' ? '🌉' :
+                    sandboxGate === 'XOR' ? '🏮' :
+                    sandboxGate === 'NAND' ? '💣' : '🛡️'
+                  ) : (
+                    level.gateType === 'INTERLOCK_NOT' ? '🪓' :
+                    level.gateType === 'AND_3WAY' ? '🔒' :
+                    level.gateType === 'OR_AND_COMBINED' ? '🌉' :
+                    level.gateType === 'XOR_PARITY' ? '🏮' :
+                    level.gateType === 'BINARY_DECODER_4BIT' ? '🔢' :
+                    level.gateType === 'REPEATER_SYNC' ? '⏱️' :
+                    level.gateType === 'NAND_SECURITY' ? '💣' :
+                    level.gateType === 'RS_NOR_LATCH' ? '💾' :
+                    level.gateType === 'HALF_ADDER' ? '🧮' :
+                    level.gateType === 'MUX_2TO1' ? '🔀' :
+                    level.gateType === 'MASTER_VAULT' ? '👑' : '💻'
+                  )}
+                </div>
+
+                {/* Power Gauge */}
+                <div className="w-full flex items-center justify-between px-2.5 py-1 rounded-xl bg-stone-900/90 border border-stone-800 mt-1">
+                  <div className="flex items-center gap-1">
+                    <Gauge className="w-3.5 h-3.5 text-rose-400" />
+                    <span className="text-[10px] font-mono text-stone-400 font-bold uppercase">Semnal:</span>
+                  </div>
+                  <span className={`text-xs font-mono font-black ${
+                    signalPower > 0 
+                      ? 'text-rose-300 font-bold'
+                      : 'text-stone-500'
+                  }`}>
+                    {signalPower} / 15
+                  </span>
+                </div>
+              </div>
+
+              {/* Glowing Redstone Dust Line Outflow */}
+              <div className={`w-20 h-1.5 rounded-full mt-2 transition-all ${
+                signalPower > 0
+                  ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
+                  : 'bg-stone-800'
+              }`} />
+            </div>
+
+            {/* 3. RIGHT: OUTPUT ACTUATORS (Spacious Right) */}
+            <div className="md:col-span-4 lg:col-span-4 flex flex-col gap-3 w-full min-w-0">
+              <div className="pb-1.5 border-b border-stone-800 flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-xs font-mono text-cyan-400 uppercase tracking-wider font-bold">
+                  <Unlock className="w-4 h-4" />
+                  <span>{isEn ? 'Output Actuators' : 'Mecanisme Ieșire'}</span>
+                </span>
+                <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded border ${
+                  out1 
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' 
+                    : 'bg-stone-950 text-stone-500 border-stone-800'
+                }`}>
+                  {out1 ? (isEn ? 'ACTIVE' : 'DEBLOCAT') : (isEn ? 'LOCKED' : 'BLOCAT')}
+                </span>
+              </div>
+
+              {/* Primary Output Block */}
+              <div className={`p-4 rounded-2xl border-2 transition-all duration-300 shadow-xl w-full ${
+                out1
+                  ? 'bg-gradient-to-r from-stone-900 to-emerald-950/80 border-emerald-500 shadow-emerald-600/30 ring-1 ring-emerald-500/30'
+                  : 'bg-stone-950/90 border-stone-800'
+              }`}>
+                <div className="flex items-center gap-3.5 w-full">
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-3xl border-2 transition-all shrink-0 ${
+                    out1
+                      ? 'bg-emerald-500/25 border-emerald-400 text-emerald-300 shadow-lg shadow-emerald-500/40 scale-105'
+                      : 'bg-stone-900 border-stone-700 text-stone-600'
+                  }`}>
+                    {out1 ? '💡' : '⚫'}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    {/* Complete output label without truncation */}
+                    <div className="font-black text-white text-sm sm:text-base leading-snug break-words">
+                      {isEn ? level.output1LabelEn : level.output1LabelRo}
                     </div>
+
+                    <div className="mt-2 flex items-center justify-between gap-2 flex-wrap">
+                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-xs font-mono font-black ${
+                        out1
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                          : 'bg-stone-900 text-stone-400 border border-stone-800'
+                      }`}>
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${out1 ? 'bg-emerald-400 animate-pulse' : 'bg-stone-600'}`} />
+                        <span>{out1 ? (isEn ? 'ACTIVE (1)' : 'DEBLOCAT (1)') : (isEn ? 'LOCKED (0)' : 'BLOCAT / STINS (0)')}</span>
+                      </div>
+
+                      <span className={`px-2.5 py-0.5 rounded-lg text-xs font-mono font-black border shrink-0 ${
+                        out1 
+                          ? 'bg-emerald-500/30 text-emerald-200 border-emerald-400 shadow-sm' 
+                          : 'bg-stone-850 text-stone-500 border-stone-700'
+                      }`}>
+                        {out1 ? 'Q = 1' : 'Q = 0'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Optional Dual Output Block (for Adders & RS-NOR Latch) */}
+              {!isSandboxMode && level.isDualOutput && (
+                <div className={`p-4 rounded-2xl border-2 transition-all duration-300 shadow-xl w-full ${
+                  out2
+                    ? 'bg-gradient-to-r from-stone-900 to-cyan-950/80 border-cyan-500 shadow-cyan-600/30 ring-1 ring-cyan-500/30'
+                    : 'bg-stone-950/90 border-stone-800'
+                }`}>
+                  <div className="flex items-center gap-3.5 w-full">
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-3xl border-2 transition-all shrink-0 ${
+                      out2
+                        ? 'bg-cyan-500/25 border-cyan-400 text-cyan-300 shadow-lg shadow-cyan-500/40 scale-105'
+                        : 'bg-stone-900 border-stone-700 text-stone-600'
+                    }`}>
+                      {out2 ? '✨' : '🔘'}
+                    </div>
+
                     <div className="min-w-0 flex-1">
-                      <h4 className="text-sm font-bold text-white flex items-center gap-2 flex-wrap">
-                        <span>{isEn ? 'Circuit Solved!' : 'Circuit Rezolvat cu Succes!'}</span>
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
-                          +{level.rewardDiamonds} 💎 | +{level.xpPoints} XP
+                      <div className="font-black text-white text-sm sm:text-base leading-snug break-words">
+                        {isEn ? level.output2LabelEn : level.output2LabelRo}
+                      </div>
+
+                      <div className="mt-2 flex items-center justify-between gap-2 flex-wrap">
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-xs font-mono font-black ${
+                          out2
+                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                            : 'bg-stone-900 text-stone-400 border border-stone-800'
+                        }`}>
+                          <span className={`w-2 h-2 rounded-full shrink-0 ${out2 ? 'bg-cyan-400 animate-pulse' : 'bg-stone-600'}`} />
+                          <span>{out2 ? (isEn ? 'ACTIVE (1)' : 'SEMNAL ACTIV (1)') : (isEn ? 'INACTIVE (0)' : 'INACTIV (0)')}</span>
+                        </div>
+
+                        <span className={`px-2.5 py-0.5 rounded-lg text-xs font-mono font-black border shrink-0 ${
+                          out2 
+                            ? 'bg-cyan-500/30 text-cyan-200 border-cyan-400 shadow-sm' 
+                            : 'bg-stone-850 text-stone-500 border-stone-700'
+                        }`}>
+                          {out2 ? 'OUT = 1' : 'OUT = 0'}
                         </span>
-                      </h4>
-                      <p className="text-xs text-stone-300 break-words mt-0.5">
-                        {isEn 
-                          ? 'Outstanding work! The redstone logic condition has been satisfied.' 
-                          : 'Excelent! Condiția logică Redstone a fost validată cu succes.'}
-                      </p>
+                      </div>
                     </div>
                   </div>
-
-                  <button
-                    onClick={handleNextLevel}
-                    disabled={currentLevelIndex >= REDSTONE_LEVELS.length - 1}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
-                  >
-                    <span>{isEn ? 'Next Mission' : 'Misiunea Următoare'}</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
                 </div>
-              ) : (
-                <div className="relative z-10 mt-4 flex items-center justify-between gap-2 text-xs font-mono text-stone-400 flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setShowTruthTableModal(true)}
-                      className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-xs"
-                    >
-                      <Info className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>{isEn ? 'Truth Table' : 'Tabel Adevăr'}</span>
-                    </button>
-
-                    <button
-                      onClick={() => setShowHint(!showHint)}
-                      className="px-3 py-1.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer text-xs"
-                    >
-                      <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
-                      <span>{isEn ? 'Hint' : 'Indiciu'}</span>
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={handleResetCurrentLevel}
-                    className="px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-xs"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>{isEn ? 'Reset' : 'Resetează'}</span>
-                  </button>
-                </div>
-              )
-            )}
+              )}
+            </div>
           </div>
+
+          {/* Bottom Victory Banner or Level Actions */}
+          {!isSandboxMode && (
+            isLevelSolved ? (
+              <div className="relative z-10 mt-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-stone-900 to-emerald-950/90 border-2 border-emerald-500/80 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 animate-fadeIn">
+                <div className="flex items-center gap-3.5 w-full sm:w-auto">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 text-2xl shadow-inner">
+                    💎
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                      <span>{isEn ? 'Circuit Solved!' : 'Circuit Rezolvat cu Succes!'}</span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold">
+                        +{level.rewardDiamonds} 💎 | +{level.xpPoints} XP
+                      </span>
+                    </h4>
+                    <p className="text-xs sm:text-sm text-stone-300 break-words mt-0.5">
+                      {isEn 
+                        ? 'Outstanding work! The redstone logic condition has been satisfied.' 
+                        : 'Excelent! Condiția logică Redstone a fost validată cu succes.'}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleNextLevel}
+                  disabled={currentLevelIndex >= REDSTONE_LEVELS.length - 1}
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs sm:text-sm font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
+                >
+                  <span>{isEn ? 'Next Mission' : 'Misiunea Următoare'}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="relative z-10 mt-6 pt-4 border-t border-stone-800 flex items-center justify-between gap-3 text-xs font-mono text-stone-400 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowTruthTableModal(true)}
+                    className="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-2 cursor-pointer text-xs"
+                  >
+                    <Info className="w-4 h-4 text-cyan-400" />
+                    <span>{isEn ? 'Truth Table Guide' : 'Ghid Tabel Adevăr'}</span>
+                  </button>
+
+                  <button
+                    onClick={() => setShowHint(!showHint)}
+                    className="px-3.5 py-2 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-2 cursor-pointer text-xs"
+                  >
+                    <HelpCircle className="w-4 h-4 text-amber-400" />
+                    <span>{isEn ? 'Hint' : 'Indiciu'}</span>
+                  </button>
+                </div>
+
+                <button
+                  onClick={handleResetCurrentLevel}
+                  className="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-2 cursor-pointer text-xs"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  <span>{isEn ? 'Reset Levers' : 'Resetează Pârghiile'}</span>
+                </button>
+              </div>
+            )
+          )}
         </div>
 
-        {/* Right Column: Educational Principles & Live Truth Table (4 cols on lg) */}
-        <div className="lg:col-span-4 flex flex-col gap-4 w-full min-w-0">
-          {/* Logic Concept Card */}
-          <div className="bg-stone-900 border border-stone-800 rounded-3xl p-5 shadow-xl flex flex-col gap-3 w-full">
-            <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider">
+        {/* Educational Section Beneath Workbench (2 Spacious Cards) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-start">
+          {/* Left Column: Architectural Logic Principle & Hint */}
+          <div className="lg:col-span-6 bg-stone-900 border border-stone-800 rounded-3xl p-5 sm:p-6 shadow-xl flex flex-col gap-4 w-full">
+            <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider pb-2 border-b border-stone-800">
               <span className="flex items-center gap-2 text-rose-400">
                 <Cpu className="w-4 h-4" />
-                <span>{isEn ? 'Architecture Principle' : 'Principiul Logic TIC'}</span>
+                <span>{isEn ? 'Architecture Principle' : 'Principiul Logic TIC & Teoria Redstone'}</span>
               </span>
-              <span className="text-stone-500">
+              <span className="text-stone-400 bg-stone-950 px-2 py-0.5 rounded border border-stone-800">
                 {isSandboxMode ? 'SANDBOX' : level.gateType}
               </span>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-stone-950 border border-stone-800 text-xs text-stone-300 leading-relaxed break-words">
+            <div className="p-4 rounded-2xl bg-stone-950 border border-stone-800 text-xs sm:text-sm text-stone-300 leading-relaxed break-words">
               {isSandboxMode
                 ? (isEn
                   ? 'In Sandbox mode, test how logic gates combine binary inputs into outputs. Notice that NAND and NOR are universal gates capable of synthesizing any Boolean function!'
@@ -1212,12 +1263,12 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 : (isEn ? level.conceptEn : level.conceptRo)}
             </div>
 
-            {/* Teacher Hint */}
+            {/* Teacher Hint Card */}
             {!isSandboxMode && showHint && (
-              <div className="p-3.5 rounded-2xl bg-amber-950/50 border border-amber-500/40 text-amber-200 text-xs leading-relaxed animate-fadeIn flex items-start gap-2.5 break-words">
-                <span className="text-base shrink-0">💡</span>
+              <div className="p-4 rounded-2xl bg-amber-950/50 border border-amber-500/40 text-amber-200 text-xs sm:text-sm leading-relaxed animate-fadeIn flex items-start gap-3 break-words">
+                <span className="text-xl shrink-0">💡</span>
                 <div>
-                  <strong className="block text-amber-300 font-bold mb-0.5">
+                  <strong className="block text-amber-300 font-bold mb-1">
                     {isEn ? 'Engineering Tip:' : 'Sfatul Inginerului Redstone:'}
                   </strong>
                   {isEn ? level.hintEn : level.hintRo}
@@ -1225,78 +1276,93 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               </div>
             )}
 
-            {/* Compact Live Truth Table with Neon Highlighting */}
-            {!isSandboxMode && (
-              <div className="w-full mt-1">
-                <div className="text-xs font-mono text-stone-400 font-bold uppercase mb-2 flex items-center justify-between">
-                  <span>{isEn ? 'Live Truth Table' : 'Tabel de Adevăr Live'}</span>
-                  <span className="text-[10px] text-stone-500">Auto-Highlight</span>
-                </div>
-
-                <div className="overflow-x-auto rounded-xl border border-stone-800 bg-stone-950 text-xs font-mono w-full">
-                  <table className="w-full text-left">
-                    <thead className="bg-stone-900 border-b border-stone-800 text-stone-400 text-[10px]">
-                      <tr>
-                        {level.inputs.map((inp) => (
-                          <th key={inp.id} className="p-2 text-center">{inp.id}</th>
-                        ))}
-                        <th className="p-2 text-right">{isEn ? 'Out' : 'Ieșire'}</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-stone-850">
-                      {level.truthTable.map((row, rIdx) => {
-                        const isCurrent = row.inputs.every((val, vIdx) => val === levelInputs[vIdx]);
-
-                        return (
-                          <tr 
-                            key={rIdx} 
-                            className={`transition-colors ${
-                              isCurrent 
-                                ? 'bg-rose-950/60 font-bold text-rose-300 ring-1 ring-rose-500/50' 
-                                : 'text-stone-400 hover:bg-stone-900/40'
-                            }`}
-                          >
-                            {row.inputs.map((val, vIdx) => (
-                              <td key={vIdx} className="p-2 text-center">
-                                {val ? '1' : '0'}
-                              </td>
-                            ))}
-                            <td className="p-2 text-right">
-                              <span className={`px-2 py-0.5 rounded text-[11px] ${
-                                row.output1 
-                                  ? 'bg-emerald-500/20 text-emerald-300 font-bold' 
-                                  : 'bg-stone-800 text-stone-500'
-                              }`}>
-                                {row.output1 ? '1' : '0'}
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+            {/* Certification Badge */}
+            <div className="bg-gradient-to-br from-cyan-950/50 to-stone-900 border border-cyan-500/30 rounded-2xl p-4 flex items-center justify-between gap-3 w-full mt-auto">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-3xl shrink-0">⛏️</span>
+                <div className="min-w-0">
+                  <h4 className="text-xs sm:text-sm font-bold text-white uppercase font-mono truncate">
+                    {isEn ? 'Master Redstone Architect' : 'Inginer Certificat Redstone'}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-stone-400 mt-0.5">
+                    {completedLevels.length} / {REDSTONE_LEVELS.length} {isEn ? 'Missions Completed' : 'Misiuni Finalizate'}
+                  </p>
                 </div>
               </div>
-            )}
+
+              <div className="text-right font-mono text-cyan-300 font-black text-sm sm:text-base shrink-0">
+                {Math.round((completedLevels.length / REDSTONE_LEVELS.length) * 100)}%
+              </div>
+            </div>
           </div>
 
-          {/* Minecraft Certification Card */}
-          <div className="bg-gradient-to-br from-cyan-950/50 to-stone-900 border border-cyan-500/30 rounded-3xl p-4 sm:p-5 shadow-xl flex items-center justify-between gap-3 w-full">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="text-3xl shrink-0">⛏️</span>
-              <div className="min-w-0">
-                <h4 className="text-xs font-bold text-white uppercase font-mono truncate">
-                  {isEn ? 'Master Redstone Architect' : 'Inginer Certificat Redstone'}
-                </h4>
-                <p className="text-[11px] text-stone-400 mt-0.5">
-                  {completedLevels.length} / {REDSTONE_LEVELS.length} {isEn ? 'Missions Completed' : 'Misiuni Finalizate'}
-                </p>
-              </div>
+          {/* Right Column: Live Interactive Truth Table */}
+          <div className="lg:col-span-6 bg-stone-900 border border-stone-800 rounded-3xl p-5 sm:p-6 shadow-xl flex flex-col gap-3 w-full">
+            <div className="text-xs font-mono text-stone-400 font-bold uppercase pb-2 border-b border-stone-800 flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-rose-400">
+                <Lightbulb className="w-4 h-4" />
+                <span>{isEn ? 'Live Truth Table' : 'Tabel de Adevăr Interactiv Live'}</span>
+              </span>
+              <span className="text-[10px] text-stone-500 bg-stone-950 px-2 py-0.5 rounded border border-stone-800">
+                {isEn ? 'Auto-Highlighting' : 'Linia Activă Iluminată'}
+              </span>
             </div>
 
-            <div className="text-right font-mono text-cyan-300 font-bold text-xs sm:text-sm shrink-0">
-              {Math.round((completedLevels.length / REDSTONE_LEVELS.length) * 100)}%
-            </div>
+            {!isSandboxMode ? (
+              <div className="overflow-x-auto rounded-2xl border border-stone-800 bg-stone-950 text-xs font-mono w-full">
+                <table className="w-full text-left">
+                  <thead className="bg-stone-900 border-b border-stone-800 text-stone-400 text-xs">
+                    <tr>
+                      {level.inputs.map((inp) => (
+                        <th key={inp.id} className="p-3 text-center font-bold">
+                          {inp.id}
+                        </th>
+                      ))}
+                      <th className="p-3 text-right font-bold">{isEn ? 'Output Result' : 'Ieșire Rezultat'}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-850">
+                    {level.truthTable.map((row, rIdx) => {
+                      const isCurrent = row.inputs.every((val, vIdx) => val === levelInputs[vIdx]);
+
+                      return (
+                        <tr 
+                          key={rIdx} 
+                          className={`transition-all ${
+                            isCurrent 
+                              ? 'bg-rose-950/80 font-bold text-rose-200 ring-2 ring-rose-500/80 shadow-md' 
+                              : 'text-stone-400 hover:bg-stone-900/50'
+                          }`}
+                        >
+                          {row.inputs.map((val, vIdx) => (
+                            <td key={vIdx} className="p-3 text-center">
+                              <span className={`px-2 py-0.5 rounded font-mono font-bold ${val ? 'bg-rose-500/20 text-rose-300' : 'text-stone-500'}`}>
+                                {val ? '1' : '0'}
+                              </span>
+                            </td>
+                          ))}
+                          <td className="p-3 text-right">
+                            <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-black ${
+                              row.output1 
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
+                                : 'bg-stone-900 text-stone-500 border border-stone-800'
+                            }`}>
+                              {row.output1 ? '1 (ACTIV)' : '0 (BLOCAT)'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="p-6 rounded-2xl bg-stone-950 border border-stone-800 text-center text-stone-400 text-xs leading-relaxed">
+                {isEn 
+                  ? 'Switch between logic gates above in Sandbox to test different truth table behaviors in real-time!' 
+                  : 'Comută între porțile logice de mai sus în modul Sandbox pentru a testa comportamentul tabelului de adevăr în timp real!'}
+              </div>
+            )}
           </div>
         </div>
       </div>

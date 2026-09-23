@@ -204,9 +204,23 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       : '🤖'
   );
 
-  // Match Status
+  // Match Status & Match Timer (când expiră cronometrul)
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState<'me' | 'opponent' | null>(null);
+  const [matchTimeLeft, setMatchTimeLeft] = useState(60);
+
+  // Firestore Throttling & Safety Refs (Protecție Cota Firebase Spark 20.000 scrieri/zi)
+  const latestBloxRef = useRef(0);
+  const lastSyncedBloxRef = useRef(-1);
+  const isGameOverRef = useRef(false);
+  const isSyncStoppedRef = useRef(false);
+  const syncIntervalRef = useRef<any>(null);
+  const matchTimerRef = useRef<any>(null);
+
+  // Păstrează scorul curent în memoria locală sincronizat în ref instantaneu
+  useEffect(() => {
+    latestBloxRef.current = blox;
+  }, [blox]);
 
   // Sound changes listener
   useEffect(() => {
@@ -323,15 +337,77 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     }
   }, [roomData, isHost, isGameOver]);
 
-  // Sync My Progress to Cloud
+  // 60-Second Match Countdown Timer
   useEffect(() => {
-    if (!roomData || isGameOver) return;
-    const progressPercent = Math.min(100, Math.round((blox / TARGET_GOAL) * 100));
-    updateDuelProgress(roomData.roomCode, isHost, {
-      score: blox,
-      progress: progressPercent
-    });
-  }, [blox, roomData, isHost, isGameOver]);
+    if (isGameOver) {
+      if (matchTimerRef.current) {
+        clearInterval(matchTimerRef.current);
+        matchTimerRef.current = null;
+      }
+      return;
+    }
+
+    matchTimerRef.current = setInterval(() => {
+      setMatchTimeLeft((prev) => {
+        if (prev <= 1) {
+          if (matchTimerRef.current) {
+            clearInterval(matchTimerRef.current);
+            matchTimerRef.current = null;
+          }
+          handleTimeExpired();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (matchTimerRef.current) {
+        clearInterval(matchTimerRef.current);
+        matchTimerRef.current = null;
+      }
+    };
+  }, [isGameOver]);
+
+  // Throttled 1-second sync to Firestore (at most once every 1000ms, only if score changed!)
+  useEffect(() => {
+    if (!roomData || isGameOver) {
+      if (syncIntervalRef.current) {
+        clearInterval(syncIntervalRef.current);
+        syncIntervalRef.current = null;
+      }
+      return;
+    }
+
+    // Set up 1000ms throttled Firestore sync
+    syncIntervalRef.current = setInterval(() => {
+      if (isGameOverRef.current || isSyncStoppedRef.current) {
+        if (syncIntervalRef.current) {
+          clearInterval(syncIntervalRef.current);
+          syncIntervalRef.current = null;
+        }
+        return;
+      }
+
+      const currentScore = latestBloxRef.current;
+      // Strict Spark quota optimization: Only write to Firestore if score actually changed
+      if (currentScore !== lastSyncedBloxRef.current) {
+        lastSyncedBloxRef.current = currentScore;
+        const progressPercent = Math.min(100, Math.round((currentScore / TARGET_GOAL) * 100));
+        updateDuelProgress(roomData.roomCode, isHost, {
+          score: currentScore,
+          progress: progressPercent
+        });
+      }
+    }, 1000);
+
+    return () => {
+      if (syncIntervalRef.current) {
+        clearInterval(syncIntervalRef.current);
+        syncIntervalRef.current = null;
+      }
+    };
+  }, [roomData?.roomCode, isHost, isGameOver]);
 
   const spawnMiniBoss = () => {
     const randomQ = TIC_BOSS_QUESTIONS[Math.floor(Math.random() * TIC_BOSS_QUESTIONS.length)];
@@ -513,31 +589,82 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     }
   };
 
-  // Check Win Condition
+  // Final authoritative safe write to Firestore
+  const handleFinalSafetySync = (finalScore: number, didIWin: boolean) => {
+    if (isSyncStoppedRef.current) return;
+    isSyncStoppedRef.current = true;
+
+    // Immediately stop the recurring sync timer
+    if (syncIntervalRef.current) {
+      clearInterval(syncIntervalRef.current);
+      syncIntervalRef.current = null;
+    }
+
+    if (roomData) {
+      const progressPercent = Math.min(100, Math.round((finalScore / TARGET_GOAL) * 100));
+      updateDuelProgress(
+        roomData.roomCode,
+        isHost,
+        {
+          score: finalScore,
+          progress: didIWin ? 100 : progressPercent,
+          finishedAt: Date.now()
+        },
+        didIWin ? (isHost ? roomData.host.id : roomData.guest?.id) : undefined,
+        didIWin ? studentName : undefined
+      );
+    }
+  };
+
+  const handleTimeExpired = () => {
+    if (isGameOver || isGameOverRef.current) return;
+    isGameOverRef.current = true;
+    setIsGameOver(true);
+
+    const myFinal = latestBloxRef.current;
+    const oppFinal = opponentBlox;
+    const didIWin = myFinal >= oppFinal;
+
+    setWinner(didIWin ? 'me' : 'opponent');
+    if (didIWin) {
+      if (!soundMuted) sounds.playVictory();
+    } else {
+      if (!soundMuted) sounds.playOof();
+    }
+
+    updateStudentArcadeScore('roblox_clicker', myFinal);
+    handleFinalSafetySync(myFinal, didIWin);
+
+    if (onFinish) onFinish(myFinal);
+  };
+
+  // Check Win Condition (reaches TARGET_GOAL)
   const checkVictory = (currentBlox: number) => {
-    if (currentBlox >= TARGET_GOAL && !isGameOver) {
+    if (currentBlox >= TARGET_GOAL && !isGameOver && !isGameOverRef.current) {
+      isGameOverRef.current = true;
       setIsGameOver(true);
       setWinner('me');
       if (!soundMuted) sounds.playVictory();
 
-      // Record high score & sync room
+      // Record high score & sync room with safety final write
       updateStudentArcadeScore('roblox_clicker', currentBlox);
-      if (roomData) {
-        updateDuelProgress(roomData.roomCode, isHost, {
-          score: currentBlox,
-          progress: 100,
-          finishedAt: Date.now()
-        }, isHost ? roomData.host.id : roomData.guest?.id, studentName);
-      }
+      handleFinalSafetySync(currentBlox, true);
+
       if (onFinish) onFinish(currentBlox);
     }
   };
 
   const triggerOpponentWin = () => {
+    if (isGameOver || isGameOverRef.current) return;
+    isGameOverRef.current = true;
     setIsGameOver(true);
     setWinner('opponent');
     if (!soundMuted) sounds.playOof();
-    if (onFinish) onFinish(blox);
+
+    const finalBlox = latestBloxRef.current;
+    handleFinalSafetySync(finalBlox, false);
+
+    if (onFinish) onFinish(finalBlox);
   };
 
   const myProgress = Math.min(100, Math.round((blox / TARGET_GOAL) * 100));
@@ -585,6 +712,19 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Match Countdown Timer Badge */}
+          <div
+            title={lang === 'en' ? 'Match Time Remaining' : 'Timp Rămas Meci'}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm ${
+              matchTimeLeft <= 10
+                ? 'bg-rose-950/80 border-rose-500/60 text-rose-300 animate-pulse'
+                : 'bg-slate-900/80 border-amber-500/40 text-amber-300'
+            }`}
+          >
+            <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${matchTimeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-amber-400'}`} />
+            <span>{matchTimeLeft}s</span>
+          </div>
+
           <button
             onClick={() => sounds.toggle()}
             className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
@@ -1112,8 +1252,13 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 type="button"
                 onClick={() => {
                   sounds.playClick();
+                  isGameOverRef.current = false;
+                  isSyncStoppedRef.current = false;
+                  latestBloxRef.current = 0;
+                  lastSyncedBloxRef.current = -1;
                   setBlox(0);
                   setOpponentBlox(0);
+                  setMatchTimeLeft(60);
                   setIsGameOver(false);
                   setWinner(null);
                 }}
