@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
 import { TypingGame } from './TypingGame';
@@ -18,6 +18,14 @@ import { CyberDinoRunner } from './CyberDinoRunner';
 import { RedstoneLogicLab } from './RedstoneLogicLab';
 import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
 import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
+import { GameLockedModal } from '../common/GameLockedModal';
+import {
+  subscribeGameSettings,
+  isGameOpen,
+  GameSettings,
+  DEFAULT_GAME_SETTINGS,
+  ALL_GAMES,
+} from '../../lib/gameControlService';
 import {
   Gamepad2,
   Keyboard,
@@ -43,6 +51,7 @@ import {
   Swords,
   Footprints,
   Boxes,
+  Lock,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -56,6 +65,33 @@ type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
   const [activeGame, setActiveGame] = useState<ActiveGame>('hub');
+  const [gameSettings, setGameSettings] = useState<GameSettings>(DEFAULT_GAME_SETTINGS);
+  const [lockedModalInfo, setLockedModalInfo] = useState<{ id: string; title: string } | null>(null);
+
+  useEffect(() => {
+    const unsub = subscribeGameSettings((settings) => {
+      setGameSettings(settings);
+    });
+    return () => unsub();
+  }, []);
+
+  const handleTryLaunchGame = (gameId: ActiveGame | 'duel', titleRo: string, titleEn: string) => {
+    sounds.playClick();
+    const open = isGameOpen(gameSettings, gameId);
+    if (!open) {
+      sounds.playWrong();
+      setLockedModalInfo({
+        id: gameId,
+        title: lang === 'en' ? titleEn : titleRo,
+      });
+      return;
+    }
+    if (gameId === 'duel') {
+      onOpenDuel?.();
+    } else {
+      setActiveGame(gameId as ActiveGame);
+    }
+  };
 
   // Load High Scores
   const typingHighScore = (() => {
@@ -202,6 +238,65 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  // Intercept locked game if active
+  if (activeGame !== 'hub' && !isGameOpen(gameSettings, activeGame)) {
+    const gameDef = ALL_GAMES.find((g) => g.id === activeGame);
+    const title = gameDef ? (lang === 'en' ? gameDef.titleEn : gameDef.titleRo) : 'Mini-Joc';
+    return (
+      <div className="flex flex-col items-center justify-center p-6 min-h-[50vh] text-center">
+        <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl">
+          <div className="w-16 h-16 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 mx-auto mb-3 shadow-lg">
+            <Lock className="w-8 h-8 animate-pulse" />
+          </div>
+          <h2 className="text-2xl font-black text-white font-heading">
+            {title}
+          </h2>
+          <p className="text-xs text-rose-300 font-mono mt-1 font-bold">
+            {lang === 'en' ? 'Acest joc este închis de profesor' : 'Acest joc este închis de profesor'}
+          </p>
+          <div className="my-4 p-4 rounded-2xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-300 text-left">
+            <p className="font-semibold text-indigo-300 mb-1">
+              {lang === 'en' ? 'Teacher Announcement:' : 'Mesajul Profesorului:'}
+            </p>
+            <p className="italic text-slate-200">
+              "{gameSettings.customMessage}"
+            </p>
+          </div>
+          <div className="flex flex-col gap-2.5">
+            <button
+              onClick={() => {
+                sounds.playClick();
+                setActiveGame('hub');
+              }}
+              className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer"
+            >
+              ← {lang === 'en' ? 'Back to Mini-Games Catalog' : 'Înapoi la Mini-Jocuri'}
+            </button>
+            <button
+              onClick={() => {
+                setLockedModalInfo({
+                  id: activeGame,
+                  title,
+                });
+              }}
+              className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs cursor-pointer"
+            >
+              {lang === 'en' ? 'Request Unlock 🙋‍♂️' : 'Solicită Deschiderea Jocului 🙋‍♂️'}
+            </button>
+          </div>
+        </div>
+        <GameLockedModal
+          isOpen={!!lockedModalInfo}
+          onClose={() => setLockedModalInfo(null)}
+          gameId={lockedModalInfo?.id || ''}
+          gameTitle={lockedModalInfo?.title || ''}
+          studentName={studentName}
+          customMessage={gameSettings.customMessage}
+        />
+      </div>
+    );
+  }
+
   if (activeGame === 'roblox_clicker') {
     return (
       <RobloxClickerDuelGame
@@ -290,6 +385,54 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     return <FirewallDefenderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
+  const renderGameActionButton = (
+    gameId: ActiveGame,
+    titleRo: string,
+    titleEn: string,
+    actionLabelRo: string,
+    actionLabelEn: string,
+    bgClass: string,
+    buttonId?: string
+  ) => {
+    const isOpen = isGameOpen(gameSettings, gameId);
+    if (!isOpen) {
+      return (
+        <button
+          id={buttonId}
+          type="button"
+          onClick={() => handleTryLaunchGame(gameId, titleRo, titleEn)}
+          className="px-3.5 py-2 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-rose-900/30 cursor-pointer active:scale-95"
+          title={lang === 'en' ? 'Game locked by teacher' : 'Joc închis de profesor'}
+        >
+          <Lock className="w-3.5 h-3.5 text-rose-400" />
+          <span>{lang === 'en' ? 'Locked' : 'Joc Închis'}</span>
+        </button>
+      );
+    }
+    return (
+      <button
+        id={buttonId}
+        type="button"
+        onClick={() => handleTryLaunchGame(gameId, titleRo, titleEn)}
+        className={`px-3.5 py-2 rounded-xl ${bgClass} text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg cursor-pointer active:scale-95`}
+      >
+        <span>{lang === 'en' ? actionLabelEn : actionLabelRo}</span>
+        <ArrowRight className="w-3.5 h-3.5" />
+      </button>
+    );
+  };
+
+  const renderCardLockBadge = (gameId: string) => {
+    const isOpen = isGameOpen(gameSettings, gameId);
+    if (isOpen) return null;
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
+        <Lock className="w-3 h-3 text-rose-400" />
+        <span>{lang === 'en' ? 'Locked' : 'Închis de Profesor'}</span>
+      </span>
+    );
+  };
+
   return (
     <div className="flex flex-col gap-8 pb-10">
       {/* Header Banner */}
@@ -352,7 +495,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                14 {lang === 'en' ? 'Arcade Games Available' : 'Jocuri Disponibile'}
+                {ALL_GAMES.filter((g) => g.id !== 'duel' && isGameOpen(gameSettings, g.id)).length} / 17 {lang === 'en' ? 'Games Open' : 'Jocuri Deschise'}
               </div>
             </div>
           </div>
@@ -361,21 +504,40 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
       {/* Featured 1v1 Realtime Duel Arena Card */}
       {onOpenDuel && (
-        <div className="relative overflow-hidden bg-gradient-to-r from-rose-950/70 via-slate-900 to-amber-950/60 border-2 border-rose-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl">
+        <div className={`relative overflow-hidden border-2 rounded-3xl p-5 sm:p-6 shadow-2xl transition-all ${
+          isGameOpen(gameSettings, 'duel')
+            ? 'bg-gradient-to-r from-rose-950/70 via-slate-900 to-amber-950/60 border-rose-500/50'
+            : 'bg-slate-950/90 border-rose-500/40 opacity-90'
+        }`}>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start sm:items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-amber-400/40">
-                <Swords className="w-6 h-6 animate-pulse" />
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ${
+                isGameOpen(gameSettings, 'duel')
+                  ? 'bg-gradient-to-tr from-rose-500 to-amber-500 ring-amber-400/40'
+                  : 'bg-rose-950 border border-rose-500/50 text-rose-400 ring-rose-500/20'
+              }`}>
+                {isGameOpen(gameSettings, 'duel') ? (
+                  <Swords className="w-6 h-6 animate-pulse" />
+                ) : (
+                  <Lock className="w-6 h-6 text-rose-400" />
+                )}
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
                     MULTIPLAYER 1V1
                   </span>
-                  <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
-                  </span>
+                  {isGameOpen(gameSettings, 'duel') ? (
+                    <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-rose-400 font-mono font-bold flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      {lang === 'en' ? 'Locked by Teacher' : 'Închis de Profesor'}
+                    </span>
+                  )}
                 </div>
                 <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
                   {lang === 'en' ? 'Duel Arena: Challenge a Classmate!' : 'Arena Duel: Provoacă un Coleg de Bancă!'}
@@ -389,15 +551,25 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </div>
 
             <button
-              onClick={() => {
-                sounds.playClick();
-                onOpenDuel();
-              }}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer shrink-0 active:scale-95"
+              onClick={() => handleTryLaunchGame('duel', 'Arena Duel 1v1', 'Duel Arena 1v1')}
+              className={`w-full sm:w-auto px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 ${
+                isGameOpen(gameSettings, 'duel')
+                  ? 'bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white shadow-rose-600/30'
+                  : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 shadow-rose-950/40'
+              }`}
             >
-              <Swords className="w-4 h-4" />
-              <span>{lang === 'en' ? 'Launch Duel 1v1' : 'Lansează Duel 1v1'}</span>
-              <ArrowRight className="w-4 h-4" />
+              {isGameOpen(gameSettings, 'duel') ? (
+                <>
+                  <Swords className="w-4 h-4" />
+                  <span>{lang === 'en' ? 'Launch Duel 1v1' : 'Lansează Duel 1v1'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  <Lock className="w-4 h-4 text-rose-400" />
+                  <span>{lang === 'en' ? 'Locked' : 'Joc Închis'}</span>
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -406,15 +578,20 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {/* Game 1: Speed Typing */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-cyan-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'typing') ? 'border-slate-700/80 hover:border-cyan-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                 <Keyboard className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{typingHighScore} WPM</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('typing')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{typingHighScore} WPM</span>
+                </div>
               </div>
             </div>
 
@@ -435,29 +612,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">⏱️ 30s / 60s</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('typing');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Play Now' : 'Joacă Acum'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'typing',
+              'Vitezomanul Tastaturii',
+              'Speed Typing TIC',
+              'Joacă Acum',
+              'Play Now',
+              'bg-cyan-600 hover:bg-cyan-500 shadow-cyan-600/30'
+            )}
           </div>
         </div>
 
         {/* Game 2: Mouse Agility */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'mouse') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
                 <MousePointer className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{mouseHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('mouse')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{mouseHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -478,29 +658,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">⏱️ 45s</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('mouse');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Play Now' : 'Joacă Acum'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'mouse',
+              'Maestrul Mouse-ului',
+              'Mouse Master',
+              'Joacă Acum',
+              'Play Now',
+              'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30'
+            )}
           </div>
         </div>
 
         {/* Game 3: 2048 Binary */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-amber-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, '2048') ? 'border-slate-700/80 hover:border-amber-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
                 <Binary className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{game2048HighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('2048')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{game2048HighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -526,29 +709,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🧠 Puzzle</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('2048');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Play Now' : 'Joacă Acum'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              '2048',
+              '2048 Binar TIC',
+              '2048 Binary Bytes',
+              'Joacă Acum',
+              'Play Now',
+              'bg-amber-600 hover:bg-amber-500 shadow-amber-600/30'
+            )}
           </div>
         </div>
 
         {/* Game 4: PC Builder (Constructorul de PC-uri - Misiunea Hardware) */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-blue-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'pcbuilder') ? 'border-slate-700/80 hover:border-blue-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
                 <Cpu className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{pcBuilderHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('pcbuilder')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{pcBuilderHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -569,29 +755,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🖥️ 3 Niveluri & POST</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('pcbuilder');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Assemble' : 'Asamblează'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'pcbuilder',
+              'Constructorul de PC-uri',
+              'PC Builder: Hardware Mission',
+              'Asamblează',
+              'Assemble',
+              'bg-blue-600 hover:bg-blue-500 shadow-blue-600/30'
+            )}
           </div>
         </div>
 
         {/* Game 5: Cyber Dino: Matrix Rush (Dinozaurul Chrome TIC) */}
-        <div className="bg-slate-900/90 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-emerald-950/30 to-slate-900">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-emerald-950/30 to-slate-900 ${
+          isGameOpen(gameSettings, 'cyber_dino') ? 'border-emerald-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 🦖
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{cyberDinoHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_dino')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{cyberDinoHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -616,31 +805,33 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri & Lasere</span>
-            <button
-              id="arcade-btn-start-cyber-dino"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('cyber_dino');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Run' : 'Joacă'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'cyber_dino',
+              'Cyber Dino: Matrix Rush',
+              'Cyber Dino Runner',
+              'Joacă',
+              'Run',
+              'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-emerald-600/30',
+              'arcade-btn-start-cyber-dino'
+            )}
           </div>
         </div>
 
         {/* Game 6: Cyber-Safe Detective */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'detective') ? 'border-slate-700/80 hover:border-rose-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
                 <ShieldAlert className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{cyberHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('detective')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{cyberHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -661,29 +852,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🔍 8 Cazuri & Lupă</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('detective');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Investigate' : 'Anchetă'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'detective',
+              'Detectivul Cyber-Safe',
+              'Cyber-Safe Detective',
+              'Anchetă',
+              'Investigate',
+              'bg-rose-600 hover:bg-rose-500 shadow-rose-600/30'
+            )}
           </div>
         </div>
 
         {/* Game 7: File Organizer Express */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-blue-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'files') ? 'border-slate-700/80 hover:border-blue-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
                 <Folder className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{filesHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('files')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{filesHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -704,29 +898,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">⏱️ 45s Sprint</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('files');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Organize' : 'Sortează'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'files',
+              'Sortatorul de Fișiere',
+              'File Tree Master',
+              'Sortează',
+              'Organize',
+              'bg-blue-600 hover:bg-blue-500 shadow-blue-600/30'
+            )}
           </div>
         </div>
 
         {/* Game 8: Redstone Logic Lab (Minecraft TIC Edition) - Position 8 */}
-        <div className="bg-slate-900/90 border-2 border-rose-500/60 hover:border-rose-400 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-rose-950/25 to-slate-900">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-rose-950/25 to-slate-900 ${
+          isGameOpen(gameSettings, 'redstone_lab') ? 'border-rose-500/60 hover:border-rose-400' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-600/20">
                 ⛏️
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{redstoneLabHighScore} XP</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('redstone_lab')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{redstoneLabHighScore} XP</span>
+                </div>
               </div>
             </div>
 
@@ -753,31 +950,33 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-rose-400 font-mono">💎 Diamante & XP</span>
-            <button
-              id="arcade-btn-start-redstone-lab"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('redstone_lab');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Enter Lab' : 'Intră în Lab'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'redstone_lab',
+              'Circuite Redstone',
+              'Redstone Logic Lab',
+              'Intră în Lab',
+              'Enter Lab',
+              'bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 shadow-rose-600/30',
+              'arcade-btn-start-redstone-lab'
+            )}
           </div>
         </div>
 
         {/* Game 9: Binary Bit Factory */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-amber-400/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'binary_factory') ? 'border-slate-700/80 hover:border-amber-400/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
                 <Zap className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{binaryFactoryHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('binary_factory')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{binaryFactoryHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -798,29 +997,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">💡 4 sau 8 Biți</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('binary_factory');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Decode' : 'Decodifică'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'binary_factory',
+              'Decodorul Binar (0 și 1)',
+              'Binary Bit Factory',
+              'Decodifică',
+              'Decode',
+              'bg-amber-600 hover:bg-amber-500 shadow-amber-600/30'
+            )}
           </div>
         </div>
 
-        {/* Game 9: Algorithm Maze Robot */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        {/* Game 10: Algorithm Maze Robot */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'maze') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
                 <Bot className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{mazeHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('maze')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{mazeHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -841,29 +1043,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🤖 5 Niveluri TIC</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('maze');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Program' : 'Programează'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'maze',
+              'Labirintul Algoritmic',
+              'Algorithm Maze Robot',
+              'Programează',
+              'Program',
+              'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30'
+            )}
           </div>
         </div>
 
-        {/* Game 10: Firewall Defender */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-red-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        {/* Game 11: Firewall Defender */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'firewall') ? 'border-slate-700/80 hover:border-red-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-red-500/15 border-2 border-red-500/30 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-red-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{firewallHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('firewall')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-red-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{firewallHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -884,29 +1089,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🛡️ 45s Defensă</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('firewall');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-red-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Defend' : 'Apără'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'firewall',
+              'Scutul Antivirus & Firewall',
+              'Firewall Defender',
+              'Apără',
+              'Defend',
+              'bg-red-600 hover:bg-red-500 shadow-red-600/30'
+            )}
           </div>
         </div>
 
-        {/* Game 11: RGB Pixel Master (Grafică Digitală 2D & Pixeli) */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-purple-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        {/* Game 12: RGB Pixel Master (Grafică Digitală 2D & Pixeli) */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'rgb_pixel') ? 'border-slate-700/80 hover:border-purple-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border-2 border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
                 <Palette className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-purple-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{rgbHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('rgb_pixel')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-purple-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{rgbHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -927,29 +1135,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🎨 3 Moduri TIC</span>
-            <button
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('rgb_pixel');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Paint' : 'Pictează'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'rgb_pixel',
+              'Maestrul Pixelilor RGB',
+              'RGB Pixel Master',
+              'Pictează',
+              'Paint',
+              'bg-purple-600 hover:bg-purple-500 shadow-purple-600/30'
+            )}
           </div>
         </div>
 
-        {/* Game 12: Byte Slider 3x3 (Puzzle-ul Unităților de Date & Jocul 15) */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-emerald-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1">
+        {/* Game 13: Byte Slider 3x3 (Puzzle-ul Unităților de Date & Jocul 15) */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'byte_slider') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
                 <Layers className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{byteSliderHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('byte_slider')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{byteSliderHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -970,32 +1181,34 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🧩 8 Unități + Liber</span>
-            <button
-              id="arcade-btn-start-byte-slider"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('byte_slider');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Slide' : 'Rezolvă'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'byte_slider',
+              'Byte Slider 3×3 (Jocul 15)',
+              'Byte Slider 3×3',
+              'Rezolvă',
+              'Slide',
+              'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30',
+              'arcade-btn-start-byte-slider'
+            )}
           </div>
         </div>
 
-        {/* Game 13: File-Drop (Tetris cu Fișiere & Extensii) */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-sky-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+        {/* Game 14: File-Drop (Tetris cu Fișiere & Extensii) */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'file_drop') ? 'border-slate-700/80 hover:border-sky-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div className="absolute -top-12 -right-12 w-28 h-28 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-sky-500/15 border-2 border-sky-500/30 flex items-center justify-center text-sky-400 group-hover:scale-110 transition-transform">
                 <FileDown className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-sky-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{fileDropHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('file_drop')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-sky-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{fileDropHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -1017,32 +1230,34 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">⚡ 5 Foldere + Stack</span>
-            <button
-              id="arcade-btn-start-file-drop"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('file_drop');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-sky-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Drop' : 'Joacă'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'file_drop',
+              'File-Drop (Tetris Fișiere)',
+              'File-Drop (Tetris)',
+              'Joacă',
+              'Drop',
+              'bg-sky-600 hover:bg-sky-500 shadow-sky-600/30',
+              'arcade-btn-start-file-drop'
+            )}
           </div>
         </div>
 
-        {/* Game 14: Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
-        <div className="bg-slate-900/90 border-2 border-slate-700/80 hover:border-rose-500/60 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+        {/* Game 15: Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'virus_sweeper') ? 'border-slate-700/80 hover:border-rose-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div className="absolute -top-12 -right-12 w-28 h-28 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
                 <Biohazard className="w-6 h-6 animate-pulse" />
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{virusSweeperHighScore} pts</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('virus_sweeper')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{virusSweeperHighScore} pts</span>
+                </div>
               </div>
             </div>
 
@@ -1064,32 +1279,34 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-slate-400 font-mono">🛡️ Scut + Sonar + Buffer</span>
-            <button
-              id="arcade-btn-start-virus-sweeper"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('virus_sweeper');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Sweep' : 'Joacă'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'virus_sweeper',
+              'Căutătorul de Viruși (Minesweeper)',
+              'Virus Sweeper (Cyber-Safe)',
+              'Joacă',
+              'Sweep',
+              'bg-rose-600 hover:bg-rose-500 shadow-rose-600/30',
+              'arcade-btn-start-virus-sweeper'
+            )}
           </div>
         </div>
 
-        {/* Game 15: Roblox Blox Clicker Champion (Hardware Clicker, Pet Gacha & Boss Raids) */}
-        <div className="bg-gradient-to-b from-slate-900 via-rose-950/30 to-slate-900 border-2 border-rose-500/60 hover:border-rose-400 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+        {/* Game 16: Roblox Blox Clicker Champion (Hardware Clicker, Pet Gacha & Boss Raids) */}
+        <div className={`bg-gradient-to-b from-slate-900 via-rose-950/30 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'roblox_clicker') ? 'border-rose-500/60 hover:border-rose-400' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20">
                 🟥
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{robloxClickerHighScore} Blox</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('roblox_clicker')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{robloxClickerHighScore} Blox</span>
+                </div>
               </div>
             </div>
 
@@ -1116,32 +1333,34 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
             <span className="text-[11px] text-rose-400 font-mono">⚡ Clicker + Gacha + PvP</span>
-            <button
-              id="arcade-btn-start-roblox-clicker"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('roblox_clicker');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs font-mono transition flex items-center gap-1.5 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Play Clicker' : 'Joacă Clicker'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'roblox_clicker',
+              'Roblox Blox Clicker: Pet & Boss',
+              'Roblox Blox Clicker Champion',
+              'Joacă Clicker',
+              'Play Clicker',
+              'bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 shadow-rose-600/30',
+              'arcade-btn-start-roblox-clicker'
+            )}
           </div>
         </div>
 
-        {/* Game 16: Minecraft Voxel Logic Architect (Arhitectul de Calculatoare Voxel) - Placed as the LAST ultimate game */}
-        <div className="bg-gradient-to-b from-stone-900 via-emerald-950/20 to-stone-900 border-2 border-emerald-500/60 hover:border-emerald-400 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden">
+        {/* Game 17: Minecraft Voxel Logic Architect (Arhitectul de Calculatoare Voxel) */}
+        <div className={`bg-gradient-to-b from-stone-900 via-emerald-950/20 to-stone-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'voxel_architect') ? 'border-emerald-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
+        }`}>
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20">
                 🧱
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-950 border border-stone-800 text-[11px] font-mono text-emerald-300">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{voxelArchitectHighScore} XP</span>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('voxel_architect')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-950 border border-stone-800 text-[11px] font-mono text-emerald-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{voxelArchitectHighScore} XP</span>
+                </div>
               </div>
             </div>
 
@@ -1168,21 +1387,31 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
           <div className="pt-2 border-t border-stone-800 flex items-center justify-between">
             <span className="text-[11px] text-emerald-400 font-mono">⚡ 15 PWR + Porți Logice</span>
-            <button
-              id="arcade-btn-start-voxel-architect"
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                setActiveGame('voxel_architect');
-              }}
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-stone-950 font-black text-xs font-mono transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
-            >
-              <span>{lang === 'en' ? 'Build World' : 'Construiește'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {renderGameActionButton(
+              'voxel_architect',
+              'Voxel Architect: Calculatoare Minecraft',
+              'Voxel Logic Architect (Minecraft CS)',
+              'Construiește',
+              'Build World',
+              'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 shadow-emerald-600/30',
+              'arcade-btn-start-voxel-architect'
+            )}
           </div>
         </div>
       </div>
+
+      {/* Teacher Locked Game Modal */}
+      <GameLockedModal
+        isOpen={!!lockedModalInfo}
+        onClose={() => setLockedModalInfo(null)}
+        gameTitle={lockedModalInfo?.title || ''}
+        customReason={lockedModalInfo ? gameSettings.games[lockedModalInfo.id]?.customReason : undefined}
+        lang={lang}
+        onContactTeacher={() => {
+          setLockedModalInfo(null);
+          onBackToCatalog();
+        }}
+      />
     </div>
   );
 };

@@ -20,7 +20,8 @@ import {
   Download,
   Search,
   AlertTriangle,
-  Filter
+  Filter,
+  Gamepad2
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { getStudentResults, deleteStudentResult, StudentResult } from '../lib/resultsService';
@@ -29,6 +30,7 @@ import { sounds } from '../utils/audio';
 import { TeacherStudentManagement } from './TeacherStudentManagement';
 import { TeacherHelpGuide } from './TeacherHelpGuide';
 import { TeacherSubmissionModal } from './TeacherSubmissionModal';
+import { TeacherGameControls } from './TeacherGameControls';
 
 interface TeacherPortalProps {
   onBackToHome: () => void;
@@ -41,7 +43,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem('arkedo_teacher_auth') === 'true';
   });
-  const [activeTab, setActiveTab] = useState<'gradebook' | 'students' | 'guide'>('gradebook');
+  const [activeTab, setActiveTab] = useState<'gradebook' | 'students' | 'games' | 'guide'>('gradebook');
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [authError, setAuthError] = useState<boolean>(false);
   const [results, setResults] = useState<StudentResult[]>([]);
@@ -303,6 +305,21 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
 
         <button
           onClick={() => {
+            setActiveTab('games');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
+            activeTab === 'games'
+              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <Gamepad2 className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Game Access Switches' : 'Comutator Jocuri (Arcade & Duel)'}</span>
+        </button>
+
+        <button
+          onClick={() => {
             setActiveTab('guide');
             sounds.playClick();
           }}
@@ -530,7 +547,12 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         <TeacherStudentManagement />
       )}
 
-      {/* Tab 3: System Help & Colleague Guide */}
+      {/* Tab 3: Games Access Controls */}
+      {activeTab === 'games' && (
+        <TeacherGameControls />
+      )}
+
+      {/* Tab 4: System Help & Colleague Guide */}
       {activeTab === 'guide' && (
         <TeacherHelpGuide />
       )}

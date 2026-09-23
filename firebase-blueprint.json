@@ -40,6 +40,32 @@
         "updatedAt": { "type": "number" }
       },
       "required": ["roomCode", "mode", "status", "host"]
+    },
+    "SetariJocuri": {
+      "title": "SetariJocuri",
+      "description": "Starea de activare/blocare a jocurilor arcade de catre profesor",
+      "type": "object",
+      "properties": {
+        "allGamesOpen": { "type": "boolean" },
+        "gameStatus": { "type": "object" },
+        "customMessage": { "type": "string" },
+        "updatedAt": { "type": "number" },
+        "updatedBy": { "type": "string" }
+      }
+    },
+    "SolicitareDeschidereJoc": {
+      "title": "SolicitareDeschidereJoc",
+      "description": "Cereri trimise de elevi profesorului pentru deblocarea unui joc",
+      "type": "object",
+      "properties": {
+        "gameId": { "type": "string" },
+        "gameTitle": { "type": "string" },
+        "studentName": { "type": "string" },
+        "studentAvatar": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "status": { "type": "string" }
+      },
+      "required": ["gameId", "studentName", "timestamp"]
     }
   },
   "firestore": {
@@ -54,6 +80,14 @@
     "/duel_rooms/{roomId}": {
       "schema": "DuelRoom",
       "description": "Camere de duel multiplayer in timp real"
+    },
+    "/setari_jocuri/{settingId}": {
+      "schema": "SetariJocuri",
+      "description": "Configurare blocare/deblocare jocuri arcade"
+    },
+    "/solicitari_jocuri/{requestId}": {
+      "schema": "SolicitareDeschidereJoc",
+      "description": "Cereri de deschidere jocuri de la elevi"
     }
   }
 }

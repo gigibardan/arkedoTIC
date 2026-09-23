@@ -13,5 +13,13 @@ service cloud.firestore {
     match /duel_rooms/{document} {
       allow read, write: if true;
     }
+    // Setari comutator jocuri arcade pentru profesor
+    match /setari_jocuri/{document} {
+      allow read, write: if true;
+    }
+    // Solicitari de deschidere jocuri trimise de elevi
+    match /solicitari_jocuri/{document} {
+      allow read, write: if true;
+    }
   }
 }
