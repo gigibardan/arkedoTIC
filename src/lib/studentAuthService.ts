@@ -811,9 +811,15 @@ export async function updateStudentScoresByTeacher(
 
     const newArcade: ArcadeScores = {
       ...DEFAULT_ARCADE_SCORES,
-      ...(student.arcadeScores || {}),
-      ...(scoresData.arcadeScores || {})
+      ...(student.arcadeScores || {})
     };
+    if (scoresData.arcadeScores) {
+      for (const k of ARCADE_GAME_KEYS) {
+        if (k in scoresData.arcadeScores) {
+          (newArcade as any)[k] = Math.max(0, Number((scoresData.arcadeScores as any)[k]) || 0);
+        }
+      }
+    }
     newArcade.totalArcade = computeTotalArcade(newArcade);
 
     const newLessons: LessonsProgress = {

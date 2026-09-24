@@ -1404,13 +1404,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       <GameLockedModal
         isOpen={!!lockedModalInfo}
         onClose={() => setLockedModalInfo(null)}
+        gameId={lockedModalInfo?.id || ''}
         gameTitle={lockedModalInfo?.title || ''}
-        customReason={lockedModalInfo ? gameSettings.games[lockedModalInfo.id]?.customReason : undefined}
-        lang={lang}
-        onContactTeacher={() => {
-          setLockedModalInfo(null);
-          onBackToCatalog();
-        }}
+        studentName={studentName}
+        customMessage={gameSettings.customMessage}
       />
     </div>
   );

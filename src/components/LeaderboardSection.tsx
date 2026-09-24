@@ -64,8 +64,12 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
   // Sort according to tab
   const sortedStudents = [...students].sort((a, b) => {
     if (activeTab === 'total') {
-      const aTotal = a.totalXP || ((a.arcadeScores?.totalArcade || 0) + (a.lessonsProgress?.totalLessonScore || 0));
-      const bTotal = b.totalXP || ((b.arcadeScores?.totalArcade || 0) + (b.lessonsProgress?.totalLessonScore || 0));
+      const aTotal = typeof a.totalXP === 'number'
+        ? a.totalXP
+        : ((a.arcadeScores?.totalArcade || 0) + (a.lessonsProgress?.totalLessonScore || 0));
+      const bTotal = typeof b.totalXP === 'number'
+        ? b.totalXP
+        : ((b.arcadeScores?.totalArcade || 0) + (b.lessonsProgress?.totalLessonScore || 0));
       return bTotal - aTotal;
     }
     if (activeTab === 'arcade') {
@@ -89,7 +93,9 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
   const getScoreValue = (student: StudentProfile) => {
     if (activeTab === 'total') {
-      return student.totalXP || ((student.arcadeScores?.totalArcade || 0) + (student.lessonsProgress?.totalLessonScore || 0));
+      return typeof student.totalXP === 'number'
+        ? student.totalXP
+        : ((student.arcadeScores?.totalArcade || 0) + (student.lessonsProgress?.totalLessonScore || 0));
     }
     if (activeTab === 'arcade') {
       return student.arcadeScores?.totalArcade || 0;
@@ -583,11 +589,35 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {selectedStudentForDetails.arcadeScores?.cyber_dino || 0} pts
                   </span>
                 </div>
+
+                {/* 15. Redstone Logic Lab */}
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <span className="text-slate-400">⛏️ Redstone Logic Lab</span>
+                  <span className="font-mono font-bold text-rose-400">
+                    {selectedStudentForDetails.arcadeScores?.redstone_lab || 0} pts
+                  </span>
+                </div>
+
+                {/* 16. Voxel Architect */}
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <span className="text-slate-400">🧱 Voxel Architect</span>
+                  <span className="font-mono font-bold text-emerald-400">
+                    {selectedStudentForDetails.arcadeScores?.voxel_architect || 0} pts
+                  </span>
+                </div>
+
+                {/* 17. Roblox Blox Clicker */}
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <span className="text-slate-400">🟥 Roblox Blox Clicker</span>
+                  <span className="font-mono font-bold text-amber-400">
+                    {selectedStudentForDetails.arcadeScores?.roblox_clicker || 0} pts
+                  </span>
+                </div>
               </div>
 
               <div className="mt-3 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex justify-between items-center text-xs">
                 <span className="font-bold text-indigo-300">
-                  {lang === 'en' ? 'Total Arcade Games Score:' : 'Punctaj Total Mini-Jocuri (14):'}
+                  {lang === 'en' ? 'Total Arcade Games Score (17):' : 'Punctaj Total Mini-Jocuri (17):'}
                 </span>
                 <span className="font-mono font-black text-sm text-indigo-200">
                   {selectedStudentForDetails.arcadeScores?.totalArcade || 0} pts

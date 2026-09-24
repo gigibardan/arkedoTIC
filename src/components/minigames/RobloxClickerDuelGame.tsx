@@ -62,19 +62,19 @@ export interface TicBossQuestion {
 
 const PET_POOL: Record<string, RobloxPet[]> = {
   starter_egg: [
-    { id: 'doge', name: 'Blox Doge 🐶', rarity: 'Common', icon: '🐶', multiplier: 1.5, cps: 5, color: 'text-amber-300', bgGlow: 'from-amber-600/30' },
-    { id: 'noob', name: 'Cyber Noob 👦', rarity: 'Rare', icon: '👦', multiplier: 2.0, cps: 12, color: 'text-yellow-300', bgGlow: 'from-yellow-600/30' },
-    { id: 'slime', name: 'Redstone Slime 🔴', rarity: 'Epic', icon: '🔴', multiplier: 3.5, cps: 25, color: 'text-rose-400', bgGlow: 'from-rose-600/30' }
+    { id: 'doge', name: 'Blox Doge 🐶', rarity: 'Common', icon: '🐶', multiplier: 0.15, cps: 1, color: 'text-amber-300', bgGlow: 'from-amber-600/30' },
+    { id: 'noob', name: 'Cyber Noob 👦', rarity: 'Rare', icon: '👦', multiplier: 0.25, cps: 2, color: 'text-yellow-300', bgGlow: 'from-yellow-600/30' },
+    { id: 'slime', name: 'Redstone Slime 🔴', rarity: 'Epic', icon: '🔴', multiplier: 0.40, cps: 3, color: 'text-rose-400', bgGlow: 'from-rose-600/30' }
   ],
   cyber_egg: [
-    { id: 'hacker_cat', name: 'Hacker Cat 🐱', rarity: 'Rare', icon: '🐱', multiplier: 5.0, cps: 60, color: 'text-emerald-300', bgGlow: 'from-emerald-600/30' },
-    { id: 'glitch_dragon', name: 'Glitch Dragon 🐉', rarity: 'Epic', icon: '🐉', multiplier: 8.5, cps: 150, color: 'text-purple-400', bgGlow: 'from-purple-600/30' },
-    { id: 'neon_bot', name: 'Neon CyberBot 🤖', rarity: 'Legendary', icon: '🤖', multiplier: 15.0, cps: 350, color: 'text-cyan-300', bgGlow: 'from-cyan-600/30' }
+    { id: 'hacker_cat', name: 'Hacker Cat 🐱', rarity: 'Rare', icon: '🐱', multiplier: 0.50, cps: 5, color: 'text-emerald-300', bgGlow: 'from-emerald-600/30' },
+    { id: 'glitch_dragon', name: 'Glitch Dragon 🐉', rarity: 'Epic', icon: '🐉', multiplier: 0.75, cps: 8, color: 'text-purple-400', bgGlow: 'from-purple-600/30' },
+    { id: 'neon_bot', name: 'Neon CyberBot 🤖', rarity: 'Legendary', icon: '🤖', multiplier: 1.00, cps: 12, color: 'text-cyan-300', bgGlow: 'from-cyan-600/30' }
   ],
   godly_egg: [
-    { id: 'dominus_rainbow', name: 'Dominus Quantum 👑', rarity: 'Legendary', icon: '👑', multiplier: 35.0, cps: 1000, color: 'text-amber-400', bgGlow: 'from-amber-500/40' },
-    { id: 'valkyrie_matrix', name: 'Valkyrie Matrix 🛡️', rarity: 'Godly', icon: '🛡️', multiplier: 80.0, cps: 2800, color: 'text-pink-400', bgGlow: 'from-pink-500/40' },
-    { id: 'titan_overlord', name: 'Titan Byte Overlord 🌌', rarity: 'Godly', icon: '🌌', multiplier: 200.0, cps: 8000, color: 'text-indigo-400', bgGlow: 'from-indigo-500/50' }
+    { id: 'dominus_rainbow', name: 'Dominus Quantum 👑', rarity: 'Legendary', icon: '👑', multiplier: 1.25, cps: 16, color: 'text-amber-400', bgGlow: 'from-amber-500/40' },
+    { id: 'valkyrie_matrix', name: 'Valkyrie Matrix 🛡️', rarity: 'Godly', icon: '🛡️', multiplier: 1.50, cps: 22, color: 'text-pink-400', bgGlow: 'from-pink-500/40' },
+    { id: 'titan_overlord', name: 'Titan Byte Overlord 🌌', rarity: 'Godly', icon: '🌌', multiplier: 2.00, cps: 30, color: 'text-indigo-400', bgGlow: 'from-indigo-500/50' }
   ]
 };
 
@@ -138,7 +138,7 @@ interface RobloxClickerDuelGameProps {
   onBack?: () => void;
 }
 
-const TARGET_GOAL = 50000; // 50,000 Blox Points to win match
+const TARGET_GOAL = 5000; // 5,000 Blox Points to win match (echilibrat pentru 45-60s)
 
 export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
   roomData,
@@ -164,16 +164,16 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 
   // Equipped Pets (Max 3)
   const [equippedPets, setEquippedPets] = useState<RobloxPet[]>([
-    { id: 'starter_doge', name: 'Blox Doge 🐶', rarity: 'Common', icon: '🐶', multiplier: 1.5, cps: 5, color: 'text-amber-300', bgGlow: 'from-amber-600/30' }
+    { id: 'starter_doge', name: 'Blox Doge 🐶', rarity: 'Common', icon: '🐶', multiplier: 0.15, cps: 1, color: 'text-amber-300', bgGlow: 'from-amber-600/30' }
   ]);
   const [petInventory, setPetInventory] = useState<RobloxPet[]>([]);
 
-  // Upgrades
+  // Upgrades (Echilibru realist TIC)
   const [upgrades, setUpgrades] = useState<UpgradeItem[]>([
-    { id: 'mouse', nameRo: 'Mouse RGB cu Macro', nameEn: 'RGB Macro Mouse', cost: 30, level: 1, bonusPerClick: 2, bonusCPS: 0, icon: '🖱️', descRo: '+2 Blox / click', descEn: '+2 Blox / click' },
-    { id: 'keyboard', nameRo: 'Switch Mecanic Red', nameEn: 'Mechanical Switches', cost: 120, level: 0, bonusPerClick: 5, bonusCPS: 2, icon: '⌨️', descRo: '+5 Blox / click & +2 CPS', descEn: '+5 Blox / click & +2 CPS' },
-    { id: 'server', nameRo: 'Server Gigabit TIC', nameEn: 'Gigabit TIC Server', cost: 450, level: 0, bonusPerClick: 0, bonusCPS: 20, icon: '🛰️', descRo: '+20 Auto-Clicks/sec', descEn: '+20 Auto-Clicks/sec' },
-    { id: 'quantum_ai', nameRo: 'Coprocesor AI Blox', nameEn: 'AI Blox Coprocessor', cost: 1500, level: 0, bonusPerClick: 25, bonusCPS: 80, icon: '🧠', descRo: '+25 / click & +80 CPS', descEn: '+25 / click & +80 CPS' }
+    { id: 'mouse', nameRo: 'Mouse RGB cu Macro', nameEn: 'RGB Macro Mouse', cost: 20, level: 0, bonusPerClick: 1, bonusCPS: 0, icon: '🖱️', descRo: '+1 Blox / click', descEn: '+1 Blox / click' },
+    { id: 'keyboard', nameRo: 'Switch Mecanic Red', nameEn: 'Mechanical Switches', cost: 70, level: 0, bonusPerClick: 2, bonusCPS: 1, icon: '⌨️', descRo: '+2 Blox / click & +1 CPS', descEn: '+2 Blox / click & +1 CPS' },
+    { id: 'server', nameRo: 'Server Gigabit TIC', nameEn: 'Gigabit TIC Server', cost: 250, level: 0, bonusPerClick: 3, bonusCPS: 4, icon: '🛰️', descRo: '+3 Blox / click & +4 CPS', descEn: '+3 Blox / click & +4 CPS' },
+    { id: 'quantum_ai', nameRo: 'Coprocesor AI Blox', nameEn: 'AI Blox Coprocessor', cost: 800, level: 0, bonusPerClick: 5, bonusCPS: 10, icon: '🧠', descRo: '+5 / click & +10 CPS', descEn: '+5 / click & +10 CPS' }
   ]);
 
   // Floating Click Particles
@@ -204,14 +204,17 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       : '🤖'
   );
 
-  // Match Status & Match Timer (când expiră cronometrul)
+  // Match Status & Match Timer
   const [isGameOver, setIsGameOver] = useState(false);
   const [winner, setWinner] = useState<'me' | 'opponent' | null>(null);
   const [matchTimeLeft, setMatchTimeLeft] = useState(60);
 
-  // Firestore Throttling & Safety Refs (Protecție Cota Firebase Spark 20.000 scrieri/zi)
+  // Firestore Throttling & Milestone Refs (Protecție Spark 20.000 scrieri/zi)
   const latestBloxRef = useRef(0);
   const lastSyncedBloxRef = useRef(-1);
+  const lastWrittenProgressRef = useRef(-1);
+  const lastWrittenTimeRef = useRef(0);
+  const lastClickTimeRef = useRef(0);
   const isGameOverRef = useRef(false);
   const isSyncStoppedRef = useRef(false);
   const syncIntervalRef = useRef<any>(null);
@@ -229,17 +232,17 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     return () => window.removeEventListener('arkedo_sound_change', handleSoundChange as EventListener);
   }, []);
 
-  // Compute Active Multiplier & CPS
-  const petMultiplier = equippedPets.reduce((acc, p) => acc + p.multiplier, 1);
+  // Compute Active Multiplier & CPS (Additive, Balanced Progression)
+  const petMultiplier = 1 + equippedPets.reduce((acc, p) => acc + p.multiplier, 0);
   const petCPS = equippedPets.reduce((acc, p) => acc + p.cps, 0);
-  const upgradeBonusClick = upgrades.reduce((acc, u) => acc + u.level * u.bonusPerClick, 1);
+  const upgradeBonusClick = 1 + upgrades.reduce((acc, u) => acc + u.level * u.bonusPerClick, 0);
   const upgradeCPS = upgrades.reduce((acc, u) => acc + u.level * u.bonusCPS, 0);
 
-  const rebirthMultiplier = 1 + rebirths * 1.5; // +150% per rebirth
-  const frenzyMultiplier = isFrenzy ? 5 : 1;
+  const rebirthMultiplier = 1 + rebirths * 0.25; // +25% per rebirth
+  const frenzyMultiplier = isFrenzy ? 2 : 1; // 2x boost during frenzy
 
-  const totalClickValue = Math.round(upgradeBonusClick * petMultiplier * rebirthMultiplier * frenzyMultiplier);
-  const totalCPS = Math.round((upgradeCPS + petCPS) * rebirthMultiplier * frenzyMultiplier);
+  const totalClickValue = Math.max(1, Math.round(upgradeBonusClick * petMultiplier * rebirthMultiplier * frenzyMultiplier));
+  const totalCPS = Math.max(0, Math.round((upgradeCPS + petCPS) * rebirthMultiplier * frenzyMultiplier));
 
   // Auto-CPS Loop (Every 1 second)
   useEffect(() => {
@@ -320,19 +323,18 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
         }
       }
     } else {
-      // Solo AI Bot simulation
+      // Solo AI Bot simulation (echilibrat pentru 5.000 Blox în ~50s)
       if (isGameOver) return;
       const aiInterval = setInterval(() => {
         setOpponentBlox((prev) => {
-          // AI clicks dynamically and buys upgrades
-          const aiGain = Math.floor(15 + Math.random() * 45 + (prev > 5000 ? 120 : 0) + (prev > 20000 ? 400 : 0));
+          const aiGain = Math.floor(8 + Math.random() * 20 + (prev > 1000 ? 12 : 0) + (prev > 2500 ? 25 : 0));
           const next = prev + aiGain;
           if (next >= TARGET_GOAL && !isGameOver) {
             triggerOpponentWin();
           }
           return next;
         });
-      }, 600);
+      }, 700);
       return () => clearInterval(aiInterval);
     }
   }, [roomData, isHost, isGameOver]);
@@ -369,7 +371,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     };
   }, [isGameOver]);
 
-  // Throttled 1-second sync to Firestore (at most once every 1000ms, only if score changed!)
+  // Protected Firestore milestone sync (Runs every 3 seconds, writes ONLY on ~15% milestone or match end)
   useEffect(() => {
     if (!roomData || isGameOver) {
       if (syncIntervalRef.current) {
@@ -379,7 +381,6 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       return;
     }
 
-    // Set up 1000ms throttled Firestore sync
     syncIntervalRef.current = setInterval(() => {
       if (isGameOverRef.current || isSyncStoppedRef.current) {
         if (syncIntervalRef.current) {
@@ -390,16 +391,27 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       }
 
       const currentScore = latestBloxRef.current;
-      // Strict Spark quota optimization: Only write to Firestore if score actually changed
-      if (currentScore !== lastSyncedBloxRef.current) {
+      const progressPercent = Math.min(100, Math.round((currentScore / TARGET_GOAL) * 100));
+      const prevProgress = lastWrittenProgressRef.current;
+      const now = Date.now();
+      const timeSinceLastSync = now - lastWrittenTimeRef.current;
+
+      // Write ONLY if progress jumped by >= 15% milestone (e.g. ~15%, 30%, 45%, 60%, 75%, 90%),
+      // or if at least 7 seconds have elapsed and score increased by at least 200 Blox
+      const crossedMilestone = progressPercent >= 15 && (prevProgress < 0 || (progressPercent - prevProgress) >= 15);
+      const safetyTimeSync = timeSinceLastSync >= 7000 && currentScore > (lastSyncedBloxRef.current + 200);
+
+      if (crossedMilestone || safetyTimeSync) {
         lastSyncedBloxRef.current = currentScore;
-        const progressPercent = Math.min(100, Math.round((currentScore / TARGET_GOAL) * 100));
+        lastWrittenProgressRef.current = progressPercent;
+        lastWrittenTimeRef.current = now;
+
         updateDuelProgress(roomData.roomCode, isHost, {
           score: currentScore,
           progress: progressPercent
         });
       }
-    }, 1000);
+    }, 3000);
 
     return () => {
       if (syncIntervalRef.current) {
@@ -436,18 +448,18 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
         sounds.playCorrect();
         sounds.playFrenzy();
       }
-      const rewardBlox = 2500 * rebirthMultiplier;
-      const rewardDiamonds = 3;
+      const rewardBlox = Math.round(200 * rebirthMultiplier);
+      const rewardDiamonds = 2;
       setBlox((prev) => prev + rewardBlox);
       setDiamonds((prev) => prev + rewardDiamonds);
 
-      // Trigger Mega Frenzy
+      // Trigger Mega Frenzy 2X
       setIsFrenzy(true);
-      setFrenzyTimer(10);
+      setFrenzyTimer(6);
       setActiveBoss(null);
 
       // Spawn floating reward
-      addFloatingText(`+${rewardBlox} BLOX & FRENZY 5X! 🔥`, window.innerWidth / 2, window.innerHeight / 2, '#38bdf8', true);
+      addFloatingText(`+${rewardBlox} BLOX & FRENZY 2X! 🔥`, window.innerWidth / 2, window.innerHeight / 2, '#38bdf8', true);
     } else {
       // Failed boss
       if (!soundMuted) sounds.playOof();
@@ -464,13 +476,19 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     }, 1200);
   };
 
-  // Main Click Handler
+  // Main Click Handler (cu protecție anti-dublu-click de 45ms)
   const handleMainClick = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-    if (isGameOver) return;
+    if (isGameOver || isGameOverRef.current) return;
 
-    // Check crit chance (15%)
-    const isCrit = Math.random() < 0.2;
-    const multiplier = isCrit ? 3 : 1;
+    const now = Date.now();
+    if (now - lastClickTimeRef.current < 45) {
+      return; // Ignore rapid synthetic double-events
+    }
+    lastClickTimeRef.current = now;
+
+    // Check crit chance (12% chance for 2x crit)
+    const isCrit = Math.random() < 0.12;
+    const multiplier = isCrit ? 2 : 1;
     const gained = totalClickValue * multiplier;
 
     setBlox((prev) => {
@@ -501,14 +519,14 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
   };
 
   // Rebirth Prestige
-  const rebirthCost = Math.round(5000 * Math.pow(2.8, rebirths));
+  const rebirthCost = Math.round(2500 * Math.pow(2.2, rebirths));
   const handleRebirth = () => {
     if (blox < rebirthCost) return;
     setBlox(0);
     setRebirths((prev) => prev + 1);
-    setDiamonds((prev) => prev + 15);
+    setDiamonds((prev) => prev + 5);
     if (!soundMuted) sounds.playLevelUp();
-    addFloatingText(`REBIRTH #${rebirths + 1}! +150% PERMANENT BOOST! 💎`, window.innerWidth / 2, window.innerHeight / 2, '#ec4899', true);
+    addFloatingText(`REBIRTH #${rebirths + 1}! +25% BOOST PERMANENT! 💎`, window.innerWidth / 2, window.innerHeight / 2, '#ec4899', true);
   };
 
   // Upgrade Purchase
@@ -523,7 +541,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
           return {
             ...u,
             level: u.level + 1,
-            cost: Math.round(u.cost * 1.6)
+            cost: Math.round(u.cost * 1.5)
           };
         }
         return u;
@@ -577,7 +595,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       setIsFrenzy(true);
       setFrenzyTimer(6);
       if (!soundMuted) sounds.playFrenzy();
-      addFloatingText('TURBO ROCKET ACTIVATED! 🚀 (5X CLICK)', window.innerWidth / 2, window.innerHeight / 2, '#38bdf8', true);
+      addFloatingText('TURBO ROCKET ACTIVATED! 🚀 (2X CLICK)', window.innerWidth / 2, window.innerHeight / 2, '#38bdf8', true);
     } else if (spellType === 'shield') {
       setShieldActive(true);
       if (!soundMuted) sounds.playRetro('powerup');
@@ -815,49 +833,49 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               {/* Starter Egg */}
               <button
                 type="button"
-                onClick={() => handleHatchEgg('starter_egg', 50)}
-                disabled={blox < 50}
+                onClick={() => handleHatchEgg('starter_egg', 100)}
+                disabled={blox < 100}
                 className={`p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition text-center cursor-pointer ${
-                  blox >= 50
+                  blox >= 100
                     ? 'bg-amber-950/40 border-amber-500/50 hover:border-amber-400 hover:scale-105 shadow-md shadow-amber-500/10'
                     : 'bg-slate-900/60 border-slate-800 opacity-50 cursor-not-allowed'
                 }`}
               >
                 <span className="text-2xl animate-bounce">🥚</span>
                 <span className="text-[10px] font-bold text-amber-200">Starter Egg</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">50 Blox</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">100 Blox</span>
               </button>
 
               {/* Cyber Egg */}
               <button
                 type="button"
-                onClick={() => handleHatchEgg('cyber_egg', 500)}
-                disabled={blox < 500}
+                onClick={() => handleHatchEgg('cyber_egg', 600)}
+                disabled={blox < 600}
                 className={`p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition text-center cursor-pointer ${
-                  blox >= 500
+                  blox >= 600
                     ? 'bg-emerald-950/40 border-emerald-500/50 hover:border-emerald-400 hover:scale-105 shadow-md shadow-emerald-500/10'
                     : 'bg-slate-900/60 border-slate-800 opacity-50 cursor-not-allowed'
                 }`}
               >
                 <span className="text-2xl animate-pulse">🧪</span>
                 <span className="text-[10px] font-bold text-emerald-200">Cyber Egg</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">500 Blox</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">600 Blox</span>
               </button>
 
               {/* Godly Dominus Egg */}
               <button
                 type="button"
-                onClick={() => handleHatchEgg('godly_egg', 3000)}
-                disabled={blox < 3000}
+                onClick={() => handleHatchEgg('godly_egg', 1800)}
+                disabled={blox < 1800}
                 className={`p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition text-center cursor-pointer ${
-                  blox >= 3000
+                  blox >= 1800
                     ? 'bg-purple-950/40 border-purple-500/50 hover:border-purple-400 hover:scale-105 shadow-md shadow-purple-500/10'
                     : 'bg-slate-900/60 border-slate-800 opacity-50 cursor-not-allowed'
                 }`}
               >
                 <span className="text-2xl animate-spin">👑</span>
                 <span className="text-[10px] font-bold text-purple-200">Dominus Egg</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">3.000 Blox</span>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">1.800 Blox</span>
               </button>
             </div>
 
@@ -874,7 +892,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                   >
                     <span>{pet.icon}</span>
                     <span className="font-bold truncate">{pet.name.split(' ')[0]}</span>
-                    <span className="text-[9px] text-emerald-400 font-bold">+{pet.multiplier}x</span>
+                    <span className="text-[9px] text-emerald-400 font-bold">+{Math.round(pet.multiplier * 100)}%</span>
                   </div>
                 ))}
               </div>
@@ -940,7 +958,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
           {isFrenzy && (
             <div className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 text-slate-950 text-center font-black text-xs uppercase tracking-wider animate-pulse flex items-center justify-center gap-2 shadow-lg shadow-rose-500/30">
               <Flame className="w-4 h-4 text-slate-950 animate-bounce" />
-              <span>MEGA FRENZY 5X BOOST ACTIVE! ({frenzyTimer}s)</span>
+              <span>MEGA FRENZY 2X BOOST ACTIVE! ({frenzyTimer}s)</span>
               <Flame className="w-4 h-4 text-slate-950 animate-bounce" />
             </div>
           )}
@@ -964,7 +982,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
             <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center">
               <div className="text-[10px] text-slate-400 font-bold uppercase">Rebirths 🔁</div>
               <div className="text-base sm:text-lg font-black font-mono text-pink-400">
-                {rebirths} (x{rebirthMultiplier.toFixed(1)})
+                {rebirths} (x{rebirthMultiplier.toFixed(2)})
               </div>
             </div>
           </div>
@@ -997,7 +1015,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
             <div>
               <span className="text-[10px] font-mono text-slate-400 block">Prestige Rebirth:</span>
               <span className="text-xs font-bold text-pink-300">
-                Cost: {rebirthCost.toLocaleString()} Blox (+150% Boost)
+                Cost: {rebirthCost.toLocaleString()} Blox (+25% Boost)
               </span>
             </div>
 
@@ -1041,7 +1059,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 }`}
               >
                 <span className="text-xl">🚀</span>
-                <span className="text-[10px] font-bold text-cyan-300">Turbo 5X</span>
+                <span className="text-[10px] font-bold text-cyan-300">Turbo 2X</span>
                 <span className="text-[9px] font-mono text-slate-400">5 💎 (6s)</span>
               </button>
 

@@ -247,7 +247,7 @@ export const ALL_GAMES: GameDefinition[] = [
 
 const LOCAL_STORAGE_SETTINGS_KEY = 'arkedo_game_settings';
 const LOCAL_STORAGE_REQUESTS_KEY = 'arkedo_game_unlock_requests';
-const DEFAULT_CUSTOM_MESSAGE = 'Acest joc este închis de profesor. Solicită deschiderea lui în timpul orei!';
+const DEFAULT_CUSTOM_MESSAGE = 'Acest joc este închis de profesor, solicită deschiderea.';
 
 export const DEFAULT_GAME_SETTINGS: GameSettings = {
   allGamesOpen: true,

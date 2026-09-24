@@ -69,6 +69,8 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     virus_sweeper: student.arcadeScores?.virus_sweeper || 0,
     cyber_dino: student.arcadeScores?.cyber_dino || 0,
     redstone_lab: student.arcadeScores?.redstone_lab || 0,
+    voxel_architect: student.arcadeScores?.voxel_architect || 0,
+    roblox_clicker: student.arcadeScores?.roblox_clicker || 0,
     totalArcade: student.arcadeScores?.totalArcade || 0
   });
 
@@ -120,12 +122,38 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
 
   if (!isOpen) return null;
 
+  const calculateArcadeTotal = (scores: Partial<ArcadeScores>) => {
+    return (
+      (scores.typing && scores.typing <= 250 ? scores.typing * 25 : scores.typing || 0) +
+      (scores.mouse || 0) +
+      (scores.game2048 || 0) +
+      (scores.pcbuilder || 0) +
+      (scores.detective || 0) +
+      (scores.files || 0) +
+      (scores.binary_factory || 0) +
+      (scores.maze || 0) +
+      (scores.firewall || 0) +
+      (scores.rgb_pixel || 0) +
+      (scores.byte_slider || 0) +
+      (scores.file_drop || 0) +
+      (scores.virus_sweeper || 0) +
+      (scores.cyber_dino || 0) +
+      (scores.redstone_lab || 0) +
+      (scores.voxel_architect || 0) +
+      (scores.roblox_clicker || 0)
+    );
+  };
+
   const handleArcadeChange = (key: keyof ArcadeScores, val: string) => {
     const num = Math.max(0, parseInt(val, 10) || 0);
-    setArcadeScores((prev) => ({
-      ...prev,
-      [key]: num
-    }));
+    setArcadeScores((prev) => {
+      const updated = {
+        ...prev,
+        [key]: num
+      };
+      updated.totalArcade = calculateArcadeTotal(updated);
+      return updated;
+    });
   };
 
   const handleLessonChange = (
@@ -147,11 +175,16 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     setSaving(true);
     setFeedbackMsg(null);
 
+    const safeArcade: ArcadeScores = {
+      ...arcadeScores,
+      totalArcade: calculateArcadeTotal(arcadeScores)
+    };
+
     const res = await updateStudentScoresByTeacher(student.id, {
-      arcadeScores,
+      arcadeScores: safeArcade,
       lessonsProgress,
       duelStats,
-      customXP
+      customXP: Math.max(0, customXP)
     });
 
     setSaving(false);
@@ -374,35 +407,99 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     {isEn ? 'Modify any game score or reset suspicious/cheated results to 0.' : 'Modificați scorul oricărui joc sau resetați la 0 dacă a trișat.'}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (window.confirm(isEn ? 'Reset all arcade games for this student to 0?' : 'Resetați toate mini-jocurile acestui elev la 0?')) {
-                      setArcadeScores({
-                        typing: 0,
-                        mouse: 0,
-                        game2048: 0,
-                        pcbuilder: 0,
-                        detective: 0,
-                        files: 0,
-                        binary_factory: 0,
-                        maze: 0,
-                        firewall: 0,
-                        rgb_pixel: 0,
-                        byte_slider: 0,
-                        file_drop: 0,
-                        virus_sweeper: 0,
-                        cyber_dino: 0,
-                        totalArcade: 0
-                      });
-                      sounds.playClick();
-                    }
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>{isEn ? 'Reset All Games' : 'Resetează Toate Jocurile'}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm(isEn 
+                        ? `Reset ALL points (Arcade: 0, Lessons: 0, Duels: 0, XP: 0) for "${student.username}"?` 
+                        : `Resetează COMPLET toate punctele (Arcade: 0, Lecții: 0, Duel: 0, XP: 0) pentru "${student.username}"?`)) {
+                        setArcadeScores({
+                          typing: 0,
+                          mouse: 0,
+                          game2048: 0,
+                          pcbuilder: 0,
+                          detective: 0,
+                          files: 0,
+                          binary_factory: 0,
+                          maze: 0,
+                          firewall: 0,
+                          rgb_pixel: 0,
+                          byte_slider: 0,
+                          file_drop: 0,
+                          virus_sweeper: 0,
+                          cyber_dino: 0,
+                          redstone_lab: 0,
+                          voxel_architect: 0,
+                          roblox_clicker: 0,
+                          totalArcade: 0
+                        });
+                        setLessonsProgress({
+                          hardware: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+                          files: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+                          internet1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+                          internet2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+                          totalLessonScore: 0
+                        });
+                        setDuelStats({
+                          wins: 0,
+                          losses: 0,
+                          matchesPlayed: 0,
+                          duelPoints: 0,
+                          cyberSprintWins: 0,
+                          speedCraftingWins: 0,
+                          blockCodingWins: 0,
+                          quizBlitzWins: 0,
+                          cyberShieldWins: 0,
+                          pcRushWins: 0
+                        });
+                        setCustomXP(0);
+                        sounds.playClick();
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-600 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md"
+                    title={isEn ? 'Reset EVERYTHING to 0' : 'Setează absolut totul la 0'}
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isEn ? 'Reset ALL (0 XP)' : 'Resetează Tot la 0'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm(isEn ? 'Reset all 17 arcade games for this student to 0?' : 'Resetați toate cele 17 mini-jocuri ale acestui elev la 0?')) {
+                        setArcadeScores({
+                          typing: 0,
+                          mouse: 0,
+                          game2048: 0,
+                          pcbuilder: 0,
+                          detective: 0,
+                          files: 0,
+                          binary_factory: 0,
+                          maze: 0,
+                          firewall: 0,
+                          rgb_pixel: 0,
+                          byte_slider: 0,
+                          file_drop: 0,
+                          virus_sweeper: 0,
+                          cyber_dino: 0,
+                          redstone_lab: 0,
+                          voxel_architect: 0,
+                          roblox_clicker: 0,
+                          totalArcade: 0
+                        });
+                        const lessonPts = lessonsProgress.totalLessonScore || 0;
+                        const duelPts = duelStats.duelPoints || 0;
+                        setCustomXP(lessonPts + duelPts);
+                        sounds.playClick();
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isEn ? 'Reset Games Only' : 'Doar Jocurile (0)'}</span>
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

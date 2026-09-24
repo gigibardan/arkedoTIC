@@ -56,8 +56,8 @@ export const GameLockedModal: React.FC<GameLockedModalProps> = ({
   const displayMessage =
     customMessage ||
     (lang === 'en'
-      ? 'This game is currently locked by the teacher. Request unlock or ask during class!'
-      : 'Acest joc este închis de profesor. Solicită deschiderea lui în timpul orei!');
+      ? 'This game is closed by the teacher, request opening.'
+      : 'Acest joc este închis de profesor, solicită deschiderea.');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">

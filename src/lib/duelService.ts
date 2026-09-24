@@ -623,7 +623,8 @@ interface PendingThrottledWrite {
 const pendingWrites = new Map<string, PendingThrottledWrite>();
 const lastWrittenTimes = new Map<string, number>();
 const lastWrittenPayloads = new Map<string, string>();
-const MIN_WRITE_INTERVAL_MS = 1000; // 1000ms strict throttle
+const lastWrittenProgress = new Map<string, number>();
+const MIN_WRITE_INTERVAL_MS = 3000; // 3000ms minimum interval between intermediate progress writes
 
 // Direct write helper to Firestore
 async function executeFirestoreUpdate(
@@ -669,7 +670,7 @@ async function executeFirestoreUpdate(
   }
 }
 
-// Update player live score and progress with strict throttling
+// Update player live score and progress with strict milestone throttling to save Firestore quota
 export async function updateDuelProgress(
   roomCode: string,
   isHost: boolean,
@@ -681,7 +682,7 @@ export async function updateDuelProgress(
   const cacheKey = `${cleanCode}_${isHost ? 'host' : 'guest'}`;
 
   // Priority 1: Match Finish / Winner declared -> Write IMMEDIATELY, clear pending
-  if (allFinishedWinnerId) {
+  if (allFinishedWinnerId || data.progress === 100) {
     const pending = pendingWrites.get(cacheKey);
     if (pending?.timer) {
       clearTimeout(pending.timer);
@@ -689,11 +690,14 @@ export async function updateDuelProgress(
     pendingWrites.delete(cacheKey);
     lastWrittenTimes.set(cacheKey, Date.now());
     lastWrittenPayloads.set(cacheKey, JSON.stringify(data));
+    if (data.progress !== undefined) {
+      lastWrittenProgress.set(cacheKey, data.progress);
+    }
     await executeFirestoreUpdate(cleanCode, isHost, data, allFinishedWinnerId, winnerName);
     return;
   }
 
-  // Priority 2: Intermediate progress updates -> deduplicate & throttle
+  // Priority 2: Intermediate progress updates -> deduplicate & milestone check
   const serialized = JSON.stringify(data);
   if (serialized === lastWrittenPayloads.get(cacheKey)) {
     // Data has not changed at all; skip Firestore write completely!
@@ -703,28 +707,44 @@ export async function updateDuelProgress(
   const now = Date.now();
   const lastTime = lastWrittenTimes.get(cacheKey) || 0;
   const elapsed = now - lastTime;
+  const currentProg = typeof data.progress === 'number' ? data.progress : -1;
+  const prevProg = lastWrittenProgress.get(cacheKey) ?? -1;
+  const hasMilestoneStep = currentProg >= 0 && (prevProg < 0 || Math.abs(currentProg - prevProg) >= 15);
 
-  if (elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
-    // We are past the 1000ms window and no write is scheduled: write immediately
+  // If milestone jumped (at least 15% difference) and minimum window elapsed:
+  if ((hasMilestoneStep || elapsed >= 7000) && elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
     lastWrittenTimes.set(cacheKey, now);
     lastWrittenPayloads.set(cacheKey, serialized);
+    if (currentProg >= 0) {
+      lastWrittenProgress.set(cacheKey, currentProg);
+    }
     await executeFirestoreUpdate(cleanCode, isHost, data);
   } else {
-    // Inside the 1000ms window: merge payload and schedule flush
+    // Buffer into pendingWrites and flush on timer
     const existing = pendingWrites.get(cacheKey);
     const mergedData = { ...(existing?.data || {}), ...data };
 
     if (existing?.timer) {
       existing.data = mergedData;
     } else {
-      const delay = Math.max(50, MIN_WRITE_INTERVAL_MS - elapsed);
+      const delay = Math.max(800, Math.min(3500, MIN_WRITE_INTERVAL_MS - elapsed));
       const timer = setTimeout(async () => {
         const item = pendingWrites.get(cacheKey);
         pendingWrites.delete(cacheKey);
         if (item) {
-          lastWrittenTimes.set(cacheKey, Date.now());
-          lastWrittenPayloads.set(cacheKey, JSON.stringify(item.data));
-          await executeFirestoreUpdate(item.roomCode, item.isHost, item.data);
+          const itemProg = typeof item.data.progress === 'number' ? item.data.progress : -1;
+          const oldProg = lastWrittenProgress.get(cacheKey) ?? -1;
+          const movedEnough = itemProg >= 0 && (oldProg < 0 || Math.abs(itemProg - oldProg) >= 10);
+          const timeWaited = Date.now() - (lastWrittenTimes.get(cacheKey) || 0);
+
+          if (movedEnough || timeWaited >= 5000) {
+            lastWrittenTimes.set(cacheKey, Date.now());
+            lastWrittenPayloads.set(cacheKey, JSON.stringify(item.data));
+            if (itemProg >= 0) {
+              lastWrittenProgress.set(cacheKey, itemProg);
+            }
+            await executeFirestoreUpdate(item.roomCode, item.isHost, item.data);
+          }
         }
       }, delay);
 
