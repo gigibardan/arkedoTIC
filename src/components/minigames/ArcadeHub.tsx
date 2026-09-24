@@ -502,79 +502,6 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         </div>
       </div>
 
-      {/* Featured 1v1 Realtime Duel Arena Card */}
-      {onOpenDuel && (
-        <div className={`relative overflow-hidden border-2 rounded-3xl p-5 sm:p-6 shadow-2xl transition-all ${
-          isGameOpen(gameSettings, 'duel')
-            ? 'bg-gradient-to-r from-rose-950/70 via-slate-900 to-amber-950/60 border-rose-500/50'
-            : 'bg-slate-950/90 border-rose-500/40 opacity-90'
-        }`}>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-start sm:items-center gap-3.5">
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ${
-                isGameOpen(gameSettings, 'duel')
-                  ? 'bg-gradient-to-tr from-rose-500 to-amber-500 ring-amber-400/40'
-                  : 'bg-rose-950 border border-rose-500/50 text-rose-400 ring-rose-500/20'
-              }`}>
-                {isGameOpen(gameSettings, 'duel') ? (
-                  <Swords className="w-6 h-6 animate-pulse" />
-                ) : (
-                  <Lock className="w-6 h-6 text-rose-400" />
-                )}
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
-                    MULTIPLAYER 1V1
-                  </span>
-                  {isGameOpen(gameSettings, 'duel') ? (
-                    <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                      {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
-                    </span>
-                  ) : (
-                    <span className="text-xs text-rose-400 font-mono font-bold flex items-center gap-1">
-                      <Lock className="w-3 h-3" />
-                      {lang === 'en' ? 'Locked by Teacher' : 'Închis de Profesor'}
-                    </span>
-                  )}
-                </div>
-                <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                  {lang === 'en' ? 'Duel Arena: Challenge a Classmate!' : 'Arena Duel: Provoacă un Coleg de Bancă!'}
-                </h3>
-                <p className="text-xs text-slate-300 mt-1 max-w-xl">
-                  {lang === 'en'
-                    ? 'Pick Cyber Sprint (Typing Race) or Quiz Blitz (TIC trivia) and compete head-to-head with live score sync.'
-                    : 'Alege Cyber Sprint (cursă de tastare) sau Quiz Blitz (cultură TIC) și concurează 1 la 1 cu sincronizare instantanee.'}
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => handleTryLaunchGame('duel', 'Arena Duel 1v1', 'Duel Arena 1v1')}
-              className={`w-full sm:w-auto px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 ${
-                isGameOpen(gameSettings, 'duel')
-                  ? 'bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white shadow-rose-600/30'
-                  : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 shadow-rose-950/40'
-              }`}
-            >
-              {isGameOpen(gameSettings, 'duel') ? (
-                <>
-                  <Swords className="w-4 h-4" />
-                  <span>{lang === 'en' ? 'Launch Duel 1v1' : 'Lansează Duel 1v1'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4 text-rose-400" />
-                  <span>{lang === 'en' ? 'Locked' : 'Joc Închis'}</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {/* Game 1: Speed Typing */}
@@ -1399,6 +1326,79 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
         </div>
       </div>
+
+      {/* Featured 1v1 Realtime Duel Arena Card (Placed after games grid) */}
+      {onOpenDuel && (
+        <div className={`relative overflow-hidden border-2 rounded-3xl p-5 sm:p-6 shadow-2xl transition-all ${
+          isGameOpen(gameSettings, 'duel')
+            ? 'bg-gradient-to-r from-rose-950/70 via-slate-900 to-amber-950/60 border-rose-500/50'
+            : 'bg-slate-950/90 border-rose-500/40 opacity-90'
+        }`}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ${
+                isGameOpen(gameSettings, 'duel')
+                  ? 'bg-gradient-to-tr from-rose-500 to-amber-500 ring-amber-400/40'
+                  : 'bg-rose-950 border border-rose-500/50 text-rose-400 ring-rose-500/20'
+              }`}>
+                {isGameOpen(gameSettings, 'duel') ? (
+                  <Swords className="w-6 h-6 animate-pulse" />
+                ) : (
+                  <Lock className="w-6 h-6 text-rose-400" />
+                )}
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
+                    MULTIPLAYER 1V1
+                  </span>
+                  {isGameOpen(gameSettings, 'duel') ? (
+                    <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-rose-400 font-mono font-bold flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      {lang === 'en' ? 'Locked by Teacher' : 'Închis de Profesor'}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                  {lang === 'en' ? 'Duel Arena: Challenge a Classmate!' : 'Arena Duel: Provoacă un Coleg de Bancă!'}
+                </h3>
+                <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                  {lang === 'en'
+                    ? 'Pick Cyber Sprint (Typing Race) or Quiz Blitz (TIC trivia) and compete head-to-head with live score sync.'
+                    : 'Alege Cyber Sprint (cursă de tastare) sau Quiz Blitz (cultură TIC) și concurează 1 la 1 cu sincronizare instantanee.'}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => handleTryLaunchGame('duel', 'Arena Duel 1v1', 'Duel Arena 1v1')}
+              className={`w-full sm:w-auto px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 ${
+                isGameOpen(gameSettings, 'duel')
+                  ? 'bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white shadow-rose-600/30'
+                  : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 shadow-rose-950/40'
+              }`}
+            >
+              {isGameOpen(gameSettings, 'duel') ? (
+                <>
+                  <Swords className="w-4 h-4" />
+                  <span>{lang === 'en' ? 'Launch Duel 1v1' : 'Lansează Duel 1v1'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  <Lock className="w-4 h-4 text-rose-400" />
+                  <span>{lang === 'en' ? 'Locked' : 'Joc Închis'}</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Teacher Locked Game Modal */}
       <GameLockedModal
