@@ -303,12 +303,16 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             onAwardXP(200, 'Victorie în Duelul Cyber Sprint 1v1!');
           }
         } else {
-          // Update live progress
-          updateDuelProgress(currentRoom.roomCode, isHost, {
-            progress: progressPercent,
-            score: currentScore,
-            currentWordIndex: nextIdx
-          });
+          // Update live progress only on 25% milestone steps to save Firestore quota
+          const prevProgress = Math.round(((nextIdx - 1) / words.length) * 100);
+          const crossedMilestone = Math.floor(progressPercent / 25) > Math.floor(prevProgress / 25);
+          if (crossedMilestone) {
+            updateDuelProgress(currentRoom.roomCode, isHost, {
+              progress: progressPercent,
+              score: currentScore,
+              currentWordIndex: nextIdx
+            });
+          }
         }
         return;
       }
@@ -570,10 +574,12 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       myName
     );
 
-    recordStudentDuelResult(true, 'roblox_clicker', finalScore);
+    // Max 1000 XP cap for duel victory
+    const awardedDuelXP = Math.min(1000, 600);
+    recordStudentDuelResult(true, 'roblox_clicker', awardedDuelXP);
 
     if (onAwardXP) {
-      onAwardXP(500, 'Maestru în Roblox Cyber Blox Duel 1v1 (50k Blox)!');
+      onAwardXP(awardedDuelXP, 'Maestru în Roblox Cyber Blox Duel 1v1 (5.000 Blox)!');
     }
   };
 
@@ -755,7 +761,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 50.000 Blox înaintea rivalului!
+                    Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 5.000 Blox înaintea rivalului!
                   </p>
                 </button>
 

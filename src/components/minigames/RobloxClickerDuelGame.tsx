@@ -129,6 +129,8 @@ const TIC_BOSS_QUESTIONS: TicBossQuestion[] = [
   }
 ];
 
+export type RobloxMatchMode = 'target_5k' | 'time_60' | 'time_120';
+
 interface RobloxClickerDuelGameProps {
   roomData?: DuelRoomData | null;
   isHost?: boolean;
@@ -138,7 +140,7 @@ interface RobloxClickerDuelGameProps {
   onBack?: () => void;
 }
 
-const TARGET_GOAL = 5000; // 5,000 Blox Points to win match (echilibrat pentru 45-60s)
+const TARGET_GOAL = 5000; // 5,000 Blox Points to win match (echilibrat)
 
 export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
   roomData,
@@ -150,6 +152,10 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 }) => {
   const { lang } = useLanguage();
   const [soundMuted, setSoundMuted] = useState(false);
+
+  // Match Mode: Default is 'target_5k' (primul la 5.000 Blox, fără limită timp), cu opțiune de provocare 1 min / 2 min
+  const [matchMode, setMatchMode] = useState<RobloxMatchMode>('target_5k');
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   // Player Economy & State
   const [blox, setBlox] = useState(0);
@@ -339,7 +345,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     }
   }, [roomData, isHost, isGameOver]);
 
-  // 60-Second Match Countdown Timer
+  // Match Timer Logic (Default: 'target_5k' - cronometru crescător fără limită de timp, sau provocare 60s/120s)
   useEffect(() => {
     if (isGameOver) {
       if (matchTimerRef.current) {
@@ -350,17 +356,23 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     }
 
     matchTimerRef.current = setInterval(() => {
-      setMatchTimeLeft((prev) => {
-        if (prev <= 1) {
-          if (matchTimerRef.current) {
-            clearInterval(matchTimerRef.current);
-            matchTimerRef.current = null;
+      if (matchMode === 'target_5k') {
+        // În modul implicit, cronometrul este crescător (nu oprește jocul, se joacă până la 5.000 Blox)
+        setElapsedSeconds((prev) => prev + 1);
+      } else {
+        // În modurile provocare (60s / 120s), cronometrul este descrescător
+        setMatchTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (matchTimerRef.current) {
+              clearInterval(matchTimerRef.current);
+              matchTimerRef.current = null;
+            }
+            handleTimeExpired();
+            return 0;
           }
-          handleTimeExpired();
-          return 0;
-        }
-        return prev - 1;
-      });
+          return prev - 1;
+        });
+      }
     }, 1000);
 
     return () => {
@@ -369,9 +381,9 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
         matchTimerRef.current = null;
       }
     };
-  }, [isGameOver]);
+  }, [isGameOver, matchMode]);
 
-  // Protected Firestore milestone sync (Runs every 3 seconds, writes ONLY on ~15% milestone or match end)
+  // Protected Firestore milestone sync (Runs every 4 seconds, writes ONLY on >= 20% milestone or match end)
   useEffect(() => {
     if (!roomData || isGameOver) {
       if (syncIntervalRef.current) {
@@ -396,12 +408,11 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       const now = Date.now();
       const timeSinceLastSync = now - lastWrittenTimeRef.current;
 
-      // Write ONLY if progress jumped by >= 15% milestone (e.g. ~15%, 30%, 45%, 60%, 75%, 90%),
-      // or if at least 7 seconds have elapsed and score increased by at least 200 Blox
-      const crossedMilestone = progressPercent >= 15 && (prevProgress < 0 || (progressPercent - prevProgress) >= 15);
-      const safetyTimeSync = timeSinceLastSync >= 7000 && currentScore > (lastSyncedBloxRef.current + 200);
+      // Write ONLY if progress jumped by >= 20% milestone (e.g. 20%, 40%, 60%, 80%, 100%),
+      // and at least 5 seconds have elapsed
+      const crossedMilestone = progressPercent >= 20 && (prevProgress < 0 || (progressPercent - prevProgress) >= 20);
 
-      if (crossedMilestone || safetyTimeSync) {
+      if (crossedMilestone && timeSinceLastSync >= 5000) {
         lastSyncedBloxRef.current = currentScore;
         lastWrittenProgressRef.current = progressPercent;
         lastWrittenTimeRef.current = now;
@@ -411,7 +422,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
           progress: progressPercent
         });
       }
-    }, 3000);
+    }, 4000);
 
     return () => {
       if (syncIntervalRef.current) {
@@ -708,7 +719,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       ))}
 
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between gap-3 mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-900/60 via-slate-900 to-indigo-900/60 border border-purple-500/30 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-900/60 via-slate-900 to-indigo-900/60 border border-purple-500/30 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-600 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/30 ring-2 ring-amber-400/40 animate-pulse">
             🟥
@@ -724,29 +735,94 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
             </div>
             <p className="text-xs text-slate-300">
               {lang === 'en'
-                ? 'Click, Hatch Pets, Rebirth & Beat your rival to 50,000 Blox!'
-                : 'Dă click, cumpără Upgrade-uri, eclozează Animăluțe și învinge-ți rivalul la 50.000 Blox!'}
+                ? 'Click, Hatch Pets, Rebirth & Beat your rival to 5,000 Blox!'
+                : 'Dă click, cumpără Upgrade-uri, eclozează Animăluțe și învinge-ți rivalul la 5.000 Blox!'}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Match Countdown Timer Badge */}
-          <div
-            title={lang === 'en' ? 'Match Time Remaining' : 'Timp Rămas Meci'}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm ${
-              matchTimeLeft <= 10
-                ? 'bg-rose-950/80 border-rose-500/60 text-rose-300 animate-pulse'
-                : 'bg-slate-900/80 border-amber-500/40 text-amber-300'
-            }`}
-          >
-            <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${matchTimeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-amber-400'}`} />
-            <span>{matchTimeLeft}s</span>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Mode Selector (Default: Primul la 5.000 Blox) */}
+          <div className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-[11px] font-bold">
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setMatchMode('target_5k');
+                setElapsedSeconds(0);
+              }}
+              className={`px-2 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+                matchMode === 'target_5k'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title={lang === 'en' ? 'First to 5,000 Blox (No Time Limit - Default)' : 'Primul la 5.000 Blox (Fără Limită de Timp - Implicit)'}
+            >
+              <Trophy className="w-3 h-3" />
+              <span>5.000 Blox</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setMatchMode('time_60');
+                setMatchTimeLeft(60);
+              }}
+              className={`px-2 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+                matchMode === 'time_60'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title={lang === 'en' ? '1 Minute Speed Challenge' : 'Provocare Cursă 1 Minut'}
+            >
+              <Clock className="w-3 h-3" />
+              <span>1 Min</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setMatchMode('time_120');
+                setMatchTimeLeft(120);
+              }}
+              className={`px-2 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+                matchMode === 'time_120'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+              title={lang === 'en' ? '2 Minutes Endurance Challenge' : 'Provocare Cursă 2 Minute'}
+            >
+              <Clock className="w-3 h-3" />
+              <span>2 Min</span>
+            </button>
           </div>
+
+          {/* Match Timer Badge */}
+          {matchMode === 'target_5k' ? (
+            <div
+              title={lang === 'en' ? 'Playing until 5,000 Blox' : 'Joc până la 5.000 Blox'}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm bg-gradient-to-r from-amber-950/80 to-slate-900 border-amber-500/50 text-amber-300"
+            >
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+              <span>{Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, '0')}</span>
+            </div>
+          ) : (
+            <div
+              title={lang === 'en' ? 'Match Time Remaining' : 'Timp Rămas Meci'}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm ${
+                matchTimeLeft <= 10
+                  ? 'bg-rose-950/80 border-rose-500/60 text-rose-300 animate-pulse'
+                  : 'bg-slate-900/80 border-amber-500/40 text-amber-300'
+              }`}
+            >
+              <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${matchTimeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-amber-400'}`} />
+              <span>{matchTimeLeft}s</span>
+            </div>
+          )}
 
           <button
             onClick={() => sounds.toggle()}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
           >
             {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
@@ -756,7 +832,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 sounds.playClick();
                 onBack();
               }}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-xs font-bold border border-slate-700 hover:border-rose-500 transition"
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-xs font-bold border border-slate-700 hover:border-rose-500 transition cursor-pointer"
             >
               {lang === 'en' ? 'Exit Duel' : 'Ieși din Duel'}
             </button>
@@ -1224,8 +1300,8 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 
             <p className="text-[10px] text-slate-400 text-center">
               {lang === 'en'
-                ? 'Defeat the boss to gain +2,500 Blox & 10s Mega Frenzy 5X!'
-                : 'Răspunde corect pentru +2.500 Blox și 10 secunde de Mega Frenzy 5X!'}
+                ? 'Defeat the boss to gain +200 Blox & 10s Frenzy 2X!'
+                : 'Răspunde corect pentru +200 Blox și 10 secunde de Frenzy 2X!'}
             </p>
           </div>
         </div>
@@ -1248,8 +1324,8 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
             <p className="text-xs text-slate-300">
               {winner === 'me'
                 ? (lang === 'en'
-                    ? `Congratulations! You reached the 50,000 Blox summit first! Score: ${blox.toLocaleString()} Blox.`
-                    : `Felicitări! Ai atins primul pragul de 50.000 Blox! Punctaj: ${blox.toLocaleString()} Blox.`)
+                    ? `Congratulations! You reached the 5,000 Blox goal first! Score: ${blox.toLocaleString()} Blox.`
+                    : `Felicitări! Ai atins primul pragul de 5.000 Blox! Punctaj: ${blox.toLocaleString()} Blox.`)
                 : (lang === 'en'
                     ? `${opponentName} reached the goal first. Train your pets and try again!`
                     : `${opponentName} a atins primul obiectivul. Antrenează-ți animăluțele și încearcă din nou!`)}
@@ -1277,7 +1353,8 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                   lastSyncedBloxRef.current = -1;
                   setBlox(0);
                   setOpponentBlox(0);
-                  setMatchTimeLeft(60);
+                  setElapsedSeconds(0);
+                  setMatchTimeLeft(matchMode === 'time_120' ? 120 : 60);
                   setIsGameOver(false);
                   setWinner(null);
                 }}

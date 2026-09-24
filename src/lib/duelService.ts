@@ -624,7 +624,7 @@ const pendingWrites = new Map<string, PendingThrottledWrite>();
 const lastWrittenTimes = new Map<string, number>();
 const lastWrittenPayloads = new Map<string, string>();
 const lastWrittenProgress = new Map<string, number>();
-const MIN_WRITE_INTERVAL_MS = 3000; // 3000ms minimum interval between intermediate progress writes
+const MIN_WRITE_INTERVAL_MS = 5000; // 5000ms minimum interval between intermediate progress writes
 
 // Direct write helper to Firestore
 async function executeFirestoreUpdate(
@@ -709,10 +709,10 @@ export async function updateDuelProgress(
   const elapsed = now - lastTime;
   const currentProg = typeof data.progress === 'number' ? data.progress : -1;
   const prevProg = lastWrittenProgress.get(cacheKey) ?? -1;
-  const hasMilestoneStep = currentProg >= 0 && (prevProg < 0 || Math.abs(currentProg - prevProg) >= 15);
+  const hasMilestoneStep = currentProg >= 0 && (prevProg < 0 || Math.abs(currentProg - prevProg) >= 20);
 
-  // If milestone jumped (at least 15% difference) and minimum window elapsed:
-  if ((hasMilestoneStep || elapsed >= 7000) && elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
+  // If milestone jumped (at least 20% difference) and minimum window elapsed (5s):
+  if ((hasMilestoneStep || elapsed >= 8000) && elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
     lastWrittenTimes.set(cacheKey, now);
     lastWrittenPayloads.set(cacheKey, serialized);
     if (currentProg >= 0) {
@@ -727,17 +727,17 @@ export async function updateDuelProgress(
     if (existing?.timer) {
       existing.data = mergedData;
     } else {
-      const delay = Math.max(800, Math.min(3500, MIN_WRITE_INTERVAL_MS - elapsed));
+      const delay = Math.max(1500, Math.min(4500, MIN_WRITE_INTERVAL_MS - elapsed));
       const timer = setTimeout(async () => {
         const item = pendingWrites.get(cacheKey);
         pendingWrites.delete(cacheKey);
         if (item) {
           const itemProg = typeof item.data.progress === 'number' ? item.data.progress : -1;
           const oldProg = lastWrittenProgress.get(cacheKey) ?? -1;
-          const movedEnough = itemProg >= 0 && (oldProg < 0 || Math.abs(itemProg - oldProg) >= 10);
+          const movedEnough = itemProg >= 0 && (oldProg < 0 || Math.abs(itemProg - oldProg) >= 20);
           const timeWaited = Date.now() - (lastWrittenTimes.get(cacheKey) || 0);
 
-          if (movedEnough || timeWaited >= 5000) {
+          if (movedEnough || timeWaited >= 8000) {
             lastWrittenTimes.set(cacheKey, Date.now());
             lastWrittenPayloads.set(cacheKey, JSON.stringify(item.data));
             if (itemProg >= 0) {

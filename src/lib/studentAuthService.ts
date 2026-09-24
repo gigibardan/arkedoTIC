@@ -656,6 +656,10 @@ export async function recordStudentDuelResult(
   const current = getActiveStudent();
   if (!current) return;
 
+  // Capped strictly at max 1000 XP for the winner of any duel (and max 250 XP for loser)
+  const cappedPoints = Math.min(1000, Math.max(0, pointsEarned));
+  const awardAmount = isWinner ? cappedPoints : Math.round(cappedPoints / 4);
+
   const prevStats = current.duelStats || {
     wins: 0,
     losses: 0,
@@ -673,7 +677,7 @@ export async function recordStudentDuelResult(
     wins: prevStats.wins + (isWinner ? 1 : 0),
     losses: prevStats.losses + (isWinner ? 0 : 1),
     matchesPlayed: prevStats.matchesPlayed + 1,
-    duelPoints: Math.max(0, (prevStats.duelPoints || 0) + (isWinner ? pointsEarned : Math.round(pointsEarned / 4))),
+    duelPoints: Math.max(0, (prevStats.duelPoints || 0) + awardAmount),
     cyberSprintWins: (prevStats.cyberSprintWins || 0) + (isWinner && mode === 'cyber_sprint' ? 1 : 0),
     blockCodingWins: (prevStats.blockCodingWins || 0) + (isWinner && mode === 'block_coding' ? 1 : 0),
     speedCraftingWins: (prevStats.speedCraftingWins || 0) + (isWinner && mode === 'speed_crafting' ? 1 : 0),
@@ -682,7 +686,7 @@ export async function recordStudentDuelResult(
     pcRushWins: (prevStats.pcRushWins || 0) + (isWinner && mode === 'pc_rush' ? 1 : 0)
   };
 
-  const totalXP = (current.totalXP || 0) + (isWinner ? pointsEarned : Math.round(pointsEarned / 4));
+  const totalXP = (current.totalXP || 0) + awardAmount;
 
   const updatedProfile: StudentProfile = {
     ...current,
