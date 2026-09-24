@@ -660,33 +660,6 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Mode 0: Roblox Blox Clicker Duel (Simulator 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('roblox_clicker')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'roblox_clicker'
-                      ? 'bg-gradient-to-br from-rose-950/90 via-purple-950/80 to-amber-950/60 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-amber-500 text-slate-950 font-black flex items-center justify-center text-base shadow-md shadow-rose-500/30">
-                      🧱
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Roblox Blox Clicker 🟥</span>
-                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">HOT 🔥</span>
-                      </h4>
-                      <span className="text-[10px] text-amber-300 font-medium">Simulator Roblox 1v1 (Pets & Rebirths)</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 50.000 Blox înaintea rivalului!
-                  </p>
-                </button>
-
                 {/* Mode 1: Cyber Sprint */}
                 <button
                   type="button"
@@ -756,6 +729,33 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
                     Asamblează logic scriptul (Start, Mergi în față, Viraje 90°, Repetă de 3 ori) pentru a-l ghida pe Arky prin matrice! Primul care ajunge la destinație fără să lovească un obstacol câștigă runda!
+                  </p>
+                </button>
+
+                {/* Mode 4: Roblox Blox Clicker Duel (Simulator 1v1) - POZIȚIA 4 */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('roblox_clicker')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'roblox_clicker'
+                      ? 'bg-gradient-to-br from-rose-950/90 via-purple-950/80 to-amber-950/60 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-amber-500 text-slate-950 font-black flex items-center justify-center text-base shadow-md shadow-rose-500/30">
+                      🧱
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Roblox Blox Clicker 🟥</span>
+                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">HOT 🔥</span>
+                      </h4>
+                      <span className="text-[10px] text-amber-300 font-medium">Simulator Roblox 1v1 (Pets & Rebirths)</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 50.000 Blox înaintea rivalului!
                   </p>
                 </button>
 

@@ -680,6 +680,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     if (!soundMuted) sounds.playOof();
 
     const finalBlox = latestBloxRef.current;
+    updateStudentArcadeScore('roblox_clicker', finalBlox);
     handleFinalSafetySync(finalBlox, false);
 
     if (onFinish) onFinish(finalBlox);
