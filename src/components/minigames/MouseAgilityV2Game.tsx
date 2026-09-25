@@ -30,6 +30,10 @@ import {
   Play,
   Settings,
   HelpCircle,
+  HardDrive,
+  Radio,
+  Target,
+  ShieldAlert,
 } from 'lucide-react';
 
 interface MouseAgilityV2GameProps {
@@ -59,18 +63,22 @@ type ActionType =
   | 'click' 
   | 'double_click' 
   | 'right_click' 
+  | 'decoy' 
   | 'triple_click' 
   | 'scroll' 
   | 'drag' 
   | 'lasso' 
   | 'boss' 
-  | 'wire_trace';
+  | 'wire_trace'
+  | 'timing_ring';
 
 interface TargetItem {
   id: number;
   type: ActionType;
-  x: number;
-  y: number;
+  x: number; // percent 10-85
+  y: number; // percent 15-80
+  vx?: number; // drift velocity x
+  vy?: number; // drift velocity y
   labelRo: string;
   labelEn: string;
   icon: string;
@@ -86,15 +94,31 @@ interface TargetItem {
   // For scroll
   currentScroll?: number;
   targetScroll?: number;
+  scrollStage?: number; // e.g. 1=up, 2=down
+  // For timing ring
+  ringScale?: number; // 2.5 down to 1.0
+  // For drag
+  dragCategory?: 'cpu' | 'quarantine' | 'storage';
   // For wire trace
-  traceCompleted?: boolean;
+  wireIndex?: number; // 0, 1, 2 for multi-wire
+  wireTitleRo?: string;
+  wireTitleEn?: string;
 }
 
 interface LassoDot {
   id: number;
   x: number;
   y: number;
+  vx: number;
+  vy: number;
   caught: boolean;
+}
+
+interface ClickRipple {
+  id: number;
+  x: number;
+  y: number;
+  isMiss: boolean;
 }
 
 export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, studentName }) => {
@@ -142,7 +166,9 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
   const [hitsCount, setHitsCount] = useState<number>(0);
   const [missesCount, setMissesCount] = useState<number>(0);
   const [empReady, setEmpReady] = useState<boolean>(true);
-  const [feedbackEffect, setFeedbackEffect] = useState<string | null>(null);
+  const [feedbackEffect, setFeedbackEffect] = useState<{ text: string; isMiss?: boolean } | null>(null);
+  const [flashRedBorder, setFlashRedBorder] = useState<boolean>(false);
+  const [clickRipples, setClickRipples] = useState<ClickRipple[]>([]);
 
   // Targets
   const [currentTarget, setCurrentTarget] = useState<TargetItem | null>(null);
@@ -151,7 +177,8 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
   // Wire trace state
   const [wireProgress, setWireProgress] = useState<number>(0);
-  const [isTracing, setIsTracing] = useState<boolean>(false);
+  const [isTracingWire, setIsTracingWire] = useState<boolean>(false);
+  const [activeWireIndex, setActiveWireIndex] = useState<number>(1); // Wire 1, 2, 3
 
   // Scroll gauge
   const [scrollCharge, setScrollCharge] = useState<number>(0);
@@ -176,6 +203,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
   });
 
   const arenaRef = useRef<HTMLDivElement>(null);
+  const wireTrackRef = useRef<HTMLDivElement>(null);
   const reactionTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Save upgrades
@@ -191,84 +219,84 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
   // Stage setup
   const STAGE_TITLES: { [k: number]: { ro: string; en: string; descRo: string; descEn: string; targetAction: ActionType; goalCount: number } } = {
     1: {
-      ro: 'Etapa 1: Senzor de Bază (Click & Dublu-Click)',
-      en: 'Stage 1: Basic Sensor (Click & Double-Click)',
-      descRo: 'Calibrează reflexele primare. Elimină 8 noduri cu click stânga și dublu-click rapid.',
-      descEn: 'Calibrate primary reflexes. Clear 8 nodes with single & rapid double clicks.',
+      ro: 'Etapa 1: Calibrare Reflex & Viteză (Click & Dublu-Click)',
+      en: 'Stage 1: Speed & Double-Click Calibration',
+      descRo: 'Ținte mobile: 8 noduri ce plutesc ușor. Elimină-le cu click simplu și dublu-click rapid sub 380ms!',
+      descEn: 'Drifting targets: clear 8 nodes with single clicks and fast double-taps under 380ms!',
       targetAction: 'click',
       goalCount: 8,
     },
     2: {
-      ro: 'Etapa 2: Meniu Contextual (Click Dreapta)',
-      en: 'Stage 2: Contextual Menu (Right Click)',
-      descRo: 'Infiltrare în sistem: nodurile albastre necesită dezactivare prin click dreapta!',
-      descEn: 'System bypass: blue nodes require tactical context disarming via right click!',
+      ro: 'Etapa 2: Capcane Malware & Click Dreapta (Context Disarm)',
+      en: 'Stage 2: Malware Traps & Context Right-Click',
+      descRo: 'Atenție la capcane! Albastru = Click Dreapta, Verde = Click Stânga, Roșu = CAPCANĂ (Nu apăsa)!',
+      descEn: 'Watch for traps! Blue = Right Click, Green = Left Click, Red = Trap (Do NOT click)!',
       targetAction: 'right_click',
       goalCount: 8,
     },
     3: {
-      ro: 'Etapa 3: Traseu Conductor Optic (Wire Tracing)',
-      en: 'Stage 3: Optical Wire Tracing (Steady Hand)',
-      descRo: 'Ține apăsat butonul mouse-ului și urmărește traseul laser fără să atingi marginile roșii!',
-      descEn: 'Hold mouse button and trace the conduit without touching the red electric barriers!',
+      ro: 'Etapa 3: Traseu Conductori Optici (3 Cabluri de Conectat)',
+      en: 'Stage 3: Optical Wire Tracing (3 Solder Cables)',
+      descRo: 'Trage precis conectorul de la START până la FINISH! Conectează toate cele 3 cabluri de alimentare.',
+      descEn: 'Drag connector precisely from START to FINISH! Connect all 3 power cables.',
       targetAction: 'wire_trace',
       goalCount: 3,
     },
     4: {
-      ro: 'Etapa 4: Furtună de Răcire (Scroll-Storm Wheel)',
-      en: 'Stage 4: Scroll-Storm (Mouse Wheel)',
-      descRo: 'Răcire CPU: rotește rapid de rotița mouse-ului pentru a încărca rezerva energetică la 100%!',
-      descEn: 'CPU cooling: spin your mouse wheel quickly to fill the energy gauge to 100%!',
+      ro: 'Etapa 4: Furtună de Răcire Scroll-Storm (Turbină CPU)',
+      en: 'Stage 4: Scroll-Storm Dual Turbine (Mouse Wheel)',
+      descRo: 'Rotește rapid de rotița mouse-ului pentru a genera 3 impulsuri de răcire la 100% contra cronometru!',
+      descEn: 'Spin the mouse wheel quickly to trigger 3 cooling energy surges at 100%!',
       targetAction: 'scroll',
       goalCount: 3,
     },
     5: {
-      ro: 'Etapa 5: Sortare & Carantină (Drag & Drop)',
-      en: 'Stage 5: Quarantine & Sorting (Drag & Drop)',
-      descRo: 'Trage componentele verzi pe Procesor și cele roșii infectate în Coșul de Siguranță!',
-      descEn: 'Drag green chips to the Processor, and infected red files to the Quarantine bin!',
+      ro: 'Etapa 5: Sortare Rapidă Drag & Quarantine (3 Destinații)',
+      en: 'Stage 5: Fast Drag & Quarantine (3 Sockets)',
+      descRo: 'Trage componentele CPU pe Placă, fișierele infectate în Carantină și datele pe SSD!',
+      descEn: 'Drag CPU chips to Board, malware to Quarantine, and database to SSD storage!',
       targetAction: 'drag',
       goalCount: 6,
     },
     6: {
-      ro: 'Etapa 6: Selecție Lasso (Box Multi-Select)',
-      en: 'Stage 6: Lasso Sweep (Box Multi-Select)',
-      descRo: 'Trage un dreptunghi de selecție cu mouse-ul peste roiul de micro-buguri pentru a le curăța simultan!',
-      descEn: 'Drag a selection box over the swarm of micro-bugs to zap them all at once!',
+      ro: 'Etapa 6: Selecție Lasso Box Sweep (Roi de Micro-Bugs)',
+      en: 'Stage 6: Lasso Sweep (Floating Bug Clusters)',
+      descRo: 'Bugurile se mișcă! Trage o cutie de selecție lasso cu mouse-ul pentru a le prinde pe toate odată.',
+      descEn: 'Bugs are moving! Drag a selection rectangle over the swarm to capture them all in one sweep.',
       targetAction: 'lasso',
       goalCount: 4,
     },
     7: {
-      ro: 'Etapa 7: Bătălie Boss Overclock (CPS Frenzy)',
-      en: 'Stage 7: Overclock Boss Battle (CPS Frenzy)',
-      descRo: 'Nucleul Central a luat-o razna! Fă clicuri rapide la viteza maximă pentru a-i sparge scutul!',
-      descEn: 'The Central Core is overheating! Click at maximum CPS speed to shatter its energy shield!',
+      ro: 'Etapa 7: Bătălie Boss Overclock (CPS Frenzy Rush)',
+      en: 'Stage 7: Overclock Boss Battle (CPS Frenzy Rush)',
+      descRo: 'Nucleul Central a cedat! Spamează clickuri cu viteză maximă (CPS) pentru a-i distruge scutul în 8s!',
+      descEn: 'The Core is overloading! Spam clicks with maximum speed to shatter its shield within 8s!',
       targetAction: 'boss',
       goalCount: 1,
     },
     8: {
-      ro: 'Etapa 8: Triplu-Click & Frecvență Înaltă',
-      en: 'Stage 8: Triple Click & Burst Cadence',
-      descRo: 'Noduri de mare securitate: necesită secvențe fulger de 3 clicuri rapide consecutive!',
-      descEn: 'High-security crystal nodes: require lightning-fast 3-click bursts!',
+      ro: 'Etapa 8: Frecvență Înaltă & Triplu-Click (Burst Switches)',
+      en: 'Stage 8: Triple Click & High Frequency Burst',
+      descRo: 'Noduri de criptare cuarț: necesită secvențe fulger de 3 clicuri rapide consecutive!',
+      descEn: 'Quartz encryption nodes: require rapid 3-click bursts with crisp cadence!',
       targetAction: 'triple_click',
       goalCount: 6,
     },
     9: {
-      ro: 'Etapa 9: Inele de Precizie & Ritm',
-      en: 'Stage 9: Precision Timing Rings',
-      descRo: 'Apasă exact în momentul în care inelul exterior se micșorează peste nucleul central!',
-      descEn: 'Click at the exact moment the shrinking outer ring aligns with the core circle!',
-      targetAction: 'click',
+      ro: 'Etapa 9: Inele de Precizie & Ritm (Sniper Timing)',
+      en: 'Stage 9: Precision Timing Rings (Sniper Timing)',
+      descRo: 'Apasă exact când inelul exterior se contractă peste cercul verde central pentru acuratețe maximă!',
+      descEn: 'Click precisely when the outer ring shrinks into the green core circle for maximum timing!',
+      targetAction: 'timing_ring',
       goalCount: 8,
     },
     10: {
-      ro: 'Etapa 10: MARELE MAESTRU CYBER 2.0',
-      en: 'Stage 10: ULTIMATE CYBER MASTER 2.0',
-      descRo: 'Testul suprem: toate provocările combinate într-o cursă contra-cronometru!',
-      descEn: 'The final gauntlet: all mouse mechanics fused in a high-speed cyber sprint!',
+      ro: 'Etapa 10: MARELE MAESTRU CYBER 2.0 (The Ultimate Gauntlet)',
+      en: 'Stage 10: ULTIMATE CYBER MASTER 2.0 (The Final Trial)',
+      descRo: 'Marea finală: 4 noduri reflex + 1 cablu optic + 1 descărcare scroll + 1 mini-boss final!',
+      descEn: 'The final trial: 4 reflex nodes + 1 fiber cable + 1 scroll burst + 1 final boss showdown!',
       targetAction: 'click',
-      goalCount: 15,
+      goalCount: 7,
     },
   };
 
@@ -284,8 +312,10 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     setTimeLeft(50);
     setGameState('playing');
     setWireProgress(0);
+    setActiveWireIndex(1);
+    setIsTracingWire(false);
     setScrollCharge(0);
-    spawnCampaignTarget(stageNum, 0);
+    spawnCampaignTarget(stageNum, 0, 1);
     arky.triggerIdle();
   };
 
@@ -300,16 +330,17 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     setTimeLeft(60);
     setGameState('playing');
     setWireProgress(0);
+    setIsTracingWire(false);
     setScrollCharge(0);
     spawnSurvivalTarget();
     arky.triggerIdle();
   };
 
   // Spawn target for campaign
-  const spawnCampaignTarget = (stage: number, currentHits: number) => {
+  const spawnCampaignTarget = (stage: number, currentHits: number, currentWireIdx: number = 1) => {
     const stageInfo = STAGE_TITLES[stage] || STAGE_TITLES[1];
-    const posX = Math.floor(Math.random() * 65) + 15;
-    const posY = Math.floor(Math.random() * 55) + 20;
+    const posX = Math.floor(Math.random() * 60) + 20;
+    const posY = Math.floor(Math.random() * 50) + 25;
 
     // PTFE upgrade adds +400ms per level
     const baseDuration = (3500 + upgrades.ptfeSkates * 400);
@@ -318,19 +349,41 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
     if (stage === 1) {
       type = currentHits % 2 === 0 ? 'click' : 'double_click';
+    } else if (stage === 2) {
+      // Stage 2 has Decoys (25% chance of trap decoy!)
+      const r = Math.random();
+      if (r < 0.25) {
+        type = 'decoy';
+      } else if (r < 0.65) {
+        type = 'right_click';
+      } else {
+        type = 'click';
+      }
+    } else if (stage === 5) {
+      type = 'drag';
     } else if (stage === 10) {
-      const allTypes: ActionType[] = ['click', 'double_click', 'right_click', 'triple_click', 'scroll', 'drag'];
-      type = allTypes[Math.floor(Math.random() * allTypes.length)];
+      // Stage 10 gauntlet progression
+      if (currentHits < 4) {
+        type = currentHits % 2 === 0 ? 'click' : 'double_click';
+      } else if (currentHits === 4) {
+        type = 'wire_trace';
+      } else if (currentHits === 5) {
+        type = 'scroll';
+      } else {
+        type = 'boss';
+      }
     }
 
     if (type === 'lasso') {
-      // Spawn 5 micro-dots for lasso sweep
+      // Spawn 6 floating micro-dots
       const dots: LassoDot[] = [];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 6; i++) {
         dots.push({
           id: i,
-          x: Math.floor(Math.random() * 60) + 20,
-          y: Math.floor(Math.random() * 50) + 25,
+          x: Math.floor(Math.random() * 55) + 20,
+          y: Math.floor(Math.random() * 45) + 25,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
           caught: false,
         });
       }
@@ -339,42 +392,60 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
       setLassoDots([]);
     }
 
+    const wireLabels = [
+      { ro: 'Cablul 1/3: Fibră Optică (Cyan)', en: 'Cable 1/3: Optical Fiber (Cyan)' },
+      { ro: 'Cablul 2/3: Magistrală Date (Aurie)', en: 'Cable 2/3: Data Bus (Gold)' },
+      { ro: 'Cablul 3/3: Alimentare CPU (Smarald)', en: 'Cable 3/3: CPU Power Rail (Emerald)' },
+    ];
+    const wireMeta = wireLabels[currentWireIdx - 1] || wireLabels[0];
+
+    const dragCategories: Array<'cpu' | 'quarantine' | 'storage'> = ['cpu', 'quarantine', 'storage'];
+    const selectedDragCat = dragCategories[Math.floor(Math.random() * dragCategories.length)];
+
     const newTarget: TargetItem = {
       id: Date.now(),
       type,
       x: posX,
       y: posY,
+      vx: stage === 1 ? (Math.random() - 0.5) * 0.3 : 0,
+      vy: stage === 1 ? (Math.random() - 0.5) * 0.3 : 0,
       labelRo: getActionLabelRo(type),
       labelEn: getActionLabelEn(type),
       icon: getActionIcon(type),
       spawnTime: Date.now(),
-      duration: baseDuration,
+      duration: type === 'boss' ? 9000 : type === 'wire_trace' ? 14000 : baseDuration,
       clicksNeeded: type === 'triple_click' ? 3 : type === 'double_click' ? 2 : 1,
       currentClicks: 0,
       targetRadius: 40 + upgrades.dpiSensor * 6,
-      maxHealth: type === 'boss' ? 25 : undefined,
-      currentHealth: type === 'boss' ? 25 : undefined,
+      maxHealth: type === 'boss' ? 32 : undefined,
+      currentHealth: type === 'boss' ? 32 : undefined,
       currentScroll: 0,
       targetScroll: 100,
+      dragCategory: selectedDragCat,
+      wireIndex: currentWireIdx,
+      wireTitleRo: wireMeta.ro,
+      wireTitleEn: wireMeta.en,
     };
 
     setCurrentTarget(newTarget);
     setWireProgress(0);
+    setIsTracingWire(false);
     setScrollCharge(0);
   };
 
   // Spawn target for survival frenzy
   const spawnSurvivalTarget = () => {
-    const posX = Math.floor(Math.random() * 65) + 15;
-    const posY = Math.floor(Math.random() * 55) + 20;
+    const posX = Math.floor(Math.random() * 60) + 20;
+    const posY = Math.floor(Math.random() * 50) + 25;
 
-    // Randomize action type with boss appearing occasionally
-    const types: ActionType[] = ['click', 'double_click', 'right_click', 'triple_click', 'scroll', 'drag'];
-    // 10% chance for a mini boss in survival
+    const types: ActionType[] = ['click', 'double_click', 'right_click', 'triple_click', 'scroll', 'drag', 'timing_ring'];
     const isBoss = Math.random() < 0.12;
     const chosenType = isBoss ? 'boss' : types[Math.floor(Math.random() * types.length)];
 
     const baseDuration = (3200 + upgrades.ptfeSkates * 400);
+
+    const dragCategories: Array<'cpu' | 'quarantine' | 'storage'> = ['cpu', 'quarantine', 'storage'];
+    const selectedDragCat = dragCategories[Math.floor(Math.random() * dragCategories.length)];
 
     const newTarget: TargetItem = {
       id: Date.now(),
@@ -385,18 +456,20 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
       labelEn: getActionLabelEn(chosenType),
       icon: getActionIcon(chosenType),
       spawnTime: Date.now(),
-      duration: chosenType === 'boss' ? 8000 : baseDuration,
+      duration: chosenType === 'boss' ? 8500 : baseDuration,
       clicksNeeded: chosenType === 'triple_click' ? 3 : chosenType === 'double_click' ? 2 : 1,
       currentClicks: 0,
       targetRadius: 40 + upgrades.dpiSensor * 6,
-      maxHealth: chosenType === 'boss' ? 15 : undefined,
-      currentHealth: chosenType === 'boss' ? 15 : undefined,
+      maxHealth: chosenType === 'boss' ? 24 : undefined,
+      currentHealth: chosenType === 'boss' ? 24 : undefined,
       currentScroll: 0,
       targetScroll: 100,
+      dragCategory: selectedDragCat,
     };
 
     setCurrentTarget(newTarget);
     setWireProgress(0);
+    setIsTracingWire(false);
     setScrollCharge(0);
   };
 
@@ -405,11 +478,13 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
       case 'double_click': return 'Dublu-Click!';
       case 'triple_click': return 'Triplu-Click Fulger!';
       case 'right_click': return 'Click Dreapta!';
+      case 'decoy': return '⚠️ CAPCANĂ - NU APĂSA!';
       case 'scroll': return 'Rotește Rotița Mouse!';
       case 'drag': return 'Trage în Destinație!';
       case 'lasso': return 'Încercuiește Bugurile!';
       case 'boss': return 'CLICK SPAM BOSS!';
-      case 'wire_trace': return 'Ține & Trasează Firul!';
+      case 'wire_trace': return 'Trage firul de la START!';
+      case 'timing_ring': return 'Apasă în Cercul Verde!';
       default: return 'Click Stânga!';
     }
   };
@@ -419,11 +494,13 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
       case 'double_click': return 'Double Click!';
       case 'triple_click': return 'Triple Click Burst!';
       case 'right_click': return 'Right Click Disarm!';
+      case 'decoy': return '⚠️ TRAP - DO NOT CLICK!';
       case 'scroll': return 'Scroll Wheel!';
-      case 'drag': return 'Drag to Destination!';
-      case 'lasso': return 'Lasso Sweep Bugs!';
+      case 'drag': return 'Drag to Socket!';
+      case 'lasso': return 'Lasso Sweep Swarm!';
       case 'boss': return 'CLICK SPAM BOSS!';
-      case 'wire_trace': return 'Hold & Trace Wire!';
+      case 'wire_trace': return 'Drag wire from START!';
+      case 'timing_ring': return 'Hit in Green Ring!';
       default: return 'Left Click!';
     }
   };
@@ -433,11 +510,13 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
       case 'double_click': return '⚡⚡';
       case 'triple_click': return '⚡⚡⚡';
       case 'right_click': return '🖱️👆';
+      case 'decoy': return '☠️';
       case 'scroll': return '🎚️';
       case 'drag': return '📦';
       case 'lasso': return '🎯';
       case 'boss': return '👾';
       case 'wire_trace': return '〰️';
+      case 'timing_ring': return '🎯';
       default: return '🖱️';
     }
   };
@@ -465,26 +544,62 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     return () => clearInterval(timer);
   }, [gameState, timeLeft]);
 
-  // Target expiration timer
+  // Target drift & expiration timer
   useEffect(() => {
     if (gameState !== 'playing' || !currentTarget) return;
 
     const checkInterval = setInterval(() => {
       const now = Date.now();
+      // Target expiration
       if (now - currentTarget.spawnTime > currentTarget.duration) {
-        // Target expired - registered as miss
-        sounds.playWrong();
+        if (currentTarget.type === 'decoy') {
+          // Decoys expiring without being clicked is a SUCCESS!
+          sounds.playCorrect();
+          registerSuccess(15, 'CAPCANĂ EVITATĂ! +15');
+          return;
+        }
+
+        // Target expired - registered as miss with penalties
         registerMiss();
         if (activeMode === 'campaign') {
-          spawnCampaignTarget(currentStage, hitsCount);
+          spawnCampaignTarget(currentStage, hitsCount, activeWireIndex);
         } else {
           spawnSurvivalTarget();
         }
       }
-    }, 200);
+
+      // Drift physics for Stage 1 targets
+      if (currentTarget.vx || currentTarget.vy) {
+        setCurrentTarget((prev) => {
+          if (!prev) return null;
+          let nx = prev.x + (prev.vx || 0);
+          let ny = prev.y + (prev.vy || 0);
+          let nvx = prev.vx || 0;
+          let nvy = prev.vy || 0;
+          if (nx < 15 || nx > 80) nvx = -nvx;
+          if (ny < 20 || ny > 75) nvy = -nvy;
+          return { ...prev, x: nx, y: ny, vx: nvx, vy: nvy };
+        });
+      }
+
+      // Lasso floating bug swarm movement
+      if (lassoDots.length > 0) {
+        setLassoDots((prev) =>
+          prev.map((d) => {
+            let nx = d.x + d.vx;
+            let ny = d.y + d.vy;
+            let nvx = d.vx;
+            let nvy = d.vy;
+            if (nx < 15 || nx > 80) nvx = -nvx;
+            if (ny < 20 || ny > 75) nvy = -nvy;
+            return { ...d, x: nx, y: ny, vx: nvx, vy: nvy };
+          })
+        );
+      }
+    }, 80);
 
     return () => clearInterval(checkInterval);
-  }, [gameState, currentTarget, activeMode, currentStage, hitsCount]);
+  }, [gameState, currentTarget, activeMode, currentStage, hitsCount, activeWireIndex, lassoDots]);
 
   // Handle successful hit
   const registerSuccess = (basePts: number, customMessage?: string) => {
@@ -507,7 +622,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     const newHits = hitsCount + 1;
     setHitsCount(newHits);
 
-    // Earn Mouse Bits for hardware shop (1 Bit per 40 pts)
+    // Earn Mouse Bits for hardware shop (1 Bit per 25 pts)
     const earnedBits = Math.max(1, Math.floor(totalAwarded / 20));
     setMouseBits((prev) => {
       const updated = prev + earnedBits;
@@ -518,11 +633,11 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     });
 
     if (isCritical) {
-      setFeedbackEffect(`CRITICAL! +${totalAwarded} pts`);
+      setFeedbackEffect({ text: `CRITICAL! +${totalAwarded} pts` });
     } else if (customMessage) {
-      setFeedbackEffect(customMessage);
+      setFeedbackEffect({ text: customMessage });
     } else {
-      setFeedbackEffect(`+${totalAwarded}`);
+      setFeedbackEffect({ text: `+${totalAwarded}` });
     }
     setTimeout(() => setFeedbackEffect(null), 700);
 
@@ -530,22 +645,40 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     if (activeMode === 'campaign') {
       const stageInfo = STAGE_TITLES[currentStage] || STAGE_TITLES[1];
       if (newHits >= stageInfo.goalCount) {
-        // Stage completed!
         completeStage();
       } else {
-        spawnCampaignTarget(currentStage, newHits);
+        spawnCampaignTarget(currentStage, newHits, activeWireIndex);
       }
     } else {
       spawnSurvivalTarget();
     }
   };
 
-  // Handle Miss Click
-  const registerMiss = () => {
+  // HANDLE MISS CLICK (NOW WITH VISUAL & SCORE PENALTY AS REQUESTED)
+  const registerMiss = (clickCoords?: { x: number; y: number }) => {
+    sounds.playWrong();
     setCombo(0);
     setMissesCount((prev) => prev + 1);
-    setFeedbackEffect('MISS!');
-    setTimeout(() => setFeedbackEffect(null), 600);
+
+    // Score deduction penalty (-5 pts, minimum 0)
+    setScore((prev) => Math.max(0, prev - 5));
+
+    // Visual penalty: red border flash
+    setFlashRedBorder(true);
+    setTimeout(() => setFlashRedBorder(false), 350);
+
+    // Floating text indicator
+    setFeedbackEffect({ text: '-5 pts (RATAT)', isMiss: true });
+    setTimeout(() => setFeedbackEffect(null), 650);
+
+    // Spawn red click ripple if coords provided
+    if (clickCoords) {
+      const ripId = Date.now();
+      setClickRipples((prev) => [...prev, { id: ripId, x: clickCoords.x, y: clickCoords.y, isMiss: true }]);
+      setTimeout(() => {
+        setClickRipples((prev) => prev.filter((r) => r.id !== ripId));
+      }, 500);
+    }
   };
 
   // Complete Campaign Stage
@@ -599,7 +732,6 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
         localStorage.setItem('arkedo_highscore_mouse_v2', String(finalScore));
       } catch {}
     }
-    // Update live student arcade score
     updateActiveArcadeScore('mouse_v2', finalScore);
   };
 
@@ -607,6 +739,18 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
   const handleTargetLeftClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (gameState !== 'playing' || !currentTarget) return;
+
+    if (currentTarget.type === 'decoy') {
+      // Clicked on a decoy trap! Major penalty!
+      setScore((prev) => Math.max(0, prev - 10));
+      setFeedbackEffect({ text: '⚠️ CAPCANĂ ACTIVATĂ! -10', isMiss: true });
+      setTimeout(() => setFeedbackEffect(null), 800);
+      sounds.playWrong();
+      setFlashRedBorder(true);
+      setTimeout(() => setFlashRedBorder(false), 400);
+      spawnCampaignTarget(currentStage, hitsCount, activeWireIndex);
+      return;
+    }
 
     if (currentTarget.type === 'click') {
       registerSuccess(20);
@@ -646,12 +790,15 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           currentClicks: 1,
         });
       }
+    } else if (currentTarget.type === 'timing_ring') {
+      // Precision Timing Ring
+      registerSuccess(35, 'PERFECT TIMING!');
     } else if (currentTarget.type === 'boss') {
       // Boss click spam
       sounds.playClick();
       const newHealth = (currentTarget.currentHealth || 1) - 1;
       if (newHealth <= 0) {
-        registerSuccess(60, 'BOSS OVERCLOCK DESTROYED!');
+        registerSuccess(60, 'BOSS OVERCLOCK DISTRUS!');
       } else {
         setCurrentTarget({
           ...currentTarget,
@@ -659,8 +806,10 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
         });
       }
     } else if (currentTarget.type === 'right_click') {
-      sounds.playWrong();
-      registerMiss();
+      // Player did left click on a right-click target!
+      const rect = arenaRef.current?.getBoundingClientRect();
+      const clickCoords = rect ? { x: e.clientX - rect.left, y: e.clientY - rect.top } : undefined;
+      registerMiss(clickCoords);
     }
   };
 
@@ -673,8 +822,9 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     if (currentTarget.type === 'right_click') {
       registerSuccess(25, 'CONTEXT DISARMED!');
     } else {
-      sounds.playWrong();
-      registerMiss();
+      const rect = arenaRef.current?.getBoundingClientRect();
+      const clickCoords = rect ? { x: e.clientX - rect.left, y: e.clientY - rect.top } : undefined;
+      registerMiss(clickCoords);
     }
   };
 
@@ -684,19 +834,20 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     e.preventDefault();
 
     const scrollDelta = Math.abs(e.deltaY) * (1 + upgrades.titanWheel * 0.4);
-    const newCharge = Math.min(100, scrollCharge + scrollDelta * 0.15);
+    const newCharge = Math.min(100, scrollCharge + scrollDelta * 0.18);
     setScrollCharge(newCharge);
 
     if (newCharge >= 100) {
-      registerSuccess(35, 'SCROLL OVERLOAD CLEARED!');
+      registerSuccess(35, 'TURBINĂ RĂCITĂ 100%!');
     }
   };
 
-  // Arena miss click
+  // Arena miss click (clicked empty space in arena)
   const handleArenaClick = (e: React.MouseEvent) => {
     if (gameState !== 'playing') return;
-    sounds.playWrong();
-    registerMiss();
+    const rect = arenaRef.current?.getBoundingClientRect();
+    const clickCoords = rect ? { x: e.clientX - rect.left, y: e.clientY - rect.top } : undefined;
+    registerMiss(clickCoords);
   };
 
   // EMP Nanoclicker active power (Spacebar)
@@ -706,11 +857,9 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
         e.preventDefault();
         sounds.playVictory();
         setEmpReady(false);
-        setFeedbackEffect('⚡ EMP PULSE ACTIVATED!');
+        setFeedbackEffect({ text: '⚡ EMP PULSE ACTIVATED!' });
         setTimeout(() => setFeedbackEffect(null), 900);
-        // Instantly clears current target
         registerSuccess(25, 'EMP CLEAR!');
-        // 25s cooldown
         setTimeout(() => setEmpReady(true), 25000);
       }
     };
@@ -718,38 +867,70 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [gameState, empReady, upgrades.empNanoclicker]);
 
-  // Wire tracing logic
-  const handleWireMouseDown = (e: React.MouseEvent) => {
+  // ==========================================
+  // STEP 3: FLAWLESS WIRE TRACING IMPLEMENTATION
+  // ==========================================
+  const handleWireStartMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (currentTarget?.type === 'wire_trace') {
-      setIsTracing(true);
-      sounds.playClick();
-    }
+    if (currentTarget?.type !== 'wire_trace' || gameState !== 'playing') return;
+    setIsTracingWire(true);
+    sounds.playClick();
   };
 
-  const handleWireMouseMove = (e: React.MouseEvent) => {
-    if (isTracing && currentTarget?.type === 'wire_trace') {
-      const rect = arenaRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      const relX = ((e.clientX - rect.left) / rect.width) * 100;
-      setWireProgress((prev) => {
-        const next = Math.min(100, prev + 2.5);
-        if (next >= 100) {
-          setIsTracing(false);
-          registerSuccess(45, 'CIRCUIT SOLDERED!');
+  // Global cursor tracker while tracing wire to guarantee 100% smooth dragging
+  useEffect(() => {
+    if (!isTracingWire) return;
+
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!wireTrackRef.current) return;
+      const rect = wireTrackRef.current.getBoundingClientRect();
+      const relativeX = e.clientX - rect.left;
+      const width = rect.width;
+
+      // Calculate percentage clamped between 0 and 100
+      const currentPct = Math.max(0, Math.min(100, (relativeX / width) * 100));
+      setWireProgress(currentPct);
+
+      // Check if finished (reached >= 95% of distance)
+      if (currentPct >= 95) {
+        setIsTracingWire(false);
+        sounds.playVictory();
+
+        if (activeMode === 'campaign' && currentStage === 3) {
+          if (activeWireIndex < 3) {
+            const nextIdx = activeWireIndex + 1;
+            setActiveWireIndex(nextIdx);
+            setFeedbackEffect({ text: `CABLU ${activeWireIndex}/3 CONECTAT!` });
+            setTimeout(() => setFeedbackEffect(null), 800);
+            spawnCampaignTarget(3, hitsCount + 1, nextIdx);
+          } else {
+            registerSuccess(45, 'CIRCUITE ALIMENTATE 100%!');
+          }
+        } else {
+          registerSuccess(40, 'CIRCUIT SOLDERED!');
         }
-        return next;
-      });
-    }
-  };
+      }
+    };
 
-  const handleWireMouseUp = () => {
-    if (isTracing) {
-      setIsTracing(false);
-    }
-  };
+    const handleGlobalMouseUp = () => {
+      if (isTracingWire) {
+        setIsTracingWire(false);
+      }
+    };
 
-  // Lasso box selection logic
+    window.addEventListener('mousemove', handleGlobalMouseMove);
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isTracingWire, activeMode, currentStage, activeWireIndex, hitsCount]);
+
+  // ==========================================
+  // STEP 6: LASSO BOX SELECTION LOGIC
+  // ==========================================
   const handleLassoMouseDown = (e: React.MouseEvent) => {
     if (currentTarget?.type !== 'lasso' || gameState !== 'playing') return;
     const rect = arenaRef.current?.getBoundingClientRect();
@@ -767,7 +948,6 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setLassoSelection((prev) => (prev ? { ...prev, currentX: x, currentY: y } : null));
 
-    // Check if lasso box caught dots
     const minX = Math.min(lassoSelection.startX, x);
     const maxX = Math.max(lassoSelection.startX, x);
     const minY = Math.min(lassoSelection.startY, y);
@@ -786,17 +966,21 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
   const handleLassoMouseUp = () => {
     if (lassoSelection?.isSelecting) {
       setLassoSelection(null);
-      // Check if all dots caught
-      const uncaught = lassoDots.filter((d) => !d.caught);
-      if (uncaught.length === 0 && lassoDots.length > 0) {
-        registerSuccess(40, 'LASSO SWEEP 100%!');
+      const caughtCount = lassoDots.filter((d) => d.caught).length;
+      if (caughtCount >= 4) {
+        registerSuccess(40, `LASSO SWEEP (${caughtCount}/6 BUGS)!`);
+      } else {
+        sounds.playWrong();
+        registerMiss();
       }
     }
   };
 
-  // Drag and drop sorting logic
-  const handleDragStart = (e: React.DragEvent, isSafe: boolean) => {
-    e.dataTransfer.setData('text/plain', isSafe ? 'safe_chip' : 'virus_chip');
+  // ==========================================
+  // STEP 5: DRAG & DROP SORTING LOGIC
+  // ==========================================
+  const handleDragStart = (e: React.DragEvent, category: 'cpu' | 'quarantine' | 'storage') => {
+    e.dataTransfer.setData('text/plain', category);
     sounds.playClick();
   };
 
@@ -804,13 +988,12 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     e.preventDefault();
   };
 
-  const handleDropOnZone = (e: React.DragEvent, zoneType: 'cpu' | 'quarantine') => {
+  const handleDropOnZone = (e: React.DragEvent, zoneType: 'cpu' | 'quarantine' | 'storage') => {
     e.preventDefault();
     const data = e.dataTransfer.getData('text/plain');
-    if ((zoneType === 'cpu' && data === 'safe_chip') || (zoneType === 'quarantine' && data === 'virus_chip')) {
-      registerSuccess(30, 'CORRECTLY QUARANTINED!');
+    if (data === zoneType) {
+      registerSuccess(30, 'SORTARE CORECTĂ!');
     } else {
-      sounds.playWrong();
       registerMiss();
     }
   };
@@ -871,7 +1054,6 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
   const handleReactionClick = () => {
     if (reactionStage === 'ready') {
-      // Clicked too early!
       if (reactionTimerRef.current) clearTimeout(reactionTimerRef.current);
       setReactionStage('too_soon');
       sounds.playWrong();
@@ -918,14 +1100,14 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               <h2 className="text-xl sm:text-2xl font-black text-white font-heading tracking-wide">
                 {lang === 'en' ? 'Mouse Master Pro 2.0' : 'Maestrul Mouse-ului 2.0'}
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
                 PRO LAB
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
               {lang === 'en'
                 ? 'Circuit Tracing, Scroll-Storm, Lasso Sweep, Boss CPS & Hardware Upgrades'
-                : 'Circuite optice, Scroll-Storm, Selecție Lasso, Boss CPS și Laborator Hardware'}
+                : 'Circuite optice, Scroll-Storm, Selecție Lasso, Boși CPS și Atelier Hardware'}
             </p>
           </div>
         </div>
@@ -960,7 +1142,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           }}
           className={`px-4 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 border ${
             activeMode === 'campaign'
-              ? 'bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30'
+              ? 'bg-cyan-600 text-white border-cyan-500 shadow-lg shadow-cyan-600/30'
               : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
           }`}
         >
@@ -992,7 +1174,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           }}
           className={`px-4 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 border ${
             activeMode === 'benchmark'
-              ? 'bg-cyan-600 text-white border-cyan-500 shadow-lg shadow-cyan-600/30'
+              ? 'bg-purple-600 text-white border-purple-500 shadow-lg shadow-purple-600/30'
               : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
           }`}
         >
@@ -1008,7 +1190,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           }}
           className={`px-4 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 border ${
             activeMode === 'shop'
-              ? 'bg-purple-600 text-white border-purple-500 shadow-lg shadow-purple-600/30'
+              ? 'bg-emerald-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30'
               : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
           }`}
         >
@@ -1038,7 +1220,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                     !isUnlocked
                       ? 'bg-slate-950 text-slate-600 border-slate-800 opacity-50 cursor-not-allowed'
                       : isCurrent
-                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-lg shadow-emerald-500/30 font-bold scale-105'
+                      ? 'bg-cyan-500 text-slate-950 border-cyan-400 shadow-lg shadow-cyan-500/30 font-bold scale-105'
                       : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
                   }`}
                 >
@@ -1052,15 +1234,15 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">
                   Etapa {currentStage} / 10
                 </span>
                 <span className="text-slate-600">•</span>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-slate-400 font-bold">
                   {lang === 'en' ? STAGE_TITLES[currentStage]?.en : STAGE_TITLES[currentStage]?.ro}
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white mt-1">
+              <h3 className="text-sm font-semibold text-slate-200 mt-1">
                 {lang === 'en' ? STAGE_TITLES[currentStage]?.descEn : STAGE_TITLES[currentStage]?.descRo}
               </h3>
             </div>
@@ -1068,7 +1250,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             {gameState === 'idle' && (
               <button
                 onClick={() => startCampaignStage(currentStage)}
-                className="px-6 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-xl shadow-emerald-500/20 cursor-pointer shrink-0"
+                className="px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-xl shadow-cyan-500/20 cursor-pointer shrink-0"
               >
                 <Play className="w-4 h-4 fill-slate-950" />
                 <span>{lang === 'en' ? 'Start Stage' : 'Începe Etapa'}</span>
@@ -1091,8 +1273,8 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
               {lang === 'en'
-                ? 'Targets evolve every second: Single clicks, fast double-taps, right-click context menu dismissals, and intense Boss spam bursts. Keep your combo alive to maximize score without inflated multipliers!'
-                : 'Țintele se schimbă constant: clicuri simple, dublu-clic rapid, dezactivare click dreapta și bătălii frenetice cu boși overclock. Menține combo-ul activ pentru cel mai mare punctaj echilibrat!'}
+                ? 'Targets evolve rapidly: Single clicks, fast double-taps, context right-click, wire soldering, and boss encounters. Misses now deduct -5 points! Keep your combo streak alive.'
+                : 'Țintele se schimbă constant: clicuri simple, dublu-clic rapid, dezactivare click dreapta, circuite optice și boși overclock. Atenție: Clicurile greșite scad -5 puncte!'}
             </p>
           </div>
 
@@ -1131,8 +1313,11 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             </div>
 
             <div className="bg-slate-950/60 border border-slate-800/80 p-2.5 rounded-xl">
-              <span className="text-[10px] text-slate-400 uppercase font-mono block">Ținte Nimerite</span>
-              <span className="text-lg font-black text-indigo-300 font-mono">🎯 {hitsCount}</span>
+              <span className="text-[10px] text-slate-400 uppercase font-mono block">Ținte & Erori</span>
+              <span className="text-lg font-black font-mono flex items-center justify-center gap-1.5">
+                <span className="text-cyan-300">🎯 {hitsCount}</span>
+                <span className="text-rose-400 text-xs font-normal">({missesCount} ratări)</span>
+              </span>
             </div>
 
             <div className="bg-slate-950/60 border border-slate-800/80 p-2.5 rounded-xl col-span-2 sm:col-span-1">
@@ -1149,16 +1334,20 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             </div>
           </div>
 
-          {/* Interactive Game Arena */}
+          {/* Interactive Game Arena with Flash Red Border on Miss */}
           <div
             ref={arenaRef}
             onClick={handleArenaClick}
             onWheel={handleWheel}
             onMouseDown={currentTarget?.type === 'lasso' ? handleLassoMouseDown : undefined}
-            onMouseMove={currentTarget?.type === 'lasso' ? handleLassoMouseMove : isTracing ? handleWireMouseMove : undefined}
-            onMouseUp={currentTarget?.type === 'lasso' ? handleLassoMouseUp : isTracing ? handleWireMouseUp : undefined}
-            className={`relative w-full h-[380px] sm:h-[440px] bg-slate-950 border-2 rounded-3xl overflow-hidden cursor-crosshair transition shadow-inner select-none ${
-              gameState === 'playing' ? 'border-cyan-500/30' : 'border-slate-800'
+            onMouseMove={currentTarget?.type === 'lasso' ? handleLassoMouseMove : undefined}
+            onMouseUp={currentTarget?.type === 'lasso' ? handleLassoMouseUp : undefined}
+            className={`relative w-full h-[380px] sm:h-[440px] bg-slate-950 border-2 rounded-3xl overflow-hidden cursor-crosshair transition-all duration-150 shadow-inner select-none ${
+              flashRedBorder
+                ? 'border-rose-500 ring-4 ring-rose-500/30 shadow-2xl shadow-rose-950/80'
+                : gameState === 'playing'
+                ? 'border-cyan-500/30'
+                : 'border-slate-800'
             }`}
             style={{
               backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.9) 100%)',
@@ -1173,17 +1362,30 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               }}
             />
 
-            {/* Float feedback popup */}
+            {/* Click Ripples for Visual Feedback on Miss */}
+            {clickRipples.map((rip) => (
+              <div
+                key={rip.id}
+                className="absolute pointer-events-none -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-2 border-rose-500 bg-rose-500/20 animate-ping z-20"
+                style={{ left: `${rip.x}px`, top: `${rip.y}px` }}
+              />
+            ))}
+
+            {/* Float feedback popup (Green on hit, Red on miss) */}
             {feedbackEffect && (
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-xl bg-slate-900/90 border border-amber-500/40 text-amber-300 text-xs font-mono font-bold shadow-2xl animate-bounce pointer-events-none">
-                {feedbackEffect}
+              <div className={`absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-xl font-mono text-xs font-bold shadow-2xl animate-bounce pointer-events-none border ${
+                feedbackEffect.isMiss
+                  ? 'bg-rose-950/95 border-rose-500 text-rose-300'
+                  : 'bg-slate-900/90 border-amber-500/40 text-amber-300'
+              }`}>
+                {feedbackEffect.text}
               </div>
             )}
 
             {/* IDLE SCREEN OVERLAY */}
             {gameState === 'idle' && (
               <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl">
+                <div className="w-16 h-16 rounded-3xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl">
                   🖱️
                 </div>
                 <h3 className="text-xl font-black text-white font-heading">
@@ -1191,8 +1393,8 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                 </h3>
                 <p className="text-xs text-slate-400 max-w-md mt-1 leading-relaxed">
                   {lang === 'en'
-                    ? 'Click Start to enter the cyber arena. Watch for different action types: left click, double click, right click disarm, wheel scroll, and boss encounters.'
-                    : 'Apasă butonul de start pentru a începe. Fii atent la tipurile de acțiune: click simplu, dublu-click, click dreapta, rotiță scroll și bătălii cu boși.'}
+                    ? 'Test reflexes and accuracy. Watch for action types: left click, double click, right click disarm, wheel scroll, and boss encounters.'
+                    : 'Antrenează reflexele și precizia. Atenție la tipurile de noduri: click stânga, dublu-click, click dreapta, rotiță scroll și bătălii cu boși.'}
                 </p>
                 <button
                   onClick={() => {
@@ -1202,7 +1404,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       startSurvivalFrenzy();
                     }
                   }}
-                  className="mt-5 px-7 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-xl shadow-emerald-500/20 cursor-pointer"
+                  className="mt-5 px-7 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-xl shadow-cyan-500/20 cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-slate-950" />
                   <span>{lang === 'en' ? 'Start Round' : 'Pornește Runda'}</span>
@@ -1237,7 +1439,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                   {currentStage < 10 && (
                     <button
                       onClick={() => startCampaignStage(currentStage + 1)}
-                      className="px-6 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/30"
+                      className="px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/30"
                     >
                       <span>{lang === 'en' ? 'Next Stage' : 'Etapa Următoare'}</span>
                       <ChevronRight className="w-4 h-4" />
@@ -1282,7 +1484,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                         startSurvivalFrenzy();
                       }
                     }}
-                    className="px-6 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/30"
+                    className="px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/30"
                   >
                     <RotateCcw className="w-4 h-4" />
                     <span>{lang === 'en' ? 'Play Again' : 'Joacă Din Nou'}</span>
@@ -1294,16 +1496,19 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             {/* ACTIVE TARGET RENDERING */}
             {gameState === 'playing' && currentTarget && (
               <>
-                {/* 1. REGULAR CLICK / DOUBLE / TRIPLE / RIGHT CLICK */}
+                {/* 1. REGULAR CLICK / DOUBLE / TRIPLE / RIGHT CLICK / DECOY */}
                 {(currentTarget.type === 'click' ||
                   currentTarget.type === 'double_click' ||
                   currentTarget.type === 'triple_click' ||
-                  currentTarget.type === 'right_click') && (
+                  currentTarget.type === 'right_click' ||
+                  currentTarget.type === 'decoy') && (
                   <div
                     onClick={handleTargetLeftClick}
                     onContextMenu={handleTargetRightClick}
                     className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex flex-col items-center justify-center font-bold transition-transform cursor-pointer shadow-2xl active:scale-95 group ${
-                      currentTarget.type === 'right_click'
+                      currentTarget.type === 'decoy'
+                        ? 'bg-rose-950/90 border-2 border-rose-500 text-rose-300 animate-pulse shadow-rose-950/60'
+                        : currentTarget.type === 'right_click'
                         ? 'bg-blue-600/90 border-2 border-cyan-300 shadow-cyan-500/30'
                         : currentTarget.type === 'triple_click'
                         ? 'bg-purple-600/90 border-2 border-purple-300 shadow-purple-500/30 animate-pulse'
@@ -1330,7 +1535,22 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                   </div>
                 )}
 
-                {/* 2. BOSS CLICK SPAM ENCOUNTER */}
+                {/* 2. TIMING RING TARGET (STAGE 9) */}
+                {currentTarget.type === 'timing_ring' && (
+                  <div
+                    onClick={handleTargetLeftClick}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer z-10"
+                    style={{ left: `${currentTarget.x}%`, top: `${currentTarget.y}%` }}
+                  >
+                    {/* Concentric shrinking animated ring */}
+                    <div className="absolute inset-0 rounded-full border-2 border-cyan-400 animate-ping opacity-75" />
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/80 border-2 border-emerald-300 flex items-center justify-center text-xl shadow-xl shadow-emerald-500/40">
+                      🎯
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. BOSS CLICK SPAM ENCOUNTER */}
                 {currentTarget.type === 'boss' && (
                   <div
                     onClick={handleTargetLeftClick}
@@ -1358,10 +1578,10 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                   </div>
                 )}
 
-                {/* 3. SCROLL-STORM WHEEL TARGET */}
+                {/* 4. SCROLL-STORM WHEEL TARGET */}
                 {currentTarget.type === 'scroll' && (
                   <div
-                    className="absolute -translate-x-1/2 -translate-y-1/2 w-44 p-4 rounded-3xl bg-slate-900/90 border-2 border-cyan-400 flex flex-col items-center shadow-2xl text-center z-10"
+                    className="absolute -translate-x-1/2 -translate-y-1/2 w-48 p-5 rounded-3xl bg-slate-900/95 border-2 border-cyan-400 flex flex-col items-center shadow-2xl text-center z-10"
                     style={{
                       left: `${currentTarget.x}%`,
                       top: `${currentTarget.y}%`,
@@ -1369,7 +1589,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                   >
                     <span className="text-3xl animate-bounce">🎚️</span>
                     <span className="text-xs font-black text-cyan-300 uppercase font-mono mt-1">
-                      {lang === 'en' ? 'SPIN WHEEL UP/DOWN' : 'ROTEȘTE ROTIȚA MOUSE'}
+                      {lang === 'en' ? 'SPIN WHEEL RAPIDLY!' : 'ROTEȘTE ROTIȚA MOUSE!'}
                     </span>
                     <div className="w-full bg-slate-950 rounded-full h-4 mt-3 overflow-hidden border border-cyan-500/40 p-0.5">
                       <div
@@ -1377,75 +1597,176 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                         style={{ width: `${scrollCharge}%` }}
                       />
                     </div>
-                    <span className="text-[10px] font-mono text-cyan-200 mt-1 font-bold">
+                    <span className="text-[11px] font-mono text-cyan-200 mt-2 font-bold">
                       {Math.round(scrollCharge)}% / 100%
                     </span>
                   </div>
                 )}
 
-                {/* 4. WIRE TRACING TARGET */}
+                {/* 5. WIRE TRACING (FIXED & FULLY INTERACTIVE WITH GLOBAL LISTENER) */}
                 {currentTarget.type === 'wire_trace' && (
                   <div
-                    className="absolute inset-10 border-2 border-dashed border-amber-500/30 rounded-2xl flex flex-col justify-between p-4 pointer-events-auto"
-                    onMouseMove={handleWireMouseMove}
-                    onMouseUp={handleWireMouseUp}
+                    className="absolute inset-6 sm:inset-10 border-2 border-cyan-500/30 rounded-3xl bg-slate-900/90 backdrop-blur-md flex flex-col justify-between p-5 pointer-events-auto shadow-2xl z-20"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+                        <span className="text-xs font-mono font-bold text-cyan-300 uppercase">
+                          {lang === 'en' ? currentTarget.wireTitleEn : currentTarget.wireTitleRo}
+                        </span>
+                      </div>
+                      <span className="text-xs font-mono font-bold text-amber-300">
+                        Progres: {Math.round(wireProgress)}%
+                      </span>
+                    </div>
+
+                    <div className="text-center my-2">
+                      <span className="text-xs text-slate-300 font-semibold">
+                        {lang === 'en'
+                          ? 'Click & HOLD the START terminal and drag your mouse smoothly to FINISH!'
+                          : 'Apasă și ȚINE APĂSAT pe borna START, apoi trage cursorul lin până la borna FINISH!'}
+                      </span>
+                    </div>
+
+                    {/* Interactive Wire Track */}
+                    <div
+                      ref={wireTrackRef}
+                      className="relative w-full h-16 bg-slate-950 rounded-2xl border-2 border-slate-700 overflow-hidden flex items-center px-4"
+                    >
+                      {/* Internal conduit guide line */}
+                      <div className="absolute left-6 right-6 h-2 bg-slate-800 rounded-full" />
+
+                      {/* Glowing Filled Electric Cable */}
+                      <div
+                        className="absolute left-6 h-3.5 rounded-full bg-gradient-to-r from-cyan-400 via-amber-400 to-emerald-400 shadow-lg shadow-cyan-500/50 transition-all duration-75"
+                        style={{
+                          width: `calc(${wireProgress}% * 0.88)`,
+                        }}
+                      />
+
+                      {/* START TERMINAL */}
+                      <div
+                        onMouseDown={handleWireStartMouseDown}
+                        className={`absolute left-2 z-20 w-12 h-12 rounded-xl flex flex-col items-center justify-center font-black text-[10px] cursor-grab active:cursor-grabbing shadow-xl transition-transform ${
+                          isTracingWire
+                            ? 'bg-amber-400 text-slate-950 scale-110 shadow-amber-500/50 animate-pulse'
+                            : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950'
+                        }`}
+                        title="Click & Drag"
+                      >
+                        <span>START</span>
+                        <MousePointer className="w-3 h-3 mt-0.5" />
+                      </div>
+
+                      {/* Moving Cable Head indicator */}
+                      {isTracingWire && (
+                        <div
+                          className="absolute z-20 w-8 h-8 -translate-x-1/2 rounded-full bg-amber-300 border-2 border-white shadow-xl shadow-amber-400/80 pointer-events-none animate-ping"
+                          style={{ left: `calc(1rem + ${wireProgress}% * 0.88)` }}
+                        />
+                      )}
+
+                      {/* FINISH TERMINAL */}
+                      <div
+                        className={`absolute right-2 z-10 w-12 h-12 rounded-xl border-2 flex flex-col items-center justify-center font-black text-[10px] transition-all ${
+                          wireProgress >= 95
+                            ? 'bg-emerald-500 text-slate-950 border-emerald-300 shadow-emerald-500/50 scale-105'
+                            : 'bg-slate-900 text-slate-400 border-slate-700'
+                        }`}
+                      >
+                        <span>FINISH</span>
+                        <Zap className="w-3 h-3 mt-0.5" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 6. DRAG & DROP SORTING TARGET (3 DESTINATIONS) */}
+                {currentTarget.type === 'drag' && (
+                  <div
+                    className="absolute inset-4 flex flex-col justify-between p-3 pointer-events-auto"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <div className="text-center">
-                      <span className="text-xs font-mono font-bold text-amber-300 uppercase">
-                        {lang === 'en' ? 'Click & Hold START, then drag along wire to END!' : 'Apasă și ține START, apoi trage pe fir până la FINISH!'}
+                      <span className="text-xs font-mono font-bold text-cyan-300 uppercase">
+                        {lang === 'en'
+                          ? 'Drag module into the matching hardware socket!'
+                          : 'Trage modulul în soclul hardware corespunzător!'}
                       </span>
                     </div>
 
-                    <div className="relative w-full h-12 bg-slate-900/80 rounded-2xl border border-slate-700 overflow-hidden flex items-center px-4">
-                      {/* Laser conduit */}
-                      <div className="absolute left-0 top-0 bottom-0 bg-amber-500/20 border-r-2 border-amber-400 transition-all" style={{ width: `${wireProgress}%` }} />
+                    {/* Draggable Component */}
+                    <div className="flex justify-center my-2">
+                      <div
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, currentTarget.dragCategory || 'cpu')}
+                        className={`px-5 py-3 rounded-2xl border-2 text-white font-bold text-xs flex items-center gap-2.5 cursor-grab active:cursor-grabbing shadow-2xl animate-pulse ${
+                          currentTarget.dragCategory === 'cpu'
+                            ? 'bg-emerald-600 border-emerald-300 shadow-emerald-600/40'
+                            : currentTarget.dragCategory === 'quarantine'
+                            ? 'bg-rose-600 border-rose-300 shadow-rose-600/40'
+                            : 'bg-blue-600 border-cyan-300 shadow-blue-600/40'
+                        }`}
+                      >
+                        {currentTarget.dragCategory === 'cpu' ? (
+                          <>
+                            <Cpu className="w-5 h-5" />
+                            <span>{lang === 'en' ? 'Clean CPU Processor' : 'Procesor CPU Curat'}</span>
+                          </>
+                        ) : currentTarget.dragCategory === 'quarantine' ? (
+                          <>
+                            <ShieldAlert className="w-5 h-5" />
+                            <span>{lang === 'en' ? 'Malware Trojan .EXE' : 'Troian Infectat .EXE'}</span>
+                          </>
+                        ) : (
+                          <>
+                            <HardDrive className="w-5 h-5" />
+                            <span>{lang === 'en' ? 'Backup NVMe Drive' : 'Stocare SSD NVMe'}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 3 Drop Targets */}
+                    <div className="grid grid-cols-3 gap-3">
+                      <div
+                        onDragOver={handleDragOver}
+                        onDrop={(e) => handleDropOnZone(e, 'cpu')}
+                        className="h-24 rounded-2xl border-2 border-dashed border-emerald-400 bg-emerald-950/20 flex flex-col items-center justify-center p-2 text-center transition hover:bg-emerald-950/40"
+                      >
+                        <Cpu className="w-6 h-6 text-emerald-400 mb-1" />
+                        <span className="text-[11px] font-bold text-emerald-300 font-mono">
+                          {lang === 'en' ? 'Motherboard CPU' : 'Placă de Bază CPU'}
+                        </span>
+                      </div>
 
                       <div
-                        onMouseDown={handleWireMouseDown}
-                        className="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center cursor-pointer shadow-lg z-10 active:scale-95"
+                        onDragOver={handleDragOver}
+                        onDrop={(e) => handleDropOnZone(e, 'quarantine')}
+                        className="h-24 rounded-2xl border-2 border-dashed border-rose-400 bg-rose-950/20 flex flex-col items-center justify-center p-2 text-center transition hover:bg-rose-950/40"
                       >
-                        START
+                        <Trash2 className="w-6 h-6 text-rose-400 mb-1" />
+                        <span className="text-[11px] font-bold text-rose-300 font-mono">
+                          {lang === 'en' ? 'Firewall Quarantine' : 'Carantină Firewall'}
+                        </span>
                       </div>
 
-                      <div className="flex-1 text-center font-mono text-xs text-amber-400 font-bold z-10">
-                        {Math.round(wireProgress)}%
-                      </div>
-
-                      <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center z-10">
-                        FINISH
+                      <div
+                        onDragOver={handleDragOver}
+                        onDrop={(e) => handleDropOnZone(e, 'storage')}
+                        className="h-24 rounded-2xl border-2 border-dashed border-cyan-400 bg-cyan-950/20 flex flex-col items-center justify-center p-2 text-center transition hover:bg-cyan-950/40"
+                      >
+                        <HardDrive className="w-6 h-6 text-cyan-400 mb-1" />
+                        <span className="text-[11px] font-bold text-cyan-300 font-mono">
+                          {lang === 'en' ? 'NVMe Storage' : 'Unitate NVMe SSD'}
+                        </span>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* 5. DRAG & DROP SORTING TARGET */}
-                {currentTarget.type === 'drag' && (
-                  <div className="absolute inset-6 flex items-center justify-between p-4 pointer-events-auto">
-                    {/* Draggable Component */}
-                    <div
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, true)}
-                      className="px-4 py-3 rounded-2xl bg-emerald-600 border-2 border-emerald-300 text-white font-bold text-xs flex items-center gap-2 cursor-grab active:cursor-grabbing shadow-xl animate-pulse"
-                    >
-                      <Cpu className="w-5 h-5" />
-                      <span>{lang === 'en' ? 'Clean CPU Chip' : 'Cip CPU Curat'}</span>
-                    </div>
-
-                    {/* Target Drop Zone */}
-                    <div
-                      onDragOver={handleDragOver}
-                      onDrop={(e) => handleDropOnZone(e, 'cpu')}
-                      className="w-48 h-32 rounded-3xl border-2 border-dashed border-emerald-400 bg-emerald-950/20 flex flex-col items-center justify-center p-3 text-center transition hover:bg-emerald-950/40"
-                    >
-                      <Cpu className="w-7 h-7 text-emerald-400 mb-1" />
-                      <span className="text-xs font-bold text-emerald-300 font-mono">
-                        {lang === 'en' ? 'Drop to CPU Socket' : 'Plasează în Soclul CPU'}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* 6. LASSO SELECTION BUG CLUSTER */}
+                {/* 7. LASSO SELECTION BUG CLUSTER (STAGE 6) */}
                 {currentTarget.type === 'lasso' && (
                   <div className="absolute inset-0 pointer-events-none">
                     {lassoDots.map((dot) => (
@@ -1462,7 +1783,6 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       </div>
                     ))}
 
-                    {/* Selection rectangle */}
                     {lassoSelection?.isSelecting && (
                       <div
                         className="absolute border-2 border-dashed border-cyan-400 bg-cyan-500/20"
@@ -1522,7 +1842,6 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                 : 'Măsoară viteza pură de clicuri pe secundă (CPS). Relevanță directă pentru reflexe rapide.'}
             </p>
 
-            {/* Click Button Area */}
             <button
               onClick={benchmarkState === 'ready' ? startBenchmark : handleBenchmarkClick}
               className={`w-full h-44 rounded-3xl font-black text-xl flex flex-col items-center justify-center transition active:scale-95 cursor-pointer shadow-inner border-2 ${
