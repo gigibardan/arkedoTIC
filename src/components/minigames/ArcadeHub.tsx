@@ -19,6 +19,7 @@ import { RedstoneLogicLab } from './RedstoneLogicLab';
 import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
 import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
 import { GameLockedModal } from '../common/GameLockedModal';
+import { UnloggedNoticeBadge } from '../common/UnloggedNoticeBadge';
 import {
   subscribeGameSettings,
   isGameOpen,
@@ -297,8 +298,18 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     );
   }
 
-  if (activeGame === 'roblox_clicker') {
+  // Render minigame helper wrapped with unlogged notification badge
+  const wrapWithUnloggedBadge = (gameNode: React.ReactNode) => {
     return (
+      <div className="flex flex-col gap-3 w-full">
+        <UnloggedNoticeBadge studentName={studentName} onNavigateToAuth={onBackToCatalog} />
+        {gameNode}
+      </div>
+    );
+  };
+
+  if (activeGame === 'roblox_clicker') {
+    return wrapWithUnloggedBadge(
       <RobloxClickerDuelGame
         onBack={() => setActiveGame('hub')}
         studentName={studentName || 'Elev Robloxian'}
@@ -308,7 +319,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'voxel_architect') {
-    return (
+    return wrapWithUnloggedBadge(
       <MinecraftVoxelArchitect
         onBack={() => setActiveGame('hub')}
         studentName={studentName}
@@ -317,7 +328,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'redstone_lab') {
-    return (
+    return wrapWithUnloggedBadge(
       <RedstoneLogicLab
         onBack={() => setActiveGame('hub')}
       />
@@ -325,7 +336,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'cyber_dino') {
-    return (
+    return wrapWithUnloggedBadge(
       <CyberDinoRunner
         onBack={() => setActiveGame('hub')}
         studentName={studentName}
@@ -334,55 +345,55 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'typing') {
-    return <TypingGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<TypingGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'mouse') {
-    return <MouseAgilityGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<MouseAgilityGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === '2048') {
-    return <Game2048Binary onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<Game2048Binary onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'pcbuilder') {
-    return <PCBuilderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<PCBuilderGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'rgb_pixel') {
-    return <RGBPixelMasterGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<RGBPixelMasterGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'byte_slider') {
-    return <ByteSliderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<ByteSliderGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'file_drop') {
-    return <FileDropGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<FileDropGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'virus_sweeper') {
-    return <VirusSweeperGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<VirusSweeperGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'detective') {
-    return <CyberSafeDetective onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<CyberSafeDetective onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'files') {
-    return <FileOrganizerGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<FileOrganizerGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'binary_factory') {
-    return <BinaryFactoryGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<BinaryFactoryGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'maze') {
-    return <AlgorithmMazeGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<AlgorithmMazeGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   if (activeGame === 'firewall') {
-    return <FirewallDefenderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+    return wrapWithUnloggedBadge(<FirewallDefenderGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
   }
 
   const renderGameActionButton = (

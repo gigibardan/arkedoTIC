@@ -27,7 +27,8 @@ import {
   applyCheatingPenalty, 
   awardTeacherBonusXP,
   resetStudentArcadeScores,
-  resetStudentLessonProgress
+  resetStudentLessonProgress,
+  computeTotalArcade
 } from '../lib/studentAuthService';
 import { sounds } from '../utils/audio';
 
@@ -123,25 +124,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   if (!isOpen) return null;
 
   const calculateArcadeTotal = (scores: Partial<ArcadeScores>) => {
-    return (
-      (scores.typing && scores.typing <= 250 ? scores.typing * 25 : scores.typing || 0) +
-      (scores.mouse || 0) +
-      (scores.game2048 || 0) +
-      (scores.pcbuilder || 0) +
-      (scores.detective || 0) +
-      (scores.files || 0) +
-      (scores.binary_factory || 0) +
-      (scores.maze || 0) +
-      (scores.firewall || 0) +
-      (scores.rgb_pixel || 0) +
-      (scores.byte_slider || 0) +
-      (scores.file_drop || 0) +
-      (scores.virus_sweeper || 0) +
-      (scores.cyber_dino || 0) +
-      (scores.redstone_lab || 0) +
-      (scores.voxel_architect || 0) +
-      (scores.roblox_clicker || 0)
-    );
+    return computeTotalArcade(scores);
   };
 
   const handleArcadeChange = (key: keyof ArcadeScores, val: string) => {

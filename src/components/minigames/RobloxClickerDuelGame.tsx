@@ -661,6 +661,10 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       if (!soundMuted) sounds.playOof();
     }
 
+    try {
+      localStorage.setItem('arkedo_highscore_roblox_clicker', String(myFinal));
+    } catch {}
+
     updateStudentArcadeScore('roblox_clicker', myFinal);
     handleFinalSafetySync(myFinal, didIWin);
 
@@ -674,6 +678,10 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       setIsGameOver(true);
       setWinner('me');
       if (!soundMuted) sounds.playVictory();
+
+      try {
+        localStorage.setItem('arkedo_highscore_roblox_clicker', String(currentBlox));
+      } catch {}
 
       // Record high score & sync room with safety final write
       updateStudentArcadeScore('roblox_clicker', currentBlox);
@@ -691,6 +699,10 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     if (!soundMuted) sounds.playOof();
 
     const finalBlox = latestBloxRef.current;
+    try {
+      localStorage.setItem('arkedo_highscore_roblox_clicker', String(finalBlox));
+    } catch {}
+
     updateStudentArcadeScore('roblox_clicker', finalBlox);
     handleFinalSafetySync(finalBlox, false);
 

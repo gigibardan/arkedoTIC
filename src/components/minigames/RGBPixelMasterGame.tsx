@@ -478,6 +478,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
         const next = prev + points;
         try {
           localStorage.setItem('arkedo_highscore_rgb_pixels', String(next));
+          updateActiveArcadeScore('rgb_pixel', next);
         } catch {}
         return next;
       });
@@ -627,6 +628,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
         const next = prev + 50;
         try {
           localStorage.setItem('arkedo_highscore_rgb_pixels', String(next));
+          updateActiveArcadeScore('rgb_pixel', next);
         } catch {}
         return next;
       });

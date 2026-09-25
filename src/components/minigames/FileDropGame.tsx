@@ -539,17 +539,17 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
       setMaxStreak((prev) => Math.max(prev, currentStreak));
 
       let multiplier = 1;
-      if (currentStreak >= 8) multiplier = 3;
-      else if (currentStreak >= 5) multiplier = 2;
-      else if (currentStreak >= 3) multiplier = 1.5;
+      if (currentStreak >= 8) multiplier = 2.0;
+      else if (currentStreak >= 5) multiplier = 1.5;
+      else if (currentStreak >= 3) multiplier = 1.25;
 
-      const basePoints = activeFile.isThreat ? 250 : 100;
+      const basePoints = activeFile.isThreat ? 50 : 25;
       const pointsEarned = Math.round(basePoints * multiplier);
 
       setScore((prev) => {
         const newScore = prev + pointsEarned;
         // Check level progression
-        const newLevel = Math.min(8, Math.floor(newScore / 1000) + 1);
+        const newLevel = Math.min(8, Math.floor(newScore / 300) + 1);
         if (newLevel > levelRef.current) {
           setLevel(newLevel);
           sounds.playLevelUp();
@@ -571,8 +571,8 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
         setRecentlyClearedLane(landedLaneIndex);
         setTimeout(() => setRecentlyClearedLane(null), 1200);
 
-        // Huge bonus for line clear!
-        const clearBonus = 350;
+        // Balanced bonus for line clear!
+        const clearBonus = 100;
         setScore((prev) => prev + clearBonus);
 
         setFeedbackMessage({

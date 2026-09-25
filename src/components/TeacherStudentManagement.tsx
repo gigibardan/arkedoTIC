@@ -147,9 +147,10 @@ export const TeacherStudentManagement: React.FC = () => {
     const arc = s.arcadeScores || {};
     return (
       (arc.typing && arc.typing > 250) ||
-      (arc.cyber_dino && arc.cyber_dino > 50000) ||
-      (arc.game2048 && arc.game2048 > 200000) ||
-      (arc.mouse && arc.mouse > 50000) ||
+      (arc.cyber_dino && arc.cyber_dino > 10000) ||
+      (arc.game2048 && arc.game2048 > 100000) ||
+      (arc.mouse && arc.mouse > 3000) ||
+      (arc.roblox_clicker && arc.roblox_clicker > 25000) ||
       (s.totalXP > 10000 && (!s.lessonsProgress || Object.keys(s.lessonsProgress).length === 0))
     );
   });

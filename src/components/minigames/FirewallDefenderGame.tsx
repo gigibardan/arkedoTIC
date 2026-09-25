@@ -252,7 +252,8 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
       setCombo(newCombo);
       if (newCombo > maxCombo) setMaxCombo(newCombo);
 
-      const points = 120 + Math.min(newCombo * 20, 80);
+      // Balanced scoring for 45s session: 30 base + max 20 combo bonus
+      const points = 30 + Math.min(newCombo * 4, 20);
       setScore((prev) => prev + points);
       setProcessedCount((prev) => prev + 1);
 

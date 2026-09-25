@@ -157,7 +157,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
       }
       updateActiveArcadeScore('mouse', score);
 
-      if (score >= 1200) {
+      if (score >= 650) {
         arky.triggerSuccess(
           lang === 'en'
             ? `Spectacular! ${score} points! True Mouse Master! 🖱️⚡`
@@ -179,17 +179,17 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
     if (!currentTarget || gameState !== 'playing') return;
 
     if (currentTarget.type === 'click') {
-      // Normal single click target
+      // Normal single click target (balanced 25 pts)
       sounds.playClick();
-      registerSuccess(100);
+      registerSuccess(25);
     } else if (currentTarget.type === 'double_click') {
-      // Check double click timing
+      // Check double click timing (balanced 45 pts)
       const now = Date.now();
       const last = currentTarget.lastClickTime || 0;
       if (now - last < 450) {
         // Successful double click!
         sounds.playCorrect();
-        registerSuccess(200);
+        registerSuccess(45);
       } else {
         sounds.playClick();
         setCurrentTarget({
@@ -211,8 +211,9 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
     if (!currentTarget || gameState !== 'playing') return;
 
     if (currentTarget.type === 'right_click') {
+      // Context right click target (balanced 35 pts)
       sounds.playCorrect();
-      registerSuccess(150);
+      registerSuccess(35);
     } else {
       sounds.playWrong();
       registerMiss();
@@ -233,8 +234,9 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
   const handleDropOnFolder = (e: React.DragEvent) => {
     e.preventDefault();
     if (currentTarget?.type === 'drag') {
+      // Drag & drop file into folder (balanced 55 pts)
       sounds.playCorrect();
-      registerSuccess(250);
+      registerSuccess(55);
     }
   };
 
@@ -250,7 +252,8 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
     setCombo(newCombo);
     if (newCombo > maxCombo) setMaxCombo(newCombo);
 
-    const bonus = Math.min(newCombo * 10, 100);
+    // Balanced combo bonus: +2 pts per combo level, max 15 pts
+    const bonus = Math.min(newCombo * 2, 15);
     setScore((prev) => prev + basePts + bonus);
     setHitsCount((prev) => prev + 1);
 

@@ -167,7 +167,8 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
       setCombo(newCombo);
       if (newCombo > maxCombo) setMaxCombo(newCombo);
 
-      const points = 100 + Math.min(newCombo * 15, 60);
+      // Balanced points for 45s sprint: 25 base + max 15 combo bonus
+      const points = 25 + Math.min(newCombo * 3, 15);
       setScore((prev) => prev + points);
       setSortedCount((prev) => prev + 1);
 

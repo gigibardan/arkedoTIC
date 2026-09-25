@@ -62,7 +62,7 @@ const DIFFICULTIES: Record<DifficultyLevel, DifficultyConfig> = {
     viruses: 10,
     badge: 'Ușor',
     color: 'from-emerald-500 to-teal-600',
-    baseScore: 1000,
+    baseScore: 400,
   },
   medium: {
     id: 'medium',
@@ -74,7 +74,7 @@ const DIFFICULTIES: Record<DifficultyLevel, DifficultyConfig> = {
     viruses: 18,
     badge: 'Mediu',
     color: 'from-indigo-500 to-blue-600',
-    baseScore: 2200,
+    baseScore: 750,
   },
   hard: {
     id: 'hard',
@@ -86,7 +86,7 @@ const DIFFICULTIES: Record<DifficultyLevel, DifficultyConfig> = {
     viruses: 28,
     badge: 'Avansat',
     color: 'from-rose-500 to-purple-600',
-    baseScore: 4000,
+    baseScore: 1100,
   },
 };
 
@@ -638,8 +638,8 @@ export const VirusSweeperGame: React.FC<VirusSweeperGameProps> = ({ onBack, stud
 
     // Score calculation
     // Base score + Time bonus + Difficulty Multiplier - Penalty for Firewall absorb
-    const timeBonus = Math.max(0, 400 - elapsedSeconds * 2);
-    const difficultyMultiplier = difficulty === 'hard' ? 2.5 : difficulty === 'medium' ? 1.6 : 1.0;
+    const timeBonus = Math.max(0, 150 - elapsedSeconds * 2);
+    const difficultyMultiplier = difficulty === 'hard' ? 1.4 : difficulty === 'medium' ? 1.2 : 1.0;
     const finalScore = Math.round((currentDiff.baseScore + timeBonus) * difficultyMultiplier);
 
     setScore(finalScore);

@@ -58,6 +58,7 @@ import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
+import { UnloggedNoticeBadge } from './common/UnloggedNoticeBadge';
 
 interface DuelArenaProps {
   lang?: 'ro' | 'en';
@@ -1067,6 +1068,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       {/* VIEW 3: ACTIVE PLAYING DUEL */}
       {viewState === 'playing' && currentRoom && (
         <div className="space-y-6">
+          <UnloggedNoticeBadge studentName={resolvedStudentName} onNavigateToAuth={onBack} />
           {/* Live Progress Bar (Race Track) */}
           <div className="p-5 rounded-2xl bg-slate-900/95 border border-purple-500/40 shadow-xl space-y-4">
             <div className="flex items-center justify-between text-xs font-bold text-slate-400">

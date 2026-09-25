@@ -87,34 +87,66 @@ export async function hashPassword(plainText: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Calculate total arcade score safely & equitably
+// Calculate total arcade score safely & equitably across all minigames
 export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
-  // Normalize typing WPM to fair competitive arcade points (1 WPM = 25 pts, e.g. 60 WPM = 1,500 pts)
+  // Normalize typing WPM to fair competitive arcade points (1 WPM = 25 pts, e.g. 60 WPM = 1,500 pts, max cap 2,500 pts)
   const rawTyping = scores.typing || 0;
-  const typingPoints = rawTyping <= 250 ? rawTyping * 25 : rawTyping;
+  const typingPoints = Math.min(2500, rawTyping <= 250 ? rawTyping * 25 : rawTyping);
 
-  // 2048 Bitwise: increased score to properly reward high difficulty + 3000 pts victory bonus
+  // 2048 Bitwise: Reaching 2048 awards up to 2,500 XP (normalized so 20,000+ raw tile merge scores don't skew student XP)
   const raw2048 = scores.game2048 || 0;
-  const game2048Points = raw2048;
+  const game2048Points = raw2048 > 2500 ? Math.min(2500, Math.round(raw2048 / 10)) : raw2048;
+
+  // Mouse Agility (45s reflex mini-game): balanced, capped at fair max 1,000 pts
+  const mousePoints = Math.min(1000, scores.mouse || 0);
+
+  // Roblox Clicker (Duel & Clicker): 5,000 Blox converted 5:1 to max 1,000 XP
+  const rawRoblox = scores.roblox_clicker || 0;
+  const robloxPoints = rawRoblox > 1000 ? Math.min(1000, Math.round(rawRoblox / 5)) : rawRoblox;
+
+  // Virus Sweeper (Cyber-Safe Minesweeper): capped at fair 1,800 XP
+  const virusSweeperPoints = Math.min(1800, scores.virus_sweeper || 0);
+
+  // File-Drop (Tetris): capped at fair 1,800 XP
+  const fileDropPoints = Math.min(1800, scores.file_drop || 0);
+
+  // File Organizer (45s sprint): capped at fair 1,200 XP
+  const filesPoints = Math.min(1200, scores.files || 0);
+
+  // Firewall Defender (45s packet inspection): capped at fair 1,500 XP
+  const firewallPoints = Math.min(1500, scores.firewall || 0);
+
+  // Cyber Dino Runner: capped at fair 1,800 XP
+  const cyberDinoPoints = Math.min(1800, scores.cyber_dino || 0);
+
+  // Complex educational games retain earned values up to sensible safety caps
+  const pcBuilderPoints = Math.min(2500, scores.pcbuilder || 0);
+  const detectivePoints = Math.min(1500, scores.detective || 0);
+  const binaryFactoryPoints = Math.min(1500, scores.binary_factory || 0);
+  const mazePoints = Math.min(2500, scores.maze || 0);
+  const rgbPoints = Math.min(2000, scores.rgb_pixel || 0);
+  const byteSliderPoints = Math.min(1500, scores.byte_slider || 0);
+  const redstonePoints = Math.min(2500, scores.redstone_lab || 0);
+  const voxelPoints = Math.min(3000, scores.voxel_architect || 0);
 
   return (
     typingPoints +
-    (scores.mouse || 0) +
+    mousePoints +
     game2048Points +
-    (scores.pcbuilder || 0) +
-    (scores.detective || 0) +
-    (scores.files || 0) +
-    (scores.binary_factory || 0) +
-    (scores.maze || 0) +
-    (scores.firewall || 0) +
-    (scores.rgb_pixel || 0) +
-    (scores.byte_slider || 0) +
-    (scores.file_drop || 0) +
-    (scores.virus_sweeper || 0) +
-    (scores.cyber_dino || 0) +
-    (scores.redstone_lab || 0) +
-    (scores.voxel_architect || 0) +
-    (scores.roblox_clicker || 0)
+    pcBuilderPoints +
+    detectivePoints +
+    filesPoints +
+    binaryFactoryPoints +
+    mazePoints +
+    firewallPoints +
+    rgbPoints +
+    byteSliderPoints +
+    fileDropPoints +
+    virusSweeperPoints +
+    cyberDinoPoints +
+    redstonePoints +
+    voxelPoints +
+    robloxPoints
   );
 }
 

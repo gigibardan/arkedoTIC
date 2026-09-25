@@ -379,15 +379,24 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   };
 
   const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2') => {
-    // If student has no name yet, prompt them first
+    // If student has no name yet and is not logged in, prompt them and scroll up to the login / student pass
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
       setIsEditingName(true);
       sounds.playWrong();
+      
+      // Smooth scroll up to the student pass / login card
+      const authSection = document.getElementById('student-pass-section');
+      if (authSection) {
+        authSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
       arky.triggerError(
         lang === 'en'
-          ? "Hold on! Tell Arky your name first before starting the mission! 🤖"
-          : "Stai puțin! Spune-i lui Arky numele tău înainte de a începe misiunea! 🤖"
+          ? "Hold on! Please log in or enter your name above before starting the mission! ✍️🤖"
+          : "Stai puțin! Te rugăm să te loghezi sau să introduci numele tău mai sus înainte de a începe misiunea! ✍️🤖"
       );
       return;
     }
@@ -475,7 +484,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
 
             {/* Student Digital ID Pass / Registration Card */}
-            <div className="bg-slate-900/95 backdrop-blur border-2 border-teal-500/40 rounded-3xl p-4 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
+            <div id="student-pass-section" className="bg-slate-900/95 backdrop-blur border-2 border-teal-500/40 rounded-3xl p-4 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden scroll-mt-24">
               {/* Subtle tech background glow */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
