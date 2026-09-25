@@ -200,7 +200,17 @@ function GameContent() {
   // Student Name persistence
   const [studentName, setStudentName] = useState<string>(() => {
     try {
-      return localStorage.getItem('arkedo_student_name') || '';
+      const saved = localStorage.getItem('arkedo_student_name') || '';
+      // Automatic cleanup for purged ghost student "PRO"
+      if (saved.trim().toUpperCase() === 'PRO') {
+        localStorage.removeItem('arkedo_student_name');
+        const prof = localStorage.getItem('arkedo_active_student_profile');
+        if (prof && prof.toLowerCase().includes('"pro"')) {
+          localStorage.removeItem('arkedo_active_student_profile');
+        }
+        return '';
+      }
+      return saved;
     } catch {
       return '';
     }

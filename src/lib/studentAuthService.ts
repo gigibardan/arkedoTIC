@@ -765,23 +765,44 @@ export async function getAllStudents(): Promise<StudentProfile[]> {
 }
 
 // DELETE STUDENT ACCOUNT (TEACHER ACTION)
-export async function deleteStudentAccount(studentId: string): Promise<boolean> {
+export async function deleteStudentAccount(studentId: string, username?: string): Promise<boolean> {
+  const current = getActiveStudent();
+  const cleanUser = (username || current?.username || '').trim().toLowerCase();
+
+  // If currently active student matches deleted ID or username, log out & clear local profile
+  if (current && (current.id === studentId || (cleanUser && current.username.trim().toLowerCase() === cleanUser))) {
+    logoutStudent();
+  }
+
+  // Also clean up any lingering local name
+  try {
+    const savedLocalName = (localStorage.getItem('arkedo_student_name') || '').trim().toLowerCase();
+    if (cleanUser && savedLocalName === cleanUser) {
+      localStorage.removeItem('arkedo_student_name');
+    }
+  } catch {}
+
+  // Also delete corresponding gradebook results in rezultate_tic
+  if (cleanUser) {
+    try {
+      const { deleteAllResultsByStudentName } = await import('./resultsService');
+      await deleteAllResultsByStudentName(cleanUser);
+    } catch (e) {
+      console.warn('Eroare stergere rezultate asociate elevului:', e);
+    }
+  }
+
   if (isCloudConnected && db) {
     try {
       const { deleteDoc } = await import('firebase/firestore');
       await deleteDoc(doc(db, STUDENTS_COLLECTION, studentId));
-      
-      const current = getActiveStudent();
-      if (current && current.id === studentId) {
-        logoutStudent();
-      }
       return true;
     } catch (err) {
       console.warn('Eroare stergere elev Firestore:', err);
       return false;
     }
   }
-  return false;
+  return true;
 }
 
 // FULL PROFILE UPDATE (TEACHER ACTION)

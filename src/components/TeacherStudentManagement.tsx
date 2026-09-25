@@ -133,7 +133,7 @@ export const TeacherStudentManagement: React.FC = () => {
       : `Sigur doriți să ștergeți definitiv contul elevului "${username}"?`;
     if (window.confirm(confirmMsg)) {
       setDeletingId(studentId);
-      const ok = await deleteStudentAccount(studentId);
+      const ok = await deleteStudentAccount(studentId, username);
       if (ok) {
         setStudents((prev) => prev.filter((s) => s.id !== studentId));
         sounds.playClick();

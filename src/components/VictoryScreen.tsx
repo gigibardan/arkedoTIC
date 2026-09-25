@@ -59,21 +59,32 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     sounds.playVictory();
     arky.triggerFinished();
     
-    // Automatically log results to Firebase Firestore
-    if (!hasLoggedRef.current) {
-      hasLoggedRef.current = true;
-      const finalName = initialStudentName.trim() || studentName.trim() || (lang === 'en' ? 'Anonymous Student' : 'Elev Anonim');
-      logStudentResult(
-        finalName,
-        courseDbTitle,
-        score,
-        maxScore,
-        elapsedSeconds
-      ).then((docId) => {
-        if (docId) {
-          setIsLoggedToFirebase(true);
-        }
-      });
+    // Automatically log results to Firebase Firestore only once per active mission run
+    const finalName = initialStudentName.trim() || studentName.trim() || (lang === 'en' ? 'Anonymous Student' : 'Elev Anonim');
+    const sessionLogKey = `arkedo_victory_logged_${courseId}_${finalName}_${score}`;
+
+    if (!hasLoggedRef.current && !sessionStorage.getItem(sessionLogKey)) {
+      // Prevent spamming ghost submissions with 0 seconds from stale page reloads
+      if (elapsedSeconds > 0) {
+        hasLoggedRef.current = true;
+        sessionStorage.setItem(sessionLogKey, 'true');
+
+        logStudentResult(
+          finalName,
+          courseDbTitle,
+          score,
+          maxScore,
+          elapsedSeconds
+        ).then((docId) => {
+          if (docId) {
+            setIsLoggedToFirebase(true);
+          }
+        });
+      } else {
+        // 0s completion detected (stale reload or un-timed) - mark as handled without spamming DB
+        hasLoggedRef.current = true;
+        sessionStorage.setItem(sessionLogKey, 'true');
+      }
     }
 
     // Launch festive confetti

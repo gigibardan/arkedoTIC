@@ -21,10 +21,17 @@ import {
   Search,
   AlertTriangle,
   Filter,
-  Gamepad2
+  Gamepad2,
+  Trash
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { getStudentResults, deleteStudentResult, StudentResult } from '../lib/resultsService';
+import { 
+  getStudentResults, 
+  deleteStudentResult, 
+  deleteAllResultsByStudentName, 
+  clearLocalResultsCache, 
+  StudentResult 
+} from '../lib/resultsService';
 import { isCloudConnected } from '../lib/firebase';
 import { sounds } from '../utils/audio';
 import { TeacherStudentManagement } from './TeacherStudentManagement';
@@ -100,6 +107,46 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         sounds.playClick();
       }
       setDeletingId(null);
+    }
+  };
+
+  const handleDeleteAllForStudent = async (studentName: string) => {
+    if (!studentName) return;
+    const confirmMsg = lang === 'en'
+      ? `Permanently delete ALL (${results.filter(r => r.studentName.toLowerCase() === studentName.toLowerCase()).length}) mission records for student "${studentName}"?`
+      : `Sigur doriți să ștergeți TOATE (${results.filter(r => r.studentName.toLowerCase() === studentName.toLowerCase()).length}) înregistrările și notele pentru elevul "${studentName}" din baza de date și cache?`;
+    
+    if (window.confirm(confirmMsg)) {
+      setLoading(true);
+      const res = await deleteAllResultsByStudentName(studentName);
+      if (res.success) {
+        setResults((prev) => prev.filter((r) => (r.studentName || '').trim().toLowerCase() !== studentName.trim().toLowerCase()));
+        sounds.playCorrect();
+      }
+      setLoading(false);
+    }
+  };
+
+  const handlePurgeLocalCache = async () => {
+    sounds.playClick();
+    const confirmMsg = lang === 'en'
+      ? 'Clean local browser cache and force refresh all records from Firestore? This removes any ghost/duplicate submissions.'
+      : 'Goliți memoria cache locală și reîncărcați catalogul proaspăt din Firestore? Această acțiune elimină datele fantomă sau duplicate reținute în browser.';
+    if (window.confirm(confirmMsg)) {
+      clearLocalResultsCache();
+      try {
+        // If active profile has test or ghost name, reset it
+        const savedName = localStorage.getItem('arkedo_student_name');
+        if (savedName && savedName.toUpperCase() === 'PRO') {
+          localStorage.removeItem('arkedo_student_name');
+        }
+        const activeProfileRaw = localStorage.getItem('arkedo_active_student_profile');
+        if (activeProfileRaw && activeProfileRaw.toLowerCase().includes('"pro"')) {
+          localStorage.removeItem('arkedo_active_student_profile');
+        }
+      } catch {}
+      await fetchResults();
+      sounds.playCorrect();
     }
   };
 
@@ -242,11 +289,11 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={fetchResults}
             disabled={loading}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
             title={t.teacherRefresh}
           >
             <RefreshCw className={`w-3.5 h-3.5 text-cyan-400 ${loading ? 'animate-spin' : ''}`} />
@@ -254,8 +301,17 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
           </button>
 
           <button
+            onClick={handlePurgeLocalCache}
+            className="px-3.5 py-2 rounded-xl bg-amber-950/50 hover:bg-amber-900/70 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            title={lang === 'en' ? 'Purge local browser cache and force clean refresh' : 'Golește cache-ul local și reîncarcă direct din cloud (elimină duplicatele/datele fantomă)'}
+          >
+            <Trash2 className="w-3.5 h-3.5 text-amber-400" />
+            <span>{lang === 'en' ? 'Purge Cache' : 'Curăță Cache'}</span>
+          </button>
+
+          <button
             onClick={handleLogout}
-            className="px-4 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>{t.teacherLogout}</span>
@@ -263,7 +319,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
 
           <button
             onClick={onBackToHome}
-            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{t.backToCourses}</span>
@@ -485,12 +541,16 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                               {idx + 1}
                             </span>
                             <div>
-                              <span>{r.studentName}</span>
-                              {isSuspicious && (
-                                <span className="ml-2 px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
+                              <span className="font-bold text-white">{r.studentName}</span>
+                              {r.elapsedSeconds === 0 ? (
+                                <span className="ml-2 px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30" title="Trimitere cu 0s (Reîncărcare de pagină sau cache local)">
+                                  ⚠️ 0s (Cache)
+                                </span>
+                              ) : isSuspicious ? (
+                                <span className="ml-2 px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
                                   ⚠️ Suspiciune Viteză
                                 </span>
-                              )}
+                              ) : null}
                             </div>
                           </td>
                           <td className="py-3.5 px-4 text-slate-300 font-medium">
@@ -522,12 +582,20 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                               </button>
 
                               <button
+                                onClick={() => handleDeleteAllForStudent(r.studentName)}
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/80 text-slate-400 hover:text-rose-300 border border-slate-700 hover:border-rose-700/50 transition cursor-pointer"
+                                title={lang === 'en' ? `Delete ALL submissions for ${r.studentName}` : `Șterge TOATE notele elevului "${r.studentName}"`}
+                              >
+                                <Trash className="w-3.5 h-3.5 text-amber-400 hover:text-rose-400" />
+                              </button>
+
+                              <button
                                 onClick={() => handleDelete(r.id)}
                                 disabled={deletingId === r.id}
                                 className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
-                                title={lang === 'en' ? 'Delete entry' : 'Șterge rând'}
+                                title={lang === 'en' ? 'Delete this entry' : 'Șterge această notă'}
                               >
-                                <Trash2 className="w-4 h-4" />
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           </td>

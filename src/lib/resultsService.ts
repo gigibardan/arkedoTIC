@@ -111,12 +111,9 @@ export async function getStudentResults(): Promise<StudentResult[]> {
       ...(d.data() as Omit<StudentResult, 'id'>),
     }));
 
-    // Cache to local storage
-    if (cloudResults.length > 0) {
-      saveLocalResults(cloudResults);
-      return cloudResults;
-    }
-    return localList;
+    // Cache to local storage (even if empty, so deleted items aren't resurrected from stale cache)
+    saveLocalResults(cloudResults);
+    return cloudResults;
   } catch (error) {
     console.warn('Interogarea cu index a eșuat, se încearcă fără index:', error);
     try {
@@ -130,16 +127,60 @@ export async function getStudentResults(): Promise<StudentResult[]> {
         const timeB = b.completedAt?.toMillis?.() || 0;
         return timeB - timeA;
       });
-      if (sorted.length > 0) {
-        saveLocalResults(sorted);
-        return sorted;
-      }
-      return localList;
+      saveLocalResults(sorted);
+      return sorted;
     } catch (fallbackError) {
       console.warn('Interogarea Firestore a eșuat, se utilizează catalogul local:', fallbackError);
       return localList;
     }
   }
+}
+
+/**
+ * Clear local results cache completely
+ */
+export function clearLocalResultsCache(): void {
+  try {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+/**
+ * Delete ALL submissions/results belonging to a student name (from both Firestore & Local Cache)
+ */
+export async function deleteAllResultsByStudentName(studentName: string): Promise<{ success: boolean; count: number }> {
+  const cleanName = (studentName || '').trim().toLowerCase();
+  if (!cleanName) return { success: false, count: 0 };
+
+  // 1. Purge from local storage cache
+  const currentLocal = getLocalResults();
+  const filteredLocal = currentLocal.filter(
+    (r) => (r.studentName || '').trim().toLowerCase() !== cleanName
+  );
+  saveLocalResults(filteredLocal);
+
+  let deletedCount = 0;
+  // 2. Purge from Firestore
+  if (db) {
+    try {
+      const snapshot = await getDocs(collection(db, COLLECTION_NAME));
+      for (const d of snapshot.docs) {
+        const data = d.data();
+        if ((data.studentName || '').trim().toLowerCase() === cleanName) {
+          await deleteDoc(doc(db, COLLECTION_NAME, d.id));
+          deletedCount++;
+        }
+      }
+      return { success: true, count: deletedCount };
+    } catch (err) {
+      console.error('Error deleting student results by name:', err);
+      return { success: false, count: deletedCount };
+    }
+  }
+
+  return { success: true, count: currentLocal.length - filteredLocal.length };
 }
 
 /**
