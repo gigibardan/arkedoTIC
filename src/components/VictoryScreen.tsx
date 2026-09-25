@@ -65,7 +65,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
     if (!hasLoggedRef.current && !sessionStorage.getItem(sessionLogKey)) {
       // Prevent spamming ghost submissions with 0 seconds from stale page reloads
-      if (elapsedSeconds > 0) {
+      if (elapsedSeconds > 0 && finalName.toUpperCase() !== 'PRO') {
         hasLoggedRef.current = true;
         sessionStorage.setItem(sessionLogKey, 'true');
 

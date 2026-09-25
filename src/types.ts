@@ -53,6 +53,7 @@ export interface ArcadeScores {
   redstone_lab?: number;
   voxel_architect?: number;
   roblox_clicker?: number;
+  mouse_v2?: number;
   totalArcade: number;
 }
 

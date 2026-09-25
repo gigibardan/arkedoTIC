@@ -35,7 +35,8 @@ export const ARCADE_GAME_KEYS = [
   'cyber_dino',
   'redstone_lab',
   'voxel_architect',
-  'roblox_clicker'
+  'roblox_clicker',
+  'mouse_v2'
 ] as const;
 
 export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
@@ -56,6 +57,7 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   redstone_lab: 0,
   voxel_architect: 0,
   roblox_clicker: 0,
+  mouse_v2: 0,
   totalArcade: 0
 };
 
@@ -129,9 +131,13 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
   const redstonePoints = Math.min(2500, scores.redstone_lab || 0);
   const voxelPoints = Math.min(3000, scores.voxel_architect || 0);
 
+  // Maestrul Mouse-ului 2.0 (Cyber Clicker & Agility Lab): capped at fair 1,200 XP
+  const mouseV2Points = Math.min(1200, scores.mouse_v2 || 0);
+
   return (
     typingPoints +
     mousePoints +
+    mouseV2Points +
     game2048Points +
     pcBuilderPoints +
     detectivePoints +
@@ -260,6 +266,8 @@ export async function registerStudent(
     byte_slider: Number(localStorage.getItem('arkedo_highscore_byte_slider') || '0'),
     file_drop: Number(localStorage.getItem('arkedo_highscore_file_drop') || '0'),
     virus_sweeper: Number(localStorage.getItem('arkedo_highscore_virus_sweeper') || '0'),
+    cyber_dino: Number(localStorage.getItem('arkedo_highscore_cyber_dino') || '0'),
+    mouse_v2: Number(localStorage.getItem('arkedo_highscore_mouse_v2') || '0'),
     totalArcade: 0
   };
   currentArcadeScores.totalArcade = computeTotalArcade(currentArcadeScores);
@@ -410,6 +418,7 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
       if (profile.arcadeScores.byte_slider) localStorage.setItem('arkedo_highscore_byte_slider', String(profile.arcadeScores.byte_slider));
       if (profile.arcadeScores.file_drop) localStorage.setItem('arkedo_highscore_file_drop', String(profile.arcadeScores.file_drop));
       if (profile.arcadeScores.virus_sweeper) localStorage.setItem('arkedo_highscore_virus_sweeper', String(profile.arcadeScores.virus_sweeper));
+      if (profile.arcadeScores.mouse_v2) localStorage.setItem('arkedo_highscore_mouse_v2', String(profile.arcadeScores.mouse_v2));
     }
 
     // Lessons progress

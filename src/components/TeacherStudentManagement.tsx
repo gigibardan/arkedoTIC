@@ -150,6 +150,7 @@ export const TeacherStudentManagement: React.FC = () => {
       (arc.cyber_dino && arc.cyber_dino > 10000) ||
       (arc.game2048 && arc.game2048 > 100000) ||
       (arc.mouse && arc.mouse > 3000) ||
+      (arc.mouse_v2 && arc.mouse_v2 > 3500) ||
       (arc.roblox_clicker && arc.roblox_clicker > 25000) ||
       (s.totalXP > 10000 && (!s.lessonsProgress || Object.keys(s.lessonsProgress).length === 0))
     );

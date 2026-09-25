@@ -3,6 +3,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
 import { TypingGame } from './TypingGame';
 import { MouseAgilityGame } from './MouseAgilityGame';
+import { MouseAgilityV2Game } from './MouseAgilityV2Game';
 import { Game2048Binary } from './Game2048Binary';
 import { CyberSafeDetective } from './CyberSafeDetective';
 import { FileOrganizerGame } from './FileOrganizerGame';
@@ -19,7 +20,6 @@ import { RedstoneLogicLab } from './RedstoneLogicLab';
 import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
 import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
 import { GameLockedModal } from '../common/GameLockedModal';
-import { UnloggedNoticeBadge } from '../common/UnloggedNoticeBadge';
 import {
   subscribeGameSettings,
   isGameOpen,
@@ -61,7 +61,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -106,6 +106,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   const mouseHighScore = (() => {
     try {
       return Number(localStorage.getItem('arkedo_highscore_mouse') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
+  const mouseV2HighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_mouse_v2') || '0');
     } catch {
       return 0;
     }
@@ -298,18 +306,8 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     );
   }
 
-  // Render minigame helper wrapped with unlogged notification badge
-  const wrapWithUnloggedBadge = (gameNode: React.ReactNode) => {
-    return (
-      <div className="flex flex-col gap-3 w-full">
-        <UnloggedNoticeBadge studentName={studentName} onNavigateToAuth={onBackToCatalog} />
-        {gameNode}
-      </div>
-    );
-  };
-
   if (activeGame === 'roblox_clicker') {
-    return wrapWithUnloggedBadge(
+    return (
       <RobloxClickerDuelGame
         onBack={() => setActiveGame('hub')}
         studentName={studentName || 'Elev Robloxian'}
@@ -319,7 +317,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'voxel_architect') {
-    return wrapWithUnloggedBadge(
+    return (
       <MinecraftVoxelArchitect
         onBack={() => setActiveGame('hub')}
         studentName={studentName}
@@ -328,7 +326,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'redstone_lab') {
-    return wrapWithUnloggedBadge(
+    return (
       <RedstoneLogicLab
         onBack={() => setActiveGame('hub')}
       />
@@ -336,7 +334,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'cyber_dino') {
-    return wrapWithUnloggedBadge(
+    return (
       <CyberDinoRunner
         onBack={() => setActiveGame('hub')}
         studentName={studentName}
@@ -345,55 +343,59 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   }
 
   if (activeGame === 'typing') {
-    return wrapWithUnloggedBadge(<TypingGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <TypingGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'mouse') {
-    return wrapWithUnloggedBadge(<MouseAgilityGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <MouseAgilityGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
+  }
+
+  if (activeGame === 'mouse_v2') {
+    return <MouseAgilityV2Game onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === '2048') {
-    return wrapWithUnloggedBadge(<Game2048Binary onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <Game2048Binary onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'pcbuilder') {
-    return wrapWithUnloggedBadge(<PCBuilderGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <PCBuilderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'rgb_pixel') {
-    return wrapWithUnloggedBadge(<RGBPixelMasterGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <RGBPixelMasterGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'byte_slider') {
-    return wrapWithUnloggedBadge(<ByteSliderGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <ByteSliderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'file_drop') {
-    return wrapWithUnloggedBadge(<FileDropGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <FileDropGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'virus_sweeper') {
-    return wrapWithUnloggedBadge(<VirusSweeperGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <VirusSweeperGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'detective') {
-    return wrapWithUnloggedBadge(<CyberSafeDetective onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <CyberSafeDetective onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'files') {
-    return wrapWithUnloggedBadge(<FileOrganizerGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <FileOrganizerGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'binary_factory') {
-    return wrapWithUnloggedBadge(<BinaryFactoryGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <BinaryFactoryGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'maze') {
-    return wrapWithUnloggedBadge(<AlgorithmMazeGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <AlgorithmMazeGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   if (activeGame === 'firewall') {
-    return wrapWithUnloggedBadge(<FirewallDefenderGame onBack={() => setActiveGame('hub')} studentName={studentName} />);
+    return <FirewallDefenderGame onBack={() => setActiveGame('hub')} studentName={studentName} />;
   }
 
   const renderGameActionButton = (
@@ -603,6 +605,57 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               'Joacă Acum',
               'Play Now',
               'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30'
+            )}
+          </div>
+        </div>
+
+        {/* Game 2B: Mouse Agility V2 (PRO COMPLEX) */}
+        <div className={`bg-gradient-to-b from-slate-900 to-slate-950 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'mouse_v2') ? 'border-cyan-500/40 hover:border-cyan-400 shadow-cyan-950/30' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 px-3 py-0.5 bg-gradient-to-l from-amber-500 to-cyan-500 text-slate-950 font-black text-[9px] uppercase tracking-wider rounded-bl-xl font-mono shadow-md">
+            🔥 VERSIUNEA 2.0 PRO
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-3 mt-1">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/10">
+                <Zap className="w-6 h-6 text-cyan-400" />
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('mouse_v2')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{mouseV2HighScore} pts</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="inline-block px-2.5 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 text-[10px] font-bold uppercase tracking-wider mb-2 border border-cyan-500/20">
+              {lang === 'en' ? 'Clicker & Reflex Lab V2' : 'Periferice & Clicker V2'}
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Mouse Master 2.0' : 'Maestrul Mouse-ului 2.0'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Ultra-advanced V2: 10 Campaign Stages, Laser Wire Tracing, Scroll-Storm, Lasso Multi-Select, Overclock Boss Battles, and DPI Hardware Workshop!'
+                : 'Versiunea 2 super-complexă: 10 Etape de Misiuni, Circuite Optice de trasat, Rotiță Scroll-Storm, Selecție Lasso, Boși CPS și Atelier Hardware DPI!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-cyan-300 font-mono font-bold">10 Etape • CPS Lab</span>
+            {renderGameActionButton(
+              'mouse_v2',
+              'Maestrul Mouse-ului 2.0',
+              'Mouse Master Pro 2.0',
+              'Joacă v2.0 Pro',
+              'Play v2.0 Pro',
+              'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-cyan-600/30'
             )}
           </div>
         </div>

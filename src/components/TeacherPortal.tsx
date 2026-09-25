@@ -29,7 +29,8 @@ import {
   getStudentResults, 
   deleteStudentResult, 
   deleteAllResultsByStudentName, 
-  clearLocalResultsCache, 
+  clearLocalResultsCache,
+  purgeZeroSecondGhostResults,
   StudentResult 
 } from '../lib/resultsService';
 import { isCloudConnected } from '../lib/firebase';
@@ -130,10 +131,12 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
   const handlePurgeLocalCache = async () => {
     sounds.playClick();
     const confirmMsg = lang === 'en'
-      ? 'Clean local browser cache and force refresh all records from Firestore? This removes any ghost/duplicate submissions.'
-      : 'Goliți memoria cache locală și reîncărcați catalogul proaspăt din Firestore? Această acțiune elimină datele fantomă sau duplicate reținute în browser.';
+      ? 'Clean local cache and delete ALL 0-second ghost submissions (including student PRO) from Firestore and browser? This permanently cleans the registry.'
+      : 'Goliți memoria cache și ștergeți definitiv TOATE înregistrările fantomă de 0s (inclusiv elevul PRO) din baza de date Firestore și din browser?';
     if (window.confirm(confirmMsg)) {
+      setLoading(true);
       clearLocalResultsCache();
+      const purgeRes = await purgeZeroSecondGhostResults();
       try {
         // If active profile has test or ghost name, reset it
         const savedName = localStorage.getItem('arkedo_student_name');
@@ -146,6 +149,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
         }
       } catch {}
       await fetchResults();
+      setLoading(false);
       sounds.playCorrect();
     }
   };

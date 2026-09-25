@@ -68,6 +68,17 @@ export const ALL_GAMES: GameDefinition[] = [
     gradeBadge: 'Clasa V-VI',
   },
   {
+    id: 'mouse_v2',
+    titleRo: 'Maestrul Mouse-ului 2.0 (Cyber Clicker)',
+    titleEn: 'Mouse Master Pro 2.0 (Cyber Clicker)',
+    category: 'Periferice & Clicker',
+    categoryEn: 'Peripherals & Clicker',
+    iconName: 'Zap',
+    descRo: 'Versiunea 2 super-complexă: circuite optice, scroll-storm, selecție lasso, bătălii CPS și laborator upgrade-uri DPI.',
+    descEn: 'Ultra-advanced V2: circuit tracing, scroll-storm, lasso select, boss CPS frenzy, and DPI hardware lab.',
+    gradeBadge: 'Versiunea 2.0 PRO',
+  },
+  {
     id: '2048',
     titleRo: '2048 Binar TIC',
     titleEn: 'Binary 2048',
