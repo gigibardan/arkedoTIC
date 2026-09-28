@@ -244,6 +244,17 @@ export const ALL_GAMES: GameDefinition[] = [
     gradeBadge: 'Clicker',
   },
   {
+    id: 'page_craft',
+    titleRo: 'PageCraft: Arhitectul de Tabele & Layout',
+    titleEn: 'PageCraft: Table & Layout Architect',
+    category: 'Documente & Machetare',
+    categoryEn: 'Documents & Layout',
+    iconName: 'LayoutTemplate',
+    descRo: 'Atelierul arcade de design grafic: tabele rapide, îmbinare celule, text wrapping în timp real, proporții imagini și paginare A4.',
+    descEn: 'Arcade document design studio: rapid tables, cell merging, real-time text wrapping, aspect ratio clinics, and A4 page layout.',
+    gradeBadge: 'Unitatea 4B',
+  },
+  {
     id: 'duel',
     titleRo: 'Arena Duel 1v1',
     titleEn: 'Multiplayer 1v1 Duel Arena',

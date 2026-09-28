@@ -19,6 +19,7 @@ import { CyberDinoRunner } from './CyberDinoRunner';
 import { RedstoneLogicLab } from './RedstoneLogicLab';
 import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
 import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
+import { PageCraftArcadeGame } from './PageCraftArcadeGame';
 import { GameLockedModal } from '../common/GameLockedModal';
 import {
   subscribeGameSettings,
@@ -53,6 +54,7 @@ import {
   Footprints,
   Boxes,
   Lock,
+  LayoutTemplate,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -61,7 +63,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -239,6 +241,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const pageCraftHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_page_craft') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -303,6 +313,15 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           customMessage={gameSettings.customMessage}
         />
       </div>
+    );
+  }
+
+  if (activeGame === 'page_craft') {
+    return (
+      <PageCraftArcadeGame
+        onBack={() => setActiveGame('hub')}
+        studentName={studentName}
+      />
     );
   }
 
@@ -508,7 +527,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
               <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
-                {ALL_GAMES.filter((g) => g.id !== 'duel' && isGameOpen(gameSettings, g.id)).length} / 17 {lang === 'en' ? 'Games Open' : 'Jocuri Deschise'}
+                {ALL_GAMES.filter((g) => g.id !== 'duel' && isGameOpen(gameSettings, g.id)).length} / {ALL_GAMES.filter((g) => g.id !== 'duel').length} {lang === 'en' ? 'Games Open' : 'Jocuri Deschise'}
               </div>
             </div>
           </div>
@@ -1386,6 +1405,59 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               'Build World',
               'bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 shadow-emerald-600/30',
               'arcade-btn-start-voxel-architect'
+            )}
+          </div>
+        </div>
+
+        {/* Game 18: PageCraft: Table & Layout Architect (Module 4B) */}
+        <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
+          isGameOpen(gameSettings, 'page_craft') ? 'border-slate-700/80 hover:border-indigo-500/60' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 border-2 border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                <LayoutTemplate className="w-6 h-6" />
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('page_craft')}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-indigo-300">
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{pageCraftHighScore} XP</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Module 4B • Word Layout' : 'Modulul 4B • Machetare Word'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-300 text-[10px] font-mono border border-purple-500/30">
+                ✨ 4 Moduri Interactive
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-indigo-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'PageCraft: Table & Layout Master' : 'PageCraft: Arhitectul de Tabele & Layout'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Design dynamic school newspapers! Master live text wrapping (Square, Behind), 1:1 picture aspect ratio, cell merging, layer hierarchy, and A4 page pagination in fast-paced arcade challenges!'
+                : 'Machetează reviste școlare interactive! Stăpânește încadrarea textului (Square, Behind), raportul de aspect 1:1 la imagini, îmbinarea celulelor de orar, ordinea straturilor și paginarea dinamică A4!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-indigo-400 font-mono">⚡ Blitz 60s + Studio Live</span>
+            {renderGameActionButton(
+              'page_craft',
+              'PageCraft: Arhitect de Tabele & Layout',
+              'PageCraft: Table & Layout Master',
+              'Machetează Acum',
+              'Start Layout',
+              'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-600/30',
+              'arcade-btn-start-page-craft'
             )}
           </div>
         </div>

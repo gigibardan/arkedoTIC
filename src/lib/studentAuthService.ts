@@ -36,7 +36,8 @@ export const ARCADE_GAME_KEYS = [
   'redstone_lab',
   'voxel_architect',
   'roblox_clicker',
-  'mouse_v2'
+  'mouse_v2',
+  'page_craft'
 ] as const;
 
 export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
@@ -58,6 +59,7 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   voxel_architect: 0,
   roblox_clicker: 0,
   mouse_v2: 0,
+  page_craft: 0,
   totalArcade: 0
 };
 
@@ -451,6 +453,7 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
       if (profile.arcadeScores.file_drop) localStorage.setItem('arkedo_highscore_file_drop', String(profile.arcadeScores.file_drop));
       if (profile.arcadeScores.virus_sweeper) localStorage.setItem('arkedo_highscore_virus_sweeper', String(profile.arcadeScores.virus_sweeper));
       if (profile.arcadeScores.mouse_v2) localStorage.setItem('arkedo_highscore_mouse_v2', String(profile.arcadeScores.mouse_v2));
+      if (profile.arcadeScores.page_craft) localStorage.setItem('arkedo_highscore_page_craft', String(profile.arcadeScores.page_craft));
     }
 
     // Lessons progress

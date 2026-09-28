@@ -1701,7 +1701,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+            <div className="pt-4 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
               <div className="text-xs text-slate-400 font-mono">
                 {activeMissionId === 'text2' && activeMissionLevel > 1 ? (
                   <span className="text-emerald-400 font-bold">
@@ -1711,17 +1711,33 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('text2')}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
-              >
-                <span>
-                  {activeMissionId === 'text2' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B')
-                    : (lang === 'en' ? 'Start Mission 4B' : 'Începe Misiunea 4B')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                {onOpenArcade && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      onOpenArcade();
+                    }}
+                    className="px-3 py-2.5 rounded-xl bg-indigo-950/90 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/50 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-950/40 active:scale-95"
+                    title={lang === 'en' ? 'Play Module 4B Arcade: PageCraft' : 'Joacă Mini-Jocul Arcade 4B: PageCraft'}
+                  >
+                    <Gamepad2 className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>{lang === 'en' ? 'Arcade 4B' : 'Arcade 4B'}</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => handleAttemptStart('text2')}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+                >
+                  <span>
+                    {activeMissionId === 'text2' && activeMissionLevel > 1
+                      ? (lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B')
+                      : (lang === 'en' ? 'Start Mission 4B' : 'Începe Misiunea 4B')}
+                  </span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1740,16 +1756,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '16 Mini-Games' : '16 Mini-Jocuri'}
+                  {lang === 'en' ? '18 Mini-Games' : '18 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? '🟥 Roblox Blox Clicker, ⛏️ Minecraft Redstone, Cyber Dino & Voxel PC' : '🟥 Roblox Blox Clicker Duel, ⛏️ Laboratorul Redstone & Voxel Architect'}
+                {lang === 'en' ? '📑 PageCraft Studio, 🟥 Roblox Blox Clicker, ⛏️ Minecraft Redstone & Cyber Dino' : '📑 PageCraft: Machetare & Tabele, 🟥 Roblox Blox Clicker & ⛏️ Minecraft Redstone'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
-                  ? 'Compete in Roblox Blox Clicker, build Minecraft Redstone circuits & Voxel PCs, sprint in Cyber Dino, sort file extensions in Tetris drop, and build computers!'
-                  : 'Concurează în Roblox Blox Clicker, construiește calculatoare Voxel 3D, circuite Redstone în stil Minecraft, aleargă în Cyber Dino și sortează fișiere în Tetris Drop!'}
+                  ? 'Master document layout in PageCraft, compete in Roblox Blox Clicker, build Minecraft Redstone circuits & Voxel PCs, sprint in Cyber Dino, and sort files in Tetris drop!'
+                  : 'Machetează ziare în PageCraft, concurează în Roblox Blox Clicker, construiește calculatoare Voxel 3D, circuite Redstone în stil Minecraft și aleargă în Cyber Dino!'}
               </p>
             </div>
           </div>

@@ -54,6 +54,7 @@ export interface ArcadeScores {
   voxel_architect?: number;
   roblox_clicker?: number;
   mouse_v2?: number;
+  page_craft?: number;
   totalArcade: number;
 }
 
