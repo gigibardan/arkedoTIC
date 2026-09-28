@@ -69,6 +69,10 @@ export interface LessonsProgress {
   files: LessonMissionState;
   internet1: LessonMissionState;
   internet2: LessonMissionState;
+  text1?: LessonMissionState;
+  text2?: LessonMissionState;
+  graphics1?: LessonMissionState;
+  graphics2?: LessonMissionState;
   totalLessonScore: number;
 }
 

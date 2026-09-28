@@ -413,12 +413,12 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
       labelEn: getActionLabelEn(type),
       icon: getActionIcon(type),
       spawnTime: Date.now(),
-      duration: type === 'boss' ? 9000 : type === 'wire_trace' ? 14000 : baseDuration,
+      duration: type === 'boss' ? 8500 : type === 'wire_trace' ? 14000 : Math.max(1600, baseDuration - currentHits * 40),
       clicksNeeded: type === 'triple_click' ? 3 : type === 'double_click' ? 2 : 1,
       currentClicks: 0,
-      targetRadius: 40 + upgrades.dpiSensor * 6,
-      maxHealth: type === 'boss' ? 32 : undefined,
-      currentHealth: type === 'boss' ? 32 : undefined,
+      targetRadius: stage === 9 ? 34 : Math.max(28, 38 - Math.floor(currentHits / 2) + upgrades.dpiSensor * 5),
+      maxHealth: type === 'boss' ? 28 : undefined,
+      currentHealth: type === 'boss' ? 28 : undefined,
       currentScroll: 0,
       targetScroll: 100,
       dragCategory: selectedDragCat,
@@ -654,22 +654,22 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
     }
   };
 
-  // HANDLE MISS CLICK (NOW WITH VISUAL & SCORE PENALTY AS REQUESTED)
+  // HANDLE MISS CLICK (ENHANCED VISUAL & SCORE PENALTY AS REQUESTED)
   const registerMiss = (clickCoords?: { x: number; y: number }) => {
     sounds.playWrong();
     setCombo(0);
     setMissesCount((prev) => prev + 1);
 
-    // Score deduction penalty (-5 pts, minimum 0)
-    setScore((prev) => Math.max(0, prev - 5));
+    // Score deduction penalty (-10 pts, minimum 0)
+    setScore((prev) => Math.max(0, prev - 10));
 
-    // Visual penalty: red border flash
+    // Visual penalty: vibrant red screen flash & shake
     setFlashRedBorder(true);
-    setTimeout(() => setFlashRedBorder(false), 350);
+    setTimeout(() => setFlashRedBorder(false), 450);
 
-    // Floating text indicator
-    setFeedbackEffect({ text: '-5 pts (RATAT)', isMiss: true });
-    setTimeout(() => setFeedbackEffect(null), 650);
+    // Floating text indicator with alert icon
+    setFeedbackEffect({ text: '-10 pts RATAT! ⚠️', isMiss: true });
+    setTimeout(() => setFeedbackEffect(null), 700);
 
     // Spawn red click ripple if coords provided
     if (clickCoords) {
@@ -870,63 +870,141 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
   // ==========================================
   // STEP 3: FLAWLESS WIRE TRACING IMPLEMENTATION
   // ==========================================
+  const triggerWireComplete = () => {
+    setIsTracingWire(false);
+    setWireProgress(100);
+    sounds.playVictory();
+
+    if (activeMode === 'campaign' && currentStage === 3) {
+      if (activeWireIndex < 3) {
+        const nextIdx = activeWireIndex + 1;
+        setActiveWireIndex(nextIdx);
+        setFeedbackEffect({ text: `CABLU ${activeWireIndex}/3 CONECTAT! ⚡` });
+        setTimeout(() => setFeedbackEffect(null), 800);
+        spawnCampaignTarget(3, hitsCount + 1, nextIdx);
+      } else {
+        registerSuccess(45, 'CIRCUITE ALIMENTATE 100%!');
+      }
+    } else {
+      registerSuccess(40, 'CIRCUIT SOLDERED!');
+    }
+  };
+
   const handleWireStartMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (currentTarget?.type !== 'wire_trace' || gameState !== 'playing') return;
     setIsTracingWire(true);
+    setWireProgress(0);
     sounds.playClick();
+  };
+
+  const handleWireStartTouch = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (currentTarget?.type !== 'wire_trace' || gameState !== 'playing') return;
+    setIsTracingWire(true);
+    setWireProgress(0);
+    sounds.playClick();
+  };
+
+  const handleTrackMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (currentTarget?.type !== 'wire_trace' || gameState !== 'playing') return;
+    setIsTracingWire(true);
+    sounds.playClick();
+    if (wireTrackRef.current) {
+      const rect = wireTrackRef.current.getBoundingClientRect();
+      const startX = rect.left + 44;
+      const endX = rect.right - 44;
+      const totalDist = endX - startX;
+      if (totalDist > 0) {
+        const currentDist = e.clientX - startX;
+        const currentPct = Math.max(0, Math.min(100, (currentDist / totalDist) * 100));
+        setWireProgress(currentPct);
+        if (currentPct >= 75 || e.clientX >= endX - 25) {
+          triggerWireComplete();
+        }
+      }
+    }
+  };
+
+  const handleTrackTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (currentTarget?.type !== 'wire_trace' || gameState !== 'playing') return;
+    setIsTracingWire(true);
+    sounds.playClick();
+    if (wireTrackRef.current && e.touches[0]) {
+      const rect = wireTrackRef.current.getBoundingClientRect();
+      const startX = rect.left + 44;
+      const endX = rect.right - 44;
+      const totalDist = endX - startX;
+      if (totalDist > 0) {
+        const currentDist = e.touches[0].clientX - startX;
+        const currentPct = Math.max(0, Math.min(100, (currentDist / totalDist) * 100));
+        setWireProgress(currentPct);
+        if (currentPct >= 75 || e.touches[0].clientX >= endX - 25) {
+          triggerWireComplete();
+        }
+      }
+    }
   };
 
   // Global cursor tracker while tracing wire to guarantee 100% smooth dragging
   useEffect(() => {
     if (!isTracingWire) return;
 
-    const handleGlobalMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (clientX: number) => {
       if (!wireTrackRef.current) return;
       const rect = wireTrackRef.current.getBoundingClientRect();
-      const relativeX = e.clientX - rect.left;
-      const width = rect.width;
+      const startX = rect.left + 44;
+      const endX = rect.right - 44;
+      const totalDist = endX - startX;
 
-      // Calculate percentage clamped between 0 and 100
-      const currentPct = Math.max(0, Math.min(100, (relativeX / width) * 100));
+      if (totalDist <= 0) return;
+
+      const currentDist = clientX - startX;
+      const currentPct = Math.max(0, Math.min(100, (currentDist / totalDist) * 100));
       setWireProgress(currentPct);
 
-      // Check if finished (reached >= 95% of distance)
-      if (currentPct >= 95) {
-        setIsTracingWire(false);
-        sounds.playVictory();
+      // Snap & finish when reached >= 75% of distance or near finish terminal
+      if (currentPct >= 75 || clientX >= endX - 25) {
+        triggerWireComplete();
+      }
+    };
 
-        if (activeMode === 'campaign' && currentStage === 3) {
-          if (activeWireIndex < 3) {
-            const nextIdx = activeWireIndex + 1;
-            setActiveWireIndex(nextIdx);
-            setFeedbackEffect({ text: `CABLU ${activeWireIndex}/3 CONECTAT!` });
-            setTimeout(() => setFeedbackEffect(null), 800);
-            spawnCampaignTarget(3, hitsCount + 1, nextIdx);
-          } else {
-            registerSuccess(45, 'CIRCUITE ALIMENTATE 100%!');
-          }
-        } else {
-          registerSuccess(40, 'CIRCUIT SOLDERED!');
-        }
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      handlePointerMove(e.clientX);
+    };
+
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches[0]) {
+        handlePointerMove(e.touches[0].clientX);
       }
     };
 
     const handleGlobalMouseUp = () => {
       if (isTracingWire) {
-        setIsTracingWire(false);
+        if (wireProgress >= 50) {
+          triggerWireComplete();
+        } else {
+          setIsTracingWire(false);
+        }
       }
     };
 
     window.addEventListener('mousemove', handleGlobalMouseMove);
     window.addEventListener('mouseup', handleGlobalMouseUp);
+    window.addEventListener('touchmove', handleGlobalTouchMove);
+    window.addEventListener('touchend', handleGlobalMouseUp);
 
     return () => {
       window.removeEventListener('mousemove', handleGlobalMouseMove);
       window.removeEventListener('mouseup', handleGlobalMouseUp);
+      window.removeEventListener('touchmove', handleGlobalTouchMove);
+      window.removeEventListener('touchend', handleGlobalMouseUp);
     };
-  }, [isTracingWire, activeMode, currentStage, activeWireIndex, hitsCount]);
+  }, [isTracingWire, activeMode, currentStage, activeWireIndex, hitsCount, wireProgress]);
 
   // ==========================================
   // STEP 6: LASSO BOX SELECTION LOGIC
@@ -1362,6 +1440,16 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               }}
             />
 
+            {/* Miss Red Flash & Screen Shake Vignette (Visual Penalty) */}
+            {flashRedBorder && (
+              <div className="absolute inset-0 bg-rose-600/20 backdrop-brightness-90 z-40 pointer-events-none animate-pulse flex items-center justify-center">
+                <div className="text-rose-300 font-mono font-black text-xs sm:text-sm uppercase tracking-wider bg-rose-950/90 px-4 py-2 rounded-2xl border-2 border-rose-500 shadow-2xl shadow-rose-950/90 flex items-center gap-2">
+                  <span>⚠️ MISS!</span>
+                  <span className="text-white">-10 PCT PENALIZARE</span>
+                </div>
+              </div>
+            )}
+
             {/* Click Ripples for Visual Feedback on Miss */}
             {clickRipples.map((rip) => (
               <div
@@ -1632,23 +1720,27 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                     {/* Interactive Wire Track */}
                     <div
                       ref={wireTrackRef}
-                      className="relative w-full h-16 bg-slate-950 rounded-2xl border-2 border-slate-700 overflow-hidden flex items-center px-4"
+                      onMouseDown={handleTrackMouseDown}
+                      onTouchStart={handleTrackTouchStart}
+                      className="relative w-full h-16 bg-slate-950 rounded-2xl border-2 border-slate-700 overflow-hidden flex items-center px-4 cursor-ew-resize select-none"
                     >
                       {/* Internal conduit guide line */}
-                      <div className="absolute left-6 right-6 h-2 bg-slate-800 rounded-full" />
+                      <div className="absolute left-6 right-6 h-2 bg-slate-800 rounded-full pointer-events-none" />
 
                       {/* Glowing Filled Electric Cable */}
                       <div
-                        className="absolute left-6 h-3.5 rounded-full bg-gradient-to-r from-cyan-400 via-amber-400 to-emerald-400 shadow-lg shadow-cyan-500/50 transition-all duration-75"
+                        className="absolute h-4 rounded-full bg-gradient-to-r from-cyan-400 via-amber-400 to-emerald-400 shadow-lg shadow-cyan-500/50 transition-all duration-75 pointer-events-none"
                         style={{
-                          width: `calc(${wireProgress}% * 0.88)`,
+                          left: '44px',
+                          width: `calc((100% - 88px) * ${Math.min(100, Math.max(0, wireProgress)) / 100})`,
                         }}
                       />
 
                       {/* START TERMINAL */}
                       <div
                         onMouseDown={handleWireStartMouseDown}
-                        className={`absolute left-2 z-20 w-12 h-12 rounded-xl flex flex-col items-center justify-center font-black text-[10px] cursor-grab active:cursor-grabbing shadow-xl transition-transform ${
+                        onTouchStart={handleWireStartTouch}
+                        className={`absolute left-2 z-20 w-12 h-12 rounded-xl flex flex-col items-center justify-center font-black text-[10px] cursor-grab active:cursor-grabbing shadow-xl transition-transform select-none ${
                           isTracingWire
                             ? 'bg-amber-400 text-slate-950 scale-110 shadow-amber-500/50 animate-pulse'
                             : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950'
@@ -1663,21 +1755,40 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       {isTracingWire && (
                         <div
                           className="absolute z-20 w-8 h-8 -translate-x-1/2 rounded-full bg-amber-300 border-2 border-white shadow-xl shadow-amber-400/80 pointer-events-none animate-ping"
-                          style={{ left: `calc(1rem + ${wireProgress}% * 0.88)` }}
+                          style={{ left: `calc(44px + (100% - 88px) * ${Math.min(100, Math.max(0, wireProgress)) / 100})` }}
                         />
                       )}
 
                       {/* FINISH TERMINAL */}
                       <div
-                        className={`absolute right-2 z-10 w-12 h-12 rounded-xl border-2 flex flex-col items-center justify-center font-black text-[10px] transition-all ${
-                          wireProgress >= 95
+                        onMouseEnter={() => { if (isTracingWire) triggerWireComplete(); }}
+                        onMouseUp={() => { if (isTracingWire) triggerWireComplete(); }}
+                        onTouchEnd={() => { if (isTracingWire) triggerWireComplete(); }}
+                        onClick={() => triggerWireComplete()}
+                        className={`absolute right-2 z-20 w-12 h-12 rounded-xl border-2 flex flex-col items-center justify-center font-black text-[10px] transition-all cursor-pointer select-none ${
+                          wireProgress >= 70
                             ? 'bg-emerald-500 text-slate-950 border-emerald-300 shadow-emerald-500/50 scale-105'
-                            : 'bg-slate-900 text-slate-400 border-slate-700'
+                            : 'bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-emerald-400 border-slate-700 hover:border-emerald-500'
                         }`}
                       >
                         <span>FINISH</span>
                         <Zap className="w-3 h-3 mt-0.5" />
                       </div>
+                    </div>
+
+                    {/* Quick Connect & Assist Button */}
+                    <div className="flex justify-center mt-2.5">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          triggerWireComplete();
+                        }}
+                        className="px-3.5 py-1.5 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/80 border border-cyan-500/50 text-cyan-300 text-xs font-mono font-bold transition flex items-center gap-1.5 shadow-md shadow-cyan-950/50 cursor-pointer active:scale-95"
+                      >
+                        <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400 animate-pulse" />
+                        <span>{lang === 'en' ? '⚡ Click to Connect Wire' : '⚡ Conectează Cablul Rapid'}</span>
+                      </button>
                     </div>
                   </div>
                 )}

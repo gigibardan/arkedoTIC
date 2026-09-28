@@ -67,8 +67,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -144,7 +144,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null>(null);
 
   // Student Cloud Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
@@ -387,7 +387,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -424,7 +424,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -444,6 +444,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Module 3B: Advanced Search, Communication & Digital Identity (Textbook p. 38-48)'
         : 'Modulul 3B: Căutare Avansată, Comunicare & Identitate Digitală (Manual pag. 38-48)';
+    }
+    if (id === 'text1') {
+      return lang === 'en'
+        ? 'Module 4A: Word Processor & Text Formatting (Textbook p. 50-67)'
+        : 'Modulul 4A: Inițierea și Formatarea Textului (Manual pag. 50-67)';
+    }
+    if (id === 'text2') {
+      return lang === 'en'
+        ? 'Module 4B: Visual Elements & Tables (Textbook p. 68-80)'
+        : 'Modulul 4B: Elemente Grafice, Tabele & Paginare (Manual pag. 68-80)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -1555,33 +1565,115 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Card 5: COMING SOON - Editare Text */}
+          {/* Card 5: ACTIVE MISSION 4A - Procesorul de Text & Tehnoredactare */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'text1'
+                ? 'border-blue-400 shadow-blue-500/20 ring-2 ring-blue-500/30'
+                : 'border-blue-500/60 hover:border-blue-400 hover:shadow-blue-500/10'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  📝
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'text1' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-black uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 4A' : 'MODULUL 4A'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 50–67 • Mission 4A' : 'Manual pag. 50–67 • Misiunea 4A'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-blue-300 transition-colors">
+                {lang === 'en' ? 'Word Processor & Text Formatting Mission' : 'Misiunea Procesorul de Text & Tehnoredactare'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Ribbon & Ruler, Golden Typing Rules, Fonts, Subscript/Superscript, Alignment, Bullets & Find/Replace' : 'Ribbon & Riglă, Reguli Tehnoredactare, Fonturi, Indici, Alinieri, Liste & Find/Replace'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Explore the word processor window & ruler (p. 50–52), master golden typing rules & punctuation hygiene (p. 53–55), format fonts & scientific scripts (p. 56–58), align paragraphs with Justify & indents (p. 59–61), structure multi-level lists (p. 62–64), deploy automated Find & Replace, and construct the Digital Student Charter!'
+                  : 'Explorează interfața procesorului de text și rigla (pag. 50–52), învață regulile de aur ale tastării și punctuației (pag. 53–55), formatează caracterele cu stiluri și formule științifice (pag. 56–58), aliniază paragrafele cu Justify și alineate (pag. 59–61), structurează liste marcate și numerotate (pag. 62–64), automatizează căutările cu Find & Replace și redactează Carta Elevului Digital!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-blue-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-blue-400" /> {lang === 'en' ? 'Word Processor Certificate' : 'Diplomă Tehnician Text & Word'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'text1' && activeMissionLevel > 1 ? (
+                  <span className="text-blue-400 font-bold">
+                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('text1')}
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'text1' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A')
+                    : (lang === 'en' ? 'Start Mission 4A' : 'Începe Misiunea 4A')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 6: COMING SOON - Modulul 4B: Tabele, Imagini & Paginare */}
           <div className="relative bg-slate-900/50 border border-slate-800 rounded-3xl p-6 opacity-85 hover:opacity-100 transition flex flex-col justify-between">
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
-                  📝
+                  📊
                 </div>
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-bold uppercase tracking-wider">
-                  <Lock className="w-3 h-3" /> {t.statusComingSoon}
+                  <Lock className="w-3 h-3" /> {lang === 'en' ? 'Next Lesson' : 'Următoarea Lecție'}
                 </span>
               </div>
 
               <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1 font-mono">
-                {t.lesson4Sub}
+                {lang === 'en' ? 'Textbook p. 68–80 • Module 4B' : 'Manual pag. 68–80 • Modulul 4B'}
               </div>
 
               <h3 className="text-xl font-bold text-slate-200 font-heading mb-2">
-                {t.lesson4Title}
+                {lang === 'en' ? 'Visual Elements, Tables & Page Layout' : 'Elemente Grafice, Tabele & Paginare'}
               </h3>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {t.lesson4Desc}
+                {lang === 'en'
+                  ? 'Inserting and formatting tables, merging cells, positioning illustrations, inserting shapes, page orientation, headers, footers, and automatic page numbers.'
+                  : 'Inserarea și formatarea tabelelor, îmbinarea celulelor, poziționarea imaginilor, forme geometrice, orientarea paginii (Portret/Vedere), antet, subsol și numerotarea automată a paginilor.'}
               </p>
             </div>
 
             <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500 font-mono">
-              <span>{lang === 'en' ? 'Module 4 • 5th Grade' : 'Modulul 4 • Clasa a V-a'}</span>
+              <span>{lang === 'en' ? 'Module 4 • Lesson 2' : 'Modulul 4 • Lecția 2'}</span>
               <span className="px-3 py-1 rounded-lg bg-slate-800/80 text-slate-400">
                 {lang === 'en' ? 'In preparation ⏳' : 'În pregătire ⏳'}
               </span>
@@ -1742,7 +1834,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | null): number {
+function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
@@ -1754,6 +1846,10 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
   if (missionId === 'internet2') {
     const internet2Scores = [0, 15, 30, 45, 60, 80, 100];
     return internet2Scores[Math.min(level - 1, 6)] || 0;
+  }
+  if (missionId === 'text1') {
+    const text1Scores = [0, 15, 30, 45, 60, 75, 90, 100];
+    return text1Scores[Math.min(level - 1, 7)] || 0;
   }
   const filesScores = [0, 10, 25, 40, 55, 70, 85, 100];
   return filesScores[Math.min(level - 1, 7)] || 0;

@@ -390,6 +390,18 @@ export const translations = {
     internet2CourseSub: 'Motoare de căutare, Evaluarea surselor, Email, Netichetă, Plagiat & Parole blindate • Manual pag. 38-48',
     internet2DiplomaTitle: 'DIPLOMĂ DE EXPERT ÎN COMUNICARE DIGITALĂ & SECURITATE',
     internet2DiplomaText: 'Pentru excelență în "Misiunea 3B: Căutare Avansată, Comunicare & Identitate Digitală 🔍✉️" (Manual pag. 38-48), stăpânirea operatorilor de căutare booleană și filtrare, evaluarea critică a credibilității informațiilor și recunoașterea știrilor false (Fake News), anatomia căsuței de e-mail (Cc, Bcc, @), respectarea regulilor de netichetă și combaterea cyberbullying-ului, evitarea plagiatului prin citare academică și protejarea identității online prin parole complexe și autentificare în 2 pași (2FA).',
+
+    // Text 1 (Module 4A) Diploma & Titles
+    text1CourseTitle: 'Misiunea 4A: Inițierea și Formatarea Textului',
+    text1CourseSub: 'Interfață Word, Reguli de aur, Fonturi, Paragrafe, Liste & Find/Replace • Manual pag. 50-67',
+    text1DiplomaTitle: 'DIPLOMĂ DE TEHNICIAN & EDITOR DE DOCUMENTE TEXT 📝',
+    text1DiplomaText: 'Pentru performanța remarcabilă în "Misiunea 4A: Inițierea și Formatarea Textului 📝" (Manual pag. 50-67), cunoașterea aprofundată a interfeței procesorului de text (Panglica Ribbon, rigla, bara de stare), respectarea cu strictețe a regulilor de aur ale tehnoredactării (spațierea semnelor de punctuație, Word Wrap, ghilimele românești), aplicarea stilurilor tipografice (Bold, Italic, Indice, Exponent), stăpânirea celor 4 alinieri de paragraf (Justify, Centrat, Dreapta, Stânga), configurarea listelor numerotate și marcate, utilizarea căutării globale Find & Replace și redactarea impecabilă a Cartei Elevului Digital.',
+
+    // Text 2 (Module 4B) Titles
+    text2CourseTitle: 'Misiunea 4B: Elemente Grafice, Tabele & Paginare',
+    text2CourseSub: 'Tabele, Forme, Imagini, Antet & Subsol • Manual pag. 68-80',
+    text2DiplomaTitle: 'DIPLOMĂ DE DESIGNER & ARHITECT DE DOCUMENTE',
+    text2DiplomaText: 'Pentru măiestrie în inserarea și formatarea tabelelor, îmbinarea celulelor, gestionarea formelor geometrice și a imaginilor, numerotarea paginilor și crearea de antete profesionale.',
   },
 
   en: {
@@ -781,6 +793,18 @@ export const translations = {
     internet2CourseSub: 'Search Engines, Source Evaluation, Email Anatomy, Netiquette, Plagiarism & Fortress Passwords • Textbook pp. 38-48',
     internet2DiplomaTitle: 'CERTIFICATE OF DIGITAL CITIZENSHIP & CYBERSECURITY EXPERT',
     internet2DiplomaText: 'For excellence in "Mission 3B: Advanced Search, Communication & Digital Identity 🔍✉️" (Textbook pages 38-48), mastering boolean search operators and filters, critically evaluating source credibility and detecting Fake News, understanding email anatomy (Cc, Bcc, @), upholding netiquette ethics and anti-cyberbullying protocols, preventing plagiarism through academic citation, and safeguarding digital identity with fortress passwords and 2FA.',
+
+    // Text 1 (Module 4A) Diploma & Titles
+    text1CourseTitle: 'Mission 4A: Text Document Formatting & Word Basics',
+    text1CourseSub: 'Word Interface, Golden Typing Rules, Fonts, Paragraphs, Lists & Find/Replace • Textbook pp. 50-67',
+    text1DiplomaTitle: 'CERTIFICATE OF WORD PROCESSOR & DOCUMENT EDITOR 📝',
+    text1DiplomaText: 'For outstanding distinction in "Mission 4A: Text Document Formatting & Word Basics 📝" (Textbook pp. 50-67), in-depth mastery of the word processor window (Ribbon tabs, ruler, status bar), rigorous adherence to golden typography rules (punctuation spacing, Word Wrap, Romanian quotes), applying typographic styles (Bold, Italic, Subscript, Superscript), mastering all 4 paragraph alignments (Justify, Center, Right, Left), building structured numbered & bulleted lists, deploying Find & Replace automation, and impeccably creating the Digital Student Charter.',
+
+    // Text 2 (Module 4B) Titles
+    text2CourseTitle: 'Mission 4B: Visual Elements, Tables & Page Layout',
+    text2CourseSub: 'Tables, Shapes, Pictures, Headers & Footers • Textbook pp. 68-80',
+    text2DiplomaTitle: 'CERTIFICATE OF DOCUMENT DESIGNER & PAGE ARCHITECT',
+    text2DiplomaText: 'For excellence in table creation and cell merging, graphic shapes and image placement, page numbering, and crafting professional headers and footers.',
   },
 } as const;
 

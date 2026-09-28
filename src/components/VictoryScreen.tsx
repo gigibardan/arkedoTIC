@@ -13,7 +13,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -39,6 +39,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isHardware = courseId === 'hardware';
   const isInternet1 = courseId === 'internet1';
   const isInternet2 = courseId === 'internet2';
+  const isText1 = courseId === 'text1';
+  const isText2 = courseId === 'text2';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -46,6 +48,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Internet & Web Basics Mission 3A (Textbook pp. 32-36)' : 'Misiunea 3A Internet, Rețele & Web (Manual pag. 32-36)')
     : isInternet2
     ? (lang === 'en' ? 'Advanced Search & Digital Identity Mission 3B (Textbook pp. 38-48)' : 'Misiunea 3B Căutare Avansată, Comunicare & Identitate (Manual pag. 38-48)')
+    : isText1
+    ? (lang === 'en' ? 'Text Formatting & Word Basics Mission 4A (Textbook pp. 50-67)' : 'Misiunea 4A Inițierea și Formatarea Textului (Manual pag. 50-67)')
+    : isText2
+    ? (lang === 'en' ? 'Visual Elements & Tables Mission 4B (Textbook pp. 68-80)' : 'Misiunea 4B Elemente Grafice & Tabele (Manual pag. 68-80)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
@@ -123,7 +129,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -139,6 +145,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Cyber & Web Explorer!' : 'Felicitări, Explorator Web & Cyber!')
           : isInternet2
           ? (lang === 'en' ? 'Congratulations, Digital Citizenship & Security Expert!' : 'Felicitări, Expert în Comunicare & Securitate Digitală!')
+          : isText1
+          ? (lang === 'en' ? 'Congratulations, Word Processor & Document Master!' : 'Felicitări, Maestru în Tehnoredactare & Documente Text!')
           : t.vTitle}
       </h2>
 
@@ -155,6 +163,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered advanced search engines and boolean filters, source credibility and Fake News detection, professional email composition, netiquette, academic citation, and fortress passwords with 2FA!'
               : 'Ai parcurs cu brio Modulul 3B: motoare de căutare și operatori booleeni, evaluarea critică a surselor și detectarea Fake News, compunerea e-mailurilor (Cc, Bcc), netichetă, citarea surselor fără plagiat și parole de neclintit cu 2FA!')
+          : isText1
+          ? (lang === 'en'
+              ? 'You mastered the word processor interface and ruler, golden typing rules, character formatting and scientific scripts, paragraph alignments and indents, lists, automated find and replace, and created the Digital Student Charter!'
+              : 'Ai parcurs cu succes Modulul 4A: interfața procesorului de text și rigla, regulile de aur ale tehnoredactării, formatarea fonturilor și indici, alinierea paragrafelor și alineate, liste marcate și numerotate, găsire și înlocuire automată și Carta Elevului Digital!')
           : t.vDesc}
       </p>
 
@@ -372,6 +384,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isText1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📝</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Ribbon & Ruler' : 'Interfață & Riglă'}</div>
+                <div className="text-[10px] text-blue-400">Ribbon, File & Ruler</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">⌨️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Typing Hygiene' : 'Reguli de Aur'}</div>
+                <div className="text-[10px] text-emerald-400">Spații & Semne</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔤</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Font Architect' : 'Stiluri & Fonturi'}</div>
+                <div className="text-[10px] text-amber-400">Serif, Indici & Formule</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Alignment Pro' : 'Aliniere & Justify'}</div>
+                <div className="text-[10px] text-cyan-400">Alineate & Liste</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🔍</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Find & Replace' : 'Găsire & Înlocuire'}</div>
+                <div className="text-[10px] text-purple-400">Ctrl+H & Carta Elevului</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -436,7 +486,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -446,7 +496,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
-            {isHardware ? t.hwDiplomaTitle : isInternet1 ? t.internet1DiplomaTitle : isInternet2 ? t.internet2DiplomaTitle : t.vDiplomaTitle}
+            {isHardware ? t.hwDiplomaTitle : isInternet1 ? t.internet1DiplomaTitle : isInternet2 ? t.internet2DiplomaTitle : isText1 ? t.text1DiplomaTitle : isText2 ? t.text2DiplomaTitle : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
             {t.vDiplomaDept}
@@ -467,7 +517,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
-            {isHardware ? t.hwDiplomaText : isInternet1 ? t.internet1DiplomaText : isInternet2 ? t.internet2DiplomaText : t.vDiplomaText}
+            {isHardware ? t.hwDiplomaText : isInternet1 ? t.internet1DiplomaText : isInternet2 ? t.internet2DiplomaText : isText1 ? t.text1DiplomaText : isText2 ? t.text2DiplomaText : t.vDiplomaText}
           </p>
 
           {/* Signatures & Date */}

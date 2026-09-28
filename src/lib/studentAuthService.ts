@@ -66,6 +66,10 @@ export const DEFAULT_LESSONS_PROGRESS: LessonsProgress = {
   files: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   internet1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   internet2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  text1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  text2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  graphics1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  graphics2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   totalLessonScore: 0
 };
 
@@ -183,7 +187,11 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const fl = computeLessonXP(lessons.files || {});
   const i1 = computeLessonXP(lessons.internet1 || {});
   const i2 = computeLessonXP(lessons.internet2 || {});
-  return hw + fl + i1 + i2;
+  const t1 = computeLessonXP(lessons.text1 || {});
+  const t2 = computeLessonXP(lessons.text2 || {});
+  const g1 = computeLessonXP(lessons.graphics1 || {});
+  const g2 = computeLessonXP(lessons.graphics2 || {});
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {
@@ -296,6 +304,30 @@ export async function registerStudent(
       level: Number(localStorage.getItem('arkedo_internet2_level') || '1'),
       score: Number(localStorage.getItem('arkedo_internet2_score') || '0'),
       elapsedSeconds: Number(localStorage.getItem('arkedo_internet2_elapsed') || '0')
+    },
+    text1: {
+      completed: Number(localStorage.getItem('arkedo_text1_level') || '1') >= 8,
+      level: Number(localStorage.getItem('arkedo_text1_level') || '1'),
+      score: Number(localStorage.getItem('arkedo_text1_score') || '0'),
+      elapsedSeconds: Number(localStorage.getItem('arkedo_text1_elapsed') || '0')
+    },
+    text2: {
+      completed: Number(localStorage.getItem('arkedo_text2_level') || '1') >= 8,
+      level: Number(localStorage.getItem('arkedo_text2_level') || '1'),
+      score: Number(localStorage.getItem('arkedo_text2_score') || '0'),
+      elapsedSeconds: Number(localStorage.getItem('arkedo_text2_elapsed') || '0')
+    },
+    graphics1: {
+      completed: Number(localStorage.getItem('arkedo_graphics1_level') || '1') >= 7,
+      level: Number(localStorage.getItem('arkedo_graphics1_level') || '1'),
+      score: Number(localStorage.getItem('arkedo_graphics1_score') || '0'),
+      elapsedSeconds: Number(localStorage.getItem('arkedo_graphics1_elapsed') || '0')
+    },
+    graphics2: {
+      completed: Number(localStorage.getItem('arkedo_graphics2_level') || '1') >= 7,
+      level: Number(localStorage.getItem('arkedo_graphics2_level') || '1'),
+      score: Number(localStorage.getItem('arkedo_graphics2_score') || '0'),
+      elapsedSeconds: Number(localStorage.getItem('arkedo_graphics2_elapsed') || '0')
     },
     totalLessonScore: 0
   };
@@ -447,6 +479,30 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
         localStorage.setItem('arkedo_internet2_score', String(i2.score || 0));
         localStorage.setItem('arkedo_internet2_elapsed', String(i2.elapsedSeconds || 0));
       }
+      const t1 = profile.lessonsProgress.text1;
+      if (t1) {
+        localStorage.setItem('arkedo_text1_level', String(t1.level || 1));
+        localStorage.setItem('arkedo_text1_score', String(t1.score || 0));
+        localStorage.setItem('arkedo_text1_elapsed', String(t1.elapsedSeconds || 0));
+      }
+      const t2 = profile.lessonsProgress.text2;
+      if (t2) {
+        localStorage.setItem('arkedo_text2_level', String(t2.level || 1));
+        localStorage.setItem('arkedo_text2_score', String(t2.score || 0));
+        localStorage.setItem('arkedo_text2_elapsed', String(t2.elapsedSeconds || 0));
+      }
+      const g1 = profile.lessonsProgress.graphics1;
+      if (g1) {
+        localStorage.setItem('arkedo_graphics1_level', String(g1.level || 1));
+        localStorage.setItem('arkedo_graphics1_score', String(g1.score || 0));
+        localStorage.setItem('arkedo_graphics1_elapsed', String(g1.elapsedSeconds || 0));
+      }
+      const g2 = profile.lessonsProgress.graphics2;
+      if (g2) {
+        localStorage.setItem('arkedo_graphics2_level', String(g2.level || 1));
+        localStorage.setItem('arkedo_graphics2_score', String(g2.score || 0));
+        localStorage.setItem('arkedo_graphics2_elapsed', String(g2.elapsedSeconds || 0));
+      }
     }
   } catch (err) {
     console.warn('Sync localstorage:', err);
@@ -506,7 +562,7 @@ export const updateActiveArcadeScore = updateStudentArcadeScore;
 
 // UPDATE LESSON PROGRESS FOR LOGGED STUDENT
 export async function updateStudentLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2',
   progressData: {
     level: number;
     score: number;
@@ -567,7 +623,7 @@ export async function updateStudentLessonProgress(
 }
 
 export function updateActiveLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2',
   completed: boolean,
   level: number,
   score: number,
@@ -971,7 +1027,7 @@ export async function resetStudentArcadeScores(
 // RESET LESSON PROGRESS
 export async function resetStudentLessonProgress(
   studentId: string,
-  missionKey?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'all'
+  missionKey?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'all'
 ): Promise<{ success: boolean; error?: string }> {
   try {
     let student: StudentProfile | null = null;

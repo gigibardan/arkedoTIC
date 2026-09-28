@@ -4,13 +4,56 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2';
 }
 
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
 const FILES_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const INTERNET1_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
 const INTERNET2_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
+const TEXT1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const TEXT1_STAGES_RO = [
+  { emoji: '📝', name: 'Interfața Procesorului de Text & Rigla (pag. 50-52)' },
+  { emoji: '⌨️', name: 'Regulile de Aur ale Tehnoredactării (pag. 53-55)' },
+  { emoji: '🔤', name: 'Formatarea Caracterelor, Fonturilor & Indici (pag. 56-58)' },
+  { emoji: '📐', name: 'Alinierea & Formatarea Paragrafelor (pag. 59-61)' },
+  { emoji: '📋', name: 'Liste Marcate (Bullets) & Numerotate (pag. 62-64)' },
+  { emoji: '🔍', name: 'Găsire, Înlocuire & Verificare Ortografică (pag. 65-67)' },
+  { emoji: '🎓', name: 'Laboratorul Practic: Carta Elevului Digital (pag. 50-67)' },
+  { emoji: '🏆', name: 'Tehnician & Editor de Documente Text Certificat!' },
+];
+
+const TEXT1_STAGES_EN = [
+  { emoji: '📝', name: 'Word Processor Interface & The Ruler (pp. 50-52)' },
+  { emoji: '⌨️', name: 'Golden Typing Rules & Special Keys (pp. 53-55)' },
+  { emoji: '🔤', name: 'Character Formatting, Fonts & Scripts (pp. 56-58)' },
+  { emoji: '📐', name: 'Paragraph Alignment & Indentations (pp. 59-61)' },
+  { emoji: '📋', name: 'Bulleted & Numbered Lists (pp. 62-64)' },
+  { emoji: '🔍', name: 'Find & Replace, Spellcheck & Export (pp. 65-67)' },
+  { emoji: '🎓', name: 'Practical Master Lab: Digital Student Charter' },
+  { emoji: '🏆', name: 'Certified Word Processor & Document Editor!' },
+];
+
+const TEXT1_MILESTONES_RO = [
+  'P1: Interfață',
+  'P2: Reguli',
+  'P3: Fonturi',
+  'P4: Aliniere',
+  'P5: Liste',
+  'P6: Căutare',
+  'P7: Laborator',
+];
+
+const TEXT1_MILESTONES_EN = [
+  'P1: Interface',
+  'P2: Typing',
+  'P3: Fonts',
+  'P4: Alignment',
+  'P5: Lists',
+  'P6: Replace',
+  'P7: Lab',
+];
 
 const INTERNET2_STAGES_RO = [
   { emoji: '🔍', name: 'Maestru Motoare de Căutare & Operatori (pag. 38-39)' },
@@ -170,6 +213,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isHardware = courseId === 'hardware';
   const isInternet1 = courseId === 'internet1';
   const isInternet2 = courseId === 'internet2';
+  const isText1 = courseId === 'text1';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -191,6 +235,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? INTERNET2_MILESTONES_EN : INTERNET2_MILESTONES_RO;
     percents = INTERNET2_STAGE_PERCENTS;
     maxLevels = 6;
+  } else if (isText1) {
+    stages = lang === 'en' ? TEXT1_STAGES_EN : TEXT1_STAGES_RO;
+    milestones = lang === 'en' ? TEXT1_MILESTONES_EN : TEXT1_MILESTONES_RO;
+    percents = TEXT1_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -212,9 +261,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Internet & Web Explorer Progress' : 'Evoluție Explorator Internet & Web TIC')
                 : isInternet2
                 ? (lang === 'en' ? 'Digital Citizenship & Security Progress' : 'Evoluție Comunicare & Securitate Digitală')
+                : isText1
+                ? (lang === 'en' ? 'Word Processor & Typography Progress' : 'Evoluție Editor de Documente & Tehnoredactare')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
-            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : isInternet2 ? 'text-indigo-400' : 'text-emerald-400'}`}>
+            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : isInternet2 ? 'text-indigo-400' : isText1 ? 'text-blue-400' : 'text-emerald-400'}`}>
               {currentStage.name}
             </div>
           </div>

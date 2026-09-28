@@ -688,6 +688,20 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {computeLessonXP(selectedStudentForDetails.lessonsProgress?.internet2 || {})} pts
                   </span>
                 </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <div className="flex flex-col">
+                    <span className="text-slate-300 font-medium">📝 Text 4A (Word & Formatare)</span>
+                    {selectedStudentForDetails.lessonsProgress?.text1?.elapsedSeconds ? (
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        ⏱️ {selectedStudentForDetails.lessonsProgress.text1.elapsedSeconds}s
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className="font-mono font-bold text-blue-300">
+                    {computeLessonXP(selectedStudentForDetails.lessonsProgress?.text1 || {})} pts
+                  </span>
+                </div>
               </div>
             </div>
 
