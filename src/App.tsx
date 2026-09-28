@@ -33,6 +33,9 @@ import { Module3BFlow } from './components/internet2/Module3BFlow';
 // Text Mission 4A (Unitatea 4 - Manual pag. 50-67)
 import { Module4AFlow } from './components/text1/Module4AFlow';
 
+// Text Mission 4B (Unitatea 4 - Manual pag. 68-80)
+import { Module4BFlow } from './components/text2/Module4BFlow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
@@ -213,6 +216,35 @@ function GameContent() {
     return 0;
   });
 
+  // Text 2 (Mission 4B) progress
+  const [text2Level, setText2Level] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_text2_level');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [text2Score, setText2Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_text2_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [text2ElapsedSeconds, setText2ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_text2_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -275,11 +307,14 @@ function GameContent() {
       localStorage.setItem('arkedo_internet2_score', String(internet2Score));
       localStorage.setItem('arkedo_text1_level', String(text1Level));
       localStorage.setItem('arkedo_text1_score', String(text1Score));
+      localStorage.setItem('arkedo_text2_level', String(text2Level));
+      localStorage.setItem('arkedo_text2_score', String(text2Score));
       localStorage.setItem('arkedo_hw_elapsed', String(hwElapsedSeconds));
       localStorage.setItem('arkedo_files_elapsed', String(filesElapsedSeconds));
       localStorage.setItem('arkedo_internet1_elapsed', String(internet1ElapsedSeconds));
       localStorage.setItem('arkedo_internet2_elapsed', String(internet2ElapsedSeconds));
       localStorage.setItem('arkedo_text1_elapsed', String(text1ElapsedSeconds));
+      localStorage.setItem('arkedo_text2_elapsed', String(text2ElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -289,7 +324,8 @@ function GameContent() {
     filesLevel, filesScore, filesElapsedSeconds,
     internet1Level, internet1Score, internet1ElapsedSeconds,
     internet2Level, internet2Score, internet2ElapsedSeconds,
-    text1Level, text1Score, text1ElapsedSeconds
+    text1Level, text1Score, text1ElapsedSeconds,
+    text2Level, text2Score, text2ElapsedSeconds
   ]);
 
   // Current active level & score
@@ -301,6 +337,8 @@ function GameContent() {
     ? internet2Level
     : activeMission === 'text1'
     ? text1Level
+    : activeMission === 'text2'
+    ? text2Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -311,6 +349,8 @@ function GameContent() {
     ? internet2Score
     : activeMission === 'text1'
     ? text1Score
+    : activeMission === 'text2'
+    ? text2Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -321,6 +361,8 @@ function GameContent() {
     ? internet2ElapsedSeconds
     : activeMission === 'text1'
     ? text1ElapsedSeconds
+    : activeMission === 'text2'
+    ? text2ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -335,7 +377,8 @@ function GameContent() {
       (activeMission === 'files' && filesLevel <= 7) ||
       (activeMission === 'internet1' && internet1Level <= 6) ||
       (activeMission === 'internet2' && internet2Level <= 6) ||
-      (activeMission === 'text1' && text1Level <= 7);
+      (activeMission === 'text1' && text1Level <= 7) ||
+      (activeMission === 'text2' && text2Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -347,6 +390,8 @@ function GameContent() {
           setInternet2ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'text1') {
           setText1ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'text2') {
+          setText2ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -355,7 +400,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level]);
 
   // Listen to browser navigation
   useEffect(() => {
@@ -427,8 +472,38 @@ function GameContent() {
       setText1Level(1);
       setText1Score(0);
       setText1ElapsedSeconds(0);
+    } else if (activeMission === 'text2') {
+      setText2Level(1);
+      setText2Score(0);
+      setText2ElapsedSeconds(0);
     }
     arky.triggerIdle();
+  };
+
+  // Text 2 (Mission 4B) level progression
+  const handleText2CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(text2Score, earnedScore));
+    setText2Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setText2Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setText2Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('text2', true, 8, updatedTotal, text2ElapsedSeconds);
+    }
+  };
+
+  const handleResetText2 = () => {
+    sounds.playClick();
+    setText2Score(0);
+    setText2Level(1);
+    setText2ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Text 1 (Mission 4A) level progression
@@ -656,7 +731,7 @@ function GameContent() {
             {/* Mission Evolution Progress */}
             <ProgressBar
               currentLevel={currentLevel}
-              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : 'files'}
+              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : 'files'}
             />
 
             {/* Level Views for HARDWARE */}
@@ -794,12 +869,34 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for TEXT 2 (MISSION 4B - ELEMENTE GRAFICE, TABELE & PAGINARE) */}
+            {activeMission === 'text2' && (
+              <div className="flex-1">
+                {text2Level <= 7 ? (
+                  <Module4BFlow
+                    currentLevel={text2Level}
+                    onCompleteLevel={handleText2CompleteLevel}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={text2Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={text2ElapsedSeconds}
+                    courseId="text2"
+                    onReset={handleResetText2}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7)) && (
         <div className="sticky bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}

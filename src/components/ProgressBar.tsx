@@ -12,6 +12,49 @@ const FILES_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const INTERNET1_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
 const INTERNET2_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
 const TEXT1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const TEXT2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const TEXT2_STAGES_RO = [
+  { emoji: '📊', name: 'Inserarea și Structurarea Tabelelor (pag. 68-70)' },
+  { emoji: '📐', name: 'Formatarea Tabelelor, Îmbinare & Umbrire (pag. 71-72)' },
+  { emoji: '🖼️', name: 'Inserarea & Redimensionarea Imaginilor (pag. 73-75)' },
+  { emoji: '📰', name: 'Încadrarea Textului în Jurul Imaginilor (pag. 76-77)' },
+  { emoji: '✨', name: 'Forme Geometrice, Casete de Text & Grupare (pag. 78-79)' },
+  { emoji: '📄', name: 'Paginarea Documentului, Margini, Antet & Subsol (pag. 80)' },
+  { emoji: '🎓', name: 'Laboratorul Practic: Revista Eco-Gimnaziul (pag. 68-80)' },
+  { emoji: '🏆', name: 'Designer & Arhitect de Documente Certificat!' },
+];
+
+const TEXT2_STAGES_EN = [
+  { emoji: '📊', name: 'Inserting & Structuring Tables (pp. 68-70)' },
+  { emoji: '📐', name: 'Table Formatting, Merge & Shading (pp. 71-72)' },
+  { emoji: '🖼️', name: 'Inserting & Sizing Images (pp. 73-75)' },
+  { emoji: '📰', name: 'Text Wrapping Around Images (pp. 76-77)' },
+  { emoji: '✨', name: 'Geometric Shapes, Text Boxes & Grouping (pp. 78-79)' },
+  { emoji: '📄', name: 'Page Setup: Margins, Headers & Footers (p. 80)' },
+  { emoji: '🎓', name: 'Practical Capstone: Eco-Magazine Master Studio' },
+  { emoji: '🏆', name: 'Certified Document Designer & Page Architect!' },
+];
+
+const TEXT2_MILESTONES_RO = [
+  'P1: Tabele',
+  'P2: Formatare',
+  'P3: Imagini',
+  'P4: Wrap Text',
+  'P5: Forme',
+  'P6: Paginare',
+  'P7: Revistă',
+];
+
+const TEXT2_MILESTONES_EN = [
+  'P1: Tables',
+  'P2: Styling',
+  'P3: Pictures',
+  'P4: Wrap Text',
+  'P5: Shapes',
+  'P6: Layout',
+  'P7: Studio',
+];
 
 const TEXT1_STAGES_RO = [
   { emoji: '📝', name: 'Interfața Procesorului de Text & Rigla (pag. 50-52)' },
@@ -214,6 +257,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isInternet1 = courseId === 'internet1';
   const isInternet2 = courseId === 'internet2';
   const isText1 = courseId === 'text1';
+  const isText2 = courseId === 'text2';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -240,6 +284,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? TEXT1_MILESTONES_EN : TEXT1_MILESTONES_RO;
     percents = TEXT1_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isText2) {
+    stages = lang === 'en' ? TEXT2_STAGES_EN : TEXT2_STAGES_RO;
+    milestones = lang === 'en' ? TEXT2_MILESTONES_EN : TEXT2_MILESTONES_RO;
+    percents = TEXT2_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -263,9 +312,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Digital Citizenship & Security Progress' : 'Evoluție Comunicare & Securitate Digitală')
                 : isText1
                 ? (lang === 'en' ? 'Word Processor & Typography Progress' : 'Evoluție Editor de Documente & Tehnoredactare')
+                : isText2
+                ? (lang === 'en' ? 'Visual Elements, Tables & Layout Progress' : 'Evoluție Tabele, Imagini & Paginare')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
-            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : isInternet2 ? 'text-indigo-400' : isText1 ? 'text-blue-400' : 'text-emerald-400'}`}>
+            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : isInternet2 ? 'text-indigo-400' : isText1 ? 'text-blue-400' : isText2 ? 'text-emerald-400' : 'text-emerald-400'}`}>
               {currentStage.name}
             </div>
           </div>

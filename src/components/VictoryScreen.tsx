@@ -129,7 +129,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -147,6 +147,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Digital Citizenship & Security Expert!' : 'Felicitări, Expert în Comunicare & Securitate Digitală!')
           : isText1
           ? (lang === 'en' ? 'Congratulations, Word Processor & Document Master!' : 'Felicitări, Maestru în Tehnoredactare & Documente Text!')
+          : isText2
+          ? (lang === 'en' ? 'Congratulations, Document Designer & Page Architect!' : 'Felicitări, Designer & Arhitect de Documente Text!')
           : t.vTitle}
       </h2>
 
@@ -167,6 +169,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered the word processor interface and ruler, golden typing rules, character formatting and scientific scripts, paragraph alignments and indents, lists, automated find and replace, and created the Digital Student Charter!'
               : 'Ai parcurs cu succes Modulul 4A: interfața procesorului de text și rigla, regulile de aur ale tehnoredactării, formatarea fonturilor și indici, alinierea paragrafelor și alineate, liste marcate și numerotate, găsire și înlocuire automată și Carta Elevului Digital!')
+          : isText2
+          ? (lang === 'en'
+              ? 'You mastered table creation and formatting, cell merging, proportional image resizing, text wrapping styles (Square, Tight, Behind Text), geometric shapes and text boxes, and full A4 page setup with headers and automatic page numbers!'
+              : 'Ai parcurs cu brio Modulul 4B: inserarea și formatarea tabelelor, îmbinarea celulelor, redimensionarea imaginilor fără distorsiune de proporții, încadrarea textului (Pătrat, Strâns, În spatele textului), forme geometrice și casete de text, alături de paginarea completă A4 cu antet, subsol și numerotare automată!')
           : t.vDesc}
       </p>
 
@@ -419,6 +425,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Find & Replace' : 'Găsire & Înlocuire'}</div>
                 <div className="text-[10px] text-purple-400">Ctrl+H & Carta Elevului</div>
+              </div>
+            </div>
+          </>
+        ) : isText2 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Table Architect' : 'Tabele & Structură'}</div>
+                <div className="text-[10px] text-blue-400">Rânduri, Coloane & TAB</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Merge & Shading' : 'Îmbinare & Umbrire'}</div>
+                <div className="text-[10px] text-indigo-400">Merge Cells & 9 Alinieri</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🖼️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Aspect Ratio Pro' : 'Proporții & Decupaj'}</div>
+                <div className="text-[10px] text-emerald-400">Colțuri 1:1 & Crop</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📰</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Wrap Text Expert' : 'Încadrare Text'}</div>
+                <div className="text-[10px] text-cyan-400">Pătrat, Strâns & Watermark</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">📄</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Page Master' : 'Paginare & Revista'}</div>
+                <div className="text-[10px] text-teal-400">Antet, Subsol & A4</div>
               </div>
             </div>
           </>

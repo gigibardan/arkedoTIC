@@ -1645,38 +1645,83 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Card 6: COMING SOON - Modulul 4B: Tabele, Imagini & Paginare */}
-          <div className="relative bg-slate-900/50 border border-slate-800 rounded-3xl p-6 opacity-85 hover:opacity-100 transition flex flex-col justify-between">
+          {/* Card 6: ACTIVE MISSION 4B - Elemente Grafice, Tabele & Paginare */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'text2'
+                ? 'border-emerald-400 shadow-emerald-500/20 ring-2 ring-emerald-500/30'
+                : 'border-emerald-500/60 hover:border-emerald-400 hover:shadow-emerald-500/10'
+            }`}
+          >
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
                   📊
                 </div>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-bold uppercase tracking-wider">
-                  <Lock className="w-3 h-3" /> {lang === 'en' ? 'Next Lesson' : 'Următoarea Lecție'}
-                </span>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'text2' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 4B' : 'MODULUL 4B'}
+                  </span>
+                </div>
               </div>
 
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 68–80 • Module 4B' : 'Manual pag. 68–80 • Modulul 4B'}
+              <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 68–80 • Mission 4B' : 'Manual pag. 68–80 • Misiunea 4B'}
               </div>
 
-              <h3 className="text-xl font-bold text-slate-200 font-heading mb-2">
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors">
                 {lang === 'en' ? 'Visual Elements, Tables & Page Layout' : 'Elemente Grafice, Tabele & Paginare'}
               </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Tables & Merge, 1:1 Aspect Ratio, Text Wrapping, Shapes, Headers & Footers' : 'Tabele & Merge, Proporții 1:1, Text Wrapping, Forme, Antet & Subsol'}
+              </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
                 {lang === 'en'
-                  ? 'Inserting and formatting tables, merging cells, positioning illustrations, inserting shapes, page orientation, headers, footers, and automatic page numbers.'
-                  : 'Inserarea și formatarea tabelelor, îmbinarea celulelor, poziționarea imaginilor, forme geometrice, orientarea paginii (Portret/Vedere), antet, subsol și numerotarea automată a paginilor.'}
+                  ? 'Master table creation and cell merging (p. 68–72), preserve picture aspect ratio and crop margins (p. 73–75), configure Square & Behind text wrapping (p. 76–77), assemble text boxes and group shapes (p. 78–79), set A4 margins and dynamic page numbers (p. 80), and publish the Eco-Magazine!'
+                  : 'Stăpânește inserarea tabelelor și îmbinarea celulelor (pag. 68–72), păstrează proporțiile imaginilor și decupează marginile (pag. 73–75), configurează încadrarea textului (Square, Behind - pag. 76–77), construiește ecusoane cu casete de text și grupare (pag. 78–79), configurează pagina A4 cu antet și numerotare dinamică (pag. 80) și publică Eco-Revista!'}
               </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-emerald-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-emerald-400" /> {lang === 'en' ? 'Document Designer Diploma' : 'Diplomă Designer Documente'}
+                </span>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500 font-mono">
-              <span>{lang === 'en' ? 'Module 4 • Lesson 2' : 'Modulul 4 • Lecția 2'}</span>
-              <span className="px-3 py-1 rounded-lg bg-slate-800/80 text-slate-400">
-                {lang === 'en' ? 'In preparation ⏳' : 'În pregătire ⏳'}
-              </span>
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'text2' && activeMissionLevel > 1 ? (
+                  <span className="text-emerald-400 font-bold">
+                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('text2')}
+                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'text2' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B')
+                    : (lang === 'en' ? 'Start Mission 4B' : 'Începe Misiunea 4B')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -1850,6 +1895,10 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
   if (missionId === 'text1') {
     const text1Scores = [0, 15, 30, 45, 60, 75, 90, 100];
     return text1Scores[Math.min(level - 1, 7)] || 0;
+  }
+  if (missionId === 'text2') {
+    const text2Scores = [0, 15, 30, 45, 60, 75, 90, 100];
+    return text2Scores[Math.min(level - 1, 7)] || 0;
   }
   const filesScores = [0, 10, 25, 40, 55, 70, 85, 100];
   return filesScores[Math.min(level - 1, 7)] || 0;

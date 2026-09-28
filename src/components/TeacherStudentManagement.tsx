@@ -289,7 +289,8 @@ export const TeacherStudentManagement: React.FC = () => {
                     s.lessonsProgress?.files?.completed,
                     s.lessonsProgress?.internet1?.completed,
                     s.lessonsProgress?.internet2?.completed,
-                    s.lessonsProgress?.text1?.completed
+                    s.lessonsProgress?.text1?.completed,
+                    s.lessonsProgress?.text2?.completed
                   ].filter(Boolean).length;
 
                   const isSuspicious = suspiciousStudents.some((susp) => susp.id === s.id);
@@ -372,7 +373,7 @@ export const TeacherStudentManagement: React.FC = () => {
                       <td className="py-3.5 px-4 font-mono text-xs text-emerald-300">
                         <div className="flex items-center gap-1">
                           <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>{lessonsCount}/5 {isEn ? 'Finished' : 'Finalizate'}</span>
+                          <span>{lessonsCount}/6 {isEn ? 'Finished' : 'Finalizate'}</span>
                         </div>
                       </td>
 

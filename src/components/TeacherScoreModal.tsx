@@ -108,6 +108,12 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
       score: student.lessonsProgress?.text1?.score || 0,
       elapsedSeconds: student.lessonsProgress?.text1?.elapsedSeconds || 0
     },
+    text2: {
+      completed: student.lessonsProgress?.text2?.completed || false,
+      level: student.lessonsProgress?.text2?.level || 1,
+      score: student.lessonsProgress?.text2?.score || 0,
+      elapsedSeconds: student.lessonsProgress?.text2?.elapsedSeconds || 0
+    },
     totalLessonScore: student.lessonsProgress?.totalLessonScore || 0
   });
 
@@ -147,7 +153,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   };
 
   const handleLessonChange = (
-    mission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1',
+    mission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2',
     field: 'completed' | 'score' | 'elapsedSeconds' | 'level',
     val: any
   ) => {
@@ -868,6 +874,69 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                         max="7"
                         value={lessonsProgress.text1?.level || 1}
                         onChange={(e) => handleLessonChange('text1', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Text 4B */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <FileText className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Unit 4B: Visual Elements, Tables & Layout' : 'Unitatea 4B: Elemente Grafice, Tabele & Paginare'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 68-80 (Tables, Images, Wrap Text, Shapes, Page Setup)' : 'Manual pag. 68-80 (Tabele, Imagini, Wrap Text, Forme, Paginare)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.text2?.completed || false}
+                        onChange={(e) => handleLessonChange('text2', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.text2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.text2?.score || 0}
+                        onChange={(e) => handleLessonChange('text2', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.text2?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('text2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.text2?.level || 1}
+                        onChange={(e) => handleLessonChange('text2', 'level', parseInt(e.target.value, 10) || 1)}
                         className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
                       />
                     </div>

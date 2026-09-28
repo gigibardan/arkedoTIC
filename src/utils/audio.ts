@@ -341,6 +341,14 @@ class SoundManager {
       // Ignore
     }
   }
+
+  playSuccess() {
+    this.playCorrect();
+  }
+
+  playFanfare() {
+    this.playVictory();
+  }
 }
 
 export const sounds = new SoundManager();
