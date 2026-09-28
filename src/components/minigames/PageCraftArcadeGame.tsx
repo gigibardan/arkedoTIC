@@ -64,6 +64,16 @@ interface BlitzTicket {
   visualHint?: string;
 }
 
+// Helper to randomly shuffle arrays (Fisher-Yates)
+export function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 const BLITZ_TICKETS: BlitzTicket[] = [
   {
     id: 't1_wrap_jump',
@@ -74,20 +84,20 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'School Gazette Article • Text jumping bug',
     options: [
       {
-        id: 'opt_square',
-        textRo: 'Pătrat (Square / În jur)',
-        textEn: 'Square (Text flows around bounding box)',
-        correct: true,
-        explanationRo: 'Corect! Modul Square face textul să curgă fluid pe laturile dreptunghiului imaginii.',
-        explanationEn: 'Correct! Square wrapping allows text to flow smoothly along all sides.',
-      },
-      {
         id: 'opt_inline',
         textRo: 'În linie cu textul (In Line with Text)',
         textEn: 'In Line with Text',
         correct: false,
         explanationRo: 'In Line tratează poza ca o literă uriașă, cauzând exact acest gol inestetic!',
         explanationEn: 'In Line treats picture like a giant letter, causing the empty gap!',
+      },
+      {
+        id: 'opt_square',
+        textRo: 'Pătrat (Square / În jur)',
+        textEn: 'Square (Text flows around bounding box)',
+        correct: true,
+        explanationRo: 'Corect! Modul Square face textul să curgă fluid pe laturile dreptunghiului imaginii.',
+        explanationEn: 'Correct! Square wrapping allows text to flow smoothly along all sides.',
       },
       {
         id: 'opt_delete',
@@ -142,14 +152,6 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'Timetable • Title Banner Cells',
     options: [
       {
-        id: 'opt_merge',
-        textRo: 'Îmbinare Celule (Merge Cells)',
-        textEn: 'Merge Cells',
-        correct: true,
-        explanationRo: 'Bravo! Merge Cells combină mai multe celule selectate într-o singură celulă continuă.',
-        explanationEn: 'Bravo! Merge Cells unites multiple selected cells into a unified banner.',
-      },
-      {
         id: 'opt_split',
         textRo: 'Scindare Celule (Split Cells)',
         textEn: 'Split Cells',
@@ -165,6 +167,14 @@ const BLITZ_TICKETS: BlitzTicket[] = [
         explanationRo: 'Dacă ștergi rândul pierzi titlul complet!',
         explanationEn: 'Deleting row loses the entire header!',
       },
+      {
+        id: 'opt_merge',
+        textRo: 'Îmbinare Celule (Merge Cells)',
+        textEn: 'Merge Cells',
+        correct: true,
+        explanationRo: 'Bravo! Merge Cells combină mai multe celule selectate într-o singură celulă continuă.',
+        explanationEn: 'Bravo! Merge Cells unites multiple selected cells into a unified banner.',
+      },
     ],
   },
   {
@@ -176,20 +186,20 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'Official Letterhead • Watermark Background',
     options: [
       {
-        id: 'opt_behind',
-        textRo: 'În spatele textului (Behind Text)',
-        textEn: 'Behind Text',
-        correct: true,
-        explanationRo: 'Super! Behind Text așază grafica pe fundal, lăsând literele vizibile deasupra.',
-        explanationEn: 'Super! Behind Text sends visual elements to the background canvas.',
-      },
-      {
         id: 'opt_front',
         textRo: 'În fața textului (In Front of Text)',
         textEn: 'In Front of Text',
         correct: false,
         explanationRo: 'In Front of Text va acoperi literele și le va face imposibil de citit!',
         explanationEn: 'In Front covers and blocks the underlying reading text!',
+      },
+      {
+        id: 'opt_behind',
+        textRo: 'În spatele textului (Behind Text)',
+        textEn: 'Behind Text',
+        correct: true,
+        explanationRo: 'Super! Behind Text așază grafica pe fundal, lăsând literele vizibile deasupra.',
+        explanationEn: 'Super! Behind Text sends visual elements to the background canvas.',
       },
       {
         id: 'opt_tight',
@@ -210,20 +220,20 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'Document Pagination • Common Pitfall',
     options: [
       {
-        id: 'opt_static_fail',
-        textRo: 'Toate paginile vor arăta greșit cifra „1”!',
-        textEn: 'Every page will incorrectly show the digit "1"!',
-        correct: true,
-        explanationRo: 'Exact! Antetul și subsolul se repetă pe toate foile. Trebuie inserat câmpul dinamic {PAGE}!',
-        explanationEn: 'Exactly! Headers/footers repeat. You must insert dynamic {PAGE} field code!',
-      },
-      {
         id: 'opt_auto_increment',
         textRo: 'Word va ști singur să le schimbe în 2 și 3',
         textEn: 'Word automatically increments static numbers',
         correct: false,
         explanationRo: 'Fals! Calculatorul nu ghicește, textul scris simplu rămâne identic peste tot.',
         explanationEn: 'False! Static text repeats identically on all sheets.',
+      },
+      {
+        id: 'opt_static_fail',
+        textRo: 'Toate paginile vor arăta greșit cifra „1”!',
+        textEn: 'Every page will incorrectly show the digit "1"!',
+        correct: true,
+        explanationRo: 'Exact! Antetul și subsolul se repetă pe toate foile. Trebuie inserat câmpul dinamic {PAGE}!',
+        explanationEn: 'Exactly! Headers/footers repeat. You must insert dynamic {PAGE} field code!',
       },
       {
         id: 'opt_crash',
@@ -244,14 +254,6 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'School Fair Poster • Layer Z-Order',
     options: [
       {
-        id: 'opt_bring_front',
-        textRo: 'Selectăm textul și dăm „Adu în față” (Bring Forward / Bring to Front)',
-        textEn: 'Select text box and click "Bring to Front"',
-        correct: true,
-        explanationRo: 'Corect! Aducerea în față plasează caseta de text pe stratul cel mai de sus.',
-        explanationEn: 'Correct! Bring to front moves the element to the top layer.',
-      },
-      {
         id: 'opt_delete_all',
         textRo: 'Ștergem totul și desenăm invers',
         textEn: 'Delete all and redraw in reverse',
@@ -267,6 +269,14 @@ const BLITZ_TICKETS: BlitzTicket[] = [
         explanationRo: 'Zoom-ul doar mărește vederea, nu schimbă ordinea straturilor.',
         explanationEn: 'Zooming in does not modify layer arrangement.',
       },
+      {
+        id: 'opt_bring_front',
+        textRo: 'Selectăm textul și dăm „Adu în față” (Bring Forward / Bring to Front)',
+        textEn: 'Select text box and click "Bring to Front"',
+        correct: true,
+        explanationRo: 'Corect! Aducerea în față plasează caseta de text pe stratul cel mai de sus.',
+        explanationEn: 'Correct! Bring to front moves the element to the top layer.',
+      },
     ],
   },
   {
@@ -278,20 +288,20 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'Page Format • Orientation Choice',
     options: [
       {
-        id: 'opt_landscape',
-        textRo: 'Vedere / Orizontal (Landscape)',
-        textEn: 'Landscape (Horizontal)',
-        correct: true,
-        explanationRo: 'Exact! Landscape oferă lățime maximă pentru diplome și tabele complexe.',
-        explanationEn: 'Exactly! Landscape gives extra width for diplomas and wide tables.',
-      },
-      {
         id: 'opt_portrait',
         textRo: 'Portret / Vertical (Portrait)',
         textEn: 'Portrait (Vertical)',
         correct: false,
         explanationRo: 'Portrait este îngust (21 cm), un tabel cu 8 coloane ar fi foarte înghesuit.',
         explanationEn: 'Portrait is narrower, squeezing columns tightly.',
+      },
+      {
+        id: 'opt_landscape',
+        textRo: 'Vedere / Orizontal (Landscape)',
+        textEn: 'Landscape (Horizontal)',
+        correct: true,
+        explanationRo: 'Exact! Landscape oferă lățime maximă pentru diplome și tabele complexe.',
+        explanationEn: 'Exactly! Landscape gives extra width for diplomas and wide tables.',
       },
       {
         id: 'opt_square_page',
@@ -346,14 +356,6 @@ const BLITZ_TICKETS: BlitzTicket[] = [
     scenarioEn: 'Image Processing • Crop vs Resize',
     options: [
       {
-        id: 'opt_crop_diff',
-        textRo: 'Decuparea taie marginile nedorite; Redimensionarea modifică mărimea totală',
-        textEn: 'Crop cuts off unwanted edges; Resize scales the total dimensions',
-        correct: true,
-        explanationRo: 'Absolut corect! Crop înlătură fundalul inutil, în timp ce Resize micșorează sau mărește poza.',
-        explanationEn: 'Spot on! Crop eliminates unwanted margins, while Resize scales the picture.',
-      },
-      {
         id: 'opt_same',
         textRo: 'Sunt două denumiri identice pentru aceeași comandă',
         textEn: 'They are identical terms for the exact same tool',
@@ -369,9 +371,195 @@ const BLITZ_TICKETS: BlitzTicket[] = [
         explanationRo: 'Crop nu alterează culorile, doar taie din cadru.',
         explanationEn: 'Crop does not alter palette colors.',
       },
+      {
+        id: 'opt_crop_diff',
+        textRo: 'Decuparea taie marginile nedorite; Redimensionarea modifică mărimea totală',
+        textEn: 'Crop cuts off unwanted edges; Resize scales the total dimensions',
+        correct: true,
+        explanationRo: 'Absolut corect! Crop înlătură fundalul inutil, în timp ce Resize micșorează sau mărește poza.',
+        explanationEn: 'Spot on! Crop eliminates unwanted margins, while Resize scales the picture.',
+      },
+    ],
+  },
+  {
+    id: 't10_cell_shading',
+    category: 'table',
+    questionRo: 'Cum se numește aplicarea unei culori de fundal pe celulele de antet ale unui tabel?',
+    questionEn: 'What is the formatting tool used to apply a background fill color to table header cells?',
+    scenarioRo: 'Stil Tabel • Culoare Fundal',
+    scenarioEn: 'Table Style • Background Color',
+    options: [
+      {
+        id: 'opt_underline',
+        textRo: 'Subliniere Text (Underline)',
+        textEn: 'Underline',
+        correct: false,
+        explanationRo: 'Sublinierea trage o linie sub litere, nu colorează celula.',
+        explanationEn: 'Underline places a line under text, does not fill cells.',
+      },
+      {
+        id: 'opt_shading',
+        textRo: 'Umplere / Umbră (Shading - Găleata de Vopsea)',
+        textEn: 'Shading (Paint Bucket Fill)',
+        correct: true,
+        explanationRo: 'Excelent! Shading (Umplere) colorează fundalul celulelor selectate.',
+        explanationEn: 'Excellent! Shading fills the background of the selected cells.',
+      },
+      {
+        id: 'opt_font_size',
+        textRo: 'Mărimea Fontului (Font Size)',
+        textEn: 'Font Size',
+        correct: false,
+        explanationRo: 'Mărimea fontului schimbă doar dimensiunea literelor.',
+        explanationEn: 'Font size only adjusts character dimensions.',
+      },
+    ],
+  },
+  {
+    id: 't11_group_shapes',
+    category: 'layer',
+    questionRo: 'Ai creat un ecuson dintr-o stea și o casetă de text. Cum le unești ca să le poți muta împreună ca pe un singur obiect?',
+    questionEn: 'You created a badge with a star and a text box. How do you bind them so they move together as a single unit?',
+    scenarioRo: 'Desene & Forme • Unire Obiecte',
+    scenarioEn: 'Shapes & Drawings • Object Binding',
+    options: [
+      {
+        id: 'opt_compress',
+        textRo: 'Comprimare Fișier ZIP',
+        textEn: 'ZIP Compression',
+        correct: false,
+        explanationRo: 'Arhivarea ZIP este pentru fișiere pe disc, nu pentru forme în pagină!',
+        explanationEn: 'ZIP is for storage files, not graphical page shapes!',
+      },
+      {
+        id: 'opt_group',
+        textRo: 'Grupare (Group - Click Dreapta > Group)',
+        textEn: 'Group (Right Click > Group)',
+        correct: true,
+        explanationRo: 'Genial! Comanda Group le leagă într-un singur bloc grafic ușor de repoziționat.',
+        explanationEn: 'Genius! The Group command binds them into a unified draggable asset.',
+      },
+      {
+        id: 'opt_delete_text',
+        textRo: 'Ștergerea textului din casetă',
+        textEn: 'Erase text box contents',
+        correct: false,
+        explanationRo: 'Dacă ștergi textul, pierzi mesajul ecusonului.',
+        explanationEn: 'Erasing text eliminates the badge label.',
+      },
+    ],
+  },
+  {
+    id: 't12_page_break',
+    category: 'page',
+    questionRo: 'Cum treci elegant pe o pagină nouă la începutul unui capitol nou, fără să apeși tasta Enter de 20 de ori?',
+    questionEn: 'How do you cleanly transition to a fresh new page at chapter start without pressing Enter 20 times?',
+    scenarioRo: 'Structură Pagină • Salt Curat',
+    scenarioEn: 'Page Structure • Clean Break',
+    options: [
+      {
+        id: 'opt_page_break',
+        textRo: 'Inserare Sfârșit de Pagină (Page Break / Ctrl + Enter)',
+        textEn: 'Insert Page Break (Ctrl + Enter)',
+        correct: true,
+        explanationRo: 'Perfect! Page Break trimite textul direct pe foaia următoare fără spații goale instabile.',
+        explanationEn: 'Perfect! Page Break cleanly advances text to next page without unstable spaces.',
+      },
+      {
+        id: 'opt_font_huge',
+        textRo: 'Mărești fontul la 72 pt până cade textul',
+        textEn: 'Increase font to 72pt until text overflows',
+        correct: false,
+        explanationRo: 'Mărirea forțată a fontului distruge aspectul documentului.',
+        explanationEn: 'Enlarging font ruins document styling.',
+      },
+      {
+        id: 'opt_restart_pc',
+        textRo: 'Repornești calculatorul',
+        textEn: 'Restart computer',
+        correct: false,
+        explanationRo: 'Repornirea nu adaugă pagini noi.',
+        explanationEn: 'Restarting PC does not add pages.',
+      },
+    ],
+  },
+  {
+    id: 't13_normal_margins',
+    category: 'page',
+    questionRo: 'Ce valoare au marginile standard „Normale” (Normal Margins) într-un document de text?',
+    questionEn: 'What is the standard measurement for "Normal Margins" in a typical text document?',
+    scenarioRo: 'Configurare Pagină • Margini Standard',
+    scenarioEn: 'Page Setup • Standard Margins',
+    options: [
+      {
+        id: 'opt_zero',
+        textRo: '0 cm (imprimanta tipărește până în buza foii)',
+        textEn: '0 cm (print reaches the physical sheet edge)',
+        correct: false,
+        explanationRo: 'Imprimantele fizice au nevoie de o margine minimă, nu pot tipări la 0 cm.',
+        explanationEn: 'Physical printers need border clearance, 0cm will clip content.',
+      },
+      {
+        id: 'opt_normal_margins',
+        textRo: '2.54 cm (1 inch) pe toate cele 4 laturi',
+        textEn: '2.54 cm (1 inch) on all 4 borders',
+        correct: true,
+        explanationRo: 'Exact! 2.54 cm pe Sus, Jos, Stânga și Dreapta este standardul internațional de tipar.',
+        explanationEn: 'Exactly! 2.54 cm on Top, Bottom, Left and Right is standard.',
+      },
+      {
+        id: 'opt_ten_cm',
+        textRo: '10 cm pe fiecare parte',
+        textEn: '10 cm on every side',
+        correct: false,
+        explanationRo: '10 cm ar lăsa doar o dungă minusculă de text pe mijloc!',
+        explanationEn: '10 cm would leave only a tiny text sliver in the center!',
+      },
+    ],
+  },
+  {
+    id: 't14_tight_wrap',
+    category: 'wrap',
+    questionRo: 'Pentru o imagine cu o mascotă decupată (fundal transparent PNG), ce mod face textul să îmbrățișeze silueta conturului?',
+    questionEn: 'For a cutout mascot with a transparent PNG background, which wrap mode contours text along the silhouette?',
+    scenarioRo: 'Machetare Grafică • Siluetă Transparentă',
+    scenarioEn: 'Graphic Layout • Transparent Silhouette',
+    options: [
+      {
+        id: 'opt_tight_correct',
+        textRo: 'Strâns (Tight) sau Prin (Through)',
+        textEn: 'Tight or Through',
+        correct: true,
+        explanationRo: 'Bravo! Modul Tight calculează conturul exact al formei și lasă textul să o îmbrățișeze.',
+        explanationEn: 'Bravo! Tight wrapping contours text around the irregular silhouette.',
+      },
+      {
+        id: 'opt_inline_fail',
+        textRo: 'În linie cu textul (In Line)',
+        textEn: 'In Line',
+        correct: false,
+        explanationRo: 'In Line nu poate urmări conturul, tratează poza ca o cutie rigidă.',
+        explanationEn: 'In Line cannot follow contours; it treats the picture as a rigid box.',
+      },
+      {
+        id: 'opt_top_bottom_fail',
+        textRo: 'Sus și jos (Top and Bottom)',
+        textEn: 'Top and Bottom',
+        correct: false,
+        explanationRo: 'Sus și jos interzice complet textul pe laturile stânga-dreapta.',
+        explanationEn: 'Top and Bottom prohibits any text on the sides.',
+      },
     ],
   },
 ];
+
+// Helper to prepare freshly randomized tickets and options
+export const prepareShuffledBlitzTickets = (): BlitzTicket[] => {
+  return shuffleArray(BLITZ_TICKETS).map((ticket) => ({
+    ...ticket,
+    options: shuffleArray(ticket.options),
+  }));
+};
 
 export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack, studentName }) => {
   const { lang } = useLanguage();
