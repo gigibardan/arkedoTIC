@@ -88,6 +88,7 @@ export interface DuelStats {
   quizBlitzWins?: number;
   cyberShieldWins?: number;
   pcRushWins?: number;
+  mouseDuelWins?: number;
 }
 
 export type ShopCategory = 'arky_skin' | 'theme' | 'title' | 'avatar_frame';

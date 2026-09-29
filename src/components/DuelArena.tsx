@@ -54,6 +54,7 @@ import {
 import { BlockCodingDuelGame } from './minigames/BlockCodingDuelGame';
 import { SpeedCraftingDuelGame } from './minigames/SpeedCraftingDuelGame';
 import { RobloxClickerDuelGame } from './minigames/RobloxClickerDuelGame';
+import { MouseMasterDuelGame } from './minigames/MouseMasterDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -607,6 +608,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🛡️ Cyber Shield (Apărare Phishing)';
       case 'pc_rush':
         return '🔧 Hardware PC Rush (Asamblare)';
+      case 'mouse_duel':
+        return '🎯 Cyber Cursor Clash (Duelul Maeștrilor Mouse-ului 1v1)';
       default:
         return '⚔️ Duel 1v1 TIC';
     }
@@ -835,6 +838,33 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
                     Asamblează calculatorul în ordinea corectă pas cu pas (CPU, Cooler, RAM, SSD, GPU, Sursă)! Cine montează primul?
+                  </p>
+                </button>
+
+                {/* Mode 5: Cyber Cursor Clash (Duel Mouse Agility & Reflex) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('mouse_duel')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'mouse_duel'
+                      ? 'bg-gradient-to-br from-cyan-950/90 via-indigo-950/80 to-teal-950/60 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-base shadow-md shadow-cyan-500/30">
+                      🎯
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Cyber Cursor Clash 🎯</span>
+                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-cyan-300 font-medium">Duel Agilitate Mouse & Touch 1v1</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    7 runde de precizie extremă (Ținte, 2x Click, Urmărire Circuit Laser, Drag & Drop, Scut Deflector, Bouncing Bugs, Overclock Burst). Progres sincronizat în DB la 15, 30, 45, 60, 75, 90, 95, 100%!
                   </p>
                 </button>
               </div>
@@ -1163,6 +1193,27 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               studentName={resolvedStudentName}
               studentAvatar={resolvedAvatar}
               onFinish={handleRobloxClickerFinish}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 1: CYBER CURSOR CLASH (MOUSE MASTER DUEL) */}
+          {currentRoom.mode === 'mouse_duel' && (
+            <MouseMasterDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(150, 'Victorie Cyber Cursor Clash');
+                }
+              }}
               onBack={() => {
                 if (currentRoom?.roomCode) {
                   leaveDuelRoom(currentRoom.roomCode, isHost);

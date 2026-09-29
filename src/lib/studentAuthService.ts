@@ -986,12 +986,26 @@ export async function resetStudentPassword(
 
 // RECORD DUEL RESULT & STATS
 export async function recordStudentDuelResult(
-  isWinner: boolean,
-  mode: string,
-  pointsEarned: number
+  isWinnerOrObj: boolean | { mode: string; won: boolean; score: number },
+  modeParam?: string,
+  pointsEarnedParam?: number
 ): Promise<void> {
   const current = getActiveStudent();
   if (!current) return;
+
+  let isWinner = false;
+  let mode = 'cyber_sprint';
+  let pointsEarned = 0;
+
+  if (typeof isWinnerOrObj === 'object') {
+    isWinner = isWinnerOrObj.won;
+    mode = isWinnerOrObj.mode;
+    pointsEarned = isWinnerOrObj.score || 0;
+  } else {
+    isWinner = isWinnerOrObj;
+    mode = modeParam || 'cyber_sprint';
+    pointsEarned = pointsEarnedParam || 0;
+  }
 
   // Capped strictly at max 1000 XP for the winner of any duel (and max 250 XP for loser)
   const cappedPoints = Math.min(1000, Math.max(0, pointsEarned));
@@ -1007,7 +1021,8 @@ export async function recordStudentDuelResult(
     speedCraftingWins: 0,
     quizBlitzWins: 0,
     cyberShieldWins: 0,
-    pcRushWins: 0
+    pcRushWins: 0,
+    mouseDuelWins: 0
   };
 
   const updatedStats = {
@@ -1020,7 +1035,8 @@ export async function recordStudentDuelResult(
     speedCraftingWins: (prevStats.speedCraftingWins || 0) + (isWinner && mode === 'speed_crafting' ? 1 : 0),
     quizBlitzWins: (prevStats.quizBlitzWins || 0) + (isWinner && mode === 'quiz_blitz' ? 1 : 0),
     cyberShieldWins: (prevStats.cyberShieldWins || 0) + (isWinner && mode === 'cyber_shield' ? 1 : 0),
-    pcRushWins: (prevStats.pcRushWins || 0) + (isWinner && mode === 'pc_rush' ? 1 : 0)
+    pcRushWins: (prevStats.pcRushWins || 0) + (isWinner && mode === 'pc_rush' ? 1 : 0),
+    mouseDuelWins: (prevStats.mouseDuelWins || 0) + (isWinner && mode === 'mouse_duel' ? 1 : 0)
   };
 
   const totalXP = (current.totalXP || 0) + awardAmount;
