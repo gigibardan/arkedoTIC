@@ -595,8 +595,8 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
     points: number;
   } | null>(null);
 
-  // Shuffled blitz tickets
-  const [ticketsList, setTicketsList] = useState<BlitzTicket[]>(() => [...BLITZ_TICKETS].sort(() => Math.random() - 0.5));
+  // Shuffled blitz tickets with dynamically randomized option positions
+  const [ticketsList, setTicketsList] = useState<BlitzTicket[]>(() => prepareShuffledBlitzTickets());
 
   // Timer reference
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -648,8 +648,8 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
       imageSrc: '🐱🤖',
       isDistorted: true,
       options: [
-        { id: 'opt1', textRo: 'Fix: Resetare raport de aspect 1:1 și tragere de colț', textEn: 'Fix: Reset 1:1 aspect ratio and drag corner handle', correct: true },
-        { id: 'opt2', textRo: 'Fix: Mai trage puțin și de sus ca să fie pătrată', textEn: 'Fix: Drag top handle too', correct: false },
+        { id: 'opt1', textRo: 'Fix: Mai trage puțin și de sus ca să fie pătrată', textEn: 'Fix: Drag top handle too', correct: false },
+        { id: 'opt2', textRo: 'Fix: Resetare raport de aspect 1:1 și tragere de colț', textEn: 'Fix: Reset 1:1 aspect ratio and drag corner handle', correct: true },
         { id: 'opt3', textRo: 'Fix: Schimbă fontul textului în Comic Sans', textEn: 'Fix: Change font to Comic Sans', correct: false },
       ],
     },
@@ -676,9 +676,9 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
       imageSrc: '📑1️⃣',
       isDistorted: false,
       options: [
-        { id: 'opt1', textRo: 'Fix: Șterge cifra „1” manuală și inserează câmpul dinamic {PAGE}', textEn: 'Fix: Erase static "1" and insert dynamic {PAGE} field code', correct: true },
-        { id: 'opt2', textRo: 'Fix: Printează fiecare pagină într-un fișier separat', textEn: 'Fix: Print each page in separate files', correct: false },
-        { id: 'opt3', textRo: 'Fix: Numerotează cu pixul pe foaia de hârtie', textEn: 'Fix: Handwrite numbers with a ballpoint pen', correct: false },
+        { id: 'opt1', textRo: 'Fix: Printează fiecare pagină într-un fișier separat', textEn: 'Fix: Print each page in separate files', correct: false },
+        { id: 'opt2', textRo: 'Fix: Numerotează cu pixul pe foaia de hârtie', textEn: 'Fix: Handwrite numbers with a ballpoint pen', correct: false },
+        { id: 'opt3', textRo: 'Fix: Șterge cifra „1” manuală și inserează câmpul dinamic {PAGE}', textEn: 'Fix: Erase static "1" and insert dynamic {PAGE} field code', correct: true },
       ],
     },
     {
@@ -690,8 +690,8 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
       imageSrc: '🟦❓',
       isDistorted: false,
       options: [
-        { id: 'opt1', textRo: 'Fix: Chenarul trebuie trimis în spate (Send to Back) sau textul adus în față', textEn: 'Fix: Send shape to Back or Bring text box to Front', correct: true },
-        { id: 'opt2', textRo: 'Fix: Schimbă luminozitatea monitorului', textEn: 'Fix: Adjust monitor brightness', correct: false },
+        { id: 'opt1', textRo: 'Fix: Schimbă luminozitatea monitorului', textEn: 'Fix: Adjust monitor brightness', correct: false },
+        { id: 'opt2', textRo: 'Fix: Chenarul trebuie trimis în spate (Send to Back) sau textul adus în față', textEn: 'Fix: Send shape to Back or Bring text box to Front', correct: true },
         { id: 'opt3', textRo: 'Fix: Trage cablul de alimentare al calculatorului', textEn: 'Fix: Unplug computer power cable', correct: false },
       ],
     },
@@ -734,7 +734,7 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
     setBlitzStreak(0);
     setBlitzMultiplier(1);
     setBlitzFeedback(null);
-    setTicketsList([...BLITZ_TICKETS].sort(() => Math.random() - 0.5));
+    setTicketsList(prepareShuffledBlitzTickets());
     arky.triggerSuccess(
       lang === 'en'
         ? '⚡ Blitz Sprint Started! Solve layout orders before time runs out!'

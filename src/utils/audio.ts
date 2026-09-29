@@ -6,7 +6,7 @@ export type RetroSoundType = 'jump' | 'duck' | 'coin' | 'powerup' | 'shoot' | 'h
 
 class SoundManager {
   private ctx: AudioContext | null = null;
-  public enabled: boolean = true;
+  public enabled: boolean = false;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -14,9 +14,11 @@ class SoundManager {
         const stored = localStorage.getItem('arkedo_sound_enabled');
         if (stored !== null) {
           this.enabled = stored === 'true';
+        } else {
+          this.enabled = false;
         }
       } catch {
-        // Fallback if localStorage unavailable
+        this.enabled = false;
       }
     }
   }

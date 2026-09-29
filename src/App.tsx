@@ -3,6 +3,7 @@ import { GameLevel } from './types';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { ArkyProvider, useArky } from './context/ArkyContext';
 import { HintProvider } from './context/HintContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { MascotaArky } from './components/MascotaArky';
 import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
@@ -947,13 +948,15 @@ function GameContent() {
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <HintProvider>
-        <ArkyProvider>
-          <GameContent />
-          <MascotaArky />
-        </ArkyProvider>
-      </HintProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <HintProvider>
+          <ArkyProvider>
+            <GameContent />
+            <MascotaArky />
+          </ArkyProvider>
+        </HintProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }

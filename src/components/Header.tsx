@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2, Swords } from 'lucide-react';
+import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2, Swords, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 
@@ -13,10 +13,12 @@ interface HeaderProps {
   studentName: string;
   elapsedSeconds: number;
   missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null;
+  byteCoins?: number;
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
   onNavigateToArcade?: () => void;
   onNavigateToDuel?: () => void;
+  onOpenShop?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,10 +31,12 @@ export const Header: React.FC<HeaderProps> = ({
   studentName,
   elapsedSeconds,
   missionId = null,
+  byteCoins,
   onEditStudentName,
   onNavigateToTeacher,
   onNavigateToArcade,
   onNavigateToDuel,
+  onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
 
@@ -177,6 +181,21 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-slate-500 text-[10px] hidden sm:inline">/{maxScore}</span>
               </div>
             </div>
+          )}
+
+          {/* Cyber Shop & Inventory Button */}
+          {onOpenShop && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                onOpenShop();
+              }}
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-pink-500/20 hover:from-amber-500/30 hover:to-pink-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+              title={lang === 'en' ? 'Open Cyber Shop & Inventory' : 'Deschide Magazinul Cyber & Inventarul'}
+            >
+              <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+              <span className="font-black font-mono">{typeof byteCoins === 'number' ? `${byteCoins} 🪙` : 'Shop'}</span>
+            </button>
           )}
 
           {/* Arcade Button */}

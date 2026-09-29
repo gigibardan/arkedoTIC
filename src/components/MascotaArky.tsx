@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ARKY_IMAGES, ArkyMascotState } from '../assets/arkyImages';
 import { useArky } from '../context/ArkyContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import { sounds } from '../utils/audio';
 import { 
   Sparkles, 
@@ -33,6 +34,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
 }) => {
   const { lang } = useLanguage();
   const arkyContext = useArky();
+  const { equipped } = useTheme();
 
   // If props are passed directly, prefer them; otherwise use context
   const activeState: ArkyMascotState = propState || arkyContext.mascotState || 'idle';
@@ -299,6 +301,39 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                 referrerPolicy="no-referrer"
                 className="relative z-10 w-28 h-36 sm:w-32 sm:h-44 object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] filter transition-all duration-300"
               />
+
+              {/* Equipped Skin Accessory Overlays */}
+              {equipped.arkySkin === 'cyber' && (
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none px-2 py-0.5 rounded-full bg-cyan-500/30 border border-cyan-400 text-[10px] font-black text-cyan-200 shadow-lg shadow-cyan-500/50 flex items-center gap-1 animate-pulse">
+                  <span>🕶️</span>
+                  <span>CYBER</span>
+                </div>
+              )}
+              {equipped.arkySkin === 'scholar' && (
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-2xl drop-shadow-lg animate-float">
+                  🎓
+                </div>
+              )}
+              {equipped.arkySkin === 'astronaut' && (
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-2xl drop-shadow-lg">
+                  👨‍🚀
+                </div>
+              )}
+              {equipped.arkySkin === 'gamer' && (
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-2xl drop-shadow-lg">
+                  🎧
+                </div>
+              )}
+              {equipped.arkySkin === 'eco' && (
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-2xl drop-shadow-lg">
+                  🌿
+                </div>
+              )}
+              {equipped.arkySkin === 'wizard' && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-3xl drop-shadow-lg animate-bounce">
+                  🧙‍♂️
+                </div>
+              )}
             </div>
           </div>
         </div>

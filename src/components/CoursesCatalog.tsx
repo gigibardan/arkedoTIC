@@ -34,6 +34,8 @@ import {
   Edit3,
   Info,
   Swords,
+  ShoppingBag,
+  Coins,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -76,6 +78,8 @@ interface CoursesCatalogProps {
   onOpenTeacherPortal?: () => void;
   onOpenArcade?: () => void;
   onOpenDuel?: () => void;
+  onOpenShop?: () => void;
+  byteCoins?: number;
 }
 
 export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
@@ -90,6 +94,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenTeacherPortal,
   onOpenArcade,
   onOpenDuel,
+  onOpenShop,
+  byteCoins,
 }) => {
   const { t, lang } = useLanguage();
   const arky = useArky();
