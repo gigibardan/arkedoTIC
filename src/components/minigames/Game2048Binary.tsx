@@ -15,6 +15,11 @@ import {
   ArrowRight as ArrowRightIcon,
   HardDrive,
   Info,
+  Lock,
+  Unlock,
+  Smartphone,
+  Hand,
+  Sliders,
 } from 'lucide-react';
 
 interface Game2048Props {
@@ -66,7 +71,80 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
     }
   });
 
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const boardRef = useRef<HTMLDivElement>(null);
+
+  // Mobile scroll lock preference (default enabled on mobile for seamless swipe gameplay)
+  const [lockScrollOnMobile, setLockScrollOnMobile] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_2048_scroll_lock');
+      return saved !== null ? saved === 'true' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  // Mobile control mode: 'both' | 'swipe' | 'dpad'
+  const [controlMode, setControlMode] = useState<'both' | 'swipe' | 'dpad'>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_2048_control_mode') as 'both' | 'swipe' | 'dpad';
+      return saved || 'both';
+    } catch {
+      return 'both';
+    }
+  });
+
+  // Toggle scroll lock state and save preference
+  const toggleScrollLock = () => {
+    sounds.playClick();
+    const next = !lockScrollOnMobile;
+    setLockScrollOnMobile(next);
+    try {
+      localStorage.setItem('arkedo_2048_scroll_lock', String(next));
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Toggle control mode and save preference
+  const changeControlMode = (mode: 'both' | 'swipe' | 'dpad') => {
+    sounds.playClick();
+    setControlMode(mode);
+    try {
+      localStorage.setItem('arkedo_2048_control_mode', mode);
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Attach native non-passive touchmove event listener to board to prevent page scrolling during touch gameplay
+  useEffect(() => {
+    const boardEl = boardRef.current;
+    if (!boardEl) return;
+
+    const handleTouchMoveNative = (e: TouchEvent) => {
+      if (lockScrollOnMobile) {
+        // Prevent default browser viewport scrolling while interacting with the board
+        e.preventDefault();
+      }
+    };
+
+    boardEl.addEventListener('touchmove', handleTouchMoveNative, { passive: false });
+
+    return () => {
+      boardEl.removeEventListener('touchmove', handleTouchMoveNative);
+    };
+  }, [lockScrollOnMobile]);
+
+  // Prevent pull-to-refresh and body bounce while playing on touch devices if scroll lock is active
+  useEffect(() => {
+    if (!lockScrollOnMobile) return;
+    const origOverscroll = document.body.style.overscrollBehavior;
+    document.body.style.overscrollBehavior = 'contain';
+    return () => {
+      document.body.style.overscrollBehavior = origOverscroll;
+    };
+  }, [lockScrollOnMobile]);
 
   // Auto-dismiss bonus toast announcement
   useEffect(() => {
@@ -315,10 +393,14 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [moveBoard]);
 
-  // Touch Swipe Controls
+  // Touch Swipe Controls with velocity & threshold check
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -328,8 +410,12 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
     const dy = touch.clientY - touchStartRef.current.y;
     const absX = Math.abs(dx);
     const absY = Math.abs(dy);
+    const elapsedTime = Date.now() - touchStartRef.current.time;
 
-    if (Math.max(absX, absY) > 30) {
+    // Minimum swipe threshold (20px or rapid flick)
+    const minThreshold = elapsedTime < 250 ? 18 : 26;
+
+    if (Math.max(absX, absY) > minThreshold) {
       if (absX > absY) {
         if (dx > 0) moveBoard('right');
         else moveBoard('left');
@@ -342,7 +428,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10 select-none">
+    <div className="flex flex-col gap-5 max-w-4xl mx-auto w-full pb-10 select-none">
       {/* Top Header / Navigation */}
       <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
         <button
@@ -380,24 +466,25 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
       {/* Main Grid & Side info layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Side: Game Board (8 cols) */}
-        <div className="lg:col-span-8 bg-slate-900/95 border-2 border-amber-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl relative flex flex-col items-center">
+        <div className="lg:col-span-8 bg-slate-900/95 border-2 border-amber-500/30 rounded-3xl p-4 sm:p-7 shadow-2xl relative flex flex-col items-center">
+          
           {/* Top Score Bar & Controls */}
-          <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="w-full flex flex-wrap items-center justify-between gap-2.5 mb-3">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="bg-slate-950 px-3.5 py-2 rounded-2xl border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Scor Curent</div>
-                <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono">{score}</div>
+              <div className="bg-slate-950 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-2xl border border-slate-800 text-center">
+                <div className="text-[9px] sm:text-[10px] text-slate-400 uppercase font-bold">Scor Curent</div>
+                <div className="text-lg sm:text-2xl font-black text-amber-400 font-mono leading-none sm:leading-normal mt-0.5 sm:mt-0">{score}</div>
               </div>
 
-              <div className="bg-slate-950 px-3 py-2 rounded-2xl border border-slate-800 text-center">
-                <div className="text-[10px] text-slate-400 uppercase font-bold">Max Memorie</div>
-                <div className="text-base sm:text-lg font-black text-teal-300 font-mono">
+              <div className="bg-slate-950 px-3 py-1.5 sm:px-3 sm:py-2 rounded-2xl border border-slate-800 text-center">
+                <div className="text-[9px] sm:text-[10px] text-slate-400 uppercase font-bold">Max Memorie</div>
+                <div className="text-sm sm:text-lg font-black text-teal-300 font-mono leading-none sm:leading-normal mt-0.5 sm:mt-0">
                   {TILE_INFO[highestTile]?.label || `${highestTile} B`}
                 </div>
               </div>
 
               <div
-                className={`px-3 py-2 rounded-2xl border text-center transition-all ${
+                className={`hidden sm:block px-3 py-2 rounded-2xl border text-center transition-all ${
                   hasReceived2048Bonus
                     ? 'bg-emerald-950/70 border-emerald-500/60 shadow-lg shadow-emerald-500/20 text-emerald-300'
                     : 'bg-slate-950 border-amber-500/30 text-amber-300'
@@ -420,12 +507,86 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
 
             <button
               onClick={resetGame}
-              className="p-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition cursor-pointer active:scale-95 flex items-center gap-1.5 text-xs font-bold"
+              className="p-2 sm:p-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition cursor-pointer active:scale-95 flex items-center gap-1.5 text-xs font-bold"
               title="Resetează jocul"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 text-amber-400" />
               <span className="hidden sm:inline">Reset</span>
             </button>
+          </div>
+
+          {/* Dedicated Mobile Assistant & Scroll-Lock Bar */}
+          <div className="w-full max-w-[380px] mb-3 p-2 rounded-2xl bg-slate-950/90 border border-slate-800/90 flex flex-col gap-2 shadow-inner">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5">
+                <Smartphone className="w-3.5 h-3.5 text-teal-400" />
+                <span className="text-[11px] font-bold text-slate-300">
+                  {lang === 'en' ? 'Touch & Mobile Mode:' : 'Control Mobil & Touch:'}
+                </span>
+              </div>
+
+              {/* Scroll Lock Toggle Button */}
+              <button
+                onClick={toggleScrollLock}
+                className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono transition flex items-center gap-1.5 cursor-pointer active:scale-95 border ${
+                  lockScrollOnMobile
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm shadow-emerald-500/30'
+                    : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+                }`}
+                title={
+                  lockScrollOnMobile
+                    ? 'Scrollul paginii este blocat când atingi tabla pentru a nu derula ecranul la swipe.'
+                    : 'Apasă pentru a bloca scrollul paginii la swipe.'
+                }
+              >
+                {lockScrollOnMobile ? (
+                  <>
+                    <Lock className="w-3 h-3 text-emerald-400" />
+                    <span>{lang === 'en' ? 'Scroll Locked (Anti-Jump)' : 'Scroll Blocat (Anti-Salt)'}</span>
+                  </>
+                ) : (
+                  <>
+                    <Unlock className="w-3 h-3 text-slate-400" />
+                    <span>{lang === 'en' ? 'Scroll Free' : 'Scroll Liber'}</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Quick Mobile Controls Selector */}
+            <div className="flex items-center justify-between gap-1 pt-1.5 border-t border-slate-800/80 text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1">
+                <Sliders className="w-3 h-3 text-cyan-400" />
+                {lang === 'en' ? 'Input:' : 'Comandă:'}
+              </span>
+              <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+                <button
+                  onClick={() => changeControlMode('both')}
+                  className={`px-2 py-0.5 rounded-md font-bold transition ${
+                    controlMode === 'both' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  {lang === 'en' ? 'Both' : 'Ambele'}
+                </button>
+                <button
+                  onClick={() => changeControlMode('swipe')}
+                  className={`px-2 py-0.5 rounded-md font-bold transition flex items-center gap-1 ${
+                    controlMode === 'swipe' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <Hand className="w-2.5 h-2.5" />
+                  {lang === 'en' ? 'Swipe' : 'Glisare'}
+                </button>
+                <button
+                  onClick={() => changeControlMode('dpad')}
+                  className={`px-2 py-0.5 rounded-md font-bold transition ${
+                    controlMode === 'dpad' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  D-Pad
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Animated Bonus Toast Announcement */}
@@ -439,10 +600,17 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
             </div>
           )}
 
-          {/* 4x4 Game Board */}
+          {/* 4x4 Game Board with touchAction none and overscroll containment */}
           <div
+            ref={boardRef}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            style={{
+              touchAction: 'none',
+              overscrollBehavior: 'contain',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+            }}
             className="w-full max-w-[380px] aspect-square bg-slate-950/90 border-4 border-slate-800 rounded-3xl p-3 sm:p-4 grid grid-cols-4 gap-2.5 sm:gap-3 shadow-2xl relative overflow-hidden"
           >
             {board.map((row, r) =>
@@ -548,40 +716,50 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
             )}
           </div>
 
-          {/* On-Screen D-PAD for Touch & Mobile Devices */}
-          <div className="mt-5 flex flex-col items-center gap-2">
-            <button
-              onClick={() => moveBoard('up')}
-              className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-md border border-slate-700 cursor-pointer active:scale-95 transition"
-              aria-label="Up"
+          {/* On-Screen Ergonomic D-PAD for Touch & Mobile Devices (rendered when controlMode is 'both' or 'dpad') */}
+          {controlMode !== 'swipe' && (
+            <div
+              style={{ touchAction: 'manipulation' }}
+              className="mt-4 flex flex-col items-center gap-2 select-none"
             >
-              <ArrowUp className="w-5 h-5" />
-            </button>
-            <div className="flex items-center gap-4">
               <button
-                onClick={() => moveBoard('left')}
-                className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-md border border-slate-700 cursor-pointer active:scale-95 transition"
-                aria-label="Left"
+                onClick={() => moveBoard('up')}
+                className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
+                aria-label="Up"
               >
-                <ArrowLeftIcon className="w-5 h-5" />
+                <ArrowUp className="w-6 h-6" />
               </button>
-              <button
-                onClick={() => moveBoard('down')}
-                className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-md border border-slate-700 cursor-pointer active:scale-95 transition"
-                aria-label="Down"
-              >
-                <ArrowDown className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => moveBoard('right')}
-                className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-md border border-slate-700 cursor-pointer active:scale-95 transition"
-                aria-label="Right"
-              >
-                <ArrowRightIcon className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => moveBoard('left')}
+                  className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
+                  aria-label="Left"
+                >
+                  <ArrowLeftIcon className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={() => moveBoard('down')}
+                  className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
+                  aria-label="Down"
+                >
+                  <ArrowDown className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={() => moveBoard('right')}
+                  className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
+                  aria-label="Right"
+                >
+                  <ArrowRightIcon className="w-6 h-6" />
+                </button>
+              </div>
             </div>
-            <span className="text-[11px] font-mono text-slate-400 mt-1">
-              💡 {lang === 'en' ? 'Use Arrow Keys, Swipe, or on-screen arrows' : 'Folosește tastele săgeți, glisare pe ecran sau butoanele de mai sus'}
+          )}
+
+          <div className="mt-2 text-center">
+            <span className="text-[11px] font-mono text-slate-400">
+              💡 {lang === 'en'
+                ? 'Swipe directly on grid, use on-screen D-Pad or keyboard arrow keys.'
+                : 'Glisează cu degetul direct pe tabel, folosește butoanele D-Pad sau săgețile tastaturii.'}
             </span>
           </div>
         </div>
