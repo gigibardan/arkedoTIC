@@ -125,6 +125,62 @@ export interface EquippedItems {
   avatarFrame: string; // 'none' | 'fire' | 'neon' | 'gold' | 'diamond' | 'emerald'
 }
 
+export type BuildingCategory =
+  | 'computing'
+  | 'networking'
+  | 'energy'
+  | 'education'
+  | 'security'
+  | 'infrastructure';
+
+export interface CityBuilding {
+  tileIndex: number; // 0 to gridSize*gridSize - 1
+  typeId: string; // e.g. 'datacenter', 'solar_matrix', '5g_tower', etc.
+  level: number; // 1 to 5
+  customName?: string;
+  builtAt: number;
+  lastUpgradedAt: number;
+}
+
+export interface CityMetrics {
+  computingPowerTFlops: number;
+  cloudStoragePB: number;
+  bandwidthTbps: number;
+  ecoScore: number;
+  securityRating: number;
+  totalPopulation: number;
+  cityScore: number;
+  cityRankTitle: string;
+}
+
+export interface CityIncident {
+  id: string;
+  type: 'traffic_spike' | 'phishing_threat' | 'data_recovery' | 'eco_audit' | 'quantum_surge';
+  titleRo: string;
+  titleEn: string;
+  descRo: string;
+  descEn: string;
+  tileIndex: number;
+  rewardCoins: number;
+  rewardXP: number;
+  expiresAt: number;
+}
+
+export interface CyberCityData {
+  id: string;
+  studentId: string;
+  studentName: string;
+  cityName: string;
+  gridSize: number; // default 5 (5x5 = 25 tiles)
+  buildings: Record<number, CityBuilding>;
+  likesCount: number;
+  totalUpgradesDone: number;
+  activeIncidents?: CityIncident[];
+  resolvedIncidentsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface StudentProfile {
   id: string;
   username: string;
@@ -137,6 +193,7 @@ export interface StudentProfile {
   byteCoins?: number;
   inventory?: StudentInventory;
   equipped?: EquippedItems;
+  cyberCity?: CyberCityData;
   totalXP: number;
   createdAt: string;
   lastActiveAt: string;

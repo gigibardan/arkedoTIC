@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2, Swords, ShoppingBag } from 'lucide-react';
+import { Volume2, VolumeX, Star, School, Clock, ArrowLeft, User, Gamepad2, Swords, ShoppingBag, Building2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 
@@ -8,7 +8,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -18,6 +18,7 @@ interface HeaderProps {
   onNavigateToTeacher?: () => void;
   onNavigateToArcade?: () => void;
   onNavigateToDuel?: () => void;
+  onNavigateToCity?: () => void;
   onOpenShop?: () => void;
 }
 
@@ -36,6 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateToTeacher,
   onNavigateToArcade,
   onNavigateToDuel,
+  onNavigateToCity,
   onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
@@ -66,6 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'teacher') return t.teacherPortalNav;
     if (currentView === 'arcade') return lang === 'en' ? 'ARKEDO Arcade Lab' : 'Laboratorul Arcade TIC';
     if (currentView === 'duel') return lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor TIC 1v1';
+    if (currentView === 'city') return lang === 'en' ? 'ARKEDO Cyber City' : 'Orașul Meu Tehnologic';
     return t.catalogTitle;
   };
 
@@ -241,6 +244,29 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Swords className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'duel' ? 'text-white' : 'text-rose-400'}`} />
               <span className="hidden lg:inline">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
+            </button>
+          )}
+
+          {/* Cyber City Builder Button */}
+          {onNavigateToCity && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                if (currentView === 'city') {
+                  onNavigateToCatalog();
+                } else {
+                  onNavigateToCity();
+                }
+              }}
+              className={`p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl transition border text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 ${
+                currentView === 'city'
+                  ? 'bg-cyan-500 text-slate-950 border-cyan-300 shadow-cyan-500/30 font-black'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:text-white'
+              }`}
+              title={lang === 'en' ? 'ARKEDO Cyber City Builder' : 'Metropola Mea Tehnologică (Cyber City)'}
+            >
+              <Building2 className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${currentView === 'city' ? 'text-slate-950' : 'text-cyan-400'}`} />
+              <span className="hidden lg:inline">{lang === 'en' ? 'My City' : 'Orașul Meu'}</span>
             </button>
           )}
 

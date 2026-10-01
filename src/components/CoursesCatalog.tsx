@@ -36,6 +36,7 @@ import {
   Swords,
   ShoppingBag,
   Coins,
+  Building2,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -78,6 +79,7 @@ interface CoursesCatalogProps {
   onOpenTeacherPortal?: () => void;
   onOpenArcade?: () => void;
   onOpenDuel?: () => void;
+  onOpenCity?: () => void;
   onOpenShop?: () => void;
   byteCoins?: number;
 }
@@ -94,6 +96,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenTeacherPortal,
   onOpenArcade,
   onOpenDuel,
+  onOpenCity,
   onOpenShop,
   byteCoins,
 }) => {
@@ -1829,6 +1832,48 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           >
             <Swords className="w-4 h-4" />
             <span>{lang === 'en' ? 'Enter Duel Arena' : 'Intră în Arena Duel 1v1'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Cyber City Builder Banner Section */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 border-2 border-cyan-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-cyan-400/30">
+              <Building2 className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
+                  {lang === 'en' ? 'Metropolis Simulator' : 'Simulator Urban TIC'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold border border-cyan-500/30">
+                  {lang === 'en' ? 'Cyber City Builder' : 'Metropola Mea Tehnologică'}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                {lang === 'en' ? 'ARKEDO Cyber City — Build & Expand Your Tech Metropolis' : 'ARKEDO Cyber City — Construiește și Modernizează Metropola Ta Digitală'}
+              </h3>
+              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                {lang === 'en'
+                  ? 'Use ByteCoins earned in lessons to construct Cloud Data Centers, AI Labs, 5G Towers & Fusion Reactors. Boost your computing power and become a Supreme Galactic Architect!'
+                  : 'Folosește ByteCoins câștigate în lecții pentru a construi Centre de Date Cloud, AI Labs, Turnuri 5G și Reactoare de Fuziune Curată. Crește puterea de calcul a orașului și devino Arhitect Suprem!'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenCity?.();
+            }}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 cursor-pointer shrink-0 active:scale-95"
+          >
+            <Building2 className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Open Cyber City' : 'Deschide Orașul Meu'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
