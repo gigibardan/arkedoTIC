@@ -62,9 +62,12 @@ export interface DuelPlayer {
 export interface QuizQuestionItem {
   id: number;
   q: string;
+  qEn?: string;
   options: string[];
+  optionsEn?: string[];
   correctIndex: number;
   explanation: string;
+  explanationEn?: string;
 }
 
 export interface CyberShieldItem {
@@ -143,63 +146,207 @@ export const CYBER_SPRINT_TEXTS: string[] = [
   'Imaginile digitale sunt formate din pixeli compusi din cele trei culori primare: Rosu, Verde si Albastru.'
 ];
 
-// Sample Quiz Blitz Questions
+// Curated Quiz Blitz Questions with Complete Explanations & Bilingual Support
 export const DUEL_QUIZ_QUESTIONS: QuizQuestionItem[] = [
   {
     id: 1,
     q: 'Ce componentă hardware este considerată „creierul” calculatorului?',
+    qEn: 'Which hardware component is considered the "brain" of the computer?',
     options: ['Procesorul (CPU)', 'Placa Video (GPU)', 'Sursa de Curent', 'Hard Disk-ul'],
+    optionsEn: ['Central Processor (CPU)', 'Graphics Card (GPU)', 'Power Supply', 'Hard Disk Drive'],
     correctIndex: 0,
-    explanation: 'CPU (Central Processing Unit) execută toate calculele și instrucțiunile programelor.'
+    explanation: 'CPU (Central Processing Unit) execută toate calculele logice și instrucțiunile programelor software.',
+    explanationEn: 'The CPU (Central Processing Unit) executes all logical calculations and software instructions.'
   },
   {
     id: 2,
     q: 'Câți biți (bit) formează exact un Byte (Octet)?',
+    qEn: 'How many bits form exactly one Byte (Octet)?',
     options: ['4 biți', '8 biți', '16 biți', '1024 biți'],
+    optionsEn: ['4 bits', '8 bits', '16 bits', '1024 bits'],
     correctIndex: 1,
-    explanation: '1 Byte (Octet) = 8 biți (valori de 0 și 1).'
+    explanation: '1 Byte (Octet) = 8 biți individuali (valori binare de 0 și 1).',
+    explanationEn: '1 Byte (Octet) equals exactly 8 individual bits (binary values of 0 and 1).'
   },
   {
     id: 3,
     q: 'Ce extensie indică un fișier executabil care poate fi periculos?',
+    qEn: 'Which file extension indicates an executable file that can carry viruses?',
     options: ['.docx', '.png', '.exe', '.mp3'],
+    optionsEn: ['.docx', '.png', '.exe', '.mp3'],
     correctIndex: 2,
-    explanation: '.exe reprezintă un program executabil și poate rula malware dacă este piratat.'
+    explanation: '.exe reprezintă un program executabil de sistem și poate rula malware dacă este piratat.',
+    explanationEn: '.exe stands for an executable program file and may execute malicious malware if untrusted.'
   },
   {
     id: 4,
     q: 'Ce este un atac de tip Phishing?',
-    options: ['O metodă de curățare a ecranului', 'Un email fals conceput pentru a fura parole', 'O viteză mare la internet', 'O placă de rețea'],
+    qEn: 'What is a Phishing attack?',
+    options: ['O metodă de curățare a ecranului', 'Un email sau mesaj fals conceput pentru a fura parole', 'O viteză mare la conexiunea internet', 'O placă de rețea Wi-Fi'],
+    optionsEn: ['A method to clean the screen', 'A fraudulent email/message designed to steal passwords', 'A high-speed internet link', 'A Wi-Fi network card'],
     correctIndex: 1,
-    explanation: 'Phishing-ul păcălește utilizatorii cu mesaje înșelătoare pentru a obține credențiale.'
+    explanation: 'Phishing-ul păcălește utilizatorii cu mesaje înșelătoare pentru a obține parole și date confidențiale.',
+    explanationEn: 'Phishing tricks users with deceptive messages to steal sensitive credentials and passwords.'
   },
   {
     id: 5,
     q: 'Care este combinația de taste rapidă pentru copiere (Copy)?',
+    qEn: 'What is the universal keyboard shortcut for Copy?',
     options: ['Ctrl + V', 'Ctrl + Z', 'Ctrl + C', 'Ctrl + X'],
+    optionsEn: ['Ctrl + V', 'Ctrl + Z', 'Ctrl + C', 'Ctrl + X'],
     correctIndex: 2,
-    explanation: 'Ctrl + C este comanda universală de copiere în clipboard.'
+    explanation: 'Ctrl + C este comanda universală de copiere în memoria temporară (clipboard). Ctrl + V este lipirea (Paste).',
+    explanationEn: 'Ctrl + C is the universal command to copy into clipboard memory. Ctrl + V is Paste.'
   },
   {
     id: 6,
     q: 'Ce culori formează modelul de lumină RGB la monitoare?',
+    qEn: 'Which primary light colors compose the monitor RGB color model?',
     options: ['Roșu, Galben, Albastru', 'Roșu, Verde, Albastru', 'Roz, Gri, Negru', 'Cyan, Magenta, Galben'],
+    optionsEn: ['Red, Yellow, Blue', 'Red, Green, Blue', 'Pink, Gray, Black', 'Cyan, Magenta, Yellow'],
     correctIndex: 1,
-    explanation: 'RGB vine de la Red (Roșu), Green (Verde) și Blue (Albastru).'
+    explanation: 'RGB vine de la Red (Roșu), Green (Verde) și Blue (Albastru) – culorile primare de emisie a luminii pe ecran.',
+    explanationEn: 'RGB stands for Red, Green, and Blue – the additive primary colors emitted by electronic display pixels.'
   },
   {
     id: 7,
     q: 'Care dispozitiv este atât de intrare, cât și de ieșire?',
-    options: ['Tastatura', 'Monitorul Touchscreen', 'Boxele', 'Mouse-ul optic'],
+    qEn: 'Which device functions as both an input and an output peripheral?',
+    options: ['Tastatura mecanică', 'Monitorul Touchscreen (tactil)', 'Boxele audio stereo', 'Mouse-ul optic cu fir'],
+    optionsEn: ['Mechanical keyboard', 'Touchscreen display monitor', 'Stereo audio speakers', 'Optical wired mouse'],
     correctIndex: 1,
-    explanation: 'Ecranul tactil afișează imagini (ieșire) și primește atingeri cu degetul (intrare).'
+    explanation: 'Ecranul tactil afișează imagini vizuale (ieșire) și citește atingerile tactile ale degetelor (intrare).',
+    explanationEn: 'The touchscreen displays visual graphics (output) and detects finger touch interactions (input).'
   },
   {
     id: 8,
     q: 'Ce rol are memoria RAM într-un sistem de calcul?',
-    options: ['Stocare permanentă', 'Memorie de lucru ultrarapidă temporară', 'Alimentare cu energie', 'Răcirea carcasei'],
+    qEn: 'What is the role of RAM memory in a computer system?',
+    options: ['Stocare permanentă când PC-ul este oprit', 'Memorie de lucru ultrarapidă temporară pentru aplicații active', 'Alimentare cu energie electrică stabilă', 'Răcirea componentelor carcasei'],
+    optionsEn: ['Permanent storage when PC is powered off', 'Ultra-fast volatile working memory for active programs', 'Stable electric power supply', 'Cooling case chassis parts'],
     correctIndex: 1,
-    explanation: 'RAM păstrează programele și datele deschise în timp ce calculatorul funcționează.'
+    explanation: 'RAM (Random Access Memory) este o memorie volatilă rapidă în care se încarcă datele programelor care rulează în prezent.',
+    explanationEn: 'RAM (Random Access Memory) is fast volatile memory holding active program code and working data.'
+  },
+  {
+    id: 9,
+    q: 'Ce protocol de rețea securizat criptează transferul de date pe site-uri web?',
+    qEn: 'Which secure web protocol encrypts data transmission over websites?',
+    options: ['HTTP', 'FTP', 'HTTPS', 'SMTP'],
+    optionsEn: ['HTTP', 'FTP', 'HTTPS', 'SMTP'],
+    correctIndex: 2,
+    explanation: 'HTTPS (HyperText Transfer Protocol Secure) utilizează criptare SSL/TLS și un certificat digital pentru siguranță.',
+    explanationEn: 'HTTPS (HyperText Transfer Protocol Secure) utilizes SSL/TLS encryption to secure web browsing sessions.'
+  },
+  {
+    id: 10,
+    q: 'Ce valoare zecimală corespunde numărului binar 101₂?',
+    qEn: 'What is the decimal equivalent of the binary number 101₂?',
+    options: ['3', '5', '6', '7'],
+    optionsEn: ['3', '5', '6', '7'],
+    correctIndex: 1,
+    explanation: 'În baza 2: 1×2² + 0×2¹ + 1×2⁰ = 4 + 0 + 1 = 5.',
+    explanationEn: 'In base 2: 1×2² + 0×2¹ + 1×2⁰ = 4 + 0 + 1 = 5.'
+  },
+  {
+    id: 11,
+    q: 'Câți Megabytes (MB) conține un Gigabyte (GB)?',
+    qEn: 'How many Megabytes (MB) are in one Gigabyte (GB)?',
+    options: ['100 MB', '1000 MB', '1024 MB', '2048 MB'],
+    optionsEn: ['100 MB', '1000 MB', '1024 MB', '2048 MB'],
+    correctIndex: 2,
+    explanation: 'În informatică, multiplii binari cresc cu puteri ale lui 2: 1 GB = 2¹⁰ MB = 1024 MB.',
+    explanationEn: 'In computer science, binary storage units scale by powers of 2: 1 GB = 2¹⁰ MB = 1024 MB.'
+  },
+  {
+    id: 12,
+    q: 'Ce rol are comanda rapidă Ctrl + Z?',
+    qEn: 'What is the function of the keyboard shortcut Ctrl + Z?',
+    options: ['Închide calculatorul', 'Anulează ultima acțiune (Undo)', 'Salvează documentul pe disc', 'Șterge un fișier definitiv'],
+    optionsEn: ['Shuts down the PC', 'Undoes the last action (Undo)', 'Saves document to disk', 'Permanently deletes a file'],
+    correctIndex: 1,
+    explanation: 'Ctrl + Z (Undo) este comanda salvatoare care anulează ultima greșeală comisă în orice program.',
+    explanationEn: 'Ctrl + Z (Undo) is the standard shortcut to reverse the most recent user action or mistake.'
+  },
+  {
+    id: 13,
+    q: 'Ce este un Firewall (Zid de Protecție)?',
+    qEn: 'What is a Firewall in computer security?',
+    options: ['Un cooler fizic cu ventilatoare mari', 'Un program sau echipament ce filtrează și blochează traficul periculos din rețea', 'O parolă compusă din 8 cifre', 'Un tip de cablu optic de mare viteză'],
+    optionsEn: ['A physical cooler with large fans', 'A software or hardware barrier filtering and blocking malicious network traffic', 'An 8-digit numeric PIN password', 'A high-speed optical fiber cable'],
+    correctIndex: 1,
+    explanation: 'Firewall-ul verifică pachetele de date de intrare/ieșire din rețea și respinge conexiunile neautorizate sau suspecte.',
+    explanationEn: 'A Firewall monitors incoming and outgoing network packets to block unauthorized access and cyber threats.'
+  },
+  {
+    id: 14,
+    q: 'Ce caracteristică definește o parolă puternică și sigură?',
+    qEn: 'What characterizes a strong, resilient password?',
+    options: ['Numele cățelului sau data nașterii tale', 'Un șir scurt de cifre ușor de ținut minte (123456)', 'Minim 12 caractere ce combină litere mari, mici, cifre și simboluri speciale', 'Cuvântul „password” urmat de o cifră'],
+    optionsEn: ['Your pet name or your birthday', 'A short sequence of numbers (123456)', 'At least 12 characters combining uppercase, lowercase, numbers and symbols', 'The word "password" followed by a digit'],
+    correctIndex: 2,
+    explanation: 'Parolele complexe cu peste 12 caractere mixte și caractere speciale (@, #, $) rezistă atacurilor de tip dicționar.',
+    explanationEn: 'Complex passwords with 12+ mixed characters and symbols resist dictionary and brute-force cracking attacks.'
+  },
+  {
+    id: 15,
+    q: 'Ce se întâmplă cu un fișier șters cu tasta Delete din Windows?',
+    qEn: 'What happens to a file deleted using the standard Delete key in Windows?',
+    options: ['Se evaporă instantaneu de pe calculator', 'Ajunge în Coșul de Reciclare (Recycle Bin) de unde poate fi restaurat', 'Se transformă într-un virus', 'Se trimite automat pe email la profesor'],
+    optionsEn: ['It is vaporized forever instantly', 'It moves to the Recycle Bin from where it can be restored', 'It turns into a computer virus', 'It is emailed to the teacher'],
+    correctIndex: 1,
+    explanation: 'Fișierele șterse normal ajung în Coșul de Reciclare (Recycle Bin), oferind o plasă de siguranță pentru restaurare.',
+    explanationEn: 'Files deleted regularly are stored in the Recycle Bin, allowing accidental deletions to be safely restored.'
+  },
+  {
+    id: 16,
+    q: 'Ce reprezintă un algoritm în informatică?',
+    qEn: 'What is an algorithm in computer science?',
+    options: ['O piesă de metal din sursa de curent', 'O succesiune finită și ordonată de pași logici pentru rezolvarea unei probleme', 'O adresă de site web', 'Un joc video instalat pe PC'],
+    optionsEn: ['A metal piece inside the power supply', 'A finite, ordered sequence of unambiguous steps to solve a problem', 'A website internet address', 'A video game installed on disk'],
+    correctIndex: 1,
+    explanation: 'Un algoritm este o rețetă logică de instrucțiuni clare, finite și executabile pentru a obține un rezultat dorit.',
+    explanationEn: 'An algorithm is an unambiguous, finite set of ordered steps designed to accomplish a specific task.'
+  },
+  {
+    id: 17,
+    q: 'Care este principalul avantaj al unui SSD față de un Hard Disk clasic (HDD)?',
+    qEn: 'What is the main advantage of an SSD compared to a classic mechanical HDD?',
+    options: ['Este mult mai greu și mai mare', 'Are viteze de citire/scriere mult superioare și nu are piese mecanice în mișcare', 'Nu folosește deloc curent electric', 'Produce un zgomot foarte puternic'],
+    optionsEn: ['It is much heavier and bulkier', 'Much faster read/write speeds and zero moving mechanical parts', 'Consumes absolutely no electricity', 'Makes very loud whirring noise'],
+    correctIndex: 1,
+    explanation: 'SSD-ul folosește cipuri flash de memorie silențioase, oferind viteze de 10-50 de ori mai mari decât un HDD mecanic.',
+    explanationEn: 'SSDs use solid-state flash memory chips with zero moving parts, providing vastly faster access times than spinning HDDs.'
+  },
+  {
+    id: 18,
+    q: 'Ce componentă leagă fizic și asigură comunicarea între toate piesele din carcasă?',
+    qEn: 'Which motherboard component connects and synchronizes all internal PC hardware?',
+    options: ['Placa de bază (Motherboard)', 'Unitatea optică DVD', 'Cablu HDMI la monitor', 'Tastatura wireless'],
+    optionsEn: ['Motherboard (System Board)', 'Optical DVD drive', 'HDMI monitor cable', 'Wireless keyboard'],
+    correctIndex: 0,
+    explanation: 'Placa de bază este coloana vertebrală pe care sunt montate CPU, RAM, SSD, plăcile de extensie și porturile I/O.',
+    explanationEn: 'The motherboard is the core circuit board that interconnects CPU, RAM, storage, expansion buses and ports.'
+  },
+  {
+    id: 19,
+    q: 'Ce este autentificarea în 2 Pași (2FA / Two-Factor Authentication)?',
+    qEn: 'What is Two-Factor Authentication (2FA)?',
+    options: ['Tastarea parolei de 2 ori la rând', 'O metodă de securitate ce cere o confirmare suplimentară (ex: cod SMS sau aplicație de securitate) pe lângă parolă', 'Folosirea a două tastaturi simultan', 'Dublarea vitezei conexiunii la internet'],
+    optionsEn: ['Typing your password twice in a row', 'A security layer requiring a secondary verification (e.g. SMS code or auth app) alongside the password', 'Using two keyboards at the same time', 'Doubling internet connection bandwidth'],
+    correctIndex: 1,
+    explanation: '2FA protejează contul chiar dacă hackerii îți află parola, deoarece nu dețin dispozitivul tău pentru al doilea pas.',
+    explanationEn: '2FA safeguards accounts even if a password leaks, requiring proof of possession of a secondary device/code.'
+  },
+  {
+    id: 20,
+    q: 'Ce program este folosit pentru a accesa și naviga pe paginile World Wide Web?',
+    qEn: 'Which software application is used to browse and access World Wide Web pages?',
+    options: ['Un player video (ex: VLC)', 'Un navigator web / Browser (ex: Chrome, Edge, Firefox)', 'Un program de calcul tabelar', 'Un antivirus'],
+    optionsEn: ['A media video player (e.g. VLC)', 'A web browser (e.g. Chrome, Edge, Firefox)', 'A spreadsheet math program', 'An antivirus engine'],
+    correctIndex: 1,
+    explanation: 'Browserul web (navigatorul) traduce codul HTML, CSS și JavaScript al paginilor web în interfețe grafice interactive.',
+    explanationEn: 'A web browser interprets HTML, CSS, and JavaScript from web servers into rendered visual interactive pages.'
   }
 ];
 

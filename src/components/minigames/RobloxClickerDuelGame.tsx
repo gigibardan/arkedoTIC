@@ -195,6 +195,14 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     question: TicBossQuestion;
     timeLeft: number;
   } | null>(null);
+  const [bossFeedback, setBossFeedback] = useState<{
+    isCorrect: boolean;
+    chosenIdx: number;
+    correctIdx: number;
+    explanation: string;
+  } | null>(null);
+  const bossAnswerLockRef = useRef<boolean>(false);
+  const bossTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Opponent Live State (Firebase synced or Solo AI Bot)
   const [opponentBlox, setOpponentBlox] = useState(0);
@@ -442,6 +450,10 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     ];
     const pickedBoss = bosses[Math.floor(Math.random() * bosses.length)];
 
+    bossAnswerLockRef.current = false;
+    setBossFeedback(null);
+    if (bossTimerRef.current) clearTimeout(bossTimerRef.current);
+
     setActiveBoss({
       name: pickedBoss.name,
       icon: pickedBoss.icon,
@@ -451,9 +463,28 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
     if (!soundMuted) sounds.playRetro('boss_alert');
   };
 
+  const closeBossModal = () => {
+    if (bossTimerRef.current) clearTimeout(bossTimerRef.current);
+    setActiveBoss(null);
+    setBossFeedback(null);
+    bossAnswerLockRef.current = false;
+  };
+
   const handleBossAnswer = (choiceIdx: number) => {
-    if (!activeBoss) return;
-    if (choiceIdx === activeBoss.question.correctIdx) {
+    if (!activeBoss || bossAnswerLockRef.current || bossFeedback !== null) return;
+    bossAnswerLockRef.current = true; // Lock immediately to prevent rapid spam clicks
+
+    const isCorrect = choiceIdx === activeBoss.question.correctIdx;
+    const explanation = lang === 'en' ? activeBoss.question.explanationEn : activeBoss.question.explanationRo;
+
+    setBossFeedback({
+      isCorrect,
+      chosenIdx: choiceIdx,
+      correctIdx: activeBoss.question.correctIdx,
+      explanation
+    });
+
+    if (isCorrect) {
       // Boss Defeated!
       if (!soundMuted) {
         sounds.playCorrect();
@@ -467,16 +498,19 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       // Trigger Mega Frenzy 2X
       setIsFrenzy(true);
       setFrenzyTimer(6);
-      setActiveBoss(null);
 
       // Spawn floating reward
       addFloatingText(`+${rewardBlox} BLOX & FRENZY 2X! 🔥`, window.innerWidth / 2, window.innerHeight / 2, '#38bdf8', true);
     } else {
       // Failed boss
       if (!soundMuted) sounds.playOof();
-      setActiveBoss(null);
-      addFloatingText('OOF! Boss Escaped!', window.innerWidth / 2, window.innerHeight / 2, '#f43f5e', false);
+      addFloatingText('OOF! Răspuns Greșit!', window.innerWidth / 2, window.innerHeight / 2, '#f43f5e', false);
     }
+
+    if (bossTimerRef.current) clearTimeout(bossTimerRef.current);
+    bossTimerRef.current = setTimeout(() => {
+      closeBossModal();
+    }, 2800);
   };
 
   const addFloatingText = (text: string, x: number, y: number, color: string, isCrit = false) => {
@@ -1298,23 +1332,64 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              {activeBoss.question.options.map((opt, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => handleBossAnswer(idx)}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-xs font-bold text-left transition cursor-pointer text-white active:scale-95"
-                >
-                  {opt}
-                </button>
-              ))}
+              {activeBoss.question.options.map((opt, idx) => {
+                let btnStyle = 'bg-slate-800 hover:bg-rose-900/60 border-slate-700 hover:border-rose-500 text-white cursor-pointer active:scale-95';
+                if (bossFeedback !== null) {
+                  if (idx === bossFeedback.correctIdx) {
+                    btnStyle = 'bg-emerald-950 border-emerald-400 text-emerald-200 ring-2 ring-emerald-500/50 cursor-default';
+                  } else if (idx === bossFeedback.chosenIdx) {
+                    btnStyle = 'bg-rose-950 border-rose-500 text-rose-200 ring-2 ring-rose-500/50 cursor-default';
+                  } else {
+                    btnStyle = 'bg-slate-900/40 border-slate-800 text-slate-600 opacity-40 cursor-default';
+                  }
+                }
+
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    disabled={bossFeedback !== null || bossAnswerLockRef.current}
+                    onClick={() => handleBossAnswer(idx)}
+                    className={`p-3 rounded-xl border text-xs font-bold text-left transition ${btnStyle}`}
+                  >
+                    {opt}
+                  </button>
+                );
+              })}
             </div>
 
-            <p className="text-[10px] text-slate-400 text-center">
-              {lang === 'en'
-                ? 'Defeat the boss to gain +200 Blox & 10s Frenzy 2X!'
-                : 'Răspunde corect pentru +200 Blox și 10 secunde de Frenzy 2X!'}
-            </p>
+            {bossFeedback && (
+              <div className={`p-3 rounded-xl border flex flex-col gap-2 animate-fadeIn text-xs ${
+                bossFeedback.isCorrect ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200' : 'bg-rose-950/90 border-rose-500/50 text-rose-200'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="font-black">
+                    {bossFeedback.isCorrect
+                      ? (lang === 'en' ? '✓ CORRECT! RAID SUCCESSFUL!' : '✓ RĂSPUNS CORECT! RAID VICTORIOS!')
+                      : (lang === 'en' ? '✗ WRONG! NO RESELECTING' : '✗ RĂSPUNS GREȘIT! SELECTARE BLOCATĂ')}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={closeBossModal}
+                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] cursor-pointer"
+                  >
+                    {lang === 'en' ? 'Continue ➔' : 'Continuă ➔'}
+                  </button>
+                </div>
+                <p className="text-[11px] opacity-90 leading-relaxed bg-black/40 p-2 rounded-lg">
+                  💡 <strong>{lang === 'en' ? 'Explanation: ' : 'Explicație: '}</strong>
+                  {bossFeedback.explanation}
+                </p>
+              </div>
+            )}
+
+            {!bossFeedback && (
+              <p className="text-[10px] text-slate-400 text-center">
+                {lang === 'en'
+                  ? 'Defeat the boss to gain +200 Blox & 10s Frenzy 2X! (Only 1 attempt)'
+                  : 'Răspunde corect pentru +200 Blox și 10 secunde de Frenzy 2X! (O singură încercare)'}
+              </p>
+            )}
           </div>
         </div>
       )}

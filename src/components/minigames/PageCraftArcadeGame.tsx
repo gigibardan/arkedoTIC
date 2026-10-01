@@ -765,7 +765,7 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
   };
 
   const handleSelectBlitzOption = (correct: boolean, expRo: string, expEn: string) => {
-    if (!blitzActive || blitzGameOver) return;
+    if (!blitzActive || blitzGameOver || blitzFeedback !== null) return;
 
     if (correct) {
       const basePoints = 50;
@@ -1136,8 +1136,9 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
                 {currentBlitzTicket.options.map((opt, i) => (
                   <button
                     key={opt.id}
+                    disabled={blitzFeedback !== null}
                     onClick={() => handleSelectBlitzOption(opt.correct, opt.explanationRo, opt.explanationEn)}
-                    className="p-4 rounded-2xl bg-slate-800/80 hover:bg-indigo-950/60 border-2 border-slate-700 hover:border-indigo-500 text-left transition flex items-start gap-3.5 group cursor-pointer active:scale-[0.99]"
+                    className="p-4 rounded-2xl bg-slate-800/80 hover:bg-indigo-950/60 border-2 border-slate-700 hover:border-indigo-500 text-left transition flex items-start gap-3.5 group cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none"
                   >
                     <div className="w-7 h-7 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 group-hover:border-indigo-400 group-hover:text-indigo-300 shrink-0 mt-0.5">
                       {String.fromCharCode(65 + i)}

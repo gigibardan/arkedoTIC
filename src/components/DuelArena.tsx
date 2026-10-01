@@ -134,17 +134,32 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [quizScore, setQuizScore] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [quizFeedback, setQuizFeedback] = useState<{
+    isCorrect: boolean;
+    selectedOptionIdx: number;
+    correctOptionIdx: number;
+    explanationRo: string;
+    explanationEn?: string;
+    pointsEarned: number;
+  } | null>(null);
+  const [quizCountdown, setQuizCountdown] = useState<number>(3);
+  const quizAnswerLockRef = useRef<boolean>(false);
+  const quizTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const quizIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Local Gameplay States - Cyber Shield
   const [shieldIndex, setShieldIndex] = useState(0);
   const [shieldScore, setShieldScore] = useState(0);
   const [shieldStreak, setShieldStreak] = useState(0);
   const [shieldFeedback, setShieldFeedback] = useState<{ isCorrect: boolean; explanation: string; action: 'block' | 'allow' } | null>(null);
+  const shieldAnswerLockRef = useRef<boolean>(false);
+  const shieldTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Local Gameplay States - Hardware PC Rush
   const [assembledParts, setAssembledParts] = useState<string[]>([]);
   const [pcScore, setPcScore] = useState(0);
   const [pcMistake, setPcMistake] = useState<string | null>(null);
+  const [pcLockedUntil, setPcLockedUntil] = useState<number>(0);
 
   // Local Gameplay States - Block Coding Duel (Cursa Algoritmilor)
   const [codingLevelIndex, setCodingLevelIndex] = useState(0);
@@ -200,6 +215,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       }
     }
   }, [countdown, isHost, currentRoom?.roomCode]);
+
+  // Clean up timers on unmount
+  useEffect(() => {
+    return () => {
+      if (quizTimerRef.current) clearTimeout(quizTimerRef.current);
+      if (quizIntervalRef.current) clearInterval(quizIntervalRef.current);
+      if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+    };
+  }, []);
 
   // Handle Create Room
   const handleCreateRoom = async () => {
@@ -327,8 +351,63 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const currentQuestions = currentRoom?.questions || [];
   const currentQ = currentQuestions[currentQIndex];
 
+  // Advance to next quiz question cleanly
+  const advanceToNextQuizQuestion = (scoreToRecord?: number) => {
+    if (quizTimerRef.current) {
+      clearTimeout(quizTimerRef.current);
+      quizTimerRef.current = null;
+    }
+    if (quizIntervalRef.current) {
+      clearInterval(quizIntervalRef.current);
+      quizIntervalRef.current = null;
+    }
+
+    setQuizFeedback(null);
+    setSelectedAnswer(null);
+    quizAnswerLockRef.current = false;
+
+    const finalScore = typeof scoreToRecord === 'number' ? scoreToRecord : quizScore;
+    const nextQIdx = currentQIndex + 1;
+    const progressPercent = Math.min(100, Math.round((nextQIdx / currentQuestions.length) * 100));
+
+    if (nextQIdx >= currentQuestions.length) {
+      // Finished all questions
+      sounds.playVictory();
+      setHasFinishedLocal(true);
+      const myName = isHost ? currentRoom?.host.name : (currentRoom?.guest?.name || 'Elev');
+      const myId = isHost ? currentRoom?.host.id : currentRoom?.guest?.id;
+
+      if (currentRoom) {
+        updateDuelProgress(
+          currentRoom.roomCode,
+          isHost,
+          { progress: 100, score: finalScore, finishedAt: Date.now() },
+          myId,
+          myName
+        );
+      }
+
+      recordStudentDuelResult(true, 'quiz_blitz', finalScore);
+
+      if (onAwardXP) {
+        onAwardXP(250, lang === 'en' ? 'Champions in 1v1 TIC Quiz Blitz!' : 'Campioni în Quiz Blitz 1v1 TIC!');
+      }
+    } else {
+      setCurrentQIndex(nextQIdx);
+      if (currentRoom) {
+        updateDuelProgress(currentRoom.roomCode, isHost, {
+          progress: progressPercent,
+          score: finalScore,
+          currentQuestionIndex: nextQIdx
+        });
+      }
+    }
+  };
+
   const handleQuizAnswer = (optionIdx: number) => {
-    if (selectedAnswer !== null || !currentQ || !currentRoom || hasFinishedLocal) return;
+    // STRICT LOCK: Never allow re-selecting or rapid spamming
+    if (quizAnswerLockRef.current || selectedAnswer !== null || !currentQ || !currentRoom || hasFinishedLocal) return;
+    quizAnswerLockRef.current = true;
 
     setSelectedAnswer(optionIdx);
     const isCorrect = optionIdx === currentQ.correctIndex;
@@ -342,52 +421,91 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     const newStreak = isCorrect ? streak + 1 : 0;
     setStreak(newStreak);
 
+    // Wrong answer gets strictly 0 points; correct gets 100 + streak bonus
     const pointsEarned = isCorrect ? 100 + newStreak * 25 : 0;
     const newScore = quizScore + pointsEarned;
     setQuizScore(newScore);
 
-    setTimeout(() => {
-      setSelectedAnswer(null);
-      const nextQIdx = currentQIndex + 1;
-      const progressPercent = Math.min(100, Math.round((nextQIdx / currentQuestions.length) * 100));
+    // Set feedback for explanation display
+    setQuizFeedback({
+      isCorrect,
+      selectedOptionIdx: optionIdx,
+      correctOptionIdx: currentQ.correctIndex,
+      explanationRo: currentQ.explanation,
+      explanationEn: currentQ.explanationEn || currentQ.explanation,
+      pointsEarned
+    });
 
-      if (nextQIdx >= currentQuestions.length) {
-        // Finished all questions
-        sounds.playVictory();
-        setHasFinishedLocal(true);
-        const myName = isHost ? currentRoom.host.name : (currentRoom.guest?.name || 'Elev');
-        const myId = isHost ? currentRoom.host.id : currentRoom.guest?.id;
-
-        updateDuelProgress(
-          currentRoom.roomCode,
-          isHost,
-          { progress: 100, score: newScore, finishedAt: Date.now() },
-          myId,
-          myName
-        );
-
-        recordStudentDuelResult(true, 'quiz_blitz', newScore);
-
-        if (onAwardXP) {
-          onAwardXP(250, 'Campioni în Quiz Blitz 1v1 TIC!');
-        }
-      } else {
-        setCurrentQIndex(nextQIdx);
-        updateDuelProgress(currentRoom.roomCode, isHost, {
-          progress: progressPercent,
-          score: newScore,
-          currentQuestionIndex: nextQIdx
-        });
+    // Start 3-second countdown to read pedagogical explanation
+    setQuizCountdown(3);
+    let remaining = 3;
+    if (quizIntervalRef.current) clearInterval(quizIntervalRef.current);
+    quizIntervalRef.current = setInterval(() => {
+      remaining -= 1;
+      setQuizCountdown(Math.max(0, remaining));
+      if (remaining <= 0 && quizIntervalRef.current) {
+        clearInterval(quizIntervalRef.current);
       }
-    }, 900);
+    }, 1000);
+
+    if (quizTimerRef.current) clearTimeout(quizTimerRef.current);
+    quizTimerRef.current = setTimeout(() => {
+      advanceToNextQuizQuestion(newScore);
+    }, 3200);
   };
 
   // Cyber Shield Logic (Phishing/Threats defense)
   const shieldItems: CyberShieldItem[] = currentRoom?.shieldItems || [];
   const currentShieldItem = shieldItems[shieldIndex];
 
+  const advanceToNextShieldItem = (scoreToRecord?: number) => {
+    if (shieldTimerRef.current) {
+      clearTimeout(shieldTimerRef.current);
+      shieldTimerRef.current = null;
+    }
+    setShieldFeedback(null);
+    shieldAnswerLockRef.current = false;
+
+    const finalScore = typeof scoreToRecord === 'number' ? scoreToRecord : shieldScore;
+    const nextShieldIdx = shieldIndex + 1;
+    const progressPercent = Math.min(100, Math.round((nextShieldIdx / shieldItems.length) * 100));
+
+    if (nextShieldIdx >= shieldItems.length) {
+      sounds.playVictory();
+      setHasFinishedLocal(true);
+      const myName = isHost ? currentRoom?.host.name : (currentRoom?.guest?.name || 'Elev');
+      const myId = isHost ? currentRoom?.host.id : currentRoom?.guest?.id;
+
+      if (currentRoom) {
+        updateDuelProgress(
+          currentRoom.roomCode,
+          isHost,
+          { progress: 100, score: finalScore, finishedAt: Date.now() },
+          myId,
+          myName
+        );
+      }
+
+      recordStudentDuelResult(true, 'cyber_shield', finalScore);
+
+      if (onAwardXP) {
+        onAwardXP(300, lang === 'en' ? 'Impenetrable Shield in Cyber Shield 1v1!' : 'Scut Impenetrabil în Cyber Shield 1v1!');
+      }
+    } else {
+      setShieldIndex(nextShieldIdx);
+      if (currentRoom) {
+        updateDuelProgress(currentRoom.roomCode, isHost, {
+          progress: progressPercent,
+          score: finalScore,
+          currentStageIndex: nextShieldIdx
+        });
+      }
+    }
+  };
+
   const handleShieldDecision = (action: 'block' | 'allow') => {
-    if (!currentShieldItem || shieldFeedback !== null || hasFinishedLocal || !currentRoom) return;
+    if (shieldAnswerLockRef.current || !currentShieldItem || shieldFeedback !== null || hasFinishedLocal || !currentRoom) return;
+    shieldAnswerLockRef.current = true;
 
     const isCorrect = (currentShieldItem.isThreat && action === 'block') || (!currentShieldItem.isThreat && action === 'allow');
 
@@ -410,39 +528,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       action
     });
 
-    setTimeout(() => {
-      setShieldFeedback(null);
-      const nextShieldIdx = shieldIndex + 1;
-      const progressPercent = Math.min(100, Math.round((nextShieldIdx / shieldItems.length) * 100));
-
-      if (nextShieldIdx >= shieldItems.length) {
-        sounds.playVictory();
-        setHasFinishedLocal(true);
-        const myName = isHost ? currentRoom.host.name : (currentRoom.guest?.name || 'Elev');
-        const myId = isHost ? currentRoom.host.id : currentRoom.guest?.id;
-
-        updateDuelProgress(
-          currentRoom.roomCode,
-          isHost,
-          { progress: 100, score: newScore, finishedAt: Date.now() },
-          myId,
-          myName
-        );
-
-        recordStudentDuelResult(true, 'cyber_shield', newScore);
-
-        if (onAwardXP) {
-          onAwardXP(300, 'Scut Impenetrabil în Cyber Shield 1v1!');
-        }
-      } else {
-        setShieldIndex(nextShieldIdx);
-        updateDuelProgress(currentRoom.roomCode, isHost, {
-          progress: progressPercent,
-          score: newScore,
-          currentStageIndex: nextShieldIdx
-        });
-      }
-    }, 1100);
+    if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+    shieldTimerRef.current = setTimeout(() => {
+      advanceToNextShieldItem(newScore);
+    }, 2800);
   };
 
   // Hardware PC Rush Logic (Sequential PC Building conveyor)
@@ -451,7 +540,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const currentExpectedPart = pcParts.find((p) => p.stepOrder === expectedStep);
 
   const handleAssemblePart = (part: PCRushPart) => {
-    if (assembledParts.includes(part.id) || hasFinishedLocal || !currentRoom) return;
+    if (pcLockedUntil > Date.now() || assembledParts.includes(part.id) || hasFinishedLocal || !currentRoom) return;
 
     if (part.stepOrder === expectedStep) {
       // Correct sequence
@@ -484,7 +573,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         recordStudentDuelResult(true, 'pc_rush', finalScore);
 
         if (onAwardXP) {
-          onAwardXP(350, 'Asamblare PC Fulger în Hardware PC Rush 1v1!');
+          onAwardXP(350, lang === 'en' ? 'Lightning PC Assembly in Hardware PC Rush 1v1!' : 'Asamblare PC Fulger în Hardware PC Rush 1v1!');
         }
       } else {
         updateDuelProgress(currentRoom.roomCode, isHost, {
@@ -494,10 +583,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         });
       }
     } else {
-      // Mistake: Wrong assembly order!
+      // Mistake: Wrong assembly order! Lock out spam clicking for 1.8s
       sounds.playWrong();
-      setPcMistake(`Greșit! Înainte de "${part.name}", trebuie să montezi "${currentExpectedPart?.name}"!`);
-      setTimeout(() => setPcMistake(null), 2000);
+      setPcLockedUntil(Date.now() + 1800);
+      setPcMistake(lang === 'en'
+        ? `Mistake! Before "${part.name}", you must mount "${currentExpectedPart?.name}"! (Locked 1.8s)`
+        : `Greșit! Înainte de "${part.name}", trebuie să montezi "${currentExpectedPart?.name}"! (Penalizare 1.8s)`);
+      setTimeout(() => {
+        setPcMistake(null);
+      }, 1800);
     }
   };
 
@@ -1260,48 +1354,153 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           {currentRoom.mode === 'quiz_blitz' && currentQ && (
             <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
               <div className="flex justify-between items-center text-xs font-bold text-slate-400">
-                <span>Întrebarea {currentQIndex + 1} din {currentQuestions.length}</span>
-                <span className="text-amber-400 flex items-center gap-1">
+                <span className="flex items-center gap-1.5 font-mono">
+                  <HelpCircle className="w-4 h-4 text-purple-400" />
+                  {lang === 'en'
+                    ? `Question ${currentQIndex + 1} of ${currentQuestions.length}`
+                    : `Întrebarea ${currentQIndex + 1} din ${currentQuestions.length}`}
+                </span>
+                <span className="text-amber-400 flex items-center gap-1 font-mono font-bold">
                   <Flame className="w-4 h-4" /> Combo Streak: x{streak}
+                  <span className="text-slate-600 mx-1.5">|</span>
+                  <span className="text-emerald-400 font-bold">{quizScore} XP</span>
                 </span>
               </div>
 
               {/* Question Text */}
               <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-                {currentQ.q}
+                {lang === 'en' && currentQ.qEn ? currentQ.qEn : currentQ.q}
               </h3>
 
               {/* Options Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {currentQ.options.map((option, oIdx) => {
-                  let btnStyle = 'bg-slate-950 border-slate-800 hover:border-indigo-500 text-white';
+                {(lang === 'en' && currentQ.optionsEn ? currentQ.optionsEn : currentQ.options).map((option, oIdx) => {
+                  let btnStyle = 'bg-slate-950 border-slate-800 hover:border-indigo-500 text-white hover:bg-slate-900/60';
+                  let statusBadge = null;
 
                   if (selectedAnswer !== null) {
                     if (oIdx === currentQ.correctIndex) {
-                      btnStyle = 'bg-emerald-950 border-emerald-400 text-emerald-200 ring-2 ring-emerald-500/40';
+                      btnStyle = 'bg-emerald-950/90 border-emerald-400 text-emerald-200 ring-2 ring-emerald-500/50 shadow-lg shadow-emerald-950/50';
+                      statusBadge = (
+                        <span className="text-[11px] font-mono font-bold text-emerald-400 flex items-center gap-1 ml-auto shrink-0 bg-emerald-900/60 px-2 py-0.5 rounded-lg border border-emerald-500/30">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {lang === 'en' ? 'Correct Answer' : 'Răspuns Corect'}
+                        </span>
+                      );
                     } else if (selectedAnswer === oIdx) {
-                      btnStyle = 'bg-rose-950 border-rose-500 text-rose-200';
+                      btnStyle = 'bg-rose-950/90 border-rose-500 text-rose-200 ring-2 ring-rose-500/50 shadow-lg shadow-rose-950/50 animate-shake';
+                      statusBadge = (
+                        <span className="text-[11px] font-mono font-bold text-rose-400 flex items-center gap-1 ml-auto shrink-0 bg-rose-900/60 px-2 py-0.5 rounded-lg border border-rose-500/30">
+                          <XCircle className="w-3.5 h-3.5" />
+                          {lang === 'en' ? 'Your Answer (Wrong)' : 'Răspunsul Tău (Greșit)'}
+                        </span>
+                      );
                     } else {
-                      btnStyle = 'bg-slate-950/40 border-slate-900 text-slate-600 opacity-50';
+                      btnStyle = 'bg-slate-950/30 border-slate-900 text-slate-600 opacity-40';
                     }
                   }
+
+                  const isButtonDisabled = selectedAnswer !== null || quizAnswerLockRef.current;
 
                   return (
                     <button
                       key={oIdx}
                       type="button"
-                      disabled={selectedAnswer !== null}
+                      disabled={isButtonDisabled}
                       onClick={() => handleQuizAnswer(oIdx)}
-                      className={`p-4 rounded-2xl border-2 text-left font-bold text-sm transition-all cursor-pointer active:scale-98 flex items-center gap-3 ${btnStyle}`}
+                      className={`p-4 rounded-2xl border-2 text-left font-bold text-sm transition-all flex items-center gap-3 relative overflow-hidden ${
+                        isButtonDisabled ? 'cursor-default pointer-events-none' : 'cursor-pointer active:scale-98'
+                      } ${btnStyle}`}
                     >
-                      <div className="w-8 h-8 rounded-xl bg-slate-800/80 flex items-center justify-center text-xs font-black shrink-0">
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${
+                        selectedAnswer !== null && oIdx === currentQ.correctIndex
+                          ? 'bg-emerald-800 text-emerald-100'
+                          : selectedAnswer === oIdx
+                          ? 'bg-rose-800 text-rose-100'
+                          : 'bg-slate-800/80 text-slate-300'
+                      }`}>
                         {String.fromCharCode(65 + oIdx)}
                       </div>
-                      <span className="flex-1">{option}</span>
+                      <span className="flex-1 text-sm font-semibold">{option}</span>
+                      {statusBadge}
                     </button>
                   );
                 })}
               </div>
+
+              {/* Explanations & Next Question Transition Callout */}
+              {quizFeedback && (
+                <div className={`p-4 sm:p-5 rounded-2xl border-2 space-y-3.5 animate-fadeIn ${
+                  quizFeedback.isCorrect
+                    ? 'bg-emerald-950/90 border-emerald-500/60 shadow-lg shadow-emerald-950/40 text-emerald-100'
+                    : 'bg-rose-950/90 border-rose-500/60 shadow-lg shadow-rose-950/40 text-rose-100'
+                }`}>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      {quizFeedback.isCorrect ? (
+                        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                          <CheckCircle2 className="w-5 h-5" />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
+                          <XCircle className="w-5 h-5" />
+                        </div>
+                      )}
+                      <div>
+                        <span className="font-black text-sm sm:text-base block">
+                          {quizFeedback.isCorrect
+                            ? (lang === 'en' ? `BRAVO! CORRECT ANSWER (+${quizFeedback.pointsEarned} XP)` : `BRAVO! RĂSPUNS CORECT (+${quizFeedback.pointsEarned} XP)`)
+                            : (lang === 'en' ? 'WRONG ANSWER! (0 points) — Locked, no reselecting' : 'RĂSPUNS GREȘIT! (0 puncte) — Selectare blocată, trecem mai departe')}
+                        </span>
+                        <span className="text-[11px] opacity-80 block">
+                          {quizFeedback.isCorrect
+                            ? (lang === 'en' ? 'Keep up your combo streak!' : 'Excelent! Ai menținut streak-ul de combo!')
+                            : (lang === 'en' ? 'Rapid-clicking is penalized. Read the explanation below to learn!' : 'Apasarea la nimereală este penalizată. Citește explicația de mai jos!')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => advanceToNextQuizQuestion()}
+                      className={`px-4 py-2 rounded-xl font-black text-xs transition cursor-pointer flex items-center gap-2 shrink-0 shadow-md active:scale-95 ${
+                        quizFeedback.isCorrect
+                          ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                          : 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/30'
+                      }`}
+                    >
+                      <span>{lang === 'en' ? 'Next Question' : 'Următoarea Întrebare'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  {/* Pedagogical Explanation Text */}
+                  <div className="p-3.5 rounded-xl bg-black/40 border border-white/10 flex items-start gap-3">
+                    <span className="text-xl shrink-0 mt-0.5">💡</span>
+                    <div className="text-xs sm:text-sm leading-relaxed">
+                      <strong className="text-amber-300 font-bold block mb-1">
+                        {lang === 'en' ? 'Pedagogical Explanation:' : 'Explicație Didactică TIC:'}
+                      </strong>
+                      <p className="text-slate-200">
+                        {lang === 'en' && quizFeedback.explanationEn ? quizFeedback.explanationEn : quizFeedback.explanationRo}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Automatic Countdown Bar */}
+                  <div className="flex items-center justify-between text-[11px] text-slate-300 font-mono pt-1">
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                      {lang === 'en'
+                        ? `Auto-advancing to next question in ${quizCountdown}s...`
+                        : `Trecem automat la următoarea întrebare în ${quizCountdown}s...`}
+                    </span>
+                    <span className="text-slate-400 text-[10px]">
+                      {lang === 'en' ? 'Or click "Next Question"' : 'Sau apasă „Următoarea Întrebare”'}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -1345,16 +1544,30 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
               {/* Feedback Alert if choice made */}
               {shieldFeedback && (
-                <div className={`p-4 rounded-2xl border-2 flex items-center gap-3 animate-fadeIn text-sm ${
+                <div className={`p-4 rounded-2xl border-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn text-sm ${
                   shieldFeedback.isCorrect 
                     ? 'bg-emerald-950/80 border-emerald-400 text-emerald-200' 
                     : 'bg-rose-950/80 border-rose-400 text-rose-200'
                 }`}>
-                  {shieldFeedback.isCorrect ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" /> : <XCircle className="w-6 h-6 text-rose-400 shrink-0" />}
-                  <div>
-                    <span className="font-black block">{shieldFeedback.isCorrect ? 'DECIZIE CORECTĂ! +150 XP' : 'DECIZIE GREȘITĂ!'}</span>
-                    <p className="text-xs mt-0.5 opacity-90">{shieldFeedback.explanation}</p>
+                  <div className="flex items-start gap-3">
+                    {shieldFeedback.isCorrect ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" /> : <XCircle className="w-6 h-6 text-rose-400 shrink-0 mt-0.5" />}
+                    <div>
+                      <span className="font-black block">{shieldFeedback.isCorrect ? 'DECIZIE CORECTĂ! +150 XP' : 'DECIZIE GREȘITĂ! (0 XP)'}</span>
+                      <p className="text-xs mt-0.5 opacity-90">{shieldFeedback.explanation}</p>
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => advanceToNextShieldItem()}
+                    className={`px-3.5 py-1.5 rounded-xl font-bold text-xs shrink-0 cursor-pointer flex items-center gap-1.5 transition ${
+                      shieldFeedback.isCorrect
+                        ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                        : 'bg-rose-600 hover:bg-rose-500 text-white'
+                    }`}
+                  >
+                    <span>{lang === 'en' ? 'Next' : 'Continuă'}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               )}
 
@@ -1362,9 +1575,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <button
                   type="button"
-                  disabled={shieldFeedback !== null}
+                  disabled={shieldFeedback !== null || shieldAnswerLockRef.current}
                   onClick={() => handleShieldDecision('block')}
-                  className="p-4 rounded-2xl bg-gradient-to-r from-rose-700 to-red-600 hover:from-rose-600 hover:to-red-500 text-white font-black text-base shadow-lg shadow-rose-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
+                  className="p-4 rounded-2xl bg-gradient-to-r from-rose-700 to-red-600 hover:from-rose-600 hover:to-red-500 text-white font-black text-base shadow-lg shadow-rose-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ShieldX className="w-5 h-5" />
                   🚨 BLOCHEAZĂ ATACUL (Phishing/Virus)
@@ -1372,9 +1585,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
                 <button
                   type="button"
-                  disabled={shieldFeedback !== null}
+                  disabled={shieldFeedback !== null || shieldAnswerLockRef.current}
                   onClick={() => handleShieldDecision('allow')}
-                  className="p-4 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-600 hover:from-emerald-600 hover:to-teal-500 text-white font-black text-base shadow-lg shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
+                  className="p-4 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-600 hover:from-emerald-600 hover:to-teal-500 text-white font-black text-base shadow-lg shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ShieldCheck className="w-5 h-5" />
                   ✅ PERMITE (Mesaj Sigur / Oficial)
@@ -1455,17 +1668,20 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {pcParts.map((part) => {
                     const isInstalled = assembledParts.includes(part.id);
+                    const isLocked = isInstalled || pcLockedUntil > Date.now();
 
                     return (
                       <button
                         key={part.id}
                         type="button"
-                        disabled={isInstalled}
+                        disabled={isLocked}
                         onClick={() => handleAssemblePart(part)}
-                        className={`p-4 rounded-2xl border-2 text-left transition-all active:scale-95 cursor-pointer flex items-center gap-3 ${
+                        className={`p-4 rounded-2xl border-2 text-left transition-all active:scale-95 flex items-center gap-3 ${
                           isInstalled
                             ? 'bg-slate-950/40 border-slate-900 opacity-40 cursor-not-allowed'
-                            : 'bg-slate-950 hover:bg-slate-800 border-cyan-500/50 hover:border-cyan-300 text-white shadow-md'
+                            : isLocked
+                            ? 'bg-slate-950/60 border-rose-900/50 opacity-50 cursor-not-allowed'
+                            : 'bg-slate-950 hover:bg-slate-800 border-cyan-500/50 hover:border-cyan-300 text-white shadow-md cursor-pointer'
                         }`}
                       >
                         <span className="text-3xl shrink-0">{part.icon}</span>
@@ -1525,6 +1741,14 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             <button
               onClick={() => {
                 sounds.playClick();
+                if (quizTimerRef.current) clearTimeout(quizTimerRef.current);
+                if (quizIntervalRef.current) clearInterval(quizIntervalRef.current);
+                if (shieldTimerRef.current) clearTimeout(shieldTimerRef.current);
+                quizAnswerLockRef.current = false;
+                shieldAnswerLockRef.current = false;
+                setQuizFeedback(null);
+                setSelectedAnswer(null);
+                setPcLockedUntil(0);
                 setViewState('lobby');
                 setCurrentRoom(null);
                 setHasFinishedLocal(false);
