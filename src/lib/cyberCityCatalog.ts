@@ -25,6 +25,7 @@ export interface BuildingTypeDefinition {
     populationBonus: number;
     icon: string;
     descRo: string;
+    descEn?: string;
   }[];
 }
 
@@ -1098,18 +1099,24 @@ export function calculateCityMetrics(buildings: Record<number, CityBuilding>): C
     finalPop * 0.5
   );
 
-  // Mayor Rank Title
-  let rankTitle = 'Primar Începător 🌱';
+  // Mayor Rank Title (Bilingual)
+  let rankTitleRo = 'Primar Începător 🌱';
+  let rankTitleEn = 'Novice Mayor 🌱';
   if (cityScore >= 25000) {
-    rankTitle = 'Arhitect Suprem Galactic 👑';
+    rankTitleRo = 'Arhitect Suprem Galactic 👑';
+    rankTitleEn = 'Galactic Supreme Architect 👑';
   } else if (cityScore >= 12000) {
-    rankTitle = 'Guvernator Cibernetic 💎';
+    rankTitleRo = 'Guvernator Cibernetic 💎';
+    rankTitleEn = 'Cybernetic Governor 💎';
   } else if (cityScore >= 6000) {
-    rankTitle = 'Maestru al Tehnologiei ⚡';
+    rankTitleRo = 'Maestru al Tehnologiei ⚡';
+    rankTitleEn = 'Master of Technology ⚡';
   } else if (cityScore >= 2500) {
-    rankTitle = 'Inginer Urban TIC ⭐';
+    rankTitleRo = 'Inginer Urban TIC ⭐';
+    rankTitleEn = 'Urban ICT Engineer ⭐';
   } else if (cityScore >= 1000) {
-    rankTitle = 'Planificator de Sisteme 🚀';
+    rankTitleRo = 'Planificator de Sisteme 🚀';
+    rankTitleEn = 'Systems Planner 🚀';
   }
 
   return {
@@ -1120,6 +1127,8 @@ export function calculateCityMetrics(buildings: Record<number, CityBuilding>): C
     securityRating: finalSec,
     totalPopulation: finalPop,
     cityScore,
-    cityRankTitle: rankTitle,
+    cityRankTitle: rankTitleRo,
+    cityRankTitleRo: rankTitleRo,
+    cityRankTitleEn: rankTitleEn,
   };
 }

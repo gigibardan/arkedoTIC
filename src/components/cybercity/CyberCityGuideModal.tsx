@@ -58,7 +58,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
               </div>
               <p className="text-xs text-slate-300">
                 {lang === 'en'
-                  ? 'Everything you need to know about building, optimizing and defending your metropolis!'
+                  ? 'Complete blueprints for designing, scaling, optimizing and defending your tech metropolis!'
                   : 'Ghidul complet pentru proiectarea, extinderea și apărarea metropolei tale tehnologice!'}
               </p>
             </div>
@@ -83,7 +83,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>1. Cum se Joacă</span>
+            <span>{lang === 'en' ? '1. How to Play' : '1. Cum se Joacă'}</span>
           </button>
 
           <button
@@ -95,7 +95,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             }`}
           >
             <Zap className="w-3.5 h-3.5" />
-            <span>2. Resurse & Indicatori</span>
+            <span>{lang === 'en' ? '2. Resources & Metrics' : '2. Resurse & Indicatori'}</span>
           </button>
 
           <button
@@ -107,7 +107,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             }`}
           >
             <Building className="w-3.5 h-3.5" />
-            <span>3. Ghidul Clădirilor</span>
+            <span>{lang === 'en' ? '3. Building Catalog' : '3. Ghidul Clădirilor'}</span>
           </button>
 
           <button
@@ -119,7 +119,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5" />
-            <span>4. Evenimente & Incidente</span>
+            <span>{lang === 'en' ? '4. Events & Incidents' : '4. Evenimente & Incidente'}</span>
           </button>
 
           <button
@@ -131,7 +131,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             }`}
           >
             <Trophy className="w-3.5 h-3.5" />
-            <span>5. Secretele Primarului de Nota 10</span>
+            <span>{lang === 'en' ? '5. Mayor Top Secrets' : '5. Secretele Primarului'}</span>
           </button>
         </div>
 
@@ -142,10 +142,18 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             <div className="space-y-6">
               <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-500/40">
                 <h3 className="text-base font-black text-cyan-300 flex items-center gap-2 mb-2">
-                  <span>🌆 Bine ai venit în ARKEDO Cyber City!</span>
+                  <span>{lang === 'en' ? '🌆 Welcome to ARKEDO Cyber City!' : '🌆 Bine ai venit în ARKEDO Cyber City!'}</span>
                 </h3>
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Ești <strong>Primarul și Arhitectul Șef</strong> al propriei tale metropole digitale! Scopul tău este să construiești un oraș tehnologic prosper, ecologic și ultra-securizat, populat de mii de cetățeni cibernetici și roboței inteligenți.
+                  {lang === 'en' ? (
+                    <>
+                      You are the <strong>Mayor and Chief Architect</strong> of your own digital metropolis! Your mission is to build a prosperous, eco-friendly, ultra-secure technological city populated by thousands of digital citizens and intelligent autonomous Arky robots.
+                    </>
+                  ) : (
+                    <>
+                      Ești <strong>Primarul și Arhitectul Șef</strong> al propriei tale metropole digitale! Scopul tău este să construiești un oraș tehnologic prosper, ecologic și ultra-securizat, populat de mii de cetățeni cibernetici și roboței inteligenți.
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -155,9 +163,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                   <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 font-black flex items-center justify-center font-mono">
                     1
                   </div>
-                  <h4 className="text-sm font-bold text-white">Câștigă ByteCoins 🪙</h4>
+                  <h4 className="text-sm font-bold text-white">
+                    {lang === 'en' ? 'Earn ByteCoins 🪙' : 'Câștigă ByteCoins 🪙'}
+                  </h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Rezolvă exerciții în lecțiile din manual, participă la duelurile 1v1 sau joacă în laboratorul arcade pentru a acumula monede.
+                    {lang === 'en'
+                      ? 'Solve exercises in curriculum textbook modules, participate in 1v1 student duels, or score in the arcade hub to accumulate ByteCoins.'
+                      : 'Rezolvă exerciții în lecțiile din manual, participă la duelurile 1v1 sau joacă în laboratorul arcade pentru a acumula monede.'}
                   </p>
                 </div>
 
@@ -165,9 +177,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                   <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 font-black flex items-center justify-center font-mono">
                     2
                   </div>
-                  <h4 className="text-sm font-bold text-white">Construiește & Extinde 🏗️</h4>
+                  <h4 className="text-sm font-bold text-white">
+                    {lang === 'en' ? 'Build & Expand 🏗️' : 'Construiește & Extinde 🏗️'}
+                  </h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Apasă pe o parcelă liberă din grilă (+), alege o clădire din magazin (Datacenter, 5G, Energie Solară, Academie) și plaseaz-o în oraș.
+                    {lang === 'en'
+                      ? 'Tap any empty plot (+) on the 5x5 grid, pick a blueprint from the catalog (Data Center, 5G Mast, Solar Array, Robotics Academy), and place it in your city.'
+                      : 'Apasă pe o parcelă liberă din grilă (+), alege o clădire din magazin (Datacenter, 5G, Energie Solară, Academie) și plaseaz-o în oraș.'}
                   </p>
                 </div>
 
@@ -175,9 +191,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                   <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 font-black flex items-center justify-center font-mono">
                     3
                   </div>
-                  <h4 className="text-sm font-bold text-white">Modernizează la Nivelul 5 ⭐</h4>
+                  <h4 className="text-sm font-bold text-white">
+                    {lang === 'en' ? 'Upgrade to Level 5 ⭐' : 'Modernizează la Nivelul 5 ⭐'}
+                  </h4>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Apasă pe orice clădire construită pentru a o moderniza până la nivelul Quantum (Nivel 5), deblocând mega-putere de calcul și populație!
+                    {lang === 'en'
+                      ? 'Tap any existing building to upgrade it all the way to Quantum Level 5, multiplying compute power, green energy, and attracting thousands of citizens!'
+                      : 'Apasă pe orice clădire construită pentru a o moderniza până la nivelul Quantum (Nivel 5), deblocând mega-putere de calcul și populație!'}
                   </p>
                 </div>
               </div>
@@ -188,7 +208,9 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
           {activeTab === 'resources' && (
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
-                Fiecare clădire din oraș contribuie la cei <strong>6 Indicatori Vitali</strong> ai metropolei:
+                {lang === 'en'
+                  ? 'Each building in your city contributes directly to the 6 Vital Metrics of your metropolis:'
+                  : 'Fiecare clădire din oraș contribuie la cei 6 Indicatori Vitali ai metropolei:'}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -197,9 +219,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                     ⚡
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-cyan-300">Putere de Calcul (TeraFLOPS)</h4>
+                    <h4 className="text-sm font-bold text-cyan-300">
+                      {lang === 'en' ? 'Computing Power (TeraFLOPS)' : 'Putere de Calcul (TeraFLOPS)'}
+                    </h4>
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Generată de Centrele de Date, AI Labs și Fabricile de Microcipuri. Determină viteza de procesare a întregului oraș.
+                      {lang === 'en'
+                        ? 'Generated by Cloud Data Centers, AI Labs, and Microchip Foundries. Dictates raw processing capacity across the smart grid.'
+                        : 'Generată de Centrele de Date, AI Labs și Fabricile de Microcipuri. Determină viteza de procesare a întregului oraș.'}
                     </p>
                   </div>
                 </div>
@@ -209,9 +235,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                     💾
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-teal-300">Stocare Cloud (PetaBytes)</h4>
+                    <h4 className="text-sm font-bold text-teal-300">
+                      {lang === 'en' ? 'Cloud Storage (PetaBytes)' : 'Stocare Cloud (PetaBytes)'}
+                    </h4>
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Generată de Server Racks și Vaults. Asigură spațiul de stocare pentru documentele, imaginile și jocurile cetățenilor.
+                      {lang === 'en'
+                        ? 'Generated by Server Arrays and Data Hubs. Provides secure decentralized storage for citizen files, databases, and games.'
+                        : 'Generată de Server Racks și Vaults. Asigură spațiul de stocare pentru documentele, imaginile și jocurile cetățenilor.'}
                     </p>
                   </div>
                 </div>
@@ -221,9 +251,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                     🌐
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-sky-300">Lățime de Bandă (Tbps)</h4>
+                    <h4 className="text-sm font-bold text-sky-300">
+                      {lang === 'en' ? 'Network Bandwidth (Tbps)' : 'Lățime de Bandă (Tbps)'}
+                    </h4>
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Generată de Turnurile 5G/6G și Nodurile de Fibră Optică. Elimină lag-ul și permite streaming holografic live.
+                      {lang === 'en'
+                        ? 'Supplied by 5G/6G towers and Optical Fiber backbone nodes. Eradicates latency and enables instant holographic streaming.'
+                        : 'Generată de Turnurile 5G/6G și Nodurile de Fibră Optică. Elimină lag-ul și permite streaming holografic live.'}
                     </p>
                   </div>
                 </div>
@@ -233,9 +267,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                     🌿
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-emerald-300">Scor Ecologic (Eco-Points)</h4>
+                    <h4 className="text-sm font-bold text-emerald-300">
+                      {lang === 'en' ? 'Eco-Score (Green Energy %)' : 'Scor Ecologic (Eco-Points)'}
+                    </h4>
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Generat de Matricea Solară, Reactoarele de Fuziune Curată și Parcurile Verzi. Serverele consumă mult curent, deci ai nevoie de energie verde!
+                      {lang === 'en'
+                        ? 'Supplied by Smart Solar Arrays, Clean Fusion Reactors, and Bioluminescent Parks. Data centers consume immense power, requiring green generation!'
+                        : 'Generat de Matricea Solară, Reactoarele de Fuziune Curată și Parcurile Verzi. Serverele consumă mult curent, deci ai nevoie de energie verde!'}
                     </p>
                   </div>
                 </div>
@@ -245,9 +283,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                     🛡️
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-rose-300">Securitate Cibernetică (Rating %)</h4>
+                    <h4 className="text-sm font-bold text-rose-300">
+                      {lang === 'en' ? 'Cyber Security Rating (%)' : 'Securitate Cibernetică (Rating %)'}
+                    </h4>
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Generată de Turnurile Firewall și Centrele Antivirus. Protejează metropola împotriva hackerilor și atacurilor malware.
+                      {lang === 'en'
+                        ? 'Maintained by Firewall Towers and Antivirus Sandbox Labs. Shields the city grid from malware incursions, trojans, and phishing.'
+                        : 'Generată de Turnurile Firewall și Centrele Antivirus. Protejează metropola împotriva hackerilor și atacurilor malware.'}
                     </p>
                   </div>
                 </div>
@@ -257,9 +299,13 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                     👥
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-indigo-300">Populație Cibernetică</h4>
+                    <h4 className="text-sm font-bold text-indigo-300">
+                      {lang === 'en' ? 'Digital Population' : 'Populație Cibernetică'}
+                    </h4>
                     <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Numărul de cetățeni digitali, programatori și roboței Arky atrași de calitatea vieții și facilitățile educaționale ale orașului.
+                      {lang === 'en'
+                        ? 'The number of computer scientists, programmers, students, and autonomous Arky robots drawn to your city by high quality of life.'
+                        : 'Numărul de cetățeni digitali, programatori și roboței Arky atrași de calitatea vieții și facilitățile educaționale ale orașului.'}
                     </p>
                   </div>
                 </div>
@@ -271,7 +317,9 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
           {activeTab === 'buildings' && (
             <div className="space-y-4">
               <p className="text-xs text-slate-400">
-                Există <strong>5 categorii majore de clădiri</strong> în catalog. Fiecare clădire poate fi ridicată prin 5 niveluri spectaculoase:
+                {lang === 'en'
+                  ? 'There are 5 major technological categories in the blueprint catalog, each upgradeable through 5 distinct levels:'
+                  : 'Există 5 categorii majore de clădiri în catalog. Fiecare clădire poate fi ridicată prin 5 niveluri spectaculoase:'}
               </p>
 
               <div className="space-y-3">
@@ -279,8 +327,12 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🏢</span>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Calcul & Inteligență Artificială</h4>
-                      <p className="text-xs text-slate-400">Data Centers, AI Labs, Fabrici de Microcipuri.</p>
+                      <h4 className="text-sm font-bold text-white">
+                        {lang === 'en' ? 'Computing & Artificial Intelligence' : 'Calcul & Inteligență Artificială'}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {lang === 'en' ? 'Cloud Data Centers, AI Neural Labs, Microchip Foundries.' : 'Data Centers, AI Labs, Fabrici de Microcipuri.'}
+                      </p>
                     </div>
                   </div>
                   <span className="text-[11px] font-mono text-cyan-300 font-bold">⚡ Max TFlops</span>
@@ -290,8 +342,12 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">📡</span>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Telecomunicații & Rețea</h4>
-                      <p className="text-xs text-slate-400">Turnuri 5G/6G, Noduri Centrale de Fibră Optică.</p>
+                      <h4 className="text-sm font-bold text-white">
+                        {lang === 'en' ? 'Telecommunications & Backbone' : 'Telecomunicații & Rețea'}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {lang === 'en' ? '5G/6G Cellular Towers, Optical Fiber Backbone Hubs.' : 'Turnuri 5G/6G, Noduri Centrale de Fibră Optică.'}
+                      </p>
                     </div>
                   </div>
                   <span className="text-[11px] font-mono text-teal-300 font-bold">🌐 Max Tbps</span>
@@ -301,33 +357,45 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">☀️</span>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Energie Verde & Sustenabilitate</h4>
-                      <p className="text-xs text-slate-400">Matrici Solare Inteligente, Reactoare de Fuziune Curată.</p>
+                      <h4 className="text-sm font-bold text-white">
+                        {lang === 'en' ? 'Green Energy & Sustainability' : 'Energie Verde & Sustenabilitate'}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {lang === 'en' ? 'Smart Photovoltaic Solar Arrays, Clean Fusion Reactors.' : 'Matrici Solare Inteligente, Reactoare de Fuziune Curată.'}
+                      </p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono text-emerald-300 font-bold">🌿 100% Zero Poluare</span>
+                  <span className="text-[11px] font-mono text-emerald-300 font-bold">🌿 Zero Emission</span>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-950 border border-indigo-500/30 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🎓</span>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Educație, Cultură & Parcuri</h4>
-                      <p className="text-xs text-slate-400">Academia de Robotică, Muzeul Retro, Parcuri Bioluminescente.</p>
+                      <h4 className="text-sm font-bold text-white">
+                        {lang === 'en' ? 'Education, Culture & Parks' : 'Educație, Cultură & Parcuri'}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {lang === 'en' ? 'Robotics & CS Academy, Retro Computing Museum, Bioluminescent Parks.' : 'Academia de Robotică, Muzeul Retro, Parcuri Bioluminescente.'}
+                      </p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono text-indigo-300 font-bold">👥 Atragere Populație</span>
+                  <span className="text-[11px] font-mono text-indigo-300 font-bold">👥 Population Magnet</span>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-950 border border-rose-500/30 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🛡️</span>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Securitate Cibernetică & Protecție</h4>
-                      <p className="text-xs text-slate-400">Turnuri Firewall, Centre Antivirus Sandbox.</p>
+                      <h4 className="text-sm font-bold text-white">
+                        {lang === 'en' ? 'Cyber Defense & Data Shielding' : 'Securitate Cibernetică & Protecție'}
+                      </h4>
+                      <p className="text-xs text-slate-400">
+                        {lang === 'en' ? 'Cyber Firewall Towers, Antivirus Sandbox Isolation Labs.' : 'Turnuri Firewall, Centre Antivirus Sandbox.'}
+                      </p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-mono text-rose-300 font-bold">🚨 100% Apărare Date</span>
+                  <span className="text-[11px] font-mono text-rose-300 font-bold">🚨 100% Defense</span>
                 </div>
               </div>
             </div>
@@ -339,47 +407,61 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
               <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-500/40">
                 <h3 className="text-sm font-bold text-amber-300 flex items-center gap-2 mb-1">
                   <AlertTriangle className="w-4 h-4" />
-                  <span>Evenimente & Incidente Urbane Spontane (Silențioase)</span>
+                  <span>
+                    {lang === 'en'
+                      ? 'Spontaneous Urban Events & Silent Incidents'
+                      : 'Evenimente & Incidente Urbane Spontane (Silențioase)'}
+                  </span>
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Pe măsură ce orașul tău crește, pe hartă vor apărea oportunități și provocări de scurtă durată (indicate printr-o insignă pulsantă pe parcelă). Apasă pe parcelă pentru a soluționa incidentul și a câștiga <strong>ByteCoins și XP bonus</strong>!
+                  {lang === 'en'
+                    ? 'As your city expands, short-lived challenges will emerge across the grid (indicated by a pulsing alert on the tile). Tap the tile to resolve the incident silently and claim ByteCoins and bonus XP!'
+                    : 'Pe măsură ce orașul tău crește, pe hartă vor apărea oportunități și provocări de scurtă durată (indicate printr-o insignă pulsantă pe parcelă). Apasă pe parcelă pentru a soluționa incidentul și a câștiga ByteCoins și XP bonus!'}
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                   <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>⚡ Vârf de Trafic Festival eSports</span>
+                    <span>{lang === 'en' ? '⚡ eSports Festival Traffic Surge' : '⚡ Vârf de Trafic Festival eSports'}</span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    Redirecționează lățimea de bandă pentru a menține transmisiile live stabile.
+                    {lang === 'en'
+                      ? 'Reroute bandwidth across optical nodes to preserve 4K holographic broadcast fidelity.'
+                      : 'Redirecționează lățimea de bandă pentru a menține transmisiile live stabile.'}
                   </p>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                   <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>🚨 Tentativă de Phishing Blocată</span>
+                    <span>{lang === 'en' ? '🚨 Phishing Infiltration Quarantined' : '🚨 Tentativă de Phishing Blocată'}</span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    Activează filtrele antispam ale firewall-ului pentru a proteja școala.
+                    {lang === 'en'
+                      ? 'Deploy firewall antispam filters to protect educational student servers.'
+                      : 'Activează filtrele antispam ale firewall-ului pentru a proteja școala.'}
                   </p>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                   <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>💾 Fragment de Cod Istoric Găsit</span>
+                    <span>{lang === 'en' ? '💾 Historic Code Floppy Discovered' : '💾 Fragment de Cod Istoric Găsit'}</span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    Decriptează o arhivă veche de dischete salvată în Muzeul Retro.
+                    {lang === 'en'
+                      ? 'Decrypt an authentic 1980s floppy disk archive preserved inside the Retro Museum.'
+                      : 'Decriptează o arhivă veche de dischete salvată în Muzeul Retro.'}
                   </p>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
                   <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>🌿 Audit Ecologic de Eficiență</span>
+                    <span>{lang === 'en' ? '🌿 Green Energy Audit Milestone' : '🌿 Audit Ecologic de Eficiență'}</span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    Optimizează consumul energetic al serverelor cu ajutorul panourilor solare.
+                    {lang === 'en'
+                      ? 'Fine-tune server cooling and solar array efficiency for maximum eco points.'
+                      : 'Optimizează consumul energetic al serverelor cu ajutorul panourilor solare.'}
                   </p>
                 </div>
               </div>
@@ -392,10 +474,14 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
               <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/40">
                 <h3 className="text-sm font-bold text-indigo-300 flex items-center gap-2 mb-1">
                   <Trophy className="w-4 h-4" />
-                  <span>Secretele unui Oraș de Top (Top Architect Strategy)</span>
+                  <span>
+                    {lang === 'en' ? 'Top Architect Strategies' : 'Secretele unui Oraș de Top (Top Architect Strategy)'}
+                  </span>
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Pentru a urca în rangurile primăriei până la <strong>Arhitect Suprem Galactic</strong>, aplică aceste sfaturi esențiale:
+                  {lang === 'en'
+                    ? 'To ascend through mayoral ranks to Galactic Supreme Architect, implement these key master strategies:'
+                    : 'Pentru a urca în rangurile primăriei până la Arhitect Suprem Galactic, aplică aceste sfaturi esențiale:'}
                 </p>
               </div>
 
@@ -403,21 +489,30 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                 <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong>Păstrează Echilibrul Resurselor:</strong> Nu construi doar centre de calcul masive fără să adaugi panouri solare și turnuri firewall, altfel scorul ecologic și securitatea vor scădea!
+                    <strong>{lang === 'en' ? 'Maintain Resource Equilibrium: ' : 'Păstrează Echilibrul Resurselor: '}</strong>
+                    {lang === 'en'
+                      ? 'Avoid spamming compute data centers without pairing them with solar arrays and firewall defenses, or your eco and security ratings will plummet!'
+                      : 'Nu construi doar centre de calcul masive fără să adaugi panouri solare și turnuri firewall, altfel scorul ecologic și securitatea vor scădea!'}
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong>Prioritizează Modernizările (Upgrades):</strong> O clădire de Nivel 3 sau Nivel 5 produce mult mai multă putere de calcul pe aceeași parcelă decât mai multe clădiri de Nivel 1.
+                    <strong>{lang === 'en' ? 'Prioritize Building Upgrades: ' : 'Prioritizează Modernizările (Upgrades): '}</strong>
+                    {lang === 'en'
+                      ? 'A Level 3 or Level 5 facility generates exponentially higher metrics per tile than multiple Level 1 buildings.'
+                      : 'O clădire de Nivel 3 sau Nivel 5 produce mult mai multă putere de calcul pe aceeași parcelă decât mai multe clădiri de Nivel 1.'}
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <strong>Vizitează Metropolele Colegilor:</strong> Explorează orașele colegilor de clasă din secțiunea „Orașele Colegilor”, inspiră-te din design-ul lor și oferă-le steluțe de apreciere!
+                    <strong>{lang === 'en' ? 'Tour Classmate Cities: ' : 'Vizitează Metropolele Colegilor: '}</strong>
+                    {lang === 'en'
+                      ? 'Inspect your classmates\' cities in the gallery, observe their layouts, and award appreciation stars!'
+                      : 'Explorează orașele colegilor de clasă din secțiunea „Orașele Colegilor”, inspiră-te din design-ul lor și oferă-le steluțe de apreciere!'}
                   </div>
                 </div>
               </div>

@@ -23,7 +23,8 @@ import {
 } from 'firebase/firestore';
 
 const LOCAL_CITY_KEY = 'arkedo_cyber_city_data';
-const STUDENTS_COLLECTION = 'students';
+const STUDENTS_COLLECTION = 'elevi';
+const HIDE_DEMO_CITIES_KEY = 'arkedo_hide_demo_cities';
 
 export const DEFAULT_STARTER_CITY: CyberCityData = {
   id: 'city_default',
@@ -414,79 +415,127 @@ export function spawnRandomCityIncident(currentCity: CyberCityData): CyberCityDa
   return updatedCity;
 }
 
+// THE 4 DEMO CITIES (Pre-configured architecture models)
+export const FOUR_DEMO_CITIES: CyberCityData[] = [
+  {
+    id: 'city_demo_alex',
+    studentId: 'demo_alex',
+    studentName: 'Alexandru P. [DEMO]',
+    cityName: 'Quantum Silicon Valley [DEMO]',
+    gridSize: 5,
+    isDemo: true,
+    demoLabelRo: 'Model Demonstrativ (Temporar)',
+    demoLabelEn: 'Demo Model (Temporary)',
+    buildings: {
+      2: { tileIndex: 2, typeId: 'fusion_reactor', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      7: { tileIndex: 7, typeId: 'ai_lab', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      8: { tileIndex: 8, typeId: 'datacenter', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      12: { tileIndex: 12, typeId: '5g_tower', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      13: { tileIndex: 13, typeId: 'robotics_academy', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      18: { tileIndex: 18, typeId: 'cyber_park', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      22: { tileIndex: 22, typeId: 'firewall_tower', level: 2, builtAt: 0, lastUpgradedAt: 0 },
+    },
+    likesCount: 24,
+    totalUpgradesDone: 18,
+    resolvedIncidentsCount: 12,
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'city_demo_maria',
+    studentId: 'demo_maria',
+    studentName: 'Maria C. [DEMO]',
+    cityName: 'Cyber-Bio Oasis 2099 [DEMO]',
+    gridSize: 5,
+    isDemo: true,
+    demoLabelRo: 'Model Demonstrativ (Temporar)',
+    demoLabelEn: 'Demo Model (Temporary)',
+    buildings: {
+      6: { tileIndex: 6, typeId: 'solar_matrix', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      7: { tileIndex: 7, typeId: 'cyber_park', level: 5, builtAt: 0, lastUpgradedAt: 0 },
+      11: { tileIndex: 11, typeId: 'retro_museum', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      12: { tileIndex: 12, typeId: 'datacenter', level: 2, builtAt: 0, lastUpgradedAt: 0 },
+      17: { tileIndex: 17, typeId: 'fiber_hub', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      18: { tileIndex: 18, typeId: 'antivirus_lab', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+    },
+    likesCount: 31,
+    totalUpgradesDone: 20,
+    resolvedIncidentsCount: 15,
+    createdAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'city_demo_matei',
+    studentId: 'demo_matei',
+    studentName: 'Matei V. [DEMO]',
+    cityName: 'Robo-Citadel Alpha [DEMO]',
+    gridSize: 5,
+    isDemo: true,
+    demoLabelRo: 'Model Demonstrativ (Temporar)',
+    demoLabelEn: 'Demo Model (Temporary)',
+    buildings: {
+      0: { tileIndex: 0, typeId: 'firewall_tower', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      4: { tileIndex: 4, typeId: 'antivirus_lab', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      6: { tileIndex: 6, typeId: 'datacenter', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      8: { tileIndex: 8, typeId: 'chip_foundry', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      12: { tileIndex: 12, typeId: 'ai_lab', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+      16: { tileIndex: 16, typeId: 'fusion_reactor', level: 2, builtAt: 0, lastUpgradedAt: 0 },
+      24: { tileIndex: 24, typeId: '5g_tower', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+    },
+    likesCount: 19,
+    totalUpgradesDone: 23,
+    resolvedIncidentsCount: 8,
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'city_demo_daria',
+    studentId: 'demo_daria',
+    studentName: 'Daria T. [DEMO]',
+    cityName: 'Eco-HyperNet Neo-Tokyo [DEMO]',
+    gridSize: 5,
+    isDemo: true,
+    demoLabelRo: 'Model Demonstrativ (Temporar)',
+    demoLabelEn: 'Demo Model (Temporary)',
+    buildings: {
+      1: { tileIndex: 1, typeId: 'solar_matrix', level: 5, builtAt: 0, lastUpgradedAt: 0 },
+      3: { tileIndex: 3, typeId: 'fiber_hub', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      7: { tileIndex: 7, typeId: 'robotics_academy', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      11: { tileIndex: 11, typeId: 'datacenter', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      13: { tileIndex: 13, typeId: 'chip_foundry', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      17: { tileIndex: 17, typeId: 'cyber_park', level: 4, builtAt: 0, lastUpgradedAt: 0 },
+      23: { tileIndex: 23, typeId: 'fusion_reactor', level: 3, builtAt: 0, lastUpgradedAt: 0 },
+    },
+    likesCount: 27,
+    totalUpgradesDone: 21,
+    resolvedIncidentsCount: 14,
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+// Helper to check if demo cities should be hidden
+export function areDemoCitiesHidden(): boolean {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem(HIDE_DEMO_CITIES_KEY) === 'true';
+}
+
+// Helper to toggle demo cities visibility
+export function setHideDemoCities(hide: boolean): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(HIDE_DEMO_CITIES_KEY, hide ? 'true' : 'false');
+}
+
 // LOAD ALL CLASSMATE CITIES FOR SHOWCASE
 export async function loadClassmateCities(): Promise<CyberCityData[]> {
   const currentCity = getCyberCityData();
-  const mockClassmates: CyberCityData[] = [
-    {
-      id: 'city_alex',
-      studentId: 'alex_pro',
-      studentName: 'Alexandru P.',
-      cityName: 'Quantum Silicon Valley',
-      gridSize: 5,
-      buildings: {
-        2: { tileIndex: 2, typeId: 'fusion_reactor', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        7: { tileIndex: 7, typeId: 'ai_lab', level: 4, builtAt: 0, lastUpgradedAt: 0 },
-        8: { tileIndex: 8, typeId: 'datacenter', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        12: { tileIndex: 12, typeId: '5g_tower', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        13: { tileIndex: 13, typeId: 'robotics_academy', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        18: { tileIndex: 18, typeId: 'cyber_park', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        22: { tileIndex: 22, typeId: 'firewall_tower', level: 2, builtAt: 0, lastUpgradedAt: 0 },
-      },
-      likesCount: 24,
-      totalUpgradesDone: 18,
-      resolvedIncidentsCount: 12,
-      createdAt: '',
-      updatedAt: '',
-    },
-    {
-      id: 'city_maria',
-      studentId: 'maria_c',
-      studentName: 'Maria C.',
-      cityName: 'Cyber-Bio Oasis 2099',
-      gridSize: 5,
-      buildings: {
-        6: { tileIndex: 6, typeId: 'solar_matrix', level: 4, builtAt: 0, lastUpgradedAt: 0 },
-        7: { tileIndex: 7, typeId: 'cyber_park', level: 5, builtAt: 0, lastUpgradedAt: 0 },
-        11: { tileIndex: 11, typeId: 'retro_museum', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        12: { tileIndex: 12, typeId: 'datacenter', level: 2, builtAt: 0, lastUpgradedAt: 0 },
-        17: { tileIndex: 17, typeId: 'fiber_hub', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        18: { tileIndex: 18, typeId: 'antivirus_lab', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-      },
-      likesCount: 31,
-      totalUpgradesDone: 20,
-      resolvedIncidentsCount: 15,
-      createdAt: '',
-      updatedAt: '',
-    },
-    {
-      id: 'city_matei',
-      studentId: 'matei_v',
-      studentName: 'Matei V.',
-      cityName: 'Robo-Citadel Alpha',
-      gridSize: 5,
-      buildings: {
-        0: { tileIndex: 0, typeId: 'firewall_tower', level: 4, builtAt: 0, lastUpgradedAt: 0 },
-        4: { tileIndex: 4, typeId: 'antivirus_lab', level: 4, builtAt: 0, lastUpgradedAt: 0 },
-        6: { tileIndex: 6, typeId: 'datacenter', level: 4, builtAt: 0, lastUpgradedAt: 0 },
-        8: { tileIndex: 8, typeId: 'chip_foundry', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        12: { tileIndex: 12, typeId: 'ai_lab', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-        16: { tileIndex: 16, typeId: 'fusion_reactor', level: 2, builtAt: 0, lastUpgradedAt: 0 },
-        24: { tileIndex: 24, typeId: '5g_tower', level: 3, builtAt: 0, lastUpgradedAt: 0 },
-      },
-      likesCount: 19,
-      totalUpgradesDone: 23,
-      resolvedIncidentsCount: 8,
-      createdAt: '',
-      updatedAt: '',
-    },
-  ];
+  const hideDemos = areDemoCitiesHidden();
+  const cloudCities: CyberCityData[] = [];
 
   if (isCloudConnected && db) {
     try {
-      const q = query(collection(db, STUDENTS_COLLECTION), limit(20));
+      const q = query(collection(db, STUDENTS_COLLECTION), limit(50));
       const snap = await getDocs(q);
-      const cloudCities: CyberCityData[] = [];
 
       snap.forEach((d) => {
         const data = d.data();
@@ -494,17 +543,151 @@ export async function loadClassmateCities(): Promise<CyberCityData[]> {
           cloudCities.push({
             ...data.cyberCity,
             studentName: data.username || data.cyberCity.studentName || 'Elev TIC',
+            isDemo: false,
           });
         }
       });
-
-      if (cloudCities.length > 0) {
-        return [currentCity, ...cloudCities.filter((c) => c.studentId !== currentCity.studentId)];
-      }
     } catch (err) {
       console.warn('Eroare încărcare orașe din cloud:', err);
     }
   }
 
-  return [currentCity, ...mockClassmates];
+  // Filter out current student to avoid duplication
+  const otherRealCities = cloudCities.filter((c) => c.studentId !== currentCity.studentId);
+
+  // If demo cities are hidden and we have other real cities, show only real
+  if (hideDemos) {
+    return [currentCity, ...otherRealCities];
+  }
+
+  // Otherwise, present real cities + the 4 demo models clearly flagged as DEMO
+  return [currentCity, ...otherRealCities, ...FOUR_DEMO_CITIES];
+}
+
+export interface TeacherCitySummary {
+  city: CyberCityData;
+  studentId: string;
+  studentName: string;
+  studentAvatar: string;
+  isDemo: boolean;
+  metrics: ReturnType<typeof calculateCityMetrics>;
+  buildingsCount: number;
+}
+
+// GET ALL CITIES FOR TEACHER MANAGEMENT
+export async function getAllCitiesForTeacher(): Promise<{
+  summaries: TeacherCitySummary[];
+  totalRealCities: number;
+  totalDemoCities: number;
+  demosHidden: boolean;
+}> {
+  const hideDemos = areDemoCitiesHidden();
+  const summaries: TeacherCitySummary[] = [];
+  const currentStudent = getActiveStudent();
+
+  // 1. Fetch from Firestore
+  if (isCloudConnected && db) {
+    try {
+      const q = query(collection(db, STUDENTS_COLLECTION));
+      const snap = await getDocs(q);
+
+      snap.forEach((d) => {
+        const data = d.data();
+        const cityData: CyberCityData = data.cyberCity || {
+          ...DEFAULT_STARTER_CITY,
+          studentId: d.id,
+          studentName: data.username || 'Elev TIC',
+          cityName: `Metropola lui ${data.username || 'Elev'}`,
+        };
+
+        const metrics = calculateCityMetrics(cityData.buildings);
+        summaries.push({
+          city: cityData,
+          studentId: d.id,
+          studentName: data.username || 'Elev TIC',
+          studentAvatar: data.avatar || '⚡',
+          isDemo: false,
+          metrics,
+          buildingsCount: Object.keys(cityData.buildings || {}).length,
+        });
+      });
+    } catch (err) {
+      console.warn('Eroare citire orase profesori Firestore:', err);
+    }
+  }
+
+  // If local student not yet in list, add local
+  if (currentStudent && !summaries.some((s) => s.studentId === currentStudent.id)) {
+    const localCity = getCyberCityData();
+    summaries.push({
+      city: localCity,
+      studentId: currentStudent.id || 'local_student',
+      studentName: currentStudent.username || 'Campion TIC',
+      studentAvatar: currentStudent.avatar || '⚡',
+      isDemo: false,
+      metrics: calculateCityMetrics(localCity.buildings),
+      buildingsCount: Object.keys(localCity.buildings || {}).length,
+    });
+  }
+
+  // 2. Always append the 4 Demo Cities for the teacher (with isDemo: true)
+  FOUR_DEMO_CITIES.forEach((demo) => {
+    summaries.push({
+      city: demo,
+      studentId: demo.studentId,
+      studentName: demo.studentName,
+      studentAvatar: '🏙️',
+      isDemo: true,
+      metrics: calculateCityMetrics(demo.buildings),
+      buildingsCount: Object.keys(demo.buildings || {}).length,
+    });
+  });
+
+  const totalReal = summaries.filter((s) => !s.isDemo).length;
+  const totalDemo = FOUR_DEMO_CITIES.length;
+
+  return {
+    summaries,
+    totalRealCities: totalReal,
+    totalDemoCities: totalDemo,
+    demosHidden: hideDemos,
+  };
+}
+
+// TEACHER GRANT BYTECOINS TO STUDENT CITY
+export async function grantTeacherCityGrant(
+  studentId: string,
+  amount: number,
+  reason: string
+): Promise<{ success: boolean; error?: string }> {
+  if (amount <= 0) return { success: false, error: 'Suma trebuie să fie pozitivă.' };
+
+  const current = getActiveStudent();
+  if (current && (current.id === studentId || current.username === studentId)) {
+    await addByteCoins(amount, `Subvenție Profesor: ${reason}`);
+    return { success: true };
+  }
+
+  if (isCloudConnected && db && studentId) {
+    try {
+      const studentRef = doc(db, STUDENTS_COLLECTION, studentId);
+      const studentSnap = await getDoc(studentRef);
+      if (studentSnap.exists()) {
+        const data = studentSnap.data();
+        const currentCoins = Number(data.byteCoins || 0);
+        await updateDoc(studentRef, {
+          byteCoins: currentCoins + amount,
+          lastActiveAt: new Date().toISOString(),
+        });
+        return { success: true };
+      }
+    } catch (err) {
+      console.warn('Eroare grant ByteCoins profesor:', err);
+      return { success: false, error: 'Eroare la salvarea în baza de date.' };
+    }
+  }
+
+  // Local fallback
+  await addByteCoins(amount, `Subvenție Profesor: ${reason}`);
+  return { success: true };
 }

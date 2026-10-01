@@ -84,6 +84,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
   const [classmateCities, setClassmateCities] = useState<CyberCityData[]>([]);
   const [viewingClassmateCity, setViewingClassmateCity] = useState<CyberCityData | null>(null);
   const [likedCities, setLikedCities] = useState<Set<string>>(new Set());
+  const [galleryFilter, setGalleryFilter] = useState<'all' | 'real' | 'demo'>('all');
 
   // Guide Modal
   const [isGuideOpen, setIsGuideOpen] = useState(false);
@@ -221,7 +222,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
     setClassmateCities((prev) =>
       prev.map((c) => (c.id === targetCityId ? { ...c, likesCount: c.likesCount + 1 } : c))
     );
-    showToast('❤️ Ai oferit o stea de apreciere colegului!');
+    showToast(lang === 'en' ? '❤️ You awarded an appreciation star to this city!' : '❤️ Ai oferit o stea de apreciere colegului!');
   };
 
   const selectedBuildingData =
@@ -254,7 +255,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           {/* City Name & Mayor Title */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {onBackToCatalog && (
                 <button
                   onClick={onBackToCatalog}
@@ -271,8 +272,14 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               </span>
 
               {viewingClassmateCity && (
-                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-400/40">
-                  Mod Vizitator (Spectator)
+                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
+                  viewingClassmateCity.isDemo
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-400/50'
+                    : 'bg-indigo-500/20 text-indigo-300 border-indigo-400/40'
+                }`}>
+                  {viewingClassmateCity.isDemo
+                    ? (lang === 'en' ? '🏷️ Demo Model (Temporary Preview)' : '🏷️ Model Demonstrativ (Temporar)')
+                    : (lang === 'en' ? 'Spectator Mode (Visiting)' : 'Mod Vizitator (Spectator)')}
                 </span>
               )}
             </div>
@@ -313,7 +320,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                         setIsRenamingCity(true);
                       }}
                       className="p-1 rounded-lg text-slate-400 hover:text-cyan-300 transition cursor-pointer"
-                      title="Redenumește orașul"
+                      title={lang === 'en' ? 'Rename city' : 'Redenumește orașul'}
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
@@ -323,16 +330,20 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             </div>
 
             {/* Mayor Persona & Rank */}
-            <div className="flex items-center gap-2 text-xs text-slate-300">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300">
               <span className="font-bold text-cyan-300 flex items-center gap-1">
                 <span>{studentAvatar}</span>
-                <span>Primar: {currentCityToDisplay.studentName}</span>
+                <span>{lang === 'en' ? 'Mayor' : 'Primar'}: {currentCityToDisplay.studentName}</span>
               </span>
               <span className="text-slate-500">•</span>
-              <span className="text-amber-300 font-bold font-mono">{metrics.cityRankTitle}</span>
+              <span className="text-amber-300 font-bold font-mono">
+                {lang === 'en'
+                  ? (metrics.cityRankTitleEn || metrics.cityRankTitle)
+                  : (metrics.cityRankTitleRo || metrics.cityRankTitle)}
+              </span>
               <span className="text-slate-500">•</span>
               <span className="text-purple-300 font-mono font-bold">
-                ⭐ {metrics.cityScore.toLocaleString()} Pts Metropolă
+                ⭐ {metrics.cityScore.toLocaleString()} {lang === 'en' ? 'Metropolis Pts' : 'Pts Metropolă'}
               </span>
             </div>
           </div>
@@ -343,7 +354,9 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             <div className="px-3.5 py-2 rounded-2xl bg-slate-950 border border-amber-500/40 text-center shadow-inner flex items-center gap-2">
               <span className="text-lg">🪙</span>
               <div className="text-left">
-                <div className="text-[9px] text-amber-300 uppercase font-bold">Sold ByteCoins</div>
+                <div className="text-[9px] text-amber-300 uppercase font-bold">
+                  {lang === 'en' ? 'ByteCoins Balance' : 'Sold ByteCoins'}
+                </div>
                 <div className="text-sm sm:text-base font-black text-white font-mono leading-none">
                   {coins.toLocaleString()}
                 </div>
@@ -356,7 +369,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               className="px-3.5 py-2.5 rounded-2xl bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md"
             >
               <BookOpen className="w-4 h-4 text-indigo-300" />
-              <span>Ghid Primar</span>
+              <span>{lang === 'en' ? 'Mayor Handbook' : 'Ghid Primar'}</span>
             </button>
 
             {/* Classmates Showcase Button */}
@@ -365,7 +378,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               className="px-3.5 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md"
             >
               <Users className="w-4 h-4 text-cyan-400" />
-              <span>Orașele Clasei</span>
+              <span>{lang === 'en' ? 'Classmate Cities' : 'Orașele Clasei'}</span>
             </button>
 
             {/* Exit Spectator Mode */}
@@ -374,7 +387,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                 onClick={() => setViewingClassmateCity(null)}
                 className="px-3.5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg transition active:scale-95 cursor-pointer"
               >
-                Înapoi la Orașul Meu
+                {lang === 'en' ? 'Back to My City' : 'Înapoi la Orașul Meu'}
               </button>
             )}
           </div>
@@ -384,7 +397,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-5 pt-4 border-t border-slate-800/80">
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-cyan-500/30 text-center">
             <div className="text-[10px] text-cyan-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Zap className="w-3 h-3" /> Calcul
+              <Zap className="w-3 h-3" /> {lang === 'en' ? 'Compute' : 'Calcul'}
             </div>
             <div className="text-sm sm:text-base font-black text-white font-mono mt-0.5">
               {metrics.computingPowerTFlops} TFlops
@@ -393,7 +406,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-teal-500/30 text-center">
             <div className="text-[10px] text-teal-300 font-bold uppercase flex items-center justify-center gap-1">
-              <HardDrive className="w-3 h-3" /> Stocare
+              <HardDrive className="w-3 h-3" /> {lang === 'en' ? 'Storage' : 'Stocare'}
             </div>
             <div className="text-sm sm:text-base font-black text-white font-mono mt-0.5">
               {metrics.cloudStoragePB} PB
@@ -402,7 +415,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-sky-500/30 text-center">
             <div className="text-[10px] text-sky-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Globe className="w-3 h-3" /> Viteză Rețea
+              <Globe className="w-3 h-3" /> {lang === 'en' ? 'Network' : 'Viteză Rețea'}
             </div>
             <div className="text-sm sm:text-base font-black text-white font-mono mt-0.5">
               {metrics.bandwidthTbps} Tbps
@@ -411,7 +424,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-emerald-500/30 text-center">
             <div className="text-[10px] text-emerald-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Leaf className="w-3 h-3" /> Eco-Energie
+              <Leaf className="w-3 h-3" /> {lang === 'en' ? 'Green Energy' : 'Eco-Energie'}
             </div>
             <div className="text-sm sm:text-base font-black text-emerald-300 font-mono mt-0.5">
               {metrics.ecoScore}%
@@ -420,7 +433,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-rose-500/30 text-center">
             <div className="text-[10px] text-rose-300 font-bold uppercase flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3 h-3" /> Securitate
+              <ShieldCheck className="w-3 h-3" /> {lang === 'en' ? 'Security' : 'Securitate'}
             </div>
             <div className="text-sm sm:text-base font-black text-rose-300 font-mono mt-0.5">
               {metrics.securityRating}%
@@ -429,7 +442,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-indigo-500/30 text-center">
             <div className="text-[10px] text-indigo-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Users className="w-3 h-3" /> Populație
+              <Users className="w-3 h-3" /> {lang === 'en' ? 'Population' : 'Populație'}
             </div>
             <div className="text-sm sm:text-base font-black text-indigo-200 font-mono mt-0.5">
               {metrics.totalPopulation.toLocaleString()}
@@ -450,7 +463,9 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-amber-400 animate-bounce" />
                 <span>
-                  {cityData.activeIncidents.length} incident cibernetic activ în oraș! Apasă pe parcela marcată pentru a-l soluționa!
+                  {lang === 'en'
+                    ? `${cityData.activeIncidents.length} active cyber incident in the city! Tap marked plot to resolve!`
+                    : `${cityData.activeIncidents.length} incident cibernetic activ în oraș! Apasă pe parcela marcată pentru a-l soluționa!`}
                 </span>
               </div>
             </div>
@@ -497,7 +512,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                     {/* Building Name Tag */}
                     <div className="w-full text-center">
                       <span className="text-[9px] sm:text-[10px] font-bold text-slate-200 block truncate leading-tight">
-                        {currentLvlData.titleRo || def.nameRo}
+                        {lang === 'en' ? (currentLvlData.titleEn || def.nameEn) : (currentLvlData.titleRo || def.nameRo)}
                       </span>
                     </div>
 
@@ -521,7 +536,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                 >
                   <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-slate-700 group-hover:text-cyan-400 transition transform group-hover:rotate-90 duration-300" />
                   <span className="text-[9px] font-mono mt-1 opacity-60 group-hover:opacity-100">
-                    Teren {tileIndex + 1}
+                    {lang === 'en' ? `Plot ${tileIndex + 1}` : `Teren ${tileIndex + 1}`}
                   </span>
                 </button>
               );
@@ -546,10 +561,14 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             <div className="p-4 sm:p-5 bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border-b border-slate-800 flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-black text-white font-heading">
-                  🏗️ Magazinul de Construcții • Terenul #{selectedTileIndex + 1}
+                  {lang === 'en'
+                    ? `🏗️ Blueprint Construction Store • Plot #${selectedTileIndex + 1}`
+                    : `🏗️ Magazinul de Construcții • Terenul #${selectedTileIndex + 1}`}
                 </h3>
                 <p className="text-xs text-slate-300">
-                  Alege o clădire tehnologică pentru a o construi pe această parcelă.
+                  {lang === 'en'
+                    ? 'Choose a technology building blueprint to construct on this empty plot.'
+                    : 'Alege o clădire tehnologică pentru a o construi pe această parcelă.'}
                 </p>
               </div>
               <button
@@ -563,12 +582,12 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             {/* Category Filter Buttons */}
             <div className="flex items-center gap-1.5 p-2 bg-slate-950 border-b border-slate-800 overflow-x-auto text-xs font-bold">
               {[
-                { id: 'all', label: 'Toate Clădirile' },
-                { id: 'computing', label: 'Calcul & AI 🏢' },
-                { id: 'networking', label: 'Telecomunicații 📡' },
-                { id: 'energy', label: 'Energie Verde ☀️' },
-                { id: 'education', label: 'Educație & Parcuri 🎓' },
-                { id: 'security', label: 'Securitate 🛡️' },
+                { id: 'all', label: lang === 'en' ? 'All Buildings' : 'Toate Clădirile' },
+                { id: 'computing', label: lang === 'en' ? 'Computing & AI 🏢' : 'Calcul & AI 🏢' },
+                { id: 'networking', label: lang === 'en' ? 'Telecom & Network 📡' : 'Telecomunicații 📡' },
+                { id: 'energy', label: lang === 'en' ? 'Green Energy ☀️' : 'Energie Verde ☀️' },
+                { id: 'education', label: lang === 'en' ? 'Education & Parks 🎓' : 'Educație & Parcuri 🎓' },
+                { id: 'security', label: lang === 'en' ? 'Cyber Security 🛡️' : 'Securitate 🛡️' },
               ].map((cat) => (
                 <button
                   key={cat.id}
@@ -602,10 +621,10 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                           <span className="text-3xl">{def.icon}</span>
                           <div>
                             <h4 className="text-sm font-bold text-white leading-tight">
-                              {def.nameRo}
+                              {lang === 'en' ? def.nameEn : def.nameRo}
                             </h4>
                             <span className="text-[10px] text-cyan-300 font-mono">
-                              Nivel 1 Starter
+                              {lang === 'en' ? 'Level 1 Starter' : 'Nivel 1 Starter'}
                             </span>
                           </div>
                         </div>
@@ -616,7 +635,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                       </div>
 
                       <p className="text-xs text-slate-300 leading-relaxed">
-                        {def.descriptionRo}
+                        {lang === 'en' ? def.descriptionEn : def.descriptionRo}
                       </p>
                     </div>
 
@@ -630,7 +649,11 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                           : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                       }`}
                     >
-                      <span>{canAfford ? 'Construiește Acum 🚀' : 'Fonduri Insuficiente 🪙'}</span>
+                      <span>
+                        {canAfford
+                          ? (lang === 'en' ? 'Construct Now 🚀' : 'Construiește Acum 🚀')
+                          : (lang === 'en' ? 'Insufficient ByteCoins 🪙' : 'Fonduri Insuficiente 🪙')}
+                      </span>
                     </button>
                   </div>
                 );
@@ -650,10 +673,14 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                 <span className="text-3xl">{selectedBuildingDef.icon}</span>
                 <div>
                   <h3 className="text-lg font-black text-white font-heading">
-                    {selectedBuildingDef.nameRo}
+                    {lang === 'en' ? selectedBuildingDef.nameEn : selectedBuildingDef.nameRo}
                   </h3>
                   <div className="flex items-center gap-2 text-xs text-amber-300 font-mono font-bold">
-                    <span>Nivel {selectedBuildingData.level} / 5</span>
+                    <span>
+                      {lang === 'en'
+                        ? `Level ${selectedBuildingData.level} / 5`
+                        : `Nivel ${selectedBuildingData.level} / 5`}
+                    </span>
                     <span>•</span>
                     <div className="flex">
                       {Array.from({ length: selectedBuildingData.level }).map((_, i) => (
@@ -675,13 +702,13 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             {/* Body */}
             <div className="p-5 space-y-4 text-xs">
               <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-slate-300 leading-relaxed">
-                {selectedBuildingDef.descriptionRo}
+                {lang === 'en' ? selectedBuildingDef.descriptionEn : selectedBuildingDef.descriptionRo}
               </div>
 
               {/* Levels Timeline */}
               <div className="space-y-2">
                 <span className="text-[11px] font-bold text-slate-400 uppercase font-mono">
-                  Evoluția Nivelurilor:
+                  {lang === 'en' ? 'TECH LEVEL PROGRESSION:' : 'Evoluția Nivelurilor:'}
                 </span>
                 <div className="grid grid-cols-5 gap-1.5">
                   {selectedBuildingDef.levels.map((lvl) => {
@@ -698,9 +725,12 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                             ? 'bg-slate-950 border-emerald-500/50 text-emerald-300'
                             : 'bg-slate-950/40 border-slate-800 text-slate-600'
                         }`}
+                        title={lang === 'en' ? (lvl.titleEn || lvl.descRo) : (lvl.titleRo || lvl.descRo)}
                       >
                         <div className="text-base">{lvl.icon}</div>
-                        <div className="text-[10px] font-mono mt-1 font-bold">Nv.{lvl.level}</div>
+                        <div className="text-[10px] font-mono mt-1 font-bold">
+                          {lang === 'en' ? `Lv.${lvl.level}` : `Nv.${lvl.level}`}
+                        </div>
                       </div>
                     );
                   })}
@@ -714,7 +744,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                   className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-rose-950 hover:text-rose-200 text-slate-400 border border-slate-700 hover:border-rose-500 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
-                  <span>Demolează & Reciclează</span>
+                  <span>{lang === 'en' ? 'Demolish & Recycle' : 'Demolează & Reciclează'}</span>
                 </button>
 
                 {selectedBuildingData.level < 5 ? (
@@ -724,13 +754,14 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                   >
                     <ArrowUpCircle className="w-4 h-4" />
                     <span>
-                      Modernizează la Nivelul {selectedBuildingData.level + 1} (🪙{' '}
-                      {selectedBuildingDef.levels[selectedBuildingData.level]?.cost || 100})
+                      {lang === 'en'
+                        ? `Upgrade to Level ${selectedBuildingData.level + 1} (🪙 ${selectedBuildingDef.levels[selectedBuildingData.level]?.cost || 100})`
+                        : `Modernizează la Nivelul ${selectedBuildingData.level + 1} (🪙 ${selectedBuildingDef.levels[selectedBuildingData.level]?.cost || 100})`}
                     </span>
                   </button>
                 ) : (
                   <span className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 font-bold text-xs border border-amber-400/40">
-                    👑 Nivel Maxim Quantum Atins!
+                    {lang === 'en' ? '👑 Max Quantum Level Reached!' : '👑 Nivel Maxim Quantum Atins!'}
                   </span>
                 )}
               </div>
@@ -746,10 +777,12 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 border-b border-slate-800 flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-black text-white font-heading">
-                  🏙️ Galeria Metropolelor Clasei
+                  {lang === 'en' ? '🏙️ Classmates Metropolis Gallery' : '🏙️ Galeria Metropolelor Clasei'}
                 </h3>
                 <p className="text-xs text-slate-300">
-                  Vizitează orașele colegilor tăi, inspiră-te din arhitectura lor și oferă-le steluțe de apreciere!
+                  {lang === 'en'
+                    ? 'Explore classmate cities, get inspired by their architecture, and award appreciation stars!'
+                    : 'Vizitează orașele colegilor tăi, inspiră-te din arhitectura lor și oferă-le steluțe de apreciere!'}
                 </p>
               </div>
               <button
@@ -760,79 +793,135 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               </button>
             </div>
 
+            {/* Gallery Filter Tabs */}
+            <div className="flex items-center gap-1.5 p-2 bg-slate-950 border-b border-slate-800 overflow-x-auto text-xs font-bold">
+              <button
+                onClick={() => setGalleryFilter('all')}
+                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                  galleryFilter === 'all'
+                    ? 'bg-cyan-500 text-slate-950 font-black'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                }`}
+              >
+                {lang === 'en' ? `All Cities (${classmateCities.length})` : `Toate Orașele (${classmateCities.length})`}
+              </button>
+              <button
+                onClick={() => setGalleryFilter('real')}
+                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                  galleryFilter === 'real'
+                    ? 'bg-teal-500 text-slate-950 font-black'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                }`}
+              >
+                {lang === 'en'
+                  ? `Real Students (${classmateCities.filter((c) => !c.isDemo).length})`
+                  : `Elevi Reali (${classmateCities.filter((c) => !c.isDemo).length})`}
+              </button>
+              <button
+                onClick={() => setGalleryFilter('demo')}
+                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                  galleryFilter === 'demo'
+                    ? 'bg-amber-500 text-slate-950 font-black'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                }`}
+              >
+                {lang === 'en'
+                  ? `Demo Models (${classmateCities.filter((c) => c.isDemo).length})`
+                  : `Modele Demo (${classmateCities.filter((c) => c.isDemo).length})`}
+              </button>
+            </div>
+
             <div className="flex-1 overflow-y-auto p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {classmateCities.map((clsCity) => {
-                const isMe = clsCity.studentId === cityData.studentId;
-                const clsMetrics = calculateCityMetrics(clsCity.buildings);
-                const hasLiked = likedCities.has(clsCity.id);
+              {classmateCities
+                .filter((clsCity) => {
+                  if (galleryFilter === 'real' && clsCity.isDemo) return false;
+                  if (galleryFilter === 'demo' && !clsCity.isDemo) return false;
+                  return true;
+                })
+                .map((clsCity) => {
+                  const isMe = clsCity.studentId === cityData.studentId;
+                  const clsMetrics = calculateCityMetrics(clsCity.buildings);
+                  const hasLiked = likedCities.has(clsCity.id);
 
-                return (
-                  <div
-                    key={clsCity.id}
-                    className="p-4 rounded-2xl bg-slate-950 border border-indigo-500/30 flex flex-col justify-between space-y-3 shadow-lg hover:border-cyan-400 transition"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <h4 className="text-sm font-bold text-white truncate">
-                          {clsCity.cityName}
-                        </h4>
-                        <span className="text-xs text-amber-300 font-mono font-black shrink-0">
-                          ⭐ {clsMetrics.cityScore}
-                        </span>
+                  return (
+                    <div
+                      key={clsCity.id}
+                      className={`p-4 rounded-2xl bg-slate-950 border flex flex-col justify-between space-y-3 shadow-lg transition ${
+                        clsCity.isDemo
+                          ? 'border-amber-500/40 hover:border-amber-400 bg-gradient-to-b from-amber-950/20 to-slate-950'
+                          : 'border-indigo-500/30 hover:border-cyan-400'
+                      }`}
+                    >
+                      <div>
+                        {/* Demo Model Badge */}
+                        {clsCity.isDemo && (
+                          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-black border border-amber-400/50 mb-2 self-start">
+                            <span>🏷️</span>
+                            <span>{lang === 'en' ? 'DEMO PREVIEW MODEL' : 'MODEL DEMO TEMPORAR'}</span>
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <h4 className="text-sm font-bold text-white truncate">
+                            {clsCity.cityName}
+                          </h4>
+                          <span className="text-xs text-amber-300 font-mono font-black shrink-0">
+                            ⭐ {clsMetrics.cityScore}
+                          </span>
+                        </div>
+
+                        <div className="text-xs text-cyan-300 font-bold mb-2">
+                          {lang === 'en' ? 'Mayor' : 'Primar'}: {clsCity.studentName} {isMe && (lang === 'en' ? '(You)' : '(Tu)')}
+                        </div>
+
+                        {/* Mini stats preview */}
+                        <div className="grid grid-cols-3 gap-1.5 text-[10px] text-center font-mono py-2 bg-slate-900/80 rounded-xl border border-slate-800">
+                          <div>
+                            <span className="text-slate-400 block">{lang === 'en' ? 'Compute' : 'Calcul'}</span>
+                            <span className="text-cyan-300 font-bold">{clsMetrics.computingPowerTFlops}T</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block">{lang === 'en' ? 'Eco' : 'Eco'}</span>
+                            <span className="text-emerald-300 font-bold">{clsMetrics.ecoScore}%</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block">{lang === 'en' ? 'Pop.' : 'Populație'}</span>
+                            <span className="text-indigo-300 font-bold">{clsMetrics.totalPopulation}</span>
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="text-xs text-cyan-300 font-bold mb-2">
-                        Primar: {clsCity.studentName} {isMe && '(Tu)'}
-                      </div>
-
-                      {/* Mini stats preview */}
-                      <div className="grid grid-cols-3 gap-1.5 text-[10px] text-center font-mono py-2 bg-slate-900/80 rounded-xl border border-slate-800">
-                        <div>
-                          <span className="text-slate-400 block">Calcul</span>
-                          <span className="text-cyan-300 font-bold">{clsMetrics.computingPowerTFlops}T</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 block">Eco</span>
-                          <span className="text-emerald-300 font-bold">{clsMetrics.ecoScore}%</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 block">Populație</span>
-                          <span className="text-indigo-300 font-bold">{clsMetrics.totalPopulation}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Visit & Like Actions */}
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-800">
-                      <button
-                        onClick={() => {
-                          setViewingClassmateCity(clsCity);
-                          setActiveModal('none');
-                        }}
-                        className="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>Vizitează Orașul</span>
-                      </button>
-
-                      {!isMe && (
+                      {/* Visit & Like Actions */}
+                      <div className="flex items-center gap-2 pt-2 border-t border-slate-800">
                         <button
-                          onClick={() => handleLikeClassmateCity(clsCity.id)}
-                          className={`p-2 rounded-xl border transition flex items-center gap-1 text-xs font-bold cursor-pointer ${
-                            hasLiked
-                              ? 'bg-rose-500 text-white border-rose-400'
-                              : 'bg-slate-900 border-slate-700 text-rose-400 hover:bg-rose-950/60'
-                          }`}
-                          title="Oferă o stea"
+                          onClick={() => {
+                            setViewingClassmateCity(clsCity);
+                            setActiveModal('none');
+                          }}
+                          className="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                         >
-                          <Heart className="w-4 h-4 fill-current" />
-                          <span>{clsCity.likesCount}</span>
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>{lang === 'en' ? 'Visit City' : 'Vizitează Orașul'}</span>
                         </button>
-                      )}
+
+                        {!isMe && (
+                          <button
+                            onClick={() => handleLikeClassmateCity(clsCity.id)}
+                            className={`p-2 rounded-xl border transition flex items-center gap-1 text-xs font-bold cursor-pointer ${
+                              hasLiked
+                                ? 'bg-rose-500 text-white border-rose-400'
+                                : 'bg-slate-900 border-slate-700 text-rose-400 hover:bg-rose-950/60'
+                            }`}
+                            title={lang === 'en' ? 'Give an appreciation star' : 'Oferă o stea'}
+                          >
+                            <Heart className="w-4 h-4 fill-current" />
+                            <span>{clsCity.likesCount}</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         </div>

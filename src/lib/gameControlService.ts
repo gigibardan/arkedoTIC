@@ -265,6 +265,17 @@ export const ALL_GAMES: GameDefinition[] = [
     descEn: 'Real-time 1v1 head-to-head student showdown.',
     gradeBadge: 'Multiplayer',
   },
+  {
+    id: 'cybercity',
+    titleRo: 'Metropola Cyber City (Simulator Urban TIC)',
+    titleEn: 'Cyber City Builder (ICT Urban Sim)',
+    category: 'Simulare & Economie',
+    categoryEn: 'Simulation & Strategy',
+    iconName: 'Building2',
+    descRo: 'Proiectează o metropolă tehnologică sustenabilă: centre cloud, energie solară, rețea 5G/6G, securitate cibernetică și gestionare de incidente.',
+    descEn: 'Design a sustainable tech metropolis: cloud data centers, solar arrays, 5G/6G towers, cyber defense grid, and incident response.',
+    gradeBadge: 'Simulare TIC',
+  },
 ];
 
 const LOCAL_STORAGE_SETTINGS_KEY = 'arkedo_game_settings';

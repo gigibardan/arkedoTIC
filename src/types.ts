@@ -151,6 +151,8 @@ export interface CityMetrics {
   totalPopulation: number;
   cityScore: number;
   cityRankTitle: string;
+  cityRankTitleRo?: string;
+  cityRankTitleEn?: string;
 }
 
 export interface CityIncident {
@@ -179,6 +181,9 @@ export interface CyberCityData {
   resolvedIncidentsCount: number;
   createdAt: string;
   updatedAt: string;
+  isDemo?: boolean;
+  demoLabelRo?: string;
+  demoLabelEn?: string;
 }
 
 export interface StudentProfile {

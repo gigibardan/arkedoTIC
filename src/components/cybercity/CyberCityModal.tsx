@@ -1,6 +1,7 @@
 import React from 'react';
 import { CyberCityView } from './CyberCityView';
 import { X } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface CyberCityModalProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ export const CyberCityModal: React.FC<CyberCityModalProps> = ({
   studentName,
   studentAvatar,
 }) => {
+  const { lang } = useLanguage();
   if (!isOpen) return null;
 
   return (
@@ -23,7 +25,7 @@ export const CyberCityModal: React.FC<CyberCityModalProps> = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2 rounded-2xl bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 shadow-lg cursor-pointer transition active:scale-95"
-          title="Închide orașul"
+          title={lang === 'en' ? 'Close metropolis' : 'Închide orașul'}
         >
           <X className="w-5 h-5" />
         </button>
