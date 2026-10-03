@@ -158,7 +158,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
   return (
     <aside 
       aria-label="Mascota Arky"
-      className={`fixed bottom-4 right-3 sm:right-6 z-50 flex flex-col items-end pointer-events-none transition-all duration-300 ${className}`}
+      className={`fixed bottom-20 sm:bottom-6 right-3 sm:right-6 z-30 flex flex-col items-end pointer-events-none transition-all duration-300 ${className}`}
     >
       {/* Minimized Pill Toggle */}
       {isMinimized ? (
@@ -172,11 +172,11 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
           <ChevronUp className="w-4 h-4 text-slate-400" />
         </button>
       ) : (
-        <div className="flex flex-col items-end max-w-[320px] sm:max-w-[380px] w-full">
+        <div className="flex flex-col items-end max-w-[290px] sm:max-w-[380px] w-full">
           {/* Animated Speech Bubble */}
           {isBubbleOpen && displayMessage && (
             <div 
-              className={`pointer-events-auto relative mb-2 w-full p-4 rounded-3xl bg-slate-900/95 backdrop-blur-md border-2 ${currentTheme.border} ${currentTheme.glow} shadow-2xl transition-all duration-300 transform origin-bottom-right animate-scale-up`}
+              className={`pointer-events-auto relative mb-2 w-full p-3 sm:p-4 rounded-3xl bg-slate-900/95 backdrop-blur-md border-2 ${currentTheme.border} ${currentTheme.glow} shadow-2xl transition-all duration-300 transform origin-bottom-right animate-scale-up max-h-[60vh] overflow-y-auto`}
             >
               {/* Header Bar in Bubble */}
               <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-800/80">

@@ -87,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'arcade') return lang === 'en' ? 'Arcade Lab' : 'Laborator Arcade';
     if (currentView === 'duel') return lang === 'en' ? 'Duel Arena 1v1' : 'Arena Duel 1v1';
     if (currentView === 'city') return lang === 'en' ? 'Cyber City' : 'Orașul Cyber';
-    return t.catalogTitle;
+    return lang === 'en' ? 'ICT' : 'TIC';
   };
 
   const currentAvatar = (() => {

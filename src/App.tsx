@@ -913,7 +913,7 @@ function GameContent() {
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
       {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7)) && (
-        <div className="sticky bottom-3 z-30 flex justify-center px-4 pointer-events-none">
+        <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
             {studentName && (
@@ -944,7 +944,7 @@ function GameContent() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-4 px-4 bg-slate-950/60 mt-auto">
+      <footer className="border-t border-slate-800/80 py-4 px-4 pb-24 md:pb-5 bg-slate-950/60 mt-auto">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <p className="text-slate-400 text-center sm:text-left leading-relaxed">
             {t.footerText}

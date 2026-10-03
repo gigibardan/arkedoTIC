@@ -492,8 +492,22 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             {/* Main Title & Subtitle */}
             <div>
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white font-heading tracking-tight leading-tight">
-                {t.catalogTitle}
+              <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white font-heading tracking-tight leading-snug sm:leading-tight">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-emerald-300 to-cyan-200">
+                  {lang === 'en' ? 'ICT' : 'TIC'}
+                </span>
+                <span className="text-slate-400 font-light mx-2">–</span>
+                {lang === 'en' ? (
+                  <span className="text-white">
+                    <span>Information & Communications</span>{' '}
+                    <span className="whitespace-nowrap sm:whitespace-normal">Technology</span>
+                  </span>
+                ) : (
+                  <span className="text-white">
+                    <span>Tehnologia Informației</span>{' '}
+                    <span className="whitespace-nowrap sm:whitespace-normal">și a Comunicațiilor</span>
+                  </span>
+                )}
               </h1>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed mt-2.5 max-w-2xl">
                 {lang === 'en'
