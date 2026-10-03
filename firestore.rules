@@ -21,5 +21,9 @@ service cloud.firestore {
     match /solicitari_jocuri/{document} {
       allow read, write: if true;
     }
+    // Recorduri all-time pentru mini-jocuri (optimizat 1 singur document)
+    match /recorduri_jocuri/{document} {
+      allow read, write: if true;
+    }
   }
 }

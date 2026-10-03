@@ -66,6 +66,15 @@
         "status": { "type": "string" }
       },
       "required": ["gameId", "studentName", "timestamp"]
+    },
+    "RecorduriJocuri": {
+      "title": "RecorduriJocuri",
+      "description": "Tabel dedicat de recorduri all-time optimizat pentru 1 singura citire rapida",
+      "type": "object",
+      "properties": {
+        "records": { "type": "object" },
+        "lastUpdated": { "type": "string" }
+      }
     }
   },
   "firestore": {
@@ -88,6 +97,10 @@
     "/solicitari_jocuri/{requestId}": {
       "schema": "SolicitareDeschidereJoc",
       "description": "Cereri de deschidere jocuri de la elevi"
+    },
+    "/recorduri_jocuri/{documentId}": {
+      "schema": "RecorduriJocuri",
+      "description": "Recorduri all-time globale salvate intr-un singur document"
     }
   }
 }

@@ -16,7 +16,15 @@ import { DEFAULT_EQUIPPED, DEFAULT_INVENTORY, SHOP_ITEMS } from './shopCatalog';
 export type { StudentProfile, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems };
 
 const STUDENTS_COLLECTION = 'elevi';
+const RECORDS_COLLECTION = 'recorduri_jocuri';
+const GLOBAL_RECORDS_DOC = 'arcade_records';
 const LOCAL_PROFILE_KEY = 'arkedo_active_student_profile';
+const LOCAL_RECORDS_CACHE_KEY = 'arkedo_cached_game_records';
+
+// In-memory cache for game records to minimize Firestore reads
+let inMemoryRecordsCache: Record<string, GameRecord> | null = null;
+let lastRecordsFetchTimestamp = 0;
+const RECORDS_CACHE_TTL_MS = 60000; // 60 seconds TTL
 
 // Standard 11 games IDs
 export const ARCADE_GAME_KEYS = [
@@ -786,12 +794,42 @@ export async function updateStudentArcadeScore(
 
   if (isCloudConnected && db && current.id) {
     try {
+      // 1. Update student document
       await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
         [`arcadeScores.${gameKey}`]: newScore,
         'arcadeScores.totalArcade': updatedArcade.totalArcade,
         totalXP,
         lastActiveAt: new Date().toISOString()
       });
+
+      // 2. Check if this is a new all-time high score in the global records document
+      const currentGlobalRecord = inMemoryRecordsCache?.[gameKey]?.bestScore || 0;
+      if (newScore > currentGlobalRecord) {
+        const newRecord: GameRecord = {
+          gameKey,
+          bestScore: newScore,
+          holderName: current.username,
+          holderAvatar: current.avatar || '🎓'
+        };
+
+        if (inMemoryRecordsCache) {
+          inMemoryRecordsCache[gameKey] = newRecord;
+          if (gameKey === 'game2048') inMemoryRecordsCache['2048'] = newRecord;
+          if (gameKey === 'detective') inMemoryRecordsCache['cyber'] = newRecord;
+          if (gameKey === 'rgb_pixel') inMemoryRecordsCache['rgb_pixels'] = newRecord;
+        }
+
+        try {
+          localStorage.setItem(LOCAL_RECORDS_CACHE_KEY, JSON.stringify(inMemoryRecordsCache || { [gameKey]: newRecord }));
+        } catch {}
+
+        await setDoc(doc(db, RECORDS_COLLECTION, GLOBAL_RECORDS_DOC), {
+          records: {
+            [gameKey]: newRecord
+          },
+          lastUpdated: new Date().toISOString()
+        }, { merge: true });
+      }
     } catch (err) {
       console.warn('Eroare update score Firestore:', err);
     }
@@ -1083,6 +1121,142 @@ export async function getAllStudents(): Promise<StudentProfile[]> {
   // Fallback to active local profile if offline
   const local = getActiveStudent();
   return local ? [local] : [];
+}
+
+export interface GameRecord {
+  gameKey: string;
+  bestScore: number;
+  holderName: string;
+  holderAvatar: string;
+}
+
+// GET ALL-TIME RECORDS FOR EACH GAME (OPTIMIZED: 1 SINGLE DOCUMENT READ & MULTI-TIER CACHE)
+export async function getGameAllTimeRecords(): Promise<Record<string, GameRecord>> {
+  const now = Date.now();
+
+  // 1. Return in-memory cache if valid (< 60 seconds)
+  if (inMemoryRecordsCache && (now - lastRecordsFetchTimestamp < RECORDS_CACHE_TTL_MS)) {
+    return inMemoryRecordsCache;
+  }
+
+  // 2. Load from localStorage cache initially
+  let records: Record<string, GameRecord> = {};
+  try {
+    const saved = localStorage.getItem(LOCAL_RECORDS_CACHE_KEY);
+    if (saved) {
+      records = JSON.parse(saved);
+    }
+  } catch {}
+
+  const current = getActiveStudent();
+  const LOCAL_MAP: Record<string, string> = {
+    typing: 'arkedo_highscore_typing',
+    mouse: 'arkedo_highscore_mouse',
+    mouse_v2: 'arkedo_highscore_mouse_v2',
+    game2048: 'arkedo_highscore_2048',
+    '2048': 'arkedo_highscore_2048',
+    pcbuilder: 'arkedo_highscore_pcbuilder',
+    detective: 'arkedo_highscore_cyber',
+    cyber: 'arkedo_highscore_cyber',
+    files: 'arkedo_highscore_files',
+    binary_factory: 'arkedo_highscore_binary_factory',
+    maze: 'arkedo_highscore_maze',
+    firewall: 'arkedo_highscore_firewall',
+    rgb_pixel: 'arkedo_highscore_rgb_pixels',
+    rgb_pixels: 'arkedo_highscore_rgb_pixels',
+    byte_slider: 'arkedo_highscore_byte_slider',
+    file_drop: 'arkedo_highscore_file_drop',
+    virus_sweeper: 'arkedo_highscore_virus_sweeper',
+    cyber_dino: 'arkedo_highscore_cyber_dino',
+    redstone_lab: 'arkedo_highscore_redstone_lab',
+    voxel_architect: 'arkedo_highscore_voxel_architect',
+    roblox_clicker: 'arkedo_highscore_roblox_clicker',
+    page_craft: 'arkedo_highscore_page_craft',
+  };
+
+  // 3. If connected to Cloud Firestore, fetch ONLY 1 dedicated document
+  if (isCloudConnected && db) {
+    try {
+      const recordsDocRef = doc(db, RECORDS_COLLECTION, GLOBAL_RECORDS_DOC);
+      const recordsSnap = await getDoc(recordsDocRef);
+
+      if (recordsSnap.exists()) {
+        const cloudData = recordsSnap.data();
+        const cloudRecords = (cloudData?.records || {}) as Record<string, GameRecord>;
+        records = { ...records, ...cloudRecords };
+      } else {
+        // One-time bootstrap: scan students and seed the dedicated document
+        const all = await getAllStudents();
+        for (const k of ARCADE_GAME_KEYS) {
+          let topScore = 0;
+          let topHolder = '';
+          let topAvatar = '🎓';
+
+          for (const s of all) {
+            const sScores = s.arcadeScores as unknown as Record<string, number> | undefined;
+            const score = sScores?.[k] || (k === 'game2048' ? sScores?.['2048'] : 0) || (k === 'detective' ? sScores?.['cyber'] : 0) || (k === 'rgb_pixel' ? sScores?.['rgb_pixels'] : 0) || 0;
+            if (score > topScore) {
+              topScore = score;
+              topHolder = s.username;
+              topAvatar = s.avatar || '🎓';
+            }
+          }
+
+          if (topScore > 0) {
+            records[k] = {
+              gameKey: k,
+              bestScore: topScore,
+              holderName: topHolder,
+              holderAvatar: topAvatar
+            };
+          }
+        }
+
+        // Save initialized records into the dedicated Firestore document
+        await setDoc(recordsDocRef, {
+          records,
+          lastUpdated: new Date().toISOString()
+        });
+      }
+    } catch (err) {
+      console.warn('⚠️ Eroare la încărcarea tabelului de recorduri:', err);
+    }
+  }
+
+  // 4. Check local storage fallback for active player
+  for (const k of ARCADE_GAME_KEYS) {
+    try {
+      const localKey = LOCAL_MAP[k];
+      if (localKey) {
+        const localScore = Number(localStorage.getItem(localKey) || '0');
+        const currentRecord = records[k]?.bestScore || 0;
+        if (localScore > currentRecord) {
+          records[k] = {
+            gameKey: k,
+            bestScore: localScore,
+            holderName: current?.username || localStorage.getItem('arkedo_student_name') || 'Campion Local',
+            holderAvatar: current?.avatar || localStorage.getItem('arkedo_student_avatar') || '🎓'
+          };
+        }
+      }
+    } catch {}
+
+    // Key aliases
+    if (records[k]) {
+      if (k === 'game2048') records['2048'] = records[k];
+      if (k === 'detective') records['cyber'] = records[k];
+      if (k === 'rgb_pixel') records['rgb_pixels'] = records[k];
+    }
+  }
+
+  // 5. Update in-memory & localStorage caches
+  inMemoryRecordsCache = records;
+  lastRecordsFetchTimestamp = now;
+  try {
+    localStorage.setItem(LOCAL_RECORDS_CACHE_KEY, JSON.stringify(records));
+  } catch {}
+
+  return records;
 }
 
 // DELETE STUDENT ACCOUNT (TEACHER ACTION)

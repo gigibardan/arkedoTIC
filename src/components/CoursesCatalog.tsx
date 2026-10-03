@@ -55,6 +55,8 @@ import {
   updateStudentAvatar,
   StudentProfile,
 } from '../lib/studentAuthService';
+import { getCyberCityData } from '../lib/cyberCityService';
+import { calculateCityMetrics } from '../lib/cyberCityCatalog';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -704,6 +706,60 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                       </div>
                     </div>
                   )}
+
+                  {/* Player Stats & Economy Pill Grid (Total Points & Cyber City Funds) */}
+                  {(() => {
+                    const activeCity = activeAccount?.cyberCity || getCyberCityData();
+                    const cityMetrics = calculateCityMetrics(activeCity);
+                    const totalPoints = activeAccount?.totalXP || (activeAccount ? (activeAccount.arcadeScores?.totalArcade || 0) + (activeAccount.lessonsProgress?.totalLessonScore || 0) : 0);
+                    const cityCoins = activeAccount?.byteCoins ?? 0;
+
+                    return (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 pt-3.5 border-t border-slate-800/80">
+                        {/* Stat 1: Total Points (XP) */}
+                        <div className="p-3 rounded-2xl bg-gradient-to-b from-amber-950/40 to-slate-950/90 border border-amber-500/30 flex items-center gap-2.5 shadow-inner">
+                          <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold shrink-0 shadow-sm text-base">
+                            ⭐
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-[10px] text-amber-300/90 font-mono uppercase font-bold tracking-wider">{lang === 'en' ? 'Total Points' : 'Puncte Elev'}</div>
+                            <div className="text-sm sm:text-base font-black text-amber-300 font-heading truncate">
+                              {totalPoints.toLocaleString()} XP
+                            </div>
+                            <div className="text-[9px] text-slate-400 font-mono">{lang === 'en' ? 'Lessons & Arcade' : 'Lecții + Jocuri'}</div>
+                          </div>
+                        </div>
+
+                        {/* Stat 2: Cyber City Funds (Bani de Oraș) */}
+                        <div className="p-3 rounded-2xl bg-gradient-to-b from-purple-950/40 to-slate-950/90 border border-purple-500/30 flex items-center gap-2.5 shadow-inner">
+                          <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 font-bold shrink-0 shadow-sm text-base">
+                            🪙
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-[10px] text-purple-300/90 font-mono uppercase font-bold tracking-wider">{lang === 'en' ? 'City Funds' : 'Bani de Oraș'}</div>
+                            <div className="text-sm sm:text-base font-black text-purple-200 font-heading truncate">
+                              {cityCoins.toLocaleString()} <span className="text-[10px] font-normal text-purple-300">Coins</span>
+                            </div>
+                            <div className="text-[9px] text-slate-400 font-mono">{lang === 'en' ? 'CyberCity Wallet' : 'Portofel CyberCity'}</div>
+                          </div>
+                        </div>
+
+                        {/* Stat 3: Cyber City Status & Rank */}
+                        <div className="p-3 rounded-2xl bg-gradient-to-b from-cyan-950/40 to-slate-950/90 border border-cyan-500/30 flex items-center gap-2.5 col-span-2 sm:col-span-1 shadow-inner">
+                          <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 font-bold shrink-0 shadow-sm text-base">
+                            🏙️
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-[10px] text-cyan-300/90 font-mono uppercase font-bold tracking-wider">{lang === 'en' ? 'Cyber City' : 'Metropolă TIC'}</div>
+                            <div className="text-sm sm:text-base font-black text-cyan-200 font-heading truncate">
+                              {cityMetrics.cityScore.toLocaleString()} <span className="text-[10px] font-normal text-cyan-300">pts</span>
+                            </div>
+                            <div className="text-[9px] text-cyan-400/80 font-mono truncate">⚡ {lang === 'en' ? (cityMetrics.cityRankTitleEn || cityMetrics.cityRankTitle) : (cityMetrics.cityRankTitleRo || cityMetrics.cityRankTitle)}</div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {/* Quick Avatar Selector Drawer if open */}
                   {isSelectingAvatar && (

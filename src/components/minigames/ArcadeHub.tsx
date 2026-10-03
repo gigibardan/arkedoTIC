@@ -28,6 +28,7 @@ import {
   DEFAULT_GAME_SETTINGS,
   ALL_GAMES,
 } from '../../lib/gameControlService';
+import { getGameAllTimeRecords, GameRecord, getActiveStudent } from '../../lib/studentAuthService';
 import {
   Gamepad2,
   Keyboard,
@@ -39,6 +40,8 @@ import {
   Bot,
   ShieldCheck,
   Trophy,
+  Crown,
+  Star,
   Sparkles,
   ArrowRight,
   ArrowLeft,
@@ -70,12 +73,19 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   const [activeGame, setActiveGame] = useState<ActiveGame>('hub');
   const [gameSettings, setGameSettings] = useState<GameSettings>(DEFAULT_GAME_SETTINGS);
   const [lockedModalInfo, setLockedModalInfo] = useState<{ id: string; title: string } | null>(null);
+  const [allTimeRecords, setAllTimeRecords] = useState<Record<string, GameRecord>>({});
 
   useEffect(() => {
     const unsub = subscribeGameSettings((settings) => {
       setGameSettings(settings);
     });
     return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    getGameAllTimeRecords().then((rec) => {
+      if (rec) setAllTimeRecords(rec);
+    });
   }, []);
 
   const handleTryLaunchGame = (gameId: ActiveGame | 'duel', titleRo: string, titleEn: string) => {
@@ -465,6 +475,54 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     );
   };
 
+  const renderScoreBadges = (gameKey: string, localScore: number, unit = 'pts') => {
+    const record =
+      allTimeRecords[gameKey] ||
+      allTimeRecords[gameKey.replace('game', '')] ||
+      allTimeRecords['game' + gameKey];
+
+    const activeStudent = getActiveStudent();
+    const sScores = activeStudent?.arcadeScores as unknown as Record<string, number> | undefined;
+    const studentCloudScore = sScores
+      ? sScores[gameKey] ||
+        (gameKey === 'game2048' ? sScores['2048'] : 0) ||
+        (gameKey === 'detective' ? sScores['cyber'] : 0) ||
+        (gameKey === 'rgb_pixel' ? sScores['rgb_pixels'] : 0) || 0
+      : 0;
+    const effectivePB = Math.max(localScore, studentCloudScore);
+
+    return (
+      <div className="flex flex-col items-end gap-1 shrink-0">
+        {/* Personal Best */}
+        <div
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300 shadow-sm"
+          title={lang === 'en' ? 'Your Personal Best Score' : 'Recordul tău personal pe acest joc'}
+        >
+          <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <span className="text-[10px] text-slate-400 font-bold uppercase">{lang === 'en' ? 'PB:' : 'Tu:'}</span>
+          <span className="font-bold text-white">{effectivePB.toLocaleString()} {unit}</span>
+        </div>
+
+        {/* System High Score Record & Record Holder */}
+        <div
+          className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-950/50 border border-amber-500/40 text-[10px] font-mono text-amber-300 shadow-sm max-w-[155px] sm:max-w-[200px]"
+          title={lang === 'en' ? 'All-Time System High Score Record' : 'Recordul absolut din sistem pe acest joc'}
+        >
+          <Crown className="w-3 h-3 text-amber-400 shrink-0 animate-pulse" />
+          {record && record.bestScore > 0 ? (
+            <span className="truncate">
+              <span className="font-bold text-amber-200">{record.bestScore.toLocaleString()}</span>
+              <span className="text-amber-400/70 mx-1">•</span>
+              <span className="text-amber-100 font-medium">{record.holderAvatar || '👤'} {record.holderName}</span>
+            </span>
+          ) : (
+            <span className="text-amber-300/80 italic">{lang === 'en' ? 'Record: Be 1st!' : 'Record: Fii primul!'}</span>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col gap-8 pb-10">
       {/* Header Banner */}
@@ -541,16 +599,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'typing') ? 'border-slate-700/80 hover:border-cyan-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shrink-0">
                 <Keyboard className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('typing')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{typingHighScore} WPM</span>
-                </div>
+                {renderScoreBadges('typing', typingHighScore, 'WPM')}
               </div>
             </div>
 
@@ -587,16 +642,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'mouse') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shrink-0">
                 <MousePointer className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('mouse')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{mouseHighScore} pts</span>
-                </div>
+                {renderScoreBadges('mouse', mouseHighScore, 'pts')}
               </div>
             </div>
 
@@ -637,16 +689,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-3 mt-1">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/10">
+            <div className="flex items-start justify-between gap-2 mb-3 mt-1">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/10 shrink-0">
                 <Zap className="w-6 h-6 text-cyan-400" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('mouse_v2')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{mouseV2HighScore} pts</span>
-                </div>
+                {renderScoreBadges('mouse_v2', mouseV2HighScore, 'pts')}
               </div>
             </div>
 
@@ -684,16 +733,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, '2048') ? 'border-slate-700/80 hover:border-amber-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform shrink-0">
                 <Binary className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('2048')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{game2048HighScore} pts</span>
-                </div>
+                {renderScoreBadges('game2048', game2048HighScore, 'pts')}
               </div>
             </div>
 
@@ -735,16 +781,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'pcbuilder') ? 'border-slate-700/80 hover:border-blue-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform shrink-0">
                 <Cpu className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('pcbuilder')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{pcBuilderHighScore} pts</span>
-                </div>
+                {renderScoreBadges('pcbuilder', pcBuilderHighScore, 'pts')}
               </div>
             </div>
 
@@ -781,16 +824,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'cyber_dino') ? 'border-emerald-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
                 🦖
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('cyber_dino')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{cyberDinoHighScore} pts</span>
-                </div>
+                {renderScoreBadges('cyber_dino', cyberDinoHighScore, 'pts')}
               </div>
             </div>
 
@@ -832,16 +872,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'detective') ? 'border-slate-700/80 hover:border-rose-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shrink-0">
                 <ShieldAlert className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('detective')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{cyberHighScore} pts</span>
-                </div>
+                {renderScoreBadges('detective', cyberHighScore, 'pts')}
               </div>
             </div>
 
@@ -878,16 +915,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'files') ? 'border-slate-700/80 hover:border-blue-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform shrink-0">
                 <Folder className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('files')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-blue-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{filesHighScore} pts</span>
-                </div>
+                {renderScoreBadges('files', filesHighScore, 'pts')}
               </div>
             </div>
 
@@ -924,16 +958,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'redstone_lab') ? 'border-rose-500/60 hover:border-rose-400' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-600/20">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-600/20 shrink-0">
                 ⛏️
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('redstone_lab')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{redstoneLabHighScore} XP</span>
-                </div>
+                {renderScoreBadges('redstone_lab', redstoneLabHighScore, 'XP')}
               </div>
             </div>
 
@@ -977,16 +1008,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'binary_factory') ? 'border-slate-700/80 hover:border-amber-400/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform shrink-0">
                 <Zap className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('binary_factory')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-amber-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{binaryFactoryHighScore} pts</span>
-                </div>
+                {renderScoreBadges('binary_factory', binaryFactoryHighScore, 'pts')}
               </div>
             </div>
 
@@ -1023,16 +1051,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'maze') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shrink-0">
                 <Bot className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('maze')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{mazeHighScore} pts</span>
-                </div>
+                {renderScoreBadges('maze', mazeHighScore, 'pts')}
               </div>
             </div>
 
@@ -1069,16 +1094,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'firewall') ? 'border-slate-700/80 hover:border-red-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-red-500/15 border-2 border-red-500/30 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-red-500/15 border-2 border-red-500/30 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform shrink-0">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('firewall')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-red-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{firewallHighScore} pts</span>
-                </div>
+                {renderScoreBadges('firewall', firewallHighScore, 'pts')}
               </div>
             </div>
 
@@ -1115,16 +1137,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'rgb_pixel') ? 'border-slate-700/80 hover:border-purple-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border-2 border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border-2 border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform shrink-0">
                 <Palette className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('rgb_pixel')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-purple-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{rgbHighScore} pts</span>
-                </div>
+                {renderScoreBadges('rgb_pixel', rgbHighScore, 'pts')}
               </div>
             </div>
 
@@ -1161,16 +1180,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'byte_slider') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shrink-0">
                 <Layers className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('byte_slider')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{byteSliderHighScore} pts</span>
-                </div>
+                {renderScoreBadges('byte_slider', byteSliderHighScore, 'pts')}
               </div>
             </div>
 
@@ -1209,16 +1225,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         }`}>
           <div className="absolute -top-12 -right-12 w-28 h-28 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-sky-500/15 border-2 border-sky-500/30 flex items-center justify-center text-sky-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-sky-500/15 border-2 border-sky-500/30 flex items-center justify-center text-sky-400 group-hover:scale-110 transition-transform shrink-0">
                 <FileDown className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('file_drop')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-sky-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{fileDropHighScore} pts</span>
-                </div>
+                {renderScoreBadges('file_drop', fileDropHighScore, 'pts')}
               </div>
             </div>
 
@@ -1258,16 +1271,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         }`}>
           <div className="absolute -top-12 -right-12 w-28 h-28 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shrink-0">
                 <Biohazard className="w-6 h-6 animate-pulse" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('virus_sweeper')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{virusSweeperHighScore} pts</span>
-                </div>
+                {renderScoreBadges('virus_sweeper', virusSweeperHighScore, 'pts')}
               </div>
             </div>
 
@@ -1307,16 +1317,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         }`}>
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20 shrink-0">
                 🟥
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('roblox_clicker')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-rose-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{robloxClickerHighScore} Blox</span>
-                </div>
+                {renderScoreBadges('roblox_clicker', robloxClickerHighScore, 'Blox')}
               </div>
             </div>
 
@@ -1361,16 +1368,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         }`}>
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20 shrink-0">
                 🧱
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('voxel_architect')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-950 border border-stone-800 text-[11px] font-mono text-emerald-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{voxelArchitectHighScore} XP</span>
-                </div>
+                {renderScoreBadges('voxel_architect', voxelArchitectHighScore, 'XP')}
               </div>
             </div>
 
@@ -1414,16 +1418,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'page_craft') ? 'border-slate-700/80 hover:border-indigo-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 border-2 border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 border-2 border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform shrink-0">
                 <LayoutTemplate className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('page_craft')}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-indigo-300">
-                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{pageCraftHighScore} XP</span>
-                </div>
+                {renderScoreBadges('page_craft', pageCraftHighScore, 'XP')}
               </div>
             </div>
 
