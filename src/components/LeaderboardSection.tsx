@@ -142,14 +142,14 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
           </div>
 
           {/* Action Tabs & Refresh */}
-          <div className="flex items-center gap-2 self-start md:self-auto flex-wrap">
-            <div className="bg-slate-950 p-1 rounded-2xl border border-slate-800 flex items-center gap-1">
+          <div className="flex items-center gap-2 self-start md:self-auto flex-wrap w-full md:w-auto">
+            <div className="bg-slate-950 p-1 rounded-2xl border border-slate-800 grid grid-cols-2 sm:flex sm:items-center gap-1 w-full sm:w-auto">
               <button
                 onClick={() => {
                   setActiveTab('total');
                   sounds.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeTab === 'total'
                     ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -164,7 +164,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('arcade');
                   sounds.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeTab === 'arcade'
                     ? 'bg-indigo-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -179,7 +179,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('lessons');
                   sounds.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeTab === 'lessons'
                     ? 'bg-teal-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -194,7 +194,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('duels');
                   sounds.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeTab === 'duels'
                     ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -210,7 +210,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 sounds.playClick();
                 fetchLeaderboard();
               }}
-              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer"
+              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer self-center"
               title={lang === 'en' ? 'Refresh Leaderboard' : 'Actualizează Clasamentul'}
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-teal-400' : ''}`} />

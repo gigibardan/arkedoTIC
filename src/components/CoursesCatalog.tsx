@@ -1301,7 +1301,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  💻⚡
+                  💻
                 </div>
                 <div className="flex items-center gap-2">
                   {activeMissionId === 'hardware' && activeMissionLevel > 1 && (
@@ -1524,7 +1524,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl border border-indigo-500/30">
-                  🔍✉️
+                  🔍
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-wider">
