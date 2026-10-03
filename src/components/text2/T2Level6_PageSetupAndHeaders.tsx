@@ -268,7 +268,7 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
           >
             {/* Header Region */}
             <div className={`border-b pb-1 flex items-center justify-between text-[10px] font-mono text-slate-500 ${hasHeader ? 'opacity-100 border-slate-300' : 'opacity-25 border-dashed border-slate-300'}`}>
-              <span>{hasHeader ? 'ȘCOALA GIMNAZIALĂ ARKEDO • PROIECT TIC' : '[ Antet necompletat ]'}</span>
+              <span>{hasHeader ? 'ȘCOALA GIMNAZIALĂ ARKYEDU • PROIECT TIC' : '[ Antet necompletat ]'}</span>
               <span>{hasHeader ? 'CLASA A V-A' : ''}</span>
             </div>
 

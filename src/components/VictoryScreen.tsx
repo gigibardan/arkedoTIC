@@ -514,13 +514,13 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           position="inline" 
           customMessage={
             lang === 'en'
-              ? 'Mission Accomplished! You are officially an ARKEDO Master of Files & Tech! Print your diploma below! 🏆🎓'
-              : 'Misiune îndeplinită cu succes! Ești oficial un Maestru ARKEDO în Fișiere și Tehnologie! Printează diploma de mai jos! 🏆🎓'
+              ? 'Mission Accomplished! You are officially an ArkyEdu Master of Files & Tech! Print your diploma below! 🏆🎓'
+              : 'Misiune îndeplinită cu succes! Ești oficial un Maestru ArkyEdu în Fișiere și Tehnologie! Printează diploma de mai jos! 🏆🎓'
           }
         />
       </div>
 
-      {/* Printable ARKEDO Diploma */}
+      {/* Printable ArkyEdu Diploma */}
       <div
         id="diploma-to-print"
         className="bg-gradient-to-tr from-amber-50 via-white to-amber-100 text-slate-900 rounded-3xl p-6 sm:p-10 max-w-2xl mx-auto border-4 border-amber-400 shadow-2xl text-center relative mb-8"
@@ -572,7 +572,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
             </div>
             <div className="text-right">
               <div className="font-extrabold text-slate-900">{t.vDiplomaDate}</div>
-              <div className="text-[11px] text-slate-600">ARKEDO TIC</div>
+              <div className="text-[11px] text-slate-600">ArkyEdu TIC</div>
             </div>
           </div>
         </div>

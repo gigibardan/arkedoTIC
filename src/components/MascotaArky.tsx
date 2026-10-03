@@ -136,7 +136,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
         >
           <img
             src={mascotImgSrc}
-            alt="Mascota Arky ARKEDO"
+            alt="Mascota Arky ArkyEdu"
             referrerPolicy="no-referrer"
             className="w-24 h-32 sm:w-28 sm:h-36 object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105"
           />
@@ -227,7 +227,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                 <span className={`px-2 py-0.5 rounded-full border ${currentTheme.badgeBg} ${currentTheme.badgeText} font-bold`}>
                   {lang === 'en' ? currentTheme.labelEn : currentTheme.labelRo}
                 </span>
-                <span className="text-slate-500">ARKEDO Kids Coding</span>
+                <span className="text-slate-500">ArkyEdu • TIC & Coding</span>
               </div>
 
               {/* Bubble Pointer Arrow towards Mascot */}

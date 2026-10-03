@@ -720,7 +720,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-black text-white tracking-tight font-heading">
-                {lang === 'en' ? 'ARKEDO DUEL ARENA 1v1' : 'ARENA DUELURILOR TIC 1v1'}
+                {lang === 'en' ? 'ARKYEDU DUEL ARENA 1v1' : 'ARENA DUELURILOR TIC 1v1'}
               </h2>
               <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-black border border-rose-500/40 uppercase tracking-wider flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />

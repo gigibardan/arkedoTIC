@@ -258,7 +258,7 @@ export const T2Level5_ShapesAndTextBoxes: React.FC<T2Level5_ShapesAndTextBoxesPr
             {/* Header Title */}
             <div className="text-center mb-3">
               <div className="text-[10px] font-mono uppercase tracking-widest text-slate-300 font-bold">
-                ȘCOALA GIMNAZIALĂ „ARKEDO”
+                ȘCOALA GIMNAZIALĂ „ARKYEDU”
               </div>
               <div className="text-xs font-black text-white uppercase tracking-wider">
                 ECUSON LABORATOR INFORMATICĂ

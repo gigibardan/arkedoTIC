@@ -268,7 +268,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
               <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[11px] font-mono font-bold border border-cyan-400/40 flex items-center gap-1">
                 <span>🏙️</span>
-                <span>ARKEDO CYBER CITY BUILDER</span>
+                <span>ARKYEDU CYBER CITY BUILDER</span>
               </span>
 
               {viewingClassmateCity && (

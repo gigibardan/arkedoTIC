@@ -52,8 +52,8 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
                 <h2 className="text-lg sm:text-xl font-black text-white font-heading tracking-tight">
                   {lang === 'en' ? 'Mayor\'s Digital Handbook & Guide' : 'Manualul Oficial al Primarului Cibernetic'}
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-400/40">
-                  ARKEDO CITY v2.0
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-400/40">
+                  ARKYEDU CITY v2.0
                 </span>
               </div>
               <p className="text-xs text-slate-300">
@@ -142,7 +142,7 @@ export const CyberCityGuideModal: React.FC<CyberCityGuideModalProps> = ({
             <div className="space-y-6">
               <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-500/40">
                 <h3 className="text-base font-black text-cyan-300 flex items-center gap-2 mb-2">
-                  <span>{lang === 'en' ? '🌆 Welcome to ARKEDO Cyber City!' : '🌆 Bine ai venit în ARKEDO Cyber City!'}</span>
+                  <span>{lang === 'en' ? '🌆 Welcome to ArkyEdu Cyber City!' : '🌆 Bine ai venit în ArkyEdu Cyber City!'}</span>
                 </h3>
                 <p className="text-sm text-slate-300 leading-relaxed">
                   {lang === 'en' ? (

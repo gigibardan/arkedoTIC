@@ -3,8 +3,8 @@ import { Language } from '../types';
 export const translations = {
   ro: {
     // Header & Navigation
-    schoolName: 'Școala ARKEDO',
-    subjectGrade: 'Informatică • Clasele V - VI',
+    schoolName: 'ArkyEdu',
+    subjectGrade: 'Informatică • Clasele V - VIII',
     appTitle: 'Misiunea Arborele Secret',
     pts: 'pct',
     soundOn: 'Oprește sunetul',
@@ -16,12 +16,12 @@ export const translations = {
     changeName: 'Schimbă numele',
     timerLabel: 'Timp test',
     timerBottomPrefix: '⏱️ Cronometru test:',
-    footerText: 'Informația este bazată pe manualul de clasa a V-a și a VI-a de TIC.',
+    footerText: 'Informația este bazată pe manualele de TIC pentru clasele V - VIII.',
     poweredBy: 'Powered by Gigi',
 
     // Courses Catalog / Home Page
     catalogTitle: 'TIC – Tehnologia Informației și a Comunicațiilor',
-    catalogBadge: 'Școala ARKEDO • Clasele V - VI',
+    catalogBadge: 'ArkyEdu • Clasele V - VIII',
     catalogSub: 'Platformă educațională digitală cu module practice și teste interactive aliniate la programa școlară.',
     studentPromptTitle: '👋 Bun venit în laboratorul digital TIC!',
     studentPromptSub: 'Introdu numele tău de elev înainte de a începe lecția. Îți va apărea sus în antet și va fi tipărit direct pe diploma ta de merit!',
@@ -75,7 +75,7 @@ export const translations = {
     ],
 
     // Teacher Tip component
-    teacherTipBadge: 'Sfatul Profesorului ARKEDO',
+    teacherTipBadge: 'Sfatul Profesorului ArkyEdu',
     bookPagePrefix: 'Manual pag.',
     rememberLabel: 'Reține pentru test:',
 
@@ -101,7 +101,7 @@ export const translations = {
     l1WinEOptionCorrect: '✓ Corect: Win + E',
     l1WinEOptionDefault: 'Apasă tasta ⊞ Windows + E',
     l1ChecklistTitle: 'Lista de verificare a misiunii (Bifează pașii realizați):',
-    l1ChecklistSub: 'Poți bifa pașii direct în simulatorul de mai sus sau pe calculatorul tău fizic din laboratorul ARKEDO:',
+    l1ChecklistSub: 'Poți bifa pașii direct în simulatorul de mai sus sau pe calculatorul tău fizic din laboratorul ArkyLab:',
     l1Chk1: 'Pasul 1: Am creat pe Desktop folderul principal "Baza Secreta" (Click dreapta ➔ Nou / New ➔ Folder).',
     l1Chk2: 'Pasul 2: Am deschis folderul (dublu-click) și am creat subfolderul "Jocuri" 🎮 pentru salvările jocurilor.',
     l1Chk3: 'Pasul 3: În același folder am creat și al doilea subfolder "Teme" 📚 pentru proiectele școlare.',
@@ -209,7 +209,7 @@ export const translations = {
     l5TipTitle: 'Coșul de Reciclare este plasa ta de siguranță! (Manual pag. 29)',
     l5TipText: '• Când ștergi un fișier cu tasta Delete sau prin comanda Șterge, el NU este distrus imediat! Se mută în Recycle Bin (Coșul de reciclare). • Dacă dai click dreapta pe el în coș și alegi Restaurează (Restore), fișierul revine EXACT în locul de unde fusese șters! • Doar dacă alegi Golește coșul de reciclare (Empty Recycle Bin), fișierele sunt șterse definitiv de pe disc!',
     l5TipExtra: 'Nu goli niciodată Coșul de Reciclare la școală fără să întrebi mai întâi profesorul de informatică!',
-    l5DesktopTitle: '🖥️ Desktop-ul Laboratorului ARKEDO',
+    l5DesktopTitle: '🖥️ Desktop-ul Laboratorului ArkyLab',
     l5StateSafe: '✓ Date salvate!',
     l5StateWarn: '⚠️ Fișier șters temporar',
     l5BinName: 'Coș de Reciclare',
@@ -234,7 +234,7 @@ export const translations = {
 
     // Victory Screen
     vBadgeMission: 'MISIUNE ÎNDEPLINITĂ CU SUCCES!',
-    vTitle: 'Felicitări din partea Școlii ARKEDO!',
+    vTitle: 'Felicitări din partea ArkyEdu!',
     vDesc: 'Ai deblocat toate secretele sistemului de operare, ai salvat Arborele Secret și ai demonstrat abilități remarcabile de viitor informatician!',
     vScoreLabel: 'Scor Test (Manual pag. 30)',
     vScorePerfect: '100 / 100 Puncte (Nota 10)',
@@ -258,7 +258,7 @@ export const translations = {
     vDiplomaDept: 'Departamentul de Informatică și Tehnologie Digitală',
     vDiplomaAwardTo: 'Această diplomă se conferă elevului / elevei:',
     vDiplomaDefaultName: 'Elevul/Eleva Curajoasă',
-    vDiplomaText: 'Pentru finalizarea impecabilă a provocării "ARKEDO: Misiunea Arborele Secret 🌳" și stăpânirea deplină a managementului fișierelor și folderelor (crearea structurilor ierarhice, comenzi rapide Ctrl+X/Ctrl+V, copiere cu Ctrl+C, redenumire rapidă F2 și restaurare din Coșul de Reciclare).',
+    vDiplomaText: 'Pentru finalizarea impecabilă a provocării "ArkyEdu: Misiunea Arborele Secret 🌳" și stăpânirea deplină a managementului fișierelor și folderelor (crearea structurilor ierarhice, comenzi rapide Ctrl+X/Ctrl+V, copiere cu Ctrl+C, redenumire rapidă F2 și restaurare din Coșul de Reciclare).',
     vDiplomaTeacher: 'Profesor de Informatică',
     vDiplomaDate: '17.09.2026',
     vDurationLabel: 'Timp total de lucru:',
@@ -406,8 +406,8 @@ export const translations = {
 
   en: {
     // Header & Navigation
-    schoolName: 'ARKEDO School',
-    subjectGrade: 'Computer Science • Grades 5 - 6',
+    schoolName: 'ArkyEdu',
+    subjectGrade: 'Computer Science • Grades 5 - 8',
     appTitle: 'Secret Tree Mission',
     pts: 'pts',
     soundOn: 'Mute sound',
@@ -419,12 +419,12 @@ export const translations = {
     changeName: 'Change name',
     timerLabel: 'Test Time',
     timerBottomPrefix: '⏱️ Test stopwatch:',
-    footerText: 'Information is based on the 5th and 6th grade ICT textbooks.',
+    footerText: 'Information is based on the ICT textbooks for grades 5 - 8.',
     poweredBy: 'Powered by Gigi',
 
     // Courses Catalog / Home Page
     catalogTitle: 'ICT – Information & Communications Technology',
-    catalogBadge: 'ARKEDO School • Grades 5 - 6',
+    catalogBadge: 'ArkyEdu • Grades 5 - 8',
     catalogSub: 'Interactive digital platform with practical challenges aligned with the computer science curriculum.',
     studentPromptTitle: '👋 Welcome to the ICT digital lab!',
     studentPromptSub: 'Enter your student name before starting the lesson. It will greet you in the header and be printed on your official Certificate of Merit!',
@@ -478,7 +478,7 @@ export const translations = {
     ],
 
     // Teacher Tip component
-    teacherTipBadge: 'ARKEDO Teacher Tip',
+    teacherTipBadge: 'ArkyEdu Teacher Tip',
     bookPagePrefix: 'Textbook p.',
     rememberLabel: 'Remember for the test:',
 
@@ -504,7 +504,7 @@ export const translations = {
     l1WinEOptionCorrect: '✓ Correct: Win + E',
     l1WinEOptionDefault: 'Press key ⊞ Windows + E',
     l1ChecklistTitle: 'Mission Checklist (Check off completed steps):',
-    l1ChecklistSub: 'You can check these directly in the simulator above or on your physical computer in the ARKEDO lab:',
+    l1ChecklistSub: 'You can check these directly in the simulator above or on your physical computer in the ArkyLab lab:',
     l1Chk1: 'Step 1: Created the root folder "Secret Base" on Desktop (Right click ➔ New ➔ Folder).',
     l1Chk2: 'Step 2: Opened the folder (double-click) and created subfolder "Games" 🎮 for saved games.',
     l1Chk3: 'Step 3: In the same folder, created the second subfolder "Homework" 📚 for school projects.',
@@ -612,7 +612,7 @@ export const translations = {
     l5TipTitle: 'The Recycle Bin is your safety net! (Textbook p. 29)',
     l5TipText: '• When you delete a file with the Delete key or Delete command, it is NOT destroyed immediately! It moves to the Recycle Bin. • If you right-click it in the bin and choose Restore, the file returns EXACTLY to its previous location! • Only if you choose Empty Recycle Bin are files permanently removed from disk!',
     l5TipExtra: 'Never empty the Recycle Bin at school without asking your computer science teacher first!',
-    l5DesktopTitle: '🖥️ ARKEDO Lab Desktop',
+    l5DesktopTitle: '🖥️ ArkyLab Desktop',
     l5StateSafe: '✓ Data saved!',
     l5StateWarn: '⚠️ File deleted temporarily',
     l5BinName: 'Recycle Bin',
@@ -637,7 +637,7 @@ export const translations = {
 
     // Victory Screen
     vBadgeMission: 'MISSION ACCOMPLISHED!',
-    vTitle: 'Congratulations from ARKEDO School!',
+    vTitle: 'Congratulations from ArkyEdu!',
     vDesc: 'You unlocked all operating system secrets, saved the Secret Tree, and demonstrated remarkable skills as a future computer scientist!',
     vScoreLabel: 'Test Score (Textbook p. 30)',
     vScorePerfect: '100 / 100 Points (Grade 10 / A+)',
@@ -661,7 +661,7 @@ export const translations = {
     vDiplomaDept: 'Department of Computer Science & Digital Technology',
     vDiplomaAwardTo: 'This certificate is proudly awarded to student:',
     vDiplomaDefaultName: 'Brave Student',
-    vDiplomaText: 'For the flawless completion of the "ARKEDO: Secret Tree Mission 🌳" challenge and full mastery of file and folder management (creating folder hierarchies, keyboard shortcuts Ctrl+X/Ctrl+V, copying with Ctrl+C, quick renaming with F2, and restoring from the Recycle Bin).',
+    vDiplomaText: 'For the flawless completion of the "ArkyEdu: Secret Tree Mission 🌳" challenge and full mastery of file and folder management (creating folder hierarchies, keyboard shortcuts Ctrl+X/Ctrl+V, copying with Ctrl+C, quick renaming with F2, and restoring from the Recycle Bin).',
     vDiplomaTeacher: 'Computer Science Teacher',
     vDiplomaDate: '17.09.2026',
     vDurationLabel: 'Total completion time:',

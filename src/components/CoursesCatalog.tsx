@@ -1190,7 +1190,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   onOpenDuel?.();
                 }}
                 className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-rose-950/50 hover:bg-rose-900/70 border border-rose-500/50 hover:border-rose-300 text-xs text-rose-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-rose-500/20"
-                title={lang === 'en' ? 'ARKEDO Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
+                title={lang === 'en' ? 'ArkyEdu Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-rose-500/25 border border-rose-400/40 flex items-center justify-center text-rose-300 shrink-0 group-hover:scale-110 transition-transform">
@@ -1826,7 +1826,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'ARKEDO Duel Arena — 1v1 Classmate Battles' : 'Arena Duelurilor TIC — Concurs 1v1 între Colegi pe Calculatoare Diferite'}
+                {lang === 'en' ? 'ArkyEdu Duel Arena — 1v1 Classmate Battles' : 'Arena Duelurilor TIC — Concurs 1v1 între Colegi pe Calculatoare Diferite'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'
@@ -1868,7 +1868,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'ARKEDO Cyber City — Build & Expand Your Tech Metropolis' : 'ARKEDO Cyber City — Construiește și Modernizează Metropola Ta Digitală'}
+                {lang === 'en' ? 'ArkyEdu Cyber City — Build & Expand Your Tech Metropolis' : 'ArkyEdu Cyber City — Construiește și Modernizează Metropola Ta Digitală'}
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
                 {lang === 'en'

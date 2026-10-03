@@ -194,7 +194,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/40">
-                  ARKEDO CYBER LAB
+                  ARKYEDU CYBER LAB
                 </span>
                 <span className={`text-xs font-mono font-bold ${collectorRank.color}`}>
                   {collectorRank.icon} {lang === 'en' ? collectorRank.nameEn : collectorRank.nameRo}

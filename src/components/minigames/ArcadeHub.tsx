@@ -487,7 +487,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
                 <Gamepad2 className="w-4 h-4 text-indigo-400" />
-                <span>{lang === 'en' ? 'ARKEDO Arcade Lab' : 'Laboratorul Arcade TIC'}</span>
+                <span>{lang === 'en' ? 'ArkyLab Arcade' : 'Laboratorul Arcade ArkyLab'}</span>
               </div>
 
               {onOpenDuel && (
