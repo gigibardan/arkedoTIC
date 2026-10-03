@@ -708,7 +708,7 @@ function GameContent() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex flex-col gap-5 sm:gap-6">
+      <main className="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 flex flex-col gap-5 sm:gap-6">
         {view === 'teacher' ? (
           <TeacherPortal onBackToHome={() => navigateToView('catalog')} />
         ) : view === 'arcade' ? (
