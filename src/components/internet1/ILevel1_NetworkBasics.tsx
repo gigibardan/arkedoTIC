@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from './QuestionHint';
 import { AnswerExplanation } from './AnswerExplanation';
 import { PageNavigationFooter } from './PageNavigationFooter';
+import { PedagogicalQuizCard } from '../common/PedagogicalQuizCard';
 import { sounds } from '../../utils/audio';
 
 interface ILevel1Props {
@@ -240,141 +241,95 @@ export const ILevel1_NetworkBasics: React.FC<ILevel1Props> = ({ onCompletePage }
           <span>✍️ {lang === 'en' ? 'Practice Questions (Manual Ex. 1, p. 33)' : 'Exerciții Practice (Manual Ex. 1, pag. 33)'}</span>
         </h3>
 
-        {/* Task 1: Calculatoarele într-o rețea sunt... */}
-        <div className="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 shadow-md">
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-bold text-white mb-2">
-              <span className="text-teal-400 font-mono mr-1.5">A.</span>
-              {lang === 'en' ? 'In a computer network, computers are:' : 'Într-o rețea, calculatoarele sunt:'}
-            </p>
-            {q1Answer && (
-              <span>
-                {isQ1Correct ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                ) : (
-                  <XCircle className="w-5 h-5 text-rose-400" />
-                )}
-              </span>
-            )}
-          </div>
+        {/* Task 1: Calculatoarele într-o rețea sunt... (Standard Pedagogical Card with 5s reflection buffer) */}
+        <PedagogicalQuizCard
+          questionRo="Într-o rețea de calculatoare, dispozitivele sunt:"
+          questionEn="In a computer network, devices are:"
+          questionNumber={1}
+          totalQuestions={2}
+          bookPage="32-33"
+          categoryLabelRo="Noțiuni Rețea"
+          categoryLabelEn="Network Basics"
+          hintRo="Gândește-te la definiția din caseta «Rețineți» de la pagina 32: calculatoarele trebuie să fie legate între ele pentru a partaja resurse (interconectate)."
+          hintEn="Check the definition: computers must be linked together to share data and printers (interconnected)."
+          cooldownSeconds={5}
+          maxXP={30}
+          initialSelectedId={q1Answer || undefined}
+          onAnswerSelected={(isCorrect, optId) => {
+            setQ1Answer(optId);
+          }}
+          options={[
+            {
+              id: 'side_by_side',
+              labelRo: 'a) Așezate unul lângă celălalt',
+              labelEn: 'a) Placed next to each other',
+              isCorrect: false,
+              explanationRo: 'Calculatoarele pot sta aproape unul de altul pe aceeași masă, dar fără conexiune fizică prin cablu sau semnal wireless ele nu pot comunica sau partaja resurse.',
+              explanationEn: 'Computers placed side-by-side without a network cable or wireless connection cannot communicate or exchange data.',
+            },
+            {
+              id: 'interconnected',
+              labelRo: 'b) Interconectate',
+              labelEn: 'b) Interconnected',
+              isCorrect: true,
+              explanationRo: 'Excelent! Calculatoarele sunt interconectate prin medii de transmisie (cablu/Wi-Fi) și protocoale pentru a partaja fișiere, conexiunea la internet și imprimante.',
+              explanationEn: 'Excellent! Computers are interconnected via physical cables or wireless links to share files, internet, and printers.',
+            },
+            {
+              id: 'disconnected',
+              labelRo: 'c) Deconectate',
+              labelEn: 'c) Disconnected',
+              isCorrect: false,
+              explanationRo: 'Calculatoarele deconectate funcționează complet izolat și nu au cum să formeze o rețea de calculatoare.',
+              explanationEn: 'Disconnected computers operate in complete isolation and cannot form a computer network.',
+            },
+          ]}
+        />
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-2">
-            {[
-              { id: 'side_by_side', labelRo: 'a) Așezate unul lângă celălalt', labelEn: 'a) Placed next to each other' },
-              { id: 'interconnected', labelRo: 'b) Interconectate', labelEn: 'b) Interconnected' },
-              { id: 'disconnected', labelRo: 'c) Deconectate', labelEn: 'c) Disconnected' },
-            ].map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => handleSelectQ1(opt.id)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-semibold transition cursor-pointer ${
-                  q1Answer === opt.id
-                    ? opt.id === 'interconnected'
-                      ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
-                      : 'bg-rose-500/20 border-rose-500 text-rose-300'
-                    : 'bg-slate-900/60 hover:bg-slate-900 border-slate-700 text-slate-300'
-                }`}
-              >
-                {lang === 'en' ? opt.labelEn : opt.labelRo}
-              </button>
-            ))}
-          </div>
-
-          {q1Answer && (
-            <AnswerExplanation
-              isCorrect={isQ1Correct}
-              explanationRo={
-                isQ1Correct
-                  ? 'Excelent! Calculatoarele sunt interconectate prin cabluri sau unde radio pentru a partaja date și imprimante.'
-                  : q1Answer === 'side_by_side'
-                  ? 'Calculatoarele pot sta aproape unul de altul, dar fără conexiune fizică sau wireless nu pot comunica.'
-                  : 'Calculatoarele deconectate funcționează complet izolat și nu formează o rețea.'
-              }
-              explanationEn={
-                isQ1Correct
-                  ? 'Excellent! Computers must be interconnected via cables or wireless signals to share data and printers.'
-                  : q1Answer === 'side_by_side'
-                  ? 'Computers placed side-by-side without a data connection cannot communicate or share resources.'
-                  : 'Disconnected computers work completely in isolation and do not form a network.'
-              }
-            />
-          )}
-
-          <QuestionHint
-            id="i1-q1-interconnected"
-            hintRo="Gândește-te la definiția din caseta «Rețineți» de la pagina 32: calculatoarele trebuie să fie legate între ele pentru a partaja resurse (interconectate)."
-            hintEn="Check the definition: computers must be linked together to share data and printers (interconnected)."
-          />
-        </div>
-
-        {/* Task 2: Internetul este o rețea la nivel global de... */}
-        <div className="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 shadow-md">
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-bold text-white mb-2">
-              <span className="text-teal-400 font-mono mr-1.5">B.</span>
-              {lang === 'en' ? 'The Internet is a global network of:' : 'Internetul este o rețea la nivel global de:'}
-            </p>
-            {q2Answer && (
-              <span>
-                {isQ2Correct ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                ) : (
-                  <XCircle className="w-5 h-5 text-rose-400" />
-                )}
-              </span>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-2">
-            {[
-              { id: 'global_computers', labelRo: 'a) Calculatoare', labelEn: 'a) Computers' },
-              { id: 'telephony', labelRo: 'b) Telefonie fixă simplă', labelEn: 'b) Simple Telephony' },
-              { id: 'radio_tv', labelRo: 'c) Doar canale radio și TV', labelEn: 'c) Radio & TV channels only' },
-            ].map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => handleSelectQ2(opt.id)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-semibold transition cursor-pointer ${
-                  q2Answer === opt.id
-                    ? opt.id === 'global_computers'
-                      ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
-                      : 'bg-rose-500/20 border-rose-500 text-rose-300'
-                    : 'bg-slate-900/60 hover:bg-slate-900 border-slate-700 text-slate-300'
-                }`}
-              >
-                {lang === 'en' ? opt.labelEn : opt.labelRo}
-              </button>
-            ))}
-          </div>
-
-          {q2Answer && (
-            <AnswerExplanation
-              isCorrect={isQ2Correct}
-              explanationRo={
-                isQ2Correct
-                  ? 'Exact! Internetul este o „rețea a rețelelor” internațională ce interconectează miliarde de calculatoare și dispozitive.'
-                  : q2Answer === 'telephony'
-                  ? 'Telefonia fixă clasică transmitea doar sunet analogic, pe când Internetul transferă date digitale de orice tip.'
-                  : 'Canalele TV/radio emit unidirecțional către public, în timp ce Internetul permite comunicare bidirecțională și interactivă.'
-              }
-              explanationEn={
-                isQ2Correct
-                  ? 'Exactly! The Internet is an international "network of networks" interconnecting billions of computers and smart devices.'
-                  : q2Answer === 'telephony'
-                  ? 'Classic fixed telephony only transferred analog voice, whereas the Internet sends versatile digital data packets.'
-                  : 'TV/Radio channels broadcast unidirectionally, while the Internet enables two-way interactive data exchange.'
-              }
-            />
-          )}
-
-          <QuestionHint
-            id="i1-q2-globalnet"
-            hintRo="Internetul leagă miliarde de computere, telefoane inteligente și servere din întreaga lume într-o rețea globală de calculatoare."
-            hintEn="The Internet connects billions of computing devices and servers into a worldwide network."
-          />
-        </div>
+        {/* Task 2: Internetul este o rețea la nivel global de... (Standard Pedagogical Card with 5s reflection buffer) */}
+        <PedagogicalQuizCard
+          questionRo="Internetul este o rețea internațională (la nivel global) de:"
+          questionEn="The Internet is an international (global) network of:"
+          questionNumber={2}
+          totalQuestions={2}
+          bookPage="33"
+          categoryLabelRo="Definiție Internet"
+          categoryLabelEn="Internet Definition"
+          hintRo="Internetul leagă miliarde de calculatoare, telefoane inteligente și servere din întreaga lume într-o rețea uriașă comună."
+          hintEn="The Internet connects billions of computing devices and servers into a single worldwide network."
+          cooldownSeconds={5}
+          maxXP={30}
+          initialSelectedId={q2Answer || undefined}
+          onAnswerSelected={(isCorrect, optId) => {
+            setQ2Answer(optId);
+          }}
+          options={[
+            {
+              id: 'global_computers',
+              labelRo: 'a) Calculatoare și dispozitive digitale',
+              labelEn: 'a) Computers and digital devices',
+              isCorrect: true,
+              explanationRo: 'Exact! Internetul este o „rețea a rețelelor” internațională ce interconectează miliarde de calculatoare, servere și dispozitive inteligente.',
+              explanationEn: 'Exactly! The Internet is an international "network of networks" interconnecting billions of computers and smart devices.',
+            },
+            {
+              id: 'telephony',
+              labelRo: 'b) Telefonie fixă analogică simplă',
+              labelEn: 'b) Simple analog fixed telephony',
+              isCorrect: false,
+              explanationRo: 'Telefonia fixă clasică transmitea doar impulsuri vocale analogice, pe când Internetul transportă pachete de date digitale complexe (texte, clipuri, jocuri).',
+              explanationEn: 'Classic analog telephony only transferred voice signals, whereas the Internet routes complex digital data packets.',
+            },
+            {
+              id: 'radio_tv',
+              labelRo: 'c) Doar canale de emisie Radio și TV',
+              labelEn: 'c) Radio & TV broadcast channels only',
+              isCorrect: false,
+              explanationRo: 'Canalele TV/Radio emit într-un singur sens (unidirecțional), în timp ce Internetul permite comunicare bidirecțională și interactivitate în timp real.',
+              explanationEn: 'Radio/TV broadcasts unidirectionally to an audience, while the Internet enables full two-way interactive communication.',
+            },
+          ]}
+        />
 
         {/* Task 3: Asociere Noțiuni & Istorie */}
         <div className="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 shadow-md">

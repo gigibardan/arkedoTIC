@@ -3,7 +3,7 @@ import { HelpCircle, ChevronDown, ChevronUp, Lightbulb } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useHints } from '../../context/HintContext';
 
-interface QuestionHintProps {
+export interface QuestionHintProps {
   id?: string;
   hintRo: string;
   hintEn: string;
