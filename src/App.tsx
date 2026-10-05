@@ -37,6 +37,12 @@ import { Module4AFlow } from './components/text1/Module4AFlow';
 // Text Mission 4B (Unitatea 4 - Manual pag. 68-80)
 import { Module4BFlow } from './components/text2/Module4BFlow';
 
+// Algo Mission 5A (Unitatea 5 - Manual pag. 54-61)
+import { Module5AFlow } from './components/algo1/Module5AFlow';
+
+// Algo Mission 5B (Unitatea 5 - Manual pag. 62-71)
+import { Module5BFlow } from './components/algo2/Module5BFlow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
@@ -66,10 +72,10 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2') return saved;
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2') return saved;
     } catch {
       // Ignore
     }
@@ -250,6 +256,64 @@ function GameContent() {
     return 0;
   });
 
+  // Algo 1 (Mission 5A) progress
+  const [algo1Level, setAlgo1Level] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_algo1_level');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [algo1Score, setAlgo1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_algo1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [algo1ElapsedSeconds, setAlgo1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_algo1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Algo 2 (Mission 5B) progress
+  const [algo2Level, setAlgo2Level] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_algo2_level');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [algo2Score, setAlgo2Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_algo2_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [algo2ElapsedSeconds, setAlgo2ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_algo2_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -314,12 +378,18 @@ function GameContent() {
       localStorage.setItem('arkedo_text1_score', String(text1Score));
       localStorage.setItem('arkedo_text2_level', String(text2Level));
       localStorage.setItem('arkedo_text2_score', String(text2Score));
+      localStorage.setItem('arkedo_algo1_level', String(algo1Level));
+      localStorage.setItem('arkedo_algo1_score', String(algo1Score));
+      localStorage.setItem('arkedo_algo2_level', String(algo2Level));
+      localStorage.setItem('arkedo_algo2_score', String(algo2Score));
       localStorage.setItem('arkedo_hw_elapsed', String(hwElapsedSeconds));
       localStorage.setItem('arkedo_files_elapsed', String(filesElapsedSeconds));
       localStorage.setItem('arkedo_internet1_elapsed', String(internet1ElapsedSeconds));
       localStorage.setItem('arkedo_internet2_elapsed', String(internet2ElapsedSeconds));
       localStorage.setItem('arkedo_text1_elapsed', String(text1ElapsedSeconds));
       localStorage.setItem('arkedo_text2_elapsed', String(text2ElapsedSeconds));
+      localStorage.setItem('arkedo_algo1_elapsed', String(algo1ElapsedSeconds));
+      localStorage.setItem('arkedo_algo2_elapsed', String(algo2ElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -330,7 +400,9 @@ function GameContent() {
     internet1Level, internet1Score, internet1ElapsedSeconds,
     internet2Level, internet2Score, internet2ElapsedSeconds,
     text1Level, text1Score, text1ElapsedSeconds,
-    text2Level, text2Score, text2ElapsedSeconds
+    text2Level, text2Score, text2ElapsedSeconds,
+    algo1Level, algo1Score, algo1ElapsedSeconds,
+    algo2Level, algo2Score, algo2ElapsedSeconds
   ]);
 
   // Current active level & score
@@ -344,6 +416,10 @@ function GameContent() {
     ? text1Level
     : activeMission === 'text2'
     ? text2Level
+    : activeMission === 'algo1'
+    ? algo1Level
+    : activeMission === 'algo2'
+    ? algo2Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -356,6 +432,10 @@ function GameContent() {
     ? text1Score
     : activeMission === 'text2'
     ? text2Score
+    : activeMission === 'algo1'
+    ? algo1Score
+    : activeMission === 'algo2'
+    ? algo2Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -368,6 +448,10 @@ function GameContent() {
     ? text1ElapsedSeconds
     : activeMission === 'text2'
     ? text2ElapsedSeconds
+    : activeMission === 'algo1'
+    ? algo1ElapsedSeconds
+    : activeMission === 'algo2'
+    ? algo2ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -383,7 +467,9 @@ function GameContent() {
       (activeMission === 'internet1' && internet1Level <= 6) ||
       (activeMission === 'internet2' && internet2Level <= 6) ||
       (activeMission === 'text1' && text1Level <= 7) ||
-      (activeMission === 'text2' && text2Level <= 7);
+      (activeMission === 'text2' && text2Level <= 7) ||
+      (activeMission === 'algo1' && algo1Level <= 7) ||
+      (activeMission === 'algo2' && algo2Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -397,6 +483,10 @@ function GameContent() {
           setText1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'text2') {
           setText2ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'algo1') {
+          setAlgo1ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'algo2') {
+          setAlgo2ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -405,7 +495,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level]);
 
   // Listen to browser navigation
   useEffect(() => {
@@ -451,7 +541,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -485,8 +575,68 @@ function GameContent() {
       setText2Level(1);
       setText2Score(0);
       setText2ElapsedSeconds(0);
+    } else if (activeMission === 'algo1') {
+      setAlgo1Level(1);
+      setAlgo1Score(0);
+      setAlgo1ElapsedSeconds(0);
+    } else if (activeMission === 'algo2') {
+      setAlgo2Level(1);
+      setAlgo2Score(0);
+      setAlgo2ElapsedSeconds(0);
     }
     arky.triggerIdle();
+  };
+
+  // Algo 1 (Mission 5A) level progression
+  const handleAlgo1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(algo1Score, earnedScore));
+    setAlgo1Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setAlgo1Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setAlgo1Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('algo1', true, 8, updatedTotal, algo1ElapsedSeconds);
+    }
+  };
+
+  const handleResetAlgo1 = () => {
+    sounds.playClick();
+    setAlgo1Score(0);
+    setAlgo1Level(1);
+    setAlgo1ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Algo 2 (Mission 5B) level progression
+  const handleAlgo2CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(algo2Score, earnedScore));
+    setAlgo2Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setAlgo2Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setAlgo2Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('algo2', true, 8, updatedTotal, algo2ElapsedSeconds);
+    }
+  };
+
+  const handleResetAlgo2 = () => {
+    sounds.playClick();
+    setAlgo2Score(0);
+    setAlgo2Level(1);
+    setAlgo2ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Text 2 (Mission 4B) level progression
@@ -747,7 +897,7 @@ function GameContent() {
             {/* Mission Evolution Progress */}
             <ProgressBar
               currentLevel={currentLevel}
-              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : 'files'}
+              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : activeMission === 'algo1' ? 'algo1' : activeMission === 'algo2' ? 'algo2' : 'files'}
             />
 
             {/* Level Views for HARDWARE */}
@@ -907,12 +1057,56 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for ALGO 1 (MISSION 5A - NOȚIUNEA DE ALGORITM & ALGORITMI SECVENȚIALI) */}
+            {activeMission === 'algo1' && (
+              <div className="flex-1">
+                {algo1Level <= 7 ? (
+                  <Module5AFlow
+                    currentLevel={algo1Level}
+                    onCompleteLevel={handleAlgo1CompleteLevel}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={algo1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={algo1ElapsedSeconds}
+                    courseId="algo1"
+                    onReset={handleResetAlgo1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for ALGO 2 (MISSION 5B - STRUCTURI DECIZIONALE, DATE & SCHEME LOGICE) */}
+            {activeMission === 'algo2' && (
+              <div className="flex-1">
+                {algo2Level <= 7 ? (
+                  <Module5BFlow
+                    currentLevel={algo2Level}
+                    onCompleteLevel={handleAlgo2CompleteLevel}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={algo2Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={algo2ElapsedSeconds}
+                    courseId="algo2"
+                    onReset={handleResetAlgo2}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}

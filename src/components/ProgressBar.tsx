@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2';
 }
 
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
@@ -13,6 +13,92 @@ const INTERNET1_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
 const INTERNET2_STAGE_PERCENTS = [16, 33, 50, 66, 83, 95, 100];
 const TEXT1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const TEXT2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const ALGO1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const ALGO2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const ALGO1_STAGES_RO = [
+  { emoji: '🧩', name: 'Ce este un Algoritm? Pași & Date (pag. 54-55)' },
+  { emoji: '📜', name: 'Cele 6 Proprietăți Fundamentale (pag. 56-57)' },
+  { emoji: '⚠️', name: 'Capcana Ambiguităților & Formulări (pag. 58)' },
+  { emoji: '➡️', name: 'Algoritmi Secvențiali Liniari (pag. 59)' },
+  { emoji: '🥛', name: 'Regula celor 3 Pahare: Interschimbare aux (pag. 60)' },
+  { emoji: '🔐', name: 'Criptare & Cifrul Substituției Numerice (pag. 60-61)' },
+  { emoji: '📐', name: 'Algoritmi Matematici: Arie & Perimetru (pag. 61)' },
+  { emoji: '🏆', name: 'Junior Algoritmist & Arhitect de Pași Certificat!' },
+];
+
+const ALGO1_STAGES_EN = [
+  { emoji: '🧩', name: 'What is an Algorithm? Steps & Data (pp. 54-55)' },
+  { emoji: '📜', name: 'The 6 Fundamental Properties (pp. 56-57)' },
+  { emoji: '⚠️', name: 'The Ambiguity Trap & Precision (p. 58)' },
+  { emoji: '➡️', name: 'Sequential Linear Algorithms (p. 59)' },
+  { emoji: '🥛', name: 'The 3 Glasses Rule: Value Swap aux (p. 60)' },
+  { emoji: '🔐', name: 'Encryption & Numeric Substitution (pp. 60-61)' },
+  { emoji: '📐', name: 'Math Algorithms: Area & Perimeter (p. 61)' },
+  { emoji: '🏆', name: 'Certified Junior Algorithmist!' },
+];
+
+const ALGO1_MILESTONES_RO = [
+  'P1: Noțiune',
+  'P2: Proprietăți',
+  'P3: Ambiguități',
+  'P4: Secvențial',
+  'P5: 3 Pahare',
+  'P6: Criptare',
+  'P7: Matematică',
+];
+
+const ALGO1_MILESTONES_EN = [
+  'P1: Concept',
+  'P2: Properties',
+  'P3: Ambiguities',
+  'P4: Sequential',
+  'P5: 3 Glasses',
+  'P6: Encryption',
+  'P7: Math',
+];
+
+const ALGO2_STAGES_RO = [
+  { emoji: '🚦', name: 'Structura Alternativă (Dacă... Atunci... Altfel) (pag. 62-63)' },
+  { emoji: '📥', name: 'Date de Intrare, Manevră & Ieșire (pag. 64-65)' },
+  { emoji: '🏷️', name: 'Tipuri de Date: Numeric, Text, Logic (pag. 66)' },
+  { emoji: '➕', name: 'Operatori Aritmetici & Relaționali (pag. 67)' },
+  { emoji: '🔀', name: 'Operatori Logici (ȘI, SAU, NU) & Tabele de Adevăr (pag. 68-69)' },
+  { emoji: '📊', name: 'Blocurile Schemelor Logice (Flowchart) (pag. 70)' },
+  { emoji: '📋', name: 'Traseul Datelor (Trace Table) & Evaluare Finală (pag. 71)' },
+  { emoji: '🏆', name: 'Maestru în Scheme Logice & Algoritmi Decizionali!' },
+];
+
+const ALGO2_STAGES_EN = [
+  { emoji: '🚦', name: 'Alternative Structure (If... Then... Else) (pp. 62-63)' },
+  { emoji: '📥', name: 'Input, Processing & Output Data (pp. 64-65)' },
+  { emoji: '🏷️', name: 'Data Types: Numeric, Text, Boolean (p. 66)' },
+  { emoji: '➕', name: 'Arithmetic & Relational Operators (p. 67)' },
+  { emoji: '🔀', name: 'Logic Operators (AND, OR, NOT) & Truth Tables (pp. 68-69)' },
+  { emoji: '📊', name: 'Flowchart Logic Blocks Studio (p. 70)' },
+  { emoji: '📋', name: 'Data Trace Table & Final Review (p. 71)' },
+  { emoji: '🏆', name: 'Certified Logic Flowchart & Algorithm Master!' },
+];
+
+const ALGO2_MILESTONES_RO = [
+  'P1: Decizie',
+  'P2: Date & Const',
+  'P3: Tipuri Date',
+  'P4: Operatori',
+  'P5: Conective',
+  'P6: Scheme Logice',
+  'P7: Traseu Date',
+];
+
+const ALGO2_MILESTONES_EN = [
+  'P1: Decision',
+  'P2: Data & Const',
+  'P3: Data Types',
+  'P4: Operators',
+  'P5: Logic Ops',
+  'P6: Flowcharts',
+  'P7: Trace Table',
+];
 
 const TEXT2_STAGES_RO = [
   { emoji: '📊', name: 'Inserarea și Structurarea Tabelelor (pag. 68-70)' },
@@ -258,6 +344,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isInternet2 = courseId === 'internet2';
   const isText1 = courseId === 'text1';
   const isText2 = courseId === 'text2';
+  const isAlgo1 = courseId === 'algo1';
+  const isAlgo2 = courseId === 'algo2';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -289,6 +377,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? TEXT2_MILESTONES_EN : TEXT2_MILESTONES_RO;
     percents = TEXT2_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isAlgo1) {
+    stages = lang === 'en' ? ALGO1_STAGES_EN : ALGO1_STAGES_RO;
+    milestones = lang === 'en' ? ALGO1_MILESTONES_EN : ALGO1_MILESTONES_RO;
+    percents = ALGO1_STAGE_PERCENTS;
+    maxLevels = 7;
+  } else if (isAlgo2) {
+    stages = lang === 'en' ? ALGO2_STAGES_EN : ALGO2_STAGES_RO;
+    milestones = lang === 'en' ? ALGO2_MILESTONES_EN : ALGO2_MILESTONES_RO;
+    percents = ALGO2_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -314,9 +412,22 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Word Processor & Typography Progress' : 'Evoluție Editor de Documente & Tehnoredactare')
                 : isText2
                 ? (lang === 'en' ? 'Visual Elements, Tables & Layout Progress' : 'Evoluție Tabele, Imagini & Paginare')
+                : isAlgo1
+                ? (lang === 'en' ? 'Algorithm Fundamentals & Sequential Logic Progress' : 'Evoluție Noțiuni de Algoritm & Algoritmi Secvențiali')
+                : isAlgo2
+                ? (lang === 'en' ? 'Decisions, Flowcharts & Logic Progress' : 'Evoluție Structuri Decizionale & Scheme Logice')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
-            <div className={`text-base sm:text-lg font-black font-heading ${isHardware ? 'text-cyan-400' : isInternet1 ? 'text-teal-400' : isInternet2 ? 'text-indigo-400' : isText1 ? 'text-blue-400' : isText2 ? 'text-emerald-400' : 'text-emerald-400'}`}>
+            <div className={`text-base sm:text-lg font-black font-heading ${
+              isHardware ? 'text-cyan-400' 
+              : isInternet1 ? 'text-teal-400' 
+              : isInternet2 ? 'text-indigo-400' 
+              : isText1 ? 'text-blue-400' 
+              : isText2 ? 'text-emerald-400' 
+              : isAlgo1 ? 'text-amber-400'
+              : isAlgo2 ? 'text-purple-400'
+              : 'text-emerald-400'
+            }`}>
               {currentStage.name}
             </div>
           </div>
@@ -342,6 +453,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-teal-500 via-emerald-400 to-cyan-400'
               : isInternet2
               ? 'bg-gradient-to-r from-indigo-500 via-purple-400 to-cyan-400'
+              : isAlgo1
+              ? 'bg-gradient-to-r from-amber-500 via-orange-400 to-yellow-300'
+              : isAlgo2
+              ? 'bg-gradient-to-r from-purple-500 via-indigo-400 to-teal-300'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -366,6 +481,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-cyan-300 font-bold'
                     : isInternet2
                     ? 'text-indigo-300 font-bold'
+                    : isAlgo1
+                    ? 'text-amber-300 font-bold'
+                    : isAlgo2
+                    ? 'text-purple-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

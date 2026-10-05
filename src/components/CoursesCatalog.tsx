@@ -72,8 +72,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -155,7 +155,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null>(null);
 
   // Student Cloud Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
@@ -398,7 +398,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -435,7 +435,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -465,6 +465,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Module 4B: Visual Elements & Tables (Textbook p. 68-80)'
         : 'Modulul 4B: Elemente Grafice, Tabele & Paginare (Manual pag. 68-80)';
+    }
+    if (id === 'algo1') {
+      return lang === 'en'
+        ? 'Module 5A: Algorithm Fundamentals & Sequential Logic (Textbook p. 54-61)'
+        : 'Modulul 5A: Noțiunea de Algoritm & Algoritmi Secvențiali (Manual pag. 54-61)';
+    }
+    if (id === 'algo2') {
+      return lang === 'en'
+        ? 'Module 5B: Decisions, Data Types & Flowcharts (Textbook p. 62-71)'
+        : 'Modulul 5B: Structuri Decizionale, Date & Scheme Logice (Manual pag. 62-71)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -1340,7 +1350,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </h2>
           </div>
           <span className="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-            {lang === 'en' ? '2 Interactive Missions Available' : '2 Misiuni Interactive Disponibile'}
+            {lang === 'en' ? '6 Interactive Missions Available' : '6 Misiuni Interactive Disponibile'}
           </span>
         </div>
 
@@ -1817,6 +1827,166 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
+            </div>
+          </div>
+
+          {/* Card 7: ACTIVE MISSION 5A - Noțiunea de Algoritm & Algoritmi Secvențiali */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'algo1'
+                ? 'border-amber-400 shadow-amber-500/20 ring-2 ring-amber-500/30'
+                : 'border-amber-500/60 hover:border-amber-400 hover:shadow-amber-500/10'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  🧩
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'algo1' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 5A • NEW' : 'MODULUL 5A • NOU'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 54–61 • Mission 5A' : 'Manual pag. 54–61 • Misiunea 5A'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-amber-300 transition-colors">
+                {lang === 'en' ? 'Algorithm Concept & Sequential Logic' : 'Noțiunea de Algoritm & Algoritmi Secvențiali'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Algorithm Definition, 6 Properties, Ambiguities, Linear Steps, 3-Glass Swap & Ciphers' : 'Definiție, 6 Proprietăți, Ambiguități, Pași Liniari, Regula celor 3 Pahare & Criptare'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Discover what an algorithm is with real-world tea & recipe routines (p. 54–55), master the 6 fundamental properties (p. 56–57), defuse the ambiguity trap (p. 58), execute sequential steps (p. 59), master the 3-glass variable swap algorithm (aux - p. 60), decode numeric substitution ciphers (p. 60–61), and solve perimeter & area math challenges!'
+                  : 'Descoperă noțiunea de algoritm prin exemple din viața cotidiană (pag. 54–55), stăpânește cele 6 proprietăți fundamentale (pag. 56–57), evită capcana ambiguităților (pag. 58), ordonează pași secvențiali (pag. 59), experimentează interschimbarea valorilor prin regula celor 3 pahare (aux - pag. 60), decodează mesaje prin substituție numerică (pag. 60–61) și rezolvă algoritmii de arie și perimetru!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-amber-400" /> {lang === 'en' ? 'Junior Algorithmist Diploma' : 'Diplomă Junior Algoritmist'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
+                  <span className="text-amber-400 font-bold">
+                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('algo1')}
+                className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'algo1' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 5A' : 'Continuă Misiunea 5A')
+                    : (lang === 'en' ? 'Start Mission 5A' : 'Începe Misiunea 5A')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 8: ACTIVE MISSION 5B - Structuri Decizionale, Date, Operatori & Scheme Logice */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'algo2'
+                ? 'border-purple-400 shadow-purple-500/20 ring-2 ring-purple-500/30'
+                : 'border-purple-500/60 hover:border-purple-400 hover:shadow-purple-500/10'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  🚦
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'algo2' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 5B • NEW' : 'MODULUL 5B • NOU'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-purple-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 62–71 • Mission 5B' : 'Manual pag. 62–71 • Misiunea 5B'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-purple-300 transition-colors">
+                {lang === 'en' ? 'Decisions, Data Types & Flowcharts' : 'Structuri Decizionale, Date & Scheme Logice'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'If-Then-Else, Constants vs Variables, Data Types, Operators, Truth Tables, Flowcharts & Trace' : 'Dacă-Atunci-Altfel, Constante vs Variabile, Tipuri de Date, Operatori, Tabele de Adevăr & Scheme'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Master alternative decision structures with traffic lights and maze robots (p. 62–63), organize input/intermediate/output data and constants (p. 64–65), identify numeric, text & boolean data types (p. 66), solve arithmetic (+, -, *, /, mod, div) & relational expressions (p. 67), evaluate logic connectives (AND, OR, NOT) with truth tables (p. 68–69), build standard flowchart block diagrams (p. 70), and trace execution tables (p. 71)!'
+                  : 'Stăpânește structura alternativă Dacă-Atunci-Altfel prin semafor și ghidarea robotului (pag. 62–63), organizează datele de intrare, manevră și ieșire (pag. 64–65), explorează tipurile de date numeric, text și logic (pag. 66), evaluează expresii aritmetice (+, -, *, /, %, div) și de comparație (pag. 67), construiește tabele de adevăr pentru conectivele logice (ȘI, SAU, NU - pag. 68–69), asamblează scheme logice standardizate (pag. 70) și execută tabele de valori (trace table - pag. 71)!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-purple-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-purple-400" /> {lang === 'en' ? 'Flowchart Master Diploma' : 'Diplomă Maestru Scheme Logice'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
+                  <span className="text-purple-400 font-bold">
+                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('algo2')}
+                className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'algo2' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 5B' : 'Continuă Misiunea 5B')
+                    : (lang === 'en' ? 'Start Mission 5B' : 'Începe Misiunea 5B')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </div>

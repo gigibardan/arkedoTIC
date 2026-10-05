@@ -290,7 +290,9 @@ export const TeacherStudentManagement: React.FC = () => {
                     s.lessonsProgress?.internet1?.completed,
                     s.lessonsProgress?.internet2?.completed,
                     s.lessonsProgress?.text1?.completed,
-                    s.lessonsProgress?.text2?.completed
+                    s.lessonsProgress?.text2?.completed,
+                    s.lessonsProgress?.algo1?.completed,
+                    s.lessonsProgress?.algo2?.completed
                   ].filter(Boolean).length;
 
                   const isSuspicious = suspiciousStudents.some((susp) => susp.id === s.id);

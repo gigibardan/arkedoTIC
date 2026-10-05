@@ -13,7 +13,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -41,6 +41,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isInternet2 = courseId === 'internet2';
   const isText1 = courseId === 'text1';
   const isText2 = courseId === 'text2';
+  const isAlgo1 = courseId === 'algo1';
+  const isAlgo2 = courseId === 'algo2';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -52,6 +54,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Text Formatting & Word Basics Mission 4A (Textbook pp. 50-67)' : 'Misiunea 4A Inițierea și Formatarea Textului (Manual pag. 50-67)')
     : isText2
     ? (lang === 'en' ? 'Visual Elements & Tables Mission 4B (Textbook pp. 68-80)' : 'Misiunea 4B Elemente Grafice & Tabele (Manual pag. 68-80)')
+    : isAlgo1
+    ? (lang === 'en' ? 'Algorithm Concept & Sequential Logic Mission 5A (Textbook pp. 54-61)' : 'Misiunea 5A Noțiunea de Algoritm & Algoritmi Secvențiali (Manual pag. 54-61)')
+    : isAlgo2
+    ? (lang === 'en' ? 'Decisions, Data Types & Flowcharts Mission 5B (Textbook pp. 62-71)' : 'Misiunea 5B Structuri Decizionale, Date & Scheme Logice (Manual pag. 62-71)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
@@ -129,7 +135,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -149,6 +155,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Word Processor & Document Master!' : 'Felicitări, Maestru în Tehnoredactare & Documente Text!')
           : isText2
           ? (lang === 'en' ? 'Congratulations, Document Designer & Page Architect!' : 'Felicitări, Designer & Arhitect de Documente Text!')
+          : isAlgo1
+          ? (lang === 'en' ? 'Congratulations, Junior Algorithmist & Logic Pioneer!' : 'Felicitări, Junior Algoritmist & Pionier al Logicii!')
+          : isAlgo2
+          ? (lang === 'en' ? 'Congratulations, Logic Flowchart & Algorithm Master!' : 'Felicitări, Maestru în Scheme Logice & Algoritmi Decizionali!')
           : t.vTitle}
       </h2>
 
@@ -173,6 +183,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered table creation and formatting, cell merging, proportional image resizing, text wrapping styles (Square, Tight, Behind Text), geometric shapes and text boxes, and full A4 page setup with headers and automatic page numbers!'
               : 'Ai parcurs cu brio Modulul 4B: inserarea și formatarea tabelelor, îmbinarea celulelor, redimensionarea imaginilor fără distorsiune de proporții, încadrarea textului (Pătrat, Strâns, În spatele textului), forme geometrice și casete de text, alături de paginarea completă A4 cu antet, subsol și numerotare automată!')
+          : isAlgo1
+          ? (lang === 'en'
+              ? 'You mastered the definition and the 6 fundamental properties of algorithms, defeated the ambiguity trap, executed sequential linear algorithms, swapped variables with the 3-glasses rule (aux), encrypted messages via numeric substitution, and solved perimeter & area math algorithms!'
+              : 'Ai finalizat cu succes Modulul 5A: stăpânești definiția și cele 6 proprietăți ale algoritmilor, eviți ambiguitățile, execuți algoritmi secvențiali, interschimbi variabile prin regula celor 3 pahare (aux), criptezi mesaje prin substituție numerică și calculezi aria și perimetrul!')
+          : isAlgo2
+          ? (lang === 'en'
+              ? 'You mastered alternative decision structures (If... Then... Else), input/intermediate/output data, numeric/text/boolean types, arithmetic & relational operators, logic connectives (AND, OR, NOT) with truth tables, flowchart block diagrams, and trace tables!'
+              : 'Ai finalizat cu brio Modulul 5B: stăpânești structura alternativă (Dacă... Atunci... Altfel), tipurile de date (numeric, text, logic), operatorii aritmetici și de comparație, conectivele logice (ȘI, SAU, NU) cu tabele de adevăr, schemele logice și tabelele de valori!')
           : t.vDesc}
       </p>
 
@@ -466,6 +484,82 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isAlgo1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧩</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Step Architect' : 'Arhitect de Pași'}</div>
+                <div className="text-[10px] text-amber-400">Definiție & Proprietăți</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Ambiguity Shield' : 'Filtru Ambiguități'}</div>
+                <div className="text-[10px] text-orange-400">Claritate & Precizie</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🥛</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Swap Master' : 'Regula celor 3 Pahare'}</div>
+                <div className="text-[10px] text-yellow-400">Interschimbare aux</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cipher Hero' : 'Maestru Criptare'}</div>
+                <div className="text-[10px] text-emerald-400">Substituție Numerică</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">📐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Math Coder' : 'Calcule Matematice'}</div>
+                <div className="text-[10px] text-teal-400">Arie & Perimetru</div>
+              </div>
+            </div>
+          </>
+        ) : isAlgo2 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🚦</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Decision Pilot' : 'Pilot Decizional'}</div>
+                <div className="text-[10px] text-purple-400">Dacă... Atunci... Altfel</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🏷️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Type Guru' : 'Tipuri de Date'}</div>
+                <div className="text-[10px] text-indigo-400">Numeric, Text & Logic</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">➕</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Operators Ace' : 'As al Operatorilor'}</div>
+                <div className="text-[10px] text-cyan-400">+, -, *, /, mod, div</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔀</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Logic Master' : 'Tabele de Adevăr'}</div>
+                <div className="text-[10px] text-emerald-400">ȘI, SAU, NU</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">📊</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Flowchart Pro' : 'Scheme & Traseu'}</div>
+                <div className="text-[10px] text-rose-400">Flowchart & Trace Table</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -530,7 +624,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -540,7 +634,21 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
-            {isHardware ? t.hwDiplomaTitle : isInternet1 ? t.internet1DiplomaTitle : isInternet2 ? t.internet2DiplomaTitle : isText1 ? t.text1DiplomaTitle : isText2 ? t.text2DiplomaTitle : t.vDiplomaTitle}
+            {isHardware 
+              ? t.hwDiplomaTitle 
+              : isInternet1 
+              ? t.internet1DiplomaTitle 
+              : isInternet2 
+              ? t.internet2DiplomaTitle 
+              : isText1 
+              ? t.text1DiplomaTitle 
+              : isText2 
+              ? t.text2DiplomaTitle 
+              : isAlgo1
+              ? (lang === 'en' ? 'Junior Algorithmist & Logic Pioneer Certificate' : 'Diplomă de Junior Algoritmist & Arhitect de Pași')
+              : isAlgo2
+              ? (lang === 'en' ? 'Algorithm Master & Logic Flowcharts Diploma' : 'Diplomă de Maestru în Scheme Logice & Algoritmi Decizionali')
+              : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
             {t.vDiplomaDept}
@@ -561,7 +669,25 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
-            {isHardware ? t.hwDiplomaText : isInternet1 ? t.internet1DiplomaText : isInternet2 ? t.internet2DiplomaText : isText1 ? t.text1DiplomaText : isText2 ? t.text2DiplomaText : t.vDiplomaText}
+            {isHardware 
+              ? t.hwDiplomaText 
+              : isInternet1 
+              ? t.internet1DiplomaText 
+              : isInternet2 
+              ? t.internet2DiplomaText 
+              : isText1 
+              ? t.text1DiplomaText 
+              : isText2 
+              ? t.text2DiplomaText 
+              : isAlgo1
+              ? (lang === 'en'
+                  ? 'For outstanding excellence in mastering the fundamental properties of algorithms, linear sequence execution, variable swapping via auxiliary glass, and numeric message encryption.'
+                  : 'Pentru excelență și măiestrie în asimilarea noțiunii de algoritm, proprietăților fundamentale, executarea algoritmilor secvențiali, interschimbarea variabilelor prin regula celor 3 pahare și criptarea mesajelor.')
+              : isAlgo2
+              ? (lang === 'en'
+                  ? 'For remarkable mastery in implementing alternative decision structures (If-Then-Else), managing algorithm data types, solving logic expressions with truth tables, constructing flowcharts, and executing data trace tables.'
+                  : 'Pentru performanțe deosebite în stăpânirea structurilor decizionale alternative (Dacă-Atunci-Altfel), tipurilor de date și constante, operatorilor logici cu tabele de adevăr, asamblării schemelor logice și verificării prin tabele de valori.')
+              : t.vDiplomaText}
           </p>
 
           {/* Signatures & Date */}
