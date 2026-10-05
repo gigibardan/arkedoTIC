@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trash2, RotateCcw, CheckCircle2, ChevronRight, HelpCircle } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { AnswerExplanation } from './common/AnswerExplanation';
 import { QuestionHint } from './common/QuestionHint';
+import { PedagogicalReflectionBanner } from './common/usePedagogicalCooldown';
 
 interface Level5Props {
   onComplete: () => void;
@@ -15,6 +16,15 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
   const [binOpen, setBinOpen] = useState<boolean>(false);
   const [hasRestored, setHasRestored] = useState<boolean>(false);
   const [quizAnswer, setQuizAnswer] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const interval = setInterval(() => {
+      setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cooldown]);
 
   const handleOpenBin = () => {
     sounds.playClick();
@@ -28,11 +38,13 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
   };
 
   const handleQuiz = (ans: string) => {
+    if (cooldown > 0) return;
     setQuizAnswer(ans);
     if (ans === 'yes_recycle_bin') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      setCooldown(5);
     }
   };
 
@@ -189,10 +201,21 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
               />
             </div>
 
+            {cooldown > 0 && (
+              <div className="mb-3">
+                <PedagogicalReflectionBanner
+                  cooldown={cooldown}
+                  customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza rolul Recycle Bin din manual pag. 29."
+                  customMessageEn="Incorrect! Please take 5 seconds to review the Recycle Bin on page 29."
+                />
+              </div>
+            )}
+
             <div className="space-y-2.5">
               <button
+                disabled={cooldown > 0}
                 onClick={() => handleQuiz('yes_recycle_bin')}
-                className={`w-full p-3 rounded-xl border text-xs text-left transition cursor-pointer ${
+                className={`w-full p-3 rounded-xl border text-xs text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   quizAnswer === 'yes_recycle_bin'
                     ? 'bg-emerald-950/80 border-emerald-500 text-emerald-200 font-bold'
                     : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
@@ -207,8 +230,9 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
               </button>
 
               <button
+                disabled={cooldown > 0}
                 onClick={() => handleQuiz('no_never')}
-                className={`w-full p-3 rounded-xl border text-xs text-left transition cursor-pointer ${
+                className={`w-full p-3 rounded-xl border text-xs text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   quizAnswer === 'no_never'
                     ? 'bg-rose-950/70 border-rose-500 text-rose-300'
                     : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
@@ -225,6 +249,7 @@ export const Level5_RecycleBin: React.FC<Level5Props> = ({ onComplete }) => {
               <div className="mt-3">
                 <AnswerExplanation
                   isCorrect={quizAnswer === 'yes_recycle_bin'}
+                  cooldown={cooldown}
                   explanationRo={
                     quizAnswer === 'yes_recycle_bin'
                       ? 'Corect! Fișierele șterse de pe hard disk ajung în Recycle Bin și pot fi recuperate oricând până la golirea coșului (Manual pag. 29).'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, BookOpen, CheckCircle2, FileCheck, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
@@ -6,6 +6,7 @@ import { sounds } from '../../utils/audio';
 import { PageNavigationFooter } from './PageNavigationFooter';
 import { AnswerExplanation } from './AnswerExplanation';
 import { QuestionHint } from './QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface TLevel4Props {
   onCompletePage: (score: number) => void;
@@ -25,7 +26,21 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
 
   // Quiz questions state
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
 
   const handleTitleAlign = (align: AlignmentType) => {
     sounds.playClick();
@@ -53,17 +68,27 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
   };
 
   const handleQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
     sounds.playClick();
     setQ1Answer(val);
-    if (val === 'justify') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'justify') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
   };
 
   const handleQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
     sounds.playClick();
     setQ2Answer(val);
-    if (val === 'center') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'center') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
   };
 
   // Evaluation
@@ -406,11 +431,22 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             <span className="text-xs font-mono text-emerald-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q1Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q1Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza alinierea Justify din manual pag. 59."
+                customMessageEn="Incorrect! Please take 5 seconds to review Justify alignment on textbook page 59."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('justify')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'justify'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -420,8 +456,9 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('size')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'size'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -431,8 +468,9 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('delete')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'delete'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -442,8 +480,9 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('color')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'color'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -461,6 +500,7 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
+              cooldown={q1Cooldown}
               explanation={
                 isQ1Correct
                   ? (lang === 'en' ? 'Spot on! Justify adjusts inter-word spacing so both page margins look crisp and elegant.' : 'Corect! Alinierea Justify distribuie spațiile dintre cuvinte astfel încât ambele laturi ale textului să fie perfect drepte.')
@@ -482,11 +522,22 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             <span className="text-xs font-mono text-emerald-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q2Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q2Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza centrarea titlurilor din manual pag. 60."
+                customMessageEn="Incorrect! Please take 5 seconds to review Centering Headings on textbook page 60."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('center')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'center'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -496,8 +547,9 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('right')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'right'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -507,8 +559,9 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('margin')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'margin'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -518,8 +571,9 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('strikethrough')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'strikethrough'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -537,6 +591,7 @@ export const TLevel4_ParagraphAlignment: React.FC<TLevel4Props> = ({ onCompleteP
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
+              cooldown={q2Cooldown}
               explanation={
                 isQ2Correct
                   ? (lang === 'en' ? 'Perfect! Titles and certificate headers are traditionally Centered (Ctrl+E) for balanced visual appeal.' : 'Exact! Titlurile și antetele de diplomă se așază în mod tradițional Centrat (Ctrl+E) pentru eleganță și simetrie vizuală.')

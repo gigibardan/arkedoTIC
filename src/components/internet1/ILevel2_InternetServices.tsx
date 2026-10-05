@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from './QuestionHint';
 import { AnswerExplanation } from './AnswerExplanation';
 import { PageNavigationFooter } from './PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface ILevel2Props {
@@ -86,6 +87,15 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
     scenario4: '', // Telnet -> 'telnet' (Control calculator la distanță)
     scenario5: '', // IRC -> 'irc' (Chat mesagerie în timp real)
   });
+  const [matchCooldown, setMatchCooldown] = useState<number>(0);
+
+  const correctTargets: Record<string, string> = {
+    scenario1: 'ftp',
+    scenario2: 'www',
+    scenario3: 'email',
+    scenario4: 'telnet',
+    scenario5: 'irc',
+  };
 
   const isM1Correct = selectedMatches.scenario1 === 'ftp';
   const isM2Correct = selectedMatches.scenario2 === 'www';
@@ -104,8 +114,26 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
   const pageScore = correctCount * 3; // 15 points total
 
   const handleMatchChange = (scenarioKey: string, val: string) => {
+    if (matchCooldown > 0) return;
+
     setSelectedMatches((prev) => ({ ...prev, [scenarioKey]: val }));
     sounds.playClick();
+
+    if (val && val !== correctTargets[scenarioKey]) {
+      sounds.playWrong();
+      setMatchCooldown(5);
+      const timer = setInterval(() => {
+        setMatchCooldown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (val && val === correctTargets[scenarioKey]) {
+      sounds.playCorrect();
+    }
   };
 
   const handleProceed = () => {
@@ -193,6 +221,15 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
 
         {/* 5 Matching rows */}
         <div className="space-y-4">
+          {matchCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={matchCooldown}
+              customMessageRo="Serviciu incorect pentru acest scenariu! Te rugăm să acorzi 5 secunde pentru a citi explicația de mai jos."
+              customMessageEn="Incorrect service for this scenario! Please take 5 seconds to review the explanation."
+              className="mb-2"
+            />
+          )}
+
           {/* Scenario 1: FTP */}
           <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -206,9 +243,10 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
               </div>
               <div className="w-full sm:w-64 shrink-0 flex items-center gap-2">
                 <select
+                  disabled={matchCooldown > 0}
                   value={selectedMatches.scenario1}
                   onChange={(e) => handleMatchChange('scenario1', e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40"
+                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="">{lang === 'en' ? '-- Choose Service --' : '-- Alege Serviciul --'}</option>
                   <option value="email">Email</option>
@@ -266,9 +304,10 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
               </div>
               <div className="w-full sm:w-64 shrink-0 flex items-center gap-2">
                 <select
+                  disabled={matchCooldown > 0}
                   value={selectedMatches.scenario2}
                   onChange={(e) => handleMatchChange('scenario2', e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40"
+                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="">{lang === 'en' ? '-- Choose Service --' : '-- Alege Serviciul --'}</option>
                   <option value="email">Email</option>
@@ -326,9 +365,10 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
               </div>
               <div className="w-full sm:w-64 shrink-0 flex items-center gap-2">
                 <select
+                  disabled={matchCooldown > 0}
                   value={selectedMatches.scenario3}
                   onChange={(e) => handleMatchChange('scenario3', e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40"
+                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="">{lang === 'en' ? '-- Choose Service --' : '-- Alege Serviciul --'}</option>
                   <option value="email">Email (Poșta Electronică)</option>
@@ -386,9 +426,10 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
               </div>
               <div className="w-full sm:w-64 shrink-0 flex items-center gap-2">
                 <select
+                  disabled={matchCooldown > 0}
                   value={selectedMatches.scenario4}
                   onChange={(e) => handleMatchChange('scenario4', e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40"
+                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="">{lang === 'en' ? '-- Choose Service --' : '-- Alege Serviciul --'}</option>
                   <option value="email">Email</option>
@@ -446,9 +487,10 @@ export const ILevel2_InternetServices: React.FC<ILevel2Props> = ({ onCompletePag
               </div>
               <div className="w-full sm:w-64 shrink-0 flex items-center gap-2">
                 <select
+                  disabled={matchCooldown > 0}
                   value={selectedMatches.scenario5}
                   onChange={(e) => handleMatchChange('scenario5', e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40"
+                  className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-xs sm:text-sm text-white focus:ring-2 focus:ring-teal-500/40 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="">{lang === 'en' ? '-- Choose Service --' : '-- Alege Serviciul --'}</option>
                   <option value="email">Email</option>

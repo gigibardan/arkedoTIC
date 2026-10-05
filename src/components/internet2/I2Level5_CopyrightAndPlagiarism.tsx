@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FileCheck2,
   Copyright,
@@ -17,6 +17,7 @@ import { TeacherTip } from '../TeacherTip';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface I2Level5_CopyrightAndPlagiarismProps {
@@ -31,8 +32,12 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
 
   // Task 1: Plagiarism definition
   const [q1Plagiarism, setQ1Plagiarism] = useState<string>('');
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
+
   // Task 2: Creative Commons / Public Domain
   const [q2Licenses, setQ2Licenses] = useState<string>('');
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
   // Task 3: Interactive Citation Lab
   const [citationForm, setCitationForm] = useState<{
     author: string;
@@ -46,6 +51,47 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
     accessDate: '',
   });
   const [citationBuilt, setCitationBuilt] = useState<boolean>(false);
+  const [q3Cooldown, setQ3Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
+
+  useEffect(() => {
+    if (q3Cooldown <= 0) return;
+    const t = setInterval(() => setQ3Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q3Cooldown]);
+
+  const handleSelectQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
+    setQ1Plagiarism(val);
+    if (val === 'intellectual_theft') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
+  };
+
+  const handleSelectQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
+    setQ2Licenses(val);
+    if (val === 'creative_commons') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
+  };
 
   const isQ1Correct = q1Plagiarism === 'intellectual_theft';
   const isQ2Correct = q2Licenses === 'creative_commons';
@@ -60,6 +106,7 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
   const pageScore = correctCount === 3 ? 15 : correctCount === 2 ? 10 : correctCount === 1 ? 5 : 0;
 
   const handleBuildCitation = () => {
+    if (q3Cooldown > 0) return;
     sounds.playClick();
     setCitationBuilt(true);
     if (isQ3Correct) {
@@ -71,6 +118,7 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
       );
     } else {
       sounds.playWrong();
+      setQ3Cooldown(5);
     }
   };
 
@@ -156,18 +204,26 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
           </span>
         </div>
 
+        {q1Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q1Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza definiția plagiatului din manual pag. 45."
+              customMessageEn="Incorrect! Please take 5 seconds to review the definition of plagiarism on page 45."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ1Plagiarism('intellectual_theft');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('intellectual_theft')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Plagiarism === 'intellectual_theft'
                 ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-md ring-1 ring-emerald-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Copying without Crediting Original Creator' : 'A) Însușirea Lucrării Fără Citarea Autorului'}
@@ -181,15 +237,13 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
 
           <button
             type="button"
-            onClick={() => {
-              setQ1Plagiarism('spelling_mistake');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('spelling_mistake')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Plagiarism === 'spelling_mistake'
                 ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-md ring-1 ring-emerald-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Minor grammar spelling error' : 'B) O simplă greșeală de ortografie'}
@@ -203,15 +257,13 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
 
           <button
             type="button"
-            onClick={() => {
-              setQ1Plagiarism('slow_typing');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('slow_typing')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Plagiarism === 'slow_typing'
                 ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-md ring-1 ring-emerald-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'C) Typing too slowly on keyboard' : 'C) Tastarea lentă a textului'}
@@ -233,6 +285,7 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
         {q1Plagiarism && (
           <AnswerExplanation
             isCorrect={isQ1Correct}
+            cooldown={q1Cooldown}
             explanationRo={
               isQ1Correct
                 ? 'Corect! Plagiatul este o încălcare a eticii academice și a legii dreptului de autor. Menționarea autorului și a sursei transformă o simplă copiere într-o cercetare științifică onestă.'
@@ -267,18 +320,26 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
           </span>
         </div>
 
+        {q2Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q2Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza rolul licențelor Creative Commons din manual pag. 45-46."
+              customMessageEn="Incorrect! Please take 5 seconds to review Creative Commons licenses on page 45-46."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ2Licenses('creative_commons');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('creative_commons')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q2Licenses === 'creative_commons'
                 ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-md ring-1 ring-emerald-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Freely use and share content with attribution' : 'A) Utilizarea gratuită și legală a resurselor cu citarea autorului'}
@@ -292,15 +353,13 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
 
           <button
             type="button"
-            onClick={() => {
-              setQ2Licenses('commercial_sale');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('commercial_sale')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q2Licenses === 'commercial_sale'
                 ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-md ring-1 ring-emerald-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Obligatory payment of $100 per photo' : 'B) Plata obligatorie a sumei de 100$ pentru fiecare poză'}
@@ -322,6 +381,7 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
         {q2Licenses && (
           <AnswerExplanation
             isCorrect={isQ2Correct}
+            cooldown={q2Cooldown}
             explanationRo={
               isQ2Correct
                 ? 'Excelent! Licențele Creative Commons (ex: CC-BY, CC-NC) oferă dreptul gratuit de reutilizare pentru educație, cu condiția atribuirii corecte a autorului original.'
@@ -439,6 +499,16 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
             </div>
           </div>
 
+          {q3Cooldown > 0 && (
+            <div className="pt-3">
+              <PedagogicalReflectionBanner
+                cooldown={q3Cooldown}
+                customMessageRo="Citare incompletă sau incorectă! Te rugăm să acorzi 5 secunde pentru a analiza structura corectă a unei referințe bibliografice din manual pag. 45-46."
+                customMessageEn="Incorrect citation! Please take 5 seconds to review the bibliographic entry structure on page 45-46."
+              />
+            </div>
+          )}
+
           {/* Action Button */}
           <div className="pt-3 border-t border-slate-800 flex justify-end">
             <button
@@ -447,14 +517,16 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
                 !citationForm.author ||
                 !citationForm.title ||
                 !citationForm.source ||
-                !citationForm.accessDate
+                !citationForm.accessDate ||
+                q3Cooldown > 0
               }
               onClick={handleBuildCitation}
               className={`px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
                 citationForm.author &&
                 citationForm.title &&
                 citationForm.source &&
-                citationForm.accessDate
+                citationForm.accessDate &&
+                q3Cooldown === 0
                   ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black shadow-lg shadow-emerald-500/20'
                   : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
@@ -484,6 +556,7 @@ export const I2Level5_CopyrightAndPlagiarism: React.FC<I2Level5_CopyrightAndPlag
         {citationBuilt && (
           <AnswerExplanation
             isCorrect={isQ3Correct}
+            cooldown={q3Cooldown}
             explanationRo={
               isQ3Correct
                 ? 'Excelent! Ai compus o referință bibliografică conform standardelor internaționale de redactare științifică: Autor ➔ Titlu ➔ Sursă Web ➔ Data accesării.'

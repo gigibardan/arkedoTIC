@@ -4,6 +4,7 @@ import { sounds } from '../../utils/audio';
 import { Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface HLevel4Props {
   onComplete: () => void;
@@ -253,10 +254,12 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
   const [assignments, setAssignments] = useState<Record<string, PeripheralType>>({});
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [cooldown, setCooldown] = useState<number>(0);
 
   const devices = lang === 'en' ? DEVICES_EN : DEVICES_RO;
 
   const handleAssign = (deviceId: string, type: PeripheralType) => {
+    if (cooldown > 0) return;
     sounds.playClick();
     setAssignments(prev => ({
       ...prev,
@@ -269,6 +272,8 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
   const allCorrect = devices.every(d => assignments[d.id] === d.type);
 
   const handleValidate = () => {
+    if (cooldown > 0) return;
+
     if (!allAssigned) {
       sounds.playWrong();
       setShowErrors(true);
@@ -282,6 +287,16 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
     } else {
       sounds.playWrong();
       setShowErrors(true);
+      setCooldown(5);
+      const timer = setInterval(() => {
+        setCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -319,8 +334,18 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
           : 'Scanerul este opusul imprimantei: imprimanta dă viață pe hârtie fișierului din PC, iar scanerul digitalizează foaia de hârtie în PC!'}
       />
 
-      {/* Sorting Activity */}
+        {/* Sorting Activity */}
       <div className="mb-7">
+        {cooldown > 0 && (
+          <PedagogicalReflectionBanner
+            cooldown={cooldown}
+            totalSeconds={5}
+            customMessageRo="Clasificarea conține erori! Te rugăm să acorzi 5 secunde pentru a citi explicațiile din casete înainte de a încerca din nou."
+            customMessageEn="Classification has mistakes! Please take 5 seconds to review the explanations before trying again."
+            className="mb-4"
+          />
+        )}
+
         <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
             <Layers className="w-5 h-5 text-purple-400" />
@@ -371,8 +396,9 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
                 {/* 3 classification buttons */}
                 <div className="grid grid-cols-3 gap-1 pt-2 border-t border-slate-800 text-[10px] font-bold font-mono">
                   <button
+                    disabled={cooldown > 0}
                     onClick={() => handleAssign(dev.id, 'input')}
-                    className={`py-1.5 px-1 rounded-lg transition border text-center cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-lg transition border text-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       currentChoice === 'input'
                         ? 'bg-cyan-600 text-white border-cyan-400 shadow'
                         : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
@@ -382,8 +408,9 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
                   </button>
 
                   <button
+                    disabled={cooldown > 0}
                     onClick={() => handleAssign(dev.id, 'output')}
-                    className={`py-1.5 px-1 rounded-lg transition border text-center cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-lg transition border text-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       currentChoice === 'output'
                         ? 'bg-amber-600 text-white border-amber-400 shadow'
                         : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'
@@ -393,8 +420,9 @@ export const HLevel4_PeripheralsSort: React.FC<HLevel4Props> = ({ onComplete }) 
                   </button>
 
                   <button
+                    disabled={cooldown > 0}
                     onClick={() => handleAssign(dev.id, 'inout')}
-                    className={`py-1.5 px-1 rounded-lg transition border text-center cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-lg transition border text-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       currentChoice === 'inout'
                         ? 'bg-purple-600 text-white border-purple-400 shadow'
                         : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border-slate-800'

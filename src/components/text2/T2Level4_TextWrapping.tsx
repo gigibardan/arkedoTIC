@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   WrapText, 
   Layers, 
@@ -14,6 +14,7 @@ import { sounds } from '../../utils/audio';
 import { QuestionHint } from '../text1/QuestionHint';
 import { AnswerExplanation } from '../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../text1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface T2Level4_TextWrappingProps {
   onCompletePage: (earnedScore: number) => void;
@@ -37,6 +38,23 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
     q3: null,
     q4: null
   });
+  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const hasActive = Object.values(cooldowns).some((c: number) => c > 0);
+    if (!hasActive) return;
+    const t = setInterval(() => {
+      setCooldowns(prev => {
+        const next: Record<string, number> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          const val = v as number;
+          if (val > 1) next[k] = val - 1;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldowns]);
 
   const correctAnswers: Record<string, number> = {
     q1: 1, // În linie cu textul (In line with text)
@@ -46,8 +64,15 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
   };
 
   const handleSelectAnswer = (qKey: string, optIdx: number) => {
+    if ((cooldowns[qKey] || 0) > 0) return;
     sounds.playClick();
     setAnswers(prev => ({ ...prev, [qKey]: optIdx }));
+    if (optIdx === correctAnswers[qKey]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, [qKey]: 5 }));
+    }
   };
 
   const handleSelectWrapMode = (mode: WrappingMode) => {
@@ -343,6 +368,16 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               : 'Care este modul implicit de încadrare atunci când inserezi o imagine nouă într-un document Word?'}
           </div>
 
+          {(cooldowns['q1'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q1']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza modul implicit de încadrare din manual pag. 76."
+                customMessageEn="Incorrect! Please take 5 seconds to review the default text wrap on page 76."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Square (Pătrat)' : 'A) Pătrat (Square)',
@@ -353,8 +388,9 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q1'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q1', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q1 === idx
                     ? idx === correctAnswers.q1
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -376,6 +412,7 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
           {answers.q1 !== null && (
             <AnswerExplanation
               isCorrect={answers.q1 === correctAnswers.q1}
+              cooldown={cooldowns['q1'] || 0}
               explanation={
                 answers.q1 === correctAnswers.q1
                   ? (lang === 'en' ? 'Correct! "In Line with Text" is the default mode.' : 'Corect! Modul implicit este «În linie cu textul», motiv pentru care imaginea nu poate fi mutată liber până nu îi schimbi încadrarea.')
@@ -397,6 +434,16 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               : 'Ce mod de încadrare face ca textul să curgă frumos în jurul unui chenar dreptunghiular invizibil, ca într-un ziar?'}
           </div>
 
+          {(cooldowns['q2'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q2']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza modul Pătrat (Square) din manual pag. 76."
+                customMessageEn="Incorrect! Please take 5 seconds to review Square text wrap on page 76."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Square (Pătrat)' : 'A) Pătrat (Square)',
@@ -407,8 +454,9 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q2'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q2', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q2 === idx
                     ? idx === correctAnswers.q2
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -430,6 +478,7 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
           {answers.q2 !== null && (
             <AnswerExplanation
               isCorrect={answers.q2 === correctAnswers.q2}
+              cooldown={cooldowns['q2'] || 0}
               explanation={
                 answers.q2 === correctAnswers.q2
                   ? (lang === 'en' ? 'Spot on! Square creates an invisible rectangular perimeter around the image.' : 'Exact! Modul Pătrat (Square) este cel mai curat și lizibil pentru articolele de revistă.')
@@ -451,6 +500,16 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               : 'Dacă vrei să plasezi o siglă estompată a școlii ca filigran/fundal sub textul paginii, ce mod alegi?'}
           </div>
 
+          {(cooldowns['q3'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q3']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza modul În spatele textului din manual pag. 77."
+                customMessageEn="Incorrect! Please take 5 seconds to review Behind Text on page 77."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) In Front of Text' : 'A) În fața textului',
@@ -461,8 +520,9 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q3'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q3', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q3 === idx
                     ? idx === correctAnswers.q3
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -484,6 +544,7 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
           {answers.q3 !== null && (
             <AnswerExplanation
               isCorrect={answers.q3 === correctAnswers.q3}
+              cooldown={cooldowns['q3'] || 0}
               explanation={
                 answers.q3 === correctAnswers.q3
                   ? (lang === 'en' ? 'Correct! Behind Text places graphics into the background layer.' : 'Corect! Modul «În spatele textului» permite transformarea imaginii într-un fundal sau filigran.')
@@ -505,6 +566,16 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               : 'Ce se întâmplă dacă selectezi din greșeală modul „În fața textului” (In Front of Text) pentru o imagine mare?'}
           </div>
 
+          {(cooldowns['q4'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q4']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza modul În fața textului din manual pag. 77."
+                customMessageEn="Incorrect! Please take 5 seconds to review In Front of Text on page 77."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Text color changes to blue' : 'A) Culoarea textului devine albastră',
@@ -515,8 +586,9 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q4'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q4', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q4 === idx
                     ? idx === correctAnswers.q4
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -538,6 +610,7 @@ export const T2Level4_TextWrapping: React.FC<T2Level4_TextWrappingProps> = ({ on
           {answers.q4 !== null && (
             <AnswerExplanation
               isCorrect={answers.q4 === correctAnswers.q4}
+              cooldown={cooldowns['q4'] || 0}
               explanation={
                 answers.q4 === correctAnswers.q4
                   ? (lang === 'en' ? 'Perfect! In Front of Text obscures words, so use it only for badges or floating stamps.' : 'Perfect! Modul «În fața textului» acoperă paragrafele, fiind util doar pentru mici ecusoane sau stickere decorative.')

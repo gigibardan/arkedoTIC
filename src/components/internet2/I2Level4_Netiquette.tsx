@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   MessageSquare,
   Smile,
@@ -17,6 +17,7 @@ import { TeacherTip } from '../TeacherTip';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface I2Level4_NetiquetteProps {
@@ -28,6 +29,29 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
 }) => {
   const { lang } = useLanguage();
   const arky = useArky();
+
+  // Pedagogical Cooldowns
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+  const [q3Cooldown, setQ3Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
+
+  useEffect(() => {
+    if (q3Cooldown <= 0) return;
+    const t = setInterval(() => setQ3Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q3Cooldown]);
 
   // Task 1: All caps meaning
   const [q1AllCaps, setQ1AllCaps] = useState<string>('');
@@ -45,6 +69,41 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
   });
   // Task 3: Cyberbullying reaction
   const [q3Bullying, setQ3Bullying] = useState<string>('');
+
+  const handleSelectQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
+    setQ1AllCaps(val);
+    if (val === 'shouting') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
+  };
+
+  const handleSelectScenario = (key: 's1' | 's2' | 's3' | 's4', val: 'good' | 'bad') => {
+    if (q2Cooldown > 0) return;
+    const correctMap = { s1: 'good', s2: 'bad', s3: 'good', s4: 'bad' };
+    setScenarios((prev) => ({ ...prev, [key]: val }));
+
+    if (val === correctMap[key]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
+  };
+
+  const handleSelectQ3 = (val: string) => {
+    if (q3Cooldown > 0) return;
+    setQ3Bullying(val);
+    if (val === 'tell_adult') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ3Cooldown(5);
+    }
+  };
 
   const isQ1Correct = q1AllCaps === 'shouting';
   const isQ2Correct =
@@ -134,18 +193,26 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
           </span>
         </div>
 
+        {q1Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q1Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza de ce literele mari transmit un ton agresiv (pag. 43)."
+              customMessageEn="Incorrect! Please take 5 seconds to review why ALL CAPS implies shouting."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ1AllCaps('shouting');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('shouting')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1AllCaps === 'shouting'
                 ? 'bg-pink-950/80 border-pink-500 text-white shadow-md ring-1 ring-pink-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Screaming / Shouting Aggressively' : 'A) Țipăt / Strigăt Agresiv'}
@@ -159,15 +226,13 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ1AllCaps('great_respect');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('great_respect')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1AllCaps === 'great_respect'
                 ? 'bg-pink-950/80 border-pink-500 text-white shadow-md ring-1 ring-pink-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Utmost Formal Respect' : 'B) Semn de Suprem Respect'}
@@ -181,15 +246,13 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ1AllCaps('secret_code');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('secret_code')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1AllCaps === 'secret_code'
                 ? 'bg-pink-950/80 border-pink-500 text-white shadow-md ring-1 ring-pink-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'C) Encrypted Military Code' : 'C) Cod Militar Criptat'}
@@ -211,6 +274,7 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
         {q1AllCaps && (
           <AnswerExplanation
             isCorrect={isQ1Correct}
+            cooldown={q1Cooldown}
             explanationRo={
               isQ1Correct
                 ? 'Corect! Scrierea integrală cu litere mari este percepută universal în comunitatea online ca un țipăt zgomotos și lipsit de politețe.'
@@ -245,6 +309,16 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
           </span>
         </div>
 
+        {q2Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q2Cooldown}
+              customMessageRo="Evaluare greșită! Te rugăm să acorzi 5 secunde pentru a analiza comportamentul din perspectiva respectului și intimității."
+              customMessageEn="Incorrect evaluation! Please take 5 seconds to review the netiquette principles."
+            />
+          </div>
+        )}
+
         <div className="space-y-3">
           {/* S1 */}
           <div className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -259,29 +333,25 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s1: 'good' }));
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s1', 'good')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s1 === 'good'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Civilized ✓' : 'Civilizat ✓'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s1: 'bad' }));
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s1', 'bad')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s1 === 'bad'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Toxic / Rude' : 'Nepoliticos'}
               </button>
@@ -301,29 +371,25 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s2: 'good' }));
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s2', 'good')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s2 === 'good'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Civilized' : 'Civilizat'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s2: 'bad' }));
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s2', 'bad')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s2 === 'bad'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Forbidden / Toxic ❌' : 'Interzis / Toxic ❌'}
               </button>
@@ -343,29 +409,25 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s3: 'good' }));
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s3', 'good')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s3 === 'good'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Civilized ✓' : 'Civilizat ✓'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s3: 'bad' }));
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s3', 'bad')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s3 === 'bad'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Toxic' : 'Nepoliticos'}
               </button>
@@ -385,29 +447,25 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s4: 'good' }));
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s4', 'good')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s4 === 'good'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Civilized' : 'Civilizat'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setScenarios((prev) => ({ ...prev, s4: 'bad' }));
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectScenario('s4', 'bad')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   scenarios.s4 === 'bad'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Forbidden / Spam ❌' : 'Interzis / Spam ❌'}
               </button>
@@ -418,6 +476,7 @@ export const I2Level4_Netiquette: React.FC<I2Level4_NetiquetteProps> = ({
         {scenarios.s1 && scenarios.s2 && scenarios.s3 && scenarios.s4 && (
           <AnswerExplanation
             isCorrect={isQ2Correct}
+            cooldown={q2Cooldown}
             explanationRo={
               isQ2Correct
                 ? 'Superb! Ai identificat corect bunele maniere (mulțumiri politicoase, respectul în dezacord) și comportamentele toxice (postarea pozelor fără acord, spamul nocturn).'

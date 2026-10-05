@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ListOrdered, List, CheckCircle2, Sparkles, BookOpen, Layers, Check, CornerDownRight, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
@@ -6,6 +6,7 @@ import { sounds } from '../../utils/audio';
 import { PageNavigationFooter } from './PageNavigationFooter';
 import { AnswerExplanation } from './AnswerExplanation';
 import { QuestionHint } from './QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface TLevel5Props {
   onCompletePage: (score: number) => void;
@@ -114,7 +115,21 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
 
   // Quiz questions
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
 
   const handleSelectType = (scenarioId: string, type: 'numbered' | 'bulleted') => {
     sounds.playClick();
@@ -132,17 +147,27 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
   };
 
   const handleQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
     sounds.playClick();
     setQ1Answer(val);
-    if (val === 'chronology') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'chronology') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
   };
 
   const handleQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
     sounds.playClick();
     setQ2Answer(val);
-    if (val === 'tab') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'tab') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
   };
 
   // Evaluation
@@ -360,11 +385,22 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             <span className="text-xs font-mono text-amber-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q1Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q1Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza utilitatea listelor numerotate din manual pag. 62."
+                customMessageEn="Incorrect! Please take 5 seconds to review Numbered Lists on textbook page 62."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('chronology')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'chronology'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -374,8 +410,9 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('colors')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'colors'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -385,8 +422,9 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('animals')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'animals'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -396,8 +434,9 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('short')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'short'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -415,6 +454,7 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
+              cooldown={q1Cooldown}
               explanation={
                 isQ1Correct
                   ? (lang === 'en' ? 'Correct! Numbered lists convey chronological order, algorithmic sequence, and priority.' : 'Corect! Listele numerotate indică o ordine obligatorie sau etape cronologice de urmat.')
@@ -436,11 +476,22 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             <span className="text-xs font-mono text-amber-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q2Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q2Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza ierarhia listelor din manual pag. 63."
+                customMessageEn="Incorrect! Please take 5 seconds to review Multi-level Lists on textbook page 63."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('tab')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'tab'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -450,8 +501,9 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('caps')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'caps'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -461,8 +513,9 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('escape')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'escape'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -472,8 +525,9 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('space')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'space'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -491,6 +545,7 @@ export const TLevel5_ListsAndHierarchy: React.FC<TLevel5Props> = ({ onCompletePa
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
+              cooldown={q2Cooldown}
               explanation={
                 isQ2Correct
                   ? (lang === 'en' ? 'Spot on! Pressing TAB indents the list item to a deeper sub-level. Pressing Shift + TAB promotes it back up.' : 'Excelent! Tasta TAB crește nivelul de indentare, transformând elementul într-o sublistă. Combinația Shift + TAB îl readuce la nivelul principal.')

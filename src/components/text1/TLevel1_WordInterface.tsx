@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileText, CheckCircle2, XCircle, Sparkles, BookOpen, Layers, MousePointer, Info, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
@@ -6,6 +6,7 @@ import { sounds } from '../../utils/audio';
 import { PageNavigationFooter } from './PageNavigationFooter';
 import { AnswerExplanation } from './AnswerExplanation';
 import { QuestionHint } from './QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface TLevel1Props {
   onCompletePage: (score: number) => void;
@@ -92,12 +93,34 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
   // Interactive match state
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
   const [matchedZones, setMatchedZones] = useState<{ [zoneId: string]: string }>({});
+  const [matchCooldown, setMatchCooldown] = useState<number>(0);
 
   // Textbook quiz questions state
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (matchCooldown <= 0) return;
+    const t = setInterval(() => setMatchCooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [matchCooldown]);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
 
   const handleMatch = (zoneId: string, labelId: string) => {
+    if (matchCooldown > 0) return;
     sounds.playClick();
     if (zoneId === labelId) {
       sounds.playCorrect();
@@ -109,31 +132,36 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
       );
     } else {
       sounds.playWrong();
+      setMatchCooldown(5);
       arky.triggerError(
         lang === 'en'
-          ? 'Not quite there. Check where that tool belongs on the window!'
-          : 'Nu este acolo. Privește cu atenție unde este amplasat acel instrument pe fereastră!'
+          ? 'Not quite there. Take 5 seconds to review the textbook window diagram!'
+          : 'Nu este acolo. Acordă 5 secunde pentru a privi diagrama ferestrei din manual!'
       );
     }
   };
 
   const handleQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
     sounds.playClick();
     setQ1Answer(val);
     if (val === 'status') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      setQ1Cooldown(5);
     }
   };
 
   const handleQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
     sounds.playClick();
     setQ2Answer(val);
     if (val === 'ribbon') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      setQ2Cooldown(5);
     }
   };
 
@@ -447,11 +475,22 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             <span className="text-xs font-mono text-blue-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q1Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q1Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza bara de stare din manual pag. 51."
+                customMessageEn="Incorrect! Please take 5 seconds to review the Status Bar on page 51."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('title')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'title'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -461,8 +500,9 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('status')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'status'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -472,8 +512,9 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('ruler')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'ruler'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -483,8 +524,9 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('zoom')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'zoom'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -502,6 +544,7 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
+              cooldown={q1Cooldown}
               explanation={
                 isQ1Correct
                   ? (lang === 'en' ? 'Correct! The Status Bar at the bottom of the window displays page statistics and word count in real time.' : 'Corect! Bara de stare (Status Bar) din partea de jos a ferestrei afișează în timp real numărul de cuvinte și pagina curentă.')
@@ -523,11 +566,22 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             <span className="text-xs font-mono text-blue-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q2Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q2Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza panglica Ribbon din manual pag. 50-51."
+                customMessageEn="Incorrect! Please take 5 seconds to review the Ribbon on page 50-51."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('ribbon')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'ribbon'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -537,8 +591,9 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('scroll')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'scroll'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -548,8 +603,9 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('desktop')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'desktop'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -559,8 +615,9 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('tray')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'tray'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -578,6 +635,7 @@ export const TLevel1_WordInterface: React.FC<TLevel1Props> = ({ onCompletePage }
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
+              cooldown={q2Cooldown}
               explanation={
                 isQ2Correct
                   ? (lang === 'en' ? 'Spot on! The Ribbon (Panglica) contains all the buttons and commands organized into thematic tabs.' : 'Excelent! Panglica (Ribbon) conține toate butoanele și comenzile grupate pe tab-uri tematice.')

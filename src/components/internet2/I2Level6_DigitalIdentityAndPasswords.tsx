@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   KeyRound,
   Shield,
@@ -20,6 +20,7 @@ import { TeacherTip } from '../TeacherTip';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface I2Level6_DigitalIdentityAndPasswordsProps {
@@ -34,12 +35,50 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
 
   // Task 1: Digital footprint
   const [q1Footprint, setQ1Footprint] = useState<string>('');
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
+
   // Task 2: 2FA definition
   const [q2TwoFactor, setQ2TwoFactor] = useState<string>('');
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
   // Task 3: Password Strength & Public Logout Simulator
   const [testPassword, setTestPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [didLogout, setDidLogout] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
+
+  const handleSelectQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
+    setQ1Footprint(val);
+    if (val === 'permanent_record') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
+  };
+
+  const handleSelectQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
+    setQ2TwoFactor(val);
+    if (val === 'password_plus_phone') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
+  };
 
   // Criteria for password
   const hasLength = testPassword.length >= 12;
@@ -139,18 +178,26 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
           </span>
         </div>
 
+        {q1Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q1Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza conceptul de amprentă digitală din manual pag. 47."
+              customMessageEn="Incorrect! Please take 5 seconds to review digital footprint on page 47."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ1Footprint('permanent_record');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('permanent_record')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Footprint === 'permanent_record'
                 ? 'bg-teal-950/80 border-teal-500 text-white shadow-md ring-1 ring-teal-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Total Trail of Online Activity Left Behind' : 'A) Urma Permanentă a Tuturor Activităților Tale Online'}
@@ -164,15 +211,13 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
 
           <button
             type="button"
-            onClick={() => {
-              setQ1Footprint('physical_dirt');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('physical_dirt')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Footprint === 'physical_dirt'
                 ? 'bg-teal-950/80 border-teal-500 text-white shadow-md ring-1 ring-teal-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Physical dirt on keyboard keys' : 'B) Praful de pe tastele calculatorului'}
@@ -194,6 +239,7 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
         {q1Footprint && (
           <AnswerExplanation
             isCorrect={isQ1Correct}
+            cooldown={q1Cooldown}
             explanationRo={
               isQ1Correct
                 ? 'Corect! Amprenta digitală reprezintă totalitatea urmelor pe care le lași navigând pe internet. Gândește-te întotdeauna de două ori înainte de a posta ceva ce ar putea să-ți afecteze viitorul!'
@@ -224,18 +270,26 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
           </span>
         </div>
 
+        {q2Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q2Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza rolul autentificării în 2 pași (2FA) din manual pag. 47-48."
+              customMessageEn="Incorrect! Please take 5 seconds to review Two-Factor Authentication on page 47-48."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ2TwoFactor('password_plus_phone');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('password_plus_phone')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q2TwoFactor === 'password_plus_phone'
                 ? 'bg-teal-950/80 border-teal-500 text-white shadow-md ring-1 ring-teal-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Password + Temporary Code on Personal Device' : 'A) Parolă + Cod Temporar pe Dispozitivul Personal'}
@@ -249,15 +303,13 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
 
           <button
             type="button"
-            onClick={() => {
-              setQ2TwoFactor('double_typing');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('double_typing')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q2TwoFactor === 'double_typing'
                 ? 'bg-teal-950/80 border-teal-500 text-white shadow-md ring-1 ring-teal-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Typing your password twice in a row' : 'B) Scrierea parolei de două ori la rând'}
@@ -279,6 +331,7 @@ export const I2Level6_DigitalIdentityAndPasswords: React.FC<
         {q2TwoFactor && (
           <AnswerExplanation
             isCorrect={isQ2Correct}
+            cooldown={q2Cooldown}
             explanationRo={
               isQ2Correct
                 ? 'Excelent! Autentificarea în 2 pași (2FA) blochează 99.9% din atacurile cibernetice, fiindcă hackerul nu are acces fizic la telefonul tău pentru a prelua codul temporar.'

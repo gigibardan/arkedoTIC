@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   Columns, 
@@ -16,6 +16,7 @@ import { sounds } from '../../utils/audio';
 import { QuestionHint } from '../text1/QuestionHint';
 import { AnswerExplanation } from '../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../text1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface T2Level6_PageSetupAndHeadersProps {
   onCompletePage: (earnedScore: number) => void;
@@ -38,6 +39,23 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
     q3: null,
     q4: null
   });
+  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const hasActive = Object.values(cooldowns).some((c: number) => c > 0);
+    if (!hasActive) return;
+    const t = setInterval(() => {
+      setCooldowns(prev => {
+        const next: Record<string, number> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          const val = v as number;
+          if (val > 1) next[k] = val - 1;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldowns]);
 
   const correctAnswers: Record<string, number> = {
     q1: 1, // Peisaj (Landscape) pentru tabele late
@@ -47,8 +65,15 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
   };
 
   const handleSelectAnswer = (qKey: string, optIdx: number) => {
+    if ((cooldowns[qKey] || 0) > 0) return;
     sounds.playClick();
     setAnswers(prev => ({ ...prev, [qKey]: optIdx }));
+    if (optIdx === correctAnswers[qKey]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, [qKey]: 5 }));
+    }
   };
 
   const handleInsertDynamicPageNum = () => {
@@ -346,6 +371,16 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               : 'Dacă trebuie să creezi un orar mare cu 7 coloane sau o diplomă lată, ce orientare a paginii este recomandată?'}
           </div>
 
+          {cooldowns.q1 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza orientarea paginii înainte de a alege o altă variantă."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on page orientation before choosing another option."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Portrait (Vertical)' : 'A) Portret (Vertical)',
@@ -356,8 +391,11 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns.q1 || 0) > 0}
                 onClick={() => handleSelectAnswer('q1', idx)}
                 className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                  (cooldowns.q1 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   answers.q1 === idx
                     ? idx === correctAnswers.q1
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -379,6 +417,7 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
           {answers.q1 !== null && (
             <AnswerExplanation
               isCorrect={answers.q1 === correctAnswers.q1}
+              cooldown={cooldowns.q1}
               explanation={
                 answers.q1 === correctAnswers.q1
                   ? (lang === 'en' ? 'Correct! Landscape (Orizontal) accommodates wide tables with ease.' : 'Corect! Orientarea Peisaj/Vedere (Landscape) este ideală pentru tabele late sau diplome.')
@@ -400,6 +439,16 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               : 'Cum trebuie adăugate numerele de pagină pentru a se incrementa automat (1, 2, 3...) pe toate paginile unei cărți?'}
           </div>
 
+          {cooldowns.q2 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q2}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza inserarea automată a numerelor de pagină."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on automatic page number fields."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Via Insert > Page Number (dynamic field)' : 'A) Prin comanda automată Inserare > Număr de pagină (câmp dinamic)',
@@ -410,8 +459,11 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns.q2 || 0) > 0}
                 onClick={() => handleSelectAnswer('q2', idx)}
                 className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                  (cooldowns.q2 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   answers.q2 === idx
                     ? idx === correctAnswers.q2
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -433,6 +485,7 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
           {answers.q2 !== null && (
             <AnswerExplanation
               isCorrect={answers.q2 === correctAnswers.q2}
+              cooldown={cooldowns.q2}
               explanation={
                 answers.q2 === correctAnswers.q2
                   ? (lang === 'en' ? 'Spot on! Dynamic page number fields calculate page counts automatically.' : 'Exact! Inserare > Număr de pagină introduce un cod inteligent ce actualizează automat numărul pe fiecare filă.')
@@ -454,6 +507,16 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               : 'Cum se numesc zonele speciale din partea de sus și de jos a foii care se repetă identic pe toate paginile?'}
           </div>
 
+          {cooldowns.q3 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q3}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza rolul antetului și subsolului."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on headers and footers."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Ribbon and Ruler' : 'A) Ribbon și Riglă',
@@ -464,8 +527,11 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns.q3 || 0) > 0}
                 onClick={() => handleSelectAnswer('q3', idx)}
                 className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                  (cooldowns.q3 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   answers.q3 === idx
                     ? idx === correctAnswers.q3
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -487,6 +553,7 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
           {answers.q3 !== null && (
             <AnswerExplanation
               isCorrect={answers.q3 === correctAnswers.q3}
+              cooldown={cooldowns.q3}
               explanation={
                 answers.q3 === correctAnswers.q3
                   ? (lang === 'en' ? 'Correct! Header sits at the top margin, Footer at the bottom margin.' : 'Corect! Antetul și subsolul oferă consistență profesională întregii cărți sau referat.')
@@ -508,6 +575,16 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               : 'Care este formatul standard european de hârtie folosit în școli și imprimante, având dimensiunile de 210 × 297 mm?'}
           </div>
 
+          {cooldowns.q4 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q4}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza dimensiunile standard de pagină."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on standard paper formats."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Letter' : 'A) Letter (format american)',
@@ -518,8 +595,11 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns.q4 || 0) > 0}
                 onClick={() => handleSelectAnswer('q4', idx)}
                 className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                  (cooldowns.q4 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   answers.q4 === idx
                     ? idx === correctAnswers.q4
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -541,6 +621,7 @@ export const T2Level6_PageSetupAndHeaders: React.FC<T2Level6_PageSetupAndHeaders
           {answers.q4 !== null && (
             <AnswerExplanation
               isCorrect={answers.q4 === correctAnswers.q4}
+              cooldown={cooldowns.q4}
               explanation={
                 answers.q4 === correctAnswers.q4
                   ? (lang === 'en' ? 'Perfect! A4 (210 × 297 mm) is the ISO international standard.' : 'Perfect! Formatul A4 (210 × 297 mm) este standardul internațional utilizat în România și Europa.')

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Palette, Box, Layers, CheckCircle2, XCircle, Sparkles, BookOpen, FileImage, Image as ImageIcon, Eye } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface G1Level1Props {
@@ -33,8 +34,63 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
   // Exercise 4: Transparency & Compression Knowledge
   const [q4Answer, setQ4Answer] = useState<string | null>(null);
 
+  // Cooldown State
+  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const hasActive = Object.values(cooldowns).some((c: number) => c > 0);
+    if (!hasActive) return;
+    const t = setInterval(() => {
+      setCooldowns(prev => {
+        const next: Record<string, number> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          const val = v as number;
+          if (val > 1) next[k] = val - 1;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldowns]);
+
   // Evaluator logic
   const isQ1Correct = q1Answer === 'adancime';
+
+  const handleSelectQ1 = (id: string) => {
+    if ((cooldowns.q1 || 0) > 0) return;
+    sounds.playClick();
+    setQ1Answer(id);
+    if (id === 'adancime') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, q1: 5 }));
+    }
+  };
+
+  const handleSelectQ3 = (id: string) => {
+    if ((cooldowns.q3 || 0) > 0) return;
+    sounds.playClick();
+    setQ3Answer(id);
+    if (id === 'editors_suite') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, q3: 5 }));
+    }
+  };
+
+  const handleSelectQ4 = (id: string) => {
+    if ((cooldowns.q4 || 0) > 0) return;
+    sounds.playClick();
+    setQ4Answer(id);
+    if (id === 'png_transparency') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, q4: 5 }));
+    }
+  };
   
   // For Q2, player selects image formats from mixed list: .png, .jpg, .bmp, .gif, .mp4, .txt
   const correctImageExtensions = ['.png', '.jpg', '.bmp', '.gif'];
@@ -319,6 +375,16 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
               : 'Care este a treia dimensiune care transformă un desen plat 2D într-un obiect spațial 3D?'}
           </p>
 
+          {cooldowns.q1 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza diferența dintre 2D (suprafață) și 3D (spațiu)."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on the difference between 2D and 3D."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
             {[
               { id: 'greutate', label: 'Greutatea obiectului (kg)' },
@@ -327,11 +393,11 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
             ].map((opt) => (
               <button
                 key={opt.id}
-                onClick={() => {
-                  sounds.playClick();
-                  setQ1Answer(opt.id);
-                }}
+                disabled={(cooldowns.q1 || 0) > 0}
+                onClick={() => handleSelectQ1(opt.id)}
                 className={`p-3 rounded-xl border text-xs font-bold text-left transition cursor-pointer flex items-center justify-between ${
+                  (cooldowns.q1 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   q1Answer === opt.id
                     ? opt.id === 'adancime'
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
@@ -425,6 +491,16 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
               : 'Care dintre următoarele grupuri conține EXCLUSIV editoare grafice autentice?'}
           </p>
 
+          {cooldowns.q3 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q3}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza exemplele de editoare grafice din manual (pag. 42)."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on graphic editors."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               { id: 'wrong_wordpad', label: 'Paint, WordPad, Skype, Calculator' },
@@ -434,11 +510,11 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
             ].map((opt) => (
               <button
                 key={opt.id}
-                onClick={() => {
-                  sounds.playClick();
-                  setQ3Answer(opt.id);
-                }}
+                disabled={(cooldowns.q3 || 0) > 0}
+                onClick={() => handleSelectQ3(opt.id)}
                 className={`p-3 rounded-xl border text-xs font-bold text-left transition cursor-pointer flex items-center justify-between ${
+                  (cooldowns.q3 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   q3Answer === opt.id
                     ? opt.id === 'editors_suite'
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
@@ -477,6 +553,16 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
               : 'De ce este formatul .PNG preferat adesea pentru sigle, pictograme și desene pe fundaluri colorate?'}
           </p>
 
+          {cooldowns.q4 > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q4}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza caracteristicile formatului .PNG (transparență)."
+                customMessageEn="Incorrect answer! Please take 5 seconds to reflect on .PNG transparency."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               { id: 'png_transparency', label: 'Suportă fundal transparent și păstrează calitatea liniilor fără estompare' },
@@ -486,11 +572,11 @@ export const G1Level1_Graphics2Dvs3D: React.FC<G1Level1Props> = ({ onCompletePag
             ].map((opt) => (
               <button
                 key={opt.id}
-                onClick={() => {
-                  sounds.playClick();
-                  setQ4Answer(opt.id);
-                }}
+                disabled={(cooldowns.q4 || 0) > 0}
+                onClick={() => handleSelectQ4(opt.id)}
                 className={`p-3 rounded-xl border text-xs font-bold text-left transition cursor-pointer flex items-center justify-between ${
+                  (cooldowns.q4 || 0) > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                } ${
                   q4Answer === opt.id
                     ? opt.id === 'png_transparency'
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'

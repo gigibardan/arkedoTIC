@@ -20,6 +20,7 @@ import { sounds } from '../../utils/audio';
 import { useLanguage } from '../../context/LanguageContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
 import { QuestionHint } from '../common/QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface FLevel2Props {
   onComplete: () => void;
@@ -30,9 +31,11 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
   // Task 1: Extension Matching
   const [matchedExtensions, setMatchedExtensions] = useState<Record<string, 'text' | 'image' | 'audio' | 'video'>>({});
+  const [extCooldown, setExtCooldown] = useState<number>(0);
   
   // Task 2: Forbidden Characters Validator
   const [inspectedNames, setInspectedNames] = useState<Record<string, boolean>>({});
+  const [nameCooldown, setNameCooldown] = useState<number>(0);
 
   // Task 3: Path Reconstitution
   const [selectedPathTokens, setSelectedPathTokens] = useState<string[]>([]);
@@ -44,6 +47,20 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
     folderHasFiles?: boolean;
     fillBlankFile?: string;
   }>({});
+  const [tfCooldown, setTfCooldown] = useState<number>(0);
+
+  const start5sCooldown = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+    setter(5);
+    const timer = setInterval(() => {
+      setter((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   // Task 1 Logic
   const extensionsList = [
@@ -56,6 +73,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
   ];
 
   const handleMatchExt = (ext: string, cat: 'text' | 'image' | 'audio' | 'video') => {
+    if (extCooldown > 0) return;
     sounds.playClick();
     const correctCat = extensionsList.find((e) => e.ext === ext)?.category;
     if (correctCat === cat) {
@@ -63,6 +81,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
       setMatchedExtensions((prev) => ({ ...prev, [ext]: cat }));
     } else {
       sounds.playWrong();
+      start5sCooldown(setExtCooldown);
     }
   };
 
@@ -109,6 +128,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
   ];
 
   const handleInspectName = (id: string, userChoice: boolean) => {
+    if (nameCooldown > 0) return;
     const item = filenameTestItems.find((f) => f.id === id);
     if (!item) return;
 
@@ -118,6 +138,7 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
     } else {
       sounds.playWrong();
       setInspectedNames((prev) => ({ ...prev, [id]: false }));
+      start5sCooldown(setNameCooldown);
     }
   };
 
@@ -234,6 +255,15 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             />
           </div>
 
+          {extCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={extCooldown}
+              customMessageRo="Asociere incorectă de format! Te rugăm să acorzi 5 secunde pentru a citi categoria corectă conform manualului pag. 25."
+              customMessageEn="Incorrect format match! Please take 5 seconds to review the category."
+              className="mb-3"
+            />
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {extensionsList.map((item) => {
               const matched = matchedExtensions[item.ext];
@@ -261,8 +291,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                   {/* 4 category buttons */}
                   <div className="grid grid-cols-2 gap-1.5 text-[11px] font-semibold">
                     <button
+                      disabled={extCooldown > 0}
                       onClick={() => handleMatchExt(item.ext, 'text')}
-                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 ${
+                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 disabled:cursor-not-allowed disabled:opacity-50 ${
                         matched === 'text'
                           ? 'bg-blue-600 border-blue-400 text-white'
                           : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -272,8 +303,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     </button>
 
                     <button
+                      disabled={extCooldown > 0}
                       onClick={() => handleMatchExt(item.ext, 'image')}
-                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 ${
+                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 disabled:cursor-not-allowed disabled:opacity-50 ${
                         matched === 'image'
                           ? 'bg-emerald-600 border-emerald-400 text-white'
                           : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -283,8 +315,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     </button>
 
                     <button
+                      disabled={extCooldown > 0}
                       onClick={() => handleMatchExt(item.ext, 'audio')}
-                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 ${
+                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 disabled:cursor-not-allowed disabled:opacity-50 ${
                         matched === 'audio'
                           ? 'bg-purple-600 border-purple-400 text-white'
                           : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -294,8 +327,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     </button>
 
                     <button
+                      disabled={extCooldown > 0}
                       onClick={() => handleMatchExt(item.ext, 'video')}
-                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 ${
+                      className={`py-1.5 px-2 rounded-lg border transition cursor-pointer flex items-center justify-center gap-1 disabled:cursor-not-allowed disabled:opacity-50 ${
                         matched === 'video'
                           ? 'bg-rose-600 border-rose-400 text-white'
                           : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -347,6 +381,15 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             />
           </div>
 
+          {nameCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={nameCooldown}
+              customMessageRo="Atenție la caracterele interzise! În Windows, semnele : * / \ ? < > | nu pot fi folosite în numele fișierelor (Manual pag. 25)."
+              customMessageEn="Watch out for forbidden characters! Symbols like : * / \ ? < > | cannot be used in Windows file names."
+              className="mb-3"
+            />
+          )}
+
           <div className="space-y-2.5">
             {filenameTestItems.map((item) => {
               const isResolved = inspectedNames[item.id] === true;
@@ -383,8 +426,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
 
                   <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                     <button
+                      disabled={nameCooldown > 0}
                       onClick={() => handleInspectName(item.id, true)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border disabled:cursor-not-allowed disabled:opacity-50 ${
                         isResolved && item.isValid
                           ? 'bg-emerald-600 border-emerald-400 text-white'
                           : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
@@ -394,8 +438,9 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     </button>
 
                     <button
+                      disabled={nameCooldown > 0}
                       onClick={() => handleInspectName(item.id, false)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border disabled:cursor-not-allowed disabled:opacity-50 ${
                         isResolved && !item.isValid
                           ? 'bg-rose-600 border-rose-400 text-white'
                           : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
@@ -542,6 +587,15 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             )}
           </div>
 
+          {tfCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={tfCooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza enunțul conform manualului pag. 25-26."
+              customMessageEn="Incorrect answer! Please take 5 seconds to review the statement."
+              className="mb-3"
+            />
+          )}
+
           <div className="space-y-3">
             {/* Q1 */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col gap-2">
@@ -551,11 +605,14 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    disabled={tfCooldown > 0}
                     onClick={() => {
+                      if (tfCooldown > 0) return;
                       sounds.playWrong();
                       setTfAnswers((prev) => ({ ...prev, fileHasFolders: true }));
+                      start5sCooldown(setTfCooldown);
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       tfAnswers.fileHasFolders === true
                         ? 'bg-rose-600 border-rose-400 text-white'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -564,11 +621,13 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     {lang === 'en' ? 'True' : 'Adevărat'}
                   </button>
                   <button
+                    disabled={tfCooldown > 0}
                     onClick={() => {
+                      if (tfCooldown > 0) return;
                       sounds.playCorrect();
                       setTfAnswers((prev) => ({ ...prev, fileHasFolders: false }));
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       tfAnswers.fileHasFolders === false
                         ? 'bg-emerald-600 border-emerald-400 text-white'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -603,11 +662,13 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    disabled={tfCooldown > 0}
                     onClick={() => {
+                      if (tfCooldown > 0) return;
                       sounds.playCorrect();
                       setTfAnswers((prev) => ({ ...prev, folderHasFiles: true }));
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       tfAnswers.folderHasFiles === true
                         ? 'bg-emerald-600 border-emerald-400 text-white'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -616,11 +677,14 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     {lang === 'en' ? 'True' : 'Adevărat'}
                   </button>
                   <button
+                    disabled={tfCooldown > 0}
                     onClick={() => {
+                      if (tfCooldown > 0) return;
                       sounds.playWrong();
                       setTfAnswers((prev) => ({ ...prev, folderHasFiles: false }));
+                      start5sCooldown(setTfCooldown);
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       tfAnswers.folderHasFiles === false
                         ? 'bg-rose-600 border-rose-400 text-white'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -655,11 +719,13 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    disabled={tfCooldown > 0}
                     onClick={() => {
+                      if (tfCooldown > 0) return;
                       sounds.playCorrect();
                       setTfAnswers((prev) => ({ ...prev, fillBlankFile: 'fisiere' }));
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       tfAnswers.fillBlankFile === 'fisiere'
                         ? 'bg-emerald-600 border-emerald-400 text-white'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
@@ -668,11 +734,14 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
                     📄 {lang === 'en' ? 'Files' : 'Fișiere'}
                   </button>
                   <button
+                    disabled={tfCooldown > 0}
                     onClick={() => {
+                      if (tfCooldown > 0) return;
                       sounds.playWrong();
                       setTfAnswers((prev) => ({ ...prev, fillBlankFile: 'cabluri' }));
+                      start5sCooldown(setTfCooldown);
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       tfAnswers.fillBlankFile === 'cabluri'
                         ? 'bg-rose-600 border-rose-400 text-white'
                         : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'

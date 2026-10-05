@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Table, 
   Grid, 
@@ -17,6 +17,7 @@ import { sounds } from '../../utils/audio';
 import { QuestionHint } from '../text1/QuestionHint';
 import { AnswerExplanation } from '../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../text1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface T2Level1_TablesCreationProps {
   onCompletePage: (earnedScore: number) => void;
@@ -48,6 +49,23 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
     q3: null,
     q4: null
   });
+  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const hasActive = Object.values(cooldowns).some((c: number) => c > 0);
+    if (!hasActive) return;
+    const t = setInterval(() => {
+      setCooldowns(prev => {
+        const next: Record<string, number> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          const val = v as number;
+          if (val > 1) next[k] = val - 1;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldowns]);
 
   const correctAnswers: Record<string, number> = {
     q1: 1, // Celulă
@@ -57,8 +75,15 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
   };
 
   const handleSelectAnswer = (qKey: string, optIdx: number) => {
+    if ((cooldowns[qKey] || 0) > 0) return;
     sounds.playClick();
     setAnswers(prev => ({ ...prev, [qKey]: optIdx }));
+    if (optIdx === correctAnswers[qKey]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, [qKey]: 5 }));
+    }
   };
 
   // Grid sizing interaction
@@ -433,6 +458,16 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               : 'Cum se numește căsuța dreptunghiulară formată la intersecția dintre o linie (rând) și o coloană?'}
           </div>
 
+          {(cooldowns['q1'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q1']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza structura unui tabel din manual pag. 68."
+                customMessageEn="Incorrect! Please take 5 seconds to review table elements on page 68."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Paragraf' : 'A) Paragraf',
@@ -443,8 +478,9 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q1'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q1', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q1 === idx
                     ? idx === correctAnswers.q1
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -466,6 +502,7 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
           {answers.q1 !== null && (
             <AnswerExplanation
               isCorrect={answers.q1 === correctAnswers.q1}
+              cooldown={cooldowns['q1'] || 0}
               explanation={
                 answers.q1 === correctAnswers.q1
                   ? (lang === 'en' ? 'Exact! A cell is the intersection of a row and column.' : 'Corect! Celula este elementul de bază format la intersecția unui rând cu o coloană.')
@@ -487,6 +524,16 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               : 'Care tastă este folosită pentru a trece rapid la celula următoare din dreapta în interiorul unui tabel?'}
           </div>
 
+          {(cooldowns['q2'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q2']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza deplasarea între celule din manual pag. 69."
+                customMessageEn="Incorrect! Please take 5 seconds to review cell navigation on page 69."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Spacebar (Bara de spațiu)' : 'A) Bara de spațiu',
@@ -497,8 +544,9 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q2'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q2', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q2 === idx
                     ? idx === correctAnswers.q2
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -520,6 +568,7 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
           {answers.q2 !== null && (
             <AnswerExplanation
               isCorrect={answers.q2 === correctAnswers.q2}
+              cooldown={cooldowns['q2'] || 0}
               explanation={
                 answers.q2 === correctAnswers.q2
                   ? (lang === 'en' ? 'Great! TAB jumps to the next cell to the right.' : 'Excelent! Tasta TAB avansează cursorul la celula din dreapta.')
@@ -541,6 +590,16 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               : 'Ce se întâmplă dacă te afli în ultima celulă (colțul dreapta-jos) a tabelului și apeși tasta TAB?'}
           </div>
 
+          {(cooldowns['q3'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q3']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza efectul tastei TAB în ultima celulă (manual pag. 70)."
+                customMessageEn="Incorrect! Please take 5 seconds to review the TAB key effect in the last cell (page 70)."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) It automatically inserts a brand new row at the bottom' : 'A) Se inserează automat un rând nou la sfârșitul tabelului',
@@ -551,8 +610,9 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q3'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q3', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q3 === idx
                     ? idx === correctAnswers.q3
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -574,6 +634,7 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
           {answers.q3 !== null && (
             <AnswerExplanation
               isCorrect={answers.q3 === correctAnswers.q3}
+              cooldown={cooldowns['q3'] || 0}
               explanation={
                 answers.q3 === correctAnswers.q3
                   ? (lang === 'en' ? 'Correct! TAB in the final cell automatically appends a new row.' : 'Exact! În ultima celulă, TAB creează automat un rând nou cu aceleași caracteristici.')
@@ -595,6 +656,16 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               : 'Ce efect are apăsarea tastei Enter în timp ce scrii în interiorul unei celule?'}
           </div>
 
+          {(cooldowns['q4'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q4']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza efectul tastei Enter în celule (manual pag. 70)."
+                customMessageEn="Incorrect! Please take 5 seconds to review the Enter key inside cells (page 70)."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Moves the cursor to the cell below' : 'A) Mută automat cursorul în celula de dedesubt',
@@ -605,8 +676,9 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q4'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q4', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q4 === idx
                     ? idx === correctAnswers.q4
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -628,6 +700,7 @@ export const T2Level1_TablesCreation: React.FC<T2Level1_TablesCreationProps> = (
           {answers.q4 !== null && (
             <AnswerExplanation
               isCorrect={answers.q4 === correctAnswers.q4}
+              cooldown={cooldowns['q4'] || 0}
               explanation={
                 answers.q4 === correctAnswers.q4
                   ? (lang === 'en' ? 'Perfect! Enter creates a new line/paragraph inside the cell, expanding its height.' : 'Perfect! Enter creează un rând nou în interiorul aceleiași celule, mărindu-i înălțimea.')

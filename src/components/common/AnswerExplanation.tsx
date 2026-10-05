@@ -4,8 +4,10 @@ import { useLanguage } from '../../context/LanguageContext';
 
 export interface AnswerExplanationProps {
   isCorrect: boolean | null;
-  explanationRo: string;
-  explanationEn: string;
+  explanationRo?: string;
+  explanationEn?: string;
+  explanation?: string; // Fallback single explanation
+  ruleReference?: string;
   selectedLabelRo?: string;
   selectedLabelEn?: string;
   customBadgeRo?: string;
@@ -19,6 +21,8 @@ export const AnswerExplanation: React.FC<AnswerExplanationProps> = ({
   isCorrect,
   explanationRo,
   explanationEn,
+  explanation,
+  ruleReference,
   selectedLabelRo,
   selectedLabelEn,
   customBadgeRo,
@@ -32,6 +36,11 @@ export const AnswerExplanation: React.FC<AnswerExplanationProps> = ({
   if (isCorrect === null || isCorrect === undefined) {
     return null;
   }
+
+  const finalExplanation =
+    lang === 'en'
+      ? explanationEn || explanation || explanationRo || ''
+      : explanationRo || explanation || explanationEn || '';
 
   return (
     <div
@@ -107,8 +116,16 @@ export const AnswerExplanation: React.FC<AnswerExplanationProps> = ({
 
           {/* Explanation Text */}
           <p className="text-slate-200 text-xs sm:text-[13px] font-medium leading-relaxed">
-            {lang === 'en' ? explanationEn : explanationRo}
+            {finalExplanation}
           </p>
+
+          {/* Optional Rule Reference */}
+          {ruleReference && (
+            <p className="text-[11px] text-indigo-300/90 font-mono mt-1 flex items-center gap-1">
+              <span>📖</span>
+              <span>{ruleReference}</span>
+            </p>
+          )}
 
           {/* Cooldown Progress Bar */}
           {!isCorrect && cooldown > 0 && (

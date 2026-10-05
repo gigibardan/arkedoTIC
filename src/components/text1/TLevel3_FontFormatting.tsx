@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Type, Bold, Italic, Underline, Strikethrough, Sparkles, BookOpen, CheckCircle2, Sliders, Palette, Zap } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
@@ -6,6 +6,7 @@ import { sounds } from '../../utils/audio';
 import { PageNavigationFooter } from './PageNavigationFooter';
 import { AnswerExplanation } from './AnswerExplanation';
 import { QuestionHint } from './QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface TLevel3Props {
   onCompletePage: (score: number) => void;
@@ -26,7 +27,21 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
 
   // Quiz questions
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
 
   const handleWaterToggle = () => {
     sounds.playClick();
@@ -64,17 +79,27 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
   };
 
   const handleQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
     sounds.playClick();
     setQ1Answer(val);
-    if (val === 'ctrl_b') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'ctrl_b') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
   };
 
   const handleQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
     sounds.playClick();
     setQ2Answer(val);
-    if (val === 'subscript') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'subscript') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
   };
 
   // Evaluation
@@ -397,11 +422,22 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             <span className="text-xs font-mono text-purple-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q1Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q1Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza scurtăturile de formatare din manual pag. 57."
+                customMessageEn="Incorrect! Please take 5 seconds to review formatting shortcuts on textbook page 57."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('ctrl_b')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'ctrl_b'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -411,8 +447,9 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('ctrl_i')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'ctrl_i'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -422,8 +459,9 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('ctrl_u')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'ctrl_u'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -433,8 +471,9 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('ctrl_s')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'ctrl_s'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -452,6 +491,7 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
+              cooldown={q1Cooldown}
               explanation={
                 isQ1Correct
                   ? (lang === 'en' ? 'Spot on! Ctrl+B is the universal shortcut for Bold. Ctrl+I is for Italic, and Ctrl+U is for Underline.' : 'Corect! Ctrl+B este scurtătura universală pentru Bold (îngroșat). Ctrl+I este pentru Italic (cursiv), iar Ctrl+U pentru Subliniere.')
@@ -473,11 +513,22 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             <span className="text-xs font-mono text-purple-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q2Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q2Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza diferența dintre Indice și Exponent din manual pag. 58."
+                customMessageEn="Incorrect! Please take 5 seconds to review Subscript vs Superscript on textbook page 58."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('subscript')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'subscript'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -487,8 +538,9 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('superscript')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'superscript'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -498,8 +550,9 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('strike')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'strike'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -509,8 +562,9 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('highlight')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'highlight'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -528,6 +582,7 @@ export const TLevel3_FontFormatting: React.FC<TLevel3Props> = ({ onCompletePage 
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
+              cooldown={q2Cooldown}
               explanation={
                 isQ2Correct
                   ? (lang === 'en' ? 'Perfect! Subscript lowers the character for chemistry formulas, while Superscript raises it for mathematical powers.' : 'Excelent! Indicele (Subscript) coboară caracterul pentru formule chimice, iar Exponentul (Superscript) îl ridică pentru puteri matematice.')

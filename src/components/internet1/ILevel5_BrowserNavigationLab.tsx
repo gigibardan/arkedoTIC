@@ -15,6 +15,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from './QuestionHint';
 import { AnswerExplanation } from './AnswerExplanation';
 import { PageNavigationFooter } from './PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface ILevel5Props {
@@ -74,9 +75,24 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
   // c) Între paginile web pot exista mai multe hiperlinkuri -> Adevărat (A)
 
   const [qBrowserProgram, setQBrowserProgram] = useState<string | null>(null);
+  const [browserCooldown, setBrowserCooldown] = useState<number>(0);
   const [tfA, setTfA] = useState<string | null>(null);
   const [tfB, setTfB] = useState<string | null>(null);
   const [tfC, setTfC] = useState<string | null>(null);
+  const [tfCooldown, setTfCooldown] = useState<number>(0);
+
+  const start5sCooldown = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+    setter(5);
+    const timer = setInterval(() => {
+      setter((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const currentPage = pages[historyIndex];
 
@@ -283,6 +299,15 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
             {lang === 'en' ? 'What program do we use to browse the internet?' : 'Ce program folosim pentru a naviga pe internet?'}
           </p>
 
+          {browserCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={browserCooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a citi explicația din manual (pag. 34-36) înainte de a încerca din nou."
+              customMessageEn="Incorrect answer! Please take 5 seconds to review the explanation before trying again."
+              className="mb-2"
+            />
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {[
               { id: 'image_editor', labelRo: 'a) Un program de editare de imagini (Paint)', labelEn: 'a) An image editing app (Paint)' },
@@ -292,12 +317,18 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
               <button
                 key={opt.id}
                 type="button"
+                disabled={browserCooldown > 0}
                 onClick={() => {
+                  if (browserCooldown > 0) return;
                   setQBrowserProgram(opt.id);
-                  if (opt.id === 'browser') sounds.playCorrect();
-                  else sounds.playWrong();
+                  if (opt.id === 'browser') {
+                    sounds.playCorrect();
+                  } else {
+                    sounds.playWrong();
+                    start5sCooldown(setBrowserCooldown);
+                  }
                 }}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-semibold transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-semibold transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   qBrowserProgram === opt.id
                     ? opt.id === 'browser'
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'

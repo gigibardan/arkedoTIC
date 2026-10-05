@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShieldAlert,
   CheckCircle2,
@@ -16,6 +16,7 @@ import { TeacherTip } from '../TeacherTip';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface I2Level2_InformationEvaluationProps {
@@ -28,6 +29,29 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
   const { lang } = useLanguage();
   const arky = useArky();
 
+  // Pedagogical Cooldowns
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+  const [q3Cooldown, setQ3Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
+
+  useEffect(() => {
+    if (q3Cooldown <= 0) return;
+    const t = setInterval(() => setQ3Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q3Cooldown]);
+
   // Task 1: 3 criteria for evaluating sources
   const [q1Criteria, setQ1Criteria] = useState<string>('');
   // Task 2: News credibility inspector (3 articles)
@@ -36,6 +60,43 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
   const [article3Eval, setArticle3Eval] = useState<'real' | 'fake' | ''>('');
   // Task 3: Cross verification rule
   const [q3CrossCheck, setQ3CrossCheck] = useState<string>('');
+
+  const handleSelectQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
+    setQ1Criteria(val);
+    if (val === 'author_date_domain') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
+  };
+
+  const handleSelectArticle = (artIdx: 1 | 2 | 3, val: 'real' | 'fake') => {
+    if (q2Cooldown > 0) return;
+    const correctMap = { 1: 'fake', 2: 'real', 3: 'fake' };
+    if (artIdx === 1) setArticle1Eval(val);
+    if (artIdx === 2) setArticle2Eval(val);
+    if (artIdx === 3) setArticle3Eval(val);
+
+    if (val === correctMap[artIdx]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
+  };
+
+  const handleSelectQ3 = (val: string) => {
+    if (q3Cooldown > 0) return;
+    setQ3CrossCheck(val);
+    if (val === 'triangulation') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ3Cooldown(5);
+    }
+  };
 
   const isQ1Correct = q1Criteria === 'author_date_domain';
   const isQ2Correct =
@@ -130,18 +191,26 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
             : 'Selectează răspunsul care cuprinde indicii reali de credibilitate conform manualului:'}
         </p>
 
+        {q1Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q1Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza indicii de credibilitate din manual pag. 39-40."
+              customMessageEn="Incorrect! Please take 5 seconds to review the credibility criteria on pp. 39–40."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ1Criteria('author_date_domain');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('author_date_domain')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Criteria === 'author_date_domain'
                 ? 'bg-amber-950/80 border-amber-500 text-white shadow-md ring-1 ring-amber-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Author, Date, Institution & Sources' : 'A) Autor, Dată, Instituție & Surse'}
@@ -155,15 +224,13 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
 
           <button
             type="button"
-            onClick={() => {
-              setQ1Criteria('flashy_colors');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('flashy_colors')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Criteria === 'flashy_colors'
                 ? 'bg-amber-950/80 border-amber-500 text-white shadow-md ring-1 ring-amber-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Flashing Banners & Popup Ads' : 'B) Reclame Clipitoare & Ferestre Popup'}
@@ -177,15 +244,13 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
 
           <button
             type="button"
-            onClick={() => {
-              setQ1Criteria('many_emojis');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('many_emojis')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1Criteria === 'many_emojis'
                 ? 'bg-amber-950/80 border-amber-500 text-white shadow-md ring-1 ring-amber-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'C) All-Caps Screaming Title' : 'C) Titlu Scris cu MAJUSCULE'}
@@ -207,6 +272,7 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
         {q1Criteria && (
           <AnswerExplanation
             isCorrect={isQ1Correct}
+            cooldown={q1Cooldown}
             explanationRo={
               isQ1Correct
                 ? 'Corect! Credibilitatea unei pagini web se bazează pe verificarea autorului (specialist în domeniu), a datei (să nu fie depășită) și a instituției care găzduiește conținutul.'
@@ -247,6 +313,16 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
             : 'Citește cu atenție cele 3 știri și marchează dacă este o Sursă Credibilă sau o Știre Falsă / Zvon Nesigur:'}
         </p>
 
+        {q2Cooldown > 0 && (
+          <div className="mb-4">
+            <PedagogicalReflectionBanner
+              cooldown={q2Cooldown}
+              customMessageRo="Clasificare greșită! Te rugăm să acorzi 5 secunde pentru a citi cu atenție indiciile articolului (domeniu, autor, ton senzaționalist)."
+              customMessageEn="Incorrect classification! Please take 5 seconds to carefully examine the article clues."
+            />
+          </div>
+        )}
+
         <div className="space-y-3">
           {/* Article 1 */}
           <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -265,29 +341,25 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setArticle1Eval('real');
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectArticle(1, 'real')}
                 className={`px-3 py-2 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   article1Eval === 'real'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Verified Fact' : 'Informație Reală'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setArticle1Eval('fake');
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectArticle(1, 'fake')}
                 className={`px-3 py-2 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   article1Eval === 'fake'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Fake News 🚨' : 'Știre Falsă 🚨'}
               </button>
@@ -311,29 +383,25 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setArticle2Eval('real');
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectArticle(2, 'real')}
                 className={`px-3 py-2 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   article2Eval === 'real'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Verified Fact ✓' : 'Informație Reală ✓'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setArticle2Eval('fake');
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectArticle(2, 'fake')}
                 className={`px-3 py-2 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   article2Eval === 'fake'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Fake News 🚨' : 'Știre Falsă 🚨'}
               </button>
@@ -357,29 +425,25 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  setArticle3Eval('real');
-                  sounds.playClick();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectArticle(3, 'real')}
                 className={`px-3 py-2 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   article3Eval === 'real'
                     ? 'bg-rose-950 border-rose-500 text-rose-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Verified Fact' : 'Informație Reală'}
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setArticle3Eval('fake');
-                  sounds.playCorrect();
-                }}
+                disabled={q2Cooldown > 0}
+                onClick={() => handleSelectArticle(3, 'fake')}
                 className={`px-3 py-2 rounded-lg text-xs font-bold border transition cursor-pointer ${
                   article3Eval === 'fake'
                     ? 'bg-emerald-950 border-emerald-500 text-emerald-200'
                     : 'bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800'
-                }`}
+                } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {lang === 'en' ? 'Fake News / Rumor 🚨' : 'Zvon Fals 🚨'}
               </button>
@@ -390,6 +454,7 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
         {article1Eval && article2Eval && article3Eval && (
           <AnswerExplanation
             isCorrect={isQ2Correct}
+            cooldown={q2Cooldown}
             explanationRo={
               isQ2Correct
                 ? 'Excelent! Ai identificat corect cele două știri false (senzaționalism extraterestru și zvon nesusținut de pe rețele) și articolul științific oficial de pe site-ul Muzeului Antipa.'
@@ -420,18 +485,26 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
           </span>
         </div>
 
+        {q3Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q3Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza Regula celor 3 Surse (pag. 39-40)."
+              customMessageEn="Incorrect! Please take 5 seconds to review the 3-Source Cross-Checking rule."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ3CrossCheck('triangulation');
-              sounds.playClick();
-            }}
+            disabled={q3Cooldown > 0}
+            onClick={() => handleSelectQ3('triangulation')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q3CrossCheck === 'triangulation'
                 ? 'bg-amber-950/80 border-amber-500 text-white shadow-md ring-1 ring-amber-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q3Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) 3 Independent Trusted Sources' : 'A) 3 Surse Independente de Încredere'}
@@ -445,15 +518,13 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
 
           <button
             type="button"
-            onClick={() => {
-              setQ3CrossCheck('single_tiktok');
-              sounds.playClick();
-            }}
+            disabled={q3Cooldown > 0}
+            onClick={() => handleSelectQ3('single_tiktok')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q3CrossCheck === 'single_tiktok'
                 ? 'bg-amber-950/80 border-amber-500 text-white shadow-md ring-1 ring-amber-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q3Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Asking 3 random comments on TikTok' : 'B) Întrebarea a 3 comentatori la întâmplare pe TikTok'}
@@ -475,6 +546,7 @@ export const I2Level2_InformationEvaluation: React.FC<I2Level2_InformationEvalua
         {q3CrossCheck && (
           <AnswerExplanation
             isCorrect={isQ3Correct}
+            cooldown={q3Cooldown}
             explanationRo={
               isQ3Correct
                 ? 'Bravo! În cercetarea digitală și jurnalism, regula celor 3 surse protejează elevii și cercetătorii de erori și dezinformare.'

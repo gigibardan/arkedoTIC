@@ -27,6 +27,7 @@ import { sounds } from '../../utils/audio';
 import { useLanguage } from '../../context/LanguageContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
 import { QuestionHint } from '../common/QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface FLevel1Props {
   onComplete: () => void;
@@ -42,12 +43,14 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
   // Power Scenarios Quiz
   const [powerScenario1, setPowerScenario1] = useState<'sleep' | 'shutdown' | 'restart' | null>(null);
   const [powerScenario2, setPowerScenario2] = useState<'sleep' | 'shutdown' | 'restart' | null>(null);
+  const [powerCooldown, setPowerCooldown] = useState<number>(0);
   const [taskbarInspected, setTaskbarInspected] = useState(false);
   const [recycleBinFound, setRecycleBinFound] = useState(false);
 
   // Text vs GUI Sorting & App vs OS Classification
   const [selectedOS, setSelectedOS] = useState<string[]>([]);
   const [osClassifiedCorrect, setOsClassifiedCorrect] = useState(false);
+  const [osCooldown, setOsCooldown] = useState<number>(0);
 
   // Window Controls Interactive State
   const [windowState, setWindowState] = useState<'normal' | 'maximized' | 'minimized'>('normal');
@@ -56,6 +59,20 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
   const [testedClose, setTestedClose] = useState(false);
   const [altF4Answer, setAltF4Answer] = useState<string | null>(null);
   const [triviaSolitaireAnswer, setTriviaSolitaireAnswer] = useState<boolean | null>(null);
+  const [shortcutCooldown, setShortcutCooldown] = useState<number>(0);
+
+  const start5sCooldown = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+    setter(5);
+    const timer = setInterval(() => {
+      setter((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   // Checks
   const isStep1Done = powerScenario1 === 'sleep' && powerScenario2 === 'shutdown' && recycleBinFound && taskbarInspected;
@@ -63,12 +80,18 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
   // Ex 4 pag. 24: Identify OS from [Paint, Media Player, Notepad, Windows, WordPad, MS-DOS]
   // Correct OS items: "Windows" and "MS-DOS"
   const handleToggleItem = (item: string) => {
+    if (osCooldown > 0) return;
     sounds.playClick();
     let updated: string[];
     if (selectedOS.includes(item)) {
       updated = selectedOS.filter(x => x !== item);
     } else {
       updated = [...selectedOS, item];
+      // If clicking a non-OS item, trigger 5s cooldown
+      if (!['Windows', 'MS-DOS'].includes(item)) {
+        sounds.playWrong();
+        start5sCooldown(setOsCooldown);
+      }
     }
     setSelectedOS(updated);
 
@@ -348,113 +371,135 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
           </div>
 
           {/* Scenarios Check from Textbook (pag. 23 Fig. 2) */}
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-            {/* Scenario 1 */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
-              <div>
-                <div className="text-xs text-slate-300 font-semibold mb-2">
-                  ❓ <strong>{lang === 'en' ? 'Scenario 1:' : 'Situația 1:'}</strong> {lang === 'en' ? 'You step away from the computer for a 10-minute break. Which Power option do you choose for energy saving (p. 23)?' : 'Pleci de la calculator pentru 10 minute în pauză. Ce opțiune din butonul Power alegi pentru consum redus (pag. 23)?'}
-                </div>
-                <QuestionHint
-                  id="q-flevel1-power1"
-                  hintRo="Pentru o pauză scurtă nu dorim să închidem toate aplicațiile deschise, ci să economisim curent (mod Sleep/Repaus)."
-                  hintEn="For a brief break, we don't want to close open windows, just save electricity (Sleep mode)."
-                />
-                <div className="grid grid-cols-3 gap-2 text-xs mt-2">
-                  {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => {
-                        if (opt === 'sleep') sounds.playCorrect();
-                        else sounds.playWrong();
-                        setPowerScenario1(opt);
-                      }}
-                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
-                        powerScenario1 === opt
-                          ? opt === 'sleep'
-                            ? 'bg-emerald-600 border-emerald-400 text-white'
-                            : 'bg-rose-600 border-rose-400 text-white'
-                          : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                      }`}
-                    >
-                      {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
-                      {opt === 'shutdown' && '🛑 Shut down'}
-                      {opt === 'restart' && '🔄 Restart'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {powerScenario1 && (
-                <div className="mt-2">
-                  <AnswerExplanation
-                    isCorrect={powerScenario1 === 'sleep'}
-                    explanationRo={
-                      powerScenario1 === 'sleep'
-                        ? 'Excelent! Modul Sleep (Repaus) reduce consumul de energie electrică menținând sesiunea în RAM pentru reluare instantanee.'
-                        : 'Nu chiar. Pentru pauze scurte alegem Sleep (Repaus), deoarece Shut down închide complet calculatorul și pierzi timpul la repornire.'
-                    }
-                    explanationEn={
-                      powerScenario1 === 'sleep'
-                        ? 'Spot on! Sleep mode preserves active state in RAM with minimal power draw for instant wake.'
-                        : 'Not quite. For short breaks choose Sleep. Shut down powers off completely.'
-                    }
+          <div className="mt-4 pt-2">
+            {powerCooldown > 0 && (
+              <PedagogicalReflectionBanner
+                cooldown={powerCooldown}
+                customMessageRo="Opțiune incorectă de alimentare! Te rugăm să acorzi 5 secunde pentru a citi rolul fiecărui mod (Sleep vs Shut down) conform manualului pag. 23."
+                customMessageEn="Incorrect power option! Please take 5 seconds to review the textbook guidance before choosing again."
+                className="mb-3"
+              />
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Scenario 1 */}
+              <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <div>
+                  <div className="text-xs text-slate-300 font-semibold mb-2">
+                    ❓ <strong>{lang === 'en' ? 'Scenario 1:' : 'Situația 1:'}</strong> {lang === 'en' ? 'You step away from the computer for a 10-minute break. Which Power option do you choose for energy saving (p. 23)?' : 'Pleci de la calculator pentru 10 minute în pauză. Ce opțiune din butonul Power alegi pentru consum redus (pag. 23)?'}
+                  </div>
+                  <QuestionHint
+                    id="q-flevel1-power1"
+                    hintRo="Pentru o pauză scurtă nu dorim să închidem toate aplicațiile deschise, ci să economisim curent (mod Sleep/Repaus)."
+                    hintEn="For a brief break, we don't want to close open windows, just save electricity (Sleep mode)."
                   />
+                  <div className="grid grid-cols-3 gap-2 text-xs mt-2">
+                    {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        disabled={powerCooldown > 0}
+                        onClick={() => {
+                          if (powerCooldown > 0) return;
+                          setPowerScenario1(opt);
+                          if (opt === 'sleep') {
+                            sounds.playCorrect();
+                          } else {
+                            sounds.playWrong();
+                            start5sCooldown(setPowerCooldown);
+                          }
+                        }}
+                        className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                          powerScenario1 === opt
+                            ? opt === 'sleep'
+                              ? 'bg-emerald-600 border-emerald-400 text-white'
+                              : 'bg-rose-600 border-rose-400 text-white'
+                            : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                        }`}
+                      >
+                        {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
+                        {opt === 'shutdown' && '🛑 Shut down'}
+                        {opt === 'restart' && '🔄 Restart'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
-            </div>
+                {powerScenario1 && (
+                  <div className="mt-2">
+                    <AnswerExplanation
+                      isCorrect={powerScenario1 === 'sleep'}
+                      explanationRo={
+                        powerScenario1 === 'sleep'
+                          ? 'Excelent! Modul Sleep (Repaus) reduce consumul de energie electrică menținând sesiunea în RAM pentru reluare instantanee.'
+                          : 'Nu chiar. Pentru pauze scurte alegem Sleep (Repaus), deoarece Shut down închide complet calculatorul și pierzi timpul la repornire.'
+                      }
+                      explanationEn={
+                        powerScenario1 === 'sleep'
+                          ? 'Spot on! Sleep mode preserves active state in RAM with minimal power draw for instant wake.'
+                          : 'Not quite. For short breaks choose Sleep. Shut down powers off completely.'
+                      }
+                    />
+                  </div>
+                )}
+              </div>
 
-            {/* Scenario 2 */}
-            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
-              <div>
-                <div className="text-xs text-slate-300 font-semibold mb-2">
-                  ❓ <strong>{lang === 'en' ? 'Scenario 2:' : 'Situația 2:'}</strong> {lang === 'en' ? 'At the end of class in the computer lab, which option do you select for complete power off (p. 23)?' : 'La terminarea orelor în laboratorul de informatică, ce opțiune alegi pentru oprirea definitivă (pag. 23)?'}
-                </div>
-                <QuestionHint
-                  id="q-flevel1-power2"
-                  hintRo="La plecarea din clasă oprim complet stația de lucru pentru siguranță și zero consum (Shut down / Închidere)."
-                  hintEn="When leaving the school lab, completely power off the PC for safety and zero power usage (Shut down)."
-                />
-                <div className="grid grid-cols-3 gap-2 text-xs mt-2">
-                  {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => {
-                        if (opt === 'shutdown') sounds.playCorrect();
-                        else sounds.playWrong();
-                        setPowerScenario2(opt);
-                      }}
-                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
-                        powerScenario2 === opt
-                          ? opt === 'shutdown'
-                            ? 'bg-emerald-600 border-emerald-400 text-white'
-                            : 'bg-rose-600 border-rose-400 text-white'
-                          : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
-                      }`}
-                    >
-                      {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
-                      {opt === 'shutdown' && '🛑 Shut down'}
-                      {opt === 'restart' && '🔄 Restart'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {powerScenario2 && (
-                <div className="mt-2">
-                  <AnswerExplanation
-                    isCorrect={powerScenario2 === 'shutdown'}
-                    explanationRo={
-                      powerScenario2 === 'shutdown'
-                        ? 'Corect! Shut down (Închidere) oprește definitiv sistemul de operare și alimentarea cu energie a tuturor componentelor (Manual pag. 23).'
-                        : 'Incorect. La terminarea orelor calculatorul trebuie oprit complet prin comanda Shut down (Închidere).'
-                    }
-                    explanationEn={
-                      powerScenario2 === 'shutdown'
-                        ? 'Correct! Shut down completely turns off the operating system and powers down all internal components (p. 23).'
-                        : 'Incorrect. At the end of the lab session, turn off the computer completely via Shut down.'
-                    }
+              {/* Scenario 2 */}
+              <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <div>
+                  <div className="text-xs text-slate-300 font-semibold mb-2">
+                    ❓ <strong>{lang === 'en' ? 'Scenario 2:' : 'Situația 2:'}</strong> {lang === 'en' ? 'At the end of class in the computer lab, which option do you select for complete power off (p. 23)?' : 'La terminarea orelor în laboratorul de informatică, ce opțiune alegi pentru oprirea definitivă (pag. 23)?'}
+                  </div>
+                  <QuestionHint
+                    id="q-flevel1-power2"
+                    hintRo="La plecarea din clasă oprim complet stația de lucru pentru siguranță și zero consum (Shut down / Închidere)."
+                    hintEn="When leaving the school lab, completely power off the PC for safety and zero power usage (Shut down)."
                   />
+                  <div className="grid grid-cols-3 gap-2 text-xs mt-2">
+                    {(['sleep', 'shutdown', 'restart'] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        disabled={powerCooldown > 0}
+                        onClick={() => {
+                          if (powerCooldown > 0) return;
+                          setPowerScenario2(opt);
+                          if (opt === 'shutdown') {
+                            sounds.playCorrect();
+                          } else {
+                            sounds.playWrong();
+                            start5sCooldown(setPowerCooldown);
+                          }
+                        }}
+                        className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                          powerScenario2 === opt
+                            ? opt === 'shutdown'
+                              ? 'bg-emerald-600 border-emerald-400 text-white'
+                              : 'bg-rose-600 border-rose-400 text-white'
+                            : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
+                        }`}
+                      >
+                        {opt === 'sleep' && (lang === 'en' ? '🌙 Sleep' : '🌙 Sleep (Repaus)')}
+                        {opt === 'shutdown' && '🛑 Shut down'}
+                        {opt === 'restart' && '🔄 Restart'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
+                {powerScenario2 && (
+                  <div className="mt-2">
+                    <AnswerExplanation
+                      isCorrect={powerScenario2 === 'shutdown'}
+                      explanationRo={
+                        powerScenario2 === 'shutdown'
+                          ? 'Corect! Shut down (Închidere) oprește definitiv sistemul de operare și alimentarea cu energie a tuturor componentelor (Manual pag. 23).'
+                          : 'Incorect. La terminarea orelor calculatorul trebuie oprit complet prin comanda Shut down (Închidere).'
+                      }
+                      explanationEn={
+                        powerScenario2 === 'shutdown'
+                          ? 'Correct! Shut down completely turns off the operating system and powers down all internal components (p. 23).'
+                          : 'Incorrect. At the end of the lab session, turn off the computer completely via Shut down.'
+                      }
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -487,6 +532,15 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
               : 'Manualul (pag. 22 și 24 ex. 4) explică: Programele utilizator (aplicațiile) se instalează după sistemul de operare. Din lista de mai jos, selectează doar cele care sunt SISTEME DE OPERARE (nu aplicații de desen, text sau redare video):'}
           </p>
 
+          {osCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={osCooldown}
+              customMessageRo="Elementul selectat este o aplicație utilizator, nu un sistem de operare! Consultă diferența explicată mai jos înainte de a reîncerca."
+              customMessageEn="The selected item is a user application, not an OS! Review the distinction below before retrying."
+              className="mb-3"
+            />
+          )}
+
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
             {[
               { id: 'Paint', label: 'Paint', icon: '🎨', type: 'app', note: lang === 'en' ? 'Drawing app (Application)' : 'Program de desenat (Aplicație)' },
@@ -501,8 +555,9 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
               return (
                 <button
                   key={item.id}
+                  disabled={osCooldown > 0}
                   onClick={() => handleToggleItem(item.id)}
-                  className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition cursor-pointer ${
+                  className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                     isSelected
                       ? isTargetOS
                         ? 'bg-emerald-950/80 border-emerald-500 ring-2 ring-emerald-500/40 text-white'
@@ -662,6 +717,15 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
           </div>
 
           {/* Questions from Textbook (pag. 24) */}
+          {shortcutCooldown > 0 && (
+            <PedagogicalReflectionBanner
+              cooldown={shortcutCooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a citi explicația din manual (pag. 23-24) înainte de a încerca din nou."
+              customMessageEn="Incorrect answer! Please take 5 seconds to review the explanation before trying again."
+              className="mb-3"
+            />
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Alt+F4 Question */}
             <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
@@ -682,12 +746,18 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                   ].map((item) => (
                     <button
                       key={item.id}
+                      disabled={shortcutCooldown > 0}
                       onClick={() => {
-                        if (item.id === 'alt_f4') sounds.playCorrect();
-                        else sounds.playWrong();
+                        if (shortcutCooldown > 0) return;
                         setAltF4Answer(item.id);
+                        if (item.id === 'alt_f4') {
+                          sounds.playCorrect();
+                        } else {
+                          sounds.playWrong();
+                          start5sCooldown(setShortcutCooldown);
+                        }
                       }}
-                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer ${
+                      className={`py-2 px-2 rounded-lg font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                         altF4Answer === item.id
                           ? item.id === 'alt_f4'
                             ? 'bg-emerald-600 border-emerald-400 text-white'
@@ -732,11 +802,13 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                 />
                 <div className="space-y-1.5 text-xs mt-2">
                   <button
+                    disabled={shortcutCooldown > 0}
                     onClick={() => {
+                      if (shortcutCooldown > 0) return;
                       sounds.playCorrect();
                       setTriviaSolitaireAnswer(true);
                     }}
-                    className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer ${
+                    className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       triviaSolitaireAnswer === true
                         ? 'bg-emerald-600/30 border-emerald-400 text-emerald-300 font-bold'
                         : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
@@ -745,11 +817,14 @@ export const FLevel1_OSInterface: React.FC<FLevel1Props> = ({ onComplete }) => {
                     {lang === 'en' ? '✓ To teach users how to use the mouse and master drag & drop' : '✓ Pentru a-i învăța pe oameni să folosească mouse-ul și operația de drag & drop'}
                   </button>
                   <button
+                    disabled={shortcutCooldown > 0}
                     onClick={() => {
+                      if (shortcutCooldown > 0) return;
                       sounds.playWrong();
                       setTriviaSolitaireAnswer(false);
+                      start5sCooldown(setShortcutCooldown);
                     }}
-                    className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer ${
+                    className={`w-full py-2 px-3 rounded-lg font-medium text-left border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                       triviaSolitaireAnswer === false
                         ? 'bg-rose-600/30 border-rose-400 text-rose-300'
                         : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'

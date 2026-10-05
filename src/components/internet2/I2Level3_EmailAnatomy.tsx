@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Mail,
   Send,
@@ -18,6 +18,7 @@ import { TeacherTip } from '../TeacherTip';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface I2Level3_EmailAnatomyProps {
@@ -29,6 +30,29 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
 }) => {
   const { lang } = useLanguage();
   const arky = useArky();
+
+  // Pedagogical Cooldowns
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+  const [q3Cooldown, setQ3Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
+
+  useEffect(() => {
+    if (q3Cooldown <= 0) return;
+    const t = setInterval(() => setQ3Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q3Cooldown]);
 
   // Task 1: Bcc privacy question
   const [q1BccPurpose, setQ1BccPurpose] = useState<string>('');
@@ -50,6 +74,45 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
   });
   const [emailSent, setEmailSent] = useState<boolean>(false);
 
+  const handleSelectQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
+    setQ1BccPurpose(val);
+    if (val === 'hide_recipients') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
+  };
+
+  const handleSelectQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
+    setQ2AtSymbol(val);
+    if (val === 'at_sign') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
+  };
+
+  const handleSendEmail = () => {
+    if (q3Cooldown > 0) return;
+    sounds.playClick();
+    setEmailSent(true);
+    if (isQ3Correct) {
+      sounds.playCorrect();
+      arky.triggerSuccess(
+        lang === 'en'
+          ? 'Exceptional formal email formatting! Clear subject line, respectful greeting, and safe PDF attachment! ✉️✨'
+          : 'Formatare excepțională a mesajului formal! Subiect clar, formulă politicoasă și atașament PDF curat! ✉️✨'
+      );
+    } else {
+      sounds.playWrong();
+      setQ3Cooldown(5);
+    }
+  };
+
   const isQ1Correct = q1BccPurpose === 'hide_recipients';
   const isQ2Correct = q2AtSymbol === 'at_sign';
   const isQ3Correct =
@@ -62,21 +125,6 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
   const correctCount = (isQ1Correct ? 1 : 0) + (isQ2Correct ? 1 : 0) + (isQ3Correct ? 1 : 0);
   const totalQuestions = 3;
   const pageScore = correctCount === 3 ? 15 : correctCount === 2 ? 10 : correctCount === 1 ? 5 : 0;
-
-  const handleSendEmail = () => {
-    sounds.playClick();
-    setEmailSent(true);
-    if (isQ3Correct) {
-      sounds.playCorrect();
-      arky.triggerSuccess(
-        lang === 'en'
-          ? 'Exceptional formal email formatting! Clear subject line, respectful greeting, and safe PDF attachment! ✉️✨'
-          : 'Formatare excepțională a mesajului formal! Subiect clar, formulă politicoasă și atașament PDF curat! ✉️✨'
-      );
-    } else {
-      sounds.playWrong();
-    }
-  };
 
   const handleProceed = () => {
     sounds.playVictory();
@@ -167,18 +215,26 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
             : 'Alege motivul legat de securitate și confidențialitate explicat în manualul de TIC (pag. 41):'}
         </p>
 
+        {q1Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q1Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza rolul câmpului Bcc din manual pag. 41."
+              customMessageEn="Incorrect! Please take 5 seconds to review the purpose of Bcc on page 41."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ1BccPurpose('hide_recipients');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('hide_recipients')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1BccPurpose === 'hide_recipients'
                 ? 'bg-sky-950/80 border-sky-500 text-white shadow-md ring-1 ring-sky-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Protect Personal Privacy' : 'A) Protejarea Datelor Personale'}
@@ -192,15 +248,13 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ1BccPurpose('speed_up');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('speed_up')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1BccPurpose === 'speed_up'
                 ? 'bg-sky-950/80 border-sky-500 text-white shadow-md ring-1 ring-sky-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Speeds up Internet Cable' : 'B) Mărește Viteza Cablului'}
@@ -214,15 +268,13 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ1BccPurpose('delete_later');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('delete_later')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1BccPurpose === 'delete_later'
                 ? 'bg-sky-950/80 border-sky-500 text-white shadow-md ring-1 ring-sky-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'C) Auto-Destruct in 5 Minutes' : 'C) Șterge Mesajul în 5 Minute'}
@@ -244,6 +296,7 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
         {q1BccPurpose && (
           <AnswerExplanation
             isCorrect={isQ1Correct}
+            cooldown={q1Cooldown}
             explanationRo={
               isQ1Correct
                 ? 'Foarte bine! Câmpul Bcc (Blind Carbon Copy) împiedică expunerea adreselor private de e-mail către terți și previne răspunsurile accidentale de tip «Reply to All».'
@@ -278,18 +331,26 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
           </span>
         </div>
 
+        {q2Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q2Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza rolul simbolului @ din manual pag. 41."
+              customMessageEn="Incorrect! Please take 5 seconds to review the @ symbol function on page 41."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ2AtSymbol('at_sign');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('at_sign')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q2AtSymbol === 'at_sign'
                 ? 'bg-sky-950/80 border-sky-500 text-white shadow-md ring-1 ring-sky-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Separates User Name from Host Domain' : 'A) Separă Numele Utilizatorului de Domeniul Gazdă'}
@@ -303,15 +364,13 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ2AtSymbol('password_encrypt');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('password_encrypt')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q2AtSymbol === 'password_encrypt'
                 ? 'bg-sky-950/80 border-sky-500 text-white shadow-md ring-1 ring-sky-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Encrypts the user password' : 'B) Criptează parola secretă a utilizatorului'}
@@ -333,6 +392,7 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
         {q2AtSymbol && (
           <AnswerExplanation
             isCorrect={isQ2Correct}
+            cooldown={q2Cooldown}
             explanationRo={
               isQ2Correct
                 ? 'Excelent! Simbolul @ (a rond) face legătura logică: indică pe ce server de e-mail (domeniu) se află căsuța poștală a utilizatorului respectiv.'
@@ -481,6 +541,16 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
             </select>
           </div>
 
+          {q3Cooldown > 0 && (
+            <div className="mb-3">
+              <PedagogicalReflectionBanner
+                cooldown={q3Cooldown}
+                customMessageRo="Structură de e-mail formal incorectă! Te rugăm să acorzi 5 secunde pentru a verifica adresa, politețea, atașamentul PDF și semnătura (pag. 41-42)."
+                customMessageEn="Incorrect formal email structure! Please take 5 seconds to review the components."
+              />
+            </div>
+          )}
+
           {/* Send Button */}
           <div className="pt-3 border-t border-slate-800 flex justify-end">
             <button
@@ -490,7 +560,8 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
                 !emailForm.subject ||
                 !emailForm.greeting ||
                 !emailForm.attachment ||
-                !emailForm.signature
+                !emailForm.signature ||
+                q3Cooldown > 0
               }
               onClick={handleSendEmail}
               className={`px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
@@ -498,7 +569,8 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
                 emailForm.subject &&
                 emailForm.greeting &&
                 emailForm.attachment &&
-                emailForm.signature
+                emailForm.signature &&
+                q3Cooldown === 0
                   ? 'bg-sky-500 hover:bg-sky-400 text-slate-950 font-black shadow-lg shadow-sky-500/20'
                   : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
@@ -512,6 +584,7 @@ export const I2Level3_EmailAnatomy: React.FC<I2Level3_EmailAnatomyProps> = ({
         {emailSent && (
           <AnswerExplanation
             isCorrect={isQ3Correct}
+            cooldown={q3Cooldown}
             explanationRo={
               isQ3Correct
                 ? 'Felicitări! Ai structurat un e-mail impecabil: adresat profesorului, cu subiect descriptiv, formulă de politețe, referat atașat în format curat PDF și semnătură cu numele și clasa ta!'

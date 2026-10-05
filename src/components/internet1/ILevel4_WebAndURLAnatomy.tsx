@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from './QuestionHint';
 import { AnswerExplanation } from './AnswerExplanation';
 import { PageNavigationFooter } from './PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface ILevel4Props {
@@ -16,13 +17,9 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
   // Part 1: WWW Inventor & CERN History Quiz
   const [inventorAnswer, setInventorAnswer] = useState<string | null>(null);
   const [htmlAnswer, setHtmlAnswer] = useState<string | null>(null);
+  const [quizCooldown, setQuizCooldown] = useState<number>(0);
 
   // Part 2: Interactive URL Component Matching (Manual p. 34: http://www.edu.ro/învățământ-gimnazial)
-  // Matching 4 elements:
-  // 1. "http://" -> protocol / transfer method
-  // 2. "www" -> world wide web prefix
-  // 3. "edu.ro" -> domain & country/institution type (.ro for Romania, .edu for education)
-  // 4. "învățământ-gimnazial" -> specific page path inside website
   const [urlMatches, setUrlMatches] = useState<{
     protocol: string;
     www: string;
@@ -34,6 +31,20 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
     domain: '',
     path: '',
   });
+  const [urlCooldown, setUrlCooldown] = useState<number>(0);
+
+  const start5sCooldown = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+    setter(5);
+    const timer = setInterval(() => {
+      setter((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const isInventorCorrect = inventorAnswer === 'tim_berners_lee';
   const isHtmlCorrect = htmlAnswer === 'html';
@@ -169,6 +180,15 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
         </div>
 
         {/* 4 Matching Dropdowns */}
+        {urlCooldown > 0 && (
+          <PedagogicalReflectionBanner
+            cooldown={urlCooldown}
+            customMessageRo="Componentă identificată incorect! Te rugăm să acorzi 5 secunde pentru a citi rolul fiecărei părți a adresei URL (Manual pag. 34)."
+            customMessageEn="Incorrect URL component! Please take 5 seconds to review the textbook diagram."
+            className="mb-3"
+          />
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Part 1: http:// */}
           <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 flex flex-col justify-between space-y-2">
@@ -179,12 +199,22 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
               </p>
             </div>
             <select
+              disabled={urlCooldown > 0}
               value={urlMatches.protocol}
               onChange={(e) => {
-                setUrlMatches((p) => ({ ...p, protocol: e.target.value }));
-                sounds.playClick();
+                if (urlCooldown > 0) return;
+                const val = e.target.value;
+                setUrlMatches((p) => ({ ...p, protocol: val }));
+                if (val === 'protocol') {
+                  sounds.playCorrect();
+                } else if (val) {
+                  sounds.playWrong();
+                  start5sCooldown(setUrlCooldown);
+                } else {
+                  sounds.playClick();
+                }
               }}
-              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white"
+              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">{lang === 'en' ? '-- Select Role --' : '-- Alege Semnificația --'}</option>
               <option value="protocol">{lang === 'en' ? 'Protocol (HyperText Transfer)' : 'Protocolul de transfer de hipertext'}</option>
@@ -221,12 +251,22 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
               </p>
             </div>
             <select
+              disabled={urlCooldown > 0}
               value={urlMatches.www}
               onChange={(e) => {
-                setUrlMatches((p) => ({ ...p, www: e.target.value }));
-                sounds.playClick();
+                if (urlCooldown > 0) return;
+                const val = e.target.value;
+                setUrlMatches((p) => ({ ...p, www: val }));
+                if (val === 'www_chars') {
+                  sounds.playCorrect();
+                } else if (val) {
+                  sounds.playWrong();
+                  start5sCooldown(setUrlCooldown);
+                } else {
+                  sounds.playClick();
+                }
               }}
-              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white"
+              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">{lang === 'en' ? '-- Select Role --' : '-- Alege Semnificația --'}</option>
               <option value="www_chars">{lang === 'en' ? 'World Wide Web network service prefix' : 'Cei trei W caracteristici unui site web'}</option>
@@ -263,12 +303,22 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
               </p>
             </div>
             <select
+              disabled={urlCooldown > 0}
               value={urlMatches.domain}
               onChange={(e) => {
-                setUrlMatches((p) => ({ ...p, domain: e.target.value }));
-                sounds.playClick();
+                if (urlCooldown > 0) return;
+                const val = e.target.value;
+                setUrlMatches((p) => ({ ...p, domain: val }));
+                if (val === 'domain_country') {
+                  sounds.playCorrect();
+                } else if (val) {
+                  sounds.playWrong();
+                  start5sCooldown(setUrlCooldown);
+                } else {
+                  sounds.playClick();
+                }
               }}
-              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white"
+              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">{lang === 'en' ? '-- Select Role --' : '-- Alege Semnificația --'}</option>
               <option value="domain_country">{lang === 'en' ? 'Type of site (.edu educational) & Country (.ro Romania)' : 'Tipul de site (.edu educațional) & Țara (.ro România)'}</option>
@@ -300,12 +350,22 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
               </p>
             </div>
             <select
+              disabled={urlCooldown > 0}
               value={urlMatches.path}
               onChange={(e) => {
-                setUrlMatches((p) => ({ ...p, path: e.target.value }));
-                sounds.playClick();
+                if (urlCooldown > 0) return;
+                const val = e.target.value;
+                setUrlMatches((p) => ({ ...p, path: val }));
+                if (val === 'page_path') {
+                  sounds.playCorrect();
+                } else if (val) {
+                  sounds.playWrong();
+                  start5sCooldown(setUrlCooldown);
+                } else {
+                  sounds.playClick();
+                }
               }}
-              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white"
+              className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-xs text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               <option value="">{lang === 'en' ? '-- Select Role --' : '-- Alege Semnificația --'}</option>
               <option value="page_path">{lang === 'en' ? 'The specific page currently opened within the site' : 'Pagina din site pe care vă aflați în acest moment'}</option>
@@ -337,6 +397,15 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
       </div>
 
       {/* Rapid Theory Check */}
+      {quizCooldown > 0 && (
+        <PedagogicalReflectionBanner
+          cooldown={quizCooldown}
+          customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a citi explicația din manual (pag. 34) înainte de a încerca din nou."
+          customMessageEn="Incorrect answer! Please take 5 seconds to review the explanation before trying again."
+          className="mb-2"
+        />
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow-md space-y-2">
           <p className="text-xs sm:text-sm font-bold text-white mb-2">
@@ -351,12 +420,18 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
               <button
                 key={opt.id}
                 type="button"
+                disabled={quizCooldown > 0}
                 onClick={() => {
+                  if (quizCooldown > 0) return;
                   setInventorAnswer(opt.id);
-                  if (opt.id === 'tim_berners_lee') sounds.playCorrect();
-                  else sounds.playWrong();
+                  if (opt.id === 'tim_berners_lee') {
+                    sounds.playCorrect();
+                  } else {
+                    sounds.playWrong();
+                    start5sCooldown(setQuizCooldown);
+                  }
                 }}
-                className={`w-full text-left p-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer ${
+                className={`w-full text-left p-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   inventorAnswer === opt.id
                     ? opt.id === 'tim_berners_lee'
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
@@ -407,12 +482,18 @@ export const ILevel4_WebAndURLAnatomy: React.FC<ILevel4Props> = ({ onCompletePag
               <button
                 key={opt.id}
                 type="button"
+                disabled={quizCooldown > 0}
                 onClick={() => {
+                  if (quizCooldown > 0) return;
                   setHtmlAnswer(opt.id);
-                  if (opt.id === 'html') sounds.playCorrect();
-                  else sounds.playWrong();
+                  if (opt.id === 'html') {
+                    sounds.playCorrect();
+                  } else {
+                    sounds.playWrong();
+                    start5sCooldown(setQuizCooldown);
+                  }
                 }}
-                className={`w-full text-left p-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer ${
+                className={`w-full text-left p-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   htmlAnswer === opt.id
                     ? opt.id === 'html'
                       ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'

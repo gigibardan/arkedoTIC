@@ -5,6 +5,7 @@ import { Cpu, Zap, CheckCircle2, ArrowRight, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
 import { QuestionHint } from '../common/QuestionHint';
+import { PedagogicalQuizCard } from '../common/PedagogicalQuizCard';
 
 interface HLevel3Props {
   onComplete: () => void;
@@ -139,6 +140,7 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
   
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [cooldown, setCooldown] = useState<number>(0);
 
   const parts = lang === 'en' ? PARTS_EN : PARTS_RO;
 
@@ -156,9 +158,21 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
   const canValidate = isAllInstalled && quizStorageAnswer !== null;
 
   const handleValidate = () => {
+    if (cooldown > 0) return;
+
     if (!canValidate) {
       sounds.playWrong();
       setShowErrors(true);
+      setCooldown(5);
+      const timer = setInterval(() => {
+        setCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
       return;
     }
 
@@ -169,6 +183,16 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
     } else {
       sounds.playWrong();
       setShowErrors(true);
+      setCooldown(5);
+      const timer = setInterval(() => {
+        setCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -345,79 +369,41 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
         </div>
       </div>
 
-      {/* Task 2: RAM vs Storage permanent quiz (pag. 17, ex. 3) */}
-      <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6">
-        <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2 mb-2">
-          <HelpCircle className="w-5 h-5 text-cyan-400" />
-          <span>{lang === 'en' ? 'Mission 2: Technical question from textbook (p. 17, Ex. 3b)' : 'Misiunea 2: Întrebare tehnică din manual (pag. 17, Ex. 3b)'}</span>
-        </h3>
-        <p className="text-xs sm:text-sm text-slate-200 mb-2 font-medium">
-          {lang === 'en'
-            ? '“To permanently preserve a photo or project on a computer, where must we save it?”'
-            : '„Pentru a păstra definitiv o fotografie sau un proiect pe calculator, unde trebuie să o salvăm?”'}
-        </p>
-
-        <QuestionHint
-          id="q-ram-vs-storage"
+      {/* Task 2: RAM vs Storage permanent quiz (pag. 17, ex. 3) with 5s Cooldown */}
+      <div className="mb-6">
+        <PedagogicalQuizCard
+          questionRo="„Pentru a păstra definitiv o fotografie sau un proiect pe calculator, unde trebuie să o salvăm?” (Manual pag. 17, Ex. 3b)"
+          questionEn="“To permanently preserve a photo or project on a computer, where must we save it?” (Textbook p. 17, Ex. 3b)"
+          questionNumber={1}
+          totalQuestions={1}
+          bookPage="17-18"
+          categoryLabelRo="Memorie Permanentă"
+          categoryLabelEn="Permanent Storage"
           hintRo="Gândește-te la diferența dintre masa de lucru (RAM) și dulapul cu dosare (HDD/SSD). Dacă se oprește curentul, ce memorie nu își pierde conținutul?"
-          hintEn="Think of the difference between a desk (RAM) and an archival file cabinet (HDD/SSD). Which one retains data without power?"
+          hintEn="Think of the difference between a desk (RAM) and a storage cabinet (HDD/SSD). Which one retains data without power?"
+          cooldownSeconds={5}
+          maxXP={20}
+          initialSelectedId={quizStorageAnswer || undefined}
+          onAnswerSelected={(isCorrect, optId) => setQuizStorageAnswer(optId)}
+          options={[
+            {
+              id: 'ram',
+              labelRo: 'A) În memoria RAM (Memoria de lucru temporară)',
+              labelEn: 'A) In RAM Memory (Volatile working memory)',
+              isCorrect: false,
+              explanationRo: 'Incorect! Memoria RAM este volatilă: când calculatorul este oprit sau repornit, tot conținutul ei dispare instantaneu. Pentru păstrare permanentă este nevoie de HDD sau SSD (Manual pag. 17).',
+              explanationEn: 'Incorrect! RAM is volatile: when the PC turns off, RAM clears out completely. Permanent retention requires writing to an SSD or HDD (p. 17).',
+            },
+            {
+              id: 'ssd',
+              labelRo: 'B) Pe HDD / SSD (Memorie permanentă / Discuri de stocare)',
+              labelEn: 'B) On HDD / SSD (Permanent non-volatile storage)',
+              isCorrect: true,
+              explanationRo: 'Excelent! Discurile HDD și SSD reprezintă memoria permanentă a calculatorului. Datele salvate pe SSD sau HDD rămân în siguranță chiar și după oprirea alimentării cu energie electrică.',
+              explanationEn: 'Spot on! HDDs and SSDs provide non-volatile permanent storage. Files written to SSD remain secure even when power is turned off.',
+            },
+          ]}
         />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-          <button
-            onClick={() => {
-              sounds.playClick();
-              setQuizStorageAnswer('ram');
-            }}
-            className={`p-3 rounded-xl text-xs font-semibold text-left transition border cursor-pointer ${
-              quizStorageAnswer === 'ram'
-                ? 'bg-rose-950/40 text-rose-300 border-rose-500'
-                : 'bg-slate-950 hover:bg-slate-900 text-slate-300 border-slate-800'
-            }`}
-          >
-            <div className="font-bold text-white mb-1">
-              {lang === 'en' ? 'A) In RAM Memory' : 'A) În memoria RAM'}
-            </div>
-            <div className="text-[11px] text-slate-400">
-              {lang === 'en' ? '(Volatile working memory erased upon shutdown)' : '(Memoria de lucru temporară care se șterge la stingerea PC-ului)'}
-            </div>
-          </button>
-
-          <button
-            onClick={() => {
-              sounds.playClick();
-              setQuizStorageAnswer('ssd');
-            }}
-            className={`p-3 rounded-xl text-xs font-semibold text-left transition border cursor-pointer ${
-              quizStorageAnswer === 'ssd'
-                ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
-                : 'bg-slate-950 hover:bg-slate-900 text-slate-300 border-slate-800'
-            }`}
-          >
-            <div className="font-bold text-white mb-1">
-              {lang === 'en' ? 'B) On HDD / SSD (Permanent Storage) ✓' : 'B) Pe HDD / SSD (Memorie permanentă) ✓'}
-            </div>
-            <div className="text-[11px] text-slate-400">
-              {lang === 'en' ? '(Magnetic or flash drive where files remain preserved)' : '(Discul de stocare magnetic sau flash unde datele rămân în siguranță)'}
-            </div>
-          </button>
-        </div>
-
-        {quizStorageAnswer && (
-          <AnswerExplanation
-            isCorrect={quizStorageAnswer === 'ssd'}
-            explanationRo={
-              quizStorageAnswer === 'ssd'
-                ? 'Excelent! HDD-ul și SSD-ul reprezintă memoria externă/secundară permanentă (nevolatilă). Fișierele salvate pe SSD rămân în siguranță chiar dacă scoți PC-ul din priză.'
-                : 'Incorect! Memoria RAM este volatilă: când calculatorul este oprit, tot conținutul ei dispare instantaneu. Pentru păstrare permanentă se folosește discul SSD sau HDD (Manual pag. 17-18).'
-            }
-            explanationEn={
-              quizStorageAnswer === 'ssd'
-                ? 'Spot on! HDDs and SSDs provide non-volatile permanent storage. Files written to SSD remain secure even when power is turned off.'
-                : 'Incorrect! RAM is volatile: when the PC turns off, RAM clears out. Permanent retention requires writing to an SSD or HDD (p. 17-18).'
-            }
-          />
-        )}
       </div>
 
       {/* Validation / Next Button */}
@@ -434,10 +420,10 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
 
         <button
           onClick={handleValidate}
-          disabled={completed}
+          disabled={completed || cooldown > 0}
           className={`px-6 py-3 rounded-2xl font-bold text-sm transition flex items-center gap-2 shadow-lg cursor-pointer ${
-            completed
-              ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+            completed || cooldown > 0
+              ? 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-60'
               : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-600/30 active:scale-95'
           }`}
         >

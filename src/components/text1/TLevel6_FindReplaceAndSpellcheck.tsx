@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Replace, CheckCircle2, Sparkles, BookOpen, FileCheck2, Download, AlertCircle, HelpCircle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
@@ -6,6 +6,7 @@ import { sounds } from '../../utils/audio';
 import { PageNavigationFooter } from './PageNavigationFooter';
 import { AnswerExplanation } from './AnswerExplanation';
 import { QuestionHint } from './QuestionHint';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface TLevel6Props {
   onCompletePage: (score: number) => void;
@@ -26,7 +27,21 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
 
   // Quiz questions
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => (p <= 1 ? 0 : p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
 
   const handleExecuteReplaceAll = () => {
     sounds.playClick();
@@ -58,17 +73,27 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
   };
 
   const handleQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
     sounds.playClick();
     setQ1Answer(val);
-    if (val === 'red_line') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'red_line') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
   };
 
   const handleQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
     sounds.playClick();
     setQ2Answer(val);
-    if (val === 'ctrl_h') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'ctrl_h') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
   };
 
   // Evaluation
@@ -357,11 +382,22 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             <span className="text-xs font-mono text-cyan-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q1Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q1Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza rolul corectorului ortografic din manual pag. 66."
+                customMessageEn="Incorrect! Please take 5 seconds to review the Spell Checker on textbook page 66."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('red_line')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'red_line'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -371,8 +407,9 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('important')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'important'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -382,8 +419,9 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('virus')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'virus'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -393,8 +431,9 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             </button>
             <button
               type="button"
+              disabled={q1Cooldown > 0}
               onClick={() => handleQ1('print')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q1Answer === 'print'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -412,6 +451,7 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
+              cooldown={q1Cooldown}
               explanation={
                 isQ1Correct
                   ? (lang === 'en' ? 'Spot on! The red wavy line signals spelling errors or terms missing from the active dictionary.' : 'Corect! Linia roșie ondulată semnalează greșeli ortografice sau cuvinte care nu figurează în dicționarul activ.')
@@ -433,11 +473,22 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             <span className="text-xs font-mono text-cyan-400 font-semibold shrink-0">1 punct</span>
           </div>
 
+          {q2Cooldown > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={q2Cooldown}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza scurtătura Înlocuire (Replace) din manual pag. 65."
+                customMessageEn="Incorrect! Please take 5 seconds to review the Replace Shortcut on textbook page 65."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('ctrl_h')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'ctrl_h'
                   ? 'bg-emerald-950/50 border-emerald-500 text-emerald-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -447,8 +498,9 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('ctrl_f')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'ctrl_f'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -458,8 +510,9 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('ctrl_p')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'ctrl_p'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -469,8 +522,9 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
             </button>
             <button
               type="button"
+              disabled={q2Cooldown > 0}
               onClick={() => handleQ2('ctrl_z')}
-              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer ${
+              className={`p-3 rounded-xl border text-left font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 q2Answer === 'ctrl_z'
                   ? 'bg-rose-950/50 border-rose-500 text-rose-300'
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
@@ -488,6 +542,7 @@ export const TLevel6_FindReplaceAndSpellcheck: React.FC<TLevel6Props> = ({ onCom
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
+              cooldown={q2Cooldown}
               explanation={
                 isQ2Correct
                   ? (lang === 'en' ? 'Perfect! Ctrl+H is the classic shortcut for Replace, whereas Ctrl+F is for simple Find.' : 'Corect! Ctrl+H deschide caseta de dialog Înlocuire (Replace). Scurtătura Ctrl+F deschide panoul de Găsire simplă.')

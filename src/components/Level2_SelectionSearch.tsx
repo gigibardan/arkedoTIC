@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MousePointerClick, Search, CheckCircle2, ChevronRight, FileText, Image, Music } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { AnswerExplanation } from './common/AnswerExplanation';
 import { QuestionHint } from './common/QuestionHint';
+import { PedagogicalReflectionBanner } from './common/usePedagogicalCooldown';
 
 interface Level2Props {
   onComplete: () => void;
@@ -40,6 +41,15 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchSuccess, setSearchSuccess] = useState<boolean>(false);
   const [shortcutAnswer, setShortcutAnswer] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const interval = setInterval(() => {
+      setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cooldown]);
 
   const toggleSelect = (id: string) => {
     sounds.playClick();
@@ -292,13 +302,25 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
               />
             </div>
 
+            {cooldown > 0 && (
+              <div className="mb-3">
+                <PedagogicalReflectionBanner
+                  cooldown={cooldown}
+                  customMessageRo="Comandă rapidă incorectă! Te rugăm să acorzi 5 secunde pentru a analiza scurtătura Ctrl + A (Select All) din manual pag. 29."
+                  customMessageEn="Incorrect shortcut! Please take 5 seconds to review the Ctrl + A shortcut on page 29."
+                />
+              </div>
+            )}
+
             <div className="space-y-2">
               <button
+                disabled={cooldown > 0}
                 onClick={() => {
+                  if (cooldown > 0) return;
                   sounds.playCorrect();
                   setShortcutAnswer('ctrl_a');
                 }}
-                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition flex items-center justify-between cursor-pointer ${
+                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition flex items-center justify-between cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   shortcutAnswer === 'ctrl_a'
                     ? 'bg-emerald-600 text-white font-bold ring-2 ring-emerald-400'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700'
@@ -309,11 +331,14 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
               </button>
 
               <button
+                disabled={cooldown > 0}
                 onClick={() => {
+                  if (cooldown > 0) return;
                   sounds.playWrong();
                   setShortcutAnswer('ctrl_c');
+                  setCooldown(5);
                 }}
-                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition cursor-pointer ${
+                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   shortcutAnswer === 'ctrl_c'
                     ? 'bg-rose-950/70 border border-rose-500 text-rose-300'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700'
@@ -323,11 +348,14 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
               </button>
 
               <button
+                disabled={cooldown > 0}
                 onClick={() => {
+                  if (cooldown > 0) return;
                   sounds.playWrong();
                   setShortcutAnswer('alt_f4');
+                  setCooldown(5);
                 }}
-                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition cursor-pointer ${
+                className={`w-full p-2.5 rounded-xl text-xs font-mono text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   shortcutAnswer === 'alt_f4'
                     ? 'bg-rose-950/70 border border-rose-500 text-rose-300'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700'
@@ -341,6 +369,7 @@ export const Level2_SelectionSearch: React.FC<Level2Props> = ({ onComplete }) =>
               <div className="mt-3">
                 <AnswerExplanation
                   isCorrect={shortcutAnswer === 'ctrl_a'}
+                  cooldown={cooldown}
                   explanationRo={
                     shortcutAnswer === 'ctrl_a'
                       ? 'Corect! Ctrl + A selectează instantaneu toate fișierele dintr-un folder (Manual pag. 29).'

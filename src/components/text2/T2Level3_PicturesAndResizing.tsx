@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Image as ImageIcon, 
   Crop, 
@@ -16,6 +16,7 @@ import { sounds } from '../../utils/audio';
 import { QuestionHint } from '../text1/QuestionHint';
 import { AnswerExplanation } from '../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../text1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface T2Level3_PicturesAndResizingProps {
   onCompletePage: (earnedScore: number) => void;
@@ -38,6 +39,23 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
     q3: null,
     q4: null
   });
+  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const hasActive = Object.values(cooldowns).some((c: number) => c > 0);
+    if (!hasActive) return;
+    const t = setInterval(() => {
+      setCooldowns(prev => {
+        const next: Record<string, number> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          const val = v as number;
+          if (val > 1) next[k] = val - 1;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldowns]);
 
   const correctAnswers: Record<string, number> = {
     q1: 0, // Mânerele din colțuri păstrează proporțiile
@@ -47,8 +65,15 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
   };
 
   const handleSelectAnswer = (qKey: string, optIdx: number) => {
+    if ((cooldowns[qKey] || 0) > 0) return;
     sounds.playClick();
     setAnswers(prev => ({ ...prev, [qKey]: optIdx }));
+    if (optIdx === correctAnswers[qKey]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, [qKey]: 5 }));
+    }
   };
 
   // Lock aspect ratio helper
@@ -332,6 +357,16 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               : 'De care mânere de redimensionare TREBUIE să tragi pentru a mări sau micșora o imagine fără a-i distorsiona proporțiile?'}
           </div>
 
+          {(cooldowns['q1'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q1']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza mânerele de redimensionare din manual pag. 74."
+                customMessageEn="Incorrect! Please take 5 seconds to review resizing handles on textbook page 74."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Only the 4 corner handles' : 'A) Doar de cele 4 mânere de la colțuri',
@@ -342,8 +377,9 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q1'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q1', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q1 === idx
                     ? idx === correctAnswers.q1
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -365,6 +401,7 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
           {answers.q1 !== null && (
             <AnswerExplanation
               isCorrect={answers.q1 === correctAnswers.q1}
+              cooldown={cooldowns['q1'] || 0}
               explanation={
                 answers.q1 === correctAnswers.q1
                   ? (lang === 'en' ? 'Perfect! Dragging corner handles preserves the exact aspect ratio.' : 'Corect! Doar mânerele de la colțuri păstrează neschimbat raportul lățime/înălțime.')
@@ -386,6 +423,16 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               : 'Cum se numește instrumentul care permite tăierea sau eliminarea zonelor de margine nedorite dintr-o poză?'}
           </div>
 
+          {(cooldowns['q2'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q2']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza instrumentul Decupare (Crop) din manual pag. 75."
+                customMessageEn="Incorrect! Please take 5 seconds to review the Crop tool on textbook page 75."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) Resize' : 'A) Redimensionare',
@@ -396,8 +443,9 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q2'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q2', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q2 === idx
                     ? idx === correctAnswers.q2
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -419,6 +467,7 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
           {answers.q2 !== null && (
             <AnswerExplanation
               isCorrect={answers.q2 === correctAnswers.q2}
+              cooldown={cooldowns['q2'] || 0}
               explanation={
                 answers.q2 === correctAnswers.q2
                   ? (lang === 'en' ? 'Great! Crop (Decupare) trims outer margins without resizing the subject.' : 'Excelent! Instrumentul Decupare (Crop) taie marginile exterioare nedorite ale imaginii.')
@@ -440,6 +489,16 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               : 'Ce efect dăunător apare dacă tragi de mânerul din stânga sau din dreapta al unei imagini?'}
           </div>
 
+          {(cooldowns['q3'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q3']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza efectul distorsionării din manual pag. 74."
+                customMessageEn="Incorrect! Please take 5 seconds to review image distortion on textbook page 74."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) The picture gets deleted' : 'A) Poza se șterge automat',
@@ -450,8 +509,9 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q3'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q3', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q3 === idx
                     ? idx === correctAnswers.q3
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -473,6 +533,7 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
           {answers.q3 !== null && (
             <AnswerExplanation
               isCorrect={answers.q3 === correctAnswers.q3}
+              cooldown={cooldowns['q3'] || 0}
               explanation={
                 answers.q3 === correctAnswers.q3
                   ? (lang === 'en' ? 'Spot on! Pulling side handles distorts the image, compromising design quality.' : 'Exact! Tragerea de mânerele laterale deformează nefiresc fotografia (distorsiune vizuală).')
@@ -494,6 +555,16 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               : 'Unde se află mânerul dedicat pentru rotirea unei imagini selectate în procesorul de text?'}
           </div>
 
+          {(cooldowns['q4'] || 0) > 0 && (
+            <div className="mb-2">
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns['q4']}
+                customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza poziția mânerului de rotire din manual pag. 75."
+                customMessageEn="Incorrect! Please take 5 seconds to review the rotation handle on textbook page 75."
+              />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
             {[
               lang === 'en' ? 'A) In the bottom right corner' : 'A) În colțul din dreapta-jos',
@@ -504,8 +575,9 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
               <button
                 key={idx}
                 type="button"
+                disabled={(cooldowns['q4'] || 0) > 0}
                 onClick={() => handleSelectAnswer('q4', idx)}
-                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer ${
+                className={`p-3 rounded-xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                   answers.q4 === idx
                     ? idx === correctAnswers.q4
                       ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
@@ -527,6 +599,7 @@ export const T2Level3_PicturesAndResizing: React.FC<T2Level3_PicturesAndResizing
           {answers.q4 !== null && (
             <AnswerExplanation
               isCorrect={answers.q4 === correctAnswers.q4}
+              cooldown={cooldowns['q4'] || 0}
               explanation={
                 answers.q4 === correctAnswers.q4
                   ? (lang === 'en' ? 'Correct! The circular rotation handle sits atop the selected picture.' : 'Corect! Mânerul rotund de rotație se află deasupra centrului imaginii selectate.')

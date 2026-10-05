@@ -6,6 +6,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
 import { QuestionHint } from '../common/QuestionHint';
+import { PedagogicalQuizCard } from '../common/PedagogicalQuizCard';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface HLevel5Props {
   onComplete: () => void;
@@ -19,6 +21,7 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
   const [step1GB, setStep1GB] = useState<string>('');
   const [step2TotalGB, setStep2TotalGB] = useState<string>('');
   const [step3MB, setStep3MB] = useState<string | null>(null);
+  const [step3Cooldown, setStep3Cooldown] = useState<number>(0);
 
   // Task 2: Magnetic storage device identification (pag. 20, ex. 2)
   const [selectedMagneticDevice, setSelectedMagneticDevice] = useState<string | null>(null);
@@ -28,6 +31,7 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
 
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [validateCooldown, setValidateCooldown] = useState<number>(0);
 
   const isMathValid =
     step1GB.trim() === '1024' &&
@@ -40,10 +44,22 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
   const canValidate = step3MB !== null && selectedMagneticDevice !== null && riddleWord.trim().length > 0;
 
   const handleValidate = () => {
+    if (validateCooldown > 0) return;
+
     if (!canValidate) {
       sounds.playWrong();
       setShowErrors(true);
       arky.triggerError();
+      setValidateCooldown(5);
+      const timer = setInterval(() => {
+        setValidateCooldown((p) => {
+          if (p <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return p - 1;
+        });
+      }, 1000);
       return;
     }
 
@@ -56,6 +72,16 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
       sounds.playWrong();
       setShowErrors(true);
       arky.triggerError();
+      setValidateCooldown(5);
+      const timer = setInterval(() => {
+        setValidateCooldown((p) => {
+          if (p <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return p - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -197,6 +223,16 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
           </div>
 
           <div className="pt-3 border-t border-slate-800">
+            {step3Cooldown > 0 && (
+              <PedagogicalReflectionBanner
+                cooldown={step3Cooldown}
+                totalSeconds={5}
+                customMessageRo="Calcul incorect! În informatică transformările se fac înmulțind cu 1024 (2¹⁰), nu cu 1000. Reîncearcă după ce analizezi formula."
+                customMessageEn="Incorrect calculation! Binary conversions multiply by 1024, not 1000. Please wait 5 seconds before trying again."
+                className="mb-3"
+              />
+            )}
+
             <span className="text-xs text-slate-300 block mb-2 font-semibold">
               <strong>{lang === 'en' ? 'Step 3:' : 'Pasul 3:'}</strong> {lang === 'en' ? 'Multiply 1536 GB by 1024 to determine total MB:' : 'Înmulțim 1536 GB cu 1024 pentru a afla capacitatea totală în MB:'}
             </span>
@@ -208,11 +244,27 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
               ].map(opt => (
                 <button
                   key={opt.id}
+                  disabled={step3Cooldown > 0}
                   onClick={() => {
                     sounds.playClick();
                     setStep3MB(opt.id);
+                    if (opt.id !== '1572864') {
+                      sounds.playWrong();
+                      setStep3Cooldown(5);
+                      const timer = setInterval(() => {
+                        setStep3Cooldown(prev => {
+                          if (prev <= 1) {
+                            clearInterval(timer);
+                            return 0;
+                          }
+                          return prev - 1;
+                        });
+                      }, 1000);
+                    } else {
+                      sounds.playCorrect();
+                    }
                   }}
-                  className={`p-2.5 rounded-xl text-xs font-mono font-bold transition border text-left cursor-pointer ${
+                  className={`p-2.5 rounded-xl text-xs font-mono font-bold transition border text-left cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                     step3MB === opt.id
                       ? opt.id === '1572864'
                         ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 ring-1 ring-emerald-400 shadow'
@@ -244,58 +296,57 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
         </div>
       </div>
 
-      {/* Task 2: Magnetic storage device identification (pag. 20, ex. 2) */}
-      <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6">
-        <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2 mb-2">
-          <HardDrive className="w-5 h-5 text-amber-400" />
-          <span>{lang === 'en' ? 'Challenge 2: Magnetic storage device (p. 20, ex. 2)' : 'Provocarea 2: Dispozitivul de stocare magnetic (pag. 20, ex. 2)'}</span>
-        </h3>
-        <p className="text-xs sm:text-sm text-slate-200 mb-2">
-          {lang === 'en'
-            ? 'Which of these storage media uses rotating magnetic platters with read/write heads?'
-            : 'Care dintre aceste medii de stocare folosește discuri magnetice rotative cu capete de citire?'}
-        </p>
-
-        <QuestionHint
-          id="q-magnetic-hint"
-          hintRo="SSD-urile și stick-urile folosesc cipuri flash, CD-urile folosesc laser optic. Hard disk-ul clasic (HDD) este singurul cu platane magnetice!"
-          hintEn="SSDs and flash sticks use silicon flash cells, CDs use optical laser. The Hard Disk Drive (HDD) is the only magnetic platter device!"
+      {/* Task 2: Magnetic storage device identification (pag. 20, ex. 2) with PedagogicalQuizCard */}
+      <div className="mb-6">
+        <PedagogicalQuizCard
+          questionRo="Care dintre următoarele medii de stocare folosește discuri magnetice rotative cu capete de citire? (Manual pag. 20, ex. 2)"
+          questionEn="Which of the following storage media uses rotating magnetic platters with read/write heads? (Textbook p. 20, ex. 2)"
+          questionNumber={2}
+          totalQuestions={3}
+          bookPage="20"
+          categoryLabelRo="Dispozitive Stocare"
+          categoryLabelEn="Storage Media"
+          hintRo="SSD-urile și stick-urile folosesc cipuri flash semiconductoare, CD-urile folosesc laser optic. Hard disk-ul clasic (HDD) este singurul cu platane magnetice rotative!"
+          hintEn="SSDs and flash sticks use flash silicon cells, CDs use optical laser. The Hard Disk Drive (HDD) is the only magnetic platter device!"
+          cooldownSeconds={5}
+          maxXP={30}
+          initialSelectedId={selectedMagneticDevice || undefined}
+          onAnswerSelected={(isCorrect, optId) => setSelectedMagneticDevice(optId)}
+          options={[
+            {
+              id: 'ssd',
+              labelRo: 'SSD (Solid-State Drive - Cipuri Flash)',
+              labelEn: 'SSD (Solid-State Drive - Flash Memory)',
+              isCorrect: false,
+              explanationRo: 'Incorect! SSD-ul este realizat pe bază de semiconductori și memorie Flash, fără componente mecanice sau magnetice în mișcare (Manual pag. 18).',
+              explanationEn: 'Incorrect! SSDs use semiconductor flash chips with no moving mechanical or magnetic parts (p. 18).',
+            },
+            {
+              id: 'hdd',
+              labelRo: 'HDD (Hard Disk Drive - Discul Dur) ✓',
+              labelEn: 'HDD (Hard Disk Drive) ✓',
+              isCorrect: true,
+              explanationRo: 'Corect! HDD-ul conține platane din aluminiu acoperite cu strat feromagnetic care se rotesc la 7200 RPM, iar datele sunt citite cu capete magnetice (Manual pag. 18).',
+              explanationEn: 'Correct! HDDs use aluminum platters coated with a ferromagnetic layer spinning at 7200 RPM, read by magnetic heads (p. 18).',
+            },
+            {
+              id: 'usb',
+              labelRo: 'Stick USB (Flash Drive)',
+              labelEn: 'USB Flash Drive',
+              isCorrect: false,
+              explanationRo: 'Incorect! Stick-ul de memorie USB utilizează cipuri de memorie Flash (semiconductori), la fel ca SSD-urile.',
+              explanationEn: 'Incorrect! USB flash drives utilize NAND flash silicon chips, not magnetic platters.',
+            },
+            {
+              id: 'cd',
+              labelRo: 'Disc Optic (CD / DVD / Blu-Ray)',
+              labelEn: 'Optical Disc (CD / DVD / Blu-Ray)',
+              isCorrect: false,
+              explanationRo: 'Incorect! CD-urile și DVD-urile sunt medii de stocare OPTICE, citite și scrise cu rază laser, nu magnetice.',
+              explanationEn: 'Incorrect! CDs and DVDs are OPTICAL storage media read by laser beams, not magnetic platters.',
+            },
+          ]}
         />
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
-          {storageDevices.map(dev => (
-            <button
-              key={dev.id}
-              onClick={() => {
-                sounds.playClick();
-                setSelectedMagneticDevice(dev.id);
-              }}
-              className={`p-3 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-between min-h-[110px] ${
-                selectedMagneticDevice === dev.id
-                  ? dev.id === 'hdd'
-                    ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 ring-1 ring-emerald-400 shadow'
-                    : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                  : 'bg-slate-950 hover:bg-slate-900 text-slate-300 border-slate-800'
-              }`}
-            >
-              <span className="text-3xl">{dev.icon}</span>
-              <span className="text-xs font-bold text-white mt-1">{dev.title}</span>
-              <span className="text-[10px] text-slate-400">{dev.desc}</span>
-            </button>
-          ))}
-        </div>
-
-        {selectedMagneticDevice && (
-          <AnswerExplanation
-            isCorrect={selectedMagneticDevice === 'hdd'}
-            explanationRo={
-              storageDevices.find(d => d.id === selectedMagneticDevice)?.pillRo || ''
-            }
-            explanationEn={
-              storageDevices.find(d => d.id === selectedMagneticDevice)?.pillEn || ''
-            }
-          />
-        )}
       </div>
 
       {/* Task 3: Riddle from textbook crossword (pag. 20, ex. 3) */}
@@ -353,6 +404,16 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
         )}
       </div>
 
+      {validateCooldown > 0 && (
+        <div className="mb-3">
+          <PedagogicalReflectionBanner
+            cooldown={validateCooldown}
+            customMessageRo="Verificare eșuată! Te rugăm să acorzi 5 secunde pentru a corecta pașii de calcul și răspunsurile tehnice din manual pag. 20."
+            customMessageEn="Validation failed! Please take 5 seconds to review the capacity calculation on page 20."
+          />
+        </div>
+      )}
+
       {/* Validation / Final Victory Button */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-700">
         <div className="text-xs text-slate-400">
@@ -367,10 +428,10 @@ export const HLevel5_BitsQuiz: React.FC<HLevel5Props> = ({ onComplete }) => {
 
         <button
           onClick={handleValidate}
-          disabled={completed}
+          disabled={completed || validateCooldown > 0}
           className={`px-6 py-3.5 rounded-2xl font-black text-sm transition flex items-center gap-2 shadow-xl cursor-pointer ${
-            completed
-              ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+            completed || validateCooldown > 0
+              ? 'bg-slate-700 text-slate-400 cursor-not-allowed opacity-60'
               : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-600/30 active:scale-95'
           }`}
         >

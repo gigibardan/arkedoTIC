@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShieldAlert,
   ShieldCheck,
@@ -17,6 +17,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from './QuestionHint';
 import { AnswerExplanation } from './AnswerExplanation';
 import { PageNavigationFooter } from './PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface ILevel6Props {
@@ -25,6 +26,17 @@ interface ILevel6Props {
 
 export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompletePage }) => {
   const { lang } = useLanguage();
+
+  // Pedagogical Cooldown state for Threat Matching
+  const [threatCooldown, setThreatCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (threatCooldown <= 0) return;
+    const timer = setInterval(() => {
+      setThreatCooldown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [threatCooldown]);
 
   // Part 1: Password Strength Lab
   const [passwordInput, setPasswordInput] = useState<string>('');
@@ -265,6 +277,14 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
           ⚔️ {lang === 'en' ? 'Identify the Threat & Security Concept' : 'Identifică Amenințarea și Conceptul de Securitate'}
         </h3>
 
+        {threatCooldown > 0 && (
+          <PedagogicalReflectionBanner
+            cooldown={threatCooldown}
+            customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza noțiunea de securitate conform manualului pag. 35-36."
+            customMessageEn="Incorrect! Please take 5 seconds to analyze the cybersecurity concept according to textbook pp. 35–36."
+          />
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           {/* Item 1 */}
           <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between space-y-2">
@@ -273,12 +293,21 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
                 1. {lang === 'en' ? 'Program that installs without permission and destroys files:' : 'Program malițios care se instalează fără voie și distruge date:'}
               </span>
               <select
+                disabled={threatCooldown > 0}
                 value={matches.virus}
                 onChange={(e) => {
-                  setMatches((p) => ({ ...p, virus: e.target.value }));
-                  sounds.playClick();
+                  const val = e.target.value;
+                  setMatches((p) => ({ ...p, virus: val }));
+                  if (val === 'virus') {
+                    sounds.playCorrect();
+                  } else if (val !== '') {
+                    sounds.playWrong();
+                    setThreatCooldown(5);
+                  }
                 }}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white"
+                className={`w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white ${
+                  threatCooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
               >
                 <option value="">{lang === 'en' ? '-- Select --' : '-- Alege noțiunea --'}</option>
                 <option value="virus">Virus informatic</option>
@@ -289,6 +318,7 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
             {matches.virus && (
               <AnswerExplanation
                 isCorrect={isVirusCorrect}
+                cooldown={threatCooldown}
                 explanationRo={
                   isVirusCorrect
                     ? 'Corect! Virușii informatici sunt programe create pentru a produce daune, a altera fișiere sau a bloca sistemul.'
@@ -314,12 +344,21 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
                 2. {lang === 'en' ? 'Stealing passwords, full names and bank card data online:' : 'Copierea ilegală de către hackeri a parolelor și cardurilor:'}
               </span>
               <select
+                disabled={threatCooldown > 0}
                 value={matches.identity}
                 onChange={(e) => {
-                  setMatches((p) => ({ ...p, identity: e.target.value }));
-                  sounds.playClick();
+                  const val = e.target.value;
+                  setMatches((p) => ({ ...p, identity: val }));
+                  if (val === 'identity_theft') {
+                    sounds.playCorrect();
+                  } else if (val !== '') {
+                    sounds.playWrong();
+                    setThreatCooldown(5);
+                  }
                 }}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white"
+                className={`w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white ${
+                  threatCooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
               >
                 <option value="">{lang === 'en' ? '-- Select --' : '-- Alege noțiunea --'}</option>
                 <option value="identity_theft">Furt de identitate</option>
@@ -330,6 +369,7 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
             {matches.identity && (
               <AnswerExplanation
                 isCorrect={isIdentityCorrect}
+                cooldown={threatCooldown}
                 explanationRo={
                   isIdentityCorrect
                     ? 'Exact! Furtul de identitate constă în sustragerea datelor personale pentru uzurparea identității unei persoane.'
@@ -355,12 +395,21 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
                 3. {lang === 'en' ? 'Online harassment, persecution and abusive insulting messages:' : 'Persecutarea, jignirea și hărțuirea unei persoane online:'}
               </span>
               <select
+                disabled={threatCooldown > 0}
                 value={matches.bullying}
                 onChange={(e) => {
-                  setMatches((p) => ({ ...p, bullying: e.target.value }));
-                  sounds.playClick();
+                  const val = e.target.value;
+                  setMatches((p) => ({ ...p, bullying: val }));
+                  if (val === 'cyberbullying') {
+                    sounds.playCorrect();
+                  } else if (val !== '') {
+                    sounds.playWrong();
+                    setThreatCooldown(5);
+                  }
                 }}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white"
+                className={`w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white ${
+                  threatCooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
               >
                 <option value="">{lang === 'en' ? '-- Select --' : '-- Alege noțiunea --'}</option>
                 <option value="cyberbullying">Cyberbullying (Hărțuire online)</option>
@@ -370,6 +419,7 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
             {matches.bullying && (
               <AnswerExplanation
                 isCorrect={isBullyingCorrect}
+                cooldown={threatCooldown}
                 explanationRo={
                   isBullyingCorrect
                     ? 'Corect! Cyberbullying-ul este hărțuirea sau intimidarea prin mijloace digitale. Trebuie raportat imediat!'
@@ -391,12 +441,21 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
                 4. {lang === 'en' ? 'Protective barrier system blocking unauthorized remote network intrusion:' : 'Sistem de protecție de tip barieră (paravan) împotriva intruziunilor:'}
               </span>
               <select
+                disabled={threatCooldown > 0}
                 value={matches.firewall}
                 onChange={(e) => {
-                  setMatches((p) => ({ ...p, firewall: e.target.value }));
-                  sounds.playClick();
+                  const val = e.target.value;
+                  setMatches((p) => ({ ...p, firewall: val }));
+                  if (val === 'firewall') {
+                    sounds.playCorrect();
+                  } else if (val !== '') {
+                    sounds.playWrong();
+                    setThreatCooldown(5);
+                  }
                 }}
-                className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white"
+                className={`w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-white ${
+                  threatCooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''
+                }`}
               >
                 <option value="">{lang === 'en' ? '-- Select --' : '-- Alege noțiunea --'}</option>
                 <option value="firewall">Firewall (Paravan de protecție)</option>
@@ -406,6 +465,7 @@ export const ILevel6_SafetyAndThreatsShield: React.FC<ILevel6Props> = ({ onCompl
             {matches.firewall && (
               <AnswerExplanation
                 isCorrect={isFirewallCorrect}
+                cooldown={threatCooldown}
                 explanationRo={
                   isFirewallCorrect
                     ? 'Excelent! Firewall-ul (paravanul de protecție) monitorizează și filtrează traficul de rețea, blocând tentativele neautorizate.'

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -16,6 +16,7 @@ import { TeacherTip } from '../TeacherTip';
 import { QuestionHint } from '../internet1/QuestionHint';
 import { AnswerExplanation } from '../internet1/AnswerExplanation';
 import { PageNavigationFooter } from '../internet1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 import { sounds } from '../../utils/audio';
 
 interface I2Level1_SearchEnginesProps {
@@ -29,6 +30,29 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
 }) => {
   const { lang } = useLanguage();
   const arky = useArky();
+
+  // Pedagogical Cooldowns
+  const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
+  const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
+  const [q3Cooldown, setQ3Cooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (q1Cooldown <= 0) return;
+    const t = setInterval(() => setQ1Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q1Cooldown]);
+
+  useEffect(() => {
+    if (q2Cooldown <= 0) return;
+    const t = setInterval(() => setQ2Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q2Cooldown]);
+
+  useEffect(() => {
+    if (q3Cooldown <= 0) return;
+    const t = setInterval(() => setQ3Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q3Cooldown]);
 
   // Task 1: Search engine definition
   const [q1SearchEngine, setQ1SearchEngine] = useState<string>('');
@@ -57,7 +81,30 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
   const totalQuestions = 3;
   const pageScore = correctCount === 3 ? 15 : correctCount === 2 ? 10 : correctCount === 1 ? 5 : 0;
 
+  const handleSelectQ1 = (val: string) => {
+    if (q1Cooldown > 0) return;
+    setQ1SearchEngine(val);
+    if (val === 'database_crawler') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ1Cooldown(5);
+    }
+  };
+
+  const handleSelectQ2 = (val: string) => {
+    if (q2Cooldown > 0) return;
+    setQ2ExactSearch(val);
+    if (val === 'quotes') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ2Cooldown(5);
+    }
+  };
+
   const handleSimulateSearch = () => {
+    if (q3Cooldown > 0) return;
     sounds.playClick();
     setSimulatedResults(true);
     if (isQ3Correct) {
@@ -69,6 +116,7 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
       );
     } else {
       sounds.playWrong();
+      setQ3Cooldown(5);
     }
   };
 
@@ -200,18 +248,26 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
             : 'Alege definiția tehnică exactă conform manualului de TIC pag. 37:'}
         </p>
 
+        {q1Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q1Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza definiția motorului de căutare din manual pag. 37."
+              customMessageEn="Incorrect! Please take 5 seconds to review the textbook search engine definition on page 37."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ1SearchEngine('database_crawler');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('database_crawler')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1SearchEngine === 'database_crawler'
                 ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'A) Specialized Web Indexer' : 'A) Indexator & Bază de date Web'}
@@ -225,15 +281,13 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ1SearchEngine('physical_browser');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('physical_browser')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1SearchEngine === 'physical_browser'
                 ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'B) Hardware Cable Router' : 'B) Router Hardware de Cablu'}
@@ -247,15 +301,13 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ1SearchEngine('text_editor');
-              sounds.playClick();
-            }}
+            disabled={q1Cooldown > 0}
+            onClick={() => handleSelectQ1('text_editor')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer flex flex-col justify-between ${
               q1SearchEngine === 'text_editor'
                 ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q1Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span className="font-bold text-slate-100 mb-1">
               {lang === 'en' ? 'C) Word Processor App' : 'C) Editor de Text Offline'}
@@ -277,6 +329,7 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
         {q1SearchEngine && (
           <AnswerExplanation
             isCorrect={isQ1Correct}
+            cooldown={q1Cooldown}
             explanationRo={
               isQ1Correct
                 ? 'Excelent! Motoarele de căutare folosesc roboți software («spiders» / «crawlers») care analizează continuu paginile web și construiesc indexuri uriașe pentru căutare rapidă.'
@@ -311,18 +364,26 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
           </span>
         </div>
 
+        {q2Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q2Cooldown}
+              customMessageRo="Răspuns greșit! Te rugăm să acorzi 5 secunde pentru a analiza rolul ghilimelelor conform manualului pag. 37-38."
+              customMessageEn="Incorrect! Please take 5 seconds to review the exact phrase search operator on pp. 37–38."
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
             type="button"
-            onClick={() => {
-              setQ2ExactSearch('quotes');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('quotes')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer ${
               q2ExactSearch === 'quotes'
                 ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <div className="font-bold text-slate-100 font-mono text-sm mb-1">
               "Mihai Eminescu Somnoroase Pasarele"
@@ -334,15 +395,13 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ2ExactSearch('plus_sign');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('plus_sign')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer ${
               q2ExactSearch === 'plus_sign'
                 ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <div className="font-bold text-slate-100 font-mono text-sm mb-1">
               Mihai + Eminescu + Somnoroase
@@ -354,15 +413,13 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              setQ2ExactSearch('parentheses');
-              sounds.playClick();
-            }}
+            disabled={q2Cooldown > 0}
+            onClick={() => handleSelectQ2('parentheses')}
             className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer ${
               q2ExactSearch === 'parentheses'
                 ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
                 : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
-            }`}
+            } ${q2Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <div className="font-bold text-slate-100 font-mono text-sm mb-1">
               (Mihai Eminescu Somnoroase Pasarele)
@@ -485,6 +542,16 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
           </div>
         </div>
 
+        {q3Cooldown > 0 && (
+          <div className="mb-4">
+            <PedagogicalReflectionBanner
+              cooldown={q3Cooldown}
+              customMessageRo="Sintaxă de căutare incorectă! Te rugăm să analizezi cei 3 parametri conform cerinței (site:edu.ro, sistemul solar, filetype:pdf)."
+              customMessageEn="Incorrect query parameters! Please review the 3 required search filters."
+            />
+          </div>
+        )}
+
         {/* Query Preview bar */}
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-2 text-xs font-mono text-indigo-300 truncate">
@@ -498,10 +565,10 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
 
           <button
             type="button"
-            disabled={!q3SearchTask.operator || !q3SearchTask.keyword || !q3SearchTask.filetype}
+            disabled={!q3SearchTask.operator || !q3SearchTask.keyword || !q3SearchTask.filetype || q3Cooldown > 0}
             onClick={handleSimulateSearch}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
-              q3SearchTask.operator && q3SearchTask.keyword && q3SearchTask.filetype
+              q3SearchTask.operator && q3SearchTask.keyword && q3SearchTask.filetype && q3Cooldown === 0
                 ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md'
                 : 'bg-slate-800 text-slate-500 cursor-not-allowed'
             }`}

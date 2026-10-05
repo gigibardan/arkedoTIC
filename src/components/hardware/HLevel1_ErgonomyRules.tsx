@@ -5,6 +5,8 @@ import { CheckCircle2, AlertTriangle, ShieldCheck, ArrowRight, Eye } from 'lucid
 import { useLanguage } from '../../context/LanguageContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
 import { QuestionHint } from '../common/QuestionHint';
+import { PedagogicalQuizCard } from '../common/PedagogicalQuizCard';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface HLevel1Props {
   onComplete: () => void;
@@ -145,10 +147,12 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
   const [headPosture, setHeadPosture] = useState<string | null>(null);
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [cooldown, setCooldown] = useState<number>(0);
 
   const rules = lang === 'en' ? RULES_EN : RULES_RO;
 
   const handleClassify = (cardId: string, choice: 'allowed' | 'forbidden') => {
+    if (cooldown > 0) return;
     sounds.playClick();
     setClassifications(prev => ({
       ...prev,
@@ -166,6 +170,8 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
   const canValidate = isRulesComplete && monitorDistance !== null && headPosture !== null;
 
   const handleValidate = () => {
+    if (cooldown > 0) return;
+
     if (!canValidate) {
       sounds.playWrong();
       setShowErrors(true);
@@ -179,6 +185,16 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
     } else {
       sounds.playWrong();
       setShowErrors(true);
+      setCooldown(5);
+      const timer = setInterval(() => {
+        setCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -218,6 +234,16 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
 
       {/* Task 1: Rules Sorting */}
       <div className="mb-7">
+        {cooldown > 0 && (
+          <PedagogicalReflectionBanner
+            cooldown={cooldown}
+            totalSeconds={5}
+            customMessageRo="Există reguli clasificate greșit sau întrebări fără răspuns! Te rugăm să acorzi 5 secunde pentru a citi atenționările înainte de a reîncerca."
+            customMessageEn="There are incorrectly classified rules! Please take 5 seconds to review the warnings before retrying."
+            className="mb-4"
+          />
+        )}
+
         <div className="flex items-center justify-between gap-2 mb-3">
           <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-cyan-400" />
@@ -299,126 +325,91 @@ export const HLevel1_ErgonomyRules: React.FC<HLevel1Props> = ({ onComplete }) =>
         </div>
       </div>
 
-      {/* Task 2: Ergonomic Posture Quiz */}
-      <div className="bg-slate-900/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6">
-        <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2 mb-3">
-          <Eye className="w-5 h-5 text-emerald-400" />
-          <span>{lang === 'en' ? 'Mission 2: Ergonomics & Posture Assessment (Textbook p. 11–12)' : 'Misiunea 2: Autoevaluarea Ergonomiei & Sănătății (Manual pag. 11–12)'}</span>
-        </h3>
+      {/* Task 2: Ergonomic Posture Quiz with PedagogicalQuizCard */}
+      <div className="space-y-4 mb-6">
+        <PedagogicalQuizCard
+          questionRo="1. La ce distanță optimă trebuie așezat monitorul față de ochi? (Manual pag. 11)"
+          questionEn="1. What is the optimal distance between eyes and monitor? (Textbook p. 11)"
+          questionNumber={1}
+          totalQuestions={2}
+          bookPage="11-12"
+          categoryLabelRo="Ergonomie Monitor"
+          categoryLabelEn="Monitor Ergonomics"
+          hintRo="Conform manualului de TIC (pag. 11), distanța ideală este aproximativ lungimea brațului: între 45 și 70 cm!"
+          hintEn="According to the textbook (p. 11), ideal viewing distance is an arm's length: 45 to 70 cm!"
+          cooldownSeconds={5}
+          maxXP={20}
+          initialSelectedId={monitorDistance || undefined}
+          onAnswerSelected={(isCorrect, optId) => setMonitorDistance(optId)}
+          options={[
+            {
+              id: '10-20',
+              labelRo: 'a) 10 – 20 cm (foarte aproape, lipit de ecran)',
+              labelEn: 'a) 10 – 20 cm (very close, pressed against screen)',
+              isCorrect: false,
+              explanationRo: 'Incorect! O distanță sub 45 cm suprasolicită mușchii de acomodare ai ochilor și favorizează miopia (Manual pag. 11).',
+              explanationEn: 'Incorrect! Less than 45 cm causes excessive eye muscle fatigue and promotes myopia (p. 11).',
+            },
+            {
+              id: '45-70',
+              labelRo: 'b) 45 – 70 cm (partea de sus a ecranului la nivelul ochilor) ✓',
+              labelEn: 'b) 45 – 70 cm (top edge of screen at eye level) ✓',
+              isCorrect: true,
+              explanationRo: 'Perfect! Distanța de 45-70 cm permite citirea confortabilă fără forțarea ochilor, iar partea superioară a ecranului la nivelul ochilor menține gâtul drept.',
+              explanationEn: 'Spot on! 45-70 cm allows comfortable reading without eye strain, keeping the neck naturally aligned.',
+            },
+            {
+              id: '150-200',
+              labelRo: 'c) 1,5 – 2 metri (la celălalt capăt al biroului)',
+              labelEn: 'c) 1.5 – 2 meters (far end of desk)',
+              isCorrect: false,
+              explanationRo: 'Incorect! Peste 1 metru forțează aplecarea corpului înainte pentru a desluși textele mici, provocând deformări ale spatelui.',
+              explanationEn: 'Incorrect! Over 1 meter forces leaning forward to decipher small fonts, inducing back strain.',
+            },
+          ]}
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Question 1: Monitor distance */}
-          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
-            <div>
-              <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-2">
-                {lang === 'en' ? '1. What is the optimal distance between eyes and monitor?' : '1. La ce distanță optimă trebuie așezat monitorul față de ochi?'}
-              </p>
-
-              <QuestionHint
-                id="q-monitor-dist"
-                hintRo="Conform manualului de TIC (pag. 11), distanța ideală este egală cu lungimea brațului întins: între 45 și 70 cm!"
-                hintEn="According to the textbook (p. 11), the ideal distance is approximately an arm's length: 45 to 70 cm!"
-              />
-
-              <div className="flex flex-col gap-2 mt-2">
-                {[
-                  { id: '10-20', label: lang === 'en' ? '10 – 20 cm (very close, pressed against screen)' : '10 – 20 cm (foarte aproape, lipit de ecran)' },
-                  { id: '45-70', label: lang === 'en' ? '45 – 70 cm (top edge at eye level) ✓' : '45 – 70 cm (partea de sus la nivelul ochilor) ✓' },
-                  { id: '150-200', label: lang === 'en' ? '1.5 – 2 meters (far side of the room)' : '1,5 – 2 metri (la celălalt capăt al camerei)' },
-                ].map(opt => (
-                  <button
-                    key={opt.id}
-                    onClick={() => {
-                      sounds.playClick();
-                      setMonitorDistance(opt.id);
-                    }}
-                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
-                      monitorDistance === opt.id
-                        ? opt.id === '45-70'
-                          ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
-                          : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {monitorDistance && (
-              <AnswerExplanation
-                isCorrect={monitorDistance === '45-70'}
-                explanationRo={
-                  monitorDistance === '45-70'
-                    ? 'Perfect! 45-70 cm permite citirea confortabilă fără forțarea mușchilor oculari, iar marginea de sus a ecranului la nivelul ochilor menține gâtul drept.'
-                    : 'Incorect! O distanță sub 45 cm obosește ochii prin focalizare forțată, iar peste 1 m forțează aplecarea corpului înainte. Standardul medical este 45-70 cm (pag. 11).'
-                }
-                explanationEn={
-                  monitorDistance === '45-70'
-                    ? 'Spot on! 45-70 cm allows comfortable reading without eye strain, keeping the neck naturally aligned.'
-                    : 'Incorrect! Less than 45 cm strains eye lenses; more than 1 m causes neck hunching. Optimal range is 45-70 cm (p. 11).'
-                }
-              />
-            )}
-          </div>
-
-          {/* Question 2: Head posture on mobile */}
-          <div className="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
-            <div>
-              <p className="text-xs sm:text-sm text-slate-200 font-semibold mb-2">
-                {lang === 'en' ? '2. How should you position your neck when using a phone or tablet?' : '2. Cum trebuie ținut capul când utilizăm telefonul sau tableta?'}
-              </p>
-
-              <QuestionHint
-                id="q-phone-posture"
-                hintRo="Aplecarea gâtului la 60° pune o presiune de 27 kg pe coloana cervicală! Ridică dispozitivul spre ochi."
-                hintEn="Tilting your neck by 60° exerts 27 kg of pressure on cervical vertebrae! Raise the device to eye level."
-              />
-
-              <div className="flex flex-col gap-2 mt-2">
-                {[
-                  { id: 'straight', label: lang === 'en' ? 'Straight head, raising device to eye level ✓' : 'Capul drept, ridicând dispozitivul la nivel confortabil ✓' },
-                  { id: 'bent', label: lang === 'en' ? 'Hunched forward towards chest' : 'Aplecat mult înainte spre piept' },
-                  { id: 'lying', label: lang === 'en' ? 'Lying flat with screen below chin' : 'Culcat pe birou cu ecranul sub bărbie' },
-                ].map(opt => (
-                  <button
-                    key={opt.id}
-                    onClick={() => {
-                      sounds.playClick();
-                      setHeadPosture(opt.id);
-                    }}
-                    className={`px-3 py-2 rounded-lg text-xs font-semibold text-left transition border cursor-pointer ${
-                      headPosture === opt.id
-                        ? opt.id === 'straight'
-                          ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500 font-bold ring-1 ring-emerald-400'
-                          : 'bg-rose-950/40 text-rose-300 border-rose-500'
-                        : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {headPosture && (
-              <AnswerExplanation
-                isCorrect={headPosture === 'straight'}
-                explanationRo={
-                  headPosture === 'straight'
-                    ? 'Foarte bine! Ținerea capului drept și ridicarea telefonului protejează coloana și previne durerile cronice de gât și umeri.'
-                    : 'Incorect! Aplecarea capului multiplică greutatea exercitată asupra coloanei vertebrale (efectul „text neck”). Ridică mereu telefonul spre privire!'
-                }
-                explanationEn={
-                  headPosture === 'straight'
-                    ? 'Excellent! Keeping your head upright and raising your phone preserves spinal health and prevents text-neck syndrome.'
-                    : 'Incorrect! Hunching forward subjects cervical vertebrae to immense tension. Always lift the device closer to eye level!'
-                }
-              />
-            )}
-          </div>
-        </div>
+        <PedagogicalQuizCard
+          questionRo="2. Cum trebuie ținut capul când utilizăm telefonul sau tableta? (Manual pag. 11)"
+          questionEn="2. How should you position your neck when using a phone or tablet? (Textbook p. 11)"
+          questionNumber={2}
+          totalQuestions={2}
+          bookPage="11-12"
+          categoryLabelRo="Postură Mobilă"
+          categoryLabelEn="Mobile Posture"
+          hintRo="Aplecarea gâtului la 60° pune o greutate resimțită de 27 kg pe coloana cervicală! Ridică mereu dispozitivul spre ochi."
+          hintEn="Tilting your neck 60° exerts 27 kg of pressure on cervical vertebrae! Always raise the device closer to eye level."
+          cooldownSeconds={5}
+          maxXP={20}
+          initialSelectedId={headPosture || undefined}
+          onAnswerSelected={(isCorrect, optId) => setHeadPosture(optId)}
+          options={[
+            {
+              id: 'straight',
+              labelRo: 'a) Capul drept, ridicând dispozitivul la nivel confortabil ✓',
+              labelEn: 'a) Straight head, raising device to eye level ✓',
+              isCorrect: true,
+              explanationRo: 'Foarte bine! Ținerea capului drept și ridicarea telefonului protejează coloana și previne durerile cronice de gât și umeri (Manual pag. 11-12).',
+              explanationEn: 'Excellent! Keeping your head upright and raising your phone preserves spinal health and prevents text-neck syndrome.',
+            },
+            {
+              id: 'bent',
+              labelRo: 'b) Aplecat mult înainte spre piept',
+              labelEn: 'b) Hunched forward towards chest',
+              isCorrect: false,
+              explanationRo: 'Incorect! Aplecarea capului multiplică greutatea resimțită de gât (sindromul „text neck”). Ridică mereu telefonul spre privire!',
+              explanationEn: 'Incorrect! Hunching forward subjects cervical vertebrae to immense tension. Always lift the device closer to eye level!',
+            },
+            {
+              id: 'lying',
+              labelRo: 'c) Culcat pe birou cu ecranul sub bărbie',
+              labelEn: 'c) Lying flat with screen below chin',
+              isCorrect: false,
+              explanationRo: 'Incorect! Această poziție deformează postura umerilor și îngreunează circulația sângelui.',
+              explanationEn: 'Incorrect! This posture twists shoulder alignment and impedes healthy circulation.',
+            },
+          ]}
+        />
       </div>
 
       {/* Validation / Next Button */}

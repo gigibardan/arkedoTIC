@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Shapes, 
   Type, 
@@ -17,6 +17,7 @@ import { sounds } from '../../utils/audio';
 import { QuestionHint } from '../text1/QuestionHint';
 import { AnswerExplanation } from '../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../text1/PageNavigationFooter';
+import { PedagogicalReflectionBanner } from '../common/usePedagogicalCooldown';
 
 interface T2Level5_ShapesAndTextBoxesProps {
   onCompletePage: (earnedScore: number) => void;
@@ -41,6 +42,23 @@ export const T2Level5_ShapesAndTextBoxes: React.FC<T2Level5_ShapesAndTextBoxesPr
     q3: null,
     q4: null
   });
+  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const hasActive = Object.values(cooldowns).some((c: number) => c > 0);
+    if (!hasActive) return;
+    const t = setInterval(() => {
+      setCooldowns(prev => {
+        const next: Record<string, number> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          const val = v as number;
+          if (val > 1) next[k] = val - 1;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldowns]);
 
   const correctAnswers: Record<string, number> = {
     q1: 0, // Text Box (Casetă de text)
@@ -50,8 +68,15 @@ export const T2Level5_ShapesAndTextBoxes: React.FC<T2Level5_ShapesAndTextBoxesPr
   };
 
   const handleSelectAnswer = (qKey: string, optIdx: number) => {
+    if ((cooldowns[qKey] || 0) > 0) return;
     sounds.playClick();
     setAnswers(prev => ({ ...prev, [qKey]: optIdx }));
+    if (optIdx === correctAnswers[qKey]) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setCooldowns(prev => ({ ...prev, [qKey]: 5 }));
+    }
   };
 
   const handleToggleGroup = () => {

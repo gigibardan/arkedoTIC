@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FolderPlus, ArrowLeft, CheckCircle2, ChevronRight, HardDrive, Laptop, Sparkles } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { AnswerExplanation } from './common/AnswerExplanation';
 import { QuestionHint } from './common/QuestionHint';
+import { PedagogicalReflectionBanner } from './common/usePedagogicalCooldown';
 
 interface Level1Props {
   onComplete: () => void;
@@ -19,6 +20,16 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
   const [hasJocuri, setHasJocuri] = useState<boolean>(false);
   const [hasTeme, setHasTeme] = useState<boolean>(false);
   const [shortcutWinEUsed, setShortcutWinEUsed] = useState<boolean>(false);
+  const [wineWrongAttempt, setWineWrongAttempt] = useState<boolean>(false);
+  const [wineCooldown, setWineCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (wineCooldown <= 0) return;
+    const interval = setInterval(() => {
+      setWineCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [wineCooldown]);
 
   // Checkbox steps
   const [chk1, setChk1] = useState<boolean>(false);
@@ -273,11 +284,14 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
           </div>
           <div className="flex flex-wrap gap-2 shrink-0">
             <button
+              disabled={wineCooldown > 0}
               onClick={() => {
+                if (wineCooldown > 0) return;
                 sounds.playCorrect();
                 setShortcutWinEUsed(true);
+                setWineWrongAttempt(false);
               }}
-              className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                 shortcutWinEUsed
                   ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 shadow-md'
                   : 'bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-600'
@@ -287,13 +301,29 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
             </button>
 
             <button
-              onClick={() => sounds.playWrong()}
-              className="px-3 py-2 rounded-xl text-xs font-mono bg-slate-800/60 hover:bg-slate-800 text-slate-400 border border-slate-700 cursor-pointer"
+              disabled={wineCooldown > 0}
+              onClick={() => {
+                if (wineCooldown > 0) return;
+                sounds.playWrong();
+                setWineWrongAttempt(true);
+                setWineCooldown(5);
+              }}
+              className="px-3 py-2 rounded-xl text-xs font-mono bg-slate-800/60 hover:bg-slate-800 text-slate-400 border border-slate-700 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
             >
               Alt + Tab
             </button>
           </div>
         </div>
+
+        {wineCooldown > 0 && (
+          <div className="mt-3">
+            <PedagogicalReflectionBanner
+              cooldown={wineCooldown}
+              customMessageRo="Comandă rapidă incorectă! Te rugăm să acorzi 5 secunde pentru a analiza scurtătura Win + E din manual pag. 27."
+              customMessageEn="Incorrect shortcut! Please take 5 seconds to review the Win + E shortcut on page 27."
+            />
+          </div>
+        )}
 
         <QuestionHint
           id="q-l1-wine"
@@ -306,6 +336,14 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
             isCorrect={true}
             explanationRo="Excelent! Win + E este comanda rapidă oficială din manual (pag. 27) care deschide fereastra File Explorer pentru navigarea prin foldere și unități de stocare."
             explanationEn="Spot on! Win + E is the official shortcut (p. 27) that instantly launches File Explorer to navigate folders and storage drives."
+          />
+        )}
+        {!shortcutWinEUsed && wineWrongAttempt && (
+          <AnswerExplanation
+            isCorrect={false}
+            cooldown={wineCooldown}
+            explanationRo="Alt + Tab comută între ferestrele deschise pe ecran! Pentru a deschide rapid File Explorer, comanda este Win + E (Windows + Explorer, manual pag. 27)."
+            explanationEn="Alt + Tab switches between active windows! To quickly open File Explorer, use Win + E (Windows + Explorer, textbook p. 27)."
           />
         )}
       </div>

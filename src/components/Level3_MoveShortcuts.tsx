@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Scissors, Clipboard, CheckCircle2, ChevronRight, AlertTriangle } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
@@ -6,6 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
 import { AnswerExplanation } from './common/AnswerExplanation';
 import { QuestionHint } from './common/QuestionHint';
+import { PedagogicalReflectionBanner } from './common/usePedagogicalCooldown';
 
 interface Level3Props {
   onComplete: () => void;
@@ -17,6 +18,15 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
   const [isCut, setIsCut] = useState<boolean>(false);
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [forbiddenQuiz, setForbiddenQuiz] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const interval = setInterval(() => {
+      setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cooldown]);
 
   const handleCut = () => {
     sounds.playClick();
@@ -31,6 +41,7 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
   };
 
   const handleQuizAnswer = (ans: string) => {
+    if (cooldown > 0) return;
     setForbiddenQuiz(ans);
     if (ans === 'valid_name') {
       sounds.playCorrect();
@@ -38,6 +49,7 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
     } else {
       sounds.playWrong();
       arky.triggerError();
+      setCooldown(5);
     }
   };
 
@@ -201,6 +213,16 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           {t.l3QuizQuestion}
         </p>
 
+        {cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={cooldown}
+              customMessageRo="Denumire incorectă! Te rugăm să acorzi 5 secunde pentru a analiza caracterele interzise din manual pag. 30."
+              customMessageEn="Incorrect file name! Please take 5 seconds to review forbidden characters on page 30."
+            />
+          </div>
+        )}
+
         <div className="mb-3">
           <QuestionHint
             id="q-l3-forbidden"
@@ -211,8 +233,9 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button
+            disabled={cooldown > 0}
             onClick={() => handleQuizAnswer('invalid_brackets')}
-            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer ${
+            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
               forbiddenQuiz === 'invalid_brackets'
                 ? 'bg-rose-950/70 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
@@ -223,8 +246,9 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           </button>
 
           <button
+            disabled={cooldown > 0}
             onClick={() => handleQuizAnswer('valid_name')}
-            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer ${
+            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
               forbiddenQuiz === 'valid_name'
                 ? 'bg-emerald-950/70 border-emerald-500 text-emerald-200 ring-2 ring-emerald-400'
                 : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
@@ -237,8 +261,9 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           </button>
 
           <button
+            disabled={cooldown > 0}
             onClick={() => handleQuizAnswer('invalid_star')}
-            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer ${
+            className={`p-3 rounded-xl border text-xs font-mono text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
               forbiddenQuiz === 'invalid_star'
                 ? 'bg-rose-950/70 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-300'
@@ -253,6 +278,7 @@ export const Level3_MoveShortcuts: React.FC<Level3Props> = ({ onComplete }) => {
           <div className="mt-3">
             <AnswerExplanation
               isCorrect={forbiddenQuiz === 'valid_name'}
+              cooldown={cooldown}
               explanationRo={
                 forbiddenQuiz === 'valid_name'
                   ? 'Corect! Denumirea nu conține niciun caracter interzis, folosind doar litere, cratimă și extensia corespunzătoare (Manual pag. 30).'

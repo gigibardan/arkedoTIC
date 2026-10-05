@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Copy, Edit3, Info, CheckCircle2, ChevronRight, FileText, HelpCircle } from 'lucide-react';
 import { TeacherTip } from './TeacherTip';
 import { sounds } from '../utils/audio';
@@ -6,6 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
 import { AnswerExplanation } from './common/AnswerExplanation';
 import { QuestionHint } from './common/QuestionHint';
+import { PedagogicalReflectionBanner } from './common/usePedagogicalCooldown';
 
 interface Level4Props {
   onComplete: () => void;
@@ -20,6 +21,15 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
   const [hasRenamedWithF2, setHasRenamedWithF2] = useState<boolean>(false);
   const [showProperties, setShowProperties] = useState<boolean>(false);
   const [extensionAnswer, setExtensionAnswer] = useState<string | null>(null);
+  const [cooldown, setCooldown] = useState<number>(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const interval = setInterval(() => {
+      setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cooldown]);
 
   const handleCopy = () => {
     sounds.playCorrect();
@@ -45,6 +55,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
   };
 
   const handleAnswerExtension = (ans: string) => {
+    if (cooldown > 0) return;
     setExtensionAnswer(ans);
     if (ans === 'type_program') {
       sounds.playCorrect();
@@ -52,6 +63,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
     } else {
       sounds.playWrong();
       arky.triggerError();
+      setCooldown(5);
     }
   };
 
@@ -255,6 +267,16 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                 {t.l4QuizQuestion}
               </p>
 
+              {cooldown > 0 && (
+                <div className="mb-3">
+                  <PedagogicalReflectionBanner
+                    cooldown={cooldown}
+                    customMessageRo="Răspuns incorect! Te rugăm să acorzi 5 secunde pentru a analiza rolul extensiei fișierului din manual pag. 30."
+                    customMessageEn="Incorrect! Please take 5 seconds to review file extensions on page 30."
+                  />
+                </div>
+              )}
+
               <div className="mb-3">
                 <QuestionHint
                   id="q-l4-ext"
@@ -265,8 +287,9 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
 
               <div className="space-y-2">
                 <button
+                  disabled={cooldown > 0}
                   onClick={() => handleAnswerExtension('type_program')}
-                  className={`w-full p-2.5 rounded-xl text-xs text-left transition cursor-pointer ${
+                  className={`w-full p-2.5 rounded-xl text-xs text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                     extensionAnswer === 'type_program'
                       ? 'bg-emerald-950/80 border border-emerald-500 text-emerald-200 font-bold'
                       : 'bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-300'
@@ -279,8 +302,9 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                 </button>
 
                 <button
+                  disabled={cooldown > 0}
                   onClick={() => handleAnswerExtension('size_only')}
-                  className={`w-full p-2.5 rounded-xl text-xs text-left transition cursor-pointer ${
+                  className={`w-full p-2.5 rounded-xl text-xs text-left transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                     extensionAnswer === 'size_only'
                       ? 'bg-rose-950/70 border border-rose-500 text-rose-300'
                       : 'bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-300'
@@ -294,6 +318,7 @@ export const Level4_CopyRenameProps: React.FC<Level4Props> = ({ onComplete }) =>
                 <div className="mt-3">
                   <AnswerExplanation
                     isCorrect={extensionAnswer === 'type_program'}
+                    cooldown={cooldown}
                     explanationRo={
                       extensionAnswer === 'type_program'
                         ? 'Corect! Extensia indică tipul de date stocat și programul implicit asociat pentru deschidere (Manual pag. 30).'
