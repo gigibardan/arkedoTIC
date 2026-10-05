@@ -348,6 +348,10 @@ class SoundManager {
     this.playCorrect();
   }
 
+  playStar() {
+    this.playRetro('coin');
+  }
+
   playFanfare() {
     this.playVictory();
   }

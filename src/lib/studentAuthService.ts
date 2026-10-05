@@ -83,6 +83,8 @@ export const DEFAULT_LESSONS_PROGRESS: LessonsProgress = {
   graphics2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   algo1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   algo2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  scratch1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  scratch2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   totalLessonScore: 0
 };
 
@@ -204,7 +206,11 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const t2 = computeLessonXP(lessons.text2 || {});
   const g1 = computeLessonXP(lessons.graphics1 || {});
   const g2 = computeLessonXP(lessons.graphics2 || {});
-  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2;
+  const a1 = computeLessonXP(lessons.algo1 || {});
+  const a2 = computeLessonXP(lessons.algo2 || {});
+  const s1 = computeLessonXP(lessons.scratch1 || {});
+  const s2 = computeLessonXP(lessons.scratch2 || {});
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {
@@ -353,6 +359,18 @@ export async function registerStudent(
       level: Number(localStorage.getItem('arkedo_algo2_level') || '1'),
       score: Number(localStorage.getItem('arkedo_algo2_score') || '0'),
       elapsedSeconds: Number(localStorage.getItem('arkedo_algo2_elapsed') || '0')
+    },
+    scratch1: {
+      completed: Number(localStorage.getItem('arkedo_scratch1_level') || '1') >= 8,
+      level: Number(localStorage.getItem('arkedo_scratch1_level') || '1'),
+      score: Number(localStorage.getItem('arkedo_scratch1_score') || '0'),
+      elapsedSeconds: Number(localStorage.getItem('arkedo_scratch1_elapsed') || '0')
+    },
+    scratch2: {
+      completed: Number(localStorage.getItem('arkedo_scratch2_level') || '1') >= 8,
+      level: Number(localStorage.getItem('arkedo_scratch2_level') || '1'),
+      score: Number(localStorage.getItem('arkedo_scratch2_score') || '0'),
+      elapsedSeconds: Number(localStorage.getItem('arkedo_scratch2_elapsed') || '0')
     },
     totalLessonScore: 0
   };
@@ -543,6 +561,18 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
         localStorage.setItem('arkedo_algo2_level', String(a2.level || 1));
         localStorage.setItem('arkedo_algo2_score', String(a2.score || 0));
         localStorage.setItem('arkedo_algo2_elapsed', String(a2.elapsedSeconds || 0));
+      }
+      const s1 = profile.lessonsProgress.scratch1;
+      if (s1) {
+        localStorage.setItem('arkedo_scratch1_level', String(s1.level || 1));
+        localStorage.setItem('arkedo_scratch1_score', String(s1.score || 0));
+        localStorage.setItem('arkedo_scratch1_elapsed', String(s1.elapsedSeconds || 0));
+      }
+      const s2 = profile.lessonsProgress.scratch2;
+      if (s2) {
+        localStorage.setItem('arkedo_scratch2_level', String(s2.level || 1));
+        localStorage.setItem('arkedo_scratch2_score', String(s2.score || 0));
+        localStorage.setItem('arkedo_scratch2_elapsed', String(s2.elapsedSeconds || 0));
       }
     }
 
@@ -866,7 +896,7 @@ export const updateActiveArcadeScore = updateStudentArcadeScore;
 
 // UPDATE LESSON PROGRESS FOR LOGGED STUDENT
 export async function updateStudentLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2',
   progressData: {
     level: number;
     score: number;
@@ -927,7 +957,7 @@ export async function updateStudentLessonProgress(
 }
 
 export function updateActiveLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2',
   completed: boolean,
   level: number,
   score: number,
@@ -1483,7 +1513,7 @@ export async function resetStudentArcadeScores(
 // RESET LESSON PROGRESS
 export async function resetStudentLessonProgress(
   studentId: string,
-  missionKey?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'all'
+  missionKey?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'all'
 ): Promise<{ success: boolean; error?: string }> {
   try {
     let student: StudentProfile | null = null;

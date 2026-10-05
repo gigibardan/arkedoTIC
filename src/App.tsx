@@ -43,6 +43,12 @@ import { Module5AFlow } from './components/algo1/Module5AFlow';
 // Algo Mission 5B (Unitatea 5 - Manual pag. 62-71)
 import { Module5BFlow } from './components/algo2/Module5BFlow';
 
+// Scratch Mission 6A (Unitatea 6 - Manual pag. 72-83)
+import { Module6AFlow } from './components/scratch1/Module6AFlow';
+
+// Scratch Mission 6B (Unitatea 6 - Manual pag. 84-93)
+import { Module6BFlow } from './components/scratch2/Module6BFlow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
@@ -72,10 +78,10 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2') return saved;
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2') return saved;
     } catch {
       // Ignore
     }
@@ -314,6 +320,64 @@ function GameContent() {
     return 0;
   });
 
+  // Scratch 1 mission progress (Unitatea 6A - Manual pag. 72-83)
+  const [scratch1Level, setScratch1Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_scratch1_level');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [scratch1Score, setScratch1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_scratch1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [scratch1ElapsedSeconds, setScratch1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_scratch1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Scratch 2 mission progress (Unitatea 6B - Manual pag. 84-93)
+  const [scratch2Level, setScratch2Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_scratch2_level');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [scratch2Score, setScratch2Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_scratch2_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [scratch2ElapsedSeconds, setScratch2ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_scratch2_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -390,6 +454,12 @@ function GameContent() {
       localStorage.setItem('arkedo_text2_elapsed', String(text2ElapsedSeconds));
       localStorage.setItem('arkedo_algo1_elapsed', String(algo1ElapsedSeconds));
       localStorage.setItem('arkedo_algo2_elapsed', String(algo2ElapsedSeconds));
+      localStorage.setItem('arkedo_scratch1_level', String(scratch1Level));
+      localStorage.setItem('arkedo_scratch1_score', String(scratch1Score));
+      localStorage.setItem('arkedo_scratch1_elapsed', String(scratch1ElapsedSeconds));
+      localStorage.setItem('arkedo_scratch2_level', String(scratch2Level));
+      localStorage.setItem('arkedo_scratch2_score', String(scratch2Score));
+      localStorage.setItem('arkedo_scratch2_elapsed', String(scratch2ElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -402,7 +472,9 @@ function GameContent() {
     text1Level, text1Score, text1ElapsedSeconds,
     text2Level, text2Score, text2ElapsedSeconds,
     algo1Level, algo1Score, algo1ElapsedSeconds,
-    algo2Level, algo2Score, algo2ElapsedSeconds
+    algo2Level, algo2Score, algo2ElapsedSeconds,
+    scratch1Level, scratch1Score, scratch1ElapsedSeconds,
+    scratch2Level, scratch2Score, scratch2ElapsedSeconds
   ]);
 
   // Current active level & score
@@ -420,6 +492,10 @@ function GameContent() {
     ? algo1Level
     : activeMission === 'algo2'
     ? algo2Level
+    : activeMission === 'scratch1'
+    ? scratch1Level
+    : activeMission === 'scratch2'
+    ? scratch2Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -436,6 +512,10 @@ function GameContent() {
     ? algo1Score
     : activeMission === 'algo2'
     ? algo2Score
+    : activeMission === 'scratch1'
+    ? scratch1Score
+    : activeMission === 'scratch2'
+    ? scratch2Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -452,6 +532,10 @@ function GameContent() {
     ? algo1ElapsedSeconds
     : activeMission === 'algo2'
     ? algo2ElapsedSeconds
+    : activeMission === 'scratch1'
+    ? scratch1ElapsedSeconds
+    : activeMission === 'scratch2'
+    ? scratch2ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -469,7 +553,9 @@ function GameContent() {
       (activeMission === 'text1' && text1Level <= 7) ||
       (activeMission === 'text2' && text2Level <= 7) ||
       (activeMission === 'algo1' && algo1Level <= 7) ||
-      (activeMission === 'algo2' && algo2Level <= 7);
+      (activeMission === 'algo2' && algo2Level <= 7) ||
+      (activeMission === 'scratch1' && scratch1Level <= 7) ||
+      (activeMission === 'scratch2' && scratch2Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -487,6 +573,10 @@ function GameContent() {
           setAlgo1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'algo2') {
           setAlgo2ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'scratch1') {
+          setScratch1ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'scratch2') {
+          setScratch2ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -495,7 +585,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level]);
 
   // Listen to browser navigation
   useEffect(() => {
@@ -541,7 +631,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -583,8 +673,68 @@ function GameContent() {
       setAlgo2Level(1);
       setAlgo2Score(0);
       setAlgo2ElapsedSeconds(0);
+    } else if (activeMission === 'scratch1') {
+      setScratch1Level(1);
+      setScratch1Score(0);
+      setScratch1ElapsedSeconds(0);
+    } else if (activeMission === 'scratch2') {
+      setScratch2Level(1);
+      setScratch2Score(0);
+      setScratch2ElapsedSeconds(0);
     }
     arky.triggerIdle();
+  };
+
+  // Scratch 1 (Mission 6A) level progression
+  const handleScratch1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(scratch1Score, earnedScore));
+    setScratch1Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setScratch1Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setScratch1Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('scratch1', true, 8, updatedTotal, scratch1ElapsedSeconds);
+    }
+  };
+
+  const handleResetScratch1 = () => {
+    sounds.playClick();
+    setScratch1Score(0);
+    setScratch1Level(1);
+    setScratch1ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Scratch 2 (Mission 6B) level progression
+  const handleScratch2CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(scratch2Score, earnedScore));
+    setScratch2Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setScratch2Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setScratch2Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('scratch2', true, 8, updatedTotal, scratch2ElapsedSeconds);
+    }
+  };
+
+  const handleResetScratch2 = () => {
+    sounds.playClick();
+    setScratch2Score(0);
+    setScratch2Level(1);
+    setScratch2ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Algo 1 (Mission 5A) level progression
@@ -897,7 +1047,7 @@ function GameContent() {
             {/* Mission Evolution Progress */}
             <ProgressBar
               currentLevel={currentLevel}
-              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : activeMission === 'algo1' ? 'algo1' : activeMission === 'algo2' ? 'algo2' : 'files'}
+              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : activeMission === 'algo1' ? 'algo1' : activeMission === 'algo2' ? 'algo2' : activeMission === 'scratch1' ? 'scratch1' : activeMission === 'scratch2' ? 'scratch2' : 'files'}
             />
 
             {/* Level Views for HARDWARE */}
@@ -1101,12 +1251,56 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for SCRATCH 1 (MISSION 6A - PRIMII PAȘI, BLOCURI, VARIABILE & EXTENSIA PEN) */}
+            {activeMission === 'scratch1' && (
+              <div className="flex-1">
+                {scratch1Level <= 7 ? (
+                  <Module6AFlow
+                    currentLevel={scratch1Level}
+                    onCompleteLevel={handleScratch1CompleteLevel}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={scratch1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={scratch1ElapsedSeconds}
+                    courseId="scratch1"
+                    onReset={handleResetScratch1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for SCRATCH 2 (MISSION 6B - DECIZII, MUZICĂ, JOCURI & MAREA EVALUARE) */}
+            {activeMission === 'scratch2' && (
+              <div className="flex-1">
+                {scratch2Level <= 7 ? (
+                  <Module6BFlow
+                    currentLevel={scratch2Level}
+                    onCompleteLevel={handleScratch2CompleteLevel}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={scratch2Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={scratch2ElapsedSeconds}
+                    courseId="scratch2"
+                    onReset={handleResetScratch2}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}

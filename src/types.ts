@@ -76,6 +76,8 @@ export interface LessonsProgress {
   graphics2?: LessonMissionState;
   algo1?: LessonMissionState;
   algo2?: LessonMissionState;
+  scratch1?: LessonMissionState;
+  scratch2?: LessonMissionState;
   totalLessonScore: number;
 }
 
@@ -107,7 +109,7 @@ export interface ShopItem {
   icon: string;
   price: number;
   rarity: ItemRarity;
-  requiredModule?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2';
+  requiredModule?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2';
   requiredLevel?: number;
   previewCss?: string;
   previewAsset?: string;

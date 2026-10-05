@@ -13,7 +13,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -43,6 +43,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isText2 = courseId === 'text2';
   const isAlgo1 = courseId === 'algo1';
   const isAlgo2 = courseId === 'algo2';
+  const isScratch1 = courseId === 'scratch1';
+  const isScratch2 = courseId === 'scratch2';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -58,6 +60,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Algorithm Concept & Sequential Logic Mission 5A (Textbook pp. 54-61)' : 'Misiunea 5A Noțiunea de Algoritm & Algoritmi Secvențiali (Manual pag. 54-61)')
     : isAlgo2
     ? (lang === 'en' ? 'Decisions, Data Types & Flowcharts Mission 5B (Textbook pp. 62-71)' : 'Misiunea 5B Structuri Decizionale, Date & Scheme Logice (Manual pag. 62-71)')
+    : isScratch1
+    ? (lang === 'en' ? 'Scratch 3.0 Environment & Variables Mission 6A (Textbook pp. 72-90)' : 'Misiunea 6A Mediul Scratch & Variabile (Manual pag. 72-90)')
+    : isScratch2
+    ? (lang === 'en' ? 'Scratch Decisions, Music & Games Mission 6B (Textbook pp. 84-93)' : 'Misiunea 6B Decizii, Muzică & Concurs Scratch (Manual pag. 84-93)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
@@ -135,7 +141,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -159,6 +165,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Junior Algorithmist & Logic Pioneer!' : 'Felicitări, Junior Algoritmist & Pionier al Logicii!')
           : isAlgo2
           ? (lang === 'en' ? 'Congratulations, Logic Flowchart & Algorithm Master!' : 'Felicitări, Maestru în Scheme Logice & Algoritmi Decizionali!')
+          : isScratch1
+          ? (lang === 'en' ? 'Congratulations, Junior Scratch 3.0 Programmer!' : 'Felicitări, Programator Junior Scratch 3.0!')
+          : isScratch2
+          ? (lang === 'en' ? 'Congratulations, Master Game Developer & ICT Graduate!' : 'Felicitări, Maestru în Jocuri Scratch & Absolvent de Onoare!')
           : t.vTitle}
       </h2>
 
@@ -191,6 +201,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered alternative decision structures (If... Then... Else), input/intermediate/output data, numeric/text/boolean types, arithmetic & relational operators, logic connectives (AND, OR, NOT) with truth tables, flowchart block diagrams, and trace tables!'
               : 'Ai finalizat cu brio Modulul 5B: stăpânești structura alternativă (Dacă... Atunci... Altfel), tipurile de date (numeric, text, logic), operatorii aritmetici și de comparație, conectivele logice (ȘI, SAU, NU) cu tabele de adevăr, schemele logice și tabelele de valori!')
+          : isScratch1
+          ? (lang === 'en'
+              ? 'You mastered the Scratch 3.0 interface and coordinate stage (480x360), the 9 color-coded block categories, linear scripts with speech and sound, variables creation & watchers, arithmetic & text join blocks, and dynamic geometric drawings with the Pen extension!'
+              : 'Ai finalizat cu succes Modulul 6A: stăpânești interfața Scratch 3.0 și coordonatele scenei (480x360), cele 9 categorii de blocuri colorate, scripturile liniare cu dialog și sunet, variabilele și monitoarele, operatorii matematici și alăturarea textelor, alături de desenele geometrice cu extensia Creion!')
+          : isScratch2
+          ? (lang === 'en'
+              ? 'You mastered alternative decision blocks, maze games with color sensing, multiplication quizzes with user input and random numbers, digital instruments & MIDI music scales, multi-sprite contest games with timers, ecological stories, and passed the Grand Final Exam of 5th Grade!'
+              : 'Ai finalizat cu brio Modulul 6B: stăpânești deciziile în Scratch, jocul labirint cu senzori de culoare, jocul tablei înmulțirii cu factori aleatorii și citire răspuns, extensia muzică și gama Do major, concursul de jocuri cu cronometru, povestea ecologică și Marea Evaluare Finală de Clasa a V-a!')
           : t.vDesc}
       </p>
 
@@ -560,6 +578,82 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isScratch1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🐱</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Scratch Architect' : 'Mediul Scratch 3.0'}</div>
+                <div className="text-[10px] text-amber-400">Interfață & Coordonate</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎨</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Palette Master' : '9 Categorii de Blocuri'}</div>
+                <div className="text-[10px] text-purple-400">Puzzle & Comportamente</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🤖</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Linear Script Pro' : 'RoboTIC se Prezintă'}</div>
+                <div className="text-[10px] text-sky-400">Glisare, Dialog & Sunet</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📦</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Variable Expert' : 'Variabile & Monitoare'}</div>
+                <div className="text-[10px] text-orange-400">Setează & Modifică cu</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">✒️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Magic Pen Artist' : 'Extensia Creion'}</div>
+                <div className="text-[10px] text-teal-400">Desene Geometrice</div>
+              </div>
+            </div>
+          </>
+        ) : isScratch2 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🌿</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Conditional Pro' : 'Decizii în Scratch'}</div>
+                <div className="text-[10px] text-amber-400">Dacă... Atunci... Altfel</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎮</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Maze Navigator' : 'Labirint Inteligent'}</div>
+                <div className="text-[10px] text-sky-400">Detectare Culori & Recul</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔢</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Math Game Maker' : 'Tabla Înmulțirii'}</div>
+                <div className="text-[10px] text-emerald-400">Întreabă, Răspuns, Aleator</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎹</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Digital Musician' : 'Extensia Muzică MIDI'}</div>
+                <div className="text-[10px] text-pink-400">Gama Do & Pădurea cu alune</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🎓</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Grade 5 Laureate' : 'Laureat Clasa a V-a'}</div>
+                <div className="text-[10px] text-emerald-300">Curriculum TIC Integral</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -624,7 +718,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -648,6 +742,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Junior Algorithmist & Logic Pioneer Certificate' : 'Diplomă de Junior Algoritmist & Arhitect de Pași')
               : isAlgo2
               ? (lang === 'en' ? 'Algorithm Master & Logic Flowcharts Diploma' : 'Diplomă de Maestru în Scheme Logice & Algoritmi Decizionali')
+              : isScratch1
+              ? (lang === 'en' ? 'Scratch 3.0 Junior Developer Certificate' : 'Diplomă de Programator Junior Scratch 3.0 & Creator Vizual')
+              : isScratch2
+              ? (lang === 'en' ? 'Grade 5 Grand Diploma • Master Game Developer & ICT Laureate' : 'Marea Diplomă de Onoare Clasa a V-a • Dezvoltator de Jocuri & Maestru TIC')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -687,6 +785,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en'
                   ? 'For remarkable mastery in implementing alternative decision structures (If-Then-Else), managing algorithm data types, solving logic expressions with truth tables, constructing flowcharts, and executing data trace tables.'
                   : 'Pentru performanțe deosebite în stăpânirea structurilor decizionale alternative (Dacă-Atunci-Altfel), tipurilor de date și constante, operatorilor logici cu tabele de adevăr, asamblării schemelor logice și verificării prin tabele de valori.')
+              : isScratch1
+              ? (lang === 'en'
+                  ? 'For creative and technical excellence in building Scratch 3.0 linear scripts, controlling stage coordinates, managing game variables and watchers, mathematical calculations, and drawing geometric art with the Pen extension.'
+                  : 'Pentru creativitate și performanțe remarcabile în asamblarea scripturilor liniare Scratch 3.0, pilotarea personajelor pe coordonatele scenei, gestionarea variabilelor de joc, efectuarea calculelor matematice și desenarea formelor geometrice cu extensia Creion.')
+              : isScratch2
+              ? (lang === 'en'
+                  ? 'For supreme graduation mastery of the complete 5th Grade Computer Science & ICT Curriculum: alternative decision structures, sensory maze algorithms, arithmetic ask/answer quizzes, digital music composition, multi-sprite contest games, and ecological simulation.'
+                  : 'Pentru absolvirea de elită a întregului Curriculum Oficial de Informatică și TIC Clasa a V-a: structuri decizionale alternative, jocuri tip labirint cu senzori, jocuri de calcul matematic, compunere muzicală digitală pe note MIDI, concursuri de jocuri cu cronometru și povestea ecologică.')
               : t.vDiplomaText}
           </p>
 

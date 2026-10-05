@@ -72,8 +72,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -155,7 +155,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null>(null);
 
   // Student Cloud Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
@@ -398,7 +398,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -435,7 +435,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -475,6 +475,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Module 5B: Decisions, Data Types & Flowcharts (Textbook p. 62-71)'
         : 'Modulul 5B: Structuri Decizionale, Date & Scheme Logice (Manual pag. 62-71)';
+    }
+    if (id === 'scratch1') {
+      return lang === 'en'
+        ? 'Module 6A: Scratch 3.0 Environment, Linear Movement & Variables (Textbook p. 72-90)'
+        : 'Modulul 6A: Mediul Scratch, Mișcare Liniară & Variabile (Manual pag. 72-90)';
+    }
+    if (id === 'scratch2') {
+      return lang === 'en'
+        ? 'Module 6B: Scratch Decisions, Music, Contest Games & Grand Exam (Textbook p. 84-93)'
+        : 'Modulul 6B: Decizii, Muzică, Concurs de Jocuri & Marea Evaluare (Manual pag. 84-93)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -1989,6 +1999,166 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </button>
             </div>
           </div>
+
+          {/* Card 9: ACTIVE MISSION 6A - Mediul Scratch 3.0, Mișcare Liniară, Variabile & Creion */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'scratch1'
+                ? 'border-orange-400 shadow-orange-500/20 ring-2 ring-orange-500/30'
+                : 'border-orange-500/60 hover:border-orange-400 hover:shadow-orange-500/10'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  🐱
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'scratch1' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 6A • SCRATCH' : 'MODULUL 6A • SCRATCH'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-orange-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 72–90 • Mission 6A' : 'Manual pag. 72–90 • Misiunea 6A'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-orange-300 transition-colors">
+                {lang === 'en' ? 'Scratch 3.0: Stage, Motion & Variables' : 'Mediul Scratch: Scena, Mișcare & Variabile'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Visual Blocks, 480x360 Stage, 9 Categories, "RoboTIC Se Prezintă", Variables, Math & Pen Extension' : 'Blocuri Vizuale, Scena 480x360, 9 Categorii, RoboTIC Se Prezintă, Variabile & Extensia Creion'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Explore the MIT Scratch 3.0 environment (p. 72–73), navigate the 480x360 coordinate stage with Green Flag & Red Stop (p. 74–75), categorize the 9 color palette blocks (p. 74–76), build project "RoboTIC Introduces Himself" with sequential gliding, speech & sound (p. 76–80), create and manipulate variables with stage watchers (p. 81–84), execute project "RoboOperations" with math operators & text join (p. 84–88), and draw geometric shapes with the Magic Pen extension (p. 88–90)!'
+                  : 'Descoperă mediul Scratch 3.0 de la MIT Media Lab (pag. 72–73), navighează pe scena de 480x360 px cu Steagul Verde și Stop (pag. 74–75), explorează cele 9 categorii de blocuri colorate (pag. 74–76), implementează proiectul „RoboTIC se prezintă” cu glisare, dialog și sunet (pag. 76–80), creează variabile și monitoare de scor (pag. 81–84), efectuează calcule cu operatori și alăturare de text în „RoboOperații” (pag. 84–88) și desenează figuri geometrice cu Extensia Creion (pag. 88–90)!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-orange-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-orange-400" /> {lang === 'en' ? 'Scratch Developer Diploma' : 'Diplomă Programator Scratch'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
+                  <span className="text-orange-400 font-bold">
+                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('scratch1')}
+                className="px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-orange-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'scratch1' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 6A' : 'Continuă Misiunea 6A')
+                    : (lang === 'en' ? 'Start Mission 6A' : 'Începe Misiunea 6A')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 10: ACTIVE MISSION 6B - Decizii Scratch, Labirint, Tabla Înmulțirii, Muzică & Marea Evaluare */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'scratch2'
+                ? 'border-pink-400 shadow-pink-500/20 ring-2 ring-pink-500/30'
+                : 'border-pink-500/60 hover:border-pink-400 hover:shadow-pink-500/10'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  🎮
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'scratch2' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 6B • GRADUATION' : 'MODULUL 6B • ABSOLVIRE'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-pink-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 84–93 • Mission 6B' : 'Manual pag. 84–93 • Misiunea 6B'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-pink-300 transition-colors">
+                {lang === 'en' ? 'Decisions, Music & Contest Games' : 'Decizii, Muzică, Jocuri & Marea Evaluare'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'If/Else, Maze Game, Math Quiz, Music MIDI Synth, Scale Songs, Catch Fish Contest & Final Grade 5 Exam' : 'Dacă/Altfel, Labirint, Tabla Înmulțirii, Extensia Muzică, Gama Do, Prinde Peștele & Marea Evaluare Finală'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Implement decision structures in Scratch (p. 84–86), program the Smart Maze game with color sensing (p. 86–88), develop the Multiplication Quiz with user input and random numbers (p. 88–90), compose digital music with the MIDI Music extension (p. 90–92), play the C Major scale and "În pădurea cu alune" (p. 91–92), build multi-sprite contest game "Catch the Fish" with timers (p. 92–93), create the "Save the Planet" ecological story and graduate Grade 5 Informatics & ICT!'
+                  : 'Programează decizii dacă/altfel în Scratch (pag. 84–86), construiește jocul Labirint cu senzori optici de culoare (pag. 86–88), creează jocul Tabla Înmulțirii cu generare de factori aleatorii și citire răspuns (pag. 88–90), explorează extensia Muzică și sintetizatorul digital (pag. 90–92), programează gama Do major și cântecul „În pădurea cu alune” (pag. 91–92), creează jocul de concurs „Prinde Peștișorul” cu cronometru (pag. 92–93), animă proiectul ecologic „Salvăm Planeta” și obține Diploma de Absolvire a Clasei a V-a (pag. 93)!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-pink-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-pink-400" /> {lang === 'en' ? 'Grade 5 Grand Diploma' : 'Marea Diplomă de Onoare Clasa a V-a'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
+                  <span className="text-pink-400 font-bold">
+                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('scratch2')}
+                className="px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-pink-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'scratch2' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 6B' : 'Continuă Misiunea 6B')
+                    : (lang === 'en' ? 'Start Mission 6B' : 'Începe Misiunea 6B')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2186,26 +2356,18 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null): number {
+function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
   }
-  if (missionId === 'internet1') {
+  if (missionId === 'internet1' || missionId === 'internet2') {
     const internetScores = [0, 15, 30, 45, 60, 80, 100];
     return internetScores[Math.min(level - 1, 6)] || 0;
   }
-  if (missionId === 'internet2') {
-    const internet2Scores = [0, 15, 30, 45, 60, 80, 100];
-    return internet2Scores[Math.min(level - 1, 6)] || 0;
-  }
-  if (missionId === 'text1') {
-    const text1Scores = [0, 15, 30, 45, 60, 75, 90, 100];
-    return text1Scores[Math.min(level - 1, 7)] || 0;
-  }
-  if (missionId === 'text2') {
-    const text2Scores = [0, 15, 30, 45, 60, 75, 90, 100];
-    return text2Scores[Math.min(level - 1, 7)] || 0;
+  if (missionId === 'text1' || missionId === 'text2' || missionId === 'algo1' || missionId === 'algo2' || missionId === 'scratch1' || missionId === 'scratch2') {
+    const standardScores = [0, 15, 30, 45, 60, 75, 90, 100];
+    return standardScores[Math.min(level - 1, 7)] || 0;
   }
   const filesScores = [0, 10, 25, 40, 55, 70, 85, 100];
   return filesScores[Math.min(level - 1, 7)] || 0;

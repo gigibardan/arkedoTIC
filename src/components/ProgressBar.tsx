@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2';
 }
 
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
@@ -15,6 +15,92 @@ const TEXT1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const TEXT2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const ALGO1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const ALGO2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const SCRATCH1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const SCRATCH2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const SCRATCH1_STAGES_RO = [
+  { emoji: '🐱', name: 'Limbajul Vizual Scratch & MIT Media Lab (pag. 72-73)' },
+  { emoji: '🖥️', name: 'Interfața Scratch 3.0 & Sistemul de Coordonate (pag. 72-75)' },
+  { emoji: '🎨', name: 'Cele 9 Categorii de Blocuri Colorate (pag. 74-76)' },
+  { emoji: '🤖', name: 'Proiectul „RoboTIC se prezintă” - Scripturi Liniare (pag. 76-80)' },
+  { emoji: '📦', name: 'Variabile în Scratch: Creare, Atribuire & Monitoare (pag. 81-84)' },
+  { emoji: '🧮', name: 'Proiectul „RoboOperații” - Operatori & Alăturare Text (pag. 84-88)' },
+  { emoji: '✒️', name: 'Extensia Creion & Desen Geometrie Dinamică (pag. 88-90)' },
+  { emoji: '🏆', name: 'Junior Scratch Master & Animator Certificat!' },
+];
+
+const SCRATCH1_STAGES_EN = [
+  { emoji: '🐱', name: 'Scratch Visual Language & MIT Media Lab (pp. 72-73)' },
+  { emoji: '🖥️', name: 'Scratch 3.0 Interface & Coordinate Stage (pp. 72-75)' },
+  { emoji: '🎨', name: 'The 9 Color-Coded Block Categories (pp. 74-76)' },
+  { emoji: '🤖', name: 'Project "RoboTIC Introduces Himself" - Linear Scripts (pp. 76-80)' },
+  { emoji: '📦', name: 'Variables in Scratch: Creation & Watchers (pp. 81-84)' },
+  { emoji: '🧮', name: 'Project "RoboOperations" - Math & Text Join (pp. 84-88)' },
+  { emoji: '✒️', name: 'The Pen Extension & Dynamic Geometry (pp. 88-90)' },
+  { emoji: '🏆', name: 'Certified Junior Scratch Master!' },
+];
+
+const SCRATCH1_MILESTONES_RO = [
+  'P1: Scratch Intro',
+  'P2: Scena & Coordonate',
+  'P3: 9 Categorii',
+  'P4: RoboTIC Liniar',
+  'P5: Variabile',
+  'P6: RoboOperații',
+  'P7: Extensia Creion',
+];
+
+const SCRATCH1_MILESTONES_EN = [
+  'P1: Scratch Intro',
+  'P2: Stage & Coords',
+  'P3: 9 Categories',
+  'P4: RoboTIC Linear',
+  'P5: Variables',
+  'P6: RoboOperations',
+  'P7: Pen Extension',
+];
+
+const SCRATCH2_STAGES_RO = [
+  { emoji: '🌿', name: 'Structura Alternativă: dacă ... atunci ... altfel (pag. 84-86)' },
+  { emoji: '🎮', name: 'Proiectul „Labirintul Inteligent” - Detectare Culori (pag. 86-88)' },
+  { emoji: '🔢', name: 'Jocul „Tabla Înmulțirii” - Întrebări & Aleator (pag. 88-90)' },
+  { emoji: '🎹', name: 'Extensia Muzică - Portativ MIDI & Sintetizator (pag. 90-92)' },
+  { emoji: '🎶', name: 'Gama Do Major & Cântecul „În pădurea cu alune” (pag. 91-92)' },
+  { emoji: '🐠', name: 'Concurs de Jocuri - „Prinde Peștișorul” Multi-Sprite (pag. 92-93)' },
+  { emoji: '🌍', name: 'Proiectul „Salvăm Planeta” & Marea Evaluare Clasa a V-a (pag. 93)' },
+  { emoji: '🎓', name: 'Absolvent de Onoare Clasa a V-a • Informatică & TIC!' },
+];
+
+const SCRATCH2_STAGES_EN = [
+  { emoji: '🌿', name: 'Decision Structures: if ... then ... else (pp. 84-86)' },
+  { emoji: '🎮', name: 'Project "The Smart Maze" - Color Sensing (pp. 86-88)' },
+  { emoji: '🔢', name: 'Game "Multiplication Quiz" - Ask & Random (pp. 88-90)' },
+  { emoji: '🎹', name: 'Music Extension - MIDI Notes & Synth (pp. 90-92)' },
+  { emoji: '🎶', name: 'C Major Scale & "În pădurea cu alune" (pp. 91-92)' },
+  { emoji: '🐠', name: 'Contest Game - "Catch the Fish" Multi-Sprite (pp. 92-93)' },
+  { emoji: '🌍', name: 'Project "Save the Planet" & Grade 5 Grand Exam (p. 93)' },
+  { emoji: '🎓', name: 'Grade 5 Informatics & ICT Graduate of Honor!' },
+];
+
+const SCRATCH2_MILESTONES_RO = [
+  'P1: Decizii Scratch',
+  'P2: Joc Labirint',
+  'P3: Tabla Înmulțirii',
+  'P4: Extensia Muzică',
+  'P5: Gama & Cântece',
+  'P6: Prinde Peștele',
+  'P7: Marea Evaluare',
+];
+
+const SCRATCH2_MILESTONES_EN = [
+  'P1: Scratch Decisions',
+  'P2: Maze Game',
+  'P3: Math Quiz',
+  'P4: Music Extension',
+  'P5: Scale & Songs',
+  'P6: Catch the Fish',
+  'P7: Grand Exam',
+];
 
 const ALGO1_STAGES_RO = [
   { emoji: '🧩', name: 'Ce este un Algoritm? Pași & Date (pag. 54-55)' },
@@ -346,6 +432,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isText2 = courseId === 'text2';
   const isAlgo1 = courseId === 'algo1';
   const isAlgo2 = courseId === 'algo2';
+  const isScratch1 = courseId === 'scratch1';
+  const isScratch2 = courseId === 'scratch2';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -387,6 +475,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? ALGO2_MILESTONES_EN : ALGO2_MILESTONES_RO;
     percents = ALGO2_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isScratch1) {
+    stages = lang === 'en' ? SCRATCH1_STAGES_EN : SCRATCH1_STAGES_RO;
+    milestones = lang === 'en' ? SCRATCH1_MILESTONES_EN : SCRATCH1_MILESTONES_RO;
+    percents = SCRATCH1_STAGE_PERCENTS;
+    maxLevels = 7;
+  } else if (isScratch2) {
+    stages = lang === 'en' ? SCRATCH2_STAGES_EN : SCRATCH2_STAGES_RO;
+    milestones = lang === 'en' ? SCRATCH2_MILESTONES_EN : SCRATCH2_MILESTONES_RO;
+    percents = SCRATCH2_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -416,6 +514,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Algorithm Fundamentals & Sequential Logic Progress' : 'Evoluție Noțiuni de Algoritm & Algoritmi Secvențiali')
                 : isAlgo2
                 ? (lang === 'en' ? 'Decisions, Flowcharts & Logic Progress' : 'Evoluție Structuri Decizionale & Scheme Logice')
+                : isScratch1
+                ? (lang === 'en' ? 'Scratch Environment & Visual Coding Progress' : 'Evoluție Mediul Scratch & Programare Vizuală')
+                : isScratch2
+                ? (lang === 'en' ? 'Scratch Decisions, Music & Games Progress' : 'Evoluție Decizii, Muzică & Concurs de Jocuri Scratch')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -426,6 +528,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isText2 ? 'text-emerald-400' 
               : isAlgo1 ? 'text-amber-400'
               : isAlgo2 ? 'text-purple-400'
+              : isScratch1 ? 'text-orange-400'
+              : isScratch2 ? 'text-pink-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -457,6 +561,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-amber-500 via-orange-400 to-yellow-300'
               : isAlgo2
               ? 'bg-gradient-to-r from-purple-500 via-indigo-400 to-teal-300'
+              : isScratch1
+              ? 'bg-gradient-to-r from-orange-500 via-amber-400 to-teal-300'
+              : isScratch2
+              ? 'bg-gradient-to-r from-pink-500 via-purple-400 to-emerald-300'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -485,6 +593,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-amber-300 font-bold'
                     : isAlgo2
                     ? 'text-purple-300 font-bold'
+                    : isScratch1
+                    ? 'text-orange-300 font-bold'
+                    : isScratch2
+                    ? 'text-pink-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

@@ -126,6 +126,18 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
       score: student.lessonsProgress?.algo2?.score || 0,
       elapsedSeconds: student.lessonsProgress?.algo2?.elapsedSeconds || 0
     },
+    scratch1: {
+      completed: student.lessonsProgress?.scratch1?.completed || false,
+      level: student.lessonsProgress?.scratch1?.level || 1,
+      score: student.lessonsProgress?.scratch1?.score || 0,
+      elapsedSeconds: student.lessonsProgress?.scratch1?.elapsedSeconds || 0
+    },
+    scratch2: {
+      completed: student.lessonsProgress?.scratch2?.completed || false,
+      level: student.lessonsProgress?.scratch2?.level || 1,
+      score: student.lessonsProgress?.scratch2?.score || 0,
+      elapsedSeconds: student.lessonsProgress?.scratch2?.elapsedSeconds || 0
+    },
     totalLessonScore: student.lessonsProgress?.totalLessonScore || 0
   });
 
@@ -165,7 +177,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   };
 
   const handleLessonChange = (
-    mission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2',
+    mission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2',
     field: 'completed' | 'score' | 'elapsedSeconds' | 'level',
     val: any
   ) => {
@@ -1075,6 +1087,132 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                         max="7"
                         value={lessonsProgress.algo2?.level || 1}
                         onChange={(e) => handleLessonChange('algo2', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* MODULUL 6A - SCRATCH 3.0, MIȘCARE & VARIABILE */}
+                <div className="p-4 rounded-2xl bg-slate-950/70 border border-orange-500/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🐱</span>
+                      <div>
+                        <div className="text-xs font-black text-orange-300">
+                          {isEn ? 'Unit 6A: Scratch 3.0 Environment, Linear Movement & Variables' : 'Unitatea 6A: Mediul Scratch, Mișcare Liniară & Variabile'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 72-90 (Visual Blocks, 480x360, 9 Categories, RoboTIC, Variables, Pen)' : 'Manual pag. 72-90 (Blocuri Vizuale, 480x360, 9 Categorii, RoboTIC, Variabile, Creion)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.scratch1?.completed || false}
+                        onChange={(e) => handleLessonChange('scratch1', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.scratch1?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.scratch1?.score || 0}
+                        onChange={(e) => handleLessonChange('scratch1', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.scratch1?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('scratch1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.scratch1?.level || 1}
+                        onChange={(e) => handleLessonChange('scratch1', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* MODULUL 6B - DECIZII, MUZICĂ & CONCURS SCRATCH */}
+                <div className="p-4 rounded-2xl bg-slate-950/70 border border-pink-500/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🎮</span>
+                      <div>
+                        <div className="text-xs font-black text-pink-300">
+                          {isEn ? 'Unit 6B: Decisions, Music, Contest Games & Grand Exam' : 'Unitatea 6B: Decizii, Muzică, Concurs de Jocuri & Marea Evaluare'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 84-93 (If/Else, Maze, Math Quiz, Music MIDI, Catch Fish, Final Exam)' : 'Manual pag. 84-93 (Dacă/Altfel, Labirint, Tabla Înmulțirii, Muzică MIDI, Prinde Pește, Evaluare)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.scratch2?.completed || false}
+                        onChange={(e) => handleLessonChange('scratch2', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.scratch2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.scratch2?.score || 0}
+                        onChange={(e) => handleLessonChange('scratch2', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.scratch2?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('scratch2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.scratch2?.level || 1}
+                        onChange={(e) => handleLessonChange('scratch2', 'level', parseInt(e.target.value, 10) || 1)}
                         className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
                       />
                     </div>
