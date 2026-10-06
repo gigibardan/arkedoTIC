@@ -168,7 +168,7 @@ export const SLevel1_VisualLanguageIntro: React.FC<SLevel1Props> = ({ onComplete
   if (isQ1Correct) totalScore += 25;
   if (isQ2Correct) totalScore += 25;
 
-  const isPageComplete = stackSuccess && isQ1Correct && isQ2Correct;
+  const isPageComplete = stackSuccess || (q1Answer !== null && q2Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6">

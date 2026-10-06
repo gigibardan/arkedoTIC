@@ -141,7 +141,7 @@ export const S2Level7_SavePlanetFinalExam: React.FC<S2Level7Props> = ({ onComple
   if (isQ3Correct) totalScore += 20;
   if (isQ4Correct) totalScore += 20;
 
-  const isPageComplete = isEcoLabComplete && isQ1Correct && isQ2Correct && isQ3Correct && isQ4Correct;
+  const isPageComplete = isEcoLabComplete || (q1Answer !== null && q2Answer !== null && q3Answer !== null && q4Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12">

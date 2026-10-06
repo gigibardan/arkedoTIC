@@ -147,7 +147,7 @@ export const SLevel2_InterfaceAndStage: React.FC<SLevel2Props> = ({ onCompletePa
   if (isQ2Correct) totalScore += 25;
   if (isQ3Correct) totalScore += 20;
 
-  const isPageComplete = targetGoalAchieved && isQ1Correct && isQ2Correct && isQ3Correct;
+  const isPageComplete = targetGoalAchieved || (q1Answer !== null && q2Answer !== null && q3Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12">

@@ -165,7 +165,7 @@ export const S2Level6_CatchFishContestGame: React.FC<S2Level6Props> = ({ onCompl
   if (isQ1Correct) totalScore += 30;
   if (isQ2Correct) totalScore += 30;
 
-  const isPageComplete = targetScoreAchieved && isQ1Correct && isQ2Correct;
+  const isPageComplete = targetScoreAchieved || score >= 2 || (q1Answer !== null && q2Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12">

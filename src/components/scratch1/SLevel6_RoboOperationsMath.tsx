@@ -126,7 +126,7 @@ export const SLevel6_RoboOperationsMath: React.FC<SLevel6Props> = ({ onCompleteP
   if (isQ1Correct) totalScore += 30;
   if (isQ2Correct) totalScore += 30;
 
-  const isPageComplete = labSuccess && isQ1Correct && isQ2Correct;
+  const isPageComplete = labSuccess || (q1Answer !== null && q2Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12">

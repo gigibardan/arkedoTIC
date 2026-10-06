@@ -215,7 +215,7 @@ export const SLevel7_PenExtensionDraw: React.FC<SLevel7Props> = ({ onCompletePag
   if (isQ1Correct) totalScore += 30;
   if (isQ2Correct) totalScore += 30;
 
-  const isPageComplete = drawnShapesCount >= 1 && isQ1Correct && isQ2Correct;
+  const isPageComplete = drawnShapesCount >= 1 || (q1Answer !== null && q2Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12">

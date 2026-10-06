@@ -161,7 +161,7 @@ export const SLevel3_BlockCategories: React.FC<SLevel3Props> = ({ onCompletePage
   if (isQ1Correct) totalScore += 30;
   if (isQ2Correct) totalScore += 30;
 
-  const isPageComplete = classificationValidated && isClassificationCorrect && isQ1Correct && isQ2Correct;
+  const isPageComplete = (classificationValidated && isClassificationCorrect) || (q1Answer !== null && q2Answer !== null) || totalScore >= 40;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12">
