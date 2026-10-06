@@ -176,7 +176,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
           {/* Animated Speech Bubble */}
           {isBubbleOpen && displayMessage && (
             <div 
-              className={`pointer-events-auto relative mb-2 w-full p-3 sm:p-4 rounded-3xl bg-slate-900/95 backdrop-blur-md border-2 ${currentTheme.border} ${currentTheme.glow} shadow-2xl transition-all duration-300 transform origin-bottom-right animate-scale-up max-h-[60vh] overflow-y-auto`}
+              className={`pointer-events-auto relative mb-3 w-full p-3 sm:p-4 rounded-3xl bg-slate-900/95 backdrop-blur-md border-2 ${currentTheme.border} ${currentTheme.glow} shadow-2xl transition-all duration-300 transform origin-bottom-right animate-scale-up overflow-visible`}
             >
               {/* Header Bar in Bubble */}
               <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-800/80">
@@ -217,10 +217,12 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                 </div>
               </div>
 
-              {/* Message text */}
-              <p className="text-xs sm:text-sm font-medium text-slate-100 leading-relaxed select-none">
-                "{displayMessage}"
-              </p>
+              {/* Message text with clean display and zero scrollbar */}
+              <div className="max-h-[260px] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <p className="text-xs sm:text-sm font-medium text-slate-100 leading-relaxed select-none">
+                  "{displayMessage}"
+                </p>
+              </div>
 
               {/* Status Badge Tag */}
               <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono text-slate-400">
@@ -232,7 +234,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
 
               {/* Bubble Pointer Arrow towards Mascot */}
               <div 
-                className={`absolute -bottom-2 right-10 w-4 h-4 bg-slate-900 border-b-2 border-r-2 ${currentTheme.border} transform rotate-45`}
+                className={`absolute -bottom-2 right-10 w-4 h-4 bg-slate-900 border-b-2 border-r-2 ${currentTheme.border} transform rotate-45 pointer-events-none`}
               />
             </div>
           )}
