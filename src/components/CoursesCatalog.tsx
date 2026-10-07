@@ -37,6 +37,12 @@ import {
   ShoppingBag,
   Coins,
   Building2,
+  Presentation,
+  Film,
+  Box,
+  Mail,
+  Repeat,
+  Layers,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -72,8 +78,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -155,7 +161,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | null>(null);
+
+  // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a")
+  const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6'>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_selected_grade');
+      if (saved === 'grade6') return 'grade6';
+    } catch {
+      // Ignore
+    }
+    return 'grade5';
+  });
+
+  const handleSelectGrade = (grade: 'grade5' | 'grade6') => {
+    sounds.playClick();
+    setSelectedGrade(grade);
+    try {
+      localStorage.setItem('arkedo_selected_grade', grade);
+    } catch {
+      // Ignore
+    }
+  };
 
   // Student Cloud Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
@@ -398,7 +425,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -435,7 +462,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -485,6 +512,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Module 6B: Scratch Decisions, Music, Contest Games & Grand Exam (Textbook p. 84-93)'
         : 'Modulul 6B: Decizii, Muzică, Concurs de Jocuri & Marea Evaluare (Manual pag. 84-93)';
+    }
+    if (id === 'g6_presentation1') {
+      return lang === 'en'
+        ? 'Grade 6 • Module 1A: Presentation & PowerPoint Interface (Textbook p. 10-15)'
+        : 'Clasa a VI-a • Modulul 1A: Prezentarea & Interfața PowerPoint (Manual pag. 10-15)';
+    }
+    if (id === 'g6_presentation2') {
+      return lang === 'en'
+        ? 'Grade 6 • Module 1B: Slide Creation, Design, Animations & Public Speaking (Textbook p. 16-25)'
+        : 'Clasa a VI-a • Modulul 1B: Realizare, Design, Animații & Public Speaking (Manual pag. 16-25)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -1350,17 +1387,137 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       {/* Interactive Knowledge Pills Section */}
       <KnowledgePills />
 
-      {/* Courses & Lessons Section */}
+      {/* Grade Selector Switcher (Clasa a V-a vs Clasa a VI-a) - Under Knowledge Pills */}
+      <div id="comutator-clasa" className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border-2 border-slate-700/80 rounded-3xl p-3.5 sm:p-5 shadow-2xl backdrop-blur relative overflow-hidden">
+        {/* Ambient subtle glow */}
+        <div className="absolute top-0 right-1/4 w-72 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none -z-0"></div>
+
+        <div className="relative z-10 flex flex-col gap-3.5">
+          {/* Header Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+                <School className="w-4 h-4 text-teal-400" />
+                {lang === 'en' ? 'Select Academic Grade Level (Official Art Klett Textbook)' : 'Comutator Nivel Gimnaziu • Programa Oficială Art Klett'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>{lang === 'en' ? 'Curriculum 2026 Aligned' : 'Conform OME 5022/2023'}</span>
+            </div>
+          </div>
+
+          {/* Large Tactile Switcher Buttons Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Tab 1: Clasa a V-a */}
+            <button
+              type="button"
+              onClick={() => handleSelectGrade('grade5')}
+              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+                selectedGrade === 'grade5'
+                  ? 'bg-gradient-to-br from-teal-950/80 via-slate-900 to-emerald-950/60 border-teal-400 shadow-xl shadow-teal-500/20 ring-2 ring-teal-400/30'
+                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+                    selectedGrade === 'grade5'
+                      ? 'bg-teal-500/25 border border-teal-400/50 text-teal-200'
+                      : 'bg-slate-800 border border-slate-700 text-slate-400'
+                  }`}>
+                    🏫
+                  </div>
+                  <div>
+                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                      selectedGrade === 'grade5' ? 'text-white' : 'text-slate-300'
+                    }`}>
+                      {lang === 'en' ? '5th Grade (Clasa a V-a)' : 'Clasa a V-a'}
+                    </h3>
+                    <div className="text-[11px] font-mono font-bold text-teal-400">
+                      {lang === 'en' ? 'Complete Curriculum • 10 Missions' : 'Materia Completă • 10 Misiuni Active'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                  selectedGrade === 'grade5'
+                    ? 'bg-teal-500/20 border-teal-400 text-teal-300 animate-pulse'
+                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                }`}>
+                  {selectedGrade === 'grade5' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                </div>
+              </div>
+
+              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade5' ? 'text-slate-200' : 'text-slate-400'}`}>
+                {lang === 'en'
+                  ? 'Hardware PC, Secret File Tree, Internet 3A & 3B, Word Formatting 4A & 4B, Sequential Algo 5A, Decisions 5B, Scratch 6A & 6B.'
+                  : 'Sisteme de calcul, Arborele de fișiere, Internet 3A & 3B, Tehnoredactare Word 4A & 4B, Algoritmi 5A & 5B, Scratch 6A & 6B.'}
+              </p>
+            </button>
+
+            {/* Tab 2: Clasa a VI-a */}
+            <button
+              type="button"
+              onClick={() => handleSelectGrade('grade6')}
+              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+                selectedGrade === 'grade6'
+                  ? 'bg-gradient-to-br from-orange-950/80 via-slate-900 to-indigo-950/60 border-orange-400 shadow-xl shadow-orange-500/20 ring-2 ring-orange-400/30'
+                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+                    selectedGrade === 'grade6'
+                      ? 'bg-orange-500/25 border border-orange-400/50 text-orange-200'
+                      : 'bg-slate-800 border border-slate-700 text-slate-400'
+                  }`}>
+                    🚀
+                  </div>
+                  <div>
+                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                      selectedGrade === 'grade6' ? 'text-white' : 'text-slate-300'
+                    }`}>
+                      {lang === 'en' ? '6th Grade (Clasa a VI-a)' : 'Clasa a VI-a'}
+                    </h3>
+                    <div className="text-[11px] font-mono font-bold text-orange-400">
+                      {lang === 'en' ? 'New Curriculum 2026 • 4 Units' : 'Curriculum Nou 2026 • 4 Mari Unități'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                  selectedGrade === 'grade6'
+                    ? 'bg-orange-500/20 border-orange-400 text-orange-300 animate-pulse'
+                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                }`}>
+                  {selectedGrade === 'grade6' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                </div>
+              </div>
+
+              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade6' ? 'text-slate-200' : 'text-slate-400'}`}>
+                {lang === 'en'
+                  ? 'PowerPoint 1A & 1B, Paint 3D Modeling 2A, Toontastic & VR 2B, Malware Security 3A, Email 3B, Advanced Scratch Loops 4A & 4B.'
+                  : 'Prezentări PowerPoint 1A & 1B, Modelare Paint 3D 2A, Toontastic & VR 2B, Securitate Malware 3A, E-mail 3B, Bucle Scratch 4A & 4B.'}
+              </p>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Courses & Lessons Section - CLASA A V-A */}
+      {selectedGrade === 'grade5' && (
       <div id="sectiune-misiuni-practice" className="scroll-mt-6">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-teal-400" />
             <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
-              {lang === 'en' ? 'Practical ICT Missions for 5th & 6th Grade' : 'Misiuni Practice TIC Clasa a V-a'}
+              {lang === 'en' ? 'Practical ICT Missions • 5th Grade (Art Klett)' : 'Misiuni Practice TIC • Clasa a V-a (Manual Art Klett)'}
             </h2>
           </div>
           <span className="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-            {lang === 'en' ? '6 Interactive Missions Available' : '6 Misiuni Interactive Disponibile'}
+            {lang === 'en' ? '10 Complete Interactive Missions Available' : '10 Misiuni Interactive Disponibile (Unitățile 1–6)'}
           </span>
         </div>
 
@@ -2161,6 +2318,444 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
         </div>
       </div>
+      )}
+
+      {/* Courses & Lessons Section - CLASA A VI-A */}
+      {selectedGrade === 'grade6' && (
+      <div id="sectiune-misiuni-clasa-6" className="scroll-mt-6 flex flex-col gap-6">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Presentation className="w-5 h-5 text-orange-400" />
+            <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
+              {lang === 'en' ? 'Practical ICT Missions • 6th Grade (Art Klett)' : 'Misiuni Practice TIC • Clasa a VI-a (Manual Art Klett)'}
+            </h2>
+          </div>
+          <span className="text-xs font-mono text-orange-300 bg-orange-950/80 px-3 py-1 rounded-full border border-orange-500/40 self-start sm:self-auto">
+            {lang === 'en' ? 'New Curriculum 2026 • 4 Major Units' : 'Curriculum Nou 2026 • 4 Mari Unități Curriculare'}
+          </span>
+        </div>
+
+        {/* 4 Major Units Roadmap Matrix Banner */}
+        <div className="bg-slate-900/90 border-2 border-orange-500/30 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+          <div className="text-xs font-mono font-bold text-orange-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5" />
+            {lang === 'en' ? '6th Grade Curriculum Overview (Textbook pp. 10–93)' : 'Harta Curriculară Clasa a VI-a (Manual pag. 10–93)'}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div className="p-3.5 rounded-2xl bg-orange-950/40 border border-orange-500/40 flex flex-col justify-between">
+              <div>
+                <span className="text-xl mb-1 block">📽️</span>
+                <div className="font-bold text-white mb-0.5">Unitatea 1: Prezentări</div>
+                <div className="text-[11px] text-slate-300 leading-snug">PowerPoint, design slide-uri, contrast, public speaking (pag. 10–25)</div>
+              </div>
+              <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● DISPONIBIL ACUM</span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+              <div>
+                <span className="text-xl mb-1 block">🧊</span>
+                <div className="font-bold text-white mb-0.5">Unitatea 2: Animații & 3D</div>
+                <div className="text-[11px] text-slate-400 leading-snug">Paint 3D, corpuri cu volum, Toontastic & VR CoSpaces (pag. 26–43)</div>
+              </div>
+              <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">○ În dezvoltare</span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+              <div>
+                <span className="text-xl mb-1 block">🛡️</span>
+                <div className="font-bold text-white mb-0.5">Unitatea 3: Internet & Securitate</div>
+                <div className="text-[11px] text-slate-400 leading-snug">Malware, firewall, parole, e-mail & Netichetă (pag. 44–61)</div>
+              </div>
+              <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">○ În dezvoltare</span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+              <div>
+                <span className="text-xl mb-1 block">🔄</span>
+                <div className="font-bold text-white mb-0.5">Unitatea 4: Algoritmi & Scratch</div>
+                <div className="text-[11px] text-slate-400 leading-snug">Bucle condiționate, contor For, Minecraft & fractali (pag. 62–93)</div>
+              </div>
+              <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">○ În dezvoltare</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 6th Grade Lesson Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Card 1: Modulul 1A - Prezentarea & Interfața PowerPoint (READY & ACTIVE) */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              activeMissionId === 'g6_presentation1'
+                ? 'border-orange-400 shadow-orange-500/20 ring-2 ring-orange-500/30'
+                : 'border-orange-500/60 hover:border-orange-400 hover:shadow-orange-500/10'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  📽️
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 && (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1A' : 'NOU • MODULUL 1A'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-orange-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 10–15 • Unit 1 (Lessons 1-2)' : 'Manual pag. 10–15 • Unitatea 1 (Lecțiile 1-2)'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-orange-300 transition-colors">
+                {lang === 'en' ? 'Presentation & PowerPoint Interface' : 'Prezentarea & Interfața PowerPoint'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Presentation Types, 3 Launch Modes, Ribbon Anatomy & Views' : 'Tipuri de Prezentări, 3 Moduri de Start, Anatomia Panglicii & Moduri de Vizualizare'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Discover presentation types, compare PowerPoint vs Keynote vs Google Slides, test the 3 launch modes (blank, template, open), master the 7 interface zones, explore Ribbon tabs, practice views & zoom, and pass the Command Lab to earn your Junior PowerPoint Specialist Diploma!'
+                  : 'Descoperă ce este o prezentare electronică, testează cele 3 moduri de pornire, explorează cele 7 zone ale cabinei de comandă PowerPoint, învață diferența crucială dintre Tranziții și Animații, reglează modurile de vizualizare (F5) și deblochează Marea Diplomă!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-orange-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-orange-400" /> Diplomă Operator PowerPoint Junior
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
+                  <span className="text-orange-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('g6_presentation1')}
+                className="px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-orange-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'g6_presentation1' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 1A' : 'Continuă Misiunea 1A')
+                    : (lang === 'en' ? 'Start Mission 1A (PowerPoint)' : 'Începe Misiunea 1A')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 2: Modulul 1B - Realizare, Design, Animații & Susținerea Prezentării (Active Mission) */}
+          <div className="group relative bg-gradient-to-br from-slate-900 via-slate-850 to-rose-950/40 border-2 border-rose-500/50 hover:border-rose-400 rounded-3xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-rose-500/20 flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500/20 to-pink-500/20 border border-rose-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                  🎨
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {activeMissionId === 'g6_presentation2' && (
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
+                      ● ACTIV
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1B' : 'NOU • MODULUL 1B'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-rose-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 16–25 • Unit 1 (Lessons 3-6)' : 'Manual pag. 16–25 • Unitatea 1 (Lecțiile 3-6)'}
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-rose-300 transition-colors">
+                {lang === 'en' ? 'Slide Creation, Design & Public Speaking' : 'Realizare, Design & Public Speaking'}
+              </h3>
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Slide Operations, Multimedia Objects, 40-Word Rule & Stage Delivery' : 'Operații Diapozitive, Inserare Obiecte, Regula 40 de Cuvinte & Arta Discursului'}
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                {lang === 'en'
+                  ? 'Master slide duplication & deletion, insert rich multimedia & tables, configure 16:9 widescreen themes, test slide transitions vs object animations, repair bad slides using the 40-word & high contrast rules, and deliver on the live classroom stage to complete project "Touristic Romania"!'
+                  : 'Stăpânește operațiile cu diapozitive (Ctrl+M), inserează imagini, tabele și clipuri multimedia, aplică formatul panoramic 16:9, exersează tranzițiile vs animațiile pe obiecte, aplică regula celor 40 de cuvinte și contrastul optim, iar apoi cucerește sala cu discursul tău în proiectul „România Turistică”!'}
+              </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-rose-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-rose-400" /> Diplomă Public Speaking & Prezentări Pro
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
+                  <span className="text-rose-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('g6_presentation2')}
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'g6_presentation2' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 1B' : 'Continuă Misiunea 1B')
+                    : (lang === 'en' ? 'Start Mission 1B (Design & Speech)' : 'Începe Misiunea 1B')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Card 3: Modulul 2A - Modelare 3D în Paint 3D */}
+          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                  🧊
+                </div>
+                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
+                  UNITATEA 2 • LECȚIILE 1–2
+                </span>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
+                Manual pag. 26–33 • Unitatea 2
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1">
+                Modelare 3D în Paint 3D
+              </h3>
+              <div className="text-xs font-semibold text-slate-400 mb-3">
+                Spațiul Tridimensional (X, Y, Z), Stickere & Corpuri cu Volum
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                Pânza transparentă, transformarea desenelor 2D în corpuri 3D, aplicarea texturilor lucioase și mate, exportul în formate 3D (.glb) pentru Minecraft și Scratch.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Grafică Tridimensională</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+                În pregătire
+              </span>
+            </div>
+          </div>
+
+          {/* Card 4: Modulul 2B - Animație Toontastic & VR CoSpaces Edu */}
+          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                  🎬
+                </div>
+                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
+                  UNITATEA 2 • LECȚIILE 3–4
+                </span>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
+                Manual pag. 34–43 • Unitatea 2
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1">
+                Animație Toontastic & Realitate Virtuală VR
+              </h3>
+              <div className="text-xs font-semibold text-slate-400 mb-3">
+                Cadre pe Secundă (24 FPS), Regie Audio & Lumi Virtuale CoSpaces
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                Crearea personajelor animate, înregistrarea vocii în direct, setarea dispoziției sonore (Mood) și explorarea scenelor interactive la 360° cu ochelari VR.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Cinema & Spațiu Virtual</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+                În pregătire
+              </span>
+            </div>
+          </div>
+
+          {/* Card 5: Modulul 3A - Amenințări Malware & Securitate Cibernetică */}
+          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                  🛡️
+                </div>
+                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
+                  UNITATEA 3 • LECȚIA 1
+                </span>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
+                Manual pag. 44–45 • Unitatea 3
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1">
+                Amenințări Malware & Protecție Digitală
+              </h3>
+              <div className="text-xs font-semibold text-slate-400 mb-3">
+                Viruși, Viermi, Troieni, Spyware & Firewall
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                Identificarea programelor dăunătoare, crearea de parole complexe (litere, cifre, simboluri) și utilizarea programelor antivirus moderne cu baze de date actualizate.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Securitate Cibernetică</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+                În pregătire
+              </span>
+            </div>
+          </div>
+
+          {/* Card 6: Modulul 3B - E-mail & Netichetă */}
+          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                  ✉️
+                </div>
+                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
+                  UNITATEA 3 • LECȚIILE 2–4
+                </span>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
+                Manual pag. 46–61 • Unitatea 3
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1">
+                Servicii E-mail, Netichetă & Colaborare
+              </h3>
+              <div className="text-xs font-semibold text-slate-400 mb-3">
+                Structura Mesajului (To, CC, BCC, Atașamente) & Reguli de Conduită
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                Trimiterea corectă a scrisorilor electronice, respectarea bunelor maniere digitale (Neticheta) și utilizarea platformelor de stocare cloud pentru proiecte în echipă.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Comunicare Digitală</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+                În pregătire
+              </span>
+            </div>
+          </div>
+
+          {/* Card 7: Modulul 4A - Bucle Condiționate Scratch */}
+          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                  🔄
+                </div>
+                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
+                  UNITATEA 4 • LECȚIILE 1–2
+                </span>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
+                Manual pag. 62–75 • Unitatea 4
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1">
+                Algoritmi & Bucle Condiționate în Scratch
+              </h3>
+              <div className="text-xs font-semibold text-slate-400 mb-3">
+                Structura „Cât timp” (While) & „Repetă până când” (Repeat Until)
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                Comparație între execuția secvențială și structurile repetitive condiționate, gestionarea condițiilor de oprire și evitarea buclelor infinite în jocuri interactive.
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Programare Avansată</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+                În pregătire
+              </span>
+            </div>
+          </div>
+
+          {/* Card 8: Modulul 4B - Contor For, Proiecte Minecraft 3D & Jocuri Finale */}
+          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                  🎮
+                </div>
+                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
+                  UNITATEA 4 • LECȚIILE 3–5
+                </span>
+              </div>
+
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
+                Manual pag. 76–93 • Unitatea 4
+              </div>
+
+              <h3 className="text-xl font-black text-white font-heading mb-1">
+                Bucle cu Contor, Minecraft 3D & Marea Diplomă
+              </h3>
+              <div className="text-xs font-semibold text-slate-400 mb-3">
+                Fractali Geometrici, Proiectul Coloana Infinitului & Absolvire
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                Construcția de structuri Minecraft pas-cu-pas, generarea coloanei infinitului (Brâncuși), jocuri complexe cu scor și decernarea Marii Diplome de Absolvire a Clasei a VI-a!
+              </p>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-xs text-slate-500 font-mono">Marea Finală Clasa a VI-a</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+                În pregătire
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      )}
 
       {/* Arcade Mini-Games Banner Section (Placed below missions) */}
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border-2 border-indigo-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
@@ -2356,7 +2951,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null): number {
+function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
@@ -2365,7 +2960,7 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
     const internetScores = [0, 15, 30, 45, 60, 80, 100];
     return internetScores[Math.min(level - 1, 6)] || 0;
   }
-  if (missionId === 'text1' || missionId === 'text2' || missionId === 'algo1' || missionId === 'algo2' || missionId === 'scratch1' || missionId === 'scratch2') {
+  if (missionId === 'text1' || missionId === 'text2' || missionId === 'algo1' || missionId === 'algo2' || missionId === 'scratch1' || missionId === 'scratch2' || missionId === 'g6_presentation1') {
     const standardScores = [0, 15, 30, 45, 60, 75, 90, 100];
     return standardScores[Math.min(level - 1, 7)] || 0;
   }

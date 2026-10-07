@@ -78,6 +78,14 @@ export interface LessonsProgress {
   algo2?: LessonMissionState;
   scratch1?: LessonMissionState;
   scratch2?: LessonMissionState;
+  presentation1?: LessonMissionState;
+  presentation2?: LessonMissionState;
+  model3d1?: LessonMissionState;
+  model3d2?: LessonMissionState;
+  cyber6a?: LessonMissionState;
+  cyber6b?: LessonMissionState;
+  scratch6a?: LessonMissionState;
+  scratch6b?: LessonMissionState;
   totalLessonScore: number;
 }
 
@@ -109,7 +117,7 @@ export interface ShopItem {
   icon: string;
   price: number;
   rarity: ItemRarity;
-  requiredModule?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2';
+  requiredModule?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2';
   requiredLevel?: number;
   previewCss?: string;
   previewAsset?: string;

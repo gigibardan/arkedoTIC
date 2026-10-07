@@ -4,8 +4,95 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2';
 }
+
+const G6P1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const G6P2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G6P2_STAGES_RO = [
+  { emoji: '📄', name: 'Operații cu Diapozitive: Inserare, Duplicare & Ștergere (pag. 16-17)' },
+  { emoji: '🧩', name: 'Inserare Obiecte: Text, Imagini, Tabele & Forme (pag. 17)' },
+  { emoji: '🎨', name: 'Teme de Proiectare, Fundaluri & Format 16:9 (pag. 18-19)' },
+  { emoji: '✨', name: 'Tranziții Diapozitiv vs Animații Obiecte (pag. 20)' },
+  { emoji: '📐', name: 'Regulile de Aur de Design: Regula 40 Cuvinte & Contrast (pag. 20-21)' },
+  { emoji: '🎤', name: 'Arta Susținerii Prezentării & Public Speaking (pag. 22-23)' },
+  { emoji: '🏆', name: 'Proiectul „România Turistică” & Marea Diplomă (pag. 24-25)' },
+  { emoji: '🎓', name: 'Maestru al Prezentărilor & Public Speaking • Clasa a VI-a!' },
+];
+
+const G6P2_STAGES_EN = [
+  { emoji: '📄', name: 'Slide Operations: Insert, Duplicate & Delete (pp. 16-17)' },
+  { emoji: '🧩', name: 'Insert Objects: Text, Images, Tables & Shapes (p. 17)' },
+  { emoji: '🎨', name: 'Design Themes, Backgrounds & 16:9 Aspect (pp. 18-19)' },
+  { emoji: '✨', name: 'Slide Transitions vs Object Animations (p. 20)' },
+  { emoji: '📐', name: 'Golden Design Rules: 40-Word Rule & Contrast (pp. 20-21)' },
+  { emoji: '🎤', name: 'Public Speaking & Slide Show Delivery (pp. 22-23)' },
+  { emoji: '🏆', name: 'Project "Touristic Romania" & Unit Diploma (pp. 24-25)' },
+  { emoji: '🎓', name: 'Master of Presentations & Public Speaking • Grade 6!' },
+];
+
+const G6P2_MILESTONES_RO = [
+  'P1: Operații Slide-uri',
+  'P2: Inserare Obiecte',
+  'P3: Teme & Format 16:9',
+  'P4: Tranziții & Efecte',
+  'P5: Reguli de Aur',
+  'P6: Public Speaking',
+  'P7: Marea Diplomă',
+];
+
+const G6P2_MILESTONES_EN = [
+  'P1: Slide Operations',
+  'P2: Insert Objects',
+  'P3: Themes & 16:9',
+  'P4: Transitions & FX',
+  'P5: Golden Rules',
+  'P6: Public Speaking',
+  'P7: Unit Diploma',
+];
+
+const G6P1_STAGES_RO = [
+  { emoji: '📽️', name: 'Ce este o Prezentare & Tipuri (pag. 10-11)' },
+  { emoji: '🚀', name: 'Start PowerPoint & Cele 3 Moduri (pag. 12-13)' },
+  { emoji: '📐', name: 'Anatomia Interfeței: Cele 7 Zone (pag. 12-13)' },
+  { emoji: '📋', name: 'Filele de Bază: Fișier, Pornire, Inserare (pag. 13)' },
+  { emoji: '✨', name: 'File Specializate: Proiectare & Tranziții (pag. 14)' },
+  { emoji: '🔍', name: 'Moduri de Vizualizare & Cursor Zoom (pag. 15)' },
+  { emoji: '🏆', name: 'Laborator de Comenzi & Marea Evaluare (pag. 15)' },
+  { emoji: '🎓', name: 'Operator PowerPoint Junior Certificat • Clasa a VI-a!' },
+];
+
+const G6P1_STAGES_EN = [
+  { emoji: '📽️', name: 'What is a Presentation & Types (pp. 10-11)' },
+  { emoji: '🚀', name: 'Start PowerPoint & The 3 Launch Modes (pp. 12-13)' },
+  { emoji: '📐', name: 'Interface Anatomy: The 7 Zones (pp. 12-13)' },
+  { emoji: '📋', name: 'Core Tabs: File, Home, Insert (p. 13)' },
+  { emoji: '✨', name: 'Specialized Tabs: Design & Transitions (p. 14)' },
+  { emoji: '🔍', name: 'View Modes & Zoom Panoraming (p. 15)' },
+  { emoji: '🏆', name: 'Command Lab & Grand Evaluation (p. 15)' },
+  { emoji: '🎓', name: 'Certified Junior PowerPoint Specialist • Grade 6!' },
+];
+
+const G6P1_MILESTONES_RO = [
+  'P1: Tipuri Prezentări',
+  'P2: Ecran Start',
+  'P3: 7 Zone Interfață',
+  'P4: File Principale',
+  'P5: Tranziții & Efecte',
+  'P6: Vizualizare & Zoom',
+  'P7: Marea Evaluare',
+];
+
+const G6P1_MILESTONES_EN = [
+  'P1: Presentation Types',
+  'P2: Start Screen',
+  'P3: 7 Interface Zones',
+  'P4: Main Tabs',
+  'P5: Transitions & Effects',
+  'P6: Views & Zoom',
+  'P7: Grand Exam',
+];
 
 const HARDWARE_STAGE_PERCENTS = [20, 40, 60, 80, 95, 100];
 const FILES_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
@@ -434,6 +521,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isAlgo2 = courseId === 'algo2';
   const isScratch1 = courseId === 'scratch1';
   const isScratch2 = courseId === 'scratch2';
+  const isG6P1 = courseId === 'g6_presentation1';
+  const isG6P2 = courseId === 'g6_presentation2';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -485,6 +574,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? SCRATCH2_MILESTONES_EN : SCRATCH2_MILESTONES_RO;
     percents = SCRATCH2_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG6P1) {
+    stages = lang === 'en' ? G6P1_STAGES_EN : G6P1_STAGES_RO;
+    milestones = lang === 'en' ? G6P1_MILESTONES_EN : G6P1_MILESTONES_RO;
+    percents = G6P1_STAGE_PERCENTS;
+    maxLevels = 7;
+  } else if (isG6P2) {
+    stages = lang === 'en' ? G6P2_STAGES_EN : G6P2_STAGES_RO;
+    milestones = lang === 'en' ? G6P2_MILESTONES_EN : G6P2_MILESTONES_RO;
+    percents = G6P2_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -518,6 +617,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Scratch Environment & Visual Coding Progress' : 'Evoluție Mediul Scratch & Programare Vizuală')
                 : isScratch2
                 ? (lang === 'en' ? 'Scratch Decisions, Music & Games Progress' : 'Evoluție Decizii, Muzică & Concurs de Jocuri Scratch')
+                : isG6P1
+                ? (lang === 'en' ? 'PowerPoint & Presentation Specialist Progress' : 'Evoluție Operator Prezentări & PowerPoint (Clasa a VI-a)')
+                : isG6P2
+                ? (lang === 'en' ? 'Slide Design, Multimedia & Public Speaking' : 'Evoluție Design Diapozitive & Public Speaking (Clasa a VI-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -530,6 +633,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isAlgo2 ? 'text-purple-400'
               : isScratch1 ? 'text-orange-400'
               : isScratch2 ? 'text-pink-400'
+              : isG6P1 ? 'text-orange-400'
+              : isG6P2 ? 'text-rose-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -565,6 +670,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-orange-500 via-amber-400 to-teal-300'
               : isScratch2
               ? 'bg-gradient-to-r from-pink-500 via-purple-400 to-emerald-300'
+              : isG6P1
+              ? 'bg-gradient-to-r from-orange-500 via-amber-400 to-rose-400'
+              : isG6P2
+              ? 'bg-gradient-to-r from-rose-500 via-pink-400 to-amber-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}

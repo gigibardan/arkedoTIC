@@ -49,6 +49,12 @@ import { Module6AFlow } from './components/scratch1/Module6AFlow';
 // Scratch Mission 6B (Unitatea 6 - Manual pag. 84-93)
 import { Module6BFlow } from './components/scratch2/Module6BFlow';
 
+// Grade 6 Presentation Mission 1A (Unitatea 1 - Manual pag. 10-15)
+import { ModuleG6P1Flow } from './components/grade6/presentation1/ModuleG6P1Flow';
+
+// Grade 6 Presentation Mission 1B (Unitatea 1 - Manual pag. 16-25)
+import { ModuleG6P2Flow } from './components/grade6/presentation2/ModuleG6P2Flow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
@@ -78,10 +84,10 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2') return saved;
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2') return saved;
     } catch {
       // Ignore
     }
@@ -378,6 +384,64 @@ function GameContent() {
     return 0;
   });
 
+  // Grade 6 Presentation Mission 1A progress (Unitatea 1 - Manual pag. 10-15)
+  const [g6P1Level, setG6P1Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6p1_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g6P1Score, setG6P1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6p1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g6P1ElapsedSeconds, setG6P1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6p1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Grade 6 Presentation Mission 1B progress (Unitatea 1 - Manual pag. 16-25)
+  const [g6P2Level, setG6P2Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6p2_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g6P2Score, setG6P2Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6p2_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g6P2ElapsedSeconds, setG6P2ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6p2_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -460,6 +524,12 @@ function GameContent() {
       localStorage.setItem('arkedo_scratch2_level', String(scratch2Level));
       localStorage.setItem('arkedo_scratch2_score', String(scratch2Score));
       localStorage.setItem('arkedo_scratch2_elapsed', String(scratch2ElapsedSeconds));
+      localStorage.setItem('arkedo_g6p1_level', String(g6P1Level));
+      localStorage.setItem('arkedo_g6p1_score', String(g6P1Score));
+      localStorage.setItem('arkedo_g6p1_elapsed', String(g6P1ElapsedSeconds));
+      localStorage.setItem('arkedo_g6p2_level', String(g6P2Level));
+      localStorage.setItem('arkedo_g6p2_score', String(g6P2Score));
+      localStorage.setItem('arkedo_g6p2_elapsed', String(g6P2ElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -474,7 +544,9 @@ function GameContent() {
     algo1Level, algo1Score, algo1ElapsedSeconds,
     algo2Level, algo2Score, algo2ElapsedSeconds,
     scratch1Level, scratch1Score, scratch1ElapsedSeconds,
-    scratch2Level, scratch2Score, scratch2ElapsedSeconds
+    scratch2Level, scratch2Score, scratch2ElapsedSeconds,
+    g6P1Level, g6P1Score, g6P1ElapsedSeconds,
+    g6P2Level, g6P2Score, g6P2ElapsedSeconds
   ]);
 
   // Current active level & score
@@ -496,6 +568,10 @@ function GameContent() {
     ? scratch1Level
     : activeMission === 'scratch2'
     ? scratch2Level
+    : activeMission === 'g6_presentation1'
+    ? g6P1Level
+    : activeMission === 'g6_presentation2'
+    ? g6P2Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -516,6 +592,10 @@ function GameContent() {
     ? scratch1Score
     : activeMission === 'scratch2'
     ? scratch2Score
+    : activeMission === 'g6_presentation1'
+    ? g6P1Score
+    : activeMission === 'g6_presentation2'
+    ? g6P2Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -536,6 +616,10 @@ function GameContent() {
     ? scratch1ElapsedSeconds
     : activeMission === 'scratch2'
     ? scratch2ElapsedSeconds
+    : activeMission === 'g6_presentation1'
+    ? g6P1ElapsedSeconds
+    : activeMission === 'g6_presentation2'
+    ? g6P2ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -555,7 +639,9 @@ function GameContent() {
       (activeMission === 'algo1' && algo1Level <= 7) ||
       (activeMission === 'algo2' && algo2Level <= 7) ||
       (activeMission === 'scratch1' && scratch1Level <= 7) ||
-      (activeMission === 'scratch2' && scratch2Level <= 7);
+      (activeMission === 'scratch2' && scratch2Level <= 7) ||
+      (activeMission === 'g6_presentation1' && g6P1Level <= 7) ||
+      (activeMission === 'g6_presentation2' && g6P2Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -577,6 +663,10 @@ function GameContent() {
           setScratch1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'scratch2') {
           setScratch2ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g6_presentation1') {
+          setG6P1ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g6_presentation2') {
+          setG6P2ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -585,7 +675,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level]);
 
   // Listen to browser navigation
   useEffect(() => {
@@ -631,7 +721,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -681,8 +771,68 @@ function GameContent() {
       setScratch2Level(1);
       setScratch2Score(0);
       setScratch2ElapsedSeconds(0);
+    } else if (activeMission === 'g6_presentation1') {
+      setG6P1Level(1);
+      setG6P1Score(0);
+      setG6P1ElapsedSeconds(0);
+    } else if (activeMission === 'g6_presentation2') {
+      setG6P2Level(1);
+      setG6P2Score(0);
+      setG6P2ElapsedSeconds(0);
     }
     arky.triggerIdle();
+  };
+
+  // Grade 6 Presentation 1 (Mission 1A) level progression
+  const handleG6P1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(g6P1Score, earnedScore));
+    setG6P1Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setG6P1Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setG6P1Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('presentation1', true, 8, updatedTotal, g6P1ElapsedSeconds);
+    }
+  };
+
+  const handleResetG6P1 = () => {
+    sounds.playClick();
+    setG6P1Score(0);
+    setG6P1Level(1);
+    setG6P1ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 6 Presentation 2 (Mission 1B) level progression
+  const handleG6P2CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(g6P2Score, earnedScore));
+    setG6P2Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setG6P2Level(levelIndex + 1);
+      arky.triggerSuccess();
+    } else {
+      setG6P2Level(8); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      updateActiveLessonProgress('presentation2', true, 8, updatedTotal, g6P2ElapsedSeconds);
+    }
+  };
+
+  const handleResetG6P2 = () => {
+    sounds.playClick();
+    setG6P2Score(0);
+    setG6P2Level(1);
+    setG6P2ElapsedSeconds(0);
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Scratch 1 (Mission 6A) level progression
@@ -1047,7 +1197,7 @@ function GameContent() {
             {/* Mission Evolution Progress */}
             <ProgressBar
               currentLevel={currentLevel}
-              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : activeMission === 'algo1' ? 'algo1' : activeMission === 'algo2' ? 'algo2' : activeMission === 'scratch1' ? 'scratch1' : activeMission === 'scratch2' ? 'scratch2' : 'files'}
+              courseId={activeMission === 'hardware' ? 'hardware' : activeMission === 'internet1' ? 'internet1' : activeMission === 'internet2' ? 'internet2' : activeMission === 'text1' ? 'text1' : activeMission === 'text2' ? 'text2' : activeMission === 'algo1' ? 'algo1' : activeMission === 'algo2' ? 'algo2' : activeMission === 'scratch1' ? 'scratch1' : activeMission === 'scratch2' ? 'scratch2' : activeMission === 'g6_presentation1' ? 'g6_presentation1' : 'files'}
             />
 
             {/* Level Views for HARDWARE */}
@@ -1295,12 +1445,59 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for GRADE 6 - PRESENTATION 1 (MISSION 1A - PREZENTAREA & INTERFAȚA POWERPOINT) */}
+            {activeMission === 'g6_presentation1' && (
+              <div className="flex-1">
+                {g6P1Level <= 7 ? (
+                  <ModuleG6P1Flow
+                    currentLevel={g6P1Level}
+                    onCompleteLevel={handleG6P1CompleteLevel}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g6P1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g6P1ElapsedSeconds}
+                    courseId="g6_presentation1"
+                    onReset={handleResetG6P1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for GRADE 6 - PRESENTATION 2 (MISSION 1B - REALIZARE, DESIGN, ANIMAȚII & PUBLIC SPEAKING) */}
+            {activeMission === 'g6_presentation2' && (
+              <div className="flex-1">
+                {g6P2Level <= 7 ? (
+                  <ModuleG6P2Flow
+                    currentLevel={g6P2Level}
+                    onCompletePage={(earnedScore) => handleG6P2CompleteLevel(g6P2Level, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG6P2}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g6P2Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g6P2ElapsedSeconds}
+                    courseId="g6_presentation2"
+                    onReset={handleResetG6P2}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
