@@ -4,11 +4,54 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d';
 }
 
 const G6P1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const G6P2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+const G6P3_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G6P3_STAGES_RO = [
+  { emoji: '🧊', name: 'Ce este Grafica 3D? Axele X, Y, Z (pag. 26-27)' },
+  { emoji: '🛠️', name: 'Interfața Paint 3D & Cele 8 Instrumente (pag. 28-29)' },
+  { emoji: '🔄', name: 'Cele 4 Ancore de Control & Translație Z (pag. 30-31)' },
+  { emoji: '🪄', name: 'Transformarea 2D în 3D & Corpuri Geometrice (pag. 31-32)' },
+  { emoji: '✨', name: 'Stickere Mulate & Cele 4 Finisaje de Material (pag. 32-33)' },
+  { emoji: '🎬', name: 'Animații Video Automate & Export .GLB/.3MF (pag. 32-33)' },
+  { emoji: '🏆', name: 'Atelierul Practic „Avatar 3D” & Marea Diplomă (pag. 33)' },
+  { emoji: '🎓', name: 'Modelator & Creator 3D Junior Certificat • Clasa a VI-a!' },
+];
+
+const G6P3_STAGES_EN = [
+  { emoji: '🧊', name: 'What is 3D? Axes X, Y, Z & Software (pp. 26-27)' },
+  { emoji: '🛠️', name: 'Paint 3D Interface & 8 Core Tools (pp. 28-29)' },
+  { emoji: '🔄', name: '4 Control Anchors & Z-Depth Translation (pp. 30-31)' },
+  { emoji: '🪄', name: 'Make 3D & Geometric 3D Primitives (pp. 31-32)' },
+  { emoji: '✨', name: 'Surface Stickers & 4 Material Finishes (pp. 32-33)' },
+  { emoji: '🎬', name: 'Automatic Video Animations & .GLB Export (pp. 32-33)' },
+  { emoji: '🏆', name: '3D Avatar Robot Lab & Unit Diploma (p. 33)' },
+  { emoji: '🎓', name: 'Junior 3D Creator Certified • Grade 6!' },
+];
+
+const G6P3_MILESTONES_RO = [
+  'P1: Axele X, Y, Z',
+  'P2: Interfață Paint 3D',
+  'P3: 4 Ancore Control',
+  'P4: Creare 3D & Corpuri',
+  'P5: Stickere & Materiale',
+  'P6: Animații & Export',
+  'P7: Marea Diplomă 3D',
+];
+
+const G6P3_MILESTONES_EN = [
+  'P1: Axes X, Y, Z',
+  'P2: Paint 3D Workspace',
+  'P3: 4 Control Anchors',
+  'P4: Make 3D & Primitives',
+  'P5: Stickers & Finishes',
+  'P6: Animations & Export',
+  'P7: 3D Creator Diploma',
+];
 
 const G6P2_STAGES_RO = [
   { emoji: '📄', name: 'Operații cu Diapozitive: Inserare, Duplicare & Ștergere (pag. 16-17)' },
@@ -523,6 +566,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isScratch2 = courseId === 'scratch2';
   const isG6P1 = courseId === 'g6_presentation1';
   const isG6P2 = courseId === 'g6_presentation2';
+  const isG6P3 = courseId === 'g6_paint3d';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -584,6 +628,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G6P2_MILESTONES_EN : G6P2_MILESTONES_RO;
     percents = G6P2_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG6P3) {
+    stages = lang === 'en' ? G6P3_STAGES_EN : G6P3_STAGES_RO;
+    milestones = lang === 'en' ? G6P3_MILESTONES_EN : G6P3_MILESTONES_RO;
+    percents = G6P3_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -621,6 +670,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'PowerPoint & Presentation Specialist Progress' : 'Evoluție Operator Prezentări & PowerPoint (Clasa a VI-a)')
                 : isG6P2
                 ? (lang === 'en' ? 'Slide Design, Multimedia & Public Speaking' : 'Evoluție Design Diapozitive & Public Speaking (Clasa a VI-a)')
+                : isG6P3
+                ? (lang === 'en' ? 'Paint 3D Modeling, Shapes & VR Graphics' : 'Evoluție Modelare Paint 3D, Forme & Grafică VR (Clasa a VI-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -635,6 +686,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isScratch2 ? 'text-pink-400'
               : isG6P1 ? 'text-orange-400'
               : isG6P2 ? 'text-rose-400'
+              : isG6P3 ? 'text-cyan-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -674,6 +726,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-orange-500 via-amber-400 to-rose-400'
               : isG6P2
               ? 'bg-gradient-to-r from-rose-500 via-pink-400 to-amber-400'
+              : isG6P3
+              ? 'bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}

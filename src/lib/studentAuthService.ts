@@ -900,7 +900,7 @@ export const updateActiveArcadeScore = updateStudentArcadeScore;
 
 // UPDATE LESSON PROGRESS FOR LOGGED STUDENT
 export async function updateStudentLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2' | 'model3d1' | 'model3d2',
   progressData: {
     level: number;
     score: number;
@@ -961,7 +961,7 @@ export async function updateStudentLessonProgress(
 }
 
 export function updateActiveLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2' | 'model3d1' | 'model3d2',
   completed: boolean,
   level: number,
   score: number,

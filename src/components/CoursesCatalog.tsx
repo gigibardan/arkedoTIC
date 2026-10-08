@@ -78,8 +78,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -161,7 +161,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | null>(null);
 
   // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a")
   const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6'>(() => {
@@ -425,7 +425,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -462,7 +462,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -522,6 +522,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Grade 6 • Module 1B: Slide Creation, Design, Animations & Public Speaking (Textbook p. 16-25)'
         : 'Clasa a VI-a • Modulul 1B: Realizare, Design, Animații & Public Speaking (Manual pag. 16-25)';
+    }
+    if (id === 'g6_paint3d') {
+      return lang === 'en'
+        ? 'Grade 6 • Module 2A: 3D Modeling in Paint 3D (Textbook p. 26-33)'
+        : 'Clasa a VI-a • Modulul 2A: Modelare 3D în Paint 3D (Manual pag. 26-33)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -2538,39 +2543,77 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Card 3: Modulul 2A - Modelare 3D în Paint 3D */}
-          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+          {/* Card 3: Modulul 2A - Modelare 3D în Paint 3D (Active Mission) */}
+          <div className="group relative bg-gradient-to-br from-slate-900 via-slate-850 to-cyan-950/40 border-2 border-cyan-500/50 hover:border-cyan-400 rounded-3xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/20 flex flex-col justify-between">
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                   🧊
                 </div>
-                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
-                  UNITATEA 2 • LECȚIILE 1–2
-                </span>
+                <div className="flex items-center gap-1.5">
+                  {activeMissionId === 'g6_paint3d' && (
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
+                      ● ACTIV
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 2A' : 'NOU • MODULUL 2A'}
+                  </span>
+                </div>
               </div>
 
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
-                Manual pag. 26–33 • Unitatea 2
+              <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 26–33 • Unit 2 (Lessons 1-2)' : 'Manual pag. 26–33 • Unitatea 2 (Lecțiile 1-2)'}
               </div>
 
-              <h3 className="text-xl font-black text-white font-heading mb-1">
-                Modelare 3D în Paint 3D
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-cyan-300 transition-colors">
+                {lang === 'en' ? '3D Modeling in Paint 3D' : 'Modelare 3D în Paint 3D'}
               </h3>
-              <div className="text-xs font-semibold text-slate-400 mb-3">
-                Spațiul Tridimensional (X, Y, Z), Stickere & Corpuri cu Volum
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? 'Tridimensional Space (X, Y, Z), 4 Control Anchors, Stickers & Primitives' : 'Spațiul Tridimensional (X, Y, Z), 4 Ancore de Manipulare, Stickere & Corpuri cu Volum'}
               </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                Pânza transparentă, transformarea desenelor 2D în corpuri 3D, aplicarea texturilor lucioase și mate, exportul în formate 3D (.glb) pentru Minecraft și Scratch.
+                {lang === 'en'
+                  ? 'Explore the depth Z axis, master the 4 spatial control anchors (Pitch X, Yaw Y, Roll Z, translation), transform flat 2D drawings into 3D volume with Make 3D, apply custom stickers and 4 material finishes (Matte, Gloss, Dull & Glossy Metal), animate models with 360° loops, and export .GLB assets in the Avatar Lab!'
+                  : 'Descoperă adâncimea axei Z, stăpânește cele 4 ancore de control spațial (rotiri X, Y, Z și translație față de pânză), transformă desenele 2D în corpuri 3D cu butonul magic „Creare 3D”, mulează stickere și aplică finisaje de materiale (mat, lucios, metal), generează bucle video de rotație și exportă asset-uri .GLB în laboratorul Avatar 3D!'}
               </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-cyan-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-cyan-400" /> Diplomă Creator & Modelator 3D Junior
+                </span>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-500 font-mono">Grafică Tridimensională</span>
-              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
-                În pregătire
-              </span>
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
+                  <span className="text-cyan-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <button
+                onClick={() => handleAttemptStart('g6_paint3d')}
+                className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
+              >
+                <span>
+                  {activeMissionId === 'g6_paint3d' && activeMissionLevel > 1
+                    ? (lang === 'en' ? 'Resume Mission 2A' : 'Continuă Misiunea 2A')
+                    : (lang === 'en' ? 'Start Mission 2A (Paint 3D)' : 'Începe Misiunea 2A')}
+                </span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 

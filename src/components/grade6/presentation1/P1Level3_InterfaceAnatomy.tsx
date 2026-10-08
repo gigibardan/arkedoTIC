@@ -142,7 +142,7 @@ export const P1Level3_InterfaceAnatomy: React.FC<P1Level3Props> = ({ onCompleteP
   const currentZoneObj = zones.find(z => z.id === activeZone) || zones[2];
 
   return (
-    <div className="flex flex-col gap-8 max-w-5xl mx-auto pb-12">
+    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto pb-12">
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-orange-950/60 via-slate-900 to-slate-950 border-2 border-orange-500/40 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>

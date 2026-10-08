@@ -94,7 +94,7 @@ export const P2Level6_PublicSpeakingArt: React.FC<P2Level6Props> = ({ onComplete
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 animate-fadeIn pb-12">
+    <div className="w-full max-w-6xl mx-auto space-y-6 animate-fadeIn pb-12">
       {/* Pedagogical Header Banner */}
       <div className="bg-gradient-to-r from-teal-950 via-slate-900 to-indigo-950 border-2 border-teal-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
         <div className="absolute -top-10 -right-10 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>

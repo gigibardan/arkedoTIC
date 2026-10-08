@@ -355,6 +355,23 @@ Arky este ghidul permanent al elevului, oferind feedback pedagogic imediat:
         │   ├── S2Level6_CatchFishContestGame.tsx
         │   └── S2Level7_SavePlanetFinalExam.tsx
         │
+        ├── grade6/                      # Module Curriculare Clasa a VI-a (Art Klett)
+        │   ├── presentation1/           # Unitatea 1A: Prezentarea & Interfața PowerPoint (7 ecrane)
+        │   │   ├── ModuleG6P1Flow.tsx
+        │   │   └── PLevel1_PresentationBasics.tsx ... PLevel7_CommandExplorerAndExam.tsx
+        │   ├── presentation2/           # Unitatea 1B: Slide Creation, Design & Public Speaking (7 ecrane)
+        │   │   ├── ModuleG6P2Flow.tsx
+        │   │   └── P2Level1_SlideOperations.tsx ... P2Level7_TouristicProjectAndDiploma.tsx
+        │   └── paint3d/                 # Unitatea 2A: Modelare 3D în Paint 3D (7 ecrane)
+        │       ├── ModuleG6Paint3DFlow.tsx
+        │       ├── Paint3DLevel1_WhatIs3D.tsx
+        │       ├── Paint3DLevel2_InterfaceAnatomy.tsx
+        │       ├── Paint3DLevel3_FourAxesManipulation.tsx
+        │       ├── Paint3DLevel4_Make3DAndShapes.tsx
+        │       ├── Paint3DLevel5_StickersAndMaterials.tsx
+        │       ├── Paint3DLevel6_ExportAndAnimations.tsx
+        │       └── Paint3DLevel7_AvatarLabAndDiploma.tsx
+        │
         ├── minigames/                   # Laboratorul Arcade TIC (/arcade - 18 mini-jocuri)
         │   └── ArcadeHub.tsx
         │

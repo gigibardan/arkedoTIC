@@ -90,7 +90,7 @@ export const P1Level1_PresentationIntro: React.FC<P1Level1Props> = ({ onComplete
   const isPageComplete = exploredAllTypes || (q1Answer !== null && q2Answer !== null && q3Answer !== null) || totalScore >= 40;
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-5xl mx-auto pb-12 select-none">
+    <div className="space-y-6 animate-fade-in w-full max-w-6xl mx-auto pb-12 select-none">
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-violet-600/30 via-indigo-600/20 to-slate-900 border border-violet-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-4">
