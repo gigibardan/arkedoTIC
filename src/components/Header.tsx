@@ -19,13 +19,14 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
+import { PWAInstallButton } from './pwa/PWAInstallButton';
 
 interface HeaderProps {
   score: number;
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -33,6 +34,7 @@ interface HeaderProps {
   byteCoins?: number;
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
+  onNavigateToSuperAdmin?: () => void;
   onNavigateToArcade?: () => void;
   onNavigateToDuel?: () => void;
   onNavigateToCity?: () => void;
@@ -263,6 +265,11 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
 
+            {/* PWA Install Button (Desktop & Tablet) */}
+            <div className="hidden sm:flex items-center">
+              <PWAInstallButton variant="compact" />
+            </div>
+
             {/* Language Switcher */}
             <div className="flex items-center bg-slate-950/95 p-0.5 rounded-xl border border-slate-700/80 shadow-inner">
               <button
@@ -385,6 +392,11 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </button>
               )}
+            </div>
+
+            {/* PWA Install in Mobile Drawer */}
+            <div className="pt-2">
+              <PWAInstallButton variant="full" className="w-full justify-center" />
             </div>
 
             {/* Sound & Language in Mobile Drawer */}

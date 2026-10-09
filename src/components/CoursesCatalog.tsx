@@ -86,6 +86,7 @@ interface CoursesCatalogProps {
   completedMissions?: Record<string, boolean>;
   onResetActiveMission: () => void;
   onOpenTeacherPortal?: () => void;
+  onOpenSuperAdmin?: () => void;
   onOpenArcade?: () => void;
   onOpenDuel?: () => void;
   onOpenCity?: () => void;
@@ -104,6 +105,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   completedMissions = {},
   onResetActiveMission,
   onOpenTeacherPortal,
+  onOpenSuperAdmin,
   onOpenArcade,
   onOpenDuel,
   onOpenCity,
@@ -3337,20 +3339,36 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         />
       </div>
 
-      {/* Discreet Teacher Portal Link (for instructors only) */}
-      {onOpenTeacherPortal && (
-        <div className="pt-2 pb-1 border-t border-slate-800/60 flex items-center justify-center">
-          <button
-            onClick={() => {
-              sounds.playClick();
-              onOpenTeacherPortal();
-            }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800/40 text-[11px] font-medium transition cursor-pointer"
-            title={lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces securizat pentru cadre didactice (catalog & notare)'}
-          >
-            <span className="text-slate-600 text-xs">🔒</span>
-            <span>{lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces cadre didactice (catalog & notare)'}</span>
-          </button>
+      {/* Discreet Teacher & Superadmin Portal Links */}
+      {(onOpenTeacherPortal || onOpenSuperAdmin) && (
+        <div className="pt-2 pb-1 border-t border-slate-800/60 flex items-center justify-center gap-3">
+          {onOpenTeacherPortal && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                onOpenTeacherPortal();
+              }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800/40 text-[11px] font-medium transition cursor-pointer"
+              title={lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces securizat pentru cadre didactice (catalog & notare)'}
+            >
+              <span className="text-slate-600 text-xs">🔒</span>
+              <span>{lang === 'en' ? 'Instructor Portal' : 'Acces cadre didactice'}</span>
+            </button>
+          )}
+
+          {onOpenSuperAdmin && (
+            <button
+              onClick={() => {
+                sounds.playClick();
+                onOpenSuperAdmin();
+              }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-amber-500/70 hover:text-amber-300 hover:bg-amber-500/10 text-[11px] font-semibold transition cursor-pointer"
+              title="Consolă Superadmin (Control Global Școli, Profesori, Scoruri)"
+            >
+              <span className="text-amber-500 text-xs">🛡️</span>
+              <span>SuperAdmin Control</span>
+            </button>
+          )}
         </div>
       )}
 

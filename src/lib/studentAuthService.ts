@@ -252,7 +252,8 @@ export function saveActiveStudentLocally(profile: StudentProfile | null) {
 export async function registerStudent(
   username: string, 
   passwordPlain: string, 
-  avatar: string = '🎓'
+  avatar: string = '🎓',
+  schoolId: string = 'scoala_pilot_01'
 ): Promise<{ success: boolean; profile?: StudentProfile; error?: string }> {
   const cleanUsername = username.trim();
   if (cleanUsername.length < 2) {
@@ -389,6 +390,7 @@ export async function registerStudent(
     usernameLower,
     passwordHash,
     avatar,
+    schoolId: schoolId || 'scoala_pilot_01',
     arcadeScores: currentArcadeScores,
     lessonsProgress: currentLessons,
     byteCoins: 100, // 100 B-Coins welcome bonus
@@ -454,7 +456,8 @@ export async function loginStudent(
 
       const fullProfile: StudentProfile = {
         ...data,
-        id: studentDoc.id
+        id: studentDoc.id,
+        schoolId: data.schoolId || 'scoala_pilot_01',
       };
 
       // Sync cloud data into local storage so current PC has all high scores & progress
@@ -1170,7 +1173,7 @@ export async function getAllStudents(): Promise<StudentProfile[]> {
       const list: StudentProfile[] = [];
       snap.forEach((d) => {
         const item = d.data() as StudentProfile;
-        list.push({ ...item, id: d.id });
+        list.push({ ...item, id: d.id, schoolId: item.schoolId || 'scoala_pilot_01' });
       });
       return list;
     } catch (err) {

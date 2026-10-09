@@ -204,6 +204,8 @@ export interface StudentProfile {
   usernameLower: string;
   passwordHash: string;
   avatar: string;
+  schoolId?: string;
+  isSuspended?: boolean;
   arcadeScores: ArcadeScores;
   lessonsProgress: LessonsProgress;
   duelStats?: DuelStats;
@@ -215,4 +217,36 @@ export interface StudentProfile {
   createdAt: string;
   lastActiveAt: string;
 }
+
+export interface School {
+  id: string;
+  name: string;
+  code: string;
+  city: string;
+  active: boolean;
+  createdAt: number;
+  notes?: string;
+}
+
+export interface Teacher {
+  id: string;
+  email: string;
+  name: string;
+  schoolId: string;
+  schoolName?: string;
+  role: 'teacher';
+  approved: boolean;
+  createdAt: number;
+  lastLogin?: number;
+}
+
+export interface SuperAdminUser {
+  uid: string;
+  email: string;
+  name: string;
+  role: 'superadmin';
+  createdAt: number;
+  lastLogin: number;
+}
+
 

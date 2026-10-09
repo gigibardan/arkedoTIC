@@ -34,6 +34,8 @@ import {
   purgeZeroSecondGhostResults,
   StudentResult 
 } from '../lib/resultsService';
+import { getActiveSchools } from '../lib/schoolService';
+import { School } from '../types';
 import { isCloudConnected } from '../lib/firebase';
 import { sounds } from '../utils/audio';
 import { TeacherStudentManagement } from './TeacherStudentManagement';
@@ -44,11 +46,12 @@ import { TeacherCyberCityManagement } from './cybercity/TeacherCyberCityManageme
 
 interface TeacherPortalProps {
   onBackToHome: () => void;
+  onOpenSuperAdmin?: () => void;
 }
 
 const TEACHER_HARDCODED_PASSWORD = 'Ark3do!';
 
-export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) => {
+export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOpenSuperAdmin }) => {
   const { t, lang } = useLanguage();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem('arkedo_teacher_auth') === 'true';
@@ -61,6 +64,8 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Search & Filter state for gradebook
+  const [schools, setSchools] = useState<School[]>([]);
+  const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   const [searchGradeQuery, setSearchGradeQuery] = useState<string>('');
   const [selectedCourseFilter, setSelectedCourseFilter] = useState<string>('all');
 
@@ -69,8 +74,12 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
 
   const fetchResults = async () => {
     setLoading(true);
-    const data = await getStudentResults();
+    const [data, schoolsData] = await Promise.all([
+      getStudentResults(),
+      getActiveSchools()
+    ]);
     setResults(data);
+    setSchools(schoolsData);
     setLoading(false);
   };
 
@@ -194,7 +203,8 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
     const matchesSearch = r.studentName.toLowerCase().includes(searchGradeQuery.toLowerCase().trim()) ||
                           r.courseTitle.toLowerCase().includes(searchGradeQuery.toLowerCase().trim());
     const matchesCourse = selectedCourseFilter === 'all' || r.courseTitle === selectedCourseFilter;
-    return matchesSearch && matchesCourse;
+    const matchesSchool = selectedSchoolFilter === 'all' || (r.schoolId || 'scoala_pilot_01') === selectedSchoolFilter;
+    return matchesSearch && matchesCourse && matchesSchool;
   });
 
   // Calculations for dashboard metrics
@@ -256,6 +266,17 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
             <span>{t.teacherLoginBtn}</span>
           </button>
 
+          {onOpenSuperAdmin && (
+            <button
+              type="button"
+              onClick={onOpenSuperAdmin}
+              className="w-full py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <KeyRound className="w-3.5 h-3.5" />
+              <span>Consolă Superadmin (Control Global)</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={onBackToHome}
@@ -314,6 +335,17 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
             <Trash2 className="w-3.5 h-3.5 text-amber-400" />
             <span>{lang === 'en' ? 'Purge Cache' : 'Curăță Cache'}</span>
           </button>
+
+          {onOpenSuperAdmin && (
+            <button
+              onClick={onOpenSuperAdmin}
+              className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+              title="Comută la Consola de Superadmin"
+            >
+              <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+              <span>SuperAdmin</span>
+            </button>
+          )}
 
           <button
             onClick={handleLogout}
@@ -487,6 +519,23 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                 />
               </div>
 
+              {/* School Filter */}
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Building2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <select
+                  value={selectedSchoolFilter}
+                  onChange={(e) => setSelectedSchoolFilter(e.target.value)}
+                  className="bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-auto"
+                >
+                  <option value="all">🏫 {lang === 'en' ? 'All Schools' : 'Toate Școlile'}</option>
+                  {schools.map((sc) => (
+                    <option key={sc.id} value={sc.id}>
+                      {sc.name} ({sc.city})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {uniqueCourses.length > 0 && (
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -562,16 +611,21 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome }) =>
                               {idx + 1}
                             </span>
                             <div>
-                              <span className="font-bold text-white">{r.studentName}</span>
-                              {r.elapsedSeconds === 0 ? (
-                                <span className="ml-2 px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30" title="Trimitere cu 0s (Reîncărcare de pagină sau cache local)">
-                                  ⚠️ 0s (Cache)
-                                </span>
-                              ) : isSuspicious ? (
-                                <span className="ml-2 px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
-                                  ⚠️ Suspiciune Viteză
-                                </span>
-                              ) : null}
+                              <div className="flex items-center">
+                                <span className="font-bold text-white">{r.studentName}</span>
+                                {r.elapsedSeconds === 0 ? (
+                                  <span className="ml-2 px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30" title="Trimitere cu 0s (Reîncărcare de pagină sau cache local)">
+                                    ⚠️ 0s (Cache)
+                                  </span>
+                                ) : isSuspicious ? (
+                                  <span className="ml-2 px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
+                                    ⚠️ Suspiciune Viteză
+                                  </span>
+                                ) : null}
+                              </div>
+                              <span className="text-[10px] text-teal-400 font-mono block">
+                                🏫 {schools.find(s => s.id === (r.schoolId || 'scoala_pilot_01'))?.name || 'Liceul „Spiru Haret”'}
+                              </span>
                             </div>
                           </td>
                           <td className="py-3.5 px-4 text-slate-300 font-medium">

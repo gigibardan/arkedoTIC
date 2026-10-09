@@ -19,7 +19,8 @@ import {
   AlertTriangle,
   Swords,
   BookOpen,
-  Award
+  Award,
+  Building2
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -28,7 +29,8 @@ import {
   resetStudentPassword, 
   deleteStudentAccount 
 } from '../lib/studentAuthService';
-import { StudentProfile } from '../types';
+import { getActiveSchools } from '../lib/schoolService';
+import { StudentProfile, School } from '../types';
 import { sounds } from '../utils/audio';
 import { TeacherScoreModal } from './TeacherScoreModal';
 
@@ -37,6 +39,8 @@ export const TeacherStudentManagement: React.FC = () => {
   const isEn = lang === 'en';
 
   const [students, setStudents] = useState<StudentProfile[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
+  const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -60,10 +64,14 @@ export const TeacherStudentManagement: React.FC = () => {
 
   const fetchStudents = async () => {
     setLoading(true);
-    const list = await getAllStudents();
+    const [list, schoolsList] = await Promise.all([
+      getAllStudents(),
+      getActiveSchools()
+    ]);
     // Sort descending by totalXP
     list.sort((a, b) => (b.totalXP || 0) - (a.totalXP || 0));
     setStudents(list);
+    setSchools(schoolsList);
     setLoading(false);
   };
 
@@ -156,9 +164,11 @@ export const TeacherStudentManagement: React.FC = () => {
     );
   });
 
-  const filteredStudents = students.filter((s) => 
-    s.username.toLowerCase().includes(searchQuery.toLowerCase().trim())
-  );
+  const filteredStudents = students.filter((s) => {
+    const matchesSearch = s.username.toLowerCase().includes(searchQuery.toLowerCase().trim());
+    const matchesSchool = selectedSchoolFilter === 'all' || (s.schoolId || 'scoala_pilot_01') === selectedSchoolFilter;
+    return matchesSearch && matchesSchool;
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -179,8 +189,25 @@ export const TeacherStudentManagement: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="relative flex-1 md:w-64">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative">
+            <Building2 className="w-4 h-4 text-emerald-400 absolute left-3 top-3 pointer-events-none" />
+            <select
+              value={selectedSchoolFilter}
+              onChange={(e) => setSelectedSchoolFilter(e.target.value)}
+              className="bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white focus:outline-none focus:border-teal-500 cursor-pointer"
+              title={isEn ? 'Filter by School' : 'Filtrează după Școală'}
+            >
+              <option value="all">🏫 {isEn ? 'All Schools' : 'Toate Școlile'}</option>
+              {schools.map((sc) => (
+                <option key={sc.id} value={sc.id}>
+                  {sc.name} ({sc.city})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="relative flex-1 sm:w-60">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
             <input
               type="text"
@@ -349,6 +376,9 @@ export const TeacherStudentManagement: React.FC = () => {
                               </div>
                               <div className="text-[10px] font-mono text-slate-500">
                                 ID: {s.id?.slice(0, 8)}...
+                              </div>
+                              <div className="text-[10px] text-teal-400 font-medium truncate max-w-[150px]" title={schools.find(sc => sc.id === (s.schoolId || 'scoala_pilot_01'))?.name || 'Liceul „Spiru Haret”'}>
+                                🏫 {schools.find(sc => sc.id === (s.schoolId || 'scoala_pilot_01'))?.name || 'Liceul „Spiru Haret”'}
                               </div>
                             </div>
                           </div>

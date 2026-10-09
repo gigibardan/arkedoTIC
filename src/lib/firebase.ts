@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
+import { getAuth, type Auth } from 'firebase/auth';
 import rawConfig from '../../firebase-applet-config.json';
 
 // Read from environment variables (e.g. Netlify/Vercel/Vite .env.local) first, then fallback to config file
@@ -22,11 +23,13 @@ const resolvedConfig = {
 
 let app: FirebaseApp | null = null;
 let firestoreDb: Firestore | null = null;
+let authInstance: Auth | null = null;
 
 try {
   if (apiKey && projectId) {
     app = !getApps().length ? initializeApp(resolvedConfig) : getApp();
     firestoreDb = firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app);
+    authInstance = getAuth(app);
   } else {
     console.info(
       'ℹ️ [Firebase] VITE_FIREBASE_API_KEY nu este configurată în variabilele de mediu. Catalogul funcționează în modul local securizat.'
@@ -37,5 +40,6 @@ try {
 }
 
 export const db = firestoreDb;
+export const auth = authInstance;
 export const isCloudConnected = Boolean(firestoreDb);
 export default app;

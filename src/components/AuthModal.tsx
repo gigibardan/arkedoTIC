@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   User, 
   Lock, 
@@ -7,12 +7,15 @@ import {
   UserPlus, 
   AlertCircle, 
   CheckCircle2, 
-  X,
-  KeyRound,
-  ShieldCheck
+  X, 
+  KeyRound, 
+  ShieldCheck,
+  Building2
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { registerStudent, loginStudent, StudentProfile } from '../lib/studentAuthService';
+import { getActiveSchools, DEFAULT_SCHOOL } from '../lib/schoolService';
+import { School } from '../types';
 import { sounds } from '../utils/audio';
 
 interface AuthModalProps {
@@ -35,9 +38,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<string>('🎓');
+  const [selectedSchoolId, setSelectedSchoolId] = useState<string>(DEFAULT_SCHOOL.id);
+  const [schools, setSchools] = useState<School[]>([DEFAULT_SCHOOL]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (isOpen) {
+      getActiveSchools().then((list) => {
+        if (list && list.length > 0) {
+          setSchools(list);
+          if (!list.some(s => s.id === selectedSchoolId)) {
+            setSelectedSchoolId(list[0].id);
+          }
+        }
+      });
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -49,7 +67,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
     try {
       if (mode === 'register') {
-        const res = await registerStudent(username, password, selectedAvatar);
+        const res = await registerStudent(username, password, selectedAvatar, selectedSchoolId);
         if (!res.success || !res.profile) {
           setErrorMessage(res.error || (lang === 'en' ? 'Registration failed' : 'Înregistrarea a eșuat'));
           sounds.playWrong();
@@ -175,6 +193,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     {av}
                   </button>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* School selector on register */}
+          {mode === 'register' && (
+            <div>
+              <label className="text-xs font-medium text-slate-300 block mb-1">
+                {lang === 'en' ? 'School / Educational Institution:' : 'Școala / Unitatea de învățământ:'}
+              </label>
+              <div className="relative">
+                <Building2 className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none" />
+                <select
+                  value={selectedSchoolId}
+                  onChange={(e) => setSelectedSchoolId(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 focus:border-teal-500 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+                >
+                  {schools.map((school) => (
+                    <option key={school.id} value={school.id} className="bg-slate-900 text-white">
+                      {school.name} ({school.city})
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           )}

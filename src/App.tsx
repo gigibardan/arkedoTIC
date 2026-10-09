@@ -8,6 +8,7 @@ import { MascotaArky } from './components/MascotaArky';
 import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
 import { CoursesCatalog } from './components/CoursesCatalog';
+import { OfflineIndicator } from './components/pwa/OfflineIndicator';
 
 // Files Mission (Unitatea 2 - Manual pag. 22-30)
 import { FLevel1_OSInterface } from './components/files/FLevel1_OSInterface';
@@ -60,6 +61,7 @@ import { ModuleG6Paint3DFlow } from './components/grade6/paint3d/ModuleG6Paint3D
 
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
+import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard';
 import { ArcadeHub } from './components/minigames/ArcadeHub';
 import { DuelArena } from './components/DuelArena';
 import { CyberCityView } from './components/cybercity/CyberCityView';
@@ -70,18 +72,23 @@ import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthS
 function GameContent() {
   const { t } = useLanguage();
   const arky = useArky();
-  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city'>(() => {
-    if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
-      return 'teacher';
-    }
-    if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
-      return 'arcade';
-    }
-    if (window.location.pathname.includes('/duel') || window.location.hash.includes('duel')) {
-      return 'duel';
-    }
-    if (window.location.pathname.includes('/city') || window.location.pathname.includes('/oras') || window.location.hash.includes('city') || window.location.hash.includes('oras')) {
-      return 'city';
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin'>(() => {
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname.includes('/superadmin') || window.location.hash.includes('superadmin')) {
+        return 'superadmin';
+      }
+      if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
+        return 'teacher';
+      }
+      if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
+        return 'arcade';
+      }
+      if (window.location.pathname.includes('/duel') || window.location.hash.includes('duel')) {
+        return 'duel';
+      }
+      if (window.location.pathname.includes('/city') || window.location.pathname.includes('/oras') || window.location.hash.includes('city') || window.location.hash.includes('oras')) {
+        return 'city';
+      }
     }
     return 'catalog';
   });
@@ -789,7 +796,9 @@ function GameContent() {
   // Listen to browser navigation
   useEffect(() => {
     const handleUrlChange = () => {
-      if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
+      if (window.location.pathname.includes('/superadmin') || window.location.hash.includes('superadmin')) {
+        setView('superadmin');
+      } else if (window.location.pathname.includes('/profesor') || window.location.hash.includes('profesor')) {
         setView('teacher');
       } else if (window.location.pathname.includes('/arcade') || window.location.hash.includes('arcade')) {
         setView('arcade');
@@ -807,9 +816,11 @@ function GameContent() {
     };
   }, []);
 
-  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city') => {
+  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin') => {
     setView(newView);
-    if (newView === 'teacher') {
+    if (newView === 'superadmin') {
+      window.history.pushState({}, '', '/superadmin');
+    } else if (newView === 'teacher') {
       window.history.pushState({}, '', '/profesor');
     } else if (newView === 'arcade') {
       window.history.pushState({}, '', '/arcade');
@@ -1391,6 +1402,7 @@ function GameContent() {
         elapsedSeconds={currentElapsedSeconds}
         onEditStudentName={() => navigateToView('catalog')}
         onNavigateToTeacher={() => navigateToView('teacher')}
+        onNavigateToSuperAdmin={() => navigateToView('superadmin')}
         onNavigateToArcade={() => navigateToView('arcade')}
         onNavigateToDuel={() => navigateToView('duel')}
         onNavigateToCity={() => navigateToView('city')}
@@ -1398,8 +1410,16 @@ function GameContent() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 flex flex-col gap-5 sm:gap-6">
-        {view === 'teacher' ? (
-          <TeacherPortal onBackToHome={() => navigateToView('catalog')} />
+        {view === 'superadmin' ? (
+          <SuperAdminDashboard
+            onBackToHome={() => navigateToView('catalog')}
+            onOpenTeacherPortal={() => navigateToView('teacher')}
+          />
+        ) : view === 'teacher' ? (
+          <TeacherPortal 
+            onBackToHome={() => navigateToView('catalog')} 
+            onOpenSuperAdmin={() => navigateToView('superadmin')}
+          />
         ) : view === 'arcade' ? (
           <ArcadeHub
             studentName={studentName}
@@ -1428,6 +1448,7 @@ function GameContent() {
             elapsedSeconds={currentElapsedSeconds}
             onResetActiveMission={handleResetActiveMission}
             onOpenTeacherPortal={() => navigateToView('teacher')}
+            onOpenSuperAdmin={() => navigateToView('superadmin')}
             onOpenArcade={() => navigateToView('arcade')}
             onOpenDuel={() => navigateToView('duel')}
             onOpenCity={() => navigateToView('city')}
@@ -1819,6 +1840,7 @@ export default function App() {
           <ArkyProvider>
             <GameContent />
             <MascotaArky />
+            <OfflineIndicator />
           </ArkyProvider>
         </HintProvider>
       </LanguageProvider>

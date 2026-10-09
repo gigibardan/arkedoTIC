@@ -317,6 +317,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                 <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-mono font-bold border border-teal-500/30">
                   ID: {student.id?.slice(0, 8)}
                 </span>
+                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
+                  🏫 {student.schoolId || 'scoala_pilot_01'}
+                </span>
               </div>
               <h3 className="text-xl font-black text-white font-heading mt-0.5">
                 {student.username}

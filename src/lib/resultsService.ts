@@ -10,6 +10,8 @@ export interface StudentResult {
   elapsedSeconds: number;
   completedAt?: any;
   dateFormatted?: string;
+  schoolId?: string;
+  schoolName?: string;
 }
 
 const COLLECTION_NAME = 'rezultate_tic';
@@ -40,13 +42,31 @@ export async function logStudentResult(
   courseTitle: string,
   score: number,
   maxScore: number,
-  elapsedSeconds: number
+  elapsedSeconds: number,
+  schoolId?: string,
+  schoolName?: string
 ): Promise<string | null> {
   const cleanName = (studentName || '').trim();
   // Prevent logging only if student name is empty
   if (!cleanName) {
     console.warn('Submisiune invalidă (nume elev lipsă).');
     return null;
+  }
+
+  // Resolve schoolId and schoolName if not explicitly provided
+  let resolvedSchoolId = schoolId;
+  let resolvedSchoolName = schoolName;
+  if (!resolvedSchoolId) {
+    try {
+      const activeRaw = localStorage.getItem('arkedo_active_student_profile');
+      if (activeRaw) {
+        const parsed = JSON.parse(activeRaw);
+        if (parsed.schoolId) resolvedSchoolId = parsed.schoolId;
+      }
+    } catch {}
+  }
+  if (!resolvedSchoolId) {
+    resolvedSchoolId = 'scoala_pilot_01';
   }
 
   const localId = `local_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
@@ -68,6 +88,8 @@ export async function logStudentResult(
     maxScore,
     elapsedSeconds: Math.max(0, elapsedSeconds),
     dateFormatted,
+    schoolId: resolvedSchoolId,
+    schoolName: resolvedSchoolName,
   };
 
   // Always save to local backup
@@ -83,6 +105,8 @@ export async function logStudentResult(
         score,
         maxScore,
         elapsedSeconds: Math.max(0, elapsedSeconds),
+        schoolId: resolvedSchoolId,
+        schoolName: resolvedSchoolName,
         completedAt: serverTimestamp(),
         dateFormatted,
       });

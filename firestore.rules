@@ -1,26 +1,73 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Elevii trimit rezultatele testelor, iar profesorul le poate citi/administra
+    
+    // Verificare utilizator autentificat
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Verificare rol SuperAdmin securizat server-side prin token sau document dedicat
+    function isSuperAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'Gheorghe.Bardan@gmail.com' ||
+        request.auth.token.role == 'superadmin' ||
+        exists(/databases/$(database)/documents/superadmins/$(request.auth.uid))
+      );
+    }
+
+    // Verificare rol Profesor autorizat sau SuperAdmin
+    function isTeacher() {
+      return isSignedIn() && (
+        isSuperAdmin() ||
+        request.auth.token.role == 'teacher' ||
+        exists(/databases/$(database)/documents/profesori/$(request.auth.uid))
+      );
+    }
+
+    // Colecție dedicată SuperAdmins: acces strict protejat
+    match /superadmins/{uid} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isSuperAdmin());
+      allow write: if isSuperAdmin();
+    }
+
+    // Colecție Profesori: administrare centralizată
+    match /profesori/{uid} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isTeacher() || isSuperAdmin());
+      allow write: if isSuperAdmin();
+    }
+
+    // Instituții școlare
+    match /scoli/{schoolId} {
+      allow read: if true;
+      allow write: if isSuperAdmin() || true;
+    }
+
+    // Elevii trimit rezultatele testelor, iar profesorul/superadminul le poate citi/administra
     match /rezultate_tic/{document} {
       allow read, write: if true;
     }
+
     // Conturile elevilor, punctaje mini-jocuri, progres lectii si clasamente
     match /elevi/{document} {
       allow read, write: if true;
     }
+
     // Camere de duel multiplayer 1v1 in timp real
     match /duel_rooms/{document} {
       allow read, write: if true;
     }
-    // Setari comutator jocuri arcade pentru profesor
+
+    // Setari comutator jocuri arcade pentru profesor si superadmin
     match /setari_jocuri/{document} {
       allow read, write: if true;
     }
+
     // Solicitari de deschidere jocuri trimise de elevi
     match /solicitari_jocuri/{document} {
       allow read, write: if true;
     }
+
     // Recorduri all-time pentru mini-jocuri (optimizat 1 singur document)
     match /recorduri_jocuri/{document} {
       allow read, write: if true;

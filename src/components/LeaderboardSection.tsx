@@ -20,11 +20,13 @@ import {
   ShieldCheck,
   Cpu,
   Keyboard,
-  HelpCircle
+  HelpCircle,
+  Building2
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { StudentProfile } from '../types';
+import { StudentProfile, School } from '../types';
 import { getAllStudents, getActiveStudent, computeLessonXP } from '../lib/studentAuthService';
+import { getActiveSchools } from '../lib/schoolService';
 import { sounds } from '../utils/audio';
 
 interface LeaderboardSectionProps {
@@ -45,6 +47,8 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
   const { lang } = useLanguage();
   const [activeTab, setActiveTab] = useState<TabType>('total');
   const [students, setStudents] = useState<StudentProfile[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
+  const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showAllRows, setShowAllRows] = useState<boolean>(false);
@@ -52,8 +56,12 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
   const fetchLeaderboard = async () => {
     setLoading(true);
-    const data = await getAllStudents();
+    const [data, schoolsData] = await Promise.all([
+      getAllStudents(),
+      getActiveSchools()
+    ]);
     setStudents(data);
+    setSchools(schoolsData);
     setLoading(false);
   };
 
@@ -84,9 +92,11 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
     return bDuel - aDuel;
   });
 
-  const filteredStudents = sortedStudents.filter((s) => 
-    s.username.toLowerCase().includes(searchQuery.toLowerCase().trim())
-  );
+  const filteredStudents = sortedStudents.filter((s) => {
+    const matchesSearch = s.username.toLowerCase().includes(searchQuery.toLowerCase().trim());
+    const matchesSchool = selectedSchoolFilter === 'all' || (s.schoolId || 'scoala_pilot_01') === selectedSchoolFilter;
+    return matchesSearch && matchesSchool;
+  });
 
   const topThree = filteredStudents.slice(0, 3);
   const remainingStudents = showAllRows ? filteredStudents.slice(3) : filteredStudents.slice(3, 10);
@@ -203,6 +213,26 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 <Swords className="w-3.5 h-3.5 text-amber-300" />
                 <span>{lang === 'en' ? 'Duels 1v1' : 'Dueluri 1v1'}</span>
               </button>
+            </div>
+
+            <div className="relative">
+              <Building2 className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
+              <select
+                value={selectedSchoolFilter}
+                onChange={(e) => {
+                  setSelectedSchoolFilter(e.target.value);
+                  sounds.playClick();
+                }}
+                className="bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                title={lang === 'en' ? 'Filter by School' : 'Filtrează după Școală'}
+              >
+                <option value="all">🏫 {lang === 'en' ? 'All Schools (National)' : 'Toate Școlile (Clasament Național)'}</option>
+                {schools.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} ({s.city})
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button

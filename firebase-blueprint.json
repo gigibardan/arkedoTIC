@@ -75,6 +75,46 @@
         "records": { "type": "object" },
         "lastUpdated": { "type": "string" }
       }
+    },
+    "SuperAdmin": {
+      "title": "SuperAdmin",
+      "description": "Utilizator cu privilegii globale de Superadmin",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "number" },
+        "lastLogin": { "type": "number" }
+      },
+      "required": ["email", "role"]
+    },
+    "Profesor": {
+      "title": "Profesor",
+      "description": "Conturi de profesori asociate cu o școală",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "role": { "type": "string" },
+        "approved": { "type": "boolean" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["email", "name", "role"]
+    },
+    "Scoala": {
+      "title": "Scoala",
+      "description": "Instituții de învățământ înregistrate în sistemul multi-școală",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "city": { "type": "string" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["name", "code"]
     }
   },
   "firestore": {
@@ -101,6 +141,18 @@
     "/recorduri_jocuri/{documentId}": {
       "schema": "RecorduriJocuri",
       "description": "Recorduri all-time globale salvate intr-un singur document"
+    },
+    "/superadmins/{uid}": {
+      "schema": "SuperAdmin",
+      "description": "Conturi de superadmin verificate prin Firebase Auth"
+    },
+    "/profesori/{uid}": {
+      "schema": "Profesor",
+      "description": "Conturi profesori asociate școlilor"
+    },
+    "/scoli/{schoolId}": {
+      "schema": "Scoala",
+      "description": "Școli înregistrate pe platformă"
     }
   }
 }
