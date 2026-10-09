@@ -85,6 +85,11 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   useEffect(() => {
     sounds.playVictory();
     arky.triggerFinished();
+
+    // Ensure mission completed state is explicitly persisted to localStorage
+    try {
+      localStorage.setItem(`arkedo_completed_${courseId}`, 'true');
+    } catch {}
     
     // Automatically log results to Firebase Firestore only once per active mission run
     const finalName = initialStudentName.trim() || studentName.trim() || (lang === 'en' ? 'Anonymous Student' : 'Elev Anonim');

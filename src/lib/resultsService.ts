@@ -43,9 +43,9 @@ export async function logStudentResult(
   elapsedSeconds: number
 ): Promise<string | null> {
   const cleanName = (studentName || '').trim();
-  // Prevent logging corrupted or ghost submissions with 0 seconds or empty name
-  if (!cleanName || cleanName.toUpperCase() === 'PRO' || elapsedSeconds <= 0) {
-    console.warn('Submisiune invalidă (timp 0s sau elev de test), ignorată pentru a preveni înregistrări fantomă.');
+  // Prevent logging only if student name is empty
+  if (!cleanName) {
+    console.warn('Submisiune invalidă (nume elev lipsă).');
     return null;
   }
 
@@ -66,7 +66,7 @@ export async function logStudentResult(
     courseTitle,
     score,
     maxScore,
-    elapsedSeconds,
+    elapsedSeconds: Math.max(0, elapsedSeconds),
     dateFormatted,
   };
 
@@ -82,7 +82,7 @@ export async function logStudentResult(
         courseTitle,
         score,
         maxScore,
-        elapsedSeconds,
+        elapsedSeconds: Math.max(0, elapsedSeconds),
         completedAt: serverTimestamp(),
         dateFormatted,
       });
@@ -103,7 +103,7 @@ export async function getStudentResults(): Promise<StudentResult[]> {
   const localList = getLocalResults();
 
   if (!db) {
-    return localList.filter((r) => r.elapsedSeconds > 0 && (r.studentName || '').trim().toUpperCase() !== 'PRO');
+    return localList.filter((r) => (r.studentName || '').trim().length > 0);
   }
 
   try {
@@ -114,58 +114,32 @@ export async function getStudentResults(): Promise<StudentResult[]> {
     );
     const snapshot = await getDocs(q);
     const cloudResults: StudentResult[] = [];
-    const ghostDocIdsToDelete: string[] = [];
 
     for (const d of snapshot.docs) {
       const data = d.data();
-      const sName = (data.studentName || '').trim().toUpperCase();
-      const isGhost = (!data.elapsedSeconds || data.elapsedSeconds <= 0) && (sName === 'PRO' || sName.includes('PRO'));
-      
-      if (isGhost) {
-        ghostDocIdsToDelete.push(d.id);
-      } else {
-        cloudResults.push({
-          ...(data as Omit<StudentResult, 'id'>),
-          id: d.id, // Ensure Firestore doc ID is preserved and not overwritten!
-        });
-      }
-    }
-
-    // Auto-clean ghost docs in background from Firestore
-    if (ghostDocIdsToDelete.length > 0) {
-      ghostDocIdsToDelete.forEach((gid) => {
-        deleteDoc(doc(db, COLLECTION_NAME, gid)).catch(() => {});
+      cloudResults.push({
+        ...(data as Omit<StudentResult, 'id'>),
+        id: d.id, // Ensure Firestore doc ID is preserved
       });
     }
 
-    // Cache to local storage sanitized results
-    saveLocalResults(cloudResults);
-    return cloudResults;
+    // Cache to local storage
+    if (cloudResults.length > 0) {
+      saveLocalResults(cloudResults);
+      return cloudResults;
+    }
+    return localList;
   } catch (error) {
     console.warn('Interogarea cu index a eșuat, se încearcă fără index:', error);
     try {
       const snapshot = await getDocs(collection(db, COLLECTION_NAME));
       const results: StudentResult[] = [];
-      const ghostDocIdsToDelete: string[] = [];
 
       for (const d of snapshot.docs) {
         const data = d.data();
-        const sName = (data.studentName || '').trim().toUpperCase();
-        const isGhost = (!data.elapsedSeconds || data.elapsedSeconds <= 0) && (sName === 'PRO' || sName.includes('PRO'));
-        
-        if (isGhost) {
-          ghostDocIdsToDelete.push(d.id);
-        } else {
-          results.push({
-            ...(data as Omit<StudentResult, 'id'>),
-            id: d.id,
-          });
-        }
-      }
-
-      if (ghostDocIdsToDelete.length > 0) {
-        ghostDocIdsToDelete.forEach((gid) => {
-          deleteDoc(doc(db, COLLECTION_NAME, gid)).catch(() => {});
+        results.push({
+          ...(data as Omit<StudentResult, 'id'>),
+          id: d.id,
         });
       }
 
@@ -174,11 +148,14 @@ export async function getStudentResults(): Promise<StudentResult[]> {
         const timeB = b.completedAt?.toMillis?.() || 0;
         return timeB - timeA;
       });
-      saveLocalResults(sorted);
-      return sorted;
+      if (sorted.length > 0) {
+        saveLocalResults(sorted);
+        return sorted;
+      }
+      return localList;
     } catch (fallbackError) {
       console.warn('Interogarea Firestore a eșuat, se utilizează catalogul local:', fallbackError);
-      return localList.filter((r) => r.elapsedSeconds > 0 && (r.studentName || '').trim().toUpperCase() !== 'PRO');
+      return localList.filter((r) => (r.studentName || '').trim().length > 0);
     }
   }
 }
@@ -215,7 +192,7 @@ export async function purgeZeroSecondGhostResults(): Promise<{ success: boolean;
       for (const d of snapshot.docs) {
         const data = d.data();
         const sName = (data.studentName || '').trim().toUpperCase();
-        const isGhost = (!data.elapsedSeconds || data.elapsedSeconds <= 0) || sName === 'PRO' || sName.includes('PRO');
+        const isGhost = (!data.elapsedSeconds || data.elapsedSeconds <= 0) || sName === 'PRO' || sName === 'TEST' || sName === 'GHOST';
         if (isGhost) {
           await deleteDoc(doc(db, COLLECTION_NAME, d.id));
           count++;

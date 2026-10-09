@@ -83,6 +83,7 @@ interface CoursesCatalogProps {
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
+  completedMissions?: Record<string, boolean>;
   onResetActiveMission: () => void;
   onOpenTeacherPortal?: () => void;
   onOpenArcade?: () => void;
@@ -100,6 +101,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   activeMissionLevel,
   activeMissionScore,
   elapsedSeconds,
+  completedMissions = {},
   onResetActiveMission,
   onOpenTeacherPortal,
   onOpenArcade,
@@ -108,6 +110,39 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenShop,
   byteCoins,
 }) => {
+  const isMissionDone = (mId: string): boolean => {
+    try {
+      if (localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
+      if (mId === 'hardware' && (localStorage.getItem('arkedo_hw_level') === '6' || Number(localStorage.getItem('arkedo_hw_score') || '0') >= 100)) return true;
+      if (mId === 'files' && (localStorage.getItem('arkedo_files_level') === '8' || Number(localStorage.getItem('arkedo_files_score') || '0') >= 100)) return true;
+      if (mId === 'internet1' && (localStorage.getItem('arkedo_internet1_level') === '7' || Number(localStorage.getItem('arkedo_internet1_score') || '0') >= 100)) return true;
+      if (mId === 'internet2' && (localStorage.getItem('arkedo_internet2_level') === '7' || Number(localStorage.getItem('arkedo_internet2_score') || '0') >= 100)) return true;
+      if (mId === 'text1' && (localStorage.getItem('arkedo_text1_level') === '8' || Number(localStorage.getItem('arkedo_text1_score') || '0') >= 100)) return true;
+      if (mId === 'text2' && (localStorage.getItem('arkedo_text2_level') === '8' || Number(localStorage.getItem('arkedo_text2_score') || '0') >= 100)) return true;
+      if (mId === 'algo1' && (localStorage.getItem('arkedo_algo1_level') === '8' || Number(localStorage.getItem('arkedo_algo1_score') || '0') >= 100)) return true;
+      if (mId === 'algo2' && (localStorage.getItem('arkedo_algo2_level') === '8' || Number(localStorage.getItem('arkedo_algo2_score') || '0') >= 100)) return true;
+      if (mId === 'scratch1' && (localStorage.getItem('arkedo_scratch1_level') === '8' || Number(localStorage.getItem('arkedo_scratch1_score') || '0') >= 100)) return true;
+      if (mId === 'scratch2' && (localStorage.getItem('arkedo_scratch2_level') === '8' || Number(localStorage.getItem('arkedo_scratch2_score') || '0') >= 100)) return true;
+      if (mId === 'g6_presentation1' && (localStorage.getItem('arkedo_g6p1_level') === '8' || Number(localStorage.getItem('arkedo_g6p1_score') || '0') >= 100)) return true;
+      if (mId === 'g6_presentation2' && (localStorage.getItem('arkedo_g6p2_level') === '8' || Number(localStorage.getItem('arkedo_g6p2_score') || '0') >= 100)) return true;
+      if (mId === 'g6_paint3d' && (localStorage.getItem('arkedo_g6p3_level') === '8' || Number(localStorage.getItem('arkedo_g6p3_score') || '0') >= 100)) return true;
+    } catch {}
+    if (completedMissions && completedMissions[mId]) return true;
+    if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
+    const activeStudent = getActiveStudent();
+    if (activeStudent?.lessonsProgress) {
+      const lp = activeStudent.lessonsProgress;
+      const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId;
+      if (lp[lessonKey]?.completed || (lp[lessonKey]?.score || 0) >= 100) return true;
+    }
+    return false;
+  };
+
+  const getMaxPlayableLevels = (mId: string): number => {
+    if (mId === 'hardware') return 5;
+    if (mId === 'internet1' || mId === 'internet2') return 6;
+    return 7;
+  };
   const { t, lang } = useLanguage();
   const arky = useArky();
   const [activeAccount, setActiveAccount] = useState<StudentProfile | null>(() => {
@@ -443,12 +478,15 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
 
     // CHECK IN-PROGRESS GUARD:
-    // If user has an active mission in progress (level > 1 and level <= 6) and tries to start a DIFFERENT mission
+    // Only guard if user has an active mission in progress that is NOT completed, different from target, and mid-way
+    const isCurrentActiveDone = activeMissionId ? isMissionDone(activeMissionId) : false;
+    const maxLevels = activeMissionId ? getMaxPlayableLevels(activeMissionId) : 5;
     const hasMissionInProgress =
       activeMissionId !== null &&
       activeMissionId !== targetMission &&
+      !isCurrentActiveDone &&
       activeMissionLevel > 1 &&
-      activeMissionLevel <= 6;
+      activeMissionLevel <= maxLevels;
 
     if (hasMissionInProgress) {
       sounds.playWrong();
@@ -755,7 +793,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                           <span>{t.studentNameChangeBtn}</span>
                         </button>
 
-                        {activeMissionId && (
+                        {activeMissionId && !isMissionDone(activeMissionId) && activeMissionLevel > 1 && (
                           <button
                             type="button"
                             onClick={() => handleAttemptStart(activeMissionId)}
@@ -1531,7 +1569,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 1 (NEW & FIRST): Modulul 1 - Sisteme de Calcul și Comunicații */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'hardware'
+              isMissionDone('hardware')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'hardware'
                 ? 'border-teal-400 shadow-teal-500/20 ring-2 ring-teal-500/30'
                 : 'border-teal-500/60 hover:border-teal-400 hover:shadow-teal-500/10'
             }`}
@@ -1542,13 +1582,18 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   💻
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'hardware' && activeMissionLevel > 1 && (
+                  {isMissionDone('hardware') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/5)` : `În Curs (Nivel ${activeMissionLevel}/5)`}
                     </span>
-                  )}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1' : 'NOU • MODULUL 1'}
+                  ) : null}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-black uppercase tracking-wider">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 1' : 'MODULUL 1'}
                   </span>
                 </div>
               </div>
@@ -1586,7 +1631,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
+                {isMissionDone('hardware') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
                   <span className="text-teal-400 font-bold">
                     {lang === 'en' ? `Progress: Level ${activeMissionLevel}/5 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/5 (${activeMissionScore} pct)`}
                   </span>
@@ -1596,14 +1646,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('hardware')}
-                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('hardware')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'hardware' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Hardware Mission' : 'Continuă Misiunea Hardware')
-                    : (lang === 'en' ? 'Start Mission 1' : 'Începe Misiunea 1')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('hardware') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Hardware Mission' : 'Continuă Misiunea Hardware'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 1' : 'Începe Misiunea 1'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -1611,7 +1675,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 2: Modulul 2 - Organizarea Datelor • Arborele Secret */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'files'
+              isMissionDone('files')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'files'
                 ? 'border-emerald-400 shadow-emerald-500/20 ring-2 ring-emerald-500/30'
                 : 'border-emerald-500/60 hover:border-emerald-400 hover:shadow-emerald-500/10'
             }`}
@@ -1622,11 +1688,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   🌳
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'files' && activeMissionLevel > 1 && (
+                  {isMissionDone('files') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 2' : 'MODULUL 2'}
                   </span>
@@ -1666,7 +1737,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'files' && activeMissionLevel > 1 ? (
+                {isMissionDone('files') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
                   <span className="text-emerald-400 font-bold">
                     {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -1676,26 +1752,54 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('files')}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('files')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'files' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Files Mission' : 'Continuă Misiunea Fișiere')
-                    : (lang === 'en' ? 'Start Mission 2' : 'Începe Misiunea 2')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('files') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Files Mission' : 'Continuă Misiunea Fișiere'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 2' : 'Începe Misiunea 2'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
 
           {/* Card 3: ACTIVE MISSION 3A - Internet, Rețele & World Wide Web */}
-          <div className="relative group bg-slate-900/80 border border-slate-700/80 hover:border-teal-500/80 rounded-3xl p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-teal-500/10 flex flex-col justify-between">
+          <div className={`relative group rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between ${
+            isMissionDone('internet1')
+              ? 'bg-slate-900/90 border-2 border-emerald-500/80 shadow-emerald-500/10'
+              : 'bg-slate-900/80 border border-slate-700/80 hover:border-teal-500/80 hover:shadow-2xl hover:shadow-teal-500/10'
+          }`}>
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-2xl border border-teal-500/30">
                   🌐
                 </div>
                 <div className="flex items-center gap-2">
+                  {isMissionDone('internet1') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/6)` : `În Curs (Pagina ${activeMissionLevel}/6)`}
+                    </span>
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/30 text-xs font-bold uppercase tracking-wider">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? '6 Interactive Pages' : '6 Pagini Interactive'}
                   </span>
@@ -1735,7 +1839,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
+                {isMissionDone('internet1') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
                   <span className="text-teal-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/6 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/6 (${activeMissionScore} pct)`}
                   </span>
@@ -1745,26 +1854,54 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('internet1')}
-                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('internet1')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'internet1' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Internet 3A' : 'Continuă Misiunea 3A')
-                    : (lang === 'en' ? 'Start Mission 3A' : 'Începe Misiunea 3A')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('internet1') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Internet 3A' : 'Continuă Misiunea 3A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 3A' : 'Începe Misiunea 3A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
 
           {/* Card 4: ACTIVE MISSION 3B - Căutare Avansată, Comunicare & Identitate Digitală */}
-          <div className="relative group bg-slate-900/80 border border-slate-700/80 hover:border-indigo-500/80 rounded-3xl p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 flex flex-col justify-between">
+          <div className={`relative group rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between ${
+            isMissionDone('internet2')
+              ? 'bg-slate-900/90 border-2 border-emerald-500/80 shadow-emerald-500/10'
+              : 'bg-slate-900/80 border border-slate-700/80 hover:border-indigo-500/80 hover:shadow-2xl hover:shadow-indigo-500/10'
+          }`}>
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl border border-indigo-500/30">
                   🔍
                 </div>
                 <div className="flex items-center gap-2">
+                  {isMissionDone('internet2') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/6)` : `În Curs (Nivel ${activeMissionLevel}/6)`}
+                    </span>
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-wider">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? '6 Interactive Levels' : '6 Niveluri Interactive'}
                   </span>
@@ -1804,7 +1941,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
+                {isMissionDone('internet2') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
                   <span className="text-indigo-400 font-bold">
                     {lang === 'en' ? `Progress: Level ${activeMissionLevel}/6 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/6 (${activeMissionScore} pct)`}
                   </span>
@@ -1814,14 +1956,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('internet2')}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('internet2')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'internet2' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Internet 3B' : 'Continuă Misiunea 3B')
-                    : (lang === 'en' ? 'Start Mission 3B' : 'Începe Misiunea 3B')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('internet2') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Internet 3B' : 'Continuă Misiunea 3B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 3B' : 'Începe Misiunea 3B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -1829,7 +1985,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 5: ACTIVE MISSION 4A - Procesorul de Text & Tehnoredactare */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'text1'
+              isMissionDone('text1')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'text1'
                 ? 'border-blue-400 shadow-blue-500/20 ring-2 ring-blue-500/30'
                 : 'border-blue-500/60 hover:border-blue-400 hover:shadow-blue-500/10'
             }`}
@@ -1840,11 +1998,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   📝
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'text1' && activeMissionLevel > 1 && (
+                  {isMissionDone('text1') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-black uppercase tracking-wider">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 4A' : 'MODULUL 4A'}
                   </span>
@@ -1884,7 +2047,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'text1' && activeMissionLevel > 1 ? (
+                {isMissionDone('text1') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
                   <span className="text-blue-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -1894,14 +2062,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('text1')}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('text1')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'text1' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A')
-                    : (lang === 'en' ? 'Start Mission 4A' : 'Începe Misiunea 4A')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('text1') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 4A' : 'Începe Misiunea 4A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -1909,7 +2091,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 6: ACTIVE MISSION 4B - Elemente Grafice, Tabele & Paginare */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'text2'
+              isMissionDone('text2')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'text2'
                 ? 'border-emerald-400 shadow-emerald-500/20 ring-2 ring-emerald-500/30'
                 : 'border-emerald-500/60 hover:border-emerald-400 hover:shadow-emerald-500/10'
             }`}
@@ -1920,11 +2104,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   📊
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'text2' && activeMissionLevel > 1 && (
+                  {isMissionDone('text2') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'text2' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 4B' : 'MODULUL 4B'}
                   </span>
@@ -1964,7 +2153,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'text2' && activeMissionLevel > 1 ? (
+                {isMissionDone('text2') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'text2' && activeMissionLevel > 1 ? (
                   <span className="text-emerald-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -1989,14 +2183,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 )}
                 <button
                   onClick={() => handleAttemptStart('text2')}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('text2')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                  }`}
                 >
-                  <span>
-                    {activeMissionId === 'text2' && activeMissionLevel > 1
-                      ? (lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B')
-                      : (lang === 'en' ? 'Start Mission 4B' : 'Începe Misiunea 4B')}
-                  </span>
-                  <ArrowRight className="w-4 h-4" />
+                  {isMissionDone('text2') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'text2' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 4B' : 'Începe Misiunea 4B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -2005,7 +2213,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 7: ACTIVE MISSION 5A - Noțiunea de Algoritm & Algoritmi Secvențiali */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'algo1'
+              isMissionDone('algo1')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'algo1'
                 ? 'border-amber-400 shadow-amber-500/20 ring-2 ring-amber-500/30'
                 : 'border-amber-500/60 hover:border-amber-400 hover:shadow-amber-500/10'
             }`}
@@ -2016,11 +2226,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   🧩
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'algo1' && activeMissionLevel > 1 && (
+                  {isMissionDone('algo1') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 5A • NEW' : 'MODULUL 5A • NOU'}
                   </span>
@@ -2060,7 +2275,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
+                {isMissionDone('algo1') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
                   <span className="text-amber-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2070,14 +2290,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('algo1')}
-                className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('algo1')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-amber-600 hover:bg-amber-500 text-slate-950 font-black shadow-amber-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'algo1' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 5A' : 'Continuă Misiunea 5A')
-                    : (lang === 'en' ? 'Start Mission 5A' : 'Începe Misiunea 5A')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('algo1') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 5A' : 'Continuă Misiunea 5A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 5A' : 'Începe Misiunea 5A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -2085,7 +2319,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 8: ACTIVE MISSION 5B - Structuri Decizionale, Date, Operatori & Scheme Logice */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'algo2'
+              isMissionDone('algo2')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'algo2'
                 ? 'border-purple-400 shadow-purple-500/20 ring-2 ring-purple-500/30'
                 : 'border-purple-500/60 hover:border-purple-400 hover:shadow-purple-500/10'
             }`}
@@ -2096,11 +2332,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   🚦
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'algo2' && activeMissionLevel > 1 && (
+                  {isMissionDone('algo2') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 5B • NEW' : 'MODULUL 5B • NOU'}
                   </span>
@@ -2140,7 +2381,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
+                {isMissionDone('algo2') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
                   <span className="text-purple-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2150,14 +2396,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('algo2')}
-                className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('algo2')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-purple-600 hover:bg-purple-500 text-white font-black shadow-purple-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'algo2' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 5B' : 'Continuă Misiunea 5B')
-                    : (lang === 'en' ? 'Start Mission 5B' : 'Începe Misiunea 5B')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('algo2') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 5B' : 'Continuă Misiunea 5B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 5B' : 'Începe Misiunea 5B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -2165,7 +2425,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 9: ACTIVE MISSION 6A - Mediul Scratch 3.0, Mișcare Liniară, Variabile & Creion */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'scratch1'
+              isMissionDone('scratch1')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'scratch1'
                 ? 'border-orange-400 shadow-orange-500/20 ring-2 ring-orange-500/30'
                 : 'border-orange-500/60 hover:border-orange-400 hover:shadow-orange-500/10'
             }`}
@@ -2176,11 +2438,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   🐱
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'scratch1' && activeMissionLevel > 1 && (
+                  {isMissionDone('scratch1') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 6A • SCRATCH' : 'MODULUL 6A • SCRATCH'}
                   </span>
@@ -2220,7 +2487,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
+                {isMissionDone('scratch1') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
                   <span className="text-orange-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2230,14 +2502,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('scratch1')}
-                className="px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-orange-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('scratch1')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'scratch1' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 6A' : 'Continuă Misiunea 6A')
-                    : (lang === 'en' ? 'Start Mission 6A' : 'Începe Misiunea 6A')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('scratch1') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 6A' : 'Continuă Misiunea 6A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 6A' : 'Începe Misiunea 6A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -2245,7 +2531,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 10: ACTIVE MISSION 6B - Decizii Scratch, Labirint, Tabla Înmulțirii, Muzică & Marea Evaluare */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'scratch2'
+              isMissionDone('scratch2')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'scratch2'
                 ? 'border-pink-400 shadow-pink-500/20 ring-2 ring-pink-500/30'
                 : 'border-pink-500/60 hover:border-pink-400 hover:shadow-pink-500/10'
             }`}
@@ -2256,11 +2544,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   🎮
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'scratch2' && activeMissionLevel > 1 && (
+                  {isMissionDone('scratch2') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 6B • GRADUATION' : 'MODULUL 6B • ABSOLVIRE'}
                   </span>
@@ -2300,7 +2593,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
+                {isMissionDone('scratch2') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
                   <span className="text-pink-400 font-bold">
                     {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2310,14 +2608,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('scratch2')}
-                className="px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-pink-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('scratch2')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-pink-600 hover:bg-pink-500 text-white font-black shadow-pink-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'scratch2' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 6B' : 'Continuă Misiunea 6B')
-                    : (lang === 'en' ? 'Start Mission 6B' : 'Începe Misiunea 6B')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('scratch2') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 6B' : 'Continuă Misiunea 6B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 6B' : 'Începe Misiunea 6B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -2392,7 +2704,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Card 1: Modulul 1A - Prezentarea & Interfața PowerPoint (READY & ACTIVE) */}
           <div
             className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              activeMissionId === 'g6_presentation1'
+              isMissionDone('g6_presentation1')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'g6_presentation1'
                 ? 'border-orange-400 shadow-orange-500/20 ring-2 ring-orange-500/30'
                 : 'border-orange-500/60 hover:border-orange-400 hover:shadow-orange-500/10'
             }`}
@@ -2403,11 +2717,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   📽️
                 </div>
                 <div className="flex items-center gap-2">
-                  {activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 && (
+                  {isMissionDone('g6_presentation1') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
                     <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
                       {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1A' : 'NOU • MODULUL 1A'}
                   </span>
@@ -2447,7 +2766,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
+                {isMissionDone('g6_presentation1') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
                   <span className="text-orange-400 font-bold">
                     {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2457,31 +2781,56 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('g6_presentation1')}
-                className="px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-orange-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('g6_presentation1')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'g6_presentation1' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 1A' : 'Continuă Misiunea 1A')
-                    : (lang === 'en' ? 'Start Mission 1A (PowerPoint)' : 'Începe Misiunea 1A')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('g6_presentation1') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 1A' : 'Continuă Misiunea 1A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 1A (PowerPoint)' : 'Începe Misiunea 1A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
 
           {/* Card 2: Modulul 1B - Realizare, Design, Animații & Susținerea Prezentării (Active Mission) */}
-          <div className="group relative bg-gradient-to-br from-slate-900 via-slate-850 to-rose-950/40 border-2 border-rose-500/50 hover:border-rose-400 rounded-3xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-rose-500/20 flex flex-col justify-between">
+          <div
+            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-rose-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
+              isMissionDone('g6_presentation2')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : 'border-rose-500/50 hover:border-rose-400 hover:shadow-2xl hover:shadow-rose-500/20'
+            }`}
+          >
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500/20 to-pink-500/20 border border-rose-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                   🎨
                 </div>
                 <div className="flex items-center gap-1.5">
-                  {activeMissionId === 'g6_presentation2' && (
+                  {isMissionDone('g6_presentation2') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'g6_presentation2' ? (
                     <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
                       ● ACTIV
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1B' : 'NOU • MODULUL 1B'}
                   </span>
@@ -2521,7 +2870,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
+                {isMissionDone('g6_presentation2') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
                   <span className="text-rose-400 font-bold">
                     {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2531,31 +2885,56 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('g6_presentation2')}
-                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('g6_presentation2')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-rose-600 hover:bg-rose-500 text-white font-black shadow-rose-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'g6_presentation2' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 1B' : 'Continuă Misiunea 1B')
-                    : (lang === 'en' ? 'Start Mission 1B (Design & Speech)' : 'Începe Misiunea 1B')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('g6_presentation2') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 1B' : 'Continuă Misiunea 1B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 1B (Design & Speech)' : 'Începe Misiunea 1B'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>
 
           {/* Card 3: Modulul 2A - Modelare 3D în Paint 3D (Active Mission) */}
-          <div className="group relative bg-gradient-to-br from-slate-900 via-slate-850 to-cyan-950/40 border-2 border-cyan-500/50 hover:border-cyan-400 rounded-3xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/20 flex flex-col justify-between">
+          <div
+            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-cyan-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
+              isMissionDone('g6_paint3d')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : 'border-cyan-500/50 hover:border-cyan-400 hover:shadow-2xl hover:shadow-cyan-500/20'
+            }`}
+          >
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                   🧊
                 </div>
                 <div className="flex items-center gap-1.5">
-                  {activeMissionId === 'g6_paint3d' && (
+                  {isMissionDone('g6_paint3d') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'g6_paint3d' ? (
                     <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
                       ● ACTIV
                     </span>
-                  )}
+                  ) : null}
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
                     <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 2A' : 'NOU • MODULUL 2A'}
                   </span>
@@ -2595,7 +2974,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
             <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
               <div className="text-xs text-slate-400 font-mono">
-                {activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
+                {isMissionDone('g6_paint3d') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
                   <span className="text-cyan-400 font-bold">
                     {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
                   </span>
@@ -2605,14 +2989,28 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <button
                 onClick={() => handleAttemptStart('g6_paint3d')}
-                className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
+                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                  isMissionDone('g6_paint3d')
+                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                    : 'bg-cyan-600 hover:bg-cyan-500 text-white font-black shadow-cyan-600/30'
+                }`}
               >
-                <span>
-                  {activeMissionId === 'g6_paint3d' && activeMissionLevel > 1
-                    ? (lang === 'en' ? 'Resume Mission 2A' : 'Continuă Misiunea 2A')
-                    : (lang === 'en' ? 'Start Mission 2A (Paint 3D)' : 'Începe Misiunea 2A')}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                {isMissionDone('g6_paint3d') ? (
+                  <>
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                  </>
+                ) : activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
+                  <>
+                    <span>{lang === 'en' ? 'Resume Mission 2A' : 'Continuă Misiunea 2A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <span>{lang === 'en' ? 'Start Mission 2A (Paint 3D)' : 'Începe Misiunea 2A'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
           </div>

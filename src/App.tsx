@@ -90,7 +90,10 @@ function GameContent() {
   const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d') return saved;
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d') {
+        const isDone = localStorage.getItem(`arkedo_completed_${saved}`) === 'true';
+        if (!isDone) return saved;
+      }
     } catch {
       // Ignore
     }
@@ -525,7 +528,11 @@ function GameContent() {
   // Persist active mission & levels
   useEffect(() => {
     try {
-      if (activeMission) localStorage.setItem('arkedo_active_mission', activeMission);
+      if (activeMission && !isMissionCompleted(activeMission)) {
+        localStorage.setItem('arkedo_active_mission', activeMission);
+      } else {
+        localStorage.removeItem('arkedo_active_mission');
+      }
       localStorage.setItem('arkedo_hw_level', String(hwLevel));
       localStorage.setItem('arkedo_hw_score', String(hwScore));
       localStorage.setItem('arkedo_files_level', String(filesLevel));
@@ -722,6 +729,63 @@ function GameContent() {
     };
   }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level]);
 
+  // Check if a mission is fully completed and finished
+  const isMissionCompleted = (mId: string): boolean => {
+    try {
+      if (localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
+    } catch {}
+
+    if (mId === 'hardware' && (hwLevel >= 6 || hwScore >= 100)) return true;
+    if (mId === 'files' && (filesLevel >= 8 || filesScore >= 100)) return true;
+    if (mId === 'internet1' && (internet1Level >= 7 || internet1Score >= 100)) return true;
+    if (mId === 'internet2' && (internet2Level >= 7 || internet2Score >= 100)) return true;
+    if (mId === 'text1' && (text1Level >= 8 || text1Score >= 100)) return true;
+    if (mId === 'text2' && (text2Level >= 8 || text2Score >= 100)) return true;
+    if (mId === 'algo1' && (algo1Level >= 8 || algo1Score >= 100)) return true;
+    if (mId === 'algo2' && (algo2Level >= 8 || algo2Score >= 100)) return true;
+    if (mId === 'scratch1' && (scratch1Level >= 8 || scratch1Score >= 100)) return true;
+    if (mId === 'scratch2' && (scratch2Level >= 8 || scratch2Score >= 100)) return true;
+    if (mId === 'g6_presentation1' && (g6P1Level >= 8 || g6P1Score >= 100)) return true;
+    if (mId === 'g6_presentation2' && (g6P2Level >= 8 || g6P2Score >= 100)) return true;
+    if (mId === 'g6_paint3d' && (g6P3Level >= 8 || g6P3Score >= 100)) return true;
+
+    const activeStudent = getActiveStudent();
+    if (activeStudent?.lessonsProgress) {
+      const lp = activeStudent.lessonsProgress;
+      if (mId === 'hardware' && (lp.hardware?.completed || (lp.hardware?.score || 0) >= 100)) return true;
+      if (mId === 'files' && (lp.files?.completed || (lp.files?.score || 0) >= 100)) return true;
+      if (mId === 'internet1' && (lp.internet1?.completed || (lp.internet1?.score || 0) >= 100)) return true;
+      if (mId === 'internet2' && (lp.internet2?.completed || (lp.internet2?.score || 0) >= 100)) return true;
+      if (mId === 'text1' && (lp.text1?.completed || (lp.text1?.score || 0) >= 100)) return true;
+      if (mId === 'text2' && (lp.text2?.completed || (lp.text2?.score || 0) >= 100)) return true;
+      if (mId === 'algo1' && (lp.algo1?.completed || (lp.algo1?.score || 0) >= 100)) return true;
+      if (mId === 'algo2' && (lp.algo2?.completed || (lp.algo2?.score || 0) >= 100)) return true;
+      if (mId === 'scratch1' && (lp.scratch1?.completed || (lp.scratch1?.score || 0) >= 100)) return true;
+      if (mId === 'scratch2' && (lp.scratch2?.completed || (lp.scratch2?.score || 0) >= 100)) return true;
+      if (mId === 'g6_presentation1' && (lp.presentation1?.completed || (lp.presentation1?.score || 0) >= 100)) return true;
+      if (mId === 'g6_presentation2' && (lp.presentation2?.completed || (lp.presentation2?.score || 0) >= 100)) return true;
+      if (mId === 'g6_paint3d' && (lp.model3d1?.completed || (lp.model3d1?.score || 0) >= 100)) return true;
+    }
+
+    return false;
+  };
+
+  const completedMissions: Record<string, boolean> = {
+    hardware: isMissionCompleted('hardware'),
+    files: isMissionCompleted('files'),
+    internet1: isMissionCompleted('internet1'),
+    internet2: isMissionCompleted('internet2'),
+    text1: isMissionCompleted('text1'),
+    text2: isMissionCompleted('text2'),
+    algo1: isMissionCompleted('algo1'),
+    algo2: isMissionCompleted('algo2'),
+    scratch1: isMissionCompleted('scratch1'),
+    scratch2: isMissionCompleted('scratch2'),
+    g6_presentation1: isMissionCompleted('g6_presentation1'),
+    g6_presentation2: isMissionCompleted('g6_presentation2'),
+    g6_paint3d: isMissionCompleted('g6_paint3d'),
+  };
+
   // Listen to browser navigation
   useEffect(() => {
     const handleUrlChange = () => {
@@ -755,8 +819,25 @@ function GameContent() {
       window.history.pushState({}, '', '/oras');
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
+      // If the current active mission is completed, clear activeMission so it doesn't linger as in-progress!
+      if (activeMission && isMissionCompleted(activeMission)) {
+        setActiveMission(null);
+        try {
+          localStorage.removeItem('arkedo_active_mission');
+        } catch {}
+      }
     }
   };
+
+  // When in catalog view, ensure completed missions do not linger as activeMission
+  useEffect(() => {
+    if (view === 'catalog' && activeMission && isMissionCompleted(activeMission)) {
+      setActiveMission(null);
+      try {
+        localStorage.removeItem('arkedo_active_mission');
+      } catch {}
+    }
+  }, [view, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level]);
 
   const handleToggleSound = () => {
     const newState = !soundEnabled;
@@ -776,6 +857,11 @@ function GameContent() {
   };
 
   const handleResetActiveMission = () => {
+    if (activeMission) {
+      try {
+        localStorage.removeItem(`arkedo_completed_${activeMission}`);
+      } catch {}
+    }
     if (activeMission === 'hardware') {
       setHwLevel(1);
       setHwScore(0);
@@ -844,6 +930,9 @@ function GameContent() {
       setG6P1Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_g6_presentation1', 'true');
+      } catch {}
       updateActiveLessonProgress('presentation1', true, 8, updatedTotal, g6P1ElapsedSeconds);
     }
   };
@@ -853,6 +942,9 @@ function GameContent() {
     setG6P1Score(0);
     setG6P1Level(1);
     setG6P1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g6_presentation1');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -870,6 +962,9 @@ function GameContent() {
       setG6P2Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_g6_presentation2', 'true');
+      } catch {}
       updateActiveLessonProgress('presentation2', true, 8, updatedTotal, g6P2ElapsedSeconds);
     }
   };
@@ -879,6 +974,9 @@ function GameContent() {
     setG6P2Score(0);
     setG6P2Level(1);
     setG6P2ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g6_presentation2');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -896,6 +994,9 @@ function GameContent() {
       setG6P3Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_g6_paint3d', 'true');
+      } catch {}
       updateActiveLessonProgress('model3d1', true, 8, updatedTotal, g6P3ElapsedSeconds);
     }
   };
@@ -905,6 +1006,9 @@ function GameContent() {
     setG6P3Score(0);
     setG6P3Level(1);
     setG6P3ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g6_paint3d');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -922,6 +1026,9 @@ function GameContent() {
       setScratch1Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_scratch1', 'true');
+      } catch {}
       updateActiveLessonProgress('scratch1', true, 8, updatedTotal, scratch1ElapsedSeconds);
     }
   };
@@ -931,6 +1038,9 @@ function GameContent() {
     setScratch1Score(0);
     setScratch1Level(1);
     setScratch1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_scratch1');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -948,6 +1058,9 @@ function GameContent() {
       setScratch2Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_scratch2', 'true');
+      } catch {}
       updateActiveLessonProgress('scratch2', true, 8, updatedTotal, scratch2ElapsedSeconds);
     }
   };
@@ -957,6 +1070,9 @@ function GameContent() {
     setScratch2Score(0);
     setScratch2Level(1);
     setScratch2ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_scratch2');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -974,6 +1090,9 @@ function GameContent() {
       setAlgo1Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_algo1', 'true');
+      } catch {}
       updateActiveLessonProgress('algo1', true, 8, updatedTotal, algo1ElapsedSeconds);
     }
   };
@@ -983,6 +1102,9 @@ function GameContent() {
     setAlgo1Score(0);
     setAlgo1Level(1);
     setAlgo1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_algo1');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1000,6 +1122,9 @@ function GameContent() {
       setAlgo2Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_algo2', 'true');
+      } catch {}
       updateActiveLessonProgress('algo2', true, 8, updatedTotal, algo2ElapsedSeconds);
     }
   };
@@ -1009,6 +1134,9 @@ function GameContent() {
     setAlgo2Score(0);
     setAlgo2Level(1);
     setAlgo2ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_algo2');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1026,6 +1154,9 @@ function GameContent() {
       setText2Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_text2', 'true');
+      } catch {}
       updateActiveLessonProgress('text2', true, 8, updatedTotal, text2ElapsedSeconds);
     }
   };
@@ -1035,6 +1166,9 @@ function GameContent() {
     setText2Score(0);
     setText2Level(1);
     setText2ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_text2');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1052,6 +1186,9 @@ function GameContent() {
       setText1Level(8); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_text1', 'true');
+      } catch {}
       updateActiveLessonProgress('text1', true, 8, updatedTotal, text1ElapsedSeconds);
     }
   };
@@ -1061,6 +1198,9 @@ function GameContent() {
     setText1Score(0);
     setText1Level(1);
     setText1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_text1');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1078,6 +1218,9 @@ function GameContent() {
       setInternet1Level(7); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_internet1', 'true');
+      } catch {}
       updateActiveLessonProgress('internet1', true, 7, updatedTotal, internet1ElapsedSeconds);
     }
   };
@@ -1087,6 +1230,9 @@ function GameContent() {
     setInternet1Score(0);
     setInternet1Level(1);
     setInternet1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_internet1');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1104,6 +1250,9 @@ function GameContent() {
       setInternet2Level(7); // Victory Screen
       setIsTimerRunning(false);
       arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_internet2', 'true');
+      } catch {}
       updateActiveLessonProgress('internet2', true, 7, updatedTotal, internet2ElapsedSeconds);
     }
   };
@@ -1113,6 +1262,9 @@ function GameContent() {
     setInternet2Score(0);
     setInternet2Level(1);
     setInternet2ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_internet2');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1144,6 +1296,9 @@ function GameContent() {
     setHwLevel(6);
     setIsTimerRunning(false);
     arky.triggerFinished();
+    try {
+      localStorage.setItem('arkedo_completed_hardware', 'true');
+    } catch {}
     updateActiveLessonProgress('hardware', true, 6, 100, hwElapsedSeconds);
   };
 
@@ -1152,6 +1307,9 @@ function GameContent() {
     setHwScore(0);
     setHwLevel(1);
     setHwElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_hardware');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1193,6 +1351,9 @@ function GameContent() {
     setFilesLevel(8);
     setIsTimerRunning(false);
     arky.triggerFinished();
+    try {
+      localStorage.setItem('arkedo_completed_files', 'true');
+    } catch {}
     updateActiveLessonProgress('files', true, 8, 100, filesElapsedSeconds);
   };
 
@@ -1201,6 +1362,9 @@ function GameContent() {
     setFilesScore(0);
     setFilesLevel(1);
     setFilesElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_files');
+    } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1257,9 +1421,10 @@ function GameContent() {
             studentName={studentName}
             onSetStudentName={handleSetStudentName}
             onSelectMission={handleSelectMission}
-            activeMissionId={activeMission}
+            activeMissionId={activeMission && !isMissionCompleted(activeMission) ? activeMission : null}
             activeMissionLevel={currentLevel}
             activeMissionScore={currentScore}
+            completedMissions={completedMissions}
             elapsedSeconds={currentElapsedSeconds}
             onResetActiveMission={handleResetActiveMission}
             onOpenTeacherPortal={() => navigateToView('teacher')}
