@@ -60,7 +60,7 @@ Materia este structurată pe **6 mari Unități de învățare**, fiecare împă
 *Misiunea 3A: Web Explorer (6 Ecrane)*
 1. **Ce este Internetul?**: Rețeaua globală de calculatoare interconectate și protocoalele de comunicare.
 2. **Browsere vs. Motoare de Căutare**: Diferența fundamentală între aplicația browser (Chrome, Edge, Firefox) și serviciul de indexare (Google, Bing).
-3. **Anatomia unei Adrese Web (URL)**: Protocol (`https://`), domeniu (`arkyedu.ro`), cale (`/cursuri`).
+3. **Anatomia unei Adrese Web (URL)**: Protocol (`https://`), domeniu (`arkyedu.com`), cale (`/cursuri`).
 4. **Hiperlinkuri & Navigare Web**: Structura legăturilor web, ancore, butoane Înainte/Înapoi și Favorite (Bookmarks).
 5. **Descărcarea Responsabilă a Fișierelor**: Salvarea imaginilor și documentelor, verificarea securității fișierelor descărcate.
 6. **Drepturi de Autor & Plagiat**: Reguli de citare, licențe libere (Creative Commons) și respectarea muncii creatorilor online.

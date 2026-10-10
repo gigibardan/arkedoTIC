@@ -69,7 +69,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
   const handleCopyEmail = () => {
     sounds.playClick();
     if (navigator.clipboard) {
-      navigator.clipboard.writeText('contact@arkyedu.ro').then(() => {
+      navigator.clipboard.writeText('contact@arkyedu.com').then(() => {
         setCopiedEmail(true);
         setTimeout(() => setCopiedEmail(false), 2500);
       });
@@ -111,7 +111,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
     const payload = {
       'form-name': 'contact',
       name: formName || 'Anonim',
-      email: formEmail || 'fara-email@arkyedu.ro',
+      email: formEmail || 'fara-email@arkyedu.com',
       role: formRole,
       subject: formSubject || 'Mesaj Platformă ArkyEdu',
       message: formMessage,
@@ -420,8 +420,8 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   </h4>
                   <p className="text-slate-300">
                     {lang === 'en'
-                      ? 'Under GDPR, you have the right to request the deletion or export of any data associated with your session. You can reach out directly at contact@arkyedu.ro for any privacy inquiries.'
-                      : 'Conform GDPR, ai dreptul de acces, rectificare sau ștergere totală a oricărei înregistrări asociate contului tău. Ne poți scrie oricând la contact@arkyedu.ro pentru orice solicitare privind confidențialitatea.'}
+                      ? 'Under GDPR, you have the right to request the deletion or export of any data associated with your session. You can reach out directly at contact@arkyedu.com for any privacy inquiries.'
+                      : 'Conform GDPR, ai dreptul de acces, rectificare sau ștergere totală a oricărei înregistrări asociate contului tău. Ne poți scrie oricând la contact@arkyedu.com pentru orice solicitare privind confidențialitatea.'}
                   </p>
                 </div>
               </div>
@@ -622,10 +622,10 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                       {lang === 'en' ? 'Official Project Email:' : 'Adresa oficială de email:'}
                     </span>
                     <a
-                      href="mailto:contact@arkyedu.ro"
+                      href="mailto:contact@arkyedu.com"
                       className="text-base sm:text-lg font-mono font-bold text-teal-300 hover:text-teal-200 underline decoration-teal-500/40"
                     >
-                      contact@arkyedu.ro
+                      contact@arkyedu.com
                     </a>
                   </div>
                 </div>
@@ -649,7 +649,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   </button>
 
                   <a
-                    href="mailto:contact@arkyedu.ro?subject=ArkyEdu%20Feedback"
+                    href="mailto:contact@arkyedu.com?subject=ArkyEdu%20Feedback"
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
@@ -688,7 +688,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                       </strong>
                       <span>
                         {lang === 'en'
-                          ? 'Thank you for writing to us. We will get back to you at contact@arkyedu.ro as soon as possible.'
+                          ? 'Thank you for writing to us. We will get back to you at contact@arkyedu.com as soon as possible.'
                           : 'Îți mulțumim pentru mesaj! Gigi și echipa ArkyEdu îți vor răspunde în cel mai scurt timp.'}
                       </span>
                     </div>
@@ -782,7 +782,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 <div className="flex items-center justify-between pt-2">
                   <span className="text-[11px] text-slate-500 flex items-center gap-1">
                     <Lock className="w-3 h-3 text-slate-400" />
-                    {lang === 'en' ? 'Encrypted & delivered to contact@arkyedu.ro' : 'Trimis în siguranță la contact@arkyedu.ro'}
+                    {lang === 'en' ? 'Encrypted & delivered to contact@arkyedu.com' : 'Trimis în siguranță la contact@arkyedu.com'}
                   </span>
 
                   <button

@@ -155,8 +155,8 @@ VITE_FIREBASE_DATABASE_ID=...
 * **Politica de Cookie-uri & Modul de Consimțământ (`CookieBanner.tsx`):**
   * Doar cookie-uri strict tehnice necesare funcționării (sesiune, temă vizuală, selecție limbă, progres) și Google Analytics anonimizat (`G-P9NW97TZHH`) pentru îmbunătățirea capitolelor.
   * Banner prietenos de acceptare / personalizare cu sincronizare automată `gtag('consent', 'update')`.
-* **Formular de Contact (`contact@arkyedu.ro`) & Integrare Netlify Forms:**
+* **Formular de Contact (`contact@arkyedu.com`) & Integrare Netlify Forms:**
   * Componenta `LegalModal.tsx` integrează formular cu atributele `data-netlify="true"`, `method="POST"`, `name="contact"` și protecție honeypot antispam.
   * Pre-înregistrare statică în `index.html` pentru ca boții Netlify să detecteze automat schema formularului la fiecare deploy.
-  * Notificările sunt direcționate automat către adresa oficială: `contact@arkyedu.ro`.
+  * Notificările sunt direcționate automat către adresa oficială: `contact@arkyedu.com`.
 

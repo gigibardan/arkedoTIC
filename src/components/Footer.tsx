@@ -43,7 +43,7 @@ export const Footer: React.FC<FooterProps> = ({
     e.preventDefault();
     sounds.playClick();
     if (navigator.clipboard) {
-      navigator.clipboard.writeText('contact@arkyedu.ro').then(() => {
+      navigator.clipboard.writeText('contact@arkyedu.com').then(() => {
         setCopiedEmail(true);
         setTimeout(() => setCopiedEmail(false), 2500);
       });
@@ -255,11 +255,11 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
               <div className="flex items-center justify-between gap-2">
                 <a
-                  href="mailto:contact@arkyedu.ro"
+                  href="mailto:contact@arkyedu.com"
                   className="text-xs font-mono font-bold text-teal-300 hover:text-teal-200 truncate"
-                  title="Trimite email la contact@arkyedu.ro"
+                  title="Trimite email la contact@arkyedu.com"
                 >
-                  contact@arkyedu.ro
+                  contact@arkyedu.com
                 </a>
                 <button
                   onClick={handleCopyEmail}
@@ -352,7 +352,7 @@ export const Footer: React.FC<FooterProps> = ({
               }}
               className="text-teal-400 hover:text-teal-300 transition-colors font-medium"
             >
-              contact@arkyedu.ro
+              contact@arkyedu.com
             </button>
           </div>
         </div>
