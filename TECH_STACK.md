@@ -22,6 +22,7 @@ Acest document reflectă cu exactitate stack-ul tehnologic, componentele de infr
 | **TypeScript** | `~5.8.2` | Verificare strictă de tipuri pe întregul cod (`tsc --noEmit`), garantând 0 erori de runtime. |
 | **Vite** | `^6.2.3` | Bundler modern de mare viteză cu `@vitejs/plugin-react` (timp de build complet: ~11 secunde). |
 | **Arhitectură Rutare** | State + History API | Rutare modulară instantanee bazată pe stare cu sincronizare curată în URL (`/superadmin`, `/profesor`, `/arcade`, `/duel`, `/oras`) și deep-linking fără reîncărcare de pagină. |
+| **Internaționalizare (i18n)** | Nativ React Context + Auto-Detector | Detectare inteligentă automată a limbii browserului (`navigator.languages`): Română (`ro`) pentru vizitatorii din RO/MD, Engleză (`en`) pentru restul lumii, cu persistență pe termen lung în `localStorage`, override manual prioritar și sincronizare cross-tab. |
 
 ---
 
