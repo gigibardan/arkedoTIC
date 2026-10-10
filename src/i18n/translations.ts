@@ -402,6 +402,21 @@ export const translations = {
     text2CourseSub: 'Tabele, Forme, Imagini, Antet & Subsol • Manual pag. 68-80',
     text2DiplomaTitle: 'DIPLOMĂ DE DESIGNER & ARHITECT DE DOCUMENTE',
     text2DiplomaText: 'Pentru măiestrie în inserarea și formatarea tabelelor, îmbinarea celulelor, gestionarea formelor geometrice și a imaginilor, numerotarea paginilor și crearea de antete profesionale.',
+
+    // Footer & Legal
+    footerAbout: 'Despre Proiect & Poveste',
+    footerPrivacy: 'Confidențialitate & GDPR',
+    footerCookies: 'Politica de Cookie-uri',
+    footerTerms: 'Termeni și Condiții',
+    footerContact: 'Contact & Feedback',
+    footerFreeNote: '100% Gratuit • Creat din Pasiune • Fără Reclame • Zero Încasări',
+    footerSchoolCurriculum: 'Conform Programei Naționale de TIC pentru clasele V - VIII (OMEN 3393/2017).',
+    footerContactEmail: 'contact@arkyedu.ro',
+    cookieBannerTitle: 'Respectăm Confidențialitatea Elevilor și Profesorilor',
+    cookieBannerDesc: 'ArkyEdu este un proiect educațional 100% gratuit creat din pasiune. Nu stocăm date personale sensibile, nu vindem date și nu difuzăm reclame. Folosim doar memorie locală tehnică pentru progres și statistici anonime Google Analytics pentru îmbunătățirea lecțiilor.',
+    cookieAcceptAll: 'Acceptă Toate',
+    cookieOnlyEssential: 'Doar Esențiale',
+    cookiePreferences: 'Personalizează',
   },
 
   en: {
@@ -805,6 +820,21 @@ export const translations = {
     text2CourseSub: 'Tables, Shapes, Pictures, Headers & Footers • Textbook pp. 68-80',
     text2DiplomaTitle: 'CERTIFICATE OF DOCUMENT DESIGNER & PAGE ARCHITECT',
     text2DiplomaText: 'For excellence in table creation and cell merging, graphic shapes and image placement, page numbering, and crafting professional headers and footers.',
+
+    // Footer & Legal
+    footerAbout: 'About Project & Story',
+    footerPrivacy: 'Privacy Policy & GDPR',
+    footerCookies: 'Cookie Policy',
+    footerTerms: 'Terms of Use',
+    footerContact: 'Contact & Feedback',
+    footerFreeNote: '100% Free • Built with Passion • No Ads • Zero Commercial Fees',
+    footerSchoolCurriculum: 'Aligned with the National ICT Curriculum for Grades 5 - 8.',
+    footerContactEmail: 'contact@arkyedu.ro',
+    cookieBannerTitle: 'We Respect Student & Teacher Privacy',
+    cookieBannerDesc: 'ArkyEdu is a 100% free educational project made with passion. We do not store sensitive personal data, sell user info, or display ads. We only use essential technical storage for progress and anonymized Google Analytics to improve lessons.',
+    cookieAcceptAll: 'Accept All',
+    cookieOnlyEssential: 'Essential Only',
+    cookiePreferences: 'Preferences',
   },
 } as const;
 

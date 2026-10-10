@@ -141,3 +141,22 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
 VITE_FIREBASE_DATABASE_ID=...
 ```
+
+---
+
+## 11. Cadrul Legal, Confidențialitate (GDPR), Cookie-uri & Formular Netlify
+
+* **Misiune Non-Profit & Educație Gratuită:**
+  * ArkyEdu este oferit 100% gratuit elevilor și profesorilor din România.
+  * Zero monetizare, zero reclame comerciale, zero vânzare sau transfer de date către terți.
+* **Protecția Minorilor & GDPR (Regulamentul UE 2016/679):**
+  * Nu se colectează CNP, date de card, adrese fizice sau numere de telefon.
+  * Progresul la teste și numele de elev sunt reținute local în browser (`localStorage`), garantând controlul utilizatorului și posibilitatea de resetare instantanee.
+* **Politica de Cookie-uri & Modul de Consimțământ (`CookieBanner.tsx`):**
+  * Doar cookie-uri strict tehnice necesare funcționării (sesiune, temă vizuală, selecție limbă, progres) și Google Analytics anonimizat (`G-P9NW97TZHH`) pentru îmbunătățirea capitolelor.
+  * Banner prietenos de acceptare / personalizare cu sincronizare automată `gtag('consent', 'update')`.
+* **Formular de Contact (`contact@arkyedu.ro`) & Integrare Netlify Forms:**
+  * Componenta `LegalModal.tsx` integrează formular cu atributele `data-netlify="true"`, `method="POST"`, `name="contact"` și protecție honeypot antispam.
+  * Pre-înregistrare statică în `index.html` pentru ca boții Netlify să detecteze automat schema formularului la fiecare deploy.
+  * Notificările sunt direcționate automat către adresa oficială: `contact@arkyedu.ro`.
+

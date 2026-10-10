@@ -9,6 +9,9 @@ import { Header } from './components/Header';
 import { ProgressBar } from './components/ProgressBar';
 import { CoursesCatalog } from './components/CoursesCatalog';
 import { OfflineIndicator } from './components/pwa/OfflineIndicator';
+import { Footer } from './components/Footer';
+import { LegalModal, LegalTabType } from './components/LegalModal';
+import { CookieBanner } from './components/CookieBanner';
 
 // Files Mission (Unitatea 2 - Manual pag. 22-30)
 import { FLevel1_OSInterface } from './components/files/FLevel1_OSInterface';
@@ -518,6 +521,35 @@ function GameContent() {
       return '';
     }
   });
+
+  // Legal & About Modal State
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalTab, setLegalTab] = useState<LegalTabType>('about');
+
+  const openLegalModal = (tab: LegalTabType) => {
+    setLegalTab(tab);
+    setLegalModalOpen(true);
+  };
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#despre' || hash === '#about') {
+        openLegalModal('about');
+      } else if (hash === '#gdpr' || hash === '#privacy' || hash === '#confidentialitate') {
+        openLegalModal('privacy');
+      } else if (hash === '#cookies' || hash === '#cookie') {
+        openLegalModal('cookies');
+      } else if (hash === '#termeni' || hash === '#terms') {
+        openLegalModal('terms');
+      } else if (hash === '#contact' || hash === '#feedback') {
+        openLegalModal('contact');
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const maxScore = 100;
@@ -1814,20 +1846,39 @@ function GameContent() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-4 px-4 lg:px-6 pb-24 md:pb-5 bg-slate-950/60 mt-auto">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <p className="text-slate-400 text-center sm:text-left leading-relaxed">
-            {t.footerText}
-          </p>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-teal-500/30 text-teal-300 font-mono font-bold text-[11px] shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-              {t.poweredBy}
-            </span>
-          </div>
-        </div>
-      </footer>
+      {/* Rich Footer with legal, contact, and Powered by Gigi */}
+      <Footer
+        onOpenLegal={openLegalModal}
+        onNavigateToCatalog={() => setView('catalog')}
+        onNavigateToArcade={() => setView('arcade')}
+        onNavigateToDuel={() => setView('duel')}
+        onNavigateToTeacher={() => setView('teacher')}
+      />
+
+      {/* Legal & About Modal with Netlify Contact form */}
+      <LegalModal
+        isOpen={legalModalOpen}
+        initialTab={legalTab}
+        onClose={() => {
+          setLegalModalOpen(false);
+          try {
+            if (
+              window.location.hash.startsWith('#despre') ||
+              window.location.hash.startsWith('#about') ||
+              window.location.hash.startsWith('#privacy') ||
+              window.location.hash.startsWith('#gdpr') ||
+              window.location.hash.startsWith('#cookies') ||
+              window.location.hash.startsWith('#termeni') ||
+              window.location.hash.startsWith('#contact')
+            ) {
+              window.history.replaceState(null, '', ' ');
+            }
+          } catch {}
+        }}
+      />
+
+      {/* Floating Cookie Consent Banner */}
+      <CookieBanner onOpenCookiePolicy={() => openLegalModal('cookies')} />
     </div>
   );
 }
