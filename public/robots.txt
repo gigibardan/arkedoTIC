@@ -1,10 +1,12 @@
 # ArkyEdu TIC & Arcade - Robots.txt
 User-agent: *
 Allow: /
+Allow: /cursuri/
+Allow: /cursuri/*
 Allow: /arcade
 Allow: /profesor
 Allow: /duel
 Allow: /oras
 Disallow: /superadmin
 
-Sitemap: https://arkedu.ro/sitemap.xml
+Sitemap: https://www.arkyedu.com/sitemap.xml

@@ -126,6 +126,22 @@ Acest document constituie planul de referință și foaia de parcurs pentru scal
   - Notificare subtilă când laboratorul pierde conexiunea la net, garantând utilizatorilor că lecțiile și jocurile rulează fără întrerupere din cache.
   - Toast automat de reconectare și sincronizare când internetul revine.
 
+### Etapa 7: Pagini Curriculare SEO Dedicate & Structură Statică Google Crawl (Completat)
+- [x] Date didactice structurate complete în `src/data/curriculaData.ts` (alinieri cu Manualul Art Klett și programa națională OMEN 3393/2017).
+- [x] Modal interactiv & fișă de curs în aplicație (`CourseCurriculaModal.tsx`):
+  - Tab 1: Sinteză Teoretică & Noțiuni Cheie cu sfaturi pedagogice (Regula 20-20-20, etc.).
+  - Tab 2: Competențe specifice MEN oficiale (C.S. 1.1, 1.2, 2.1, 3.1, etc.).
+  - Tab 3: Glosar Vocabular IT & Scurtături de tastatură de laborator.
+  - Tab 4: Întrebări Frecvente (FAQ) de auto-evaluare & Exercițiu practic de laborator.
+  - Butoane de acțiune: Lansare Misiune, Tipărire Fișă Didactică (`window.print()`), Copiere Deep-Link (`#curricula-[id]`).
+- [x] Butoane integrate pe toate cardurile de misiune din `CoursesCatalog.tsx` („Programă & Teorie 📖”).
+- [x] Pagini statice pre-generate pentru motoarele de căutare (`/public/cursuri/*/index.html`):
+  - HTML semantic curat (`<h1>`, `<article>`, `<section>`, liste, tabele) accesibil instant de Googlebot și Bingbot fără a necesita execuție JavaScript grea.
+  - Schema.org JSON-LD bogat cu `Course`, `LearningResource`, `FAQPage`, `BreadcrumbList`.
+  - Redirecționare inteligentă și buton direct de lansare în aplicația interactivă.
+- [x] Domeniu canonic aliniat la `https://arkyedu.com/` în `index.html`, `sitemap.xml`, `robots.txt` și paginile de curs.
+- [x] Actualizare completă `sitemap.xml` și `robots.txt` cu toate paginile de curs și priorități 0.9.
+
 ---
 
 ## 4. Modelul de Securitate Firestore (RBAC)

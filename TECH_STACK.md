@@ -79,11 +79,20 @@ Acest document reflectă cu exactitate stack-ul tehnologic, componentele de infr
 
 ---
 
-## 7. SEO, Social Media & Indexare
+## 7. SEO, Social Media & Indexare Profesională (Opțiunea A Implementată)
 
-* **Schema.org JSON-LD (`index.html`):** Date structurate specifice pentru entitățile `WebApplication`, `EducationalApplication` și `Course` TIC Gimnaziu (Clasele V-VIII).
-* **OpenGraph & Twitter Cards:** Metadate vizuale pentru distribuire pe rețele sociale (titluri, descriere detaliată, `theme-color: #0f172a`, `og:locale: ro_RO`).
-* **Indexare Motoare de Căutare:** Fișiere statice `public/robots.txt` și `public/sitemap.xml` configurate și actualizate.
+* **Generare Pagini Statice Pre-Rendered (`scripts/generate_seo_pages.js`):**
+  * La fiecare build (`npm run build`), se generează pagini HTML statice pure în `/public/cursuri/[modul]/index.html` pentru toate modulele curriculare (Hardware, Sisteme de Operare & Fișiere, Internet & Securitate, Editoare de Text & Tehnoredactare, Algoritmi, Scratch 3.0, Prezentări PowerPoint & Google Slides, Grafică 3D Paint 3D).
+  * Netlify servește aceste pagini fizice direct cu status HTTP 200 către boții de căutare (Googlebot, Bingbot), fără a depinde de rularea client-side a JavaScript-ului.
+  * Fiecare pagină conține buton de lansare directă / deep-link în simulator (`/#curricula-[id]`), permițând accesul instant în aplicația interactivă.
+* **Schema.org JSON-LD Structurat Complet (@graph):**
+  * Entități `WebApplication` & `EducationalApplication` în rădăcină (`index.html`).
+  * Entități specifice `Course` (cu `educationalLevel: Clasa a V-a / a VI-a`, `isAccessibleForFree: true`, volum de lucru `PT2H`).
+  * Entități `LearningResource` cu `educationalAlignment` pe programa oficială națională a Ministerului Educației (OMEN 3393/2017).
+  * Entități `FAQPage` cu întrebări și răspunsuri frecvente pentru afișarea în Google Rich Results / Rich Snippets.
+  * Entități `BreadcrumbList` pentru ierarhie vizuală clară în rezultatele Google (Acasă > Cursuri TIC > Modul).
+* **OpenGraph & Twitter Cards:** Metadate vizuale complete (titlu, descriere, link canonic `https://arkyedu.com/cursuri/.../`, limbă `ro_RO`, temă `#0f172a`).
+* **Harta Site-ului & Directiva Robots:** `public/sitemap.xml` și `public/robots.txt` actualizate cu toate URL-urile de cursuri și priorități de indexare (0.9 - 1.0).
 
 ---
 

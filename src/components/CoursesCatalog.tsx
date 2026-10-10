@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   School,
   BookOpen,
@@ -49,6 +49,8 @@ import { useArky } from '../context/ArkyContext';
 import { sounds } from '../utils/audio';
 import { KnowledgePills } from './hardware/KnowledgePills';
 import { MissionGuardModal } from './MissionGuardModal';
+import { CourseCurriculaModal } from './CourseCurriculaModal';
+import { CURRICULA_MODULES, CurriculaModule } from '../data/curriculaData';
 import { ARKY_IMAGES } from '../assets/arkyImages';
 import { LeaderboardSection } from './LeaderboardSection';
 import { AuthModal } from './AuthModal';
@@ -199,6 +201,41 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
   const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | null>(null);
+
+  // Curricula Syllabus Modal state & SEO deep-linking
+  const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkCurriculaHash = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#curricula-')) {
+        const rawId = hash.replace('#curricula-', '').toLowerCase();
+        const found = CURRICULA_MODULES.find(
+          (m) => m.id === rawId || m.missionId === rawId || m.slug === rawId || rawId.includes(m.id)
+        );
+        if (found) {
+          setSelectedCurriculaModule(found);
+        }
+      }
+    };
+    checkCurriculaHash();
+    window.addEventListener('hashchange', checkCurriculaHash);
+    return () => window.removeEventListener('hashchange', checkCurriculaHash);
+  }, []);
+
+  const openCurriculaModal = (targetId: string) => {
+    sounds.playClick();
+    const found = CURRICULA_MODULES.find(
+      (m) => m.id === targetId || m.missionId === targetId || m.slug.includes(targetId) || targetId.includes(m.id)
+    );
+    if (found) {
+      setSelectedCurriculaModule(found);
+      try {
+        window.history.replaceState(null, '', `#curricula-${found.id}`);
+      } catch {}
+    }
+  };
 
   // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a")
   const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6'>(() => {
@@ -1646,8 +1683,18 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '5 Interactive Levels' : '5 Niveluri interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('hardware')}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('hardware')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('hardware')}
                 className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                   isMissionDone('hardware')
                     ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
@@ -1671,6 +1718,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   </>
                 )}
               </button>
+              </div>
             </div>
           </div>
 
@@ -1752,31 +1800,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Practical Challenges' : '7 Provocări practice'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('files')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('files')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
-                }`}
-              >
-                {isMissionDone('files') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Files Mission' : 'Continuă Misiunea Fișiere'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 2' : 'Începe Misiunea 2'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('fisiere-so')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('files')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('files')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                  }`}
+                >
+                  {isMissionDone('files') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Files Mission' : 'Continuă Misiunea Fișiere'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 2' : 'Începe Misiunea 2'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1854,31 +1913,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? 'Theory + Interactive Tasks' : 'Teorie + Exerciții interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('internet1')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('internet1')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
-                }`}
-              >
-                {isMissionDone('internet1') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Internet 3A' : 'Continuă Misiunea 3A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 3A' : 'Începe Misiunea 3A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('internet-siguranta')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('internet1')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('internet1')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
+                  }`}
+                >
+                  {isMissionDone('internet1') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Internet 3A' : 'Continuă Misiunea 3A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 3A' : 'Începe Misiunea 3A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1956,31 +2026,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? 'Theory + Smart Simulator' : 'Teorie + Simulator Inteligent'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('internet2')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('internet2')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
-                }`}
-              >
-                {isMissionDone('internet2') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Internet 3B' : 'Continuă Misiunea 3B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 3B' : 'Începe Misiunea 3B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('internet-siguranta')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('internet2')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('internet2')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
+                  }`}
+                >
+                  {isMissionDone('internet2') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Internet 3B' : 'Continuă Misiunea 3B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 3B' : 'Începe Misiunea 3B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2062,31 +2143,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('text1')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('text1')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
-                }`}
-              >
-                {isMissionDone('text1') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 4A' : 'Începe Misiunea 4A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('editoare-text')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('text1')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('text1')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
+                  }`}
+                >
+                  {isMissionDone('text1') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 4A' : 'Începe Misiunea 4A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2183,6 +2275,15 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     <span>{lang === 'en' ? 'Arcade 4B' : 'Arcade 4B'}</span>
                   </button>
                 )}
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('editoare-text')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
                 <button
                   onClick={() => handleAttemptStart('text2')}
                   className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
@@ -2290,31 +2391,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('algo1')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('algo1')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-amber-600 hover:bg-amber-500 text-slate-950 font-black shadow-amber-600/30'
-                }`}
-              >
-                {isMissionDone('algo1') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 5A' : 'Continuă Misiunea 5A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 5A' : 'Începe Misiunea 5A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('algoritmi')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('algo1')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('algo1')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-amber-600 hover:bg-amber-500 text-slate-950 font-black shadow-amber-600/30'
+                  }`}
+                >
+                  {isMissionDone('algo1') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 5A' : 'Continuă Misiunea 5A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 5A' : 'Începe Misiunea 5A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2396,31 +2508,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('algo2')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('algo2')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-purple-600 hover:bg-purple-500 text-white font-black shadow-purple-600/30'
-                }`}
-              >
-                {isMissionDone('algo2') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 5B' : 'Continuă Misiunea 5B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 5B' : 'Începe Misiunea 5B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('algoritmi')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('algo2')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('algo2')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-purple-600 hover:bg-purple-500 text-white font-black shadow-purple-600/30'
+                  }`}
+                >
+                  {isMissionDone('algo2') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 5B' : 'Continuă Misiunea 5B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 5B' : 'Începe Misiunea 5B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2502,31 +2625,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('scratch1')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('scratch1')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
-                }`}
-              >
-                {isMissionDone('scratch1') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 6A' : 'Continuă Misiunea 6A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 6A' : 'Începe Misiunea 6A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('scratch')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('scratch1')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('scratch1')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
+                  }`}
+                >
+                  {isMissionDone('scratch1') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 6A' : 'Continuă Misiunea 6A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 6A' : 'Începe Misiunea 6A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2608,31 +2742,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('scratch2')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('scratch2')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-pink-600 hover:bg-pink-500 text-white font-black shadow-pink-600/30'
-                }`}
-              >
-                {isMissionDone('scratch2') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 6B' : 'Continuă Misiunea 6B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 6B' : 'Începe Misiunea 6B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('scratch')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('scratch2')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('scratch2')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-pink-600 hover:bg-pink-500 text-white font-black shadow-pink-600/30'
+                  }`}
+                >
+                  {isMissionDone('scratch2') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 6B' : 'Continuă Misiunea 6B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 6B' : 'Începe Misiunea 6B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2781,31 +2926,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('g6_presentation1')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('g6_presentation1')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
-                }`}
-              >
-                {isMissionDone('g6_presentation1') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 1A' : 'Continuă Misiunea 1A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 1A (PowerPoint)' : 'Începe Misiunea 1A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('prezentari-slides')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('g6_presentation1')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('g6_presentation1')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
+                  }`}
+                >
+                  {isMissionDone('g6_presentation1') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 1A' : 'Continuă Misiunea 1A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 1A (PowerPoint)' : 'Începe Misiunea 1A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2885,31 +3041,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('g6_presentation2')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('g6_presentation2')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-rose-600 hover:bg-rose-500 text-white font-black shadow-rose-600/30'
-                }`}
-              >
-                {isMissionDone('g6_presentation2') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 1B' : 'Continuă Misiunea 1B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 1B (Design & Speech)' : 'Începe Misiunea 1B'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('prezentari-slides')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('g6_presentation2')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('g6_presentation2')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-rose-600 hover:bg-rose-500 text-white font-black shadow-rose-600/30'
+                  }`}
+                >
+                  {isMissionDone('g6_presentation2') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 1B' : 'Continuă Misiunea 1B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 1B (Design & Speech)' : 'Începe Misiunea 1B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -2989,31 +3156,42 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
                 )}
               </div>
-              <button
-                onClick={() => handleAttemptStart('g6_paint3d')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('g6_paint3d')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-cyan-600 hover:bg-cyan-500 text-white font-black shadow-cyan-600/30'
-                }`}
-              >
-                {isMissionDone('g6_paint3d') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Mission 2A' : 'Continuă Misiunea 2A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 2A (Paint 3D)' : 'Începe Misiunea 2A'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('paint-3d')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('g6_paint3d')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('g6_paint3d')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-cyan-600 hover:bg-cyan-500 text-white font-black shadow-cyan-600/30'
+                  }`}
+                >
+                  {isMissionDone('g6_paint3d') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 2A' : 'Continuă Misiunea 2A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 2A (Paint 3D)' : 'Începe Misiunea 2A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -3406,6 +3584,32 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           setPendingTargetMission(null);
         }}
       />
+
+      {/* Course Curricula & SEO Syllabus Modal */}
+      {selectedCurriculaModule && (
+        <CourseCurriculaModal
+          module={selectedCurriculaModule}
+          onClose={() => {
+            setSelectedCurriculaModule(null);
+            try {
+              if (window.location.hash.startsWith('#curricula-')) {
+                window.history.replaceState(null, '', ' ');
+              }
+            } catch {}
+          }}
+          onStartMission={(mId) => {
+            const mappedMission =
+              mId === 'g6p1'
+                ? 'g6_presentation1'
+                : mId === 'g6p2'
+                ? 'g6_presentation2'
+                : mId === 'g6paint3d'
+                ? 'g6_paint3d'
+                : mId;
+            handleAttemptStart(mappedMission as any);
+          }}
+        />
+      )}
     </div>
   );
 };

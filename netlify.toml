@@ -2,6 +2,30 @@
   publish = "dist"
   command = "npm run build"
 
+# Redirect de la vechiul domeniu Netlify la cel oficial de productie (cu fortare 301!)
+[[redirects]]
+  from = "https://arkedotic.netlify.app/*"
+  to = "https://www.arkyedu.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://arkedotic.netlify.app/*"
+  to = "https://www.arkyedu.com/:splat"
+  status = 301
+  force = true
+
+# Redirect de la apex domain la www
+[[redirects]]
+  from = "https://arkyedu.com/*"
+  to = "https://www.arkyedu.com/:splat"
+  status = 301
+
+[[redirects]]
+  from = "http://arkyedu.com/*"
+  to = "https://www.arkyedu.com/:splat"
+  status = 301
+
 # SPA Fallback routing
 [[redirects]]
   from = "/*"

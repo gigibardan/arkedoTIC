@@ -1,1 +1,16 @@
-/*    /index.html   200
+# ==============================================================================
+# Netlify Redirects Configuration for ArkyEdu
+# ==============================================================================
+
+# Redirect de la vechiul domeniu Netlify la domeniul oficial de producție (cu forțare 301!)
+https://arkedotic.netlify.app/*   https://www.arkyedu.com/:splat   301!
+http://arkedotic.netlify.app/*    https://www.arkyedu.com/:splat   301!
+
+# Redirect de la apex domain (fara www) la www (in caz ca nu e setat deja din DNS)
+https://arkyedu.com/*             https://www.arkyedu.com/:splat   301
+http://arkyedu.com/*              https://www.arkyedu.com/:splat   301
+
+# Regula obligatorie de fallback pentru aplicatii SPA (React / Vite)
+# Nota: Paginile fizice existente (ex: /cursuri/hardware/index.html) sunt servite
+# direct cu status 200 de catre CDN-ul Netlify, fallback-ul aplicandu-se doar rutelor SPA virtuale.
+/*                                /index.html                      200
