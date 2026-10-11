@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware';
 }
 
 const G6P1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
@@ -51,6 +51,50 @@ const G6P3_MILESTONES_EN = [
   'P5: Stickers & Finishes',
   'P6: Animations & Export',
   'P7: 3D Creator Diploma',
+];
+
+const G6M1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G6M1_STAGES_RO = [
+  { emoji: '🔍', name: 'Ce este Malware? Simptome & Diagnostic (pag. 44-45)' },
+  { emoji: '🦠', name: 'Galeria Amenințărilor: Viruși, Viermi, Troieni, Spyware & Ransomware' },
+  { emoji: '🎣', name: 'Phishing & Inginerie Socială: Capcane de E-mail & Link-uri False' },
+  { emoji: '🛡️', name: 'Scutul Antivirus: Scanare de Sistem, Baze de Date & Carantină' },
+  { emoji: '🧱', name: 'Laboratorul Firewall: Filtrare Trafic de Rețea & Reguli Porturi' },
+  { emoji: '🔐', name: 'Fortăreața Digitală: Parole Blindate, Entropie & 2FA' },
+  { emoji: '🏆', name: 'Examenul Gardianului Cibernetic & Marea Diplomă (pag. 45)' },
+  { emoji: '🎓', name: 'Expert în Securitate Cibernetică Certificat • Clasa a VI-a!' },
+];
+
+const G6M1_STAGES_EN = [
+  { emoji: '🔍', name: 'What is Malware? Symptoms & Diagnostics (pp. 44-45)' },
+  { emoji: '🦠', name: 'Threat Gallery: Viruses, Worms, Trojans, Spyware & Ransomware' },
+  { emoji: '🎣', name: 'Phishing & Social Engineering: Email Traps & Deceptive Links' },
+  { emoji: '🛡️', name: 'Antivirus Shield: System Scanning, Signatures & Quarantine Vault' },
+  { emoji: '🧱', name: 'Firewall Traffic Lab: Network Packet Filtering & Port Rules' },
+  { emoji: '🔐', name: 'Digital Fortress: Bulletproof Passwords, Entropy & 2FA' },
+  { emoji: '🏆', name: 'Cyber Guardian Exam & Capstone Diploma (p. 45)' },
+  { emoji: '🎓', name: 'Certified Cyber Security Expert • Grade 6!' },
+];
+
+const G6M1_MILESTONES_RO = [
+  'P1: Diagnostic Malware',
+  'P2: Galeria Amenințărilor',
+  'P3: Anti-Phishing',
+  'P4: Antivirus & Carantină',
+  'P5: Laborator Firewall',
+  'P6: Parole & 2FA',
+  'P7: Marea Diplomă Cyber',
+];
+
+const G6M1_MILESTONES_EN = [
+  'P1: Malware Diagnostics',
+  'P2: Threat Gallery',
+  'P3: Anti-Phishing',
+  'P4: Antivirus Vault',
+  'P5: Firewall Lab',
+  'P6: Passwords & 2FA',
+  'P7: Cyber Diploma',
 ];
 
 const G6P2_STAGES_RO = [
@@ -567,6 +611,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isG6P1 = courseId === 'g6_presentation1';
   const isG6P2 = courseId === 'g6_presentation2';
   const isG6P3 = courseId === 'g6_paint3d';
+  const isG6M1 = courseId === 'g6_malware';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -633,6 +678,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G6P3_MILESTONES_EN : G6P3_MILESTONES_RO;
     percents = G6P3_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG6M1) {
+    stages = lang === 'en' ? G6M1_STAGES_EN : G6M1_STAGES_RO;
+    milestones = lang === 'en' ? G6M1_MILESTONES_EN : G6M1_MILESTONES_RO;
+    percents = G6M1_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -672,6 +722,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Slide Design, Multimedia & Public Speaking' : 'Evoluție Design Diapozitive & Public Speaking (Clasa a VI-a)')
                 : isG6P3
                 ? (lang === 'en' ? 'Paint 3D Modeling, Shapes & VR Graphics' : 'Evoluție Modelare Paint 3D, Forme & Grafică VR (Clasa a VI-a)')
+                : isG6M1
+                ? (lang === 'en' ? 'Malware Defense & Cybersecurity Specialist' : 'Evoluție Securitate Cibernetică & Protecție Malware (Clasa a VI-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -687,6 +739,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isG6P1 ? 'text-orange-400'
               : isG6P2 ? 'text-rose-400'
               : isG6P3 ? 'text-cyan-400'
+              : isG6M1 ? 'text-red-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -728,6 +781,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-rose-500 via-pink-400 to-amber-400'
               : isG6P3
               ? 'bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500'
+              : isG6M1
+              ? 'bg-gradient-to-r from-red-500 via-rose-500 to-amber-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}

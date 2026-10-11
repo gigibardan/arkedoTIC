@@ -403,6 +403,27 @@ export const translations = {
     text2DiplomaTitle: 'DIPLOMĂ DE DESIGNER & ARHITECT DE DOCUMENTE',
     text2DiplomaText: 'Pentru măiestrie în inserarea și formatarea tabelelor, îmbinarea celulelor, gestionarea formelor geometrice și a imaginilor, numerotarea paginilor și crearea de antete profesionale.',
 
+    // Grade 6 Modules
+    g6P1CourseTitle: 'Misiunea 1A: Prezentarea & Interfața PowerPoint',
+    g6P1CourseSub: 'Tipuri de Prezentări, 3 Moduri de Start, Anatomia Panglicii & Moduri de Vizualizare • Manual pag. 10-15',
+    g6P1DiplomaTitle: 'DIPLOMĂ DE OPERATOR JUNIOR POWERPOINT & PREZENTĂRI',
+    g6P1DiplomaText: 'Pentru rezultate deosebite în stăpânirea celor 3 moduri de lansare PowerPoint, navigarea panglicii de comenzi, utilizarea filelor specializate și setarea modurilor de vizualizare.',
+
+    g6P2CourseTitle: 'Misiunea 1B: Realizare, Design, Animații & Public Speaking',
+    g6P2CourseSub: 'Operații Diapozitive, Obiecte Multimedia, Regula 40 de Cuvinte & Discurs • Manual pag. 16-25',
+    g6P2DiplomaTitle: 'DIPLOMĂ DE MAESTRU ÎN PREZENTĂRI & PUBLIC SPEAKING',
+    g6P2DiplomaText: 'Pentru excelență în proiectarea diapozitivelor 16:9, aplicarea tranzițiilor și animațiilor, respectarea contrastului și susținerea discursului pe scenă.',
+
+    g6P3CourseTitle: 'Misiunea 2A: Modelare 3D în Paint 3D',
+    g6P3CourseSub: 'Spațiul Tridimensional (X, Y, Z), 4 Ancore de Manipulare, Stickere & Corpuri cu Volum • Manual pag. 26-33',
+    g6P3DiplomaTitle: 'DIPLOMĂ DE CREATOR & MODELATOR 3D JUNIOR',
+    g6P3DiplomaText: 'Pentru măiestrie în manipularea spațială 3D pe axele X, Y, Z, transformarea desenelor 2D în corpuri 3D, mularea stickerelor și exportul modelelor tridimensionale.',
+
+    g6M1CourseTitle: 'Misiunea 3A: Amenințări Malware & Securitate Cibernetică',
+    g6M1CourseSub: 'Viruși, Viermi, Troieni, Phishing, Antivirus, Firewall & Parole Blindate • Manual pag. 44-45',
+    g6M1DiplomaTitle: 'DIPLOMĂ DE EXPERT ÎN SECURITATE CIBERNETICĂ & DEFENSE',
+    g6M1DiplomaText: 'Pentru excelență în identificarea amenințărilor malware, investigarea tentativelor de phishing, scanarea antivirus cu carantină, filtrarea pachetelor de rețea prin Firewall și securizarea conturilor prin parole blindate și 2FA.',
+
     // Footer & Legal
     footerAbout: 'Despre Proiect & Poveste',
     footerPrivacy: 'Confidențialitate & GDPR',
@@ -820,6 +841,27 @@ export const translations = {
     text2CourseSub: 'Tables, Shapes, Pictures, Headers & Footers • Textbook pp. 68-80',
     text2DiplomaTitle: 'CERTIFICATE OF DOCUMENT DESIGNER & PAGE ARCHITECT',
     text2DiplomaText: 'For excellence in table creation and cell merging, graphic shapes and image placement, page numbering, and crafting professional headers and footers.',
+
+    // Grade 6 Modules
+    g6P1CourseTitle: 'Mission 1A: Presentation & PowerPoint Interface',
+    g6P1CourseSub: 'Presentation Types, 3 Launch Modes, Ribbon Anatomy & Views • Textbook pp. 10-15',
+    g6P1DiplomaTitle: 'JUNIOR POWERPOINT & PRESENTATIONS SPECIALIST CERTIFICATE',
+    g6P1DiplomaText: 'For outstanding performance in mastering PowerPoint launch modes, Ribbon navigation, specialized tabs, and slide presentation views.',
+
+    g6P2CourseTitle: 'Mission 1B: Slide Creation, Design, Animations & Public Speaking',
+    g6P2CourseSub: 'Slide Operations, Multimedia Objects, 40-Word Rule & Stage Delivery • Textbook pp. 16-25',
+    g6P2DiplomaTitle: 'MASTER OF PRESENTATIONS & PUBLIC SPEAKING DIPLOMA',
+    g6P2DiplomaText: 'For demonstrated mastery in 16:9 widescreen layout, slide transitions vs animations, high-contrast visual rules, and confident public speaking delivery.',
+
+    g6P3CourseTitle: 'Mission 2A: 3D Modeling in Paint 3D',
+    g6P3CourseSub: 'Tridimensional Space (X, Y, Z), 4 Control Anchors, Stickers & Primitives • Textbook pp. 26-33',
+    g6P3DiplomaTitle: 'JUNIOR 3D CREATOR & MODELER CERTIFICATE',
+    g6P3DiplomaText: 'For exceptional skill in 3D spatial rotation on X, Y, Z axes, converting flat drawings to 3D volume, texturing with stickers, and exporting 3D assets.',
+
+    g6M1CourseTitle: 'Mission 3A: Malware Threats & Cyber Security',
+    g6M1CourseSub: 'Viruses, Worms, Trojans, Phishing, Antivirus, Firewall & Passwords • Textbook pp. 44-45',
+    g6M1DiplomaTitle: 'CYBER SECURITY & DEFENSE SPECIALIST DIPLOMA',
+    g6M1DiplomaText: 'For excellence in malware classification, phishing trap detection, antivirus scanning & quarantine management, network firewall filtering, and 2FA authentication.',
 
     // Footer & Legal
     footerAbout: 'About Project & Story',

@@ -32,7 +32,7 @@ export interface CurriculaModule {
     answer: string;
   }[];
   practicalLab: string;
-  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d';
+  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6malware';
 }
 
 export const CURRICULA_MODULES: CurriculaModule[] = [
@@ -593,5 +593,62 @@ export const CURRICULA_MODULES: CurriculaModule[] = [
     ],
     practicalLab: 'Construiește o navă spațială folosind un cilindru, două conuri și aplică o textură metalică strălucitoare.',
     missionId: 'g6paint3d'
+  },
+  {
+    id: 'malware-securitate',
+    slug: 'securitate-cibernetica-malware',
+    title: 'Amenințări Malware, Viruși & Protecție Digitală',
+    shortTitle: 'Securitate Cibernetică',
+    grade: 'Clasa a VI-a',
+    unit: 'Unitatea 3: Internet & Securitate Digitală (pag. 44–45)',
+    manualRef: 'Manual Art Klett Clasa a VI-a — OMEN 3393/2017',
+    icon: '🛡️',
+    color: 'from-rose-500 to-red-600',
+    metaDescription: 'Lecție completă TIC Clasa a 6-a de Securitate Cibernetică: Malware, Viruși, Viermi, Troieni, Ransomware, Antivirus, Carantină, Firewall și Parole Blindate.',
+    keywords: [
+      'securitate cibernetica clasa 6',
+      'malware virusi viermi troieni',
+      'antivirus carantina firewall',
+      'parole sigure 2fa gimnaziu',
+      'phishing capcane internet'
+    ],
+    competencies: [
+      {
+        code: '1.2',
+        description: 'Identificarea riscurilor legate de securitatea datelor și a comportamentelor periculoase în mediul virtual.'
+      },
+      {
+        code: '3.1',
+        description: 'Aplicarea normelor de securitate și protecție a datelor personale împotriva programelor de tip malware.'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Ce este un program dăunător (Malware)?',
+        content: [
+          'Malware provine de la Malicious Software și desemnează orice cod conceput intenționat pentru a afecta calculatoarele sau a fura date.',
+          'Principalele categorii: Viruși (necesită fișier gazdă), Viermi (se replică singuri prin rețea), Troieni (se deghizează în jocuri/utilitare), Spyware (spionează tastele) și Ransomware (criptează datele și cere bani).',
+          'Sistemul de apărare cuprinde trei piloni: Programul Antivirus cu actualizare zilnică a semnăturilor, Zidul de Protecție (Firewall) și vigilența utilizatorului (parole blindate și 2FA).'
+        ]
+      }
+    ],
+    keyTerms: [
+      { term: 'Malware', definition: 'Programe create malițios pentru a perturba sistemul, a fura date sau a obține acces neautorizat.' },
+      { term: 'Carantină', definition: 'Zonă de izolare securizată unde fișierele infectate sunt blocate pentru a nu rula cod dăunător.' },
+      { term: 'Firewall', definition: 'Barieră de securitate ce monitorizează și filtrează conexiunile de rețea între PC și Internet.' },
+      { term: 'Phishing', definition: 'Tehnică de fraudă prin care atacatorii mimează instituții de încredere pentru a fura parole.' }
+    ],
+    faqs: [
+      {
+        question: 'Dacă am Firewall activat, mai am nevoie de Antivirus?',
+        answer: 'Da, absolut! Firewall-ul oprește conexiunile periculoase din rețea, dar Antivirusul scanează fișierele deja descărcate sau rulate de pe disc.'
+      },
+      {
+        question: 'Cum îmi dau seama dacă un email este Phishing?',
+        answer: 'Verifică adresa reală a expeditorului (după @), fii atent la sentimentul fals de panică („urgent”) și nu deschide atașamente executabile (.exe).'
+      }
+    ],
+    practicalLab: 'Realizează o scanare antivirus de sistem, trimite fișierele infectate în Carantină și configurează o parolă blindată de peste 12 caractere.',
+    missionId: 'g6malware'
   }
 ];

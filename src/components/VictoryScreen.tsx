@@ -13,7 +13,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -48,6 +48,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isG6P1 = courseId === 'g6_presentation1';
   const isG6P2 = courseId === 'g6_presentation2';
   const isG6P3 = courseId === 'g6_paint3d';
+  const isG6M1 = courseId === 'g6_malware';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -73,6 +74,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Slide Creation & Public Speaking (Grade 6 Textbook pp. 16-25)' : 'Realizare Diapozitive & Public Speaking (Clasa a VI-a Manual pag. 16-25)')
     : isG6P3
     ? (lang === 'en' ? 'Paint 3D Modeling & 3D Creator (Grade 6 Textbook pp. 26-33)' : 'Modelare 3D în Paint 3D (Clasa a VI-a Manual pag. 26-33)')
+    : isG6M1
+    ? (lang === 'en' ? 'Malware Threats & Cyber Security (Grade 6 Textbook pp. 44-45)' : 'Amenințări Malware & Securitate Cibernetică (Clasa a VI-a Manual pag. 44-45)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
   const formatCompletionTime = (sec: number) => {
@@ -155,7 +158,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -189,6 +192,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Master of Presentations & Public Speaking!' : 'Felicitări, Maestru al Prezentărilor & Public Speaking!')
           : isG6P3
           ? (lang === 'en' ? 'Congratulations, Certified Junior 3D Creator & Modeler!' : 'Felicitări, Creator & Modelator 3D Junior Certificat!')
+          : isG6M1
+          ? (lang === 'en' ? 'Congratulations, Certified Cyber Defender & Security Expert!' : 'Felicitări, Expert în Securitate Cibernetică & Protecție Digitală!')
           : t.vTitle}
       </h2>
 
@@ -241,6 +246,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered 3D space (X, Y, Z), 4 control anchors, Make 3D, stickers, materials, video loops, and asset export from Textbook pp. 26-33!'
               : 'Ai finalizat cu succes Modulul 2A: spațiul tridimensional (X, Y, Z), cele 4 ancore de manipulare, Creare 3D, aplicarea stickerelor mulate, finisajele de materiale, animațiile automate și exportul 3D!')
+          : isG6M1
+          ? (lang === 'en'
+              ? 'You mastered malware classification (Viruses, Worms, Trojans, Spyware, Ransomware), antivirus system scanning, quarantine isolation, firewall traffic rules, and bulletproof passwords with 2FA from Textbook pp. 44-45!'
+              : 'Ai finalizat cu succes Modulul 3A: cunoști diferența dintre Viruși, Viermi, Troieni, Spyware și Ransomware, stăpânești scanarea antivirus și zona de carantină, filtrarea conexiunilor de rețea prin Firewall, parolele blindate și securizarea conturilor prin 2FA!')
           : t.vDesc}
       </p>
 
@@ -686,6 +695,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isG6M1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🛡️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Antivirus Pro' : 'Scut Antivirus'}</div>
+                <div className="text-[10px] text-emerald-400">{lang === 'en' ? 'Signatures & Scan' : 'Scanare & Baze'}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧱</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Firewall Master' : 'Zid Firewall'}</div>
+                <div className="text-[10px] text-teal-400">{lang === 'en' ? 'Packet Filtering' : 'Filtrare Porturi'}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎣</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Anti-Phishing' : 'Anti-Phishing'}</div>
+                <div className="text-[10px] text-cyan-400">{lang === 'en' ? 'Trap Detector' : 'Capcane E-mail'}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? '2FA Fortress' : 'Fortăreață 2FA'}</div>
+                <div className="text-[10px] text-purple-400">{lang === 'en' ? 'Bulletproof Auth' : 'Parole & OTP'}</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🏆</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cyber Defender' : 'Cyber Defender'}</div>
+                <div className="text-[10px] text-rose-400">{lang === 'en' ? 'Grade 6 Certified' : 'Clasa a VI-a'}</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -750,7 +797,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -778,6 +825,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Scratch 3.0 Junior Developer Certificate' : 'Diplomă de Programator Junior Scratch 3.0 & Creator Vizual')
               : isScratch2
               ? (lang === 'en' ? 'Grade 5 Grand Diploma • Master Game Developer & ICT Laureate' : 'Marea Diplomă de Onoare Clasa a V-a • Dezvoltator de Jocuri & Maestru TIC')
+              : isG6P1
+              ? (lang === 'en' ? 'Junior PowerPoint Specialist Certificate' : 'Diplomă de Operator Junior PowerPoint & Prezentări')
+              : isG6P2
+              ? (lang === 'en' ? 'Public Speaking & Presentation Master Diploma' : 'Diplomă de Maestru în Prezentări & Public Speaking')
+              : isG6P3
+              ? (lang === 'en' ? 'Junior 3D Modeler & Creator Certificate' : 'Diplomă de Creator & Modelator 3D Junior')
+              : isG6M1
+              ? (lang === 'en' ? 'Cyber Security & Malware Defense Specialist Diploma' : 'Diplomă de Expert în Securitate Cibernetică & Protecție Digitală')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">

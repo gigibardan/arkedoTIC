@@ -214,7 +214,9 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const s2 = computeLessonXP(lessons.scratch2 || {});
   const p1 = computeLessonXP(lessons.presentation1 || {});
   const p2 = computeLessonXP(lessons.presentation2 || {});
-  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2;
+  const m3d1 = computeLessonXP(lessons.model3d1 || {});
+  const cy6a = computeLessonXP(lessons.cyber6a || {});
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + cy6a;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {
@@ -903,7 +905,7 @@ export const updateActiveArcadeScore = updateStudentArcadeScore;
 
 // UPDATE LESSON PROGRESS FOR LOGGED STUDENT
 export async function updateStudentLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2' | 'model3d1' | 'model3d2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2' | 'model3d1' | 'model3d2' | 'cyber6a' | 'cyber6b',
   progressData: {
     level: number;
     score: number;
@@ -964,7 +966,7 @@ export async function updateStudentLessonProgress(
 }
 
 export function updateActiveLessonProgress(
-  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2' | 'model3d1' | 'model3d2',
+  missionKey: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'graphics1' | 'graphics2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'presentation1' | 'presentation2' | 'model3d1' | 'model3d2' | 'cyber6a' | 'cyber6b',
   completed: boolean,
   level: number,
   score: number,
