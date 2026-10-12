@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact ArkyEdu</title>
+</head>
+<body>
+  <!-- Netlify Forms static definition for Vite SPA detection -->
+  <form name="contact" method="POST" action="/" data-netlify="true" netlify netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="contact" />
+    <input type="hidden" name="bot-field" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="text" name="role" />
+    <input type="text" name="subject" />
+    <textarea name="message"></textarea>
+    <button type="submit">Trimite</button>
+  </form>
+</body>
+</html>

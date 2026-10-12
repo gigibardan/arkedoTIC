@@ -72,5 +72,11 @@ service cloud.firestore {
     match /recorduri_jocuri/{document} {
       allow read, write: if true;
     }
+
+    // Mesaje de contact primite de la utilizatori/profesori
+    match /contact_messages/{document} {
+      allow create: if true;
+      allow read, update, delete: if isTeacher() || isSuperAdmin();
+    }
   }
 }

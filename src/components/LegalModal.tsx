@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
+import { db, isCloudConnected } from '../lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 export type LegalTabType = 'about' | 'privacy' | 'cookies' | 'terms' | 'contact';
 
@@ -46,7 +48,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
   const [formRole, setFormRole] = useState<'student' | 'teacher' | 'parent' | 'other'>('student');
   const [formSubject, setFormSubject] = useState('');
   const [formMessage, setFormMessage] = useState('');
-  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'fallback' | 'error'>('idle');
 
   // Cookie preference state (within modal)
   const [cookieChoice, setCookieChoice] = useState<'all' | 'essential' | null>(() => {
@@ -108,28 +110,67 @@ export const LegalModal: React.FC<LegalModalProps> = ({
     sounds.playClick();
     setFormStatus('submitting');
 
-    const payload = {
-      'form-name': 'contact',
-      name: formName || 'Anonim',
-      email: formEmail || 'fara-email@arkyedu.com',
-      role: formRole,
-      subject: formSubject || 'Mesaj Platformă ArkyEdu',
-      message: formMessage,
-    };
+    const params = new URLSearchParams();
+    params.append('form-name', 'contact');
+    params.append('name', formName.trim() || 'Anonim');
+    params.append('email', formEmail.trim() || 'fara-email@arkyedu.com');
+    params.append('role', formRole);
+    params.append('subject', formSubject.trim() || 'Mesaj Platformă ArkyEdu');
+    params.append('message', formMessage.trim());
+    params.append('bot-field', '');
 
+    let submitted = false;
+
+    // 1. Submit to Netlify Forms (endpoint /)
     try {
-      await fetch('/', {
+      const res = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode(payload),
+        body: params.toString(),
       });
+      if (res.ok) {
+        submitted = true;
+      } else if (res.status === 404) {
+        // Fallback endpoint in case Netlify CDN routes form through contact.html
+        const res2 = await fetch('/contact.html', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+        });
+        if (res2.ok) {
+          submitted = true;
+        }
+      }
+    } catch (netErr) {
+      console.warn('Netlify form network request warning:', netErr);
+    }
+
+    // 2. Backup to Firestore if cloud database is active
+    if (isCloudConnected && db) {
+      try {
+        await addDoc(collection(db, 'contact_messages'), {
+          name: formName.trim() || 'Anonim',
+          email: formEmail.trim() || 'fara-email@arkyedu.com',
+          role: formRole,
+          subject: formSubject.trim() || 'Mesaj Platformă ArkyEdu',
+          message: formMessage.trim(),
+          createdAt: new Date().toISOString(),
+          status: 'unread'
+        });
+        submitted = true;
+      } catch (fErr) {
+        console.warn('Firestore backup contact failed:', fErr);
+      }
+    }
+
+    if (submitted) {
       sounds.playSuccess();
       setFormStatus('success');
       setFormMessage('');
-    } catch (err) {
-      console.warn('Netlify form submission failed, fallback to local mail client:', err);
-      // Fallback: still treat gracefully so user is informed
-      setFormStatus('success');
+    } else {
+      // If server returned 404 and no firestore, still treat gracefully and display mail client shortcut
+      sounds.playSuccess();
+      setFormStatus('fallback');
     }
   };
 
@@ -662,17 +703,14 @@ export const LegalModal: React.FC<LegalModalProps> = ({
               <form
                 name="contact"
                 method="POST"
+                action="/"
                 data-netlify="true"
                 data-netlify-honeypot="bot-field"
                 onSubmit={handleContactSubmit}
                 className="p-5 sm:p-6 rounded-2xl bg-slate-800/40 border border-slate-700/80 space-y-4"
               >
                 <input type="hidden" name="form-name" value="contact" />
-                <p className="hidden">
-                  <label>
-                    Don’t fill this out if you're human: <input name="bot-field" />
-                  </label>
-                </p>
+                <input type="hidden" name="bot-field" />
 
                 <h4 className="font-bold text-white text-sm flex items-center gap-2">
                   <Send className="w-4 h-4 text-teal-400" />
@@ -689,9 +727,32 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                       <span>
                         {lang === 'en'
                           ? 'Thank you for writing to us. We will get back to you at contact@arkyedu.com as soon as possible.'
-                          : 'Îți mulțumim pentru mesaj! Gigi și echipa ArkyEdu îți vor răspunde în cel mai scurt timp.'}
+                          : 'Îți mulțumim pentru mesaj! Mesajul a fost înregistrat, iar Gigi și echipa ArkyEdu îți vor răspunde în cel mai scurt timp pe email.'}
                       </span>
                     </div>
+                  </div>
+                )}
+
+                {formStatus === 'fallback' && (
+                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2 text-amber-200 text-xs sm:text-sm animate-in fade-in">
+                    <div className="flex items-center gap-2 text-white font-bold">
+                      <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0" />
+                      <span>{lang === 'en' ? 'Message Ready to Dispatch' : 'Mesajul este pregătit!'}</span>
+                    </div>
+                    <p className="text-slate-300 text-xs">
+                      {lang === 'en'
+                        ? 'To ensure 100% immediate delivery to our inbox, you can also send it directly via your mail client:'
+                        : 'Pentru a fi sigur că ajunge direct în inbox-ul nostru, poți deschide și aplicația ta de email cu un singur click:'}
+                    </p>
+                    <a
+                      href={`mailto:contact@arkyedu.com?subject=${encodeURIComponent(formSubject.trim() || 'Mesaj Platformă ArkyEdu')}&body=${encodeURIComponent(
+                        `Nume: ${formName.trim() || 'Anonim'}\nEmail: ${formEmail.trim()}\nCalitate: ${formRole}\n\nMesaj:\n${formMessage.trim()}`
+                      )}`}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>{lang === 'en' ? 'Open Mail Client (contact@arkyedu.com)' : 'Deschide Aplicația Mail (contact@arkyedu.com)'}</span>
+                    </a>
                   </div>
                 )}
 
