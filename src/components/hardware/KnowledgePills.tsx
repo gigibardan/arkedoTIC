@@ -8,7 +8,8 @@ export interface PillFact {
   emoji: string;
   shortTitle: string;
   title: string;
-  category: 'all' | 'hardware' | 'files' | 'internet';
+  category: 'all' | 'hardware' | 'files' | 'internet' | 'algorithms' | 'scratch' | 'presentation' | 'model3d' | 'malware';
+  grade?: 'g5' | 'g6';
   tag: string;
   bookPage: string;
   content: string;
@@ -268,6 +269,7 @@ const PILLS_RO: PillFact[] = [
     shortTitle: 'Operatori de Căutare',
     title: 'Căutare Avansată cu Ghilimele & site:',
     category: 'internet',
+    grade: 'g5',
     tag: 'Navigare Inteligentă',
     bookPage: '38-40',
     content: 'Folosește ghilimelele `""` pentru a căuta exact o expresie în ordinea cuvintelor. Operatorul `site:edu.ro` caută doar pe site-urile școlare, iar `filetype:pdf` găsește doar documente gata de descărcat.',
@@ -280,11 +282,111 @@ const PILLS_RO: PillFact[] = [
     shortTitle: 'E-mail: To vs Cc vs Bcc',
     title: 'Anatomia E-mailului & Protecția Adreselor',
     category: 'internet',
+    grade: 'g5',
     tag: 'Comunicare Sigură',
     bookPage: '42-44',
     content: 'La trimiterea unui mesaj: `To` este destinatarul principal; `Cc` (Carbon Copy) este pentru informare; `Bcc` (Blind Carbon Copy) ascunde adresele celorlalți destinatari, protejându-le intimitatea.',
     proTip: 'Când trimiți un e-mail către toți colegii de clasă sau profesori, pune adresele în `Bcc:` pentru a nu divulga public adresele lor private de e-mail!',
     didYouKnow: 'Simbolul `@` (arond / at) a fost ales de Ray Tomlinson în 1971 pentru a separa numele utilizatorului de numele calculatorului gazdă (server).',
+  },
+
+  // MODULUL 4 - ALGORITMI & SCRATCH (CLASA A V-A)
+  {
+    id: 'algo-proprieties',
+    emoji: '🧩',
+    shortTitle: 'Proprietățile Algoritmilor',
+    title: 'Cele 4 Proprietăți Fundamentale ale Algoritmului',
+    category: 'algorithms',
+    grade: 'g5',
+    tag: 'Gândire Algoritmică',
+    bookPage: '56-58',
+    content: 'Un algoritm este o succesiune ordonată de pași logici pentru rezolvarea unei probleme. Are 4 proprietăți obligatorii: Claritate (fără ambiguitate), Finitudine (se termină într-un număr finit de pași), Generalitate (rezolvă o clasă întreagă de probleme) și Eficiență.',
+    proTip: 'Rețeta unei prăjituri sau instrucțiunile de asamblare Lego sunt exemple perfecte de algoritmi din viața de zi cu zi!',
+    didYouKnow: 'Cuvântul „Algoritm” provine de la numele matematicianului persan Al-Khwarizmi, care a trăit în secolul al IX-lea la Bagdad.',
+  },
+  {
+    id: 'scratch-xy-coords',
+    emoji: '🐱',
+    shortTitle: 'Coordonatele X & Y în Scratch',
+    title: 'Scena Scratch: Grila Cartesiană (480 x 360)',
+    category: 'scratch',
+    grade: 'g5',
+    tag: 'Programare Vizuală',
+    bookPage: '68-70',
+    content: 'În Scratch, scena măsoară 480 pixeli pe lățime și 360 pixeli pe înălțime. Centrul scenei este (X: 0, Y: 0). Axa X merge de la -240 (stânga) la +240 (dreapta), iar Y merge de la -180 (jos) la +180 (sus).',
+    proTip: 'Pentru a readuce instant un personaj în centrul scenei, folosește blocul `Mergi la x: 0 y: 0` la începutul fiecărui script cu steag verde!',
+    didYouKnow: 'Scratch a fost dezvoltat de echipa Lifelong Kindergarten de la prestigiosul laborator MIT Media Lab din SUA și este folosit de peste 100 de milioane de elevi din întreaga lume.',
+  },
+
+  // CLASA A VI-A - PREZENTĂRI MULTIMEDIA
+  {
+    id: 'regula-6x6',
+    emoji: '📊',
+    shortTitle: 'Regula de Aur 6 x 6',
+    title: 'Designul Diapozitivelor: Regula 6 x 6 & Contrastul',
+    category: 'presentation',
+    grade: 'g6',
+    tag: 'Prezentări Diapozitive',
+    bookPage: '14-16',
+    content: 'O prezentare de nota 10 respectă Regula 6x6: maxim 6 rânduri de text pe diapozitiv și maxim 6 cuvinte pe fiecare rând. Slide-ul este suport vizual pentru vorbitor, nu o pagină de carte ce trebuie citită cuvânt cu cuvânt.',
+    proTip: 'Asigură un contrast puternic: text deschis pe fundal întunecat sau text închis pe fundal alb. Nu folosi mai mult de 2-3 culori tematice și 2 fonturi într-o prezentare!',
+    didYouKnow: 'Tasta F5 pornește prezentarea de la primul diapozitiv, iar combinația Shift + F5 o lansează exact de la diapozitivul selectat pe care lucrezi.',
+  },
+  {
+    id: 'slide-animations',
+    emoji: '🎬',
+    shortTitle: 'Tranziții vs Animații',
+    title: 'Diferența dintre Tranziții și Animații',
+    category: 'presentation',
+    grade: 'g6',
+    tag: 'Prezentări Diapozitive',
+    bookPage: '18-20',
+    content: 'Tranziția este efectul vizual la trecerea de la un diapozitiv la altul (schimbarea paginii). Animația este efectul aplicat unui element individual din interiorul diapozitivului (titlu, casetă de text, pictogramă, imagine).',
+    proTip: 'Folosește tranziții discrete (Fade, Wipe) cu durată de 0.5-1 secundă. Efectele exagerate sau prea zgomotoase distrag atenția publicului de la mesajul tău!',
+    didYouKnow: 'Publicul își formează o impresie despre prezentarea ta în primele 7 secunde ale expunerii: contactul vizual și postura dreaptă contează enorm.',
+  },
+
+  // CLASA A VI-A - GRAFICĂ TRIDIMENSIONALĂ & MODELARE 3D
+  {
+    id: 'paint3d-axes',
+    emoji: '🧊',
+    shortTitle: 'Axa Z & Spațiul 3D',
+    title: 'Grafică 3D: Axele X, Y și A Treia Dimensiune (Z)',
+    category: 'model3d',
+    grade: 'g6',
+    tag: 'Modelare & Paint 3D',
+    bookPage: '28-30',
+    content: 'În grafica 2D avem doar Lățime (X) și Înălțime (Y). În Paint 3D apare Axa Z (Profunzime/Adâncime), care plasează obiectele mai aproape sau mai departe de privitor în spațiu.',
+    proTip: 'Un model 3D poate fi rotit pe 3 cercuri de rotație distincte (Roll, Pitch, Yaw) pentru a fi examinat din față, profil, spate sau de sus!',
+    didYouKnow: 'Ochelarii de Realitate Virtuală (VR) afișează două imagini ușor decalate pentru fiecare ochi, păcălind creierul să perceapă profunzimea reală a axei Z.',
+  },
+
+  // CLASA A VI-A - AMENINȚĂRI MALWARE & SECURITATE CIBERNETICĂ
+  {
+    id: 'malware-types',
+    emoji: '🦠',
+    shortTitle: 'Viruși, Viermi & Troieni',
+    title: 'Clasificarea Malware: Virus vs Vierme vs Cal Troian',
+    category: 'malware',
+    grade: 'g6',
+    tag: 'Securitate Cibernetică',
+    bookPage: '44-46',
+    content: 'Malware provine de la „Malicious Software”. Un Virus are nevoie de un fișier-gazdă (.exe, .docx) pentru a infecta. Un Vierme (Worm) se replică singur prin rețea fără ajutorul utilizatorului. Un Cal Troian (Trojan) se deghizează într-un joc sau program util pentru a păcăli victima.',
+    proTip: 'Ransomware-ul este cea mai periculoasă formă de malware: criptează fișierele cu o cheie secretă și cere bani de răscumpărare. Singura armă sigură este backup-ul periodic offline pe disc extern!',
+    didYouKnow: 'Primul virus cibernetic atestat din istorie s-a numit „Creeper” (1971) și afișa mesajul inofensiv: „I\'m the creeper, catch me if you can!”.',
+  },
+  {
+    id: 'antivirus-firewall',
+    emoji: '🛡️',
+    shortTitle: 'Antivirus vs Firewall',
+    title: 'Cei 3 Piloni ai Apărării: Antivirus, Carantină & Firewall',
+    category: 'malware',
+    grade: 'g6',
+    tag: 'Protecție Digitală',
+    bookPage: '46-48',
+    content: 'Firewall-ul (Zidul de Protecție) este portarul rețelei ce blochează conexiunile suspecte din Internet. Antivirusul scanează fișierele salvate pe disc. Dacă detectează cod periculos, îl mută în Carantină (zonă izolată) pentru a preveni rularea.',
+    proTip: 'Nu folosi niciodată două programe antivirus instalate simultan pe același PC: vor intra în conflict și vor bloca calculatorul! Păstrează doar unul, actualizat zilnic.',
+    didYouKnow: 'O parolă puternică de 12 caractere ce combină litere mari, mici, cifre și simboluri (ex: `#ArkyTIC!2026`) ar necesita sute de mii de ani pentru a fi spartă de un computer obișnuit prin forță brută!',
   },
 ];
 
@@ -296,6 +398,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Pascaline 1642',
     title: 'The Pascaline – The First Mechanical Calculator',
     category: 'hardware',
+    grade: 'g5',
     tag: 'History of Computing',
     bookPage: '13',
     content: 'Invented in 1642 by French mathematician and philosopher Blaise Pascal, the Pascaline used rotating geared wheels numbered 0 to 9 to perform mechanical additions and subtractions.',
@@ -308,6 +411,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'ENIAC 1946',
     title: 'ENIAC – The First General-Purpose Electronic Digital Computer',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Digital Evolution',
     bookPage: '13',
     content: 'ENIAC (Electronic Numerical Integrator And Computer) was completed in 1946 for the US military. Unlike mechanical devices, it used vacuum tubes and was fully programmable.',
@@ -320,6 +424,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: '45-70 cm Rule',
     title: 'Computer & Smartphone Ergonomics',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Health & Posture',
     bookPage: '11-12',
     content: 'Ergonomics studies human interaction with equipment. Place the monitor 45–70 cm away with the top bezel at eye level. Keep your back supported and elbows at a 90° desk angle.',
@@ -332,6 +437,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'CPU vs RAM',
     title: 'Microprocessor (CPU) & RAM Memory',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Motherboard Hardware',
     bookPage: '15-17',
     content: 'The CPU is the brain of the computer, handling calculations, logic, and control. RAM is the temporary workspace where active application data is kept while running.',
@@ -344,6 +450,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'HDD vs SSD',
     title: 'Hard Disk Drive (HDD) vs Solid-State Drive (SSD)',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Permanent Storage',
     bookPage: '18',
     content: 'HDDs store data on spinning magnetic platters (e.g. 7200 RPM) read by moving heads. SSDs store data electronically in solid-state flash chips with zero moving parts.',
@@ -356,6 +463,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: '1 Byte = 8 Bits',
     title: 'Units of Digital Information',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Binary Mathematics',
     bookPage: '19',
     content: 'A bit (b) is the smallest unit (0 or 1). A group of 8 bits forms a Byte (B). Multipliers are powers of 2: 1 KB = 1024 B, 1 MB = 1024 KB, 1 GB = 1024 MB, 1 TB = 1024 GB.',
@@ -368,6 +476,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Ports & Connectors',
     title: 'System Unit Ports (USB, HDMI, Audio Jacks)',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Connectors & I/O',
     bookPage: '16-17',
     content: 'Ports are physical connection points linking peripherals to the motherboard: USB for keyboard, mouse, and flash storage; HDMI for digital video/audio; 3.5mm jack for headsets.',
@@ -380,6 +489,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Von Neumann Architecture',
     title: 'Functional Computer Architecture',
     category: 'hardware',
+    grade: 'g5',
     tag: 'Core Computing Theory',
     bookPage: '15',
     content: 'Formulated by John von Neumann in 1945, this model defines 4 core subsystems: the CPU (Control Unit + Arithmetic Logic Unit), Internal Memory (RAM/ROM), Input/Output devices, and System Buses.',
@@ -392,20 +502,100 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'E-Waste & Recycling',
     title: 'Green Computing & WEEE Recycling',
     category: 'hardware',
+    grade: 'g5',
     tag: 'ICT Sustainability',
     bookPage: '12',
     content: 'Obsolete electronics contain hazardous elements (lead, mercury) alongside precious metals (gold, copper). Never discard old electronics in municipal trash; bring them to dedicated WEEE collection centers.',
     proTip: 'Enable Power Saver mode and set monitors to sleep after 5 minutes of inactivity to reduce energy consumption and extend hardware lifespan.',
     didYouKnow: 'One ton of discarded circuit boards yields significantly more pure gold than one ton of mined gold ore!',
   },
+  {
+    id: 'periferice-io',
+    emoji: '🖱️',
+    shortTitle: 'I/O Peripherals',
+    title: 'Input, Output, and Combined I/O Devices',
+    category: 'hardware',
+    grade: 'g5',
+    tag: 'Peripherals & Hardware',
+    bookPage: '16-17',
+    content: 'Input peripherals send data into the system (Keyboard, Mouse, Microphone, Scanner). Output devices render results (Monitor, Printer, Speakers). Combined I/O units perform both (Touchscreens, Network cards, Headsets with mic).',
+    proTip: 'If a device can both send and receive data (such as a touchscreen or Wi-Fi modem), it is always categorized as a mixed Input/Output unit!',
+    didYouKnow: 'The first computer mouse was invented in 1964 by Douglas Engelbart and was carved from wood with two perpendicular metal wheels.',
+  },
+  {
+    id: 'rom-bios',
+    emoji: '💾',
+    shortTitle: 'ROM & BIOS Boot',
+    title: 'ROM Memory & PC Boot Sequence',
+    category: 'hardware',
+    grade: 'g5',
+    tag: 'System Firmware',
+    bookPage: '15-16',
+    content: 'ROM (Read-Only Memory) is non-volatile and contains firmware (BIOS/UEFI). When powering on, BIOS runs the POST (Power-On Self Test) hardware diagnostic and loads the operating system.',
+    proTip: 'Unlike RAM which loses contents on shutdown, ROM code remains permanently written on the motherboard!',
+    didYouKnow: 'The flat CR2032 coin-cell battery on motherboards keeps the real-time clock ticking even when completely disconnected from electrical outlets.',
+  },
 
   // MODULE 2 - FILES, FOLDERS & OPERATING SYSTEMS
+  {
+    id: 'os-role',
+    emoji: '🪟',
+    shortTitle: 'Operating System Role',
+    title: 'The Operating System: Human-Computer Bridge',
+    category: 'files',
+    grade: 'g5',
+    tag: 'Operating Systems',
+    bookPage: '22-23',
+    content: 'The OS (Windows, macOS, Linux, Android) is the fundamental software orchestrating hardware components, filesystem hierarchies, and offering a user-friendly graphical interface (GUI).',
+    proTip: 'Modern operating systems are multitasking: they can play music, stream tutorials, and keep open text editors simultaneously without stuttering!',
+    didYouKnow: 'Before graphical user interfaces, users typed command lines on a monochrome terminal screen (such as MS-DOS).',
+  },
+  {
+    id: 'desktop-taskbar',
+    emoji: '🖥️',
+    shortTitle: 'Desktop & Taskbar',
+    title: 'Workspace Desktop & Taskbar Anatomy',
+    category: 'files',
+    grade: 'g5',
+    tag: 'Graphical User Interface',
+    bookPage: '23-24',
+    content: 'The Desktop displays shortcuts and wallpaper. At the bottom lies the Taskbar with the Start button, pinned app icons, and Notification Area (clock, volume, network).',
+    proTip: 'Pressing `Windows + D` instantly minimizes all windows, revealing your clean desktop in a split second!',
+    didYouKnow: 'The notification tray is often called the "System Tray" and hosts silent background services like antivirus monitoring.',
+  },
+  {
+    id: 'ferestre-os',
+    emoji: '🔲',
+    shortTitle: 'Window Controls',
+    title: 'Window Layout & Management Controls',
+    category: 'files',
+    grade: 'g5',
+    tag: 'GUI Navigation',
+    bookPage: '24',
+    content: 'Every program runs inside a window. In the top-right corner, three standard buttons control state: Minimize (_), Maximize/Restore (□), and Close (X / Alt+F4).',
+    proTip: 'Press `Alt + Tab` to cycle instantly through all open windows without ever touching your mouse!',
+    didYouKnow: 'Dragging a window to the screen edge triggers Windows Snap, organizing two tasks side-by-side on split screen.',
+  },
+  {
+    id: 'cautare-masca',
+    emoji: '🔎',
+    shortTitle: 'Search Wildcards (* and ?)',
+    title: 'Searching Files with Wildcard Masks',
+    category: 'files',
+    grade: 'g5',
+    tag: 'Search & Organization',
+    bookPage: '29',
+    content: 'Wildcards help locate items with partial names: `*` substitutes any sequence of characters (e.g. `*.docx`), while `?` replaces exactly one character (e.g. `test?.txt`).',
+    proTip: 'Typing `project*.*` in the File Explorer search box finds all files whose names begin with "project", across all file types!',
+    didYouKnow: 'Windows search indexes file text beforehand, enabling you to locate an essay simply by searching a unique sentence within it.',
+  },
   {
     id: 'folder-tree',
     emoji: '🌳',
     shortTitle: 'Folder Tree Hierarchy',
     title: 'Hierarchical Folder Directory Architecture',
     category: 'files',
+    grade: 'g5',
     tag: 'Operating Systems',
     bookPage: '27-28',
     content: 'Files are structured in a hierarchical tree. The Root is the drive `C:\\`, which branches into parent folders and subfolders, with files as leaves.',
@@ -418,6 +608,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Forbidden Filename Chars',
     title: 'The 9 Forbidden Characters in File Names',
     category: 'files',
+    grade: 'g5',
     tag: 'File Management Rules',
     bookPage: '28',
     content: 'In Windows, filenames cannot contain any of these 9 characters: \\ / : * ? " < > |. The system automatically blocks them if typed.',
@@ -430,6 +621,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'File Extensions',
     title: 'File Extensions & Program Associations',
     category: 'files',
+    grade: 'g5',
     tag: 'File Types & Formats',
     bookPage: '28-29',
     content: 'The file extension is a 3-4 letter suffix after the period (e.g., `.docx`, `.xlsx`, `.pptx`, `.png`, `.mp3`, `.mp4`, `.exe`). It identifies the file format and tells Windows which app to launch.',
@@ -442,6 +634,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Keyboard Shortcuts',
     title: 'Essential Productivity Keyboard Shortcuts',
     category: 'files',
+    grade: 'g5',
     tag: 'Workflow Efficiency',
     bookPage: '29-30',
     content: 'Mastering keyboard shortcuts boosts speed significantly: `Ctrl+C` (Copy), `Ctrl+X` (Cut/Move), `Ctrl+V` (Paste), `Ctrl+Z` (Undo), `Ctrl+A` (Select All), `F2` (Rename), and `Del` (Delete).',
@@ -454,6 +647,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Recycle Bin',
     title: 'Recycle Bin: File Safety & Instant Restoration',
     category: 'files',
+    grade: 'g5',
     tag: 'Data Safety',
     bookPage: '30',
     content: 'When pressing Delete on hard drive files, they are safely relocated to the Recycle Bin. Right-clicking and selecting `Restore` puts the file back in its exact original folder.',
@@ -468,6 +662,7 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Search Operators',
     title: 'Smart Search with Quotes & site: Filters',
     category: 'internet',
+    grade: 'g5',
     tag: 'Web Exploration',
     bookPage: '38-40',
     content: 'Use quotation marks `""` to search for exact phrases. Use `site:edu.ro` to restrict results to educational sites, and `filetype:pdf` to download official PDF documents.',
@@ -480,24 +675,126 @@ const PILLS_EN: PillFact[] = [
     shortTitle: 'Email: To vs Cc vs Bcc',
     title: 'Email Addressing & Privacy Etiquette',
     category: 'internet',
+    grade: 'g5',
     tag: 'Secure Communication',
     bookPage: '42-44',
     content: '`To` is for primary recipients; `Cc` (Carbon Copy) is for informational copies; `Bcc` (Blind Carbon Copy) hides all recipient email addresses from each other.',
     proTip: 'When emailing large groups or classmates, place addresses in `Bcc:` to preserve everyone’s personal privacy!',
     didYouKnow: 'The `@` symbol was chosen by Ray Tomlinson in 1971 to separate the user mailbox name from the destination host computer.',
   },
+
+  // MODULE 4 - ALGORITHMS & SCRATCH
+  {
+    id: 'algo-proprieties',
+    emoji: '🧩',
+    shortTitle: 'Algorithm Properties',
+    title: 'The 4 Fundamental Properties of an Algorithm',
+    category: 'algorithms',
+    grade: 'g5',
+    tag: 'Algorithmic Thinking',
+    bookPage: '56-58',
+    content: 'An algorithm is an ordered sequence of unambiguous instructions. It must have 4 core properties: Precision/Clarity, Finiteness (terminates in finite steps), Generality (solves a class of inputs), and Efficiency.',
+    proTip: 'A baking recipe or Lego instruction guide are everyday physical world examples of algorithms!',
+    didYouKnow: 'The word "Algorithm" derives from the 9th-century Persian mathematician Muhammad ibn Musa al-Khwarizmi.',
+  },
+  {
+    id: 'scratch-xy-coords',
+    emoji: '🐱',
+    shortTitle: 'Scratch X & Y Coordinates',
+    title: 'The Scratch Stage: 480 x 360 Cartesian Grid',
+    category: 'scratch',
+    grade: 'g5',
+    tag: 'Visual Coding',
+    bookPage: '68-70',
+    content: 'The Scratch stage spans 480 pixels wide by 360 pixels high. Center is (0, 0). X extends from -240 (left) to +240 (right), and Y from -180 (bottom) to +180 (top).',
+    proTip: 'Always reset your sprite to `go to x: 0 y: 0` inside the green-flag event block so it starts predictably every run!',
+    didYouKnow: 'Scratch was created by the Lifelong Kindergarten Group at the MIT Media Lab and is enjoyed by over 100 million students worldwide.',
+  },
+
+  // GRADE 6 - PRESENTATIONS & DESIGN
+  {
+    id: 'regula-6x6',
+    emoji: '📊',
+    shortTitle: 'The 6 x 6 Golden Rule',
+    title: 'Slide Design: The 6x6 Rule & Visual Contrast',
+    category: 'presentation',
+    grade: 'g6',
+    tag: 'Slide Decks',
+    bookPage: '14-16',
+    content: 'Top presentation designers use the 6x6 rule: no more than 6 bullet lines per slide, and at most 6 words per line. Slides are visual aids for the speaker, not a transcript to be read verbatim.',
+    proTip: 'Keep high contrast between text and background. Limit your color palette to 2-3 theme colors and no more than 2 distinct fonts per presentation!',
+    didYouKnow: 'Pressing F5 starts slideshow playback from slide 1, while Shift + F5 launches from whichever slide is currently active in your editor.',
+  },
+  {
+    id: 'slide-animations',
+    emoji: '🎬',
+    shortTitle: 'Transitions vs Animations',
+    title: 'Transitions vs Object Animations',
+    category: 'presentation',
+    grade: 'g6',
+    tag: 'Slide Decks',
+    bookPage: '18-20',
+    content: 'A transition is the visual effect that occurs between two whole slides as you turn pages. An animation applies to an individual element inside a slide (such as a headline, picture, or icon).',
+    proTip: 'Opt for subtle transitions (Fade, Push) lasting 0.5-1.0s. Overly flashy or noisy animations distract listeners from your core message!',
+    didYouKnow: 'Audiences form their initial impression of a speaker in the first 7 seconds: upright posture, a smile, and eye contact set a confident tone.',
+  },
+
+  // GRADE 6 - 3D GRAPHICS & MODELING
+  {
+    id: 'paint3d-axes',
+    emoji: '🧊',
+    shortTitle: 'Z-Axis & 3D Space',
+    title: '3D Graphics: X, Y Axes and the Third Dimension (Z)',
+    category: 'model3d',
+    grade: 'g6',
+    tag: '3D Modeling & Paint 3D',
+    bookPage: '28-30',
+    content: '2D graphics only use Width (X) and Height (Y). Paint 3D introduces the Z-axis (Depth), placing geometric volumes closer or farther from the camera viewpoint in space.',
+    proTip: 'A 3D model can be rotated across 3 distinct circular gizmos (Roll, Pitch, Yaw) to inspect it from front, profile, rear, or overhead views!',
+    didYouKnow: 'Virtual Reality (VR) headsets display two slightly offset images—one per eye—fooling our brains into perceiving authentic spatial 3D depth.',
+  },
+
+  // GRADE 6 - MALWARE & CYBERSECURITY
+  {
+    id: 'malware-types',
+    emoji: '🦠',
+    shortTitle: 'Viruses, Worms & Trojans',
+    title: 'Malware Taxonomy: Virus vs Worm vs Trojan Horse',
+    category: 'malware',
+    grade: 'g6',
+    tag: 'Cybersecurity',
+    bookPage: '44-46',
+    content: 'Malware stands for "Malicious Software". A Virus requires a host program to infect. A Worm self-replicates through networks automatically. A Trojan masquerades as legitimate software or games to deceive users.',
+    proTip: 'Ransomware is dangerous: it encrypts personal documents and demands ransom money. Your best defense is a regular offline backup on an external hard drive!',
+    didYouKnow: 'The earliest recognized computer virus was named "Creeper" (1971) which harmlessly displayed: "I\'m the creeper, catch me if you can!".',
+  },
+  {
+    id: 'antivirus-firewall',
+    emoji: '🛡️',
+    shortTitle: 'Antivirus vs Firewall',
+    title: 'The 3 Pillars of Defense: Antivirus, Quarantine & Firewall',
+    category: 'malware',
+    grade: 'g6',
+    tag: 'Digital Protection',
+    bookPage: '46-48',
+    content: 'The Firewall acts as a network bouncer checking incoming and outgoing traffic. The Antivirus scans disk files against signature databases. Suspicious files are safely isolated in Quarantine.',
+    proTip: 'Never install two active antiviruses on the same computer: they will conflict and freeze your system! Stick to one reputable suite updated daily.',
+    didYouKnow: 'A 12-character password mixing uppercase, lowercase, numbers, and symbols (e.g. `#ArkyTIC!2026`) would take centuries for a typical cracker rig to brute-force!',
+  },
 ];
 
 export const KnowledgePills: React.FC = () => {
   const { lang, t } = useLanguage();
   const [selectedPillId, setSelectedPillId] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'hardware' | 'files' | 'internet'>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [activeGradeFilter, setActiveGradeFilter] = useState<'all' | 'g5' | 'g6'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const pills = lang === 'en' ? PILLS_EN : PILLS_RO;
 
   const filteredPills = pills.filter((pill) => {
     const matchesCategory = activeCategory === 'all' || pill.category === activeCategory;
+    const matchesGrade = activeGradeFilter === 'all' || (pill.grade || 'g5') === activeGradeFilter;
     const query = searchQuery.toLowerCase().trim();
     const matchesQuery =
       !query ||
@@ -505,7 +802,7 @@ export const KnowledgePills: React.FC = () => {
       pill.shortTitle.toLowerCase().includes(query) ||
       pill.tag.toLowerCase().includes(query) ||
       pill.content.toLowerCase().includes(query);
-    return matchesCategory && matchesQuery;
+    return matchesCategory && matchesGrade && matchesQuery;
   });
 
   const selectedPill = pills.find((p) => p.id === selectedPillId) || null;
@@ -520,16 +817,28 @@ export const KnowledgePills: React.FC = () => {
     setSelectedPillId(null);
   };
 
+  const categories = [
+    { id: 'all', labelRo: `Toate (${pills.length})`, labelEn: `All (${pills.length})` },
+    { id: 'hardware', labelRo: 'Hardware (V) 💻', labelEn: 'Hardware (G5) 💻' },
+    { id: 'files', labelRo: 'Fișiere & SO (V) 📁', labelEn: 'Files & OS (G5) 📁' },
+    { id: 'internet', labelRo: 'Internet (V) 🌐', labelEn: 'Internet (G5) 🌐' },
+    { id: 'algorithms', labelRo: 'Algoritmi (V) 🧩', labelEn: 'Algorithms (G5) 🧩' },
+    { id: 'scratch', labelRo: 'Scratch (V) 🐱', labelEn: 'Scratch (G5) 🐱' },
+    { id: 'presentation', labelRo: 'Prezentări (VI) 📊', labelEn: 'Presentations (G6) 📊' },
+    { id: 'model3d', labelRo: 'Paint 3D (VI) 🧊', labelEn: 'Paint 3D (G6) 🧊' },
+    { id: 'malware', labelRo: 'Malware & Securitate (VI) 🛡️', labelEn: 'Malware & Security (G6) 🛡️' },
+  ];
+
   return (
-    <div className="bg-slate-900/90 border-2 border-teal-500/40 rounded-3xl p-4 sm:p-5 mb-6 shadow-2xl backdrop-blur">
+    <div className="bg-slate-900/90 border-2 border-teal-500/40 rounded-3xl p-3.5 sm:p-5 mb-6 shadow-2xl backdrop-blur">
       {/* Header & Filter Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-700/80">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-teal-400 text-slate-950 flex items-center justify-center shadow-md">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-700/80">
+        <div className="flex items-start sm:items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-teal-400 text-slate-950 flex items-center justify-center shadow-md shrink-0 mt-0.5 sm:mt-0">
             <Lightbulb className="w-4 h-4 font-bold" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm sm:text-base font-black uppercase tracking-wider text-cyan-300 font-heading">
                 {lang === 'en' ? 'Interactive Knowledge Pills & Didactic Notes' : 'Pilule Interactive de Cunoștințe & Sinteze Didactice'}
               </span>
@@ -539,101 +848,154 @@ export const KnowledgePills: React.FC = () => {
             </div>
             <p className="text-xs text-slate-400 font-medium">
               {lang === 'en'
-                ? 'Quick curriculum summaries, pro tips from teachers & textbook curiosities for Modules 1, 2 & 3'
-                : 'Sinteze din manualul de TIC, sfaturi de la profesori și curiozități practice pentru Modulele 1, 2 și 3'}
+                ? 'Official curriculum summaries, pro tips & textbook insights for Grade 5 & Grade 6'
+                : 'Sinteze din manualul de TIC, sfaturi de la profesori și curiozități practice pentru Clasa a V-a și a VI-a'}
             </p>
           </div>
         </div>
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center gap-1.5 self-start md:self-auto">
-          {[
-            { id: 'all', labelRo: 'Toate (16)', labelEn: 'All (16)' },
-            { id: 'hardware', labelRo: 'Modulul 1: Hardware 💻', labelEn: 'Module 1: Hardware 💻' },
-            { id: 'files', labelRo: 'Modulul 2: Fișiere 📁', labelEn: 'Module 2: Files 📁' },
-            { id: 'internet', labelRo: 'Modulul 3: Internet 🌐', labelEn: 'Module 3: Internet 🌐' },
-          ].map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => {
-                sounds.playClick();
-                setActiveCategory(cat.id as any);
-              }}
-              className={`px-3 py-1 rounded-xl text-xs font-bold transition border cursor-pointer ${
-                activeCategory === cat.id
-                  ? 'bg-cyan-500 text-slate-950 border-cyan-400 shadow-md font-black'
-                  : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-700/80'
-              }`}
-            >
-              {lang === 'en' ? cat.labelEn : cat.labelRo}
-            </button>
-          ))}
+        {/* Grade switch pills */}
+        <div className="flex items-center gap-1.5 self-start lg:self-auto bg-slate-950/80 p-1 rounded-2xl border border-slate-800">
+          <button
+            onClick={() => {
+              sounds.playClick();
+              setActiveGradeFilter('all');
+            }}
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer ${
+              activeGradeFilter === 'all'
+                ? 'bg-cyan-500 text-slate-950 font-black shadow'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            {lang === 'en' ? 'All Classes' : 'Toate Clasele'}
+          </button>
+          <button
+            onClick={() => {
+              sounds.playClick();
+              setActiveGradeFilter('g5');
+            }}
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer ${
+              activeGradeFilter === 'g5'
+                ? 'bg-emerald-500 text-slate-950 font-black shadow'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            {lang === 'en' ? 'Grade 5 (V)' : 'Clasa a V-a'}
+          </button>
+          <button
+            onClick={() => {
+              sounds.playClick();
+              setActiveGradeFilter('g6');
+            }}
+            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer ${
+              activeGradeFilter === 'g6'
+                ? 'bg-purple-500 text-white font-black shadow'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            {lang === 'en' ? 'Grade 6 (VI)' : 'Clasa a VI-a'}
+          </button>
         </div>
       </div>
 
-      {/* Pill Buttons Horizontal Scroll Grid */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+      {/* Category Horizontal Filter Bar */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3 scrollbar-thin">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => {
+              sounds.playClick();
+              setActiveCategory(cat.id);
+            }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 border cursor-pointer ${
+              activeCategory === cat.id
+                ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 border-cyan-400 shadow-md font-black'
+                : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-700/80'
+            }`}
+          >
+            {lang === 'en' ? cat.labelEn : cat.labelRo}
+          </button>
+        ))}
+      </div>
+
+      {/* Pill Buttons Responsive Scrolling Flow */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2.5 scrollbar-thin">
         {filteredPills.map((pill) => {
           const isActive = selectedPill?.id === pill.id;
+          const isG6 = pill.grade === 'g6';
           return (
             <button
               key={pill.id}
               onClick={() => handleOpenPill(pill.id)}
-              className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 shrink-0 border cursor-pointer ${
+              className={`px-3 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2.5 shrink-0 border cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-r from-cyan-500/30 to-teal-500/30 text-cyan-200 border-cyan-400 shadow-lg ring-1 ring-cyan-400'
                   : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700/80 hover:border-slate-600'
               }`}
             >
-              <span className="text-lg">{pill.emoji}</span>
+              <span className="text-xl shrink-0">{pill.emoji}</span>
               <div className="text-left">
-                <div className="font-bold leading-tight">{pill.shortTitle}</div>
-                <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
-                  <span>{pill.tag}</span>
-                  <span>•</span>
-                  <span>p. {pill.bookPage}</span>
+                <div className="font-bold leading-tight flex items-center gap-1.5">
+                  <span className="whitespace-nowrap">{pill.shortTitle}</span>
+                  {isG6 && (
+                    <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-black shrink-0">
+                      VI
+                    </span>
+                  )}
+                </div>
+                <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1 mt-0.5">
+                  <span className="truncate max-w-[130px]">{pill.tag}</span>
+                  <span className="shrink-0">•</span>
+                  <span className="shrink-0">p. {pill.bookPage}</span>
                 </div>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-500 shrink-0 ml-1" />
+              <ChevronRight className="w-3.5 h-3.5 text-slate-500 shrink-0 ml-0.5" />
             </button>
           );
         })}
       </div>
 
-      {/* Pop-out Expanded Fact Modal / Card */}
+      {/* Pop-out Expanded Fact Card */}
       {selectedPill && (
         <div className="mt-4 pt-4 border-t border-slate-700/80 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="bg-slate-950/90 border-2 border-cyan-500/50 rounded-2xl p-4 sm:p-6 relative shadow-2xl">
+          <div className="bg-slate-950/95 border-2 border-cyan-500/50 rounded-2xl p-4 sm:p-6 relative shadow-2xl">
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+              className="absolute top-3.5 right-3.5 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
               title={t.pillClose}
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-3 mb-2.5">
-              <span className="text-3xl sm:text-4xl">{selectedPill.emoji}</span>
-              <div>
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-2.5 py-0.5 rounded-full border border-cyan-500/40 font-mono">
+            <div className="flex items-start sm:items-center gap-3 mb-2.5 pr-8">
+              <span className="text-3xl sm:text-4xl shrink-0">{selectedPill.emoji}</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-2 py-0.5 rounded-full border border-cyan-500/40 font-mono">
                     {selectedPill.tag}
+                  </span>
+                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border font-mono ${
+                    selectedPill.grade === 'g6'
+                      ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                      : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                  }`}>
+                    {selectedPill.grade === 'g6' ? (lang === 'en' ? 'Grade 6 (VI)' : 'Clasa a VI-a') : (lang === 'en' ? 'Grade 5 (V)' : 'Clasa a V-a')}
                   </span>
                   <span className="text-xs font-semibold text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800 font-mono">
                     {t.bookPagePrefix} {selectedPill.bookPage}
                   </span>
                 </div>
-                <h4 className="text-base sm:text-xl font-black text-white font-heading">
+                <h4 className="text-base sm:text-xl font-black text-white font-heading break-words">
                   {selectedPill.title}
                 </h4>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed my-3 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed my-3 bg-slate-900/70 p-3.5 sm:p-4 rounded-xl border border-slate-800">
               {selectedPill.content}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs">
               <div className="bg-amber-500/10 border border-amber-500/30 p-3.5 rounded-xl flex items-start gap-2.5 text-amber-200">
                 <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
