@@ -80,8 +80,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -131,13 +131,15 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g6_presentation2' && (localStorage.getItem('arkedo_g6p2_level') === '8' || Number(localStorage.getItem('arkedo_g6p2_score') || '0') >= 100)) return true;
       if (mId === 'g6_paint3d' && (localStorage.getItem('arkedo_g6p3_level') === '8' || Number(localStorage.getItem('arkedo_g6p3_score') || '0') >= 100)) return true;
       if (mId === 'g6_malware' && (localStorage.getItem('arkedo_g6m1_level') === '8' || Number(localStorage.getItem('arkedo_g6m1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_malware') === 'true')) return true;
+      if (mId === 'g6_email' && (localStorage.getItem('arkedo_g6e1_level') === '8' || Number(localStorage.getItem('arkedo_g6e1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_email') === 'true')) return true;
+      if (mId === 'g6_scratch1' && (localStorage.getItem('arkedo_g6s1_level') === '8' || Number(localStorage.getItem('arkedo_g6s1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch1') === 'true')) return true;
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
       const lp = activeStudent.lessonsProgress;
-      const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId === 'g6_malware' ? 'cyber6a' : mId;
+      const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId === 'g6_malware' ? 'cyber6a' : mId === 'g6_email' ? 'cyber6b' : mId === 'g6_scratch1' ? 'scratch6a' : mId;
       if (lp[lessonKey]?.completed || (lp[lessonKey]?.score || 0) >= 100) return true;
     }
     return false;
@@ -201,7 +203,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -500,7 +502,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -540,7 +542,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -610,6 +612,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Grade 6 • Module 3A: Malware Threats & Cyber Security (Textbook p. 44-45)'
         : 'Clasa a VI-a • Modulul 3A: Amenințări Malware & Securitate Cibernetică (Manual pag. 44-45)';
+    }
+    if (id === 'g6_email') {
+      return lang === 'en'
+        ? 'Grade 6 • Module 3B: Email Services, Netiquette & Cloud Collaboration (Textbook p. 46-61)'
+        : 'Clasa a VI-a • Modulul 3B: Servicii E-mail, Netichetă & Colaborare Cloud (Manual pag. 46-61)';
+    }
+    if (id === 'g6_scratch1') {
+      return lang === 'en'
+        ? 'Grade 6 • Module 4A: Scratch Conditional Loops & Algorithm Logic (Textbook p. 62-75)'
+        : 'Clasa a VI-a • Modulul 4A: Algoritmi & Bucle Condiționate în Scratch (Manual pag. 62-75)';
     }
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
@@ -2835,10 +2847,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <div className="p-3.5 rounded-2xl bg-rose-950/40 border border-rose-500/40 flex flex-col justify-between">
               <div>
                 <span className="text-xl mb-1 block">🛡️</span>
-                <div className="font-bold text-white mb-0.5">Unitatea 3: Internet & Securitate</div>
-                <div className="text-[11px] text-slate-300 leading-snug">Malware, firewall, antiviruși, phishing & parole (pag. 44–61)</div>
+                <div className="font-bold text-white mb-0.5">Unitatea 3: Internet, Malware & E-mail</div>
+                <div className="text-[11px] text-slate-300 leading-snug">Malware, firewall, e-mail, netichetă & cloud (pag. 44–61)</div>
               </div>
-              <span className="mt-2 text-[10px] font-mono font-bold text-rose-400">● MODULUL 3A ACTIV</span>
+              <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● MODULUL 3A & 3B ACTIVE</span>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
@@ -3358,75 +3370,241 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Card 6: Modulul 3B - E-mail & Netichetă */}
-          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+          {/* Card 6: Modulul 3B - E-mail, Netichetă & Colaborare în Cloud (ACTIVE & READY) */}
+          <div
+            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
+              isMissionDone('g6_email')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'g6_email'
+                ? 'border-blue-400 shadow-blue-500/20 ring-2 ring-blue-500/30'
+                : 'border-blue-500/60 hover:border-blue-400 hover:shadow-blue-500/10'
+            }`}
+          >
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
                   ✉️
                 </div>
-                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
-                  UNITATEA 3 • LECȚIILE 2–4
-                </span>
+                <div className="flex items-center gap-2">
+                  {isMissionDone('g6_email') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'g6_email' && activeMissionLevel > 1 ? (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
+                    </span>
+                  ) : null}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 3B' : 'NOU • MODULUL 3B'}
+                  </span>
+                </div>
               </div>
 
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
-                Manual pag. 46–61 • Unitatea 3
+              <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 46–61 • Unit 3 (Lessons 2-4)' : 'Manual pag. 46–61 • Unitatea 3 (Lecțiile 2-4)'}
               </div>
 
-              <h3 className="text-xl font-black text-white font-heading mb-1">
-                Servicii E-mail, Netichetă & Colaborare
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-blue-300 transition-colors">
+                {lang === 'en' ? 'Email Services, Netiquette & Cloud Collaboration' : 'Servicii E-mail, Netichetă & Colaborare în Cloud'}
               </h3>
-              <div className="text-xs font-semibold text-slate-400 mb-3">
-                Structura Mesajului (To, CC, BCC, Atașamente) & Reguli de Conduită
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en'
+                  ? 'Message Anatomy (To, CC, BCC), Attachments, Anti-Cyberbullying & Cloud'
+                  : 'Anatomia Mesajului (To, CC, BCC), Atașamente <25MB, Netichetă, Scut Anti-Cyberbullying & Permisiuni Cloud'}
               </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                Trimiterea corectă a scrisorilor electronice, respectarea bunelor maniere digitale (Neticheta) și utilizarea platformelor de stocare cloud pentru proiecte în echipă.
+                {lang === 'en'
+                  ? 'Master email syntax, uncover the privacy power of BCC over CC, handle file attachments under the 25 MB limit, follow golden Netiquette rules (never type in ALL-CAPS), respond to cyberbullying with the 4-step protocol (119/116111), and manage Viewer vs Editor cloud permissions!'
+                  : 'Învață structura unei adrese de e-mail, stăpânește diferența critică de confidențialitate dintre To, CC și BCC (copie ascunsă), respectă limita de 25 MB pentru atașamente, aplică normele de Netichetă (fără majuscule agresive), activează scutul Anti-Cyberbullying și configurează permisiunile în Cloud!'}
               </p>
+
+              {/* Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-blue-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-blue-400" /> Diplomă Ambasador Netichetă
+                </span>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-500 font-mono">Comunicare Digitală</span>
-              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
-                În pregătire
-              </span>
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {isMissionDone('g6_email') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'g6_email' && activeMissionLevel > 1 ? (
+                  <span className="text-blue-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('email-neticheta')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('g6_email')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('g6_email')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-blue-600 hover:bg-blue-500 text-white font-black shadow-blue-600/30'
+                  }`}
+                >
+                  {isMissionDone('g6_email') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'g6_email' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 3B' : 'Continuă Misiunea 3B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 3B (Email & Netiquette)' : 'Începe Misiunea 3B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Card 7: Modulul 4A - Bucle Condiționate Scratch */}
-          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+          <div
+            className={`bg-slate-900/90 border-2 rounded-3xl p-6 shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group ${
+              isMissionDone('g6_scratch1')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'g6_scratch1'
+                ? 'border-amber-400 shadow-amber-500/20 ring-2 ring-amber-500/30'
+                : 'border-amber-500/60 hover:border-amber-400 hover:shadow-amber-500/10'
+            }`}
+          >
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
                   🔄
                 </div>
-                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
-                  UNITATEA 4 • LECȚIILE 1–2
-                </span>
+                <div className="flex items-center gap-2">
+                  {isMissionDone('g6_scratch1') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'g6_scratch1' && activeMissionLevel > 1 ? (
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
+                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
+                    </span>
+                  ) : null}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 4A' : 'NOU • MODULUL 4A'}
+                  </span>
+                </div>
               </div>
 
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
-                Manual pag. 62–75 • Unitatea 4
+              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 62–75 • Unit 4 (Lessons 1-3)' : 'Manual pag. 62–75 • Unitatea 4 (Lecțiile 1-3)'}
               </div>
 
-              <h3 className="text-xl font-black text-white font-heading mb-1">
-                Algoritmi & Bucle Condiționate în Scratch
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-amber-300 transition-colors">
+                {lang === 'en' ? 'Scratch Algorithms & Conditional Loops' : 'Algoritmi & Bucle Condiționate în Scratch'}
               </h3>
-              <div className="text-xs font-semibold text-slate-400 mb-3">
-                Structura „Cât timp” (While) & „Repetă până când” (Repeat Until)
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en'
+                  ? 'While vs Repeat Until, Logic Inversion, Compound Booleans & Maze Sensors'
+                  : 'Structura „Cât timp” vs „Repetă până când”, Operatori Booleeni (ȘI, SAU, NU), Bucle Infinite & Senzori'}
               </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                Comparație între execuția secvențială și structurile repetitive condiționate, gestionarea condițiilor de oprire și evitarea buclelor infinite în jocuri interactive.
+                {lang === 'en'
+                  ? 'Master the critical logic difference between textbook While loops and Scratch Repeat Until blocks! Evaluate compound Boolean operators, hunt down freeze bugs and infinite loops, calibrate color and proximity sensors, and guide Arky through an autonomous smart maze runner!'
+                  : 'Înțelege de ce bucla Scratch „repetă până când” funcționează invers față de „cât timp” din pseudocod! Testează operatorii relaționali și booleeni (ȘI, SAU, NU), rezolvă capcana buclelor infinite, pilotează autonom cu senzori de coliziune și parcurge labirintul inteligent!'}
               </p>
+
+              {/* Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-purple-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-purple-400" /> Diplomă Programator Scratch 6A
+                </span>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-500 font-mono">Programare Avansată</span>
-              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
-                În pregătire
-              </span>
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {isMissionDone('g6_scratch1') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'g6_scratch1' && activeMissionLevel > 1 ? (
+                  <span className="text-amber-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('algoritmi-bucle-scratch-1')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('g6_scratch1')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('g6_scratch1')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-amber-600 hover:bg-amber-500 text-white font-black shadow-amber-600/30'
+                  }`}
+                >
+                  {isMissionDone('g6_scratch1') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'g6_scratch1' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 4A (Scratch Loops)' : 'Începe Misiunea 4A'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -3698,6 +3876,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 ? 'g6_paint3d'
                 : mId === 'g6malware' || mId === 'g6_malware'
                 ? 'g6_malware'
+                : mId === 'g6email' || mId === 'g6_email'
+                ? 'g6_email'
+                : mId === 'g6scratch1' || mId === 'g6_scratch1'
+                ? 'g6_scratch1'
                 : mId;
             handleAttemptStart(mappedMission as any);
           }}
@@ -3707,7 +3889,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | null): number {
+function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
@@ -3726,7 +3908,9 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
     missionId === 'g6_presentation1' ||
     missionId === 'g6_presentation2' ||
     missionId === 'g6_paint3d' ||
-    missionId === 'g6_malware'
+    missionId === 'g6_malware' ||
+    missionId === 'g6_email' ||
+    missionId === 'g6_scratch1'
   ) {
     const standardScores = [0, 15, 30, 45, 60, 75, 90, 100];
     return standardScores[Math.min(level - 1, 7)] || 0;

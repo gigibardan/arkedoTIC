@@ -8,7 +8,7 @@ export interface PillFact {
   emoji: string;
   shortTitle: string;
   title: string;
-  category: 'all' | 'hardware' | 'files' | 'internet' | 'algorithms' | 'scratch' | 'presentation' | 'model3d' | 'malware';
+  category: 'all' | 'hardware' | 'files' | 'internet' | 'algorithms' | 'scratch' | 'presentation' | 'model3d' | 'malware' | 'email';
   grade?: 'g5' | 'g6';
   tag: string;
   bookPage: string;
@@ -387,6 +387,45 @@ const PILLS_RO: PillFact[] = [
     content: 'Firewall-ul (Zidul de Protecție) este portarul rețelei ce blochează conexiunile suspecte din Internet. Antivirusul scanează fișierele salvate pe disc. Dacă detectează cod periculos, îl mută în Carantină (zonă izolată) pentru a preveni rularea.',
     proTip: 'Nu folosi niciodată două programe antivirus instalate simultan pe același PC: vor intra în conflict și vor bloca calculatorul! Păstrează doar unul, actualizat zilnic.',
     didYouKnow: 'O parolă puternică de 12 caractere ce combină litere mari, mici, cifre și simboluri (ex: `#ArkyTIC!2026`) ar necesita sute de mii de ani pentru a fi spartă de un computer obișnuit prin forță brută!',
+  },
+  {
+    id: 'email-to-cc-bcc',
+    emoji: '✉️',
+    shortTitle: 'To, CC vs BCC',
+    title: 'Diferența Critică: Câmpurile To, CC și BCC',
+    category: 'email',
+    grade: 'g6',
+    tag: 'Confidențialitate E-mail',
+    bookPage: '48-50',
+    content: 'Câmpul TO este pentru destinatarul principal. Câmpul CC (Carbon Copy) este pentru persoanele informate secundar (toată lumea le vede adresa). Câmpul BCC (Blind Carbon Copy) ascunde 100% adresele pentru a proteja confidențialitatea la trimiteri colective!',
+    proTip: 'Regula de aur GDPR: Când trimiți un email la 25 de colegi sau părinți, adaugă-le adresele în BCC pentru a nu le divulga datele private!',
+    didYouKnow: 'Simbolul @ a fost ales în 1971 de inginerul Ray Tomlinson deoarece era o tastă rar folosită pe tastaturile teletype și înseamnă „at” (la / pe serverul).',
+  },
+  {
+    id: 'netiquette-caps',
+    emoji: '🎩',
+    shortTitle: 'Neticheta & Majuscule',
+    title: 'Regula #1 a Netichetei: De Ce Nu Scriem cu MAJUSCULE',
+    category: 'email',
+    grade: 'g6',
+    tag: 'Etică Digitală',
+    bookPage: '51-53',
+    content: 'Neticheta (Network + Etiquette) reprezintă codul bunelor maniere în spațiul online. Scrierea unui text integral cu MAJUSCULE (Caps Lock) este percepută în toată lumea drept un STRIGĂT agresiv sau un țipăt la destinatar!',
+    proTip: 'Include întotdeauna un Subiect clar și respectă structura în 4 părți: Salut inițial politicos, Text aerisit cu diacritice, Încheiere de respect și Semnătura cu numele tău complet!',
+    didYouKnow: 'Cuvântul Netiquette a fost folosit pentru prima dată în anii 1980 pe rețeaua Usenet, înainte de apariția web-ului modern!',
+  },
+  {
+    id: 'cloud-permissions',
+    emoji: '☁️',
+    shortTitle: 'Permisiuni în Cloud',
+    title: 'Stocare Cloud: Viewer vs Commenter vs Editor',
+    category: 'email',
+    grade: 'g6',
+    tag: 'Colaborare Cloud',
+    bookPage: '56-60',
+    content: 'La partajarea unui fișier în Cloud (Google Drive / OneDrive), setezi drepturile: Viewer (poate doar citi/descărca), Commenter (poate lăsa sugestii pe marginea textului) și Editor (poate modifica direct conținutul în timp real cu ceilalți).',
+    proTip: 'Dacă un coleg șterge din greșeală textul dintr-un document comun, deschide „Istoricul Versiunilor” (Version History) și poți restaura orice variantă anterioară cu un click!',
+    didYouKnow: 'Termenul de „Cloud” (nor) provine din schemele de rețea din anii \'90, unde infrastructura telecomunicațiilor era desenată grafic ca un nor alb pufos.',
   },
 ];
 
@@ -781,6 +820,45 @@ const PILLS_EN: PillFact[] = [
     proTip: 'Never install two active antiviruses on the same computer: they will conflict and freeze your system! Stick to one reputable suite updated daily.',
     didYouKnow: 'A 12-character password mixing uppercase, lowercase, numbers, and symbols (e.g. `#ArkyTIC!2026`) would take centuries for a typical cracker rig to brute-force!',
   },
+  {
+    id: 'email-to-cc-bcc',
+    emoji: '✉️',
+    shortTitle: 'To, CC vs BCC',
+    title: 'Critical Distinction: To, CC, and BCC Header Fields',
+    category: 'email',
+    grade: 'g6',
+    tag: 'Email Privacy',
+    bookPage: '48-50',
+    content: 'The TO field is for the primary recipient. The CC (Carbon Copy) field keeps secondary parties informed visibly. The BCC (Blind Carbon Copy) field keeps all recipient addresses 100% hidden, strictly protecting personal privacy!',
+    proTip: 'GDPR Golden Rule: When emailing 25 classmates or parents, put their addresses in BCC so private emails are never leaked!',
+    didYouKnow: 'The @ symbol was chosen in 1971 by engineer Ray Tomlinson because it was rarely used on keyboards and literally meant "at" the remote server.',
+  },
+  {
+    id: 'netiquette-caps',
+    emoji: '🎩',
+    shortTitle: 'Netiquette & Caps',
+    title: 'Golden Rule of Netiquette: Why You Never Type in ALL-CAPS',
+    category: 'email',
+    grade: 'g6',
+    tag: 'Digital Ethics',
+    bookPage: '51-53',
+    content: 'Netiquette (Network + Etiquette) is the code of courteous digital behavior. Typing entirely in ALL-CAPS is globally interpreted as aggressive SHOUTING or screaming at the recipient!',
+    proTip: 'Always write a clear Subject, open with a polite greeting, format with readable paragraphs, and close with a respectful sign-off and your full name!',
+    didYouKnow: 'The word "Netiquette" originated in the 1980s on Usenet newsgroups well before the World Wide Web was even invented!',
+  },
+  {
+    id: 'cloud-permissions',
+    emoji: '☁️',
+    shortTitle: 'Cloud Permissions',
+    title: 'Cloud Storage: Viewer vs Commenter vs Editor Roles',
+    category: 'email',
+    grade: 'g6',
+    tag: 'Cloud Collaboration',
+    bookPage: '56-60',
+    content: 'When sharing files in Cloud services (Google Drive / OneDrive), assign roles deliberately: Viewer (read/download only), Commenter (suggest comments on margins), and Editor (full real-time authoring rights).',
+    proTip: 'If a teammate accidentally deletes three pages of your shared paper, open "Version History" to instantly restore any earlier state with one click!',
+    didYouKnow: 'The term "Cloud" comes from old telecom diagrams in the 1990s, where complex server networks were drawn as a fluffy white cloud.',
+  },
 ];
 
 export const KnowledgePills: React.FC = () => {
@@ -827,6 +905,7 @@ export const KnowledgePills: React.FC = () => {
     { id: 'presentation', labelRo: 'Prezentări (VI) 📊', labelEn: 'Presentations (G6) 📊' },
     { id: 'model3d', labelRo: 'Paint 3D (VI) 🧊', labelEn: 'Paint 3D (G6) 🧊' },
     { id: 'malware', labelRo: 'Malware & Securitate (VI) 🛡️', labelEn: 'Malware & Security (G6) 🛡️' },
+    { id: 'email', labelRo: 'E-mail & Netichetă (VI) ✉️', labelEn: 'Email & Netiquette (G6) ✉️' },
   ];
 
   return (

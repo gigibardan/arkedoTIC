@@ -355,6 +355,10 @@ class SoundManager {
   playFanfare() {
     this.playVictory();
   }
+
+  playPop() {
+    this.playClick();
+  }
 }
 
 export const sounds = new SoundManager();

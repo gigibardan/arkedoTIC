@@ -32,7 +32,7 @@ export interface CurriculaModule {
     answer: string;
   }[];
   practicalLab: string;
-  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6malware';
+  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6malware' | 'g6email' | 'g6scratch1';
 }
 
 export const CURRICULA_MODULES: CurriculaModule[] = [
@@ -650,5 +650,259 @@ export const CURRICULA_MODULES: CurriculaModule[] = [
     ],
     practicalLab: 'Realizează o scanare antivirus de sistem, trimite fișierele infectate în Carantină și configurează o parolă blindată de peste 12 caractere.',
     missionId: 'g6malware'
+  },
+  {
+    id: 'prezentari-slides-2',
+    slug: 'prezentari-design-animatii-proiect',
+    title: 'Design Diapozitive, Tranziții, Animații & Proiect Turistic',
+    shortTitle: 'Design & Animații Slide',
+    grade: 'Clasa a VI-a',
+    unit: 'Unitatea 1: Tehnoredactare & Prezentări (pag. 16–25)',
+    manualRef: 'Manual Art Klett Clasa a VI-a — OMEN 3393/2017',
+    icon: '🎬',
+    color: 'from-pink-500 to-rose-600',
+    metaDescription: 'Ghid complet TIC Clasa a 6-a: Inserare imagini, SmartArt, forme geometrice, tranziții fluide, animații de intrare/ieșire, reguli de design și susținerea unei expuneri.',
+    keywords: [
+      'design prezentari clasa 6',
+      'tranzitii slide powerpoint',
+      'animatii intrare accent iesire',
+      'smartart diagrame proiect',
+      'public speaking expunere diapozitive'
+    ],
+    competencies: [
+      {
+        code: '2.1',
+        description: 'Personalizarea diapozitivelor prin inserarea și formatarea obiectelor multimedia (imagini, sunete, forme, SmartArt).'
+      },
+      {
+        code: '2.2',
+        description: 'Aplicarea efectelor de tranziție și animație pentru evidențierea ideilor cheie, respectând principiile de lizibilitate.'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Tranziții vs Animații: Diferența Esențială',
+        content: [
+          'Tranziția este efectul vizual aplicat întregului diapozitiv în momentul trecerii de la un slide la următorul.',
+          'Animația este efectul aplicat unui element specific din slide (un titlu, o fotografie, o casetă de text, o formă geometrică).',
+          'Tipuri de animații: Intrare (verde - cum apare elementul), Accent (galben - cum pulsează/se evidențiază), Ieșire (roșu - cum dispare din cadru).'
+        ],
+        tips: 'Moderare: Folosește maxim 1 sau 2 tipuri de tranziții în toată prezentarea pentru a nu distrage atenția publicului!'
+      },
+      {
+        title: 'Elemente Vizuale & SmartArt',
+        content: [
+          'Diagramele SmartArt transformă listele plictisitoare de text în diagrame vizuale atractive (procese, cicluri, ierarhii, relații).',
+          'Imaginile trebuie să fie de rezoluție bună și aliniate armonios, respectând regula treimilor.',
+          'Regula contrastului: pe fundal întunecat se folosește text luminos (alb/galben); pe fundal deschis se folosește text închis la culoare (negru/albastru închis).'
+        ]
+      }
+    ],
+    keyTerms: [
+      { term: 'SmartArt', definition: 'Instrument grafic care organizează informațiile în diagrame schematice profesionale.' },
+      { term: 'Tranziție', definition: 'Efect vizual de trecere între două diapozitive consecutive.' },
+      { term: 'Animație de Intrare', definition: 'Efect care aduce un obiect pe ecran în timpul expunerii.' },
+      { term: 'Cronometrare (Timing)', definition: 'Setarea duratei de afișare și a întârzierii animațiilor.' }
+    ],
+    keyboardShortcuts: [
+      { keys: 'F5', action: 'Lansarea prezentării pe tot ecranul de la primul diapozitiv' },
+      { keys: 'Shift + F5', action: 'Pornirea prezentării de la diapozitivul curent selectat' },
+      { keys: 'B / W', action: 'Înnegrirea (Black) sau albirea (White) temporară a ecranului în timpul expunerii' }
+    ],
+    faqs: [
+      {
+        question: 'Cum adaug o melodie de fundal care să ruleze pe toate slide-urile?',
+        answer: 'Inserează fișierul audio pe primul diapozitiv și bifează opțiunea „Play Across Slides” (Redare pe toate diapozitivele).'
+      }
+    ],
+    practicalLab: 'Realizează proiectul turistic „Obiective de Vizitat în România” cu 5 diapozitive, SmartArt pentru traseu și animații de intrare pe imagini.',
+    missionId: 'g6p2'
+  },
+  {
+    id: 'email-neticheta',
+    slug: 'email-neticheta-colaborare-cloud',
+    title: 'Servicii E-mail, Netichetă & Colaborare în Cloud',
+    shortTitle: 'E-mail, Netichetă & Cloud',
+    grade: 'Clasa a VI-a',
+    unit: 'Unitatea 3: Internet & Comunicare Digitală (pag. 46–61)',
+    manualRef: 'Manual Art Klett Clasa a VI-a — OMEN 3393/2017',
+    icon: '✉️',
+    color: 'from-blue-600 to-indigo-700',
+    metaDescription: 'Lecție completă TIC Clasa a 6-a: Structura e-mailului, Câmpurile To, CC, BCC, atașamente <25MB, Netichetă, Protocol Anti-Cyberbullying și colaborare securizată în Cloud.',
+    keywords: [
+      'email clasa 6 gimnaziu',
+      'campuri to cc bcc diferenta',
+      'atasa fisier limita 25mb',
+      'neticheta reguli bune maniere online',
+      'cyberbullying raportare 119',
+      'google drive onedrive permisiuni viewer editor'
+    ],
+    competencies: [
+      {
+        code: '1.2',
+        description: 'Aplicarea normelor de securitate și a eticii în comunicarea electronică (Neticheta).'
+      },
+      {
+        code: '3.1',
+        description: 'Utilizarea serviciilor de poștă electronică pentru schimbul de mesaje și fișiere atașate în condiții de siguranță.'
+      },
+      {
+        code: '3.2',
+        description: 'Partajarea resurselor și colaborarea online pe documente în spații de stocare Cloud.'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Anatomia Adresei & Câmpurile de Adresare',
+        content: [
+          'Adresă e-mail: utilizator@server.domeniu (ex: elev@scoala.ro). Simbolul @ separă utilizatorul de gazdă.',
+          'Câmpul TO (Către): destinatarii principali cărora li se cere o acțiune sau răspuns direct.',
+          'Câmpul CC (Carbon Copy): persoane informate secundar; adresele sunt vizibile pentru toți.',
+          'Câmpul BCC (Blind Carbon Copy): destinatarii ascunși; adresele sunt 100% invizibile pentru ceilalți (esențial pentru protejarea intimității la trimiteri colective).'
+        ],
+        tips: 'Regula de aur GDPR: Când trimiți o invitație către toți colegii de clasă, pune-le adresele în BCC pentru a nu le divulga fără acord!'
+      },
+      {
+        title: 'Atașamente & Limita de 25 MB',
+        content: [
+          'Fișierele atașate (simbol agrafă 📎) au o limită de maxim 25 MB în majoritatea serviciilor de e-mail.',
+          'Fișierele voluminoase (>25 MB) se încarcă în Cloud (Google Drive / OneDrive) și se trimite linkul de acces.',
+          'Sunt strict interzise fișierele executabile (.exe, .bat, .vbs) deoarece pot infecta calculatoarele cu viruși.'
+        ]
+      },
+      {
+        title: 'Neticheta: Reguli de Bun Simț în Mediul Digital',
+        content: [
+          'Nu scrie cu MAJUSCULE: în lumea digitală, textul cu majuscule înseamnă că STRIGI sau ȚIPI la destinatar.',
+          'Subiectul (Subject) este obligatoriu: rezumă clar conținutul mesajului în câteva cuvinte.',
+          'Formula politicoasă: include salutul („Bună ziua, stimate domnule profesor”), paragrafe aerisite și formula de încheiere cu semnătură („Cu respect, Nume Prenume”).',
+          'Nu participa la Cyberbullying: raportează, blochează agresorii și apelează numărul gratuit 119 sau 116 111.'
+        ]
+      },
+      {
+        title: 'Partajarea în Cloud: Viewer vs Commenter vs Editor',
+        content: [
+          'Vizualizator (Viewer): poate doar citi și descărca documentul; nu poate modifica nimic.',
+          'Comentator (Commenter): poate lăsa sugestii și notițe pe marginea textului.',
+          'Editor: are drepturi complete de editare, adăugare și ștergere de conținut în timp real.',
+          'Istoricul Versiunilor (Version History): permite recuperarea oricărei modificări șterse din greșeală.'
+        ]
+      }
+    ],
+    keyTerms: [
+      { term: 'BCC (Cci)', definition: 'Blind Carbon Copy — câmp de e-mail ce ascunde complet identitatea destinatarilor.' },
+      { term: 'Netichetă', definition: 'Ansamblul de reguli de politețe și respect reciproc în comunicarea pe Internet.' },
+      { term: 'Cyberbullying', definition: 'Hărțuirea sau intimidarea unei persoane prin mijloace digitale.' },
+      { term: 'Cloud Storage', definition: 'Stocarea fișierelor pe servere conectate la Internet (Google Drive, OneDrive).' },
+      { term: 'Version History', definition: 'Jurnal cronologic al modificărilor unui fișier partajat, permițând restaurarea.' }
+    ],
+    keyboardShortcuts: [
+      { keys: 'Ctrl + Enter', action: 'Trimiterea rapidă a e-mailului compus în majoritatea clienților de mail' },
+      { keys: 'Ctrl + K', action: 'Inserarea unui hyperlink către o resursă Cloud pe un cuvânt selectat' }
+    ],
+    faqs: [
+      {
+        question: 'Care este diferența dintre Reply și Reply All?',
+        answer: 'Reply răspunde doar expeditorului inițial, în timp ce Reply All trimite mesajul tău către toți cei din lista To și CC, ceea ce poate crea spam inutil.'
+      },
+      {
+        question: 'Ce număr pot apela gratuit dacă eu sau un coleg suntem hărțuiți online?',
+        answer: '119 (Numărul Național pentru Urgențe Copii) sau 116 111 (Telefonul Copilului).'
+      }
+    ],
+    practicalLab: 'Compune un e-mail politicos către profesor cu o temă atașată, pune adresa părintelui în CC și configurează un document Google Docs cu drept de Editor pentru colegul de bancă.',
+    missionId: 'g6email'
+  },
+  {
+    id: 'algoritmi-bucle-scratch-1',
+    slug: 'algoritmi-bucle-conditionate-scratch',
+    title: 'Algoritmi & Bucle Condiționate în Scratch (Cât timp vs Repetă până când)',
+    shortTitle: 'Bucle Scratch 6A',
+    grade: 'Clasa a VI-a',
+    unit: 'Unitatea 4: Algoritmi și programare în Scratch (pag. 62–75)',
+    manualRef: 'Manual pag. 62–75 • Unitatea 4',
+    icon: 'Repeat',
+    color: 'from-amber-500 to-orange-600',
+    metaDescription: 'Lecție completă și laborator interactiv Scratch pentru Clasa a VI-a: bucle condiționate, cât timp vs repetă până când, operatori booleeni și prevenirea buclelor infinite.',
+    keywords: ['scratch', 'bucle conditionate', 'cat timp', 'while', 'repeat until', 'senzori', 'labirint', 'operatori booleeni'],
+    competencies: [
+      {
+        code: '1.3',
+        description: 'Aplicarea regulilor de sintaxă și a structurilor de control în medii vizuale de programare.'
+      },
+      {
+        code: '2.3',
+        description: 'Transpunerea algoritmilor exprimați în limbaj natural sau pseudocod în blocuri Scratch.'
+      },
+      {
+        code: '3.2',
+        description: 'Depanarea erorilor logice, gestionarea buclelor infinite și utilizarea senzorilor interactivi.'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'De la Execuție Secvențială la Repetitivă',
+        content: [
+          'În algoritmii liniari, instrucțiunile se execută una după alta. Când o secvență trebuie repetată de 10 sau 100 de ori, scrierea manuală a fiecărui bloc consumă memorie și duce la erori.',
+          'Structura repetitivă (bucla) permite executarea repetată a unui set de instrucțiuni într-un mod compact și eficient.'
+        ]
+      },
+      {
+        title: 'Marea Inversare: Pseudocod „Cât timp” vs Scratch „Repetă până când”',
+        content: [
+          'În pseudocod și limbaje textuale (C++, Python), bucla WHILE („cât timp <condiție> execută”) rulează ATÂT TIMP CÂT condiția este ADEVĂRATĂ și se oprește când devine falsă.',
+          'În Scratch, blocul este REPEAT UNTIL („repetă până când <condiție>”), ceea ce înseamnă că rulează ATÂT TIMP CÂT condiția este FALSĂ și se OPREȘTE când condiția din hexagon devine ADEVĂRATĂ.',
+          'Pentru a converti „cât timp x > 0” în Scratch, folosim negația logică: „repetă până când x <= 0” sau „repetă până când x = 0”.'
+        ],
+        tips: 'Regula de aur la test: În Scratch, condiția din buclă este CONDIȚIA DE OPRIRE, nu condiția de continuare!'
+      },
+      {
+        title: 'Operatori Relaționali & Booleeni în Scratch',
+        content: [
+          'Blocurile verzi hexagonale permit evaluarea adevărului logic: relaționali (>, <, =) și logici.',
+          '[ȘI] (AND): ambele condiții trebuie să fie adevărate.',
+          '[SAU] (OR): cel puțin o condiție trebuie să fie adevărată.',
+          '[NU] (NOT): inversează valoarea logică, transformând Adevărat în Fals.'
+        ]
+      },
+      {
+        title: 'Capcana Buclelor Infinite & Comenzi de Oprire',
+        content: [
+          'O buclă devine infinită atunci când variabila testată nu se modifică niciodată în interiorul corpului buclei sau când pasul de incrementare sare peste valoarea de oprire (ex: x crește cu 2 pornind de la 1 și testează x = 10). Aceasta blochează procesorul sau fila de browser.',
+          'Comenzile de oprire dedicate sunt: „oprește [acest script]”, „oprește [alte scripturi ale personajului]” și „oprește [toate]”.'
+        ]
+      },
+      {
+        title: 'Senzori Inteligenți Scratch & Navigație Autonomă',
+        content: [
+          'Categoria Detectare (Senzori) oferă blocuri precum: <atinge [margine/personaj]>, <atinge culoarea [#...]>, (distanța până la [țintă]) și <tasta [spațiu] apăsată?>.',
+          'Împreună cu buclele condiționate, senzorii permit personajelor să reacționeze la mediu, să navigheze autonom în labirinturi și să evite coliziunile.'
+        ]
+      }
+    ],
+    keyTerms: [
+      { term: 'Buclă (Loop)', definition: 'Structură de control algoritmică ce repetă un set de instrucțiuni pe baza unei condiții sau a unui contor.' },
+      { term: 'Cât timp (While)', definition: 'Buclă cu test inițial din pseudocod ce rulează cât timp condiția este Adevărată.' },
+      { term: 'Repetă până când (Repeat Until)', definition: 'Buclă nativă Scratch ce rulează cât timp condiția este Falsă și se oprește când devine Adevărată.' },
+      { term: 'Buclă Infinită', definition: 'Eroare de programare în care condiția de oprire nu este niciodată atinsă, blocând programul.' },
+      { term: 'Operatori Logici', definition: 'Blocurile ȘI (AND), SAU (OR), NU (NOT) utilizate pentru a construi condiții compuse.' }
+    ],
+    keyboardShortcuts: [
+      { keys: 'Spațiu', action: 'Tastă standard frecvent verificată prin senzorul <tasta [spațiu] apăsată?>' },
+      { keys: 'Steag Verde', action: 'Declanșatorul universal de pornire al proiectelor Scratch' },
+      { keys: 'Butonul Roșu (Octogon)', action: 'Oprirea de urgență a tuturor scripturilor și buclelor active' }
+    ],
+    faqs: [
+      {
+        question: 'Cum evit o buclă infinită când folosesc o variabilă contor?',
+        answer: 'Asigură-te că adaugi instrucțiunea „modifică [contor] cu (1)” în interiorul buclei și folosești operatorul de inegalitate (ex: >= sau >) în loc de egalitate fixă (=).'
+      },
+      {
+        question: 'Care este echivalentul în Scratch pentru condiția compusă „scor > 50 ȘI vieți > 0”?',
+        answer: 'Introducem un bloc hexagonal verde < [ ] și [ ] > în care plasăm blocurile <scor > 50> în primul slot și <vieți > 0> în al doilea slot.'
+      }
+    ],
+    practicalLab: 'Construiește un algoritm autonom în Scratch care ghidează robotul printr-un labirint 2D folosind bucla „repetă până când atinge [Steag Verde]” combinată cu senzorul de perete.',
+    missionId: 'g6scratch1'
   }
 ];
