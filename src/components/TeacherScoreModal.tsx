@@ -23,7 +23,8 @@ import {
   Presentation,
   Box,
   Mail,
-  Repeat
+  Repeat,
+  Clapperboard
 } from 'lucide-react';
 import { StudentProfile, ArcadeScores, LessonsProgress, DuelStats } from '../types';
 import { 
@@ -1457,6 +1458,69 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                         max="7"
                         value={lessonsProgress.model3d1?.level || 1}
                         onChange={(e) => handleLessonChange('model3d1', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Grade 6 - Animation Toontastic & VR (model3d2) */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Clapperboard className="w-5 h-5 text-pink-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 6 • Unit 2B: Toontastic Animation & Virtual Reality VR' : 'Clasa a VI-a • Unitatea 2B: Animație Toontastic & Realitate Virtuală VR'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 34-43 (24 FPS, Story Arc, Digital Puppeteering, Audio Mood, CoSpaces 360° VR)' : 'Manual pag. 34-43 (24 FPS, Arc Narativ, Păpușărie Digitală, Regie Audio, CoSpaces 360° VR)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.model3d2?.completed || false}
+                        onChange={(e) => handleLessonChange('model3d2', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.model3d2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.model3d2?.score || 0}
+                        onChange={(e) => handleLessonChange('model3d2', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.model3d2?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('model3d2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.model3d2?.level || 1}
+                        onChange={(e) => handleLessonChange('model3d2', 'level', parseInt(e.target.value, 10) || 1)}
                         className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
                       />
                     </div>

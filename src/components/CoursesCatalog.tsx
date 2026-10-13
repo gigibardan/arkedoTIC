@@ -80,8 +80,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -130,6 +130,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g6_presentation1' && (localStorage.getItem('arkedo_g6p1_level') === '8' || Number(localStorage.getItem('arkedo_g6p1_score') || '0') >= 100)) return true;
       if (mId === 'g6_presentation2' && (localStorage.getItem('arkedo_g6p2_level') === '8' || Number(localStorage.getItem('arkedo_g6p2_score') || '0') >= 100)) return true;
       if (mId === 'g6_paint3d' && (localStorage.getItem('arkedo_g6p3_level') === '8' || Number(localStorage.getItem('arkedo_g6p3_score') || '0') >= 100)) return true;
+      if (mId === 'g6_anim3d' && (localStorage.getItem('arkedo_g6a1_level') === '8' || Number(localStorage.getItem('arkedo_g6a1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_anim3d') === 'true')) return true;
       if (mId === 'g6_malware' && (localStorage.getItem('arkedo_g6m1_level') === '8' || Number(localStorage.getItem('arkedo_g6m1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_malware') === 'true')) return true;
       if (mId === 'g6_email' && (localStorage.getItem('arkedo_g6e1_level') === '8' || Number(localStorage.getItem('arkedo_g6e1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_email') === 'true')) return true;
       if (mId === 'g6_scratch1' && (localStorage.getItem('arkedo_g6s1_level') === '8' || Number(localStorage.getItem('arkedo_g6s1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch1') === 'true')) return true;
@@ -139,7 +140,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
       const lp = activeStudent.lessonsProgress;
-      const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId === 'g6_malware' ? 'cyber6a' : mId === 'g6_email' ? 'cyber6b' : mId === 'g6_scratch1' ? 'scratch6a' : mId;
+      const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId === 'g6_anim3d' ? 'model3d2' : mId === 'g6_malware' ? 'cyber6a' : mId === 'g6_email' ? 'cyber6b' : mId === 'g6_scratch1' ? 'scratch6a' : mId;
       if (lp[lessonKey]?.completed || (lp[lessonKey]?.score || 0) >= 100) return true;
     }
     return false;
@@ -203,7 +204,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -502,7 +503,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -542,7 +543,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null) => {
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -607,6 +608,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return lang === 'en'
         ? 'Grade 6 • Module 2A: 3D Modeling in Paint 3D (Textbook p. 26-33)'
         : 'Clasa a VI-a • Modulul 2A: Modelare 3D în Paint 3D (Manual pag. 26-33)';
+    }
+    if (id === 'g6_anim3d') {
+      return lang === 'en'
+        ? 'Grade 6 • Module 2B: Toontastic Animation & Virtual Reality VR (Textbook p. 34-43)'
+        : 'Clasa a VI-a • Modulul 2B: Animație Toontastic & Realitate Virtuală VR (Manual pag. 34-43)';
     }
     if (id === 'g6_malware') {
       return lang === 'en'
@@ -3213,39 +3219,120 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Card 4: Modulul 2B - Animație Toontastic & VR CoSpaces Edu */}
-          <div className="bg-slate-900/80 border-2 border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+          {/* Card 4: Modulul 2B - Animație Toontastic & VR CoSpaces Edu (Active Mission) */}
+          <div
+            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-purple-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
+              isMissionDone('g6_anim3d')
+                ? 'border-emerald-500/80 shadow-emerald-500/10'
+                : activeMissionId === 'g6_anim3d'
+                ? 'border-pink-400 shadow-pink-500/20 ring-2 ring-pink-500/30'
+                : 'border-pink-500/50 hover:border-pink-400 hover:shadow-2xl hover:shadow-pink-500/20'
+            }`}
+          >
             <div>
               <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                   🎬
                 </div>
-                <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-xs font-mono font-bold">
-                  UNITATEA 2 • LECȚIILE 3–4
-                </span>
+                <div className="flex items-center gap-1.5">
+                  {isMissionDone('g6_anim3d') ? (
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
+                    </span>
+                  ) : activeMissionId === 'g6_anim3d' ? (
+                    <span className="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/40 text-[11px] font-bold font-mono animate-pulse">
+                      ● ACTIV
+                    </span>
+                  ) : null}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
+                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 2B' : 'NOU • MODULUL 2B'}
+                  </span>
+                </div>
               </div>
 
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1 font-mono">
-                Manual pag. 34–43 • Unitatea 2
+              <div className="text-[11px] font-bold uppercase tracking-wider text-pink-400 mb-1 font-mono">
+                {lang === 'en' ? 'Textbook p. 34–43 • Unit 2 (Lessons 3-4)' : 'Manual pag. 34–43 • Unitatea 2 (Lecțiile 3–4)'}
               </div>
 
-              <h3 className="text-xl font-black text-white font-heading mb-1">
-                Animație Toontastic & Realitate Virtuală VR
+              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-pink-300 transition-colors">
+                {lang === 'en' ? 'Toontastic Animation & Virtual Reality VR' : 'Animație Toontastic & Realitate Virtuală VR'}
               </h3>
-              <div className="text-xs font-semibold text-slate-400 mb-3">
-                Cadre pe Secundă (24 FPS), Regie Audio & Lumi Virtuale CoSpaces
+              <div className="text-xs font-semibold text-slate-300 mb-3">
+                {lang === 'en' ? '24 FPS Cinema Gold, 3-Act Story Arc, Digital Puppeteering & CoSpaces 360°' : 'Cadre 24 FPS, Arc Narativ în 3 Acte, Păpușărie Digitală & Lumi CoSpaces 360°'}
               </div>
 
               <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                Crearea personajelor animate, înregistrarea vocii în direct, setarea dispoziției sonore (Mood) și explorarea scenelor interactive la 360° cu ochelari VR.
+                {lang === 'en'
+                  ? 'Master the 24 FPS persistence of vision, direct stories with Setup-Conflict-Resolution, perform real-time digital puppeteering with voice capture, tune emotional soundtrack moods, distinguish VR from AR, and build 360° virtual worlds with CoBlocks!'
+                  : 'Stăpânește iluzia optică a celor 24 FPS, scrie scenarii cu arc narativ (Setup, Conflict, Rezolvare), mânuiește personajele în direct prin păpușărie digitală cu voce la microfon, regizează coloana sonoră (Mood), diferențiază VR de AR și explorează lumi 360° în CoSpaces Edu!'}
               </p>
+
+              {/* Badges / Highlights */}
+              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-pink-400" /> 20-25 min
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-pink-300 flex items-center gap-1">
+                  <Award className="w-3 h-3 text-pink-400" /> Diplomă Regizor Digital & Arhitect VR
+                </span>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-500 font-mono">Cinema & Spațiu Virtual</span>
-              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
-                În pregătire
-              </span>
+            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
+              <div className="text-xs text-slate-400 font-mono">
+                {isMissionDone('g6_anim3d') ? (
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
+                    <Award className="w-4 h-4 text-amber-400" />
+                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
+                  </span>
+                ) : activeMissionId === 'g6_anim3d' && activeMissionLevel > 1 ? (
+                  <span className="text-pink-400 font-bold">
+                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
+                  </span>
+                ) : (
+                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => openCurriculaModal('animatie-toontastic-realitate-virtuala-vr')}
+                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-pink-300 hover:text-white border border-pink-500/30 hover:border-pink-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  title="Vezi programa școlară, teoria și fișa didactică"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-pink-400" />
+                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                </button>
+                <button
+                  onClick={() => handleAttemptStart('g6_anim3d')}
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
+                    isMissionDone('g6_anim3d')
+                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black shadow-pink-600/30'
+                  }`}
+                >
+                  {isMissionDone('g6_anim3d') ? (
+                    <>
+                      <Award className="w-4 h-4 text-amber-400" />
+                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
+                    </>
+                  ) : activeMissionId === 'g6_anim3d' && activeMissionLevel > 1 ? (
+                    <>
+                      <span>{lang === 'en' ? 'Resume Mission 2B' : 'Continuă Misiunea 2B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission 2B (Toontastic & VR)' : 'Începe Misiunea 2B'}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -3874,6 +3961,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 ? 'g6_presentation2'
                 : mId === 'g6paint3d'
                 ? 'g6_paint3d'
+                : mId === 'g6anim3d' || mId === 'g6_anim3d'
+                ? 'g6_anim3d'
                 : mId === 'g6malware' || mId === 'g6_malware'
                 ? 'g6_malware'
                 : mId === 'g6email' || mId === 'g6_email'
@@ -3889,7 +3978,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null): number {
+function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
@@ -3908,6 +3997,7 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
     missionId === 'g6_presentation1' ||
     missionId === 'g6_presentation2' ||
     missionId === 'g6_paint3d' ||
+    missionId === 'g6_anim3d' ||
     missionId === 'g6_malware' ||
     missionId === 'g6_email' ||
     missionId === 'g6_scratch1'

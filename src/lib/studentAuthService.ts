@@ -88,6 +88,7 @@ export const DEFAULT_LESSONS_PROGRESS: LessonsProgress = {
   presentation1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   presentation2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   model3d1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  model3d2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   cyber6a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   cyber6b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   scratch6a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
@@ -220,11 +221,12 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const p1 = computeLessonXP(lessons.presentation1 || {});
   const p2 = computeLessonXP(lessons.presentation2 || {});
   const m3d1 = computeLessonXP(lessons.model3d1 || {});
+  const m3d2 = computeLessonXP(lessons.model3d2 || {});
   const cy6a = computeLessonXP(lessons.cyber6a || {});
   const cy6b = computeLessonXP(lessons.cyber6b || {});
   const sc6a = computeLessonXP(lessons.scratch6a || {});
   const sc6b = computeLessonXP(lessons.scratch6b || {});
-  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + cy6a + cy6b + sc6a + sc6b;
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {

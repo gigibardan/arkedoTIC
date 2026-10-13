@@ -32,7 +32,7 @@ export interface CurriculaModule {
     answer: string;
   }[];
   practicalLab: string;
-  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6malware' | 'g6email' | 'g6scratch1';
+  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6anim3d' | 'g6_anim3d' | 'g6malware' | 'g6email' | 'g6scratch1';
 }
 
 export const CURRICULA_MODULES: CurriculaModule[] = [
@@ -904,5 +904,93 @@ export const CURRICULA_MODULES: CurriculaModule[] = [
     ],
     practicalLab: 'Construiește un algoritm autonom în Scratch care ghidează robotul printr-un labirint 2D folosind bucla „repetă până când atinge [Steag Verde]” combinată cu senzorul de perete.',
     missionId: 'g6scratch1'
+  },
+  {
+    id: 'animatie-vr-toontastic-cospaces',
+    slug: 'animatie-toontastic-realitate-virtuala-vr',
+    title: 'Animație Toontastic & Realitate Virtuală VR (Cadre 24 FPS, Regie Audio & CoSpaces)',
+    shortTitle: 'Animație & VR 2B',
+    grade: 'Clasa a VI-a',
+    unit: 'Unitatea 2: Animații & Realitate Virtuală (pag. 34–43)',
+    manualRef: 'Manual pag. 34–43 • Unitatea 2 (Lecțiile 3–4)',
+    icon: 'Clapperboard',
+    color: 'from-pink-500 to-purple-600',
+    metaDescription: 'Lecție completă și atelier interactiv de TIC pentru Clasa a VI-a: Secretele animației (24 FPS, persistența retiniană), structurarea scenariilor în 3 acte în Toontastic 3D, păpușărie digitală cu voce în direct, coloană sonoră și lumi virtuale 360° în CoSpaces Edu.',
+    keywords: ['toontastic', 'animatie', 'fps', '24 fps', 'story arc', 'cospaces', 'vr', 'ar', 'realitate virtuala', 'coblocks'],
+    competencies: [
+      {
+        code: '2.1',
+        description: 'Crearea de secvențe animate digitale folosind principii narative și aplicații dedicate (Toontastic 3D).'
+      },
+      {
+        code: '2.2',
+        description: 'Sincronizarea dialogului vocal și a efectelor audio cu mișcarea personajelor pe scenă.'
+      },
+      {
+        code: '3.3',
+        description: 'Explorarea și configurarea mediilor tridimensionale la 360° și a spațiilor de realitate virtuală (CoSpaces Edu).'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Secretele Animației: Persistența Retiniană & Rata de Cadre (FPS)',
+        content: [
+          'Animația (din latinescul „animare” = a da viață) este iluzia mișcării creată prin succesiunea rapidă de imagini statice (cadre).',
+          'Persistența retiniană: Ochiul uman păstrează o imagine timp de aproximativ 1/16 dintr-o secundă. Când imaginile se succed mai rapid de această limită, creierul le contopește într-o mișcare fluidă continuă.',
+          'Standardul cinematografic de aur este 24 FPS (Frames Per Second) din anul 1927, în timp ce video pe web folosește 30 FPS, iar jocurile 60 FPS.'
+        ],
+        tips: 'Regulă de calcul: Durata în secunde × FPS = Numărul total de cadre necesare (ex: 10s × 24 FPS = 240 cadre).'
+      },
+      {
+        title: 'Arcul Narativ în 3 Acte (Story Arc în Toontastic 3D)',
+        content: [
+          'Actul I - Setup (Începutul): Introducerea personajelor, a decorului și a situației normale inițiale (Cine? și Unde?).',
+          'Actul II - Conflict (Punctul Culminant): Apariția obstacolului neașteptat sau a dilemei majore; tensiunea atinge cota maximă.',
+          'Actul III - Resolution (Deznodământul): Rezolvarea ingenioasă a problemei, victoria binelui și morala poveștii.'
+        ]
+      },
+      {
+        title: 'Păpușărie Digitală & Regie Audio (Digital Puppeteering)',
+        content: [
+          'În Toontastic 3D, personajele sunt mânuite direct pe ecran precum marionetele cu degetul sau mouse-ul în timp ce microfonul captează vocea sincronizată.',
+          'Coloana sonoră (Mood) schimbă 50% din emoția spectatorului: Vesel (Happy), Dramatic (Suspense), Misterios (Spooky), Eroic (Triumphant) sau Sci-Fi.',
+          'Netichetă la microfon: Păstrează distanța de 15–20 cm, rostește clar și lucrează într-o încăpere fără zgomot de fond.'
+        ]
+      },
+      {
+        title: 'VR vs AR vs MR & Explorare 360° în CoSpaces Edu',
+        content: [
+          'VR (Virtual Reality): Imersiune 100% într-o lume generată pe calculator prin ochelari opaci 360° (Google Cardboard, Meta Quest).',
+          'AR (Augmented Reality): Suprapunerea elementelor 3D peste realitatea fizică vizibilă prin camera telefonului.',
+          'CoSpaces Edu: Permite construirea spațiilor 3D panoramice și programarea interactivității cu blocuri vizuale CoBlocks (declanșate la click pe obiecte).'
+        ],
+        tips: 'Ergonomie VR: Fă pauză la fiecare 15–20 de minute pentru a preveni răul de mișcare cibernetic (simulator sickness).'
+      }
+    ],
+    keyTerms: [
+      { term: 'FPS (Frames Per Second)', definition: 'Numărul de imagini statice afișate într-o singură secundă pentru a genera mișcare fluidă.' },
+      { term: 'Persistență Retiniană', definition: 'Proprietatea ochiului uman de a păstra o imagine pe retină timp de ~1/16 dintr-o secundă.' },
+      { term: 'Digital Puppeteering', definition: 'Mânuirea personajelor pe ecran în timp real concomitent cu înregistrarea vocală.' },
+      { term: 'Realitate Virtuală (VR)', definition: 'Mediu 3D artificial în care utilizatorul este complet imersat prin ochelari dedicați.' },
+      { term: 'Realitate Augmentată (AR)', definition: 'Tehnologie ce suprapune conținut digital (holograme 3D) peste lumea fizică reală.' },
+      { term: 'CoBlocks', definition: 'Limbaj de programare vizual cu blocuri în CoSpaces Edu pentru controlul spațiilor 3D.' }
+    ],
+    keyboardShortcuts: [
+      { keys: 'W, A, S, D', action: 'Navigație și deplasare în spațiul virtual 3D în modul First-Person' },
+      { keys: 'Spacebar', action: 'Săritură sau declanșare acțiune în exploratorul virtual' },
+      { keys: 'Mouse Drag', action: 'Rotirea privirii la 360° pe axele orizontală și verticală' }
+    ],
+    faqs: [
+      {
+        question: 'De ce este standardul de 24 FPS preferat în cinematografie?',
+        answer: 'Pentru că oferă fluiditate naturală optimă a mișcării pentru ochiul uman („motion blur” cinematografic) fără costuri excesive de producție.'
+      },
+      {
+        question: 'Care este diferența principală între ochelarii VR și camera AR a telefonului?',
+        answer: 'Ochelarii VR blochează complet lumina din cameră și te plasează într-un spațiu 100% digital, în timp ce camera AR afișează camera ta reală și adaugă obiecte 3D peste ea.'
+      }
+    ],
+    practicalLab: 'Realizează un scurtmetraj animat în 3 acte în Toontastic 3D cu personajul Arky salvând laboratorul TIC, adaugă o coloană sonoră potrivită și explorează scena în modul 360° VR.',
+    missionId: 'g6_anim3d'
   }
 ];

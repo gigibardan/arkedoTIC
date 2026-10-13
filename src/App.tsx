@@ -62,6 +62,9 @@ import { ModuleG6P2Flow } from './components/grade6/presentation2/ModuleG6P2Flow
 // Grade 6 Paint 3D Mission 2A (Unitatea 2 - Manual pag. 26-33)
 import { ModuleG6Paint3DFlow } from './components/grade6/paint3d/ModuleG6Paint3DFlow';
 
+// Grade 6 Animation & VR Mission 2B (Unitatea 2 - Manual pag. 34-43)
+import { ModuleG6AnimVRFlow } from './components/grade6/animation_vr/ModuleG6AnimVRFlow';
+
 // Grade 6 Malware & Cyber Security Mission 3A (Unitatea 3 - Manual pag. 44-45)
 import { ModuleG6M1Flow } from './components/grade6/malware/ModuleG6M1Flow';
 
@@ -106,10 +109,10 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1') {
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1') {
         const isDone = localStorage.getItem(`arkedo_completed_${saved}`) === 'true';
         if (!isDone) return saved;
       }
@@ -496,6 +499,35 @@ function GameContent() {
     return 0;
   });
 
+  // Grade 6 Animation & VR Mission 2B progress (Unitatea 2 - Manual pag. 34-43)
+  const [g6A1Level, setG6A1Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6a1_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g6A1Score, setG6A1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6a1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g6A1ElapsedSeconds, setG6A1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g6a1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   // Grade 6 Malware Mission 3A progress (Unitatea 3 - Manual pag. 44-45)
   const [g6M1Level, setG6M1Level] = useState<GameLevel>(() => {
     try {
@@ -707,6 +739,9 @@ function GameContent() {
       localStorage.setItem('arkedo_g6p3_level', String(g6P3Level));
       localStorage.setItem('arkedo_g6p3_score', String(g6P3Score));
       localStorage.setItem('arkedo_g6p3_elapsed', String(g6P3ElapsedSeconds));
+      localStorage.setItem('arkedo_g6a1_level', String(g6A1Level));
+      localStorage.setItem('arkedo_g6a1_score', String(g6A1Score));
+      localStorage.setItem('arkedo_g6a1_elapsed', String(g6A1ElapsedSeconds));
       localStorage.setItem('arkedo_g6m1_level', String(g6M1Level));
       localStorage.setItem('arkedo_g6m1_score', String(g6M1Score));
       localStorage.setItem('arkedo_g6m1_elapsed', String(g6M1ElapsedSeconds));
@@ -734,6 +769,7 @@ function GameContent() {
     g6P1Level, g6P1Score, g6P1ElapsedSeconds,
     g6P2Level, g6P2Score, g6P2ElapsedSeconds,
     g6P3Level, g6P3Score, g6P3ElapsedSeconds,
+    g6A1Level, g6A1Score, g6A1ElapsedSeconds,
     g6M1Level, g6M1Score, g6M1ElapsedSeconds,
     g6E1Level, g6E1Score, g6E1ElapsedSeconds,
     g6S1Level, g6S1Score, g6S1ElapsedSeconds
@@ -764,6 +800,8 @@ function GameContent() {
     ? g6P2Level
     : activeMission === 'g6_paint3d'
     ? g6P3Level
+    : activeMission === 'g6_anim3d'
+    ? g6A1Level
     : activeMission === 'g6_malware'
     ? g6M1Level
     : activeMission === 'g6_email'
@@ -796,6 +834,8 @@ function GameContent() {
     ? g6P2Score
     : activeMission === 'g6_paint3d'
     ? g6P3Score
+    : activeMission === 'g6_anim3d'
+    ? g6A1Score
     : activeMission === 'g6_malware'
     ? g6M1Score
     : activeMission === 'g6_email'
@@ -828,6 +868,8 @@ function GameContent() {
     ? g6P2ElapsedSeconds
     : activeMission === 'g6_paint3d'
     ? g6P3ElapsedSeconds
+    : activeMission === 'g6_anim3d'
+    ? g6A1ElapsedSeconds
     : activeMission === 'g6_malware'
     ? g6M1ElapsedSeconds
     : activeMission === 'g6_email'
@@ -857,6 +899,7 @@ function GameContent() {
       (activeMission === 'g6_presentation1' && g6P1Level <= 7) ||
       (activeMission === 'g6_presentation2' && g6P2Level <= 7) ||
       (activeMission === 'g6_paint3d' && g6P3Level <= 7) ||
+      (activeMission === 'g6_anim3d' && g6A1Level <= 7) ||
       (activeMission === 'g6_malware' && g6M1Level <= 7) ||
       (activeMission === 'g6_email' && g6E1Level <= 7) ||
       (activeMission === 'g6_scratch1' && g6S1Level <= 7);
@@ -887,6 +930,8 @@ function GameContent() {
           setG6P2ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g6_paint3d') {
           setG6P3ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g6_anim3d') {
+          setG6A1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g6_malware') {
           setG6M1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g6_email') {
@@ -901,7 +946,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6M1Level, g6E1Level, g6S1Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level]);
 
   // Check if a mission is fully completed and finished
   const isMissionCompleted = (mId: string): boolean => {
@@ -922,6 +967,7 @@ function GameContent() {
     if (mId === 'g6_presentation1' && (g6P1Level >= 8 || g6P1Score >= 100)) return true;
     if (mId === 'g6_presentation2' && (g6P2Level >= 8 || g6P2Score >= 100)) return true;
     if (mId === 'g6_paint3d' && (g6P3Level >= 8 || g6P3Score >= 100)) return true;
+    if (mId === 'g6_anim3d' && (g6A1Level >= 8 || g6A1Score >= 100)) return true;
     if (mId === 'g6_malware' && (g6M1Level >= 8 || g6M1Score >= 100)) return true;
     if (mId === 'g6_email' && (g6E1Level >= 8 || g6E1Score >= 100)) return true;
     if (mId === 'g6_scratch1' && (g6S1Level >= 8 || g6S1Score >= 100)) return true;
@@ -942,6 +988,7 @@ function GameContent() {
       if (mId === 'g6_presentation1' && (lp.presentation1?.completed || (lp.presentation1?.score || 0) >= 100)) return true;
       if (mId === 'g6_presentation2' && (lp.presentation2?.completed || (lp.presentation2?.score || 0) >= 100)) return true;
       if (mId === 'g6_paint3d' && (lp.model3d1?.completed || (lp.model3d1?.score || 0) >= 100)) return true;
+      if (mId === 'g6_anim3d' && (lp.model3d2?.completed || (lp.model3d2?.score || 0) >= 100)) return true;
       if (mId === 'g6_malware' && (lp.cyber6a?.completed || (lp.cyber6a?.score || 0) >= 100)) return true;
       if (mId === 'g6_email' && (lp.cyber6b?.completed || (lp.cyber6b?.score || 0) >= 100)) return true;
       if (mId === 'g6_scratch1' && (lp.scratch6a?.completed || (lp.scratch6a?.score || 0) >= 100)) return true;
@@ -964,6 +1011,7 @@ function GameContent() {
     g6_presentation1: isMissionCompleted('g6_presentation1'),
     g6_presentation2: isMissionCompleted('g6_presentation2'),
     g6_paint3d: isMissionCompleted('g6_paint3d'),
+    g6_anim3d: isMissionCompleted('g6_anim3d'),
     g6_malware: isMissionCompleted('g6_malware'),
     g6_email: isMissionCompleted('g6_email'),
     g6_scratch1: isMissionCompleted('g6_scratch1'),
@@ -1034,7 +1082,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -1101,6 +1149,10 @@ function GameContent() {
       setG6P3Level(1);
       setG6P3Score(0);
       setG6P3ElapsedSeconds(0);
+    } else if (activeMission === 'g6_anim3d') {
+      setG6A1Level(1);
+      setG6A1Score(0);
+      setG6A1ElapsedSeconds(0);
     } else if (activeMission === 'g6_malware') {
       setG6M1Level(1);
       setG6M1Score(0);
@@ -1239,6 +1291,38 @@ function GameContent() {
     setG6P3ElapsedSeconds(0);
     try {
       localStorage.removeItem('arkedo_completed_g6_paint3d');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 6 Animation & VR (Mission 2B) level progression
+  const handleG6A1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    const updatedTotal = Math.min(100, Math.max(g6A1Score, earnedScore));
+    setG6A1Score(updatedTotal);
+    
+    if (levelIndex < 7) {
+      setG6A1Level((levelIndex + 1) as GameLevel);
+      arky.triggerSuccess();
+    } else {
+      setG6A1Level(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_completed_g6_anim3d', 'true');
+      } catch {}
+      updateActiveLessonProgress('model3d2', true, 8, updatedTotal, g6A1ElapsedSeconds);
+    }
+  };
+
+  const handleResetG6A1 = () => {
+    sounds.playClick();
+    setG6A1Score(0);
+    setG6A1Level(1);
+    setG6A1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g6_anim3d');
     } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
@@ -2063,6 +2147,31 @@ function GameContent() {
               </div>
             )}
 
+            {/* Level Views for GRADE 6 - ANIMATION & VR (MISSION 2B - TOONTASTIC, CADRE 24 FPS & COSPACES 360°) */}
+            {activeMission === 'g6_anim3d' && (
+              <div className="flex-1">
+                {g6A1Level <= 7 ? (
+                  <ModuleG6AnimVRFlow
+                    currentLevel={g6A1Level}
+                    onCompletePage={(earnedScore) => handleG6A1CompleteLevel(g6A1Level, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG6A1}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g6A1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g6A1ElapsedSeconds}
+                    courseId="g6_anim3d"
+                    onReset={handleResetG6A1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
             {/* Level Views for GRADE 6 - MALWARE (MISSION 3A - AMENINȚĂRI MALWARE & SECURITATE CIBERNETICĂ) */}
             {activeMission === 'g6_malware' && (
               <div className="flex-1">
@@ -2142,7 +2251,7 @@ function GameContent() {
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
