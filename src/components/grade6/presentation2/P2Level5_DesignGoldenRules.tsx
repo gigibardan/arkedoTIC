@@ -20,6 +20,7 @@ import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
+import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
 
 interface P2Level5Props {
   onCompletePage: (earnedScore: number) => void;
@@ -37,7 +38,7 @@ export const P2Level5_DesignGoldenRules: React.FC<P2Level5Props> = ({ onComplete
   // Quiz states
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
-  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleToggleFix = (fix: 'words' | 'contrast' | 'fonts' | 'images') => {
     sounds.playRetro('coin');
@@ -50,24 +51,24 @@ export const P2Level5_DesignGoldenRules: React.FC<P2Level5Props> = ({ onComplete
   const allFixesApplied = fixWords && fixContrast && fixFonts && fixImages;
 
   const handleAnswerQ1 = (val: string) => {
-    if (q1Answer) return;
+    if (isLocked('q1')) return;
     setQ1Answer(val);
     if (val === 'rule_40_words') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q1: Date.now() + 4000 }));
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleAnswerQ2 = (val: string) => {
-    if (q2Answer) return;
+    if (isLocked('q2')) return;
     setQ2Answer(val);
     if (val === 'high_contrast') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q2: Date.now() + 4000 }));
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -392,7 +393,7 @@ export const P2Level5_DesignGoldenRules: React.FC<P2Level5Props> = ({ onComplete
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q1Answer}
+                disabled={isLocked('q1') || isQ1Correct}
                 onClick={() => handleAnswerQ1(opt.id)}
                 className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                   q1Answer === opt.id
@@ -406,6 +407,14 @@ export const P2Level5_DesignGoldenRules: React.FC<P2Level5Props> = ({ onComplete
               </button>
             ))}
           </div>
+
+          {cooldowns.q1 && cooldowns.q1 > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns.q1}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: Regula celor 40 de cuvinte previne oboseala publicului!"
+            />
+          ) : null}
 
           {q1Answer && (
             <AnswerExplanation
@@ -447,7 +456,7 @@ export const P2Level5_DesignGoldenRules: React.FC<P2Level5Props> = ({ onComplete
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q2Answer}
+                disabled={isLocked('q2') || isQ2Correct}
                 onClick={() => handleAnswerQ2(opt.id)}
                 className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                   q2Answer === opt.id
@@ -461,6 +470,14 @@ export const P2Level5_DesignGoldenRules: React.FC<P2Level5Props> = ({ onComplete
               </button>
             ))}
           </div>
+
+          {cooldowns.q2 && cooldowns.q2 > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns.q2}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: Galbenul pe alb are un contrast foarte scăzut!"
+            />
+          ) : null}
 
           {q2Answer && (
             <AnswerExplanation

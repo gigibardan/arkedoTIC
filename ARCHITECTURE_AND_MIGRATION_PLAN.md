@@ -142,6 +142,19 @@ Acest document constituie planul de referință și foaia de parcurs pentru scal
 - [x] Domeniu canonic aliniat la `https://arkyedu.com/` în `index.html`, `sitemap.xml`, `robots.txt` și paginile de curs.
 - [x] Actualizare completă `sitemap.xml` și `robots.txt` cu toate paginile de curs și priorități 0.9.
 
+### Etapa 8: Finalizarea Curriculei Complete Clasa a VI-a (Unitatea 4 - Modulul 4B) (Completat)
+- [x] Dezvoltarea completă a Modulului 4B: Bucle cu Contor, Minecraft 3D & Marea Diplomă de Onoare Gimnazială TIC (pag. 76–93 Art Klett).
+- [x] Toate cele 7 ecrane interactive dezvoltate:
+  - Nivelul 1: Structura repetitivă cu contor (PENTRU / repeat n) & Simulatorul interactiv al Sumei lui Gauss (S = n(n+1)/2).
+  - Nivelul 2: Geometria poligoanelor regulate (formula unghiului exterior 360°/n) cu stilou virtual animat & animații ciclice de personaje.
+  - Nivelul 3: Proiectul „Minecraft 3D în Scratch” — aranjarea straturilor de adâncime (Layering Z-Index), control din taste și plasare de voxeli.
+  - Nivelul 4: Caroiajul cartezian Scratch (X: -240..240, Y: -180..180), protecție coliziuni la marginea ecranului, scalare perspectivă și efect fantomă (transparență/teleportare).
+  - Nivelul 5: Proiectul „Albumul Brâncuși” — schimbarea decorurilor, oprirea scripturilor paralele concurente și generarea procedurală a Coloanei Infinitului cu 15 moduli romboidali.
+  - Nivelul 6: Fractali în Scratch & Proceduri cu parametri („Blocurile mele” / My Blocks), arbori recursivi și simularea biologică a florilor la apus.
+  - Nivelul 7: Marea Evaluare Finală Gimnazială a Clasei a VI-a cu buffer de reflecție de 5 secunde, diplomă oficială de absolvire printabilă (format A4) și confeti.
+- [x] Alinierea datelor curriculare didactice în `src/data/curriculaData.ts` (competențe specifice MEN, sinteză teoretică, glosar, FAQ, laborator practic).
+- [x] Integrare deplină în `CoursesCatalog.tsx`, `src/App.tsx`, cronometru de laborator și stocarea sigură a notelor și progresului.
+
 ---
 
 ## 4. Modelul de Securitate Firestore (RBAC)

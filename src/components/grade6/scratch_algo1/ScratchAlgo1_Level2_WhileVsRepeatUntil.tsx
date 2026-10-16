@@ -18,6 +18,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level2Props {
   onCompletePage: (earnedScore: number) => void;
@@ -124,17 +125,20 @@ export const ScratchAlgo1_Level2_WhileVsRepeatUntil: React.FC<Level2Props> = ({ 
   const [simulationVal, setSimulationVal] = useState<number>(EXERCISES[0].initialValue);
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [simLog, setSimLog] = useState<string[]>([]);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const currentExercise = EXERCISES[currentExIndex];
   const selectedOptionId = selectedAnswers[currentExercise.id];
+  const currentExSolved = currentExercise.options.find((o) => o.id === selectedOptionId)?.isCorrect;
 
   const handleSelectOption = (optId: string, isCorrect: boolean) => {
-    if (selectedAnswers[currentExercise.id]) return;
+    if (isLocked(currentExercise.id) || currentExSolved) return;
     setSelectedAnswers((prev) => ({ ...prev, [currentExercise.id]: optId }));
     if (isCorrect) {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown(currentExercise.id, 5);
     }
   };
 
@@ -315,8 +319,9 @@ export const ScratchAlgo1_Level2_WhileVsRepeatUntil: React.FC<Level2Props> = ({ 
               return (
                 <button
                   key={opt.id}
+                  disabled={isLocked(currentExercise.id) || !!currentExSolved}
                   onClick={() => handleSelectOption(opt.id, opt.isCorrect)}
-                  className={`p-4 rounded-2xl border text-left transition flex items-start justify-between gap-3 cursor-pointer ${style}`}
+                  className={`p-4 rounded-2xl border text-left transition flex items-start justify-between gap-3 cursor-pointer disabled:cursor-not-allowed ${style}`}
                 >
                   <div className="space-y-1">
                     <div className="font-mono font-bold text-sm text-amber-300">
@@ -338,6 +343,15 @@ export const ScratchAlgo1_Level2_WhileVsRepeatUntil: React.FC<Level2Props> = ({ 
               );
             })}
           </div>
+
+          {cooldowns[currentExercise.id] && cooldowns[currentExercise.id] > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns[currentExercise.id]}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: 'Cât timp' repetă cât timp condiția e adevărată; Scratch 'repetă până când' repetă până când devine adevărată!"
+              customMessageEn="Reflection buffer: 'While' repeats while true; Scratch 'repeat until' repeats until condition turns true!"
+            />
+          ) : null}
 
           {/* Live Step-By-Step Simulation Box */}
           <div className="bg-slate-950 rounded-2xl p-4 border border-slate-800 space-y-3">

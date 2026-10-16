@@ -20,6 +20,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface EmailLevel4Props {
   onCompletePage: (earnedScore: number) => void;
@@ -35,11 +36,13 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
   const [salutationFlawChecked, setSalutationFlawChecked] = useState<boolean>(false);
   const [signatureFlawChecked, setSignatureFlawChecked] = useState<boolean>(false);
 
-  // Reply vs Reply All quiz
+  // Reply vs Reply All quiz with 5s cooldown
   const [qReplyAnswer, setQReplyAnswer] = useState<string | null>(null);
 
-  // General netiquette quiz
+  // General netiquette quiz with 5s cooldown
   const [qCapsMeaning, setQCapsMeaning] = useState<string | null>(null);
+
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleToggleFlaw = (flaw: 'caps' | 'subject' | 'salutation' | 'signature') => {
     sounds.playClick();
@@ -50,17 +53,25 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
   };
 
   const handleReplyAnswer = (ans: string) => {
-    if (qReplyAnswer) return;
+    if (isLocked('qReply') || qReplyAnswer === 'reply_only') return;
     setQReplyAnswer(ans);
-    if (ans === 'reply_only') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === 'reply_only') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('qReply', 5);
+    }
   };
 
   const handleCapsAnswer = (ans: string) => {
-    if (qCapsMeaning) return;
+    if (isLocked('qCaps') || qCapsMeaning === 'shouting') return;
     setQCapsMeaning(ans);
-    if (ans === 'shouting') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === 'shouting') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('qCaps', 5);
+    }
   };
 
   const allFlawsIdentified = capsFlawChecked && subjectFlawChecked && salutationFlawChecked && signatureFlawChecked;
@@ -273,11 +284,11 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleReplyAnswer('reply_only')}
-            disabled={!!qReplyAnswer}
-            className={`p-4 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qReply') || qReplyAnswer === 'reply_only'}
+            className={`p-4 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qReplyAnswer === 'reply_only'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
@@ -292,11 +303,11 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleReplyAnswer('reply_all')}
-            disabled={!!qReplyAnswer}
-            className={`p-4 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qReply') || qReplyAnswer === 'reply_only'}
+            className={`p-4 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qReplyAnswer === 'reply_all'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
@@ -308,6 +319,15 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
             </p>
           </button>
         </div>
+
+        {cooldowns.qReply && cooldowns.qReply > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.qReply}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Folosește Reply doar pentru expeditor, nu Reply All pentru toată clasa!"
+            customMessageEn="Reflection buffer: Use Reply for single sender, not Reply All for everyone!"
+          />
+        ) : null}
 
         <QuestionHint hint="„Reply All” trimite răspunsul către toți destinatarii inițiali. Folosește-l doar dacă informația este de interes public pentru toată grupa." />
 
@@ -338,11 +358,11 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleCapsAnswer('polite')}
-            disabled={!!qCapsMeaning}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qCaps') || qCapsMeaning === 'shouting'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qCapsMeaning === 'polite'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             A. Un semn de mare politețe
@@ -350,11 +370,11 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleCapsAnswer('shouting')}
-            disabled={!!qCapsMeaning}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qCaps') || qCapsMeaning === 'shouting'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qCapsMeaning === 'shouting'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             B. Echivalentul unui STRIGĂT sau al țipătului
@@ -362,16 +382,25 @@ export const EmailLevel4_NetiquetteMaster: React.FC<EmailLevel4Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleCapsAnswer('fast_typing')}
-            disabled={!!qCapsMeaning}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qCaps') || qCapsMeaning === 'shouting'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qCapsMeaning === 'fast_typing'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             C. Un mod de a scrie mai rapid
           </button>
         </div>
+
+        {cooldowns.qCaps && cooldowns.qCaps > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.qCaps}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Textul scris cu MAJUSCULE este perceput ca un strigăt agresiv!"
+            customMessageEn="Reflection buffer: ALL-CAPS text is interpreted as aggressive shouting!"
+          />
+        ) : null}
 
         <QuestionHint hint="Gândește-te la efectul vizual al literelor mari comparat cu un ton ridicat de voce." />
 

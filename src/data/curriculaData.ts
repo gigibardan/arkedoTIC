@@ -32,7 +32,7 @@ export interface CurriculaModule {
     answer: string;
   }[];
   practicalLab: string;
-  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6anim3d' | 'g6_anim3d' | 'g6malware' | 'g6email' | 'g6scratch1';
+  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6anim3d' | 'g6_anim3d' | 'g6malware' | 'g6email' | 'g6scratch1' | 'g6scratch2' | 'g6_scratch2';
 }
 
 export const CURRICULA_MODULES: CurriculaModule[] = [
@@ -992,5 +992,106 @@ export const CURRICULA_MODULES: CurriculaModule[] = [
     ],
     practicalLab: 'Realizează un scurtmetraj animat în 3 acte în Toontastic 3D cu personajul Arky salvând laboratorul TIC, adaugă o coloană sonoră potrivită și explorează scena în modul 360° VR.',
     missionId: 'g6_anim3d'
+  },
+  {
+    id: 'algoritmi-contor-minecraft-scratch',
+    slug: 'algoritmi-contor-minecraft-scratch',
+    title: 'Bucle cu Contor, Minecraft 3D, Fractali & Absolvirea Gimnaziului',
+    shortTitle: 'Contor & Minecraft 4B',
+    grade: 'Clasa a VI-a',
+    unit: 'Unitatea 4: Algoritmi & Programare Avansată (pag. 76–93)',
+    manualRef: 'Manual pag. 76–93 • Unitatea 4 (Lecțiile 5–7)',
+    icon: 'Gamepad2',
+    color: 'from-amber-500 via-emerald-600 to-indigo-600',
+    metaDescription: 'Lecție completă TIC Clasa a VI-a: Structura repetitivă cu contor (Pentru/Repeat n), suma lui Gauss, geometria poligoanelor (360°/n), proiectul Minecraft 3D cu straturi de adâncime (Layering), Albumul Brâncuși, fractali recursivi și Diploma Oficială de Absolvire Gimnazială.',
+    keywords: [
+      'scratch contor for',
+      'suma lui gauss scratch',
+      'minecraft 3d scratch',
+      'layering adancime straturi scratch',
+      'album brancusi coloana infinitului',
+      'fractali proceduri my blocks',
+      'tic clasa 6 manual art klett'
+    ],
+    competencies: [
+      {
+        code: '1.3',
+        description: 'Construirea de algoritmi cu număr cunoscut de iterații folosind bucle cu contor și variabile numerice.'
+      },
+      {
+        code: '2.4',
+        description: 'Generarea figurilor geometrice regulate și a fractalilor prin calculul unghiurilor exterioare (360°/n).'
+      },
+      {
+        code: '3.1',
+        description: 'Proiectarea jocurilor 2.5D interactive cu straturi de adâncime (Z-index), efecte grafice și proceduri modulare (My Blocks).'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Structura cu Contor (Pentru / Repeat n) & Suma lui Gauss',
+        content: [
+          'Spre deosebire de buclele condiționate, structura „Pentru i ← 1, n execută” cunoaște numărul exact de repetiții înainte de începerea execuției.',
+          'În Scratch, blocul galben „repetă (n)” execută instrucțiunile din interior de exact n ori.',
+          'Suma lui Gauss: S = 1 + 2 + ... + n = n × (n + 1) / 2. Prin acumularea succesivă a contorului într-o variabilă „suma”, calculăm instantaneu serii numerice mari.'
+        ],
+        tips: 'Regulă Scratch: Dacă ai nevoie de valoarea curentă a contorului în interiorul buclei, folosește o variabilă proprie „i” și instrucțiunea „modifică [i] cu (1)”.'
+      },
+      {
+        title: 'Geometria Poligoanelor Regulate & Regula celor 360°',
+        content: [
+          'Pentru a trasa un poligon regulat închis, personajul trebuie să se rotească la fiecare colț cu unghiul exterior: Unghi = 360° / n.',
+          'Exemple clasice: Triunghi echilateral = 120° (360°/3), Pătrat = 90° (360°/4), Pentagon = 72° (360°/5), Hexagon = 60° (360°/6), Octogon = 45° (360°/8).',
+          'Cercul în Scratch este aproximat ca un poligon regulat cu 360 de laturi infime: repetă (360) [ mergi (1) pași, rotește (1) grade ].'
+        ]
+      },
+      {
+        title: 'Proiectul Minecraft 3D: Adâncime (Layering) & Coordonate',
+        content: [
+          'Ecranul Scratch este o grilă carteziană 480 × 360: X variază de la -240 la +240, iar Y variază de la -180 la +180, cu originea (0,0) în centru.',
+          'Iluzia tridimensională (2.5D) se obține combinând: 1) Ordinea straturilor (blocurile „mergi în stratul [din față]” și „mergi în spate cu n straturi”), 2) Scalarea mărimii copacilor odată cu distanța („setează mărimea la ... %”), 3) Efectul fantomă pentru transparență și teleportare.'
+        ]
+      },
+      {
+        title: 'Albumul Brâncuși, Proceduri „My Blocks” & Fractali',
+        content: [
+          'În proiectul Albumul Brâncuși, butonul declanșează „decorul următor” și blochează scripturile paralele prin „oprește [alte scripturi din personaj]”.',
+          'Coloana Infinitului se generează vertical printr-o buclă repetitivă de 15 moduli romboidali care translează pe axa Y.',
+          'Fractalii (forme auto-similare) și arborii recursivi sunt programați prin categoria „Blocurile mele” (My Blocks), permițând crearea de funcții cu parametri numerici (ex: Arbore(lungime)).'
+        ],
+        tips: 'Oprirea recursivității: O funcție recursivă trebuie să aibă întotdeauna o condiție de oprire de bază (ex: dacă lungime < 10 oprește-te), altfel se produce blocarea programului!'
+      }
+    ],
+    keyTerms: [
+      { term: 'Buclă cu Contor (FOR)', definition: 'Structură algoritmică ce repetă o secvență de instrucțiuni de un număr exact și prestabilit de ori.' },
+      { term: 'Suma lui Gauss', definition: 'Formula matematică S = n(n+1)/2 pentru calculul sumei primelor n numere naturale.' },
+      { term: 'Unghi Exterior (360°/n)', definition: 'Unghiul cu care trebuie să se rotească creionul pentru a desena un poligon regulat închis cu n laturi.' },
+      { term: 'Straturi de Adâncime (Layering / Z-index)', definition: 'Ordinea de suprapunere a personajelor pe ecran, stabilind care obiect este în prim-plan și care în fundal.' },
+      { term: 'Efect Fantomă (Ghost)', definition: 'Efect grafic de transparență în Scratch (0 = opac, 100 = complet invizibil).' },
+      { term: 'Blocuri Proprii (My Blocks)', definition: 'Proceduri și subprograme personalizate definite de utilizator, ce acceptă parametri de intrare.' },
+      { term: 'Fractal', definition: 'Figură geometrică complexă ce prezintă auto-similaritate (părțile componente sunt identice sau similare cu întregul).' }
+    ],
+    keyboardShortcuts: [
+      { keys: 'Săgeată Stânga / Dreapta', action: 'Deplasare orizontală pe axa X în jocul Minecraft 2.5D' },
+      { keys: 'Săgeată Sus / Spațiu', action: 'Săritură verticală pe axa Y sau punere de blocuri' },
+      { keys: 'Ctrl + P', action: 'Tipărirea oficială a Diplomei de Absolvire Gimnazială TIC' }
+    ],
+    faqs: [
+      {
+        question: 'Cum calculează Scratch suma primelor 100 de numere?',
+        answer: 'Inițializăm suma cu 0 și i cu 1. În bucla „repetă (100)”, adăugăm i la sumă și mărim i cu 1. La final, suma va fi exact 5050, conform formulei lui Gauss 100×101/2!'
+      },
+      {
+        question: 'Cum facem ca un copac să pară mai departe în spațiu?',
+        answer: 'Îi setăm o mărime mai mică (ex: 60% în loc de 100%) și îl trimitem într-un strat inferior cu blocul „mergi în spate cu (1) straturi”.'
+      },
+      {
+        question: 'Ce diplomă se deblochează la finalul Modulului 4B?',
+        answer: 'Diploma Oficială de Onoare Gimnazială ce atestă absolvirea completă a programei de Informatică și TIC Clasa a VI-a conform standardelor Ministerului Educației!'
+      }
+    ],
+    practicalLab: 'Construiește în Scratch o scenă de Minecraft 3D cu personajul ghidat din taste, un copac în adâncime și generează Coloana Infinitului cu 15 moduli romboidali procedurali!',
+    missionId: 'g6_scratch2'
   }
 ];
+

@@ -16,6 +16,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level3Props {
   onCompletePage: (earnedScore: number) => void;
@@ -32,9 +33,10 @@ export const ScratchAlgo1_Level3_LogicOperatorsAndConditions: React.FC<Level3Pro
   const [condB, setCondB] = useState<boolean>(false);
   const [activeGate, setActiveGate] = useState<'AND' | 'OR' | 'NOT'>('AND');
 
-  // Interactive Quiz state
+  // Interactive Quiz state with 5-second cooldown
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   // Compute logic gate result
   let gateResult = false;
@@ -43,17 +45,25 @@ export const ScratchAlgo1_Level3_LogicOperatorsAndConditions: React.FC<Level3Pro
   if (activeGate === 'NOT') gateResult = !condA;
 
   const handleQ1 = (choice: string) => {
-    if (q1) return;
+    if (isLocked('q1') || q1 === 'false') return;
     setQ1(choice);
-    if (choice === 'false') sounds.playCorrect();
-    else sounds.playWrong();
+    if (choice === 'false') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('q1', 5);
+    }
   };
 
   const handleQ2 = (choice: string) => {
-    if (q2) return;
+    if (isLocked('q2') || q2 === 'or') return;
     setQ2(choice);
-    if (choice === 'or') sounds.playCorrect();
-    else sounds.playWrong();
+    if (choice === 'or') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('q2', 5);
+    }
   };
 
   const isLevelCompleted = q1 === 'false' && q2 === 'or';
@@ -283,8 +293,9 @@ export const ScratchAlgo1_Level3_LogicOperatorsAndConditions: React.FC<Level3Pro
               return (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1') || q1 === 'false'}
                   onClick={() => handleQ1(opt.id)}
-                  className={`p-3.5 rounded-xl border font-bold text-sm text-left transition cursor-pointer flex items-center justify-between ${style}`}
+                  className={`p-3.5 rounded-xl border font-bold text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between ${style}`}
                 >
                   <span>{opt.label}</span>
                   {q1 && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
@@ -293,6 +304,15 @@ export const ScratchAlgo1_Level3_LogicOperatorsAndConditions: React.FC<Level3Pro
               );
             })}
           </div>
+
+          {cooldowns.q1 && cooldowns.q1 > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns.q1}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: La operatorul ȘI (AND), dacă o condiție e falsă, rezultatul e FALS!"
+              customMessageEn="Reflection buffer: In an AND gate, if one condition is false, the result is FALSE!"
+            />
+          ) : null}
 
           {q1 && (
             <AnswerExplanation
@@ -333,8 +353,9 @@ export const ScratchAlgo1_Level3_LogicOperatorsAndConditions: React.FC<Level3Pro
               return (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2') || q2 === 'or'}
                   onClick={() => handleQ2(opt.id)}
-                  className={`p-3.5 rounded-xl border font-bold text-xs text-left transition cursor-pointer flex items-center justify-between ${style}`}
+                  className={`p-3.5 rounded-xl border font-bold text-xs text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between ${style}`}
                 >
                   <span className="font-mono">{opt.label}</span>
                   {q2 && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
@@ -343,6 +364,15 @@ export const ScratchAlgo1_Level3_LogicOperatorsAndConditions: React.FC<Level3Pro
               );
             })}
           </div>
+
+          {cooldowns.q2 && cooldowns.q2 > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns.q2}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: Operatorul SAU (OR) se activează când oricare dintre condiții e adevărată!"
+              customMessageEn="Reflection buffer: The OR operator triggers when either condition is true!"
+            />
+          ) : null}
 
           {q2 && (
             <AnswerExplanation

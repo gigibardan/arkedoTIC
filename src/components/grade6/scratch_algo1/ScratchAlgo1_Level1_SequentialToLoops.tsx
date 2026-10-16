@@ -19,6 +19,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level1Props {
   onCompletePage: (earnedScore: number) => void;
@@ -35,9 +36,10 @@ export const ScratchAlgo1_Level1_SequentialToLoops: React.FC<Level1Props> = ({ o
   const [stepsExecuted, setStepsExecuted] = useState<number>(0);
   const [instructionLines, setInstructionLines] = useState<number>(12);
 
-  // Quiz state
+  // Quiz state with 5s cooldown
   const [selectedLoopType, setSelectedLoopType] = useState<string | null>(null);
   const [quizAnswered, setQuizAnswered] = useState<boolean>(false);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const runSimulation = (mode: 'sequential' | 'loop') => {
     if (isRunning) return;
@@ -69,17 +71,18 @@ export const ScratchAlgo1_Level1_SequentialToLoops: React.FC<Level1Props> = ({ o
   };
 
   const handleQuiz = (choice: string) => {
-    if (quizAnswered) return;
+    if (isLocked('loopType') || selectedLoopType === 'repeat_n') return;
     setSelectedLoopType(choice);
     setQuizAnswered(true);
     if (choice === 'repeat_n') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('loopType', 5);
     }
   };
 
-  const canProceed = quizAnswered && selectedLoopType === 'repeat_n';
+  const canProceed = selectedLoopType === 'repeat_n';
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-fadeIn text-slate-100">
@@ -347,7 +350,8 @@ export const ScratchAlgo1_Level1_SequentialToLoops: React.FC<Level1Props> = ({ o
               <button
                 key={item.id}
                 onClick={() => handleQuiz(item.id)}
-                className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer ${btnStyle}`}
+                disabled={isLocked('loopType') || selectedLoopType === 'repeat_n'}
+                className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ${btnStyle}`}
               >
                 <div>
                   <div className="font-mono font-bold text-sm mb-1">{item.label}</div>
@@ -367,6 +371,15 @@ export const ScratchAlgo1_Level1_SequentialToLoops: React.FC<Level1Props> = ({ o
             );
           })}
         </div>
+
+        {cooldowns.loopType && cooldowns.loopType > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.loopType}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Hexagonul are 6 laturi egale, deci numărul de repetiții este fix (repetă de 6 ori)!"
+            customMessageEn="Reflection buffer: The hexagon has 6 equal sides, requiring a fixed repeat (6) loop!"
+          />
+        ) : null}
 
         <QuestionHint
           hint={

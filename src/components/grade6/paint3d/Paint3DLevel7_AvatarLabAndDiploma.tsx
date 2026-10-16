@@ -21,6 +21,8 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
+import { useQuestionCooldowns, computeGradeDetails } from '../../../utils/pedagogicalGrading';
 
 interface Paint3DLevel7Props {
   onCompletePage: (earnedScore: number) => void;
@@ -46,6 +48,7 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
   const [q3Answer, setQ3Answer] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const [hasCelebrated, setHasCelebrated] = useState<boolean>(false);
 
@@ -55,33 +58,47 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
   };
 
   const handleAnswerQ1 = (val: string) => {
-    if (q1Answer) return;
+    if (isLocked('q1')) return;
     setQ1Answer(val);
     if (val === 'xyz_axes') sounds.playCorrect();
-    else sounds.playWrong();
+    else {
+      sounds.playWrong();
+      triggerCooldown('q1', 5);
+    }
   };
 
   const handleAnswerQ2 = (val: string) => {
-    if (q2Answer) return;
+    if (isLocked('q2')) return;
     setQ2Answer(val);
     if (val === 'make_3d') sounds.playCorrect();
-    else sounds.playWrong();
+    else {
+      sounds.playWrong();
+      triggerCooldown('q2', 5);
+    }
   };
 
   const handleAnswerQ3 = (val: string) => {
-    if (q3Answer) return;
+    if (isLocked('q3')) return;
     setQ3Answer(val);
     if (val === 'left_anchor') sounds.playCorrect();
-    else sounds.playWrong();
+    else {
+      sounds.playWrong();
+      triggerCooldown('q3', 5);
+    }
   };
 
   const isQ1Correct = q1Answer === 'xyz_axes';
   const isQ2Correct = q2Answer === 'make_3d';
   const isQ3Correct = q3Answer === 'left_anchor';
 
-  const allStepsDone = completedSteps.step1 && completedSteps.step2 && completedSteps.step3 && completedSteps.step4;
+  const stepsCount = Object.values(completedSteps).filter(Boolean).length;
+  const correctCount = [isQ1Correct, isQ2Correct, isQ3Correct].filter(Boolean).length;
+  const allStepsDone = stepsCount >= 4;
   const allQuizzesCorrect = isQ1Correct && isQ2Correct && isQ3Correct;
   const isGraduated = allStepsDone && allQuizzesCorrect;
+
+  const earnedScore = Math.min(100, Math.round((stepsCount / 4) * 40 + (correctCount / 3) * 60));
+  const gradeDetails = computeGradeDetails(earnedScore, 100);
 
   // Trigger celebration confetti
   React.useEffect(() => {
@@ -97,9 +114,13 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
       } catch {
         // Fallback
       }
-      onCompletePage(100);
     }
-  }, [isGraduated, hasCelebrated, onCompletePage]);
+  }, [isGraduated, hasCelebrated]);
+
+  const handleFinalizeMission = () => {
+    sounds.playVictory();
+    onCompletePage(earnedScore);
+  };
 
   const handlePrint = () => {
     sounds.playClick();
@@ -227,9 +248,9 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q1Answer}
+                disabled={isLocked('q1') || isQ1Correct}
                 onClick={() => handleAnswerQ1(opt.id)}
-                className={`w-full p-2 rounded-lg border text-left text-xs font-medium cursor-pointer ${
+                className={`w-full p-2 rounded-lg border text-left text-xs font-medium cursor-pointer disabled:cursor-not-allowed ${
                   q1Answer === opt.id
                     ? opt.id === 'xyz_axes'
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
@@ -241,6 +262,10 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               </button>
             ))}
           </div>
+
+          {cooldowns.q1 && cooldowns.q1 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q1} />
+          ) : null}
         </div>
 
         {/* Q2 */}
@@ -258,9 +283,9 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q2Answer}
+                disabled={isLocked('q2') || isQ2Correct}
                 onClick={() => handleAnswerQ2(opt.id)}
-                className={`w-full p-2 rounded-lg border text-left text-xs font-medium cursor-pointer ${
+                className={`w-full p-2 rounded-lg border text-left text-xs font-medium cursor-pointer disabled:cursor-not-allowed ${
                   q2Answer === opt.id
                     ? opt.id === 'make_3d'
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
@@ -272,6 +297,10 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               </button>
             ))}
           </div>
+
+          {cooldowns.q2 && cooldowns.q2 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q2} />
+          ) : null}
         </div>
 
         {/* Q3 */}
@@ -289,9 +318,9 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q3Answer}
+                disabled={isLocked('q3') || isQ3Correct}
                 onClick={() => handleAnswerQ3(opt.id)}
-                className={`w-full p-2 rounded-lg border text-left text-xs font-medium cursor-pointer ${
+                className={`w-full p-2 rounded-lg border text-left text-xs font-medium cursor-pointer disabled:cursor-not-allowed ${
                   q3Answer === opt.id
                     ? opt.id === 'left_anchor'
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
@@ -303,91 +332,53 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               </button>
             ))}
           </div>
+
+          {cooldowns.q3 && cooldowns.q3 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q3} />
+          ) : null}
         </div>
       </div>
 
-      {/* Graduation Certificate / Diploma */}
-      {isGraduated ? (
-        <div className="bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 border-4 border-cyan-400/80 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden animate-scaleUp">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div className="relative z-10 text-center space-y-6">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-4xl">🏅</span>
-              <div className="inline-block px-4 py-1 rounded-full bg-cyan-400/20 border border-cyan-400 text-cyan-300 font-mono font-black text-xs uppercase tracking-widest">
-                DIPLOMĂ OFICIALĂ DE ABSOLVIRE • CLASA A VI-A
-              </div>
-              <span className="text-4xl">🏅</span>
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-sky-200 to-indigo-300 font-heading">
-                MODELATOR & CREATOR 3D JUNIOR
-              </h2>
-              <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto">
-                Se acordă cu distincție elevului/elevei
-              </p>
-              <div className="text-2xl sm:text-3xl font-black text-cyan-300 font-mono underline decoration-cyan-400 decoration-wavy py-1">
-                {studentName}
-              </div>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed pt-2">
-                Pentru stăpânirea coordonatelor spațiale (X, Y, Z), a manipulării pe cele 4 ancore de control, transformarea desenelor 2D în corpuri 3D, aplicarea texturilor și stickerelor mulate pe curburi și generarea animațiilor video în Paint 3D!
-              </p>
-            </div>
-
-            {/* Diploma Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-4 py-3 border-y border-slate-700/60">
-              <div className="px-3 py-1.5 rounded-xl bg-slate-950/80 border border-cyan-500/40 text-xs font-mono text-cyan-300">
-                ⭐ 100% Punctaj Unitatea 2A
-              </div>
-              <div className="px-3 py-1.5 rounded-xl bg-slate-950/80 border border-amber-500/40 text-xs font-mono text-amber-300">
-                🏛️ Manual Art Klett • OME 5022/2023
-              </div>
-              <div className="px-3 py-1.5 rounded-xl bg-slate-950/80 border border-indigo-500/40 text-xs font-mono text-indigo-300">
-                🧊 Certificat Export .GLB & .3MF
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-bold text-sm shadow-lg hover:brightness-110 flex items-center gap-2 cursor-pointer transition-all"
-              >
-                <Printer className="w-4 h-4" />
-                <span>Tipărește / Salvează Diploma (PDF)</span>
-              </button>
-
-              {onRestartMission && (
-                <button
-                  type="button"
-                  onClick={onRestartMission}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-medium text-sm flex items-center gap-2 cursor-pointer transition-all"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  <span>Reia Misiunea 2A</span>
-                </button>
-              )}
-
-              {onReturnToCatalog && (
-                <button
-                  type="button"
-                  onClick={onReturnToCatalog}
-                  className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg flex items-center gap-2 cursor-pointer transition-all"
-                >
-                  <BookOpen className="w-4 h-4" />
-                  <span>Înapoi la Catalogul Cursurilor</span>
-                </button>
-              )}
-            </div>
-          </div>
+      {/* Capstone Evaluation Summary Card & Finalization */}
+      <div className="bg-gradient-to-br from-slate-900 via-cyan-950/30 to-slate-950 border-2 border-cyan-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5">
+        <div className="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto text-3xl shadow-inner">
+          🏆
         </div>
-      ) : (
-        <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 text-center text-xs font-mono text-cyan-300">
-          👉 Bifează toate etapele Atelierului „Avatar Robot 3D” și răspunde corect la cele 3 întrebări pentru a debloca Diploma!
+
+        <div className="space-y-1">
+          <h2 className="text-xl sm:text-2xl font-black text-white">
+            {lang === 'en' ? 'Synthesis Evaluation Completed' : 'Evaluare Finală Modulul 2A'}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
+            {lang === 'en'
+              ? 'Your score is dynamically calculated based on your practical 3D avatar steps and final quiz.'
+              : 'Punctajul și nota sunt calculate dinamic în baza atelierului de modelare 3D și a testului final.'}
+          </p>
         </div>
-      )}
+
+        {/* Dynamic Score & Grade Badge */}
+        <div className="inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 rounded-2xl bg-slate-950/90 border border-cyan-500/50 shadow-lg">
+          <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+          <span className="text-base sm:text-lg font-black text-cyan-300 font-mono">
+            Punctaj: {earnedScore} / 100 Puncte
+          </span>
+          <span className="text-slate-500 font-bold">•</span>
+          <span className="text-sm sm:text-base font-bold text-emerald-300">
+            {gradeDetails.calificativRo}
+          </span>
+        </div>
+
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={handleFinalizeMission}
+            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/20 cursor-pointer transition transform active:scale-95 flex items-center gap-2.5"
+          >
+            <Trophy className="w-5 h-5" />
+            <span>{lang === 'en' ? 'Finalize Mission 2A & Claim Official Diploma!' : 'Finalizează Misiunea 2A & Revendică Marea Diplomă!'}</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

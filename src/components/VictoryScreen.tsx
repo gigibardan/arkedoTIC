@@ -7,13 +7,14 @@ import { useArky } from '../context/ArkyContext';
 import { useHints } from '../context/HintContext';
 import { MascotaArky } from './MascotaArky';
 import { logStudentResult } from '../lib/resultsService';
+import { computeGradeDetails } from '../utils/pedagogicalGrading';
 
 interface VictoryScreenProps {
   score: number;
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -36,6 +37,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const [isLoggedToFirebase, setIsLoggedToFirebase] = useState<boolean>(false);
   const hasLoggedRef = useRef<boolean>(false);
 
+  const gradeDetails = computeGradeDetails(score, maxScore);
+
   const isHardware = courseId === 'hardware';
   const isInternet1 = courseId === 'internet1';
   const isInternet2 = courseId === 'internet2';
@@ -49,6 +52,9 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isG6P2 = courseId === 'g6_presentation2';
   const isG6P3 = courseId === 'g6_paint3d';
   const isG6M1 = courseId === 'g6_malware';
+  const isG6A1 = courseId === 'g6_anim3d';
+  const isG6E1 = courseId === 'g6_email';
+  const isG6S1 = courseId === 'g6_scratch1';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -76,7 +82,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Paint 3D Modeling & 3D Creator (Grade 6 Textbook pp. 26-33)' : 'Modelare 3D în Paint 3D (Clasa a VI-a Manual pag. 26-33)')
     : isG6M1
     ? (lang === 'en' ? 'Malware Threats & Cyber Security (Grade 6 Textbook pp. 44-45)' : 'Amenințări Malware & Securitate Cibernetică (Clasa a VI-a Manual pag. 44-45)')
+    : isG6A1
+    ? (lang === 'en' ? 'Animation & VR World Creator (Grade 6 Textbook pp. 34-43)' : 'Animație Digitală & Realitate Virtuală (Clasa a VI-a Manual pag. 34-43)')
+    : isG6E1
+    ? (lang === 'en' ? 'Email, Netiquette & Cloud Sharing (Grade 6 Textbook pp. 46-55)' : 'Poștă Electronică, Netichetă & Cloud (Clasa a VI-a Manual pag. 46-55)')
+    : isG6S1
+    ? (lang === 'en' ? 'Scratch Loops & Conditional Algorithms (Grade 6 Textbook pp. 62-75)' : 'Bucle Condiționate & Algoritmi Scratch (Clasa a VI-a Manual pag. 62-75)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
+
 
   const formatCompletionTime = (sec: number) => {
     const mins = Math.floor(sec / 60);
@@ -269,7 +282,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               {t.vScoreLabel}
             </div>
             <div className="text-2xl font-black text-amber-300 font-heading">
-              {score} / {maxScore} ({t.vScorePerfect})
+              {score} / {maxScore} ({lang === 'en' ? gradeDetails.calificativEn : gradeDetails.calificativRo})
             </div>
           </div>
         </div>
@@ -797,7 +810,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -833,6 +846,12 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Junior 3D Modeler & Creator Certificate' : 'Diplomă de Creator & Modelator 3D Junior')
               : isG6M1
               ? (lang === 'en' ? 'Cyber Security & Malware Defense Specialist Diploma' : 'Diplomă de Expert în Securitate Cibernetică & Protecție Digitală')
+              : isG6A1
+              ? (lang === 'en' ? 'Animation & VR World Creator Diploma' : 'Diplomă de Creator în Animație Digitală 24 FPS & Realitate Virtuală 360°')
+              : isG6E1
+              ? (lang === 'en' ? 'Netiquette, Email & Cloud Collaboration Certificate' : 'Diplomă de Specialist în Comunicare Electronică, Netichetă & Cloud')
+              : isG6S1
+              ? (lang === 'en' ? 'Scratch Loops & Conditional Algorithms Master Diploma' : 'Diplomă de Programator în Bucle Condiționate & Algoritmi Scratch')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -853,7 +872,16 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
             />
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-3">
+          {/* Official Grade & Score Badge */}
+          <div className="my-3 inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-2xl bg-amber-200/70 border-2 border-amber-600/40 shadow-sm">
+            <span className="text-base">⭐</span>
+            <span className="text-xs sm:text-sm font-black text-amber-950 font-mono">
+              {score} / {maxScore} Puncte • {lang === 'en' ? gradeDetails.calificativEn : gradeDetails.calificativRo}
+            </span>
+            <span className="text-base">⭐</span>
+          </div>
+
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed max-w-lg mx-auto mt-2">
             {isHardware 
               ? t.hwDiplomaText 
               : isInternet1 
@@ -880,6 +908,34 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en'
                   ? 'For supreme graduation mastery of the complete 5th Grade Computer Science & ICT Curriculum: alternative decision structures, sensory maze algorithms, arithmetic ask/answer quizzes, digital music composition, multi-sprite contest games, and ecological simulation.'
                   : 'Pentru absolvirea de elită a întregului Curriculum Oficial de Informatică și TIC Clasa a V-a: structuri decizionale alternative, jocuri tip labirint cu senzori, jocuri de calcul matematic, compunere muzicală digitală pe note MIDI, concursuri de jocuri cu cronometru și povestea ecologică.')
+              : isG6P1
+              ? (lang === 'en'
+                  ? 'For outstanding achievements in PowerPoint presentation techniques, 3 launch modes, Ribbon command tabs, and visual presentation views (Textbook pp. 10-15).'
+                  : 'Pentru performanțe deosebite în stăpânirea tehnicilor de prezentare PowerPoint, cele 3 moduri de lansare, panglica de comenzi și modurile de vizualizare (Manual pag. 10-15).')
+              : isG6P2
+              ? (lang === 'en'
+                  ? 'For creative and rhetorical mastery of slide layout operations, multimedia objects, transitions, animations, the 40-word golden rule, and public speaking (Textbook pp. 16-25).'
+                  : 'Pentru măiestrie creativă în operațiile cu diapozitive, obiecte multimedia, tranziții, animații, regula de aur a celor 40 de cuvinte și arta susținerii discursului (Manual pag. 16-25).')
+              : isG6P3
+              ? (lang === 'en'
+                  ? 'For demonstrated excellence in 3D modeling, spatial manipulation (X, Y, Z axes), 4 control anchors, Make 3D, conforming stickers, material finishes, and 3D export (Textbook pp. 26-33).'
+                  : 'Pentru excelență în modelarea tridimensională, manipularea în spațiul 3D (axele X, Y, Z), cele 4 ancore de control, Creare 3D, stickere mulate, finisaje de materiale și export 3D (Manual pag. 26-33).')
+              : isG6M1
+              ? (lang === 'en'
+                  ? 'For exceptional competence in cybersecurity defense, classification of malware threats (Viruses, Worms, Trojans, Spyware, Ransomware), antivirus scanning, quarantine protocols, firewall rules, and bulletproof 2FA passwords (Textbook pp. 44-45).'
+                  : 'Pentru competențe de elită în protecție cibernetică, clasificarea amenințărilor malware (Viruși, Viermi, Troieni, Spyware, Ransomware), scanare antivirus, carantină, reguli Firewall și parole de neclintit cu 2FA (Manual pag. 44-45).')
+              : isG6A1
+              ? (lang === 'en'
+                  ? 'For remarkable mastery of classical and digital animation principles (24 FPS, retinal persistence), 3-act story arc structuring in Toontastic 3D, puppet synchronization, and immersive 360° VR world building.'
+                  : 'Pentru asimilarea remarcabilă a principiilor animației clasice și digitale (24 FPS, persistența retiniană), structurarea scenariilor prin arcul narativ în 3 acte în Toontastic 3D, regia sonoră și explorarea mediilor imersive 360°.')
+              : isG6E1
+              ? (lang === 'en'
+                  ? 'For exceptional competence in professional email communication (To/Cc/Bcc, attachments, subject lines), adherence to online netiquette rules, anti-cyberbullying defense, and collaborative cloud storage management.'
+                  : 'Pentru competențe deosebite în redactarea mesajelor e-mail (Către/Cc/Bcc, atașamente, eticheta subiectului), respectarea regulilor de netichetă, prevenirea cyberbullying-ului și partajarea securizată a documentelor în Cloud.')
+              : isG6S1
+              ? (lang === 'en'
+                  ? 'For outstanding achievements in conditional loops algorithms (While vs Repeat Until), Boolean logic operators (AND, OR, NOT), infinite loop debugging, and autonomous sensory programming in Scratch 3.0.'
+                  : 'Pentru performanțe remarcabile în programarea buclelor condiționate (Cât timp vs Repetă până când), operatorilor logici compuși (Și, Sau, Nu), depanarea buclelor infinite și construirea algoritmilor inteligenți cu senzori în Scratch 3.0.')
               : t.vDiplomaText}
           </p>
 

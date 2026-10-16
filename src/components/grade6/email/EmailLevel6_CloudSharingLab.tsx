@@ -20,6 +20,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface EmailLevel6Props {
   onCompletePage: (earnedScore: number) => void;
@@ -37,8 +38,9 @@ export const EmailLevel6_CloudSharingLab: React.FC<EmailLevel6Props> = ({ onComp
   const [labSubmitted, setLabSubmitted] = useState<boolean>(false);
   const [labSuccess, setLabSuccess] = useState<boolean>(false);
 
-  // Version history quiz
+  // Version history quiz with 5s cooldown
   const [qVersionAnswer, setQVersionAnswer] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleValidateLab = () => {
     if (!danRole || !profRole || !linkPrivacy) return;
@@ -57,10 +59,14 @@ export const EmailLevel6_CloudSharingLab: React.FC<EmailLevel6Props> = ({ onComp
   };
 
   const handleVersionAnswer = (ans: string) => {
-    if (qVersionAnswer) return;
+    if (isLocked('version') || qVersionAnswer === 'version_history') return;
     setQVersionAnswer(ans);
-    if (ans === 'version_history') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === 'version_history') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('version', 5);
+    }
   };
 
   const isAllComplete = labSuccess && qVersionAnswer === 'version_history';
@@ -279,11 +285,11 @@ export const EmailLevel6_CloudSharingLab: React.FC<EmailLevel6Props> = ({ onComp
           <button
             type="button"
             onClick={() => handleVersionAnswer('lost_forever')}
-            disabled={!!qVersionAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('version') || qVersionAnswer === 'version_history'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qVersionAnswer === 'lost_forever'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             A. Textul este pierdut definitiv și trebuie rescris totul
@@ -292,16 +298,25 @@ export const EmailLevel6_CloudSharingLab: React.FC<EmailLevel6Props> = ({ onComp
           <button
             type="button"
             onClick={() => handleVersionAnswer('version_history')}
-            disabled={!!qVersionAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('version') || qVersionAnswer === 'version_history'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qVersionAnswer === 'version_history'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             B. Deschizi meniul „Istoricul Versiunilor” (Version History) și restaurezi versiunea de acum 30 de minute
           </button>
         </div>
+
+        {cooldowns.version && cooldowns.version > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.version}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Serviciile Cloud salvează automat istoricul fiecărei modificări!"
+            customMessageEn="Reflection buffer: Cloud services automatically maintain a full history of changes!"
+          />
+        ) : null}
 
         <QuestionHint hint="Aplicațiile Cloud salvează fiecare literă în mod continuu într-o linie a timpului numită Version History." />
 

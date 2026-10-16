@@ -20,6 +20,7 @@ import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
+import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
 
 interface P2Level1Props {
   onCompletePage: (earnedScore: number) => void;
@@ -49,7 +50,7 @@ export const P2Level1_SlideOperations: React.FC<P2Level1Props> = ({ onCompletePa
   // Quiz states
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
-  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleSelectSlide = (id: number) => {
     sounds.playClick();
@@ -118,24 +119,24 @@ export const P2Level1_SlideOperations: React.FC<P2Level1Props> = ({ onCompletePa
   };
 
   const handleQ1 = (id: string) => {
-    if ((cooldowns.q1 || 0) > 0) return;
+    if (isLocked('q1')) return;
     setQ1Answer(id);
     if (id === 'ctrl_d') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q1: 5 }));
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (id: string) => {
-    if ((cooldowns.q2 || 0) > 0) return;
+    if (isLocked('q2')) return;
     setQ2Answer(id);
     if (id === 'drag_reorder') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q2: 5 }));
+      triggerCooldown('q2', 5);
     }
   };
 

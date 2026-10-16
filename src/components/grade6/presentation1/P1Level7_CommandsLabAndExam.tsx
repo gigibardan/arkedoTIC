@@ -21,6 +21,7 @@ import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
 import { getActiveStudent } from '../../../lib/studentAuthService';
+import { useQuestionCooldowns, computeGradeDetails } from '../../../utils/pedagogicalGrading';
 
 interface P1Level7Props {
   onCompletePage: (earnedScore: number) => void;
@@ -39,7 +40,7 @@ export const P1Level7_CommandsLabAndExam: React.FC<P1Level7Props> = ({ onComplet
 
   // Grand Exam Quiz States
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
   const [showDiploma, setShowDiploma] = useState<boolean>(false);
 
   const commandItems = [
@@ -142,13 +143,13 @@ export const P1Level7_CommandsLabAndExam: React.FC<P1Level7Props> = ({ onComplet
   ];
 
   const handleAnswerExam = (qId: string, optId: string, correctId: string) => {
-    if ((cooldowns[qId] || 0) > 0) return;
+    if (isLocked(qId)) return;
     setAnswers(prev => ({ ...prev, [qId]: optId }));
     if (optId === correctId) {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, [qId]: 5 }));
+      triggerCooldown(qId, 5);
     }
   };
 
@@ -156,11 +157,18 @@ export const P1Level7_CommandsLabAndExam: React.FC<P1Level7Props> = ({ onComplet
   const examScore = correctAnswersCount * 25;
   const labScore = matchedCount * 6.25;
   const totalScore = Math.min(100, Math.round(examScore + labScore));
+  const gradeDetails = computeGradeDetails(totalScore, 100);
 
   const isPageComplete = Object.keys(answers).length >= 2 || matchedCount >= 2;
 
   const handlePrint = () => {
+    sounds.playClick();
     window.print();
+  };
+
+  const handleUnlockDiploma = () => {
+    sounds.playVictory();
+    setShowDiploma(true);
   };
 
   return (
@@ -335,69 +343,49 @@ export const P1Level7_CommandsLabAndExam: React.FC<P1Level7Props> = ({ onComplet
         </div>
       </div>
 
-      {/* Diplome Celebration Section */}
-      <div className="bg-gradient-to-br from-slate-900 via-orange-950/30 to-slate-950 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col items-center text-center relative overflow-hidden">
-        <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-slate-950 font-black text-2xl shadow-xl shadow-amber-500/20 mb-4 animate-bounce">
-          🎓
+      {/* Capstone Evaluation Summary Card & Finalization */}
+      <div className="bg-gradient-to-br from-slate-900 via-orange-950/30 to-slate-950 border-2 border-orange-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5">
+        <div className="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-3xl shadow-inner">
+          🏆
         </div>
 
-        <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest mb-1">
-          MINISTERUL EDUCAȚIEI • PLATFORMA ARKYEDU
-        </span>
-        <h2 className="text-2xl sm:text-3xl font-black text-white font-heading mb-2">
-          Diplomă de Merit: Operator PowerPoint Junior
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-300 max-w-xl mb-6">
-          Se acordă elevului/elevei <span className="text-amber-300 font-bold">{studentName}</span> pentru finalizarea cu brio a Modulului 1A din manualul de Informatică și TIC Clasa a VI-a!
-        </p>
-
-        {/* Printable Certificate Frame */}
-        <div className="w-full max-w-2xl bg-slate-950 border-4 border-amber-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl relative text-center">
-          <div className="absolute top-3 left-4 text-xs font-mono text-amber-400/80">★ CLASA A VI-A ★</div>
-          <div className="absolute top-3 right-4 text-xs font-mono text-amber-400/80">★ TIC ART KLETT ★</div>
-
-          <div className="py-4">
-            <div className="text-xs uppercase tracking-widest text-slate-400 mb-1">DIPLOMĂ DE ONOARE</div>
-            <div className="text-2xl sm:text-3xl font-black text-amber-300 font-heading mb-2">
-              {studentName}
-            </div>
-            <div className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
-              A demonstrat stăpânirea deplină a noțiunilor fundamentale: tipurile de prezentări, anatomia interfeței PowerPoint 365, filele din Panglică (Ribbon), modurile de vizualizare și scurtăturile esențiale (Ctrl+M, F5).
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <div>Data: {new Date().toLocaleDateString('ro-RO')}</div>
-            <div className="text-amber-400 font-bold">Nota 10 • Calificativ Excelent</div>
-            <div>Mascota Arky TIC 🤖</div>
-          </div>
+        <div className="space-y-1">
+          <h2 className="text-xl sm:text-2xl font-black text-white">
+            {lang === 'en' ? 'Synthesis Evaluation Completed' : 'Evaluare Finală Modulul 1A'}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
+            {lang === 'en'
+              ? 'Your score is dynamically calculated based on your lab shortcuts and quiz performance.'
+              : 'Punctajul și nota sunt calculate dinamic în baza asocierilor și răspunsurilor tale.'}
+          </p>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        {/* Dynamic Score & Grade Badge */}
+        <div className="inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 rounded-2xl bg-slate-950/90 border border-amber-500/50 shadow-lg">
+          <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+          <span className="text-base sm:text-lg font-black text-amber-300 font-mono">
+            Punctaj: {totalScore} / 100 Puncte
+          </span>
+          <span className="text-slate-500 font-bold">•</span>
+          <span className="text-sm sm:text-base font-bold text-emerald-300">
+            {gradeDetails.calificativRo}
+          </span>
+        </div>
+
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
-            onClick={handlePrint}
-            className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-amber-500/20 cursor-pointer"
+            type="button"
+            onClick={() => {
+              sounds.playVictory();
+              onCompletePage(totalScore);
+            }}
+            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/20 cursor-pointer transition transform active:scale-95 flex items-center gap-2.5"
           >
-            <Printer className="w-4 h-4" />
-            <span>Imprimă Diploma (PDF / Print)</span>
+            <Trophy className="w-5 h-5" />
+            <span>{lang === 'en' ? 'Finalize Mission 1A & Claim Official Diploma!' : 'Finalizează Misiunea 1A & Revendică Marea Diplomă!'}</span>
           </button>
         </div>
       </div>
-
-      {/* Completion & Navigation Footer */}
-      <PageNavigationFooter
-        currentPage={7}
-        totalPages={7}
-        earnedScore={totalScore}
-        isCompleted={isPageComplete}
-        isLastPage={true}
-        onNextPage={() => {
-          sounds.playVictory();
-          onCompletePage(totalScore);
-        }}
-        nextButtonLabelRo="Finalizează Misiunea 1A & Salvează Punctajul!"
-        nextButtonLabelEn="Finish Mission 1A & Save Score!"
-      />
     </div>
   );
 };

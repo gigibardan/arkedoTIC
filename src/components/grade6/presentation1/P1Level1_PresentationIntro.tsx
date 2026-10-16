@@ -19,6 +19,8 @@ import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
 
+import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
+
 interface P1Level1Props {
   onCompletePage: (earnedScore: number) => void;
 }
@@ -34,7 +36,7 @@ export const P1Level1_PresentationIntro: React.FC<P1Level1Props> = ({ onComplete
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
   const [q3Answer, setQ3Answer] = useState<string | null>(null);
-  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleSelectType = (id: string) => {
     sounds.playClick();
@@ -43,35 +45,35 @@ export const P1Level1_PresentationIntro: React.FC<P1Level1Props> = ({ onComplete
   };
 
   const handleQ1 = (id: string) => {
-    if ((cooldowns.q1 || 0) > 0) return;
+    if (isLocked('q1')) return;
     setQ1Answer(id);
     if (id === 'slides_diapozitive') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q1: 5 }));
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (id: string) => {
-    if ((cooldowns.q2 || 0) > 0) return;
+    if (isLocked('q2')) return;
     setQ2Answer(id);
     if (id === 'speaker_notes') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q2: 5 }));
+      triggerCooldown('q2', 5);
     }
   };
 
   const handleQ3 = (id: string) => {
-    if ((cooldowns.q3 || 0) > 0) return;
+    if (isLocked('q3')) return;
     setQ3Answer(id);
     if (id === 'electronic_print') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q3: 5 }));
+      triggerCooldown('q3', 5);
     }
   };
 

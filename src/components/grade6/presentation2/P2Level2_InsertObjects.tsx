@@ -21,6 +21,7 @@ import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
+import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
 
 interface P2Level2Props {
   onCompletePage: (earnedScore: number) => void;
@@ -47,7 +48,7 @@ export const P2Level2_InsertObjects: React.FC<P2Level2Props> = ({ onCompletePage
   // Quiz states
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
-  const [cooldowns, setCooldowns] = useState<Record<string, number>>({});
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleAddObject = (type: 'text' | 'image' | 'shape' | 'table') => {
     sounds.playRetro('coin');
@@ -81,24 +82,24 @@ export const P2Level2_InsertObjects: React.FC<P2Level2Props> = ({ onCompletePage
   };
 
   const handleQ1 = (id: string) => {
-    if ((cooldowns.q1 || 0) > 0) return;
+    if (isLocked('q1')) return;
     setQ1Answer(id);
     if (id === 'textbox_mandatory') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q1: 5 }));
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (id: string) => {
-    if ((cooldowns.q2 || 0) > 0) return;
+    if (isLocked('q2')) return;
     setQ2Answer(id);
     if (id === 'aspect_ratio') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
-      setCooldowns(prev => ({ ...prev, q2: 5 }));
+      triggerCooldown('q2', 5);
     }
   };
 

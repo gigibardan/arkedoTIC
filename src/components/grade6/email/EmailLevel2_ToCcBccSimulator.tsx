@@ -19,6 +19,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface EmailLevel2Props {
   onCompletePage: (earnedScore: number) => void;
@@ -82,8 +83,9 @@ export const EmailLevel2_ToCcBccSimulator: React.FC<EmailLevel2Props> = ({ onCom
   const [s2Submitted, setS2Submitted] = useState<boolean>(false);
   const [s2Correct, setS2Correct] = useState<boolean>(false);
 
-  // Theory quiz
+  // Theory quiz with 5-second cooldown
   const [qBccConcept, setQBccConcept] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleSubmitS1 = () => {
     if (!s1To || !s1Cc) return;
@@ -104,10 +106,14 @@ export const EmailLevel2_ToCcBccSimulator: React.FC<EmailLevel2Props> = ({ onCom
   };
 
   const handleBccConceptAnswer = (ans: string) => {
-    if (qBccConcept) return;
+    if (isLocked('bcc') || qBccConcept === 'invisible') return;
     setQBccConcept(ans);
-    if (ans === 'invisible') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === 'invisible') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('bcc', 5);
+    }
   };
 
   const isAllComplete = s1Correct && s2Correct && qBccConcept === 'invisible';
@@ -384,8 +390,8 @@ export const EmailLevel2_ToCcBccSimulator: React.FC<EmailLevel2Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleBccConceptAnswer('visible_marked')}
-            disabled={!!qBccConcept}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('bcc') || qBccConcept === 'invisible'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qBccConcept === 'visible_marked'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
@@ -396,8 +402,8 @@ export const EmailLevel2_ToCcBccSimulator: React.FC<EmailLevel2Props> = ({ onCom
           <button
             type="button"
             onClick={() => handleBccConceptAnswer('invisible')}
-            disabled={!!qBccConcept}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('bcc') || qBccConcept === 'invisible'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qBccConcept === 'invisible'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
                 : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
@@ -406,6 +412,15 @@ export const EmailLevel2_ToCcBccSimulator: React.FC<EmailLevel2Props> = ({ onCom
             B. Nu văd absolut deloc adresa acelei persoane (rămâne secretă)
           </button>
         </div>
+
+        {cooldowns.bcc && cooldowns.bcc > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.bcc}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Câmpul BCC (Blind Carbon Copy) ascunde complet adresele destinatarilor!"
+            customMessageEn="Reflection buffer: The BCC field completely hides recipients' addresses!"
+          />
+        ) : null}
 
         <QuestionHint hint="BCC vine de la Blind Carbon Copy. Cuvântul Blind (orb/nevăzut) indică faptul că ceilalți nu pot vedea lista respectivă." />
 

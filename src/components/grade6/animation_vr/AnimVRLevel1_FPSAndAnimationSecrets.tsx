@@ -20,6 +20,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level1Props {
   onCompletePage: (earnedScore: number) => void;
@@ -42,6 +43,7 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
   const [q3, setQ3] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   // Interactive simulator loop
   useEffect(() => {
@@ -69,29 +71,35 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
   };
 
   const handleQ1 = (val: string) => {
+    if (isLocked('q1')) return;
     setQ1(val);
     if (val === '24') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (val: string) => {
+    if (isLocked('q2')) return;
     setQ2(val);
     if (val === 'persistence') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
   const handleQ3 = (val: string) => {
+    if (isLocked('q3')) return;
     setQ3(val);
     if (val === '240') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q3', 5);
     }
   };
 
@@ -408,6 +416,7 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1')}
                   onClick={() => handleQ1(opt.id)}
                   className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
                     q1 === opt.id
@@ -424,6 +433,15 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
                 </button>
               ))}
             </div>
+
+            {cooldowns.q1 && cooldowns.q1 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                totalSeconds={5}
+                customMessageRo="Reflecție didactică: Gândește-te la standardul clasic de 24 de cadre pe secundă al cinematografiei!"
+                customMessageEn="Pedagogical reflection: Think about cinema's 24 frames per second benchmark!"
+              />
+            ) : null}
 
             {q1 && (
               <AnswerExplanation
@@ -457,6 +475,7 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2')}
                   onClick={() => handleQ2(opt.id)}
                   className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
                     q2 === opt.id
@@ -473,6 +492,15 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
                 </button>
               ))}
             </div>
+
+            {cooldowns.q2 && cooldowns.q2 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q2}
+                totalSeconds={5}
+                customMessageRo="Reflecție didactică: Retina ochiului reține imaginea timp de o fracțiune de secundă (persistență retiniană)!"
+                customMessageEn="Pedagogical reflection: The retina retains visual stimulus briefly (retinal persistence)!"
+              />
+            ) : null}
 
             {q2 && (
               <AnswerExplanation
@@ -506,6 +534,7 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q3')}
                   onClick={() => handleQ3(opt.id)}
                   className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
                     q3 === opt.id
@@ -522,6 +551,15 @@ export const AnimVRLevel1_FPSAndAnimationSecrets: React.FC<Level1Props> = ({ onC
                 </button>
               ))}
             </div>
+
+            {cooldowns.q3 && cooldowns.q3 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q3}
+                totalSeconds={5}
+                customMessageRo="Reflecție didactică: Înmulțește 10 secunde cu cele 24 de cadre ale fiecărei secunde!"
+                customMessageEn="Pedagogical reflection: Multiply 10 seconds by 24 frames per second!"
+              />
+            ) : null}
 
             {q3 && (
               <AnswerExplanation

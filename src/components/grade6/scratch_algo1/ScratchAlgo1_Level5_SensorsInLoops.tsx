@@ -19,6 +19,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level5Props {
   onCompletePage: (earnedScore: number) => void;
@@ -34,8 +35,6 @@ export const ScratchAlgo1_Level5_SensorsInLoops: React.FC<Level5Props> = ({ onCo
   const [isDriving, setIsDriving] = useState<boolean>(false);
   const [simulationStatus, setSimulationStatus] = useState<string>('idle');
 
-  // Mini quiz state
-  const [quizAnswer, setQuizAnswer] = useState<string | null>(null);
 
   const startSensorRun = (sensor: 'distance' | 'color' | 'key') => {
     if (isDriving) return;
@@ -74,6 +73,10 @@ export const ScratchAlgo1_Level5_SensorsInLoops: React.FC<Level5Props> = ({ onCo
     }, 120);
   };
 
+  // Mini quiz state with 5s cooldown
+  const [quizAnswer, setQuizAnswer] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
+
   const resetSensorLab = () => {
     setRobotX(0);
     setIsDriving(false);
@@ -82,10 +85,14 @@ export const ScratchAlgo1_Level5_SensorsInLoops: React.FC<Level5Props> = ({ onCo
   };
 
   const handleQuiz = (ans: string) => {
-    if (quizAnswer) return;
+    if (isLocked('sensor') || quizAnswer === 'touch_color') return;
     setQuizAnswer(ans);
-    if (ans === 'touch_color') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === 'touch_color') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('sensor', 5);
+    }
   };
 
   const canProceed = simulationStatus === 'stopped_safely' && quizAnswer === 'touch_color';
@@ -309,7 +316,8 @@ export const ScratchAlgo1_Level5_SensorsInLoops: React.FC<Level5Props> = ({ onCo
               <button
                 key={item.id}
                 onClick={() => handleQuiz(item.id)}
-                className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer ${style}`}
+                disabled={isLocked('sensor') || quizAnswer === 'touch_color'}
+                className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer disabled:cursor-not-allowed ${style}`}
               >
                 <div>
                   <div className="font-mono font-bold text-xs text-cyan-300 mb-1">{item.label}</div>
@@ -329,6 +337,15 @@ export const ScratchAlgo1_Level5_SensorsInLoops: React.FC<Level5Props> = ({ onCo
             );
           })}
         </div>
+
+        {cooldowns.sensor && cooldowns.sensor > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.sensor}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Senzorul de atingere a culorii peretelui oprește bucla la obstacol!"
+            customMessageEn="Reflection buffer: The color touching sensor stops the loop at the wall obstacle!"
+          />
+        ) : null}
 
         <QuestionHint
           hint={

@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import {
-  Award,
   Trophy,
   Sparkles,
   CheckCircle2,
   XCircle,
   Printer,
   RotateCcw,
-  Star,
   ShieldCheck,
   BookOpen,
   ArrowRight,
-  Code2,
-  Repeat
+  Repeat,
+  Star
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
-import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { useQuestionCooldowns, computeGradeDetails, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level7Props {
   onCompletePage: (earnedScore: number) => void;
@@ -35,46 +33,64 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
 }) => {
   const { lang } = useLanguage();
   const isEn = lang === 'en';
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
   const [q3, setQ3] = useState<string | null>(null);
-
-  const [hasCelebrated, setHasCelebrated] = useState<boolean>(false);
+  const [showPreviewDiploma, setShowPreviewDiploma] = useState<boolean>(false);
 
   const handleQ1 = (val: string) => {
-    if (q1) return;
+    if (isLocked('q1') || q1 === 'inversion') return;
     setQ1(val);
-    if (val === 'inversion') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'inversion') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('q1', 5);
+    }
   };
 
   const handleQ2 = (val: string) => {
-    if (q2) return;
+    if (isLocked('q2') || q2 === 'infinite') return;
     setQ2(val);
-    if (val === 'infinite') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'infinite') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('q2', 5);
+    }
   };
 
   const handleQ3 = (val: string) => {
-    if (q3) return;
+    if (isLocked('q3') || q3 === 'and') return;
     setQ3(val);
-    if (val === 'and') sounds.playCorrect();
-    else sounds.playWrong();
+    if (val === 'and') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('q3', 5);
+    }
   };
 
-  const isExamPassed = q1 === 'inversion' && q2 === 'infinite' && q3 === 'and';
+  const isQ1Correct = q1 === 'inversion';
+  const isQ2Correct = q2 === 'infinite';
+  const isQ3Correct = q3 === 'and';
 
-  const triggerCelebration = () => {
-    if (hasCelebrated) return;
-    setHasCelebrated(true);
+  const correctCount = [isQ1Correct, isQ2Correct, isQ3Correct].filter(Boolean).length;
+  const allAnswered = !!(q1 && q2 && q3);
+
+  const earnedScore = Math.min(100, correctCount * 30 + (allAnswered ? 10 : 0));
+  const gradeDetails = computeGradeDetails(earnedScore, 100);
+
+  const handleFinalize = () => {
     sounds.playFanfare();
     confetti({
       particleCount: 120,
       spread: 80,
       origin: { y: 0.6 }
     });
-    onCompletePage(20);
+    onCompletePage(earnedScore);
   };
 
   return (
@@ -97,12 +113,12 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
             <p className="text-slate-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
               {isEn
                 ? 'Answer the 3 comprehensive synthesis questions correctly to earn your Grade 6 Official Scratch Algorithm Certificate!'
-                : 'Răspunde corect la cele 3 întrebări de sinteză didactică pentru a debloca Brevetul Oficial de Programator în Bucle Condiționate Scratch!'}
+                : 'Răspunde la cele 3 întrebări de sinteză didactică din manual pentru a debloca Brevetul Oficial de Programator în Bucle Condiționate Scratch!'}
             </p>
           </div>
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-xs font-mono text-amber-400/80">REWARD</span>
-            <span className="text-xl font-black text-amber-300 font-mono">+20 XP</span>
+            <span className="text-xs font-mono text-amber-400/80">RECOMPENSĂ</span>
+            <span className="text-xl font-black text-amber-300 font-mono">100 XP</span>
           </div>
         </div>
       </div>
@@ -148,8 +164,9 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
               return (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1') || isQ1Correct}
                   onClick={() => handleQ1(opt.id)}
-                  className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer flex items-center justify-between gap-3 ${style}`}
+                  className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between gap-3 ${style}`}
                 >
                   <span>{opt.label}</span>
                   {q1 && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
@@ -158,6 +175,10 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
               );
             })}
           </div>
+
+          {cooldowns.q1 && cooldowns.q1 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q1} />
+          ) : null}
 
           {q1 && (
             <AnswerExplanation
@@ -206,8 +227,9 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
               return (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2') || isQ2Correct}
                   onClick={() => handleQ2(opt.id)}
-                  className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer flex items-center justify-between gap-3 ${style}`}
+                  className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between gap-3 ${style}`}
                 >
                   <span>{opt.label}</span>
                   {q2 && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
@@ -216,6 +238,10 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
               );
             })}
           </div>
+
+          {cooldowns.q2 && cooldowns.q2 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q2} />
+          ) : null}
 
           {q2 && (
             <AnswerExplanation
@@ -252,124 +278,72 @@ export const ScratchAlgo1_Level7_DiplomaAndExam: React.FC<Level7Props> = ({
               return (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q3') || isQ3Correct}
                   onClick={() => handleQ3(opt.id)}
-                  className={`p-3.5 rounded-xl border font-bold text-xs text-left transition cursor-pointer flex items-center justify-between ${style}`}
+                  className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between gap-3 ${style}`}
                 >
-                  <span className="font-mono">{opt.label}</span>
-                  {q3 && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-                  {q3 && isSelected && !opt.isCorrect && <XCircle className="w-4 h-4 text-rose-400" />}
+                  <span>{opt.label}</span>
+                  {q3 && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
+                  {q3 && isSelected && !opt.isCorrect && <XCircle className="w-4 h-4 text-rose-400 shrink-0" />}
                 </button>
               );
             })}
           </div>
 
+          {cooldowns.q3 && cooldowns.q3 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q3} />
+          ) : null}
+
           {q3 && (
             <AnswerExplanation
               isCorrect={q3 === 'and'}
-              explanation="Perfect! Operatorul ȘI (AND) impune ca ambele cerințe să fie simultan îndeplinite pentru acordarea victoriei!"
+              explanation="Perfect! Operatorul logic „ȘI” cere ca ambele condiții să fie simultan ADEVĂRATE pentru ca întreaga expresie să fie validată."
             />
           )}
         </div>
       </div>
 
-      {/* Diploma Unlock Section */}
-      {isExamPassed && (
-        <div className="space-y-6 animate-scaleUp pt-4">
-          {!hasCelebrated && (
-            <div className="text-center p-6 bg-slate-900 border-2 border-amber-500/60 rounded-3xl shadow-2xl">
-              <div className="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-3 text-3xl animate-bounce">
-                🌟
-              </div>
-              <h3 className="text-xl font-black text-white mb-2">
-                Ai trecut Examenul cu Scor Maxim (100%)!
-              </h3>
-              <p className="text-xs text-slate-300 max-w-md mx-auto mb-4">
-                Felicitări! Ai demonstrat stăpânirea deplină a algoritmilor și buclelor condiționate din programa de clasa a VI-a.
-              </p>
-              <button
-                onClick={triggerCelebration}
-                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-black text-sm shadow-xl shadow-amber-500/30 transition cursor-pointer"
-              >
-                🎓 Dezvăluie Marea Diplomă Oficială!
-              </button>
-            </div>
-          )}
-
-          {hasCelebrated && (
-            <div className="space-y-6">
-              {/* Printable Certificate Card */}
-              <div className="bg-gradient-to-b from-amber-950/40 via-slate-950 to-slate-950 border-4 border-amber-500/60 rounded-3xl p-8 sm:p-12 shadow-2xl text-center relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <Repeat className="w-10 h-10 text-amber-400" />
-                  <span className="text-xs font-mono font-black uppercase tracking-widest text-amber-400 border border-amber-500/40 px-3 py-1 rounded-full bg-amber-500/10">
-                    CERTIFICAT OFICIAL ARKEDO TIC • CLASA A VI-A
-                  </span>
-                </div>
-
-                <h2 className="text-2xl sm:text-4xl font-black text-white font-heading tracking-tight mb-2">
-                  DIPLOMĂ DE MERIT DIDACTIC
-                </h2>
-                <div className="text-xs sm:text-sm font-mono text-amber-300/80 mb-6">
-                  PROGRAMATOR DE BUCLE CONDIȚIONATE & ALGORITMI SCRATCH
-                </div>
-
-                <div className="text-slate-300 text-xs sm:text-sm mb-4">Se acordă cu onoare elevului:</div>
-                <div className="text-2xl sm:text-3xl font-black text-amber-300 font-heading tracking-wide border-b-2 border-amber-500/40 pb-2 max-w-md mx-auto mb-6">
-                  {studentName}
-                </div>
-
-                <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed mb-8">
-                  Pentru absolvirea strălucită a Modulului 4A conform Programei Naționale OMEN 3393/2017: înțelegerea inversării logice „Cât timp” vs „Repetă până când”, evaluarea operatorilor booleeni compuși, evitarea buclelor infinite și construirea algoritmilor inteligenți cu senzori.
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-800 text-xs text-slate-400">
-                  <div className="text-left font-mono">
-                    <div>Data: {new Date().toLocaleDateString('ro-RO')}</div>
-                    <div>Cod Brevet: ARK-G6-ALGO-LOOP-2026</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-6 h-6 text-emerald-400" />
-                    <span className="font-bold text-white font-mono">Verificat & Validat Arkedo</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <button
-                  onClick={() => window.print()}
-                  className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-2 border border-slate-700 cursor-pointer shadow"
-                >
-                  <Printer className="w-4 h-4" />
-                  <span>Printează Diploma</span>
-                </button>
-
-                {onRestartMission && (
-                  <button
-                    onClick={onRestartMission}
-                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs flex items-center gap-2 border border-slate-700 cursor-pointer"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                    <span>Reia Misiunea</span>
-                  </button>
-                )}
-
-                {onReturnToCatalog && (
-                  <button
-                    onClick={onReturnToCatalog}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-black text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-600/30"
-                  >
-                    <span>Înapoi la Catalogul Cursurilor</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
+      {/* Synthesis Evaluation Card */}
+      <div className="bg-gradient-to-br from-slate-900 via-amber-950/30 to-slate-950 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5">
+        <div className="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-3xl shadow-inner">
+          🏆
         </div>
-      )}
+
+        <div className="space-y-1">
+          <h2 className="text-xl sm:text-2xl font-black text-white">
+            {isEn ? 'Evaluation Completed' : 'Evaluare Finală Modulul 4A'}
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
+            {isEn
+              ? 'Your score and grade are calculated based on your pedagogical results.'
+              : 'Punctajul și calificativul sunt calculate dinamic în baza răspunsurilor tale din manual.'}
+          </p>
+        </div>
+
+        {/* Dynamic Score & Grade Badge */}
+        <div className="inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2.5 rounded-2xl bg-slate-950/90 border border-amber-500/50 shadow-lg">
+          <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+          <span className="text-base sm:text-lg font-black text-amber-300 font-mono">
+            Punctaj: {earnedScore} / 100 Puncte
+          </span>
+          <span className="text-slate-500 font-bold">•</span>
+          <span className="text-sm sm:text-base font-bold text-emerald-300">
+            {isEn ? gradeDetails.calificativEn : gradeDetails.calificativRo}
+          </span>
+        </div>
+
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={handleFinalize}
+            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/20 cursor-pointer transition transform active:scale-95 flex items-center gap-2.5"
+          >
+            <Trophy className="w-5 h-5" />
+            <span>{isEn ? 'Finalize Mission & Claim Official Diploma!' : 'Finalizează Misiunea 4A & Revendică Marea Diplomă!'}</span>
+          </button>
+
+        </div>
+      </div>
     </div>
   );
 };

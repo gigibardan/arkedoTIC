@@ -21,6 +21,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface EmailLevel1Props {
   onCompletePage: (earnedScore: number) => void;
@@ -83,8 +84,9 @@ export const EmailLevel1_AnatomyAndAddresses: React.FC<EmailLevel1Props> = ({ on
   const [testedAddresses, setTestedAddresses] = useState<Record<string, 'valid' | 'invalid'>>({});
   const [addressFeedback, setAddressFeedback] = useState<Record<string, boolean>>({});
 
-  // Sorting email quiz
+  // Sorting email quiz with 5-second pedagogical cooldown
   const [qSortAnswer, setQSortAnswer] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleTestAddress = (id: string, userChoice: 'valid' | 'invalid') => {
     if (testedAddresses[id]) return;
@@ -100,10 +102,14 @@ export const EmailLevel1_AnatomyAndAddresses: React.FC<EmailLevel1Props> = ({ on
   };
 
   const handleSortAnswer = (choice: string) => {
-    if (qSortAnswer) return;
+    if (isLocked('qSort') || qSortAnswer === 'spam') return;
     setQSortAnswer(choice);
-    if (choice === 'spam') sounds.playCorrect();
-    else sounds.playWrong();
+    if (choice === 'spam') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('qSort', 5);
+    }
   };
 
   const completedAllTests = Object.keys(testedAddresses).length === ADDRESS_TESTS.length;
@@ -386,8 +392,8 @@ export const EmailLevel1_AnatomyAndAddresses: React.FC<EmailLevel1Props> = ({ on
           <button
             type="button"
             onClick={() => handleSortAnswer('inbox')}
-            disabled={!!qSortAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all text-left ${
+            disabled={isLocked('qSort') || qSortAnswer === 'spam'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all text-left cursor-pointer disabled:cursor-not-allowed ${
               qSortAnswer === 'inbox'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
@@ -398,8 +404,8 @@ export const EmailLevel1_AnatomyAndAddresses: React.FC<EmailLevel1Props> = ({ on
           <button
             type="button"
             onClick={() => handleSortAnswer('drafts')}
-            disabled={!!qSortAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all text-left ${
+            disabled={isLocked('qSort') || qSortAnswer === 'spam'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all text-left cursor-pointer disabled:cursor-not-allowed ${
               qSortAnswer === 'drafts'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
                 : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
@@ -410,8 +416,8 @@ export const EmailLevel1_AnatomyAndAddresses: React.FC<EmailLevel1Props> = ({ on
           <button
             type="button"
             onClick={() => handleSortAnswer('spam')}
-            disabled={!!qSortAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all text-left ${
+            disabled={isLocked('qSort') || qSortAnswer === 'spam'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all text-left cursor-pointer disabled:cursor-not-allowed ${
               qSortAnswer === 'spam'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
                 : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
@@ -420,6 +426,15 @@ export const EmailLevel1_AnatomyAndAddresses: React.FC<EmailLevel1Props> = ({ on
             C. În Spam / Junk & Blocat (este o capcană phishing)
           </button>
         </div>
+
+        {cooldowns.qSort && cooldowns.qSort > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.qSort}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Mesajele nesolicitate cu premii uriașe sunt escrocherii phishing!"
+            customMessageEn="Reflection buffer: Unsolicited lottery emails are phishing scams!"
+          />
+        ) : null}
 
         <QuestionHint
           hint={

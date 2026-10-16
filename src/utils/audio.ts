@@ -359,6 +359,22 @@ class SoundManager {
   playPop() {
     this.playClick();
   }
+
+  playNext() {
+    this.playClick();
+  }
+
+  playJump() {
+    this.playRetro('jump');
+  }
+
+  playCraft() {
+    this.playRetro('powerup');
+  }
+
+  playLaser() {
+    this.playRetro('shoot');
+  }
 }
 
 export const sounds = new SoundManager();

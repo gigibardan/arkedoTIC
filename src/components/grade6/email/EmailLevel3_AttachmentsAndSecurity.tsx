@@ -20,6 +20,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface EmailLevel3Props {
   onCompletePage: (earnedScore: number) => void;
@@ -86,8 +87,9 @@ export const EmailLevel3_AttachmentsAndSecurity: React.FC<EmailLevel3Props> = ({
   const [decisions, setDecisions] = useState<Record<string, 'attach_direct' | 'block_malware' | 'cloud_link'>>({});
   const [fileFeedback, setFileFeedback] = useState<Record<string, boolean>>({});
 
-  // Theory question: maximum size limit
+  // Theory question: maximum size limit with 5s cooldown
   const [qLimitAnswer, setQLimitAnswer] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleDecision = (fileId: string, choice: 'attach_direct' | 'block_malware' | 'cloud_link') => {
     if (decisions[fileId]) return;
@@ -103,10 +105,14 @@ export const EmailLevel3_AttachmentsAndSecurity: React.FC<EmailLevel3Props> = ({
   };
 
   const handleLimitAnswer = (ans: string) => {
-    if (qLimitAnswer) return;
+    if (isLocked('qLimit') || qLimitAnswer === '25mb') return;
     setQLimitAnswer(ans);
-    if (ans === '25mb') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === '25mb') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('qLimit', 5);
+    }
   };
 
   const allFilesDecided = Object.keys(decisions).length === FILES_TO_INSPECT.length;
@@ -308,11 +314,11 @@ export const EmailLevel3_AttachmentsAndSecurity: React.FC<EmailLevel3Props> = ({
           <button
             type="button"
             onClick={() => handleLimitAnswer('100mb')}
-            disabled={!!qLimitAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qLimit') || qLimitAnswer === '25mb'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qLimitAnswer === '100mb'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             A. Până la 100 MB
@@ -320,11 +326,11 @@ export const EmailLevel3_AttachmentsAndSecurity: React.FC<EmailLevel3Props> = ({
           <button
             type="button"
             onClick={() => handleLimitAnswer('25mb')}
-            disabled={!!qLimitAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qLimit') || qLimitAnswer === '25mb'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qLimitAnswer === '25mb'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             B. Exact 25 MB (standard mondial)
@@ -332,16 +338,25 @@ export const EmailLevel3_AttachmentsAndSecurity: React.FC<EmailLevel3Props> = ({
           <button
             type="button"
             onClick={() => handleLimitAnswer('nelimitat')}
-            disabled={!!qLimitAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('qLimit') || qLimitAnswer === '25mb'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qLimitAnswer === 'nelimitat'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             C. Nelimitat, cât permite hard diskul
           </button>
         </div>
+
+        {cooldowns.qLimit && cooldowns.qLimit > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.qLimit}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Majoritatea serviciilor de e-mail au o limită de atașament de 25 MB!"
+            customMessageEn="Reflection buffer: Most email providers enforce a 25 MB attachment limit!"
+          />
+        ) : null}
 
         <QuestionHint hint="Standardul majorității serverelor de poștă electronică impune o limită strictă de 25 MB per mesaj." />
 

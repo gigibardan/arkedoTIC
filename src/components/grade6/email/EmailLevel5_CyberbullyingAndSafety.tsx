@@ -18,6 +18,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface EmailLevel5Props {
   onCompletePage: (earnedScore: number) => void;
@@ -30,11 +31,13 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
   // 4 Steps Protocol Interactive sequence
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
-  // Simulation scenario answer
+  // Simulation scenario answer with 5s cooldown
   const [qScenarioAnswer, setQScenarioAnswer] = useState<string | null>(null);
 
-  // Phone helpline quiz
+  // Phone helpline quiz with 5s cooldown
   const [qHelplineAnswer, setQHelplineAnswer] = useState<string | null>(null);
+
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleStepClick = (stepIndex: number) => {
     if (completedSteps.includes(stepIndex)) return;
@@ -43,17 +46,25 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
   };
 
   const handleScenarioAnswer = (ans: string) => {
-    if (qScenarioAnswer) return;
+    if (isLocked('scenario') || qScenarioAnswer === 'support_and_report') return;
     setQScenarioAnswer(ans);
-    if (ans === 'support_and_report') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === 'support_and_report') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('scenario', 5);
+    }
   };
 
   const handleHelplineAnswer = (ans: string) => {
-    if (qHelplineAnswer) return;
+    if (isLocked('helpline') || qHelplineAnswer === '119_116111') return;
     setQHelplineAnswer(ans);
-    if (ans === '119_116111') sounds.playCorrect();
-    else sounds.playWrong();
+    if (ans === '119_116111') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('helpline', 5);
+    }
   };
 
   const allStepsLearned = completedSteps.length >= 4;
@@ -185,11 +196,11 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
           <button
             type="button"
             onClick={() => handleScenarioAnswer('join_laugh')}
-            disabled={!!qScenarioAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('scenario') || qScenarioAnswer === 'support_and_report'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qScenarioAnswer === 'join_laugh'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             A. Râzi și tu și dai mai departe poza pe alte grupuri
@@ -198,11 +209,11 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
           <button
             type="button"
             onClick={() => handleScenarioAnswer('support_and_report')}
-            disabled={!!qScenarioAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('scenario') || qScenarioAnswer === 'support_and_report'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qScenarioAnswer === 'support_and_report'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             B. Iei apărarea colegului, salvezi dovezi (screenshot) și anunți dirigintele / un adult
@@ -211,16 +222,25 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
           <button
             type="button"
             onClick={() => handleScenarioAnswer('ignore_completely')}
-            disabled={!!qScenarioAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('scenario') || qScenarioAnswer === 'support_and_report'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qScenarioAnswer === 'ignore_completely'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             C. Te prefaci că nu ai văzut nimic și lași victima singură
           </button>
         </div>
+
+        {cooldowns.scenario && cooldowns.scenario > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.scenario}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: A fi martor activ înseamnă a susține victima și a anunța un adult!"
+            customMessageEn="Reflection buffer: An active bystander supports the victim and notifies an adult!"
+          />
+        ) : null}
 
         <QuestionHint hint="Tăcerea în fața unei nedreptăți îi încurajează pe agresori. Fii un martor activ care sprijină victima!" />
 
@@ -251,11 +271,11 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
           <button
             type="button"
             onClick={() => handleHelplineAnswer('random')}
-            disabled={!!qHelplineAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('helpline') || qHelplineAnswer === '119_116111'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qHelplineAnswer === 'random'
                 ? 'bg-rose-950/80 border-rose-500 text-rose-300'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             A. Numerele 8989 și 9999
@@ -264,16 +284,25 @@ export const EmailLevel5_CyberbullyingAndSafety: React.FC<EmailLevel5Props> = ({
           <button
             type="button"
             onClick={() => handleHelplineAnswer('119_116111')}
-            disabled={!!qHelplineAnswer}
-            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all ${
+            disabled={isLocked('helpline') || qHelplineAnswer === '119_116111'}
+            className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
               qHelplineAnswer === '119_116111'
                 ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30'
-                : 'bg-slate-800/80 border-slate-700 text-slate-300'
+                : 'bg-slate-800/80 border-slate-700 text-slate-300 hover:border-slate-600'
             }`}
           >
             B. 119 (Numărul Unic Copii) & 116 111 (Telefonul Copilului)
           </button>
         </div>
+
+        {cooldowns.helpline && cooldowns.helpline > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.helpline}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Numerele gratuite de ajutor pentru copii în România sunt 119 și 116 111!"
+            customMessageEn="Reflection buffer: The free child assistance helplines in Romania are 119 and 116 111!"
+          />
+        ) : null}
 
         {qHelplineAnswer && (
           <AnswerExplanation

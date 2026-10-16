@@ -17,6 +17,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Paint3DLevel5Props {
   onCompletePage: (earnedScore: number) => void;
@@ -41,6 +42,7 @@ export const Paint3DLevel5_StickersAndMaterials: React.FC<Paint3DLevel5Props> = 
   // Quiz states
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const materialsInfo = [
     {
@@ -101,22 +103,24 @@ export const Paint3DLevel5_StickersAndMaterials: React.FC<Paint3DLevel5Props> = 
   };
 
   const handleAnswerQ1 = (val: string) => {
-    if (q1Answer) return;
+    if (isLocked('q1')) return;
     setQ1Answer(val);
     if (val === 'texture_wrap') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleAnswerQ2 = (val: string) => {
-    if (q2Answer) return;
+    if (isLocked('q2')) return;
     setQ2Answer(val);
     if (val === 'four_materials') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -380,7 +384,7 @@ export const Paint3DLevel5_StickersAndMaterials: React.FC<Paint3DLevel5Props> = 
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q1Answer}
+                disabled={isLocked('q1')}
                 onClick={() => handleAnswerQ1(opt.id)}
                 className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                   q1Answer === opt.id
@@ -388,12 +392,16 @@ export const Paint3DLevel5_StickersAndMaterials: React.FC<Paint3DLevel5Props> = 
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
                       : 'bg-rose-950/60 border-rose-400 text-rose-200'
                     : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-300'
-                }`}
+                } ${isLocked('q1') ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {opt.label}
               </button>
             ))}
           </div>
+
+          {cooldowns.q1 && cooldowns.q1 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q1} />
+          ) : null}
 
           {q1Answer && (
             <AnswerExplanation
@@ -435,7 +443,7 @@ export const Paint3DLevel5_StickersAndMaterials: React.FC<Paint3DLevel5Props> = 
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q2Answer}
+                disabled={isLocked('q2')}
                 onClick={() => handleAnswerQ2(opt.id)}
                 className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
                   q2Answer === opt.id
@@ -443,12 +451,16 @@ export const Paint3DLevel5_StickersAndMaterials: React.FC<Paint3DLevel5Props> = 
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
                       : 'bg-rose-950/60 border-rose-400 text-rose-200'
                     : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-300'
-                }`}
+                } ${isLocked('q2') ? 'opacity-60 cursor-not-allowed' : ''}`}
               >
                 {opt.label}
               </button>
             ))}
           </div>
+
+          {cooldowns.q2 && cooldowns.q2 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q2} />
+          ) : null}
 
           {q2Answer && (
             <AnswerExplanation

@@ -18,6 +18,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Paint3DLevel1Props {
   onCompletePage: (earnedScore: number) => void;
@@ -25,6 +26,7 @@ interface Paint3DLevel1Props {
 
 export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onCompletePage }) => {
   const { lang } = useLanguage();
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   // Interactive 2D vs 3D Dimension Inspector State
   const [viewDimension, setViewDimension] = useState<'2D' | '3D'>('2D');
@@ -50,22 +52,24 @@ export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onComplet
   };
 
   const handleAnswerQ1 = (val: string) => {
-    if (q1Answer) return;
+    if (isLocked('q1') || q1Answer === 'depth_z') return;
     setQ1Answer(val);
     if (val === 'depth_z') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleAnswerQ2 = (val: string) => {
-    if (q2Answer) return;
+    if (isLocked('q2') || q2Answer === 'paint3d_tinkercad') return;
     setQ2Answer(val);
     if (val === 'paint3d_tinkercad') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -487,9 +491,9 @@ export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onComplet
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q1Answer}
+                disabled={isLocked('q1') || isQ1Correct}
                 onClick={() => handleAnswerQ1(opt.id)}
-                className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
+                className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer disabled:cursor-not-allowed ${
                   q1Answer === opt.id
                     ? opt.id === 'depth_z'
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
@@ -501,6 +505,10 @@ export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onComplet
               </button>
             ))}
           </div>
+
+          {cooldowns.q1 && cooldowns.q1 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q1} />
+          ) : null}
 
           {q1Answer && (
             <AnswerExplanation
@@ -542,9 +550,9 @@ export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onComplet
               <button
                 key={opt.id}
                 type="button"
-                disabled={!!q2Answer}
+                disabled={isLocked('q2') || isQ2Correct}
                 onClick={() => handleAnswerQ2(opt.id)}
-                className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer ${
+                className={`w-full p-3 rounded-xl border text-left text-xs font-medium transition-all cursor-pointer disabled:cursor-not-allowed ${
                   q2Answer === opt.id
                     ? opt.id === 'paint3d_tinkercad'
                       ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
@@ -556,6 +564,10 @@ export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onComplet
               </button>
             ))}
           </div>
+
+          {cooldowns.q2 && cooldowns.q2 > 0 ? (
+            <PedagogicalReflectionBanner cooldown={cooldowns.q2} />
+          ) : null}
 
           {q2Answer && (
             <AnswerExplanation
@@ -578,8 +590,9 @@ export const Paint3DLevel1_WhatIs3D: React.FC<Paint3DLevel1Props> = ({ onComplet
       <PageNavigationFooter
         canAdvance={isComplete}
         onAdvance={handleFinish}
-        cooldownRemaining={0}
+        cooldownRemaining={Math.max(cooldowns.q1 || 0, cooldowns.q2 || 0)}
       />
     </div>
   );
 };
+

@@ -18,6 +18,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level4Props {
   onCompletePage: (earnedScore: number) => void;
@@ -126,15 +127,21 @@ export const ScratchAlgo1_Level4_InfiniteLoopsTrap: React.FC<Level4Props> = ({ o
 
   const [activeBugIdx, setActiveBugIdx] = useState<number>(0);
   const [fixedBugs, setFixedBugs] = useState<Record<string, string>>({});
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const currentBug = BUG_CASES[activeBugIdx];
   const selectedSolutionId = fixedBugs[currentBug.id];
+  const currentBugSolved = currentBug.solutions.find((x) => x.id === selectedSolutionId)?.isCorrect;
 
   const handleSelectSolution = (solId: string, isCorrect: boolean) => {
-    if (fixedBugs[currentBug.id]) return;
+    if (isLocked(currentBug.id) || currentBugSolved) return;
     setFixedBugs((prev) => ({ ...prev, [currentBug.id]: solId }));
-    if (isCorrect) sounds.playCorrect();
-    else sounds.playWrong();
+    if (isCorrect) {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown(currentBug.id, 5);
+    }
   };
 
   const solvedCount = BUG_CASES.filter((b) => {
@@ -287,8 +294,9 @@ export const ScratchAlgo1_Level4_InfiniteLoopsTrap: React.FC<Level4Props> = ({ o
               return (
                 <button
                   key={sol.id}
+                  disabled={isLocked(currentBug.id) || !!currentBugSolved}
                   onClick={() => handleSelectSolution(sol.id, sol.isCorrect)}
-                  className={`p-4 rounded-2xl border text-left transition flex items-start justify-between gap-3 cursor-pointer ${style}`}
+                  className={`p-4 rounded-2xl border text-left transition flex items-start justify-between gap-3 cursor-pointer disabled:cursor-not-allowed ${style}`}
                 >
                   <div className="space-y-1">
                     <div className="font-bold text-xs sm:text-sm">{sol.label}</div>
@@ -308,6 +316,15 @@ export const ScratchAlgo1_Level4_InfiniteLoopsTrap: React.FC<Level4Props> = ({ o
               );
             })}
           </div>
+
+          {cooldowns[currentBug.id] && cooldowns[currentBug.id] > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns[currentBug.id]}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: O buclă infinită se produce când condiția de oprire nu este atinsă niciodată!"
+              customMessageEn="Reflection buffer: An infinite loop occurs when the termination condition is never reached!"
+            />
+          ) : null}
         </div>
 
         <QuestionHint
