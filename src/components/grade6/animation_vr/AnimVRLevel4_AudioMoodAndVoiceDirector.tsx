@@ -19,6 +19,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level4Props {
   onCompletePage: (earnedScore: number) => void;
@@ -41,6 +42,7 @@ export const AnimVRLevel4_AudioMoodAndVoiceDirector: React.FC<Level4Props> = ({ 
   // Quiz questions
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   // Play audio synthesised chords for mood preview using Web Audio
   const playMoodAudio = (mood: MoodType) => {
@@ -129,20 +131,24 @@ export const AnimVRLevel4_AudioMoodAndVoiceDirector: React.FC<Level4Props> = ({ 
   };
 
   const handleQ1 = (val: string) => {
+    if (isLocked('q1') || q1 === 'emotion') return;
     setQ1(val);
     if (val === 'emotion') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (val: string) => {
+    if (isLocked('q2') || q2 === 'distance') return;
     setQ2(val);
     if (val === 'distance') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -409,8 +415,9 @@ export const AnimVRLevel4_AudioMoodAndVoiceDirector: React.FC<Level4Props> = ({ 
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1') || q1 === 'emotion'}
                   onClick={() => handleQ1(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q1 === opt.id
                       ? opt.id === 'emotion'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -425,6 +432,15 @@ export const AnimVRLevel4_AudioMoodAndVoiceDirector: React.FC<Level4Props> = ({ 
                 </button>
               ))}
             </div>
+
+            {cooldowns.q1 && cooldowns.q1 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: Coloana sonoră ghidează starea emoțională a spectatorului!"
+                customMessageEn="Reflection buffer: The soundtrack guides the audience's emotional mood!"
+              />
+            ) : null}
 
             {q1 && (
               <AnswerExplanation
@@ -458,8 +474,9 @@ export const AnimVRLevel4_AudioMoodAndVoiceDirector: React.FC<Level4Props> = ({ 
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2') || q2 === 'distance'}
                   onClick={() => handleQ2(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q2 === opt.id
                       ? opt.id === 'distance'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -474,6 +491,15 @@ export const AnimVRLevel4_AudioMoodAndVoiceDirector: React.FC<Level4Props> = ({ 
                 </button>
               ))}
             </div>
+
+            {cooldowns.q2 && cooldowns.q2 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q2}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: Distanța de 15-20 cm previne distorsiunile sonore și suflul la microfon!"
+                customMessageEn="Reflection buffer: The 15-20 cm distance prevents sound distortion and microphone popping!"
+              />
+            ) : null}
 
             {q2 && (
               <AnswerExplanation

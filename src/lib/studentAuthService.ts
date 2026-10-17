@@ -11,9 +11,9 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db, isCloudConnected } from './firebase';
-import { StudentProfile, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems } from '../types';
+import { StudentProfile, StudentDiploma, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems } from '../types';
 import { DEFAULT_EQUIPPED, DEFAULT_INVENTORY, SHOP_ITEMS } from './shopCatalog';
-export type { StudentProfile, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems };
+export type { StudentProfile, StudentDiploma, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems };
 
 const STUDENTS_COLLECTION = 'elevi';
 const RECORDS_COLLECTION = 'recorduri_jocuri';
@@ -988,6 +988,64 @@ export function updateActiveLessonProgress(
     score,
     elapsedSeconds
   });
+}
+
+// SAVE & RETRIEVE STUDENT DIPLOMAS (PERSISTENCE TO FIRESTORE & LOCAL)
+export async function saveStudentDiploma(diploma: StudentDiploma): Promise<boolean> {
+  const current = getActiveStudent();
+  const studentId = current?.id;
+
+  // Persist locally in current student profile
+  if (current) {
+    const updatedDiplomas = {
+      ...(current.diplomas || {}),
+      [diploma.courseId]: diploma
+    };
+    const updatedProfile: StudentProfile = {
+      ...current,
+      diplomas: updatedDiplomas,
+      lastActiveAt: new Date().toISOString()
+    };
+    saveActiveStudentLocally(updatedProfile);
+  }
+
+  // Also persist in dedicated local storage cache
+  try {
+    const raw = localStorage.getItem('arkedo_student_diplomas');
+    const existing = raw ? JSON.parse(raw) : {};
+    existing[diploma.courseId] = diploma;
+    localStorage.setItem('arkedo_student_diplomas', JSON.stringify(existing));
+  } catch (err) {
+    console.warn('Eroare salvare diploma in cache local:', err);
+  }
+
+  // Synchronize to Cloud Firestore if connected and student is registered
+  if (isCloudConnected && db && studentId) {
+    try {
+      await updateDoc(doc(db, STUDENTS_COLLECTION, studentId), {
+        [`diplomas.${diploma.courseId}`]: diploma,
+        lastActiveAt: new Date().toISOString()
+      });
+      return true;
+    } catch (err) {
+      console.warn('Eroare sincronizare diploma in Firestore:', err);
+    }
+  }
+
+  return true;
+}
+
+export function getStudentDiplomas(): Record<string, StudentDiploma> {
+  const current = getActiveStudent();
+  if (current?.diplomas && Object.keys(current.diplomas).length > 0) {
+    return current.diplomas;
+  }
+  try {
+    const raw = localStorage.getItem('arkedo_student_diplomas');
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
 }
 
 // UPDATE USERNAME BY STUDENT OR TEACHER

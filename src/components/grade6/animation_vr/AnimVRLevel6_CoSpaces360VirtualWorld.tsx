@@ -21,6 +21,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level6Props {
   onCompletePage: (earnedScore: number) => void;
@@ -41,6 +42,7 @@ export const AnimVRLevel6_CoSpaces360VirtualWorld: React.FC<Level6Props> = ({ on
   // Quiz questions
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleRotate = (delta: number) => {
     sounds.playPop();
@@ -54,20 +56,24 @@ export const AnimVRLevel6_CoSpaces360VirtualWorld: React.FC<Level6Props> = ({ on
   };
 
   const handleQ1 = (val: string) => {
+    if (isLocked('q1') || q1 === 'coblocks') return;
     setQ1(val);
     if (val === 'coblocks') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (val: string) => {
+    if (isLocked('q2') || q2 === 'wasd') return;
     setQ2(val);
     if (val === 'wasd') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -416,8 +422,9 @@ export const AnimVRLevel6_CoSpaces360VirtualWorld: React.FC<Level6Props> = ({ on
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1') || q1 === 'coblocks'}
                   onClick={() => handleQ1(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q1 === opt.id
                       ? opt.id === 'coblocks'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -432,6 +439,15 @@ export const AnimVRLevel6_CoSpaces360VirtualWorld: React.FC<Level6Props> = ({ on
                 </button>
               ))}
             </div>
+
+            {cooldowns.q1 && cooldowns.q1 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: CoBlocks este limbajul vizual cu blocuri pentru medii 3D în CoSpaces!"
+                customMessageEn="Reflection buffer: CoBlocks is the block-based visual language for 3D worlds in CoSpaces!"
+              />
+            ) : null}
 
             {q1 && (
               <AnswerExplanation
@@ -465,8 +481,9 @@ export const AnimVRLevel6_CoSpaces360VirtualWorld: React.FC<Level6Props> = ({ on
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2') || q2 === 'wasd'}
                   onClick={() => handleQ2(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q2 === opt.id
                       ? opt.id === 'wasd'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -481,6 +498,15 @@ export const AnimVRLevel6_CoSpaces360VirtualWorld: React.FC<Level6Props> = ({ on
                 </button>
               ))}
             </div>
+
+            {cooldowns.q2 && cooldowns.q2 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q2}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: Tastele WASD și săgețile reprezintă standardul internațional de navigație 3D!"
+                customMessageEn="Reflection buffer: WASD keys and arrows are the international standard for 3D navigation!"
+              />
+            ) : null}
 
             {q2 && (
               <AnswerExplanation

@@ -326,7 +326,7 @@ export const ScratchAlgo2_Level4_CoordinateBoundsAndGhost: React.FC<Level4Props>
               return (
                 <button
                   key={opt.id}
-                  disabled={Boolean(qBounds)}
+                  disabled={isLocked('qBounds') || qBounds === 'x_240_y_180'}
                   onClick={() => handleBoundsQuiz(opt.id)}
                   className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between gap-2 ${style}`}
                 >
@@ -337,6 +337,15 @@ export const ScratchAlgo2_Level4_CoordinateBoundsAndGhost: React.FC<Level4Props>
               );
             })}
           </div>
+
+          {cooldowns.qBounds && cooldowns.qBounds > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns.qBounds}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: Originea (0,0) este în centrul scenei, de unde X variază [-240, 240] și Y [-180, 180]!"
+              customMessageEn="Reflection buffer: The origin (0,0) is at the center, with X spanning [-240, 240] and Y [-180, 180]!"
+            />
+          ) : null}
 
           {qBounds && (
             <AnswerExplanation
@@ -380,7 +389,7 @@ export const ScratchAlgo2_Level4_CoordinateBoundsAndGhost: React.FC<Level4Props>
               return (
                 <button
                   key={opt.id}
-                  disabled={Boolean(qGhostEffect)}
+                  disabled={isLocked('qGhost') || qGhostEffect === 'transparency'}
                   onClick={() => handleGhostQuiz(opt.id)}
                   className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between gap-2 ${style}`}
                 >
@@ -391,6 +400,15 @@ export const ScratchAlgo2_Level4_CoordinateBoundsAndGhost: React.FC<Level4Props>
               );
             })}
           </div>
+
+          {cooldowns.qGhost && cooldowns.qGhost > 0 ? (
+            <PedagogicalReflectionBanner
+              cooldown={cooldowns.qGhost}
+              totalSeconds={5}
+              customMessageRo="Timp de reflecție: Efectul 'fantomă' controlează transparența de la 0 (opac) la 100 (invizibil)!"
+              customMessageEn="Reflection buffer: The 'ghost' effect controls transparency from 0 (opaque) to 100 (invisible)!"
+            />
+          ) : null}
 
           {qGhostEffect && (
             <AnswerExplanation

@@ -19,6 +19,7 @@ import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level6Props {
   onCompletePage: (earnedScore: number) => void;
@@ -63,6 +64,21 @@ export const ScratchAlgo1_Level6_SmartMazeAlgorithm: React.FC<Level6Props> = ({ 
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [hasReachedGoal, setHasReachedGoal] = useState<boolean>(false);
   const [stepLogs, setStepLogs] = useState<string[]>([]);
+
+  // 5s Cooldown Quiz
+  const [qMaze, setQMaze] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
+
+  const handleQMaze = (val: string) => {
+    if (isLocked('qMaze') || qMaze === 'flag') return;
+    setQMaze(val);
+    if (val === 'flag') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      triggerCooldown('qMaze', 5);
+    }
+  };
 
   const isScriptComplete = hasLoopBlock && hasMoveBlock && hasWallCondition;
 
@@ -288,6 +304,75 @@ export const ScratchAlgo1_Level6_SmartMazeAlgorithm: React.FC<Level6Props> = ({ 
         </div>
       </div>
 
+      {/* Conceptual Question with 5s Cooldown */}
+      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-purple-400" />
+            <h3 className="font-bold text-white text-base">
+              {isEn
+                ? 'What stop condition keeps the autonomous maze algorithm safely running until arrival?'
+                : 'Ce condiție de oprire este verificată continuu de buclă pentru a garanta sosirea autonomă?'}
+            </h3>
+          </div>
+          <QuestionHint
+            hint={
+              isEn
+                ? 'The loop checks whether Arky has made contact with the Green Flag (atinge [Steag Verde])!'
+                : 'Gândește-te la senzorul de atingere a țintei finale: atinge [Steag Verde]!'
+            }
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          {[
+            { id: 'flag', label: 'atinge [Steag Verde]', isCorrect: true },
+            { id: 'space', label: 'tasta [spațiu] este apăsată', isCorrect: false },
+            { id: 'timer', label: 'cronometrul atinge 100 de secunde', isCorrect: false }
+          ].map((opt) => {
+            const isSelected = qMaze === opt.id;
+            let style = 'bg-slate-950 border-slate-800 hover:border-slate-700 text-slate-200';
+            if (qMaze) {
+              if (opt.isCorrect) style = 'bg-emerald-950/60 border-emerald-500 text-emerald-200';
+              else if (isSelected) style = 'bg-rose-950/60 border-rose-500 text-rose-200';
+            }
+
+            return (
+              <button
+                key={opt.id}
+                disabled={isLocked('qMaze') || qMaze === 'flag'}
+                onClick={() => handleQMaze(opt.id)}
+                className={`p-3.5 rounded-xl border font-bold text-xs sm:text-sm text-left transition cursor-pointer disabled:cursor-not-allowed flex items-center justify-between gap-2 ${style}`}
+              >
+                <span className="font-mono">{opt.label}</span>
+                {qMaze && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
+                {qMaze && isSelected && !opt.isCorrect && <XCircle className="w-4 h-4 text-rose-400 shrink-0" />}
+              </button>
+            );
+          })}
+        </div>
+
+        {cooldowns.qMaze && cooldowns.qMaze > 0 ? (
+          <PedagogicalReflectionBanner
+            cooldown={cooldowns.qMaze}
+            totalSeconds={5}
+            customMessageRo="Timp de reflecție: Bucla 'repetă până când' evaluează atingerea Steagului Verde la fiecare iterație!"
+            customMessageEn="Reflection buffer: The 'repeat until' loop evaluates touching the Green Flag on each iteration!"
+          />
+        ) : null}
+
+        {qMaze && (
+          <AnswerExplanation
+            isCorrect={qMaze === 'flag'}
+            explanation={
+              isEn
+                ? 'Correct! The condition <atinge [Steag Verde]> halts the repeat-until loop precisely upon arrival at the destination.'
+                : 'Corect! Condiția <atinge [Steag Verde]> oprește bucla „repetă până când” exact în momentul în care robotul ajunge la destinația finală!'
+            }
+          />
+        )}
+      </div>
+
       <QuestionHint
         hint={
           isEn
@@ -298,7 +383,7 @@ export const ScratchAlgo1_Level6_SmartMazeAlgorithm: React.FC<Level6Props> = ({ 
 
       {/* Navigation Footer */}
       <PageNavigationFooter
-        canProceed={hasReachedGoal}
+        canProceed={hasReachedGoal && qMaze === 'flag'}
         onNext={() => onCompletePage(15)}
         nextLabel={isEn ? 'Level 7: Exam & Official Diploma' : 'Nivelul 7: Examenul de Brevet & Marea Diplomă'}
       />

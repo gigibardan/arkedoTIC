@@ -7,6 +7,7 @@ import { useArky } from '../context/ArkyContext';
 import { useHints } from '../context/HintContext';
 import { MascotaArky } from './MascotaArky';
 import { logStudentResult } from '../lib/resultsService';
+import { saveStudentDiploma } from '../lib/studentAuthService';
 import { computeGradeDetails } from '../utils/pedagogicalGrading';
 
 interface VictoryScreenProps {
@@ -14,7 +15,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }

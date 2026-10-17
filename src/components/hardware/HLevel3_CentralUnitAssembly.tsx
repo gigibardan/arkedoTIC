@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
-import { Cpu, Zap, CheckCircle2, ArrowRight, HelpCircle } from 'lucide-react';
+import { Cpu, Zap, CheckCircle2, ArrowRight, HelpCircle, Activity, Volume2, Terminal, Power, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { AnswerExplanation } from '../common/AnswerExplanation';
 import { QuestionHint } from '../common/QuestionHint';
@@ -44,8 +44,18 @@ const PARTS_RO: ComponentPart[] = [
     pillEn: 'Contains the Control Unit (CU) and Arithmetic Logic Unit (ALU), processing billions of instructions per second.',
   },
   {
+    id: 'cooler',
+    name: 'Cooler CPU & Pastă Termoconductoare',
+    slotNumber: 4,
+    icon: '❄️',
+    role: 'Răcește procesorul și transferă căldura pentru a preveni oprirea de urgență la peste 95°C.',
+    detail: 'Manual pag. 17, sfat practic',
+    pillRo: 'Pasta termică umple micro-imperfecțiunile dintre procesor și radiatorul metalic pentru disipare termică optimă.',
+    pillEn: 'Thermal paste fills microscopic gaps between the CPU heat spreader and copper cooler base.',
+  },
+  {
     id: 'ram',
-    name: 'Memoria RAM',
+    name: 'Memoria RAM (Dual-Channel)',
     slotNumber: 3,
     icon: '⚡',
     role: 'Memoria de lucru temporară unde sunt stocate datele imediat necesare aplicațiilor rulate.',
@@ -55,13 +65,23 @@ const PARTS_RO: ComponentPart[] = [
   },
   {
     id: 'psu',
-    name: 'Sursa de alimentare',
+    name: 'Sursa de alimentare (PSU)',
     slotNumber: 5,
     icon: '🔌',
     role: 'Asigură energia electrică necesară funcționării întregii unități centrale.',
     detail: 'Manual pag. 17, punctul 5',
     pillRo: 'Transformă curentul alternativ de la priză (230V) în curent continuu de joasă tensiune (12V, 5V, 3.3V) pentru circuite.',
     pillEn: 'Converts 230V AC household power into safe regulated DC voltages (12V, 5V, 3.3V) for PC chips.',
+  },
+  {
+    id: 'atx_cable',
+    name: 'Cablaj Principal ATX 24-Pini',
+    slotNumber: 6,
+    icon: '⚡',
+    role: 'Livrează energia electrică stabilă de la sursă direct către circuitele plăcii de bază.',
+    detail: 'Standard ATX pag. 17',
+    pillRo: 'Conectorul ATX 24 pini alimentează cipurile plăcii de bază și sloturile PCIe pentru plăcile de extensie.',
+    pillEn: 'The 24-pin ATX connector delivers main rail power to the motherboard chipsets and expansion slots.',
   },
   {
     id: 'storage',
@@ -97,8 +117,18 @@ const PARTS_EN: ComponentPart[] = [
     pillEn: 'Contains the Control Unit (CU) and Arithmetic Logic Unit (ALU), processing billions of instructions per second.',
   },
   {
+    id: 'cooler',
+    name: 'CPU Cooler & Thermal Paste',
+    slotNumber: 4,
+    icon: '❄️',
+    role: 'Transfers thermal energy away from the CPU die to prevent emergency thermal throttling over 95°C.',
+    detail: 'Textbook p. 17 practical tip',
+    pillRo: 'Pasta termică umple micro-imperfecțiunile dintre procesor și radiatorul metalic pentru disipare termică optimă.',
+    pillEn: 'Thermal paste fills microscopic gaps between the CPU heat spreader and copper cooler base.',
+  },
+  {
     id: 'ram',
-    name: 'RAM Memory',
+    name: 'RAM Memory (Dual-Channel)',
     slotNumber: 3,
     icon: '⚡',
     role: 'Temporary working memory storing volatile data needed immediately by active applications.',
@@ -115,6 +145,16 @@ const PARTS_EN: ComponentPart[] = [
     detail: 'Textbook p. 17, point 5',
     pillRo: 'Transformă curentul alternativ de la priză (230V) în curent continuu de joasă tensiune (12V, 5V, 3.3V) pentru circuite.',
     pillEn: 'Converts 230V AC household power into safe regulated DC voltages (12V, 5V, 3.3V) for PC chips.',
+  },
+  {
+    id: 'atx_cable',
+    name: '24-Pin ATX Main Power Cable',
+    slotNumber: 6,
+    icon: '⚡',
+    role: 'Routes regulated power rails from the PSU directly to the motherboard distribution circuits.',
+    detail: 'ATX standard p. 17',
+    pillRo: 'Conectorul ATX 24 pini alimentează cipurile plăcii de bază și sloturile PCIe pentru plăcile de extensie.',
+    pillEn: 'The 24-pin ATX connector delivers main rail power to the motherboard chipsets and expansion slots.',
   },
   {
     id: 'storage',
@@ -137,7 +177,12 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
 
   // Exercise from textbook pag. 17, ex. 3:
   const [quizStorageAnswer, setQuizStorageAnswer] = useState<string | null>(null);
-  
+  const [quizPostAnswer, setQuizPostAnswer] = useState<string | null>(null);
+
+  // Interactive BIOS POST & Beep Diagnostics Bench
+  const [postStatus, setPostStatus] = useState<'idle' | 'testing' | 'error' | 'success'>('idle');
+  const [postDiagnosticMsg, setPostDiagnosticMsg] = useState<{ ro: string; en: string; beep: string } | null>(null);
+
   const [showErrors, setShowErrors] = useState<boolean>(false);
   const [completed, setCompleted] = useState<boolean>(false);
   const [cooldown, setCooldown] = useState<number>(0);
@@ -150,12 +195,74 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
       setInstalledParts(prev => [...prev, partId]);
     }
     setSelectedPartId(partId);
+    // Reset post status if parts change so student tests the new config
+    setPostStatus('idle');
+  };
+
+  const handleRunPOSTTest = () => {
+    sounds.playRetro('powerup');
+    setPostStatus('testing');
+
+    setTimeout(() => {
+      // Diagnostic rule evaluation
+      if (!installedParts.includes('mobo')) {
+        sounds.playWrong();
+        setPostStatus('error');
+        setPostDiagnosticMsg({
+          ro: 'EROARE CRITICĂ: Fără Placa de bază nu există circuite de comunicare între componente!',
+          en: 'CRITICAL ERROR: Without the Motherboard there are no system communication buses!',
+          beep: '⚡ 0 Beep / Fără alimentare'
+        });
+      } else if (!installedParts.includes('psu') || !installedParts.includes('atx_cable')) {
+        sounds.playWrong();
+        setPostStatus('error');
+        setPostDiagnosticMsg({
+          ro: 'EROARE ALIMENTARE: Sursa sau cablul ATX 24-pini lipsește! Niciun cip nu primește tensiunea de 12V/5V.',
+          en: 'POWER ERROR: PSU or 24-pin ATX cable missing! Components receive no electrical power.',
+          beep: '🔇 Fără semnal de pornire'
+        });
+      } else if (!installedParts.includes('cpu') || !installedParts.includes('cooler')) {
+        sounds.playWrong();
+        setPostStatus('error');
+        setPostDiagnosticMsg({
+          ro: 'EROARE PROCESOR: CPU lipsește sau Cooler-ul fără pastă provoacă alertă termică de urgență!',
+          en: 'CPU ERROR: Microprocessor missing or cooler/paste missing causing emergency thermal shutdown!',
+          beep: '🔊 Beep continuu înalt (Supraîncălzire CPU)'
+        });
+      } else if (!installedParts.includes('ram')) {
+        sounds.playWrong();
+        setPostStatus('error');
+        setPostDiagnosticMsg({
+          ro: 'EROARE MEMORIE: 3 Beep-uri scurte! Memoria RAM nu este detectată în slotul Dual-Channel.',
+          en: 'MEMORY ERROR: 3 Short Beeps! RAM is missing or not seated in the Dual-Channel slot.',
+          beep: '🔊 Beep • Beep • Beep (Cod alertă RAM)'
+        });
+      } else if (!installedParts.includes('storage')) {
+        sounds.playWrong();
+        setPostStatus('error');
+        setPostDiagnosticMsg({
+          ro: 'AVERTISMENT BIOS: Hardware POST reușit, dar mesajul este „No Bootable Device Found” (Lipsește SSD-ul).',
+          en: 'BIOS WARNING: Hardware POST passed, but screen reads “No Bootable Device Found” (SSD missing).',
+          beep: '🔊 1 Beep scurt urmat de ecran negru'
+        });
+      } else {
+        sounds.playCorrect();
+        setPostStatus('success');
+        setPostDiagnosticMsg({
+          ro: 'POST COMPLET CU SUCCES! 1 Beep scurt. Toate cele 7 componente vitale sunt recunoscute. Windows 11 inițializat!',
+          en: 'POST SUCCESSFUL! 1 Short Beep. All 7 vital components recognized. System ready to boot Windows 11!',
+          beep: '✅ 1 Beep scurt (Semnal oficial POST OK)'
+        });
+      }
+    }, 500);
   };
 
   const isAllInstalled = parts.every(p => installedParts.includes(p.id));
   const isQuizCorrect = quizStorageAnswer === 'ssd';
+  const isQuiz2Correct = quizPostAnswer === 'post_diagnostic';
+  const isPostPassed = postStatus === 'success';
 
-  const canValidate = isAllInstalled && quizStorageAnswer !== null;
+  const canValidate = isAllInstalled && isQuizCorrect && isQuiz2Correct && isPostPassed;
 
   const handleValidate = () => {
     if (cooldown > 0) return;
@@ -176,24 +283,9 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
       return;
     }
 
-    if (isAllInstalled && isQuizCorrect) {
-      sounds.playCorrect();
-      setCompleted(true);
-      onComplete();
-    } else {
-      sounds.playWrong();
-      setShowErrors(true);
-      setCooldown(5);
-      const timer = setInterval(() => {
-        setCooldown(prev => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
+    sounds.playCorrect();
+    setCompleted(true);
+    onComplete();
   };
 
   const activePart = parts.find(p => p.id === selectedPartId) || parts[0];
@@ -369,13 +461,94 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
         </div>
       </div>
 
+      {/* Interactive BIOS POST & Beep Code Diagnostic Lab */}
+      <div className="mb-7 bg-slate-950/90 border-2 border-indigo-500/40 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">
+              <Terminal className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white font-heading">
+                {lang === 'en' ? 'BIOS/UEFI Power-On Self-Test (POST) Diagnostic Bench' : 'Banc de Diagnoză BIOS/UEFI: Autotestarea POST & Coduri Beep'}
+              </h3>
+              <p className="text-[11px] text-slate-400">
+                {lang === 'en'
+                  ? 'Press Power to test if all 7 hardware components receive power and communicate via system buses.'
+                  : 'Apasă butonul de pornire pentru a verifica dacă toate cele 7 componente primesc tensiune și comunică.'}
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleRunPOSTTest}
+            disabled={postStatus === 'testing'}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-2 cursor-pointer transition active:scale-95 disabled:opacity-50"
+          >
+            <Power className="w-4 h-4" />
+            <span>{postStatus === 'testing' ? (lang === 'en' ? 'Testing Circuits...' : 'Testare circuite...') : (lang === 'en' ? 'Power-On / Run POST Test' : 'Pornire PC / Testează POST')}</span>
+          </button>
+        </div>
+
+        {/* CRT BIOS Screen */}
+        <div className="bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono text-xs space-y-2">
+          <div className="flex items-center justify-between text-[10px] text-slate-500 pb-1.5 border-b border-slate-900">
+            <span>AMERICAN MEGATRENDS / UEFI BIOS v4.8</span>
+            <span>ACPI x64 COMPLIANT</span>
+          </div>
+
+          {postStatus === 'idle' && (
+            <div className="text-slate-400 py-3 text-center flex flex-col items-center gap-1">
+              <Activity className="w-5 h-5 text-indigo-400 animate-pulse" />
+              <span>{lang === 'en' ? 'System in Standby. Mount all 7 parts and click “Power-On / Run POST Test”.' : 'Sistem în standby. Montează toate cele 7 componente și apasă „Pornire PC / Testează POST”.'}</span>
+            </div>
+          )}
+
+          {postStatus === 'testing' && (
+            <div className="text-cyan-400 py-3 text-center flex flex-col items-center gap-1 animate-pulse">
+              <Zap className="w-5 h-5 text-amber-400 animate-spin" />
+              <span>{lang === 'en' ? 'Checking 24-Pin ATX voltage rails... Scanning CPU die temperature... Querying SPD EEPROM RAM...' : 'Verificare tensiuni ATX 24 pini... Scanare temperatură procesor... Detectare memorie RAM...'}</span>
+            </div>
+          )}
+
+          {postStatus === 'error' && postDiagnosticMsg && (
+            <div className="p-3 rounded-lg bg-rose-950/60 border border-rose-500/50 text-rose-200 space-y-1.5">
+              <div className="flex items-center justify-between text-rose-300 font-bold">
+                <span className="flex items-center gap-1.5"><AlertTriangle className="w-4 h-4 text-rose-400" /> {lang === 'en' ? 'POST FAILED' : 'POST EȘUAT'}</span>
+                <span className="text-[11px] bg-rose-900/50 px-2 py-0.5 rounded border border-rose-500/40">{postDiagnosticMsg.beep}</span>
+              </div>
+              <p className="text-[11px] text-rose-100/90 leading-relaxed">
+                {lang === 'en' ? postDiagnosticMsg.en : postDiagnosticMsg.ro}
+              </p>
+            </div>
+          )}
+
+          {postStatus === 'success' && postDiagnosticMsg && (
+            <div className="p-3 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-200 space-y-1.5">
+              <div className="flex items-center justify-between text-emerald-300 font-bold">
+                <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-400" /> {lang === 'en' ? 'POST ALL OK' : 'POST REUȘIT'}</span>
+                <span className="text-[11px] bg-emerald-900/50 px-2 py-0.5 rounded border border-emerald-500/40">{postDiagnosticMsg.beep}</span>
+              </div>
+              <p className="text-[11px] text-emerald-100/90 leading-relaxed">
+                {lang === 'en' ? postDiagnosticMsg.en : postDiagnosticMsg.ro}
+              </p>
+              <div className="text-[10px] text-emerald-400/80 pt-1 border-t border-emerald-900/50 flex flex-wrap gap-3">
+                <span>CPU: 3.80 GHz (32°C Cooler OK)</span>
+                <span>RAM: 16 GB Dual-Channel 3200MHz OK</span>
+                <span>NVMe: 1000 GB High Speed SSD OK</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Task 2: RAM vs Storage permanent quiz (pag. 17, ex. 3) with 5s Cooldown */}
-      <div className="mb-6">
+      <div className="mb-6 space-y-5">
         <PedagogicalQuizCard
           questionRo="„Pentru a păstra definitiv o fotografie sau un proiect pe calculator, unde trebuie să o salvăm?” (Manual pag. 17, Ex. 3b)"
           questionEn="“To permanently preserve a photo or project on a computer, where must we save it?” (Textbook p. 17, Ex. 3b)"
           questionNumber={1}
-          totalQuestions={1}
+          totalQuestions={2}
           bookPage="17-18"
           categoryLabelRo="Memorie Permanentă"
           categoryLabelEn="Permanent Storage"
@@ -404,6 +577,49 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
             },
           ]}
         />
+
+        {/* Task 3: BIOS POST & Beep codes check with 5s Cooldown */}
+        <PedagogicalQuizCard
+          questionRo="Ce indică un semnal sonor scurt (beep code) emis de difuzorul plăcii de bază la pornirea calculatorului?"
+          questionEn="What does a short beep code from the motherboard speaker indicate when turning on the PC?"
+          questionNumber={2}
+          totalQuestions={2}
+          bookPage="17"
+          categoryLabelRo="Diagnoză Hardware & POST"
+          categoryLabelEn="Hardware Diagnostics & POST"
+          hintRo="Programele din cipul BIOS/UEFI verifică starea componentelor vitale înainte de încărcarea Windows-ului."
+          hintEn="The BIOS/UEFI firmware checks vital hardware integrity before loading the OS."
+          cooldownSeconds={5}
+          maxXP={20}
+          initialSelectedId={quizPostAnswer || undefined}
+          onAnswerSelected={(isCorrect, optId) => setQuizPostAnswer(optId)}
+          options={[
+            {
+              id: 'post_diagnostic',
+              labelRo: 'A) Reușita testului POST (Power-On Self-Test) și inițializarea normală a componentelor vitale',
+              labelEn: 'A) Success of the POST (Power-On Self-Test) routine and initialization of vital hardware',
+              isCorrect: true,
+              explanationRo: 'Corect! Un beep scurt la pornire este semnalul universal că BIOS-ul a verificat CPU-ul, memoria RAM și placa de bază și totul funcționează corect.',
+              explanationEn: 'Correct! A single short beep is the standard POST confirmation that CPU, RAM, and motherboard passed hardware checks.',
+            },
+            {
+              id: 'wifi_speed',
+              labelRo: 'B) Că s-a descărcat un film sau melodia de pe YouTube',
+              labelEn: 'B) That a movie or YouTube song finished downloading',
+              isCorrect: false,
+              explanationRo: 'Incorect! Beep-ul plăcii de bază este un semnal hardware de nivel foarte jos, emis înainte ca sistemul de operare sau internetul să funcționeze.',
+              explanationEn: 'Incorrect! The BIOS beep is a low-level hardware alert before the OS or internet browser even loads.',
+            },
+            {
+              id: 'volume_high',
+              labelRo: 'C) Că volumul boxelor este setat la maximum',
+              labelEn: 'C) That external speakers are set to maximum volume',
+              isCorrect: false,
+              explanationRo: 'Incorect! Difuzorul intern al carcasei (buzzer-ul de pe placa de bază) nu are legătură cu volumul boxelor externe.',
+              explanationEn: 'Incorrect! The internal motherboard buzzer operates independently from external audio volume.',
+            },
+          ]}
+        />
       </div>
 
       {/* Validation / Next Button */}
@@ -411,10 +627,14 @@ export const HLevel3_CentralUnitAssembly: React.FC<HLevel3Props> = ({ onComplete
         <div className="text-xs text-slate-400">
           {completed ? (
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'Central unit assembled successfully! +20 points added.' : 'Unitate Centrală asamblată cu succes! +20 puncte adăugate.'}
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'Central unit assembled and POST validated! +20 points added.' : 'Unitate Centrală asamblată și testată POST cu succes! +20 puncte adăugate.'}
             </span>
           ) : (
-            <span>{lang === 'en' ? 'Install all 5 components and answer the technical question.' : 'Instalează toate cele 5 componente și răspunde la întrebarea tehnică.'}</span>
+            <span>
+              {lang === 'en'
+                ? `Install 7 parts (${installedParts.length}/7), run POST test (${isPostPassed ? 'OK ✓' : 'Pending'}), and answer both technical questions.`
+                : `Montează cele 7 piese (${installedParts.length}/7), rulează testul POST (${isPostPassed ? 'Reușit ✓' : 'În așteptare'}) și răspunde la ambele întrebări.`}
+            </span>
           )}
         </div>
 

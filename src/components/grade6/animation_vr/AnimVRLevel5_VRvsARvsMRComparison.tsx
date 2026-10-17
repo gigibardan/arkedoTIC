@@ -20,6 +20,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level5Props {
   onCompletePage: (earnedScore: number) => void;
@@ -81,6 +82,7 @@ export const AnimVRLevel5_VRvsARvsMRComparison: React.FC<Level5Props> = ({ onCom
   // Quiz questions
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleClassify = (scenarioId: string, tech: TechType) => {
     sounds.playPop();
@@ -99,20 +101,24 @@ export const AnimVRLevel5_VRvsARvsMRComparison: React.FC<Level5Props> = ({ onCom
   const allScenariosCorrect = scenarios.every((s) => isScenarioCorrect(s.id));
 
   const handleQ1 = (val: string) => {
+    if (isLocked('q1') || q1 === 'immersion') return;
     setQ1(val);
     if (val === 'immersion') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (val: string) => {
+    if (isLocked('q2') || q2 === 'breaks') return;
     setQ2(val);
     if (val === 'breaks') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -390,8 +396,9 @@ export const AnimVRLevel5_VRvsARvsMRComparison: React.FC<Level5Props> = ({ onCom
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1') || q1 === 'immersion'}
                   onClick={() => handleQ1(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q1 === opt.id
                       ? opt.id === 'immersion'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -406,6 +413,15 @@ export const AnimVRLevel5_VRvsARvsMRComparison: React.FC<Level5Props> = ({ onCom
                 </button>
               ))}
             </div>
+
+            {cooldowns.q1 && cooldowns.q1 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: VR creează o imersiune totală, izolând vizual utilizatorul de realitate!"
+                customMessageEn="Reflection buffer: VR creates total immersion, visually isolating the user from reality!"
+              />
+            ) : null}
 
             {q1 && (
               <AnswerExplanation
@@ -439,8 +455,9 @@ export const AnimVRLevel5_VRvsARvsMRComparison: React.FC<Level5Props> = ({ onCom
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2') || q2 === 'breaks'}
                   onClick={() => handleQ2(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q2 === opt.id
                       ? opt.id === 'breaks'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -455,6 +472,15 @@ export const AnimVRLevel5_VRvsARvsMRComparison: React.FC<Level5Props> = ({ onCom
                 </button>
               ))}
             </div>
+
+            {cooldowns.q2 && cooldowns.q2 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q2}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: Pauzele periodice de 15 minute previn oboseala vizuală și răul de mișcare!"
+                customMessageEn="Reflection buffer: Periodic 15-minute breaks prevent visual fatigue and motion sickness!"
+              />
+            ) : null}
 
             {q2 && (
               <AnswerExplanation

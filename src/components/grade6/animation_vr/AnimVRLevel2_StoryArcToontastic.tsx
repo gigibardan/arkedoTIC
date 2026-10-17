@@ -18,6 +18,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
+import { useQuestionCooldowns, PedagogicalReflectionBanner } from '../../../utils/pedagogicalGrading';
 
 interface Level2Props {
   onCompletePage: (earnedScore: number) => void;
@@ -66,6 +67,7 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
   // Quiz questions
   const [q1, setQ1] = useState<string | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
+  const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const handleSelectCardForSlot = (cardId: string, slotIndex: 1 | 2 | 3) => {
     sounds.playPop();
@@ -94,20 +96,24 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
   const isArcCorrect = slot1 === 'setup' && slot2 === 'conflict' && slot3 === 'resolution';
 
   const handleQ1 = (val: string) => {
+    if (isLocked('q1') || q1 === 'conflict') return;
     setQ1(val);
     if (val === 'conflict') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q1', 5);
     }
   };
 
   const handleQ2 = (val: string) => {
+    if (isLocked('q2') || q2 === '3parts') return;
     setQ2(val);
     if (val === '3parts') {
       sounds.playCorrect();
     } else {
       sounds.playWrong();
+      triggerCooldown('q2', 5);
     }
   };
 
@@ -450,8 +456,9 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q1') || q1 === 'conflict'}
                   onClick={() => handleQ1(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q1 === opt.id
                       ? opt.id === 'conflict'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -466,6 +473,15 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
                 </button>
               ))}
             </div>
+
+            {cooldowns.q1 && cooldowns.q1 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q1}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: Conflictul este momentul cheie dintre introducere și deznodământ!"
+                customMessageEn="Reflection buffer: The conflict is the key moment between introduction and resolution!"
+              />
+            ) : null}
 
             {q1 && (
               <AnswerExplanation
@@ -499,8 +515,9 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
               ].map((opt) => (
                 <button
                   key={opt.id}
+                  disabled={isLocked('q2') || q2 === '3parts'}
                   onClick={() => handleQ2(opt.id)}
-                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all ${
+                  className={`p-3 rounded-xl border text-left text-xs font-semibold transition-all disabled:cursor-not-allowed ${
                     q2 === opt.id
                       ? opt.id === '3parts'
                         ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200'
@@ -515,6 +532,15 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
                 </button>
               ))}
             </div>
+
+            {cooldowns.q2 && cooldowns.q2 > 0 ? (
+              <PedagogicalReflectionBanner
+                cooldown={cooldowns.q2}
+                totalSeconds={5}
+                customMessageRo="Timp de reflecție: Toontastic 3D structurează povestea scurtă în exact 3 părți!"
+                customMessageEn="Reflection buffer: Toontastic 3D structures a short story into exactly 3 parts!"
+              />
+            ) : null}
 
             {q2 && (
               <AnswerExplanation

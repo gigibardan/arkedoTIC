@@ -198,6 +198,22 @@ export interface CyberCityData {
   demoLabelEn?: string;
 }
 
+export interface StudentDiploma {
+  id: string; // e.g. 'g6_presentation1', 'g6_scratch2'
+  courseId: string;
+  titleRo: string;
+  titleEn: string;
+  grade: 'Clasa a V-a' | 'Clasa a VI-a';
+  studentName: string;
+  userEmail?: string;
+  awardedAt: string; // ISO format
+  score: number;
+  maxScore: number;
+  calificativ: string;
+  timeSpentSeconds: number;
+  officialRef?: string;
+}
+
 export interface StudentProfile {
   id: string;
   username: string;
@@ -213,6 +229,7 @@ export interface StudentProfile {
   inventory?: StudentInventory;
   equipped?: EquippedItems;
   cyberCity?: CyberCityData;
+  diplomas?: Record<string, StudentDiploma>;
   totalXP: number;
   createdAt: string;
   lastActiveAt: string;
