@@ -8,7 +8,12 @@ import {
   BookOpen, 
   Layers, 
   RotateCcw,
-  Check
+  Check,
+  Play,
+  FastForward,
+  Sliders,
+  Terminal,
+  ArrowRight
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
@@ -89,6 +94,70 @@ export const A2Level6_FlowchartBlocksLab: React.FC<A2Level6Props> = ({ onComplet
   const handleResetFlowchart = () => {
     sounds.playClick();
     setSlotAssignments({ slot1: null, slot2: null, slot3: null, slot4: null, slot5: null, slot6: null });
+  };
+
+  // Step-by-Step Flowchart Execution Tracer State
+  const [traceA, setTraceA] = useState<number>(14);
+  const [traceB, setTraceB] = useState<number>(9);
+  const [activeTraceStep, setActiveTraceStep] = useState<number | null>(null);
+  const [isTracing, setIsTracing] = useState<boolean>(false);
+  const [traceResultMax, setTraceResultMax] = useState<number | null>(null);
+  const [traceBranchTaken, setTraceBranchTaken] = useState<'TRUE' | 'FALSE' | null>(null);
+
+  const isFlowchartBuilt = FLOWCHART_SLOTS.every(s => slotAssignments[s.slotId] === s.expectedShape);
+
+  const handleStartTrace = () => {
+    if (isTracing) return;
+    setIsTracing(true);
+    setTraceResultMax(null);
+    setTraceBranchTaken(null);
+    sounds.playRetro('powerup');
+    
+    // Step 1: START
+    setActiveTraceStep(1);
+    
+    setTimeout(() => {
+      // Step 2: READ a, b
+      sounds.playClick();
+      setActiveTraceStep(2);
+
+      setTimeout(() => {
+        // Step 3: DECISION a > b
+        sounds.playClick();
+        setActiveTraceStep(3);
+        const condition = traceA > traceB;
+        setTraceBranchTaken(condition ? 'TRUE' : 'FALSE');
+
+        setTimeout(() => {
+          // Step 4: ASSIGN Max
+          sounds.playPop();
+          setActiveTraceStep(4);
+          const computedMax = condition ? traceA : traceB;
+          setTraceResultMax(computedMax);
+
+          setTimeout(() => {
+            // Step 5: OUTPUT Max
+            sounds.playCorrect();
+            setActiveTraceStep(5);
+
+            setTimeout(() => {
+              // Step 6: STOP
+              sounds.playClick();
+              setActiveTraceStep(6);
+              setIsTracing(false);
+            }, 800);
+          }, 800);
+        }, 900);
+      }, 900);
+    }, 800);
+  };
+
+  const handleResetTrace = () => {
+    setActiveTraceStep(null);
+    setIsTracing(false);
+    setTraceResultMax(null);
+    setTraceBranchTaken(null);
+    sounds.playClick();
   };
 
   // Quiz handlers
@@ -248,6 +317,150 @@ export const A2Level6_FlowchartBlocksLab: React.FC<A2Level6Props> = ({ onComplet
             );
           })}
         </div>
+      </div>
+
+      {/* Interactive Step-by-Step Execution Tracer */}
+      <div className="bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border-2 border-indigo-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xl shadow-inner">
+              <Play className="w-5 h-5 text-indigo-300" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-black text-white font-heading">
+                {lang === 'en' ? 'Step-by-Step Flowchart Execution Simulator' : 'Simulator de Execuție Pas cu Pas a Schemei Logice'}
+              </h3>
+              <p className="text-xs text-slate-300">
+                {lang === 'en'
+                  ? 'Test how the algorithm branches and assigns values with custom inputs for a and b.'
+                  : 'Testează cum parcurge calculatorul ramurile de decizie și cum calculează maximul dintre a și b.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleStartTrace}
+              disabled={isTracing}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-indigo-500/20 flex items-center gap-2 cursor-pointer transition active:scale-95 disabled:opacity-50"
+            >
+              <FastForward className="w-4 h-4" />
+              <span>{isTracing ? (lang === 'en' ? 'Tracing Steps...' : 'Se execută...') : (lang === 'en' ? 'Run Flowchart Trace' : 'Rulează Urmărirea Pas cu Pas')}</span>
+            </button>
+            <button
+              onClick={handleResetTrace}
+              disabled={isTracing}
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer"
+              title="Reset"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Input variables controllers & Live memory status */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-1">
+            <label className="text-[11px] font-mono font-bold text-slate-400 uppercase">
+              {lang === 'en' ? 'Input a (First Number)' : 'Valoare a (Primul număr)'}
+            </label>
+            <input
+              type="number"
+              disabled={isTracing}
+              value={traceA}
+              onChange={(e) => {
+                setTraceA(Number(e.target.value) || 0);
+                handleResetTrace();
+              }}
+              className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold text-sm focus:outline-none focus:border-indigo-400"
+            />
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-1">
+            <label className="text-[11px] font-mono font-bold text-slate-400 uppercase">
+              {lang === 'en' ? 'Input b (Second Number)' : 'Valoare b (Al doilea număr)'}
+            </label>
+            <input
+              type="number"
+              disabled={isTracing}
+              value={traceB}
+              onChange={(e) => {
+                setTraceB(Number(e.target.value) || 0);
+                handleResetTrace();
+              }}
+              className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold text-sm focus:outline-none focus:border-indigo-400"
+            />
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col justify-between">
+            <div className="text-[11px] font-mono font-bold text-slate-400 uppercase">
+              {lang === 'en' ? 'RAM Variables State' : 'Tabel Stare Variabile'}
+            </div>
+            <div className="flex items-center gap-3 font-mono text-xs">
+              <span className="text-cyan-400 font-bold">a = {traceA}</span>
+              <span className="text-cyan-400 font-bold">b = {traceB}</span>
+              <span className={`font-black ${traceResultMax !== null ? 'text-emerald-400 text-sm' : 'text-slate-500'}`}>
+                Max = {traceResultMax !== null ? traceResultMax : '?'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Trace Visual Execution Steps */}
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 font-mono text-xs">
+          {[
+            { step: 1, name: 'START', desc: 'Inițializare' },
+            { step: 2, name: 'CITEȘTE a, b', desc: `a=${traceA}, b=${traceB}` },
+            { step: 3, name: 'a > b ?', desc: traceA > traceB ? 'DA (True)' : 'NU (False)' },
+            { step: 4, name: 'Max = ' + (traceA > traceB ? 'a' : 'b'), desc: `Max = ${Math.max(traceA, traceB)}` },
+            { step: 5, name: 'SCRIE Max', desc: `Afișare: ${Math.max(traceA, traceB)}` },
+            { step: 6, name: 'STOP', desc: 'Terminat' }
+          ].map((item) => {
+            const isActive = activeTraceStep === item.step;
+            const isPassed = activeTraceStep !== null && activeTraceStep > item.step;
+
+            return (
+              <div
+                key={item.step}
+                className={`p-3 rounded-2xl border flex flex-col items-center text-center justify-between transition-all ${
+                  isActive
+                    ? 'bg-indigo-600 text-white border-indigo-300 shadow-xl shadow-indigo-600/40 ring-2 ring-indigo-400 scale-105'
+                    : isPassed
+                    ? 'bg-emerald-950/60 border-emerald-500/50 text-emerald-200'
+                    : 'bg-slate-950/50 border-slate-800 text-slate-400'
+                }`}
+              >
+                <span className="text-[10px] font-bold opacity-80">PAS #{item.step}</span>
+                <span className="font-bold my-1 text-xs">{item.name}</span>
+                <span className="text-[10px] opacity-90">{item.desc}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {activeTraceStep === 3 && (
+          <div className="p-3 rounded-xl bg-indigo-950/80 border border-indigo-400 text-indigo-100 text-xs flex items-center justify-between gap-2 animate-fadeIn">
+            <span>
+              {lang === 'en'
+                ? `Condition evaluation: ${traceA} > ${traceB} is ${traceA > traceB ? 'TRUE (takes YES branch)' : 'FALSE (takes NO branch)'}!`
+                : `Evaluare condiție: ${traceA} > ${traceB} este ${traceA > traceB ? 'ADEVĂRAT (alege ramura DA)' : 'FALS (alege ramura NU)'}!`}
+            </span>
+            <span className="px-2 py-0.5 rounded bg-indigo-500 text-white font-bold font-mono">
+              {traceA > traceB ? 'DA / YES' : 'NU / NO'}
+            </span>
+          </div>
+        )}
+
+        {activeTraceStep === 6 && (
+          <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-100 text-xs flex items-center justify-between gap-2 animate-fadeIn">
+            <span>
+              {lang === 'en'
+                ? `Trace Completed! Final output: Max is ${Math.max(traceA, traceB)}.`
+                : `Execuție finalizată cu succes! Rezultat afișat: Max = ${Math.max(traceA, traceB)}.`}
+            </span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          </div>
+        )}
       </div>
 
       {/* Step 2: Knowledge Assessment Quiz */}
