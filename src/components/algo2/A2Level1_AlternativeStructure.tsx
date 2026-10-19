@@ -218,12 +218,44 @@ export const A2Level1_AlternativeStructure: React.FC<A2Level1Props> = ({ onCompl
               <div className="text-violet-400 font-bold uppercase">
                 {lang === 'en' ? 'Decision Algorithm Structure:' : 'Structura Decizională:'}
               </div>
-              <div className="text-slate-300 space-y-1">
-                <div><span className="text-violet-400 font-bold">Dacă</span> Culoare == Verde <span className="text-violet-400 font-bold">Atunci</span></div>
-                <div className="pl-4 text-emerald-300 font-semibold">Traversează strada pe trecere</div>
-                <div><span className="text-violet-400 font-bold">Altfel</span></div>
-                <div className="pl-4 text-rose-300 font-semibold">Așteaptă pe trotuar</div>
-                <div><span className="text-violet-400 font-bold">Sfârșit_Dacă</span></div>
+              <div className="text-slate-300 space-y-1.5 font-mono text-xs">
+                <div className="p-1.5 rounded-lg bg-violet-950/60 border border-violet-500/40 text-violet-200">
+                  <span className="text-violet-400 font-bold">Dacă</span> Culoare ({trafficColor === 'GREEN' ? 'Verde' : trafficColor === 'RED' ? 'Roșu' : 'Galben'}) == Verde{' '}
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md inline-flex items-center gap-1 ${
+                    trafficColor === 'GREEN'
+                      ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-500/40'
+                      : 'bg-rose-500/30 text-rose-300 border border-rose-500/40'
+                  }`}>
+                    ➔ {trafficColor === 'GREEN' ? (lang === 'en' ? 'TRUE' : 'ADEVĂRAT') : (lang === 'en' ? 'FALSE' : 'FALS')}
+                  </span>{' '}
+                  <span className="text-violet-400 font-bold">Atunci</span>
+                </div>
+                
+                <div className={`pl-4 py-1.5 px-2.5 rounded-lg transition-all flex items-center gap-2 ${
+                  trafficColor === 'GREEN'
+                    ? 'bg-emerald-500/20 text-emerald-300 font-bold border-l-4 border-emerald-400 ring-1 ring-emerald-500/40 shadow-sm'
+                    : 'text-slate-500 opacity-60'
+                }`}>
+                  {trafficColor === 'GREEN' && <span>👉</span>}
+                  <span>{lang === 'en' ? 'Cross the street on pedestrian crossing' : 'Traversează strada pe trecere'}</span>
+                </div>
+                
+                <div className="py-0.5 text-slate-400 font-bold text-violet-400">
+                  Altfel
+                </div>
+                
+                <div className={`pl-4 py-1.5 px-2.5 rounded-lg transition-all flex items-center gap-2 ${
+                  trafficColor !== 'GREEN'
+                    ? 'bg-rose-500/20 text-rose-300 font-bold border-l-4 border-rose-400 ring-1 ring-rose-500/40 shadow-sm'
+                    : 'text-slate-500 opacity-60'
+                }`}>
+                  {trafficColor !== 'GREEN' && <span>👉</span>}
+                  <span>{lang === 'en' ? 'Wait on the sidewalk' : 'Așteaptă pe trotuar'}</span>
+                </div>
+                
+                <div className="py-0.5 text-slate-400 font-bold text-violet-400">
+                  Sfârșit_Dacă
+                </div>
               </div>
             </div>
 
