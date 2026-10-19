@@ -14,7 +14,10 @@ import {
   Smile, 
   Wand2, 
   Download,
-  Share2
+  Share2,
+  Sun,
+  Layers,
+  Eye
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../../context/LanguageContext';
@@ -52,6 +55,8 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
   const [chestBadge, setChestBadge] = useState<'arc_reactor' | 'cyber_shield' | 'gear' | 'atom' | 'tic_logo'>('arc_reactor');
   const [eyeStyle, setEyeStyle] = useState<'laser_visor' | 'dual_led' | 'vr_headset'>('laser_visor');
   const [isRotating, setIsRotating] = useState<boolean>(true);
+  const [renderMode, setRenderMode] = useState<'shaded' | 'wireframe' | 'neon'>('shaded');
+  const [lightDirection, setLightDirection] = useState<'top_left' | 'front' | 'top_right'>('top_left');
 
   // Synthesis Quiz Answers
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
@@ -144,6 +149,8 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
         materialFinish,
         chestBadge,
         eyeStyle,
+        renderMode,
+        lightDirection,
         coordinates: { x: 0, y: 120, z: -40 },
         dimensions: { width: 180, height: 260, depth: 150 },
       },
@@ -251,22 +258,138 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
             <div className="absolute inset-0 bg-[radial-gradient(#06b6d4_1px,transparent_1px)] [background-size:16px_16px] opacity-15 pointer-events-none" />
             <div className="absolute bottom-6 w-48 h-10 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
 
+            {/* 3D Viewport Toolbar: Render Modes & Light Angle */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-2 mb-3 px-1 z-10">
+              {/* Render Mode Switcher */}
+              <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-[10px] font-mono">
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setRenderMode('shaded');
+                  }}
+                  className={`px-2 py-1 rounded-lg transition cursor-pointer font-bold ${
+                    renderMode === 'shaded'
+                      ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  🎨 {lang === 'en' ? 'Shaded' : 'Realist'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setRenderMode('wireframe');
+                  }}
+                  className={`px-2 py-1 rounded-lg transition cursor-pointer font-bold ${
+                    renderMode === 'wireframe'
+                      ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  📐 {lang === 'en' ? 'Wireframe' : 'Rețea'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setRenderMode('neon');
+                  }}
+                  className={`px-2 py-1 rounded-lg transition cursor-pointer font-bold ${
+                    renderMode === 'neon'
+                      ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ⚡ Neon
+                </button>
+              </div>
+
+              {/* Light Angle Switcher */}
+              <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-[10px] font-mono">
+                <span className="text-slate-500 px-1 hidden sm:inline">☀️</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setLightDirection('top_left');
+                  }}
+                  className={`px-2 py-1 rounded-lg transition cursor-pointer font-bold ${
+                    lightDirection === 'top_left'
+                      ? 'bg-amber-400 text-slate-950 shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Lumină Stânga-Sus"
+                >
+                  ↖️
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setLightDirection('front');
+                  }}
+                  className={`px-2 py-1 rounded-lg transition cursor-pointer font-bold ${
+                    lightDirection === 'front'
+                      ? 'bg-amber-400 text-slate-950 shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Lumină Frontală"
+                >
+                  ⬆️
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setLightDirection('top_right');
+                  }}
+                  className={`px-2 py-1 rounded-lg transition cursor-pointer font-bold ${
+                    lightDirection === 'top_right'
+                      ? 'bg-amber-400 text-slate-950 shadow-sm'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Lumină Dreapta-Sus"
+                >
+                  ↗️
+                </button>
+              </div>
+            </div>
+
             {/* SVG 3D Robot Figure */}
             <div className={`relative transition-transform duration-700 ${isRotating ? 'animate-bounce' : ''}`} style={{ animationDuration: '3s' }}>
               <svg width="200" height="230" viewBox="0 0 200 230" className="drop-shadow-2xl">
                 <defs>
-                  {/* Body Gradient based on material finish */}
-                  <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity={materialFinish.includes('gloss') ? 0.45 : 0.15} />
+                  {/* Body Gradient based on material finish & light direction */}
+                  <linearGradient 
+                    id="bodyGrad" 
+                    x1={lightDirection === 'top_left' ? '0%' : lightDirection === 'top_right' ? '100%' : '50%'} 
+                    y1="0%" 
+                    x2={lightDirection === 'top_left' ? '100%' : lightDirection === 'top_right' ? '0%' : '50%'} 
+                    y2="100%"
+                  >
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity={materialFinish.includes('gloss') ? 0.5 : 0.18} />
                     <stop offset="40%" stopColor={bodyColor} />
-                    <stop offset="100%" stopColor="#0f172a" stopOpacity={materialFinish.includes('metal') ? 0.7 : 0.9} />
+                    <stop offset="100%" stopColor="#0f172a" stopOpacity={materialFinish.includes('metal') ? 0.75 : 0.9} />
                   </linearGradient>
 
-                  <linearGradient id="metalSheen" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <linearGradient 
+                    id="metalSheen" 
+                    x1={lightDirection === 'top_left' ? '0%' : lightDirection === 'top_right' ? '100%' : '50%'} 
+                    y1="0%" 
+                    x2={lightDirection === 'top_left' ? '100%' : lightDirection === 'top_right' ? '0%' : '50%'} 
+                    y2="0%"
+                  >
                     <stop offset="0%" stopColor="white" stopOpacity="0.1" />
-                    <stop offset="50%" stopColor="white" stopOpacity={materialFinish.includes('metal') ? 0.4 : 0.15} />
+                    <stop offset="50%" stopColor="white" stopOpacity={materialFinish.includes('metal') ? 0.45 : 0.2} />
                     <stop offset="100%" stopColor="white" stopOpacity="0.0" />
                   </linearGradient>
+
+                  <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
                 </defs>
 
                 {/* Soft ground shadow */}
@@ -276,37 +399,59 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
                 <line x1="100" y1="40" x2="100" y2="18" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
                 <circle cx="100" cy="15" r="5" fill="#f59e0b" className="animate-pulse" />
 
-                {/* Head Shape */}
-                {headShape === 'cube' && (
-                  <rect x="70" y="38" width="60" height="48" rx="8" fill="url(#bodyGrad)" stroke="#38bdf8" strokeWidth="2" />
-                )}
-                {headShape === 'sphere' && (
-                  <circle cx="100" cy="60" r="28" fill="url(#bodyGrad)" stroke="#38bdf8" strokeWidth="2" />
-                )}
-                {headShape === 'cylinder' && (
-                  <rect x="74" y="38" width="52" height="50" rx="16" fill="url(#bodyGrad)" stroke="#38bdf8" strokeWidth="2" />
-                )}
+                {/* Dynamic fill & stroke helper */}
+                {(() => {
+                  const partFill = renderMode === 'wireframe' 
+                    ? 'rgba(2, 6, 23, 0.4)' 
+                    : renderMode === 'neon' 
+                    ? 'rgba(6, 182, 212, 0.2)' 
+                    : 'url(#bodyGrad)';
+                  const partStroke = renderMode === 'wireframe' 
+                    ? '#38bdf8' 
+                    : renderMode === 'neon' 
+                    ? '#22d3ee' 
+                    : '#38bdf8';
+                  const partDash = renderMode === 'wireframe' ? '4,2' : undefined;
+                  const partFilter = renderMode === 'neon' ? 'url(#neonGlow)' : undefined;
 
-                {/* Neck connector */}
-                <rect x="94" y="86" width="12" height="8" rx="2" fill="#475569" />
+                  return (
+                    <g filter={partFilter}>
+                      {/* Head Shape */}
+                      {headShape === 'cube' && (
+                        <rect x="70" y="38" width="60" height="48" rx="8" fill={partFill} stroke={partStroke} strokeWidth="2" strokeDasharray={partDash} />
+                      )}
+                      {headShape === 'sphere' && (
+                        <circle cx="100" cy="60" r="28" fill={partFill} stroke={partStroke} strokeWidth="2" strokeDasharray={partDash} />
+                      )}
+                      {headShape === 'cylinder' && (
+                        <rect x="74" y="38" width="52" height="50" rx="16" fill={partFill} stroke={partStroke} strokeWidth="2" strokeDasharray={partDash} />
+                      )}
 
-                {/* Torso / Body */}
-                <rect x="62" y="94" width="76" height="80" rx="14" fill="url(#bodyGrad)" stroke="#0284c7" strokeWidth="2" />
-                <rect x="64" y="96" width="72" height="76" rx="12" fill="url(#metalSheen)" pointerEvents="none" />
+                      {/* Neck connector */}
+                      <rect x="94" y="86" width="12" height="8" rx="2" fill={renderMode === 'wireframe' ? 'transparent' : '#475569'} stroke={partStroke} strokeWidth="1" />
 
-                {/* Arms */}
-                <rect x="38" y="104" width="18" height="52" rx="9" fill="url(#bodyGrad)" stroke="#0284c7" strokeWidth="1.5" />
-                <rect x="144" y="104" width="18" height="52" rx="9" fill="url(#bodyGrad)" stroke="#0284c7" strokeWidth="1.5" />
-                {/* Hands */}
-                <circle cx="47" cy="162" r="7" fill="#64748b" />
-                <circle cx="153" cy="162" r="7" fill="#64748b" />
+                      {/* Torso / Body */}
+                      <rect x="62" y="94" width="76" height="80" rx="14" fill={partFill} stroke={partStroke} strokeWidth="2" strokeDasharray={partDash} />
+                      {renderMode === 'shaded' && (
+                        <rect x="64" y="96" width="72" height="76" rx="12" fill="url(#metalSheen)" pointerEvents="none" />
+                      )}
 
-                {/* Legs */}
-                <rect x="74" y="174" width="20" height="40" rx="6" fill="#334155" />
-                <rect x="106" y="174" width="20" height="40" rx="6" fill="#334155" />
-                {/* Feet */}
-                <rect x="68" y="210" width="28" height="8" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
-                <rect x="104" y="210" width="28" height="8" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
+                      {/* Arms */}
+                      <rect x="38" y="104" width="18" height="52" rx="9" fill={partFill} stroke={partStroke} strokeWidth="1.5" strokeDasharray={partDash} />
+                      <rect x="144" y="104" width="18" height="52" rx="9" fill={partFill} stroke={partStroke} strokeWidth="1.5" strokeDasharray={partDash} />
+                      {/* Hands */}
+                      <circle cx="47" cy="162" r="7" fill={renderMode === 'wireframe' ? 'transparent' : '#64748b'} stroke={partStroke} strokeWidth="1" />
+                      <circle cx="153" cy="162" r="7" fill={renderMode === 'wireframe' ? 'transparent' : '#64748b'} stroke={partStroke} strokeWidth="1" />
+
+                      {/* Legs */}
+                      <rect x="74" y="174" width="20" height="40" rx="6" fill={renderMode === 'wireframe' ? 'transparent' : '#334155'} stroke={partStroke} strokeWidth="1" strokeDasharray={partDash} />
+                      <rect x="106" y="174" width="20" height="40" rx="6" fill={renderMode === 'wireframe' ? 'transparent' : '#334155'} stroke={partStroke} strokeWidth="1" strokeDasharray={partDash} />
+                      {/* Feet */}
+                      <rect x="68" y="210" width="28" height="8" rx="4" fill={renderMode === 'wireframe' ? 'transparent' : '#0f172a'} stroke={partStroke} strokeWidth="1" />
+                      <rect x="104" y="210" width="28" height="8" rx="4" fill={renderMode === 'wireframe' ? 'transparent' : '#0f172a'} stroke={partStroke} strokeWidth="1" />
+                    </g>
+                  );
+                })()}
 
                 {/* Eyes Style */}
                 {eyeStyle === 'laser_visor' && (
@@ -355,6 +500,8 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
               <span className="text-sm font-black text-white font-mono">{avatarName}</span>
               <div className="flex items-center justify-center gap-2 text-[10px] text-cyan-300 font-mono mt-0.5">
                 <span>Material: {materialFinish}</span>
+                <span>•</span>
+                <span>{renderMode.toUpperCase()}</span>
                 <span>•</span>
                 <span>X:0 Y:120 Z:-40</span>
               </div>
