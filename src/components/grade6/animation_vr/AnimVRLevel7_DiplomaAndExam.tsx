@@ -12,7 +12,8 @@ import {
   Film,
   Glasses,
   Volume2,
-  Star
+  Star,
+  Download
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../../context/LanguageContext';
@@ -102,6 +103,34 @@ export const AnimVRLevel7_DiplomaAndExam: React.FC<AnimVRLevel7Props> = ({
     if (typeof window !== 'undefined') {
       window.print();
     }
+  };
+
+  const handleDownloadCertificate = () => {
+    sounds.playRetro('powerup');
+    const certData = {
+      projectType: 'Animation_VR_Diploma',
+      unit: 'Clasa a VI-a • Unitatea 2B (Animație & Realitate Virtuală)',
+      studentName,
+      evaluation: {
+        score: earnedScore,
+        gradeDetails,
+        topicsMastered: [
+          'Story Arc in 3 Acts (Setup, Conflict, Resolution)',
+          'Digital Puppeteering & Lip-Sync in Toontastic',
+          '360° Virtual Scene Exploration in CoSpaces Edu',
+          'Optical Isolation in VR vs Augmented Reality (AR)'
+        ]
+      },
+      issuedDate: today,
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(certData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Diploma_Regizor_Animatie_VR_${studentName.replace(/\s+/g, '_')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const today = new Date().toLocaleDateString('ro-RO', {
@@ -418,6 +447,23 @@ export const AnimVRLevel7_DiplomaAndExam: React.FC<AnimVRLevel7Props> = ({
             <span>{isEn ? 'Finalize Mission & Claim Official Diploma!' : 'Finalizează Misiunea 2B & Revendică Marea Diplomă!'}</span>
           </button>
 
+          <button
+            type="button"
+            onClick={handleDownloadCertificate}
+            className="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-bold text-sm shadow-lg cursor-pointer transition flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            <span>{isEn ? 'Export Certificate (.json)' : 'Exportă Certificatul (.json)'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-sm shadow-lg cursor-pointer transition flex items-center gap-2"
+          >
+            <Printer className="w-4 h-4" />
+            <span>{isEn ? 'Print Official Certificate' : 'Tipărește Diploma'}</span>
+          </button>
         </div>
       </div>
     </div>

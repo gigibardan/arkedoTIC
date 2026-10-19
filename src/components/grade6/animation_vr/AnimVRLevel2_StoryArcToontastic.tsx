@@ -12,7 +12,8 @@ import {
   ChevronRight,
   Lightbulb,
   FileText,
-  Clapperboard
+  Clapperboard,
+  Download
 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
@@ -118,6 +119,28 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
   };
 
   const allCompleted = isArcCorrect && q1 === 'conflict' && q2 === '3parts';
+
+  const handleExportScript = () => {
+    sounds.playRetro('powerup');
+    const scriptData = {
+      projectType: 'Toontastic_StoryArc_Script',
+      unit: 'Clasa a VI-a • Unitatea 2B (Animație & VR)',
+      acts: [
+        { act: 1, title: 'Setup', description: 'Dimineață liniștită: Arky prezintă laboratorul TIC' },
+        { act: 2, title: 'Conflict', description: 'Alarmă în Laborator: Un virus blochează conexiunea!' },
+        { act: 3, title: 'Resolution', description: 'Soluția de Aur: Firewall-ul este activat & proiectul salvat' }
+      ],
+      guidelines: ['Arcul Narativ în 3 Acte', 'Introducere personaj & decor', 'Punct culminant dramatic', 'Rezolvare prin colaborare'],
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(scriptData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Fisa_Regizor_Storyboard_Toontastic_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleContinue = () => {
     if (!allCompleted) return;
@@ -405,11 +428,22 @@ export const AnimVRLevel2_StoryArcToontastic: React.FC<Level2Props> = ({ onCompl
         </div>
 
         {isArcCorrect && (
-          <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/50 text-emerald-200 text-xs flex items-center gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-            <div>
-              <b>Excelent!</b> Ai asamblat perfect arcul narativ: Începutul stabil (Setup) → Apariția obstacolului neașteptat (Conflict) → Triumful ingenios al echipei (Resolution).
+          <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/50 text-emerald-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+              <div>
+                <b>Excelent!</b> Ai asamblat perfect arcul narativ: Începutul stabil (Setup) → Apariția obstacolului neașteptat (Conflict) → Triumful ingenios al echipei (Resolution).
+              </div>
             </div>
+
+            <button
+              type="button"
+              onClick={handleExportScript}
+              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center gap-1.5 shrink-0 shadow cursor-pointer text-xs"
+            >
+              <Download className="w-4 h-4" />
+              <span>{isEn ? 'Export Director\'s Sheet' : 'Descarcă Fișa Regizorală'}</span>
+            </button>
           </div>
         )}
       </div>
