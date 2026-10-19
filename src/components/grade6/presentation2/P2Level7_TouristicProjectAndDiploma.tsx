@@ -152,6 +152,24 @@ export const P2Level7_TouristicProjectAndDiploma: React.FC<P2Level7Props> = ({
     }
   }, [isGraduated, hasCelebrated]);
 
+  // Fullscreen F5 Keyboard Navigation (Arrow Keys + ESC)
+  React.useEffect(() => {
+    if (!isF5Mode) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsF5Mode(false);
+      } else if (e.key === 'ArrowRight' || e.key === 'Space') {
+        setActiveSlideIndex(prev => Math.min(3, prev + 1));
+        sounds.playClick();
+      } else if (e.key === 'ArrowLeft') {
+        setActiveSlideIndex(prev => Math.max(0, prev - 1));
+        sounds.playClick();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isF5Mode]);
+
   const handleFinalizeMission = () => {
     sounds.playVictory();
     setIsFinalized(true);
@@ -161,6 +179,119 @@ export const P2Level7_TouristicProjectAndDiploma: React.FC<P2Level7Props> = ({
   const handlePrint = () => {
     sounds.playClick();
     window.print();
+  };
+
+  // Helper to render slide body content (used in both preview and F5 fullscreen player)
+  const renderSlideContent = (index: number) => {
+    switch (index) {
+      case 0:
+        return (
+          <div className="my-auto text-center space-y-3 animate-fadeIn">
+            <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-mono font-bold tracking-wider uppercase">
+              Ghid Turistic Oficial
+            </span>
+            <h1 className="text-2xl sm:text-4xl font-black font-heading tracking-tight drop-shadow-lg">
+              {selectedDestination === 'peles' && 'Castelul Peleș — Perla Regală a Carpaților'}
+              {selectedDestination === 'delta' && 'Delta Dunării — Paradisul Păsărilor din România'}
+              {selectedDestination === 'sighisoara' && 'Cetatea Sighișoara — Farmecul Istoriei Medievale'}
+              {selectedDestination === 'maramures' && 'Maramureșul Istoric — Tradiții și Biserici de Lemn'}
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
+              O călătorie spectaculoasă prin cele mai frumoase atracții naturale și culturale românești.
+            </p>
+            <div className="pt-2 text-xs font-mono font-semibold text-teal-300">
+              Prezentat de: {studentName} • Elev Clasa a VI-a
+            </div>
+          </div>
+        );
+      case 1:
+        return (
+          <div className="my-auto grid grid-cols-1 sm:grid-cols-2 gap-6 items-center animate-fadeIn">
+            <div className="space-y-2">
+              <span className="text-[10px] font-mono font-bold uppercase text-teal-300">Diapozitivul 2 • Atracții Cheie</span>
+              <h2 className="text-xl sm:text-2xl font-black">Ce Vizităm & De Ce Ne Fascinează</h2>
+              <ul className="text-xs sm:text-sm space-y-1.5 text-slate-200">
+                <li>• Peisaje alpine și arhitectură neorenascentistă unică</li>
+                <li>• Muzee bogate în istorie și colecții de artă de patrimoniu</li>
+                <li>• Trasee turistice accesibile pentru elevi și familii</li>
+              </ul>
+              <div className="text-[10px] text-emerald-300 font-mono pt-1">
+                ✓ Regula 6x6 respectată: sub 6 rânduri, lizibilitate maximă!
+              </div>
+            </div>
+            <div className="bg-slate-900/80 border border-white/20 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-lg">
+              <div className="text-4xl mb-2">📸</div>
+              <span className="text-xs font-bold text-white">Fotografie de Înaltă Rezoluție</span>
+              <span className="text-[10px] text-slate-400 mt-1">Încadrare proporțională cu colțurile Shift (fără deformare)</span>
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="my-auto space-y-3 animate-fadeIn">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg sm:text-xl font-black">Planificarea Excursiei & Buget (Tabel 3x3)</h2>
+              <span className="text-[10px] font-mono text-teal-300">Inserare ➔ Tabel (Ctrl+Alt+T)</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-white/20 bg-white/10 font-bold">
+                    <th className="p-2">Ziua</th>
+                    <th className="p-2">Obiectiv / Activitate</th>
+                    <th className="p-2">Cost Estimat / Elev</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/10 text-slate-200">
+                  <tr>
+                    <td className="p-2 font-mono font-bold">Ziua 1</td>
+                    <td className="p-2">Tur ghidat și vizită muzee locale</td>
+                    <td className="p-2 font-mono text-emerald-300">35 lei</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2 font-mono font-bold">Ziua 2</td>
+                    <td className="p-2">Drumeție în natură și atelier foto</td>
+                    <td className="p-2 font-mono text-emerald-300">20 lei</td>
+                  </tr>
+                  <tr>
+                    <td className="p-2 font-mono font-bold">Ziua 3</td>
+                    <td className="p-2">Recapitulare și prezentare impresii</td>
+                    <td className="p-2 font-mono text-emerald-300">Gratuit</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="my-auto text-center space-y-3 animate-fadeIn">
+            <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-mono font-bold text-amber-300">
+              Diapozitivul 4 • Concluzii & Recomandări
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black">Sfaturi de Aur pentru Călători Responsabili</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto pt-2 text-xs">
+              <div className="p-3 rounded-xl bg-white/10 border border-white/10">
+                <span className="font-bold block mb-1">🌿 Protejează</span>
+                <span className="text-slate-300 text-[11px]">Nu lăsa deșeuri în rezervațiile naturale.</span>
+              </div>
+              <div className="p-3 rounded-xl bg-white/10 border border-white/10">
+                <span className="font-bold block mb-1">🧭 Explorează</span>
+                <span className="text-slate-300 text-[11px]">Ascultă ghidul și respectă regulile locale.</span>
+              </div>
+              <div className="p-3 rounded-xl bg-white/10 border border-white/10">
+                <span className="font-bold block mb-1">✨ Împărtășește</span>
+                <span className="text-slate-300 text-[11px]">Prezintă impresiile colegilor de clasă.</span>
+              </div>
+            </div>
+            <div className="text-[10px] text-teal-300 font-mono">
+              Total cuvinte: 36 (Sub limita de 40 cuvinte/slide!)
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -358,114 +489,8 @@ export const P2Level7_TouristicProjectAndDiploma: React.FC<P2Level7Props> = ({
               <span>16:9 Widescreen • Morf Tranziție</span>
             </div>
 
-            {/* Slide 1: Cover */}
-            {activeSlideIndex === 0 && (
-              <div className="my-auto text-center space-y-3 animate-fadeIn">
-                <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-mono font-bold tracking-wider uppercase">
-                  Ghid Turistic Oficial
-                </span>
-                <h1 className="text-2xl sm:text-4xl font-black font-heading tracking-tight drop-shadow-lg">
-                  {selectedDestination === 'peles' && 'Castelul Peleș — Perla Regală a Carpaților'}
-                  {selectedDestination === 'delta' && 'Delta Dunării — Paradisul Păsărilor din România'}
-                  {selectedDestination === 'sighisoara' && 'Cetatea Sighișoara — Farmecul Istoriei Medievale'}
-                  {selectedDestination === 'maramures' && 'Maramureșul Istoric — Tradiții și Biserici de Lemn'}
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto">
-                  O călătorie spectaculoasă prin cele mai frumoase atracții naturale și culturale românești.
-                </p>
-                <div className="pt-2 text-xs font-mono font-semibold text-teal-300">
-                  Prezentat de: {studentName} • Elev Clasa a VI-a
-                </div>
-              </div>
-            )}
-
-            {/* Slide 2: Top Attractions */}
-            {activeSlideIndex === 1 && (
-              <div className="my-auto grid grid-cols-1 sm:grid-cols-2 gap-6 items-center animate-fadeIn">
-                <div className="space-y-2">
-                  <span className="text-[10px] font-mono font-bold uppercase text-teal-300">Diapozitivul 2 • Atracții Cheie</span>
-                  <h2 className="text-xl sm:text-2xl font-black">Ce Vizităm & De Ce Ne Fascinează</h2>
-                  <ul className="text-xs sm:text-sm space-y-1.5 text-slate-200">
-                    <li>• Peisaje alpine și arhitectură neorenascentistă unică</li>
-                    <li>• Muzee bogate în istorie și colecții de artă de patrimoniu</li>
-                    <li>• Trasee turistice accesibile pentru elevi și familii</li>
-                  </ul>
-                  <div className="text-[10px] text-emerald-300 font-mono pt-1">
-                    ✓ Regula 6x6 respectată: sub 6 rânduri, lizibilitate maximă!
-                  </div>
-                </div>
-                <div className="bg-slate-900/80 border border-white/20 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-lg">
-                  <div className="text-4xl mb-2">📸</div>
-                  <span className="text-xs font-bold text-white">Fotografie de Înaltă Rezoluție</span>
-                  <span className="text-[10px] text-slate-400 mt-1">Încadrare proporțională cu colțurile Shift (fără deformare)</span>
-                </div>
-              </div>
-            )}
-
-            {/* Slide 3: Travel Schedule Table */}
-            {activeSlideIndex === 2 && (
-              <div className="my-auto space-y-3 animate-fadeIn">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg sm:text-xl font-black">Planificarea Excursiei & Buget (Tabel 3x3)</h2>
-                  <span className="text-[10px] font-mono text-teal-300">Inserare ➔ Tabel (Ctrl+Alt+T)</span>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead>
-                      <tr className="border-b border-white/20 bg-white/10 font-bold">
-                        <th className="p-2">Ziua</th>
-                        <th className="p-2">Obiectiv / Activitate</th>
-                        <th className="p-2">Cost Estimat / Elev</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/10 text-slate-200">
-                      <tr>
-                        <td className="p-2 font-mono font-bold">Ziua 1</td>
-                        <td className="p-2">Tur ghidat și vizită muzee locale</td>
-                        <td className="p-2 font-mono text-emerald-300">35 lei</td>
-                      </tr>
-                      <tr>
-                        <td className="p-2 font-mono font-bold">Ziua 2</td>
-                        <td className="p-2">Drumeție în natură și atelier foto</td>
-                        <td className="p-2 font-mono text-emerald-300">20 lei</td>
-                      </tr>
-                      <tr>
-                        <td className="p-2 font-mono font-bold">Ziua 3</td>
-                        <td className="p-2">Recapitulare și prezentare impresii</td>
-                        <td className="p-2 font-mono text-emerald-300">Gratuit</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-            {/* Slide 4: Tips & 40-Words Rule */}
-            {activeSlideIndex === 3 && (
-              <div className="my-auto text-center space-y-3 animate-fadeIn">
-                <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-mono font-bold text-amber-300">
-                  Diapozitivul 4 • Concluzii & Recomandări
-                </span>
-                <h2 className="text-xl sm:text-2xl font-black">Sfaturi de Aur pentru Călători Responsabili</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto pt-2 text-xs">
-                  <div className="p-3 rounded-xl bg-white/10 border border-white/10">
-                    <span className="font-bold block mb-1">🌿 Protejează</span>
-                    <span className="text-slate-300 text-[11px]">Nu lăsa deșeuri în rezervațiile naturale.</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-white/10 border border-white/10">
-                    <span className="font-bold block mb-1">🧭 Explorează</span>
-                    <span className="text-slate-300 text-[11px]">Ascultă ghidul și respectă regulile locale.</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-white/10 border border-white/10">
-                    <span className="font-bold block mb-1">✨ Împărtășește</span>
-                    <span className="text-slate-300 text-[11px]">Prezintă impresiile colegilor de clasă.</span>
-                  </div>
-                </div>
-                <div className="text-[10px] text-teal-300 font-mono">
-                  Total cuvinte: 36 (Sub limita de 40 cuvinte/slide!)
-                </div>
-              </div>
-            )}
+            {/* Slide Body */}
+            {renderSlideContent(activeSlideIndex)}
 
             {/* Slide Footer */}
             <div className="flex items-center justify-between text-[10px] font-mono opacity-70 border-t border-white/10 pt-2">
@@ -702,8 +727,118 @@ export const P2Level7_TouristicProjectAndDiploma: React.FC<P2Level7Props> = ({
             <Trophy className="w-5 h-5" />
             <span>{lang === 'en' ? 'Finalize Mission 1B & Claim Official Diploma!' : 'Finalizează Misiunea 1B & Revendică Marea Diplomă!'}</span>
           </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadPresentation}
+            className="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-teal-500/40 font-bold text-sm shadow-lg cursor-pointer transition flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Export Project (.json)' : 'Exportă Proiectul (.json)'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-sm shadow-lg cursor-pointer transition flex items-center gap-2"
+          >
+            <Printer className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Print Official Certificate' : 'Tipărește Diploma'}</span>
+          </button>
         </div>
       </div>
+
+      {/* Fullscreen F5 Slide Show Modal Player */}
+      {isF5Mode && (
+        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col justify-between p-4 sm:p-8 animate-fadeIn backdrop-blur-md">
+          {/* Top Control HUD */}
+          <div className="flex items-center justify-between text-xs font-mono text-slate-300 border-b border-white/10 pb-3">
+            <div className="flex items-center gap-3">
+              <span className="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 font-bold border border-teal-500/40">
+                F5 EXPUNERE ACTIVĂ
+              </span>
+              <span className="hidden sm:inline text-slate-400">
+                România Turistică • {selectedDestination.toUpperCase()}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="text-slate-400">
+                Diapozitivul {activeSlideIndex + 1} / 4
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsF5Mode(false)}
+                className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition flex items-center gap-1.5 cursor-pointer shadow-lg"
+              >
+                <span>Ieșire [ESC]</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Fullscreen 16:9 Slide Canvas */}
+          <div 
+            className="w-full max-w-5xl mx-auto aspect-video rounded-3xl p-6 sm:p-12 shadow-2xl relative overflow-hidden flex flex-col justify-between border-2 border-white/20 my-auto transition-all"
+            style={{
+              background: selectedTheme === 'teal'
+                ? 'linear-gradient(135deg, #020617 0%, #042f2e 50%, #0f172a 100%)'
+                : selectedTheme === 'sunset'
+                ? 'linear-gradient(135deg, #020617 0%, #451a03 50%, #292524 100%)'
+                : selectedTheme === 'emerald'
+                ? 'linear-gradient(135deg, #020617 0%, #022c22 50%, #0f172a 100%)'
+                : 'linear-gradient(135deg, #020617 0%, #1e1b4b 50%, #0f172a 100%)',
+              color: 'white'
+            }}
+          >
+            <div className="flex items-center justify-between text-xs font-mono opacity-80 border-b border-white/15 pb-2">
+              <span>PROIECT DIGITAL • CLASA A VI-A</span>
+              <span>Tema: {selectedTheme.toUpperCase()} • 16:9 Widescreen</span>
+            </div>
+
+            {renderSlideContent(activeSlideIndex)}
+
+            <div className="flex items-center justify-between text-xs font-mono opacity-80 border-t border-white/15 pt-2">
+              <span>{studentName} • Școala Gimnazială</span>
+              <span>Slide {activeSlideIndex + 1} din 4</span>
+            </div>
+          </div>
+
+          {/* Bottom HUD: Navigation Buttons + Teacher Guidelines */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono text-slate-400 border-t border-white/10 pt-3">
+            <span className="text-emerald-400 font-bold">
+              ✓ Ghid Prezentator: Folosește tastele ⬅️ ➡️ sau bara de spațiu pentru derulare!
+            </span>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={activeSlideIndex === 0}
+                onClick={() => {
+                  sounds.playClick();
+                  setActiveSlideIndex(prev => Math.max(0, prev - 1));
+                }}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white disabled:opacity-40 cursor-pointer font-bold flex items-center gap-1.5"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Anterior</span>
+              </button>
+
+              <button
+                type="button"
+                disabled={activeSlideIndex === 3}
+                onClick={() => {
+                  sounds.playClick();
+                  setActiveSlideIndex(prev => Math.min(3, prev + 1));
+                }}
+                className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white disabled:opacity-40 cursor-pointer font-bold flex items-center gap-1.5"
+              >
+                <span>Următor</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
