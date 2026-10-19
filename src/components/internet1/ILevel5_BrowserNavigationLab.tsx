@@ -10,6 +10,11 @@ import {
   Search,
   Lock,
   Globe,
+  ShieldCheck,
+  ShieldAlert,
+  AlertTriangle,
+  KeyRound,
+  Info,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { QuestionHint } from './QuestionHint';
@@ -65,21 +70,87 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isReloading, setIsReloading] = useState<boolean>(false);
+  const [showSslModal, setShowSslModal] = useState<boolean>(false);
 
   // Practical Quiz Tasks on Browser Controls (Manual p. 35-36)
-  // 1. Program to navigate the web? -> Browser (c)
-  // 2. Button to reload page? -> Refresh / Reîncărcare (5)
-  // 3. True/False questions (p. 36, Ex. 4)
-  // a) Un site web poate avea o singură pagină web -> Adevărat (A)
-  // b) Pentru realizarea unei pagini web se folosește Paint -> Fals (F)
-  // c) Între paginile web pot exista mai multe hiperlinkuri -> Adevărat (A)
-
   const [qBrowserProgram, setQBrowserProgram] = useState<string | null>(null);
   const [browserCooldown, setBrowserCooldown] = useState<number>(0);
   const [tfA, setTfA] = useState<string | null>(null);
   const [tfB, setTfB] = useState<string | null>(null);
   const [tfC, setTfC] = useState<string | null>(null);
   const [tfCooldown, setTfCooldown] = useState<number>(0);
+
+  // Typosquatting & SSL Certificate Verification Lab
+  const [typosquattingAnswers, setTyposquattingAnswers] = useState<Record<string, 'safe' | 'phishing'>>({});
+  const [typoCooldown, setTypoCooldown] = useState<number>(0);
+
+  const typoCases = [
+    {
+      id: 'cfr',
+      url: 'https://www.cfr.ro/mersul-trenurilor',
+      protocol: 'HTTPS (Port 443)',
+      sslValid: true,
+      issuer: 'DigiCert Global TLS RSA CA',
+      domain: 'cfr.ro (Domeniu oficial național)',
+      expected: 'safe',
+      hintRo: 'Protocol securizat HTTPS, certificat valid emis pentru CFR SA și domeniu oficial .ro.',
+      hintEn: 'Secure HTTPS protocol, valid certificate issued for CFR SA and official .ro domain.',
+    },
+    {
+      id: 'banca_fake',
+      url: 'http://banca-transllvania-online.ro',
+      protocol: 'HTTP (Port 80 - Nesecurizat)',
+      sslValid: false,
+      issuer: 'LIPSĂ CERTIFICAT (Conexiune în clar)',
+      domain: 'banca-transllvania-online.ro (Dublu "ll" în loc de "il")',
+      expected: 'phishing',
+      hintRo: 'Pericol! Protocol HTTP nesecurizat și adresă clonată (transllvania cu doi de "l") - Typosquatting tipic!',
+      hintEn: 'Danger! Insecure HTTP protocol and misspelled domain (transllvania with double "l") - Classic typosquatting!',
+    },
+    {
+      id: 'edu_fake',
+      url: 'https://edu-ro.rezultate-evaluare.xyz',
+      protocol: 'HTTPS (Certificat generic gratuit)',
+      sslValid: false,
+      issuer: 'Certificat Nerecunoscut de Minister',
+      domain: 'rezultate-evaluare.xyz (Extensie ciudată .xyz, mascare edu-ro)',
+      expected: 'phishing',
+      hintRo: 'Atenție! Site-ul oficial este www.edu.ro. Extensia .xyz și mascarea "edu-ro" într-un subdomeniu ascuns indică phishing!',
+      hintEn: 'Caution! The official site is www.edu.ro. The .xyz extension and masked "edu-ro" prefix indicate phishing!',
+    },
+    {
+      id: 'mnar',
+      url: 'https://www.mnar.arts.ro',
+      protocol: 'HTTPS (Port 443)',
+      sslValid: true,
+      issuer: 'Let’s Encrypt Authority',
+      domain: 'mnar.arts.ro (Muzeul Național de Artă al României)',
+      expected: 'safe',
+      hintRo: 'Autentic! Subdomeniu oficial acreditat al domeniului arts.ro cu certificat de securitate valid.',
+      hintEn: 'Authentic! Official accredited arts.ro domain with valid SSL certificate.',
+    },
+  ];
+
+  const handleClassifyUrl = (caseId: string, choice: 'safe' | 'phishing') => {
+    if (typoCooldown > 0) return;
+    const targetCase = typoCases.find((c) => c.id === caseId);
+    if (!targetCase) return;
+
+    if (targetCase.expected === choice) {
+      sounds.playCorrect();
+      setTyposquattingAnswers((prev) => ({ ...prev, [caseId]: choice }));
+    } else {
+      sounds.playWrong();
+      setTyposquattingAnswers((prev) => ({ ...prev, [caseId]: choice }));
+      start5sCooldown(setTypoCooldown);
+    }
+  };
+
+  const isTyposquattingDone =
+    typosquattingAnswers.cfr === 'safe' &&
+    typosquattingAnswers.banca_fake === 'phishing' &&
+    typosquattingAnswers.edu_fake === 'phishing' &&
+    typosquattingAnswers.mnar === 'safe';
 
   const start5sCooldown = (setter: React.Dispatch<React.SetStateAction<number>>) => {
     setter(5);
@@ -129,12 +200,13 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
   const isTfBCorrect = tfB === 'F'; // Nu se folosește Paint pentru realizarea paginilor web (Fals, se folosește HTML)
   const isTfCCorrect = tfC === 'A'; // Între pagini pot exista mai multe hiperlinkuri (Adevărat)
 
-  const totalQuestions = 4;
+  const totalQuestions = 5;
   const correctCount =
     (isQBrowserCorrect ? 1 : 0) +
     (isTfACorrect ? 1 : 0) +
     (isTfBCorrect ? 1 : 0) +
-    (isTfCCorrect ? 1 : 0);
+    (isTfCCorrect ? 1 : 0) +
+    (isTyposquattingDone ? 1 : 0);
 
   const pageScore = Math.round((correctCount / totalQuestions) * 15);
 
@@ -149,6 +221,8 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
     setTfA(null);
     setTfB(null);
     setTfC(null);
+    setTyposquattingAnswers({});
+    setShowSslModal(false);
     setHistoryIndex(0);
     setIsBookmarked(false);
     sounds.playClick();
@@ -232,9 +306,21 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
           </button>
 
           {/* Address Bar (URL Bar) */}
-          <div className="flex-1 min-w-[200px] bg-slate-950 border border-slate-700 px-3.5 py-1.5 rounded-xl flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 overflow-hidden">
-              <Lock className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+          <div className="flex-1 min-w-[200px] bg-slate-950 border border-slate-700 px-3 py-1.5 rounded-xl flex items-center justify-between gap-2 relative">
+            <div className="flex items-center gap-2 overflow-hidden flex-1">
+              {/* Clickable Lock for SSL Inspector */}
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSslModal(!showSslModal);
+                  sounds.playClick();
+                }}
+                className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold transition cursor-pointer shrink-0"
+                title={lang === 'en' ? 'Click to inspect SSL/TLS Security Certificate' : 'Click pentru a inspecta Certificatul de Securitate SSL/TLS'}
+              >
+                <Lock className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="hidden md:inline">HTTPS</span>
+              </button>
               <span className="text-xs font-mono text-white truncate font-medium">
                 {currentPage.url}
               </span>
@@ -243,7 +329,7 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
             <button
               type="button"
               onClick={handleToggleBookmark}
-              className="text-slate-400 hover:text-amber-400 transition cursor-pointer p-1"
+              className="text-slate-400 hover:text-amber-400 transition cursor-pointer p-1 shrink-0"
               title="4. Adaugă la Pagini Favorite (Bookmark)"
             >
               <Star className={`w-4 h-4 ${isBookmarked ? 'fill-amber-400 text-amber-400' : ''}`} />
@@ -272,6 +358,48 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
           </div>
         </div>
 
+        {/* SSL Certificate Inspector Card */}
+        {showSslModal && (
+          <div className="bg-slate-950/95 border-b-2 border-emerald-500/40 p-4 sm:p-5 flex flex-col gap-3 animate-fadeIn">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <span className="font-bold text-sm text-white font-mono">
+                  {lang === 'en' ? 'Verified Security Certificate (SSL / TLS 1.3)' : 'Certificat de Securitate Verificat (SSL / TLS 1.3)'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowSslModal(false)}
+                className="text-xs text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700 cursor-pointer"
+              >
+                ✕ {lang === 'en' ? 'Close' : 'Închide'}
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs font-mono">
+              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-400 block uppercase">Autoritate Emitentă (CA)</span>
+                <span className="text-emerald-400 font-bold">DigiCert Global Root G2</span>
+              </div>
+              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-400 block uppercase">Protocol Criptare</span>
+                <span className="text-cyan-400 font-bold">TLS 1.3 • AES_256_GCM</span>
+              </div>
+              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-400 block uppercase">Domeniu Verificat</span>
+                <span className="text-purple-400 font-bold">{currentPage.url.replace('https://', '')}</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              💡 {lang === 'en'
+                ? 'HTTPS encrypts all data sent between your browser and the web server, protecting passwords and personal info from eavesdropping.'
+                : 'Protocolul HTTPS criptează toate datele transmise între browserul tău și serverul web, împiedicând interceptarea parolelor și a datelor personale de către atacatori pe rețelele Wi-Fi publice.'}
+            </p>
+          </div>
+        )}
+
         {/* Browser Page Viewport Body */}
         <div className="p-6 bg-slate-900/90 min-h-[140px] flex flex-col justify-center">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 mb-2">
@@ -283,6 +411,140 @@ export const ILevel5_BrowserNavigationLab: React.FC<ILevel5Props> = ({ onComplet
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
             {lang === 'en' ? currentPage.contentEn : currentPage.contentRo}
           </p>
+        </div>
+      </div>
+
+      {/* Laborator Practic de Securitate: Depistarea Typosquatting & Certificate SSL */}
+      <div className="bg-slate-900/90 border border-slate-700 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/30 font-bold text-sm">
+              🛡️
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-white font-heading">
+                {lang === 'en'
+                  ? 'Interactive Security Lab: SSL Certificates & Typosquatting Hunter'
+                  : 'Laborator Interactiv: Inspector Certificate SSL & Depistare Typosquatting'}
+              </h3>
+              <p className="text-xs text-slate-400">
+                {lang === 'en'
+                  ? 'Examine 4 simulated links: check HTTPS padlock, spelling errors and clone domains!'
+                  : 'Analizează 4 adrese simulate: verifică lacătul HTTPS, greșelile de scriere și domeniile clonate!'}
+              </p>
+            </div>
+          </div>
+          {isTyposquattingDone ? (
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30 self-start sm:self-auto font-mono">
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'Security Master! (+3 pts)' : 'Expert Securitate! (+3 pct)'}
+            </span>
+          ) : (
+            <span className="text-xs text-slate-400 font-mono">
+              {Object.keys(typosquattingAnswers).length} / 4 {lang === 'en' ? 'checked' : 'analizate'}
+            </span>
+          )}
+        </div>
+
+        {typoCooldown > 0 && (
+          <PedagogicalReflectionBanner
+            cooldown={typoCooldown}
+            customMessageRo="Clasificare eronată! Atenție: site-urile periculoase folosesc HTTP în clar sau domenii clonate (ex: 'll' în loc de 'il', extensii dubioase .xyz). Reanalizează linkul."
+            customMessageEn="Incorrect classification! Warning: fraudulent sites use unencrypted HTTP or misspelled domains (e.g., 'll' instead of 'il', weird .xyz extensions)."
+          />
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {typoCases.map((tc) => {
+            const userChoice = typosquattingAnswers[tc.id];
+            const isAnswered = Boolean(userChoice);
+            const isCorrect = userChoice === tc.expected;
+
+            return (
+              <div
+                key={tc.id}
+                className={`p-4 rounded-2xl border transition ${
+                  isAnswered
+                    ? isCorrect
+                      ? 'bg-slate-950/80 border-emerald-500/60'
+                      : 'bg-slate-950/80 border-rose-500/60'
+                    : 'bg-slate-950/60 border-slate-800'
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="text-[11px] font-mono font-bold text-slate-400">
+                    URL #{tc.id.toUpperCase()}
+                  </span>
+                  <span
+                    className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                      tc.sslValid
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                    }`}
+                  >
+                    {tc.protocol}
+                  </span>
+                </div>
+
+                <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 font-mono text-xs text-white truncate mb-2.5 select-all">
+                  {tc.url}
+                </div>
+
+                <div className="text-[11px] text-slate-400 space-y-1 mb-3">
+                  <div>
+                    <strong className="text-slate-300">Certificat:</strong> {tc.issuer}
+                  </div>
+                  <div>
+                    <strong className="text-slate-300">Domeniu detectat:</strong> {tc.domain}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={typoCooldown > 0}
+                    onClick={() => handleClassifyUrl(tc.id, 'safe')}
+                    className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                      userChoice === 'safe'
+                        ? tc.expected === 'safe'
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-rose-600 text-white'
+                        : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                    }`}
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>{lang === 'en' ? 'Legitimate & Safe' : 'Legitim & Securizat'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={typoCooldown > 0}
+                    onClick={() => handleClassifyUrl(tc.id, 'phishing')}
+                    className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                      userChoice === 'phishing'
+                        ? tc.expected === 'phishing'
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-rose-600 text-white'
+                        : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700'
+                    }`}
+                  >
+                    <ShieldAlert className="w-3.5 h-3.5" />
+                    <span>{lang === 'en' ? 'Phishing / Fake' : 'Phishing / Fals'}</span>
+                  </button>
+                </div>
+
+                {isAnswered && (
+                  <p
+                    className={`text-[11px] mt-2 font-medium ${
+                      isCorrect ? 'text-emerald-400' : 'text-rose-400'
+                    }`}
+                  >
+                    {isCorrect ? '✓ ' : '✗ '}
+                    {lang === 'en' ? tc.hintEn : tc.hintRo}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

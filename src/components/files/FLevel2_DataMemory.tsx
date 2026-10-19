@@ -13,7 +13,9 @@ import {
   Hash,
   Compass,
   ArrowRight,
-  HardDrive
+  HardDrive,
+  Calculator,
+  Database
 } from 'lucide-react';
 import { TeacherTip } from '../TeacherTip';
 import { sounds } from '../../utils/audio';
@@ -48,6 +50,13 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
     fillBlankFile?: string;
   }>({});
   const [tfCooldown, setTfCooldown] = useState<number>(0);
+
+  // Task 5: Storage Capacity & Conversion Lab
+  const [selectedStorageSample, setSelectedStorageSample] = useState<string>('photo');
+  const [inspectedSamples, setInspectedSamples] = useState<string[]>(['photo']);
+  const [quizStorage1, setQuizStorage1] = useState<string | null>(null);
+  const [quizStorage2, setQuizStorage2] = useState<string | null>(null);
+  const [storageCooldown, setStorageCooldown] = useState<number>(0);
 
   const start5sCooldown = (setter: React.Dispatch<React.SetStateAction<number>>) => {
     setter(5);
@@ -175,7 +184,106 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
     tfAnswers.folderHasFiles === true && // Un folder poate contine fisiere? ADEVARAT!
     tfAnswers.fillBlankFile === 'fisiere';
 
-  const allCompleted = isTask1Done && isTask2Done && isTask3Done && isTask4Done;
+  // Task 5: Storage capacity converter samples
+  const storageSamples = [
+    {
+      id: 'doc',
+      name: lang === 'en' ? 'School Word Essay (Referat.docx)' : 'Referat Școlar Word (Referat.docx)',
+      icon: '📄',
+      sizeBytes: 524288,
+      sizeKB: 512,
+      sizeMB: 0.5,
+      sizeGB: 0.00049,
+      unitLabel: '512 KB',
+      practicalFactRo: 'Un document Word fără multe poze are aproximativ 512 KB (adică o jumătate de Megabyte).',
+      practicalFactEn: 'A Word text document without large images is about 512 KB (half of a Megabyte).'
+    },
+    {
+      id: 'photo',
+      name: lang === 'en' ? 'Holiday Photo (Vacanta.jpg)' : 'Poză din Vacanță HD (Vacanta.jpg)',
+      icon: '📸',
+      sizeBytes: 2097152,
+      sizeKB: 2048,
+      sizeMB: 2,
+      sizeGB: 0.00195,
+      unitLabel: '2 MB (= 2.048 KB)',
+      practicalFactRo: 'O poză de înaltă claritate ocupă circa 2 MB, adică 2 × 1024 = 2.048 KB.',
+      practicalFactEn: 'A high-resolution photo occupies around 2 MB, which is 2 × 1024 = 2,048 KB.'
+    },
+    {
+      id: 'audio',
+      name: lang === 'en' ? 'Music Song Track (Piesa.mp3)' : 'Melodie Audio MP3 (Piesa.mp3)',
+      icon: '🎵',
+      sizeBytes: 4194304,
+      sizeKB: 4096,
+      sizeMB: 4,
+      sizeGB: 0.0039,
+      unitLabel: '4 MB (= 4.096 KB)',
+      practicalFactRo: 'O melodie de 3-4 minute la calitate standard ocupă 4 MB, adică 4.096 KB.',
+      practicalFactEn: 'A 3-minute standard MP3 audio track takes 4 MB, which equals 4,096 KB.'
+    },
+    {
+      id: 'video',
+      name: lang === 'en' ? 'Short Video Clip (Prezentare.mp4)' : 'Filmuleț Video Clip (Prezentare.mp4)',
+      icon: '🎬',
+      sizeBytes: 268435456,
+      sizeKB: 262144,
+      sizeMB: 256,
+      sizeGB: 0.25,
+      unitLabel: '256 MB (= 0.25 GB)',
+      practicalFactRo: 'Un sfert de Gigabyte (256 MB) este echivalentul a 262.144 KB.',
+      practicalFactEn: 'A quarter of a Gigabyte (256 MB) equals 262,144 KB.'
+    },
+    {
+      id: 'usb',
+      name: lang === 'en' ? 'USB Flash Drive 1GB (Stick_USB)' : 'Stick Memorie USB 1GB (Stick_USB)',
+      icon: '💾',
+      sizeBytes: 1073741824,
+      sizeKB: 1048576,
+      sizeMB: 1024,
+      sizeGB: 1,
+      unitLabel: '1 GB (= 1.024 MB)',
+      practicalFactRo: '1 GB conține exact 1.024 MB (sau 1.048.576 KB)! Pe el încap 512 poze a câte 2 MB.',
+      practicalFactEn: '1 GB contains exactly 1,024 MB (or 1,048,576 KB)! It can hold 512 photos of 2 MB each.'
+    }
+  ];
+
+  const handleSelectSample = (sampleId: string) => {
+    sounds.playClick();
+    setSelectedStorageSample(sampleId);
+    if (!inspectedSamples.includes(sampleId)) {
+      setInspectedSamples((prev) => [...prev, sampleId]);
+    }
+  };
+
+  const handleAnswerStorage1 = (val: string) => {
+    if (storageCooldown > 0) return;
+    setQuizStorage1(val);
+    if (val === '512') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      start5sCooldown(setStorageCooldown);
+    }
+  };
+
+  const handleAnswerStorage2 = (val: string) => {
+    if (storageCooldown > 0) return;
+    setQuizStorage2(val);
+    if (val === '4096') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      start5sCooldown(setStorageCooldown);
+    }
+  };
+
+  const isTask5Done =
+    inspectedSamples.length >= 2 &&
+    quizStorage1 === '512' &&
+    quizStorage2 === '4096';
+
+  const allCompleted = isTask1Done && isTask2Done && isTask3Done && isTask4Done && isTask5Done;
 
   const handleFinish = () => {
     sounds.playLevelUp();
@@ -769,6 +877,216 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
             </div>
           </div>
         </div>
+
+        {/* ======================================================== */}
+        {/* PROVOCAREA 5: Laboratorul de Conversie Capacitate de Stocare (KB <-> MB <-> GB) */}
+        {/* ======================================================== */}
+        <div className="bg-slate-900/90 border border-slate-700/90 rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-black flex items-center justify-center border border-cyan-500/40">
+                5
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-white font-heading flex items-center gap-2">
+                <Calculator className="w-4 h-4 text-cyan-400" />
+                {lang === 'en' ? 'Digital Storage & Unit Conversions Lab (KB ↔ MB ↔ GB)' : 'Laboratorul de Conversie a Capacității de Stocare (KB ↔ MB ↔ GB)'}
+              </h3>
+            </div>
+            {isTask5Done ? (
+              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Storage lab master!' : 'Laborator stocare promovat!'}
+              </span>
+            ) : (
+              <span className="text-xs text-slate-400 font-mono">
+                {inspectedSamples.length >= 2 && quizStorage1 === '512' && quizStorage2 === '4096' ? 'Complet' : `${inspectedSamples.length}/2 fișiere explorate`}
+              </span>
+            )}
+          </div>
+
+          <p className="text-xs sm:text-sm text-slate-300 mb-3">
+            {lang === 'en'
+              ? 'In the digital world, units of measurement grow by factors of 1024 (powers of 2): 1 KB = 1024 Bytes, 1 MB = 1024 KB, 1 GB = 1024 MB. Explore real-world files and calculate capacities!'
+              : 'În informatică, multiplii octetului (Byte) cresc din 1024 în 1024 (puteri ale lui 2): 1 KB = 1024 Bytes, 1 MB = 1024 KB, 1 GB = 1024 MB. Explorează fișierele reale și calculează capacitățile de memorare:'}
+          </p>
+
+          {/* Interactive File Samples Selection */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 mb-4">
+            {storageSamples.map((sample) => {
+              const isSelected = selectedStorageSample === sample.id;
+              return (
+                <button
+                  key={sample.id}
+                  onClick={() => handleSelectSample(sample.id)}
+                  className={`p-3 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between ${
+                    isSelected
+                      ? 'bg-cyan-950/60 border-cyan-400 shadow-md ring-1 ring-cyan-400/50'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-300'
+                  }`}
+                >
+                  <div className="text-2xl mb-1">{sample.icon}</div>
+                  <div className="text-xs font-bold text-white truncate w-full">{sample.name}</div>
+                  <div className="text-[11px] font-mono text-cyan-300 font-bold mt-1">{sample.unitLabel}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Sample Unit Breakdown Card */}
+          {(() => {
+            const activeSample = storageSamples.find((s) => s.id === selectedStorageSample) || storageSamples[0];
+            return (
+              <div className="bg-slate-950/80 p-4 rounded-xl border border-cyan-500/30 mb-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{activeSample.icon}</span>
+                    <div>
+                      <h4 className="text-sm font-bold text-white">{activeSample.name}</h4>
+                      <p className="text-xs text-cyan-300 font-mono">
+                        {lang === 'en' ? activeSample.practicalFactEn : activeSample.practicalFactRo}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-mono font-bold self-start sm:self-auto">
+                    {activeSample.unitLabel}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-mono">
+                  <div className="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800">
+                    <div className="text-[10px] text-slate-400">OCTEȚI (BYTES)</div>
+                    <div className="text-sm font-bold text-emerald-400 mt-0.5">{activeSample.sizeBytes.toLocaleString()} B</div>
+                  </div>
+                  <div className="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800">
+                    <div className="text-[10px] text-slate-400">KILOBYTES (KB)</div>
+                    <div className="text-sm font-bold text-cyan-400 mt-0.5">{activeSample.sizeKB.toLocaleString()} KB</div>
+                  </div>
+                  <div className="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800">
+                    <div className="text-[10px] text-slate-400">MEGABYTES (MB)</div>
+                    <div className="text-sm font-bold text-purple-400 mt-0.5">{activeSample.sizeMB} MB</div>
+                  </div>
+                  <div className="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800">
+                    <div className="text-[10px] text-slate-400">GIGABYTES (GB)</div>
+                    <div className="text-sm font-bold text-amber-400 mt-0.5">{activeSample.sizeGB} GB</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* 5-Second Cooldown Reflection Banner */}
+          {storageCooldown > 0 && (
+            <div className="mb-4">
+              <PedagogicalReflectionBanner
+                cooldown={storageCooldown}
+                customMessageRo="Calcul eronat! Reține regula din manual: 1 GB = 1024 MB și 1 MB = 1024 KB. Analizează câteva secunde înainte de a răspunde din nou."
+                customMessageEn="Incorrect calculation! Remember the textbook rule: 1 GB = 1024 MB and 1 MB = 1024 KB. Take a moment to reflect."
+              />
+            </div>
+          )}
+
+          {/* Two Practical Storage Problems */}
+          <div className="space-y-4">
+            {/* Problem 1 */}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+                <div className="text-xs text-slate-300">
+                  <strong className="text-cyan-400 font-bold">Problema 1:</strong>{' '}
+                  {lang === 'en'
+                    ? 'How many 2 MB high-resolution photos can fit onto a 1 GB (1024 MB) USB flash drive?'
+                    : 'Câte fotografii de 2 MB încap pe un stick de memorie USB de 1 GB (1.024 MB)?'}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {[
+                    { id: '100', label: '100 poze' },
+                    { id: '512', label: '512 poze (1024 ÷ 2)' },
+                    { id: '2048', label: '2.048 poze' }
+                  ].map((opt) => (
+                    <button
+                      key={opt.id}
+                      disabled={storageCooldown > 0}
+                      onClick={() => handleAnswerStorage1(opt.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                        quizStorage1 === opt.id
+                          ? opt.id === '512'
+                            ? 'bg-emerald-600 border-emerald-400 text-white'
+                            : 'bg-rose-600 border-rose-400 text-white'
+                          : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {quizStorage1 && (
+                <AnswerExplanation
+                  isCorrect={quizStorage1 === '512'}
+                  explanationRo={
+                    quizStorage1 === '512'
+                      ? 'Corect! 1 GB = 1.024 MB. Împărțind 1.024 MB la 2 MB obținem exact 512 fotografii.'
+                      : 'Incorect! Calculează: 1 GB conține 1.024 MB. Împarte 1.024 MB la 2 MB per poză.'
+                  }
+                  explanationEn={
+                    quizStorage1 === '512'
+                      ? 'Correct! 1 GB = 1,024 MB. Dividing 1,024 MB by 2 MB gives exactly 512 photos.'
+                      : 'Incorrect! Compute: 1 GB holds 1,024 MB. Divide 1,024 MB by 2 MB per picture.'
+                  }
+                />
+              )}
+            </div>
+
+            {/* Problem 2 */}
+            <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+                <div className="text-xs text-slate-300">
+                  <strong className="text-cyan-400 font-bold">Problema 2:</strong>{' '}
+                  {lang === 'en'
+                    ? 'An audio track takes 4 MB of space. How many Kilobytes (KB) does this represent?'
+                    : 'O melodie ocupă 4 MB de spațiu pe disc. Câți Kilobytes (KB) reprezintă această dimensiune?'}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {[
+                    { id: '400', label: '400 KB' },
+                    { id: '4096', label: '4.096 KB (4 × 1024)' },
+                    { id: '40000', label: '40.000 KB' }
+                  ].map((opt) => (
+                    <button
+                      key={opt.id}
+                      disabled={storageCooldown > 0}
+                      onClick={() => handleAnswerStorage2(opt.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                        quizStorage2 === opt.id
+                          ? opt.id === '4096'
+                            ? 'bg-emerald-600 border-emerald-400 text-white'
+                            : 'bg-rose-600 border-rose-400 text-white'
+                          : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {quizStorage2 && (
+                <AnswerExplanation
+                  isCorrect={quizStorage2 === '4096'}
+                  explanationRo={
+                    quizStorage2 === '4096'
+                      ? 'Excelent! 1 MB = 1.024 KB. Prin urmare, 4 MB = 4 × 1.024 = 4.096 KB.'
+                      : 'Incorect! Multiplicarea unităților digitale se face cu 1.024 (nu cu 100 sau 10.000).'
+                  }
+                  explanationEn={
+                    quizStorage2 === '4096'
+                      ? 'Spot on! 1 MB = 1,024 KB. Therefore, 4 MB = 4 × 1,024 = 4,096 KB.'
+                      : 'Incorrect! Multipliers in computing use 1,024 rather than decimal factors.'
+                  }
+                />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Completion & Next Level Button */}
@@ -776,10 +1094,10 @@ export const FLevel2_DataMemory: React.FC<FLevel2Props> = ({ onComplete }) => {
         <div className="text-xs text-slate-400">
           {allCompleted ? (
             <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'All 4 challenges completed! (+15 pts)' : 'Toate cele 4 provocări sunt rezolvate! (+15 pct)'}
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? 'All 5 challenges completed! (+20 pts)' : 'Toate cele 5 provocări sunt rezolvate! (+20 pct)'}
             </span>
           ) : (
-            <span>{lang === 'en' ? 'Complete the requirements in the 4 challenges above to continue.' : 'Completează cerințele din cele 4 provocări de mai sus pentru a continua spre crearea arborelui de foldere.'}</span>
+            <span>{lang === 'en' ? 'Complete the requirements in all 5 challenges above to continue.' : 'Completează cerințele din cele 5 provocări de mai sus pentru a continua spre crearea arborelui de foldere.'}</span>
           )}
         </div>
 

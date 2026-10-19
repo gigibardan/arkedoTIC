@@ -68,6 +68,24 @@ const TYPO_ERRORS: TypoError[] = [
     explanationRo: 'În limba română deschidem ghilimelele jos („) și le închidem sus (”).',
     explanationEn: 'Standard Romanian typography opens quotes at the base („) and closes at the top (”).',
   },
+  {
+    id: 'missing_diacritics_invatamant',
+    incorrectSnippet: 'invatamant',
+    correctSnippet: 'învățământ',
+    ruleTitleRo: 'Diacriticele românești (î, ă, â, ș, ț)',
+    ruleTitleEn: 'Romanian diacritics',
+    explanationRo: 'Limba română conține 5 caractere specifice: ă, â, î, ș, ț. Scrierea fără diacritice în documente școlare oficiale este o greșeală!',
+    explanationEn: 'Romanian typography mandates the 5 diacritic letters: ă, â, î, ș, ț.',
+  },
+  {
+    id: 'missing_diacritics_stiinta',
+    incorrectSnippet: 'stiinta',
+    correctSnippet: 'știință',
+    ruleTitleRo: 'Ortografie: Ș și Ț cu virgulă dedesubt',
+    ruleTitleEn: 'Proper comma diacritics under S and T',
+    explanationRo: 'Literele Ș și Ț se scriu corect cu virgulă dedesubt (standardul românesc oficial), nu cu sedilă turcească.',
+    explanationEn: 'Official Romanian spelling uses standard comma-below characters (Ș and Ț).',
+  },
 ];
 
 export const TLevel2_TypingRules: React.FC<TLevel2Props> = ({ onCompletePage }) => {
@@ -256,7 +274,7 @@ export const TLevel2_TypingRules: React.FC<TLevel2Props> = ({ onCompletePage }) 
               {lang === 'en' ? 'Interactive Lab • Typo Error Detective' : 'Laborator Interactiv • Detectorul de Greșeli'}
             </div>
             <h3 className="text-lg font-bold text-white mt-1">
-              {lang === 'en' ? 'Fix the 5 Typing Mistakes in this Student Article' : 'Depistează și corectează cele 5 greșeli tipografice!'}
+              {lang === 'en' ? 'Fix the 7 Typing Mistakes in this Student Article' : 'Depistează și corectează cele 7 greșeli tipografice!'}
             </h3>
           </div>
           <div className="text-right">
@@ -360,7 +378,39 @@ export const TLevel2_TypingRules: React.FC<TLevel2Props> = ({ onCompletePage }) 
                 "TIC"
               </button>
             )}
-            .
+            . De asemenea, în orice sistem de{' '}
+            {/* Error 6: Diacritics invatamant */}
+            {fixedErrors.missing_diacritics_invatamant ? (
+              <span className="bg-emerald-100 text-emerald-900 font-semibold px-1 rounded transition-all">
+                învățământ
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleFixError(TYPO_ERRORS[5])}
+                className="bg-rose-100 hover:bg-rose-200 text-rose-900 font-bold px-1.5 py-0.5 rounded border border-rose-300 underline decoration-wavy decoration-rose-500 cursor-pointer animate-pulse"
+                title="Apasă pentru corectare!"
+              >
+                invatamant
+              </button>
+            )}{' '}
+            modern, tehnologia se îmbină cu pasiunea pentru{' '}
+            {/* Error 7: Diacritics stiinta */}
+            {fixedErrors.missing_diacritics_stiinta ? (
+              <span className="bg-emerald-100 text-emerald-900 font-semibold px-1 rounded transition-all">
+                știință
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleFixError(TYPO_ERRORS[6])}
+                className="bg-rose-100 hover:bg-rose-200 text-rose-900 font-bold px-1.5 py-0.5 rounded border border-rose-300 underline decoration-wavy decoration-rose-500 cursor-pointer animate-pulse"
+                title="Apasă pentru corectare!"
+              >
+                stiinta
+              </button>
+            )}
+            !
           </p>
         </div>
 

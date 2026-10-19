@@ -15,10 +15,11 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
   const { t, lang } = useLanguage();
 
   // Simulator state
-  const [currentPath, setCurrentPath] = useState<'desktop' | 'baza_secreta'>('desktop');
+  const [currentPath, setCurrentPath] = useState<'desktop' | 'baza_secreta' | 'teme'>('desktop');
   const [hasRootFolder, setHasRootFolder] = useState<boolean>(false);
   const [hasJocuri, setHasJocuri] = useState<boolean>(false);
   const [hasTeme, setHasTeme] = useState<boolean>(false);
+  const [hasProiecteTIC, setHasProiecteTIC] = useState<boolean>(false);
   const [shortcutWinEUsed, setShortcutWinEUsed] = useState<boolean>(false);
   const [wineWrongAttempt, setWineWrongAttempt] = useState<boolean>(false);
   const [wineCooldown, setWineCooldown] = useState<number>(0);
@@ -47,9 +48,19 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
     setCurrentPath('baza_secreta');
   };
 
+  const handleOpenTeme = () => {
+    sounds.playClick();
+    setCurrentPath('teme');
+  };
+
   const handleBackToDesktop = () => {
     sounds.playClick();
     setCurrentPath('desktop');
+  };
+
+  const handleBackToRoot = () => {
+    sounds.playClick();
+    setCurrentPath('baza_secreta');
   };
 
   const handleCreateJocuri = () => {
@@ -62,6 +73,11 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
     sounds.playCorrect();
     setHasTeme(true);
     setChk3(true);
+  };
+
+  const handleCreateProiecteTIC = () => {
+    sounds.playCorrect();
+    setHasProiecteTIC(true);
   };
 
   const isLevelCompleted =
@@ -122,7 +138,15 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
             <span className="text-slate-400">{lang === 'en' ? '📍 Path:' : '📍 Cale:'}</span>
             <div className="flex items-center gap-1 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700/80 text-emerald-400">
               <HardDrive className="w-3 h-3 text-slate-400" />
-              <span>{currentPath === 'desktop' ? t.l1PathDesktop : t.l1PathInside}</span>
+              <span>
+                {currentPath === 'desktop'
+                  ? t.l1PathDesktop
+                  : currentPath === 'baza_secreta'
+                  ? t.l1PathInside
+                  : lang === 'en'
+                  ? 'Desktop \\ Secret Base \\ Homework'
+                  : 'Desktop \\ Baza Secreta \\ Teme'}
+              </span>
             </div>
           </div>
 
@@ -153,7 +177,7 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                   </div>
                 )}
               </>
-            ) : (
+            ) : currentPath === 'baza_secreta' ? (
               /* Inside "Baza Secreta" folder */
               <div className="w-full flex flex-wrap gap-4">
                 {hasJocuri ? (
@@ -165,16 +189,46 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                 ) : null}
 
                 {hasTeme ? (
-                  <div className="flex flex-col items-center p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/50 shadow-md w-32 text-center animate-fade">
-                    <div className="text-5xl drop-shadow">📚</div>
+                  <div
+                    onClick={handleOpenTeme}
+                    className="flex flex-col items-center p-3.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/40 border-2 border-amber-500/50 hover:border-amber-400 shadow-md w-32 text-center animate-fade cursor-pointer transition transform hover:scale-105 group"
+                    title={lang === 'en' ? 'Click to open Homework folder' : 'Click pentru a deschide folderul Teme'}
+                  >
+                    <div className="text-5xl group-hover:scale-110 transition drop-shadow">📚</div>
                     <span className="text-xs font-bold mt-2 text-amber-300">{lang === 'en' ? 'Homework' : 'Teme'}</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5">{lang === 'en' ? 'Subfolder' : 'Subfolder'}</span>
+                    <span className="text-[10px] text-amber-200/80 mt-0.5 font-medium">
+                      {lang === 'en' ? 'Click to open ➜' : 'Click pt. deschidere ➜'}
+                    </span>
                   </div>
                 ) : null}
 
                 {!hasJocuri && !hasTeme && (
                   <div className="w-full py-8 text-center text-slate-500 text-xs">
                     {t.l1InsideEmpty}
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Inside "Teme" subfolder (Level 3 school hierarchy) */
+              <div className="w-full flex flex-wrap gap-4">
+                {hasProiecteTIC ? (
+                  <div className="flex flex-col items-center p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/50 shadow-md w-36 text-center animate-fade">
+                    <div className="text-5xl drop-shadow">📂</div>
+                    <span className="text-xs font-bold mt-2 text-emerald-300 truncate w-full">
+                      Proiecte_TIC
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-mono mt-0.5">
+                      {lang === 'en' ? 'Level 3 Subfolder' : 'Subfolder Nivel 3'}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="w-full py-8 text-center text-slate-400 text-xs flex flex-col items-center justify-center">
+                    <span className="text-2xl mb-1">📂</span>
+                    <span>
+                      {lang === 'en'
+                        ? 'This folder is empty. Create the school projects subfolder: "Proiecte_TIC"!'
+                        : 'Acest subfolder este gol. Creează subfolderul școlar pentru proiecte: „Proiecte_TIC”!'}
+                    </span>
                   </div>
                 )}
               </div>
@@ -213,6 +267,16 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                   )}
                 </>
               )}
+
+              {currentPath === 'teme' && !hasProiecteTIC && (
+                <button
+                  onClick={handleCreateProiecteTIC}
+                  className="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-md flex items-center gap-1.5 cursor-pointer"
+                >
+                  <FolderPlus className="w-4 h-4" />
+                  {lang === 'en' ? 'Create Subfolder: Proiecte_TIC' : 'Creează Subfolderul: Proiecte_TIC'}
+                </button>
+              )}
             </div>
 
             {currentPath === 'baza_secreta' && (
@@ -221,6 +285,15 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                 className="text-xs text-slate-300 hover:text-white px-3 py-1.5 bg-slate-700/80 hover:bg-slate-700 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" /> {t.l1BtnBack}
+              </button>
+            )}
+
+            {currentPath === 'teme' && (
+              <button
+                onClick={handleBackToRoot}
+                className="text-xs text-slate-300 hover:text-white px-3 py-1.5 bg-slate-700/80 hover:bg-slate-700 rounded-lg flex items-center gap-1.5 transition cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" /> {lang === 'en' ? 'Back to Secret Base' : 'Înapoi la Baza Secreta'}
               </button>
             )}
           </div>
@@ -260,6 +333,15 @@ export const Level1_Structure: React.FC<Level1Props> = ({ onComplete }) => {
                     <span>└── 📚 {lang === 'en' ? 'Homework' : 'Teme'}</span>
                     {hasTeme && <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />}
                   </div>
+
+                  {hasTeme && (
+                    <div className="ml-4 pl-3 border-l-2 border-slate-700 space-y-1">
+                      <div className={`flex items-center gap-2 ${hasProiecteTIC ? 'text-emerald-400 font-bold' : 'text-slate-600'}`}>
+                        <span>└── 📂 Proiecte_TIC</span>
+                        {hasProiecteTIC && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -44,6 +44,15 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
     step1: true
   });
 
+  // 3D Avatar Customizer State
+  const [avatarName, setAvatarName] = useState<string>('Robo-Titan 3D');
+  const [headShape, setHeadShape] = useState<'cube' | 'sphere' | 'cylinder'>('cube');
+  const [bodyColor, setBodyColor] = useState<string>('#06b6d4');
+  const [materialFinish, setMaterialFinish] = useState<'metal_gloss' | 'metal_matte' | 'gloss' | 'matte'>('metal_gloss');
+  const [chestBadge, setChestBadge] = useState<'arc_reactor' | 'cyber_shield' | 'gear' | 'atom' | 'tic_logo'>('arc_reactor');
+  const [eyeStyle, setEyeStyle] = useState<'laser_visor' | 'dual_led' | 'vr_headset'>('laser_visor');
+  const [isRotating, setIsRotating] = useState<boolean>(true);
+
   // Synthesis Quiz Answers
   const [q1Answer, setQ1Answer] = useState<string | null>(null);
   const [q2Answer, setQ2Answer] = useState<string | null>(null);
@@ -122,6 +131,35 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
     onCompletePage(earnedScore);
   };
 
+  const handleDownloadProject = () => {
+    sounds.playRetro('powerup');
+    const projectData = {
+      projectType: 'Paint3D_Avatar_Project',
+      unit: 'Clasa a VI-a • Unitatea 2A',
+      studentName,
+      avatarName,
+      specifications: {
+        headShape,
+        bodyColor,
+        materialFinish,
+        chestBadge,
+        eyeStyle,
+        coordinates: { x: 0, y: 120, z: -40 },
+        dimensions: { width: 180, height: 260, depth: 150 },
+      },
+      exportFormat: '.GLB / Paint 3D Native',
+      gradeDetails,
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Proiect_3D_${avatarName.replace(/\s+/g, '_')}_${studentName.replace(/\s+/g, '_')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handlePrint = () => {
     sounds.playClick();
     window.print();
@@ -158,6 +196,319 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-700 text-xs font-mono text-cyan-300">
             <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" />
             <span>{lang === 'en' ? '3D Modeler Certified' : 'Modelator 3D Certificat'}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3D Avatar Robot Studio & Customizer */}
+      <div className="bg-gradient-to-br from-slate-900 via-cyan-950/30 to-slate-900 border-2 border-cyan-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl shadow-inner font-bold">
+              🎨
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-black text-white font-heading">
+                {lang === 'en' ? 'Interactive 3D Avatar Modeler Studio' : 'Atelierul Interactiv de Personalizare a Robotului 3D'}
+              </h2>
+              <p className="text-xs text-slate-300">
+                {lang === 'en'
+                  ? 'Customize the robot geometry, metallic texture, chest sticker, and test 360° turntable rotation.'
+                  : 'Configurează geometria 3D, finisajul metalic, stickerul de pe piept și testează rotația la 360°.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleDownloadProject}
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
+            >
+              <Download className="w-4 h-4" />
+              <span>{lang === 'en' ? 'Download 3D Blueprint (.json)' : 'Descarcă Proiectul 3D (.json)'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsRotating(prev => !prev)}
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer border ${
+                isRotating
+                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50'
+                  : 'bg-slate-800 text-slate-400 border-slate-700'
+              }`}
+            >
+              <RotateCcw className={`w-3.5 h-3.5 ${isRotating ? 'animate-spin' : ''}`} />
+              <span>360°</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Studio Grid: Robot Preview + Customization Controls */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          {/* 3D Visual Robot Stage */}
+          <div className="lg:col-span-5 bg-slate-950/90 border-2 border-cyan-500/30 rounded-3xl p-6 relative flex flex-col items-center justify-center min-h-[320px] shadow-inner overflow-hidden">
+            {/* Grid Floor Perspective */}
+            <div className="absolute inset-0 bg-[radial-gradient(#06b6d4_1px,transparent_1px)] [background-size:16px_16px] opacity-15 pointer-events-none" />
+            <div className="absolute bottom-6 w-48 h-10 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
+
+            {/* SVG 3D Robot Figure */}
+            <div className={`relative transition-transform duration-700 ${isRotating ? 'animate-bounce' : ''}`} style={{ animationDuration: '3s' }}>
+              <svg width="200" height="230" viewBox="0 0 200 230" className="drop-shadow-2xl">
+                <defs>
+                  {/* Body Gradient based on material finish */}
+                  <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity={materialFinish.includes('gloss') ? 0.45 : 0.15} />
+                    <stop offset="40%" stopColor={bodyColor} />
+                    <stop offset="100%" stopColor="#0f172a" stopOpacity={materialFinish.includes('metal') ? 0.7 : 0.9} />
+                  </linearGradient>
+
+                  <linearGradient id="metalSheen" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="white" stopOpacity="0.1" />
+                    <stop offset="50%" stopColor="white" stopOpacity={materialFinish.includes('metal') ? 0.4 : 0.15} />
+                    <stop offset="100%" stopColor="white" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
+
+                {/* Soft ground shadow */}
+                <ellipse cx="100" cy="220" rx="60" ry="8" fill="#000000" opacity="0.4" />
+
+                {/* Antenna */}
+                <line x1="100" y1="40" x2="100" y2="18" stroke={bodyColor} strokeWidth="3" strokeLinecap="round" />
+                <circle cx="100" cy="15" r="5" fill="#f59e0b" className="animate-pulse" />
+
+                {/* Head Shape */}
+                {headShape === 'cube' && (
+                  <rect x="70" y="38" width="60" height="48" rx="8" fill="url(#bodyGrad)" stroke="#38bdf8" strokeWidth="2" />
+                )}
+                {headShape === 'sphere' && (
+                  <circle cx="100" cy="60" r="28" fill="url(#bodyGrad)" stroke="#38bdf8" strokeWidth="2" />
+                )}
+                {headShape === 'cylinder' && (
+                  <rect x="74" y="38" width="52" height="50" rx="16" fill="url(#bodyGrad)" stroke="#38bdf8" strokeWidth="2" />
+                )}
+
+                {/* Neck connector */}
+                <rect x="94" y="86" width="12" height="8" rx="2" fill="#475569" />
+
+                {/* Torso / Body */}
+                <rect x="62" y="94" width="76" height="80" rx="14" fill="url(#bodyGrad)" stroke="#0284c7" strokeWidth="2" />
+                <rect x="64" y="96" width="72" height="76" rx="12" fill="url(#metalSheen)" pointerEvents="none" />
+
+                {/* Arms */}
+                <rect x="38" y="104" width="18" height="52" rx="9" fill="url(#bodyGrad)" stroke="#0284c7" strokeWidth="1.5" />
+                <rect x="144" y="104" width="18" height="52" rx="9" fill="url(#bodyGrad)" stroke="#0284c7" strokeWidth="1.5" />
+                {/* Hands */}
+                <circle cx="47" cy="162" r="7" fill="#64748b" />
+                <circle cx="153" cy="162" r="7" fill="#64748b" />
+
+                {/* Legs */}
+                <rect x="74" y="174" width="20" height="40" rx="6" fill="#334155" />
+                <rect x="106" y="174" width="20" height="40" rx="6" fill="#334155" />
+                {/* Feet */}
+                <rect x="68" y="210" width="28" height="8" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
+                <rect x="104" y="210" width="28" height="8" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
+
+                {/* Eyes Style */}
+                {eyeStyle === 'laser_visor' && (
+                  <rect x="78" y="52" width="44" height="10" rx="5" fill="#ef4444" stroke="#fca5a5" strokeWidth="1.5" className="animate-pulse" />
+                )}
+                {eyeStyle === 'dual_led' && (
+                  <g>
+                    <circle cx="88" cy="56" r="5" fill="#38bdf8" className="animate-ping" style={{ animationDuration: '2s' }} />
+                    <circle cx="88" cy="56" r="4" fill="#38bdf8" />
+                    <circle cx="112" cy="56" r="4" fill="#38bdf8" />
+                  </g>
+                )}
+                {eyeStyle === 'vr_headset' && (
+                  <rect x="74" y="48" width="52" height="18" rx="6" fill="#090d16" stroke="#a855f7" strokeWidth="2" />
+                )}
+
+                {/* Chest Emblem Badge */}
+                <rect x="80" y="112" width="40" height="40" rx="10" fill="#020617" stroke="#38bdf8" strokeWidth="1.5" />
+                {chestBadge === 'arc_reactor' && (
+                  <g transform="translate(100, 132)">
+                    <circle r="12" fill="#0284c7" opacity="0.3" />
+                    <circle r="8" fill="#38bdf8" className="animate-pulse" />
+                    <circle r="4" fill="#ffffff" />
+                  </g>
+                )}
+                {chestBadge === 'cyber_shield' && (
+                  <path d="M100 120 L112 124 L112 134 Q100 144 100 144 Q88 134 88 134 L88 124 Z" fill="#10b981" />
+                )}
+                {chestBadge === 'gear' && (
+                  <circle cx="100" cy="132" r="9" fill="#f59e0b" stroke="#78350f" strokeWidth="2" strokeDasharray="3,2" />
+                )}
+                {chestBadge === 'atom' && (
+                  <g transform="translate(100, 132)">
+                    <ellipse rx="10" ry="4" fill="none" stroke="#a855f7" strokeWidth="1.5" transform="rotate(30)" />
+                    <ellipse rx="10" ry="4" fill="none" stroke="#a855f7" strokeWidth="1.5" transform="rotate(-30)" />
+                    <circle r="3" fill="#ec4899" />
+                  </g>
+                )}
+                {chestBadge === 'tic_logo' && (
+                  <text x="100" y="136" textAnchor="middle" fill="#38bdf8" fontSize="11" fontWeight="bold" fontFamily="monospace">TIC</text>
+                )}
+              </svg>
+            </div>
+
+            <div className="mt-3 text-center">
+              <span className="text-sm font-black text-white font-mono">{avatarName}</span>
+              <div className="flex items-center justify-center gap-2 text-[10px] text-cyan-300 font-mono mt-0.5">
+                <span>Material: {materialFinish}</span>
+                <span>•</span>
+                <span>X:0 Y:120 Z:-40</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Customizer Controls Panel */}
+          <div className="lg:col-span-7 space-y-4">
+            {/* Avatar Name */}
+            <div>
+              <label className="text-[11px] font-mono font-bold text-slate-300 uppercase block mb-1">
+                {lang === 'en' ? 'Avatar Name / Designation:' : 'Nume Avatar / Denumire Proiect:'}
+              </label>
+              <input
+                type="text"
+                value={avatarName}
+                onChange={(e) => setAvatarName(e.target.value)}
+                maxLength={30}
+                className="w-full bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-cyan-400"
+              />
+            </div>
+
+            {/* Head Geometry Selection */}
+            <div>
+              <span className="text-[11px] font-mono font-bold text-slate-400 uppercase block mb-1.5">
+                {lang === 'en' ? 'Head 3D Shape (Axa Z):' : 'Formă Cap 3D (Forme de Bază):'}
+              </span>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: 'cube', label: 'Cub Cibernetic 🟩' },
+                  { id: 'sphere', label: 'Sferă Holografică 🔵' },
+                  { id: 'cylinder', label: 'Cilindru Smart 🥫' }
+                ].map(h => (
+                  <button
+                    key={h.id}
+                    type="button"
+                    onClick={() => {
+                      sounds.playPop();
+                      setHeadShape(h.id as any);
+                    }}
+                    className={`p-2 rounded-xl border text-xs font-semibold text-center transition cursor-pointer ${
+                      headShape === h.id
+                        ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200'
+                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    {h.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Color Palette & Material Finish */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <span className="text-[11px] font-mono font-bold text-slate-400 uppercase block mb-1.5">
+                  {lang === 'en' ? 'Chassis Color:' : 'Culoare Carcasă:'}
+                </span>
+                <div className="flex items-center gap-2">
+                  {[
+                    { color: '#06b6d4', name: 'Cyan' },
+                    { color: '#10b981', name: 'Emerald' },
+                    { color: '#f59e0b', name: 'Gold' },
+                    { color: '#8b5cf6', name: 'Violet' },
+                    { color: '#ef4444', name: 'Crimson' }
+                  ].map(c => (
+                    <button
+                      key={c.color}
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        setBodyColor(c.color);
+                      }}
+                      className={`w-7 h-7 rounded-full border-2 transition cursor-pointer ${
+                        bodyColor === c.color ? 'ring-2 ring-white scale-110' : 'border-slate-700'
+                      }`}
+                      style={{ backgroundColor: c.color }}
+                      title={c.name}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[11px] font-mono font-bold text-slate-400 uppercase block mb-1.5">
+                  {lang === 'en' ? 'Material Finish (Paint 3D):' : 'Finisaj Material (Paint 3D):'}
+                </span>
+                <select
+                  value={materialFinish}
+                  onChange={(e) => {
+                    sounds.playClick();
+                    setMaterialFinish(e.target.value as any);
+                  }}
+                  className="w-full bg-slate-950 border border-slate-700 px-3 py-1.5 rounded-xl text-xs text-slate-200 font-semibold focus:outline-none focus:border-cyan-400 cursor-pointer"
+                >
+                  <option value="metal_gloss">Metal Lucios (Polished Metal)</option>
+                  <option value="metal_matte">Metal Mat (Dull Metal)</option>
+                  <option value="gloss">Plastic Lucios (Gloss)</option>
+                  <option value="matte">Mat Standard (Matte)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Chest Badge & Eyes */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <span className="text-[11px] font-mono font-bold text-slate-400 uppercase block mb-1.5">
+                  {lang === 'en' ? 'Chest Sticker / Emblem:' : 'Sticker / Emblemă Piept:'}
+                </span>
+                <div className="grid grid-cols-5 gap-1.5">
+                  {[
+                    { id: 'arc_reactor', icon: '⚡' },
+                    { id: 'cyber_shield', icon: '🛡️' },
+                    { id: 'gear', icon: '⚙️' },
+                    { id: 'atom', icon: '⚛️' },
+                    { id: 'tic_logo', icon: '💻' }
+                  ].map(b => (
+                    <button
+                      key={b.id}
+                      type="button"
+                      onClick={() => {
+                        sounds.playPop();
+                        setChestBadge(b.id as any);
+                      }}
+                      className={`p-1.5 rounded-lg border text-center text-sm transition cursor-pointer ${
+                        chestBadge === b.id
+                          ? 'bg-cyan-500/20 border-cyan-400 shadow-sm'
+                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                      }`}
+                    >
+                      {b.icon}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[11px] font-mono font-bold text-slate-400 uppercase block mb-1.5">
+                  {lang === 'en' ? 'Eye Optics / Visor:' : 'Optică Ochi / Vizor:'}
+                </span>
+                <select
+                  value={eyeStyle}
+                  onChange={(e) => {
+                    sounds.playClick();
+                    setEyeStyle(e.target.value as any);
+                  }}
+                  className="w-full bg-slate-950 border border-slate-700 px-3 py-1.5 rounded-xl text-xs text-slate-200 font-semibold focus:outline-none focus:border-cyan-400 cursor-pointer"
+                >
+                  <option value="laser_visor">Vizor Laser Roșu (Laser Visor)</option>
+                  <option value="dual_led">LED-uri Duble Cyan (Dual LEDs)</option>
+                  <option value="vr_headset">Ochelari Imersivi VR (VR Headset)</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -368,6 +719,22 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
           </span>
         </div>
 
+        {/* Certified 3D Project Seal */}
+        <div className="max-w-md mx-auto p-4 rounded-2xl bg-slate-950/80 border border-cyan-500/30 flex items-center justify-between gap-3 text-left">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-lg font-bold border border-cyan-500/40">
+              🤖
+            </div>
+            <div>
+              <div className="text-xs font-black text-white">{avatarName}</div>
+              <div className="text-[10px] text-cyan-300/80 font-mono">Autor: {studentName} • Finisaj: {materialFinish}</div>
+            </div>
+          </div>
+          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold">
+            GLB 3D ✓
+          </span>
+        </div>
+
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <button
             type="button"
@@ -376,6 +743,24 @@ export const Paint3DLevel7_AvatarLabAndDiploma: React.FC<Paint3DLevel7Props> = (
           >
             <Trophy className="w-5 h-5" />
             <span>{lang === 'en' ? 'Finalize Mission 2A & Claim Official Diploma!' : 'Finalizează Misiunea 2A & Revendică Marea Diplomă!'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadProject}
+            className="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 font-bold text-sm shadow-lg cursor-pointer transition flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Download Project (.json)' : 'Descarcă Fișa Proiectului'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-sm shadow-lg cursor-pointer transition flex items-center gap-2"
+          >
+            <Printer className="w-4 h-4" />
+            <span>{lang === 'en' ? 'Print Official Certificate' : 'Tipărește Diploma'}</span>
           </button>
         </div>
       </div>

@@ -27,6 +27,7 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
   // Master Document Editor State
   const [headerActive, setHeaderActive] = useState<boolean>(false);
   const [footerActive, setFooterActive] = useState<boolean>(false);
+  const [hasTableOfContents, setHasTableOfContents] = useState<boolean>(false);
   
   // Image styling
   const [hasImage, setHasImage] = useState<boolean>(false);
@@ -49,6 +50,7 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
   const c4_tableShading = hasTable && tableHeaderShaded;
   const c5_tableAlignment = hasTable && tableCentered;
   const c6_shapeBadge = hasBadgeShape;
+  const c7_toc = hasTableOfContents;
 
   const passedCriteriaCount = [
     c1_headerFooter,
@@ -56,10 +58,11 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
     c3_tableMerged,
     c4_tableShading,
     c5_tableAlignment,
-    c6_shapeBadge
+    c6_shapeBadge,
+    c7_toc
   ].filter(Boolean).length;
 
-  const totalCriteria = 6;
+  const totalCriteria = 7;
   const isMasterDocumentReady = passedCriteriaCount === totalCriteria;
 
   // Final score for Lab is 100 maximum
@@ -102,7 +105,7 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2 text-sm font-bold text-white uppercase font-mono">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>{lang === 'en' ? 'Editorial Quality Criteria (Must reach 6/6):' : 'Criterii de Calitate Redacțională (Obiectiv: 6/6):'}</span>
+            <span>{lang === 'en' ? 'Editorial Quality Criteria (Must reach 7/7):' : 'Criterii de Calitate Redacțională (Obiectiv: 7/7):'}</span>
           </div>
           <span className={`text-xs font-mono font-black px-3 py-1 rounded-full border ${
             isMasterDocumentReady
@@ -113,7 +116,7 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
           <div className={`p-3 rounded-xl border flex items-center gap-2.5 transition ${c1_headerFooter ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'}`}>
             <span className="text-base">{c1_headerFooter ? '✓' : '1️⃣'}</span>
             <span>{lang === 'en' ? 'Header & Dynamic Footer' : 'Antet & Subsol cu Nr. Pagină'}</span>
@@ -142,6 +145,11 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
           <div className={`p-3 rounded-xl border flex items-center gap-2.5 transition ${c6_shapeBadge ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'}`}>
             <span className="text-base">{c6_shapeBadge ? '✓' : '6️⃣'}</span>
             <span>{lang === 'en' ? 'Eco-Badge Shape Inserted' : 'Ecuson Formă „Eco-Aprobat”'}</span>
+          </div>
+
+          <div className={`p-3 rounded-xl border flex items-center gap-2.5 transition ${c7_toc ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'}`}>
+            <span className="text-base">{c7_toc ? '✓' : '7️⃣'}</span>
+            <span>{lang === 'en' ? 'Visual Table of Contents (TOC)' : 'Cuprins cu Paginare Automată'}</span>
           </div>
         </div>
       </div>
@@ -200,6 +208,22 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
               >
                 <span>Subsol: Nr. Pagină Auto</span>
                 <span>{footerActive ? '✓ Activ' : '+ Adaugă'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  setHasTableOfContents(!hasTableOfContents);
+                }}
+                className={`w-full p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between transition cursor-pointer ${
+                  hasTableOfContents
+                    ? 'bg-teal-950/80 border-teal-400 text-teal-200'
+                    : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500'
+                }`}
+              >
+                <span>Cuprins Automat (TOC)</span>
+                <span>{hasTableOfContents ? '✓ Inserat' : '+ Adaugă'}</span>
               </button>
             </div>
           </div>
@@ -386,6 +410,33 @@ export const T2Level7_MagazineMasterLab: React.FC<T2Level7_MagazineMasterLabProp
                     Redactor Șef: Echipa Elevilor Digitali • Data: An Școlar Curent
                   </div>
                 </div>
+
+                {/* Visual Table of Contents (Cuprins Școlar) */}
+                {hasTableOfContents && (
+                  <div className="my-2 p-2.5 bg-slate-50 border border-slate-300 rounded-lg font-mono text-[10px] text-slate-700 animate-fadeIn shadow-sm">
+                    <div className="font-bold text-emerald-900 uppercase border-b border-slate-300 pb-1 mb-1.5 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <FileText className="w-3 h-3 text-emerald-700" />
+                        <span>📑 CUPRINSUL REVISTEI ECO-ȘCOALA</span>
+                      </span>
+                      <span className="text-[9px] text-slate-500">PAGINA</span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between border-b border-dotted border-slate-300">
+                        <span>1. Inițiativa Verde: Tehnologia în Sprijinul Naturii</span>
+                        <span className="font-bold text-emerald-800">1</span>
+                      </div>
+                      <div className="flex justify-between border-b border-dotted border-slate-300">
+                        <span>2. Calendarul Activităților Ecologice & Responsabili</span>
+                        <span className="font-bold text-emerald-800">2</span>
+                      </div>
+                      <div className="flex justify-between border-b border-dotted border-slate-300">
+                        <span>3. Certificarea Verde & Ecusonul Oficial</span>
+                        <span className="font-bold text-emerald-800">3</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Floating Image with Wrap Text */}
                 {hasImage && (

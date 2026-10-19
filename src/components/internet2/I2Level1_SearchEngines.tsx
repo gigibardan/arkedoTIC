@@ -35,6 +35,7 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
   const [q1Cooldown, setQ1Cooldown] = useState<number>(0);
   const [q2Cooldown, setQ2Cooldown] = useState<number>(0);
   const [q3Cooldown, setQ3Cooldown] = useState<number>(0);
+  const [q4Cooldown, setQ4Cooldown] = useState<number>(0);
 
   useEffect(() => {
     if (q1Cooldown <= 0) return;
@@ -54,6 +55,12 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
     return () => clearInterval(t);
   }, [q3Cooldown]);
 
+  useEffect(() => {
+    if (q4Cooldown <= 0) return;
+    const t = setInterval(() => setQ4Cooldown((p) => Math.max(0, p - 1)), 1000);
+    return () => clearInterval(t);
+  }, [q4Cooldown]);
+
   // Task 1: Search engine definition
   const [q1SearchEngine, setQ1SearchEngine] = useState<string>('');
   // Task 2: Advanced Search Operator Quiz
@@ -70,16 +77,24 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
   });
   const [simulatedResults, setSimulatedResults] = useState<boolean>(false);
 
+  // Task 4: Boolean Logic & Exclusion Operator (-term / AND / OR)
+  const [q4BooleanOp, setQ4BooleanOp] = useState<string>('');
+
   const isQ1Correct = q1SearchEngine === 'database_crawler';
   const isQ2Correct = q2ExactSearch === 'quotes';
   const isQ3Correct =
     q3SearchTask.operator === 'site_edu' &&
     q3SearchTask.keyword === 'sistemul solar' &&
     q3SearchTask.filetype === 'pdf';
+  const isQ4Correct = q4BooleanOp === 'minus_exclusion';
 
-  const correctCount = (isQ1Correct ? 1 : 0) + (isQ2Correct ? 1 : 0) + (isQ3Correct ? 1 : 0);
-  const totalQuestions = 3;
-  const pageScore = correctCount === 3 ? 15 : correctCount === 2 ? 10 : correctCount === 1 ? 5 : 0;
+  const correctCount =
+    (isQ1Correct ? 1 : 0) +
+    (isQ2Correct ? 1 : 0) +
+    (isQ3Correct ? 1 : 0) +
+    (isQ4Correct ? 1 : 0);
+  const totalQuestions = 4;
+  const pageScore = Math.round((correctCount / totalQuestions) * 15);
 
   const handleSelectQ1 = (val: string) => {
     if (q1Cooldown > 0) return;
@@ -120,6 +135,17 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
     }
   };
 
+  const handleSelectQ4 = (val: string) => {
+    if (q4Cooldown > 0) return;
+    setQ4BooleanOp(val);
+    if (val === 'minus_exclusion') {
+      sounds.playCorrect();
+    } else {
+      sounds.playWrong();
+      setQ4Cooldown(5);
+    }
+  };
+
   const handleProceed = () => {
     sounds.playVictory();
     onCompletePage(pageScore);
@@ -131,6 +157,7 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
     setQ2ExactSearch('');
     setQ3SearchTask({ operator: '', keyword: '', filetype: '' });
     setSimulatedResults(false);
+    setQ4BooleanOp('');
   };
 
   return (
@@ -625,6 +652,119 @@ export const I2Level1_SearchEngines: React.FC<I2Level1_SearchEnginesProps> = ({
               isQ3Correct
                 ? 'Excellent! You combined the Romanian educational domain filter with the exact topic and safe PDF file format.'
                 : 'Double-check requirements: the Solar System presentation must reside on .edu.ro in .pdf format.'
+            }
+          />
+        )}
+      </div>
+
+      {/* Task 4: Operatori Booleeni & Excludere (Manual pag. 37-38) */}
+      <div className="bg-slate-900/90 border border-slate-700 rounded-2xl p-5 shadow-xl">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+            <span className="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center text-xs font-mono font-black">
+              4
+            </span>
+            {lang === 'en'
+              ? 'Boolean Logic & Exclusion: How to search for planet Mercury without chemistry results?'
+              : 'Operatori Booleeni & Excludere: Cum cauți planeta Mercur fără rezultate despre chimie?'}
+          </h3>
+          <span className="text-xs font-mono text-indigo-400 bg-indigo-950/60 px-2.5 py-1 rounded-md border border-indigo-500/30">
+            5 {lang === 'en' ? 'pts' : 'pct'}
+          </span>
+        </div>
+
+        <p className="text-xs text-slate-300 mb-3 leading-relaxed">
+          {lang === 'en'
+            ? 'According to the textbook (p. 37), the minus sign "-" attached to a word acts as a NOT operator, excluding unwanted connotations (e.g., jaguar -masina).'
+            : 'Conform manualului (pag. 37), semnul minus „-” lipit direct de cuvânt funcționează ca un operator de negație (NOT), eliminând rezultatele nedorite (ex: jaguar -masina):'}
+        </p>
+
+        {q4Cooldown > 0 && (
+          <div className="mb-3">
+            <PedagogicalReflectionBanner
+              cooldown={q4Cooldown}
+              customMessageRo="Răspuns greșit! Pentru a exclude un termen nedorit, manualul recomandă semnul minus (-) lipit de cuvânt: Mercur -chimie. Analizează câteva secunde."
+              customMessageEn="Incorrect! To exclude an unwanted term, the textbook specifies the minus sign (-) attached to the word: Mercur -chimie."
+            />
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button
+            type="button"
+            disabled={q4Cooldown > 0}
+            onClick={() => handleSelectQ4('minus_exclusion')}
+            className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer ${
+              q4BooleanOp === 'minus_exclusion'
+                ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
+                : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
+            } ${q4Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
+          >
+            <div className="font-bold text-slate-100 font-mono text-sm mb-1">
+              Mercur -chimie
+            </div>
+            <div className="text-[11px] text-slate-400">
+              {lang === 'en' ? 'Excludes chemistry pages (NOT operator)' : 'Exclude paginile despre chimie (Operatorul de excludere)'}
+            </div>
+          </button>
+
+          <button
+            type="button"
+            disabled={q4Cooldown > 0}
+            onClick={() => handleSelectQ4('plus_inclusion')}
+            className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer ${
+              q4BooleanOp === 'plus_inclusion'
+                ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
+                : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
+            } ${q4Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
+          >
+            <div className="font-bold text-slate-100 font-mono text-sm mb-1">
+              Mercur + chimie
+            </div>
+            <div className="text-[11px] text-slate-400">
+              {lang === 'en' ? 'Forces both terms to appear (AND operator)' : 'Forțează ambele noțiuni (Operator logic AND)'}
+            </div>
+          </button>
+
+          <button
+            type="button"
+            disabled={q4Cooldown > 0}
+            onClick={() => handleSelectQ4('or_alternative')}
+            className={`p-3.5 rounded-xl border text-left text-xs transition cursor-pointer ${
+              q4BooleanOp === 'or_alternative'
+                ? 'bg-indigo-950/80 border-indigo-500 text-white shadow-md ring-1 ring-indigo-500/40'
+                : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-800'
+            } ${q4Cooldown > 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
+          >
+            <div className="font-bold text-slate-100 font-mono text-sm mb-1">
+              Mercur OR chimie
+            </div>
+            <div className="text-[11px] text-slate-400">
+              {lang === 'en' ? 'Returns either term (OR operator)' : 'Afișează oricare dintre termeni (Operator logic OR)'}
+            </div>
+          </button>
+        </div>
+
+        <QuestionHint
+          id="q4-boolean-hints"
+          hintRo="Semnul minus pus fără spațiu înaintea unui cuvânt (ex: -chimie) îi transmite motorului de căutare să sară peste orice pagină ce conține acel cuvânt (Manual pag. 37)."
+          hintEn="The minus sign attached with no space to a keyword (e.g. -chemistry) tells the engine to drop any pages containing that word."
+        />
+
+        {q4BooleanOp && (
+          <AnswerExplanation
+            isCorrect={isQ4Correct}
+            explanationRo={
+              isQ4Correct
+                ? 'Excelent! Semnul minus (-) elimină din căutare toate paginile despre elementul chimic mercur sau termometre, returnând exclusiv articole despre planeta Mercur din Sistemul Solar (Manual pag. 37).'
+                : q4BooleanOp === 'plus_inclusion'
+                ? 'Incorect! Operatorul «+» aduce obligatoriu și pagini despre chimie, exact ceea ce doream să evităm.'
+                : 'Incorect! Operatorul «OR» returnează pagini care conțin fie Mercur, fie chimie, aducând și mai multe rezultate nedorite.'
+            }
+            explanationEn={
+              isQ4Correct
+                ? 'Spot on! The minus sign (-) drops all pages concerning the chemical element, delivering only articles about the planet Mercury.'
+                : 'Incorrect! The plus operator or OR operator includes or expands chemistry results instead of filtering them out.'
             }
           />
         )}
