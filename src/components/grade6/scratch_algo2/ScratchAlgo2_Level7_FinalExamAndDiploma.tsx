@@ -13,7 +13,8 @@ import {
   Star,
   Award,
   Layers,
-  GraduationCap
+  GraduationCap,
+  Download
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../../context/LanguageContext';
@@ -100,6 +101,34 @@ export const ScratchAlgo2_Level7_FinalExamAndDiploma: React.FC<Level7Props> = ({
   const printDiploma = () => {
     sounds.playClick();
     window.print();
+  };
+
+  const handleDownloadDiplomaJson = () => {
+    sounds.playRetro('powerup');
+    const diplomaData = {
+      projectType: 'Grade6_Graduation_Diploma',
+      level: 'Clasa a VI-a • Marea Evaluare Finală & Absolvire Gimnazială',
+      studentName,
+      issuedDate: currentDate,
+      score: earnedScore,
+      gradeDetails,
+      disciplinesMastered: [
+        'Prezentări Electronice PowerPoint (Format 16:9, Regula 6x6)',
+        'Modelare & Editare 3D în Paint 3D (Forme tridimensionale, Iluminare & Texturi)',
+        'Animație Cinematografică & VR (Arc Narativ 3 Acte, CoSpaces Edu 360°)',
+        'Securitate Cibernetică & Protecție Malware (Firewall, Antivirus, Phishing)',
+        'Algoritmi & Programare Scratch Clasa a VI-a (Structuri Repetitive, Fractali, Variabile)'
+      ],
+      curriculumReference: 'OMEN nr. 3393/2017',
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(diplomaData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Diploma_Onoare_Absolvire_TIC_${studentName.replace(/\s+/g, '_')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const currentDate = new Date().toLocaleDateString('ro-RO', {
@@ -358,6 +387,15 @@ export const ScratchAlgo2_Level7_FinalExamAndDiploma: React.FC<Level7Props> = ({
       {showPreviewDiploma && (
         <div className="animate-fadeIn space-y-4 pt-4">
           <div className="flex justify-end gap-2 print:hidden">
+            <button
+              type="button"
+              onClick={handleDownloadDiplomaJson}
+              className="py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-bold text-xs flex items-center gap-2 shadow-lg cursor-pointer transition active:scale-95"
+            >
+              <Download className="w-4 h-4" />
+              <span>{isEn ? 'Export Diploma (.json)' : 'Exportă Diploma (.json)'}</span>
+            </button>
+
             <button
               type="button"
               onClick={printDiploma}
