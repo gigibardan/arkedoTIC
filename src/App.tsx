@@ -2399,13 +2399,14 @@ function GameContent() {
         </div>
       )}
 
-      {/* Rich Footer with legal, contact, and Powered by Gigi */}
       <Footer
         onOpenLegal={openLegalModal}
         onNavigateToCatalog={() => setView('catalog')}
         onNavigateToArcade={() => setView('arcade')}
         onNavigateToDuel={() => setView('duel')}
+        onNavigateToCity={() => setView('city')}
         onNavigateToTeacher={() => setView('teacher')}
+        onNavigateToSuperAdmin={() => setView('superadmin')}
       />
 
       {/* Legal & About Modal with Netlify Contact form */}
