@@ -636,7 +636,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   return (
     <div className="flex flex-col gap-8 pb-10">
       {/* Hero Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-teal-950/60 border border-teal-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl">
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-teal-950/60 border border-teal-500/30 rounded-2xl sm:rounded-3xl p-3.5 sm:p-10 shadow-2xl">
         {/* Background ambient lighting */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
         <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
@@ -683,43 +683,45 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
 
             {/* Student Digital ID Pass / Registration Card */}
-            <div className="bg-slate-900/95 backdrop-blur border-2 border-teal-500/40 rounded-3xl p-4 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
+            <div className="bg-slate-900/95 backdrop-blur border-2 border-teal-500/40 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
               {/* Subtle tech background glow */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
-              {/* Pass Top Bar: Title UNUL SUB ALTUL + Status Badge (NO wrapping) */}
-              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5 mb-4">
-                {/* Vertically stacked title */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 shadow-sm">
-                    <BadgeCheck className="w-5 h-5 text-teal-400" />
+              {/* Pass Top Bar: Single Row on mobile + desktop */}
+              <div className="relative z-10 flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5 sm:pb-3.5 mb-3 sm:mb-4">
+                {/* Title and Badge Icon */}
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 shadow-sm">
+                    <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" />
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-xs sm:text-sm font-black tracking-wider text-teal-300 uppercase font-heading leading-tight">
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-xs sm:text-sm font-black tracking-wider text-teal-300 uppercase font-heading leading-tight truncate">
                       {lang === 'en' ? 'Student Access Pass' : 'Legitimație Elev'}
                     </span>
-                    <span className="text-[11px] font-mono font-medium text-slate-400">
+                    <span className="text-[10px] sm:text-[11px] font-mono font-medium text-slate-400 truncate">
                       {lang === 'en' ? 'Computer Lab Station' : 'Laborator TIC'}
                     </span>
                   </div>
                 </div>
 
                 {/* Right side: Status Badge & Exit button */}
-                <div className="flex items-center gap-2 self-start sm:self-auto">
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                   {activeAccount ? (
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-500/40 shadow-sm">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                      <span>{lang === 'en' ? 'CLOUD ACTIVE' : 'CONT ACTIVAT (CLOUD)'}</span>
+                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-emerald-300 bg-emerald-950/80 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-emerald-500/40 shadow-sm">
+                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                      <span className="hidden xs:inline">{lang === 'en' ? 'CLOUD ACTIVE' : 'CONT CLOUD'}</span>
+                      <span className="xs:hidden">CLOUD</span>
                     </div>
                   ) : studentName ? (
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-300 bg-amber-950/80 px-3 py-1 rounded-full border border-amber-500/40 shadow-sm">
-                      <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                      <span>{lang === 'en' ? 'GUEST (LOCAL)' : 'MOD VIZITATOR (LOCAL)'}</span>
+                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-amber-300 bg-amber-950/80 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-amber-500/40 shadow-sm">
+                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400"></span>
+                      <span className="hidden xs:inline">{lang === 'en' ? 'GUEST (LOCAL)' : 'VIZITATOR'}</span>
+                      <span className="xs:hidden">LOCAL</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-400 bg-slate-950/90 px-3 py-1 rounded-full border border-slate-700/80 shadow-sm">
-                      <span className="w-2 h-2 rounded-full bg-slate-500"></span>
-                      <span>{lang === 'en' ? 'NOT LOGGED IN' : 'NECONFIRMAT'}</span>
+                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-slate-400 bg-slate-950/90 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-slate-700/80 shadow-sm">
+                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-500"></span>
+                      <span>{lang === 'en' ? 'OFFLINE' : 'NECONECTAT'}</span>
                     </div>
                   )}
 
@@ -727,11 +729,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     <button
                       onClick={handleLogout}
                       type="button"
-                      className="flex items-center gap-1 text-[11px] font-mono font-bold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900/90 px-2.5 py-1 rounded-full border border-rose-500/40 transition cursor-pointer shadow-sm"
+                      className="flex items-center gap-1 text-[10px] sm:text-[11px] font-mono font-bold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900/90 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-rose-500/40 transition cursor-pointer shadow-sm"
                       title={lang === 'en' ? 'Sign out' : 'Deconectează contul'}
                     >
                       <LogOut className="w-3 h-3" />
-                      <span>{lang === 'en' ? 'Exit' : 'Ieșire'}</span>
+                      <span className="hidden xs:inline">{lang === 'en' ? 'Exit' : 'Ieșire'}</span>
                     </button>
                   )}
                 </div>
@@ -986,10 +988,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 </div>
               ) : (
                 /* Choice Form: Autentificare / Cont Nou / Fără Cont */
-                <div className="relative z-10 flex flex-col gap-3.5">
-                  {/* The 3 Prominent Option Buttons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {/* Autentificare */}
+                <div className="relative z-10 flex flex-col gap-2.5 sm:gap-3.5">
+                  {/* The Option Buttons: Mobile: 2 buttons on top, 1 below (2 cu 1); Desktop: 3 in a row */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-1.5 bg-slate-950/90 rounded-2xl border border-slate-800/90 shadow-inner">
+                    {/* 1. Autentificare */}
                     <button
                       type="button"
                       onClick={() => {
@@ -998,26 +1000,19 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         setRegisterError('');
                         sounds.playClick();
                       }}
-                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+                      className={`py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer min-h-[44px] ${
                         passMode === 'login'
-                          ? 'bg-gradient-to-b from-teal-500 to-teal-600 text-white border-teal-300 shadow-lg shadow-teal-500/30 scale-[1.02]'
-                          : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-800 hover:border-teal-500/50'
+                          ? 'bg-gradient-to-r sm:bg-gradient-to-b from-teal-500 to-teal-600 text-slate-950 font-black border border-teal-300 shadow-md shadow-teal-500/30'
+                          : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800/80'
                       }`}
                     >
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-1 ${
-                        passMode === 'login' ? 'bg-white/20 text-white' : 'bg-teal-500/15 text-teal-400'
-                      }`}>
-                        <LogIn className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-black uppercase tracking-wide">
+                      <LogIn className={`w-4 h-4 shrink-0 ${passMode === 'login' ? 'text-slate-950' : 'text-teal-400'}`} />
+                      <span className="text-xs sm:text-sm font-black uppercase tracking-wide whitespace-nowrap">
                         {lang === 'en' ? 'Sign In' : 'Autentificare'}
-                      </span>
-                      <span className={`text-[10px] mt-0.5 ${passMode === 'login' ? 'text-teal-100 font-medium' : 'text-slate-400'}`}>
-                        {lang === 'en' ? 'I have an account' : 'Am deja cont'}
                       </span>
                     </button>
 
-                    {/* Cont Nou */}
+                    {/* 2. Cont Nou */}
                     <button
                       type="button"
                       onClick={() => {
@@ -1026,26 +1021,19 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         setRegisterError('');
                         sounds.playClick();
                       }}
-                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+                      className={`py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer min-h-[44px] ${
                         passMode === 'register'
-                          ? 'bg-gradient-to-b from-amber-500 to-amber-600 text-slate-950 border-amber-300 shadow-lg shadow-amber-500/30 scale-[1.02]'
-                          : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-800 hover:border-amber-500/50'
+                          ? 'bg-gradient-to-r sm:bg-gradient-to-b from-amber-500 to-amber-600 text-slate-950 font-black border border-amber-300 shadow-md shadow-amber-500/30'
+                          : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800/80'
                       }`}
                     >
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-1 ${
-                        passMode === 'register' ? 'bg-black/15 text-slate-950' : 'bg-amber-500/15 text-amber-400'
-                      }`}>
-                        <KeyRound className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-black uppercase tracking-wide">
-                        {lang === 'en' ? 'New Account' : 'Cont Nou'}
-                      </span>
-                      <span className={`text-[10px] mt-0.5 ${passMode === 'register' ? 'text-amber-950 font-bold' : 'text-slate-400'}`}>
-                        {lang === 'en' ? 'Save scores in cloud' : 'Salvare punctaj cloud'}
+                      <KeyRound className={`w-4 h-4 shrink-0 ${passMode === 'register' ? 'text-slate-950' : 'text-amber-400'}`} />
+                      <span className="text-xs sm:text-sm font-black uppercase tracking-wide whitespace-nowrap">
+                        {lang === 'en' ? 'New Pass' : 'Cont Nou'}
                       </span>
                     </button>
 
-                    {/* Fără Cont */}
+                    {/* 3. Fără Cont (Row 2 on mobile: col-span-2, 1 col on desktop: sm:col-span-1) */}
                     <button
                       type="button"
                       onClick={() => {
@@ -1054,37 +1042,57 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         setRegisterError('');
                         sounds.playClick();
                       }}
-                      className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center cursor-pointer ${
+                      className={`col-span-2 sm:col-span-1 py-1.5 sm:py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer min-h-[38px] sm:min-h-[44px] ${
                         passMode === 'guest'
-                          ? 'bg-slate-800 text-white border-slate-500 shadow-md scale-[1.02]'
-                          : 'bg-slate-950/80 hover:bg-slate-800 text-slate-400 border-slate-800 hover:border-slate-600'
+                          ? 'bg-slate-800 text-white font-bold border border-slate-500 shadow-sm'
+                          : 'bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800/70'
                       }`}
                     >
-                      <div className="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center mb-1 text-slate-300">
-                        <User className="w-4 h-4" />
-                      </div>
-                      <span className="text-xs font-black uppercase tracking-wide">
-                        {lang === 'en' ? 'No Account' : 'Fără Cont'}
-                      </span>
-                      <span className="text-[10px] text-slate-400 mt-0.5">
-                        {lang === 'en' ? 'Temporary guest' : 'Mod Vizitator local'}
+                      <User className={`w-3.5 h-3.5 shrink-0 ${passMode === 'guest' ? 'text-white' : 'text-slate-400'}`} />
+                      <span className="text-xs font-bold whitespace-nowrap">
+                        {lang === 'en' ? 'Guest Mode (No Account)' : 'Fără Cont (Mod Vizitator)'}
                       </span>
                     </button>
                   </div>
 
+                  {/* Contextual Single-Line Helper Banner */}
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/70 border border-slate-800/90 text-[11px] sm:text-xs text-slate-300">
+                    {passMode === 'login' && (
+                      <>
+                        <Info className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                        <span className="truncate">
+                          {lang === 'en'
+                            ? 'Sign in to sync your score and arcade games on any PC!'
+                            : 'Autentifică-te pentru a sincroniza punctajul pe orice calculator!'}
+                        </span>
+                      </>
+                    )}
+                    {passMode === 'register' && (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span className="truncate">
+                          {lang === 'en'
+                            ? 'Free student pass: choose avatar, username & password!'
+                            : 'Cont gratuit: alege avatar, nume și o parolă simplă!'}
+                        </span>
+                      </>
+                    )}
+                    {passMode === 'guest' && (
+                      <>
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span className="truncate">
+                          {lang === 'en'
+                            ? 'Guest mode: scores are saved only temporarily on this PC.'
+                            : 'Vizitator: punctajul este salvat temporar doar pe acest calculator.'}
+                        </span>
+                      </>
+                    )}
+                  </div>
+
                   {/* MODE 1: LOGIN FORM */}
                   {passMode === 'login' && (
-                    <form onSubmit={handleInCardLogin} className="flex flex-col gap-3 p-3.5 bg-slate-950/60 rounded-2xl border border-teal-500/20">
-                      <div className="flex items-start gap-2 text-xs text-teal-200/90 mb-1">
-                        <Info className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
-                        <span>
-                          {lang === 'en'
-                            ? 'Your score is saved only if you sign in with your account. Recommended: Sign in or create an account.'
-                            : 'Punctajul va fi salvat doar dacă te autentifici cu contul tău. Recomandare: autentificare sau cont nou.'}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <form onSubmit={handleInCardLogin} className="flex flex-col gap-2.5 p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-teal-500/25">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <User className="w-4 h-4" />
@@ -1133,7 +1141,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between gap-3 pt-1">
+                      <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
                         <button
                           type="button"
                           onClick={() => {
@@ -1141,17 +1149,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             setLoginError('');
                             sounds.playClick();
                           }}
-                          className="text-xs text-teal-400 hover:text-teal-300 underline underline-offset-2 cursor-pointer"
+                          className="text-xs text-center sm:text-left text-teal-400 hover:text-teal-300 underline underline-offset-2 cursor-pointer py-1"
                         >
                           {lang === 'en' ? "Don't have an account? Create one!" : 'Nu ai cont? Creează cont nou!'}
                         </button>
                         <button
                           type="submit"
                           disabled={loginLoading}
-                          className="px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-1.5 shadow-md shadow-teal-500/30 cursor-pointer disabled:opacity-50"
+                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-teal-500/30 cursor-pointer disabled:opacity-50"
                         >
                           <LogIn className="w-4 h-4" />
-                          <span>{loginLoading ? (lang === 'en' ? 'Connecting...' : 'Se conectează...') : (lang === 'en' ? 'Sign In to Station' : 'Conectează-te la Calculator')}</span>
+                          <span>{loginLoading ? (lang === 'en' ? 'Connecting...' : 'Se conectează...') : (lang === 'en' ? 'Sign In' : 'Conectare la Calculator')}</span>
                         </button>
                       </div>
                     </form>
@@ -1159,31 +1167,22 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
                   {/* MODE 2: REGISTER FORM WITH DUPLICATE USERNAME CHECK */}
                   {passMode === 'register' && (
-                    <form onSubmit={handleInCardRegister} className="flex flex-col gap-3 p-3.5 bg-slate-950/60 rounded-2xl border border-amber-500/20">
-                      <div className="flex items-start gap-2 text-xs text-amber-200/90 mb-1">
-                        <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                        <span>
-                          {lang === 'en'
-                            ? 'Create your free account. Your scores at all 16 arcade games and lesson progress follow you on any PC in the lab!'
-                            : 'Creează contul tău: punctajele la cele 16 jocuri și progresul la lecții se salvează automat și te urmează pe orice calculator din laborator!'}
-                        </span>
-                      </div>
-
+                    <form onSubmit={handleInCardRegister} className="flex flex-col gap-2.5 p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-amber-500/25">
                       {/* 1. Choose Avatar */}
                       <div>
-                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
                           {lang === 'en' ? '1. Choose your explorer avatar:' : '1. Alege avatarul tău de explorator:'}
                         </p>
-                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                           {AVATARS.map((av) => (
                             <button
                               key={av.emoji}
                               type="button"
                               onClick={() => handleSelectAvatar(av.emoji)}
-                              className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg transition cursor-pointer shrink-0 ${
+                              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-base sm:text-lg transition cursor-pointer shrink-0 ${
                                 selectedAvatar === av.emoji
                                   ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 scale-110 shadow-md font-bold'
-                                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                                  : 'bg-slate-850 hover:bg-slate-700 text-slate-300 border border-slate-700'
                               }`}
                               title={lang === 'en' ? av.labelEn : av.labelRo}
                             >
@@ -1195,10 +1194,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
                       {/* 2. Choose Username & Password */}
                       <div>
-                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
                           {lang === 'en' ? '2. Username and simple password:' : '2. Nume de elev și parolă simplă:'}
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                           <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                               <User className="w-4 h-4" />
@@ -1248,7 +1247,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between gap-3 pt-1">
+                      <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
                         <button
                           type="button"
                           onClick={() => {
@@ -1256,17 +1255,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             setRegisterError('');
                             sounds.playClick();
                           }}
-                          className="text-xs text-amber-400 hover:text-amber-300 underline underline-offset-2 cursor-pointer"
+                          className="text-xs text-center sm:text-left text-amber-400 hover:text-amber-300 underline underline-offset-2 cursor-pointer py-1"
                         >
                           {lang === 'en' ? 'Already have an account? Sign in!' : 'Ai deja cont? Autentifică-te!'}
                         </button>
                         <button
                           type="submit"
                           disabled={registerLoading}
-                          className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer disabled:opacity-50"
+                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer disabled:opacity-50"
                         >
                           <KeyRound className="w-4 h-4" />
-                          <span>{registerLoading ? (lang === 'en' ? 'Creating...' : 'Se creează...') : (lang === 'en' ? 'Create My Account' : 'Creează Contul Meu')}</span>
+                          <span>{registerLoading ? (lang === 'en' ? 'Creating...' : 'Se creează...') : (lang === 'en' ? 'Create Account' : 'Creează Contul')}</span>
                         </button>
                       </div>
                     </form>
@@ -1274,35 +1273,22 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
                   {/* MODE 3: GUEST FORM (FĂRĂ CONT) */}
                   {passMode === 'guest' && (
-                    <form onSubmit={handleInCardGuestSubmit} className="flex flex-col gap-3 p-3.5 bg-slate-950/60 rounded-2xl border border-slate-700/50">
-                      {/* Notice as requested: punctajul va fi salvat doar daca te autentifici cu contul tau. recomandare autentificare */}
-                      <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/40 flex items-start gap-2.5 text-xs text-amber-200/90">
-                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                        <div>
-                          <span className="font-bold text-amber-300">
-                            {lang === 'en' ? 'Guest Mode Notice:' : 'Atenție Mod Vizitator:'}
-                          </span>{' '}
-                          {lang === 'en'
-                            ? 'Your score is only saved temporarily on this PC. For permanent saving and classroom ranking, signing in with an account is recommended!'
-                            : 'Punctajul va fi salvat doar dacă te autentifici cu contul tău! În modul vizitator, progresul este temporar doar pe acest calculator.'}
-                        </div>
-                      </div>
-
+                    <form onSubmit={handleInCardGuestSubmit} className="flex flex-col gap-2.5 p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-slate-700/50">
                       {/* 1. Choose Avatar */}
                       <div>
-                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
                           {lang === 'en' ? '1. Choose your explorer avatar:' : '1. Alege avatarul tău de explorator:'}
                         </p>
-                        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                           {AVATARS.map((av) => (
                             <button
                               key={av.emoji}
                               type="button"
                               onClick={() => handleSelectAvatar(av.emoji)}
-                              className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg transition cursor-pointer shrink-0 ${
+                              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-base sm:text-lg transition cursor-pointer shrink-0 ${
                                 selectedAvatar === av.emoji
                                   ? 'bg-teal-500 text-white ring-2 ring-teal-300 scale-110 shadow-md font-bold'
-                                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+                                  : 'bg-slate-850 hover:bg-slate-700 text-slate-300 border border-slate-700'
                               }`}
                               title={lang === 'en' ? av.labelEn : av.labelRo}
                             >
@@ -1314,7 +1300,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
                       {/* 2. Guest Name Input */}
                       <div>
-                        <p className="text-xs font-semibold text-slate-300 mb-1.5">
+                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
                           {lang === 'en' ? '2. Enter your temporary student name:' : '2. Introdu numele tău temporar de elev:'}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-2">
@@ -1338,7 +1324,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                           </div>
                           <button
                             type="submit"
-                            className="px-5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow shrink-0 cursor-pointer"
+                            className="w-full sm:w-auto px-5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow shrink-0 cursor-pointer"
                           >
                             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                             <span>{lang === 'en' ? 'Confirm (Guest)' : 'Confirmă Numele (Vizitator)'}</span>
