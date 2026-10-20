@@ -345,6 +345,25 @@ export const Footer: React.FC<FooterProps> = ({
               Termeni
             </button>
             <span className="text-slate-700">•</span>
+            <a
+              href="/llms.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-emerald-400 transition-colors font-mono text-[11px]"
+              title="Context structurat pentru LLM & Agenți AI (llmstxt.org)"
+            >
+              llms.txt (AI)
+            </a>
+            <span className="text-slate-700">•</span>
+            <a
+              href="/sitemap.xml"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-slate-300 transition-colors text-[11px]"
+            >
+              Sitemap
+            </a>
+            <span className="text-slate-700">•</span>
             <button
               onClick={() => {
                 sounds.playClick();

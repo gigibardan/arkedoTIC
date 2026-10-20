@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import { getFirestore, type Firestore } from 'firebase/firestore';
+import { initializeFirestore, getFirestore, setLogLevel, type Firestore } from 'firebase/firestore';
 import { getAuth, type Auth } from 'firebase/auth';
 import rawConfig from '../../firebase-applet-config.json';
 
@@ -28,7 +28,26 @@ let authInstance: Auth | null = null;
 try {
   if (apiKey && projectId) {
     app = !getApps().length ? initializeApp(resolvedConfig) : getApp();
-    firestoreDb = firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app);
+
+    // Folosim experimentalForceLongPolling pentru a asigura conexiunea stabilă în iframes,
+    // medii de cloud preview și rețele școlare/proxy fără erori WebChannel de streaming.
+    try {
+      setLogLevel('error');
+    } catch {
+      // Ignoră dacă log level nu poate fi setat
+    }
+
+    try {
+      firestoreDb = firestoreDatabaseId
+        ? initializeFirestore(app, { experimentalForceLongPolling: true }, firestoreDatabaseId)
+        : initializeFirestore(app, { experimentalForceLongPolling: true });
+    } catch {
+      // Fallback în cazul în care instanța a fost deja inițializată anterior
+      firestoreDb = firestoreDatabaseId
+        ? getFirestore(app, firestoreDatabaseId)
+        : getFirestore(app);
+    }
+
     authInstance = getAuth(app);
   } else {
     console.info(

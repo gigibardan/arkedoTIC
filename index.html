@@ -23,15 +23,29 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <link rel="alternate icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="keywords" content="TIC gimnaziu, informatica clasa 5, informatica clasa 6, jocuri educative TIC, hardware calculatoare, sisteme de operare, securitate internet, scratch algoritmi, dueluri TIC 1v1, catalog profesori TIC, ArkyEdu" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="keywords" content="TIC gimnaziu, informatica clasa 5, informatica clasa 6, jocuri educative TIC, hardware calculatoare, sisteme de operare, securitate internet, scratch algoritmi, dueluri TIC 1v1, catalog profesori TIC, ArkyEdu, Cyber Snake" />
     <meta property="og:title" content="ArkyEdu: Platformă Interactivă TIC & Coding 🚀" />
-    <meta property="og:description" content="Platformă educativă și interactivă de TIC pentru elevii de gimnaziu (clasele V - VIII): Sisteme de calcul & Hardware, Organizarea fișierelor & SO, Internet & Securitate Web, Arcade Retro și Dueluri 1v1 în timp real." />
+    <meta property="og:description" content="Platformă educativă și interactivă de TIC pentru elevii de gimnaziu (clasele V - VIII): Sisteme de calcul & Hardware, Organizarea fișierelor & SO, Internet & Securitate Web, 20 de Jocuri Arcade și Dueluri 1v1 în timp real." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ArkyEdu TIC & Arcade" />
     <meta property="og:locale" content="ro_RO" />
+    <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png" />
+    <meta property="og:image:secure_url" content="https://www.arkyedu.com/pwa-512x512.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="ArkyEdu TIC & Coding Platformă Gimnaziu" />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ArkyEdu: Platformă Interactivă TIC & Coding 🚀" />
     <meta name="twitter:description" content="Platformă educativă și interactivă de TIC pentru elevii de gimnaziu: Sisteme de calcul, SO, Securitate Web, Algoritmi, Scratch și Arcade Retro." />
+    <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png" />
+
+    <!-- AI & LLM Discovery Links -->
+    <link rel="help" type="text/markdown" href="/llms.txt" title="LLM Context for AI Agents" />
+    <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="Full LLM Documentation" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
@@ -39,7 +53,7 @@
     <link rel="canonical" href="https://www.arkyedu.com/" />
     <meta property="og:url" content="https://www.arkyedu.com/" />
     
-    <!-- Schema.org JSON-LD Structured Data -->
+    <!-- Schema.org JSON-LD Structured Data with Rich AI Grounding -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,7 +62,7 @@
           "@type": "WebApplication",
           "@id": "https://www.arkyedu.com/#webapp",
           "name": "ArkyEdu TIC & Coding Platform",
-          "alternateName": "ARKEDO",
+          "alternateName": ["ARKEDO", "ArkyEdu"],
           "applicationCategory": "EducationalApplication",
           "operatingSystem": "All",
           "inLanguage": ["ro", "en"],
@@ -59,22 +73,35 @@
             "priceCurrency": "RON"
           },
           "featureList": [
-            "14 module interactive curriculare TIC aliniate manualului școlar",
-            "19 mini-jocuri arcade retro pentru fixarea noțiunilor",
+            "12 ghiduri curriculare statice complete indexabile de motoare de căutare",
+            "20 de mini-jocuri arcade retro pentru fixarea noțiunilor (Cyber Snake, Hacker vs Defender, Redstone Logic, Voxel Architect)",
             "Sistem de dueluri multiplayer 1v1 în timp real",
             "Catalog digital și notare automată pentru profesori (Gradebook)",
             "Panou de superadministrare multi-școală și izolare date",
-            "Ghiduri curriculare și fișe didactice conforme OMEN 3393/2017"
+            "Conformitate OMEN 3393/2017 și standardele europene DigComp"
           ]
         },
         {
+          "@type": "EducationalOrganization",
+          "@id": "https://www.arkyedu.com/#organization",
+          "name": "ArkyEdu",
+          "url": "https://www.arkyedu.com/",
+          "logo": "https://www.arkyedu.com/pwa-512x512.png",
+          "description": "Platformă educațională gratuită pentru predarea disciplinei TIC în învățământul gimnazial.",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "contact@arkyedu.com",
+            "contactType": "educational support",
+            "availableLanguage": ["Romanian", "English"]
+          }
+        },
+        {
           "@type": "Course",
+          "@id": "https://www.arkyedu.com/#course",
           "name": "Tehnologia Informației și a Comunicațiilor - Gimnaziu",
           "description": "Curs interactiv TIC acoperind arhitectura calculatorului, sisteme de operare, securitate cibernetică, birotică, algoritmi și programare Scratch.",
           "provider": {
-            "@type": "Organization",
-            "name": "ArkyEdu",
-            "sameAs": "https://www.arkyedu.com"
+            "@id": "https://www.arkyedu.com/#organization"
           },
           "educationalLevel": "Gimnaziu (Clasele V-VIII)"
         }

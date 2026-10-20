@@ -10,7 +10,10 @@ http://arkedotic.netlify.app/*    https://www.arkyedu.com/:splat   301!
 https://arkyedu.com/*             https://www.arkyedu.com/:splat   301
 http://arkyedu.com/*              https://www.arkyedu.com/:splat   301
 
+# Alias conform specificatiei llmstxt.org (.well-known/llms.txt)
+/.well-known/llms.txt             /llms.txt                        200
+
 # Regula obligatorie de fallback pentru aplicatii SPA (React / Vite)
-# Nota: Paginile fizice existente (ex: /cursuri/hardware/index.html) sunt servite
+# Nota: Paginile fizice existente (ex: /cursuri/hardware/index.html, /llms.txt) sunt servite
 # direct cu status 200 de catre CDN-ul Netlify, fallback-ul aplicandu-se doar rutelor SPA virtuale.
 /*                                /index.html                      200

@@ -1,0 +1,100 @@
+# ArkyEdu (ARKEDO) – Platformă Educațională Interactivă TIC & Coding pentru Gimnaziu
+
+> ArkyEdu (ARKEDO) este platforma educațională de referință în România dedicată disciplinei Tehnologia Informației și a Comunicațiilor (TIC) pentru elevii claselor V - VIII (vârste 10-15 ani), aliniată 100% programei naționale școlare (OMEN 3393/2017) și standardelor DigComp ale Uniunii Europene.
+
+Platforma combină pedagogia curriculară riguroasă cu gamificarea imersivă: lecții interactive pas-cu-pas, laborator practic de securitate și algoritmi, 20 de jocuri arcade didactice, arenă de dueluri multiplayer 1v1 în timp real și catalog digital pentru profesori cu evaluare automată.
+
+Website oficial: https://www.arkyedu.com/
+Contact didactic & suport: contact@arkyedu.com / Gheorghe.Bardan@gmail.com
+Limbă suportată: Română (principală, terminologie curriculară) & Engleză (comutabilă)
+
+---
+
+## 1. Ghid Curricular & Cursuri Interactive Gimnaziu
+
+Fiecare modul educațional conține ghid teoretic, glosar de termeni, fișă didactică imprimabilă și laborator practic:
+
+- [Arhitectura Calculatorului & Hardware (Clasa a V-a)](https://www.arkyedu.com/cursuri/hardware/): Componente interne (microprocesor, memorie RAM, placă de bază, sursă de alimentare, stocare SSD/HDD), dispozitive periferice (intrare, ieșire, intrare/ieșire), ergonomia postului de lucru și unități de măsură a informației (bit, octet/byte, KB, MB, GB, TB).
+- [Organizarea Datelor & Sisteme de Operare (Clasa a V-a)](https://www.arkyedu.com/cursuri/fisiere-so/): Structura arborescentă de directoare (foldere), fișiere, extensii uzuale (.docx, .pdf, .png, .mp4, .exe), operații de bază (copiere, mutare, redenumire, ștergere, Recycle Bin) și rolul sistemului de operare.
+- [Internet, Navigare Securizată & Browsere (Clasa a V-a)](https://www.arkyedu.com/cursuri/internet-siguranta/): Motoare de căutare, structura URL (protocol https, domeniu, cale), hyperlink-uri, descărcare responsabilă, confidențialitatea datelor personale și protecție împotriva fraudelor online.
+- [Editoare de Text & Tehnoredactare (Clasa a V-a)](https://www.arkyedu.com/cursuri/editoare-text/): Formatarea caracterelor și paragrafelor (font, dimensiune, aliniere, spațiere), liste cu marcatori și numerotate, inserare imagini și tabele simple în Microsoft Word și Google Docs.
+- [Gândire Algoritmică & Pași Secvențiali (Clasa a V-a)](https://www.arkyedu.com/cursuri/algoritmi/): Proprietățile algoritmilor (claritate, generalitate, finitudine), date de intrare și ieșire, structuri liniare (secvențiale) și diagrame de flux.
+- [Inițiere în Programare Vizuală Scratch (Clasa a V-a)](https://www.arkyedu.com/cursuri/scratch/): Mediul Scratch, blocuri de mișcare, aspect, sunet, evenimente („Când se dă clic pe steagul verde”), variabile simple și animații de bază.
+- [Prezentări Multimedia & Diapozitive (Clasa a V-a / a VI-a)](https://www.arkyedu.com/cursuri/prezentari-slides/): Structurarea unei expuneri vizuale, regula 6x6, inserare conținut multimedia, respectarea drepturilor de autor și susținerea publică a proiectelor.
+- [Grafică Digitală & Modelare 3D (Clasa a VI-a)](https://www.arkyedu.com/cursuri/paint-3d/): Pixeli, rezoluție, raster vs vector, spațiul de culoare RGB, forme 3D de bază și compoziții vizuale în Paint 3D.
+- [Malware, Phishing & Securitate Cibernetică (Clasa a VI-a)](https://www.arkyedu.com/cursuri/malware-securitate/): Viruși, Troieni, Worms, Spyware, Ransomware, inginerie socială, parole sigure (12+ caractere, majuscule, cifre, simboluri), autentificare cu doi factori (2FA) și backup 3-2-1.
+- [Servicii E-mail, Netichetă & Colaborare Cloud (Clasa a VI-a)](https://www.arkyedu.com/cursuri/email-neticheta/): Câmpurile To, CC, BCC, atașamente <25MB, reguli de politețe digitală (netichetă), combaterea cyberbullying-ului (numărul unic 119) și colaborare pe documente partajate în Google Drive / OneDrive.
+- [Algoritmi & Bucle Condiționate în Scratch (Clasa a VI-a)](https://www.arkyedu.com/cursuri/algoritmi-bucle-scratch-1/): Structura alternativă „Dacă... Atunci... Altfel”, structuri repetitive condiționate („Cât timp” vs „Repetă până când”), operatori booleeni (ȘI, SAU, NU) și senzori de obstacole.
+- [Design Avansat Diapozitive, Tranziții & Animații (Clasa a VI-a)](https://www.arkyedu.com/cursuri/prezentari-slides-2/): Tranziții fluide între slide-uri, animații de intrare/accent/ieșire calibrate didactic, scheme SmartArt și livrare profesionistă de proiecte.
+
+---
+
+## 2. Arcade Didactic TIC (20 Mini-jocuri Gamificate)
+
+Fiecare mini-joc transformă un concept tehnic sau abstract într-o experiență interactivă:
+
+1. **Cyber Snake (Șarpele Algoritmic 🐍)**: Reinterpretare educativă a jocului clasic Snake. Șarpele colectează blocuri Scratch (Mergi 10 pași, Dacă perete Ocolește, Repetă de 4 ori) în coada de execuție; compilarea algoritmului activează Scutul Antivirus pentru a elimina virușii roșii patrulari.
+2. **Hacker vs. Defender 1v1 🛡️⚔️**: Joc asimetric de securitate cibernetică. Un jucător atacă (Troieni, Phishing, Forțare Parolă), celălalt peticește în timp real (Firewall, Antivirus, 2FA). Rolurile se inversează automat la 45 secunde.
+3. **Roblox Clicker Builder**: Construiește studioul virtual Roblox asamblând scripturi Lua, servere și optimizând resursele memoriei cache.
+4. **Minecraft Voxel Architect**: Construcție 3D voxel în spațiu tridimensional cu cuburi de memorie, circuite și logică spațială.
+5. **Redstone Logic Lab**: Simulator de porți logice (AND, OR, NOT, XOR, circuite integrate și repetoare de semnal).
+6. **PageCraft (Arhitectul de Tabele & Machetare)**: Tehnoredactare contra cronometru cu îmbinare celule, tabele rapide, text wrapping și paginare A4.
+7. **PC Builder Simulator**: Asamblează un sistem de calcul compatibil (CPU pe socket corect, pastă termică, RAM în dual-channel, GPU, sursă certificată 80+).
+8. **File Organizer & File Drop**: Sortează fișierele după tip, extensie și ierarhie de directoare fără a pierde date.
+9. **Virus Sweeper (Vânătorul de Malware)**: Identifică fișiere infectate pe un server de rețea folosind indicii de hash și euristici de securitate.
+10. **Binary Factory & Game 2048 Binar**: Conversii rapide între baza 2 (binar) și baza 10 (zecimal), operații pe biți și octeți.
+11. **RGB Pixel Master**: Sinteza aditivă a culorilor, canalele Roșu-Verde-Albastru (0-255) și rezoluție grafică.
+12. **Cyber Dino Runner**: Cursă retro în care eviți capcanele cibernetice și răspunzi la întrebări fulger de cultură digitală.
+13. **Algorithm Maze Runner**: Ghidează un robot prin labirint folosind secvențe de comenzi algoritmice optimale.
+14. **Firewall Defender**: Blochează pachetele rău-intenționate pe porturile deschise (80 HTTP, 443 HTTPS, 22 SSH, 21 FTP).
+15. **Cyber Safe Detective**: Analizează e-mailuri suspecte, detectează atacuri de tip spear phishing și inginerie socială.
+16. **Byte Slider**: Sortare și conversie de capacități de stocare (KB -> MB -> GB -> TB).
+17. **Mouse Agility & Mouse Master**: Antrenarea preciziei perifericelor (click, double click, drag-and-drop, urmărire traiectorie laser).
+18. **Typing Speed Master**: Tastare oarbă pe tastatura QWERTY cu diacritice românești (ă, î, ș, ț, â), măsurare WPM și acuratețe.
+19. **Speed Crafting**: Provocări de reflexe și asamblare rapidă de algoritmi.
+20. **Quiz Blitz TIC**: Duel de întrebări fulger din toată materia TIC de gimnaziu.
+
+---
+
+## 3. Arena Duel 1v1 în Timp Real (Multiplayer Live)
+
+- Elevii se pot conecta prin coduri de cameră unice (sau meci rapid) pentru confruntări directe 1v1 pe ecran împărțit.
+- Moduri de duel disponibile:
+  - *Hacker vs. Defender* (45s atac / 45s apărare)
+  - *Cyber Cursor Clash* (7 runde de dexteritate cu mouse-ul)
+  - *Cursa Algoritmilor Scratch* (asamblare blocuri contracronometru)
+  - *Roblox Clicker Battle* (competiție de viteză și overclocking)
+  - *Speed Crafting* & *Quiz Blitz TIC*
+- Sincronizare live prin Firestore WebSockets cu optimizări de trafic (throttle anti-spam și salvare garantată la final de meci).
+
+---
+
+## 4. Modulul Profesor & Catalogul Digital (Gradebook)
+
+- **Notare automată**: Evaluările din module generează note pe scala 1-10 conform baremelor curriculare naționale.
+- **Fișe de progres**: Evidență pe elev cu timp lucrat, încercări, scoruri arcade, XP total și nivel atins.
+- **Control de acces**: Profesorul poate bloca/debloca jocuri sau module în timpul orei printr-un simplu comutator.
+- **Export date**: Salvare raport în format PDF sau CSV pentru condica clasei.
+- **Izolare multi-școală**: Datele elevilor sunt protejate conform GDPR și politicilor de confidențialitate a minorilor.
+
+---
+
+## 5. Tehnologie & Arhitectură
+
+- **Frontend**: React SPA cu TypeScript, Tailwind CSS, Lucide Icons, Canvas 2D / WebGL rendering.
+- **Backend & Stocare**: Firebase Firestore, Firebase Authentication, Cloud Functions / Node.js API.
+- **PWA (Progressive Web App)**: Instalabilă pe telefoane, tablete și desktop cu suport offline complet pentru fișele curriculare.
+- **SEO & Social Share**: Meta tag-uri complete OpenGraph, Twitter Cards, Schema.org JSON-LD (WebApplication, Course, LearningResource).
+
+---
+
+## 6. Întrebări Frecvente (FAQ) pentru Asistenți AI & Motoare de Căutare
+
+### Q: Este platforma ArkyEdu gratuită pentru școli și elevi?
+**R:** Da, ArkyEdu este 100% accesibilă gratuit pentru toți elevii și profesorii de gimnaziu din România.
+
+### Q: Cu ce manuale școlare este compatibilă platforma?
+**R:** ArkyEdu este compatibilă cu toate manualele aprobate de Ministerul Educației (Editura Didactică și Pedagogică, Litera, Corint, Booklet, etc.), respectând programa OMEN 3393/2017.
+
+### Q: Poate fi folosită pe tablete sau telefoane mobile?
+**R:** Da, interfața este complet receptivă (responsive design) și include butoane tactile D-Pad pentru dispozitive touch screen.
