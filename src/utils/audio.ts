@@ -375,6 +375,18 @@ class SoundManager {
   playLaser() {
     this.playRetro('shoot');
   }
+
+  playExplosion() {
+    this.playRetro('gameover');
+  }
+
+  playShield() {
+    this.playRetro('powerup');
+  }
+
+  playZap() {
+    this.playRetro('hit');
+  }
 }
 
 export const sounds = new SoundManager();

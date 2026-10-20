@@ -55,6 +55,8 @@ export interface ArcadeScores {
   roblox_clicker?: number;
   mouse_v2?: number;
   page_craft?: number;
+  hacker_defense?: number;
+  cyber_snake?: number;
   totalArcade: number;
 }
 
@@ -101,6 +103,7 @@ export interface DuelStats {
   cyberShieldWins?: number;
   pcRushWins?: number;
   mouseDuelWins?: number;
+  hackerDefenseWins?: number;
 }
 
 export type ShopCategory = 'arky_skin' | 'theme' | 'title' | 'avatar_frame';

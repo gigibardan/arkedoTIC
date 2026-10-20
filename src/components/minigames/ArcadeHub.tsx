@@ -20,6 +20,8 @@ import { RedstoneLogicLab } from './RedstoneLogicLab';
 import { MinecraftVoxelArchitect } from './MinecraftVoxelArchitect';
 import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
 import { PageCraftArcadeGame } from './PageCraftArcadeGame';
+import { HackerDefenderDuelGame } from './HackerDefenderDuelGame';
+import { CyberSnakeGame } from './CyberSnakeGame';
 import { GameLockedModal } from '../common/GameLockedModal';
 import {
   subscribeGameSettings,
@@ -66,7 +68,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -259,6 +261,22 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const hackerDefenseHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_duel_hacker_defense') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
+  const cyberSnakeHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_snake') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -323,6 +341,27 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           customMessage={gameSettings.customMessage}
         />
       </div>
+    );
+  }
+
+  if (activeGame === 'cyber_snake') {
+    return (
+      <CyberSnakeGame
+        studentName={studentName || 'Programator TIC'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
+
+  if (activeGame === 'hacker_defense') {
+    return (
+      <HackerDefenderDuelGame
+        studentName={studentName || 'Agent Securitate'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+        onBackToLobby={() => setActiveGame('hub')}
+      />
     );
   }
 
@@ -1459,6 +1498,108 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               'Start Layout',
               'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-600/30',
               'arcade-btn-start-page-craft'
+            )}
+          </div>
+        </div>
+
+        {/* Game 19: Hacker vs. Defender (Atac & Peticire 1v1) */}
+        <div className={`bg-gradient-to-b from-slate-900 via-rose-950/25 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'hacker_defense') ? 'border-rose-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20 shrink-0">
+                🛡️
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('hacker_defense')}
+                {renderScoreBadges('hacker_defense', hackerDefenseHighScore, 'XP')}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-rose-500/15 text-rose-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Cybersecurity 1v1' : 'Securitate Cibernetică 1v1'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+                ⚔️ Inversare Roluri 45s
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Hacker vs. Defender (Attack & Patch)' : 'Hacker vs. Defender (Atac & Peticire 1v1)'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Tactical 1v1 cyber battle: The Attacker launches disguised Trojans, phishing emails, and brute-force sprays; the Defender patches live using Firewall, Antivirus, and 2FA. At 45 seconds, roles reverse automatically!'
+                : 'Bătălie tactică 1 la 1: Atacatorul lansează valuri de Troieni mascați, e-mailuri de phishing și forțare brută; Apărătorul peticește în timp real cu Firewall, Antivirus și 2FA. După 45 secunde, rolurile se inversează automat!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-emerald-400 font-mono">🛡️ 2 Runde x 45s + Salvare DB sigură</span>
+            {renderGameActionButton(
+              'hacker_defense',
+              'Hacker vs. Defender (Atac & Peticire 1v1)',
+              'Hacker vs Defender (Attack & Patch 1v1)',
+              'Luptă Cibernetică',
+              'Start Cyber Duel',
+              'bg-gradient-to-r from-rose-600 via-purple-600 to-emerald-600 hover:from-rose-500 hover:to-emerald-500 shadow-rose-600/30',
+              'arcade-btn-start-hacker-defense'
+            )}
+          </div>
+        </div>
+
+        {/* Game 20: Cyber Snake / Șarpele Algoritmic 🐍 (Gândire Algoritmică & Scratch) */}
+        <div className={`bg-gradient-to-b from-slate-900 via-emerald-950/25 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_snake') ? 'border-emerald-500/60 hover:border-cyan-400' : 'border-emerald-500/40 opacity-95'
+        }`}>
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20 shrink-0">
+                🐍
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_snake')}
+                {renderScoreBadges('cyber_snake', cyberSnakeHighScore, 'XP')}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Algorithmic Thinking & Scratch' : 'Gândire Algoritmică & Scratch'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
+                🧩 Blocuri Scratch + Scut
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Cyber Snake: Algorithmic Serpent' : 'Cyber Snake: Șarpele Algoritmic'}</span>
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Classic Snake reimagined: collect Scratch code blocks (Move 10 steps, If wall Turn, Repeat 4x) into an active execution queue. Compiling scripts unleashes an invulnerability shield to eat and purge patrolling red malware bugs!'
+                : 'Jocul clasic Snake reimaginat: colectează blocuri reale de cod Scratch (Mergi 10 pași, Dacă perete Ocolește, Repetă de 4 ori) în coada de execuție. Compilarea algoritmilor declanșează scuturi de protecție pentru a nimici virușii roșii ce patrulează pe matrice!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri + Coadă Script</span>
+            {renderGameActionButton(
+              'cyber_snake',
+              'Cyber Snake: Șarpele Algoritmic 🐍',
+              'Cyber Snake: Algorithmic Serpent 🐍',
+              'Start Algoritm',
+              'Launch Cyber Snake',
+              'bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 shadow-emerald-600/30',
+              'arcade-btn-start-cyber-snake'
             )}
           </div>
         </div>

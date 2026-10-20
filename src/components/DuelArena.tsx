@@ -55,6 +55,7 @@ import { BlockCodingDuelGame } from './minigames/BlockCodingDuelGame';
 import { SpeedCraftingDuelGame } from './minigames/SpeedCraftingDuelGame';
 import { RobloxClickerDuelGame } from './minigames/RobloxClickerDuelGame';
 import { MouseMasterDuelGame } from './minigames/MouseMasterDuelGame';
+import { HackerDefenderDuelGame } from './minigames/HackerDefenderDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -704,6 +705,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🔧 Hardware PC Rush (Asamblare)';
       case 'mouse_duel':
         return '🎯 Cyber Cursor Clash (Duelul Maeștrilor Mouse-ului 1v1)';
+      case 'hacker_defense':
+        return '🛡️⚔️ Hacker vs Defender (Atac & Peticire 1v1)';
       default:
         return '⚔️ Duel 1v1 TIC';
     }
@@ -959,6 +962,33 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
                     7 runde de precizie extremă (Ținte, 2x Click, Urmărire Circuit Laser, Drag & Drop, Scut Deflector, Bouncing Bugs, Overclock Burst). Progres sincronizat în DB la 15, 30, 45, 60, 75, 90, 95, 100%!
+                  </p>
+                </button>
+
+                {/* Mode 6: Hacker vs Defender (Atac & Peticire 1v1 - Securitate Cibernetică) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('hacker_defense')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'hacker_defense'
+                      ? 'bg-gradient-to-br from-rose-950/90 via-slate-900 to-emerald-950/80 border-rose-400 ring-2 ring-rose-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center text-base shadow-md shadow-rose-500/30">
+                      🛡️
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Hacker vs Defender ⚔️</span>
+                        <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-rose-300 font-medium">Atac & Peticire 1v1 (Inversare la 45s)</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Un jucător lansează valuri de Troieni, Phishing și forțare parolă; celălalt activează Firewall, Antivirus sau 2FA. După 45 secunde, rolurile se inversează automat!
                   </p>
                 </button>
               </div>
@@ -1309,6 +1339,29 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 }
               }}
               onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE: HACKER VS DEFENDER (ATAC & PETICIRE 1v1) */}
+          {currentRoom.mode === 'hacker_defense' && (
+            <HackerDefenderDuelGame
+              room={currentRoom}
+              currentPlayer={me || currentRoom.host}
+              opponent={opponent}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinishMatch={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(200, 'Victorie Hacker vs Defender 1v1');
+                }
+              }}
+              onBackToLobby={() => {
                 if (currentRoom?.roomCode) {
                   leaveDuelRoom(currentRoom.roomCode, isHost);
                 }

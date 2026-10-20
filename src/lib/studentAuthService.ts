@@ -69,6 +69,8 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   roblox_clicker: 0,
   mouse_v2: 0,
   page_craft: 0,
+  hacker_defense: 0,
+  cyber_snake: 0,
   totalArcade: 0
 };
 
@@ -161,6 +163,12 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
   // Maestrul Mouse-ului 2.0 (Cyber Clicker & Agility Lab): capped at fair 1,200 XP
   const mouseV2Points = Math.min(1200, scores.mouse_v2 || 0);
 
+  // PageCraft Document & Layout Architect: capped at 2,000 XP
+  const pageCraftPoints = Math.min(2000, scores.page_craft || 0);
+
+  // Hacker vs Defender Cybersecurity Duel: capped at 2,000 XP
+  const hackerDefensePoints = Math.min(2000, scores.hacker_defense || 0);
+
   return (
     typingPoints +
     mousePoints +
@@ -179,7 +187,9 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     cyberDinoPoints +
     redstonePoints +
     voxelPoints +
-    robloxPoints
+    robloxPoints +
+    pageCraftPoints +
+    hackerDefensePoints
   );
 }
 
