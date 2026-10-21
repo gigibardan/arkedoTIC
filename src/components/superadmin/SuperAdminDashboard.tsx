@@ -29,7 +29,8 @@ import {
   UserCheck,
   UserX,
   Sliders,
-  Database
+  Database,
+  Mail
 } from 'lucide-react';
 import { 
   School, 
@@ -60,7 +61,11 @@ import {
   getAllActiveDuelRooms,
   forceCloseDuelRoom,
   ActiveDuelRoom,
-  PRIMARY_SUPERADMIN_EMAIL
+  PRIMARY_SUPERADMIN_EMAIL,
+  getAllContactMessages,
+  markContactMessageStatus,
+  deleteContactMessage,
+  ContactMessage
 } from '../../lib/superadminService';
 import { 
   getAllStudents, 
@@ -95,7 +100,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   const [authError, setAuthError] = useState<string | null>(null);
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<'overview' | 'schools' | 'teachers' | 'students' | 'scores' | 'submissions' | 'duels' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'schools' | 'teachers' | 'students' | 'scores' | 'submissions' | 'duels' | 'messages' | 'settings'>('overview');
 
   // Data states
   const [schools, setSchools] = useState<School[]>([]);
@@ -103,6 +108,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   const [students, setStudents] = useState<StudentProfile[]>([]);
   const [submissions, setSubmissions] = useState<StudentResult[]>([]);
   const [duelRooms, setDuelRooms] = useState<ActiveDuelRoom[]>([]);
+  const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [loadingData, setLoadingData] = useState<boolean>(false);
   const [actionSuccessMsg, setActionSuccessMsg] = useState<string | null>(null);
 
@@ -110,6 +116,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   const [searchStudentQuery, setSearchStudentQuery] = useState<string>('');
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
   const [searchSubmissionQuery, setSearchSubmissionQuery] = useState<string>('');
+  const [searchMessageQuery, setSearchMessageQuery] = useState<string>('');
 
   // Selected Student for Score Editing
   const [selectedStudentForScores, setSelectedStudentForScores] = useState<StudentProfile | null>(null);
@@ -141,18 +148,20 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   const loadAllDashboardData = async () => {
     setLoadingData(true);
     try {
-      const [schoolsData, teachersData, studentsData, subsData, duelsData] = await Promise.all([
+      const [schoolsData, teachersData, studentsData, subsData, duelsData, msgsData] = await Promise.all([
         getAllSchools(),
         getAllTeachers(),
         getAllStudents(),
         getStudentResults(),
-        getAllActiveDuelRooms()
+        getAllActiveDuelRooms(),
+        getAllContactMessages()
       ]);
       setSchools(schoolsData);
       setTeachers(teachersData);
       setStudents(studentsData);
       setSubmissions(subsData);
       setDuelRooms(duelsData);
+      setContactMessages(msgsData);
     } catch (err) {
       console.warn('Error fetching superadmin data:', err);
     } finally {
@@ -518,6 +527,40 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     return matchesSearch && matchesSchool;
   });
 
+  // Filtered contact messages
+  const filteredMessages = contactMessages.filter(msg => {
+    const q = searchMessageQuery.toLowerCase();
+    return (
+      (msg.name || '').toLowerCase().includes(q) ||
+      (msg.email || '').toLowerCase().includes(q) ||
+      (msg.subject || '').toLowerCase().includes(q) ||
+      (msg.message || '').toLowerCase().includes(q)
+    );
+  });
+
+  const handleUpdateMessageStatus = async (msgId: string, status: 'unread' | 'read' | 'replied') => {
+    try {
+      await markContactMessageStatus(msgId, status);
+      setContactMessages(prev => prev.map(m => m.id === msgId ? { ...m, status } : m));
+      showNotification(`Stare mesaj actualizată (${status}).`);
+      sounds.playClick();
+    } catch (e) {
+      console.warn('Error updating message status:', e);
+    }
+  };
+
+  const handleDeleteMessage = async (msgId: string) => {
+    if (!window.confirm('Ești sigur că vrei să ștergi acest mesaj?')) return;
+    try {
+      await deleteContactMessage(msgId);
+      setContactMessages(prev => prev.filter(m => m.id !== msgId));
+      showNotification('Mesajul a fost șters.');
+      sounds.playClick();
+    } catch (e) {
+      console.warn('Error deleting message:', e);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* TOP HEADER */}
@@ -676,6 +719,28 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
             }`}
           >
             <Swords className="w-4 h-4 flex-shrink-0" /> Dueluri Live ({duelRooms.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('messages')}
+            className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
+              activeTab === 'messages'
+                ? 'bg-amber-500 text-slate-950 shadow-sm font-bold'
+                : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Mail className="w-4 h-4 flex-shrink-0" /> Mesaje Contact
+            </div>
+            {contactMessages.filter(m => m.status === 'unread').length > 0 ? (
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                activeTab === 'messages' ? 'bg-slate-950 text-amber-400' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+              }`}>
+                {contactMessages.filter(m => m.status === 'unread').length} noi
+              </span>
+            ) : (
+              <span className="text-[11px] opacity-70">({contactMessages.length})</span>
+            )}
           </button>
 
           <button
@@ -1333,6 +1398,138 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* TAB: CONTACT MESSAGES */}
+          {activeTab === 'messages' && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Mail className="w-5 h-5 text-amber-400" />
+                    Mesaje Primite din Formularul de Contact ({contactMessages.length})
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Toate mesajele transmise de vizitatori, elevi, profesori și părinți (notificate la contact@arkyedu.com și gheorghe.bardan@gmail.com).
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+                    <input
+                      type="text"
+                      placeholder="Caută după nume, email, text..."
+                      value={searchMessageQuery}
+                      onChange={(e) => setSearchMessageQuery(e.target.value)}
+                      className="pl-9 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-60"
+                    />
+                  </div>
+                  <button
+                    onClick={loadAllDashboardData}
+                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer"
+                    title="Reîncarcă mesajele"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${loadingData ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+              </div>
+
+              {filteredMessages.length === 0 ? (
+                <div className="p-12 text-center bg-slate-900/50 border border-slate-800 rounded-2xl space-y-3">
+                  <Mail className="w-10 h-10 text-slate-600 mx-auto" />
+                  <p className="text-sm font-semibold text-slate-400">
+                    {searchMessageQuery ? 'Niciun mesaj nu corespunde căutării.' : 'Nu există încă mesaje de contact primite.'}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    Când un utilizator completează formularul de contact, mesajul va apărea automat aici și va fi expediat pe email.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3.5">
+                  {filteredMessages.map((msg) => {
+                    const isUnread = msg.status === 'unread';
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+                          isUnread
+                            ? 'bg-slate-900/90 border-amber-500/50 shadow-md shadow-amber-500/5'
+                            : 'bg-slate-900/40 border-slate-800/80'
+                        }`}
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                          <div className="flex items-center gap-2.5 flex-wrap">
+                            <span className="font-bold text-sm text-white">
+                              {msg.name}
+                            </span>
+                            {msg.email && (
+                              <a
+                                href={`mailto:${msg.email}?subject=Re:%20${encodeURIComponent(msg.subject || 'Mesaj ArkyEdu')}`}
+                                className="text-xs font-mono text-teal-400 hover:underline"
+                              >
+                                {msg.email}
+                              </a>
+                            )}
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-semibold uppercase">
+                              {msg.role || 'vizitator'}
+                            </span>
+                            {isUnread && (
+                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                                NOU
+                              </span>
+                            )}
+                          </div>
+
+                          <span className="text-[11px] text-slate-400 font-mono">
+                            {new Date(msg.createdAt).toLocaleString('ro-RO')}
+                          </span>
+                        </div>
+
+                        <div className="py-3 space-y-1.5">
+                          <h4 className="text-xs font-bold text-amber-300">
+                            Subiect: {msg.subject}
+                          </h4>
+                          <p className="text-xs sm:text-sm text-slate-200 whitespace-pre-wrap leading-relaxed bg-slate-950/40 p-3 rounded-xl border border-slate-800/60 font-sans">
+                            {msg.message}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 gap-2 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            {msg.email && (
+                              <a
+                                href={`mailto:${msg.email}?subject=Re:%20${encodeURIComponent(msg.subject || 'Mesaj ArkyEdu')}`}
+                                onClick={() => handleUpdateMessageStatus(msg.id, 'replied')}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition"
+                              >
+                                <Mail className="w-3.5 h-3.5" />
+                                Răspunde pe Email
+                              </a>
+                            )}
+                            <button
+                              onClick={() => handleUpdateMessageStatus(msg.id, isUnread ? 'read' : 'unread')}
+                              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition cursor-pointer"
+                            >
+                              {isUnread ? 'Marchează Citit' : 'Marchează Necitit'}
+                            </button>
+                          </div>
+
+                          <button
+                            onClick={() => handleDeleteMessage(msg.id)}
+                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition text-xs flex items-center gap-1 cursor-pointer"
+                            title="Șterge mesaj"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>Șterge</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 

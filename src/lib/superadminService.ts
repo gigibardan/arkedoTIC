@@ -621,3 +621,92 @@ export async function forceCloseDuelRoom(roomId: string): Promise<boolean> {
     return false;
   }
 }
+
+/* ==========================================================
+   CONTACT MESSAGES MANAGEMENT
+   ========================================================== */
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  subject: string;
+  message: string;
+  createdAt: string;
+  status: 'unread' | 'read' | 'replied';
+}
+
+export async function getAllContactMessages(): Promise<ContactMessage[]> {
+  const localList: ContactMessage[] = (() => {
+    try {
+      const raw = localStorage.getItem('arkyedu_local_contact_messages');
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  })();
+
+  if (!db || !isCloudConnected) return localList;
+  try {
+    const snap = await getDocs(query(collection(db, 'contact_messages'), orderBy('createdAt', 'desc')));
+    const messages: ContactMessage[] = [];
+    snap.forEach((d) => {
+      const data = d.data();
+      messages.push({
+        id: d.id,
+        name: data.name || 'Anonim',
+        email: data.email || '',
+        role: data.role || 'vizitator',
+        subject: data.subject || 'Fără subiect',
+        message: data.message || '',
+        createdAt: data.createdAt || new Date().toISOString(),
+        status: data.status || 'unread',
+      });
+    });
+    return messages.length > 0 ? messages : localList;
+  } catch (e) {
+    console.warn('[Superadmin] Error getting contact messages:', e);
+    return localList;
+  }
+}
+
+export async function markContactMessageStatus(messageId: string, status: 'unread' | 'read' | 'replied'): Promise<boolean> {
+  try {
+    const raw = localStorage.getItem('arkyedu_local_contact_messages');
+    if (raw) {
+      const list: ContactMessage[] = JSON.parse(raw);
+      const updated = list.map(m => m.id === messageId ? { ...m, status } : m);
+      localStorage.setItem('arkyedu_local_contact_messages', JSON.stringify(updated));
+    }
+  } catch {}
+
+  if (!db || !isCloudConnected) return true;
+  try {
+    await updateDoc(doc(db, 'contact_messages', messageId), { status });
+    return true;
+  } catch (e) {
+    console.warn('[Superadmin] Error updating message status:', e);
+    return false;
+  }
+}
+
+export async function deleteContactMessage(messageId: string): Promise<boolean> {
+  try {
+    const raw = localStorage.getItem('arkyedu_local_contact_messages');
+    if (raw) {
+      const list: ContactMessage[] = JSON.parse(raw);
+      const updated = list.filter(m => m.id !== messageId);
+      localStorage.setItem('arkyedu_local_contact_messages', JSON.stringify(updated));
+    }
+  } catch {}
+
+  if (!db || !isCloudConnected) return true;
+  try {
+    await deleteDoc(doc(db, 'contact_messages', messageId));
+    return true;
+  } catch (e) {
+    console.warn('[Superadmin] Error deleting contact message:', e);
+    return false;
+  }
+}
+

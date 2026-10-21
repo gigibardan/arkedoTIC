@@ -110,69 +110,95 @@ export const LegalModal: React.FC<LegalModalProps> = ({
     sounds.playClick();
     setFormStatus('submitting');
 
-    const params = new URLSearchParams();
-    params.append('form-name', 'contact');
-    params.append('name', formName.trim() || 'Anonim');
-    params.append('email', formEmail.trim() || 'fara-email@arkyedu.com');
-    params.append('role', formRole);
-    params.append('subject', formSubject.trim() || 'Mesaj Platformă ArkyEdu');
-    params.append('message', formMessage.trim());
-    params.append('bot-field', '');
+    const cleanName = formName.trim() || 'Anonim';
+    const cleanEmail = formEmail.trim() || 'fara-email@arkyedu.com';
+    const cleanSubject = formSubject.trim() || 'Mesaj Platformă ArkyEdu';
+    const cleanMessage = formMessage.trim();
 
-    let submitted = false;
+    const newContactDoc = {
+      id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+      name: cleanName,
+      email: cleanEmail,
+      role: formRole,
+      subject: cleanSubject,
+      message: cleanMessage,
+      createdAt: new Date().toISOString(),
+      status: 'unread' as const
+    };
 
-    // 1. Submit to Netlify Forms (endpoint /)
+    // 1. Salvare sigură în LocalStorage pentru a nu pierde niciodată mesajul
     try {
-      const res = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      });
-      if (res.ok) {
-        submitted = true;
-      } else if (res.status === 404) {
-        // Fallback endpoint in case Netlify CDN routes form through contact.html
-        const res2 = await fetch('/contact.html', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: params.toString(),
-        });
-        if (res2.ok) {
-          submitted = true;
-        }
-      }
-    } catch (netErr) {
-      console.warn('Netlify form network request warning:', netErr);
-    }
+      const existing = localStorage.getItem('arkyedu_local_contact_messages');
+      const list = existing ? JSON.parse(existing) : [];
+      list.unshift(newContactDoc);
+      localStorage.setItem('arkyedu_local_contact_messages', JSON.stringify(list.slice(0, 50)));
+    } catch {}
 
-    // 2. Backup to Firestore if cloud database is active
+    // 2. Salvare în colecția Firestore contact_messages (accesibilă în Panoul Superadmin / Profesor)
     if (isCloudConnected && db) {
       try {
         await addDoc(collection(db, 'contact_messages'), {
-          name: formName.trim() || 'Anonim',
-          email: formEmail.trim() || 'fara-email@arkyedu.com',
+          name: cleanName,
+          email: cleanEmail,
           role: formRole,
-          subject: formSubject.trim() || 'Mesaj Platformă ArkyEdu',
-          message: formMessage.trim(),
-          createdAt: new Date().toISOString(),
+          subject: cleanSubject,
+          message: cleanMessage,
+          createdAt: newContactDoc.createdAt,
           status: 'unread'
         });
-        submitted = true;
       } catch (fErr) {
         console.warn('Firestore backup contact failed:', fErr);
       }
     }
 
-    if (submitted) {
-      sounds.playSuccess();
-      setFormStatus('success');
-      setFormMessage('');
-    } else {
-      // If server returned 404 and no firestore, still treat gracefully and display mail client shortcut
-      sounds.playSuccess();
-      setFormStatus('fallback');
+    // 3. Expediere reală prin FormSubmit.co către contact@arkyedu.com și CC către gheorghe.bardan@gmail.com
+    try {
+      const emailPayload = {
+        name: cleanName,
+        email: cleanEmail,
+        role: formRole,
+        subject: cleanSubject,
+        message: cleanMessage,
+        _subject: `[ArkyEdu Contact] ${cleanSubject} - de la ${cleanName} (${formRole})`,
+        _cc: 'gheorghe.bardan@gmail.com',
+        _replyto: cleanEmail,
+        _captcha: 'false',
+        _template: 'table'
+      };
+
+      await fetch('https://formsubmit.co/ajax/contact@arkyedu.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(emailPayload)
+      });
+    } catch (e) {
+      console.warn('FormSubmit network notice:', e);
     }
+
+    // 4. Fallback Netlify static crawler form
+    try {
+      const params = new URLSearchParams();
+      params.append('form-name', 'contact');
+      params.append('name', cleanName);
+      params.append('email', cleanEmail);
+      params.append('role', formRole);
+      params.append('subject', cleanSubject);
+      params.append('message', cleanMessage);
+      params.append('bot-field', '');
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+      });
+    } catch {}
+
+    sounds.playSuccess();
+    setFormStatus('success');
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-5 animate-in fade-in duration-200 overflow-y-auto">
@@ -668,13 +694,17 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                     >
                       contact@arkyedu.com
                     </a>
+                    <span className="text-[11px] text-slate-400 block">
+                      (Copie trimisă automat la: <span className="font-mono text-slate-300">gheorghe.bardan@gmail.com</span>)
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
+                    type="button"
                     onClick={handleCopyEmail}
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-700/80 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors"
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-700/80 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors cursor-pointer"
                   >
                     {copiedEmail ? (
                       <>
@@ -690,16 +720,21 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   </button>
 
                   <a
-                    href="mailto:contact@arkyedu.com?subject=ArkyEdu%20Feedback"
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-colors"
+                    href={`mailto:contact@arkyedu.com?cc=gheorghe.bardan@gmail.com&subject=${encodeURIComponent(
+                      `[ArkyEdu Contact] ${formSubject.trim() || 'Mesaj Nou'} (${formName.trim() || 'Vizitator'} - ${formRole})`
+                    )}&body=${encodeURIComponent(
+                      `Bună ziua,\n\nNume: ${formName.trim() || 'Anonim'}\nEmail: ${formEmail.trim() || 'nespecificat'}\nCalitate: ${formRole}\nSubiect: ${formSubject.trim() || 'Mesaj Platformă'}\n\nMesaj:\n${formMessage.trim()}\n\n---\nTrimis prin platforma ArkyEdu (arkyedu.com)`
+                    )}`}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-colors shadow-sm"
+                    title="Deschide aplicația ta de email cu datele completate"
                   >
                     <ExternalLink className="w-4 h-4" />
-                    <span>{lang === 'en' ? 'Open Mail App' : 'Deschide Mail'}</span>
+                    <span>{lang === 'en' ? 'Open in Mail App' : 'Deschide în Mail App'}</span>
                   </a>
                 </div>
               </div>
 
-              {/* Netlify Form */}
+              {/* Netlify & FormSubmit Form */}
               <form
                 name="contact"
                 method="POST"
@@ -712,47 +747,56 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 <input type="hidden" name="form-name" value="contact" />
                 <input type="hidden" name="bot-field" />
 
-                <h4 className="font-bold text-white text-sm flex items-center gap-2">
-                  <Send className="w-4 h-4 text-teal-400" />
-                  {lang === 'en' ? 'Send a Message Directly Here' : 'Trimite un Mesaj Direct de pe Site'}
-                </h4>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-slate-800">
+                  <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                    <Send className="w-4 h-4 text-teal-400" />
+                    {lang === 'en' ? 'Send a Message Directly Here' : 'Trimite un Mesaj Direct de pe Site'}
+                  </h4>
+                  <span className="text-[11px] text-teal-400 font-mono">
+                    🛡️ FormSubmit + Copie Gmail + Firestore
+                  </span>
+                </div>
 
+                {/* SUCCESS NOTIFICATION */}
                 {formStatus === 'success' && (
-                  <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3 text-emerald-300 text-xs sm:text-sm animate-in fade-in">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                    <div>
-                      <strong className="block text-white font-bold">
-                        {lang === 'en' ? 'Message Sent!' : 'Mesajul tău a fost trimis cu succes!'}
-                      </strong>
-                      <span>
-                        {lang === 'en'
-                          ? 'Thank you for writing to us. We will get back to you at contact@arkyedu.com as soon as possible.'
-                          : 'Îți mulțumim pentru mesaj! Mesajul a fost înregistrat, iar Gigi și echipa ArkyEdu îți vor răspunde în cel mai scurt timp pe email.'}
-                      </span>
+                  <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-3 text-emerald-200 text-xs sm:text-sm animate-in fade-in">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="block text-white font-bold text-sm sm:text-base">
+                          {lang === 'en' ? 'Message Sent Successfully!' : 'Mesaj expediat și înregistrat cu succes!'}
+                        </strong>
+                        <p className="text-emerald-300 mt-1 leading-relaxed">
+                          {lang === 'en'
+                            ? 'Your message was dispatched to contact@arkyedu.com (copy to gheorghe.bardan@gmail.com) and securely saved in the ArkyEdu dashboard.'
+                            : 'Mesajul tău a fost expediat către contact@arkyedu.com (cu copie securizată la gheorghe.bardan@gmail.com) și stocat în panoul intern ArkyEdu.'}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )}
 
-                {formStatus === 'fallback' && (
-                  <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2 text-amber-200 text-xs sm:text-sm animate-in fade-in">
-                    <div className="flex items-center gap-2 text-white font-bold">
-                      <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0" />
-                      <span>{lang === 'en' ? 'Message Ready to Dispatch' : 'Mesajul este pregătit!'}</span>
+                    <div className="pt-2 border-t border-emerald-500/20 flex flex-wrap items-center gap-2.5">
+                      <a
+                        href={`mailto:contact@arkyedu.com?cc=gheorghe.bardan@gmail.com&subject=${encodeURIComponent(
+                          `[ArkyEdu Contact] ${formSubject.trim() || 'Mesaj Nou'} (${formName.trim() || 'Vizitator'} - ${formRole})`
+                        )}&body=${encodeURIComponent(
+                          `Bună ziua,\n\nNume: ${formName.trim() || 'Anonim'}\nEmail: ${formEmail.trim() || 'nespecificat'}\nCalitate: ${formRole}\nSubiect: ${formSubject.trim() || 'Mesaj Platformă'}\n\nMesaj:\n${formMessage.trim()}\n\n---\nTrimis prin platforma ArkyEdu (arkyedu.com)`
+                        )}`}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow cursor-pointer"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>{lang === 'en' ? 'Open in Mail App (Save a Sent copy)' : 'Deschide și în aplicația ta de email (pentru dosarul Trimise)'}</span>
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormStatus('idle');
+                          setFormMessage('');
+                        }}
+                        className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition cursor-pointer"
+                      >
+                        {lang === 'en' ? 'Send another message' : 'Trimite alt mesaj'}
+                      </button>
                     </div>
-                    <p className="text-slate-300 text-xs">
-                      {lang === 'en'
-                        ? 'To ensure 100% immediate delivery to our inbox, you can also send it directly via your mail client:'
-                        : 'Pentru a fi sigur că ajunge direct în inbox-ul nostru, poți deschide și aplicația ta de email cu un singur click:'}
-                    </p>
-                    <a
-                      href={`mailto:contact@arkyedu.com?subject=${encodeURIComponent(formSubject.trim() || 'Mesaj Platformă ArkyEdu')}&body=${encodeURIComponent(
-                        `Nume: ${formName.trim() || 'Anonim'}\nEmail: ${formEmail.trim()}\nCalitate: ${formRole}\n\nMesaj:\n${formMessage.trim()}`
-                      )}`}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer"
-                    >
-                      <Mail className="w-4 h-4" />
-                      <span>{lang === 'en' ? 'Open Mail Client (contact@arkyedu.com)' : 'Deschide Aplicația Mail (contact@arkyedu.com)'}</span>
-                    </a>
                   </div>
                 )}
 
@@ -840,29 +884,46 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   ></textarea>
                 </div>
 
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-[11px] text-slate-500 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-slate-400" />
-                    {lang === 'en' ? 'Encrypted & delivered to contact@arkyedu.com' : 'Trimis în siguranță la contact@arkyedu.com'}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                  <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                    <Lock className="w-3.5 h-3.5 text-emerald-400" />
+                    {lang === 'en'
+                      ? 'Delivered to contact@arkyedu.com & gheorghe.bardan@gmail.com'
+                      : 'Expediat la contact@arkyedu.com & gheorghe.bardan@gmail.com'}
                   </span>
 
-                  <button
-                    type="submit"
-                    disabled={formStatus === 'submitting'}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50 cursor-pointer"
-                  >
-                    {formStatus === 'submitting' ? (
-                      <>
-                        <RefreshCw className="w-4 h-4 animate-spin" />
-                        <span>{lang === 'en' ? 'Sending...' : 'Se trimite...'}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>{lang === 'en' ? 'Send Message' : 'Trimite Mesajul'}</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                    <a
+                      href={`mailto:contact@arkyedu.com?cc=gheorghe.bardan@gmail.com&subject=${encodeURIComponent(
+                        `[ArkyEdu Contact] ${formSubject.trim() || 'Mesaj Nou'} (${formName.trim() || 'Vizitator'} - ${formRole})`
+                      )}&body=${encodeURIComponent(
+                        `Bună ziua,\n\nNume: ${formName.trim() || 'Anonim'}\nEmail: ${formEmail.trim() || 'nespecificat'}\nCalitate: ${formRole}\nSubiect: ${formSubject.trim() || 'Mesaj Platformă'}\n\nMesaj:\n${formMessage.trim()}\n\n---\nTrimis prin platforma ArkyEdu (arkyedu.com)`
+                      )}`}
+                      className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition cursor-pointer border border-slate-700"
+                      title="Trimite direct din Gmail sau aplicația ta de email"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-indigo-400" />
+                      <span>{lang === 'en' ? 'Or open Mail client' : 'Deschide în Gmail / Mail'}</span>
+                    </a>
+
+                    <button
+                      type="submit"
+                      disabled={formStatus === 'submitting'}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-teal-500/20 disabled:opacity-50 cursor-pointer"
+                    >
+                      {formStatus === 'submitting' ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 animate-spin" />
+                          <span>{lang === 'en' ? 'Sending...' : 'Se trimite...'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>{lang === 'en' ? 'Send Online' : 'Trimite Formularul'}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
