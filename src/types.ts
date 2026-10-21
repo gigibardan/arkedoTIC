@@ -88,6 +88,18 @@ export interface LessonsProgress {
   cyber6b?: LessonMissionState;
   scratch6a?: LessonMissionState;
   scratch6b?: LessonMissionState;
+  g7_word_a?: LessonMissionState;
+  g7_word_b?: LessonMissionState;
+  g7_audio_a?: LessonMissionState;
+  g7_video_b?: LessonMissionState;
+  g7_cloud_a?: LessonMissionState;
+  g7_gis_b?: LessonMissionState;
+  g7_cpp_a?: LessonMissionState;
+  g7_cpp_b?: LessonMissionState;
+  g7_decision_a?: LessonMissionState;
+  g7_loop_b?: LessonMissionState;
+  g7_stem_a?: LessonMissionState;
+  g7_robot_b?: LessonMissionState;
   totalLessonScore: number;
 }
 
@@ -146,6 +158,7 @@ export type BuildingCategory =
   | 'energy'
   | 'education'
   | 'security'
+  | 'media'
   | 'infrastructure';
 
 export interface CityBuilding {
@@ -206,7 +219,7 @@ export interface StudentDiploma {
   courseId: string;
   titleRo: string;
   titleEn: string;
-  grade: 'Clasa a V-a' | 'Clasa a VI-a';
+  grade: 'Clasa a V-a' | 'Clasa a VI-a' | 'Clasa a VII-a';
   studentName: string;
   userEmail?: string;
   awardedAt: string; // ISO format
@@ -224,6 +237,7 @@ export interface StudentProfile {
   passwordHash: string;
   avatar: string;
   schoolId?: string;
+  classGrade?: string; // e.g. '5', '6', '7' or '7A'
   isSuspended?: boolean;
   arcadeScores: ArcadeScores;
   lessonsProgress: LessonsProgress;

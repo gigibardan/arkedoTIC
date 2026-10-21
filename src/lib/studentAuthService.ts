@@ -95,6 +95,18 @@ export const DEFAULT_LESSONS_PROGRESS: LessonsProgress = {
   cyber6b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   scratch6a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   scratch6b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_word_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_word_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_audio_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_video_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_cloud_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_gis_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_cpp_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_cpp_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_decision_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_loop_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_stem_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g7_robot_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   totalLessonScore: 0
 };
 
@@ -236,7 +248,19 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const cy6b = computeLessonXP(lessons.cyber6b || {});
   const sc6a = computeLessonXP(lessons.scratch6a || {});
   const sc6b = computeLessonXP(lessons.scratch6b || {});
-  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b;
+  const g7w1 = computeLessonXP(lessons.g7_word_a || {});
+  const g7w2 = computeLessonXP(lessons.g7_word_b || {});
+  const g7a1 = computeLessonXP(lessons.g7_audio_a || {});
+  const g7v2 = computeLessonXP(lessons.g7_video_b || {});
+  const g7c1 = computeLessonXP(lessons.g7_cloud_a || {});
+  const g7g2 = computeLessonXP(lessons.g7_gis_b || {});
+  const g7cp1 = computeLessonXP(lessons.g7_cpp_a || {});
+  const g7cp2 = computeLessonXP(lessons.g7_cpp_b || {});
+  const g7d1 = computeLessonXP(lessons.g7_decision_a || {});
+  const g7l2 = computeLessonXP(lessons.g7_loop_b || {});
+  const g7st1 = computeLessonXP(lessons.g7_stem_a || {});
+  const g7r2 = computeLessonXP(lessons.g7_robot_b || {});
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b + g7w1 + g7w2 + g7a1 + g7v2 + g7c1 + g7g2 + g7cp1 + g7cp2 + g7d1 + g7l2 + g7st1 + g7r2;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {

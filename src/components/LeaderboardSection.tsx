@@ -49,6 +49,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
   const [students, setStudents] = useState<StudentProfile[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('all');
+  const [selectedGradeFilter, setSelectedGradeFilter] = useState<string>('all');
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showAllRows, setShowAllRows] = useState<boolean>(false);
@@ -95,7 +96,23 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
   const filteredStudents = sortedStudents.filter((s) => {
     const matchesSearch = s.username.toLowerCase().includes(searchQuery.toLowerCase().trim());
     const matchesSchool = selectedSchoolFilter === 'all' || (s.schoolId || 'scoala_pilot_01') === selectedSchoolFilter;
-    return matchesSearch && matchesSchool;
+    
+    // Smart Grade Matching
+    const lp = s.lessonsProgress as any;
+    const hasG7 = lp && Object.keys(lp).some(k => k.startsWith('g7_') && lp[k]?.score > 0);
+    const hasG6 = lp && Object.keys(lp).some(k => (k.startsWith('g6') || k.includes('cyber6') || k.includes('model3d') || k.includes('presentation')) && lp[k]?.score > 0);
+    const hasG5 = lp && Object.keys(lp).some(k => ['hardware', 'files', 'internet1', 'internet2', 'text1', 'text2', 'algo1', 'algo2', 'scratch1', 'scratch2'].includes(k) && lp[k]?.score > 0);
+
+    let matchesGrade = true;
+    if (selectedGradeFilter === '7') {
+      matchesGrade = (s.classGrade?.includes('7')) || hasG7 || (!hasG5 && !hasG6 && !s.classGrade);
+    } else if (selectedGradeFilter === '6') {
+      matchesGrade = (s.classGrade?.includes('6')) || hasG6;
+    } else if (selectedGradeFilter === '5') {
+      matchesGrade = (s.classGrade?.includes('5')) || hasG5;
+    }
+
+    return matchesSearch && matchesSchool && matchesGrade;
   });
 
   const topThree = filteredStudents.slice(0, 3);
@@ -213,6 +230,24 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 <Swords className="w-3.5 h-3.5 text-amber-300" />
                 <span>{lang === 'en' ? 'Duels 1v1' : 'Dueluri 1v1'}</span>
               </button>
+            </div>
+
+            {/* Grade Filter */}
+            <div className="relative">
+              <select
+                value={selectedGradeFilter}
+                onChange={(e) => {
+                  setSelectedGradeFilter(e.target.value);
+                  sounds.playClick();
+                }}
+                className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                title={lang === 'en' ? 'Filter by Grade' : 'Filtrează după Clasă'}
+              >
+                <option value="all">🎒 {lang === 'en' ? 'All Grades' : 'Toate Clasele'}</option>
+                <option value="5">🏫 {lang === 'en' ? 'Grade 5' : 'Clasa a V-a'}</option>
+                <option value="6">🚀 {lang === 'en' ? 'Grade 6' : 'Clasa a VI-a'}</option>
+                <option value="7">🔬 {lang === 'en' ? 'Grade 7' : 'Clasa a VII-a'}</option>
+              </select>
             </div>
 
             <div className="relative">

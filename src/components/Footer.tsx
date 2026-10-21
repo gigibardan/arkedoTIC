@@ -77,12 +77,21 @@ export const Footer: React.FC<FooterProps> = ({
     { titleRo: 'Design Diapozitive & Animații', titleEn: 'Slide Transitions & Animations', url: '/cursuri/prezentari-slides-2/', icon: '🎬' },
   ];
 
+  const coursesGrade7 = [
+    { titleRo: 'Word & Tehnoredactare', titleEn: 'Word & Typography', url: '/cursuri/word-tehnoredactare-interfata/', icon: '📝' },
+    { titleRo: 'Tipografie & Machetare', titleEn: 'Page Layout & Typography', url: '/cursuri/machetare-pagina-tipografie/', icon: '📐' },
+    { titleRo: 'Studio Audio WavePad', titleEn: 'WavePad Audio Studio', url: '/cursuri/wavepad-editare-audio-digitala/', icon: '🎙️' },
+    { titleRo: 'Montaj Video VideoPad', titleEn: 'VideoPad Video Editing', url: '/cursuri/videopad-montaj-video-multitrack/', icon: '🎬' },
+    { titleRo: 'Cloud Docs & GIS Satelitar', titleEn: 'Cloud Docs & GIS Maps', url: '/cursuri/sisteme-informationale-geografice-gis/', icon: '🗺️' },
+    { titleRo: 'Programare C++ & Roboți', titleEn: 'C++ Coding & Virtual Robots', url: '/cursuri/programare-cpp-codeblocks-variabile/', icon: '⚙️' },
+  ];
+
   return (
     <footer className="border-t border-slate-800/80 bg-slate-950/95 text-slate-300 pt-12 pb-24 md:pb-10 px-4 sm:px-6 lg:px-8 mt-auto relative z-10">
       <div className="max-w-7xl mx-auto space-y-10">
         
-        {/* Main Grid: 5 columns on desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-8 pb-10 border-b border-slate-800/70">
+        {/* Main Grid: 6 columns on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-6 pb-10 border-b border-slate-800/70">
           
           {/* Column 1: Brand, Misiune & Powered by */}
           <div className="space-y-4 lg:col-span-1">
@@ -263,7 +272,29 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Column 5: Legal, Siguranță & Contact */}
+          {/* Column 5: Ghiduri Curriculare Clasa a VII-a (C++, Audio, GIS, Roboți) */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-black uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+              <span className="text-sm">🔬</span>
+              {lang === 'en' ? 'Grade 7 Curriculum' : 'Programa Clasa a VII-a'}
+            </h4>
+            <ul className="space-y-1.5 text-xs">
+              {coursesGrade7.map((c) => (
+                <li key={c.url}>
+                  <a
+                    href={c.url}
+                    className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5 py-0.5 group"
+                    title={lang === 'en' ? c.titleEn : c.titleRo}
+                  >
+                    <span className="text-xs opacity-80 group-hover:scale-110 transition-transform">{c.icon}</span>
+                    <span className="truncate">{lang === 'en' ? c.titleEn : c.titleRo}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 6: Legal, Siguranță & Contact */}
           <div className="space-y-4">
             <h4 className="text-xs font-black uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />

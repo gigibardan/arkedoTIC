@@ -65,6 +65,8 @@ import {
 } from '../lib/studentAuthService';
 import { getCyberCityData } from '../lib/cyberCityService';
 import { calculateCityMetrics } from '../lib/cyberCityCatalog';
+import { Grade7CatalogSection } from './grade7/Grade7CatalogSection';
+import { Grade7InteractiveSimulators } from './grade7/Grade7InteractiveSimulators';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -243,9 +245,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   };
 
   // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a")
-  const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6'>(() => {
+  const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6' | 'grade7'>(() => {
     try {
       const saved = localStorage.getItem('arkedo_selected_grade');
+      if (saved === 'grade7') return 'grade7';
       if (saved === 'grade6') return 'grade6';
     } catch {
       // Ignore
@@ -253,7 +256,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     return 'grade5';
   });
 
-  const handleSelectGrade = (grade: 'grade5' | 'grade6') => {
+  const handleSelectGrade = (grade: 'grade5' | 'grade6' | 'grade7') => {
     sounds.playClick();
     setSelectedGrade(grade);
     try {
@@ -1501,7 +1504,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
 
           {/* Large Tactile Switcher Buttons Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {/* Tab 1: Clasa a V-a */}
             <button
               type="button"
@@ -1593,6 +1596,53 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 {lang === 'en'
                   ? 'PowerPoint 1A & 1B, Paint 3D Modeling 2A, Toontastic & VR 2B, Malware Security 3A, Email 3B, Advanced Scratch Loops 4A & 4B.'
                   : 'Prezentări PowerPoint 1A & 1B, Modelare Paint 3D 2A, Toontastic & VR 2B, Securitate Malware 3A, E-mail 3B, Bucle Scratch 4A & 4B.'}
+              </p>
+            </button>
+
+            {/* Tab 3: Clasa a VII-a */}
+            <button
+              type="button"
+              onClick={() => handleSelectGrade('grade7')}
+              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+                selectedGrade === 'grade7'
+                  ? 'bg-gradient-to-br from-cyan-950/80 via-slate-900 to-violet-950/60 border-cyan-400 shadow-xl shadow-cyan-500/20 ring-2 ring-cyan-400/30'
+                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+                    selectedGrade === 'grade7'
+                      ? 'bg-cyan-500/25 border border-cyan-400/50 text-cyan-200'
+                      : 'bg-slate-800 border border-slate-700 text-slate-400'
+                  }`}>
+                    🔬
+                  </div>
+                  <div>
+                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                      selectedGrade === 'grade7' ? 'text-white' : 'text-slate-300'
+                    }`}>
+                      {lang === 'en' ? '7th Grade (Clasa a VII-a)' : 'Clasa a VII-a'}
+                    </h3>
+                    <div className="text-[11px] font-mono font-bold text-cyan-400">
+                      {lang === 'en' ? 'Official Curriculum • 12 Missions' : 'Programa Oficială • 12 Misiuni Complete'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                  selectedGrade === 'grade7'
+                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 animate-pulse'
+                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                }`}>
+                  {selectedGrade === 'grade7' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                </div>
+              </div>
+
+              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade7' ? 'text-slate-200' : 'text-slate-400'}`}>
+                {lang === 'en'
+                  ? 'Word 1A & 1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, C++ Programming 4A-6A, Virtual Robots & Sensors 6B.'
+                  : 'Tehnoredactare Word 1A/1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, Programare C++ 4A–6A & Roboți Senzoriali 6B.'}
               </p>
             </button>
           </div>
@@ -3802,6 +3852,31 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
         </div>
       </div>
+      )}
+
+      {/* Courses & Lessons Section - CLASA A VII-A */}
+      {selectedGrade === 'grade7' && (
+        <div className="flex flex-col gap-8">
+          <Grade7CatalogSection
+            onOpenCurriculaModal={openCurriculaModal}
+            onLaunchInteractiveLab={(mId) => {
+              openCurriculaModal(mId);
+            }}
+            completedMissions={
+              activeAccount?.lessonsProgress
+                ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
+                    const lState = (activeAccount.lessonsProgress as any)[k];
+                    if (lState?.completed) acc[k] = true;
+                    return acc;
+                  }, {} as Record<string, boolean>)
+                : {}
+            }
+          />
+
+          <div id="simulatoare-interactive-clasa-7" className="scroll-mt-6">
+            <Grade7InteractiveSimulators />
+          </div>
+        </div>
       )}
 
       {/* Arcade Mini-Games Banner Section (Placed below missions) */}
