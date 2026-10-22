@@ -4,8 +4,52 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a';
 }
+
+const G7W1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G7W1_STAGES_RO = [
+  { emoji: '🖋️', name: 'Anatomia Tipografică & Clasificarea Fonturilor (pag. 10-12)' },
+  { emoji: '🇷🇴', name: 'Standardul Românesc SR 13411 & Ghilimelele „99 jos / 99 sus”' },
+  { emoji: '📐', name: 'Geometria Paragrafului: Riglă, Aliniere Justify & Spațiere' },
+  { emoji: '📑', name: 'Ierarhia Semantică a Stilurilor (Heading 1/2) & Cuprins Automat' },
+  { emoji: '🔍', name: 'Laboratorul Găsire & Înlocuire (Ctrl+H) & Coduri Speciale (^p, ^t)' },
+  { emoji: '📰', name: 'Studio Editorial Word: Ribbon, Paginare & Criterii Profesionale' },
+  { emoji: '🏆', name: 'Marele Examen de Tehnoredactare & Diplomă Clasa a VII-a' },
+  { emoji: '🎓', name: 'Tehnoredactor & Editor Șef Digital Certificat • Clasa a VII-a!' },
+];
+
+const G7W1_STAGES_EN = [
+  { emoji: '🖋️', name: 'Typography Anatomy & Font Classification (pp. 10-12)' },
+  { emoji: '🇷🇴', name: 'Romanian SR 13411 Standards & Quotes „99 low / 99 high”' },
+  { emoji: '📐', name: 'Paragraph Geometry: Ruler, Justify & Spacing Metrics' },
+  { emoji: '📑', name: 'Semantic Style Hierarchy (Heading 1/2) & Automatic Table of Contents' },
+  { emoji: '🔍', name: 'Find & Replace Lab (Ctrl+H) & Invisible Special Codes (^p, ^t)' },
+  { emoji: '📰', name: 'Word Editorial Studio: Ribbon, Pagination & Professional Rubric' },
+  { emoji: '🏆', name: 'Typography & Layout Grand Exam & Grade 7 Diploma' },
+  { emoji: '🎓', name: 'Certified Chief Digital Typesetter & Editor • Grade 7!' },
+];
+
+const G7W1_MILESTONES_RO = [
+  'P1: Anatomie Fonturi',
+  'P2: Norme SR 13411',
+  'P3: Riglă & Paragraf',
+  'P4: Stiluri & Cuprins',
+  'P5: Găsire & Înlocuire',
+  'P6: Studio Editorial',
+  'P7: Examen Tipografie',
+];
+
+const G7W1_MILESTONES_EN = [
+  'P1: Font Anatomy',
+  'P2: Romanian Rules',
+  'P3: Ruler & Spacing',
+  'P4: Styles & TOC',
+  'P5: Find & Replace',
+  'P6: Editorial Studio',
+  'P7: Typography Exam',
+];
 
 const G6P1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 const G6P2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
@@ -612,6 +656,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isG6P2 = courseId === 'g6_presentation2';
   const isG6P3 = courseId === 'g6_paint3d';
   const isG6M1 = courseId === 'g6_malware';
+  const isG7W1 = courseId === 'g7_word_a';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -683,6 +728,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G6M1_MILESTONES_EN : G6M1_MILESTONES_RO;
     percents = G6M1_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG7W1) {
+    stages = lang === 'en' ? G7W1_STAGES_EN : G7W1_STAGES_RO;
+    milestones = lang === 'en' ? G7W1_MILESTONES_EN : G7W1_MILESTONES_RO;
+    percents = G7W1_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -724,6 +774,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Paint 3D Modeling, Shapes & VR Graphics' : 'Evoluție Modelare Paint 3D, Forme & Grafică VR (Clasa a VI-a)')
                 : isG6M1
                 ? (lang === 'en' ? 'Malware Defense & Cybersecurity Specialist' : 'Evoluție Securitate Cibernetică & Protecție Malware (Clasa a VI-a)')
+                : isG7W1
+                ? (lang === 'en' ? 'Advanced Word Processing & Typography (Grade 7)' : 'Evoluție Tehnoredactare Avansată & Tipografie (Clasa a VII-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -740,6 +792,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isG6P2 ? 'text-rose-400'
               : isG6P3 ? 'text-cyan-400'
               : isG6M1 ? 'text-red-400'
+              : isG7W1 ? 'text-blue-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -783,6 +836,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500'
               : isG6M1
               ? 'bg-gradient-to-r from-red-500 via-rose-500 to-amber-400'
+              : isG7W1
+              ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -815,6 +870,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-orange-300 font-bold'
                     : isScratch2
                     ? 'text-pink-300 font-bold'
+                    : isG7W1
+                    ? 'text-blue-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

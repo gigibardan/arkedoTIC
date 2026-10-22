@@ -30,7 +30,7 @@ interface HeaderProps {
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
-  missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | null;
+  missionId?: string | null;
   byteCoins?: number;
   onEditStudentName?: () => void;
   onNavigateToTeacher?: () => void;
@@ -80,6 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (missionId === 'internet2') return t.internet2CourseTitle;
     if (missionId === 'text1') return t.text1CourseTitle;
     if (missionId === 'text2') return t.text2CourseTitle;
+    if (missionId === 'g7_word_a') return lang === 'en' ? 'M1A: Word Processing & Typography' : 'Misiunea 1A: Tehnoredactare & Tipografie';
     return t.appTitle;
   };
 

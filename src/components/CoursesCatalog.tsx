@@ -82,8 +82,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -137,6 +137,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g6_email' && (localStorage.getItem('arkedo_g6e1_level') === '8' || Number(localStorage.getItem('arkedo_g6e1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_email') === 'true')) return true;
       if (mId === 'g6_scratch1' && (localStorage.getItem('arkedo_g6s1_level') === '8' || Number(localStorage.getItem('arkedo_g6s1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch1') === 'true')) return true;
       if (mId === 'g6_scratch2' && (localStorage.getItem('arkedo_g6s2_level') === '8' || Number(localStorage.getItem('arkedo_g6s2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch2') === 'true')) return true;
+      if (mId === 'g7_word_a' && (localStorage.getItem('arkedo_g7w1_level') === '8' || Number(localStorage.getItem('arkedo_g7w1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_word_a') === 'true')) return true;
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
@@ -144,7 +145,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     if (activeStudent?.lessonsProgress) {
       const lp = activeStudent.lessonsProgress;
       const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId === 'g6_anim3d' ? 'model3d2' : mId === 'g6_malware' ? 'cyber6a' : mId === 'g6_email' ? 'cyber6b' : mId === 'g6_scratch1' ? 'scratch6a' : mId === 'g6_scratch2' ? 'scratch6b' : mId;
-      if (lp[lessonKey]?.completed || (lp[lessonKey]?.score || 0) >= 100) return true;
+      if ((lp as any)[lessonKey]?.completed || ((lp as any)[lessonKey]?.score || 0) >= 100) return true;
     }
     return false;
   };
@@ -207,7 +208,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g7_word_a' | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -507,7 +508,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -547,7 +548,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g7_word_a' | null) => {
+    if (id === 'g7_word_a') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 1A: Advanced Typography & Romanian Digital Standards (Textbook p. 10-14)'
+        : 'Clasa a VII-a • Modulul 1A: Tehnoredactare Avansată & Tipografie Digitală Românească (Manual pag. 10-14)';
+    }
     if (id === 'hardware') {
       return lang === 'en'
         ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
@@ -3860,7 +3866,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           <Grade7CatalogSection
             onOpenCurriculaModal={openCurriculaModal}
             onLaunchInteractiveLab={(mId) => {
-              openCurriculaModal(mId);
+              if (mId === 'g7_word_a') {
+                handleAttemptStart('g7_word_a');
+              } else {
+                openCurriculaModal(mId);
+              }
             }}
             completedMissions={
               activeAccount?.lessonsProgress
@@ -4123,7 +4133,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   );
 };
 
-function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | null): number {
+function activeScore(level: number, missionId?: string | null): number {
   if (level <= 1) return 0;
   if (missionId === 'hardware') {
     return Math.min((level - 1) * 20, 100);
@@ -4145,7 +4155,9 @@ function activeScore(level: number, missionId?: 'hardware' | 'files' | 'internet
     missionId === 'g6_anim3d' ||
     missionId === 'g6_malware' ||
     missionId === 'g6_email' ||
-    missionId === 'g6_scratch1'
+    missionId === 'g6_scratch1' ||
+    missionId === 'g6_scratch2' ||
+    missionId === 'g7_word_a'
   ) {
     const standardScores = [0, 15, 30, 45, 60, 75, 90, 100];
     return standardScores[Math.min(level - 1, 7)] || 0;

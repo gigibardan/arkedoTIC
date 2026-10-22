@@ -77,6 +77,9 @@ import { ModuleG6ScratchAlgo1Flow } from './components/grade6/scratch_algo1/Modu
 // Grade 6 Scratch Algo Mission 4B (Unitatea 4 - Manual pag. 76-93)
 import { ModuleG6ScratchAlgo2Flow } from './components/grade6/scratch_algo2/ModuleG6ScratchAlgo2Flow';
 
+// Grade 7 Word Mission 1A (Unitatea 1 - Manual pag. 10-17)
+import { ModuleG7Word1Flow } from './components/grade7/word1/ModuleG7Word1Flow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard';
@@ -112,10 +115,10 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1' || saved === 'g6_scratch2') {
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1' || saved === 'g6_scratch2' || saved === 'g7_word_a') {
         const isDone = localStorage.getItem(`arkedo_completed_${saved}`) === 'true';
         if (!isDone) return saved;
       }
@@ -647,6 +650,35 @@ function GameContent() {
     return 0;
   });
 
+  // Grade 7 Word Mission 1A progress (Unitatea 1 - Tehnoredactare Avansată)
+  const [g7W1Level, setG7W1Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7w1_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7W1Score, setG7W1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7w1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7W1ElapsedSeconds, setG7W1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7w1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -786,6 +818,9 @@ function GameContent() {
       localStorage.setItem('arkedo_g6s2_level', String(g6S2Level));
       localStorage.setItem('arkedo_g6s2_score', String(g6S2Score));
       localStorage.setItem('arkedo_g6s2_elapsed', String(g6S2ElapsedSeconds));
+      localStorage.setItem('arkedo_g7w1_level', String(g7W1Level));
+      localStorage.setItem('arkedo_g7w1_score', String(g7W1Score));
+      localStorage.setItem('arkedo_g7w1_elapsed', String(g7W1ElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -808,7 +843,8 @@ function GameContent() {
     g6M1Level, g6M1Score, g6M1ElapsedSeconds,
     g6E1Level, g6E1Score, g6E1ElapsedSeconds,
     g6S1Level, g6S1Score, g6S1ElapsedSeconds,
-    g6S2Level, g6S2Score, g6S2ElapsedSeconds
+    g6S2Level, g6S2Score, g6S2ElapsedSeconds,
+    g7W1Level, g7W1Score, g7W1ElapsedSeconds
   ]);
 
   // Current active level & score
@@ -846,6 +882,8 @@ function GameContent() {
     ? g6S1Level
     : activeMission === 'g6_scratch2'
     ? g6S2Level
+    : activeMission === 'g7_word_a'
+    ? g7W1Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -882,6 +920,8 @@ function GameContent() {
     ? g6S1Score
     : activeMission === 'g6_scratch2'
     ? g6S2Score
+    : activeMission === 'g7_word_a'
+    ? g7W1Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -918,6 +958,8 @@ function GameContent() {
     ? g6S1ElapsedSeconds
     : activeMission === 'g6_scratch2'
     ? g6S2ElapsedSeconds
+    : activeMission === 'g7_word_a'
+    ? g7W1ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -945,7 +987,8 @@ function GameContent() {
       (activeMission === 'g6_malware' && g6M1Level <= 7) ||
       (activeMission === 'g6_email' && g6E1Level <= 7) ||
       (activeMission === 'g6_scratch1' && g6S1Level <= 7) ||
-      (activeMission === 'g6_scratch2' && g6S2Level <= 7);
+      (activeMission === 'g6_scratch2' && g6S2Level <= 7) ||
+      (activeMission === 'g7_word_a' && g7W1Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -983,6 +1026,8 @@ function GameContent() {
           setG6S1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g6_scratch2') {
           setG6S2ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_word_a') {
+          setG7W1ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -1017,6 +1062,7 @@ function GameContent() {
     if (mId === 'g6_email' && (g6E1Level >= 8 || g6E1Score >= 100)) return true;
     if (mId === 'g6_scratch1' && (g6S1Level >= 8 || g6S1Score >= 100)) return true;
     if (mId === 'g6_scratch2' && (g6S2Level >= 8 || g6S2Score >= 100)) return true;
+    if (mId === 'g7_word_a' && (g7W1Level >= 8 || g7W1Score >= 100)) return true;
 
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
@@ -1039,6 +1085,7 @@ function GameContent() {
       if (mId === 'g6_email' && (lp.cyber6b?.completed || (lp.cyber6b?.score || 0) >= 100)) return true;
       if (mId === 'g6_scratch1' && (lp.scratch6a?.completed || (lp.scratch6a?.score || 0) >= 100)) return true;
       if (mId === 'g6_scratch2' && (lp.scratch6b?.completed || (lp.scratch6b?.score || 0) >= 100)) return true;
+      if (mId === 'g7_word_a' && (lp.g7_word_a?.completed || (lp.g7_word_a?.score || 0) >= 100)) return true;
     }
 
     return false;
@@ -1063,6 +1110,7 @@ function GameContent() {
     g6_email: isMissionCompleted('g6_email'),
     g6_scratch1: isMissionCompleted('g6_scratch1'),
     g6_scratch2: isMissionCompleted('g6_scratch2'),
+    g7_word_a: isMissionCompleted('g7_word_a'),
   };
 
   // Listen to browser navigation
@@ -1130,7 +1178,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -1217,8 +1265,53 @@ function GameContent() {
       setG6S2Level(1);
       setG6S2Score(0);
       setG6S2ElapsedSeconds(0);
+    } else if (activeMission === 'g7_word_a') {
+      handleResetG7W1();
+      return;
     }
     arky.triggerIdle();
+  };
+
+  // Grade 7 Word Mission 1A (Unitatea 1) level progression
+  const handleG7W1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7W1Score, earnedScore));
+      setG7W1Score(updatedTotal);
+      setG7W1Level((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7w1_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7w1_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7W1Score(finalScore);
+      setG7W1Level(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7w1_level', '8');
+        localStorage.setItem('arkedo_g7w1_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_word_a', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_word_a', true, 8, finalScore, g7W1ElapsedSeconds);
+    }
+  };
+
+  const handleResetG7W1 = () => {
+    sounds.playClick();
+    setG7W1Score(0);
+    setG7W1Level(1);
+    setG7W1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_word_a');
+      localStorage.setItem('arkedo_g7w1_level', '1');
+      localStorage.setItem('arkedo_g7w1_score', '0');
+      localStorage.setItem('arkedo_g7w1_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Grade 6 Presentation 1 (Mission 1A) level progression
@@ -2363,12 +2456,36 @@ function GameContent() {
                 )}
               </div>
             )}
+            {/* Level Views for GRADE 7 - WORD MISSION 1A (TEHNOREDACTARE AVANSATĂ & TIPOGRAFIE ROMÂNEASCĂ) */}
+            {activeMission === 'g7_word_a' && (
+              <div className="flex-1">
+                {g7W1Level <= 7 ? (
+                  <ModuleG7Word1Flow
+                    currentLevel={g7W1Level}
+                    onCompletePage={(earnedScore) => handleG7W1CompleteLevel(g7W1Level, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7W1}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7W1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7W1ElapsedSeconds}
+                    courseId="g7_word_a"
+                    onReset={handleResetG7W1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
