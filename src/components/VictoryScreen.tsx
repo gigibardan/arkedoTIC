@@ -178,7 +178,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -216,6 +216,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Certified Cyber Defender & Security Expert!' : 'Felicitări, Expert în Securitate Cibernetică & Protecție Digitală!')
           : isG7W1
           ? (lang === 'en' ? 'Congratulations, Certified Digital Typographer & Editor!' : 'Felicitări, Tehnoredactor & Editor Digital Certificat!')
+          : isG7W2
+          ? (lang === 'en' ? 'Congratulations, Document Architect & Page Layout Master!' : 'Felicitări, Arhitect de Documente & Machetare Tipografică!')
           : t.vTitle}
       </h2>
 
@@ -276,6 +278,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered font anatomy, Romanian diacritic standards SR 13411, ruler paragraph metrics, hierarchical styles, batch Find & Replace, and editorial publication in PDF format from Grade 7 Textbook pp. 10-17!'
               : 'Ai finalizat cu succes Misiunea 1A (Clasa a VII-a): stăpânești familiile de fonturi, standardul românesc SR 13411 cu virgulă dedesubt, metrica paragrafelor pe riglă (1.25 cm), stilurile semantice Titlu 1 & 2, curățarea automată cu Ctrl+H și exportul PDF!')
+          : isG7W2
+          ? (lang === 'en'
+              ? 'You mastered A4 page layout, gutter margins, Different First Page, Landscape section breaks, academic tables, and footnotes from Grade 7 Textbook pp. 18-27!'
+              : 'Ai finalizat cu succes Misiunea 1B (Clasa a VII-a): stăpânești machetarea paginii A4, marginea de îndosariere (Gutter), antetul cu primă pagină diferită, ruperile de secțiune pentru tabele largi, alinierea la dreapta a numerelor și notele de subsol!')
           : t.vDesc}
       </p>
 
@@ -797,6 +803,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isG7W2 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'A4 Margins' : 'Margini & Gutter'}</div>
+                <div className="text-[10px] text-blue-400">210x297 mm & 1.5 cm</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📑</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Header & Footer' : 'Antet & Subsol'}</div>
+                <div className="text-[10px] text-purple-400">Diff First & Odd/Even</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">✂️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Section Breaks' : 'Ruperi Secțiune'}</div>
+                <div className="text-[10px] text-cyan-400">Landscape Hibrid</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Tables & Merge' : 'Tabele & Merge'}</div>
+                <div className="text-[10px] text-emerald-400">Aliniere la Dreapta</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">📜</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Academic Notes' : 'Note de Subsol'}</div>
+                <div className="text-[10px] text-amber-400">Alt+Ctrl+F Footnote</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -861,7 +905,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -905,6 +949,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Scratch Loops & Conditional Algorithms Master Diploma' : 'Diplomă de Programator în Bucle Condiționate & Algoritmi Scratch')
               : isG7W1
               ? (lang === 'en' ? 'Digital Typographer & Chief Editor Diploma' : 'Diplomă de Tehnoredactor & Editor Șef Digital')
+              : isG7W2
+              ? (lang === 'en' ? 'Document Architect & Page Layout Master Diploma' : 'Diplomă de Arhitect de Documente & Machetare Tipografică')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -993,6 +1039,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en'
                   ? 'For exceptional mastery of digital typography, Romanian diacritic standards SR 13411, paragraph geometry on the horizontal ruler, semantic styles architecture, batch Find & Replace, and editorial publication in PDF format.'
                   : 'Pentru excelență și măiestrie în tehnoredactarea computerizată, respectarea normelor tipografice românești SR 13411, geometria paragrafelor pe rigla orizontală, arhitectura stilurilor semantice, curățarea automată a textului și publicarea revistei școlare în format PDF.')
+              : isG7W2
+              ? (lang === 'en'
+                  ? 'For demonstrated excellence in professional document layout, A4 gutter margins, Landscape section break isolation, advanced header and footer architecture with Different First Page, academic table formatting, and scholarly footnote citation.'
+                  : 'Pentru performanțe deosebite în machetarea profesională a documentelor complexe, configurarea marginilor de îndosariere A4, izolarea secțiunilor în format Vedere/Landscape, arhitectura antetului și subsolului cu Different First Page, formatarea academică a tabelelor și citarea prin note de subsol.')
               : t.vDiplomaText}
           </p>
 

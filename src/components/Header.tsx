@@ -81,6 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (missionId === 'text1') return t.text1CourseTitle;
     if (missionId === 'text2') return t.text2CourseTitle;
     if (missionId === 'g7_word_a') return lang === 'en' ? 'M1A: Word Processing & Typography' : 'Misiunea 1A: Tehnoredactare & Tipografie';
+    if (missionId === 'g7_word_b') return lang === 'en' ? 'M1B: Page Layout & Structured Documents' : 'Misiunea 1B: Machetare & Tipografie';
     return t.appTitle;
   };
 

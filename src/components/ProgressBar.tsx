@@ -4,8 +4,52 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b';
 }
+
+const G7W2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G7W2_STAGES_RO = [
+  { emoji: '📐', name: 'Machetare A4, Margini & Spațiul de Îndosariere Gutter (pag. 18-20)' },
+  { emoji: '📑', name: 'Antet & Subsol: Câmpuri Dinamice, Prima Pagină Diferită & Paginare Dublă' },
+  { emoji: '✂️', name: 'Ruperi de Secțiune vs Ruperi de Pagină: Tabele Landscape Hibride' },
+  { emoji: '📊', name: 'Tabele Profesionale: Îmbinare Celule (Merge) & Alinierea Datelor' },
+  { emoji: '📜', name: 'Note de Subsol (Footnotes) vs Note de Sfârșit & Separator Tipografic' },
+  { emoji: '📰', name: 'Studio Editorial Revistă Școlară: Paginare pe 2 Coloane & Verificare' },
+  { emoji: '🏆', name: 'Marele Examen de Machetare & Structură de Document • Clasa a VII-a' },
+  { emoji: '🎓', name: 'Arhitect de Documente & Tehnoredactor Șef Certificat • Clasa a VII-a!' },
+];
+
+const G7W2_STAGES_EN = [
+  { emoji: '📐', name: 'A4 Page Setup, Margins & Gutter Binding Margin (pp. 18-20)' },
+  { emoji: '📑', name: 'Headers & Footers: Dynamic Fields, Different First Page & Facing Pages' },
+  { emoji: '✂️', name: 'Section Breaks vs Page Breaks: Hybrid Landscape Tables' },
+  { emoji: '📊', name: 'Professional Tables: Merge Cells & Numerical Alignment Rules' },
+  { emoji: '📜', name: 'Footnotes vs Endnotes & Typographic Separator Lines' },
+  { emoji: '📰', name: 'School Magazine Studio: 2-Column Editorial & Technical Rubric' },
+  { emoji: '🏆', name: 'Page Layout & Document Architecture Grand Exam • Grade 7' },
+  { emoji: '🎓', name: 'Certified Document Architect & Senior Layout Editor • Grade 7!' },
+];
+
+const G7W2_MILESTONES_RO = [
+  'P1: Margini & Gutter',
+  'P2: Antet & Subsol',
+  'P3: Ruperi Secțiune',
+  'P4: Tabele & Merge',
+  'P5: Note Subsol',
+  'P6: Studio Revistă',
+  'P7: Examen Machetare',
+];
+
+const G7W2_MILESTONES_EN = [
+  'P1: Margins & Gutter',
+  'P2: Header & Footer',
+  'P3: Section Breaks',
+  'P4: Tables & Merge',
+  'P5: Footnotes',
+  'P6: Magazine Studio',
+  'P7: Layout Exam',
+];
 
 const G7W1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 
@@ -657,6 +701,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isG6P3 = courseId === 'g6_paint3d';
   const isG6M1 = courseId === 'g6_malware';
   const isG7W1 = courseId === 'g7_word_a';
+  const isG7W2 = courseId === 'g7_word_b';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -733,6 +778,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G7W1_MILESTONES_EN : G7W1_MILESTONES_RO;
     percents = G7W1_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG7W2) {
+    stages = lang === 'en' ? G7W2_STAGES_EN : G7W2_STAGES_RO;
+    milestones = lang === 'en' ? G7W2_MILESTONES_EN : G7W2_MILESTONES_RO;
+    percents = G7W2_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -776,6 +826,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Malware Defense & Cybersecurity Specialist' : 'Evoluție Securitate Cibernetică & Protecție Malware (Clasa a VI-a)')
                 : isG7W1
                 ? (lang === 'en' ? 'Advanced Word Processing & Typography (Grade 7)' : 'Evoluție Tehnoredactare Avansată & Tipografie (Clasa a VII-a)')
+                : isG7W2
+                ? (lang === 'en' ? 'Page Layout, Headers & Structured Docs (Grade 7)' : 'Evoluție Machetare de Pagină & Documente Structurate (Clasa a VII-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -793,6 +845,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isG6P3 ? 'text-cyan-400'
               : isG6M1 ? 'text-red-400'
               : isG7W1 ? 'text-blue-400'
+              : isG7W2 ? 'text-sky-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -838,6 +891,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-red-500 via-rose-500 to-amber-400'
               : isG7W1
               ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400'
+              : isG7W2
+              ? 'bg-gradient-to-r from-indigo-600 via-sky-500 to-teal-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -872,6 +927,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-pink-300 font-bold'
                     : isG7W1
                     ? 'text-blue-300 font-bold'
+                    : isG7W2
+                    ? 'text-sky-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}
