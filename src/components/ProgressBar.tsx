@@ -4,8 +4,52 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b';
 }
+
+const G7V2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G7V2_STAGES_RO = [
+  { emoji: '🎞️', name: 'Fundamente Video: Rezoluție (1080p), Raport de Aspect & FPS (pag. 36-37)' },
+  { emoji: '🥞', name: 'Cronologie Multitrack: Piste Video, Audio & Audio Ducking (pag. 38-39)' },
+  { emoji: '✂️', name: 'Tăiere Chirurgicală: Split (Tasta L) & Ripple Delete (pag. 40-41)' },
+  { emoji: '✨', name: 'Tranziții Video: Cut Direct, CrossFade 1.0s & Ștergeri (pag. 42-43)' },
+  { emoji: '🏷️', name: 'Titrarea & Burtiere: Lower Third, Generice & Ctrl+B (pag. 44-45)' },
+  { emoji: '🎬', name: 'Studio Regie Școlară: Scurtmetraj 30s & Export MP4 (pag. 46-47)' },
+  { emoji: '🏆', name: 'Marele Examen de Regie VideoPad & Licențe Creative Commons' },
+  { emoji: '🎓', name: 'Regizor & Editor Video Digital Certificat • Clasa a VII-a!' },
+];
+
+const G7V2_STAGES_EN = [
+  { emoji: '🎞️', name: 'Video Fundamentals: Resolution (1080p), Aspect Ratio & FPS (pp. 36-37)' },
+  { emoji: '🥞', name: 'Multitrack Timeline: Video, Audio Tracks & Audio Ducking (pp. 38-39)' },
+  { emoji: '✂️', name: 'Surgical Editing: Split (L Key) & Ripple Delete (pp. 40-41)' },
+  { emoji: '✨', name: 'Video Transitions: Hard Cut, 1.0s CrossFade & Wipes (pp. 42-43)' },
+  { emoji: '🏷️', name: 'Titling & Graphics: Lower Thirds, Rolling Credits & Ctrl+B (pp. 44-45)' },
+  { emoji: '🎬', name: 'School Film Studio: 30s Short Movie & MP4 Export (pp. 46-47)' },
+  { emoji: '🏆', name: 'VideoPad Multitrack Directing & Creative Commons Exam' },
+  { emoji: '🎓', name: 'Certified Video Director & Digital Editor • Grade 7!' },
+];
+
+const G7V2_MILESTONES_RO = [
+  'P1: Rezoluție & FPS',
+  'P2: Piste & Ducking',
+  'P3: Split (L) & Trim',
+  'P4: CrossFade 1s',
+  'P5: Lower Third',
+  'P6: Studio Regie',
+  'P7: Examen Video',
+];
+
+const G7V2_MILESTONES_EN = [
+  'P1: Resolution & FPS',
+  'P2: Tracks & Ducking',
+  'P3: Split (L) & Trim',
+  'P4: CrossFade 1s',
+  'P5: Lower Third',
+  'P6: Film Studio',
+  'P7: Video Exam',
+];
 
 const G7A1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 
@@ -747,6 +791,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isG7W1 = courseId === 'g7_word_a';
   const isG7W2 = courseId === 'g7_word_b';
   const isG7A1 = courseId === 'g7_audio_a';
+  const isG7V2 = courseId === 'g7_video_b';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -833,6 +878,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G7A1_MILESTONES_EN : G7A1_MILESTONES_RO;
     percents = G7A1_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG7V2) {
+    stages = lang === 'en' ? G7V2_STAGES_EN : G7V2_STAGES_RO;
+    milestones = lang === 'en' ? G7V2_MILESTONES_EN : G7V2_MILESTONES_RO;
+    percents = G7V2_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -880,6 +930,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Page Layout, Headers & Structured Docs (Grade 7)' : 'Evoluție Machetare de Pagină & Documente Structurate (Clasa a VII-a)')
                 : isG7A1
                 ? (lang === 'en' ? 'Digital Acoustics & WavePad Audio Studio (Grade 7)' : 'Evoluție Acustică Digitală & Studio WavePad (Clasa a VII-a)')
+                : isG7V2
+                ? (lang === 'en' ? 'Multitrack Video Editing & VideoPad Studio (Grade 7)' : 'Evoluție Montaj Video Multitrack & VideoPad (Clasa a VII-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -899,6 +951,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isG7W1 ? 'text-blue-400'
               : isG7W2 ? 'text-sky-400'
               : isG7A1 ? 'text-amber-400'
+              : isG7V2 ? 'text-rose-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -948,6 +1001,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-indigo-600 via-sky-500 to-teal-400'
               : isG7A1
               ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-500'
+              : isG7V2
+              ? 'bg-gradient-to-r from-rose-600 via-pink-500 to-amber-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -986,6 +1041,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-sky-300 font-bold'
                     : isG7A1
                     ? 'text-amber-300 font-bold'
+                    : isG7V2
+                    ? 'text-rose-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

@@ -348,6 +348,14 @@ class SoundManager {
     this.playCorrect();
   }
 
+  playLevelComplete() {
+    this.playLevelUp();
+  }
+
+  playFailure() {
+    this.playWrong();
+  }
+
   playStar() {
     this.playRetro('coin');
   }
