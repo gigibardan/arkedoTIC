@@ -4,8 +4,52 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a';
 }
+
+const G7A1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G7A1_STAGES_RO = [
+  { emoji: '🎙️', name: 'Fizica Sunetului: Frecvență (Hz), Amplitudine (dB) & Praguri (pag. 28-29)' },
+  { emoji: '⏱️', name: 'Digitalizarea: Teorema Nyquist-Shannon 44.1 kHz, Biți & Stereo (pag. 30)' },
+  { emoji: '💾', name: 'Formate Audio & Calcul Matematic: WAV Uncompressed vs MP3 (pag. 31)' },
+  { emoji: '🎛️', name: 'Interfața WavePad: Formă de Undă, Riglă Timp & Cursor (pag. 32-33)' },
+  { emoji: '✂️', name: 'Tehnici de Editare: Trim, Cut, Delete vs Silence 0 dB (pag. 34)' },
+  { emoji: '📻', name: 'Studio Radio Școlar: Paste Mix (Ctrl+Shift+V), Fade & Normalizare (pag. 35)' },
+  { emoji: '🏆', name: 'Marele Examen de Acustică & Tehnici Audio WavePad • Clasa a VII-a' },
+  { emoji: '🎓', name: 'Inginer de Sunet & Producător Audio Digital Certificat • Clasa a VII-a!' },
+];
+
+const G7A1_STAGES_EN = [
+  { emoji: '🎙️', name: 'Physics of Sound: Frequency (Hz), Amplitude (dB) & Thresholds (pp. 28-29)' },
+  { emoji: '⏱️', name: 'Digitization: Nyquist-Shannon 44.1 kHz, Bit Depth & Stereo (p. 30)' },
+  { emoji: '💾', name: 'Audio Formats & Math Calculation: Linear WAV vs MP3 (p. 31)' },
+  { emoji: '🎛️', name: 'WavePad Interface: Waveforms, Time Ruler & Playhead (pp. 32-33)' },
+  { emoji: '✂️', name: 'Editing Techniques: Trim, Cut, Delete vs Silence 0 dB (p. 34)' },
+  { emoji: '📻', name: 'School Radio Studio: Paste Mix (Ctrl+Shift+V), Fade & Normalization (p. 35)' },
+  { emoji: '🏆', name: 'Digital Acoustics & WavePad Production Grand Exam • Grade 7' },
+  { emoji: '🎓', name: 'Certified Sound Engineer & Audio Producer • Grade 7!' },
+];
+
+const G7A1_MILESTONES_RO = [
+  'P1: Frecvență & dB',
+  'P2: Eșantionare 44.1k',
+  'P3: Calcul WAV/MP3',
+  'P4: Interfață WavePad',
+  'P5: Trim vs Silence',
+  'P6: Paste Mix Studio',
+  'P7: Examen Acustică',
+];
+
+const G7A1_MILESTONES_EN = [
+  'P1: Frequency & dB',
+  'P2: 44.1k Sampling',
+  'P3: WAV/MP3 Math',
+  'P4: WavePad Space',
+  'P5: Trim vs Silence',
+  'P6: Paste Mix Studio',
+  'P7: Acoustic Exam',
+];
 
 const G7W2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 
@@ -702,6 +746,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isG6M1 = courseId === 'g6_malware';
   const isG7W1 = courseId === 'g7_word_a';
   const isG7W2 = courseId === 'g7_word_b';
+  const isG7A1 = courseId === 'g7_audio_a';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -783,6 +828,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G7W2_MILESTONES_EN : G7W2_MILESTONES_RO;
     percents = G7W2_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG7A1) {
+    stages = lang === 'en' ? G7A1_STAGES_EN : G7A1_STAGES_RO;
+    milestones = lang === 'en' ? G7A1_MILESTONES_EN : G7A1_MILESTONES_RO;
+    percents = G7A1_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -828,6 +878,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Advanced Word Processing & Typography (Grade 7)' : 'Evoluție Tehnoredactare Avansată & Tipografie (Clasa a VII-a)')
                 : isG7W2
                 ? (lang === 'en' ? 'Page Layout, Headers & Structured Docs (Grade 7)' : 'Evoluție Machetare de Pagină & Documente Structurate (Clasa a VII-a)')
+                : isG7A1
+                ? (lang === 'en' ? 'Digital Acoustics & WavePad Audio Studio (Grade 7)' : 'Evoluție Acustică Digitală & Studio WavePad (Clasa a VII-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -846,6 +898,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isG6M1 ? 'text-red-400'
               : isG7W1 ? 'text-blue-400'
               : isG7W2 ? 'text-sky-400'
+              : isG7A1 ? 'text-amber-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -893,6 +946,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400'
               : isG7W2
               ? 'bg-gradient-to-r from-indigo-600 via-sky-500 to-teal-400'
+              : isG7A1
+              ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-500'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -929,6 +984,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-blue-300 font-bold'
                     : isG7W2
                     ? 'text-sky-300 font-bold'
+                    : isG7A1
+                    ? 'text-amber-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

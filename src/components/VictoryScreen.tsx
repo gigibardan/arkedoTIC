@@ -15,7 +15,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -58,6 +58,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isG6S1 = courseId === 'g6_scratch1';
   const isG7W1 = courseId === 'g7_word_a';
   const isG7W2 = courseId === 'g7_word_b';
+  const isG7A1 = courseId === 'g7_audio_a';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -95,6 +96,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Word Processing & Romanian Typography (Grade 7 Textbook pp. 10-17)' : 'Tehnoredactare Avansată & Tipografie Românească (Clasa a VII-a Manual pag. 10-17)')
     : isG7W2
     ? (lang === 'en' ? 'Page Layout & Structured Documents (Grade 7 Textbook pp. 18-27)' : 'Machetare de Pagină & Documente Structurate (Clasa a VII-a Manual pag. 18-27)')
+    : isG7A1
+    ? (lang === 'en' ? 'Digital Acoustics & WavePad Audio Studio (Grade 7 Textbook pp. 28-35)' : 'Acustică Digitală & Studio WavePad (Clasa a VII-a Manual pag. 28-35)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
 
@@ -178,7 +181,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : isG7A1 ? '🎙️📻' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -218,6 +221,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Certified Digital Typographer & Editor!' : 'Felicitări, Tehnoredactor & Editor Digital Certificat!')
           : isG7W2
           ? (lang === 'en' ? 'Congratulations, Document Architect & Page Layout Master!' : 'Felicitări, Arhitect de Documente & Machetare Tipografică!')
+          : isG7A1
+          ? (lang === 'en' ? 'Congratulations, Digital Sound Engineer & WavePad Producer!' : 'Felicitări, Inginer de Sunet & Specialist Acustică Digitală!')
           : t.vTitle}
       </h2>
 
@@ -242,6 +247,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered table creation and formatting, cell merging, proportional image resizing, text wrapping styles (Square, Tight, Behind Text), geometric shapes and text boxes, and full A4 page setup with headers and automatic page numbers!'
               : 'Ai parcurs cu brio Modulul 4B: inserarea și formatarea tabelelor, îmbinarea celulelor, redimensionarea imaginilor fără distorsiune de proporții, încadrarea textului (Pătrat, Strâns, În spatele textului), forme geometrice și casete de text, alături de paginarea completă A4 cu antet, subsol și numerotare automată!')
+          : isG7A1
+          ? (lang === 'en'
+              ? 'You successfully mastered sound physics (frequency in Hz, amplitude in dB), the Nyquist-Shannon sampling theorem (44.1 kHz, 16-bit, stereo), mathematical uncompressed WAV audio sizes vs MP3 compression, precision WavePad waveforms, Trim/Cut/Silence surgical editing, and produced a professional school radio jingle with Paste Mix!'
+              : 'Ai finalizat cu succes evaluarea completă a Unității 2 (Aplicații audio): stăpânești fizica sunetului (frecvență în Hz, amplitudine în dB), teorema de eșantionare Nyquist-Shannon (44.1 kHz, 16 biți, stereo), calculul matematic al fișierelor WAV vs MP3, interfața WavePad, operațiile Trim/Cut/Silence și ai produs un jingle radio profesional prin tehnica Paste Mix!')
           : isAlgo1
           ? (lang === 'en'
               ? 'You mastered the definition and the 6 fundamental properties of algorithms, defeated the ambiguity trap, executed sequential linear algorithms, swapped variables with the 3-glasses rule (aux), encrypted messages via numeric substitution, and solved perimeter & area math algorithms!'
@@ -841,6 +850,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isG7A1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎙️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Acoustic Waves' : 'Frecvență & dB'}</div>
+                <div className="text-[10px] text-amber-400">20–20.000 Hz & 0 dB</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">⏱️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Nyquist Theorem' : 'Eșantionare 44.1 kHz'}</div>
+                <div className="text-[10px] text-cyan-400">16 biți & Stereo 2x</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">💾</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'WAV vs MP3' : 'Calcul WAV & MP3'}</div>
+                <div className="text-[10px] text-emerald-400">PCM Liniar vs 128 kbps</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">✂️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Audio Surgery' : 'Chirurgie WavePad'}</div>
+                <div className="text-[10px] text-rose-400">Trim vs Silence 0 dB</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">📻</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Paste Mix Studio' : 'Producător Jingle'}</div>
+                <div className="text-[10px] text-purple-400">Fade In/Out & Normalizare</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -905,7 +952,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : isG7A1 ? '🎙️' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -951,6 +998,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Digital Typographer & Chief Editor Diploma' : 'Diplomă de Tehnoredactor & Editor Șef Digital')
               : isG7W2
               ? (lang === 'en' ? 'Document Architect & Page Layout Master Diploma' : 'Diplomă de Arhitect de Documente & Machetare Tipografică')
+              : isG7A1
+              ? (lang === 'en' ? 'Digital Sound Engineer & Audio Producer Diploma' : 'Diplomă de Inginer de Sunet & Producător Audio Digital')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -1043,6 +1092,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en'
                   ? 'For demonstrated excellence in professional document layout, A4 gutter margins, Landscape section break isolation, advanced header and footer architecture with Different First Page, academic table formatting, and scholarly footnote citation.'
                   : 'Pentru performanțe deosebite în machetarea profesională a documentelor complexe, configurarea marginilor de îndosariere A4, izolarea secțiunilor în format Vedere/Landscape, arhitectura antetului și subsolului cu Different First Page, formatarea academică a tabelelor și citarea prin note de subsol.')
+              : isG7A1
+              ? (lang === 'en'
+                  ? 'For remarkable mastery of digital sound physics, frequency in Hz, amplitude in dB, Nyquist-Shannon 44.1 kHz sampling, linear PCM uncompressed WAV math, surgical WavePad editing, and professional radio jingle production with Paste Mix.'
+                  : 'Pentru excelență și măiestrie în asimilarea fizicii sunetului digital, a spectrului de frecvențe în Hz, amplitudinii în dB, teoremei de eșantionare Nyquist-Shannon 44.1 kHz, calculului fișierelor audio WAV/MP3, chirurgiei WavePad și producerii jingle-ului radio școlar prin Paste Mix.')
               : t.vDiplomaText}
           </p>
 

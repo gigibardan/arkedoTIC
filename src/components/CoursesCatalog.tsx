@@ -82,8 +82,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -139,6 +139,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g6_scratch2' && (localStorage.getItem('arkedo_g6s2_level') === '8' || Number(localStorage.getItem('arkedo_g6s2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch2') === 'true')) return true;
       if (mId === 'g7_word_a' && (localStorage.getItem('arkedo_g7w1_level') === '8' || Number(localStorage.getItem('arkedo_g7w1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_word_a') === 'true')) return true;
       if (mId === 'g7_word_b' && (localStorage.getItem('arkedo_g7w2_level') === '8' || Number(localStorage.getItem('arkedo_g7w2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_word_b') === 'true')) return true;
+      if (mId === 'g7_audio_a' && (localStorage.getItem('arkedo_g7a1_level') === '8' || Number(localStorage.getItem('arkedo_g7a1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_audio_a') === 'true')) return true;
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
@@ -209,7 +210,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -509,7 +510,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -549,7 +550,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | null) => {
+    if (id === 'g7_audio_a') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 2A: Digital Acoustics & WavePad Audio Studio (Textbook p. 28-35)'
+        : 'Clasa a VII-a • Modulul 2A: Acustică Digitală & Studio de Editare WavePad (Manual pag. 28-35)';
+    }
     if (id === 'g7_word_a') {
       return lang === 'en'
         ? 'Grade 7 • Module 1A: Advanced Typography & Romanian Digital Standards (Textbook p. 10-14)'
@@ -3876,6 +3882,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 handleAttemptStart('g7_word_a');
               } else if (mId === 'g7_word_b') {
                 handleAttemptStart('g7_word_b');
+              } else if (mId === 'g7_audio_a') {
+                handleAttemptStart('g7_audio_a');
               } else {
                 openCurriculaModal(mId);
               }

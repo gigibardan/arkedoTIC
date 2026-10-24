@@ -809,6 +809,20 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {computeLessonXP(selectedStudentForDetails.lessonsProgress?.g7_word_b || {})} pts
                   </span>
                 </div>
+
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <div className="flex flex-col">
+                    <span className="text-slate-300 font-medium">🎙️ VII: Audio 2A (WavePad)</span>
+                    {selectedStudentForDetails.lessonsProgress?.g7_audio_a?.elapsedSeconds ? (
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        ⏱️ {selectedStudentForDetails.lessonsProgress.g7_audio_a.elapsedSeconds}s
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className="font-mono font-bold text-amber-300">
+                    {computeLessonXP(selectedStudentForDetails.lessonsProgress?.g7_audio_a || {})} pts
+                  </span>
+                </div>
               </div>
             </div>
 
