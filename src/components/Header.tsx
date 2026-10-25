@@ -84,6 +84,8 @@ export const Header: React.FC<HeaderProps> = ({
     if (missionId === 'g7_word_b') return lang === 'en' ? 'M1B: Page Layout & Structured Documents' : 'Misiunea 1B: Machetare & Tipografie';
     if (missionId === 'g7_audio_a') return lang === 'en' ? 'M2A: Digital Acoustics & WavePad' : 'Misiunea 2A: Acustică & WavePad';
     if (missionId === 'g7_video_b') return lang === 'en' ? 'M2B: VideoPad & Video Editing' : 'Misiunea 2B: VideoPad & Montaj Video';
+    if (missionId === 'g7_cloud_a') return lang === 'en' ? 'M3A: Cloud Collaboration & Teams' : 'Misiunea 3A: Aplicații Colaborative Cloud';
+    if (missionId === 'g7_gis_b') return lang === 'en' ? 'M3B: GIS & Digital Cartography' : 'Misiunea 3B: GIS & Cartografie Digitală';
     return t.appTitle;
   };
 

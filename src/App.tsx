@@ -89,6 +89,12 @@ import { ModuleG7Audio1Flow } from './components/grade7/audio1/ModuleG7Audio1Flo
 // Grade 7 Video Mission 2B (Unitatea 2 - Manual pag. 36-47)
 import { ModuleG7Video1Flow } from './components/grade7/video1/ModuleG7Video1Flow';
 
+// Grade 7 Cloud Mission 3A (Unitatea 3 - Manual pag. 48-56)
+import { ModuleG7Cloud1Flow } from './components/grade7/cloud1/ModuleG7Cloud1Flow';
+
+// Grade 7 GIS Mission 3B (Unitatea 3 - Manual pag. 57-63)
+import { ModuleG7Gis1Flow } from './components/grade7/gis1/ModuleG7Gis1Flow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard';
@@ -124,10 +130,10 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1' || saved === 'g6_scratch2' || saved === 'g7_word_a' || saved === 'g7_word_b' || saved === 'g7_audio_a' || saved === 'g7_video_b') {
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1' || saved === 'g6_scratch2' || saved === 'g7_word_a' || saved === 'g7_word_b' || saved === 'g7_audio_a' || saved === 'g7_video_b' || saved === 'g7_cloud_a' || saved === 'g7_gis_b') {
         const isDone = localStorage.getItem(`arkedo_completed_${saved}`) === 'true';
         if (!isDone) return saved;
       }
@@ -775,6 +781,64 @@ function GameContent() {
     return 0;
   });
 
+  // Grade 7 Cloud Mission 3A progress (Unitatea 3 - Aplicații Colaborative în Cloud)
+  const [g7C1Level, setG7C1Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7c1_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7C1Score, setG7C1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7c1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7C1ElapsedSeconds, setG7C1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7c1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Grade 7 GIS Mission 3B progress (Unitatea 3 - Sisteme Informaționale Geografice & Cartografie Digitală)
+  const [g7G1Level, setG7G1Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7g1_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7G1Score, setG7G1Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7g1_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7G1ElapsedSeconds, setG7G1ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7g1_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -926,6 +990,12 @@ function GameContent() {
       localStorage.setItem('arkedo_g7v2_level', String(g7V2Level));
       localStorage.setItem('arkedo_g7v2_score', String(g7V2Score));
       localStorage.setItem('arkedo_g7v2_elapsed', String(g7V2ElapsedSeconds));
+      localStorage.setItem('arkedo_g7c1_level', String(g7C1Level));
+      localStorage.setItem('arkedo_g7c1_score', String(g7C1Score));
+      localStorage.setItem('arkedo_g7c1_elapsed', String(g7C1ElapsedSeconds));
+      localStorage.setItem('arkedo_g7g1_level', String(g7G1Level));
+      localStorage.setItem('arkedo_g7g1_score', String(g7G1Score));
+      localStorage.setItem('arkedo_g7g1_elapsed', String(g7G1ElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -952,7 +1022,9 @@ function GameContent() {
     g7W1Level, g7W1Score, g7W1ElapsedSeconds,
     g7W2Level, g7W2Score, g7W2ElapsedSeconds,
     g7A1Level, g7A1Score, g7A1ElapsedSeconds,
-    g7V2Level, g7V2Score, g7V2ElapsedSeconds
+    g7V2Level, g7V2Score, g7V2ElapsedSeconds,
+    g7C1Level, g7C1Score, g7C1ElapsedSeconds,
+    g7G1Level, g7G1Score, g7G1ElapsedSeconds
   ]);
 
   // Current active level & score
@@ -998,6 +1070,10 @@ function GameContent() {
     ? g7A1Level
     : activeMission === 'g7_video_b'
     ? g7V2Level
+    : activeMission === 'g7_cloud_a'
+    ? g7C1Level
+    : activeMission === 'g7_gis_b'
+    ? g7G1Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -1042,6 +1118,10 @@ function GameContent() {
     ? g7A1Score
     : activeMission === 'g7_video_b'
     ? g7V2Score
+    : activeMission === 'g7_cloud_a'
+    ? g7C1Score
+    : activeMission === 'g7_gis_b'
+    ? g7G1Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -1086,6 +1166,10 @@ function GameContent() {
     ? g7A1ElapsedSeconds
     : activeMission === 'g7_video_b'
     ? g7V2ElapsedSeconds
+    : activeMission === 'g7_cloud_a'
+    ? g7C1ElapsedSeconds
+    : activeMission === 'g7_gis_b'
+    ? g7G1ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -1117,7 +1201,9 @@ function GameContent() {
       (activeMission === 'g7_word_a' && g7W1Level <= 7) ||
       (activeMission === 'g7_word_b' && g7W2Level <= 7) ||
       (activeMission === 'g7_audio_a' && g7A1Level <= 7) ||
-      (activeMission === 'g7_video_b' && g7V2Level <= 7);
+      (activeMission === 'g7_video_b' && g7V2Level <= 7) ||
+      (activeMission === 'g7_cloud_a' && g7C1Level <= 7) ||
+      (activeMission === 'g7_gis_b' && g7G1Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -1163,6 +1249,10 @@ function GameContent() {
           setG7A1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g7_video_b') {
           setG7V2ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_cloud_a') {
+          setG7C1ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_gis_b') {
+          setG7G1ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -1171,7 +1261,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level, g6S2Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level, g6S2Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level, g7C1Level, g7G1Level]);
 
   // Check if a mission is fully completed and finished
   const isMissionCompleted = (mId: string): boolean => {
@@ -1201,6 +1291,8 @@ function GameContent() {
     if (mId === 'g7_word_b' && (g7W2Level >= 8 || g7W2Score >= 100)) return true;
     if (mId === 'g7_audio_a' && (g7A1Level >= 8 || g7A1Score >= 100)) return true;
     if (mId === 'g7_video_b' && (g7V2Level >= 8 || g7V2Score >= 100)) return true;
+    if (mId === 'g7_cloud_a' && (g7C1Level >= 8 || g7C1Score >= 100)) return true;
+    if (mId === 'g7_gis_b' && (g7G1Level >= 8 || g7G1Score >= 100)) return true;
 
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
@@ -1227,6 +1319,8 @@ function GameContent() {
       if (mId === 'g7_word_b' && (lp.g7_word_b?.completed || (lp.g7_word_b?.score || 0) >= 100)) return true;
       if (mId === 'g7_audio_a' && (lp.g7_audio_a?.completed || (lp.g7_audio_a?.score || 0) >= 100)) return true;
       if (mId === 'g7_video_b' && (lp.g7_video_b?.completed || (lp.g7_video_b?.score || 0) >= 100)) return true;
+      if (mId === 'g7_cloud_a' && (lp.g7_cloud_a?.completed || (lp.g7_cloud_a?.score || 0) >= 100)) return true;
+      if (mId === 'g7_gis_b' && (lp.g7_gis_b?.completed || (lp.g7_gis_b?.score || 0) >= 100)) return true;
     }
 
     return false;
@@ -1255,6 +1349,8 @@ function GameContent() {
     g7_word_b: isMissionCompleted('g7_word_b'),
     g7_audio_a: isMissionCompleted('g7_audio_a'),
     g7_video_b: isMissionCompleted('g7_video_b'),
+    g7_cloud_a: isMissionCompleted('g7_cloud_a'),
+    g7_gis_b: isMissionCompleted('g7_gis_b'),
   };
 
   // Listen to browser navigation
@@ -1312,7 +1408,7 @@ function GameContent() {
         localStorage.removeItem('arkedo_active_mission');
       } catch {}
     }
-  }, [view, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g7W1Level, g7W2Level, g7A1Level]);
+  }, [view, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level, g7C1Level, g7G1Level]);
 
   const handleToggleSound = () => {
     const newState = !soundEnabled;
@@ -1322,7 +1418,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -1420,6 +1516,12 @@ function GameContent() {
       return;
     } else if (activeMission === 'g7_video_b') {
       handleResetG7V2();
+      return;
+    } else if (activeMission === 'g7_cloud_a') {
+      handleResetG7C1();
+      return;
+    } else if (activeMission === 'g7_gis_b') {
+      handleResetG7G1();
       return;
     }
     arky.triggerIdle();
@@ -1587,6 +1689,90 @@ function GameContent() {
       localStorage.setItem('arkedo_g7v2_level', '1');
       localStorage.setItem('arkedo_g7v2_score', '0');
       localStorage.setItem('arkedo_g7v2_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 Cloud Mission 3A (Unitatea 3 - Aplicații Colaborative în Cloud: Google Docs & Slides în Echipă) level progression
+  const handleG7C1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7C1Score, earnedScore));
+      setG7C1Score(updatedTotal);
+      setG7C1Level((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7c1_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7c1_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7C1Score(finalScore);
+      setG7C1Level(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7c1_level', '8');
+        localStorage.setItem('arkedo_g7c1_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_cloud_a', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_cloud_a', true, 8, finalScore, g7C1ElapsedSeconds);
+    }
+  };
+
+  const handleResetG7C1 = () => {
+    sounds.playClick();
+    setG7C1Score(0);
+    setG7C1Level(1);
+    setG7C1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_cloud_a');
+      localStorage.setItem('arkedo_g7c1_level', '1');
+      localStorage.setItem('arkedo_g7c1_score', '0');
+      localStorage.setItem('arkedo_g7c1_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 GIS Mission 3B (Unitatea 3 - Sisteme Informaționale Geografice & Cartografie Digitală) level progression
+  const handleG7G1CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7G1Score, earnedScore));
+      setG7G1Score(updatedTotal);
+      setG7G1Level((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7g1_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7g1_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7G1Score(finalScore);
+      setG7G1Level(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7g1_level', '8');
+        localStorage.setItem('arkedo_g7g1_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_gis_b', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_gis_b', true, 8, finalScore, g7G1ElapsedSeconds);
+    }
+  };
+
+  const handleResetG7G1 = () => {
+    sounds.playClick();
+    setG7G1Score(0);
+    setG7G1Level(1);
+    setG7G1ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_gis_b');
+      localStorage.setItem('arkedo_g7g1_level', '1');
+      localStorage.setItem('arkedo_g7g1_score', '0');
+      localStorage.setItem('arkedo_g7g1_elapsed', '0');
     } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
@@ -2834,12 +3020,62 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for GRADE 7 - CLOUD MISSION 3A (APLICAȚII COLABORATIVE ÎN CLOUD — GOOGLE DOCS & SLIDES ÎN ECHIPĂ) */}
+            {activeMission === 'g7_cloud_a' && (
+              <div className="flex-1">
+                {g7C1Level <= 7 ? (
+                  <ModuleG7Cloud1Flow
+                    currentLevel={g7C1Level}
+                    onCompletePage={(earnedScore) => handleG7C1CompleteLevel(g7C1Level, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7C1}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7C1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7C1ElapsedSeconds}
+                    courseId="g7_cloud_a"
+                    onReset={handleResetG7C1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for GRADE 7 - GIS MISSION 3B (SISTEME INFORMAȚIONALE GEOGRAFICE & CARTOGRAFIE DIGITALĂ) */}
+            {activeMission === 'g7_gis_b' && (
+              <div className="flex-1">
+                {g7G1Level <= 7 ? (
+                  <ModuleG7Gis1Flow
+                    currentLevel={g7G1Level}
+                    onCompletePage={(earnedScore) => handleG7G1CompleteLevel(g7G1Level, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7G1}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7G1Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7G1ElapsedSeconds}
+                    courseId="g7_gis_b"
+                    onReset={handleResetG7G1}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}

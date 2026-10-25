@@ -82,8 +82,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -141,6 +141,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g7_word_b' && (localStorage.getItem('arkedo_g7w2_level') === '8' || Number(localStorage.getItem('arkedo_g7w2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_word_b') === 'true')) return true;
       if (mId === 'g7_audio_a' && (localStorage.getItem('arkedo_g7a1_level') === '8' || Number(localStorage.getItem('arkedo_g7a1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_audio_a') === 'true')) return true;
       if (mId === 'g7_video_b' && (localStorage.getItem('arkedo_g7v2_level') === '8' || Number(localStorage.getItem('arkedo_g7v2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_video_b') === 'true')) return true;
+      if (mId === 'g7_cloud_a' && (localStorage.getItem('arkedo_g7c1_level') === '8' || Number(localStorage.getItem('arkedo_g7c1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cloud_a') === 'true')) return true;
+      if (mId === 'g7_gis_b' && (localStorage.getItem('arkedo_g7g1_level') === '8' || Number(localStorage.getItem('arkedo_g7g1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_gis_b') === 'true')) return true;
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
@@ -211,7 +213,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -511,7 +513,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -551,7 +553,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | null) => {
+    if (id === 'g7_gis_b') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 3B: GIS & Digital Cartography (Textbook p. 57-63)'
+        : 'Clasa a VII-a • Modulul 3B: Sisteme Informaționale Geografice (GIS) & Cartografie Digitală (Manual pag. 57-63)';
+    }
+    if (id === 'g7_cloud_a') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 3A: Cloud Collaboration & Teams (Textbook p. 48-56)'
+        : 'Clasa a VII-a • Modulul 3A: Aplicații Colaborative în Cloud — Google Docs & Slides în Echipă (Manual pag. 48-56)';
+    }
     if (id === 'g7_video_b') {
       return lang === 'en'
         ? 'Grade 7 • Module 2B: Multitrack VideoPad Editing, Transitions & Titling (Textbook p. 36-47)'
@@ -3892,6 +3904,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 handleAttemptStart('g7_audio_a');
               } else if (mId === 'g7_video_b') {
                 handleAttemptStart('g7_video_b');
+              } else if (mId === 'g7_cloud_a') {
+                handleAttemptStart('g7_cloud_a');
+              } else if (mId === 'g7_gis_b') {
+                handleAttemptStart('g7_gis_b');
               } else {
                 openCurriculaModal(mId);
               }
@@ -4181,7 +4197,11 @@ function activeScore(level: number, missionId?: string | null): number {
     missionId === 'g6_email' ||
     missionId === 'g6_scratch1' ||
     missionId === 'g6_scratch2' ||
-    missionId === 'g7_word_a'
+    missionId === 'g7_word_a' ||
+    missionId === 'g7_word_b' ||
+    missionId === 'g7_audio_a' ||
+    missionId === 'g7_video_b' ||
+    missionId === 'g7_cloud_a'
   ) {
     const standardScores = [0, 15, 30, 45, 60, 75, 90, 100];
     return standardScores[Math.min(level - 1, 7)] || 0;

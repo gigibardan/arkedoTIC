@@ -4,8 +4,96 @@ import { useLanguage } from '../context/LanguageContext';
 
 interface ProgressBarProps {
   currentLevel: GameLevel;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b';
 }
+
+const G7G1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G7G1_STAGES_RO = [
+  { emoji: '🗺️', name: 'Arhitectură GIS: Hartă Digitală vs Clasic, Atribute & Date Spațiale (pag. 57-58)' },
+  { emoji: '🥞', name: 'Straturi Tematice: Ierarhie, Suprapunere & Opacitate Reliefe (pag. 58-59)' },
+  { emoji: '📍', name: 'Primitive Vectoriale: Punct, Polilinie, Poligon & Tabel Atribute (pag. 60-61)' },
+  { emoji: '📡', name: 'Coordonate GPS: Latitudine, Longitudine, Radian WGS84 & Precizie (pag. 61-62)' },
+  { emoji: '🌍', name: 'Google Earth 3D: Înclinare Tilt, Orientare Nord (Tasta R) & Riglă (pag. 62)' },
+  { emoji: '🚨', name: 'Analiză Spațială Smart City: Buffer Inundații Siret & Rutare Salvare (pag. 63)' },
+  { emoji: '🏆', name: 'Marele Examen GIS & Netichetă Cartografică: GDPR, Privacy & OpenStreetMap' },
+  { emoji: '🎓', name: 'Cartograf Digital & Specialist Analiză Spațială GIS Certificat • Clasa a VII-a!' },
+];
+
+const G7G1_STAGES_EN = [
+  { emoji: '🗺️', name: 'GIS Architecture: Digital vs Paper Maps, Spatial Attributes (pp. 57-58)' },
+  { emoji: '🥞', name: 'Thematic Layers: Layer Stack Hierarchy, Opacity & Overlap (pp. 58-59)' },
+  { emoji: '📍', name: 'Vector Primitives: Points, Polylines, Polygons & Attribute Tables (pp. 60-61)' },
+  { emoji: '📡', name: 'GPS Coordinates: Latitude, Longitude, WGS84 Calibration & Accuracy (pp. 61-62)' },
+  { emoji: '🌍', name: 'Google Earth 3D: Tilt Angle, Reset North (R key) & Distance Ruler (p. 62)' },
+  { emoji: '🚨', name: 'Smart City Spatial Analysis: Siret Flood Buffer & Emergency Routing (p. 63)' },
+  { emoji: '🏆', name: 'Grand GIS & Cartographic Netiquette Exam: GDPR, Privacy & OpenStreetMap' },
+  { emoji: '🎓', name: 'Certified Digital Cartographer & GIS Spatial Analysis Specialist • Grade 7!' },
+];
+
+const G7G1_MILESTONES_RO = [
+  'P1: Arhitectură GIS',
+  'P2: Straturi & Stack',
+  'P3: Vectori & Atribute',
+  'P4: Coordonate GPS',
+  'P5: Google Earth 3D',
+  'P6: Smart City & ISU',
+  'P7: Examen GIS',
+];
+
+const G7G1_MILESTONES_EN = [
+  'P1: GIS Architecture',
+  'P2: Layers & Stack',
+  'P3: Vectors & Tables',
+  'P4: GPS Coordinates',
+  'P5: Google Earth 3D',
+  'P6: Smart City & ISU',
+  'P7: GIS Exam',
+];
+
+const G7C1_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
+
+const G7C1_STAGES_RO = [
+  { emoji: '☁️', name: 'Arhitectura Cloud: Centre de Date, Sincronizare & Autosave (pag. 48-51)' },
+  { emoji: '🔐', name: 'Matricea de Permisiuni: Viewer, Commenter, Editor & Securitate (pag. 52-54)' },
+  { emoji: '👥', name: 'Colaborare Sincronă: Cursori Colorați, Avatare & Editare (pag. 48-51)' },
+  { emoji: '💬', name: 'Comentarii & Modul Sugestii: Mențiuni @, Task-uri & Aprobare (pag. 52-55)' },
+  { emoji: '⏳', name: 'Mașina Timpului: Istoricul Versiunilor, Diff & Restaurare (pag. 50-51, 56)' },
+  { emoji: '📊', name: 'Studio Producție: Prezentare Google Slides în Echipă (pag. 54-56)' },
+  { emoji: '🏆', name: 'Marele Examen de Aplicații Colaborative & Netichetă Cloud' },
+  { emoji: '🎓', name: 'Coordonator Proiecte în Cloud & Echipă Certificat • Clasa a VII-a!' },
+];
+
+const G7C1_STAGES_EN = [
+  { emoji: '☁️', name: 'Cloud Architecture: Data Centers, Sync & Continuous Autosave (pp. 48-51)' },
+  { emoji: '🔐', name: 'Permission Matrix: Viewer, Commenter, Editor & Link Security (pp. 52-54)' },
+  { emoji: '👥', name: 'Synchronous Collaboration: Colored Cursors, Avatars & Co-editing (pp. 48-51)' },
+  { emoji: '💬', name: 'Comments & Suggesting Mode: @Mentions, Tasks & Approval (pp. 52-55)' },
+  { emoji: '⏳', name: 'Time Machine: Version History, Diffs & Rollback (pp. 50-51, 56)' },
+  { emoji: '📊', name: 'Production Studio: Collaborative Google Slides Team Project (pp. 54-56)' },
+  { emoji: '🏆', name: 'Cloud Collaboration Applications & Team Netiquette Grand Exam' },
+  { emoji: '🎓', name: 'Certified Cloud Collaboration & Team Coordinator • Grade 7!' },
+];
+
+const G7C1_MILESTONES_RO = [
+  'P1: Cloud & Autosave',
+  'P2: Permisiuni',
+  'P3: Cursori Live',
+  'P4: @Task & Sugestii',
+  'P5: Mașina Timpului',
+  'P6: Studio Slides',
+  'P7: Examen Cloud',
+];
+
+const G7C1_MILESTONES_EN = [
+  'P1: Cloud & Autosave',
+  'P2: Permissions',
+  'P3: Live Cursors',
+  'P4: @Tasks & Suggest',
+  'P5: Time Machine',
+  'P6: Slides Studio',
+  'P7: Cloud Exam',
+];
 
 const G7V2_STAGE_PERCENTS = [14, 28, 42, 57, 71, 85, 95, 100];
 
@@ -792,6 +880,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
   const isG7W2 = courseId === 'g7_word_b';
   const isG7A1 = courseId === 'g7_audio_a';
   const isG7V2 = courseId === 'g7_video_b';
+  const isG7C1 = courseId === 'g7_cloud_a';
+  const isG7GIS = courseId === 'g7_gis_b';
 
   let stages = lang === 'en' ? FILES_STAGES_EN : FILES_STAGES_RO;
   let milestones = lang === 'en' ? FILES_MILESTONES_EN : FILES_MILESTONES_RO;
@@ -883,6 +973,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     milestones = lang === 'en' ? G7V2_MILESTONES_EN : G7V2_MILESTONES_RO;
     percents = G7V2_STAGE_PERCENTS;
     maxLevels = 7;
+  } else if (isG7C1) {
+    stages = lang === 'en' ? G7C1_STAGES_EN : G7C1_STAGES_RO;
+    milestones = lang === 'en' ? G7C1_MILESTONES_EN : G7C1_MILESTONES_RO;
+    percents = G7C1_STAGE_PERCENTS;
+    maxLevels = 7;
+  } else if (isG7GIS) {
+    stages = lang === 'en' ? G7G1_STAGES_EN : G7G1_STAGES_RO;
+    milestones = lang === 'en' ? G7G1_MILESTONES_EN : G7G1_MILESTONES_RO;
+    percents = G7G1_STAGE_PERCENTS;
+    maxLevels = 7;
   }
 
   const stageIndex = Math.min(Math.max(currentLevel - 1, 0), stages.length - 1);
@@ -932,6 +1032,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                 ? (lang === 'en' ? 'Digital Acoustics & WavePad Audio Studio (Grade 7)' : 'Evoluție Acustică Digitală & Studio WavePad (Clasa a VII-a)')
                 : isG7V2
                 ? (lang === 'en' ? 'Multitrack Video Editing & VideoPad Studio (Grade 7)' : 'Evoluție Montaj Video Multitrack & VideoPad (Clasa a VII-a)')
+                : isG7C1
+                ? (lang === 'en' ? 'Cloud Collaboration & Teamwork in Google Docs/Slides (Grade 7)' : 'Evoluție Aplicații Colaborative în Cloud (Clasa a VII-a)')
+                : isG7GIS
+                ? (lang === 'en' ? 'GIS & Digital Cartography Lab (Grade 7)' : 'Evoluție GIS & Cartografie Digitală (Clasa a VII-a)')
                 : (lang === 'en' ? 'File & OS Architect Progress' : 'Evoluție Arhitect Fișiere & Sistem de Operare')}
             </div>
             <div className={`text-base sm:text-lg font-black font-heading ${
@@ -952,6 +1056,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               : isG7W2 ? 'text-sky-400'
               : isG7A1 ? 'text-amber-400'
               : isG7V2 ? 'text-rose-400'
+              : isG7C1 ? 'text-teal-400'
+              : isG7GIS ? 'text-emerald-400'
               : 'text-emerald-400'
             }`}>
               {currentStage.name}
@@ -1003,6 +1109,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
               ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-500'
               : isG7V2
               ? 'bg-gradient-to-r from-rose-600 via-pink-500 to-amber-400'
+              : isG7C1
+              ? 'bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-400'
+              : isG7GIS
+              ? 'bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-400'
               : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400'
           }`}
           style={{ width: `${currentPercent}%` }}
@@ -1043,6 +1153,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
                     ? 'text-amber-300 font-bold'
                     : isG7V2
                     ? 'text-rose-300 font-bold'
+                    : isG7C1
+                    ? 'text-teal-300 font-bold'
+                    : isG7GIS
+                    ? 'text-emerald-300 font-bold'
                     : 'text-emerald-400 font-bold'
                   : 'text-slate-500'
               }`}

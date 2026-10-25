@@ -15,7 +15,7 @@ interface VictoryScreenProps {
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b';
+  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b';
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -60,6 +60,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isG7W2 = courseId === 'g7_word_b';
   const isG7A1 = courseId === 'g7_audio_a';
   const isG7V2 = courseId === 'g7_video_b';
+  const isG7C1 = courseId === 'g7_cloud_a';
+  const isG7GIS = courseId === 'g7_gis_b';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -101,6 +103,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Digital Acoustics & WavePad Audio Studio (Grade 7 Textbook pp. 28-35)' : 'Acustică Digitală & Studio WavePad (Clasa a VII-a Manual pag. 28-35)')
     : isG7V2
     ? (lang === 'en' ? 'Multitrack Video Editing & VideoPad Studio (Grade 7 Textbook pp. 36-47)' : 'Montaj Video Multitrack & Studio VideoPad (Clasa a VII-a Manual pag. 36-47)')
+    : isG7C1
+    ? (lang === 'en' ? 'Cloud Collaboration & Teamwork in Google Docs/Slides (Grade 7 Textbook pp. 48-56)' : 'Aplicații Colaborative în Cloud & Echipă (Clasa a VII-a Manual pag. 48-56)')
+    : isG7GIS
+    ? (lang === 'en' ? 'Geographic Information Systems (GIS) & Digital Cartography (Grade 7 Textbook pp. 57-63)' : 'Sisteme Informaționale Geografice (GIS) & Cartografie Digitală (Clasa a VII-a Manual pag. 57-63)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
 
@@ -184,7 +190,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : isG7A1 ? '🎙️📻' : isG7V2 ? '🎬📽️' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : isG7A1 ? '🎙️📻' : isG7V2 ? '🎬📽️' : isG7C1 ? '👥☁️' : isG7GIS ? '🗺️🧭' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -228,6 +234,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Digital Sound Engineer & WavePad Producer!' : 'Felicitări, Inginer de Sunet & Specialist Acustică Digitală!')
           : isG7V2
           ? (lang === 'en' ? 'Congratulations, Certified Video Director & Editor!' : 'Felicitări, Regizor & Editor Video Digital Certificat!')
+          : isG7C1
+          ? (lang === 'en' ? 'Congratulations, Certified Cloud Collaboration Leader!' : 'Felicitări, Lider de Colaborare în Cloud & Echipă!')
+          : isG7GIS
+          ? (lang === 'en' ? 'Congratulations, Certified GIS Specialist & Digital Cartographer!' : 'Felicitări, Specialist GIS & Cartograf Digital Certificat!')
           : t.vTitle}
       </h2>
 
@@ -300,6 +310,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You mastered A4 page layout, gutter margins, Different First Page, Landscape section breaks, academic tables, and footnotes from Grade 7 Textbook pp. 18-27!'
               : 'Ai finalizat cu succes Misiunea 1B (Clasa a VII-a): stăpânești machetarea paginii A4, marginea de îndosariere (Gutter), antetul cu primă pagină diferită, ruperile de secțiune pentru tabele largi, alinierea la dreapta a numerelor și notele de subsol!')
+          : isG7C1
+          ? (lang === 'en'
+              ? 'You successfully mastered Cloud Computing fundamentals, real-time autosave, the 3 permission levels (Viewer, Commenter, Editor), live multi-cursor synchronous editing, comments with @mentions, Suggesting mode, Version History disaster recovery, and team production in Google Slides!'
+              : 'Ai finalizat cu succes evaluarea completă a Unității 3 (Aplicații colaborative în cloud): stăpânești arhitectura cloud și autosave-ul continuu, matricea celor 3 permisiuni (Viewer, Commenter, Editor), editarea sincronă cu cursori colorați, mențiunile cu @, modul de Sugestii, recuperarea prin Istoricul Versiunilor și realizarea prezentării în echipă în Google Slides!')
+          : isG7GIS
+          ? (lang === 'en'
+              ? 'You successfully mastered Geographic Information Systems (GIS), thematic layer stacking, spatial vector primitives (Points, Lines, Polygons), attribute tables, GPS coordinates in Romania, 3D Google Earth exploration, emergency spatial routing, and cartographic privacy!'
+              : 'Ai finalizat cu succes evaluarea completă a Unității 3B (GIS & Cartografie Digitală): stăpânești sistemele informaționale geografice, stiva straturilor tematice (Layers), formele geometrice vectoriale (Punct, Linie, Poligon), tabelele de atribute, coordonatele GPS ale României, explorarea 3D în Google Earth, analiza spațială pentru situații de urgență și protecția datelor de geolocație!')
           : t.vDesc}
       </p>
 
@@ -935,6 +953,82 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : isG7C1 ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">☁️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cloud & Autosave' : 'Cloud & Autosave'}</div>
+                <div className="text-[10px] text-emerald-400">Sync & No Loss</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Permission Matrix' : 'Matrice Permisiuni'}</div>
+                <div className="text-[10px] text-teal-400">Viewer, Commenter & Editor</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">👥</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Sync Cursors' : 'Cursori Sincroni'}</div>
+                <div className="text-[10px] text-cyan-400">Prezență Live & Avatare</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">💬</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? '@Mentions & Suggest' : 'Mențiuni @ & Sugestii'}</div>
+                <div className="text-[10px] text-amber-400">Task-uri & Aprobare ✓</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">⏳</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Time Machine' : 'Mașina Timpului'}</div>
+                <div className="text-[10px] text-emerald-300">Istoric Versiuni & Rollback</div>
+              </div>
+            </div>
+          </>
+        ) : isG7GIS ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🥞</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Layer Stacking' : 'Straturi Tematice'}</div>
+                <div className="text-[10px] text-teal-400">Layers & Opacitate</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Spatial Vectors' : 'Vectori Spațiali'}</div>
+                <div className="text-[10px] text-cyan-400">Punct, Linie, Poligon</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🛰️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'GPS Navigator' : 'Coordonate GPS'}</div>
+                <div className="text-[10px] text-emerald-400">Latitudine & Longitudine</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🌍</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Google Earth 3D' : 'Google Earth 3D'}</div>
+                <div className="text-[10px] text-sky-400">Tilt, Busolă (R) & Riglă</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🚨</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Spatial Analysis' : 'Analiză Spațială'}</div>
+                <div className="text-[10px] text-amber-300">Rute Urgență 112 & Smart City</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -999,7 +1093,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : isG7A1 ? '🎙️' : isG7V2 ? '🎬' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : isG7A1 ? '🎙️' : isG7V2 ? '🎬' : isG7C1 ? '👥' : isG7GIS ? '🗺️' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -1049,6 +1143,10 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Digital Sound Engineer & Audio Producer Diploma' : 'Diplomă de Inginer de Sunet & Producător Audio Digital')
               : isG7V2
               ? (lang === 'en' ? 'Video Director & Multitrack Editor Diploma' : 'Diplomă de Regizor & Producător Video Digital')
+              : isG7C1
+              ? (lang === 'en' ? 'Cloud Collaboration & Team Project Master Diploma' : 'Diplomă de Coordonator & Specialist Proiecte în Cloud')
+              : isG7GIS
+              ? (lang === 'en' ? 'Digital Cartographer & GIS Spatial Analysis Master Diploma' : 'Diplomă de Cartograf Digital & Specialist Analiză Spațială GIS')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -1149,6 +1247,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en'
                   ? 'For exceptional mastery in multitrack video editing, timeline track hierarchy, surgical Split and Ripple Delete techniques, cinematic CrossFade transitions, Lower Third graphic design, Creative Commons music attribution, and Full HD MP4 film production.'
                   : 'Pentru excelență și măiestrie regizorală în montajul video multitrack, ierarhia pistelor paralele, tăierea chirurgicală Split și Ripple Delete, tranzițiile cinematice CrossFade, designul burtierelor Lower Third, respectarea drepturilor de autor Creative Commons și producția scurtmetrajului școlar MP4 Full HD.')
+              : isG7C1
+              ? (lang === 'en'
+                  ? 'For exceptional mastery in cloud collaboration architectures, autosave mechanics, permission access governance (Viewer, Commenter, Editor), real-time synchronous multi-user editing, @mention task delegation, Suggesting mode review workflows, and Version History disaster recovery in Google Docs and Slides.'
+                  : 'Pentru excelență și performanțe remarcabile în stăpânirea arhitecturii Cloud Computing, salvarea continuă automată, securitatea matricii de permisiuni (Viewer, Commenter, Editor), redactarea sincronă în echipă cu cursori colorați, delegarea sarcinilor prin mențiuni @, fluxul de lucru în modul Sugestii și recuperarea prin Istoricul Versiunilor în Google Docs și Slides.')
+              : isG7GIS
+              ? (lang === 'en'
+                  ? 'For exceptional mastery of Geographic Information Systems (GIS), thematic layer stacking hierarchies, vector geometry primitives, precise WGS84 GPS coordinate navigation, 3D spatial terrain analysis in Google Earth, and emergency flood crisis routing with cartographic netiquette and privacy ethics.'
+                  : 'Pentru excelență și performanțe remarcabile în stăpânirea Sistemelor Informaționale Geografice (GIS), ierarhia suprapunerii straturilor tematice, primitivele vectoriale (Punct, Polilinie, Poligon), navigarea prin coordonate GPS WGS84, analiza spațială 3D a reliefului în Google Earth și intervenția de urgență în caz de inundații cu respectarea netichetei cartografice și a confidențialității GDPR.')
               : t.vDiplomaText}
           </p>
 
