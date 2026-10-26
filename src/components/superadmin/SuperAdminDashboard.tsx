@@ -95,7 +95,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
 }) => {
   // Auth state
   const [session, setSession] = useState<SuperAdminUser | null>(() => getCurrentSuperAdminSession());
-  const [emailInput, setEmailInput] = useState<string>(PRIMARY_SUPERADMIN_EMAIL);
+  const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [authLoading, setAuthLoading] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -505,7 +505,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 required
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
-                placeholder="Gheorghe.Bardan@gmail.com"
+                placeholder="admin@arkedo.ro"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors"
               />
             </div>
@@ -532,10 +532,6 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 placeholder="••••••••••••"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors"
               />
-              <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
-                <KeyRound className="w-3 h-3 text-amber-400" />
-                Parolă master de urgență: <span className="font-mono font-bold text-amber-300">Ark3do!</span>
-              </p>
             </div>
 
             <button
