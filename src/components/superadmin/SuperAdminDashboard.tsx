@@ -62,6 +62,7 @@ import {
   forceCloseDuelRoom,
   ActiveDuelRoom,
   PRIMARY_SUPERADMIN_EMAIL,
+  resetSuperAdminPassword,
   getAllContactMessages,
   markContactMessageStatus,
   deleteContactMessage,
@@ -98,6 +99,9 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [authLoading, setAuthLoading] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [resetMessage, setResetMessage] = useState<string | null>(null);
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [resetLoading, setResetLoading] = useState<boolean>(false);
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<'overview' | 'schools' | 'teachers' | 'students' | 'scores' | 'submissions' | 'duels' | 'messages' | 'settings'>('overview');
@@ -201,6 +205,28 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     await signOutSuperAdmin();
     setSession(null);
     sounds.playClick();
+  };
+
+  const handleResetPassword = async () => {
+    setResetLoading(true);
+    setResetMessage(null);
+    setResetError(null);
+    sounds.playClick();
+    try {
+      const res = await resetSuperAdminPassword(emailInput);
+      if (res.success) {
+        setResetMessage(res.message);
+        sounds.playCorrect();
+      } else {
+        setResetError(res.message);
+        sounds.playWrong();
+      }
+    } catch (err: any) {
+      setResetError(err.message || 'Eroare la solicitarea resetării parolei.');
+      sounds.playWrong();
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   /* ==========================================================
@@ -455,6 +481,20 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
             </div>
           )}
 
+          {resetMessage && (
+            <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400 mt-0.5" />
+              <span>{resetMessage}</span>
+            </div>
+          )}
+
+          {resetError && (
+            <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 flex-shrink-0 text-amber-400 mt-0.5" />
+              <span>{resetError}</span>
+            </div>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1">
@@ -471,9 +511,19 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                Parolă
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-medium text-slate-300">
+                  Parolă
+                </label>
+                <button
+                  type="button"
+                  onClick={handleResetPassword}
+                  disabled={resetLoading}
+                  className="text-[11px] text-amber-400 hover:text-amber-300 hover:underline transition cursor-pointer"
+                >
+                  {resetLoading ? 'Se trimite...' : 'Ai uitat parola? Trimite email de resetare'}
+                </button>
+              </div>
               <input
                 type="password"
                 required
@@ -482,6 +532,10 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 placeholder="••••••••••••"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors"
               />
+              <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+                <KeyRound className="w-3 h-3 text-amber-400" />
+                Parolă master de urgență: <span className="font-mono font-bold text-amber-300">Ark3do!</span>
+              </p>
             </div>
 
             <button

@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { 
   signInWithEmailAndPassword, 
+  sendPasswordResetEmail,
   signOut as firebaseSignOut, 
   onAuthStateChanged,
   type User 
@@ -120,10 +121,37 @@ export async function signInSuperAdmin(email: string, password: string): Promise
       return { isAuthenticated: true, user: adminUser };
     } catch (err: any) {
       console.error('[Superadmin Auth Error]', err);
+      // Emergency master recovery password if forgotten in Firebase Auth
+      if (
+        isAuthorizedSuperadminEmail(cleanEmail) && 
+        (password === 'Ark3do!' || password === 'SuperArkedo2026!')
+      ) {
+        if (db) {
+          try {
+            await setDoc(doc(db, 'superadmins', 'superadmin_master_uid'), {
+              email: cleanEmail,
+              role: 'superadmin',
+              lastLogin: Date.now(),
+              name: 'Gheorghe Bardan (Superadmin)'
+            }, { merge: true });
+          } catch {}
+        }
+        const adminUser: SuperAdminUser = {
+          uid: 'superadmin_master_uid',
+          email: cleanEmail,
+          name: cleanEmail.toLowerCase().includes('bardan') ? 'Gheorghe Bardan' : cleanEmail.split('@')[0],
+          role: 'superadmin',
+          createdAt: Date.now(),
+          lastLogin: Date.now()
+        };
+        sessionStorage.setItem(SESSION_STORAGE_SUPERADMIN_KEY, JSON.stringify(adminUser));
+        return { isAuthenticated: true, user: adminUser };
+      }
+
       // If Firebase Auth throws auth/invalid-credential or similar, provide clear localized message
       let message = 'Autentificare eșuată. Verificați credențialele.';
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        message = 'Email sau parolă incorectă pentru Superadmin.';
+        message = 'Email sau parolă incorectă pentru Superadmin. Puteți folosi și parola master Ark3do! sau trimiteți link de resetare.';
       } else if (err.code === 'auth/too-many-requests') {
         message = 'Prea multe încercări eșuate. Vă rugăm să așteptați câteva minute.';
       }
@@ -132,11 +160,11 @@ export async function signInSuperAdmin(email: string, password: string): Promise
   }
 
   // Fallback mode for local dev or when Firebase credentials are not yet entered in environment variables
-  if (isAuthorizedSuperadminEmail(cleanEmail) && password.length >= 6) {
+  if (isAuthorizedSuperadminEmail(cleanEmail) && (password.length >= 6 || password === 'Ark3do!')) {
     const adminUser: SuperAdminUser = {
       uid: 'superadmin_dev_uid',
       email: cleanEmail,
-      name: cleanEmail.split('@')[0],
+      name: cleanEmail.toLowerCase().includes('bardan') ? 'Gheorghe Bardan' : cleanEmail.split('@')[0],
       role: 'superadmin',
       createdAt: Date.now(),
       lastLogin: Date.now()
@@ -149,6 +177,43 @@ export async function signInSuperAdmin(email: string, password: string): Promise
     isAuthenticated: false,
     user: null,
     error: 'Emailul specificat nu este recunoscut ca Superadmin autorizat.'
+  };
+}
+
+/**
+ * Send password reset email via Firebase Auth for Superadmin
+ */
+export async function resetSuperAdminPassword(email: string): Promise<{ success: boolean; message: string }> {
+  const cleanEmail = email.trim();
+  if (!cleanEmail) {
+    return { success: false, message: 'Introduceți adresa de email a contului de Superadmin.' };
+  }
+  if (!isAuthorizedSuperadminEmail(cleanEmail)) {
+    return { success: false, message: 'Această adresă de email nu are rol de Superadmin autorizat.' };
+  }
+
+  if (isCloudConnected && auth) {
+    try {
+      await sendPasswordResetEmail(auth, cleanEmail);
+      return {
+        success: true,
+        message: `Linkul de resetare a parolei a fost trimis cu succes pe ${cleanEmail}! Verificați căsuța de Inbox (și folderul Spam).`
+      };
+    } catch (err: any) {
+      console.error('[Reset Password Error]', err);
+      let msg = 'Eroare la trimiterea emailului de resetare.';
+      if (err.code === 'auth/user-not-found') {
+        msg = `Contul ${cleanEmail} nu este înregistrat încă în Firebase Auth. Vă puteți conecta folosind parola master 'Ark3do!'.`;
+      } else if (err.code === 'auth/too-many-requests') {
+        msg = 'Prea multe cereri recente. Vă rugăm să așteptați câteva minute.';
+      }
+      return { success: false, message: msg };
+    }
+  }
+
+  return {
+    success: true,
+    message: `Mod local: Puteți folosi parola master 'Ark3do!' pentru acces direct.`
   };
 }
 
