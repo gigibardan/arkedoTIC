@@ -356,6 +356,10 @@ class SoundManager {
     this.playWrong();
   }
 
+  playError() {
+    this.playWrong();
+  }
+
   playStar() {
     this.playRetro('coin');
   }

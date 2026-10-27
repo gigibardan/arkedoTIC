@@ -98,6 +98,9 @@ import { ModuleG7Gis1Flow } from './components/grade7/gis1/ModuleG7Gis1Flow';
 // Grade 7 C++ Mission 4A (Unitatea 4 - Manual pag. 64-73)
 import { ModuleG7Cpp1Flow } from './components/grade7/cpp1/ModuleG7Cpp1Flow';
 
+// Grade 7 C++ Mission 4B (Unitatea 4 - Manual pag. 74-76)
+import { ModuleG7Cpp2Flow } from './components/grade7/cpp2/ModuleG7Cpp2Flow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard';
@@ -871,6 +874,35 @@ function GameContent() {
     return 0;
   });
 
+  // Grade 7 C++ Mission 4B progress (Unitatea 4 - Structura Liniară, cin/cout & Regula celor 3 Pahare)
+  const [g7CP2Level, setG7CP2Level] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7cp2_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7CP2Score, setG7CP2Score] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7cp2_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7CP2ElapsedSeconds, setG7CP2ElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7cp2_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -1112,6 +1144,8 @@ function GameContent() {
     ? g7G1Level
     : activeMission === 'g7_cpp_a'
     ? g7CP1Level
+    : activeMission === 'g7_cpp_b'
+    ? g7CP2Level
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -1162,6 +1196,8 @@ function GameContent() {
     ? g7G1Score
     : activeMission === 'g7_cpp_a'
     ? g7CP1Score
+    : activeMission === 'g7_cpp_b'
+    ? g7CP2Score
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -1212,6 +1248,8 @@ function GameContent() {
     ? g7G1ElapsedSeconds
     : activeMission === 'g7_cpp_a'
     ? g7CP1ElapsedSeconds
+    : activeMission === 'g7_cpp_b'
+    ? g7CP2ElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -1246,7 +1284,8 @@ function GameContent() {
       (activeMission === 'g7_video_b' && g7V2Level <= 7) ||
       (activeMission === 'g7_cloud_a' && g7C1Level <= 7) ||
       (activeMission === 'g7_gis_b' && g7G1Level <= 7) ||
-      (activeMission === 'g7_cpp_a' && g7CP1Level <= 7);
+      (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) ||
+      (activeMission === 'g7_cpp_b' && g7CP2Level <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -1298,6 +1337,8 @@ function GameContent() {
           setG7G1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g7_cpp_a') {
           setG7CP1ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_cpp_b') {
+          setG7CP2ElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -1306,7 +1347,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level, g6S2Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level, g7C1Level, g7G1Level, g7CP1Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level, g6S2Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level, g7C1Level, g7G1Level, g7CP1Level, g7CP2Level]);
 
   // Check if a mission is fully completed and finished
   const isMissionCompleted = (mId: string): boolean => {
@@ -1339,6 +1380,7 @@ function GameContent() {
     if (mId === 'g7_cloud_a' && (g7C1Level >= 8 || g7C1Score >= 100)) return true;
     if (mId === 'g7_gis_b' && (g7G1Level >= 8 || g7G1Score >= 100)) return true;
     if (mId === 'g7_cpp_a' && (g7CP1Level >= 8 || g7CP1Score >= 100)) return true;
+    if (mId === 'g7_cpp_b' && (g7CP2Level >= 8 || g7CP2Score >= 100)) return true;
 
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
@@ -1368,6 +1410,7 @@ function GameContent() {
       if (mId === 'g7_cloud_a' && (lp.g7_cloud_a?.completed || (lp.g7_cloud_a?.score || 0) >= 100)) return true;
       if (mId === 'g7_gis_b' && (lp.g7_gis_b?.completed || (lp.g7_gis_b?.score || 0) >= 100)) return true;
       if (mId === 'g7_cpp_a' && ((lp as any).g7_cpp_a?.completed || ((lp as any).g7_cpp_a?.score || 0) >= 100)) return true;
+      if (mId === 'g7_cpp_b' && ((lp as any).g7_cpp_b?.completed || ((lp as any).g7_cpp_b?.score || 0) >= 100)) return true;
     }
 
     return false;
@@ -1399,6 +1442,7 @@ function GameContent() {
     g7_cloud_a: isMissionCompleted('g7_cloud_a'),
     g7_gis_b: isMissionCompleted('g7_gis_b'),
     g7_cpp_a: isMissionCompleted('g7_cpp_a'),
+    g7_cpp_b: isMissionCompleted('g7_cpp_b'),
   };
 
   // Listen to browser navigation
@@ -1573,6 +1617,9 @@ function GameContent() {
       return;
     } else if (activeMission === 'g7_cpp_a') {
       handleResetG7CP1();
+      return;
+    } else if (activeMission === 'g7_cpp_b') {
+      handleResetG7CP2();
       return;
     }
     arky.triggerIdle();
@@ -1866,6 +1913,48 @@ function GameContent() {
       localStorage.setItem('arkedo_g7cp1_level', '1');
       localStorage.setItem('arkedo_g7cp1_score', '0');
       localStorage.setItem('arkedo_g7cp1_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 C++ Mission 4B (Unitatea 4 - Structura Liniară, cin/cout & Regula celor 3 Pahare) level progression
+  const handleG7CP2CompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7CP2Score, earnedScore));
+      setG7CP2Score(updatedTotal);
+      setG7CP2Level((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7cp2_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7cp2_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7CP2Score(finalScore);
+      setG7CP2Level(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7cp2_level', '8');
+        localStorage.setItem('arkedo_g7cp2_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_cpp_b', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_cpp_b', true, 8, finalScore, g7CP2ElapsedSeconds);
+    }
+  };
+
+  const handleResetG7CP2 = () => {
+    sounds.playClick();
+    setG7CP2Score(0);
+    setG7CP2Level(1);
+    setG7CP2ElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_cpp_b');
+      localStorage.setItem('arkedo_g7cp2_level', '1');
+      localStorage.setItem('arkedo_g7cp2_score', '0');
+      localStorage.setItem('arkedo_g7cp2_elapsed', '0');
     } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
@@ -3188,12 +3277,37 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for GRADE 7 - C++ MISSION 4B (STRUCTURA LINIARĂ, CIN/COUT & REGULA CELOR 3 PAHARE) */}
+            {activeMission === 'g7_cpp_b' && (
+              <div className="flex-1">
+                {g7CP2Level <= 7 ? (
+                  <ModuleG7Cpp2Flow
+                    currentLevel={g7CP2Level}
+                    onCompletePage={(earnedScore) => handleG7CP2CompleteLevel(g7CP2Level, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7CP2}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7CP2Score}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7CP2ElapsedSeconds}
+                    courseId="g7_cpp_b"
+                    onReset={handleResetG7CP2}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7) || (activeMission === 'g7_cpp_a' && g7CP1Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7) || (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) || (activeMission === 'g7_cpp_b' && g7CP2Level <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
