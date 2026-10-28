@@ -82,8 +82,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | null;
+  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b') => void;
+  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b' | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -144,6 +144,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g7_cloud_a' && (localStorage.getItem('arkedo_g7c1_level') === '8' || Number(localStorage.getItem('arkedo_g7c1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cloud_a') === 'true')) return true;
       if (mId === 'g7_gis_b' && (localStorage.getItem('arkedo_g7g1_level') === '8' || Number(localStorage.getItem('arkedo_g7g1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_gis_b') === 'true')) return true;
       if (mId === 'g7_cpp_a' && (localStorage.getItem('arkedo_g7cp1_level') === '8' || Number(localStorage.getItem('arkedo_g7cp1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cpp_a') === 'true')) return true;
+      if (mId === 'g7_cpp_b' && (localStorage.getItem('arkedo_g7cp2_level') === '8' || Number(localStorage.getItem('arkedo_g7cp2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cpp_b') === 'true')) return true;
+      if (mId === 'g7_decision_a' && (localStorage.getItem('arkedo_g7dec_level') === '8' || Number(localStorage.getItem('arkedo_g7dec_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_decision_a') === 'true')) return true;
+      if (mId === 'g7_loop_b' && (localStorage.getItem('arkedo_g7loop_level') === '8' || Number(localStorage.getItem('arkedo_g7loop_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_loop_b') === 'true')) return true;
+      if (mId === 'g7_stem_a' && (localStorage.getItem('arkedo_g7stem_level') === '8' || Number(localStorage.getItem('arkedo_g7stem_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_stem_a') === 'true')) return true;
+      if (mId === 'g7_robot_b' && (localStorage.getItem('arkedo_g7robot_level') === '8' || Number(localStorage.getItem('arkedo_g7robot_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_robot_b') === 'true')) return true;
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
@@ -214,7 +219,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -514,7 +519,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b') => {
+  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b') => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -554,7 +559,27 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | null) => {
+  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b' | null) => {
+    if (id === 'g7_robot_b') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 4F: Educational Robotics & Virtual Robots with Sensors (Textbook p. 103-108)'
+        : 'Clasa a VII-a • Modulul 4F: Robotică Educațională & Roboți Virtuali cu Senzori (Manual pag. 103-108)';
+    }
+    if (id === 'g7_stem_a') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 4E: For Loop, do-while & Interdisciplinary STEM in C++ (Textbook p. 86-102)'
+        : 'Clasa a VII-a • Modulul 4E: Bucle for, do-while & Aplicații Interdisciplinare STEM (Manual pag. 86-102)';
+    }
+    if (id === 'g7_loop_b') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 4D: While Loop & Number Digit Algorithms (Textbook p. 81-85)'
+        : 'Clasa a VII-a • Modulul 4D: Structura Repetitivă while & Algoritmi pe Cifrele unui Număr (Manual pag. 81-85)';
+    }
+    if (id === 'g7_decision_a') {
+      return lang === 'en'
+        ? 'Grade 7 • Module 4C: Alternative Structure, if/else & Logical Operators (Textbook p. 77-80)'
+        : 'Clasa a VII-a • Modulul 4C: Structura Alternativă: if / else & Operatori Logici (Manual pag. 77-80)';
+    }
     if (id === 'g7_cpp_b') {
       return lang === 'en'
         ? 'Grade 7 • Module 4B: Linear Structure, cin/cout & The 3-Glasses Rule (Textbook p. 74-76)'
@@ -3923,6 +3948,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 handleAttemptStart('g7_cpp_a');
               } else if (mId === 'g7_cpp_b') {
                 handleAttemptStart('g7_cpp_b');
+              } else if (mId === 'g7_decision_a') {
+                handleAttemptStart('g7_decision_a');
+              } else if (mId === 'g7_loop_b') {
+                handleAttemptStart('g7_loop_b');
+              } else if (mId === 'g7_stem_a') {
+                handleAttemptStart('g7_stem_a');
+              } else if (mId === 'g7_robot_b') {
+                handleAttemptStart('g7_robot_b');
               } else {
                 openCurriculaModal(mId);
               }
@@ -4216,7 +4249,11 @@ function activeScore(level: number, missionId?: string | null): number {
     missionId === 'g7_word_b' ||
     missionId === 'g7_audio_a' ||
     missionId === 'g7_video_b' ||
-    missionId === 'g7_cloud_a'
+    missionId === 'g7_cloud_a' ||
+    missionId === 'g7_gis_b' ||
+    missionId === 'g7_cpp_a' ||
+    missionId === 'g7_cpp_b' ||
+    missionId === 'g7_decision_a'
   ) {
     const standardScores = [0, 15, 30, 45, 60, 75, 90, 100];
     return standardScores[Math.min(level - 1, 7)] || 0;

@@ -101,6 +101,18 @@ import { ModuleG7Cpp1Flow } from './components/grade7/cpp1/ModuleG7Cpp1Flow';
 // Grade 7 C++ Mission 4B (Unitatea 4 - Manual pag. 74-76)
 import { ModuleG7Cpp2Flow } from './components/grade7/cpp2/ModuleG7Cpp2Flow';
 
+// Grade 7 Decision Mission 4C (Unitatea 4 - Manual pag. 77-80)
+import { ModuleG7DecisionFlow } from './components/grade7/decision/ModuleG7DecisionFlow';
+
+// Grade 7 While Loop Mission 4D (Unitatea 4 - Manual pag. 81-85)
+import { ModuleG7LoopFlow } from './components/grade7/loop/ModuleG7LoopFlow';
+
+// Grade 7 STEM Interdisciplinary Mission 4E (Unitatea 4 - Manual pag. 86-102)
+import { ModuleG7StemFlow } from './components/grade7/stem/ModuleG7StemFlow';
+
+// Grade 7 Robotics Mission 4F (Unitatea 4 - Manual pag. 103-108)
+import { ModuleG7RobotFlow } from './components/grade7/robot/ModuleG7RobotFlow';
+
 import { VictoryScreen } from './components/VictoryScreen';
 import { TeacherPortal } from './components/TeacherPortal';
 import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard';
@@ -136,12 +148,12 @@ function GameContent() {
   });
 
   // Current selected mission
-  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | null>(() => {
+  const [activeMission, setActiveMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b' | null>(() => {
     try {
       const saved = localStorage.getItem('arkedo_active_mission');
-      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1' || saved === 'g6_scratch2' || saved === 'g7_word_a' || saved === 'g7_word_b' || saved === 'g7_audio_a' || saved === 'g7_video_b' || saved === 'g7_cloud_a' || saved === 'g7_gis_b' || saved === 'g7_cpp_a') {
+      if (saved === 'hardware' || saved === 'files' || saved === 'internet1' || saved === 'internet2' || saved === 'text1' || saved === 'text2' || saved === 'algo1' || saved === 'algo2' || saved === 'scratch1' || saved === 'scratch2' || saved === 'g6_presentation1' || saved === 'g6_presentation2' || saved === 'g6_paint3d' || saved === 'g6_anim3d' || saved === 'g6_malware' || saved === 'g6_email' || saved === 'g6_scratch1' || saved === 'g6_scratch2' || saved === 'g7_word_a' || saved === 'g7_word_b' || saved === 'g7_audio_a' || saved === 'g7_video_b' || saved === 'g7_cloud_a' || saved === 'g7_gis_b' || saved === 'g7_cpp_a' || saved === 'g7_cpp_b' || saved === 'g7_decision_a' || saved === 'g7_loop_b' || saved === 'g7_stem_a' || saved === 'g7_robot_b') {
         const isDone = localStorage.getItem(`arkedo_completed_${saved}`) === 'true';
-        if (!isDone) return saved;
+        if (!isDone) return saved as any;
       }
     } catch {
       // Ignore
@@ -903,6 +915,122 @@ function GameContent() {
     return 0;
   });
 
+  // Grade 7 C++ Mission 4C progress (Unitatea 4 - Structura Alternativă: if / else & Operatori Logici)
+  const [g7DecLevel, setG7DecLevel] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7dec_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7DecScore, setG7DecScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7dec_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7DecElapsedSeconds, setG7DecElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7dec_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Grade 7 C++ Mission 4D progress (Unitatea 4 - Structura Repetitivă while & Algoritmi pe Cifrele unui Număr)
+  const [g7LoopLevel, setG7LoopLevel] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7loop_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7LoopScore, setG7LoopScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7loop_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7LoopElapsedSeconds, setG7LoopElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7loop_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Grade 7 C++ Mission 4E progress (Unitatea 4 - Bucle for, do-while & Aplicații Interdisciplinare STEM)
+  const [g7StemLevel, setG7StemLevel] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7stem_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7StemScore, setG7StemScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7stem_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7StemElapsedSeconds, setG7StemElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7stem_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
+  // Grade 7 Robotics Mission 4F progress (Unitatea 4 - Robotică Educațională & Roboți Virtuali cu Senzori)
+  const [g7RobotLevel, setG7RobotLevel] = useState<GameLevel>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7robot_level');
+      if (saved) return Number(saved) as GameLevel;
+    } catch {
+      // Ignore
+    }
+    return 1;
+  });
+  const [g7RobotScore, setG7RobotScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7robot_score');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+  const [g7RobotElapsedSeconds, setG7RobotElapsedSeconds] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('arkedo_g7robot_elapsed');
+      if (saved) return Number(saved);
+    } catch {
+      // Ignore
+    }
+    return 0;
+  });
+
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
 
   // Sync state if audio manager changes anywhere (e.g. from in-game sound button)
@@ -1063,6 +1191,21 @@ function GameContent() {
       localStorage.setItem('arkedo_g7cp1_level', String(g7CP1Level));
       localStorage.setItem('arkedo_g7cp1_score', String(g7CP1Score));
       localStorage.setItem('arkedo_g7cp1_elapsed', String(g7CP1ElapsedSeconds));
+      localStorage.setItem('arkedo_g7cp2_level', String(g7CP2Level));
+      localStorage.setItem('arkedo_g7cp2_score', String(g7CP2Score));
+      localStorage.setItem('arkedo_g7cp2_elapsed', String(g7CP2ElapsedSeconds));
+      localStorage.setItem('arkedo_g7dec_level', String(g7DecLevel));
+      localStorage.setItem('arkedo_g7dec_score', String(g7DecScore));
+      localStorage.setItem('arkedo_g7dec_elapsed', String(g7DecElapsedSeconds));
+      localStorage.setItem('arkedo_g7loop_level', String(g7LoopLevel));
+      localStorage.setItem('arkedo_g7loop_score', String(g7LoopScore));
+      localStorage.setItem('arkedo_g7loop_elapsed', String(g7LoopElapsedSeconds));
+      localStorage.setItem('arkedo_g7stem_level', String(g7StemLevel));
+      localStorage.setItem('arkedo_g7stem_score', String(g7StemScore));
+      localStorage.setItem('arkedo_g7stem_elapsed', String(g7StemElapsedSeconds));
+      localStorage.setItem('arkedo_g7robot_level', String(g7RobotLevel));
+      localStorage.setItem('arkedo_g7robot_score', String(g7RobotScore));
+      localStorage.setItem('arkedo_g7robot_elapsed', String(g7RobotElapsedSeconds));
     } catch {
       // Ignore
     }
@@ -1092,7 +1235,12 @@ function GameContent() {
     g7V2Level, g7V2Score, g7V2ElapsedSeconds,
     g7C1Level, g7C1Score, g7C1ElapsedSeconds,
     g7G1Level, g7G1Score, g7G1ElapsedSeconds,
-    g7CP1Level, g7CP1Score, g7CP1ElapsedSeconds
+    g7CP1Level, g7CP1Score, g7CP1ElapsedSeconds,
+    g7CP2Level, g7CP2Score, g7CP2ElapsedSeconds,
+    g7DecLevel, g7DecScore, g7DecElapsedSeconds,
+    g7LoopLevel, g7LoopScore, g7LoopElapsedSeconds,
+    g7StemLevel, g7StemScore, g7StemElapsedSeconds,
+    g7RobotLevel, g7RobotScore, g7RobotElapsedSeconds
   ]);
 
   // Current active level & score
@@ -1146,6 +1294,14 @@ function GameContent() {
     ? g7CP1Level
     : activeMission === 'g7_cpp_b'
     ? g7CP2Level
+    : activeMission === 'g7_decision_a'
+    ? g7DecLevel
+    : activeMission === 'g7_loop_b'
+    ? g7LoopLevel
+    : activeMission === 'g7_stem_a'
+    ? g7StemLevel
+    : activeMission === 'g7_robot_b'
+    ? g7RobotLevel
     : filesLevel;
     
   const currentScore = activeMission === 'hardware' 
@@ -1198,6 +1354,14 @@ function GameContent() {
     ? g7CP1Score
     : activeMission === 'g7_cpp_b'
     ? g7CP2Score
+    : activeMission === 'g7_decision_a'
+    ? g7DecScore
+    : activeMission === 'g7_loop_b'
+    ? g7LoopScore
+    : activeMission === 'g7_stem_a'
+    ? g7StemScore
+    : activeMission === 'g7_robot_b'
+    ? g7RobotScore
     : filesScore;
     
   const currentElapsedSeconds = activeMission === 'hardware' 
@@ -1250,6 +1414,14 @@ function GameContent() {
     ? g7CP1ElapsedSeconds
     : activeMission === 'g7_cpp_b'
     ? g7CP2ElapsedSeconds
+    : activeMission === 'g7_decision_a'
+    ? g7DecElapsedSeconds
+    : activeMission === 'g7_loop_b'
+    ? g7LoopElapsedSeconds
+    : activeMission === 'g7_stem_a'
+    ? g7StemElapsedSeconds
+    : activeMission === 'g7_robot_b'
+    ? g7RobotElapsedSeconds
     : filesElapsedSeconds;
 
   // Automatically scroll to top on view or level change
@@ -1285,7 +1457,11 @@ function GameContent() {
       (activeMission === 'g7_cloud_a' && g7C1Level <= 7) ||
       (activeMission === 'g7_gis_b' && g7G1Level <= 7) ||
       (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) ||
-      (activeMission === 'g7_cpp_b' && g7CP2Level <= 7);
+      (activeMission === 'g7_cpp_b' && g7CP2Level <= 7) ||
+      (activeMission === 'g7_decision_a' && g7DecLevel <= 7) ||
+      (activeMission === 'g7_loop_b' && g7LoopLevel <= 7) ||
+      (activeMission === 'g7_stem_a' && g7StemLevel <= 7) ||
+      (activeMission === 'g7_robot_b' && g7RobotLevel <= 7);
 
     if (isTimerRunning && view === 'lesson' && isOngoing) {
       interval = setInterval(() => {
@@ -1339,6 +1515,14 @@ function GameContent() {
           setG7CP1ElapsedSeconds((prev) => prev + 1);
         } else if (activeMission === 'g7_cpp_b') {
           setG7CP2ElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_decision_a') {
+          setG7DecElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_loop_b') {
+          setG7LoopElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_stem_a') {
+          setG7StemElapsedSeconds((prev) => prev + 1);
+        } else if (activeMission === 'g7_robot_b') {
+          setG7RobotElapsedSeconds((prev) => prev + 1);
         } else {
           setFilesElapsedSeconds((prev) => prev + 1);
         }
@@ -1347,7 +1531,7 @@ function GameContent() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level, g6S2Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level, g7C1Level, g7G1Level, g7CP1Level, g7CP2Level]);
+  }, [isTimerRunning, view, currentLevel, activeMission, hwLevel, filesLevel, internet1Level, internet2Level, text1Level, text2Level, algo1Level, algo2Level, scratch1Level, scratch2Level, g6P1Level, g6P2Level, g6P3Level, g6A1Level, g6M1Level, g6E1Level, g6S1Level, g6S2Level, g7W1Level, g7W2Level, g7A1Level, g7V2Level, g7C1Level, g7G1Level, g7CP1Level, g7CP2Level, g7DecLevel, g7LoopLevel, g7StemLevel, g7RobotLevel]);
 
   // Check if a mission is fully completed and finished
   const isMissionCompleted = (mId: string): boolean => {
@@ -1381,6 +1565,10 @@ function GameContent() {
     if (mId === 'g7_gis_b' && (g7G1Level >= 8 || g7G1Score >= 100)) return true;
     if (mId === 'g7_cpp_a' && (g7CP1Level >= 8 || g7CP1Score >= 100)) return true;
     if (mId === 'g7_cpp_b' && (g7CP2Level >= 8 || g7CP2Score >= 100)) return true;
+    if (mId === 'g7_decision_a' && (g7DecLevel >= 8 || g7DecScore >= 100)) return true;
+    if (mId === 'g7_loop_b' && (g7LoopLevel >= 8 || g7LoopScore >= 100)) return true;
+    if (mId === 'g7_stem_a' && (g7StemLevel >= 8 || g7StemScore >= 100)) return true;
+    if (mId === 'g7_robot_b' && (g7RobotLevel >= 8 || g7RobotScore >= 100)) return true;
 
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
@@ -1411,6 +1599,10 @@ function GameContent() {
       if (mId === 'g7_gis_b' && (lp.g7_gis_b?.completed || (lp.g7_gis_b?.score || 0) >= 100)) return true;
       if (mId === 'g7_cpp_a' && ((lp as any).g7_cpp_a?.completed || ((lp as any).g7_cpp_a?.score || 0) >= 100)) return true;
       if (mId === 'g7_cpp_b' && ((lp as any).g7_cpp_b?.completed || ((lp as any).g7_cpp_b?.score || 0) >= 100)) return true;
+      if (mId === 'g7_decision_a' && ((lp as any).g7_decision_a?.completed || ((lp as any).g7_decision_a?.score || 0) >= 100)) return true;
+      if (mId === 'g7_loop_b' && ((lp as any).g7_loop_b?.completed || ((lp as any).g7_loop_b?.score || 0) >= 100)) return true;
+      if (mId === 'g7_stem_a' && ((lp as any).g7_stem_a?.completed || ((lp as any).g7_stem_a?.score || 0) >= 100)) return true;
+      if (mId === 'g7_robot_b' && ((lp as any).g7_robot_b?.completed || ((lp as any).g7_robot_b?.score || 0) >= 100)) return true;
     }
 
     return false;
@@ -1443,6 +1635,10 @@ function GameContent() {
     g7_gis_b: isMissionCompleted('g7_gis_b'),
     g7_cpp_a: isMissionCompleted('g7_cpp_a'),
     g7_cpp_b: isMissionCompleted('g7_cpp_b'),
+    g7_decision_a: isMissionCompleted('g7_decision_a'),
+    g7_loop_b: isMissionCompleted('g7_loop_b'),
+    g7_stem_a: isMissionCompleted('g7_stem_a'),
+    g7_robot_b: isMissionCompleted('g7_robot_b'),
   };
 
   // Listen to browser navigation
@@ -1510,7 +1706,7 @@ function GameContent() {
   };
 
   // Launch or resume a mission
-  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a') => {
+  const handleSelectMission = (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a') => {
     setActiveMission(missionId);
     setView('lesson');
     setIsTimerRunning(true);
@@ -1620,6 +1816,15 @@ function GameContent() {
       return;
     } else if (activeMission === 'g7_cpp_b') {
       handleResetG7CP2();
+      return;
+    } else if (activeMission === 'g7_decision_a') {
+      handleResetG7Dec();
+      return;
+    } else if (activeMission === 'g7_loop_b') {
+      handleResetG7Loop();
+      return;
+    } else if (activeMission === 'g7_stem_a') {
+      handleResetG7Stem();
       return;
     }
     arky.triggerIdle();
@@ -1955,6 +2160,174 @@ function GameContent() {
       localStorage.setItem('arkedo_g7cp2_level', '1');
       localStorage.setItem('arkedo_g7cp2_score', '0');
       localStorage.setItem('arkedo_g7cp2_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 C++ Mission 4C (Unitatea 4 - Structura Alternativă: if / else & Operatori Logici) level progression
+  const handleG7DecCompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7DecScore, earnedScore));
+      setG7DecScore(updatedTotal);
+      setG7DecLevel((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7dec_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7dec_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7DecScore(finalScore);
+      setG7DecLevel(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7dec_level', '8');
+        localStorage.setItem('arkedo_g7dec_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_decision_a', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_decision_a' as any, true, 8, finalScore, g7DecElapsedSeconds);
+    }
+  };
+
+  const handleResetG7Dec = () => {
+    sounds.playClick();
+    setG7DecScore(0);
+    setG7DecLevel(1);
+    setG7DecElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_decision_a');
+      localStorage.setItem('arkedo_g7dec_level', '1');
+      localStorage.setItem('arkedo_g7dec_score', '0');
+      localStorage.setItem('arkedo_g7dec_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 C++ Mission 4D (Unitatea 4 - Structura Repetitivă while & Algoritmi pe Cifrele unui Număr) level progression
+  const handleG7LoopCompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7LoopScore, earnedScore));
+      setG7LoopScore(updatedTotal);
+      setG7LoopLevel((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7loop_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7loop_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7LoopScore(finalScore);
+      setG7LoopLevel(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7loop_level', '8');
+        localStorage.setItem('arkedo_g7loop_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_loop_b', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_loop_b' as any, true, 8, finalScore, g7LoopElapsedSeconds);
+    }
+  };
+
+  const handleResetG7Loop = () => {
+    sounds.playClick();
+    setG7LoopScore(0);
+    setG7LoopLevel(1);
+    setG7LoopElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_loop_b');
+      localStorage.setItem('arkedo_g7loop_level', '1');
+      localStorage.setItem('arkedo_g7loop_score', '0');
+      localStorage.setItem('arkedo_g7loop_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 C++ Mission 4E (Unitatea 4 - Bucle for, do-while & Aplicații Interdisciplinare STEM) level progression
+  const handleG7StemCompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7StemScore, earnedScore));
+      setG7StemScore(updatedTotal);
+      setG7StemLevel((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7stem_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7stem_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7StemScore(finalScore);
+      setG7StemLevel(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7stem_level', '8');
+        localStorage.setItem('arkedo_g7stem_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_stem_a', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_stem_a' as any, true, 8, finalScore, g7StemElapsedSeconds);
+    }
+  };
+
+  const handleResetG7Stem = () => {
+    sounds.playClick();
+    setG7StemScore(0);
+    setG7StemLevel(1);
+    setG7StemElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_stem_a');
+      localStorage.setItem('arkedo_g7stem_level', '1');
+      localStorage.setItem('arkedo_g7stem_score', '0');
+      localStorage.setItem('arkedo_g7stem_elapsed', '0');
+    } catch {}
+    setIsTimerRunning(true);
+    arky.triggerIdle();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Grade 7 Robotics Mission 4F (Unitatea 4 - Robotică Educațională & Roboți Virtuali cu Senzori) level progression
+  const handleG7RobotCompleteLevel = (levelIndex: number, earnedScore: number) => {
+    if (levelIndex < 7) {
+      const updatedTotal = Math.min(100, Math.max(g7RobotScore, earnedScore));
+      setG7RobotScore(updatedTotal);
+      setG7RobotLevel((levelIndex + 1) as GameLevel);
+      try {
+        localStorage.setItem('arkedo_g7robot_level', String(levelIndex + 1));
+        localStorage.setItem('arkedo_g7robot_score', String(updatedTotal));
+      } catch {}
+      arky.triggerSuccess();
+    } else {
+      const finalScore = Math.min(100, Math.max(0, earnedScore));
+      setG7RobotScore(finalScore);
+      setG7RobotLevel(8 as GameLevel); // Victory Screen
+      setIsTimerRunning(false);
+      arky.triggerFinished();
+      try {
+        localStorage.setItem('arkedo_g7robot_level', '8');
+        localStorage.setItem('arkedo_g7robot_score', String(finalScore));
+        localStorage.setItem('arkedo_completed_g7_robot_b', 'true');
+      } catch {}
+      updateActiveLessonProgress('g7_robot_b' as any, true, 8, finalScore, g7RobotElapsedSeconds);
+    }
+  };
+
+  const handleResetG7Robot = () => {
+    sounds.playClick();
+    setG7RobotScore(0);
+    setG7RobotLevel(1);
+    setG7RobotElapsedSeconds(0);
+    try {
+      localStorage.removeItem('arkedo_completed_g7_robot_b');
+      localStorage.setItem('arkedo_g7robot_level', '1');
+      localStorage.setItem('arkedo_g7robot_score', '0');
+      localStorage.setItem('arkedo_g7robot_elapsed', '0');
     } catch {}
     setIsTimerRunning(true);
     arky.triggerIdle();
@@ -3302,12 +3675,112 @@ function GameContent() {
                 )}
               </div>
             )}
+
+            {/* Level Views for GRADE 7 - C++ MISSION 4C (STRUCTURA ALTERNATIVĂ: IF / ELSE & OPERATORI LOGICI) */}
+            {activeMission === 'g7_decision_a' && (
+              <div className="flex-1">
+                {g7DecLevel <= 7 ? (
+                  <ModuleG7DecisionFlow
+                    currentLevel={g7DecLevel}
+                    onCompletePage={(earnedScore) => handleG7DecCompleteLevel(g7DecLevel, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7Dec}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7DecScore}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7DecElapsedSeconds}
+                    courseId="g7_decision_a"
+                    onReset={handleResetG7Dec}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for GRADE 7 - C++ MISSION 4D (STRUCTURA REPETITIVĂ WHILE & ALGORITMI PE CIFRE) */}
+            {activeMission === 'g7_loop_b' && (
+              <div className="flex-1">
+                {g7LoopLevel <= 7 ? (
+                  <ModuleG7LoopFlow
+                    currentLevel={g7LoopLevel}
+                    onCompletePage={(earnedScore) => handleG7LoopCompleteLevel(g7LoopLevel, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7Loop}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7LoopScore}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7LoopElapsedSeconds}
+                    courseId="g7_loop_b"
+                    onReset={handleResetG7Loop}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for GRADE 7 - C++ MISSION 4E (BUCLE FOR, DO-WHILE & APLICAȚII STEM) */}
+            {activeMission === 'g7_stem_a' && (
+              <div className="flex-1">
+                {g7StemLevel <= 7 ? (
+                  <ModuleG7StemFlow
+                    currentLevel={g7StemLevel}
+                    onCompletePage={(earnedScore) => handleG7StemCompleteLevel(g7StemLevel, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7Stem}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7StemScore}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7StemElapsedSeconds}
+                    courseId="g7_stem_a"
+                    onReset={handleResetG7Stem}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
+
+            {/* Level Views for GRADE 7 - ROBOTICS MISSION 4F (ROBOTICĂ EDUCAȚIONALĂ & ROBOȚI VIRTUALI CU SENZORI) */}
+            {activeMission === 'g7_robot_b' && (
+              <div className="flex-1">
+                {g7RobotLevel <= 7 ? (
+                  <ModuleG7RobotFlow
+                    currentLevel={g7RobotLevel}
+                    onCompletePage={(earnedScore) => handleG7RobotCompleteLevel(g7RobotLevel, earnedScore)}
+                    studentName={studentName}
+                    onRestartMission={handleResetG7Robot}
+                    onReturnToCatalog={() => navigateToView('catalog')}
+                  />
+                ) : (
+                  <VictoryScreen
+                    score={g7RobotScore}
+                    maxScore={maxScore}
+                    studentName={studentName}
+                    elapsedSeconds={g7RobotElapsedSeconds}
+                    courseId="g7_robot_b"
+                    onReset={handleResetG7Robot}
+                    onBackToCatalog={() => navigateToView('catalog')}
+                  />
+                )}
+              </div>
+            )}
           </>
         )}
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7) || (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) || (activeMission === 'g7_cpp_b' && g7CP2Level <= 7)) && (
+      {view === 'lesson' && ((activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7) || (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) || (activeMission === 'g7_cpp_b' && g7CP2Level <= 7) || (activeMission === 'g7_decision_a' && g7DecLevel <= 7) || (activeMission === 'g7_loop_b' && g7LoopLevel <= 7) || (activeMission === 'g7_stem_a' && g7StemLevel <= 7) || (activeMission === 'g7_robot_b' && g7RobotLevel <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}
