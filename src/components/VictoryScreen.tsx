@@ -9,13 +9,14 @@ import { MascotaArky } from './MascotaArky';
 import { logStudentResult } from '../lib/resultsService';
 import { saveStudentDiploma } from '../lib/studentAuthService';
 import { computeGradeDetails } from '../utils/pedagogicalGrading';
+import { AllMissionId } from '../types';
 
 interface VictoryScreenProps {
   score: number;
   maxScore: number;
   studentName?: string;
   elapsedSeconds?: number;
-  courseId?: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_malware' | 'g6_anim3d' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b';
+  courseId?: AllMissionId | string;
   onReset: () => void;
   onBackToCatalog?: () => void;
 }
@@ -62,6 +63,18 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isG7V2 = courseId === 'g7_video_b';
   const isG7C1 = courseId === 'g7_cloud_a';
   const isG7GIS = courseId === 'g7_gis_b';
+  const isG8CalcA = courseId === 'g8_calc_a';
+  const isG8CalcB = courseId === 'g8_calc_b';
+  const isG8CalcC = courseId === 'g8_calc_c';
+  const isG8CalcD = courseId === 'g8_calc_d';
+  const isG8WebA = courseId === 'g8_web_a';
+  const isG8WebB = courseId === 'g8_web_b';
+  const isG8WebC = courseId === 'g8_web_c';
+  const isG8AlgoA = courseId === 'g8_algo_a';
+  const isG8AlgoB = courseId === 'g8_algo_b';
+  const isG8AlgoC = courseId === 'g8_algo_c';
+  const isG8AlgoD = courseId === 'g8_algo_d';
+  const isG8AlgoE = courseId === 'g8_algo_e';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -107,6 +120,30 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     ? (lang === 'en' ? 'Cloud Collaboration & Teamwork in Google Docs/Slides (Grade 7 Textbook pp. 48-56)' : 'Aplicații Colaborative în Cloud & Echipă (Clasa a VII-a Manual pag. 48-56)')
     : isG7GIS
     ? (lang === 'en' ? 'Geographic Information Systems (GIS) & Digital Cartography (Grade 7 Textbook pp. 57-63)' : 'Sisteme Informaționale Geografice (GIS) & Cartografie Digitală (Clasa a VII-a Manual pag. 57-63)')
+    : isG8CalcA
+    ? (lang === 'en' ? 'Excel Interface & Spreadsheets Mission 1A (Grade 8 Textbook pp. 12-20)' : 'Misiunea 1A Interfață Excel & Registre de Calcul (Clasa a VIII-a Manual pag. 12-20)')
+    : isG8CalcB
+    ? (lang === 'en' ? 'Excel Formulas & Absolute References Mission 1B (Grade 8 Textbook pp. 21-25)' : 'Misiunea 1B Formule, Funcții Standard & Adresare $ (Clasa a VIII-a Manual pag. 21-25)')
+    : isG8CalcC
+    ? (lang === 'en' ? 'Conditional Functions IF/COUNTIF Mission 1C (Grade 8 Textbook pp. 26-29)' : 'Misiunea 1C Funcții Logice IF/COUNTIF & Filtrare (Clasa a VIII-a Manual pag. 26-29)')
+    : isG8CalcD
+    ? (lang === 'en' ? 'Charts & Data Visualization Mission 1D (Grade 8 Textbook pp. 30-35)' : 'Misiunea 1D Diagrame & Reprezentare Grafică (Clasa a VIII-a Manual pag. 30-35)')
+    : isG8WebA
+    ? (lang === 'en' ? 'Web Structure & Navigation Mission 2A (Grade 8 Textbook pp. 36-43)' : 'Misiunea 2A Structură Site & Navigare Google Sites (Clasa a VIII-a Manual pag. 36-43)')
+    : isG8WebB
+    ? (lang === 'en' ? 'Cloud Media Integration Mission 2B (Grade 8 Textbook pp. 44-51)' : 'Misiunea 2B Integrare Media & Servicii Cloud Google (Clasa a VIII-a Manual pag. 44-51)')
+    : isG8WebC
+    ? (lang === 'en' ? 'Web Publishing & Digital Safety Mission 2C (Grade 8 Textbook pp. 52-57)' : 'Misiunea 2C Publicare, Domenii & Securitate Digitală (Clasa a VIII-a Manual pag. 52-57)')
+    : isG8AlgoA
+    ? (lang === 'en' ? 'C++ Digit Processing Mission 3A (Grade 8 Textbook pp. 58-69)' : 'Misiunea 3A C++ Prelucrarea Cifrelor unui Număr (Clasa a VIII-a Manual pag. 58-69)')
+    : isG8AlgoB
+    ? (lang === 'en' ? 'C++ Number Sequences & Fibonacci Mission 3B (Grade 8 Textbook pp. 70-77)' : 'Misiunea 3B C++ Șirul Fibonacci & Variabile Glisante (Clasa a VIII-a Manual pag. 70-77)')
+    : isG8AlgoC
+    ? (lang === 'en' ? 'C++ Extremum Min/Max & Positions Mission 3C (Grade 8 Textbook pp. 78-83)' : 'Misiunea 3C C++ Extremum Min/Max & Poziții (Clasa a VIII-a Manual pag. 78-83)')
+    : isG8AlgoD
+    ? (lang === 'en' ? 'Robotics & Autonomous Virtual Sensors Mission 3D (Grade 8 Textbook pp. 84-91)' : 'Misiunea 3D Robotică & Roboți Virtuali cu Senzori (Clasa a VIII-a Manual pag. 84-91)')
+    : isG8AlgoE
+    ? (lang === 'en' ? 'Grand Graduation Project: Preferred High School Mission 3E (Grade 8 Textbook pp. 92-96)' : 'Misiunea 3E Proiect Final „Liceul Preferat” & Absolvire Gimnaziu (Clasa a VIII-a Manual pag. 92-96)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
 
@@ -190,7 +227,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
       {/* Decorative Icon & Glow */}
       <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
-        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : isG7A1 ? '🎙️📻' : isG7V2 ? '🎬📽️' : isG7C1 ? '👥☁️' : isG7GIS ? '🗺️🧭' : '🌳✨'}
+        {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : isG7A1 ? '🎙️📻' : isG7V2 ? '🎬📽️' : isG7C1 ? '👥☁️' : isG7GIS ? '🗺️🧭' : isG8CalcA ? '📊💻' : isG8CalcB ? '🧮✨' : isG8CalcC ? '🚦📈' : isG8CalcD ? '📊🥧' : isG8WebA ? '🌐📐' : isG8WebB ? '🧩☁️' : isG8WebC ? '🚀🛡️' : isG8AlgoA ? '🔢💻' : isG8AlgoB ? '🌀⚡' : isG8AlgoC ? '🏆🎯' : isG8AlgoD ? '🤖📡' : isG8AlgoE ? '🎓🌟' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
@@ -238,6 +275,30 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, Certified Cloud Collaboration Leader!' : 'Felicitări, Lider de Colaborare în Cloud & Echipă!')
           : isG7GIS
           ? (lang === 'en' ? 'Congratulations, Certified GIS Specialist & Digital Cartographer!' : 'Felicitări, Specialist GIS & Cartograf Digital Certificat!')
+          : isG8CalcA
+          ? (lang === 'en' ? 'Congratulations, Certified Excel & Spreadsheet Specialist!' : 'Felicitări, Specialist Certificat în Foi de Calcul Excel!')
+          : isG8CalcB
+          ? (lang === 'en' ? 'Congratulations, Master of Formulas & Mathematical Functions!' : 'Felicitări, Maestru în Formule & Funcții Matematice!')
+          : isG8CalcC
+          ? (lang === 'en' ? 'Congratulations, Data Analyst & Conditional Logic Master!' : 'Felicitări, Analist de Date & Maestru în Funcții Condiționale!')
+          : isG8CalcD
+          ? (lang === 'en' ? 'Congratulations, Chart Architect & Data Visualizer!' : 'Felicitări, Arhitect de Diagrame & Reprezentări Grafice!')
+          : isG8WebA
+          ? (lang === 'en' ? 'Congratulations, Certified Google Sites Web Designer!' : 'Felicitări, Web Designer Google Sites Certificat!')
+          : isG8WebB
+          ? (lang === 'en' ? 'Congratulations, Multimedia Developer & Cloud Integrator!' : 'Felicitări, Dezvoltator Multimedia & Integrator Cloud!')
+          : isG8WebC
+          ? (lang === 'en' ? 'Congratulations, Certified Web Administrator & Cyber Ethicist!' : 'Felicitări, Administrator Web & Specialist Securitate Digitală!')
+          : isG8AlgoA
+          ? (lang === 'en' ? 'Congratulations, C++ Programmer • Digit Processing Master!' : 'Felicitări, Programator C++ • Maestru în Prelucrarea Cifrelor!')
+          : isG8AlgoB
+          ? (lang === 'en' ? 'Congratulations, C++ Algorithmist • Sequences & Fibonacci Hero!' : 'Felicitări, Algoritmist C++ • Maestru în Șiruri & Fibonacci!')
+          : isG8AlgoC
+          ? (lang === 'en' ? 'Congratulations, C++ Search & Extremum Analytics Specialist!' : 'Felicitări, Specialist C++ în Căutare & Determinare Extremum!')
+          : isG8AlgoD
+          ? (lang === 'en' ? 'Congratulations, Certified Autonomous Robotics & Sensor Engineer!' : 'Felicitări, Inginer în Robotică Autonomă & Senzori Virtuali!')
+          : isG8AlgoE
+          ? (lang === 'en' ? 'Congratulations, Gymnasium Laureate & High School Candidate!' : 'Felicitări, Absolvent de Onoare al Gimnaziului • Informatică & TIC!')
           : t.vTitle}
       </h2>
 
@@ -318,6 +379,54 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en'
               ? 'You successfully mastered Geographic Information Systems (GIS), thematic layer stacking, spatial vector primitives (Points, Lines, Polygons), attribute tables, GPS coordinates in Romania, 3D Google Earth exploration, emergency spatial routing, and cartographic privacy!'
               : 'Ai finalizat cu succes evaluarea completă a Unității 3B (GIS & Cartografie Digitală): stăpânești sistemele informaționale geografice, stiva straturilor tematice (Layers), formele geometrice vectoriale (Punct, Linie, Poligon), tabelele de atribute, coordonatele GPS ale României, explorarea 3D în Google Earth, analiza spațială pentru situații de urgență și protecția datelor de geolocație!')
+          : isG8CalcA
+          ? (lang === 'en'
+              ? 'You successfully mastered spreadsheet essentials: workbook architecture, Ribbon commands, row/column boundaries (1M rows), cell addressing (B2), data types (numeric, text, currency), and sheet management!'
+              : 'Ai finalizat cu succes Misiunea 1A: stăpânești registrul de calcul Excel (.xlsx), anatomia panglicii Ribbon, adresele de celule (B2), tipurile de date (numere, text, monedă), adăugarea și redenumirea foilor de lucru!')
+          : isG8CalcB
+          ? (lang === 'en'
+              ? 'You successfully mastered Excel mathematical and statistical formulas: SUM, AVERAGE, MIN, MAX, COUNT, relative vs absolute addresses ($A$1), and error diagnostics (#DIV/0!, #NAME?, #REF!)!'
+              : 'Ai finalizat cu succes Misiunea 1B: stăpânești formulele matematice, funcțiile SUM, AVERAGE, MIN, MAX, COUNT, diferența crucială dintre adresele relative și absolute ($A$1) și depanarea erorilor de calcul!')
+          : isG8CalcC
+          ? (lang === 'en'
+              ? 'You successfully mastered conditional decision logic: IF function syntax, multiple criteria, conditional counting with COUNTIF, and column sorting and auto-filtering!'
+              : 'Ai finalizat cu succes Misiunea 1C: stăpânești logica decizională cu funcția IF, ghilimelele pentru texte, numărarea condiționată COUNTIF, sortarea alfabetică/numerică și filtrele automate cu criterii multiple!')
+          : isG8CalcD
+          ? (lang === 'en'
+              ? 'You successfully mastered chart design: column/bar histograms, line trend charts, 2D/3D pie proportions, data labels, series selection, and statistical data visualization!'
+              : 'Ai finalizat cu succes Misiunea 1D: stăpânești diagramele în coloane/bare, liniile de evoluție în timp, diagramele circulare Pie 2D/3D, etichetele de date, legendele și reprezentarea vizuală a indicatorilor școlari!')
+          : isG8WebA
+          ? (lang === 'en'
+              ? 'You successfully mastered Google Sites website creation: hierarchical page trees, 3-click navigation rule, custom headers, image carousels, and responsive design across desktop, tablet, and mobile!'
+              : 'Ai finalizat cu succes Misiunea 2A: stăpânești crearea site-urilor în Google Sites, arborele ierarhic de pagini, regula celor 3 clicuri, tipurile de antet, caruselul de imagini și designul responsive pe desktop, tabletă și telefon!')
+          : isG8WebB
+          ? (lang === 'en'
+              ? 'You successfully mastered cloud multimedia integration: embedding Google Forms, Slides presentations, Sheets tables, Google Maps, YouTube videos, and HTML/CSS iframe embeds with public access permissions!'
+              : 'Ai finalizat cu succes Misiunea 2B: stăpânești integrarea conținutului multimedia din Google Drive (Formulare feedback, Prezentări Slides, Foi Sheets), hărți Google Maps, videoclipuri și cod HTML5/CSS3 prin iframe!')
+          : isG8WebC
+          ? (lang === 'en'
+              ? 'You successfully mastered web publication workflows: domain management, viewing vs editing permission matrices, Creative Commons copyright compliance, and GDPR student privacy protection!'
+              : 'Ai finalizat cu succes Misiunea 2C: stăpânești publicarea pe web a proiectului, matricea drepturilor de acces, configurarea adresei URL, respectarea drepturilor de autor și protecția strictă a datelor personale conform GDPR!')
+          : isG8AlgoA
+          ? (lang === 'en'
+              ? 'You successfully mastered C++ integer digit processing: division / and modulo %, digit extraction, digit sum, even/odd counting, number inversion, palindrome validation, and 13-digit CNP parsing!'
+              : 'Ai finalizat cu succes Misiunea 3A: stăpânești prelucrarea cifrelor unui număr în C++, operatorii / și %, descompunerea iterativă, suma cifrelor, oglinditul, testul de număr palindrom și decodificarea CNP-ului de 13 cifre!')
+          : isG8AlgoB
+          ? (lang === 'en'
+              ? 'You successfully mastered number sequence generation: sliding variables without arrays, Fibonacci terms, arithmetic/geometric progressions, triangular numbers, and memory optimization!'
+              : 'Ai finalizat cu succes Misiunea 3B: stăpânești generarea secvențelor de numere în C++, algoritmul variabilelor glisante (p, d, c), termenii șirului Fibonacci, progresiile aritmetice și numerele triunghiulare fără consum masiv de memorie!')
+          : isG8AlgoC
+          ? (lang === 'en'
+              ? 'You successfully mastered search and extremum algorithms: minimum/maximum identification, safe initialization with first element, first/last occurrence position tracking, and statistical indicators!'
+              : 'Ai finalizat cu succes Misiunea 3C: stăpânești determinarea valorilor extreme (minim și maxim) în C++, inițializarea corectă pentru numere negative, memorarea poziției de apariție și calculul mediilor condiționate!')
+          : isG8AlgoD
+          ? (lang === 'en'
+              ? 'You successfully mastered educational robotics: Lego Mindstorms EV3 / NXT architectures, ultrasonic distance sensors, collision prevention thresholds, decision loops, and reactive state machines!'
+              : 'Ai finalizat cu succes Misiunea 3D: stăpânești arhitectura roboților autonomi, senzorul ultrasonic de distanță, pragurile de siguranță la frânare, buclele de decizie în timp real și mașinile reactive de stări pentru evitarea coliziunilor!')
+          : isG8AlgoE
+          ? (lang === 'en'
+              ? 'You successfully completed the Grand Graduation Project: Preferred High School! You integrated Excel admission grade calculators, Google Sites presentation web pages, and C++ admission prediction algorithms!'
+              : 'Ai finalizat cu succes Misiunea 3E și Proiectul de Sinteză „Liceul Preferat”! Ai integrat foaia de calcul tabelar a mediilor de admitere 80/20, site-ul web de prezentare a profilului dorit și algoritmul C++ de predicție a șanselor de admitere!')
           : t.vDesc}
       </p>
 
@@ -1029,6 +1138,196 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               </div>
             </div>
           </>
+        ) : courseId?.startsWith('g8_calc') ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Excel Master' : 'Interfață & Registru'}</div>
+                <div className="text-[10px] text-emerald-400">Workbook .xlsx & Foi</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧮</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Formula Pro' : 'Formule & Adresare $'}</div>
+                <div className="text-[10px] text-teal-400">SUM, AVERAGE & $A$1</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🚦</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Conditional Logic' : 'Funcții IF & COUNTIF'}</div>
+                <div className="text-[10px] text-cyan-400">Logică & Burse</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📈</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Chart Architect' : 'Diagrame 2D/3D'}</div>
+                <div className="text-[10px] text-purple-400">Coloane, Linii & Plăcintă</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🔍</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'AutoFilter Pro' : 'Sortare & Filtrare'}</div>
+                <div className="text-[10px] text-amber-300">Criterii & Top Elevi</div>
+              </div>
+            </div>
+          </>
+        ) : courseId?.startsWith('g8_web') ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🌐</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Web Architect' : 'Structură Google Sites'}</div>
+                <div className="text-[10px] text-sky-400">Arbore Pagini & Antet</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📱</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Responsive Pro' : 'Design Responsive'}</div>
+                <div className="text-[10px] text-emerald-400">Desktop, Tablet & Mobil</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧩</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cloud Integrator' : 'Integrare Media'}</div>
+                <div className="text-[10px] text-indigo-400">Forms, Slides & Maps</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">💻</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'HTML5 Embed' : 'Cod HTML & CSS'}</div>
+                <div className="text-[10px] text-cyan-400">Iframe & Carusel Foto</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🚀</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Web Publisher' : 'Publicare & GDPR'}</div>
+                <div className="text-[10px] text-rose-400">Domeniu & Siguranță</div>
+              </div>
+            </div>
+          </>
+        ) : isG8AlgoD ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🤖</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Autonomous Robot' : 'Robot Autonom'}</div>
+                <div className="text-[10px] text-emerald-400">Lego Mindstorms EV3</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📡</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Ultrasonic Eye' : 'Senzor Ultrasonic'}</div>
+                <div className="text-[10px] text-cyan-400">Con Reflexie & cm</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🛑</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Emergency Brake' : 'Frânare Sigură'}</div>
+                <div className="text-[10px] text-rose-400">Prag Inerție 15 cm</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔄</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Obstacle Avoidance' : 'Evitare Obstacol'}</div>
+                <div className="text-[10px] text-teal-400">Viraje & Ocolire</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">⚙️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'State Machine' : 'Mașină de Stări'}</div>
+                <div className="text-[10px] text-amber-300">Decizii în Timp Real</div>
+              </div>
+            </div>
+          </>
+        ) : isG8AlgoE ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🎓</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Gymnasium Laureate' : 'Absolvent de Onoare'}</div>
+                <div className="text-[10px] text-amber-300">Final Clasa a VIII-a</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🏫</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Preferred High School' : 'Liceul Preferat'}</div>
+                <div className="text-[10px] text-emerald-400">Proiect de Sinteză</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📊</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Admission Math' : 'Medie Admitere 80/20'}</div>
+                <div className="text-[10px] text-teal-400">Excel & Diagrame</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">💻</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'C++ Predictor' : 'Predicție C++'}</div>
+                <div className="text-[10px] text-indigo-400">Sondaj & Șanse Admitere</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">📜</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Grand Graduation' : 'Diploma de Merit'}</div>
+                <div className="text-[10px] text-amber-400">Clasa V - VIII Încheiată</div>
+              </div>
+            </div>
+          </>
+        ) : courseId?.startsWith('g8_algo') ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔢</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Digit Processor' : 'Prelucrare Cifre'}</div>
+                <div className="text-[10px] text-emerald-400">Operatorii / și %</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🌀</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Fibonacci Hero' : 'Șirul Fibonacci'}</div>
+                <div className="text-[10px] text-cyan-400">Variabile Glisante (p,d,c)</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🏆</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Extremum Finder' : 'Minim & Maxim'}</div>
+                <div className="text-[10px] text-amber-300">Poziții Prim/Ultim</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🔄</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Palindrome Pro' : 'Oglindit & Palindrom'}</div>
+                <div className="text-[10px] text-purple-400">Descompunere n &gt; 0</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🆔</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'CNP Parser' : 'Parser CNP 13 Cifre'}</div>
+                <div className="text-[10px] text-teal-400">Sex & Data Nașterii</div>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -1093,7 +1392,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
-                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : isG7A1 ? '🎙️' : isG7V2 ? '🎬' : isG7C1 ? '👥' : isG7GIS ? '🗺️' : '🌳'}
+                {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : isG7A1 ? '🎙️' : isG7V2 ? '🎬' : isG7C1 ? '👥' : isG7GIS ? '🗺️' : isG8CalcA ? '📊' : isG8CalcB ? '🧮' : isG8CalcC ? '🚦' : isG8CalcD ? '📈' : isG8WebA ? '🌐' : isG8WebB ? '🧩' : isG8WebC ? '🚀' : isG8AlgoA ? '🔢' : isG8AlgoB ? '🌀' : isG8AlgoC ? '🏆' : isG8AlgoD ? '🤖' : isG8AlgoE ? '🎓' : '🌳'}
               </span>
               <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
                 {t.schoolName}
@@ -1147,6 +1446,30 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en' ? 'Cloud Collaboration & Team Project Master Diploma' : 'Diplomă de Coordonator & Specialist Proiecte în Cloud')
               : isG7GIS
               ? (lang === 'en' ? 'Digital Cartographer & GIS Spatial Analysis Master Diploma' : 'Diplomă de Cartograf Digital & Specialist Analiză Spațială GIS')
+              : isG8CalcA
+              ? (lang === 'en' ? 'Certified Spreadsheet & Excel Specialist Diploma' : 'Diplomă de Specialist în Foi de Calcul & Registre Excel')
+              : isG8CalcB
+              ? (lang === 'en' ? 'Master of Formulas & Mathematical Modeling Diploma' : 'Diplomă de Maestru în Formule & Modelare Matematică')
+              : isG8CalcC
+              ? (lang === 'en' ? 'Data Analyst & Conditional Logic Master Diploma' : 'Diplomă de Analist de Date & Funcții Condiționale IF')
+              : isG8CalcD
+              ? (lang === 'en' ? 'Chart Architect & Data Visualization Master Diploma' : 'Diplomă de Arhitect de Diagrame & Vizualizare Date')
+              : isG8WebA
+              ? (lang === 'en' ? 'Certified Google Sites Web Designer Diploma' : 'Diplomă de Web Designer & Arhitect Google Sites')
+              : isG8WebB
+              ? (lang === 'en' ? 'Multimedia Developer & Cloud Media Integrator Diploma' : 'Diplomă de Dezvoltator Multimedia & Integrator Cloud')
+              : isG8WebC
+              ? (lang === 'en' ? 'Web Administrator & Digital Safety Specialist Diploma' : 'Diplomă de Administrator Web & Securitate Digitală')
+              : isG8AlgoA
+              ? (lang === 'en' ? 'C++ Programmer • Digit Processing Specialist Diploma' : 'Diplomă de Programator C++ • Prelucrarea Cifrelor')
+              : isG8AlgoB
+              ? (lang === 'en' ? 'C++ Algorithmist • Sequences & Fibonacci Hero Diploma' : 'Diplomă de Algoritmist C++ • Șiruri & Fibonacci')
+              : isG8AlgoC
+              ? (lang === 'en' ? 'C++ Search & Extremum Analytics Master Diploma' : 'Diplomă de Specialist C++ în Căutare & Determinare Extremum')
+              : isG8AlgoD
+              ? (lang === 'en' ? 'Autonomous Robotics & Sensor Systems Engineer Diploma' : 'Diplomă de Inginer în Robotică Autonomă & Senzori')
+              : isG8AlgoE
+              ? (lang === 'en' ? 'Grand Graduation Diploma of Gymnasium • Computer Science & ICT Laureate' : 'Marea Diplomă de Onoare la Absolvirea Gimnaziului • Informatică & TIC')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -1255,6 +1578,54 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               ? (lang === 'en'
                   ? 'For exceptional mastery of Geographic Information Systems (GIS), thematic layer stacking hierarchies, vector geometry primitives, precise WGS84 GPS coordinate navigation, 3D spatial terrain analysis in Google Earth, and emergency flood crisis routing with cartographic netiquette and privacy ethics.'
                   : 'Pentru excelență și performanțe remarcabile în stăpânirea Sistemelor Informaționale Geografice (GIS), ierarhia suprapunerii straturilor tematice, primitivele vectoriale (Punct, Polilinie, Poligon), navigarea prin coordonate GPS WGS84, analiza spațială 3D a reliefului în Google Earth și intervenția de urgență în caz de inundații cu respectarea netichetei cartografice și a confidențialității GDPR.')
+              : isG8CalcA
+              ? (lang === 'en'
+                  ? 'For remarkable mastery in spreadsheet workbook structure (.xlsx), cell coordinates, data typing, worksheet manipulation, and financial currency formatting (Textbook pp. 12-20).'
+                  : 'Pentru performanțe deosebite în stăpânirea structurii registrului de calcul (.xlsx), a coordonatelor de celule, a tipurilor de date, gestionării foilor de lucru și formatării financiare a tabelelor (Manual pag. 12-20).')
+              : isG8CalcB
+              ? (lang === 'en'
+                  ? 'For demonstrated excellence in constructing complex formulas, standard mathematical functions (SUM, AVERAGE, MIN, MAX, COUNT), absolute dollar referencing ($A$1), and error diagnostics (Textbook pp. 21-25).'
+                  : 'Pentru excelență în construirea formulelor matematice complexe, stăpânirea funcțiilor standard (SUM, AVERAGE, MIN, MAX, COUNT), blocarea referințelor absolute prin simbolul $ ($A$1) și depanarea erorilor de calcul (Manual pag. 21-25).')
+              : isG8CalcC
+              ? (lang === 'en'
+                  ? 'For outstanding achievements in conditional decision logic with IF, multi-criteria evaluations, conditional counting with COUNTIF, and ascending/descending data filtering (Textbook pp. 26-29).'
+                  : 'Pentru performanțe remarcabile în aplicarea logicii decizionale prin funcția IF, evaluări cu criterii multiple, numărarea condiționată prin COUNTIF și filtrarea/sortarea avansată a datelor școlare (Manual pag. 26-29).')
+              : isG8CalcD
+              ? (lang === 'en'
+                  ? 'For exceptional creativity and analytical precision in designing 2D/3D column histograms, line trend series, circular pie proportion charts, and statistical dashboards (Textbook pp. 30-35).'
+                  : 'Pentru creativitate și precizie analitică în proiectarea diagramelor de tip coloane/bare, liniilor de evoluție temporală, diagramelor circulare Pie 2D/3D și panourilor statistice de date (Manual pag. 30-35).')
+              : isG8WebA
+              ? (lang === 'en'
+                  ? 'For outstanding architectural mastery in building Google Sites web projects, establishing 3-click intuitive navigation trees, custom header typography, and multi-device responsive previews (Textbook pp. 36-43).'
+                  : 'Pentru măiestrie arhitecturală în proiectarea site-urilor web în Google Sites, stabilirea ierarhiei optime de navigare, personalizarea anteturilor și previzualizarea responsive pe orice dispozitiv (Manual pag. 36-43).')
+              : isG8WebB
+              ? (lang === 'en'
+                  ? 'For exceptional competence in multimedia cloud integration: embedding Google Forms, collaborative Slides, Sheets databases, interactive Maps, YouTube media, and HTML5/CSS3 iframes (Textbook pp. 44-51).'
+                  : 'Pentru competențe de elită în integrarea resurselor multimedia din cloud: formulare interactive de feedback, prezentări Slides, foi de calcul Sheets, hărți Google Maps și cod sursă HTML5/CSS3 (Manual pag. 44-51).')
+              : isG8WebC
+              ? (lang === 'en'
+                  ? 'For demonstrated excellence in website publishing, domain routing, permission security matrices, Creative Commons intellectual property adherence, and GDPR student privacy defense (Textbook pp. 52-57).'
+                  : 'Pentru excelență în publicarea pe web, gestionarea domeniilor, configurarea permisiunilor de acces, respectarea drepturilor de autor Creative Commons și protejarea strictă a datelor elevilor conform GDPR (Manual pag. 52-57).')
+              : isG8AlgoA
+              ? (lang === 'en'
+                  ? 'For remarkable algorithmic mastery in C++ integer digit processing: division and modulo arithmetic (/ and %), digit extraction loops, digit summation, number reversal, and CNP decoding (Textbook pp. 58-69).'
+                  : 'Pentru asimilarea excepțională a prelucrării cifrelor unui număr în C++: operatorii aritmetici / și %, buclele de descompunere, suma și numărarea cifrelor, testul de palindrom și decodificarea CNP-ului (Manual pag. 58-69).')
+              : isG8AlgoB
+              ? (lang === 'en'
+                  ? 'For outstanding performance in generating number sequences, sliding variable algorithms without vectors, Fibonacci terms, arithmetic progressions, and triangular numbers in C++ (Textbook pp. 70-77).'
+                  : 'Pentru performanțe deosebite în generarea secvențelor numerice în C++, tehnica variabilelor glisante fără tablouri unidimensionale, termenii șirului Fibonacci, progresiile matematice și numerele triunghiulare (Manual pag. 70-77).')
+              : isG8AlgoC
+              ? (lang === 'en'
+                  ? 'For demonstrated excellence in searching and extremum determination algorithms, robust negative-number initialization, first/last occurrence position tracking, and statistical aggregations in C++ (Textbook pp. 78-83).'
+                  : 'Pentru excelență în algoritmii de căutare și determinare a extremelor (minim/maxim), inițializarea corectă pentru mulțimi cu numere negative, memorarea poziției de apariție și statistici numerice în C++ (Manual pag. 78-83).')
+              : isG8AlgoD
+              ? (lang === 'en'
+                  ? 'For exceptional mastery in educational robotics, ultrasonic echo sensing, distance threshold braking calculations, collision prevention maneuvers, and autonomous state machine programming (Textbook pp. 84-91).'
+                  : 'Pentru măiestrie inginerească în robotica educațională, calibrarea senzorului ultrasonic de distanță, calculul inerției de frânare, manevrele de evitare a obstacolelor și programarea mașinilor de stări autonome (Manual pag. 84-91).')
+              : isG8AlgoE
+              ? (lang === 'en'
+                  ? 'For supreme graduation excellence in completing the 8th Grade Capstone Project: Preferred High School! Successfully combining spreadsheet admission databases, Google Sites presentation architecture, and C++ predictive admission analytics across the entire gymnasium curriculum (Textbook pp. 92-96).'
+                  : 'Pentru absolvirea de elită a întregului Ciclu Gimnazial (Clasele V-VIII) și finalizarea cu brio a Proiectului de Sinteză „Liceul Preferat”: integrarea calculului tabelar al mediilor de admitere 80/20, dezvoltarea site-ului web Google Sites și implementarea algoritmului C++ de predicție a sanselor de admitere (Manual pag. 92-96).')
               : t.vDiplomaText}
           </p>
 

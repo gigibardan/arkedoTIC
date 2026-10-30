@@ -45,7 +45,7 @@ export default defineConfig(() => {
           ],
         },
         workbox: {
-          maximumFileSizeToCacheInBytes: 8 * 1024 * 1024, // 8 MiB to precache full game assets & modules
+          maximumFileSizeToCacheInBytes: 25 * 1024 * 1024, // 25 MiB to precache full game assets & modules
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,json}'],
           runtimeCaching: [
             {

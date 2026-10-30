@@ -67,6 +67,9 @@ import { getCyberCityData } from '../lib/cyberCityService';
 import { calculateCityMetrics } from '../lib/cyberCityCatalog';
 import { Grade7CatalogSection } from './grade7/Grade7CatalogSection';
 import { Grade7InteractiveSimulators } from './grade7/Grade7InteractiveSimulators';
+import { Grade8CatalogSection } from './grade8/Grade8CatalogSection';
+import { Grade8InteractiveSimulators } from './grade8/Grade8InteractiveSimulators';
+import { AllMissionId } from '../types';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -82,8 +85,8 @@ const AVATARS = [
 interface CoursesCatalogProps {
   studentName: string;
   onSetStudentName: (name: string) => void;
-  onSelectMission: (missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b') => void;
-  activeMissionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b' | null;
+  onSelectMission: (missionId: AllMissionId) => void;
+  activeMissionId: AllMissionId | null;
   activeMissionLevel: number;
   activeMissionScore: number;
   elapsedSeconds: number;
@@ -149,6 +152,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g7_loop_b' && (localStorage.getItem('arkedo_g7loop_level') === '8' || Number(localStorage.getItem('arkedo_g7loop_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_loop_b') === 'true')) return true;
       if (mId === 'g7_stem_a' && (localStorage.getItem('arkedo_g7stem_level') === '8' || Number(localStorage.getItem('arkedo_g7stem_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_stem_a') === 'true')) return true;
       if (mId === 'g7_robot_b' && (localStorage.getItem('arkedo_g7robot_level') === '8' || Number(localStorage.getItem('arkedo_g7robot_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_robot_b') === 'true')) return true;
+      if (mId.startsWith('g8_')) {
+        if (localStorage.getItem(`arkedo_${mId}_level`) === '6' || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
+      }
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
@@ -163,6 +169,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   const getMaxPlayableLevels = (mId: string): number => {
     if (mId === 'hardware') return 5;
+    if (mId.startsWith('g8_')) return 5;
     if (mId === 'internet1' || mId === 'internet2') return 6;
     return 7;
   };
@@ -219,7 +226,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
-  const [pendingTargetMission, setPendingTargetMission] = useState<'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | null>(null);
+  const [pendingTargetMission, setPendingTargetMission] = useState<AllMissionId | null>(null);
 
   // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
@@ -257,9 +264,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   };
 
   // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a")
-  const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6' | 'grade7'>(() => {
+  const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6' | 'grade7' | 'grade8'>(() => {
     try {
       const saved = localStorage.getItem('arkedo_selected_grade');
+      if (saved === 'grade8') return 'grade8';
       if (saved === 'grade7') return 'grade7';
       if (saved === 'grade6') return 'grade6';
     } catch {
@@ -268,7 +276,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     return 'grade5';
   });
 
-  const handleSelectGrade = (grade: 'grade5' | 'grade6' | 'grade7') => {
+  const handleSelectGrade = (grade: 'grade5' | 'grade6' | 'grade7' | 'grade8') => {
     sounds.playClick();
     setSelectedGrade(grade);
     try {
@@ -519,7 +527,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  const handleAttemptStart = (targetMission: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b') => {
+  const handleAttemptStart = (targetMission: AllMissionId) => {
     // If student has no name yet, prompt them first
     if (!studentName && !nameInput.trim()) {
       setNameError(true);
@@ -559,7 +567,26 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     onSelectMission(targetMission);
   };
 
-  const getMissionTitle = (id: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6_presentation1' | 'g6_presentation2' | 'g6_paint3d' | 'g6_anim3d' | 'g6_malware' | 'g6_email' | 'g6_scratch1' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b' | null) => {
+  const getMissionTitle = (id: AllMissionId | null) => {
+    if (id?.startsWith('g8_')) {
+      const g8Titles: Record<string, { ro: string; en: string }> = {
+        g8_calc_a: { ro: 'Clasa a VIII-a • Modulul 1A: Registrul de calcul tabelar, Celule & Tipuri de Date', en: 'Grade 8 • Module 1A: Spreadsheet Workbook Structure, Cells & Data Types' },
+        g8_calc_b: { ro: 'Clasa a VIII-a • Modulul 1B: Formule & Funcții Matematice/Statistice (SUM, AVERAGE, MIN, MAX)', en: 'Grade 8 • Module 1B: Formulas & Statistical Functions (SUM, AVERAGE, MIN, MAX)' },
+        g8_calc_c: { ro: 'Clasa a VIII-a • Modulul 1C: Reprezentări Grafice & Diagrame 2D/3D', en: 'Grade 8 • Module 1C: Data Visualization & 2D/3D Charts' },
+        g8_calc_d: { ro: 'Clasa a VIII-a • Modulul 1D: Baze de Date Tabelare, Sortare & Filtrare', en: 'Grade 8 • Module 1D: Tabular Databases, Multi-key Sorting & Filtering' },
+        g8_web_a: { ro: 'Clasa a VIII-a • Modulul 2A: Structura Web & HTML5 Semantic', en: 'Grade 8 • Module 2A: Web Structure & Semantic HTML5' },
+        g8_web_b: { ro: 'Clasa a VIII-a • Modulul 2B: Google Sites & Creare Vizuală WYSIWYG', en: 'Grade 8 • Module 2B: Google Sites & Visual WYSIWYG Web Design' },
+        g8_web_c: { ro: 'Clasa a VIII-a • Modulul 2C: Publicare Web, Domenii, Securitate HTTPS & SEO', en: 'Grade 8 • Module 2C: Web Publishing, Domains, HTTPS Security & SEO' },
+        g8_algo_a: { ro: 'Clasa a VIII-a • Modulul 3A: Recapitulare C++, Variabile & Expresii', en: 'Grade 8 • Module 3A: C++ Recap, Variables & Complex Expressions' },
+        g8_algo_b: { ro: 'Clasa a VIII-a • Modulul 3B: Structuri Alternative: if/else, switch & Cifrele unui Număr', en: 'Grade 8 • Module 3B: Decisions: if/else, switch & Digit Extraction' },
+        g8_algo_c: { ro: 'Clasa a VIII-a • Modulul 3C: Structuri Repetitive: while, do-while, for & Șiruri', en: 'Grade 8 • Module 3C: Loops: while, do-while, for & Number Sequences' },
+        g8_algo_d: { ro: 'Clasa a VIII-a • Modulul 3D: Algoritmi Fundamentali: Primalitate, CMMDC, Fibonacci', en: 'Grade 8 • Module 3D: Fundamental Algorithms: Primes, GCD & Fibonacci' },
+        g8_algo_e: { ro: 'Clasa a VIII-a • Modulul 3E: Proiect Integrator Final „Liceul Preferat” & Robotică', en: 'Grade 8 • Module 3E: Culminating Project "Preferred High School" & Robotics' },
+      };
+      if (id && g8Titles[id]) {
+        return lang === 'en' ? g8Titles[id].en : g8Titles[id].ro;
+      }
+    }
     if (id === 'g7_robot_b') {
       return lang === 'en'
         ? 'Grade 7 • Module 4F: Educational Robotics & Virtual Robots with Sensors (Textbook p. 103-108)'
@@ -1576,7 +1603,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
 
           {/* Large Tactile Switcher Buttons Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Tab 1: Clasa a V-a */}
             <button
               type="button"
@@ -1715,6 +1742,53 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 {lang === 'en'
                   ? 'Word 1A & 1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, C++ Programming 4A-6A, Virtual Robots & Sensors 6B.'
                   : 'Tehnoredactare Word 1A/1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, Programare C++ 4A–6A & Roboți Senzoriali 6B.'}
+              </p>
+            </button>
+
+            {/* Tab 4: Clasa a VIII-a */}
+            <button
+              type="button"
+              onClick={() => handleSelectGrade('grade8')}
+              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+                selectedGrade === 'grade8'
+                  ? 'bg-gradient-to-br from-emerald-950/80 via-slate-900 to-teal-950/60 border-emerald-400 shadow-xl shadow-emerald-500/20 ring-2 ring-emerald-400/30'
+                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+                    selectedGrade === 'grade8'
+                      ? 'bg-emerald-500/25 border border-emerald-400/50 text-emerald-200'
+                      : 'bg-slate-800 border border-slate-700 text-slate-400'
+                  }`}>
+                    🎓
+                  </div>
+                  <div>
+                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                      selectedGrade === 'grade8' ? 'text-white' : 'text-slate-300'
+                    }`}>
+                      {lang === 'en' ? '8th Grade (Clasa a VIII-a)' : 'Clasa a VIII-a'}
+                    </h3>
+                    <div className="text-[11px] font-mono font-bold text-emerald-400">
+                      {lang === 'en' ? 'Official Curriculum • 12 Missions' : 'Manual Art Klett 2025 • 12 Misiuni'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                  selectedGrade === 'grade8'
+                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 animate-pulse'
+                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                }`}>
+                  {selectedGrade === 'grade8' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                </div>
+              </div>
+
+              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade8' ? 'text-slate-200' : 'text-slate-400'}`}>
+                {lang === 'en'
+                  ? 'Excel Spreadsheets 1A-1D, Google Sites Web Pages 2A-2C, Advanced C++ Sequences 3A-3D, Robotics & High School Project 3E.'
+                  : 'Calcul Tabelar Excel 1A–1D, Pagini Web Google Sites 2A–2C, Algoritmi C++ 3A–3D & Proiectul Final Liceu 3E.'}
               </p>
             </button>
           </div>
@@ -3973,6 +4047,39 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
           <div id="simulatoare-interactive-clasa-7" className="scroll-mt-6">
             <Grade7InteractiveSimulators />
+          </div>
+        </div>
+      )}
+
+      {/* Courses & Lessons Section - CLASA A VIII-A */}
+      {selectedGrade === 'grade8' && (
+        <div className="flex flex-col gap-8">
+          <Grade8CatalogSection
+            onOpenCurriculaModal={openCurriculaModal}
+            onLaunchInteractiveLab={(mId) => {
+              if (
+                mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' ||
+                mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' ||
+                mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e'
+              ) {
+                handleAttemptStart(mId as AllMissionId);
+              } else {
+                openCurriculaModal(mId);
+              }
+            }}
+            completedMissions={
+              activeAccount?.lessonsProgress
+                ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
+                    const lState = (activeAccount.lessonsProgress as any)[k];
+                    if (lState?.completed) acc[k] = true;
+                    return acc;
+                  }, {} as Record<string, boolean>)
+                : {}
+            }
+          />
+
+          <div id="simulatoare-interactive-clasa-8" className="scroll-mt-6">
+            <Grade8InteractiveSimulators />
           </div>
         </div>
       )}

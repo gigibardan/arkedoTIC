@@ -60,6 +60,50 @@ export interface ArcadeScores {
   totalArcade: number;
 }
 
+export type AllMissionId =
+  | 'hardware'
+  | 'files'
+  | 'internet1'
+  | 'internet2'
+  | 'text1'
+  | 'text2'
+  | 'algo1'
+  | 'algo2'
+  | 'scratch1'
+  | 'scratch2'
+  | 'g6_presentation1'
+  | 'g6_presentation2'
+  | 'g6_paint3d'
+  | 'g6_anim3d'
+  | 'g6_malware'
+  | 'g6_email'
+  | 'g6_scratch1'
+  | 'g6_scratch2'
+  | 'g7_word_a'
+  | 'g7_word_b'
+  | 'g7_audio_a'
+  | 'g7_video_b'
+  | 'g7_cloud_a'
+  | 'g7_gis_b'
+  | 'g7_cpp_a'
+  | 'g7_cpp_b'
+  | 'g7_decision_a'
+  | 'g7_loop_b'
+  | 'g7_stem_a'
+  | 'g7_robot_b'
+  | 'g8_calc_a'
+  | 'g8_calc_b'
+  | 'g8_calc_c'
+  | 'g8_calc_d'
+  | 'g8_web_a'
+  | 'g8_web_b'
+  | 'g8_web_c'
+  | 'g8_algo_a'
+  | 'g8_algo_b'
+  | 'g8_algo_c'
+  | 'g8_algo_d'
+  | 'g8_algo_e';
+
 export interface LessonMissionState {
   completed: boolean;
   level: number;
@@ -100,6 +144,18 @@ export interface LessonsProgress {
   g7_loop_b?: LessonMissionState;
   g7_stem_a?: LessonMissionState;
   g7_robot_b?: LessonMissionState;
+  g8_calc_a?: LessonMissionState;
+  g8_calc_b?: LessonMissionState;
+  g8_calc_c?: LessonMissionState;
+  g8_calc_d?: LessonMissionState;
+  g8_web_a?: LessonMissionState;
+  g8_web_b?: LessonMissionState;
+  g8_web_c?: LessonMissionState;
+  g8_algo_a?: LessonMissionState;
+  g8_algo_b?: LessonMissionState;
+  g8_algo_c?: LessonMissionState;
+  g8_algo_d?: LessonMissionState;
+  g8_algo_e?: LessonMissionState;
   totalLessonScore: number;
 }
 

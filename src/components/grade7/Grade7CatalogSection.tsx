@@ -188,7 +188,7 @@ export const Grade7CatalogSection: React.FC<Grade7CatalogSectionProps> = ({
               <div className="font-bold text-white mb-0.5">Unitatea 4: C++ & Roboți</div>
               <div className="text-[11px] text-slate-300 leading-snug">Code::Blocks, cin/cout, decizii if/else, bucle while/for, algoritmi cifre, fizică & roboți cu senzori (pag. 64–108)</div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-violet-400">● 6 MISIUNI ACTIVE (4A–6B)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-violet-400">● 6 MISIUNI ACTIVE (4A–4F)</span>
           </div>
         </div>
       </div>

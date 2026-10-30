@@ -107,6 +107,18 @@ export const DEFAULT_LESSONS_PROGRESS: LessonsProgress = {
   g7_loop_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   g7_stem_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   g7_robot_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_calc_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_calc_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_calc_c: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_calc_d: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_web_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_web_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_web_c: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_algo_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_algo_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_algo_c: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_algo_d: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_algo_e: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   totalLessonScore: 0
 };
 
@@ -260,7 +272,19 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const g7l2 = computeLessonXP(lessons.g7_loop_b || {});
   const g7st1 = computeLessonXP(lessons.g7_stem_a || {});
   const g7r2 = computeLessonXP(lessons.g7_robot_b || {});
-  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b + g7w1 + g7w2 + g7a1 + g7v2 + g7c1 + g7g2 + g7cp1 + g7cp2 + g7d1 + g7l2 + g7st1 + g7r2;
+  const g8ca = computeLessonXP(lessons.g8_calc_a || {});
+  const g8cb = computeLessonXP(lessons.g8_calc_b || {});
+  const g8cc = computeLessonXP(lessons.g8_calc_c || {});
+  const g8cd = computeLessonXP(lessons.g8_calc_d || {});
+  const g8wa = computeLessonXP(lessons.g8_web_a || {});
+  const g8wb = computeLessonXP(lessons.g8_web_b || {});
+  const g8wc = computeLessonXP(lessons.g8_web_c || {});
+  const g8aa = computeLessonXP(lessons.g8_algo_a || {});
+  const g8ab = computeLessonXP(lessons.g8_algo_b || {});
+  const g8ac = computeLessonXP(lessons.g8_algo_c || {});
+  const g8ad = computeLessonXP(lessons.g8_algo_d || {});
+  const g8ae = computeLessonXP(lessons.g8_algo_e || {});
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b + g7w1 + g7w2 + g7a1 + g7v2 + g7c1 + g7g2 + g7cp1 + g7cp2 + g7d1 + g7l2 + g7st1 + g7r2 + g8ca + g8cb + g8cc + g8cd + g8wa + g8wb + g8wc + g8aa + g8ab + g8ac + g8ad + g8ae;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {
@@ -626,6 +650,236 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
         localStorage.setItem('arkedo_scratch2_level', String(s2.level || 1));
         localStorage.setItem('arkedo_scratch2_score', String(s2.score || 0));
         localStorage.setItem('arkedo_scratch2_elapsed', String(s2.elapsedSeconds || 0));
+      }
+
+      // Grade 6 Lessons
+      const p1 = profile.lessonsProgress.presentation1;
+      if (p1) {
+        localStorage.setItem('arkedo_g6p1_level', String(p1.level || 1));
+        localStorage.setItem('arkedo_g6p1_score', String(p1.score || 0));
+        localStorage.setItem('arkedo_g6p1_elapsed', String(p1.elapsedSeconds || 0));
+        if (p1.completed) localStorage.setItem('arkedo_completed_g6_presentation1', 'true');
+      }
+      const p2 = profile.lessonsProgress.presentation2;
+      if (p2) {
+        localStorage.setItem('arkedo_g6p2_level', String(p2.level || 1));
+        localStorage.setItem('arkedo_g6p2_score', String(p2.score || 0));
+        localStorage.setItem('arkedo_g6p2_elapsed', String(p2.elapsedSeconds || 0));
+        if (p2.completed) localStorage.setItem('arkedo_completed_g6_presentation2', 'true');
+      }
+      const m3d1 = profile.lessonsProgress.model3d1;
+      if (m3d1) {
+        localStorage.setItem('arkedo_g6p3_level', String(m3d1.level || 1));
+        localStorage.setItem('arkedo_g6p3_score', String(m3d1.score || 0));
+        localStorage.setItem('arkedo_g6p3_elapsed', String(m3d1.elapsedSeconds || 0));
+        if (m3d1.completed) localStorage.setItem('arkedo_completed_g6_paint3d', 'true');
+      }
+      const m3d2 = profile.lessonsProgress.model3d2;
+      if (m3d2) {
+        localStorage.setItem('arkedo_g6a1_level', String(m3d2.level || 1));
+        localStorage.setItem('arkedo_g6a1_score', String(m3d2.score || 0));
+        localStorage.setItem('arkedo_g6a1_elapsed', String(m3d2.elapsedSeconds || 0));
+        if (m3d2.completed) localStorage.setItem('arkedo_completed_g6_anim3d', 'true');
+      }
+      const cy6a = profile.lessonsProgress.cyber6a;
+      if (cy6a) {
+        localStorage.setItem('arkedo_g6m1_level', String(cy6a.level || 1));
+        localStorage.setItem('arkedo_g6m1_score', String(cy6a.score || 0));
+        localStorage.setItem('arkedo_g6m1_elapsed', String(cy6a.elapsedSeconds || 0));
+        if (cy6a.completed) localStorage.setItem('arkedo_completed_g6_malware', 'true');
+      }
+      const cy6b = profile.lessonsProgress.cyber6b;
+      if (cy6b) {
+        localStorage.setItem('arkedo_g6e1_level', String(cy6b.level || 1));
+        localStorage.setItem('arkedo_g6e1_score', String(cy6b.score || 0));
+        localStorage.setItem('arkedo_g6e1_elapsed', String(cy6b.elapsedSeconds || 0));
+        if (cy6b.completed) localStorage.setItem('arkedo_completed_g6_email', 'true');
+      }
+      const sc6a = profile.lessonsProgress.scratch6a;
+      if (sc6a) {
+        localStorage.setItem('arkedo_g6s1_level', String(sc6a.level || 1));
+        localStorage.setItem('arkedo_g6s1_score', String(sc6a.score || 0));
+        localStorage.setItem('arkedo_g6s1_elapsed', String(sc6a.elapsedSeconds || 0));
+        if (sc6a.completed) localStorage.setItem('arkedo_completed_g6_scratch1', 'true');
+      }
+      const sc6b = profile.lessonsProgress.scratch6b;
+      if (sc6b) {
+        localStorage.setItem('arkedo_g6s2_level', String(sc6b.level || 1));
+        localStorage.setItem('arkedo_g6s2_score', String(sc6b.score || 0));
+        localStorage.setItem('arkedo_g6s2_elapsed', String(sc6b.elapsedSeconds || 0));
+        if (sc6b.completed) localStorage.setItem('arkedo_completed_g6_scratch2', 'true');
+      }
+
+      // Grade 7 Lessons
+      const g7w1 = profile.lessonsProgress.g7_word_a;
+      if (g7w1) {
+        localStorage.setItem('arkedo_g7w1_level', String(g7w1.level || 1));
+        localStorage.setItem('arkedo_g7w1_score', String(g7w1.score || 0));
+        localStorage.setItem('arkedo_g7w1_elapsed', String(g7w1.elapsedSeconds || 0));
+        if (g7w1.completed) localStorage.setItem('arkedo_completed_g7_word_a', 'true');
+      }
+      const g7w2 = profile.lessonsProgress.g7_word_b;
+      if (g7w2) {
+        localStorage.setItem('arkedo_g7w2_level', String(g7w2.level || 1));
+        localStorage.setItem('arkedo_g7w2_score', String(g7w2.score || 0));
+        localStorage.setItem('arkedo_g7w2_elapsed', String(g7w2.elapsedSeconds || 0));
+        if (g7w2.completed) localStorage.setItem('arkedo_completed_g7_word_b', 'true');
+      }
+      const g7a1 = profile.lessonsProgress.g7_audio_a;
+      if (g7a1) {
+        localStorage.setItem('arkedo_g7a1_level', String(g7a1.level || 1));
+        localStorage.setItem('arkedo_g7a1_score', String(g7a1.score || 0));
+        localStorage.setItem('arkedo_g7a1_elapsed', String(g7a1.elapsedSeconds || 0));
+        if (g7a1.completed) localStorage.setItem('arkedo_completed_g7_audio_a', 'true');
+      }
+      const g7v2 = profile.lessonsProgress.g7_video_b;
+      if (g7v2) {
+        localStorage.setItem('arkedo_g7v2_level', String(g7v2.level || 1));
+        localStorage.setItem('arkedo_g7v2_score', String(g7v2.score || 0));
+        localStorage.setItem('arkedo_g7v2_elapsed', String(g7v2.elapsedSeconds || 0));
+        if (g7v2.completed) localStorage.setItem('arkedo_completed_g7_video_b', 'true');
+      }
+      const g7c1 = profile.lessonsProgress.g7_cloud_a;
+      if (g7c1) {
+        localStorage.setItem('arkedo_g7c1_level', String(g7c1.level || 1));
+        localStorage.setItem('arkedo_g7c1_score', String(g7c1.score || 0));
+        localStorage.setItem('arkedo_g7c1_elapsed', String(g7c1.elapsedSeconds || 0));
+        if (g7c1.completed) localStorage.setItem('arkedo_completed_g7_cloud_a', 'true');
+      }
+      const g7g1 = profile.lessonsProgress.g7_gis_b;
+      if (g7g1) {
+        localStorage.setItem('arkedo_g7g1_level', String(g7g1.level || 1));
+        localStorage.setItem('arkedo_g7g1_score', String(g7g1.score || 0));
+        localStorage.setItem('arkedo_g7g1_elapsed', String(g7g1.elapsedSeconds || 0));
+        if (g7g1.completed) localStorage.setItem('arkedo_completed_g7_gis_b', 'true');
+      }
+      const g7cp1 = profile.lessonsProgress.g7_cpp_a;
+      if (g7cp1) {
+        localStorage.setItem('arkedo_g7cp1_level', String(g7cp1.level || 1));
+        localStorage.setItem('arkedo_g7cp1_score', String(g7cp1.score || 0));
+        localStorage.setItem('arkedo_g7cp1_elapsed', String(g7cp1.elapsedSeconds || 0));
+        if (g7cp1.completed) localStorage.setItem('arkedo_completed_g7_cpp_a', 'true');
+      }
+      const g7cp2 = profile.lessonsProgress.g7_cpp_b;
+      if (g7cp2) {
+        localStorage.setItem('arkedo_g7cp2_level', String(g7cp2.level || 1));
+        localStorage.setItem('arkedo_g7cp2_score', String(g7cp2.score || 0));
+        localStorage.setItem('arkedo_g7cp2_elapsed', String(g7cp2.elapsedSeconds || 0));
+        if (g7cp2.completed) localStorage.setItem('arkedo_completed_g7_cpp_b', 'true');
+      }
+      const g7dec = profile.lessonsProgress.g7_decision_a;
+      if (g7dec) {
+        localStorage.setItem('arkedo_g7dec_level', String(g7dec.level || 1));
+        localStorage.setItem('arkedo_g7dec_score', String(g7dec.score || 0));
+        localStorage.setItem('arkedo_g7dec_elapsed', String(g7dec.elapsedSeconds || 0));
+        if (g7dec.completed) localStorage.setItem('arkedo_completed_g7_decision_a', 'true');
+      }
+      const g7loop = profile.lessonsProgress.g7_loop_b;
+      if (g7loop) {
+        localStorage.setItem('arkedo_g7loop_level', String(g7loop.level || 1));
+        localStorage.setItem('arkedo_g7loop_score', String(g7loop.score || 0));
+        localStorage.setItem('arkedo_g7loop_elapsed', String(g7loop.elapsedSeconds || 0));
+        if (g7loop.completed) localStorage.setItem('arkedo_completed_g7_loop_b', 'true');
+      }
+      const g7stem = profile.lessonsProgress.g7_stem_a;
+      if (g7stem) {
+        localStorage.setItem('arkedo_g7stem_level', String(g7stem.level || 1));
+        localStorage.setItem('arkedo_g7stem_score', String(g7stem.score || 0));
+        localStorage.setItem('arkedo_g7stem_elapsed', String(g7stem.elapsedSeconds || 0));
+        if (g7stem.completed) localStorage.setItem('arkedo_completed_g7_stem_a', 'true');
+      }
+      const g7robot = profile.lessonsProgress.g7_robot_b;
+      if (g7robot) {
+        localStorage.setItem('arkedo_g7robot_level', String(g7robot.level || 1));
+        localStorage.setItem('arkedo_g7robot_score', String(g7robot.score || 0));
+        localStorage.setItem('arkedo_g7robot_elapsed', String(g7robot.elapsedSeconds || 0));
+        if (g7robot.completed) localStorage.setItem('arkedo_completed_g7_robot_b', 'true');
+      }
+
+      // Grade 8 Lessons
+      const g8ca = profile.lessonsProgress.g8_calc_a;
+      if (g8ca) {
+        localStorage.setItem('arkedo_g8ca_level', String(g8ca.level || 1));
+        localStorage.setItem('arkedo_g8ca_score', String(g8ca.score || 0));
+        localStorage.setItem('arkedo_g8ca_elapsed', String(g8ca.elapsedSeconds || 0));
+        if (g8ca.completed) localStorage.setItem('arkedo_completed_g8_calc_a', 'true');
+      }
+      const g8cb = profile.lessonsProgress.g8_calc_b;
+      if (g8cb) {
+        localStorage.setItem('arkedo_g8cb_level', String(g8cb.level || 1));
+        localStorage.setItem('arkedo_g8cb_score', String(g8cb.score || 0));
+        localStorage.setItem('arkedo_g8cb_elapsed', String(g8cb.elapsedSeconds || 0));
+        if (g8cb.completed) localStorage.setItem('arkedo_completed_g8_calc_b', 'true');
+      }
+      const g8cc = profile.lessonsProgress.g8_calc_c;
+      if (g8cc) {
+        localStorage.setItem('arkedo_g8cc_level', String(g8cc.level || 1));
+        localStorage.setItem('arkedo_g8cc_score', String(g8cc.score || 0));
+        localStorage.setItem('arkedo_g8cc_elapsed', String(g8cc.elapsedSeconds || 0));
+        if (g8cc.completed) localStorage.setItem('arkedo_completed_g8_calc_c', 'true');
+      }
+      const g8cd = profile.lessonsProgress.g8_calc_d;
+      if (g8cd) {
+        localStorage.setItem('arkedo_g8cd_level', String(g8cd.level || 1));
+        localStorage.setItem('arkedo_g8cd_score', String(g8cd.score || 0));
+        localStorage.setItem('arkedo_g8cd_elapsed', String(g8cd.elapsedSeconds || 0));
+        if (g8cd.completed) localStorage.setItem('arkedo_completed_g8_calc_d', 'true');
+      }
+      const g8wa = profile.lessonsProgress.g8_web_a;
+      if (g8wa) {
+        localStorage.setItem('arkedo_g8wa_level', String(g8wa.level || 1));
+        localStorage.setItem('arkedo_g8wa_score', String(g8wa.score || 0));
+        localStorage.setItem('arkedo_g8wa_elapsed', String(g8wa.elapsedSeconds || 0));
+        if (g8wa.completed) localStorage.setItem('arkedo_completed_g8_web_a', 'true');
+      }
+      const g8wb = profile.lessonsProgress.g8_web_b;
+      if (g8wb) {
+        localStorage.setItem('arkedo_g8wb_level', String(g8wb.level || 1));
+        localStorage.setItem('arkedo_g8wb_score', String(g8wb.score || 0));
+        localStorage.setItem('arkedo_g8wb_elapsed', String(g8wb.elapsedSeconds || 0));
+        if (g8wb.completed) localStorage.setItem('arkedo_completed_g8_web_b', 'true');
+      }
+      const g8wc = profile.lessonsProgress.g8_web_c;
+      if (g8wc) {
+        localStorage.setItem('arkedo_g8wc_level', String(g8wc.level || 1));
+        localStorage.setItem('arkedo_g8wc_score', String(g8wc.score || 0));
+        localStorage.setItem('arkedo_g8wc_elapsed', String(g8wc.elapsedSeconds || 0));
+        if (g8wc.completed) localStorage.setItem('arkedo_completed_g8_web_c', 'true');
+      }
+      const g8aa = profile.lessonsProgress.g8_algo_a;
+      if (g8aa) {
+        localStorage.setItem('arkedo_g8aa_level', String(g8aa.level || 1));
+        localStorage.setItem('arkedo_g8aa_score', String(g8aa.score || 0));
+        localStorage.setItem('arkedo_g8aa_elapsed', String(g8aa.elapsedSeconds || 0));
+        if (g8aa.completed) localStorage.setItem('arkedo_completed_g8_algo_a', 'true');
+      }
+      const g8ab = profile.lessonsProgress.g8_algo_b;
+      if (g8ab) {
+        localStorage.setItem('arkedo_g8ab_level', String(g8ab.level || 1));
+        localStorage.setItem('arkedo_g8ab_score', String(g8ab.score || 0));
+        localStorage.setItem('arkedo_g8ab_elapsed', String(g8ab.elapsedSeconds || 0));
+        if (g8ab.completed) localStorage.setItem('arkedo_completed_g8_algo_b', 'true');
+      }
+      const g8ac = profile.lessonsProgress.g8_algo_c;
+      if (g8ac) {
+        localStorage.setItem('arkedo_g8ac_level', String(g8ac.level || 1));
+        localStorage.setItem('arkedo_g8ac_score', String(g8ac.score || 0));
+        localStorage.setItem('arkedo_g8ac_elapsed', String(g8ac.elapsedSeconds || 0));
+        if (g8ac.completed) localStorage.setItem('arkedo_completed_g8_algo_c', 'true');
+      }
+      const g8ad = profile.lessonsProgress.g8_algo_d;
+      if (g8ad) {
+        localStorage.setItem('arkedo_g8ad_level', String(g8ad.level || 1));
+        localStorage.setItem('arkedo_g8ad_score', String(g8ad.score || 0));
+        localStorage.setItem('arkedo_g8ad_elapsed', String(g8ad.elapsedSeconds || 0));
+        if (g8ad.completed) localStorage.setItem('arkedo_completed_g8_algo_d', 'true');
+      }
+      const g8ae = profile.lessonsProgress.g8_algo_e;
+      if (g8ae) {
+        localStorage.setItem('arkedo_g8ae_level', String(g8ae.level || 1));
+        localStorage.setItem('arkedo_g8ae_score', String(g8ae.score || 0));
+        localStorage.setItem('arkedo_g8ae_elapsed', String(g8ae.elapsedSeconds || 0));
+        if (g8ae.completed) localStorage.setItem('arkedo_completed_g8_algo_e', 'true');
       }
     }
 

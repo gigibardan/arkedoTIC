@@ -20,11 +20,23 @@ import {
   Sliders,
   Award,
   FileText,
+  FileCode,
   Presentation,
   Box,
   Mail,
   Repeat,
-  Clapperboard
+  Clapperboard,
+  Music,
+  Video,
+  Cloud,
+  MapPin,
+  Code2,
+  Binary,
+  GitFork,
+  RefreshCw,
+  Activity,
+  Bot,
+  GraduationCap
 } from 'lucide-react';
 import { StudentProfile, ArcadeScores, LessonsProgress, DuelStats } from '../types';
 import { 
@@ -35,7 +47,8 @@ import {
   resetStudentArcadeScores,
   resetStudentLessonProgress,
   computeTotalArcade,
-  computeTotalLessons
+  computeTotalLessons,
+  DEFAULT_LESSONS_PROGRESS
 } from '../lib/studentAuthService';
 import { sounds } from '../utils/audio';
 
@@ -83,93 +96,10 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   });
 
   // Form states for Lessons
-  const [lessonsProgress, setLessonsProgress] = useState<LessonsProgress>({
-    hardware: {
-      completed: student.lessonsProgress?.hardware?.completed || false,
-      level: student.lessonsProgress?.hardware?.level || 1,
-      score: student.lessonsProgress?.hardware?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.hardware?.elapsedSeconds || 0
-    },
-    files: {
-      completed: student.lessonsProgress?.files?.completed || false,
-      level: student.lessonsProgress?.files?.level || 1,
-      score: student.lessonsProgress?.files?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.files?.elapsedSeconds || 0
-    },
-    internet1: {
-      completed: student.lessonsProgress?.internet1?.completed || false,
-      level: student.lessonsProgress?.internet1?.level || 1,
-      score: student.lessonsProgress?.internet1?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.internet1?.elapsedSeconds || 0
-    },
-    internet2: {
-      completed: student.lessonsProgress?.internet2?.completed || false,
-      level: student.lessonsProgress?.internet2?.level || 1,
-      score: student.lessonsProgress?.internet2?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.internet2?.elapsedSeconds || 0
-    },
-    text1: {
-      completed: student.lessonsProgress?.text1?.completed || false,
-      level: student.lessonsProgress?.text1?.level || 1,
-      score: student.lessonsProgress?.text1?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.text1?.elapsedSeconds || 0
-    },
-    text2: {
-      completed: student.lessonsProgress?.text2?.completed || false,
-      level: student.lessonsProgress?.text2?.level || 1,
-      score: student.lessonsProgress?.text2?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.text2?.elapsedSeconds || 0
-    },
-    algo1: {
-      completed: student.lessonsProgress?.algo1?.completed || false,
-      level: student.lessonsProgress?.algo1?.level || 1,
-      score: student.lessonsProgress?.algo1?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.algo1?.elapsedSeconds || 0
-    },
-    algo2: {
-      completed: student.lessonsProgress?.algo2?.completed || false,
-      level: student.lessonsProgress?.algo2?.level || 1,
-      score: student.lessonsProgress?.algo2?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.algo2?.elapsedSeconds || 0
-    },
-    scratch1: {
-      completed: student.lessonsProgress?.scratch1?.completed || false,
-      level: student.lessonsProgress?.scratch1?.level || 1,
-      score: student.lessonsProgress?.scratch1?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.scratch1?.elapsedSeconds || 0
-    },
-    scratch2: {
-      completed: student.lessonsProgress?.scratch2?.completed || false,
-      level: student.lessonsProgress?.scratch2?.level || 1,
-      score: student.lessonsProgress?.scratch2?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.scratch2?.elapsedSeconds || 0
-    },
-    presentation1: {
-      completed: student.lessonsProgress?.presentation1?.completed || false,
-      level: student.lessonsProgress?.presentation1?.level || 1,
-      score: student.lessonsProgress?.presentation1?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.presentation1?.elapsedSeconds || 0
-    },
-    presentation2: {
-      completed: student.lessonsProgress?.presentation2?.completed || false,
-      level: student.lessonsProgress?.presentation2?.level || 1,
-      score: student.lessonsProgress?.presentation2?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.presentation2?.elapsedSeconds || 0
-    },
-    model3d1: {
-      completed: student.lessonsProgress?.model3d1?.completed || false,
-      level: student.lessonsProgress?.model3d1?.level || 1,
-      score: student.lessonsProgress?.model3d1?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.model3d1?.elapsedSeconds || 0
-    },
-    cyber6a: {
-      completed: student.lessonsProgress?.cyber6a?.completed || false,
-      level: student.lessonsProgress?.cyber6a?.level || 1,
-      score: student.lessonsProgress?.cyber6a?.score || 0,
-      elapsedSeconds: student.lessonsProgress?.cyber6a?.elapsedSeconds || 0
-    },
-    totalLessonScore: student.lessonsProgress?.totalLessonScore || 0
-  });
+  const [lessonsProgress, setLessonsProgress] = useState<LessonsProgress>(() => ({
+    ...DEFAULT_LESSONS_PROGRESS,
+    ...(student.lessonsProgress || {})
+  }));
 
   // Form states for Duels
   const [duelStats, setDuelStats] = useState<DuelStats>({
@@ -495,11 +425,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                           totalArcade: 0
                         });
                         setLessonsProgress({
-                          hardware: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
-                          files: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
-                          internet1: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
-                          internet2: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
-                          totalLessonScore: 0
+                          ...DEFAULT_LESSONS_PROGRESS
                         });
                         setDuelStats({
                           wins: 0,
@@ -1715,6 +1641,922 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Grade 6 - Scratch Variables & Complete Games (scratch6b) */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Gamepad2 className="w-5 h-5 text-lime-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 6 • Unit 4B: Scratch Variables, Lists & Complete Games' : 'Clasa a VI-a • Unitatea 4B: Scratch Variabile, Liste & Jocuri Complete'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 76-88 (Global vs Local Variables, Lists, Clones, Broadcast Messages, Scoring & Win Conditions)' : 'Manual pag. 76-88 (Variabile Globale/Locale, Liste, Clone, Mesaje Difuzate, Punctaj & Condiții de Victorie)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.scratch6b?.completed || false}
+                        onChange={(e) => handleLessonChange('scratch6b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-lime-600 focus:ring-lime-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.scratch6b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.scratch6b?.score || 0}
+                        onChange={(e) => handleLessonChange('scratch6b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.scratch6b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('scratch6b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.scratch6b?.level || 1}
+                        onChange={(e) => handleLessonChange('scratch6b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* GRADE 7 SECTION HEADER */}
+                <div className="pt-4 pb-2 border-t border-cyan-500/20">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-black uppercase tracking-wider">
+                      {isEn ? 'Grade 7 Curriculum' : 'Clasa a VII-a'}
+                    </span>
+                    <span className="text-xs font-bold text-slate-300">
+                      {isEn ? 'Manual Art Klett (Pages 10–108 • 12 Modules)' : 'Manual Art Klett (Pag. 10–108 • 12 Module Active)'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* G7 - Word 1A */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <FileText className="w-5 h-5 text-blue-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 1A: Word Formatting, Tables & Styles' : 'Clasa a VII-a • Unitatea 1A: Tehnoredactare & Interfață Word'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 10-19 (Heading Styles, Tables, Split/Merge, Header/Footer, Footnotes)' : 'Manual pag. 10-19 (Stiluri Titlu, Tabele avansate, Îmbinare/Divizare, Antet/Subsol, Note subsol)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_word_a?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_word_a', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_word_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_word_a?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_word_a', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_word_a?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_word_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_word_a?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_word_a', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Word 1B */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <FileCode className="w-5 h-5 text-indigo-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 1B: Advanced Layout, Columns & TOC' : 'Clasa a VII-a • Unitatea 1B: Machetare & Tipografie Avansată'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 20-27 (Multi-columns, Section Breaks, Drop Cap, Math Formulas, Automatic TOC)' : 'Manual pag. 20-27 (Coloane ziar, Întreruperi secțiune, Drop Cap, Formule matematice, Cuprins automat)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_word_b?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_word_b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_word_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_word_b?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_word_b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_word_b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_word_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_word_b?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_word_b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Audio 2A */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Music className="w-5 h-5 text-purple-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 2A: Sound Acoustics & WavePad Studio' : 'Clasa a VII-a • Unitatea 2A: Acustică & Studio WavePad'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 28-37 (Sample Rate, Hz, Amplitude, Waveform, Trimming, Fade In/Out, Equalizer)' : 'Manual pag. 28-37 (Eșantionare, Hz, Amplitudine, Formă de undă, Trimming, Fade In/Out, Egalizator)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_audio_a?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_audio_a', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_audio_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_audio_a?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_audio_a', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_audio_a?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_audio_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_audio_a?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_audio_a', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Video 2B */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Video className="w-5 h-5 text-rose-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 2B: VideoPad & Multitrack Video Editing' : 'Clasa a VII-a • Unitatea 2B: VideoPad & Montaj Video Multitrack'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 38-47 (Timeline, Video/Audio Tracks, Split, Transitions, Chroma Key, MP4 Export)' : 'Manual pag. 38-47 (Timeline, Piste Video/Audio, Split, Tranziții, Chroma Key, Export MP4)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_video_b?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_video_b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-rose-600 focus:ring-rose-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_video_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_video_b?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_video_b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_video_b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_video_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_video_b?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_video_b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Cloud 3A */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Cloud className="w-5 h-5 text-sky-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 3A: Cloud Collaborative Apps (Docs/Slides)' : 'Clasa a VII-a • Unitatea 3A: Aplicații Colaborative Cloud Google Docs/Slides'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 48-55 (Real-time Sharing, View/Comment/Edit, Suggestions, Version History)' : 'Manual pag. 48-55 (Partajare în timp real, Vizualizator/Comentator/Editor, Sugestii, Istoric versiuni)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_cloud_a?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_cloud_a', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_cloud_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_cloud_a?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_cloud_a', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_cloud_a?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_cloud_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_cloud_a?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_cloud_a', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - GIS 3B */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <MapPin className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 3B: Digital Cartography & GIS (My Maps)' : 'Clasa a VII-a • Unitatea 3B: Cartografie Digitală & GIS'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 56-63 (GPS Coordinates, Vector/Raster Layers, Google My Maps, Pin Clustering, Spatial Analysis)' : 'Manual pag. 56-63 (Coordonate GPS, Straturi vectoriale/raster, Google My Maps, Pinuri & KML, Analiză spațială)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_gis_b?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_gis_b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_gis_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_gis_b?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_gis_b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_gis_b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_gis_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_gis_b?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_gis_b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - C++ 4A */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Code2 className="w-5 h-5 text-cyan-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 4A: Code::Blocks IDE & C++ Data Types' : 'Clasa a VII-a • Unitatea 4A: Code::Blocks & Tipuri C++'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 64-73 (IDE, Preprocessor #include, int/float/char/bool, Memory size, Comments)' : 'Manual pag. 64-73 (IDE, Preprocesor #include <iostream>, int/float/char/bool, Dimensiune memorie, Comentarii)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_cpp_a?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_cpp_a', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-cyan-600 focus:ring-cyan-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_cpp_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_cpp_a?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_cpp_a', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_cpp_a?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_cpp_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_cpp_a?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_cpp_a', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - C++ 4B */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Binary className="w-5 h-5 text-teal-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 4B: Linear Structure & I/O Streams in C++' : 'Clasa a VII-a • Unitatea 4B: Structura Liniară & I/O C++'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 74-81 (cin >>, cout <<, Arithmetic Operators, Modulo %, Sequential Algorithms)' : 'Manual pag. 74-81 (cin >>, cout <<, Operatori +, -, *, /, %, Algoritmi liniari de calcul)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_cpp_b?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_cpp_b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-teal-600 focus:ring-teal-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_cpp_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_cpp_b?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_cpp_b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_cpp_b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_cpp_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_cpp_b?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_cpp_b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Decision 4C */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <GitFork className="w-5 h-5 text-amber-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 4C: Alternative Structure (if / else)' : 'Clasa a VII-a • Unitatea 4C: Structura Alternativă if/else'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 82-89 (Conditionals, Relational Operators == !=, Logic && || !, Min/Max 3 numbers, Leap year)' : 'Manual pag. 82-89 (Ramificații decizionale, Operatori relaționali și logici, Min/Max 3 numere, An bisect)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_decision_a?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_decision_a', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_decision_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_decision_a?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_decision_a', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_decision_a?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_decision_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_decision_a?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_decision_a', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Loop 4D */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <RefreshCw className="w-5 h-5 text-orange-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 4D: Repetitive Structure (while loop)' : 'Clasa a VII-a • Unitatea 4D: Structura Repetitivă while'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 90-97 (Preconditioned Loops, Digit processing, Number reversal, Palindrome, GCD Euclid)' : 'Manual pag. 90-97 (Bucle cu test inițial, Prelucrare cifre, Oglindit, Palindrom, CMMDC Euclid)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_loop_b?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_loop_b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_loop_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_loop_b?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_loop_b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_loop_b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_loop_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_loop_b?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_loop_b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - STEM 4E */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Activity className="w-5 h-5 text-violet-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 4E: For / Do-While Loops & STEM Applications' : 'Clasa a VII-a • Unitatea 4E: Bucle for/do & Fizică/Geografie STEM'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 98-103 (Counter Loops for, Postconditioned Loops do-while, Velocity/Altitude STEM)' : 'Manual pag. 98-103 (Bucle contor for, Bucle cu test final do-while, Aplicații STEM traiectorie, viteză, altitudine)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_stem_a?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_stem_a', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-violet-600 focus:ring-violet-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_stem_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_stem_a?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_stem_a', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_stem_a?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_stem_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_stem_a?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_stem_a', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* G7 - Robot 4F */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Bot className="w-5 h-5 text-green-400" />
+                      <div>
+                        <div className="text-xs font-bold text-white">
+                          {isEn ? 'Grade 7 • Unit 4F: Virtual Robotics & Sensors' : 'Clasa a VII-a • Unitatea 4F: Roboți Virtuali & Senzori'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isEn ? 'Manual pages 104-108 (Microcontroller, Ultrasonic/Line Sensors, Actuators, Obstacle Avoidance)' : 'Manual pag. 104-108 (Microcontroler, Senzori ultrasunete/linie, Actuatori/Motoare, Algoritmi evitare obstacole)'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={lessonsProgress.g7_robot_b?.completed || false}
+                        onChange={(e) => handleLessonChange('g7_robot_b', 'completed', e.target.checked)}
+                        className="w-4 h-4 rounded text-green-600 focus:ring-green-500 bg-slate-900 border-slate-700 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-slate-300">
+                        {lessonsProgress.g7_robot_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                      </span>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={lessonsProgress.g7_robot_b?.score || 0}
+                        onChange={(e) => handleLessonChange('g7_robot_b', 'score', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                      <input
+                        type="number"
+                        value={lessonsProgress.g7_robot_b?.elapsedSeconds || 0}
+                        onChange={(e) => handleLessonChange('g7_robot_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="7"
+                        value={lessonsProgress.g7_robot_b?.level || 1}
+                        onChange={(e) => handleLessonChange('g7_robot_b', 'level', parseInt(e.target.value, 10) || 1)}
+                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* SECTION DIVIDER: CLASA A VIII-A */}
+                <div className="pt-4 border-t border-slate-700/80">
+                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-400 font-mono">
+                    <GraduationCap className="w-4 h-4 text-emerald-400" />
+                    <span>{isEn ? '8th Grade Curriculum • Manual Art Klett 2025 (12 Missions)' : 'Curriculum Clasa a VIII-a • Manual Oficial Art Klett 2025 (12 Misiuni)'}</span>
+                  </div>
+                </div>
+
+                {[
+                  { key: 'g8_calc_a' as const, titleRo: 'Clasa a VIII-a • Modulul 1A: Structura registrului de calcul tabelar, celule & tipuri de date', titleEn: 'Grade 8 • Unit 1A: Spreadsheet Workbook Structure, Cells & Data Types', pages: '12-16', icon: '📊' },
+                  { key: 'g8_calc_b' as const, titleRo: 'Clasa a VIII-a • Modulul 1B: Formule & funcții matematice/statistice (SUM, AVERAGE, MIN, MAX)', titleEn: 'Grade 8 • Unit 1B: Formulas & Statistical Functions (SUM, AVERAGE, MIN, MAX)', pages: '17-21', icon: '🧮' },
+                  { key: 'g8_calc_c' as const, titleRo: 'Clasa a VIII-a • Modulul 1C: Reprezentări grafice & diagrame 2D/3D', titleEn: 'Grade 8 • Unit 1C: Data Visualization & 2D/3D Charts', pages: '22-29', icon: '📈' },
+                  { key: 'g8_calc_d' as const, titleRo: 'Clasa a VIII-a • Modulul 1D: Baze de date tabelare, sortare & filtrare', titleEn: 'Grade 8 • Unit 1D: Tabular Databases, Multi-key Sorting & Filtering', pages: '30-35', icon: '🗄️' },
+                  { key: 'g8_web_a' as const, titleRo: 'Clasa a VIII-a • Modulul 2A: Structura web & HTML5 semantic', titleEn: 'Grade 8 • Unit 2A: Web Structure & Semantic HTML5', pages: '36-41', icon: '🌐' },
+                  { key: 'g8_web_b' as const, titleRo: 'Clasa a VIII-a • Modulul 2B: Google Sites & creare vizuală WYSIWYG', titleEn: 'Grade 8 • Unit 2B: Google Sites & Visual WYSIWYG Web Design', pages: '42-49', icon: '🖥️' },
+                  { key: 'g8_web_c' as const, titleRo: 'Clasa a VIII-a • Modulul 2C: Publicare web, domenii, securitate HTTPS & SEO', titleEn: 'Grade 8 • Unit 2C: Web Publishing, Domains, HTTPS Security & SEO', pages: '50-57', icon: '🔒' },
+                  { key: 'g8_algo_a' as const, titleRo: 'Clasa a VIII-a • Modulul 3A: Recapitulare C++, variabile & expresii', titleEn: 'Grade 8 • Unit 3A: C++ Recap, Variables & Complex Expressions', pages: '58-65', icon: '⚡' },
+                  { key: 'g8_algo_b' as const, titleRo: 'Clasa a VIII-a • Modulul 3B: Structuri alternative: if/else, switch & cifre', titleEn: 'Grade 8 • Unit 3B: Decisions: if/else, switch & Digit Extraction', pages: '66-73', icon: '🔀' },
+                  { key: 'g8_algo_c' as const, titleRo: 'Clasa a VIII-a • Modulul 3C: Structuri repetitive: while, do-while, for & șiruri', titleEn: 'Grade 8 • Unit 3C: Loops: while, do-while, for & Number Sequences', pages: '74-81', icon: '🔄' },
+                  { key: 'g8_algo_d' as const, titleRo: 'Clasa a VIII-a • Modulul 3D: Algoritmi fundamentali: primalitate, CMMDC, Fibonacci', titleEn: 'Grade 8 • Unit 3D: Fundamental Algorithms: Primes, GCD & Fibonacci', pages: '82-89', icon: '🔢' },
+                  { key: 'g8_algo_e' as const, titleRo: 'Clasa a VIII-a • Modulul 3E: Proiect integrator final „Liceul Preferat” & robotică', titleEn: 'Grade 8 • Unit 3E: Culminating Project "Preferred High School" & Robotics', pages: '90-96', icon: '🤖' },
+                ].map((item) => (
+                  <div key={item.key} className="p-4 rounded-2xl bg-slate-950/60 border border-emerald-500/30 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-xl">{item.icon}</span>
+                        <div>
+                          <div className="text-xs font-bold text-white">
+                            {isEn ? item.titleEn : item.titleRo}
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            {isEn ? `Manual pages ${item.pages}` : `Manual pag. ${item.pages}`}
+                          </div>
+                        </div>
+                      </div>
+
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={lessonsProgress[item.key]?.completed || false}
+                          onChange={(e) => handleLessonChange(item.key, 'completed', e.target.checked)}
+                          className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
+                        />
+                        <span className="text-xs font-bold text-slate-300">
+                          {lessonsProgress[item.key]?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
+                        </span>
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                      <div>
+                        <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={lessonsProgress[item.key]?.score || 0}
+                          onChange={(e) => handleLessonChange(item.key, 'score', parseInt(e.target.value, 10) || 0)}
+                          className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
+                        <input
+                          type="number"
+                          value={lessonsProgress[item.key]?.elapsedSeconds || 0}
+                          onChange={(e) => handleLessonChange(item.key, 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
+                          className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-5)' : 'Nivel Max (1-5)'}</label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="6"
+                          value={lessonsProgress[item.key]?.level || 1}
+                          onChange={(e) => handleLessonChange(item.key, 'level', parseInt(e.target.value, 10) || 1)}
+                          className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

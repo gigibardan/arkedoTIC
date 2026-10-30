@@ -1,11 +1,12 @@
 import { GRADE_7_CURRICULA_MODULES } from './grade7Curricula';
+import { GRADE_8_CURRICULA_MODULES } from './grade8Curricula';
 
 export interface CurriculaModule {
   id: string;
   slug: string;
   title: string;
   shortTitle: string;
-  grade: 'Clasa a V-a' | 'Clasa a VI-a' | 'Clasa a VII-a';
+  grade: 'Clasa a V-a' | 'Clasa a VI-a' | 'Clasa a VII-a' | 'Clasa a VIII-a';
   unit: string;
   manualRef: string;
   icon: string;
@@ -29,12 +30,31 @@ export interface CurriculaModule {
     keys: string;
     action: string;
   }[];
-  faqs: {
+  shortcuts?: {
+    key: string;
+    action: string;
+  }[];
+  faqs?: {
     question: string;
     answer: string;
   }[];
-  practicalLab: string;
-  missionId: 'hardware' | 'files' | 'internet1' | 'internet2' | 'text1' | 'text2' | 'algo1' | 'algo2' | 'scratch1' | 'scratch2' | 'g6p1' | 'g6p2' | 'g6paint3d' | 'g6anim3d' | 'g6_anim3d' | 'g6malware' | 'g6email' | 'g6scratch1' | 'g6scratch2' | 'g6_scratch2' | 'g7_word_a' | 'g7_word_b' | 'g7_audio_a' | 'g7_video_b' | 'g7_cloud_a' | 'g7_gis_b' | 'g7_cpp_a' | 'g7_cpp_b' | 'g7_decision_a' | 'g7_loop_b' | 'g7_stem_a' | 'g7_robot_b';
+  faq?: {
+    question: string;
+    answer: string;
+  }[];
+  practicalLab?: string;
+  practicalLabs?: {
+    step: number;
+    title: string;
+    task: string;
+  }[];
+  testQuestions?: {
+    question: string;
+    options: string[];
+    correctIndex: number;
+    explanation: string;
+  }[];
+  missionId?: string;
 }
 
 export const CURRICULA_MODULES: CurriculaModule[] = [
@@ -1095,6 +1115,7 @@ export const CURRICULA_MODULES: CurriculaModule[] = [
     practicalLab: 'Construiește în Scratch o scenă de Minecraft 3D cu personajul ghidat din taste, un copac în adâncime și generează Coloana Infinitului cu 15 moduli romboidali procedurali!',
     missionId: 'g6_scratch2'
   },
-  ...GRADE_7_CURRICULA_MODULES
+  ...GRADE_7_CURRICULA_MODULES,
+  ...GRADE_8_CURRICULA_MODULES
 ];
 
