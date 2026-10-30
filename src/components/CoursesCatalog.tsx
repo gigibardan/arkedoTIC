@@ -169,6 +169,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   const getMaxPlayableLevels = (mId: string): number => {
     if (mId === 'hardware') return 5;
+    if (mId === 'g8_calc_a') return 7;
     if (mId.startsWith('g8_')) return 5;
     if (mId === 'internet1' || mId === 'internet2') return 6;
     return 7;
