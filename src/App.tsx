@@ -113,9 +113,14 @@ import { ModuleG7StemFlow } from './components/grade7/stem/ModuleG7StemFlow';
 // Grade 7 Robotics Mission 4F (Unitatea 4 - Manual pag. 103-108)
 import { ModuleG7RobotFlow } from './components/grade7/robot/ModuleG7RobotFlow';
 
-// Grade 8 Culminating Missions (Unitățile 1, 2, 3 - Manual Art Klett 2025)
 import { Grade8MissionFlow } from './components/grade8/Grade8MissionFlow';
 import { ModuleG8Calc1Flow } from './components/grade8/calc1/ModuleG8Calc1Flow';
+import { ModuleG8Calc2Flow } from './components/grade8/calc2/ModuleG8Calc2Flow';
+import { ModuleG8Calc3Flow } from './components/grade8/calc3/ModuleG8Calc3Flow';
+import { ModuleG8Calc4Flow } from './components/grade8/calc4/ModuleG8Calc4Flow';
+import { ModuleG8Web1Flow } from './components/grade8/web1/ModuleG8Web1Flow';
+import { ModuleG8Web2Flow } from './components/grade8/web2/ModuleG8Web2Flow';
+import { ModuleG8Web3Flow } from './components/grade8/web3/ModuleG8Web3Flow';
 import { AllMissionId } from './types';
 
 import { VictoryScreen } from './components/VictoryScreen';
@@ -1486,7 +1491,7 @@ function GameContent() {
   // Timer interval effect
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
-    const isOngoing = (Boolean(activeMission?.startsWith('g8_')) && (g8Levels[activeMission || ''] || 1) <= (activeMission === 'g8_calc_a' ? 7 : 5)) ||
+    const isOngoing = (Boolean(activeMission?.startsWith('g8_')) && (g8Levels[activeMission || ''] || 1) <= ((activeMission === 'g8_calc_a' || activeMission === 'g8_calc_b') ? 7 : 5)) ||
       (activeMission === 'hardware' && hwLevel <= 5) ||
       (activeMission === 'files' && filesLevel <= 7) ||
       (activeMission === 'internet1' && internet1Level <= 6) ||
@@ -1918,7 +1923,7 @@ function GameContent() {
 
   // Grade 8 Level Progression & Score Handler
   const handleG8CompleteLevel = (mId: string, levelIndex: number, earnedScore: number) => {
-    const maxPlayable = mId === 'g8_calc_a' ? 7 : 5;
+    const maxPlayable = (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c') ? 7 : 5;
     const victoryLevel = maxPlayable + 1;
     if (levelIndex < maxPlayable) {
       const nextLevel = levelIndex + 1;
@@ -3910,9 +3915,57 @@ function GameContent() {
             {/* Level Views for GRADE 8 - ALL 12 CULMINATING MISSIONS (Unitățile 1, 2, 3 - Manual Art Klett 2025) */}
             {activeMission?.startsWith('g8_') && (
               <div className="flex-1">
-                {(g8Levels[activeMission] || 1) <= (activeMission === 'g8_calc_a' ? 7 : 5) ? (
+                {(g8Levels[activeMission] || 1) <= ((activeMission === 'g8_calc_a' || activeMission === 'g8_calc_b' || activeMission === 'g8_calc_c' || activeMission === 'g8_calc_d' || activeMission === 'g8_web_a') ? 7 : 5) ? (
                   activeMission === 'g8_calc_a' ? (
                     <ModuleG8Calc1Flow
+                      currentLevel={g8Levels[activeMission] || 1}
+                      onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
+                      studentName={studentName}
+                      onRestartMission={() => handleResetG8(activeMission)}
+                      onReturnToCatalog={() => navigateToView('catalog')}
+                    />
+                  ) : activeMission === 'g8_calc_b' ? (
+                    <ModuleG8Calc2Flow
+                      currentLevel={g8Levels[activeMission] || 1}
+                      onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
+                      studentName={studentName}
+                      onRestartMission={() => handleResetG8(activeMission)}
+                      onReturnToCatalog={() => navigateToView('catalog')}
+                    />
+                  ) : activeMission === 'g8_calc_c' ? (
+                    <ModuleG8Calc3Flow
+                      currentLevel={g8Levels[activeMission] || 1}
+                      onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
+                      studentName={studentName}
+                      onRestartMission={() => handleResetG8(activeMission)}
+                      onReturnToCatalog={() => navigateToView('catalog')}
+                    />
+                  ) : activeMission === 'g8_calc_d' ? (
+                    <ModuleG8Calc4Flow
+                      currentLevel={g8Levels[activeMission] || 1}
+                      onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
+                      studentName={studentName}
+                      onRestartMission={() => handleResetG8(activeMission)}
+                      onReturnToCatalog={() => navigateToView('catalog')}
+                    />
+                  ) : activeMission === 'g8_web_a' ? (
+                    <ModuleG8Web1Flow
+                      currentLevel={g8Levels[activeMission] || 1}
+                      onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
+                      studentName={studentName}
+                      onRestartMission={() => handleResetG8(activeMission)}
+                      onReturnToCatalog={() => navigateToView('catalog')}
+                    />
+                  ) : activeMission === 'g8_web_b' ? (
+                    <ModuleG8Web2Flow
+                      currentLevel={g8Levels[activeMission] || 1}
+                      onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
+                      studentName={studentName}
+                      onRestartMission={() => handleResetG8(activeMission)}
+                      onReturnToCatalog={() => navigateToView('catalog')}
+                    />
+                  ) : activeMission === 'g8_web_c' ? (
+                    <ModuleG8Web3Flow
                       currentLevel={g8Levels[activeMission] || 1}
                       onCompletePage={(earnedScore) => handleG8CompleteLevel(activeMission, g8Levels[activeMission] || 1, earnedScore)}
                       studentName={studentName}
@@ -3947,7 +4000,7 @@ function GameContent() {
       </main>
 
       {/* Floating Bottom Stopwatch Bar (shown during active lesson) */}
-      {view === 'lesson' && ((Boolean(activeMission?.startsWith('g8_')) && (g8Levels[activeMission || ''] || 1) <= (activeMission === 'g8_calc_a' ? 7 : 5)) || (activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7) || (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) || (activeMission === 'g7_cpp_b' && g7CP2Level <= 7) || (activeMission === 'g7_decision_a' && g7DecLevel <= 7) || (activeMission === 'g7_loop_b' && g7LoopLevel <= 7) || (activeMission === 'g7_stem_a' && g7StemLevel <= 7) || (activeMission === 'g7_robot_b' && g7RobotLevel <= 7)) && (
+      {view === 'lesson' && ((Boolean(activeMission?.startsWith('g8_')) && (g8Levels[activeMission || ''] || 1) <= ((activeMission === 'g8_calc_a' || activeMission === 'g8_calc_b' || activeMission === 'g8_calc_c' || activeMission === 'g8_calc_d' || activeMission === 'g8_web_a' || activeMission === 'g8_web_b' || activeMission === 'g8_web_c') ? 7 : 5)) || (activeMission === 'hardware' && hwLevel <= 5) || (activeMission === 'files' && filesLevel <= 7) || (activeMission === 'internet1' && internet1Level <= 6) || (activeMission === 'internet2' && internet2Level <= 6) || (activeMission === 'text1' && text1Level <= 7) || (activeMission === 'text2' && text2Level <= 7) || (activeMission === 'algo1' && algo1Level <= 7) || (activeMission === 'algo2' && algo2Level <= 7) || (activeMission === 'scratch1' && scratch1Level <= 7) || (activeMission === 'scratch2' && scratch2Level <= 7) || (activeMission === 'g6_presentation1' && g6P1Level <= 7) || (activeMission === 'g6_presentation2' && g6P2Level <= 7) || (activeMission === 'g6_paint3d' && g6P3Level <= 7) || (activeMission === 'g6_anim3d' && g6A1Level <= 7) || (activeMission === 'g6_malware' && g6M1Level <= 7) || (activeMission === 'g6_email' && g6E1Level <= 7) || (activeMission === 'g6_scratch1' && g6S1Level <= 7) || (activeMission === 'g6_scratch2' && g6S2Level <= 7) || (activeMission === 'g7_word_a' && g7W1Level <= 7) || (activeMission === 'g7_word_b' && g7W2Level <= 7) || (activeMission === 'g7_audio_a' && g7A1Level <= 7) || (activeMission === 'g7_video_b' && g7V2Level <= 7) || (activeMission === 'g7_cloud_a' && g7C1Level <= 7) || (activeMission === 'g7_gis_b' && g7G1Level <= 7) || (activeMission === 'g7_cpp_a' && g7CP1Level <= 7) || (activeMission === 'g7_cpp_b' && g7CP2Level <= 7) || (activeMission === 'g7_decision_a' && g7DecLevel <= 7) || (activeMission === 'g7_loop_b' && g7LoopLevel <= 7) || (activeMission === 'g7_stem_a' && g7StemLevel <= 7) || (activeMission === 'g7_robot_b' && g7RobotLevel <= 7)) && (
         <div className="sticky bottom-20 md:bottom-3 z-30 flex justify-center px-4 pointer-events-none">
           <div className="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl px-4 py-2.5 shadow-2xl flex items-center gap-4 text-xs font-mono pointer-events-auto ring-1 ring-teal-500/20">
             {/* Student Name */}

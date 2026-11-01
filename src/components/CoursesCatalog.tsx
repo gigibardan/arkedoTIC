@@ -153,7 +153,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g7_stem_a' && (localStorage.getItem('arkedo_g7stem_level') === '8' || Number(localStorage.getItem('arkedo_g7stem_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_stem_a') === 'true')) return true;
       if (mId === 'g7_robot_b' && (localStorage.getItem('arkedo_g7robot_level') === '8' || Number(localStorage.getItem('arkedo_g7robot_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_robot_b') === 'true')) return true;
       if (mId.startsWith('g8_')) {
-        if (localStorage.getItem(`arkedo_${mId}_level`) === '6' || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
+        const targetMax = (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c') ? '8' : '6';
+        if (localStorage.getItem(`arkedo_${mId}_level`) === targetMax || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
       }
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
@@ -166,10 +167,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
     return false;
   };
-
   const getMaxPlayableLevels = (mId: string): number => {
     if (mId === 'hardware') return 5;
-    if (mId === 'g8_calc_a') return 7;
+    if (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c') return 7;
     if (mId.startsWith('g8_')) return 5;
     if (mId === 'internet1' || mId === 'internet2') return 6;
     return 7;
