@@ -9,163 +9,115 @@ Acest document furnizează contextul educațional, curricular și funcțional ex
 - **Nume complet:** ArkyEdu: Platformă Educațională Interactivă de TIC & Coding
 - **Acronim / Alias:** ARKEDO
 - **URL oficial:** https://www.arkyedu.com/
+- **Pagină de Comparație vs Cursuri Private:** https://www.arkyedu.com/comparatie-scoli-private/
 - **Grup țintă:** Elevi de gimnaziu (clasele V, VI, VII, VIII – vârste 10-15 ani), profesori de informatică și TIC, părinți.
-- **Cadrul de reglementare:** Ordinul Ministrului Educației Naționale nr. 3393/28.02.2017 privind aprobarea programelor școlare pentru învățământul gimnazial (disciplina Informatică și TIC).
+- **Model Financiar:** 100% GRATUIT (0 Lei), non-profit, fără abonamente, fără reclame, fără colectare de date bancare.
+- **Cadrul de reglementare:** Ordinul Ministrului Educației Naționale nr. 3393/28.02.2017 & OM 5420/2024 privind aprobarea programelor școlare pentru învățământul gimnazial (disciplina Informatică și TIC).
 - **Competențe cheie vizate:**
   1. Utilizarea responsabilă și eficientă a tehnologiei informației și a comunicațiilor.
-  2. Prelucrarea digitală a textelor, imaginilor și datelor numerice.
-  3. Rezolvarea problemelor prin gândire algoritmică și programare vizuală.
-  4. Cooperarea în mediul online și respectarea normelor de securitate și etică digitală (netichetă).
+  2. Prelucrarea digitală a textelor, imaginilor și datelor numerice tabelare.
+  3. Rezolvarea problemelor prin gândire algoritmică, limbajul C++ și programare vizuală.
+  4. Cooperarea în mediul online și respectarea normelor de securitate cibernetică și etică digitală (netichetă).
+  5. Robotică educațională, microcontrollere Arduino Uno și integrare sisteme inteligente IoT Smart City.
 
 ---
 
-## 2. Detalierea Curriculară a celor 12 Module Interactiv-Didactice
+## 2. Detalierea Curriculară a celor 40 de Module Interactiv-Didactice
 
-### Modulul 1: Arhitectura Calculatorului & Hardware (Clasa a V-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/hardware/
-- **Concepte:** 
-  - Schema de principiu a calculatorului Von Neumann.
-  - Unitatea Centrală de Prelucrare (CPU): Unitatea de Comandă și Control (UCC), Unitatea Aritmetică și Logică (UAL), registre interne.
-  - Memoria internă: RAM (Random Access Memory – volatilă, rapidă) vs. ROM (Read Only Memory – nevolatilă, conține BIOS/UEFI).
-  - Placa de bază (Motherboard): magistrale de date, socket procesor, sloturi PCIe, porturi I/O.
-  - Memorii externe: SSD (NVMe / SATA, memorie flash), HDD (platane magnetice), memorii USB, carduri SD.
-  - Periferice de intrare: tastatură, mouse, microfon, cameră web, scanner, touchpad.
-  - Periferice de ieșire: monitor, boxe/căști, imprimantă (laser, inkjet, 3D), proiector.
-  - Periferice intrare/ieșire: ecran tactil (touchscreen), placă de rețea, căști cu microfon (headset).
-  - Ergonomia utilizatorului: distanța corectă la ecran (50-70 cm), poziția spatelui (unghi 90-100°), pauze de 10 minute la fiecare 50 de minute de lucru (regula 20-20-20).
+### CLASA A V-A (6 MODULE)
+- **Hub Clasa a V-a:** https://www.arkyedu.com/clasa-5/
+1. **Hardware & Ergonomie** (`hardware`): Arhitectura Von Neumann, CPU, RAM vs ROM, SSD vs HDD, periferice, ergonomia biroului și regula 20-20-20. (https://www.arkyedu.com/cursuri/hardware/)
+2. **Sisteme de Operare & Fișiere** (`fisiere-so`): Windows/Linux, structura arborescentă pe directoare, extensii uzuale (.docx, .pdf, .png, .mp4, .exe), Recycle Bin. (https://www.arkyedu.com/cursuri/fisiere-so/)
+3. **Internet & Siguranță Online** (`internet-siguranta`): Rețele LAN/WAN, WWW vs Internet, URL, protocoale HTTP/HTTPS, confidențialitatea datelor minorilor. (https://www.arkyedu.com/cursuri/internet-siguranta/)
+4. **Editoare de Text & Tehnoredactare** (`editoare-text`): Formatare caractere/paragrafe, aliniere, spațiere, liste și tabele simple în Word & Google Docs. (https://www.arkyedu.com/cursuri/editoare-text/)
+5. **Gândire Algoritmică & Scheme Logice** (`algoritmi`): Proprietățile algoritmilor (claritate, generalitate, finitudine), pași secvențiali și blocuri de decizie. (https://www.arkyedu.com/cursuri/algoritmi/)
+6. **Programare Vizuală Scratch 3.0** (`scratch`): Blocuri de mișcare, costume, bucle simple și evenimente „când se dă clic pe steag”. (https://www.arkyedu.com/cursuri/scratch/)
 
-### Modulul 2: Organizarea Datelor & Sisteme de Operare (Clasa a V-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/fisiere-so/
-- **Concepte:**
-  - Rolul sistemului de operare (Windows, Linux, macOS, Android): intermediar între hardware și aplicațiile utilizatorului.
-  - Ierarhia arborescentă a discului: rădăcină (C:\), directoare părinte, subdirectoare, căi absolute și relative.
-  - Fișiere: nume, separator punct, extensie (identificator de tip de date).
-  - Extensii de bază: documente (.docx, .odt, .pdf, .txt), grafică (.png, .jpg, .svg, .gif), audio/video (.mp3, .wav, .mp4), executabile (.exe, .msi, .sh).
-  - Operațiuni de manipulare: Selectare (Ctrl+A), Copiere (Ctrl+C), Tăiere/Mutare (Ctrl+X), Lipire (Ctrl+V), Ștergere (Delete / Shift+Delete), Redenumire (F2).
-  - Coșul de reciclare (Recycle Bin) și recuperarea datelor șterse accidental.
+### CLASA A VI-A (8 MODULE)
+- **Hub Clasa a VI-a:** https://www.arkyedu.com/clasa-6/
+7. **Prezentări PowerPoint & Diapozitive** (`prezentari-slides`): Regula 6x6, conținut multimedia, drepturi de autor și susținere publică. (https://www.arkyedu.com/cursuri/prezentari-slides/)
+8. **Design Diapozitive, Tranziții & Animații** (`prezentari-slides-2`): Tranziții fluide, categorii de animații (intrare, accent, ieșire), scheme SmartArt. (https://www.arkyedu.com/cursuri/prezentari-slides-2/)
+9. **Grafică Digitală & Paint 3D** (`paint-3d`): Pixeli, rezoluție, sinteză RGB, forme tridimensionale și texturi. (https://www.arkyedu.com/cursuri/paint-3d/)
+10. **Animație VR & Medii Imersive** (`animatie-vr-toontastic-cospaces`): Spații virtuale 3D, scenarii interactive și povestire digitală. (https://www.arkyedu.com/cursuri/animatie-vr-toontastic-cospaces/)
+11. **Securitate Cibernetică & Malware** (`malware-securitate`): Viruși, Troieni, Worms, Spyware, Ransomware, inginerie socială, parole sigure, 2FA și backup 3-2-1. (https://www.arkyedu.com/cursuri/malware-securitate/)
+12. **Servicii E-mail, Netichetă & Cloud** (`email-neticheta`): Câmpurile To, CC, BCC, atașamente <25MB, bune maniere digitale, apel 119 cyberbullying. (https://www.arkyedu.com/cursuri/email-neticheta/)
+13. **Algoritmi & Bucle Condiționate în Scratch** (`algoritmi-bucle-scratch-1`): Structura alternativă Dacă...Atunci...Altfel, operatori booleeni ȘI/SAU/NU, bucle repetitive condiționate. (https://www.arkyedu.com/cursuri/algoritmi-bucle-scratch-1/)
+14. **Algoritmi cu Contor & Jocuri Scratch** (`algoritmi-contor-minecraft-scratch`): Variabile contoare, punctaj, clonare personaje și mecanică de joc. (https://www.arkyedu.com/cursuri/algoritmi-contor-minecraft-scratch/)
 
-### Modulul 3: Internet & Navigare Securizată (Clasa a V-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/internet-siguranta/
-- **Concepte:**
-  - Noțiunea de rețea de calculatoare (LAN vs. WAN / Internet).
-  - World Wide Web (WWW) vs. Internet: Web-ul ca serviciu de pagini hipertext transportate prin protocolul HTTP/HTTPS.
-  - Structura unui URL: https:// (protocol securizat criptat prin TLS), www.domeniu.ro (nume gazdă / domeniu), /cale/pagina.html (resursă).
-  - Navigatoare web (browsere): Chrome, Firefox, Edge, Safari; file, marcaje (bookmarks), istoric, modul incognito/privat.
-  - Căutare inteligentă: utilizarea operatorilor de căutare (ghilimele pentru expresie exactă, minus pentru excludere).
+### CLASA A VII-A (12 MODULE)
+- **Hub Clasa a VII-a:** https://www.arkyedu.com/clasa-7/
+15. **Tehnoredactare Avansată Word** (`g7_word_a`): Panglica Ribbon, comenzi rapide universale, gestionare .docx/.pdf. (https://www.arkyedu.com/cursuri/g7_word_a/)
+16. **Machetare de Pagină, Antet & Subsol** (`g7_word_b`): Margini A4, orientare portret/peisaj, numerotare pagini, tabele complexe. (https://www.arkyedu.com/cursuri/g7_word_b/)
+17. **Acustică Digitală & Studio WavePad** (`g7_audio_a`): Frecvență de eșantionare (44.1 kHz), rezoluție pe 16 biți, forme de undă, egalizare, normalizare, export MP3/WAV. (https://www.arkyedu.com/cursuri/g7_audio_a/)
+18. **Montaj Video Multitrack VideoPad** (`g7_video_b`): Linii temporale, tăiere/îmbinare cadre, tranziții, titrare, cheie cromatică (green screen) și export MP4 Full HD. (https://www.arkyedu.com/cursuri/g7_video_b/)
+19. **Aplicații Colaborative în Cloud** (`g7_cloud_a`): Google Docs & Slides în echipă, partajare permisiuni (vizualizator, comentator, editor), istoric versiuni. (https://www.arkyedu.com/cursuri/g7_cloud_a/)
+20. **Sisteme Informaționale Geografice (GIS)** (`g7_gis_b`): Cartografie digitală, straturi tematice, Google My Maps, geolocalizare și coordonate GPS. (https://www.arkyedu.com/cursuri/g7_gis_b/)
+21. **Tranziția la C++ & Code::Blocks** (`g7_cpp_a`): Compilare, sintaxă, biblioteci `#include <iostream>`, tipuri de date primitive (int, float, double, char), intrare/ieșire std::cin/cout. (https://www.arkyedu.com/cursuri/g7_cpp_a/)
+22. **Structura Liniară & Regula celor 3 Pahare** (`g7_cpp_b`): Variabile auxiliare, interschimbare (swap), operatori aritmetici (+, -, *, /, %). (https://www.arkyedu.com/cursuri/g7_cpp_b/)
+23. **Structura Alternativă if / else** (`g7_decision_a`): Expresii relaționale (==, !=, <, >, <=, >=), operatori logici (&&, ||, !), decizii imbricate. (https://www.arkyedu.com/cursuri/g7_decision_a/)
+24. **Structura Repetitivă while & Algoritmi pe Cifre** (`g7_loop_b`): Oglinditul unui număr, suma cifrelor, număr de cifre pare, verificare număr palindrom. (https://www.arkyedu.com/cursuri/g7_loop_b/)
+25. **Bucle for, do-while & Aplicații STEM** (`g7_stem_a`): Repetiții cu număr cunoscut de pași, suma lui Gauss, calculul factorialului, numere prime. (https://www.arkyedu.com/cursuri/g7_stem_a/)
+26. **Robotică Educațională & Senzori Virtuali** (`g7_robot_b`): Navigare în labirint, evitare coliziuni cu senzor ultrasonic, simulare cinematică robot diferențial. (https://www.arkyedu.com/cursuri/g7_robot_b/)
 
-### Modulul 4: Editoare de Text & Tehnoredactare (Clasa a V-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/editoare-text/
-- **Concepte:**
-  - Tehnoredactarea computerizată a documentelor conform normelor gramaticale românești (spațiu după semnele de punctuație, nu înainte).
-  - Formatare caractere: familie de fonturi (serif vs sans-serif), stiluri (Bold/Aldin, Italic/Cursiv, Underline/Subliniat), culori.
-  - Formatare paragraf: aliniere la stânga, la dreapta, centrat, justificat (Justify); indentare primul rând (First Line Indent); spațiere interlinie (Line Spacing).
-  - Liste marcate (bullets) și numerotate (numbered lists).
-  - Inserare imagini, poziționare (wrap text: în linie, pătrat, strâns) și tabele de date.
-
-### Modulul 5: Gândire Algoritmică & Pași Secvențiali (Clasa a V-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/algoritmi/
-- **Concepte:**
-  - Definiția algoritmului: secvență finită, clară și ordonată de operații ce rezolvă o clasă de probleme pornind de la date de intrare spre date de ieșire.
-  - Proprietățile algoritmilor:
-    1. Claritate (neambiguitate): fiecare pas este interpretat identic de orice executant.
-    2. Generalitate: rezolvă orice instanță a problemei, nu doar una particulară.
-    3. Finitudine: algoritmul se oprește după un număr determinat de pași.
-    4. Corectitudine și eficiență.
-  - Forme de reprezentare: limbaj natural, pseudocod, schemă logică (bloc de start/stop oval, decizie romb, procesare dreptunghi, intrare/ieșire paralelogram).
-
-### Modulul 6: Inițiere în Scratch & Programare Vizuală (Clasa a V-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/scratch/
-- **Concepte:**
-  - Interfața Scratch: scenă (Stage cu coordonate X: -240..+240, Y: -180..+180), personaje (Sprites), zona de cod, paleta de blocuri.
-  - Categorii de blocuri Scratch:
-    - Mișcare (albastru): `mergi 10 pași`, `rotește la dreapta 15 grade`, `mergi la x: y:`.
-    - Aspect (violet): `spune Salut timp de 2 secunde`, `schimbă costumul la...`.
-    - Sunet (roz): `cântă sunetul miau până se termină`.
-    - Evenimente (galben): `când se dă clic pe steagul verde`, `când se apasă tasta spațiu`.
-    - Control (portocaliu): `așteaptă 1 secunde`, `repetă de 10 ori`, `la infinit`.
-
-### Modulul 7: Prezentări Multimedia & Diapozitive (Clasa a V-a / a VI-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/prezentari-slides/
-- **Concepte:**
-  - Crearea diapozitivelor (slide-uri), șabloane tematice, layout-uri de conținut.
-  - Regula 6x6 (maximum 6 rânduri pe slide, maximum 6 cuvinte pe rând) pentru evitarea supraîncărcării cognitive.
-  - Drepturi de autor (Copyright) și licențe Creative Commons (CC BY, CC NC) pentru fotografii și audio preluate de pe web.
-
-### Modulul 8: Grafică Digitală & Modelare 3D (Clasa a VI-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/paint-3d/
-- **Concepte:**
-  - Grafică raster (pixeli pe grilă, dependentă de rezoluție) vs. grafică vectorială (formule geometrice, scalabilă fără pierderi de claritate).
-  - Modelul de culoare RGB (Red, Green, Blue) cu 8 biți per canal (valori 0-255) -> 16.7 milioane de culori posibile.
-  - Forme 3D (cub, sferă, cilindru, tor) și transformări spațiale în trei axe (X, Y, Z).
-
-### Modulul 9: Malware & Securitate Cibernetică (Clasa a VI-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/malware-securitate/
-- **Concepte:**
-  - Tipuri de malware:
-    - Virus: atașat de fișiere gazdă, se replică la executare.
-    - Worm (Vierme): se propagă autonom prin rețea exploatând vulnerabilități.
-    - Cal Troian (Trojan): pretinde a fi un program util, dar deschide breșe secrete.
-    - Ransomware: criptează fișierele victimei și solicită răscumpărare.
-    - Spyware & Keyloggers: monitorizează activitatea și tastele apăsate.
-  - Atacuri de inginerie socială: Phishing (mesaje înșelătoare), Smishing (SMS fraudulos), Spoofing.
-  - Măsuri proactive: parole complexe cu entropie ridicată, 2FA/MFA (autentificare cu doi factori), backup 3-2-1 (3 copii, 2 suporturi diferite, 1 off-site).
-
-### Modulul 10: E-mail, Netichetă & Cloud (Clasa a VI-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/email-neticheta/
-- **Concepte:**
-  - Anatomia adresei de e-mail: nume_utilizator@domeniu.extensie.
-  - Câmpurile de expediere:
-    - To (Către): destinatarii primari direcți.
-    - CC (Carbon Copy / Copie): destinatari informați, adrese vizibile tuturor.
-    - BCC (Blind Carbon Copy / Copie Ascunsă): destinatari a căror adresă rămâne invizibilă celorlalți (protecția vieții private).
-  - Reguli de etică digitală (Netichetă): scrierea cu majuscule echivalează cu țipătul; formule de salut și încheiere; verificarea atașamentelor (<25MB limită standard).
-  - Raportarea conținutului dăunător și apelarea numărului de urgență pentru copii 119 în caz de cyberbullying.
-
-### Modulul 11: Algoritmi & Bucle Condiționate în Scratch (Clasa a VI-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/algoritmi-bucle-scratch-1/
-- **Concepte:**
-  - Structura alternativă: `Dacă <condiție> Atunci ... Altfel ...`.
-  - Structuri repetitive condiționate: `Repetă până când <condiție>` vs buclă infinită `La infinit`.
-  - Operatori logici booleeni: ȘI (AND – ambele adevărate), SAU (OR – cel puțin una adevărată), NU (NOT – negare logică).
-  - Senzori Scratch: `atinge indicatorul mouse-ului`, `atinge culoarea...`, `distanța până la...`.
-
-### Modulul 12: Design Diapozitive, Tranziții & Animații (Clasa a VI-a)
-- **URL Canonic:** https://www.arkyedu.com/cursuri/prezentari-slides-2/
-- **Concepte:**
-  - Diferența între tranziție (trecerea între două slide-uri întregi) și animație (efect aplicat unui obiect specific din slide: text, imagine, diagramă).
-  - Categorii de animații: Intrare (Entrance), Accent (Emphasis), Ieșire (Exit), Căi de mișcare (Motion Paths).
-  - SmartArt pentru reprezentarea ierarhiilor, proceselor secvențiale și ciclurilor.
+### CLASA A VIII-A (14 MODULE)
+- **Hub Clasa a VIII-a:** https://www.arkyedu.com/clasa-8/
+27. **Registru Excel & Adrese de Celule** (`g8_calc_a`): Foi de calcul (1.048.576 rânduri x 16.384 coloane), Name Box, Formula Bar, selecție domenii. (https://www.arkyedu.com/cursuri/g8_calc_a/)
+28. **Formatare Celule, Autofill & Sortare** (`g8_calc_b`): Formate numerice, valută, procente, AutoFill serii logice, sortare pe chei multiple. (https://www.arkyedu.com/cursuri/g8_calc_b/)
+29. **Formule Aritmetice & Funcții Matematice** (`g8_calc_c`): Formule cu `=`, funcții SUM, AVERAGE, MIN, MAX, IF logic, referințe relative vs absolute ($A$1). (https://www.arkyedu.com/cursuri/g8_calc_c/)
+30. **Diagrame Interactive 2D/3D & Filtre** (`g8_calc_d`): Grafice coloană, bare, linii, pie chart, legendă, etichete de date și filtrare avansată. (https://www.arkyedu.com/cursuri/g8_calc_d/)
+31. **Anatomia Paginii Web & Securitate HTTPS** (`g8_web_a`): HTML5 semantic (header, nav, main, section, footer), securitate certificate SSL, domeniu vs găzduire. (https://www.arkyedu.com/cursuri/g8_web_a/)
+32: **Editorul Google Sites & Blocuri Media** (`g8_web_b`): Machetare vizuală WYSIWYG, integrare YouTube, Google Forms, Google Maps, design receptiv mobil. (https://www.arkyedu.com/cursuri/g8_web_b/)
+33. **Site Multipage, Navigare & Publicare** (`g8_web_c`): Meniu ierarhic de navigare, lucru colaborativ, noțiuni SEO și publicare web live. (https://www.arkyedu.com/cursuri/g8_web_c/)
+34. **Decizie switch, Validare CNP & Bucle** (`g8_algo_a`): Structura de selecție multiplă `switch(n)`, algoritmul cifrei de control pentru CNP-ul românesc. (https://www.arkyedu.com/cursuri/g8_algo_a/)
+35. **Roboți Virtuali Open Roberta & Senzori NXT** (`g8_algo_b`): Urmărire linie (Line Follower), senzor de lumină/culoare, algoritm proporțional de reglare. (https://www.arkyedu.com/cursuri/g8_algo_b/)
+36. **Șiruri de Valori, Fibonacci & Reguli** (`g8_algo_c`): Șirul lui Fibonacci, numere triunghiulare, generare recurentă în C++. (https://www.arkyedu.com/cursuri/g8_algo_c/)
+37. **Prelucrarea Șirurilor în C++ (Vectori)** (`g8_algo_d`): Tablouri unidimensionale, citire din flux, parcurgere secvențială, filtrare și contorizare elemente. (https://www.arkyedu.com/cursuri/g8_algo_d/)
+38. **Tehnica Semafoarelor & Min/Max Liceu** (`g8_algo_e`): Variabile flag booleene, găsire minim/maxim, pregătire concursuri și admitere liceu informatică. (https://www.arkyedu.com/cursuri/g8_algo_e/)
+39. **Microcontrollere Arduino Uno & Senzori** (`g8_robot_a`): Arhitectură ATmega328P, pini digitali I/O, intrări analogice ADC 10-biți (0-1023), senzori LDR, PIR, Ultrasonic HC-SR04, punte H L298N. (https://www.arkyedu.com/cursuri/g8_robot_a/)
+40. **Sisteme Inteligente, Smart Home & IoT Integrator** (`g8_robot_b`): Proiectul integrator de Smart City (manual Art Klett 2025 pag. 99–108): iluminat inteligent PWM, barieră automată parcare cu servomotoare SG90, sistem alertă gaz MQ-2, ecran LCD 1602 prin protocol I2C și multitasking cooperativ cu `millis()`. (https://www.arkyedu.com/cursuri/g8_robot_b/)
 
 ---
 
-## 3. Mini-jocuri Arcade & Gamification (Catalog Complet)
+## 3. Mini-jocuri Didactice Arcade (21 de Jocuri Complete)
+Hub Arcade: https://www.arkyedu.com/arcade/
 
-Platforma ArkyEdu integrează 20 de mini-jocuri arcade special create:
-1. `cyber_snake` – **Cyber Snake: Șarpele Algoritmic 🐍**: Colectare blocuri Scratch (Mergi 10 pași, Dacă perete Ocolește, Repetă de 4 ori), formare coadă de scripturi, compilare cu scut antivirus și dezinfecție a virușilor roșii patrulari.
-2. `hacker_defense` – **Hacker vs. Defender 1v1 🛡️⚔️**: Joc duel multiplayer 1v1 de securitate. 45s Atacator (Troieni, Phishing, Forțare Parolă) / 45s Apărător (Firewall, Antivirus, 2FA) cu inversare automată a rolurilor.
-3. `roblox_clicker` – **Roblox Clicker Builder**: Dezvoltare joc Roblox, optimizare scripturi Lua și servere.
-4. `voxel_architect` – **Minecraft Voxel Architect**: Construcție 3D creativă cu cuburi voxel și circuite logice.
-5. `redstone_lab` – **Redstone Logic Lab**: Simulator interactiv de porți logice AND, OR, NOT, XOR.
-6. `page_craft` – **PageCraft: Arhitectul de Tabele & Layout**: Aranjare în pagină, îmbinare celule, text wrapping și proporții.
-7. `pcbuilder` – **PC Builder Simulator**: Asamblare calculator pas cu pas (CPU, cooler, pastă termică, RAM, GPU, PSU).
-8. `files` / `file_drop` – **File Organizer & File Drop**: Aranjare arborescentă pe extensii și directoare.
-9. `virus_sweeper` – **Virus Sweeper**: Scanare și decontaminare servere de fișiere compromise.
-10. `binary_factory` / `2048` – **Binary Factory & Game 2048 Binar**: Conversii zecimal-binar și operații aritmetice pe biți.
-11. `rgb_pixel` – **RGB Pixel Master**: Sinteza aditivă RGB, rezoluție și palete de culoare pe matrice.
-12. `cyber_dino` – **Cyber Dino Runner**: Cursă infinită cu întrebări fulger de TIC și cultură digitală.
-13. `maze` – **Algorithm Maze Game**: Ghidare robot prin labirint prin secvențe algoritmice.
-14. `firewall` – **Firewall Defender**: Filtrare pachete pe porturi TCP/UDP de rețea.
-15. `detective` – **Cyber Safe Detective**: Identificare atacuri de inginerie socială și e-mailuri capcană.
-16. `byte_slider` – **Byte Slider**: Echivalențe de stocare (B, KB, MB, GB, TB).
-17. `mouse` / `mouse_v2` – **Mouse Agility & Mouse Master**: Antrenare dexteritate mână-ochi și precizie periferice.
-18. `typing` – **Typing Speed Master**: Tastare rapidă cu diacritice românești (WPM, acuratețe %).
-19. `speed_crafting` – **Speed Crafting**: Asamblare rapidă de componente contra cronometru.
-20. `quiz_blitz` – **Quiz Blitz TIC**: Duel de întrebări fulger curricular.
+1. `circuit_master`: **Circuit Master 80s (Robotică & Circuite Smart City)** — Simulator arcade retro în 4 etape: Breadboard wiring (Arduino Uno, LED, LDR, rezistori), Osciloscop & Legea lui Ohm (V=I·R, frecvență semnal), Multitasking `millis()` fără `delay()` și Grila Centrală Smart City (iluminat PWM, servomotor SG90 barieră, senzor gaz MQ-2, LCD 1602 I2C).
+2. `cyber_snake`: **Cyber Snake: Șarpele Algoritmic 🐍** — Colectare instrucțiuni Scratch, formare coadă de scripturi, compilare scut antivirus și neutralizare malware patrulari.
+3. `hacker_defense`: **Hacker vs. Defender 1v1 🛡️⚔️** — Confruntare asimetrică: 45s atac cibernetic (Troieni, Phishing, Forțare Parolă) / 45s apărare activă (Firewall, 2FA, Antivirus).
+4. `roblox_clicker`: **Roblox Clicker Builder** — Dezvoltare studio virtual, scripturi Lua, optimizare memorie cache și servere.
+5. `voxel_architect`: **Minecraft Voxel Architect** — Modelare 3D în spațiu tridimensional cu voxel blocks și circuite logice.
+6. `redstone_lab`: **Redstone Logic Lab** — Porți logice AND, OR, NOT, XOR, circuite integrate și bistabile.
+7. `page_craft`: **PageCraft: Arhitectul de Machetare** — Formatare text contracronometru, îmbinare celule, tabele rapide, text wrapping.
+8. `pcbuilder`: **PC Builder Simulator** — Asamblare sistem de calcul complet (CPU, pastă termică, RAM dual channel, GPU, sursă modulară).
+9. `files` / `file_drop`: **File Organizer & File Drop** — Sortare arborescentă rapidă pe extensii și directoare.
+10. `virus_sweeper`: **Virus Sweeper** — Depistare fișiere compromise pe servere de rețea.
+11. `binary_factory` / `2048`: **Binary Factory & 2048 Binar** — Conversii zecimal-binar și aritmetică pe biți.
+12. `rgb_pixel`: **RGB Pixel Master** — Canale de culoare 0-255 și sinteză aditivă pe matrice.
+13. `cyber_dino`: **Cyber Dino Runner** — Cursă retro infinită cu întrebări fulger din materia școlară de TIC.
+14. `maze`: **Algorithm Maze Game** — Ghidare robot prin labirint prin planificare algoritmică optimală.
+15. `firewall`: **Firewall Defender** — Filtrare pachete pe porturi de rețea (80, 443, 22, 21).
+16. `detective`: **Cyber Safe Detective** — Depistare atacuri de inginerie socială și e-mailuri de tip spear-phishing.
+17. `byte_slider`: **Byte Slider** — Conversii de unități de măsură (B, KB, MB, GB, TB).
+18. `mouse` / `mouse_v2`: **Mouse Agility & Mouse Master** — Dexteritate mână-ochi, precizie click și drag-and-drop.
+19. `typing`: **Typing Speed Master** — Tastare oarbă QWERTY cu diacritice românești (WPM, acuratețe %).
+20. `speed_crafting`: **Speed Crafting** — Asamblare rapidă de algoritmi și circuite.
+21. `quiz_blitz`: **Quiz Blitz TIC** — Duel de cultură digitală și întrebări curriculare fulger.
 
 ---
 
-## 4. Evaluare, Securitate & Tehnologii
+## 4. De Ce ArkyEdu vs. Școli Private de Programare (Logiscool, MindHub etc.)?
+Pagină dedicată: https://www.arkyedu.com/comparatie-scoli-private/
 
-- **Conformitate GDPR & COPPA**: Datele elevilor sunt anonimizate; nu se colectează date de urmărire invazive sau reclame.
-- **Arhitectură tehnică**: React SPA + Tailwind CSS + Vite; Firestore noSQL securizat cu reguli RBAC; suport complet PWA offline prin Service Worker.
-- **Contact Tehnic & Administrator**: Gheorghe.Bardan@gmail.com / contact@arkyedu.com
+1. **Preț: 0 Lei vs 4.000 – 6.000 Lei/An**: ArkyEdu garantează acces liber și egal tuturor elevilor, indiferent de venitul familiei.
+2. **Sincronizare 100% cu Programa Școlară Națională**: Cursurile private au programe paralele străine; ArkyEdu pregătește elevul direct pentru nota 10 la școală, pe manualele aprobate Art Klett, Litera și EDP.
+3. **Disponibilitate 24/7 de pe orice dispozitiv**: Nu depinzi de 1 singură ședință săptămânală rigidă; elevul poate exersa oricând, relua lecțiile și jocurile.
+4. **Tehnologie Reală în Browser**: Fără instalare de software complicat; elevul rulează direct în browser C++ nativ, simulatoare Arduino IoT, editoare web și calcul tabelar.
+5. **Diplome Oficiale de Onoare**: Diplome PDF de înaltă rezoluție, cu barem didactic de la 1 la 10, XP și diplomă oficială de merit.
+
+---
+
+## 5. Tehnologie & Arhitectură
+- **Frontend:** React 19 SPA, TypeScript, Tailwind CSS v4, Lucide Icons, Canvas 2D / WebGL.
+- **Backend & Bază de date:** Firebase Firestore securizat cu reguli RBAC, Firebase Auth.
+- **PWA & Offline:** PWA complet instalabilă pe Android, iOS, Windows, macOS și Linux.
+- **SEO & Date Structurate:** Schema.org JSON-LD (Course, WebApplication, EducationalOrganization, FAQPage, BreadcrumbList), sitemap XML automat cu 52 de rute indexabile, conformitate OMEN 3393/2017 & OM 5420/2024.

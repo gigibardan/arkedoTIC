@@ -53,7 +53,7 @@
     <link rel="canonical" href="https://www.arkyedu.com/" />
     <meta property="og:url" content="https://www.arkyedu.com/" />
     
-    <!-- Schema.org JSON-LD Structured Data with Rich AI Grounding -->
+    <!-- Schema.org JSON-LD Structured Data with Rich Educational & FAQ Grounding -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -62,26 +62,27 @@
           "@type": "WebApplication",
           "@id": "https://www.arkyedu.com/#webapp",
           "name": "ArkyEdu TIC & Coding Platform",
-          "alternateName": ["ARKEDO", "ArkyEdu"],
+          "alternateName": ["ARKEDO", "ArkyEdu", "ArkyEdu TIC"],
           "applicationCategory": "EducationalApplication",
           "operatingSystem": "All",
           "inLanguage": ["ro", "en"],
-          "description": "Platformă educațională gamificată de Tehnologia Informației și a Comunicațiilor (TIC) pentru elevii claselor V-VIII conform programei școlare naționale din România.",
+          "description": "Platformă educațională gamificată 100% gratuită de Tehnologia Informației și a Comunicațiilor (TIC) și programare pentru elevii claselor V-VIII conform programei școlare naționale din România (OMEN 3393/2017 & OM 5420/2024).",
+          "url": "https://www.arkyedu.com/",
           "offers": {
             "@type": "Offer",
             "price": "0",
             "priceCurrency": "RON"
           },
           "featureList": [
-            "Modul complet Clasa a VIII-a: Calcul Tabelar MS Excel & Google Sheets, Crearea site-urilor Google Sites, Algoritmi și limbajul C++, Robotică Arduino & Sisteme Inteligente Smart Home IoT",
-            "Simulator interactiv Smart Streetlight (LDR + PIR + PWM LED) și Barieră Inteligentă (HC-SR04 + Servomotor SG90)",
-            "Simulator Alertă Gaz MQ-2 & Stație Meteo I2C LCD 1602 cu DHT11 și multitasking cooperativ millis()",
-            "13 ghiduri curriculare statice complete indexabile de motoare de căutare",
+            "40 de module curriculare interactive acoperind integral clasele V, VI, VII și VIII",
+            "Clasa a V-a: Arhitectura calculatorului, sisteme de operare, rețele, editoare text și Scratch 3.0",
+            "Clasa a VI-a: Prezentări multimedia, modelare 3D, securitate cibernetică și algoritmi cu bucle",
+            "Clasa a VII-a: Tehnoredactare Word, audio WavePad, video VideoPad, GIS, programare C++ Code::Blocks și robotică cu senzori",
+            "Clasa a VIII-a: Calcul Tabelar MS Excel & Google Sheets, Web Design Google Sites, algoritmi structurați C++, robotică Arduino Uno și proiect integrator Smart Home IoT (manual Art Klett 2025)",
             "21 de mini-jocuri arcade retro pentru fixarea noțiunilor (Circuit Master 80s, Cyber Snake, Hacker vs Defender, Redstone Logic, Voxel Architect)",
-            "Sistem de dueluri multiplayer 1v1 în timp real",
-            "Catalog digital și notare automată pentru profesori (Gradebook)",
-            "Panou de superadministrare multi-școală și izolare date",
-            "Conformitate OMEN 3393/2017, OM 5420/2024 și manualul Art Klett 2025"
+            "Arena de dueluri multiplayer 1v1 în timp real pentru competiții tehnologice școlare",
+            "Portal profesori cu catalog digital, bareme oficiale și notare automată (Gradebook)",
+            "100% Gratuit — Alternativă deschisă la cursurile private de coding copii (Logiscool, MindHub etc.)"
           ]
         },
         {
@@ -90,7 +91,7 @@
           "name": "ArkyEdu",
           "url": "https://www.arkyedu.com/",
           "logo": "https://www.arkyedu.com/pwa-512x512.png",
-          "description": "Platformă educațională gratuită pentru predarea disciplinei TIC în învățământul gimnazial.",
+          "description": "Organizație educațională dedicată învățământului digital gratuit și performant în România.",
           "contactPoint": {
             "@type": "ContactPoint",
             "email": "contact@arkyedu.com",
@@ -100,28 +101,81 @@
         },
         {
           "@type": "Course",
-          "@id": "https://www.arkyedu.com/#course-g8",
-          "name": "Informatică și TIC - Clasa a VIII-a (Calcul Tabelar, Web Design, Algoritmi C++, Robotică & Smart Home IoT)",
-          "description": "Curs complet interactiv pentru clasa a VIII-a conform programei școlare și manualului Art Klett 2025: foi de calcul tabelar, formule și funcții matematice/statistice, diagrame grafice, pagini web Google Sites, algoritmi structurați C++, robotică Arduino Uno și proiectul integrator Smart Home & IoT (paginile 99–108).",
-          "provider": {
-            "@id": "https://www.arkyedu.com/#organization"
-          },
-          "educationalLevel": "Gimnaziu (Clasa a VIII-a, 13-15 ani)",
-          "hasCourseInstance": {
-            "@type": "CourseInstance",
-            "courseMode": "Online",
-            "inLanguage": "ro"
-          }
+          "@id": "https://www.arkyedu.com/#course-g5",
+          "name": "Informatică și TIC - Clasa a V-a (Hardware, Windows, Word & Scratch)",
+          "description": "Curs interactiv complet pentru clasa a V-a conform programei OMEN 3393/2017: arhitectura sistemelor de calcul, organizarea arborescentă a fișierelor, navigare securizată pe Internet, tehnoredactare și programare vizuală Scratch.",
+          "provider": { "@id": "https://www.arkyedu.com/#organization" },
+          "educationalLevel": "Gimnaziu (Clasa a V-a, 10-11 ani)",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RON" }
         },
         {
           "@type": "Course",
-          "@id": "https://www.arkyedu.com/#course",
-          "name": "Tehnologia Informației și a Comunicațiilor - Gimnaziu (Clasele V-VIII)",
-          "description": "Curs interactiv TIC acoperind arhitectura calculatorului, sisteme de operare, securitate cibernetică, birotică, calcul tabelar, pagini web, algoritmi și robotică.",
-          "provider": {
-            "@id": "https://www.arkyedu.com/#organization"
-          },
-          "educationalLevel": "Gimnaziu (Clasele V-VIII)"
+          "@id": "https://www.arkyedu.com/#course-g6",
+          "name": "Informatică și TIC - Clasa a VI-a (Prezentări, Grafică 3D, Securitate & Algoritmi)",
+          "description": "Curs interactiv clasa a VI-a: realizarea prezentărilor în PowerPoint, modelare 3D în Paint 3D, securitate cibernetică, malware, netichetă și algoritmi cu structuri alternative și repetitive în Scratch.",
+          "provider": { "@id": "https://www.arkyedu.com/#organization" },
+          "educationalLevel": "Gimnaziu (Clasa a VI-a, 11-12 ani)",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RON" }
+        },
+        {
+          "@type": "Course",
+          "@id": "https://www.arkyedu.com/#course-g7",
+          "name": "Informatică și TIC - Clasa a VII-a (Word Avansat, Audio-Video, Programare C++ & Robotică)",
+          "description": "Curs interactiv clasa a VII-a: tehnoredactare avansată Word, editare acustică WavePad, montaj video VideoPad, Google Docs & Slides colaborativ, GIS, inițiere în limbajul C++ Code::Blocks și robotică cu senzori.",
+          "provider": { "@id": "https://www.arkyedu.com/#organization" },
+          "educationalLevel": "Gimnaziu (Clasa a VII-a, 12-13 ani)",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RON" }
+        },
+        {
+          "@type": "Course",
+          "@id": "https://www.arkyedu.com/#course-g8",
+          "name": "Informatică și TIC - Clasa a VIII-a (Calcul Tabelar Excel, Web Design, C++ & Robotică IoT Smart Home)",
+          "description": "Curs interactiv clasa a VIII-a conform manualului Art Klett 2025: foi de calcul Excel, formule și funcții matematice/statistice, Google Sites, algoritmi structurați C++, microcontrollere Arduino Uno și proiect integrator Smart Home IoT (paginile 99–108).",
+          "provider": { "@id": "https://www.arkyedu.com/#organization" },
+          "educationalLevel": "Gimnaziu (Clasa a VIII-a, 13-15 ani)",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "RON" }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.arkyedu.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Este platforma ArkyEdu complet gratuită?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Da, ArkyEdu este 100% gratuită pentru toți elevii și profesorii din România. Nu există abonamente lunare, plăți ascunse sau reclame, reprezentând o alternativă deschisă de înaltă performanță la cursurile private de programare."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Cum se compară ArkyEdu cu școlile private de programare (Logiscool, MindHub, Academia Micilor Developeri)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "În timp ce academiile private costă între 4.000 și 6.000 lei/an și folosesc programe generice, ArkyEdu este 100% gratuit și aliniat direct la programa școlară oficială (OMEN 3393/2017 & OM 5420/2024), ajutând elevii să obțină nota 10 la clasă, oferind în plus 21 jocuri arcade didactice, simulatoare C++ și Arduino Uno IoT."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Ce limbaje de programare și tehnologii învață elevii?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Elevii studiază Scratch 3.0 (clasele V-VI), limbajul C++ în mediul Code::Blocks (clasele VII-VIII, bucle, algoritmi de divizibilitate, șiruri, Fibonacci, semafoare), tehnoredactare Word, calcul tabelar Excel cu formule SUM/AVERAGE/IF, web design HTML5 & Google Sites, și robotică Arduino Uno cu senzori LDR, PIR, Ultrasonic HC-SR04, Gaz MQ-2 și ecran LCD 1602."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Se oferă diplome la finalul cursurilor?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Da! Fiecare modul absolvit generează o Diplomă Oficială de Merit TIC cu notă de la 1 la 10 pe baza baremelor didactice oficiale, descărcabilă și imprimabilă la calitate înaltă."
+              }
+            }
+          ]
         }
       ]
     }
@@ -129,6 +183,27 @@
   </head>
   <body class="bg-slate-900 text-slate-100 antialiased selection:bg-emerald-500 selection:text-white">
     <div id="root"></div>
+
+    <!-- Crawlable Semantic SEO Fallback for Search Bots & AI Crawlers -->
+    <noscript>
+      <header>
+        <h1>ArkyEdu — Platformă Gratuită de TIC, Programare &amp; Robotică Gimnaziu (Clasele V-VIII)</h1>
+        <p>Alternativă 100% gratuită la școlile private de coding pentru copii. Conform programei oficiale a Ministerului Educației Naționale (OMEN 3393/2017 &amp; OM 5420/2024).</p>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="/clasa-5/">TIC Clasa a V-a (Hardware, Windows, Word, Scratch)</a></li>
+          <li><a href="/clasa-6/">TIC Clasa a VI-a (PowerPoint, Modelare 3D, Securitate, Bucle)</a></li>
+          <li><a href="/clasa-7/">TIC Clasa a VII-a (Tehnoredactare, Audio-Video, Programare C++, Robotică)</a></li>
+          <li><a href="/clasa-8/">TIC Clasa a VIII-a (Calcul Tabelar Excel, Google Sites, C++, Arduino Uno IoT)</a></li>
+          <li><a href="/comparatie-scoli-private/">ArkyEdu vs Cursuri Private de Coding (Logiscool, MindHub)</a></li>
+          <li><a href="/arcade/">21 Jocuri Didactice Arcade Retro (Circuit Master 80s, Cyber Snake)</a></li>
+          <li><a href="/duel/">Arena Dueluri Tehnologice 1v1 în Timp Real</a></li>
+          <li><a href="/profesor/">Portal Profesori &amp; Catalog Digital</a></li>
+          <li><a href="/oras/">Arkedo Smart City — Laborator IoT &amp; Robotică</a></li>
+        </ul>
+      </nav>
+    </noscript>
 
     <!-- Netlify Forms static crawler registration -->
     <form name="contact" method="POST" action="/" data-netlify="true" netlify netlify-honeypot="bot-field" style="display: none;">

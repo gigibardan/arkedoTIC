@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Structura Liniară, Fluxul I/O (cin/cout) & Algoritmul celor 3 Pahare — Clasa a VII-a | ArkyEdu TIC</title>
+  <meta name="description" content="Structura liniară C++ clasa a 7-a: afișare cout, citire tastatură cin, operatori aritmetici (+, -, *, /, %), împărțirea întreagă și algoritmul interschimbării a două valori.">
+  <meta name="keywords" content="structura liniara c++ clasa 7, citire afisare cin cout endl, operatori aritmetici impartire intreaga modulo, algoritmul celor trei pahare variabila auxiliara, probleme secventiale gimnaziu">
+  <link rel="canonical" href="https://www.arkyedu.com/cursuri/g7_cpp_b/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Structura Liniară, Fluxul I/O (cin/cout) & Algoritmul celor 3 Pahare — Clasa a VII-a">
+  <meta property="og:description" content="Structura liniară C++ clasa a 7-a: afișare cout, citire tastatură cin, operatori aritmetici (+, -, *, /, %), împărțirea întreagă și algoritmul interschimbării a două valori.">
+  <meta property="og:url" content="https://www.arkyedu.com/cursuri/g7_cpp_b/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Structura Liniară, Fluxul I/O (cin/cout) & Algoritmul celor 3 Pahare — Clasa a VII-a">
+  <meta name="twitter:description" content="Structura liniară C++ clasa a 7-a: afișare cout, citire tastatură cin, operatori aritmetici (+, -, *, /, %), împărțirea întreagă și algoritmul interschimbării a două valori.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Course",
+      "@id": "https://www.arkyedu.com/cursuri/g7_cpp_b/#course",
+      "name": "Structura Liniară, Fluxul I/O (cin/cout) & Algoritmul celor 3 Pahare — Clasa a VII-a",
+      "description": "Structura liniară C++ clasa a 7-a: afișare cout, citire tastatură cin, operatori aritmetici (+, -, *, /, %), împărțirea întreagă și algoritmul interschimbării a două valori.",
+      "provider": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu TIC",
+        "url": "https://www.arkyedu.com/"
+      },
+      "educationalLevel": "Clasa a VII-a (Gimnaziu România)",
+      "inLanguage": "ro",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "PT2H"
+      }
+    },
+    {
+      "@type": "LearningResource",
+      "name": "Fișă Didactică & Sinteză Teoretică: Structura Liniară & I/O C++",
+      "description": "Structura liniară C++ clasa a 7-a: afișare cout, citire tastatură cin, operatori aritmetici (+, -, *, /, %), împărțirea întreagă și algoritmul interschimbării a două valori.",
+      "learningResourceType": "Lesson Plan",
+      "isAccessibleForFree": true,
+      "educationalAlignment": [
+        {
+          "@type": "AlignmentObject",
+          "alignmentType": "educationalSubject",
+          "targetName": "Competența 1.4: Implementarea structurii liniare într-un mediu de programare textual folosind fluxuri standard de intrare/ieșire."
+        },
+        {
+          "@type": "AlignmentObject",
+          "alignmentType": "educationalSubject",
+          "targetName": "Competența 2.2: Construirea unor algoritmi secvențiali pentru rezolvarea unor probleme de calcul aritmetic și schimb de date."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Clasa a VII-a",
+          "item": "https://www.arkyedu.com/clasa-7/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Structura Liniară & I/O C++",
+          "item": "https://www.arkyedu.com/cursuri/g7_cpp_b/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Cât face 13 / 5 și 13 % 5 în C++?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "13 / 5 dă câtul 2 (deoarece 5 intră de 2 ori în 13). 13 % 5 dă restul 3 (deoarece 13 - 10 = 3)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce se întâmplă dacă scriem a = b fără variabilă auxiliară?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Valoarea inițială a lui a se pierde ireversibil, fiind suprascrisă imediat de valoarea din b, ambele variabile devenind identice."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .page-header { text-align: center; margin-bottom: 2.5rem; }
+    .badge-bar { justify-content: center; margin-bottom: 1rem; }
+    .content-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .content-box h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .content-box h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--brand-cyan);
+      margin: 1.25rem 0 0.5rem;
+    }
+    .content-box ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+    .content-box li {
+      margin-bottom: 0.4rem;
+    }
+    .pro-tip {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      border-radius: 0 0.75rem 0.75rem 0;
+      font-size: 0.9rem;
+      color: #34d399;
+      margin: 1rem 0;
+    }
+    .terms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .term-card {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+    .term-title {
+      font-weight: 800;
+      color: #38bdf8;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">TIC</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa a V-a</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa a VI-a</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa a VII-a</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa a VIII-a</a>
+        <a href="https://www.arkyedu.com/arcade/">21 Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/">100% Gratuit vs Privat</a>
+      </nav>
+      <a href="https://www.arkyedu.com/?mission=g7_cpp_b" class="nav-cta">
+        <span>🎮 Deschide Misiunea</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2.5rem;">
+    <div class="page-header">
+      <div class="badge-bar">
+        <span class="badge">Clasa a VII-a</span>
+        <span class="badge">Unitatea 4: Limbajul de programare (pag. 74–76)</span>
+        <span class="badge badge-green">Curriculum Național 100% Gratuit</span>
+      </div>
+      <h1>Structura Liniară, Fluxul I/O (cin/cout) & Algoritmul celor 3 Pahare</h1>
+      <p class="lead-text">Structura liniară C++ clasa a 7-a: afișare cout, citire tastatură cin, operatori aritmetici (+, -, *, /, %), împărțirea întreagă și algoritmul interschimbării a două valori.</p>
+      
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?mission=g7_cpp_b" class="btn-primary">
+          <span>🚀 Lansează Laboratorul Interactiv Acum</span>
+        </a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/" class="btn-secondary">
+          <span>💡 Vezi De Ce Este 100% Gratuit</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- TEORIE SI CONTINUT DIDACTIC -->
+    <div class="content-box">
+      <h2>📖 Ghid Didactic &amp; Sinteză Teoretică</h2>
+      
+        <h3>Fluxul de Afișare (cout) și Citire de la Tastatură (cin)</h3>
+        <ul>
+          <li>Structura liniară (secvențială) este cea mai simplă structură algoritmică: instrucțiunile se execută strict una după alta, în ordinea scrierii lor, de sus în jos.</li><li>Afișarea pe ecran (cout — console output): folosește operatorul de inserție <<. Putem afișa mesaje text între ghilimele, valori ale variabilelor sau rezultate ale calculelor. Manipulatorul endl trece la rând nou.</li><li>Exemplu: cout << "Suma este: " << a + b << endl;</li><li>Citirea de la tastatură (cin — console input): folosește operatorul de extracție >>. Programul se oprește și așteaptă ca utilizatorul să introducă o valoare și să apese Enter.</li><li>Exemplu: cout << "Introdu varsta: "; cin >> varsta;</li><li>Operatorul de atribuire (=): salvează valoarea din dreapta în variabila din stânga. Nu confunda x = 5 (atribuire) cu egalitatea matematică!</li>
+        </ul>
+        <div class="pro-tip">💡 <strong>Sfat de la Profesor:</strong> Regulă de orientare a săgeților: la cout săgețile merg spre consolă (spre stânga: <<), iar la cin săgețile merg dinspre tastatură spre variabilă (spre dreapta: >>)!</div>
+      
+        <h3>Operatori Aritmetici, Împărțirea Întreagă & Regula celor 3 Pahare</h3>
+        <ul>
+          <li>Operatori aritmetici în C++: adunare (+), scădere (-), înmulțire (*).</li><li>Marea capcană a împărțirii: Împărțirea întreagă (/) vs. Restul împărțirii întregi (% - modulo):</li><li>Dacă ambele numere sunt întregi, a / b returnează câtul întreg! De exemplu: 7 / 2 este egal cu 3 (nu 3.5!).</li><li>Operatorul modulo a % b returnează restul împărțirii: 7 % 2 este egal cu 1.</li><li>Pentru a obține rezultat cu zecimale, cel puțin unul dintre operanzi trebuie să fie real: 7.0 / 2 dă 3.5.</li><li>Algoritmul celor trei pahare (Interschimbarea valorilor a două variabile):</li><li>Dacă avem un pahar cu lapte (a) și unul cu ceai (b), nu putem turna laptele peste ceai fără să le amestecăm! Avem nevoie de un al treilea pahar gol auxiliar (aux):</li><li>aux = a;  // salvam valoarea lui a in paharul gol</li><li>a = b;    // mutam valoarea din b in a</li><li>b = aux;  // punem valoarea initiala salvata din aux in b</li>
+        </ul>
+        <div class="pro-tip">💡 <strong>Sfat de la Profesor:</strong> Pentru a extrage ultima cifră a unui număr întreg n, folosim formula n % 10. Pentru a tăia ultima cifră, folosim formula n / 10!</div>
+      
+    </div>
+
+    <!-- COMPETENTE CURRICULARE -->
+    <div class="content-box">
+      <h2>🎯 Competențe Specifice Oficiale (OMEN 3393/2017 &amp; OM 5420/2024)</h2>
+      <ul>
+        
+          <li><strong>Competența 1.4:</strong> Implementarea structurii liniare într-un mediu de programare textual folosind fluxuri standard de intrare/ieșire.</li>
+        
+          <li><strong>Competența 2.2:</strong> Construirea unor algoritmi secvențiali pentru rezolvarea unor probleme de calcul aritmetic și schimb de date.</li>
+        
+      </ul>
+    </div>
+
+    <!-- VOCABULAR IT -->
+    
+    <div class="content-box">
+      <h2>💡 Glosar de Noțiuni IT &amp; Concepte Cheie</h2>
+      <div class="terms-grid">
+        
+          <div class="term-card">
+            <div class="term-title">cout</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Obiectul standard C++ de flux de ieșire folosit pentru afișarea textului și numerelor în consolă.</p>
+          </div>
+        
+          <div class="term-card">
+            <div class="term-title">cin</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Obiectul standard C++ de flux de intrare folosit pentru citirea datelor introduse de la tastatură.</p>
+          </div>
+        
+          <div class="term-card">
+            <div class="term-title">Modulo (%)</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Operatorul aritmetic care calculează restul împărțirii a două numere întregi.</p>
+          </div>
+        
+          <div class="term-card">
+            <div class="term-title">Împărțire Întreagă (/)</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Operația de împărțire a două numere de tip int care păstrează doar câtul și ignoră zecimalele.</p>
+          </div>
+        
+          <div class="term-card">
+            <div class="term-title">Variabilă Auxiliară</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Variabilă temporară folosită pentru a reține o valoare în timpul schimbului de date dintre alte două variabile.</p>
+          </div>
+        
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    
+    <div class="content-box">
+      <h2>❓ Întrebări Frecvente &amp; Auto-Evaluare</h2>
+      
+        <div class="faq-block">
+          <div class="faq-question">Q: Cât face 13 / 5 și 13 % 5 în C++?</div>
+          <div class="faq-answer">R: 13 / 5 dă câtul 2 (deoarece 5 intră de 2 ori în 13). 13 % 5 dă restul 3 (deoarece 13 - 10 = 3).</div>
+        </div>
+      
+        <div class="faq-block">
+          <div class="faq-question">Q: Ce se întâmplă dacă scriem a = b fără variabilă auxiliară?</div>
+          <div class="faq-answer">R: Valoarea inițială a lui a se pierde ireversibil, fiind suprascrisă imediat de valoarea din b, ambele variabile devenind identice.</div>
+        </div>
+      
+    </div>
+
+    <!-- FINAL CTA BANNER -->
+    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 3rem;">
+      <h2 style="font-size: 1.75rem; margin-bottom: 0.75rem;">Gata de Provocare? Intră în Simulatorul Interactiv!</h2>
+      <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 1.5rem;">Fiecare nivel îți testează cunoștințele prin practică reală, audio feedback, provocări retro arcade și diplomă de merit oficială.</p>
+      <a href="https://www.arkyedu.com/?mission=g7_cpp_b" class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+        🎮 Începe Modulul Acum — 100% Gratuit
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>ArkyEdu TIC</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Platforma educațională gratuită nr. 1 pentru TIC și informatică gimnaziu din România.</p>
+          <a href="https://www.arkyedu.com/comparatie-scoli-private/" style="color: var(--accent); font-weight: 700;">De ce 100% Gratuit? →</a>
+        </div>
+        <div class="footer-col">
+          <h4>Clase Gimnaziu</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/clasa-5/">TIC Clasa a V-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-6/">TIC Clasa a VI-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-7/">TIC Clasa a VII-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-8/">TIC Clasa a VIII-a</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Arcade &amp; Competiții</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/arcade/">21 Jocuri Didactice Arcade</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 Live</a></li>
+            <li><a href="https://www.arkyedu.com/profesor/">Portal Profesori &amp; Catalog</a></li>
+            <li><a href="https://www.arkyedu.com/oras/">Arkedo Smart City IoT</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Comparație &amp; Legal</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Cursuri Private</a></li>
+            <li><a href="https://www.arkyedu.com/sitemap.xml">Harta Site-ului (Sitemap)</a></li>
+            <li><a href="https://www.arkyedu.com/llms.txt">Documentație AI (LLMs)</a></li>
+            <li><a href="mailto:contact@arkyedu.com">contact@arkyedu.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu — Platformă Educațională Gratuită. Aliniată programei Ministerului Educației.</div>
+        <div>Fără reclame • Fără abonamente • 100% Educație Digitală Românească</div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

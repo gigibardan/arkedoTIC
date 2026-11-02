@@ -264,9 +264,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a")
+  // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a"), or honors deep link URLs
   const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6' | 'grade7' | 'grade8'>(() => {
     try {
+      if (typeof window !== 'undefined') {
+        const fullUrl = (window.location.pathname + window.location.search + window.location.hash).toLowerCase();
+        if (fullUrl.includes('clasa-8') || fullUrl.includes('clasa-a-8') || fullUrl.includes('grade8') || fullUrl.includes('clasa-a-viii')) return 'grade8';
+        if (fullUrl.includes('clasa-7') || fullUrl.includes('clasa-a-7') || fullUrl.includes('grade7') || fullUrl.includes('clasa-a-vii')) return 'grade7';
+        if (fullUrl.includes('clasa-6') || fullUrl.includes('clasa-a-6') || fullUrl.includes('grade6') || fullUrl.includes('clasa-a-vi')) return 'grade6';
+        if (fullUrl.includes('clasa-5') || fullUrl.includes('clasa-a-5') || fullUrl.includes('grade5') || fullUrl.includes('clasa-a-v')) return 'grade5';
+      }
       const saved = localStorage.getItem('arkedo_selected_grade');
       if (saved === 'grade8') return 'grade8';
       if (saved === 'grade7') return 'grade7';
@@ -4094,7 +4101,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '18 Mini-Games' : '18 Mini-Jocuri'}
+                  {lang === 'en' ? '21 Mini-Games' : '21 Mini-Jocuri'}
                 </span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
@@ -4205,6 +4212,47 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <span>{lang === 'en' ? 'Open Cyber City' : 'Deschide Orașul Meu'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
+        </div>
+      </div>
+
+      {/* 100% Free vs Private Coding Academies Comparison Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-emerald-950/60 to-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-emerald-400/30">
+              <Sparkles className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono">
+                  {lang === 'en' ? 'Free Education vs Paid Academies' : '100% Gratuit vs Școli Private'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/30">
+                  {lang === 'en' ? 'Save 4,500+ RON / year' : 'Economie 4.500+ Lei / an'}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
+                {lang === 'en'
+                  ? 'ArkyEdu vs Private Coding Schools (Logiscool, MindHub): Why Pay Thousands?'
+                  : 'ArkyEdu vs Școli Private de Programare (Logiscool, MindHub): De ce să plătești mii de lei?'}
+              </h3>
+              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+                {lang === 'en'
+                  ? 'Get complete curriculum-aligned ICT education for Grades 5-8 with C++, Arduino IoT, 21 Arcade Games, 1v1 Live Duels, and official diplomas — completely free, 24/7!'
+                  : 'Educație digitală de înaltă performanță pentru clasele 5-8 conform programei oficiale a Ministerului Educației (OMEN 3393/2017 & OM 5420/2024), C++, Arduino IoT, 21 jocuri arcade și diplome oficiale — 100% gratuit, non-profit!'}
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="/comparatie-scoli-private/"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer shrink-0 active:scale-95 text-center"
+            title="Vezi de ce ArkyEdu este 100% gratuit și cum se compară cu școlile private"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>{lang === 'en' ? 'See Full Comparison' : 'Vezi Comparația Detaliată'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
         </div>
       </div>
 

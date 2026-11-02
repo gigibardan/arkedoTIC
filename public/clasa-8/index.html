@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIC Clasa a VIII-a: Calcul Tabelar Excel, Google Sites, Algoritmi C++, Robotică Arduino Uno & IoT Smart Home | ArkyEdu TIC</title>
+  <meta name="description" content="Ghid curricular complet TIC Clasa a 8-a: Foi de calcul Excel, formule SUM/AVERAGE/IF, diagrame 2D/3D, Google Sites, algoritmi structurați C++, microcontrollere Arduino Uno și proiect integrator Smart Home IoT.">
+  <meta name="keywords" content="tic clasa 8, informatica clasa a viii-a, calcul tabelar excel clasa 8, formule excel functii, google sites clasa 8, c++ switch siruri fibonacci clasa 8, robotica arduino uno clasa 8, smart home iot gimnaziu">
+  <link rel="canonical" href="https://www.arkyedu.com/clasa-8/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TIC Clasa a VIII-a: Calcul Tabelar Excel, Google Sites, Algoritmi C++, Robotică Arduino Uno & IoT Smart Home">
+  <meta property="og:description" content="Ghid curricular complet TIC Clasa a 8-a: Foi de calcul Excel, formule SUM/AVERAGE/IF, diagrame 2D/3D, Google Sites, algoritmi structurați C++, microcontrollere Arduino Uno și proiect integrator Smart Home IoT.">
+  <meta property="og:url" content="https://www.arkyedu.com/clasa-8/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Course",
+      "@id": "https://www.arkyedu.com/clasa-8/#course",
+      "name": "TIC Clasa a VIII-a: Calcul Tabelar Excel, Google Sites, Algoritmi C++, Robotică Arduino Uno & IoT Smart Home",
+      "description": "Ghid curricular complet TIC Clasa a 8-a: Foi de calcul Excel, formule SUM/AVERAGE/IF, diagrame 2D/3D, Google Sites, algoritmi structurați C++, microcontrollere Arduino Uno și proiect integrator Smart Home IoT.",
+      "provider": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu TIC",
+        "url": "https://www.arkyedu.com/"
+      },
+      "educationalLevel": "Clasa a VIII-a Gimnaziu",
+      "inLanguage": "ro",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Clasa a VIII-a",
+          "item": "https://www.arkyedu.com/clasa-8/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">Clasa a VIII-a</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (21)</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/">vs Privat</a>
+      </nav>
+      <a href="https://www.arkyedu.com/?grade=grade8" class="nav-cta">
+        <span>🎮 Deschide Catalogul Clasa a VIII-a</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge">Programa Națională OMEN 3393/2017 &amp; OM 5420/2024</span>
+        <span class="badge badge-green">14 Module Didactice Interactive</span>
+        <span class="badge badge-free">100% Gratuit — Fără Abonament</span>
+      </div>
+      <h1>TIC Clasa a VIII-a: Calcul Tabelar Excel, Google Sites, Algoritmi C++, Robotică Arduino Uno & IoT Smart Home</h1>
+      <p class="lead-text">Ghid curricular complet TIC Clasa a 8-a: Foi de calcul Excel, formule SUM/AVERAGE/IF, diagrame 2D/3D, Google Sites, algoritmi structurați C++, microcontrollere Arduino Uno și proiect integrator Smart Home IoT.</p>
+      
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?grade=grade8" class="btn-primary">
+          <span>🚀 Deschide Aplicația &amp; Începe Lecțiile</span>
+        </a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/" class="btn-secondary">
+          <span>⚖️ Compară cu Școlile Private de Coding</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MODULES GRID -->
+    <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">Module Curriculare Interactive — Clasa a VIII-a</h2>
+    <div class="grid-2">
+      
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3 class="card-title">Utilizarea Foilor de Calcul Tabelar & Interfața MS Excel</h3>
+          <p class="card-desc">Ghid complet TIC Clasa a 8-a: Foi de calcul electronice, registrul de lucru Excel, anatomia panglicii Ribbon, adrese de celule și operații fundamentale.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_a/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_calc_a" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🎨</div>
+          <h3 class="card-title">Formatarea Registrului, Tipuri de Date & Sortare Multicriterială</h3>
+          <p class="card-desc">Lecție completă formatare Excel: stiluri de celule, borduri, aliniere text, Wrap Text, Merge Cells, formate numerice/monedă/dată, Autofill și sortare pe niveluri multiple.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_b/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_calc_b" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🧮</div>
+          <h3 class="card-title">Calcule Tabelare: Formule Aritmetice & Funcții (SUM, AVERAGE, MIN, MAX, IF, INT)</h3>
+          <p class="card-desc">Stăpânește formulele și funcțiile esențiale din Excel: operatori aritmetici, funcțiile SUM, AVERAGE, MIN, MAX, funcția decizională IF și funcția INT pentru rotunjire.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_c/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_calc_c" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">📈</div>
+          <h3 class="card-title">Reprezentări Grafice & Diagrame Interactive în MS Excel</h3>
+          <p class="card-desc">Lecție completă despre diagrame în Excel: diagrame coloană, linii, radială (Pie chart), dispersie XY, corelații interdisciplinare și proiectul de concurs Planificarea unui eveniment.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_d/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_calc_d" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <h3 class="card-title">Anatomia Paginii Web: Structură, Antet, Slider & Securitate Cibernetică</h3>
+          <p class="card-desc">Ghid esențial web Clasa a 8-a: Istoria WWW, cele 4 elemente de structură (Titlu, Antet cu carusel/slider, Corp, Subsol), bune practici pentru tag-uri și protecția împotriva ingineriei sociale.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_web_a/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_web_a" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">💻</div>
+          <h3 class="card-title">Aplicații de Editare Web: Interfața Google Sites & Construcția Primei Pagini</h3>
+          <p class="card-desc">Construiește prima ta pagină web în Google Sites: cele 3 tab-uri (Inserează, Pagini, Teme), blocuri de conținut, editare text/imagini, încorporare tabele Excel, hărți, YouTube și publicare online.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_web_b/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_web_b" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <h3 class="card-title">Construirea unui Site Multipage, Navigare & Lucru Colaborativ</h3>
+          <p class="card-desc">Construiește un site web complex cu pagini multiple: ierarhie de subpagini, navigare sus/lateral, căutare internă, lucrul în echipă colaborativă și Proiectul Site-ul Clasei.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_web_c/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_web_c" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3 class="card-title">Structura Decizională Multiplă (switch), Analiza CNP & Bucle Complexe</h3>
+          <p class="card-desc">Lecție avansată C++ Clasa a 8-a: Structura decizională multiplă switch, instrucțiunea break, decodificarea CNP-ului de 13 cifre, oracolul digital, piramida în trepte și primalitatea.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_a/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_algo_a" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <h3 class="card-title">Algoritmi în Robotică: Senzori Virtuali NXT & Navigare în Labirint</h3>
+          <p class="card-desc">Programarea roboților educaționali LEGO NXT în mediul Open Roberta Lab: utilizarea senzorilor de distanță cu ultrasunete, a senzorilor tactili și de culoare pentru evitarea obstacolelor.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_b/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_algo_b" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🌀</div>
+          <h3 class="card-title">Șiruri de Valori: Reguli de Generare, Fibonacci & Numere Triunghiulare</h3>
+          <p class="card-desc">Algoritmi esențiali pe șiruri de numere în C++: distincția n termeni vs valori <= n, șirul lui Fibonacci și spirala de aur, numere triunghiulare, pătratice și piramidale.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_c/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_algo_c" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🔢</div>
+          <h3 class="card-title">Prelucrarea Șirurilor în C++: Citire, Parcurgere, Filtrare & Numărare</h3>
+          <p class="card-desc">Operații pe șiruri de numere în C++: citire cu număr cunoscut n sau cu santinelă 0, afișare interval [a, b], filtrare după proprietăți și tehnica contorului de numărare cnt.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_algo_d" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🏆</div>
+          <h3 class="card-title">Semafoare, Căutare Secvențială, Min/Max & Proiectul Integrator Liceu</h3>
+          <p class="card-desc">Algoritmi avansați pe șiruri în C++: verificarea cu variabilă semafor/flag, căutare secvențială cu oprire timpurie, calcul minim/maxim cu reținere poziție, sumă/produs și Proiectul de final de ciclu gimnazial Liceul Preferat.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_e/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_algo_e" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <h3 class="card-title">Microcontrollere, Senzori Digitali/Analogici & Actuatori Robotici</h3>
+          <p class="card-desc">Arhitectura sistemelor robotice: microcontrollere Arduino și micro:bit, pini digitali și analogici, conversia ADC, senzori ultrasonici HC-SR04, LDR, PIR, servomotoare și drivere de motoare punte H.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_robot_a/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_robot_a" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🏙️</div>
+          <h3 class="card-title">Sisteme Inteligente, Smart Home & Proiectul Integrator IoT</h3>
+          <p class="card-desc">Automatizări inteligente: iluminat public automatizat, barieră inteligentă de parcare cu servomotor, sistem de alertă gaz/incendiu, stație meteo IoT și sinteza finală a ciclului gimnazial de robotică.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/g8_robot_b/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=g8_robot_b" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+    </div>
+
+    <!-- VALUE PROPOSITION -->
+    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 3rem;">
+      <h2 style="font-size: 1.85rem; margin-bottom: 1rem;">De Ce Învață Elevii Mai Bine cu ArkyEdu?</h2>
+      <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 21 de jocuri arcade, simulatoare interactive și diplome de merit oficiale, 100% gratuit!</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?grade=grade8" class="btn-primary">Exersează Acum Clasa a VIII-a</a>
+        <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">Vezi Cele 21 de Jocuri Arcade</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>ArkyEdu TIC</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Platformă educațională 100% gratuită dedicată elevilor și profesorilor de gimnaziu din România.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Gimnaziu</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/clasa-5/">Clasa a V-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-6/">Clasa a VI-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-7/">Clasa a VII-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-8/">Clasa a VIII-a</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Arcade &amp; Duel</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/arcade/">21 Jocuri Arcade Didactice</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 Live</a></li>
+            <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Școli Private</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu. Conform manualelor școlare Art Klett, Litera, EDP.</div>
+        <div>Fără taxe • Fără reclame • 100% Gratuit</div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

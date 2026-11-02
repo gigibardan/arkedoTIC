@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIC Clasa a VI-a: Prezentări PowerPoint, Modelare 3D, Securitate Cibernetică & Algoritmi | ArkyEdu TIC</title>
+  <meta name="description" content="Ghid curricular complet TIC Clasa a 6-a: Diapozitive PowerPoint, animații, modelare Paint 3D, securitate cibernetică, malware, phishing, e-mail și bucle condiționate în Scratch.">
+  <meta name="keywords" content="tic clasa 6, informatica clasa a vi-a, prezentari powerpoint clasa 6, securitate cibernetica malware clasa 6, paint 3d clasa 6, algoritmi bucle scratch clasa 6, neticheta email">
+  <link rel="canonical" href="https://www.arkyedu.com/clasa-6/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TIC Clasa a VI-a: Prezentări PowerPoint, Modelare 3D, Securitate Cibernetică & Algoritmi">
+  <meta property="og:description" content="Ghid curricular complet TIC Clasa a 6-a: Diapozitive PowerPoint, animații, modelare Paint 3D, securitate cibernetică, malware, phishing, e-mail și bucle condiționate în Scratch.">
+  <meta property="og:url" content="https://www.arkyedu.com/clasa-6/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Course",
+      "@id": "https://www.arkyedu.com/clasa-6/#course",
+      "name": "TIC Clasa a VI-a: Prezentări PowerPoint, Modelare 3D, Securitate Cibernetică & Algoritmi",
+      "description": "Ghid curricular complet TIC Clasa a 6-a: Diapozitive PowerPoint, animații, modelare Paint 3D, securitate cibernetică, malware, phishing, e-mail și bucle condiționate în Scratch.",
+      "provider": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu TIC",
+        "url": "https://www.arkyedu.com/"
+      },
+      "educationalLevel": "Clasa a VI-a Gimnaziu",
+      "inLanguage": "ro",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Clasa a VI-a",
+          "item": "https://www.arkyedu.com/clasa-6/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">Clasa a VI-a</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (21)</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/">vs Privat</a>
+      </nav>
+      <a href="https://www.arkyedu.com/?grade=grade6" class="nav-cta">
+        <span>🎮 Deschide Catalogul Clasa a VI-a</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge">Programa Națională OMEN 3393/2017 &amp; OM 5420/2024</span>
+        <span class="badge badge-green">8 Module Didactice Interactive</span>
+        <span class="badge badge-free">100% Gratuit — Fără Abonament</span>
+      </div>
+      <h1>TIC Clasa a VI-a: Prezentări PowerPoint, Modelare 3D, Securitate Cibernetică & Algoritmi</h1>
+      <p class="lead-text">Ghid curricular complet TIC Clasa a 6-a: Diapozitive PowerPoint, animații, modelare Paint 3D, securitate cibernetică, malware, phishing, e-mail și bucle condiționate în Scratch.</p>
+      
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?grade=grade6" class="btn-primary">
+          <span>🚀 Deschide Aplicația &amp; Începe Lecțiile</span>
+        </a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/" class="btn-secondary">
+          <span>⚖️ Compară cu Școlile Private de Coding</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MODULES GRID -->
+    <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">Module Curriculare Interactive — Clasa a VI-a</h2>
+    <div class="grid-2">
+      
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3 class="card-title">Prezentări Multimedia & Diapozitive Interactive</h3>
+          <p class="card-desc">Lecție completă Prezentări PowerPoint & Google Slides clasa a 6-a: Diapozitive, tranziții, animații, reguli de design vizual și susținerea unei expuneri.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/prezentari-slides/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=prezentari-slides" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🧊</div>
+          <h3 class="card-title">Grafică Tridimensională, Forme & Modele 3D</h3>
+          <p class="card-desc">Lecție TIC Clasa a 6-a de Grafică 3D: Axele X, Y, Z, rotație spațială, iluminare, texturi, biblioteci 3D și exportul modelelor tridimensionale.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/paint-3d/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=paint-3d" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <h3 class="card-title">Amenințări Malware, Viruși & Protecție Digitală</h3>
+          <p class="card-desc">Lecție completă TIC Clasa a 6-a de Securitate Cibernetică: Malware, Viruși, Viermi, Troieni, Ransomware, Antivirus, Carantină, Firewall și Parole Blindate.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/malware-securitate/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=malware-securitate" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">🎬</div>
+          <h3 class="card-title">Design Diapozitive, Tranziții, Animații & Proiect Turistic</h3>
+          <p class="card-desc">Ghid complet TIC Clasa a 6-a: Inserare imagini, SmartArt, forme geometrice, tranziții fluide, animații de intrare/ieșire, reguli de design și susținerea unei expuneri.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/prezentari-slides-2/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=prezentari-slides-2" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">✉️</div>
+          <h3 class="card-title">Servicii E-mail, Netichetă & Colaborare în Cloud</h3>
+          <p class="card-desc">Lecție completă TIC Clasa a 6-a: Structura e-mailului, Câmpurile To, CC, BCC, atașamente <25MB, Netichetă, Protocol Anti-Cyberbullying și colaborare securizată în Cloud.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/email-neticheta/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=email-neticheta" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">Repeat</div>
+          <h3 class="card-title">Algoritmi & Bucle Condiționate în Scratch (Cât timp vs Repetă până când)</h3>
+          <p class="card-desc">Lecție completă și laborator interactiv Scratch pentru Clasa a VI-a: bucle condiționate, cât timp vs repetă până când, operatori booleeni și prevenirea buclelor infinite.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/algoritmi-bucle-scratch-1/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=algoritmi-bucle-scratch-1" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">Clapperboard</div>
+          <h3 class="card-title">Animație Toontastic & Realitate Virtuală VR (Cadre 24 FPS, Regie Audio & CoSpaces)</h3>
+          <p class="card-desc">Lecție completă și atelier interactiv de TIC pentru Clasa a VI-a: Secretele animației (24 FPS, persistența retiniană), structurarea scenariilor în 3 acte în Toontastic 3D, păpușărie digitală cu voce în direct, coloană sonoră și lumi virtuale 360° în CoSpaces Edu.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/animatie-vr-toontastic-cospaces/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=animatie-vr-toontastic-cospaces" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div class="card-icon">Gamepad2</div>
+          <h3 class="card-title">Bucle cu Contor, Minecraft 3D, Fractali & Absolvirea Gimnaziului</h3>
+          <p class="card-desc">Lecție completă TIC Clasa a VI-a: Structura repetitivă cu contor (Pentru/Repeat n), suma lui Gauss, geometria poligoanelor (360°/n), proiectul Minecraft 3D cu straturi de adâncime (Layering), Albumul Brâncuși, fractali recursivi și Diploma Oficială de Absolvire Gimnazială.</p>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="https://www.arkyedu.com/cursuri/algoritmi-contor-minecraft-scratch/" class="card-link">Citește Teoria &amp; Fisa Didactică →</a>
+            <a href="https://www.arkyedu.com/?mission=algoritmi-contor-minecraft-scratch" style="font-size: 0.85rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 0.35rem 0.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 700;">Lansează Misiunea 🚀</a>
+          </div>
+        </div>
+      
+    </div>
+
+    <!-- VALUE PROPOSITION -->
+    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 3rem;">
+      <h2 style="font-size: 1.85rem; margin-bottom: 1rem;">De Ce Învață Elevii Mai Bine cu ArkyEdu?</h2>
+      <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 21 de jocuri arcade, simulatoare interactive și diplome de merit oficiale, 100% gratuit!</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?grade=grade6" class="btn-primary">Exersează Acum Clasa a VI-a</a>
+        <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">Vezi Cele 21 de Jocuri Arcade</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>ArkyEdu TIC</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Platformă educațională 100% gratuită dedicată elevilor și profesorilor de gimnaziu din România.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Gimnaziu</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/clasa-5/">Clasa a V-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-6/">Clasa a VI-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-7/">Clasa a VII-a</a></li>
+            <li><a href="https://www.arkyedu.com/clasa-8/">Clasa a VIII-a</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Arcade &amp; Duel</h4>
+          <ul>
+            <li><a href="https://www.arkyedu.com/arcade/">21 Jocuri Arcade Didactice</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 Live</a></li>
+            <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Școli Private</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu. Conform manualelor școlare Art Klett, Litera, EDP.</div>
+        <div>Fără taxe • Fără reclame • 100% Gratuit</div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

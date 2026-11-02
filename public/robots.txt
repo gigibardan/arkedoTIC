@@ -8,12 +8,17 @@ User-agent: *
 Allow: /
 Allow: /cursuri/
 Allow: /cursuri/*
-Allow: /llms.txt
-Allow: /llms-full.txt
+Allow: /clasa-5
+Allow: /clasa-6
+Allow: /clasa-7
+Allow: /clasa-8
+Allow: /comparatie-scoli-private
 Allow: /arcade
 Allow: /profesor
 Allow: /duel
 Allow: /oras
+Allow: /llms.txt
+Allow: /llms-full.txt
 Disallow: /superadmin
 
 # AI Search Engines & LLM Indexers (ChatGPT, Perplexity, Claude, Gemini, Apple, Meta)
