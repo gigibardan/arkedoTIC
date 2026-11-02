@@ -1644,7 +1644,7 @@ function GameContent() {
     if (mId.startsWith('g8_')) {
       const lvl = g8Levels[mId] || 1;
       const sc = g8Scores[mId] || 0;
-      if (lvl >= 6 || sc >= 100) return true;
+      if (lvl >= 8 || sc >= 100) return true;
     }
 
     const activeStudent = getActiveStudent();
@@ -3919,10 +3919,10 @@ function GameContent() {
               </div>
             )}
 
-            {/* Level Views for GRADE 8 - ALL 12 CULMINATING MISSIONS (Unitățile 1, 2, 3 - Manual Art Klett 2025) */}
+            {/* Level Views for GRADE 8 - ALL 14 CULMINATING MISSIONS (Unitățile 1, 2, 3, 4 - Manual Art Klett 2025) */}
             {activeMission?.startsWith('g8_') && (
               <div className="flex-1">
-                {(g8Levels[activeMission] || 1) <= ((activeMission === 'g8_calc_a' || activeMission === 'g8_calc_b' || activeMission === 'g8_calc_c' || activeMission === 'g8_calc_d' || activeMission === 'g8_web_a') ? 7 : 5) ? (
+                {(g8Levels[activeMission] || 1) <= 7 ? (
                   activeMission === 'g8_calc_a' ? (
                     <ModuleG8Calc1Flow
                       currentLevel={g8Levels[activeMission] || 1}

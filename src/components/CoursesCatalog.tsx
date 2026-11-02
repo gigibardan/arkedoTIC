@@ -529,21 +529,15 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   };
 
   const handleAttemptStart = (targetMission: AllMissionId) => {
-    // If student has no name yet, prompt them first
+    // If student has no name yet, assign a friendly default so they can start immediately on mobile/laptop without friction!
     if (!studentName && !nameInput.trim()) {
-      setNameError(true);
-      setIsEditingName(true);
-      sounds.playWrong();
-      arky.triggerError(
-        lang === 'en'
-          ? "Hold on! Tell Arky your name first before starting the mission! 🤖"
-          : "Stai puțin! Spune-i lui Arky numele tău înainte de a începe misiunea! 🤖"
-      );
-      return;
-    }
-    if (nameInput.trim() && !studentName) {
+      const defaultName = lang === 'en' ? 'Student Explorer' : 'Elev Explorator';
+      setNameInput(defaultName);
+      onSetStudentName(defaultName);
+    } else if (nameInput.trim() && !studentName) {
       onSetStudentName(nameInput.trim());
     }
+
 
     // CHECK IN-PROGRESS GUARD:
     // Only guard if user has an active mission in progress that is NOT completed, different from target, and mid-way

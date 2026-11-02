@@ -35,7 +35,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
   const { lang } = useLanguage();
   const [activeTabUnit, setActiveTabUnit] = useState<'all' | 'u1' | 'u2' | 'u3' | 'u4'>('all');
 
-  const getUnitTag = (missionId: string) => {
+  const getUnitTag = (missionId: string = '') => {
     if (missionId.startsWith('g8_calc')) return 'u1';
     if (missionId.startsWith('g8_web')) return 'u2';
     if (missionId.startsWith('g8_algo')) return 'u3';
@@ -44,7 +44,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
 
   const filteredModules = activeTabUnit === 'all'
     ? GRADE_8_CURRICULA_MODULES
-    : GRADE_8_CURRICULA_MODULES.filter(m => getUnitTag(m.missionId) === activeTabUnit);
+    : GRADE_8_CURRICULA_MODULES.filter(m => getUnitTag(m.missionId || m.id) === activeTabUnit);
 
   return (
     <div id="sectiune-misiuni-clasa-8" className="scroll-mt-6 flex flex-col gap-6">
@@ -209,7 +209,8 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
       {/* Grid of 12 Interactive Mission Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredModules.map((module) => {
-          const isDone = Boolean(completedMissions[module.missionId]);
+          const effectiveMissionId = module.missionId || module.id;
+          const isDone = Boolean(completedMissions[effectiveMissionId] || completedMissions[module.id]);
 
           return (
             <div
@@ -310,7 +311,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                     type="button"
                     onClick={() => {
                       sounds.playClick();
-                      onLaunchInteractiveLab?.(module.missionId);
+                      onLaunchInteractiveLab?.(effectiveMissionId);
                     }}
                     className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                       isDone

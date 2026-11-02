@@ -4,6 +4,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
   // ==================== UNITATEA 1: CALCUL TABELAR ====================
   {
     id: 'g8_calc_a',
+    missionId: 'g8_calc_a',
     slug: 'excel-introducere-interfata-registru',
     title: 'Utilizarea Foilor de Calcul Tabelar & Interfața MS Excel',
     shortTitle: 'Interfață Excel & Registru de Calcul',
@@ -142,6 +143,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_calc_b',
+    missionId: 'g8_calc_b',
     slug: 'excel-formatare-tipuri-date-sortare',
     title: 'Formatarea Registrului, Tipuri de Date & Sortare Multicriterială',
     shortTitle: 'Formatare Celule, Autofill & Sortare',
@@ -289,6 +291,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_calc_c',
+    missionId: 'g8_calc_c',
     slug: 'excel-formule-functii-matematice-decizie',
     title: 'Calcule Tabelare: Formule Aritmetice & Funcții (SUM, AVERAGE, MIN, MAX, IF, INT)',
     shortTitle: 'Formule & Funcții Specializate',
@@ -431,6 +434,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_calc_d',
+    missionId: 'g8_calc_d',
     slug: 'excel-modalitati-grafice-diagrame-concurs',
     title: 'Reprezentări Grafice & Diagrame Interactive în MS Excel',
     shortTitle: 'Diagrame & Reprezentări Grafice',
@@ -569,6 +573,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
   // ==================== UNITATEA 2: PAGINI WEB ====================
   {
     id: 'g8_web_a',
+    missionId: 'g8_web_a',
     slug: 'web-structura-antet-slider-securitate',
     title: 'Anatomia Paginii Web: Structură, Antet, Slider & Securitate Cibernetică',
     shortTitle: 'Structură Web & Securitate',
@@ -709,6 +714,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_web_b',
+    missionId: 'g8_web_b',
     slug: 'web-google-sites-sectiuni-blocuri-continut',
     title: 'Aplicații de Editare Web: Interfața Google Sites & Construcția Primei Pagini',
     shortTitle: 'Editorul Google Sites & Blocuri Media',
@@ -853,6 +859,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_web_c',
+    missionId: 'g8_web_c',
     slug: 'web-site-multipage-navigare-colaborare',
     title: 'Construirea unui Site Multipage, Navigare & Lucru Colaborativ',
     shortTitle: 'Site Multipage & Colaborare',
@@ -994,6 +1001,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
   // ==================== UNITATEA 3: ALGORITMI & PROGRAMARE C++ ====================
   {
     id: 'g8_algo_a',
+    missionId: 'g8_algo_a',
     slug: 'cpp-decizie-switch-cnp-bucle-complexe',
     title: 'Structura Decizională Multiplă (switch), Analiza CNP & Bucle Complexe',
     shortTitle: 'Decizie switch, CNP & Bucle',
@@ -1139,6 +1147,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_algo_b',
+    missionId: 'g8_algo_b',
     slug: 'robotica-open-roberta-senzori-labirint',
     title: 'Algoritmi în Robotică: Senzori Virtuali NXT & Navigare în Labirint',
     shortTitle: 'Roboți Virtuali & Senzori NXT',
@@ -1278,6 +1287,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_algo_c',
+    missionId: 'g8_algo_c',
     slug: 'cpp-siruri-reguli-fibonacci-triunghiulare',
     title: 'Șiruri de Valori: Reguli de Generare, Fibonacci & Numere Triunghiulare',
     shortTitle: 'Șiruri, Fibonacci & Reguli',
@@ -1425,6 +1435,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_algo_d',
+    missionId: 'g8_algo_d',
     slug: 'cpp-operatii-siruri-citire-filtrare-numarare',
     title: 'Prelucrarea Șirurilor în C++: Citire, Parcurgere, Filtrare & Numărare',
     shortTitle: 'Citire, Filtrare & Contor în C++',
@@ -1573,6 +1584,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_algo_e',
+    missionId: 'g8_algo_e',
     slug: 'cpp-semafoare-cautare-min-max-proiect-liceu',
     title: 'Semafoare, Căutare Secvențială, Min/Max & Proiectul Integrator Liceu',
     shortTitle: 'Semafoare, Căutare & Min/Max',
@@ -1729,6 +1741,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_robot_a',
+    missionId: 'g8_robot_a',
     slug: 'robotica-microcontrollere-senzori-actuatori',
     title: 'Microcontrollere, Senzori Digitali/Analogici & Actuatori Robotici',
     shortTitle: 'Microcontrollere & Senzori',
@@ -1889,6 +1902,7 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
 
   {
     id: 'g8_robot_b',
+    missionId: 'g8_robot_b',
     slug: 'robotica-smart-city-smart-home-proiect-integrator',
     title: 'Sisteme Inteligente, Smart Home & Proiectul Integrator IoT',
     shortTitle: 'Smart Home & Robotică IoT',
