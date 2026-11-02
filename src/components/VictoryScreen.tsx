@@ -75,6 +75,8 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
   const isG8AlgoC = courseId === 'g8_algo_c';
   const isG8AlgoD = courseId === 'g8_algo_d';
   const isG8AlgoE = courseId === 'g8_algo_e';
+  const isG8RobotA = courseId === 'g8_robot_a';
+  const isG8RobotB = courseId === 'g8_robot_b';
 
   const courseDbTitle = isHardware
     ? (lang === 'en' ? 'PC Architecture & Ergonomics Mission (Textbook pp. 10-20)' : 'Misiunea Sisteme de calcul și comunicații (Manual pag. 10-20)')
@@ -141,9 +143,13 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     : isG8AlgoC
     ? (lang === 'en' ? 'C++ Extremum Min/Max & Positions Mission 3C (Grade 8 Textbook pp. 78-83)' : 'Misiunea 3C C++ Extremum Min/Max & Poziții (Clasa a VIII-a Manual pag. 78-83)')
     : isG8AlgoD
-    ? (lang === 'en' ? 'Robotics & Autonomous Virtual Sensors Mission 3D (Grade 8 Textbook pp. 84-91)' : 'Misiunea 3D Robotică & Roboți Virtuali cu Senzori (Clasa a VIII-a Manual pag. 84-91)')
+    ? (lang === 'en' ? 'C++ Vectors, Binary Search & Bubble Sort Mission 3D (Grade 8 Textbook pp. 77-84)' : 'Misiunea 3D C++ Tablouri Unidimensionale & Sortare (Clasa a VIII-a Manual pag. 77-84)')
     : isG8AlgoE
-    ? (lang === 'en' ? 'Grand Graduation Project: Preferred High School Mission 3E (Grade 8 Textbook pp. 92-96)' : 'Misiunea 3E Proiect Final „Liceul Preferat” & Absolvire Gimnaziu (Clasa a VIII-a Manual pag. 92-96)')
+    ? (lang === 'en' ? 'C++ Subprograms, Functions & Modular Architecture Mission 3E (Grade 8 Textbook pp. 85-88)' : 'Misiunea 3E C++ Subprograme, Funcții & Proiect Integrator (Clasa a VIII-a Manual pag. 85-88)')
+    : isG8RobotA
+    ? (lang === 'en' ? 'Robotics & Microcontrollers Mission 4A (Grade 8 Textbook pp. 89-98)' : 'Misiunea 4A Microcontrollere, Senzori & Actuatori Robotici (Clasa a VIII-a Manual pag. 89-98)')
+    : isG8RobotB
+    ? (lang === 'en' ? 'Smart Home & Smart City IoT Mission 4B (Grade 8 Textbook pp. 99-108)' : 'Misiunea 4B Smart Home & Robotică IoT (Clasa a VIII-a Manual pag. 99-108)')
     : (lang === 'en' ? 'Secret Tree Mission (Textbook pp. 27-30)' : 'Misiunea Arborele Secret (Manual pag. 27-30)');
 
 
@@ -293,12 +299,14 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           ? (lang === 'en' ? 'Congratulations, C++ Programmer • Digit Processing Master!' : 'Felicitări, Programator C++ • Maestru în Prelucrarea Cifrelor!')
           : isG8AlgoB
           ? (lang === 'en' ? 'Congratulations, C++ Algorithmist • Sequences & Fibonacci Hero!' : 'Felicitări, Algoritmist C++ • Maestru în Șiruri & Fibonacci!')
-          : isG8AlgoC
-          ? (lang === 'en' ? 'Congratulations, C++ Search & Extremum Analytics Specialist!' : 'Felicitări, Specialist C++ în Căutare & Determinare Extremum!')
           : isG8AlgoD
-          ? (lang === 'en' ? 'Congratulations, Certified Autonomous Robotics & Sensor Engineer!' : 'Felicitări, Inginer în Robotică Autonomă & Senzori Virtuali!')
+          ? (lang === 'en' ? 'Congratulations, C++ Vectors & Sorting Specialist!' : 'Felicitări, Specialist C++ în Tablouri & Sortare!')
           : isG8AlgoE
-          ? (lang === 'en' ? 'Congratulations, Gymnasium Laureate & High School Candidate!' : 'Felicitări, Absolvent de Onoare al Gimnaziului • Informatică & TIC!')
+          ? (lang === 'en' ? 'Congratulations, C++ Modular Software Architect!' : 'Felicitări, Arhitect C++ de Programe Modulare!')
+          : isG8RobotA
+          ? (lang === 'en' ? 'Congratulations, Certified Robotics & Embedded Systems Engineer!' : 'Felicitări, Inginer Certificat în Robotică & Sisteme Încorporate!')
+          : isG8RobotB
+          ? (lang === 'en' ? 'Congratulations, Smart Home & IoT Architect!' : 'Felicitări, Arhitect Smart Home & Sisteme Inteligente IoT!')
           : t.vTitle}
       </h2>
 
@@ -421,12 +429,20 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               : 'Ai finalizat cu succes Misiunea 3C: stăpânești determinarea valorilor extreme (minim și maxim) în C++, inițializarea corectă pentru numere negative, memorarea poziției de apariție și calculul mediilor condiționate!')
           : isG8AlgoD
           ? (lang === 'en'
-              ? 'You successfully mastered educational robotics: Lego Mindstorms EV3 / NXT architectures, ultrasonic distance sensors, collision prevention thresholds, decision loops, and reactive state machines!'
-              : 'Ai finalizat cu succes Misiunea 3D: stăpânești arhitectura roboților autonomi, senzorul ultrasonic de distanță, pragurile de siguranță la frânare, buclele de decizie în timp real și mașinile reactive de stări pentru evitarea coliziunilor!')
+              ? 'You successfully mastered C++ 1D arrays and vectors: contiguous memory indexing (0..n-1), sequential traversal, insertion and deletion with shift, Bubble Sort, Selection Sort, and Binary Search!'
+              : 'Ai finalizat cu succes Misiunea 3D: stăpânești vectorii în C++, indexarea de la 0, inserarea și ștergerea elementelor cu deplasare, Bubble Sort, sortarea prin selecție și Căutarea Binară logaritmică!')
           : isG8AlgoE
           ? (lang === 'en'
-              ? 'You successfully completed the Grand Graduation Project: Preferred High School! You integrated Excel admission grade calculators, Google Sites presentation web pages, and C++ admission prediction algorithms!'
-              : 'Ai finalizat cu succes Misiunea 3E și Proiectul de Sinteză „Liceul Preferat”! Ai integrat foaia de calcul tabelar a mediilor de admitere 80/20, site-ul web de prezentare a profilului dorit și algoritmul C++ de predicție a șanselor de admitere!')
+              ? 'You successfully mastered C++ subprograms and modular architecture: functions, parameter passing by value vs reference (&), passing arrays by address, utility algorithms, and the complete Gradebook Capstone Project!'
+              : 'Ai finalizat cu succes Misiunea 3E: stăpânești subprogramele C++, transmiterea prin valoare vs prin referință (&), vectorii ca parametri prin adresă, trusa de funcții utilitare și Proiectul Integrator al Catalogului Școlar!')
+          : isG8RobotA
+          ? (lang === 'en'
+              ? 'You successfully mastered robotics and embedded systems: Arduino Uno ATmega328P architecture, 10-bit ADC sensor conversion (0..1023), HC-SR04 ultrasonic echo physics, SG90 servo precision angles, and H-bridge motor drivers!'
+              : 'Ai finalizat cu succes Misiunea 4A: stăpânești arhitectura microcontrollerului Arduino Uno, conversia ADC pe 10 biți (0..1023), calculul distanței cu senzorul ultrasonic HC-SR04, comanda servomotoarelor SG90 și puntea H L298N pentru navigare autonomă!')
+          : isG8RobotB
+          ? (lang === 'en'
+              ? 'You successfully mastered Smart City and Smart Home IoT systems: automated streetlights with LDR, ultrasonic servo parking barriers, gas alert buzzers, and infinite loop state machines!'
+              : 'Ai finalizat cu succes Misiunea 4B: stăpânești sistemele inteligente IoT, iluminatul public automatizat cu senzori LDR, barierele inteligente de acces cu servomotor, alertele sonore și bucla continuă de automatizare!')
           : t.vDesc}
       </p>
 
@@ -1324,7 +1340,83 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               <span className="text-2xl">🆔</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'CNP Parser' : 'Parser CNP 13 Cifre'}</div>
-                <div className="text-[10px] text-teal-400">Sex & Data Nașterii</div>
+                <div className="text-[10px] text-teal-400">Sex &amp; Data Nașterii</div>
+              </div>
+            </div>
+          </>
+        ) : isG8RobotB ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🏙️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Smart Streetlight' : 'Iluminat Inteligent'}</div>
+                <div className="text-[10px] text-emerald-400">LDR + PIR • PWM Eco</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🚗</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Smart Parking' : 'Barieră de Parcare'}</div>
+                <div className="text-[10px] text-blue-400">HC-SR04 &amp; SG90 90°</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🚨</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Gas & Fire Safety' : 'Securitate Gaz MQ-2'}</div>
+                <div className="text-[10px] text-red-400">Alarmă Buzzer &amp; Releu</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🌤️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'IoT Weather LCD' : 'Stație Meteo I2C'}</div>
+                <div className="text-[10px] text-cyan-400">DHT11 • LCD 1602 (0x27)</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">👑</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Grand IoT Master' : 'Mare Maestru IoT'}</div>
+                <div className="text-[10px] text-amber-300">Multitasking millis()</div>
+              </div>
+            </div>
+          </>
+        ) : isG8RobotA ? (
+          <>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🤖</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'ATmega328P Master' : 'Microcontroller Arduino'}</div>
+                <div className="text-[10px] text-cyan-400">Pini PWM &amp; ADC 10 biți</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">📡</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Ultrasonic Radar' : 'Senzor Ultrasonic'}</div>
+                <div className="text-[10px] text-teal-400">HC-SR04 • pulseIn()</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">⚙️</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'H-Bridge Driver' : 'Punte H &amp; Motoare DC'}</div>
+                <div className="text-[10px] text-amber-300">L298N • PWM 0..255</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
+              <span className="text-2xl">🧭</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Servo SG90 Pro' : 'Servomotor SG90'}</div>
+                <div className="text-[10px] text-emerald-400">Unghiuri 0°..180°</div>
+              </div>
+            </div>
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+              <span className="text-2xl">🏆</span>
+              <div>
+                <div className="text-xs font-bold text-white">{lang === 'en' ? 'Robotics Engineer' : 'Robotician Certificat'}</div>
+                <div className="text-[10px] text-rose-400">Autonomie &amp; Evitare Obstacole</div>
               </div>
             </div>
           </>
@@ -1465,11 +1557,15 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
               : isG8AlgoB
               ? (lang === 'en' ? 'C++ Algorithmist • Sequences & Fibonacci Hero Diploma' : 'Diplomă de Algoritmist C++ • Șiruri & Fibonacci')
               : isG8AlgoC
-              ? (lang === 'en' ? 'C++ Search & Extremum Analytics Master Diploma' : 'Diplomă de Specialist C++ în Căutare & Determinare Extremum')
+              ? (lang === 'en' ? 'C++ Number Sequences & Fibonacci Hero Diploma' : 'Diplomă de Algoritmist C++ • Șiruri & Fibonacci')
               : isG8AlgoD
-              ? (lang === 'en' ? 'Autonomous Robotics & Sensor Systems Engineer Diploma' : 'Diplomă de Inginer în Robotică Autonomă & Senzori')
+              ? (lang === 'en' ? 'C++ Data Stream Processing, Counting & Filtering Diploma' : 'Diplomă de Programator C++ • Prelucrare Șiruri, Filtrare & Contor')
               : isG8AlgoE
-              ? (lang === 'en' ? 'Grand Graduation Diploma of Gymnasium • Computer Science & ICT Laureate' : 'Marea Diplomă de Onoare la Absolvirea Gimnaziului • Informatică & TIC')
+              ? (lang === 'en' ? 'C++ Search, Flags, Min/Max & High School Project Integrator Diploma' : 'Diplomă de Specialist C++ în Semafoare, Căutare, Min/Max & Proiectul Liceu')
+              : isG8RobotA
+              ? (lang === 'en' ? 'Robotics & Microcontrollers Engineer Diploma' : 'Diplomă de Inginer în Robotică, Microcontrollere Arduino & Senzori')
+              : isG8RobotB
+              ? (lang === 'en' ? 'Grand Graduation Diploma of Gymnasium • Smart City & IoT Systems Master' : 'Marea Diplomă de Onoare la Absolvirea Gimnaziului • Mare Maestru Smart City & Sisteme Inteligente IoT')
               : t.vDiplomaTitle}
           </h3>
           <p className="text-xs text-slate-600 font-semibold uppercase tracking-wider mt-1">
@@ -1616,16 +1712,24 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                   : 'Pentru performanțe deosebite în generarea secvențelor numerice în C++, tehnica variabilelor glisante fără tablouri unidimensionale, termenii șirului Fibonacci, progresiile matematice și numerele triunghiulare (Manual pag. 70-77).')
               : isG8AlgoC
               ? (lang === 'en'
-                  ? 'For demonstrated excellence in searching and extremum determination algorithms, robust negative-number initialization, first/last occurrence position tracking, and statistical aggregations in C++ (Textbook pp. 78-83).'
-                  : 'Pentru excelență în algoritmii de căutare și determinare a extremelor (minim/maxim), inițializarea corectă pentru mulțimi cu numere negative, memorarea poziției de apariție și statistici numerice în C++ (Manual pag. 78-83).')
+                  ? 'For remarkable performance in generating mathematical number sequences, sliding variable techniques (p, d, c), Fibonacci terms, triangular and pyramidal numbers in C++ (Textbook pp. 68-71).'
+                  : 'Pentru performanțe deosebite în generarea secvențelor numerice în C++, tehnica variabilelor glisante (p, d, c), termenii șirului Fibonacci, numerele triunghiulare și piramidale (Manual pag. 68-71).')
               : isG8AlgoD
               ? (lang === 'en'
-                  ? 'For exceptional mastery in educational robotics, ultrasonic echo sensing, distance threshold braking calculations, collision prevention maneuvers, and autonomous state machine programming (Textbook pp. 84-91).'
-                  : 'Pentru măiestrie inginerească în robotica educațională, calibrarea senzorului ultrasonic de distanță, calculul inerției de frânare, manevrele de evitare a obstacolelor și programarea mașinilor de stări autonome (Manual pag. 84-91).')
+                  ? 'For demonstrated mastery in C++ data stream processing, fixed-length and sentinel-based input loops, numerical property filtering, and counting algorithms with cnt counters (Textbook pp. 72-77).'
+                  : 'Pentru măiestrie algoritmică în citirea fluxurilor de date în C++, bucle de citire cu număr cunoscut sau santinelă 0, filtrarea elementelor după criterii logice și tehnica contorului de numărare cnt (Manual pag. 72-77).')
               : isG8AlgoE
               ? (lang === 'en'
-                  ? 'For supreme graduation excellence in completing the 8th Grade Capstone Project: Preferred High School! Successfully combining spreadsheet admission databases, Google Sites presentation architecture, and C++ predictive admission analytics across the entire gymnasium curriculum (Textbook pp. 92-96).'
-                  : 'Pentru absolvirea de elită a întregului Ciclu Gimnazial (Clasele V-VIII) și finalizarea cu brio a Proiectului de Sinteză „Liceul Preferat”: integrarea calculului tabelar al mediilor de admitere 80/20, dezvoltarea site-ului web Google Sites și implementarea algoritmului C++ de predicție a sanselor de admitere (Manual pag. 92-96).')
+                  ? 'For supreme algorithmic excellence in flag/semaphore logic verification, early-exit sequential search, extremum min/max determination with position tracking, and the Preferred High School Statistical Project (Textbook pp. 78-88).'
+                  : 'Pentru excelență algoritmică în verificarea proprietăților globale prin variabile semafor/flag, căutare secvențială optimizată, determinarea minimului/maximului cu reținere de poziție și realizarea Proiectului de final de gimnaziu „Liceul Preferat” (Manual pag. 78-88).')
+              : isG8RobotA
+              ? (lang === 'en'
+                  ? 'For exceptional engineering mastery in Arduino Uno microcontroller architecture, 10-bit ADC sensor conversion, HC-SR04 ultrasonic distance echolocation, H-bridge DC motors, and autonomous obstacle avoidance (Textbook pp. 89-98).'
+                  : 'Pentru măiestrie inginerească în arhitectura microcontrollerelor Arduino Uno, conversia ADC pe 10 biți a senzorilor analogici, ecolocația ultrasonică HC-SR04, puntea H pentru motoare DC și proiectarea robotului autonom de evitare a obstacolelor (Manual pag. 89-98).')
+              : isG8RobotB
+              ? (lang === 'en'
+                  ? 'For supreme capstone graduation excellence in Smart City & IoT Systems: automated streetlight with LDR & PIR, smart parking barrier with SG90 servo, MQ-2 gas & fire alarm relay safety, 1602 LCD weather station, and non-blocking multitasking using millis() (Textbook pp. 99-108).'
+                  : 'Pentru absolvirea de elită a întregului Ciclu Gimnazial (Clasele V-VIII) și excelență supremă în Sisteme Inteligente IoT & Smart City: iluminat public automat cu LDR și PIR, barieră inteligentă de parcare cu servomotor SG90, sistem de securitate gaz MQ-2 cu alarmă și releu ventilator, stație meteo cu ecran LCD 1602 I2C și multitasking cooperativ non-blocant cu funcția millis() (Manual pag. 99-108).')
               : t.vDiplomaText}
           </p>
 

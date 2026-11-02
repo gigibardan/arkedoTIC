@@ -57,6 +57,7 @@ export interface ArcadeScores {
   page_craft?: number;
   hacker_defense?: number;
   cyber_snake?: number;
+  circuit_master?: number;
   totalArcade: number;
 }
 
@@ -102,7 +103,9 @@ export type AllMissionId =
   | 'g8_algo_b'
   | 'g8_algo_c'
   | 'g8_algo_d'
-  | 'g8_algo_e';
+  | 'g8_algo_e'
+  | 'g8_robot_a'
+  | 'g8_robot_b';
 
 export interface LessonMissionState {
   completed: boolean;

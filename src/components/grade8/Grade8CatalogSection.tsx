@@ -33,12 +33,13 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
   completedMissions = {},
 }) => {
   const { lang } = useLanguage();
-  const [activeTabUnit, setActiveTabUnit] = useState<'all' | 'u1' | 'u2' | 'u3'>('all');
+  const [activeTabUnit, setActiveTabUnit] = useState<'all' | 'u1' | 'u2' | 'u3' | 'u4'>('all');
 
   const getUnitTag = (missionId: string) => {
     if (missionId.startsWith('g8_calc')) return 'u1';
     if (missionId.startsWith('g8_web')) return 'u2';
-    return 'u3';
+    if (missionId.startsWith('g8_algo')) return 'u3';
+    return 'u4';
   };
 
   const filteredModules = activeTabUnit === 'all'
@@ -55,10 +56,10 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
           </div>
           <div>
             <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
-              {lang === 'en' ? 'Practical ICT & C++ Missions • 8th Grade (Art Klett)' : 'Misiuni Practice TIC & C++ • Clasa a VIII-a (Manual Art Klett)'}
+              {lang === 'en' ? 'Practical ICT, C++ & Robotics Missions • 8th Grade (Art Klett)' : 'Misiuni Practice TIC, C++ & Robotică • Clasa a VIII-a (Manual Art Klett)'}
             </h2>
             <div className="text-xs text-emerald-400 font-mono font-medium">
-              {lang === 'en' ? 'Official National Curriculum OMEN 3393/2017 & OM 5420/2024 • 12 Culminating Missions' : 'Programa Națională Oficială OMEN 3393/2017 & OM 5420/2024 • 12 Misiuni Finale Gimnaziu'}
+              {lang === 'en' ? 'Official National Curriculum OMEN 3393/2017 & OM 5420/2024 • 14 Culminating Missions' : 'Programa Națională Oficială OMEN 3393/2017 & OM 5420/2024 • 14 Misiuni Finale Gimnaziu'}
             </div>
           </div>
         </div>
@@ -71,12 +72,12 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
         </div>
       </div>
 
-      {/* 3 Major Units Roadmap Matrix Banner */}
+      {/* 4 Major Units Roadmap Matrix Banner */}
       <div className="bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-emerald-950/40 border-2 border-emerald-500/30 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-emerald-400" />
-            {lang === 'en' ? '8th Grade Curriculum Roadmap (Manual Art Klett 2025, 100 pages)' : 'Harta Curriculară Clasa a VIII-a (Manual Oficial Art Klett 2025, 100 pagini)'}
+            {lang === 'en' ? '8th Grade Curriculum Roadmap (Manual Art Klett 2025, 108 pages)' : 'Harta Curriculară Clasa a VIII-a (Manual Oficial Art Klett 2025, 108 pagini)'}
           </div>
 
           {/* Unit Filter Tabs */}
@@ -92,7 +93,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              {lang === 'en' ? 'All (12)' : 'Toate (12)'}
+              {lang === 'en' ? 'All (14)' : 'Toate (14)'}
             </button>
             <button
               onClick={() => {
@@ -118,7 +119,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              U2: Web Sites (3)
+              U2: Web (3)
             </button>
             <button
               onClick={() => {
@@ -131,50 +132,76 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              U3: C++ & Roboți (5)
+              U3: C++ (5)
+            </button>
+            <button
+              onClick={() => {
+                setActiveTabUnit('u4');
+                sounds.playClick();
+              }}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition cursor-pointer ${
+                activeTabUnit === 'u4'
+                  ? 'bg-amber-600 text-white shadow-sm font-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              U4: Robotică & IoT (2)
             </button>
           </div>
         </div>
 
         {/* Units Description Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
+                <FileSpreadsheet className="w-5 h-5 text-emerald-400 shrink-0" />
                 <span className="font-bold text-white">Unitatea 1: Calcul Tabelar</span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                Excel/Calc, adrese celule relative/absolute ($A$1), formule SUM, AVERAGE, IF, diagrame 2D/3D, sortare multi-cheie & autofiltrare (pag. 12–35)
+                Excel/Calc, adrese celule relative/absolute ($A$1), formule SUM, AVERAGE, IF, diagrame 2D/3D, sortare & autofiltrare (pag. 12–35)
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● 4 MISIUNI ACTIVE (1A–1D)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● 4 MISIUNI (1A–1D)</span>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-sky-950/40 border border-sky-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Globe className="w-5 h-5 text-sky-400" />
+                <Globe className="w-5 h-5 text-sky-400 shrink-0" />
                 <span className="font-bold text-white">Unitatea 2: Pagini Web</span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                HTML5 semantic, Google Sites WYSIWYG, carusel imagini, hărți, machetare responsive (Desktop/Tabletă/Telefon), securitate HTTPS & SEO (pag. 36–57)
+                HTML5 semantic, Google Sites WYSIWYG, carusel imagini, hărți, layout responsive, securitate HTTPS & SEO (pag. 36–58)
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-sky-400">● 3 MISIUNI ACTIVE (2A–2C)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-sky-400">● 3 MISIUNI (2A–2C)</span>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Code2 className="w-5 h-5 text-indigo-400" />
-                <span className="font-bold text-white">Unitatea 3: Algoritmi, C++ & Robotică</span>
+                <Code2 className="w-5 h-5 text-indigo-400 shrink-0" />
+                <span className="font-bold text-white">Unitatea 3: Algoritmi C++</span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                if/else, switch, bucle while/do-while/for, cifre, divizori, CMMDC, Fibonacci, simulator senzori roboți & Proiectul final „Liceul Preferat” (pag. 58–96)
+                Operatori, decizii if/switch, bucle while/for, cifre, divizori, vectori & subprograme modulare (pag. 59–88)
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-indigo-400">● 5 MISIUNI ACTIVE (3A–3E)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-indigo-400">● 5 MISIUNI (3A–3E)</span>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/40 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Bot className="w-5 h-5 text-amber-400 shrink-0" />
+                <span className="font-bold text-white">Unitatea 4: Robotică & IoT</span>
+              </div>
+              <div className="text-[11px] text-slate-300 leading-snug">
+                Arduino Uno, HC-SR04, servomotoare SG90, Smart Streetlight LDR+PIR, alertă gaz MQ-2, LCD I2C & multitasking millis() (pag. 89–108)
+              </div>
+            </div>
+            <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">● 2 MISIUNI (4A–4B)</span>
           </div>
         </div>
       </div>

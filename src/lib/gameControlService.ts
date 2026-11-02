@@ -277,6 +277,17 @@ export const ALL_GAMES: GameDefinition[] = [
     gradeBadge: 'Scratch & Algo',
   },
   {
+    id: 'circuit_master',
+    titleRo: 'Circuit Master Retro 80s: Arduino & Smart City ⚡',
+    titleEn: 'Circuit Master Retro 80s: Arduino & Smart City ⚡',
+    category: 'Robotică & Circuite Smart City',
+    categoryEn: 'Robotics & Smart City Circuits',
+    iconName: 'Cpu',
+    descRo: 'Simulator hardware retro: conectează senzori (LDR, PIR, Ultrasonic, Gas MQ-2), evită scurtcircuitele, gestionează evenimente multitasking millis() și salvează orașul inteligent!',
+    descEn: 'Retro hardware simulator: wire Arduino breadboards (LDR, PIR, Ultrasonic, MQ-2 Gas), avoid short circuits, dispatch millis() non-blocking events, and stabilize the Smart City grid!',
+    gradeBadge: 'Robotică Clasa VII-VIII',
+  },
+  {
     id: 'duel',
     titleRo: 'Arena Duel 1v1',
     titleEn: 'Multiplayer 1v1 Duel Arena',

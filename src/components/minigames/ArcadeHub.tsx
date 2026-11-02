@@ -22,6 +22,7 @@ import { RobloxClickerDuelGame } from './RobloxClickerDuelGame';
 import { PageCraftArcadeGame } from './PageCraftArcadeGame';
 import { HackerDefenderDuelGame } from './HackerDefenderDuelGame';
 import { CyberSnakeGame } from './CyberSnakeGame';
+import { CircuitMasterGame } from './CircuitMasterGame';
 import { GameLockedModal } from '../common/GameLockedModal';
 import {
   subscribeGameSettings,
@@ -68,7 +69,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -277,6 +278,14 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const circuitMasterHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_circuit_master') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -341,6 +350,16 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           customMessage={gameSettings.customMessage}
         />
       </div>
+    );
+  }
+
+  if (activeGame === 'circuit_master') {
+    return (
+      <CircuitMasterGame
+        studentName={studentName || 'Inginer Hardware'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
     );
   }
 
@@ -1600,6 +1619,57 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               'Launch Cyber Snake',
               'bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 shadow-emerald-600/30',
               'arcade-btn-start-cyber-snake'
+            )}
+          </div>
+        </div>
+
+        {/* Game 21: Circuit Master Retro 80s: Arduino & Smart City ⚡ */}
+        <div className={`bg-gradient-to-b from-slate-900 via-amber-950/20 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'circuit_master') ? 'border-amber-500/60 hover:border-amber-400' : 'border-amber-500/40 opacity-95'
+        }`}>
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border-2 border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-amber-500/20 shrink-0">
+                ⚡
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('circuit_master')}
+                {renderScoreBadges('circuit_master', circuitMasterHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 mb-2">
+              <div className="inline-block px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                {lang === 'en' ? 'Hardware & Smart City' : 'Robotică & Smart City'}
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 text-[10px] font-mono border border-cyan-500/30">
+                🔌 Arduino Uno ATmega328P
+              </div>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
+              <span>{lang === 'en' ? 'Circuit Master 80s: Arduino & Smart City' : 'Circuit Master 80s: Arduino & Smart City'}</span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Retro 80s hardware engineering simulator: wire real Arduino breadboards (LDR, PIR, Ultrasonic HC-SR04, MQ-2 Gas), calibrate PWM and Ohm resistors on a CRT oscilloscope, dispatch millis() non-blocking events, and stabilize the Smart City power grid!'
+                : 'Simulator hardware retro 80s: conectează senzori pe breadboard (LDR, PIR, Ultrasonic HC-SR04, Gaz MQ-2), calibrează PWM-ul și rezistențele Ohm pe osciloscop CRT, gestionează evenimentele multitasking fără delay() și salvează grila Smart City!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-[11px] text-amber-400 font-mono">⚡ 4 Etape Hardware + Boss Grid</span>
+            {renderGameActionButton(
+              'circuit_master',
+              'Circuit Master 80s: Arduino & Smart City ⚡',
+              'Circuit Master 80s: Arduino & Smart City ⚡',
+              'Start Hardware Lab',
+              'Launch Circuit Master',
+              'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-slate-950 shadow-amber-500/30',
+              'arcade-btn-start-circuit-master'
             )}
           </div>
         </div>

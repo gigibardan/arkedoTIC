@@ -71,6 +71,7 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   page_craft: 0,
   hacker_defense: 0,
   cyber_snake: 0,
+  circuit_master: 0,
   totalArcade: 0
 };
 
@@ -193,6 +194,12 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
   // Hacker vs Defender Cybersecurity Duel: capped at 2,000 XP
   const hackerDefensePoints = Math.min(2000, scores.hacker_defense || 0);
 
+  // Cyber Snake Scratch Algorithm Runner: capped at 2,000 XP
+  const cyberSnakePoints = Math.min(2000, scores.cyber_snake || 0);
+
+  // Circuit Master Retro Hardware & IoT Lab: capped at 2,000 XP
+  const circuitMasterPoints = Math.min(2000, scores.circuit_master || 0);
+
   return (
     typingPoints +
     mousePoints +
@@ -213,7 +220,9 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     voxelPoints +
     robloxPoints +
     pageCraftPoints +
-    hackerDefensePoints
+    hackerDefensePoints +
+    cyberSnakePoints +
+    circuitMasterPoints
   );
 }
 
@@ -370,6 +379,10 @@ export async function registerStudent(
     virus_sweeper: Number(localStorage.getItem('arkedo_highscore_virus_sweeper') || '0'),
     cyber_dino: Number(localStorage.getItem('arkedo_highscore_cyber_dino') || '0'),
     mouse_v2: Number(localStorage.getItem('arkedo_highscore_mouse_v2') || '0'),
+    page_craft: Number(localStorage.getItem('arkedo_highscore_page_craft') || '0'),
+    hacker_defense: Number(localStorage.getItem('arkedo_highscore_hacker_defense') || '0'),
+    cyber_snake: Number(localStorage.getItem('arkedo_highscore_cyber_snake') || '0'),
+    circuit_master: Number(localStorage.getItem('arkedo_highscore_circuit_master') || '0'),
     totalArcade: 0
   };
   currentArcadeScores.totalArcade = computeTotalArcade(currentArcadeScores);
@@ -575,6 +588,9 @@ export function syncProfileToLocalStorage(profile: StudentProfile) {
       if (profile.arcadeScores.virus_sweeper) localStorage.setItem('arkedo_highscore_virus_sweeper', String(profile.arcadeScores.virus_sweeper));
       if (profile.arcadeScores.mouse_v2) localStorage.setItem('arkedo_highscore_mouse_v2', String(profile.arcadeScores.mouse_v2));
       if (profile.arcadeScores.page_craft) localStorage.setItem('arkedo_highscore_page_craft', String(profile.arcadeScores.page_craft));
+      if (profile.arcadeScores.hacker_defense) localStorage.setItem('arkedo_highscore_hacker_defense', String(profile.arcadeScores.hacker_defense));
+      if (profile.arcadeScores.cyber_snake) localStorage.setItem('arkedo_highscore_cyber_snake', String(profile.arcadeScores.cyber_snake));
+      if (profile.arcadeScores.circuit_master) localStorage.setItem('arkedo_highscore_circuit_master', String(profile.arcadeScores.circuit_master));
     }
 
     // Lessons progress

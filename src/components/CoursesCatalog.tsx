@@ -153,7 +153,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g7_stem_a' && (localStorage.getItem('arkedo_g7stem_level') === '8' || Number(localStorage.getItem('arkedo_g7stem_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_stem_a') === 'true')) return true;
       if (mId === 'g7_robot_b' && (localStorage.getItem('arkedo_g7robot_level') === '8' || Number(localStorage.getItem('arkedo_g7robot_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_robot_b') === 'true')) return true;
       if (mId.startsWith('g8_')) {
-        const targetMax = (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' || mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d') ? '8' : '6';
+        const targetMax = (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' || mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e' || mId === 'g8_robot_a' || mId === 'g8_robot_b') ? '8' : '6';
         if (localStorage.getItem(`arkedo_${mId}_level`) === targetMax || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
       }
     } catch {}
@@ -169,7 +169,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   };
   const getMaxPlayableLevels = (mId: string): number => {
     if (mId === 'hardware') return 5;
-    if (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' || mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d') return 7;
+    if (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' || mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e' || mId === 'g8_robot_a' || mId === 'g8_robot_b') return 7;
     if (mId.startsWith('g8_')) return 5;
     if (mId === 'internet1' || mId === 'internet2') return 6;
     return 7;
@@ -582,7 +582,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         g8_algo_b: { ro: 'Clasa a VIII-a • Modulul 3B: Structuri Alternative: if/else, switch & Cifrele unui Număr', en: 'Grade 8 • Module 3B: Decisions: if/else, switch & Digit Extraction' },
         g8_algo_c: { ro: 'Clasa a VIII-a • Modulul 3C: Structuri Repetitive: while, do-while, for & Șiruri', en: 'Grade 8 • Module 3C: Loops: while, do-while, for & Number Sequences' },
         g8_algo_d: { ro: 'Clasa a VIII-a • Modulul 3D: Algoritmi Fundamentali: Primalitate, CMMDC, Fibonacci', en: 'Grade 8 • Module 3D: Fundamental Algorithms: Primes, GCD & Fibonacci' },
-        g8_algo_e: { ro: 'Clasa a VIII-a • Modulul 3E: Proiect Integrator Final „Liceul Preferat” & Robotică', en: 'Grade 8 • Module 3E: Culminating Project "Preferred High School" & Robotics' },
+        g8_algo_e: { ro: 'Clasa a VIII-a • Modulul 3E: Subprograme, Funcții & Proiect Integrator C++', en: 'Grade 8 • Module 3E: Subprograms, Functions & C++ Integrator Project' },
+        g8_robot_a: { ro: 'Clasa a VIII-a • Modulul 4A: Robotică, Microcontrollere Arduino & Senzori (Manual pag. 89-98)', en: 'Grade 8 • Module 4A: Robotics, Arduino Microcontrollers & Sensors (Textbook p. 89-98)' },
+        g8_robot_b: { ro: 'Clasa a VIII-a • Modulul 4B: Sisteme Inteligente, Smart Home & Proiectul Integrator IoT (Manual pag. 99-108)', en: 'Grade 8 • Module 4B: Smart Systems, Smart Home & IoT Integrator Project (Textbook p. 99-108)' },
       };
       if (id && g8Titles[id]) {
         return lang === 'en' ? g8Titles[id].en : g8Titles[id].ro;
@@ -1772,7 +1774,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                       {lang === 'en' ? '8th Grade (Clasa a VIII-a)' : 'Clasa a VIII-a'}
                     </h3>
                     <div className="text-[11px] font-mono font-bold text-emerald-400">
-                      {lang === 'en' ? 'Official Curriculum • 12 Missions' : 'Manual Art Klett 2025 • 12 Misiuni'}
+                      {lang === 'en' ? 'Official Curriculum • 14 Missions' : 'Manual Art Klett 2025 • 14 Misiuni Complete'}
                     </div>
                   </div>
                 </div>
@@ -1788,8 +1790,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
               <p className={`text-xs leading-relaxed ${selectedGrade === 'grade8' ? 'text-slate-200' : 'text-slate-400'}`}>
                 {lang === 'en'
-                  ? 'Excel Spreadsheets 1A-1D, Google Sites Web Pages 2A-2C, Advanced C++ Sequences 3A-3D, Robotics & High School Project 3E.'
-                  : 'Calcul Tabelar Excel 1A–1D, Pagini Web Google Sites 2A–2C, Algoritmi C++ 3A–3D & Proiectul Final Liceu 3E.'}
+                  ? 'Excel Spreadsheets 1A-1D, Google Sites 2A-2C, Advanced C++ 3A-3E, Arduino Robotics 4A & Smart Home IoT 4B.'
+                  : 'Calcul Tabelar Excel 1A–1D, Pagini Web Google Sites 2A–2C, Algoritmi C++ 3A–3E, Robotică Arduino 4A & Smart Home IoT 4B.'}
               </p>
             </button>
           </div>
@@ -4061,7 +4063,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               if (
                 mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' ||
                 mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' ||
-                mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e'
+                mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e' || mId === 'g8_robot_a' || mId === 'g8_robot_b'
               ) {
                 handleAttemptStart(mId as AllMissionId);
               } else {

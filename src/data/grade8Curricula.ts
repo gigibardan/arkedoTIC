@@ -1722,7 +1722,356 @@ export const GRADE_8_CURRICULA_MODULES: CurriculaModule[] = [
           'p = -1;'
         ],
         correctIndex: 1,
-        explanation: '1 este elementul neutru la înmulțire ($1 \cdot x = x$), în timp ce 0 ar anula complet orice produs.'
+        explanation: '1 este elementul neutru la înmulțire ($1 \\cdot x = x$), în timp ce 0 ar anula complet orice produs.'
+      }
+    ]
+  },
+
+  {
+    id: 'g8_robot_a',
+    slug: 'robotica-microcontrollere-senzori-actuatori',
+    title: 'Microcontrollere, Senzori Digitali/Analogici & Actuatori Robotici',
+    shortTitle: 'Microcontrollere & Senzori',
+    grade: 'Clasa a VIII-a',
+    unit: 'Unitatea 4: Robotică și Sisteme Inteligente (pag. 89–98)',
+    manualRef: 'Manual Art Klett 2025 — OMEN 3393/2017 & OM 5420/2024',
+    icon: '🤖',
+    color: 'from-cyan-600 to-blue-700',
+    metaDescription: 'Arhitectura sistemelor robotice: microcontrollere Arduino și micro:bit, pini digitali și analogici, conversia ADC, senzori ultrasonici HC-SR04, LDR, PIR, servomotoare și drivere de motoare punte H.',
+    keywords: [
+      'microcontroller arduino uno clasa 8',
+      'senzori digitali si analogici robotica',
+      'conversie adc rezolutie 10 biti',
+      'senzor distanta ultrasonic hc-sr04',
+      'actuatori servomotoare motoare dc driver l298n',
+      'robot autonom evitare obstacole'
+    ],
+    competencies: [
+      {
+        code: '3.1',
+        description: 'Identificarea componentelor hardware ale unui sistem robotic: unitate de procesare, senzori și actuatori.'
+      },
+      {
+        code: '3.2',
+        description: 'Conectarea și programarea senzorilor digitali și analogici pentru achiziția de date din mediul înconjurător.'
+      },
+      {
+        code: '3.3',
+        description: 'Comandarea motoarelor și servomotoarelor pe baza citirilor de la senzori pentru acțiuni autonome.'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Arhitectura unui Sistem Robotic & Placa de Dezvoltare',
+        content: [
+          'Un robot este un sistem mecatronic inteligent compus din trei subsisteme principale:',
+          '1. Unitatea de comandă (Creierul): microcontrollere (Arduino Uno, Nano sau BBC micro:bit) echipate cu microprocesor, memorie Flash (stocare program) și SRAM (variabile).',
+          '2. Subsistemul senzorial (Simțurile): senzori care măsoară mărimi fizice și le transformă în semnale electrice.',
+          '3. Subsistemul de acționare / Actuatori (Mușchii): motoare, servomotoare, difuzoare, relee, afișaje LED ce transformă energia electrică în mișcare mecanică sau semnale sonore/luminoase.',
+          'Pinii plăcii Arduino:',
+          '• Pini Digitali (0–13): acceptă sau generează semnale binare (0V = LOW, 5V = HIGH). Pinii marcați cu tildă (~) oferă modulație în lățime a impulsurilor (PWM).',
+          '• Pini Analogici (A0–A5): citesc tensiuni continue între 0V și 5V și le convertesc în numere întregi 0..1023 prin ADC.',
+          '• Pini de Alimentare: 5V, 3.3V, GND (Ground/Masă), Vin (alimentare externă 7–12V).'
+        ],
+        tips: 'Pinii 0 (RX) și 1 (TX) sunt rezervați pentru comunicarea serială cu calculatorul; evită conectarea senzorilor pe acești pini!'
+      },
+      {
+        title: 'Senzori Digitali vs Senzori Analogici & Conversia ADC',
+        content: [
+          '• Senzorii Digitali au doar două stări logice posibile: 0 (LOW / 0V) sau 1 (HIGH / 5V). Exemple: comutator cu buton, senzor de mișcare PIR, senzor tactil (capacitiv).',
+          '  Citire în cod: int stare = digitalRead(pinDigital);',
+          '• Senzorii Analogici produc o tensiune variabilă proporțională cu mărimea fizică măsurată. Exemple: foto-rezistor LDR (intensitate luminoasă), termistor (temperatură), senzor de umiditate a solului.',
+          '• Convertorul Analog-Digital (ADC) pe 10 biți din Arduino transformă tensiunea 0–5V într-o valoare între 0 și 1023:',
+          '  Tensiune = (valoareADC * 5.0) / 1023.0;',
+          '• Funcția map(val, minIn, maxIn, minOut, maxOut) re-scalează valoarea (de exemplu de la 0..1023 la un procent 0..100%).'
+        ],
+        tips: 'Rezoluția ADC de 10 biți înseamnă că fiecare pas măsoară aproximativ 5V / 1024 = 4.88 milivolți!'
+      },
+      {
+        title: 'Senzorul Ultrasonic HC-SR04 & Viteza Sunetului',
+        content: [
+          'Senzorul HC-SR04 măsoară distanța până la un obstacol prin ecolocație (similar liliecilor):',
+          '1. Pinul Trigger primește un impuls HIGH de 10 microsecunde pentru a emite o rafală de 8 impulsuri ultrasonice la 40 kHz.',
+          '2. Semnalul se propagă prin aer cu viteza de 343 m/s (0.0343 cm/µs).',
+          '3. La întâlnirea unui obstacol, unda ricoșează și este detectată de capsula receptor (Echo).',
+          '4. Pinul Echo rămâne pe HIGH pe durata călătoriei dus-întors a sunetului:',
+          '   durata = pulseIn(echoPin, HIGH);',
+          '   distanta = (durata * 0.0343) / 2; // împărțire la 2 pentru drumul dus-întors'
+        ],
+        tips: 'Unghiul optim de detecție pentru HC-SR04 este de maxim 15 grade, iar intervalul optim este între 2 cm și 400 cm.'
+      },
+      {
+        title: 'Actuatori: Servomotoare și Motoare DC cu Punte H',
+        content: [
+          '• Servomotorul (ex: TowerPro SG90): motor cu reductor de turație și potențiometru intern de feedback ce permite poziționarea exactă a axului la orice unghi între 0° și 180°:',
+          '  #include <Servo.h> Servo serv; serv.attach(9); serv.write(90); // poziție centrală',
+          '• Motorul de curent continuu (DC): se rotește continuu; viteza sa este controlată prin semnal PWM (0..255 cu analogWrite), iar sensul este dictat de o punte H (circuit integrat L298N sau L293D).',
+          '• Puntea H permite inversarea polarității curentului prin motor fără comutare mecanică: când IN1 = HIGH și IN2 = LOW motorul merge înainte, iar când IN1 = LOW și IN2 = HIGH merge înapoi.'
+        ],
+        tips: 'Nu alimenta niciodată motoarele DC direct din pinul 5V al plăcii Arduino; motoarele consumă curent mare și pot distruge placa! Folosește întotdeauna un pack extern de baterii cu masă comună (GND comun).'
+      }
+    ],
+    keyTerms: [
+      { term: 'Microcontroller', definition: 'Circuit integrat programabil ce conține pe un singur cip un procesor, memorie și pini de intrare/ieșire configurabili.' },
+      { term: 'ADC (Analog-to-Digital Converter)', definition: 'Circuit electronic ce transformă o tensiune electrică continuă într-un număr binar discret.' },
+      { term: 'PWM (Pulse Width Modulation)', definition: 'Tehnică de generare a unei tensiuni medii variabile prin modificarea duratei semnalului activ într-o perioadă fixă.' },
+      { term: 'Servomotor', definition: 'Actuator electromecanic capabil de poziționare unghiulară precisă (0..180 grade) pe baza unui semnal de control PWM.' },
+      { term: 'Punte H (H-Bridge)', definition: 'Configurație de tranzistori ce permite controlul bidirecțional al sensului și turației motoarelor de curent continuu.' }
+    ],
+    shortcuts: [
+      { key: 'Ctrl + R', action: 'Verificare / Compilare schiță în Arduino IDE' },
+      { key: 'Ctrl + U', action: 'Încărcare cod pe placa de dezvoltare' },
+      { key: 'Ctrl + Shift + M', action: 'Deschidere Serial Monitor la 9600 baud' }
+    ],
+    practicalLabs: [
+      {
+        step: 1,
+        title: 'Explorarea Pinilor și Semnalelor Arduino',
+        task: 'Identifică pinii digitali, PWM și analogici. Comută un pin digital între HIGH și LOW și observă nivelul de tensiune de 5V.'
+      },
+      {
+        step: 2,
+        title: 'Citirea Senzorului LDR și Conversia ADC',
+        task: 'Simulează variația luminii pe o fotorezistență LDR. Urmărește valorile ADC între 0 și 1023 și conversia în volți și procente.'
+      },
+      {
+        step: 3,
+        title: 'Calculul Distanței cu Senzorul Ultrasonic',
+        task: 'Măsoară distanța până la un obstacol virtual în cm folosind formula fizică pe baza duratei ecoului (pulseIn).'
+      }
+    ],
+    faq: [
+      {
+        question: 'De ce împărțim durata pulsului la 2 în formula senzorului ultrasonic?',
+        answer: 'Deoarece unda sonoră parcurge distanța de două ori: de la emițător la obstacol (dus) și de la obstacol înapoi la receptor (întors).'
+      },
+      {
+        question: 'Ce înseamnă că un pin este plutitor (floating)?',
+        answer: 'Un pin de intrare lăsat neconectat la masă sau alimentare captează zgomot electromagnetic și produce citiri aleatoare între 0 și 1. Se remediază cu un rezistor de pull-up sau pull-down.'
+      }
+    ],
+    testQuestions: [
+      {
+        question: 'Ce interval de valori generează convertorul ADC pe 10 biți al plăcii Arduino pentru o tensiune între 0V și 5V?',
+        options: [
+          '0 .. 255',
+          '0 .. 1023',
+          '0 .. 100',
+          '1 .. 5000'
+        ],
+        correctIndex: 1,
+        explanation: 'Un convertor pe 10 biți împarte intervalul în 2^10 = 1024 de trepte discrete, de la 0 (pentru 0V) până la 1023 (pentru 5V).'
+      },
+      {
+        question: 'Care este rolul punții H (driver de motoare L298N) într-un șasiu robotic?',
+        options: [
+          'Măsoară temperatura motoarelor',
+          'Permite controlul sensului de rotație (înainte/înapoi) și al vitezei motoarelor DC fără a suprasolicita microcontrollerul',
+          'Înlocuiește complet microcontrollerul',
+          'Transformă curentul continuu în lumină infraroșie'
+        ],
+        correctIndex: 1,
+        explanation: 'Puntea H controlează polaritatea tensiunii aplicate motoarelor pentru inversarea sensului și amplifică curentul necesar fără a afecta placa Arduino.'
+      },
+      {
+        question: 'La ce viteză a sunetului în aer se raportează calculul distanței pentru senzorul HC-SR04?',
+        options: [
+          '300.000 km/s (viteza luminii)',
+          'Aproximativ 343 m/s (0.0343 cm/µs)',
+          '100 m/s',
+          '1500 m/s (viteza în apă)'
+        ],
+        correctIndex: 1,
+        explanation: 'Viteza sunetului în aer la 20°C este de circa 343 metri pe secundă, echivalent cu 0.0343 centimetri pe microsecundă.'
+      }
+    ]
+  },
+
+  {
+    id: 'g8_robot_b',
+    slug: 'robotica-smart-city-smart-home-proiect-integrator',
+    title: 'Sisteme Inteligente, Smart Home & Proiectul Integrator IoT',
+    shortTitle: 'Smart Home & Robotică IoT',
+    grade: 'Clasa a VIII-a',
+    unit: 'Unitatea 4: Robotică și Sisteme Inteligente (pag. 99–108)',
+    manualRef: 'Manual Art Klett 2025 — OMEN 3393/2017 & OM 5420/2024',
+    icon: '🏙️',
+    color: 'from-emerald-600 to-teal-700',
+    metaDescription: 'Automatizări inteligente: iluminat public automatizat, barieră inteligentă de parcare cu servomotor, sistem de alertă gaz/incendiu, stație meteo IoT și sinteza finală a ciclului gimnazial de robotică.',
+    keywords: [
+      'smart home arduino sistem inteligent',
+      'smart city iluminat public automat ldr',
+      'bariera parcare servomotor ultrasonic',
+      'statie meteo dht11 umiditate temperatura',
+      'proiect final robotica clasa 8'
+    ],
+    competencies: [
+      {
+        code: '3.1',
+        description: 'Proiectarea și asamblarea unui sistem inteligent integrat compus din senzori, unitate decizională și actuatori.'
+      },
+      {
+        code: '3.2',
+        description: 'Elaborarea algoritmilor de decizie în buclă infinită (void loop()) pentru monitorizarea continuă a mediului.'
+      },
+      {
+        code: '3.3',
+        description: 'Prezentarea și argumentarea soluției tehnice pentru o problemă din viața reală (Smart City sau Smart Home).'
+      }
+    ],
+    theorySections: [
+      {
+        title: 'Conceptul de Smart City & Smart Home (Oraș & Casă Inteligentă)',
+        content: [
+          'Un sistem inteligent (IoT – Internet of Things) integrează senzori, rețele de comunicație și actuatori pentru a automatiza decizii în timp real:',
+          '• Eficiență energetică: iluminat stradal inteligent care aprinde luminile doar când lumina naturală scade (senzor LDR) și când este detectată prezența pietonilor sau mașinilor (senzor PIR).',
+          '• Securitate și siguranță: detecție scurgeri de gaz (senzor MQ-2) cu alarmare sonoră prin buzzer și închiderea automată a electrovalvei prin servomotor.',
+          '• Mobilitate urbană: parcare inteligentă cu barieră automată controlată de senzor ultrasonic și afișaj cu numărul de locuri libere (display LCD 1602).',
+          '• Monitorizare climatică: stații meteo urbane cu senzori DHT11/DHT22 pentru temperatură, umiditate relativă și calculul indicelui de confort termic.'
+        ],
+        tips: 'Structura oricărui program de microcontroller constă din: setup() executat o singură dată la pornire și loop() executat continuu la infinit!'
+      },
+      {
+        title: 'Bariera Inteligentă de Parcare & Servomotoare de Acces',
+        content: [
+          'Sistemul automat de parcare combină detecția de proximitate cu poziționarea unghiulară precisă:',
+          '1. Măsurarea distanței: Senzorul HC-SR04 măsoară continuu distanța vehiculului aflat în fața porții.',
+          '2. Condiția logică de acces: Dacă distanța d < 15 cm și locuriLibere > 0, sistemul comandă servomotorul la 90° (barieră ridicată), aprinde LED-ul Verde și decrementează numărul de locuri disponibile.',
+          '3. Închidere sigură: După trecerea vehiculului (distanța redevine mare timp de 3 secunde), servomotorul revine la 0° (barieră coborâtă) și se aprinde LED-ul Roșu de staționare.'
+        ],
+        tips: 'Biblioteca Servo.h folosește comanda myservo.write(unghi), unde 0° reprezintă orizontal (barieră închisă), iar 90° vertical (barieră deschisă).'
+      },
+      {
+        title: 'Sisteme de Securitate: Detecție Gaz, Fum & Alarmă Sonoră',
+        content: [
+          'Senzorul MQ-2 conține o rezistență de dioxid de staniu (SnO2) sensibilă la gaze inflamabile (GPL, propan, metan, fum):',
+          '• Când concentrația de gaz crește, conductivitatea senzorului crește, generând o tensiune analogică mai mare pe pinul A0.',
+          '• Pragul de alarmă (ex: ADC > 450) declanșează două acțiuni simultane:',
+          '  1. Alarma acustică: buzzerul piezo activ generează un ton intermitent (funcția tone(buzzerPin, 2000)).',
+          '  2. Ventilarea de urgență: releul electromecanic acționează ventilatorul de evacuare, iar servomotorul de gaz închide robinetul general.'
+        ],
+        tips: 'Senzorii de gaz necesită un timp de preîncălzire (warm-up) de circa 20-30 de secunde după pornirea alimentării pentru stabilizarea filamentului.'
+      },
+      {
+        title: 'Multitasking cu millis() vs Blocarea cu delay()',
+        content: [
+          'Într-un sistem Smart City cu mai multe subsisteme concurente (iluminat, barieră, alarmă gaz), folosirea funcției delay() este o greșeală gravă de proiectare:',
+          '• delay(5000) îngheață complet procesorul timp de 5 secunde. În acest interval, sistemul nu poate citi senzorul de gaz sau comanda bariera!',
+          '• Tehnica corectă: sincronizarea non-blocantă cu funcția millis(), care returnează numărul de milisecunde scurse de la pornirea plăcii:',
+          '  unsigned long timpCurent = millis();',
+          '  if (timpCurent - timpAnterior >= interval) { timpAnterior = timpCurent; /* execută acțiunea */ }'
+        ],
+        tips: 'Folosirea millis() permite microcontrollerului să parcurgă mii de iterații pe secundă, verificând toți senzorii simultan!'
+      }
+    ],
+    keyTerms: [
+      { term: 'Smart Home', definition: 'Locuință dotată cu echipamente electronice capabile de comunicare și automatizare a confortului, energiei și siguranței.' },
+      { term: 'IoT (Internet of Things)', definition: 'Rețeaua de obiecte fizice echipate cu senzori, software și conexiune pentru schimb de date în timp real.' },
+      { term: 'Histerezis (Hysteresis)', definition: 'Tehnică de stabilizare a pragurilor decizionale (ex: pornire la < 300 lux, oprire la > 400 lux) pentru prevenirea pâlpâirii.' },
+      { term: 'Sincronizare cu millis()', definition: 'Metodă non-blocantă de cronometrare a acțiunilor periodice fără a opri bucla de execuție a microcontrollerului.' },
+      { term: 'Releu Electromecanic', definition: 'Comutator acționat electromagnetic ce permite unui circuit de joasă tensiune (5V) să comande aparate de mare putere (230V).' },
+      { term: 'Display LCD 1602 I2C', definition: 'Ecran cu cristale lichide de 16 caractere pe 2 linii, comunicând prin magistrala serială I2C (pinii SDA și SCL).' }
+    ],
+    shortcuts: [
+      { key: 'F5', action: 'Rulare simulare circuit în Tinkercad' },
+      { key: 'Ctrl + Shift + M', action: 'Deschidere monitor serial în Arduino IDE' },
+      { key: 'Ctrl + Shift + L', action: 'Deschidere trasor serial (Serial Plotter) pentru grafice' }
+    ],
+    practicalLabs: [
+      {
+        step: 1,
+        title: 'Sistem de Iluminat Automat Smart Streetlight',
+        task: 'Conectează un LDR și un LED. Programează aprinderea automată a LED-ului la lăsarea întunericului (valoare ADC < 400) și intensificarea la detecție PIR.'
+      },
+      {
+        step: 2,
+        title: 'Barieră Inteligentă cu Servomotor și Senzor Ultrasonic',
+        task: 'Când o mașină se apropie la sub 15 cm, servomotorul ridică bariera la 90 de grade, actualizează locurile libere și coboară după 3 secunde.'
+      },
+      {
+        step: 3,
+        title: 'Sistem de Securitate Gaz și Incendiu cu MQ-2',
+        task: 'Monitorizează nivelul de gaz. La depășirea pragului critic de 450 ADC, declanșează buzzerul de alarmă și releul ventilatorului.'
+      },
+      {
+        step: 4,
+        title: 'Stație Meteo IoT cu Ecran LCD 1602',
+        task: 'Citește temperatura și umiditatea, calculează indicele de căldură și afișează datele pe 2 linii pe display-ul I2C.'
+      }
+    ],
+    faq: [
+      {
+        question: 'Ce diferență este între un robot industrial și un sistem Smart Home?',
+        answer: 'Robotul industrial execută operațiuni mecanice mobile sau de manipulare pe linii de fabricație, în timp ce Smart Home este o rețea fixă de noduri senzoriale și comutatoare inteligente orientată pe confort și siguranță.'
+      },
+      {
+        question: 'De ce este periculos să folosim delay() într-un sistem de securitate gaz?',
+        answer: 'Dacă programul este blocat într-un delay(5000), microcontrollerul este complet orb timp de 5 secunde și nu poate sesiza creșterea bruscă a gazului sau o solicitare de oprire de urgență.'
+      },
+      {
+        question: 'Ce este magistrala I2C folosită la ecranul LCD?',
+        answer: 'Este un protocol de comunicație serial pe doar două fire: SDA (linie de date) și SCL (linie de ceas), permițând conectarea ecranului folosind doar 2 pini în loc de 16 pini paraleli.'
+      },
+      {
+        question: 'Cum se calculează numărul de locuri libere dintr-o parcare inteligentă?',
+        answer: 'Se declară o variabilă locuriLibere inițializată cu capacitatea maximă (ex: 10). La intrarea unei mașini se face locuriLibere--, iar la ieșire locuriLibere++.'
+      }
+    ],
+    testQuestions: [
+      {
+        question: 'Care este structura fundamentală a oricărui program scris pentru microcontrollerul Arduino?',
+        options: [
+          'Funcțiile citire(), calcul() și afisare()',
+          'Funcția setup() (configurare inițială rulată o singură dată) urmată de bucla infinită loop() (execuție continuă)',
+          'O singură buclă while fără alte declarații',
+          'Instrucțiunea return 0 direct în prima linie'
+        ],
+        correctIndex: 1,
+        explanation: 'În Arduino, void setup() rulează o singură dată pentru configurarea pinilor (pinMode), iar void loop() rulează continuu la infinit, repetând ciclul de achiziție, decizie și comandă.'
+      },
+      {
+        question: 'De ce este recomandată utilizarea funcției millis() în locul funcției delay() într-un sistem IoT multi-senzor?',
+        options: [
+          'millis() reduce consumul de curent la 0 mA',
+          'millis() permite temporizarea acțiunilor în mod non-blocant, păstrând procesorul activ pentru a monitoriza toți ceilalți senzori în timp real',
+          'delay() nu este compatibil cu limbajul C++',
+          'millis() mărește rezoluția senzorilor analogici de la 10 la 16 biți'
+        ],
+        correctIndex: 1,
+        explanation: 'delay() îngheață execuția procesorului, blocând reacția la alarme de urgență. millis() permite execuția multitasking cooperativă non-blocantă.'
+      },
+      {
+        question: 'Ce unghi este transmis servomotorului SG90 pentru a ridica la verticală o barieră de parcare coborâtă la 0 grade?',
+        options: [
+          '180 de grade',
+          '90 de grade',
+          '45 de grade',
+          '360 de grade'
+        ],
+        correctIndex: 1,
+        explanation: 'O barieră plasată pe axul servomotorului trece de la poziția orizontală (0°) la poziția verticală de liberă trecere printr-o rotație perpendiculară de 90°.'
+      },
+      {
+        question: 'Ce rol are histerezisul în algoritmul de control al unui stâlp de iluminat inteligent?',
+        options: [
+          'Mărește viteza de transfer a datelor prin WiFi',
+          'Previne pâlpâirea repetată a lămpii la apus sau răsărit prin utilizarea a două praguri de luminanță distincte pentru aprindere și stingere',
+          'Inversează sensul de circulație al curentului în LED',
+          'Șterge memoria SRAM a microcontrollerului'
+        ],
+        correctIndex: 1,
+        explanation: 'Fără histerezis, fluctuațiile mici de lumină din jurul unui prag fix ar face ca lampa să se aprindă și să se stingă rapid și deranjant la fiecare secundă.'
+      },
+      {
+        question: 'Ce pini I2C utilizează ecranul LCD 1602 pe placa Arduino Uno pentru transferul de date și ceas?',
+        options: [
+          'Pinii digitali D0 și D1 (RX / TX)',
+          'Pinii analogici A4 (SDA) și A5 (SCL)',
+          'Pinii PWM ~D9 și ~D10',
+          'Pinii de alimentare 5V și Vin'
+        ],
+        correctIndex: 1,
+        explanation: 'Pe Arduino Uno, magistrala hardware I2C este mapată pe pinii A4 (SDA - Serial Data) și A5 (SCL - Serial Clock).'
       }
     ]
   }
