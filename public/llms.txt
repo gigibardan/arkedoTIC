@@ -97,8 +97,20 @@ Hub dedicat: https://www.arkyedu.com/arcade/
 ## 3. Arena Dueluri Tehnologice 1v1 în Timp Real
 Hub dedicat: https://www.arkyedu.com/duel/
 
-- Confruntări multiplayer directe pe ecran împărțit sau prin cod de cameră unic.
-- Sincronizare WebSocket prin Firebase Firestore cu mecanisme anti-lag și anti-spam.
+- Confruntări multiplayer directe pe ecran împărțit sau prin cod de cameră unic din 4 caractere.
+- Sincronizare live prin Firebase Firestore cu mod de antrenament solo cu Bot didactic.
+- Cele 11 Moduri de Duel Didactic 1v1:
+  1. **Binary Clash 1v1 (Cursa Biților & Conversii)**: Comutare comutatoare de biți 128..1 pentru atingerea zecimalului țintă, porți NOT și bonusuri de combo.
+  2. **Circuit Clash 1v1 (Duelul Electricienilor Smart City)**: Cablare breadboard contracronometru pini PWM Arduino, senzori LDR/PIR, servomotoare SG90 și afișaje LCD I2C fără scurtcircuit.
+  3. **C++ Code Racer 1v1 (Bătălia Algoritmilor & Depanare C++)**: Identificare operatori lipsă (regula 3 pahare, while, bucle for Gauss, switch CNP, vectori) cu simulare consolă compilator C++17.
+  4. **Pixel Art Sprite Clash 1v1 (Grafică Bitmap 8x8 & Culori RGB)**: Reproducere contracronometru de sprite-uri retro pixel cu pixel cu instrument Oglindă X și umplere rapidă.
+  5. **Network Packet Racer 1v1 (Rutare Porturi & Firewall)**: Rutare pachete de date pe porturi (443 HTTPS, 53 DNS, 25 SMTP) și carantinare atacuri DDoS/Troieni în Firewall cu indicator ping în timp real.
+  6. **Hacker vs Defender 1v1 (Securitate Cibernetică Asimetrică)**: 45s Atacator (Troieni, Phishing, Forțare Parolă) / 45s Apărător (Firewall, Antivirus, 2FA) cu inversare de roluri.
+  7. **Cursa Algoritmilor (Block Coding Duel tip Scratch)**: Asamblare blocuri de comandă pentru ghidarea robotului Arky prin matrice fără lovire de obstacole.
+  8. **Cyber Cursor Clash 1v1 (Agilitate Mouse & Touch)**: 7 runde de precizie extremă (ținte în mișcare, dublu click, drag & drop, evitare lasere).
+  9. **Hardware PC Rush 1v1 (Asamblare PC Pas cu Pas)**: Montare componente în ordine strictă tehnologică (CPU, Cooler, RAM, SSD, GPU, Sursă).
+  10. **Cyber Shield 1v1 (Apărare Phishing & Inginerie Socială)**: Analiză linkuri și mesaje malițioase primite în timp real.
+  11. **Roblox Blox Clicker 1v1 (Simulator Blox & Gacha Pets)**: Click pe nucleul Blox, eclozare ouă legendare și competiție de viteză pentru 5.000 Blox.
 - Pregătește elevii pentru olimpiadele școlare de TIC, concursuri de informatică aplicată și competiții de robotică.
 
 ---

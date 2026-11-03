@@ -56,6 +56,11 @@ import { SpeedCraftingDuelGame } from './minigames/SpeedCraftingDuelGame';
 import { RobloxClickerDuelGame } from './minigames/RobloxClickerDuelGame';
 import { MouseMasterDuelGame } from './minigames/MouseMasterDuelGame';
 import { HackerDefenderDuelGame } from './minigames/HackerDefenderDuelGame';
+import { BinaryClashDuelGame } from './minigames/BinaryClashDuelGame';
+import { CircuitMasterDuelGame } from './minigames/CircuitMasterDuelGame';
+import { CodeRacerCppDuelGame } from './minigames/CodeRacerCppDuelGame';
+import { PixelClashDuelGame } from './minigames/PixelClashDuelGame';
+import { NetworkPacketRacerDuelGame } from './minigames/NetworkPacketRacerDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -707,6 +712,16 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🎯 Cyber Cursor Clash (Duelul Maeștrilor Mouse-ului 1v1)';
       case 'hacker_defense':
         return '🛡️⚔️ Hacker vs Defender (Atac & Peticire 1v1)';
+      case 'binary_clash':
+        return '🔢 Binary Clash (Cursa Biților & Conversii 1v1)';
+      case 'circuit_duel':
+        return '⚡ Circuit Clash (Duelul Electricienilor Smart City 1v1)';
+      case 'algo_race_cpp':
+        return '💻 C++ Code Racer (Duelul Compilatorului Rapid 1v1)';
+      case 'pixel_clash':
+        return '🎨 Pixel Art Sprite Clash (Duelul Graficii 1v1)';
+      case 'network_racer':
+        return '🌐 Network Packet Racer (Cursa Pachetelor & Switch 1v1)';
       default:
         return '⚔️ Duel 1v1 TIC';
     }
@@ -989,6 +1004,141 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
                     Un jucător lansează valuri de Troieni, Phishing și forțare parolă; celălalt activează Firewall, Antivirus sau 2FA. După 45 secunde, rolurile se inversează automat!
+                  </p>
+                </button>
+
+                {/* Mode 7: Binary Clash (Cursa Biților & Conversii 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('binary_clash')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'binary_clash'
+                      ? 'bg-gradient-to-br from-emerald-950/90 via-slate-900 to-cyan-950/80 border-emerald-400 ring-2 ring-emerald-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-base shadow-md shadow-emerald-500/30">
+                      🔢
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Binary Clash 1v1 🔢</span>
+                        <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-emerald-300 font-medium">Cursa Biților & Conversii Rapide (0/1)</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Comută comutatoarele de biți (128, 64, 32, 16, 8, 4, 2, 1) pentru a atinge numărul zecimal țintă înaintea rivalului! Folosește porți NOT și multiplicatori.
+                  </p>
+                </button>
+
+                {/* Mode 8: Circuit Clash (Duelul Electricienilor Smart City 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('circuit_duel')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'circuit_duel'
+                      ? 'bg-gradient-to-br from-amber-950/90 via-slate-900 to-emerald-950/80 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center text-base shadow-md shadow-amber-500/30">
+                      ⚡
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Circuit Clash 1v1 ⚡</span>
+                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-amber-300 font-medium">Cablare Breadboard Arduino & Senzori</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Conectează contracronometru pini PWM, senzori LDR, ultrasonic HC-SR04, servomotoare SG90 și ecrane LCD I2C fără scurtcircuit!
+                  </p>
+                </button>
+
+                {/* Mode 9: C++ Code Racer (Duelul Compilatorului Rapid 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('algo_race_cpp')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'algo_race_cpp'
+                      ? 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-purple-950/80 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-base shadow-md shadow-cyan-500/30">
+                      💻
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>C++ Code Racer 1v1 💻</span>
+                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-cyan-300 font-medium">Bătălia Algoritmilor & Depanare C++</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Găsește operatorul sau comanda lipsă din codul C++ (regula 3 pahare, while, bucle for Gauss, switch CNP, vectori)! Cine compilează primul fără eroare?
+                  </p>
+                </button>
+
+                {/* Mode 10: Pixel Art Sprite Clash (Duelul Graficii Digitale 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('pixel_clash')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'pixel_clash'
+                      ? 'bg-gradient-to-br from-purple-950/90 via-slate-900 to-pink-950/80 border-purple-400 ring-2 ring-purple-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center text-base shadow-md shadow-purple-500/30">
+                      🎨
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Pixel Art Clash 1v1 🎨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-purple-300 font-medium">Grafică Bitmap 8x8 & Culori RGB</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Reprodu sprite-urile retro pixel cu pixel (inimă 8-bit, floppy disk, sabie diamant)! Folosește instrumentul Oglindă X și umplerea rapidă.
+                  </p>
+                </button>
+
+                {/* Mode 11: Network Packet Racer (Cursa Pachetelor & Internet Switch 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('network_racer')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'network_racer'
+                      ? 'bg-gradient-to-br from-indigo-950/90 via-slate-900 to-cyan-950/80 border-indigo-400 ring-2 ring-indigo-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-base shadow-md shadow-indigo-500/30">
+                      🌐
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Network Packet Racer 1v1 🌐</span>
+                        <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                      </h4>
+                      <span className="text-[10px] text-indigo-300 font-medium">Rutare Porturi (443/53/25) & Firewall</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Comută pachetele sosite în router către porturile potrivite (Web HTTPS, DNS, Email) și carantinează atacurile DDoS și virușii în Firewall!
                   </p>
                 </button>
               </div>
@@ -1749,6 +1899,111 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 </div>
               </div>
             </div>
+          )}
+
+          {/* MODE 7: BINARY CLASH 1v1 */}
+          {currentRoom.mode === 'binary_clash' && (
+            <BinaryClashDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(250, 'Victorie Cursa Biților 1v1');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 8: CIRCUIT CLASH 1v1 */}
+          {currentRoom.mode === 'circuit_duel' && (
+            <CircuitMasterDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(300, 'Victorie Circuit Clash Smart City 1v1');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 9: C++ CODE RACER 1v1 */}
+          {currentRoom.mode === 'algo_race_cpp' && (
+            <CodeRacerCppDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(300, 'Victorie C++ Code Racer 1v1');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 10: PIXEL ART SPRITE CLASH 1v1 */}
+          {currentRoom.mode === 'pixel_clash' && (
+            <PixelClashDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(300, 'Victorie Pixel Art Sprite Clash 1v1');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 11: NETWORK PACKET RACER 1v1 */}
+          {currentRoom.mode === 'network_racer' && (
+            <NetworkPacketRacerDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(300, 'Victorie Network Packet Racer 1v1');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
           )}
         </div>
       )}

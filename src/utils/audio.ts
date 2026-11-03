@@ -396,6 +396,10 @@ class SoundManager {
     this.playRetro('powerup');
   }
 
+  playPowerup() {
+    this.playRetro('powerup');
+  }
+
   playZap() {
     this.playRetro('hit');
   }

@@ -1201,10 +1201,10 @@ function generateFeatureHubs() {
     },
     {
       dir: 'duel',
-      title: 'Arena Dueluri TIC 1v1: Competiții Tehnologice Școlare & Coding Live | ArkyEdu',
-      meta: 'Confruntări live multiplayer 1v1 între elevi: Hacker vs Defender, Cursa Algoritmilor Scratch, Cyber Cursor Clash și Quiz Blitz TIC în timp real.',
-      keywords: 'dueluri tic 1v1, competitii tehnologice scolare, jocuri multiplayer educative, olimpiada tic live, meciuri programare copii gimnaziu',
-      h1: 'Arena Dueluri TIC 1v1: Competiții Tehnologice în Timp Real',
+      title: 'Arena Dueluri TIC 1v1: Competiții Tehnologice Școlare, Coding Live & Circuite | ArkyEdu',
+      meta: 'Confruntări live multiplayer 1v1 între elevi: Binary Clash (cursa biților), Circuit Clash Arduino Smart City, C++ Code Racer, Pixel Art Sprite Clash, Network Packet Racer (rutare porturi), Hacker vs Defender și Cursa Algoritmilor Scratch.',
+      keywords: 'dueluri tic 1v1, competitii tehnologice scolare, binary clash 1v1, circuit clash arduino, c++ code racer, pixel art clash, network packet racer, jocuri multiplayer educative, olimpiada tic live',
+      h1: 'Arena Dueluri TIC 1v1: 11 Competiții Tehnologice în Timp Real',
       appLink: 'https://www.arkyedu.com/#duel'
     },
     {

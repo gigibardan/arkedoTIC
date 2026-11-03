@@ -11,7 +11,22 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-export type DuelGameMode = 'cyber_sprint' | 'block_coding' | 'speed_crafting' | 'quiz_blitz' | 'cyber_shield' | 'pc_rush' | 'file_battle' | 'roblox_clicker' | 'mouse_duel' | 'hacker_defense';
+export type DuelGameMode =
+  | 'cyber_sprint'
+  | 'block_coding'
+  | 'speed_crafting'
+  | 'quiz_blitz'
+  | 'cyber_shield'
+  | 'pc_rush'
+  | 'file_battle'
+  | 'roblox_clicker'
+  | 'mouse_duel'
+  | 'hacker_defense'
+  | 'binary_clash'
+  | 'circuit_duel'
+  | 'algo_race_cpp'
+  | 'pixel_clash'
+  | 'network_racer';
 
 export type CodeBlockType =
   | 'start'
