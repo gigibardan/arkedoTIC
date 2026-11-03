@@ -229,8 +229,10 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
         recordStudentDuelResult(true, 'circuit_duel', nextScore);
         onFinish?.(nextScore, true);
       } else {
-        const newProg = Math.round((nextIndex / CIRCUIT_STAGES.length) * 100);
-        if (roomData?.roomCode) {
+        // Sync progress only on milestones (Stage 2 and Stage 4)
+        const isMilestone = nextIndex === 2 || nextIndex === 4;
+        if (isMilestone && roomData?.roomCode) {
+          const newProg = Math.round((nextIndex / CIRCUIT_STAGES.length) * 100);
           updateDuelProgress(roomData.roomCode, isHost, {
             progress: newProg,
             score: nextScore,

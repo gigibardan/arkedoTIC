@@ -29,8 +29,8 @@ import { sounds } from '../../utils/audio';
 import { DuelRoomData, DuelPlayer, updateDuelProgress } from '../../lib/duelService';
 import { recordStudentDuelResult } from '../../lib/studentAuthService';
 
-// Progressive milestone thresholds (15, 30, 45, 60, 75, 90, 95, 100)
-const MILESTONES = [15, 30, 45, 60, 75, 90, 95, 100] as const;
+// Progressive milestone thresholds (25, 50, 75, 100 to protect Firebase free-tier quota)
+const MILESTONES = [25, 50, 75, 100] as const;
 type Milestone = (typeof MILESTONES)[number];
 
 interface TargetItem {

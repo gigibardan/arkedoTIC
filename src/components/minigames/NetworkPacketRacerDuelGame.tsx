@@ -160,10 +160,15 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
 
   const currentPacket = PACKET_STREAM[packetIndex] || PACKET_STREAM[0];
 
-  // Sync with Firestore Duel Room
+  // Sync with Firestore Duel Room - Milestone throttled to protect Spark quotas
   const syncProgress = (newScore: number, index: number, done: boolean = false) => {
     if (!roomData) return;
     const progressPercent = Math.min(100, Math.round(((index + (done ? 1 : 0)) / PACKET_STREAM.length) * 100));
+
+    // Only sync to Firestore at 30%, 70%, or 100% finish
+    const isMilestone = index === 3 || index === 7 || done;
+    if (!isMilestone) return;
+
     const myId = isHost ? roomData.host.id : roomData.guest?.id;
 
     updateDuelProgress(

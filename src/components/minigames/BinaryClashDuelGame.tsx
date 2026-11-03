@@ -129,9 +129,10 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
         recordStudentDuelResult(true, 'binary_clash', nextScore);
         onFinish?.(nextScore, true);
       } else {
-        // Sync progress
-        const newProg = Math.round((nextIndex / TARGET_CHALLENGES.length) * 100);
-        if (roomData?.roomCode) {
+        // Sync progress only on 25%, 50%, 75% milestones
+        const isMilestone = nextIndex === 2 || nextIndex === 4 || nextIndex === 6;
+        if (isMilestone && roomData?.roomCode) {
+          const newProg = Math.round((nextIndex / TARGET_CHALLENGES.length) * 100);
           updateDuelProgress(
             roomData.roomCode,
             isHost,

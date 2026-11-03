@@ -1142,6 +1142,10 @@ export function logoutStudent() {
 }
 
 // UPDATE ARCADE SCORE FOR LOGGED STUDENT (AND CLOUD)
+// In-memory score write debouncer to protect Spark free tier quota
+let isStudentAuthQuotaExhausted = false;
+const pendingScoreWrites = new Map<string, any>();
+
 export async function updateStudentArcadeScore(
   gameKey: keyof Omit<ArcadeScores, 'totalArcade'>, 
   newScore: number
@@ -1169,49 +1173,71 @@ export async function updateStudentArcadeScore(
     lastActiveAt: new Date().toISOString()
   };
 
+  // Instant local persistence
   saveActiveStudentLocally(updatedProfile);
 
-  if (isCloudConnected && db && current.id) {
-    try {
-      // 1. Update student document
-      await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
-        [`arcadeScores.${gameKey}`]: newScore,
-        'arcadeScores.totalArcade': updatedArcade.totalArcade,
-        totalXP,
-        lastActiveAt: new Date().toISOString()
-      });
+  // Debounced cloud persistence (at most 1 write every 3.5s per student)
+  if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+    const studentId = current.id;
+    const writeKey = `${studentId}_${gameKey}`;
 
-      // 2. Check if this is a new all-time high score in the global records document
-      const currentGlobalRecord = inMemoryRecordsCache?.[gameKey]?.bestScore || 0;
-      if (newScore > currentGlobalRecord) {
-        const newRecord: GameRecord = {
-          gameKey,
-          bestScore: newScore,
-          holderName: current.username,
-          holderAvatar: current.avatar || '🎓'
-        };
-
-        if (inMemoryRecordsCache) {
-          inMemoryRecordsCache[gameKey] = newRecord;
-          if (gameKey === 'game2048') inMemoryRecordsCache['2048'] = newRecord;
-          if (gameKey === 'detective') inMemoryRecordsCache['cyber'] = newRecord;
-          if (gameKey === 'rgb_pixel') inMemoryRecordsCache['rgb_pixels'] = newRecord;
-        }
-
-        try {
-          localStorage.setItem(LOCAL_RECORDS_CACHE_KEY, JSON.stringify(inMemoryRecordsCache || { [gameKey]: newRecord }));
-        } catch {}
-
-        await setDoc(doc(db, RECORDS_COLLECTION, GLOBAL_RECORDS_DOC), {
-          records: {
-            [gameKey]: newRecord
-          },
-          lastUpdated: new Date().toISOString()
-        }, { merge: true });
-      }
-    } catch (err) {
-      console.warn('Eroare update score Firestore:', err);
+    if (pendingScoreWrites.has(writeKey)) {
+      clearTimeout(pendingScoreWrites.get(writeKey));
     }
+
+    const timer = setTimeout(async () => {
+      pendingScoreWrites.delete(writeKey);
+      if (isStudentAuthQuotaExhausted || !db) return;
+
+      try {
+        // 1. Update student document
+        await updateDoc(doc(db, STUDENTS_COLLECTION, studentId), {
+          [`arcadeScores.${gameKey}`]: newScore,
+          'arcadeScores.totalArcade': updatedArcade.totalArcade,
+          totalXP,
+          lastActiveAt: new Date().toISOString()
+        });
+
+        // 2. Check if this is a new all-time high score in the global records document
+        const currentGlobalRecord = inMemoryRecordsCache?.[gameKey]?.bestScore || 0;
+        if (newScore > currentGlobalRecord) {
+          const newRecord: GameRecord = {
+            gameKey,
+            bestScore: newScore,
+            holderName: current.username,
+            holderAvatar: current.avatar || '🎓'
+          };
+
+          if (inMemoryRecordsCache) {
+            inMemoryRecordsCache[gameKey] = newRecord;
+            if (gameKey === 'game2048') inMemoryRecordsCache['2048'] = newRecord;
+            if (gameKey === 'detective') inMemoryRecordsCache['cyber'] = newRecord;
+            if (gameKey === 'rgb_pixel') inMemoryRecordsCache['rgb_pixels'] = newRecord;
+          }
+
+          try {
+            localStorage.setItem(LOCAL_RECORDS_CACHE_KEY, JSON.stringify(inMemoryRecordsCache || { [gameKey]: newRecord }));
+          } catch {}
+
+          await setDoc(doc(db, RECORDS_COLLECTION, GLOBAL_RECORDS_DOC), {
+            records: {
+              [gameKey]: newRecord
+            },
+            lastUpdated: new Date().toISOString()
+          }, { merge: true });
+        }
+      } catch (err: any) {
+        const errMsg = err?.message || String(err);
+        if (err?.code === 'resource-exhausted' || errMsg.includes('quota') || errMsg.includes('Quota exceeded')) {
+          isStudentAuthQuotaExhausted = true;
+          console.warn('⚠️ [StudentAuth Quota Guard] Cota zilnică Firebase Spark a fost atinsă. Scorurile rămân salvate local în siguranță.');
+        } else {
+          console.warn('Eroare update score Firestore:', err);
+        }
+      }
+    }, 2500);
+
+    pendingScoreWrites.set(writeKey, timer);
   }
 }
 

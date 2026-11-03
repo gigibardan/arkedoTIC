@@ -233,8 +233,10 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
           recordStudentDuelResult(true, 'algo_race_cpp', nextScore);
           onFinish?.(nextScore, true);
         } else {
-          const newProg = Math.round((nextIndex / CPP_CHALLENGES.length) * 100);
-          if (roomData?.roomCode) {
+          // Sync progress only on milestones (Round 2 and Round 4)
+          const isMilestone = nextIndex === 2 || nextIndex === 4;
+          if (isMilestone && roomData?.roomCode) {
+            const newProg = Math.round((nextIndex / CPP_CHALLENGES.length) * 100);
             updateDuelProgress(roomData.roomCode, isHost, {
               progress: newProg,
               score: nextScore,

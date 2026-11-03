@@ -175,10 +175,15 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
 
   const accuracy = calculateAccuracy(grid);
 
-  // Sync progress to Duel Room
+  // Sync progress to Duel Room - Milestone throttled to protect Spark quotas
   const syncProgress = (newScore: number, stageIdx: number, done: boolean = false) => {
     if (!roomData) return;
-    const totalProgress = Math.min(100, Math.round(((stageIdx + (accuracy / 100)) / SPRITE_CHALLENGES.length) * 100));
+
+    // Only write on stage 2, stage 4, or match finish
+    const isMilestone = stageIdx === 2 || stageIdx === 4 || done;
+    if (!isMilestone) return;
+
+    const totalProgress = Math.min(100, Math.round(((stageIdx + (done ? 1 : 0)) / SPRITE_CHALLENGES.length) * 100));
     const myId = isHost ? roomData.host.id : roomData.guest?.id;
 
     updateDuelProgress(

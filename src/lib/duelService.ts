@@ -782,11 +782,14 @@ interface PendingThrottledWrite {
   roomCode: string;
   isHost: boolean;
 }
+
+let isFirestoreQuotaExhausted = false;
+const finishedRoomsCache = new Set<string>();
 const pendingWrites = new Map<string, PendingThrottledWrite>();
 const lastWrittenTimes = new Map<string, number>();
 const lastWrittenPayloads = new Map<string, string>();
 const lastWrittenProgress = new Map<string, number>();
-const MIN_WRITE_INTERVAL_MS = 5000; // 5000ms minimum interval between intermediate progress writes
+const MIN_WRITE_INTERVAL_MS = 3500; // Minimum 3.5s between intermediate progress writes
 
 // Direct write helper to Firestore
 async function executeFirestoreUpdate(
@@ -796,8 +799,14 @@ async function executeFirestoreUpdate(
   allFinishedWinnerId?: string,
   winnerName?: string
 ): Promise<void> {
-  if (!db) return;
+  if (!db || isFirestoreQuotaExhausted) return;
   const cleanCode = roomCode.trim().toUpperCase();
+
+  // If this room has already processed final completion, suppress redundant finish writes
+  if (allFinishedWinnerId && finishedRoomsCache.has(cleanCode)) {
+    return;
+  }
+
   try {
     const roomRef = doc(db, 'duel_rooms', cleanCode);
     const updatePayload: Record<string, any> = {
@@ -820,12 +829,15 @@ async function executeFirestoreUpdate(
       if (winnerName) {
         updatePayload.winnerName = winnerName;
       }
+      finishedRoomsCache.add(cleanCode);
     }
 
     await updateDoc(roomRef, updatePayload);
   } catch (err: any) {
-    if (err?.code === 'resource-exhausted' || err?.message?.includes('quota')) {
-      console.warn('⚠️ Cota zilnică Firebase Spark a fost atinsă. Meciul continuă local fără întrerupere.');
+    const errMsg = err?.message || String(err);
+    if (err?.code === 'resource-exhausted' || errMsg.includes('quota') || errMsg.includes('Quota exceeded')) {
+      isFirestoreQuotaExhausted = true;
+      console.warn('⚠️ [Firestore Quota Guard] Cota zilnică Firebase Spark a fost atinsă. Meciurile continuă fluid în mod local fără întrerupere.');
     } else {
       console.warn('Eroare update duel progress:', err);
     }
@@ -840,6 +852,8 @@ export async function updateDuelProgress(
   allFinishedWinnerId?: string,
   winnerName?: string
 ): Promise<void> {
+  if (isFirestoreQuotaExhausted) return;
+
   const cleanCode = roomCode.trim().toUpperCase();
   const cacheKey = `${cleanCode}_${isHost ? 'host' : 'guest'}`;
 
@@ -871,10 +885,16 @@ export async function updateDuelProgress(
   const elapsed = now - lastTime;
   const currentProg = typeof data.progress === 'number' ? data.progress : -1;
   const prevProg = lastWrittenProgress.get(cacheKey) ?? -1;
-  const hasMilestoneStep = currentProg >= 0 && (prevProg < 0 || Math.abs(currentProg - prevProg) >= 20);
 
-  // If milestone jumped (at least 20% difference) and minimum window elapsed (5s):
-  if ((hasMilestoneStep || elapsed >= 8000) && elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
+  // Milestone Step Check (writes ONLY when crossing a 25% boundary: e.g. 25%, 50%, 75%)
+  const crossedMilestone = currentProg >= 0 && (
+    (prevProg < 25 && currentProg >= 25) ||
+    (prevProg < 50 && currentProg >= 50) ||
+    (prevProg < 75 && currentProg >= 75)
+  );
+
+  // If milestone crossed and minimum interval elapsed (3.5s):
+  if ((crossedMilestone || elapsed >= 9000) && elapsed >= MIN_WRITE_INTERVAL_MS && !pendingWrites.has(cacheKey)) {
     lastWrittenTimes.set(cacheKey, now);
     lastWrittenPayloads.set(cacheKey, serialized);
     if (currentProg >= 0) {
@@ -889,17 +909,21 @@ export async function updateDuelProgress(
     if (existing?.timer) {
       existing.data = mergedData;
     } else {
-      const delay = Math.max(1500, Math.min(4500, MIN_WRITE_INTERVAL_MS - elapsed));
+      const delay = Math.max(1200, Math.min(4000, MIN_WRITE_INTERVAL_MS - elapsed));
       const timer = setTimeout(async () => {
         const item = pendingWrites.get(cacheKey);
         pendingWrites.delete(cacheKey);
-        if (item) {
+        if (item && !isFirestoreQuotaExhausted) {
           const itemProg = typeof item.data.progress === 'number' ? item.data.progress : -1;
           const oldProg = lastWrittenProgress.get(cacheKey) ?? -1;
-          const movedEnough = itemProg >= 0 && (oldProg < 0 || Math.abs(itemProg - oldProg) >= 20);
+          const isMilestone = itemProg >= 0 && (
+            (oldProg < 25 && itemProg >= 25) ||
+            (oldProg < 50 && itemProg >= 50) ||
+            (oldProg < 75 && itemProg >= 75)
+          );
           const timeWaited = Date.now() - (lastWrittenTimes.get(cacheKey) || 0);
 
-          if (movedEnough || timeWaited >= 8000) {
+          if (isMilestone || timeWaited >= 9000) {
             lastWrittenTimes.set(cacheKey, Date.now());
             lastWrittenPayloads.set(cacheKey, JSON.stringify(item.data));
             if (itemProg >= 0) {
