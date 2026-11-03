@@ -1482,13 +1482,13 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   onOpenArcade?.();
                 }}
                 className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
-                title={lang === 'en' ? 'Open Arcade Games (16 Mini-Games)' : 'Deschide Jocurile Arcade (16 Mini-Jocuri)'}
+                title={lang === 'en' ? 'Open Arcade Games (21 Mini-Games)' : 'Deschide Jocurile Arcade (21 Mini-Jocuri)'}
               >
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Arcade (16)' : 'Arcade (16)'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Arcade (21)' : 'Arcade (21)'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1531,7 +1531,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Trophy className="w-3.5 h-3.5" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Top Elevi' : 'Top Elevi'}</span>
+                  <span className="truncate">{lang === 'en' ? 'Leaderboard' : 'Top Elevi'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>

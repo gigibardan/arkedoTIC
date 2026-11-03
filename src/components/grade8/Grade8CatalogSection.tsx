@@ -27,6 +27,113 @@ interface Grade8CatalogSectionProps {
   completedMissions?: Record<string, boolean>;
 }
 
+const GRADE_8_EN_MAP: Record<string, {
+  title: string;
+  shortTitle: string;
+  unit: string;
+  metaDescription: string;
+  skills: string[];
+}> = {
+  g8_calc_a: {
+    title: 'Spreadsheet Applications & MS Excel Workbook Interface',
+    shortTitle: 'Excel Interface & Workbook',
+    unit: 'Unit 1: Spreadsheets (p. 12–20)',
+    metaDescription: 'Complete 8th Grade ICT curriculum: Electronic spreadsheets, Excel workbooks, Ribbon anatomy, cell addressing (A1, relative & absolute), and fundamental data types.',
+    skills: ['1.1: Cell grid navigation', '1.2: Row & column sizing', '3.1: Data type formatting']
+  },
+  g8_calc_b: {
+    title: 'Formulas & Mathematical / Statistical Functions (SUM, AVERAGE, MIN, MAX, IF)',
+    shortTitle: 'Formulas & Functions',
+    unit: 'Unit 1: Spreadsheets (p. 21–28)',
+    metaDescription: 'Automated calculations: Equal sign (=) formula syntax, operator precedence, AutoSum, conditional IF tests, and absolute references ($A$1).',
+    skills: ['1.2: Mathematical formulas', '1.3: Statistical functions', '3.1: Logical IF conditions']
+  },
+  g8_calc_c: {
+    title: 'Data Visualization & 2D / 3D Charts (Column, Bar, Pie, Line)',
+    shortTitle: 'Charts & Data Visualization',
+    unit: 'Unit 1: Spreadsheets (p. 29–35)',
+    metaDescription: 'Visual storytelling with data: Column, line and pie charts, axis configuration, data series selection, legend placement, and trend interpretation.',
+    skills: ['1.3: Chart type selection', '2.1: Data series mapping', '3.2: Chart layout & styling']
+  },
+  g8_calc_d: {
+    title: 'Tabular Databases, Multi-key Sorting, AutoFilters & Data Validation',
+    shortTitle: 'Databases, Sorting & Filtering',
+    unit: 'Unit 1: Spreadsheets (p. 32–35)',
+    metaDescription: 'Manage structured lists: Excel as a flat database, ascending/descending sorting, multi-criteria AutoFilters, search filtering, and dropdown data validation rules.',
+    skills: ['1.4: Multi-column sorting', '2.2: Contextual autofilters', '3.3: Data validation dropdowns']
+  },
+  g8_web_a: {
+    title: 'Web Architecture, Semantic HTML5 Tags & Hyperlink Networks',
+    shortTitle: 'Web Architecture & HTML5',
+    unit: 'Unit 2: Web Pages (p. 36–45)',
+    metaDescription: 'Understand how the web works: Client-server HTTP requests, semantic HTML5 structure (<header>, <nav>, <main>, <section>, <article>, <footer>), hyperlinks, and embedded media.',
+    skills: ['1.1: Semantic HTML5 tags', '1.2: Hyperlink anchors', '3.1: Accessible structure']
+  },
+  g8_web_b: {
+    title: 'Visual Web Design with Google Sites WYSIWYG & Interactive Widgets',
+    shortTitle: 'Google Sites WYSIWYG Design',
+    unit: 'Unit 2: Web Pages (p. 46–52)',
+    metaDescription: 'Build modern websites without coding: Google Sites drag-and-drop layout, responsive multi-device design, image carousels, YouTube embeds, and interactive Google Maps.',
+    skills: ['1.2: Drag-and-drop layouts', '2.1: Multimedia widgets', '3.2: Responsive preview']
+  },
+  g8_web_c: {
+    title: 'Web Publishing, Custom Domains, HTTPS SSL Security & SEO Optimization',
+    shortTitle: 'Publishing, HTTPS & SEO',
+    unit: 'Unit 2: Web Pages (p. 53–58)',
+    metaDescription: 'Launch your website into the world: DNS domains (.ro, .com), web hosting, HTTPS encryption certificates, privacy policies, and search engine optimization (SEO).',
+    skills: ['1.3: Custom domain routing', '2.2: HTTPS SSL security', '3.3: SEO meta tags']
+  },
+  g8_algo_a: {
+    title: 'C++ Review: Data Types, Arithmetic Operators & Complex Expressions',
+    shortTitle: 'C++ Review & Expressions',
+    unit: 'Unit 3: C++ Algorithms (p. 59–66)',
+    metaDescription: 'Solidify algorithmic fundamentals: Code::Blocks setup, int/float/char/bool memory representation, arithmetic operators (+, -, *, /, %), and integer vs float division.',
+    skills: ['1.1: Variable typing', '1.2: Arithmetic operations', '3.1: Precedence rules']
+  },
+  g8_algo_b: {
+    title: 'Alternative Decision Structures: if / else, switch & Digit Extraction Logic',
+    shortTitle: 'Decisions: if/else & switch',
+    unit: 'Unit 3: C++ Algorithms (p. 67–74)',
+    metaDescription: 'Multi-branch decision logic: Simple and nested if/else statements, compound boolean expressions (&&, ||, !), switch-case selection, and number digit inspection.',
+    skills: ['1.2: Nested conditional branches', '2.1: Switch-case evaluation', '3.1: Digit testing']
+  },
+  g8_algo_c: {
+    title: 'Repetitive Structures: while, do-while, for Loops & Numeric Sequences',
+    shortTitle: 'Loops: while, do-while, for',
+    unit: 'Unit 3: C++ Algorithms (p. 75–80)',
+    metaDescription: 'Master algorithmic repetition: Pre-test while loops, post-test do-while loops, counted for loops, step modification, break/continue statements, and sequence generation.',
+    skills: ['1.3: Loop condition checks', '2.2: Counter loop iteration', '3.2: Infinite loop prevention']
+  },
+  g8_algo_d: {
+    title: 'Fundamental Classical Algorithms: Primality, GCD, Divisors & Fibonacci',
+    shortTitle: 'Fundamental Algorithms',
+    unit: 'Unit 3: C++ Algorithms (p. 81–85)',
+    metaDescription: 'Elite competitive programming foundations: Primality checking (square root efficiency), Euclidean GCD algorithm, divisor counting, and the Fibonacci recurrence sequence.',
+    skills: ['1.4: Prime number tests', '2.3: Euclidean GCD', '3.3: Fibonacci recurrence']
+  },
+  g8_algo_e: {
+    title: 'Modular Subprograms, User-Defined Functions & C++ Integrator Project',
+    shortTitle: 'Functions & Integrator Project',
+    unit: 'Unit 3: C++ Algorithms (p. 86–88)',
+    metaDescription: 'Modular software engineering: Function definitions, parameter passing (by value), return types (void vs typed), code reusability, and culminating middle-school graduation project.',
+    skills: ['1.5: Function signatures', '2.4: Parameter passing', '3.4: Modular architecture']
+  },
+  g8_robot_a: {
+    title: 'Educational Robotics, Arduino Uno Microcontrollers & Sensor Interfaces',
+    shortTitle: 'Arduino Robotics & Sensors',
+    unit: 'Unit 4: Robotics & IoT (p. 89–98)',
+    metaDescription: 'Physical computing and microcontrollers: Arduino Uno pinout (digital IO, analog in, PWM), breadboard circuits, ultrasonic distance sensors (HC-SR04), and pulseIn() timing.',
+    skills: ['1.1: Microcontroller pinouts', '2.1: Circuit breadboarding', '3.1: Sensor data processing']
+  },
+  g8_robot_b: {
+    title: 'Smart Systems, Smart Home Automation & IoT Integrator Project',
+    shortTitle: 'Smart Home & IoT Integrator',
+    unit: 'Unit 4: Robotics & IoT (p. 99–108)',
+    metaDescription: 'Design intelligent environments: Smart streetlights (LDR + PIR), MQ-2 gas detection alarms, SG90 servo automated barriers, I2C LCD displays, and non-blocking millis() multitasking.',
+    skills: ['1.2: Sensor-actuator loops', '2.2: Smart home automation', '3.2: Non-blocking IoT code']
+  }
+};
+
 export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
   onOpenCurriculaModal,
   onLaunchInteractiveLab,
@@ -106,7 +213,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              U1: Excel (4)
+              {lang === 'en' ? 'U1: Excel (4)' : 'U1: Excel (4)'}
             </button>
             <button
               onClick={() => {
@@ -119,7 +226,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              U2: Web (3)
+              {lang === 'en' ? 'U2: Web (3)' : 'U2: Web (3)'}
             </button>
             <button
               onClick={() => {
@@ -132,7 +239,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              U3: C++ (5)
+              {lang === 'en' ? 'U3: C++ (5)' : 'U3: C++ (5)'}
             </button>
             <button
               onClick={() => {
@@ -145,7 +252,7 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              U4: Robotică & IoT (2)
+              {lang === 'en' ? 'U4: Robotics & IoT (2)' : 'U4: Robotică & IoT (2)'}
             </button>
           </div>
         </div>
@@ -156,61 +263,91 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <FileSpreadsheet className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span className="font-bold text-white">Unitatea 1: Calcul Tabelar</span>
+                <span className="font-bold text-white">
+                  {lang === 'en' ? 'Unit 1: Spreadsheets' : 'Unitatea 1: Calcul Tabelar'}
+                </span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                Excel/Calc, adrese celule relative/absolute ($A$1), formule SUM, AVERAGE, IF, diagrame 2D/3D, sortare & autofiltrare (pag. 12–35)
+                {lang === 'en'
+                  ? 'Excel/Calc, relative/absolute cell references ($A$1), SUM, AVERAGE, IF, 2D/3D charts, sort & autofilter (p. 12–35)'
+                  : 'Excel/Calc, adrese celule relative/absolute ($A$1), formule SUM, AVERAGE, IF, diagrame 2D/3D, sortare & autofiltrare (pag. 12–35)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● 4 MISIUNI (1A–1D)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">
+              {lang === 'en' ? '● 4 MISSIONS (1A–1D)' : '● 4 MISIUNI (1A–1D)'}
+            </span>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-sky-950/40 border border-sky-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Globe className="w-5 h-5 text-sky-400 shrink-0" />
-                <span className="font-bold text-white">Unitatea 2: Pagini Web</span>
+                <span className="font-bold text-white">
+                  {lang === 'en' ? 'Unit 2: Web Pages' : 'Unitatea 2: Pagini Web'}
+                </span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                HTML5 semantic, Google Sites WYSIWYG, carusel imagini, hărți, layout responsive, securitate HTTPS & SEO (pag. 36–58)
+                {lang === 'en'
+                  ? 'Semantic HTML5, Google Sites WYSIWYG, image carousel, maps, responsive layout, HTTPS security & SEO (p. 36–58)'
+                  : 'HTML5 semantic, Google Sites WYSIWYG, carusel imagini, hărți, layout responsive, securitate HTTPS & SEO (pag. 36–58)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-sky-400">● 3 MISIUNI (2A–2C)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-sky-400">
+              {lang === 'en' ? '● 3 MISSIONS (2A–2C)' : '● 3 MISIUNI (2A–2C)'}
+            </span>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Code2 className="w-5 h-5 text-indigo-400 shrink-0" />
-                <span className="font-bold text-white">Unitatea 3: Algoritmi C++</span>
+                <span className="font-bold text-white">
+                  {lang === 'en' ? 'Unit 3: C++ Algorithms' : 'Unitatea 3: Algoritmi C++'}
+                </span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                Operatori, decizii if/switch, bucle while/for, cifre, divizori, vectori & subprograme modulare (pag. 59–88)
+                {lang === 'en'
+                  ? 'Operators, if/switch decisions, while/for loops, digits, divisors, arrays & modular subprograms (p. 59–88)'
+                  : 'Operatori, decizii if/switch, bucle while/for, cifre, divizori, vectori & subprograme modulare (pag. 59–88)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-indigo-400">● 5 MISIUNI (3A–3E)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-indigo-400">
+              {lang === 'en' ? '● 5 MISSIONS (3A–3E)' : '● 5 MISIUNI (3A–3E)'}
+            </span>
           </div>
 
           <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Bot className="w-5 h-5 text-amber-400 shrink-0" />
-                <span className="font-bold text-white">Unitatea 4: Robotică & IoT</span>
+                <span className="font-bold text-white">
+                  {lang === 'en' ? 'Unit 4: Robotics & IoT' : 'Unitatea 4: Robotică & IoT'}
+                </span>
               </div>
               <div className="text-[11px] text-slate-300 leading-snug">
-                Arduino Uno, HC-SR04, servomotoare SG90, Smart Streetlight LDR+PIR, alertă gaz MQ-2, LCD I2C & multitasking millis() (pag. 89–108)
+                {lang === 'en'
+                  ? 'Arduino Uno, HC-SR04, SG90 servos, Smart Streetlight LDR+PIR, MQ-2 gas alert, I2C LCD & multitasking millis() (p. 89–108)'
+                  : 'Arduino Uno, HC-SR04, servomotoare SG90, Smart Streetlight LDR+PIR, alertă gaz MQ-2, LCD I2C & multitasking millis() (pag. 89–108)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">● 2 MISIUNI (4A–4B)</span>
+            <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">
+              {lang === 'en' ? '● 2 MISSIONS (4A–4B)' : '● 2 MISIUNI (4A–4B)'}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Grid of 12 Interactive Mission Cards */}
+      {/* Grid of 14 Interactive Mission Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredModules.map((module) => {
           const effectiveMissionId = module.missionId || module.id;
           const isDone = Boolean(completedMissions[effectiveMissionId] || completedMissions[module.id]);
+          const enInfo = GRADE_8_EN_MAP[effectiveMissionId] || GRADE_8_EN_MAP[module.id];
+
+          const displayUnit = (lang === 'en' && enInfo?.unit) ? enInfo.unit : module.unit;
+          const displayTitle = (lang === 'en' && enInfo?.title) ? enInfo.title : module.title;
+          const displayShortTitle = (lang === 'en' && enInfo?.shortTitle) ? enInfo.shortTitle : module.shortTitle;
+          const displayMeta = (lang === 'en' && enInfo?.metaDescription) ? enInfo.metaDescription : module.metaDescription;
 
           return (
             <div
@@ -243,30 +380,41 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                 </div>
 
                 <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 mb-1 font-mono">
-                  {module.unit}
+                  {displayUnit}
                 </div>
 
                 <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors">
-                  {module.title}
+                  {displayTitle}
                 </h3>
                 <div className="text-xs font-semibold text-slate-300 mb-3">
-                  {module.shortTitle}
+                  {displayShortTitle}
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                  {module.metaDescription}
+                  {displayMeta}
                 </p>
 
                 {/* Key Skills Tags */}
                 <div className="flex flex-wrap gap-1.5 mb-4">
-                  {module.competencies.slice(0, 3).map((comp, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2 py-0.5 rounded-md bg-slate-950/70 border border-slate-800 text-[11px] text-slate-300 font-mono"
-                    >
-                      {comp.code}: {comp.description.slice(0, 50)}...
-                    </span>
-                  ))}
+                  {lang === 'en' && enInfo?.skills ? (
+                    enInfo.skills.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 rounded-md bg-slate-950/70 border border-slate-800 text-[11px] text-slate-300 font-mono"
+                      >
+                        {skill}
+                      </span>
+                    ))
+                  ) : (
+                    module.competencies.slice(0, 3).map((comp, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 rounded-md bg-slate-950/70 border border-slate-800 text-[11px] text-slate-300 font-mono"
+                      >
+                        {comp.code}: {comp.description.slice(0, 50)}...
+                      </span>
+                    ))
+                  )}
                 </div>
 
                 {/* Badges / Highlights */}
@@ -275,10 +423,10 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                     <Clock className="w-3 h-3 text-emerald-400" /> 20-25 min
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> 100 pts
+                    <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 pts' : '100 pct'}
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-teal-300 flex items-center gap-1">
-                    <Award className="w-3 h-3 text-teal-400" /> {module.shortTitle}
+                    <Award className="w-3 h-3 text-teal-400" /> {displayShortTitle}
                   </span>
                 </div>
               </div>
@@ -301,10 +449,10 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                     type="button"
                     onClick={() => onOpenCurriculaModal(module.id)}
                     className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                    title="Vezi programa școlară, teoria și fișa didactică"
+                    title={lang === 'en' ? 'View curriculum, textbook theory and questions' : 'Vezi programa școlară, teoria și fișa didactică'}
                   >
                     <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
+                    <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus & Theory' : 'Programă & Teorie'}</span>
                   </button>
 
                   <button
@@ -316,17 +464,17 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                     className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                       isDone
                         ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                        : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                        : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 font-black'
                     }`}
                   >
                     {isDone ? (
                       <>
                         <Award className="w-4 h-4 text-amber-400" />
-                        <span>{lang === 'en' ? 'Replay' : 'Reia'}</span>
+                        <span>{lang === 'en' ? 'Replay Mission' : 'Reia Misiunea'}</span>
                       </>
                     ) : (
                       <>
-                        <span>{lang === 'en' ? 'Start' : 'Începe'}</span>
+                        <span>{lang === 'en' ? 'Start Mission' : 'Începe Misiunea'}</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}

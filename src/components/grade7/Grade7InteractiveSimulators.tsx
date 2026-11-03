@@ -42,10 +42,12 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
           </div>
           <div>
             <h3 className="text-xl font-black text-white font-heading">
-              Laboratoare Interactive & Simulatoare • Clasa a VII-a
+              {lang === 'en' ? 'Interactive Labs & Simulators • 7th Grade' : 'Laboratoare Interactive & Simulatoare • Clasa a VII-a'}
             </h3>
             <p className="text-xs text-cyan-400 font-mono">
-              Simulatoare profesionale în browser: Tipografie, Studio Audio WebAudio, Consola C++, GIS și RoboSim 2D
+              {lang === 'en'
+                ? 'Professional in-browser simulators: Typography, WebAudio Studio, C++ Console, GIS Mapping & 2D RoboSim'
+                : 'Simulatoare profesionale în browser: Tipografie, Studio Audio WebAudio, Consola C++, GIS și RoboSim 2D'}
             </p>
           </div>
         </div>
@@ -79,7 +81,7 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
-            <span>Tipografie Word</span>
+            <span>{lang === 'en' ? 'Word Typography' : 'Tipografie Word'}</span>
           </button>
 
           <button
@@ -109,7 +111,7 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
             }`}
           >
             <MapPin className="w-3.5 h-3.5" />
-            <span>Harta GIS</span>
+            <span>{lang === 'en' ? 'GIS Maps' : 'Harta GIS'}</span>
           </button>
 
           <button
