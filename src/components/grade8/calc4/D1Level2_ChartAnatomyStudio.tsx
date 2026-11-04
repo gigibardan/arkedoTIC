@@ -19,6 +19,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface D1Level2Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -29,8 +30,11 @@ interface D1Level2Props {
 interface AnatomyPart {
   id: string;
   name: string;
+  nameEn: string;
   manualDesc: string;
+  manualDescEn: string;
   location: string;
+  locationEn: string;
   icon: any;
 }
 
@@ -38,43 +42,61 @@ const ANATOMY_PARTS: AnatomyPart[] = [
   {
     id: 'title',
     name: 'Titlul Diagramei (Chart Title)',
+    nameEn: 'Chart Title',
     manualDesc: 'Manual pag. 30: Textul din partea superioară ce sintetizează clar conținutul și tema reprezentării (ex: „Vânzări Lunare 2025”).',
+    manualDescEn: 'Curriculum p. 30: Top text summarizing the subject and content of the visualization (e.g. "Monthly Sales 2025").',
     location: 'Sus, centrat deasupra zonei de trasare',
+    locationEn: 'Top, centered above the plot area',
     icon: Bookmark
   },
   {
     id: 'plotArea',
     name: 'Zona de Trasare (Plot Area)',
+    nameEn: 'Plot Area',
     manualDesc: 'Manual pag. 30: Spațiul interior delimitat strict de axele X și Y, unde sunt desenate fizic barele, liniile sau punctele.',
+    manualDescEn: 'Curriculum p. 30: The bounded interior region between the X and Y axes where bars, lines, or points are rendered.',
     location: 'Interiorul dreptunghiului axelor',
+    locationEn: 'Interior rectangle bounded by axes',
     icon: Maximize2
   },
   {
     id: 'categoryAxis',
     name: 'Axa Orizontală a Categoriilor (Axa X)',
+    nameEn: 'Horizontal Category Axis (X Axis)',
     manualDesc: 'Manual pag. 31: Axa pe care sunt dispuse grupele sau intervalele de timp independente (ex: Ian, Feb, Mar sau Clasele 5-8).',
+    manualDescEn: 'Curriculum p. 31: The axis laying out independent groups or time intervals (e.g. Jan, Feb, Mar or Grades 5-8).',
     location: 'La baza zonei de trasare, orizontal',
+    locationEn: 'At the bottom of the plot area, horizontally',
     icon: Sliders
   },
   {
     id: 'valueAxis',
     name: 'Axa Verticală a Valorilor (Axa Y)',
+    nameEn: 'Vertical Value Axis (Y Axis)',
     manualDesc: 'Manual pag. 31: Scara gradată numerică (cu min, max și pas de diviziune) care măsoară magnitudinea cantitativă a datelor.',
+    manualDescEn: 'Curriculum p. 31: Numerical graduated scale with intervals that measures the quantitative magnitude of data points.',
     location: 'În stânga zonei de trasare, vertical',
+    locationEn: 'Left of the plot area, vertically',
     icon: Sliders
   },
   {
     id: 'legend',
     name: 'Legenda Diagramei (Legend)',
+    nameEn: 'Chart Legend',
     manualDesc: 'Manual pag. 31: Caseta ce codifică culorile sau stilurile grafice pentru a distinge între serii diferite (ex: Albastru = Băieți, Portocaliu = Fete).',
+    manualDescEn: 'Curriculum p. 31: Box identifying colors and styles to distinguish between data series (e.g. Blue = Boys, Orange = Girls).',
     location: 'De regulă în dreapta sau în partea de jos',
+    locationEn: 'Typically on the right or at the bottom',
     icon: Tag
   },
   {
     id: 'gridlines',
     name: 'Linii de Grilă (Gridlines)',
+    nameEn: 'Gridlines',
     manualDesc: 'Manual pag. 31: Liniile de fundal orizontale și verticale care ghidează privirea de la un punct al seriei la valoarea sa de pe axă.',
+    manualDescEn: 'Curriculum p. 31: Background reference lines that guide the eye from data points to their corresponding axis values.',
     location: 'Fundalul zonei de trasare',
+    locationEn: 'Background of the plot area',
     icon: Grid
   }
 ];
@@ -84,6 +106,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const [selectedPartId, setSelectedPartId] = useState<string>('title');
   const [discoveredParts, setDiscoveredParts] = useState<string[]>(['title']);
 
@@ -132,20 +155,24 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 30–31</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • p. 30–31' : 'Manual Art Klett 2025 • Pag. 30–31'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Layers className="w-8 h-8 text-teal-400" />
-              Nivelul 2: Anatomia Completă a unei Diagrame
+              {lang === 'en' ? 'Level 2: Complete Anatomy of a Chart' : 'Nivelul 2: Anatomia Completă a unei Diagrame'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Explorează componentele vitale: de la Zona de Trasare (Plot Area) la Axele de Categorii și Liniile de Grilă. Învață să controlezi fiecare element de proiectare.
+              {lang === 'en'
+                ? 'Explore vital chart components: from the Plot Area to Category Axes and Gridlines. Learn to control each design element.'
+                : 'Explorează componentele vitale: de la Zona de Trasare (Plot Area) la Axele de Categorii și Liniile de Grilă. Învață să controlezi fiecare element de proiectare.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Elemente Identificate</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">
+              {lang === 'en' ? 'Identified Elements' : 'Elemente Identificate'}
+            </div>
             <div className="text-2xl font-black text-teal-400">{discoveredParts.length}/{ANATOMY_PARTS.length}</div>
-            <div className="text-[11px] text-slate-400">Componente Manual</div>
+            <div className="text-[11px] text-slate-400">{lang === 'en' ? 'Curriculum Components' : 'Componente Manual'}</div>
           </div>
         </div>
       </div>
@@ -158,8 +185,12 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
               <Sliders className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Simulator de Disecție a Diagramei</h2>
-              <p className="text-xs text-slate-400">Fă click pe butoane sau pe elementele grafice pentru a le analiza</p>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Chart Dissection Simulator' : 'Simulator de Disecție a Diagramei'}
+              </h2>
+              <p className="text-xs text-slate-400">
+                {lang === 'en' ? 'Click buttons or graphical elements to inspect them' : 'Fă click pe butoane sau pe elementele grafice pentru a le analiza'}
+              </p>
             </div>
           </div>
 
@@ -171,7 +202,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 showTitle ? 'bg-teal-500/20 border-teal-500 text-teal-300' : 'bg-slate-800 border-slate-700 text-slate-500'
               }`}
             >
-              Titlu: {showTitle ? 'ON' : 'OFF'}
+              {lang === 'en' ? 'Title: ' : 'Titlu: '}{showTitle ? 'ON' : 'OFF'}
             </button>
             <button
               onClick={() => { sounds.playClick(); setShowLegend(!showLegend); }}
@@ -179,7 +210,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 showLegend ? 'bg-teal-500/20 border-teal-500 text-teal-300' : 'bg-slate-800 border-slate-700 text-slate-500'
               }`}
             >
-              Legendă: {showLegend ? 'ON' : 'OFF'}
+              {lang === 'en' ? 'Legend: ' : 'Legendă: '}{showLegend ? 'ON' : 'OFF'}
             </button>
             <button
               onClick={() => { sounds.playClick(); setShowGridlines(!showGridlines); }}
@@ -187,7 +218,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 showGridlines ? 'bg-teal-500/20 border-teal-500 text-teal-300' : 'bg-slate-800 border-slate-700 text-slate-500'
               }`}
             >
-              Grilă: {showGridlines ? 'ON' : 'OFF'}
+              {lang === 'en' ? 'Gridlines: ' : 'Grilă: '}{showGridlines ? 'ON' : 'OFF'}
             </button>
             <button
               onClick={() => { sounds.playClick(); setShowDataLabels(!showDataLabels); }}
@@ -195,7 +226,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 showDataLabels ? 'bg-teal-500/20 border-teal-500 text-teal-300' : 'bg-slate-800 border-slate-700 text-slate-500'
               }`}
             >
-              Etichete: {showDataLabels ? 'ON' : 'OFF'}
+              {lang === 'en' ? 'Data Labels: ' : 'Etichete: '}{showDataLabels ? 'ON' : 'OFF'}
             </button>
           </div>
         </div>
@@ -222,9 +253,9 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 className="cursor-pointer group"
               >
                 <rect
-                  x="140"
+                  x="120"
                   y="12"
-                  width="220"
+                  width="260"
                   height="26"
                   rx="6"
                   fill={selectedPartId === 'title' ? 'rgba(20, 184, 166, 0.25)' : 'rgba(30, 41, 59, 0.4)'}
@@ -236,10 +267,10 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                   y="29"
                   textAnchor="middle"
                   fill={selectedPartId === 'title' ? '#2dd4bf' : '#f8fafc'}
-                  fontSize="13"
+                  fontSize="12"
                   fontWeight="bold"
                 >
-                  Performanța Școlară la Matematică (2025)
+                  {lang === 'en' ? 'Mathematics Academic Performance (2025)' : 'Performanța Școlară la Matematică (2025)'}
                 </text>
               </g>
             )}
@@ -300,7 +331,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 transform="rotate(-90, 25, 120)"
                 textAnchor="middle"
               >
-                Punctaj Mediu
+                {lang === 'en' ? 'Average Score' : 'Punctaj Mediu'}
               </text>
             </g>
 
@@ -314,17 +345,17 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 stroke={selectedPartId === 'categoryAxis' ? '#2dd4bf' : '#64748b'}
                 strokeWidth={selectedPartId === 'categoryAxis' ? 3 : 2}
               />
-              {['Clasa 8A', 'Clasa 8B', 'Clasa 8C', 'Clasa 8D'].map((cls, idx) => (
+              {['Class 8A', 'Class 8B', 'Class 8C', 'Class 8D'].map((cls, idx) => (
                 <text
                   key={idx}
                   x={100 + idx * 75}
                   y="206"
                   fill={selectedPartId === 'categoryAxis' ? '#2dd4bf' : '#cbd5e1'}
-                  fontSize="11"
+                  fontSize="10"
                   fontWeight="semibold"
                   textAnchor="middle"
                 >
-                  {cls}
+                  {lang === 'en' ? cls : cls.replace('Class', 'Clasa')}
                 </text>
               ))}
             </g>
@@ -386,12 +417,16 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                   strokeWidth="2"
                 />
                 <text x="442" y="88" textAnchor="middle" fill="#94a3b8" fontSize="10" fontWeight="bold">
-                  Legendă
+                  {lang === 'en' ? 'Legend' : 'Legendă'}
                 </text>
                 <rect x="405" y="98" width="12" height="12" rx="2" fill="#0284c7" />
-                <text x="424" y="108" fill="#e2e8f0" fontSize="10">Semestrul I</text>
+                <text x="424" y="108" fill="#e2e8f0" fontSize="9">
+                  {lang === 'en' ? 'Semester 1' : 'Semestrul I'}
+                </text>
                 <rect x="405" y="118" width="12" height="12" rx="2" fill="#f59e0b" />
-                <text x="424" y="128" fill="#e2e8f0" fontSize="10">Semestrul II</text>
+                <text x="424" y="128" fill="#e2e8f0" fontSize="9">
+                  {lang === 'en' ? 'Semester 2' : 'Semestrul II'}
+                </text>
               </g>
             )}
           </svg>
@@ -403,6 +438,8 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
             const isSelected = selectedPartId === part.id;
             const isDiscovered = discoveredParts.includes(part.id);
             const Icon = part.icon;
+            const pName = lang === 'en' ? part.nameEn : part.name;
+            const pLoc = lang === 'en' ? part.locationEn : part.location;
             return (
               <button
                 key={part.id}
@@ -422,10 +459,10 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold truncate flex items-center justify-between">
-                    <span>{part.name.split('(')[0]}</span>
+                    <span>{pName.split('(')[0]}</span>
                     {isDiscovered && <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0 ml-1" />}
                   </div>
-                  <span className="text-[10px] text-slate-400 block truncate">{part.location}</span>
+                  <span className="text-[10px] text-slate-400 block truncate">{pLoc}</span>
                 </div>
               </button>
             );
@@ -436,10 +473,14 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
         <div className="bg-teal-950/30 border border-teal-500/30 rounded-2xl p-5 space-y-2">
           <div className="flex items-center gap-2 text-teal-400 text-sm font-bold">
             <Sparkles className="w-4 h-4" />
-            {currentPart.name}
+            {lang === 'en' ? currentPart.nameEn : currentPart.name}
           </div>
-          <p className="text-slate-200 text-sm leading-relaxed">{currentPart.manualDesc}</p>
-          <div className="text-xs text-teal-300 font-mono">Amplasare: {currentPart.location}</div>
+          <p className="text-slate-200 text-sm leading-relaxed">
+            {lang === 'en' ? currentPart.manualDescEn : currentPart.manualDesc}
+          </p>
+          <div className="text-xs text-teal-300 font-mono">
+            {lang === 'en' ? `Location: ${currentPart.locationEn}` : `Amplasare: ${currentPart.location}`}
+          </div>
         </div>
       </div>
 
@@ -450,23 +491,36 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Reflecție Pedagogică: Arhitectura Datelor Vizuale</h2>
-            <p className="text-xs text-slate-400">Verifică-ți cunoștințele din manualul oficial (pag. 30–31)</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Reflection: Visual Data Architecture' : 'Reflecție Pedagogică: Arhitectura Datelor Vizuale'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Verify your knowledge from the official curriculum (p. 30–31)' : 'Verifică-ți cunoștințele din manualul oficial (pag. 30–31)'}
+            </p>
           </div>
         </div>
 
         {/* Question 1 */}
         <div className="space-y-3">
           <div className="text-sm font-semibold text-slate-200">
-            1. Care este diferența dintre „Zona diagramei” (Chart Area) și „Zona de trasare” (Plot Area)?
+            {lang === 'en'
+              ? '1. What is the difference between the "Chart Area" and the "Plot Area"?'
+              : '1. Care este diferența dintre „Zona diagramei” (Chart Area) și „Zona de trasare” (Plot Area)?'}
           </div>
-          <QuestionHint hint="Gândește-te la un tablou într-o ramă: care este pânza desenată și care este rama cu tot cu etichetă?" />
+          <QuestionHint
+            hintRo="Gândește-te la un tablou într-o ramă: care este pânza desenată și care este rama cu tot cu etichetă?"
+            hintEn="Think of a framed painting: which is the painted canvas and which is the frame including labels?"
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'The Chart Area encompasses the entire container (title, legend, borders), while the Plot Area is strictly the inner space bounded by the X and Y axes where data series are drawn', correct: true },
+              { text: 'They are two interchangeable terms for the exact same graphic element', correct: false },
+              { text: 'The Plot Area includes only the title text and legend, without data', correct: false }
+            ] : [
               { text: 'Zona diagramei cuprinde tot cadrul (titlu, legendă, margini), iar zona de trasare este doar interiorul delimitat de axele X și Y unde sunt desenate seriile grafice', correct: true },
               { text: 'Sunt două denumiri identice pentru același element grafic', correct: false },
               { text: 'Zona de trasare include doar textul titlului și legenda, fără date', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l2_q1';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -493,22 +547,35 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l2_q1'] || 0} />
           )}
           {quizSubmitted['d1_l2_q1'] && (
-            <AnswerExplanation explanation="Corect! Manual pag. 30: Chart Area este întregul obiect inserat în foaie, în timp ce Plot Area este spațiul geometric delimitat de axe unde sunt reprezentate fizic seriile de date." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Correct! Curriculum p. 30: The Chart Area is the entire object embedded in the sheet, whereas the Plot Area is the geometric boundary defined by the axes where data series are plotted.'
+                : 'Corect! Manual pag. 30: Chart Area este întregul obiect inserat în foaie, în timp ce Plot Area este spațiul geometric delimitat de axe unde sunt reprezentate fizic seriile de date.'}
+            />
           )}
         </div>
 
         {/* Question 2 */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <div className="text-sm font-semibold text-slate-200">
-            2. Când este obligatorie prezența Legendei într-o diagramă?
+            {lang === 'en'
+              ? '2. When is a Legend strictly required in a chart?'
+              : '2. Când este obligatorie prezența Legendei într-o diagramă?'}
           </div>
-          <QuestionHint hint="Dacă ai o singură coloană de date (ex. doar note la informatică), ai nevoie să știi ce culoare are fiecare serie?" />
+          <QuestionHint
+            hintRo="Dacă ai o singură coloană de date (ex. doar note la informatică), ai nevoie să știi ce culoare are fiecare serie?"
+            hintEn="If you have a single data series (e.g. only computer science grades), do you need to distinguish multiple colors?"
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'When the chart contains two or more data series (e.g. Boys vs Girls or Semester 1 vs Semester 2), to distinguish the meaning of each color', correct: true },
+              { text: 'Only when the chart is printed in black and white', correct: false },
+              { text: 'A legend is mandatory in every chart, even when there is only a single series', correct: false }
+            ] : [
               { text: 'Când diagrama conține două sau mai multe serii de date (ex: Băieți vs Fete sau Semestrul 1 vs Semestrul 2), pentru a diferenția semnificația fiecărei culori', correct: true },
               { text: 'Doar când diagrama este tipărită alb-negru', correct: false },
               { text: 'Legenda este obligatorie în orice diagramă, chiar și dacă are o singură coloană', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l2_q2';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -535,7 +602,11 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l2_q2'] || 0} />
           )}
           {quizSubmitted['d1_l2_q2'] && (
-            <AnswerExplanation explanation="Excelent! La o singură serie de date, titlul diagramei este suficient, iar legenda ocupă inutil spațiu. În schimb, la reprezentări multiserie, legenda este indispensabilă pentru înțelegerea graficului." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Excellent! With a single data series, the chart title is sufficient and a legend wastes space. Conversely, in multi-series charts, the legend is indispensable for interpreting the graphic.'
+                : 'Excelent! La o singură serie de date, titlul diagramei este suficient, iar legenda ocupă inutil spațiu. În schimb, la reprezentări multiserie, legenda este indispensabilă pentru înțelegerea graficului.'}
+            />
           )}
         </div>
       </div>
@@ -549,7 +620,7 @@ export const D1Level2_ChartAnatomyStudio: React.FC<D1Level2Props> = ({
           if (onCompletePage) onCompletePage(100);
           else if (onComplete) onComplete();
         }}
-        nextLabel="Spre Nivelul 3: Instrumente de Proiectare & Formatare"
+        nextLabel={lang === 'en' ? 'To Level 3: Design & Formatting Tools' : 'Spre Nivelul 3: Instrumente de Proiectare & Formatare'}
       />
     </div>
   );

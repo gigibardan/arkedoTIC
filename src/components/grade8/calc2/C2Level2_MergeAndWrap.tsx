@@ -91,18 +91,20 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 22–23</span>
+              <span>{lang === 'en' ? 'Art Klett 2025 Textbook • P. 22–23' : 'Manual Art Klett 2025 • Pag. 22–23'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Table2 className="w-8 h-8 text-teal-400" />
-              Nivelul 2: Îmbinarea Celulelor (Merge) & Încadrarea Textului (Wrap)
+              {lang === 'en' ? 'Level 2: Cell Merging (Merge) & Text Wrapping (Wrap)' : 'Nivelul 2: Îmbinarea Celulelor (Merge) & Încadrarea Textului (Wrap)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Cum creezi un titlu unificat peste mai multe coloane și cum așezi textele lungi pe rânduri multiple fără să lărgești exagerat foaia de calcul?
+              {lang === 'en'
+                ? 'How do you create a unified banner title across multiple columns, and how do you fit long texts on multiple lines without excessively widening columns?'
+                : 'Cum creezi un titlu unificat peste mai multe coloane și cum așezi textele lungi pe rânduri multiple fără să lărgești exagerat foaia de calcul?'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1B</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1B' : 'Modulul 1B'}</div>
             <div className="text-2xl font-black text-teal-400">2 / 7</div>
           </div>
         </div>
@@ -116,9 +118,13 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
               <Maximize2 className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Atelier Interactiv: Alinierea & Îmbinarea Celulelor</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Interactive Studio: Cell Alignment & Merging' : 'Atelier Interactiv: Alinierea & Îmbinarea Celulelor'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Testează butoanele oficiale din grupul „Aliniere” de pe Panglica Pornire
+                {lang === 'en'
+                  ? 'Test official controls from the "Alignment" group on the Home Ribbon'
+                  : 'Testează butoanele oficiale din grupul „Aliniere” de pe Panglica Pornire'}
               </p>
             </div>
           </div>
@@ -134,7 +140,9 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
                   : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
               }`}
             >
-              {isMerged ? '✓ Îmbinare & Centrare (Activat)' : 'Îmbinare & Centrare (Dezactivat)'}
+              {isMerged
+                ? (lang === 'en' ? '✓ Merge & Center (Active)' : '✓ Îmbinare & Centrare (Activat)')
+                : (lang === 'en' ? 'Merge & Center (Disabled)' : 'Îmbinare & Centrare (Dezactivat)')}
             </button>
 
             {/* Wrap Toggle */}
@@ -147,7 +155,9 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
                   : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
               }`}
             >
-              {isWrapped ? '✓ Înfășurare Text (Activat)' : 'Înfășurare Text (Wrap Text)'}
+              {isWrapped
+                ? (lang === 'en' ? '✓ Wrap Text (Active)' : '✓ Înfășurare Text (Activat)')
+                : (lang === 'en' ? 'Wrap Text (Disabled)' : 'Înfășurare Text (Wrap Text)')}
             </button>
           </div>
         </div>
@@ -156,12 +166,12 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
         <div className="flex items-center gap-3 bg-slate-950 p-3 rounded-2xl border border-slate-800 text-xs">
           <span className="text-slate-400 font-semibold flex items-center gap-1.5">
             <RotateCw className="w-3.5 h-3.5 text-amber-400" />
-            Orientare text antet coloane:
+            {lang === 'en' ? 'Column header orientation:' : 'Orientare text antet coloane:'}
           </span>
           {[
-            { id: 'normal', label: 'Orizontal Normal (0°)' },
-            { id: 'angle', label: 'Înclinație la 45°' },
-            { id: 'vertical', label: 'Text Vertical' },
+            { id: 'normal', label: lang === 'en' ? 'Horizontal Normal (0°)' : 'Orizontal Normal (0°)' },
+            { id: 'angle', label: lang === 'en' ? 'Angle Counterclockwise 45°' : 'Înclinație la 45°' },
+            { id: 'vertical', label: lang === 'en' ? 'Vertical Text' : 'Text Vertical' },
           ].map(opt => (
             <button
               key={opt.id}
@@ -199,14 +209,16 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
                     colSpan={4}
                     className="p-3 text-center font-black text-white text-sm bg-gradient-to-r from-emerald-900/40 via-teal-900/50 to-emerald-900/40 tracking-wider text-emerald-200"
                   >
-                    CATALOGUL NOTELOR — CLASA A VIII-A B (A1:D1 Îmbinat & Centrat)
+                    {lang === 'en'
+                      ? 'GRADE ROSTER — GRADE 8 B (A1:D1 Merged & Centered)'
+                      : 'CATALOGUL NOTELOR — CLASA A VIII-A B (A1:D1 Îmbinat & Centrat)'}
                   </td>
                 ) : (
                   <>
-                    <td className="p-2.5 border-r border-slate-800 text-emerald-300 font-bold">CATALOGUL</td>
-                    <td className="p-2.5 border-r border-slate-800 text-slate-500">NOTELOR</td>
-                    <td className="p-2.5 border-r border-slate-800 text-slate-500">CLASA VIII</td>
-                    <td className="p-2.5 text-slate-500">AN 2026</td>
+                    <td className="p-2.5 border-r border-slate-800 text-emerald-300 font-bold">{lang === 'en' ? 'ROSTER' : 'CATALOGUL'}</td>
+                    <td className="p-2.5 border-r border-slate-800 text-slate-500">{lang === 'en' ? 'GRADES' : 'NOTELOR'}</td>
+                    <td className="p-2.5 border-r border-slate-800 text-slate-500">{lang === 'en' ? 'GRADE 8' : 'CLASA VIII'}</td>
+                    <td className="p-2.5 text-slate-500">{lang === 'en' ? 'YEAR 2026' : 'AN 2026'}</td>
                   </>
                 )}
               </tr>
@@ -216,17 +228,17 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
                 <td className="p-2.5 border-r border-slate-800 bg-slate-900 text-slate-400">2</td>
                 <td className="p-3 border-r border-slate-800">
                   <span className={`inline-block transition ${orientation === 'angle' ? '-rotate-45' : orientation === 'vertical' ? 'writing-vertical' : ''}`}>
-                    Nume & Prenume Elev
+                    {lang === 'en' ? 'Student Full Name' : 'Nume & Prenume Elev'}
                   </span>
                 </td>
                 <td className="p-3 border-r border-slate-800">
                   <span className={`inline-block transition ${orientation === 'angle' ? '-rotate-45' : orientation === 'vertical' ? 'writing-vertical' : ''}`}>
-                    Informatică
+                    {lang === 'en' ? 'Computer Science' : 'Informatică'}
                   </span>
                 </td>
                 <td className="p-3 border-r border-slate-800">
                   <span className={`inline-block transition ${orientation === 'angle' ? '-rotate-45' : orientation === 'vertical' ? 'writing-vertical' : ''}`}>
-                    Matematică
+                    {lang === 'en' ? 'Mathematics' : 'Matematică'}
                   </span>
                 </td>
                 {/* Column D: Demonstrating Wrap Text */}
@@ -234,7 +246,7 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
                   <span className={`inline-block transition ${
                     isWrapped ? 'whitespace-normal leading-tight text-teal-300' : 'whitespace-nowrap overflow-hidden text-ellipsis block text-slate-400'
                   }`}>
-                    Observații și recomandări pedagogice anuale
+                    {lang === 'en' ? 'Annual pedagogical observations and notes' : 'Observații și recomandări pedagogice anuale'}
                   </span>
                 </td>
               </tr>
@@ -246,7 +258,7 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
                 <td className="p-2.5 border-r border-slate-850 text-emerald-400 font-bold">10</td>
                 <td className="p-2.5 border-r border-slate-850 text-slate-300">9</td>
                 <td className="p-2.5 text-left pl-3 text-slate-400 text-[11px]">
-                  Olimpic la faza județeană de TIC
+                  {lang === 'en' ? 'County ICT Olympiad Contestant' : 'Olimpic la faza județeană de TIC'}
                 </td>
               </tr>
             </tbody>
@@ -257,9 +269,13 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
         <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 flex items-start gap-3 text-xs text-amber-200">
           <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <strong className="text-white font-bold">Avertisment critic din Manual (pag. 22):</strong>
+            <strong className="text-white font-bold">
+              {lang === 'en' ? 'Critical Warning from Textbook (p. 22):' : 'Avertisment critic din Manual (pag. 22):'}
+            </strong>
             <p className="leading-relaxed">
-              Dacă îmbini două sau mai multe celule care conțin deja date (de exemplu A1 conține „Elev” și B1 conține „Notă”), <strong>doar valoarea din celula din stânga-sus (A1) este păstrată</strong>! Conținutul celulelor din dreapta este șters definitiv.
+              {lang === 'en'
+                ? <>If you merge two or more cells that already contain data, <strong>only the upper-left cell value is preserved</strong>! Content in other cells is permanently discarded.</>
+                : <>Dacă îmbini două sau mai multe celule care conțin deja date (de exemplu A1 conține „Elev” și B1 conține „Notă”), <strong>doar valoarea din celula din stânga-sus (A1) este păstrată</strong>! Conținutul celulelor din dreapta este șters definitiv.</>}
             </p>
           </div>
         </div>
@@ -272,8 +288,12 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Îmbinare & Înfășurare Text</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a avansa</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Merge & Wrap Text' : 'Verificare Pedagogică: Îmbinare & Înfășurare Text'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Answer all 3 textbook questions correctly to advance' : 'Răspunde corect la cele 3 întrebări din manual pentru a avansa'}
+            </p>
           </div>
         </div>
 
@@ -281,17 +301,19 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Ce se întâmplă cu datele dacă îmbini mai multe celule care conțineau fiecare câte un text diferit?
+              {lang === 'en'
+                ? '1. What happens to existing data if you merge multiple cells that each contained different text?'
+                : '1. Ce se întâmplă cu datele dacă îmbini mai multe celule care conțineau fiecare câte un text diferit?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'topLeft', text: 'Se păstrează numai valoarea din celula din stânga-sus, restul datelor fiind șterse' },
-              { id: 'allConcatenated', text: 'Toate cuvintele se lipesc automat într-un singur text uriaș' },
-              { id: 'backupCloud', text: 'Datele sunt trimise pe e-mail dirigintelui' },
-              { id: 'duplicateSheet', text: 'Se deschide automat o copie nouă de fișier' },
+              { id: 'topLeft', text: lang === 'en' ? 'Only the value from the upper-left cell is kept; remaining data is discarded' : 'Se păstrează numai valoarea din celula din stânga-sus, restul datelor fiind șterse' },
+              { id: 'allConcatenated', text: lang === 'en' ? 'All words are automatically joined into one giant block of text' : 'Toate cuvintele se lipesc automat într-un singur text uriaș' },
+              { id: 'backupCloud', text: lang === 'en' ? 'Data is emailed to the homeroom teacher' : 'Datele sunt trimise pe e-mail dirigintelui' },
+              { id: 'duplicateSheet', text: lang === 'en' ? 'A new duplicate workbook file opens automatically' : 'Se deschide automat o copie nouă de fișier' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -311,11 +333,15 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
             ))}
           </div>
 
-          <QuestionHint hint="Amintește-ți de caseta de avertizare a programului Excel menționată la pagina 22 din manual." />
+          <QuestionHint
+            hintRo="Amintește-ți de caseta de avertizare a programului Excel menționată la pagina 22 din manual."
+            hintEn="Recall the Excel alert dialog mentioned on page 22 of the official textbook."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Comanda 'Merge & Center' păstrează exclusiv conținutul celulei din stânga-sus a domeniului selectat, avertizând utilizatorul că restul datelor vor fi eliminate."
+              explanationRo="Corect! Comanda 'Merge & Center' păstrează exclusiv conținutul celulei din stânga-sus a domeniului selectat, avertizând utilizatorul că restul datelor vor fi eliminate."
+              explanationEn="Correct! The 'Merge & Center' command retains only the upper-left cell's value and warns that other cell values will be discarded."
             />
           )}
         </div>
@@ -324,17 +350,19 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce comandă permite afișarea unui text lung pe mai multe rânduri în interiorul aceleiași celule, fără a mări lățimea coloanei?
+              {lang === 'en'
+                ? '2. Which command allows displaying long text on multiple lines within the same cell without widening the column?'
+                : '2. Ce comandă permite afișarea unui text lung pe mai multe rânduri în interiorul aceleiași celule, fără a mări lățimea coloanei?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'wrapText', text: 'Înfășurare text (Wrap Text)' },
-              { id: 'deleteText', text: 'Ștergere formatare (Clear Formats)' },
-              { id: 'zoom50', text: 'Micșorarea Zoom-ului la 10%' },
-              { id: 'saveAsPdf', text: 'Salvare ca fișier text .txt' },
+              { id: 'wrapText', text: lang === 'en' ? 'Wrap Text' : 'Înfășurare text (Wrap Text)' },
+              { id: 'deleteText', text: lang === 'en' ? 'Clear Formats' : 'Ștergere formatare (Clear Formats)' },
+              { id: 'zoom50', text: lang === 'en' ? 'Decreasing Zoom to 10%' : 'Micșorarea Zoom-ului la 10%' },
+              { id: 'saveAsPdf', text: lang === 'en' ? 'Save as plain .txt file' : 'Salvare ca fișier text .txt' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -354,11 +382,15 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
             ))}
           </div>
 
-          <QuestionHint hint="Comanda se găsește în grupul 'Aliniere' și se traduce literal prin înfășurarea/încadrarea textului." />
+          <QuestionHint
+            hintRo="Comanda se găsește în grupul 'Aliniere' și se traduce literal prin înfășurarea/încadrarea textului."
+            hintEn="The command is found in the 'Alignment' ribbon group and wraps words across multiple rows."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Wrap Text adaptează înălțimea rândului și distribuie cuvintele pe mai multe linii, asigurând lizibilitatea capetelor de tabel compacte."
+              explanationRo="Excelent! Wrap Text adaptează înălțimea rândului și distribuie cuvintele pe mai multe linii, asigurând lizibilitatea capetelor de tabel compacte."
+              explanationEn="Excellent! Wrap Text adjusts the row height to flow text across multiple lines, preserving compact column widths."
             />
           )}
         </div>
@@ -367,7 +399,9 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Ce combinație de taste introduce manual un rând nou în timp ce editezi textul în interiorul unei celule?
+              {lang === 'en'
+                ? '3. What keyboard shortcut inserts a manual line break while editing text inside a cell?'
+                : '3. Ce combinație de taste introduce manual un rând nou în timp ce editezi textul în interiorul unei celule?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
@@ -375,7 +409,7 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { id: 'altEnter', text: 'Alt + Enter' },
-              { id: 'enterSimple', text: 'Enter simplu (care doar trece la celula de dedesubt)' },
+              { id: 'enterSimple', text: lang === 'en' ? 'Simple Enter (which moves to the cell below)' : 'Enter simplu (care doar trece la celula de dedesubt)' },
               { id: 'ctrlEsc', text: 'Ctrl + Escape' },
               { id: 'shiftTab', text: 'Shift + Tab' },
             ].map((option) => (
@@ -397,11 +431,15 @@ export const C2Level2_MergeAndWrap: React.FC<C2Level2Props> = ({ onCompletePage 
             ))}
           </div>
 
-          <QuestionHint hint="Apăsarea tastei Enter normale validează celula și sare la rândul următor. Ai nevoie de o tastă modificatoare (Alt)." />
+          <QuestionHint
+            hintRo="Apăsarea tastei Enter normale validează celula și sare la rândul următor. Ai nevoie de o tastă modificatoare (Alt)."
+            hintEn="Normal Enter confirms the cell and moves down. You need a modifier key (Alt)."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Combinația Alt + Enter forțează o linie nouă (linebreak) în corpul celulei curente, fiind trucul preferat al redactorilor de foi de calcul."
+              explanationRo="Exact! Combinația Alt + Enter forțează o linie nouă (linebreak) în corpul celulei curente, fiind trucul preferat al redactorilor de foi de calcul."
+              explanationEn="Exactly! Alt + Enter creates an in-cell line break, a crucial productivity trick for clean spreadsheet tables."
             />
           )}
         </div>

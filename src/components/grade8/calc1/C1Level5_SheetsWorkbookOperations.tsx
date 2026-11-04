@@ -158,18 +158,20 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 16–17</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • pp. 16–17' : 'Manual Art Klett 2025 • Pag. 16–17'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <FolderArchive className="w-8 h-8 text-emerald-400" />
-              Nivelul 5: Gestionarea Foilor de Lucru & Operații pe Registru
+              {lang === 'en' ? 'Level 5: Worksheet Management & Workbook Operations' : 'Nivelul 5: Gestionarea Foilor de Lucru & Operații pe Registru'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Un registru de calcul conține mai multe foi (sheets). Învață să adaugi, să redenumești (ex: „Tabla cu 6”), să reordonezi prin glisare și să stăpânești scurtăturile oficiale Ctrl+S, Ctrl+N, Ctrl+P!
+              {lang === 'en'
+                ? 'A workbook contains multiple worksheets. Learn to add, rename, reorder via drag-and-drop, color-code tabs, and master the official shortcuts: Ctrl+S, Ctrl+N, and Ctrl+P!'
+                : 'Un registru de calcul conține mai multe foi (sheets). Învață să adaugi, să redenumești (ex: „Tabla cu 6”), să reordonezi prin glisare și să stăpânești scurtăturile oficiale Ctrl+S, Ctrl+N, Ctrl+P!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-emerald-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Pas Curent</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Current Step' : 'Pas Curent'}</div>
             <div className="text-2xl font-black text-emerald-400">5 / 7</div>
           </div>
         </div>
@@ -183,9 +185,13 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laborator: Operații pe Etichetele Foilor de Lucru</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Lab: Worksheet Tab Operations' : 'Laborator: Operații pe Etichetele Foilor de Lucru'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Adaugă foi noi, redenumește-le, schimbă culoarea etichetei și mută-le ordinea (Manual pag. 16)
+                {lang === 'en'
+                  ? 'Add worksheets, rename them, set tab colors, and reorder tabs (Textbook p. 16)'
+                  : 'Adaugă foi noi, redenumește-le, schimbă culoarea etichetei și mută-le ordinea (Manual pag. 16)'}
               </p>
             </div>
           </div>
@@ -196,15 +202,15 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
             className="px-3.5 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-emerald-500/20"
           >
             <Plus className="w-4 h-4" />
-            <span>Foaie Nouă (+)</span>
+            <span>{lang === 'en' ? 'New Sheet (+)' : 'Foaie Nouă (+)'}</span>
           </button>
         </div>
 
         {/* Live Sheet Tabs Bar */}
         <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-4">
           <div className="text-xs text-slate-400 font-mono flex items-center justify-between">
-            <span>Bara de etichete a registrului:</span>
-            <span className="text-emerald-400 font-bold">{sheets.length} foi în registru</span>
+            <span>{lang === 'en' ? 'Workbook Tab Bar:' : 'Bara de etichete a registrului:'}</span>
+            <span className="text-emerald-400 font-bold">{sheets.length} {lang === 'en' ? 'sheets in workbook' : 'foi în registru'}</span>
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
@@ -227,7 +233,7 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
                         type="button"
                         onClick={(e) => { e.stopPropagation(); handleStartRename(sheet.id, sheet.name); }}
                         className="p-1 hover:bg-slate-700 rounded text-slate-300 hover:text-emerald-300"
-                        title="Redenumește (Dublu-clic)"
+                        title={lang === 'en' ? 'Rename (Double-click)' : 'Redenumește (Dublu-clic)'}
                       >
                         <Edit2 className="w-3 h-3" />
                       </button>
@@ -236,7 +242,7 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
                         onClick={(e) => { e.stopPropagation(); handleMoveLeft(idx); }}
                         disabled={idx === 0}
                         className="p-0.5 hover:bg-slate-700 rounded text-slate-400 disabled:opacity-20"
-                        title="Mută la stânga"
+                        title={lang === 'en' ? 'Move Left' : 'Mută la stânga'}
                       >
                         ◀
                       </button>
@@ -245,7 +251,7 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
                         onClick={(e) => { e.stopPropagation(); handleMoveRight(idx); }}
                         disabled={idx === sheets.length - 1}
                         className="p-0.5 hover:bg-slate-700 rounded text-slate-400 disabled:opacity-20"
-                        title="Mută la dreapta"
+                        title={lang === 'en' ? 'Move Right' : 'Mută la dreapta'}
                       >
                         ▶
                       </button>
@@ -259,12 +265,14 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
           {/* Quick Rename Panel if active */}
           {isRenaming && (
             <div className="p-3 bg-slate-900 rounded-xl border border-emerald-500/40 flex flex-wrap items-center gap-3 animate-fadeIn">
-              <span className="text-xs text-emerald-300 font-bold">Redenumește Foaia Activă:</span>
+              <span className="text-xs text-emerald-300 font-bold">
+                {lang === 'en' ? 'Rename Active Sheet:' : 'Redenumește Foaia Activă:'}
+              </span>
               <input
                 type="text"
                 value={renameValue}
                 onChange={(e) => setRenameValue(e.target.value)}
-                placeholder="Ex: Tabla cu 6"
+                placeholder={lang === 'en' ? 'e.g. Times Table 6' : 'Ex: Tabla cu 6'}
                 className="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-white font-mono focus:border-emerald-400 focus:outline-none"
               />
               <button
@@ -272,14 +280,14 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
                 onClick={handleSaveRename}
                 className="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 text-xs font-bold hover:bg-emerald-400 cursor-pointer"
               >
-                Salvează Numele
+                {lang === 'en' ? 'Save Name' : 'Salvează Numele'}
               </button>
               <button
                 type="button"
-                onClick={() => setRenameValue('Tabla cu 6')}
+                onClick={() => setRenameValue(lang === 'en' ? 'Times Table 6' : 'Tabla cu 6')}
                 className="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs hover:text-white cursor-pointer"
               >
-                Folosește „Tabla cu 6” (Exemplu Manual)
+                {lang === 'en' ? 'Use "Times Table 6" (Textbook Example)' : 'Folosește „Tabla cu 6” (Exemplu Manual)'}
               </button>
             </div>
           )}
@@ -288,14 +296,14 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
           <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-800 text-xs">
             <span className="text-slate-400 flex items-center gap-1.5">
               <Palette className="w-3.5 h-3.5 text-amber-400" />
-              Culoare etichetă filă activă:
+              {lang === 'en' ? 'Active tab color:' : 'Culoare etichetă filă activă:'}
             </span>
             {[
-              { label: 'Verde Smarald', class: 'border-emerald-500', bg: 'bg-emerald-500' },
-              { label: 'Albastru Cyan', class: 'border-cyan-500', bg: 'bg-cyan-500' },
-              { label: 'Violet', class: 'border-purple-500', bg: 'bg-purple-500' },
-              { label: 'Chihlimbar', class: 'border-amber-500', bg: 'bg-amber-500' },
-              { label: 'Trandafiriu', class: 'border-rose-500', bg: 'bg-rose-500' },
+              { label: lang === 'en' ? 'Emerald Green' : 'Verde Smarald', class: 'border-emerald-500', bg: 'bg-emerald-500' },
+              { label: lang === 'en' ? 'Cyan Blue' : 'Albastru Cyan', class: 'border-cyan-500', bg: 'bg-cyan-500' },
+              { label: lang === 'en' ? 'Purple' : 'Violet', class: 'border-purple-500', bg: 'bg-purple-500' },
+              { label: lang === 'en' ? 'Amber' : 'Chihlimbar', class: 'border-amber-500', bg: 'bg-amber-500' },
+              { label: lang === 'en' ? 'Rose' : 'Trandafiriu', class: 'border-rose-500', bg: 'bg-rose-500' },
             ].map(col => (
               <button
                 key={col.label}
@@ -318,21 +326,55 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
             <Keyboard className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Comenzi Rapide Esențiale pe Tastatură</h2>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Essential Keyboard Shortcuts' : 'Comenzi Rapide Esențiale pe Tastatură'}
+            </h2>
             <p className="text-xs text-slate-400">
-              Scurtăturile oficiale pe care fiecare elev de clasa a VIII-a trebuie să le cunoască pe de rost
+              {lang === 'en'
+                ? 'Standard shortcuts every computer science student should know by heart'
+                : 'Scurtăturile oficiale pe care fiecare elev de clasa a VIII-a trebuie să le cunoască pe de rost'}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           {[
-            { key: 'Ctrl + S', name: 'Salvare (Save)', desc: 'Salvează modificările pe disc sau sincronizează cu OneDrive/Cloud', icon: Save },
-            { key: 'Ctrl + N', name: 'Registru Nou (New)', desc: 'Deschide imediat un registru de calcul tabelar complet gol', icon: Plus },
-            { key: 'Ctrl + O', name: 'Deschidere (Open)', desc: 'Afișează fereastra de navigare pentru deschiderea unui fișier .xlsx', icon: FolderArchive },
-            { key: 'Ctrl + P', name: 'Imprimare (Print)', desc: 'Previzualizează foaia și trimite tabelul spre imprimantă', icon: Printer },
-            { key: 'Ctrl + Z', name: 'Anulare (Undo)', desc: 'Anulează ultima modificare greșită sau ștergere accidentală', icon: Command },
-            { key: 'Shift + F11', name: 'Foaie Nouă', desc: 'Comandă rapidă pentru inserarea instantanee a unei foi noi', icon: Sparkles },
+            {
+              key: 'Ctrl + S',
+              name: lang === 'en' ? 'Save' : 'Salvare (Save)',
+              desc: lang === 'en' ? 'Saves changes to disk or syncs with Cloud/OneDrive' : 'Salvează modificările pe disc sau sincronizează cu OneDrive/Cloud',
+              icon: Save
+            },
+            {
+              key: 'Ctrl + N',
+              name: lang === 'en' ? 'New Workbook' : 'Registru Nou (New)',
+              desc: lang === 'en' ? 'Instantly creates a fresh, empty spreadsheet workbook' : 'Deschide imediat un registru de calcul tabelar complet gol',
+              icon: Plus
+            },
+            {
+              key: 'Ctrl + O',
+              name: lang === 'en' ? 'Open' : 'Deschidere (Open)',
+              desc: lang === 'en' ? 'Brings up file navigation dialog to open an existing .xlsx file' : 'Afișează fereastra de navigare pentru deschiderea unui fișier .xlsx',
+              icon: FolderArchive
+            },
+            {
+              key: 'Ctrl + P',
+              name: lang === 'en' ? 'Print' : 'Imprimare (Print)',
+              desc: lang === 'en' ? 'Prepares preview and sends worksheet data to the printer' : 'Previzualizează foaia și trimite tabelul spre imprimantă',
+              icon: Printer
+            },
+            {
+              key: 'Ctrl + Z',
+              name: lang === 'en' ? 'Undo' : 'Anulare (Undo)',
+              desc: lang === 'en' ? 'Reverts last inadvertent mistake or accidental deletion' : 'Anulează ultima modificare greșită sau ștergere accidentală',
+              icon: Command
+            },
+            {
+              key: 'Shift + F11',
+              name: lang === 'en' ? 'New Sheet' : 'Foaie Nouă',
+              desc: lang === 'en' ? 'Fast keyboard shortcut to insert a new worksheet instantly' : 'Comandă rapidă pentru inserarea instantanee a unei foi noi',
+              icon: Sparkles
+            },
           ].map((item) => {
             const isPressed = activeShortcut === item.key;
             return (
@@ -366,8 +408,12 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Operații pe Registru</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca laboratorul practic</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Workbook Operations' : 'Verificare Pedagogică: Operații pe Registru'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Answer all 3 textbook questions correctly to unlock the lab' : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca laboratorul practic'}
+            </p>
           </div>
         </div>
 
@@ -375,17 +421,19 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Cum se poate redenumi cel mai rapid o foaie de calcul (de exemplu din „Foaie1” în „Tabla cu 6”)?
+              {lang === 'en'
+                ? '1. What is the quickest way to rename a worksheet (e.g., from "Sheet1" to "Times Table 6")?'
+                : '1. Cum se poate redenumi cel mai rapid o foaie de calcul (de exemplu din „Foaie1” în „Tabla cu 6”)?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'doubleClick', text: 'Dublu-clic pe eticheta foii sau clic-dreapta și alegerea comenzii Redenumire (Rename)' },
-              { id: 'restartPC', text: 'Repornirea calculatorului în modul de depanare' },
-              { id: 'deleteMonitor', text: 'Lipirea unei etichete de hârtie cu scotch pe ecranul monitorului' },
-              { id: 'capsLock', text: 'Apăsarea tastei Caps Lock de 10 ori consecutiv' },
+              { id: 'doubleClick', text: lang === 'en' ? 'Double-click the sheet tab, or right-click and choose Rename' : 'Dublu-clic pe eticheta foii sau clic-dreapta și alegerea comenzii Redenumire (Rename)' },
+              { id: 'restartPC', text: lang === 'en' ? 'Restarting the computer in safe mode' : 'Repornirea calculatorului în modul de depanare' },
+              { id: 'deleteMonitor', text: lang === 'en' ? 'Sticking a paper label on the physical screen' : 'Lipirea unei etichete de hârtie cu scotch pe ecranul monitorului' },
+              { id: 'capsLock', text: lang === 'en' ? 'Pressing Caps Lock 10 consecutive times' : 'Apăsarea tastei Caps Lock de 10 ori consecutiv' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -405,11 +453,13 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
             ))}
           </div>
 
-          <QuestionHint hint="Amintește-ți de simulatorul de mai sus: făceai clic pe butonul creion sau dublu-clic pe denumire." />
+          <QuestionHint hint={lang === 'en' ? 'Recall the simulator above: clicking the pencil icon or double-clicking the title allows inline editing.' : 'Amintește-ți de simulatorul de mai sus: făceai clic pe butonul creion sau dublu-clic pe denumire.'} />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Dublu-clic pe eticheta din bara inferioară transformă numele în câmp editabil, permițând tastarea noii denumiri."
+              explanation={lang === 'en'
+                ? 'Correct! Double-clicking the tab in the bottom bar switches the name to an editable text field, allowing direct typing.'
+                : 'Corect! Dublu-clic pe eticheta din bara inferioară transformă numele în câmp editabil, permițând tastarea noii denumiri.'}
             />
           )}
         </div>
@@ -418,16 +468,18 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce combinație rapidă de taste este recomandată pentru salvarea periodică a registrului de lucru?
+              {lang === 'en'
+                ? '2. Which keyboard shortcut is universally recommended for periodically saving your workbook?'
+                : '2. Ce combinație rapidă de taste este recomandată pentru salvarea periodică a registrului de lucru?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'ctrlS', text: 'Ctrl + S (Salvare / Save)' },
-              { id: 'altF4', text: 'Alt + F4 (Închidere bruscă a programului)' },
-              { id: 'esc', text: 'Tasta Escape repetată' },
+              { id: 'ctrlS', text: lang === 'en' ? 'Ctrl + S (Save)' : 'Ctrl + S (Salvare / Save)' },
+              { id: 'altF4', text: lang === 'en' ? 'Alt + F4 (Force Close Application)' : 'Alt + F4 (Închidere bruscă a programului)' },
+              { id: 'esc', text: lang === 'en' ? 'Escape key repeated' : 'Tasta Escape repetată' },
               { id: 'ctrlAltDel', text: 'Ctrl + Alt + Delete' },
             ].map((option) => (
               <button
@@ -448,11 +500,13 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
             ))}
           </div>
 
-          <QuestionHint hint="Litera S vine de la verbul 'to Save' (a salva)." />
+          <QuestionHint hint={lang === 'en' ? 'The letter S represents the verb "to Save".' : 'Litera S vine de la verbul \'to Save\' (a salva).'} />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Comanda rapidă Ctrl+S este reflexul digital fundamental al oricărui utilizator de calculator pentru a evita pierderea muncii efectuate."
+              explanation={lang === 'en'
+                ? 'Excellent! Ctrl+S is the fundamental digital habit for any computer user to prevent work loss.'
+                : 'Excelent! Comanda rapidă Ctrl+S este reflexul digital fundamental al oricărui utilizator de calculator pentru a evita pierderea muncii efectuate.'}
             />
           )}
         </div>
@@ -461,17 +515,19 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Care este extensia standard de fișier asociată registrelor moderne de calcul Microsoft Excel?
+              {lang === 'en'
+                ? '3. What is the standard file extension associated with modern Microsoft Excel workbooks?'
+                : '3. Care este extensia standard de fișier asociată registrelor moderne de calcul Microsoft Excel?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'xlsx', text: '.xlsx (sau .xls în versiunile vechi)' },
-              { id: 'mp3', text: '.mp3 (fișier audio de muzică)' },
-              { id: 'docx', text: '.docx (document de procesare text Word)' },
-              { id: 'pptx', text: '.pptx (prezentare PowerPoint)' },
+              { id: 'xlsx', text: lang === 'en' ? '.xlsx (or legacy .xls)' : '.xlsx (sau .xls în versiunile vechi)' },
+              { id: 'mp3', text: lang === 'en' ? '.mp3 (audio music file)' : '.mp3 (fișier audio de muzică)' },
+              { id: 'docx', text: lang === 'en' ? '.docx (Word document)' : '.docx (document de procesare text Word)' },
+              { id: 'pptx', text: lang === 'en' ? '.pptx (PowerPoint presentation)' : '.pptx (prezentare PowerPoint)' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -491,11 +547,13 @@ export const C1Level5_SheetsWorkbookOperations: React.FC<C1Level5Props> = ({ onC
             ))}
           </div>
 
-          <QuestionHint hint="Numele vine de la XML Spreadsheet, având literele XL și un X la final." />
+          <QuestionHint hint={lang === 'en' ? 'The name originates from XML Spreadsheet, with the letters XL ending in X.' : 'Numele vine de la XML Spreadsheet, având literele XL și un X la final.'} />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Extensia .xlsx este formatul deschis bazat pe XML utilizat de Excel începând cu versiunea 2007 și recunoscut de toate suitele de birotică moderne."
+              explanation={lang === 'en'
+                ? 'Exact! The .xlsx extension is the modern open XML-based format used by Excel since 2007 and supported across all modern productivity software.'
+                : 'Exact! Extensia .xlsx este formatul deschis bazat pe XML utilizat de Excel începând cu versiunea 2007 și recunoscut de toate suitele de birotică moderne.'}
             />
           )}
         </div>

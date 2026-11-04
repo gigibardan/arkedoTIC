@@ -55,14 +55,17 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
   // Active cell in the worksheet for user typing
   const [activeCellCoord, setActiveCellCoord] = useState<string>('A1');
 
-  // Step 1: Sheet renamed to 'Tabla cu 6'
-  const isSheetRenamed = sheetName.trim().toLowerCase() === 'tabla cu 6';
+  // Step 1: Sheet renamed to 'Tabla cu 6' or 'Times Table 6'
+  const isSheetRenamed = (
+    sheetName.trim().toLowerCase() === 'tabla cu 6' ||
+    sheetName.trim().toLowerCase() === 'times table 6'
+  );
 
-  // Step 2: Headers match 'Factor 1', 'Factor 2', 'Produs'
+  // Step 2: Headers match 'Factor 1', 'Factor 2', 'Produs' / 'Product'
   const isHeadersSet = (
     headers.a1.trim().toLowerCase().includes('factor') &&
     headers.b1.trim().toLowerCase().includes('factor') &&
-    headers.c1.trim().toLowerCase().includes('produs')
+    (headers.c1.trim().toLowerCase().includes('produs') || headers.c1.trim().toLowerCase().includes('product'))
   );
 
   // Step 3: Factors 1..10 in A and 6 in B
@@ -103,7 +106,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
     setHeaders({
       a1: 'Factor 1',
       b1: 'Factor 2',
-      c1: 'Produs'
+      c1: lang === 'en' ? 'Product' : 'Produs'
     });
   };
 
@@ -138,18 +141,20 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 18 (Fișă de Laborator)</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • p. 18 (Lab Sheet)' : 'Manual Art Klett 2025 • Pag. 18 (Fișă de Laborator)'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Calculator className="w-8 h-8 text-emerald-400" />
-              Nivelul 6: Atelier Practic Aplicativ — „Tabla Înmulțirii cu 6”
+              {lang === 'en' ? 'Level 6: Applied Lab Workshop — "Times Table 6"' : 'Nivelul 6: Atelier Practic Aplicativ — „Tabla Înmulțirii cu 6”'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Creează și formatează cap-coadă foaia de calcul cerută la pagina 18 din manual: redenumire foaie, antete de coloane, multiplicare cu formule și stilizare tabelară profesională!
+              {lang === 'en'
+                ? 'Create and format the full spreadsheet required on page 18 of the textbook: rename sheet, column headers, multiplication formulas, and professional table styling!'
+                : 'Creează și formatează cap-coadă foaia de calcul cerută la pagina 18 din manual: redenumire foaie, antete de coloane, multiplicare cu formule și stilizare tabelară profesională!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-emerald-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Pas Curent</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Current Step' : 'Pas Curent'}</div>
             <div className="text-2xl font-black text-emerald-400">6 / 7</div>
           </div>
         </div>
@@ -160,12 +165,14 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
         <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-800 pb-4">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-400" />
-            <h2 className="text-base font-bold text-white">Cerințe de Realizat din Fișa de Laborator</h2>
+            <h2 className="text-base font-bold text-white">
+              {lang === 'en' ? 'Lab Sheet Target Objectives' : 'Cerințe de Realizat din Fișa de Laborator'}
+            </h2>
           </div>
           <div className="flex items-center gap-2 bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 font-mono text-xs">
-            <span className="text-slate-400">Progres Atelier:</span>
+            <span className="text-slate-400">{lang === 'en' ? 'Lab Progress:' : 'Progres Atelier:'}</span>
             <span className="text-emerald-400 font-black">{totalScore}%</span>
-            <span className="text-slate-500">({criteriaPassed}/5 obiective)</span>
+            <span className="text-slate-500">({criteriaPassed}/5 {lang === 'en' ? 'objectives' : 'obiective'})</span>
           </div>
         </div>
 
@@ -174,7 +181,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             isSheetRenamed ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">1.</span>
-            <span>Redenumește în „Tabla cu 6”</span>
+            <span>{lang === 'en' ? 'Rename sheet to "Times Table 6"' : 'Redenumește în „Tabla cu 6”'}</span>
             {isSheetRenamed && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -182,7 +189,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             isHeadersSet ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">2.</span>
-            <span>Antet: Factor 1, Factor 2, Produs</span>
+            <span>{lang === 'en' ? 'Headers: Factor 1, Factor 2, Product' : 'Antet: Factor 1, Factor 2, Produs'}</span>
             {isHeadersSet && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -190,7 +197,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             isFactorsFilled ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">3.</span>
-            <span>Completare 1..10 și factorul 6</span>
+            <span>{lang === 'en' ? 'Fill series 1..10 and factor 6' : 'Completare 1..10 și factorul 6'}</span>
             {isFactorsFilled && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -198,7 +205,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             isFormulasComplete ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">4.</span>
-            <span>Formule înmulțire (=A2*B2..)</span>
+            <span>{lang === 'en' ? 'Multiply formulas (=A2*B2..)' : 'Formule înmulțire (=A2*B2..)'}</span>
             {isFormulasComplete && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -206,7 +213,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             isFormatted ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">5.</span>
-            <span>Stilizare: Bold, Fill & All Borders</span>
+            <span>{lang === 'en' ? 'Styling: Bold, Fill & All Borders' : 'Stilizare: Bold, Fill & All Borders'}</span>
             {isFormatted && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
         </div>
@@ -217,7 +224,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
         {/* Studio Ribbon Quick Helper Tools */}
         <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 text-slate-300 font-semibold">
-            <span>Asistent de Laborator:</span>
+            <span>{lang === 'en' ? 'Lab Assistant:' : 'Asistent de Laborator:'}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
@@ -226,28 +233,28 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
               onClick={handleAutoFillHeaders}
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium cursor-pointer"
             >
-              ✍️ Completează Antetul
+              {lang === 'en' ? '✍️ Fill Headers' : '✍️ Completează Antetul'}
             </button>
             <button
               type="button"
               onClick={handleAutoFillFactors}
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium cursor-pointer"
             >
-              🔢 Trage Seria 1..10 (Fill Handle)
+              {lang === 'en' ? '🔢 Drag Series 1..10 (Fill Handle)' : '🔢 Trage Seria 1..10 (Fill Handle)'}
             </button>
             <button
               type="button"
               onClick={handleApplyFormulas}
               className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 font-bold cursor-pointer"
             >
-              ⚡ Calculează Formulele (=A2*B2)
+              {lang === 'en' ? '⚡ Calculate Formulas (=A2*B2)' : '⚡ Calculează Formulele (=A2*B2)'}
             </button>
             <button
               type="button"
               onClick={handleApplyFormatting}
               className="px-3 py-1.5 rounded-xl bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 font-bold cursor-pointer"
             >
-              🎨 Formatează Tabelul (Bold & Fill)
+              {lang === 'en' ? '🎨 Format Table (Bold & Fill)' : '🎨 Formatează Tabelul (Bold & Fill)'}
             </button>
           </div>
         </div>
@@ -259,7 +266,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
           </div>
           <div className="text-slate-500 font-bold">fx</div>
           <div className="flex-1 px-3 py-1 rounded bg-slate-900 border border-slate-700 text-slate-300">
-            {activeCellCoord === 'C2' ? '=A2*B2' : activeCellCoord === 'A1' ? headers.a1 : activeCellCoord === 'B1' ? headers.b1 : activeCellCoord === 'C1' ? headers.c1 : 'Selectează o celulă'}
+            {activeCellCoord === 'C2' ? '=A2*B2' : activeCellCoord === 'A1' ? headers.a1 : activeCellCoord === 'B1' ? headers.b1 : activeCellCoord === 'C1' ? headers.c1 : (lang === 'en' ? 'Select a cell' : 'Selectează o celulă')}
           </div>
         </div>
 
@@ -269,9 +276,9 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             <thead>
               <tr className="bg-slate-900 text-slate-400 font-bold border-b border-slate-800">
                 <th className="p-2 border-r border-slate-800 w-12 bg-slate-850">◢</th>
-                <th className="p-2 border-r border-slate-800 w-1/3">Coloana A</th>
-                <th className="p-2 border-r border-slate-800 w-1/3">Coloana B</th>
-                <th className="p-2 w-1/3">Coloana C</th>
+                <th className="p-2 border-r border-slate-800 w-1/3">{lang === 'en' ? 'Column A' : 'Coloana A'}</th>
+                <th className="p-2 border-r border-slate-800 w-1/3">{lang === 'en' ? 'Column B' : 'Coloana B'}</th>
+                <th className="p-2 w-1/3">{lang === 'en' ? 'Column C' : 'Coloana C'}</th>
               </tr>
             </thead>
             <tbody>
@@ -288,7 +295,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
                     type="text"
                     value={headers.a1}
                     onChange={(e) => setHeaders(prev => ({ ...prev, a1: e.target.value }))}
-                    placeholder="Tastați: Factor 1"
+                    placeholder={lang === 'en' ? 'Type: Factor 1' : 'Tastați: Factor 1'}
                     className="w-full text-center bg-transparent border-none focus:outline-none placeholder:text-slate-600"
                   />
                 </td>
@@ -300,7 +307,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
                     type="text"
                     value={headers.b1}
                     onChange={(e) => setHeaders(prev => ({ ...prev, b1: e.target.value }))}
-                    placeholder="Tastați: Factor 2"
+                    placeholder={lang === 'en' ? 'Type: Factor 2' : 'Tastați: Factor 2'}
                     className="w-full text-center bg-transparent border-none focus:outline-none placeholder:text-slate-600"
                   />
                 </td>
@@ -312,7 +319,7 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
                     type="text"
                     value={headers.c1}
                     onChange={(e) => setHeaders(prev => ({ ...prev, c1: e.target.value }))}
-                    placeholder="Tastați: Produs"
+                    placeholder={lang === 'en' ? 'Type: Product' : 'Tastați: Produs'}
                     className="w-full text-center bg-transparent border-none focus:outline-none placeholder:text-slate-600 text-emerald-300 font-bold"
                   />
                 </td>
@@ -367,12 +374,12 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
         {/* Sheet Tabs Bar with Editable Tab Name */}
         <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between text-xs font-mono">
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">Nume Etichetă Foaie:</span>
+            <span className="text-slate-400">{lang === 'en' ? 'Sheet Tab Name:' : 'Nume Etichetă Foaie:'}</span>
             <input
               type="text"
               value={sheetName}
               onChange={(e) => setSheetName(e.target.value)}
-              placeholder="Foaie1"
+              placeholder={lang === 'en' ? 'Sheet1' : 'Foaie1'}
               className={`px-3 py-1 rounded-lg border font-bold text-xs focus:outline-none ${
                 isSheetRenamed
                   ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
@@ -382,15 +389,15 @@ export const C1Level6_TableLabMultiplication: React.FC<C1Level6Props> = ({ onCom
             {!isSheetRenamed && (
               <button
                 type="button"
-                onClick={() => setSheetName('Tabla cu 6')}
+                onClick={() => setSheetName(lang === 'en' ? 'Times Table 6' : 'Tabla cu 6')}
                 className="text-[11px] text-amber-300 underline hover:text-amber-200"
               >
-                Setează „Tabla cu 6”
+                {lang === 'en' ? 'Set "Times Table 6"' : 'Setează „Tabla cu 6”'}
               </button>
             )}
           </div>
           <div className="text-slate-500 text-[11px] hidden sm:inline">
-            Fișa Pag. 18 • Registru1.xlsx
+            {lang === 'en' ? 'Lab Sheet p. 18 • Book1.xlsx' : 'Fișa Pag. 18 • Registru1.xlsx'}
           </div>
         </div>
       </div>

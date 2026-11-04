@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Globe
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
@@ -27,26 +28,24 @@ interface W1Level2Props {
   onPrev?: () => void;
 }
 
-interface SkeletonStep {
-  id: string;
-  tag: string;
-  category: 'doctype' | 'root' | 'head' | 'body';
-  description: string;
-  placed: boolean;
-}
-
 export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
   onCompletePage,
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
+
   // Skeleton assembly state
   const [assembledTags, setAssembledTags] = useState<string[]>([
     '<!DOCTYPE html>'
   ]);
 
-  const [pageTitle, setPageTitle] = useState('Proiectul Meu Web');
-  const [bodyText, setBodyText] = useState('Salut, lume! Aceasta este prima mea pagină HTML5.');
+  const [pageTitle, setPageTitle] = useState(lang === 'en' ? 'My Web Project' : 'Proiectul Meu Web');
+  const [bodyText, setBodyText] = useState(
+    lang === 'en'
+      ? 'Hello, world! This is my first HTML5 page.'
+      : 'Salut, lume! Aceasta este prima mea pagină HTML5.'
+  );
 
   // Reflection cooldown hook (5s anti-spam)
   const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
@@ -54,14 +53,46 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
   const [quizSubmitted, setQuizSubmitted] = useState<{ [qId: string]: boolean }>({});
 
   const requiredPieces = [
-    { tag: '<html lang="ro">', desc: 'Elementul rădăcină (Root) care cuprinde întreaga pagină' },
-    { tag: '<head>', desc: 'Zona tehnică de metadate invizibile direct pe pagină' },
-    { tag: `<title>${pageTitle}</title>`, desc: 'Titlul afișat pe fila browserului' },
-    { tag: '</head>', desc: 'Închiderea zonei tehnice' },
-    { tag: '<body>', desc: 'Începutul conținutului vizual al paginii' },
-    { tag: `<h1>${bodyText}</h1>`, desc: 'Titlul principal vizibil în corpul paginii' },
-    { tag: '</body>', desc: 'Închiderea corpului paginii' },
-    { tag: '</html>', desc: 'Închiderea documentului HTML' }
+    {
+      tag: `<html lang="${lang === 'en' ? 'en' : 'ro'}">`,
+      descRo: 'Elementul rădăcină (Root) care cuprinde întreaga pagină',
+      descEn: 'The root element wrapping the entire web page'
+    },
+    {
+      tag: '<head>',
+      descRo: 'Zona tehnică de metadate invizibile direct pe pagină',
+      descEn: 'The technical metadata zone invisible directly on the rendered page'
+    },
+    {
+      tag: `<title>${pageTitle}</title>`,
+      descRo: 'Titlul afișat pe fila browserului',
+      descEn: 'The title displayed on the browser tab'
+    },
+    {
+      tag: '</head>',
+      descRo: 'Închiderea zonei tehnice',
+      descEn: 'Closing of the technical head zone'
+    },
+    {
+      tag: '<body>',
+      descRo: 'Începutul conținutului vizual al paginii',
+      descEn: 'Opening tag of the page visual body content'
+    },
+    {
+      tag: `<h1>${bodyText}</h1>`,
+      descRo: 'Titlul principal vizibil în corpul paginii',
+      descEn: 'Primary headline visible in the body'
+    },
+    {
+      tag: '</body>',
+      descRo: 'Închiderea corpului paginii',
+      descEn: 'Closing of the visual body'
+    },
+    {
+      tag: '</html>',
+      descRo: 'Închiderea documentului HTML',
+      descEn: 'Closing of the root HTML document'
+    }
   ];
 
   const handleAddNextPiece = () => {
@@ -104,20 +135,28 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 38–39</span>
+              <span>{lang === 'en' ? 'Art Klett Manual 2025 • Pages 38–39' : 'Manual Art Klett 2025 • Pag. 38–39'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Code2 className="w-8 h-8 text-sky-400" />
-              Nivelul 2: Scheletul Canonic al Documentului HTML5
+              {lang === 'en'
+                ? 'Level 2: Canonical Skeleton of an HTML5 Document'
+                : 'Nivelul 2: Scheletul Canonic al Documentului HTML5'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Fiecare pagină de pe glob respectă aceeași structură fundamentală: declarația DOCTYPE, elementul rădăcină html, antetul tehnic head și corpul vizual body.
+              {lang === 'en'
+                ? 'Every web page on Earth adheres to the exact same foundational structure: DOCTYPE declaration, root html element, technical head metadata, and visual body content.'
+                : 'Fiecare pagină de pe glob respectă aceeași structură fundamentală: declarația DOCTYPE, elementul rădăcină html, antetul tehnic head și corpul vizual body.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-sky-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Progres Schelet</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">
+              {lang === 'en' ? 'Skeleton Progress' : 'Progres Schelet'}
+            </div>
             <div className="text-2xl font-black text-sky-400">{assembledTags.length}/{requiredPieces.length + 1}</div>
-            <div className="text-[11px] text-slate-400">Etichete Asamblate</div>
+            <div className="text-[11px] text-slate-400">
+              {lang === 'en' ? 'Tags Assembled' : 'Etichete Asamblate'}
+            </div>
           </div>
         </div>
       </div>
@@ -130,8 +169,16 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
               <Terminal className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Atelierul de Construcție HTML5 (Split-Screen)</h2>
-              <p className="text-xs text-slate-400">Asamblează scheletul canonic și observă randarea live în browser</p>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'HTML5 Construction Studio (Split-Screen)'
+                  : 'Atelierul de Construcție HTML5 (Split-Screen)'}
+              </h2>
+              <p className="text-xs text-slate-400">
+                {lang === 'en'
+                  ? 'Assemble the canonical skeleton and observe live rendering in the simulated browser'
+                  : 'Asamblează scheletul canonic și observă randarea live în browser'}
+              </p>
             </div>
           </div>
 
@@ -139,21 +186,22 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
             {!isSkeletonComplete ? (
               <button
                 onClick={handleAddNextPiece}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg flex items-center gap-2"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg flex items-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-sky-300" />
-                Adaugă Eticheta Următoare
+                {lang === 'en' ? 'Add Next Tag' : 'Adaugă Eticheta Următoare'}
               </button>
             ) : (
               <span className="text-xs font-bold text-emerald-400 bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-500/30 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Schelet HTML5 Valid & Complet
+                <CheckCircle2 className="w-4 h-4" />
+                {lang === 'en' ? 'Valid & Complete HTML5 Skeleton' : 'Schelet HTML5 Valid & Complet'}
               </span>
             )}
             <button
               onClick={handleResetSkeleton}
-              className="px-3 py-2 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-800 text-xs text-slate-400"
+              className="px-3 py-2 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-800 text-xs text-slate-400 cursor-pointer"
             >
-              Reia
+              {lang === 'en' ? 'Reset' : 'Reia'}
             </button>
           </div>
         </div>
@@ -172,7 +220,6 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
             <div className="space-y-1 text-slate-300 min-h-[220px]">
               {assembledTags.map((line, idx) => {
                 const isDoctype = line.includes('!DOCTYPE');
-                const isClosing = line.startsWith('</');
                 const isHead = line.includes('head') || line.includes('title');
                 const isBody = line.includes('body') || line.includes('h1');
 
@@ -197,7 +244,9 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
 
               {!isSkeletonComplete && (
                 <div className="text-slate-600 italic text-[11px] pt-2 pl-7 animate-pulse">
-                  // Apasă „Adaugă Eticheta Următoare” pentru pasul următor...
+                  {lang === 'en'
+                    ? '// Click "Add Next Tag" for the next structural element...'
+                    : '// Apasă „Adaugă Eticheta Următoare” pentru pasul următor...'}
                 </div>
               )}
             </div>
@@ -214,7 +263,11 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
               </div>
               <div className="bg-slate-950 px-3 py-1 rounded-md text-[11px] font-mono text-slate-300 flex items-center gap-2 max-w-[200px] truncate border border-slate-800">
                 <Globe className="w-3 h-3 text-sky-400 shrink-0" />
-                <span className="truncate">{assembledTags.some(t => t.includes('title')) ? pageTitle : 'Fără Titlu (Untitled)'}</span>
+                <span className="truncate">
+                  {assembledTags.some(t => t.includes('title'))
+                    ? pageTitle
+                    : (lang === 'en' ? 'Untitled Page' : 'Fără Titlu (Untitled)')}
+                </span>
               </div>
               <span className="text-[10px] text-slate-500 font-mono">127.0.0.1</span>
             </div>
@@ -227,12 +280,16 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
                     {bodyText}
                   </h1>
                   <p className="text-xs text-slate-600">
-                    Acesta este conținutul vizual randat de motorul browserului din eticheta <code>&lt;body&gt;</code>.
+                    {lang === 'en'
+                      ? 'This is the visual content rendered by the browser engine from inside the <body> tag.'
+                      : 'Acesta este conținutul vizual randat de motorul browserului din eticheta <body>.'}
                   </p>
                 </div>
               ) : (
                 <div className="text-center text-slate-400 text-xs italic">
-                  Corpul paginii &lt;body&gt; este încă gol sau neasamblat.
+                  {lang === 'en'
+                    ? 'The <body> section is still empty or unmounted.'
+                    : 'Corpul paginii <body> este încă gol sau neasamblat.'}
                 </div>
               )}
             </div>
@@ -244,7 +301,9 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
           <div className="grid sm:grid-cols-2 gap-4 pt-2">
             <div>
               <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-                Modifică titlul din &lt;title&gt; (Bara de file a browserului):
+                {lang === 'en'
+                  ? 'Edit title in <title> (Browser tab bar):'
+                  : 'Modifică titlul din <title> (Bara de file a browserului):'}
               </label>
               <input
                 type="text"
@@ -255,7 +314,9 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
             </div>
             <div>
               <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-                Modifică titlul din &lt;h1&gt; (Corpul vizibil al paginii):
+                {lang === 'en'
+                  ? 'Edit text in <h1> (Visible page body):'
+                  : 'Modifică titlul din <h1> (Corpul vizibil al paginii):'}
               </label>
               <input
                 type="text"
@@ -275,22 +336,45 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Reflecție Pedagogică: Ierarhia și Rolul Etichetelor Fundamentale</h2>
-            <p className="text-xs text-slate-400">Manual Art Klett pag. 38–39</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Pedagogical Reflection: Hierarchy & Role of Fundamental Tags'
+                : 'Reflecție Pedagogică: Ierarhia și Rolul Etichetelor Fundamentale'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Art Klett Manual pages 38–39' : 'Manual Art Klett pag. 38–39'}
+            </p>
           </div>
         </div>
 
         {/* Question 1 */}
         <div className="space-y-3">
           <div className="text-sm font-semibold text-slate-200">
-            1. Unde este afișat textul cuprins între etichetele pereche <code className="text-sky-300 font-mono">&lt;title&gt;...&lt;/title&gt;</code>?
+            {lang === 'en'
+              ? '1. Where is the text enclosed between paired <title>...</title> tags displayed?'
+              : <>1. Unde este afișat textul cuprins între etichetele pereche <code className="text-sky-300 font-mono">&lt;title&gt;...&lt;/title&gt;</code>?</>}
           </div>
-          <QuestionHint hint="Verifică antetul ferestrei browserului și fila activă de sus." />
+          <QuestionHint
+            hintRo="Verifică antetul ferestrei browserului și fila activă de sus."
+            hintEn="Check the browser window header and active top tab."
+          />
           <div className="space-y-2">
             {[
-              { text: 'Pe bara de titlu sau pe fila (tab-ul) deschisă în browserul web, și nu pe suprafața paginii albe', correct: true },
-              { text: 'În mijlocul paginii cu litere îngroșate de culoare roșie', correct: false },
-              { text: 'În subsolul paginii ca notă de final', correct: false }
+              {
+                textRo: 'Pe bara de titlu sau pe fila (tab-ul) deschisă în browserul web, și nu pe suprafața paginii albe',
+                textEn: 'On the title bar or active tab opened in the web browser, rather than on the white page body surface',
+                correct: true
+              },
+              {
+                textRo: 'În mijlocul paginii cu litere îngroșate de culoare roșie',
+                textEn: 'In the middle of the page with bold red font',
+                correct: false
+              },
+              {
+                textRo: 'În subsolul paginii ca notă de final',
+                textEn: 'At the bottom footer of the page as a footnote',
+                correct: false
+              }
             ].map((opt, idx) => {
               const qId = 'w1_l2_q1';
               const isSelected = quizAnswers[qId] === idx;
@@ -308,7 +392,7 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
                       : 'border-slate-800 bg-slate-950/40 text-slate-300 hover:border-slate-700'
                   }`}
                 >
-                  <span>{opt.text}</span>
+                  <span>{lang === 'en' ? opt.textEn : opt.textRo}</span>
                   {isSelected && (opt.correct ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertTriangle className="w-4 h-4 text-rose-400" />)}
                 </button>
               );
@@ -318,21 +402,42 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['w1_l2_q1'] || 0} />
           )}
           {quizSubmitted['w1_l2_q1'] && (
-            <AnswerExplanation explanation="Corect! Manual pag. 39: Eticheta <title> se plasează obligatoriu în interiorul <head> și dă denumirea filei din browser, fiind utilizată și de motoarele de căutare (Google)." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Correct! Textbook page 39: The <title> tag must be nested inside <head> and dictates the browser tab label, while also being indexed by search engines (Google).'
+                : 'Corect! Manual pag. 39: Eticheta <title> se plasează obligatoriu în interiorul <head> și dă denumirea filei din browser, fiind utilizată și de motoarele de căutare (Google).'}
+            />
           )}
         </div>
 
         {/* Question 2 */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <div className="text-sm font-semibold text-slate-200">
-            2. Ce rol are declarația <code className="text-amber-300 font-mono">&lt;!DOCTYPE html&gt;</code> plasată pe prima linie a oricărui document web?
+            {lang === 'en'
+              ? '2. What purpose does the <!DOCTYPE html> declaration serve at the very first line of any web document?'
+              : <>2. Ce rol are declarația <code className="text-amber-300 font-mono">&lt;!DOCTYPE html&gt;</code> plasată pe prima linie a oricărui document web?</>}
           </div>
-          <QuestionHint hint="DOCTYPE vine de la Document Type Definition." />
+          <QuestionHint
+            hintRo="DOCTYPE vine de la Document Type Definition."
+            hintEn="DOCTYPE stands for Document Type Definition."
+          />
           <div className="space-y-2">
             {[
-              { text: 'Informează browserul că fișierul este scris conform standardului modern HTML5, asigurând interpretarea și randarea corectă a etichetelor', correct: true },
-              { text: 'Criptează fișierul cu o parolă secretă', correct: false },
-              { text: 'Conectează automat computerul la o imprimantă wireless', correct: false }
+              {
+                textRo: 'Informează browserul că fișierul este scris conform standardului modern HTML5, asigurând interpretarea și randarea corectă a etichetelor',
+                textEn: 'Informs the browser that the file adheres to the modern HTML5 standard, ensuring standard rendering compliance',
+                correct: true
+              },
+              {
+                textRo: 'Criptează fișierul cu o parolă secretă',
+                textEn: 'Encrypts the file with a secret password',
+                correct: false
+              },
+              {
+                textRo: 'Conectează automat computerul la o imprimantă wireless',
+                textEn: 'Automatically connects the computer to a wireless printer',
+                correct: false
+              }
             ].map((opt, idx) => {
               const qId = 'w1_l2_q2';
               const isSelected = quizAnswers[qId] === idx;
@@ -350,7 +455,7 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
                       : 'border-slate-800 bg-slate-950/40 text-slate-300 hover:border-slate-700'
                   }`}
                 >
-                  <span>{opt.text}</span>
+                  <span>{lang === 'en' ? opt.textEn : opt.textRo}</span>
                   {isSelected && (opt.correct ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertTriangle className="w-4 h-4 text-rose-400" />)}
                 </button>
               );
@@ -360,7 +465,11 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['w1_l2_q2'] || 0} />
           )}
           {quizSubmitted['w1_l2_q2'] && (
-            <AnswerExplanation explanation="Exact! Manual pag. 38: <!DOCTYPE html> este instrucțiunea inițială obligatorie care specifică versiunea limbajului și comută browserul în modul standard de afișare." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Exactly! Textbook page 38: <!DOCTYPE html> is the mandatory initial preamble specifying the document language specification and triggering standards mode.'
+                : 'Exact! Manual pag. 38: <!DOCTYPE html> este instrucțiunea inițială obligatorie care specifică versiunea limbajului și comută browserul în modul standard de afișare.'}
+            />
           )}
         </div>
       </div>
@@ -374,7 +483,9 @@ export const W1Level2_HtmlDocumentSkeleton: React.FC<W1Level2Props> = ({
           if (onCompletePage) onCompletePage(100);
           else if (onComplete) onComplete();
         }}
-        nextLabel="Spre Nivelul 3: Ierarhia Titlurilor & Paragrafe"
+        nextLabel={lang === 'en'
+          ? 'To Level 3: Headings Hierarchy & Paragraphs'
+          : 'Spre Nivelul 3: Ierarhia Titlurilor & Paragrafe'}
       />
     </div>
   );

@@ -97,18 +97,20 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
               <Award className="w-3.5 h-3.5" />
-              <span>Test Oficial de Autoevaluare • Manual Art Klett 2025 Pag. 20</span>
+              <span>{lang === 'en' ? 'Official Self-Assessment Test • Art Klett 2025 Textbook p. 20' : 'Test Oficial de Autoevaluare • Manual Art Klett 2025 Pag. 20'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <GraduationCap className="w-8 h-8 text-amber-400" />
-              Nivelul 7: Evaluarea Sumativă a Modulului 1A (Excel Master)
+              {lang === 'en' ? 'Level 7: Module 1A Summative Assessment (Excel Master)' : 'Nivelul 7: Evaluarea Sumativă a Modulului 1A (Excel Master)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Demonstrează că stăpânești toate cerințele din programa națională de clasa a VIII-a. Răspunde corect la cele 4 întrebări din manual pentru a debloca Diploma Oficială de Merit și Nota 10!
+              {lang === 'en'
+                ? 'Prove mastery over all 8th-grade national computing standards. Answer all 4 textbook evaluation questions to unlock the Official Certificate of Merit and top marks!'
+                : 'Demonstrează că stăpânești toate cerințele din programa națională de clasa a VIII-a. Răspunde corect la cele 4 întrebări din manual pentru a debloca Diploma Oficială de Merit și Nota 10!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-amber-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Evaluare Finală</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Final Evaluation' : 'Evaluare Finală'}</div>
             <div className="text-2xl font-black text-amber-400">7 / 7</div>
           </div>
         </div>
@@ -118,14 +120,14 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
       <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-xl">
-            {correctCount === 4 ? '10' : correctCount === 3 ? '8' : correctCount === 2 ? '6' : correctCount === 1 ? '4' : '1'}
+            {correctCount === 4 ? (lang === 'en' ? 'A+' : '10') : correctCount === 3 ? (lang === 'en' ? 'B' : '8') : correctCount === 2 ? (lang === 'en' ? 'C' : '6') : correctCount === 1 ? (lang === 'en' ? 'D' : '4') : 'F'}
           </div>
           <div>
-            <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Notă Estimată</div>
+            <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">{lang === 'en' ? 'Estimated Grade' : 'Notă Estimată'}</div>
             <div className="text-base font-bold text-white">
               {correctCount === 4
-                ? '🌟 Notă Maximă: 10 (Deblochează Diploma Oficială!)'
-                : `${correctCount} din 4 răspunsuri corecte validate`}
+                ? (lang === 'en' ? '🌟 Top Grade! (Unlocks Official Diploma)' : '🌟 Notă Maximă: 10 (Deblochează Diploma Oficială!)')
+                : (lang === 'en' ? `${correctCount} of 4 correct answers verified` : `${correctCount} din 4 răspunsuri corecte validate`)}
             </div>
           </div>
         </div>
@@ -155,17 +157,19 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Într-o foaie de calcul s-au introdus notele unui elev și media generală. Dacă profesorul modifică nota la Geografie de la 7 la 9, ce se întâmplă cu media?
+              {lang === 'en'
+                ? '1. A teacher enters student grades and the overall average. If the Geography grade is updated from 7 to 9, what happens to the average?'
+                : '1. Într-o foaie de calcul s-au introdus notele unui elev și media generală. Dacă profesorul modifică nota la Geografie de la 7 la 9, ce se întâmplă cu media?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'autoRecalc', text: 'Media se recalculează automat și crește imediat, fără reintroducerea formulei' },
-              { id: 'manualFormula', text: 'Media rămâne neschimbată până când ștergi și tastezi formula din nou' },
-              { id: 'resetSheet', text: 'Foaia de calcul se resetează și notele celorlalți elevi se pierd' },
-              { id: 'errorMsg', text: 'Apare mesajul de eroare #DIV/0! pe tot ecranul' },
+              { id: 'autoRecalc', text: lang === 'en' ? 'The average recalculates automatically and increases immediately without retyping formulas' : 'Media se recalculează automat și crește imediat, fără reintroducerea formulei' },
+              { id: 'manualFormula', text: lang === 'en' ? 'The average remains frozen until you delete and re-enter the formula' : 'Media rămâne neschimbată până când ștergi și tastezi formula din nou' },
+              { id: 'resetSheet', text: lang === 'en' ? 'The entire sheet resets and all other student scores are lost' : 'Foaia de calcul se resetează și notele celorlalți elevi se pierd' },
+              { id: 'errorMsg', text: lang === 'en' ? 'A fullscreen #DIV/0! error message appears' : 'Apare mesajul de eroare #DIV/0! pe tot ecranul' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -185,11 +189,13 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
             ))}
           </div>
 
-          <QuestionHint hint="Acesta este principiul de bază al calculului tabelar pe care l-ai exersat la Nivelul 1." />
+          <QuestionHint hint={lang === 'en' ? 'This is the foundational principle of digital spreadsheets practiced in Level 1.' : 'Acesta este principiul de bază al calculului tabelar pe care l-ai exersat la Nivelul 1.'} />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Recalcularea automată dinamică este funcția definitorie a programelor de calcul tabelar: orice modificare de intrare propagă noile rezultate în celulele dependente."
+              explanation={lang === 'en'
+                ? 'Correct! Dynamic automatic recalculation is the defining characteristic of spreadsheet programs: input changes automatically flow through all dependent formulas.'
+                : 'Corect! Recalcularea automată dinamică este funcția definitorie a programelor de calcul tabelar: orice modificare de intrare propagă noile rezultate în celulele dependente.'}
             />
           )}
         </div>
@@ -198,17 +204,19 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Care dintre următoarele notații reprezintă o adresare corectă a unui domeniu continuu de celule conform manualului?
+              {lang === 'en'
+                ? '2. Which of the following notations represents a syntactically correct continuous cell range reference?'
+                : '2. Care dintre următoarele notații reprezintă o adresare corectă a unui domeniu continuu de celule conform manualului?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'd1e2', text: 'D1:E2 (cu separatorul două puncte între colțul stânga-sus și dreapta-jos)' },
-              { id: 'd1_dash_e2', text: 'D1-E2 (folosind semnul minus)' },
-              { id: '1d2e', text: '1D:2E (cu numărul rândului înaintea literei coloanei)' },
-              { id: 'd1_and_e2', text: 'D1 & E2 (folosind caracterul ampersand)' },
+              { id: 'd1e2', text: lang === 'en' ? 'D1:E2 (with a colon separator between top-left and bottom-right corners)' : 'D1:E2 (cu separatorul două puncte între colțul stânga-sus și dreapta-jos)' },
+              { id: 'd1_dash_e2', text: lang === 'en' ? 'D1-E2 (using a minus sign)' : 'D1-E2 (folosind semnul minus)' },
+              { id: '1d2e', text: lang === 'en' ? '1D:2E (row number before column letter)' : '1D:2E (cu numărul rândului înaintea literei coloanei)' },
+              { id: 'd1_and_e2', text: lang === 'en' ? 'D1 & E2 (using ampersand)' : 'D1 & E2 (folosind caracterul ampersand)' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -228,11 +236,13 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
             ))}
           </div>
 
-          <QuestionHint hint="Amintește-ți de operatorul de domeniu (două puncte) și regula litera coloanei urmată de numărul rândului." />
+          <QuestionHint hint={lang === 'en' ? 'Recall the range operator (colon) and the column-letter then row-number convention.' : 'Amintește-ți de operatorul de domeniu (două puncte) și regula litera coloanei urmată de numărul rândului.'} />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! D1:E2 este notația carteziană canonică ce cuprinde celulele D1, E1, D2 și E2."
+              explanation={lang === 'en'
+                ? 'Excellent! D1:E2 is the canonical spreadsheet range notation encompassing cells D1, E1, D2, and E2.'
+                : 'Excelent! D1:E2 este notația carteziană canonică ce cuprinde celulele D1, E1, D2 și E2.'}
             />
           )}
         </div>
@@ -241,17 +251,19 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Cum rezolvi problema dacă într-o celulă cu numere apare afișat simbolul „####”?
+              {lang === 'en'
+                ? '3. How do you resolve a cell that displays the "####" symbol sequence?'
+                : '3. Cum rezolvi problema dacă într-o celulă cu numere apare afișat simbolul „####”?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'widthAutofit', text: 'Mărești lățimea coloanei prin tragerea separatorului sau dublu-clic (Autofit)' },
-              { id: 'eraseNumber', text: 'Ștergi ultimele trei cifre din număr pentru a încăpea forțat' },
-              { id: 'formatText', text: 'Transformi numărul în fișier PDF și îl printezi' },
-              { id: 'changeKeyboard', text: 'Schimbi tastatura din limba Română în limba Engleză' },
+              { id: 'widthAutofit', text: lang === 'en' ? 'Expand column width by dragging column header separator or double-clicking (Autofit)' : 'Mărești lățimea coloanei prin tragerea separatorului sau dublu-clic (Autofit)' },
+              { id: 'eraseNumber', text: lang === 'en' ? 'Delete the last three digits of the number to force it to fit' : 'Ștergi ultimele trei cifre din număr pentru a încăpea forțat' },
+              { id: 'formatText', text: lang === 'en' ? 'Convert number into a PDF and print it out' : 'Transformi numărul în fișier PDF și îl printezi' },
+              { id: 'changeKeyboard', text: lang === 'en' ? 'Switch computer keyboard layout language' : 'Schimbi tastatura din limba Română în limba Engleză' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -271,11 +283,13 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
             ))}
           </div>
 
-          <QuestionHint hint="Simbolul #### indică doar lipsa de spațiu pe orizontală." />
+          <QuestionHint hint={lang === 'en' ? 'The "####" indicator signifies a lack of horizontal column width.' : 'Simbolul #### indică doar lipsa de spațiu pe orizontală.'} />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Corect! Semnul '####' dispare imediat ce coloana devine suficient de lată pentru a reda numărul complet."
+              explanation={lang === 'en'
+                ? 'Correct! "####" immediately vanishes as soon as the column is wide enough to render the full numeric digits.'
+                : 'Corect! Semnul \'####\' dispare imediat ce coloana devine suficient de lată pentru a reda numărul complet.'}
             />
           )}
         </div>
@@ -284,17 +298,19 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              4. De ce orice formulă sau funcție dintr-o foaie de calcul trebuie să înceapă obligatoriu cu caracterul egal („=”)?
+              {lang === 'en'
+                ? '4. Why must every spreadsheet formula or function begin with an equal sign ("=")?'
+                : '4. De ce orice formulă sau funcție dintr-o foaie de calcul trebuie să înceapă obligatoriu cu caracterul egal („=”)?'}
             </h3>
             {cooldowns.q4 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q4} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'mathSignal', text: 'Pentru a semnala programului că urmează o expresie de calculat, altfel ar fi tratată ca text obișnuit' },
-              { id: 'equalRule', text: 'Este o simplă convenție grafică fără niciun rol computațional' },
-              { id: 'password', text: 'Reprezintă parola secretă de deschidere a fișierului pe server' },
-              { id: 'soundPlay', text: 'Pornește difuzoarele calculatorului pentru a reda o melodie' },
+              { id: 'mathSignal', text: lang === 'en' ? 'To signal the spreadsheet parser that an evaluatable expression follows, otherwise it is treated as plain text' : 'Pentru a semnala programului că urmează o expresie de calculat, altfel ar fi tratată ca text obișnuit' },
+              { id: 'equalRule', text: lang === 'en' ? 'It is a visual convention with zero computational significance' : 'Este o simplă convenție grafică fără niciun rol computațional' },
+              { id: 'password', text: lang === 'en' ? 'It represents the secret decryption key for the spreadsheet server' : 'Reprezintă parola secretă de deschidere a fișierului pe server' },
+              { id: 'soundPlay', text: lang === 'en' ? 'It activates computer speakers to play an audio notification' : 'Pornește difuzoarele calculatorului pentru a reda o melodie' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -314,11 +330,13 @@ export const C1Level7_ExcelMasterExam: React.FC<C1Level7Props> = ({ onCompletePa
             ))}
           </div>
 
-          <QuestionHint hint="Fără caracterul '=', dacă scrii '2+2', Excel afișează doar textul '2+2' și nu face calculul 4." />
+          <QuestionHint hint={lang === 'en' ? 'Without "=", typing "2+2" simply outputs the literal text string "2+2" without calculating 4.' : 'Fără caracterul \'=\', dacă scrii \'2+2\', Excel afișează doar textul \'2+2\' și nu face calculul 4.'} />
           {q4Answer && (
             <AnswerExplanation
               isCorrect={isQ4Correct}
-              explanation="Exact! Semnul '=' instruiește compilatorul intern al foii de calcul să evalueze expresia matematică și să randeze rezultatul final în celulă."
+              explanation={lang === 'en'
+                ? 'Exact! The "=" operator instructs the calculation engine to parse and evaluate the mathematical expression and return the computed value.'
+                : 'Exact! Semnul \'=\' instruiește compilatorul intern al foii de calcul să evalueze expresia matematică și să randeze rezultatul final în celulă.'}
             />
           )}
         </div>

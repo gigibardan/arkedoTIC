@@ -98,6 +98,15 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
   const totalScore = Math.round((correctCount / 3) * 100);
   const canProceed = isQ1Correct && isQ2Correct && isQ3Correct;
 
+  const getSubjectName = (sub: string) => {
+    if (lang !== 'en') return sub;
+    if (sub === 'Informatică & TIC') return 'Computer Science & ICT';
+    if (sub === 'Matematică') return 'Mathematics';
+    if (sub === 'Geografie') return 'Geography';
+    if (sub === 'Limba Română') return 'Language Arts';
+    return sub;
+  };
+
   return (
     <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto pb-12">
       {/* Level Header Banner */}
@@ -107,18 +116,22 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 12–13</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • p. 12–13' : 'Manual Art Klett 2025 • Pag. 12–13'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <FileSpreadsheet className="w-8 h-8 text-emerald-400" />
-              Nivelul 1: Originea Foilor de Calcul & Recalcularea Automată
+              {lang === 'en' ? 'Level 1: Spreadsheet Origins & Automatic Recalculation' : 'Nivelul 1: Originea Foilor de Calcul & Recalcularea Automată'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Înainte de computere, calculele se făceau cu pixul în registre masive de hârtie. Descoperă de ce foile electronice (Spreadsheets) au revoluționat lumea modernă prin recalculare instantanee și salvare sincronizată!
+              {lang === 'en'
+                ? 'Before computers, calculations were hand-written in massive paper ledgers. Discover why spreadsheets revolutionized the modern world with instant reactive recalculation and cloud sync!'
+                : 'Înainte de computere, calculele se făceau cu pixul în registre masive de hârtie. Descoperă de ce foile electronice (Spreadsheets) au revoluționat lumea modernă prin recalculare instantanee și salvare sincronizată!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-emerald-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Pas Curent</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">
+              {lang === 'en' ? 'Current Step' : 'Pas Curent'}
+            </div>
             <div className="text-2xl font-black text-emerald-400">1 / 7</div>
           </div>
         </div>
@@ -132,15 +145,19 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
               <Calculator className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laborator Interactiv: Recalcularea Dinamică</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Interactive Lab: Dynamic Recalculation' : 'Laborator Interactiv: Recalcularea Dinamică'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Schimbă nota la Geografie (exemplul din manual pag. 12) și observă efectul de cascadă
+                {lang === 'en'
+                  ? 'Change the Geography grade (textbook p. 12 example) and watch the ripple effect'
+                  : 'Schimbă nota la Geografie (exemplul din manual pag. 12) și observă efectul de cascadă'}
               </p>
             </div>
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs font-mono border border-emerald-500/30">
             <RefreshCw className="w-3.5 h-3.5 animate-spin text-emerald-400" />
-            <span>Actualizare în Timp Real</span>
+            <span>{lang === 'en' ? 'Real-Time Update' : 'Actualizare în Timp Real'}</span>
           </div>
         </div>
 
@@ -150,9 +167,15 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             <thead>
               <tr className="bg-emerald-950/60 border-b border-slate-700 text-emerald-200">
                 <th className="p-3 border-r border-slate-700 w-12 text-center font-mono">#</th>
-                <th className="p-3 border-r border-slate-700 font-semibold">Coloana A: Disciplină Școlară</th>
-                <th className="p-3 border-r border-slate-700 font-semibold text-center w-36">Coloana B: Notă</th>
-                <th className="p-3 font-semibold text-slate-300">Stare Formulă</th>
+                <th className="p-3 border-r border-slate-700 font-semibold">
+                  {lang === 'en' ? 'Column A: School Subject' : 'Coloana A: Disciplină Școlară'}
+                </th>
+                <th className="p-3 border-r border-slate-700 font-semibold text-center w-36">
+                  {lang === 'en' ? 'Column B: Grade' : 'Coloana B: Notă'}
+                </th>
+                <th className="p-3 font-semibold text-slate-300">
+                  {lang === 'en' ? 'Formula Status' : 'Stare Formulă'}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800 bg-slate-950/40">
@@ -162,10 +185,10 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
                     {idx + 1}
                   </td>
                   <td className="p-3 border-r border-slate-800 font-medium text-white flex items-center justify-between">
-                    <span>{row.subject}</span>
+                    <span>{getSubjectName(row.subject)}</span>
                     {row.subject === 'Geografie' && (
                       <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30">
-                        Modifică mai jos!
+                        {lang === 'en' ? 'Edit below!' : 'Modifică mai jos!'}
                       </span>
                     )}
                   </td>
@@ -176,31 +199,41 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
                   </td>
                   <td className="p-3 text-xs text-slate-400">
                     {row.subject === 'Geografie' ? (
-                      <span className="text-emerald-400 font-mono">Valoare de intrare (modificată)</span>
+                      <span className="text-emerald-400 font-mono">
+                        {lang === 'en' ? 'Input value (edited)' : 'Valoare de intrare (modificată)'}
+                      </span>
                     ) : (
-                      <span className="text-slate-500 font-mono">Valoare statică de intrare</span>
+                      <span className="text-slate-500 font-mono">
+                        {lang === 'en' ? 'Static input value' : 'Valoare statică de intrare'}
+                      </span>
                     )}
                   </td>
                 </tr>
               ))}
               <tr className="bg-emerald-900/20 font-bold border-t-2 border-emerald-500/40 text-emerald-200">
                 <td className="p-3 border-r border-slate-800 text-center font-mono bg-slate-900/60">Σ</td>
-                <td className="p-3 border-r border-slate-800 text-right pr-4">Total Puncte (Formula: =SUM(B1:B4)):</td>
+                <td className="p-3 border-r border-slate-800 text-right pr-4">
+                  {lang === 'en' ? 'Total Points (Formula: =SUM(B1:B4)):' : 'Total Puncte (Formula: =SUM(B1:B4)): '}
+                </td>
                 <td className="p-3 border-r border-slate-800 text-center text-emerald-300 font-mono text-base">
                   {totalSum}
                 </td>
-                <td className="p-3 text-xs text-emerald-400 font-mono">Recalculat automat la fiecare tastă</td>
+                <td className="p-3 text-xs text-emerald-400 font-mono">
+                  {lang === 'en' ? 'Automatically recalculated on every change' : 'Recalculat automat la fiecare tastă'}
+                </td>
               </tr>
               <tr className="bg-teal-900/30 font-black border-t border-slate-800 text-white">
                 <td className="p-3 border-r border-slate-800 text-center font-mono bg-slate-900/60">x̄</td>
                 <td className="p-3 border-r border-slate-800 text-right pr-4 text-teal-300">
-                  Media Generală (Formula: =AVERAGE(B1:B4)):
+                  {lang === 'en' ? 'Grade Average (Formula: =AVERAGE(B1:B4)):' : 'Media Generală (Formula: =AVERAGE(B1:B4)): '}
                 </td>
                 <td className="p-3 border-r border-slate-800 text-center text-amber-300 font-mono text-lg">
                   {gradeAverage}
                 </td>
                 <td className="p-3 text-xs text-teal-300 font-semibold">
-                  {Number(gradeAverage) >= 9.5 ? '🏆 Premiul I (Felicitări!)' : 'Excelentă progresie!'}
+                  {Number(gradeAverage) >= 9.5
+                    ? (lang === 'en' ? '🏆 1st Honors (Congrats!)' : '🏆 Premiul I (Felicitări!)')
+                    : (lang === 'en' ? 'Excellent progress!' : 'Excelentă progresie!')}
                 </td>
               </tr>
             </tbody>
@@ -212,10 +245,12 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
           <div className="space-y-1 text-center sm:text-left">
             <div className="text-sm font-bold text-white flex items-center gap-2 justify-center sm:justify-start">
               <TrendingUp className="w-4 h-4 text-amber-400" />
-              Schimbă nota la Geografie:
+              {lang === 'en' ? 'Change the Geography grade:' : 'Schimbă nota la Geografie:'}
             </div>
             <p className="text-xs text-slate-400">
-              Observă cum pe hârtie ar fi trebuit să ștergi cu radiera și să aduni iar toate cele 4 numere!
+              {lang === 'en'
+                ? 'Notice that on paper, you would have had to erase with rubber and re-add all 4 numbers by hand!'
+                : 'Observă cum pe hârtie ar fi trebuit să ștergi cu radiera și să aduni iar toate cele 4 numere!'}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -233,7 +268,7 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
                       : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700'
                   }`}
                 >
-                  Nota {score}
+                  {lang === 'en' ? `Grade ${score}` : `Nota ${score}`}
                 </button>
               );
             })}
@@ -248,14 +283,18 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Desktop vs Cloud: Cum Salvăm & Colaborăm</h2>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Desktop vs Cloud: How We Save & Collaborate' : 'Desktop vs Cloud: Cum Salvăm & Colaborăm'}
+            </h2>
             <p className="text-xs text-slate-400">
-              Aplicații instalate local pe calculator vs soluții moderne în browser (Manual pag. 12)
+              {lang === 'en'
+                ? 'Local installed software vs modern in-browser suites (Textbook p. 12)'
+                : 'Aplicații instalate local pe calculator vs soluții moderne în browser (Manual pag. 12)'}
             </p>
           </div>
         </div>
 
-        <div className="flex gap-2 border-b border-slate-800 pb-3">
+        <div className="flex gap-2 border-b border-slate-800 pb-3 flex-wrap">
           <button
             type="button"
             onClick={() => { sounds.playClick(); setActivePlatform('cloud'); }}
@@ -266,7 +305,7 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             }`}
           >
             <Cloud className="w-4 h-4" />
-            Foi de Calcul în Cloud (Google Sheets / Excel 365)
+            {lang === 'en' ? 'Cloud Spreadsheets (Google Sheets / Excel 365)' : 'Foi de Calcul în Cloud (Google Sheets / Excel 365)'}
           </button>
           <button
             type="button"
@@ -278,7 +317,7 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             }`}
           >
             <HardDrive className="w-4 h-4" />
-            Foi Desktop Tradiționale (MS Excel / LibreOffice Calc)
+            {lang === 'en' ? 'Traditional Desktop Sheets (MS Excel / Calc)' : 'Foi Desktop Tradiționale (MS Excel / LibreOffice Calc)'}
           </button>
         </div>
 
@@ -286,26 +325,35 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fadeIn">
             <div className="p-4 rounded-2xl bg-teal-950/20 border border-teal-500/30 space-y-2">
               <div className="text-teal-400 font-bold text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" /> Salvare Automată Continuă
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Continuous Auto-Save' : 'Salvare Automată Continuă'}</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Fiecare caracter tastat se salvează instantaneu pe serverele securizate Google Drive / OneDrive. Nu pierzi datele dacă se oprește curentul!
+                {lang === 'en'
+                  ? 'Every single keystroke is instantly committed to secure cloud servers (Google Drive / OneDrive). You never lose data during power outages!'
+                  : 'Fiecare caracter tastat se salvează instantaneu pe serverele securizate Google Drive / OneDrive. Nu pierzi datele dacă se oprește curentul!'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-teal-950/20 border border-teal-500/30 space-y-2">
               <div className="text-teal-400 font-bold text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" /> Colaborare Simultană (Multiplayer)
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Real-Time Multiplayer Collaboration' : 'Colaborare Simultană (Multiplayer)'}</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Mai mulți colegi de clasă sau profesori pot edita același tabel în același timp, văzând cursoarele colorate ale celilalți în direct.
+                {lang === 'en'
+                  ? 'Multiple classmates and teachers can edit the same workbook simultaneously, tracking each other’s live colorful cursors.'
+                  : 'Mai mulți colegi de clasă sau profesori pot edita același tabel în același timp, văzând cursoarele colorate ale celilalți în direct.'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-teal-950/20 border border-teal-500/30 space-y-2">
               <div className="text-teal-400 font-bold text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" /> Istoric Complet de Versiuni
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Comprehensive Version History' : 'Istoric Complet de Versiuni'}</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Poți călători în timp la orice versiune a registrului de acum 1 oră sau 3 săptămâni și să anulezi orice greșeală accidentală.
+                {lang === 'en'
+                  ? 'Time travel back to any version from 1 hour or 3 weeks ago, inspect student changes, and seamlessly undo accidental deletions.'
+                  : 'Poți călători în timp la orice versiune a registrului de acum 1 oră sau 3 săptămâni și să anulezi orice greșeală accidentală.'}
               </p>
             </div>
           </div>
@@ -313,26 +361,35 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fadeIn">
             <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-2">
               <div className="text-emerald-400 font-bold text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" /> Putere Maximă Offline
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Maximum Offline Power' : 'Putere Maximă Offline'}</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Funcționează impecabil fără nicio conexiune la internet. Ideal pentru procesarea de tabele gigantice cu sute de mii de rânduri.
+                {lang === 'en'
+                  ? 'Operates flawlessly with zero internet connection. Built for analyzing massive databases with hundreds of thousands of rows.'
+                  : 'Funcționează impecabil fără nicio conexiune la internet. Ideal pentru procesarea de tabele gigantice cu sute de mii de rânduri.'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-2">
               <div className="text-emerald-400 font-bold text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" /> Securitate Fizică & Fișiere .XLSX
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Physical Security & .XLSX Files' : 'Securitate Fizică & Fișiere .XLSX'}</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Fișierele sunt stocate local pe SSD/HDD-ul calculatorului tău sau pe un stick USB și pot fi protejate prin parolă criptată.
+                {lang === 'en'
+                  ? 'Workbooks remain locally on your SSD or USB stick, and files can be password-protected and strongly encrypted.'
+                  : 'Fișierele sunt stocate local pe SSD/HDD-ul calculatorului tău sau pe un stick USB și pot fi protejate prin parolă criptată.'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-2">
               <div className="text-emerald-400 font-bold text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" /> Instrumente Avansate & Macrocomenzi
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Advanced Automation & Macros' : 'Instrumente Avansate & Macrocomenzi'}</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Suport complet pentru limbaje de automatizare (VBA), grafice complexe 3D și calcule statistice de nivel universitar.
+                {lang === 'en'
+                  ? 'Full scripting support with VBA macros, sophisticated 3D pivot visualizations, and advanced scientific analysis packages.'
+                  : 'Suport complet pentru limbaje de automatizare (VBA), grafice complexe 3D și calcule statistice de nivel universitar.'}
               </p>
             </div>
           </div>
@@ -346,8 +403,14 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică a Noțiunilor</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 2</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Concept Check' : 'Verificare Pedagogică a Noțiunilor'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer all 3 questions correctly to complete Level 1'
+                : 'Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 2'}
+            </p>
           </div>
         </div>
 
@@ -355,17 +418,39 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Conform manualului (pag. 12), care este marele avantaj al unui program de calcul tabelar când schimbi nota la o materie?
+              {lang === 'en'
+                ? '1. According to the textbook (p. 12), what is the key advantage of an electronic spreadsheet when you change a single value?'
+                : '1. Conform manualului (pag. 12), care este marele avantaj al unui program de calcul tabelar când schimbi nota la o materie?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'recalc', text: 'Toate mediile și formulele dependente se recalculează automat și instantaneu' },
-              { id: 'delete', text: 'Programul șterge toate celelalte note și te pune să le reintroduci manual' },
-              { id: 'nothing', text: 'Nu se întâmplă nimic; trebuie să reintroduci formula sumei de la tastatură' },
-              { id: 'print', text: 'Documentul se trimite automat direct la imprimantă pe foaie A4' },
+              {
+                id: 'recalc',
+                text: lang === 'en'
+                  ? 'All dependent averages and formulas recalculate automatically and instantly'
+                  : 'Toate mediile și formulele dependente se recalculează automat și instantaneu'
+              },
+              {
+                id: 'delete',
+                text: lang === 'en'
+                  ? 'The application wipes all numbers and prompts you to retype them manually'
+                  : 'Programul șterge toate celelalte note și te pune să le reintroduci manual'
+              },
+              {
+                id: 'nothing',
+                text: lang === 'en'
+                  ? 'Nothing updates; you must manually re-enter the addition formula from scratch'
+                  : 'Nu se întâmplă nimic; trebuie să reintroduci formula sumei de la tastatură'
+              },
+              {
+                id: 'print',
+                text: lang === 'en'
+                  ? 'The workbook automatically dispatches an immediate print job to an A4 printer'
+                  : 'Documentul se trimite automat direct la imprimantă pe foaie A4'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -385,11 +470,17 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             ))}
           </div>
 
-          <QuestionHint hint="Gândește-te la demonstrația interactivă de mai sus când ai schimbat nota la Geografie." />
+          <QuestionHint
+            hint={lang === 'en'
+              ? 'Think about the interactive gradebook demo above when you adjusted the Geography grade.'
+              : 'Gândește-te la demonstrația interactivă de mai sus când ai schimbat nota la Geografie.'}
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Esența calculului tabelar este recalcularea dinamică: modificarea oricărei celule de date primare actualizează imediat toate celulele dependente de formule."
+              explanation={lang === 'en'
+                ? 'Correct! The essence of electronic spreadsheets is reactive dynamic recalculation: changing any input cell immediately updates all dependent formulas.'
+                : 'Corect! Esența calculului tabelar este recalcularea dinamică: modificarea oricărei celule de date primare actualizează imediat toate celulele dependente de formule.'}
             />
           )}
         </div>
@@ -398,17 +489,39 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce caracteristică majoră diferențiază foile de calcul în cloud (Google Sheets) de fișierele salvate strict pe calculator?
+              {lang === 'en'
+                ? '2. What major feature distinguishes cloud spreadsheets (Google Sheets, Excel 365) from files stored solely on a local PC?'
+                : '2. Ce caracteristică majoră diferențiază foile de calcul în cloud (Google Sheets) de fișierele salvate strict pe calculator?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'mouse', text: 'În cloud nu poți folosi mouse-ul, doar comenzi de la tastatură' },
-              { id: 'cloud', text: 'Salvare automată continuă și colaborare în timp real cu alți elevi/colegi' },
-              { id: 'loss', text: 'În cloud documentele se șterg automat în fiecare seară la ora 24:00' },
-              { id: 'single', text: 'Un singur utilizator are voie să acceseze documentul pe lună' },
+              {
+                id: 'mouse',
+                text: lang === 'en'
+                  ? 'In the cloud you cannot use a mouse, only keyboard shortcuts'
+                  : 'În cloud nu poți folosi mouse-ul, doar comenzi de la tastatură'
+              },
+              {
+                id: 'cloud',
+                text: lang === 'en'
+                  ? 'Continuous auto-saving and real-time team collaboration with classmates'
+                  : 'Salvare automată continuă și colaborare în timp real cu alți elevi/colegi'
+              },
+              {
+                id: 'loss',
+                text: lang === 'en'
+                  ? 'Cloud documents are purged automatically every night at 24:00'
+                  : 'În cloud documentele se șterg automat în fiecare seară la ora 24:00'
+              },
+              {
+                id: 'single',
+                text: lang === 'en'
+                  ? 'Only one user is permitted to open the document per month'
+                  : 'Un singur utilizator are voie să acceseze documentul pe lună'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -428,11 +541,17 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             ))}
           </div>
 
-          <QuestionHint hint="Manualul explică avantajele stocării în cloud: nu pierzi datele și poți lucra în echipă." />
+          <QuestionHint
+            hint={lang === 'en'
+              ? 'The textbook highlights the core advantages of cloud storage: you never lose work and can collaborate as a team.'
+              : 'Manualul explică avantajele stocării în cloud: nu pierzi datele și poți lucra în echipă.'}
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! În aplicațiile cloud (Google Sheets, Excel 365), documentul se salvează automat la fiecare secundă și permite editarea concurentă a mai multor utilizatori."
+              explanation={lang === 'en'
+                ? 'Excellent! In cloud platforms (Google Sheets, Excel 365), changes save automatically every second and multiple users can edit concurrently.'
+                : 'Excelent! În aplicațiile cloud (Google Sheets, Excel 365), documentul se salvează automat la fiecare secundă și permite editarea concurentă a mai multor utilizatori.'}
             />
           )}
         </div>
@@ -441,14 +560,21 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Care a fost primul program de calcul tabelar din istorie (lansat în 1979 pentru Apple II), menționat în istoria TIC?
+              {lang === 'en'
+                ? '3. What was the first electronic spreadsheet program in computer history (launched in 1979 for Apple II)?'
+                : '3. Care a fost primul program de calcul tabelar din istorie (lansat în 1979 pentru Apple II), menționat în istoria TIC?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'visicalc', text: 'VisiCalc (creat de Dan Bricklin și Bob Frankston)' },
+              {
+                id: 'visicalc',
+                text: lang === 'en'
+                  ? 'VisiCalc (created by Dan Bricklin & Bob Frankston)'
+                  : 'VisiCalc (creat de Dan Bricklin și Bob Frankston)'
+              },
               { id: 'photoshop', text: 'Adobe Photoshop' },
               { id: 'scratch', text: 'Scratch 3.0 MIT' },
               { id: 'tiktok', text: 'TikTok Spreadsheet' },
@@ -471,11 +597,17 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
             ))}
           </div>
 
-          <QuestionHint hint="Numele programului vine de la 'Visible Calculator' (Calculator Vizibil)." />
+          <QuestionHint
+            hint={lang === 'en'
+              ? "The program name stands for 'Visible Calculator'."
+              : "Numele programului vine de la 'Visible Calculator' (Calculator Vizibil)."}
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! VisiCalc a demonstrat în 1979 utilitatea calculatoarelor personale în afaceri și a deschis calea programelor Lotus 1-2-3 și Microsoft Excel."
+              explanation={lang === 'en'
+                ? 'Exactly! VisiCalc demonstrated the business power of microcomputers in 1979 and paved the way for Lotus 1-2-3 and Microsoft Excel.'
+                : 'Exact! VisiCalc a demonstrat în 1979 utilitatea calculatoarelor personale în afaceri și a deschis calea programelor Lotus 1-2-3 și Microsoft Excel.'}
             />
           )}
         </div>

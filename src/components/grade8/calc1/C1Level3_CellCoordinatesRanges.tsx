@@ -129,18 +129,20 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 14–16</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • pp. 14–16' : 'Manual Art Klett 2025 • Pag. 14–16'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Grid className="w-8 h-8 text-emerald-400" />
-              Nivelul 3: Coordonate, Celule Active & Domenii (Ranges)
+              {lang === 'en' ? 'Level 3: Coordinates, Active Cells & Cell Ranges' : 'Nivelul 3: Coordonate, Celule Active & Domenii (Ranges)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Foaia Excel are 1.048.576 de rânduri și 16.384 de coloane. Învață cum se adresează corect fiecare celulă și cum definim grupuri dreptunghiulare de celule (domenii) prin separatorul două puncte (:).
+              {lang === 'en'
+                ? 'An Excel sheet has 1,048,576 rows and 16,384 columns. Learn proper cell addressing and how rectangular cell groups (ranges) are defined using the colon (:) operator.'
+                : 'Foaia Excel are 1.048.576 de rânduri și 16.384 de coloane. Învață cum se adresează corect fiecare celulă și cum definim grupuri dreptunghiulare de celule (domenii) prin separatorul două puncte (:).'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-emerald-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Pas Curent</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Current Step' : 'Pas Curent'}</div>
             <div className="text-2xl font-black text-emerald-400">3 / 7</div>
           </div>
         </div>
@@ -154,22 +156,24 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
               <Crosshair className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Navigatorul Cartezian de Celule & Domenii</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Cartesian Cell & Range Navigator' : 'Navigatorul Cartezian de Celule & Domenii'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Fă clic pe orice celulă din grilă sau alege un domeniu din exemplele manualului
+                {lang === 'en' ? 'Click any cell on the grid or pick a textbook range preset' : 'Fă clic pe orice celulă din grilă sau alege un domeniu din exemplele manualului'}
               </p>
             </div>
           </div>
 
           {/* Current Selection Pill */}
           <div className="flex items-center gap-2 bg-slate-950 px-4 py-2 rounded-2xl border border-slate-800 font-mono">
-            <span className="text-xs text-slate-400">Adresă Activă:</span>
+            <span className="text-xs text-slate-400">{lang === 'en' ? 'Active Address:' : 'Adresă Activă:'}</span>
             <span className="text-emerald-300 font-black text-base bg-emerald-500/10 px-2.5 py-0.5 rounded-lg border border-emerald-500/30">
               {activeRange ? `${activeRange.startCol}${activeRange.startRow}:${activeRange.endCol}${activeRange.endRow}` : `${activeCell.col}${activeCell.row}`}
             </span>
             {activeRange && (
               <span className="text-[11px] text-teal-300 bg-teal-500/10 px-2 py-0.5 rounded-full border border-teal-500/30">
-                {getRangeCellCount()} celule
+                {getRangeCellCount()} {lang === 'en' ? 'cells' : 'celule'}
               </span>
             )}
           </div>
@@ -177,12 +181,12 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
 
         {/* Preset Range Selector Buttons (from textbook p. 15) */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-slate-400 font-medium mr-1">Domenii din Manual:</span>
+          <span className="text-xs text-slate-400 font-medium mr-1">{lang === 'en' ? 'Textbook Presets:' : 'Domenii din Manual:'}</span>
           {[
-            { label: 'D1:E2 (Exemplu pag. 15)', startCol: 'D', startRow: 1, endCol: 'E', endRow: 2 },
-            { label: 'G2:I2 (Orizontal)', startCol: 'C', startRow: 2, endCol: 'E', endRow: 2 },
-            { label: 'B2:D5 (Bloc 4x3)', startCol: 'B', startRow: 2, endCol: 'D', endRow: 5 },
-            { label: 'A1:C1 (Antet)', startCol: 'A', startRow: 1, endCol: 'C', endRow: 1 },
+            { label: lang === 'en' ? 'D1:E2 (Example p. 15)' : 'D1:E2 (Exemplu pag. 15)', startCol: 'D', startRow: 1, endCol: 'E', endRow: 2 },
+            { label: lang === 'en' ? 'C2:E2 (Horizontal)' : 'G2:I2 (Orizontal)', startCol: 'C', startRow: 2, endCol: 'E', endRow: 2 },
+            { label: lang === 'en' ? 'B2:D5 (Block 4x3)' : 'B2:D5 (Bloc 4x3)', startCol: 'B', startRow: 2, endCol: 'D', endRow: 5 },
+            { label: lang === 'en' ? 'A1:C1 (Header)' : 'A1:C1 (Antet)', startCol: 'A', startRow: 1, endCol: 'C', endRow: 1 },
           ].map(preset => {
             const isSelected = activeRange && activeRange.startCol === preset.startCol && activeRange.startRow === preset.startRow && activeRange.endCol === preset.endCol && activeRange.endRow === preset.endRow;
             return (
@@ -260,7 +264,7 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
                     >
                       <span>{col}{row}</span>
                       {isCurrentSingleCell && (
-                        <span className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-400 rounded-sm" title="Mâner de umplere (Fill handle)"></span>
+                        <span className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-400 rounded-sm" title={lang === 'en' ? 'Fill Handle' : 'Mâner de umplere (Fill handle)'}></span>
                       )}
                     </div>
                   );
@@ -275,19 +279,23 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
             <div className="text-emerald-400 font-bold text-sm flex items-center gap-2">
               <Square className="w-4 h-4" />
-              Celula Activă & Mânerul de Umplere
+              {lang === 'en' ? 'Active Cell & Fill Handle' : 'Celula Activă & Mânerul de Umplere'}
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Celula selectată este evidențiată cu un chenar îngroșat. Pătrățelul din colțul dreapta-jos se numește <strong>mâner de umplere (fill handle)</strong> și permite copierea automată a formulelor și crearea de serii de date (1, 2, 3... sau Ianuarie, Februarie...).
+              {lang === 'en'
+                ? 'The selected cell is bordered with a thick stroke. The bottom-right square is called the fill handle and allows instant copying of formulas or series generation (1, 2, 3... or January, February...).'
+                : 'Celula selectată este evidențiată cu un chenar îngroșat. Pătrățelul din colțul dreapta-jos se numește mâner de umplere (fill handle) și permite copierea automată a formulelor și crearea de serii de date (1, 2, 3... sau Ianuarie, Februarie...).'}
             </p>
           </div>
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
             <div className="text-teal-400 font-bold text-sm flex items-center gap-2">
               <Maximize className="w-4 h-4" />
-              Sintaxa Domeniilor: Semnul Două Puncte (:)
+              {lang === 'en' ? 'Range Syntax: The Colon Sign (:)' : 'Sintaxa Domeniilor: Semnul Două Puncte (:)'}
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Un domeniu este definit prin coordonata colțului stânga-sus și colțului dreapta-jos despărțite prin două puncte. Formula <code>=SUM(D1:E2)</code> adună toate cele 4 celule incluse în dreptunghi (D1, E1, D2, E2).
+              {lang === 'en'
+                ? 'A range is defined by top-left and bottom-right corners separated by a colon. For example, =SUM(D1:E2) aggregates all 4 cells inside the rectangular boundary (D1, E1, D2, E2).'
+                : 'Un domeniu este definit prin coordonata colțului stânga-sus și colțului dreapta-jos despărțite prin două puncte. Formula =SUM(D1:E2) adună toate cele 4 celule incluse în dreptunghi (D1, E1, D2, E2).'}
             </p>
           </div>
         </div>
@@ -300,8 +308,12 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Coordonate & Domenii</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a avansa</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Coordinates & Ranges' : 'Verificare Pedagogică: Coordonate & Domenii'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Answer all 3 curriculum questions correctly to progress' : 'Răspunde corect la cele 3 întrebări din manual pentru a avansa'}
+            </p>
           </div>
         </div>
 
@@ -309,17 +321,19 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Cum se scrie corect adresa celulei aflate la intersecția coloanei B cu rândul 2?
+              {lang === 'en'
+                ? '1. What is the correct syntax for the cell at the intersection of column B and row 2?'
+                : '1. Cum se scrie corect adresa celulei aflate la intersecția coloanei B cu rândul 2?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'b2', text: 'B2 (Litera coloanei urmată de numărul rândului)' },
-              { id: '2b', text: '2B (Numărul rândului urmat de litera coloanei)' },
-              { id: 'b_dash_2', text: 'B-2 cu cratimă la mijloc' },
-              { id: 'b_plus_2', text: 'B+2 cu semnul adunării' },
+              { id: 'b2', text: lang === 'en' ? 'B2 (Column letter followed by row number)' : 'B2 (Litera coloanei urmată de numărul rândului)' },
+              { id: '2b', text: lang === 'en' ? '2B (Row number followed by column letter)' : '2B (Numărul rândului urmat de litera coloanei)' },
+              { id: 'b_dash_2', text: lang === 'en' ? 'B-2 with a hyphen' : 'B-2 cu cratimă la mijloc' },
+              { id: 'b_plus_2', text: lang === 'en' ? 'B+2 with a plus operator' : 'B+2 cu semnul adunării' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -339,11 +353,13 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
             ))}
           </div>
 
-          <QuestionHint hint="În sistemul cartezian Excel se specifică întâi axa verticală (litera coloanei) și apoi numărul rândului." />
+          <QuestionHint hint={lang === 'en' ? 'In Excel cartesian coordinates, specify the vertical axis (column letter) first, followed by the row number.' : 'În sistemul cartezian Excel se specifică întâi axa verticală (litera coloanei) și apoi numărul rândului.'} />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Adresa celulei se notează întotdeauna cu litera coloanei urmată de numărul rândului: B2. Scrierea '2B' este o eroare comună sancționată de aplicație."
+              explanation={lang === 'en'
+                ? "Correct! Cell coordinates always follow column-then-row order: B2. Writing '2B' is a syntax error in spreadsheets."
+                : "Corect! Adresa celulei se notează întotdeauna cu litera coloanei urmată de numărul rândului: B2. Scrierea '2B' este o eroare comună sancționată de aplicație."}
             />
           )}
         </div>
@@ -352,17 +368,19 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce caracter de punctuație este folosit în mod standard pentru a defini un domeniu compact de celule (de la celula de început la cea de sfârșit)?
+              {lang === 'en'
+                ? '2. What punctuation mark is standardly used to define a contiguous range of cells (from starting cell to ending cell)?'
+                : '2. Ce caracter de punctuație este folosit în mod standard pentru a defini un domeniu compact de celule (de la celula de început la cea de sfârșit)?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'colon', text: 'Două puncte (:) de exemplu D1:E2' },
-              { id: 'slash', text: 'Bară oblică (/) de exemplu D1/E2' },
-              { id: 'percent', text: 'Semnul de procent (%) de exemplu D1%E2' },
-              { id: 'dollar', text: 'Semnul dolar ($) de exemplu D1$E2' },
+              { id: 'colon', text: lang === 'en' ? 'Colon (:) e.g. D1:E2' : 'Două puncte (:) de exemplu D1:E2' },
+              { id: 'slash', text: lang === 'en' ? 'Slash (/) e.g. D1/E2' : 'Bară oblică (/) de exemplu D1/E2' },
+              { id: 'percent', text: lang === 'en' ? 'Percent sign (%) e.g. D1%E2' : 'Semnul de procent (%) de exemplu D1%E2' },
+              { id: 'dollar', text: lang === 'en' ? 'Dollar sign ($) e.g. D1$E2' : 'Semnul dolar ($) de exemplu D1$E2' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -382,11 +400,13 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
             ))}
           </div>
 
-          <QuestionHint hint="Privește exemplul din manual: D1:E2 include celulele de la D1 până la E2." />
+          <QuestionHint hint={lang === 'en' ? 'Look at the textbook notation: D1:E2 encompasses cells from D1 to E2.' : 'Privește exemplul din manual: D1:E2 include celulele de la D1 până la E2.'} />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Caracterul două puncte (:) reprezintă operatorul de domeniu în Excel, indicând toate celulele cuprinse între colțul stânga-sus și cel dreapta-jos."
+              explanation={lang === 'en'
+                ? 'Excellent! The colon (:) operator represents range references in spreadsheets, identifying every cell bounded between the specified corners.'
+                : 'Excelent! Caracterul două puncte (:) reprezintă operatorul de domeniu în Excel, indicând toate celulele cuprinse între colțul stânga-sus și cel dreapta-jos.'}
             />
           )}
         </div>
@@ -395,17 +415,19 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Conform exemplului de la pagina 15 din manual, câte celule cuprinde domeniul notat D1:E2?
+              {lang === 'en'
+                ? '3. According to textbook p. 15, how many total cells are contained within the range D1:E2?'
+                : '3. Conform exemplului de la pagina 15 din manual, câte celule cuprinde domeniul notat D1:E2?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'fourCells', text: '4 celule (D1, E1, D2 și E2)' },
-              { id: 'twoCells', text: 'Doar 2 celule (D1 și E2 pe diagonală)' },
-              { id: 'zeroCells', text: 'Nicio celulă, notația este invalidă' },
-              { id: 'tenCells', text: '10 celule adunate consecutiv' },
+              { id: 'fourCells', text: lang === 'en' ? '4 cells (D1, E1, D2, and E2)' : '4 celule (D1, E1, D2 și E2)' },
+              { id: 'twoCells', text: lang === 'en' ? 'Only 2 cells (diagonally D1 and E2)' : 'Doar 2 celule (D1 și E2 pe diagonală)' },
+              { id: 'zeroCells', text: lang === 'en' ? 'Zero cells, the syntax is invalid' : 'Nicio celulă, notația este invalidă' },
+              { id: 'tenCells', text: lang === 'en' ? '10 cells summed consecutively' : '10 celule adunate consecutiv' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -425,11 +447,13 @@ export const C1Level3_CellCoordinatesRanges: React.FC<C1Level3Props> = ({ onComp
             ))}
           </div>
 
-          <QuestionHint hint="Domeniul formează un dreptunghi: coloanele D și E (2 coloane) x rândurile 1 și 2 (2 rânduri). Cât face 2 x 2?" />
+          <QuestionHint hint={lang === 'en' ? 'The range forms a rectangle: columns D and E (2 columns) x rows 1 and 2 (2 rows). 2 x 2 = ?' : 'Domeniul formează un dreptunghi: coloanele D și E (2 coloane) x rândurile 1 și 2 (2 rânduri). Cât face 2 x 2?'} />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! D1:E2 cuprinde 2 coloane (D, E) și 2 rânduri (1, 2), adică 2 × 2 = 4 celule compacte: D1, E1, D2, E2."
+              explanation={lang === 'en'
+                ? 'Exact! D1:E2 spans 2 columns (D, E) and 2 rows (1, 2), calculating to 2 × 2 = 4 total cells: D1, E1, D2, E2.'
+                : 'Exact! D1:E2 cuprinde 2 coloane (D, E) și 2 rânduri (1, 2), adică 2 × 2 = 4 celule compacte: D1, E1, D2, E2.'}
             />
           )}
         </div>

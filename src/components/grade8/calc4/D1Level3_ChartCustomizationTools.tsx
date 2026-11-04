@@ -20,6 +20,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface D1Level3Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -32,6 +33,7 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   // Chart Design State
   const [swappedAxes, setSwappedAxes] = useState(false); // Switch Row/Column
   const [chartSubtype, setChartSubtype] = useState<'grouped' | 'stacked'>('grouped');
@@ -105,20 +107,26 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/20 text-violet-300 text-xs font-bold border border-violet-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 32–33</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • p. 32–33' : 'Manual Art Klett 2025 • Pag. 32–33'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Sliders className="w-8 h-8 text-violet-400" />
-              Nivelul 3: Instrumente de Proiectare & Formatare (Chart Design)
+              {lang === 'en'
+                ? 'Level 3: Design & Formatting Tools (Chart Design)'
+                : 'Nivelul 3: Instrumente de Proiectare & Formatare (Chart Design)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Descoperă magia tab-ului contextual Proiectare diagramă: comută rândurile cu coloanele, alege coloane grupate sau stivuite și aplică palete cromatice armonioase.
+              {lang === 'en'
+                ? 'Discover the contextual Chart Design tab: switch rows and columns, select clustered or stacked layouts, and apply harmonious palettes.'
+                : 'Descoperă magia tab-ului contextual Proiectare diagramă: comută rândurile cu coloanele, alege coloane grupate sau stivuite și aplică palete cromatice armonioase.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-violet-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Instrumente Testate</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">
+              {lang === 'en' ? 'Tested Tools' : 'Instrumente Testate'}
+            </div>
             <div className="text-2xl font-black text-violet-400">{testedTools.length}/4</div>
-            <div className="text-[11px] text-slate-400">Funcții Ribbon</div>
+            <div className="text-[11px] text-slate-400">{lang === 'en' ? 'Ribbon Features' : 'Funcții Ribbon'}</div>
           </div>
         </div>
       </div>
@@ -128,9 +136,9 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
         <div className="border-b border-slate-800 pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-bold text-violet-400 uppercase tracking-wider">
-              <Layout className="w-4 h-4" /> Instrumente Diagramă • Tab-ul Proiectare (Chart Design)
+              <Layout className="w-4 h-4" /> {lang === 'en' ? 'Chart Tools • Chart Design Tab' : 'Instrumente Diagramă • Tab-ul Proiectare (Chart Design)'}
             </div>
-            <span className="text-[11px] text-slate-400">Manual pag. 32</span>
+            <span className="text-[11px] text-slate-400">{lang === 'en' ? 'Curriculum p. 32' : 'Manual pag. 32'}</span>
           </div>
         </div>
 
@@ -150,9 +158,13 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
               {testedTools.includes('switch_row_col') && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
             </div>
             <div>
-              <div className="text-xs font-bold">Comutare Rând/Coloană</div>
+              <div className="text-xs font-bold">
+                {lang === 'en' ? 'Switch Row/Column' : 'Comutare Rând/Coloană'}
+              </div>
               <div className="text-[10px] text-slate-400 mt-0.5">
-                {swappedAxes ? 'Mod: Produse pe axa X' : 'Mod: Trimestre pe axa X'}
+                {swappedAxes
+                  ? (lang === 'en' ? 'Mode: Products on X-axis' : 'Mod: Produse pe axa X')
+                  : (lang === 'en' ? 'Mode: Quarters on X-axis' : 'Mod: Trimestre pe axa X')}
               </div>
             </div>
           </button>
@@ -171,8 +183,14 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
               {testedTools.includes('change_subtype') && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
             </div>
             <div>
-              <div className="text-xs font-bold">Tip: {chartSubtype === 'grouped' ? 'Grupate (Clustered)' : 'Stivuite (Stacked)'}</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Click pentru a schimba</div>
+              <div className="text-xs font-bold">
+                {lang === 'en'
+                  ? `Type: ${chartSubtype === 'grouped' ? 'Clustered' : 'Stacked'}`
+                  : `Tip: ${chartSubtype === 'grouped' ? 'Grupate (Clustered)' : 'Stivuite (Stacked)'}`}
+              </div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {lang === 'en' ? 'Click to switch layout' : 'Click pentru a schimba'}
+              </div>
             </div>
           </button>
 
@@ -183,7 +201,9 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
               {testedTools.includes('change_color') && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
             </div>
             <div>
-              <div className="text-xs font-bold text-slate-300 mb-1">Paletă Cromatică</div>
+              <div className="text-xs font-bold text-slate-300 mb-1">
+                {lang === 'en' ? 'Color Palette' : 'Paletă Cromatică'}
+              </div>
               <div className="flex items-center gap-1.5">
                 {[
                   { id: 'blue-amber', c1: '#0284c7', c2: '#f59e0b' },
@@ -219,8 +239,14 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
               {testedTools.includes('data_table') && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
             </div>
             <div>
-              <div className="text-xs font-bold">Tabel de Date Sub Diagramă</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">{showDataTable ? 'Activat (Afișat)' : 'Dezactivat'}</div>
+              <div className="text-xs font-bold">
+                {lang === 'en' ? 'Data Table Below Chart' : 'Tabel de Date Sub Diagramă'}
+              </div>
+              <div className="text-[10px] text-slate-400 mt-0.5">
+                {showDataTable
+                  ? (lang === 'en' ? 'Enabled (Shown)' : 'Activat (Afișat)')
+                  : (lang === 'en' ? 'Disabled' : 'Dezactivat')}
+              </div>
             </div>
           </button>
         </div>
@@ -229,10 +255,14 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
           <div className="text-center mb-3">
             <h3 className="text-sm font-bold text-white">
-              Vânzări Produse Tehnologice (Trimestrul 1 vs Trimestrul 2)
+              {lang === 'en'
+                ? 'Tech Products Sales (Quarter 1 vs Quarter 2)'
+                : 'Vânzări Produse Tehnologice (Trimestrul 1 vs Trimestrul 2)'}
             </h3>
             <span className="text-[11px] text-slate-400">
-              {swappedAxes ? 'Perspectivă: Grupate pe Produse' : 'Perspectivă: Grupate pe Trimestre'}
+              {swappedAxes
+                ? (lang === 'en' ? 'Perspective: Grouped by Products' : 'Perspectivă: Grupate pe Produse')
+                : (lang === 'en' ? 'Perspective: Grouped by Quarters' : 'Perspectivă: Grupate pe Trimestre')}
             </span>
           </div>
 
@@ -254,9 +284,9 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
             {!swappedAxes ? (
               // Perspective A: Categories = Trimestru 1, Trimestru 2, Trimestru 3
               [
-                { cat: 'Trimestrul 1', v1: 70, v2: 45, x: 90 },
-                { cat: 'Trimestrul 2', v1: 95, v2: 60, x: 220 },
-                { cat: 'Trimestrul 3', v1: 120, v2: 85, x: 350 },
+                { cat: lang === 'en' ? 'Quarter 1' : 'Trimestrul 1', v1: 70, v2: 45, x: 90 },
+                { cat: lang === 'en' ? 'Quarter 2' : 'Trimestrul 2', v1: 95, v2: 60, x: 220 },
+                { cat: lang === 'en' ? 'Quarter 3' : 'Trimestrul 3', v1: 120, v2: 85, x: 350 },
               ].map((item, idx) => {
                 if (chartSubtype === 'grouped') {
                   return (
@@ -284,8 +314,8 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
             ) : (
               // Perspective B: Categories = Laptopuri, Tablete
               [
-                { cat: 'Laptopuri', v1: 70, v2: 95, v3: 120, x: 120 },
-                { cat: 'Tablete', v1: 45, v2: 60, v3: 85, x: 290 },
+                { cat: lang === 'en' ? 'Laptops' : 'Laptopuri', v1: 70, v2: 95, v3: 120, x: 120 },
+                { cat: lang === 'en' ? 'Tablets' : 'Tablete', v1: 45, v2: 60, v3: 85, x: 290 },
               ].map((item, idx) => (
                 <g key={idx}>
                   <rect x={item.x} y={165 - item.v1} width="24" height={item.v1} rx="3" fill={paletteColors.s1} />
@@ -299,10 +329,18 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
 
             {/* Legend */}
             <g>
-              <rect x="360" y="5" width="12" height="12" rx="2" fill={paletteColors.s1} />
-              <text x="378" y="15" fill="#cbd5e1" fontSize="10">{swappedAxes ? 'Trimestru 1' : 'Laptopuri'}</text>
-              <rect x="425" y="5" width="12" height="12" rx="2" fill={paletteColors.s2} />
-              <text x="443" y="15" fill="#cbd5e1" fontSize="10">{swappedAxes ? 'Trimestru 2' : 'Tablete'}</text>
+              <rect x="340" y="5" width="12" height="12" rx="2" fill={paletteColors.s1} />
+              <text x="358" y="15" fill="#cbd5e1" fontSize="10">
+                {swappedAxes
+                  ? (lang === 'en' ? 'Quarter 1' : 'Trimestru 1')
+                  : (lang === 'en' ? 'Laptops' : 'Laptopuri')}
+              </text>
+              <rect x="420" y="5" width="12" height="12" rx="2" fill={paletteColors.s2} />
+              <text x="438" y="15" fill="#cbd5e1" fontSize="10">
+                {swappedAxes
+                  ? (lang === 'en' ? 'Quarter 2' : 'Trimestru 2')
+                  : (lang === 'en' ? 'Tablets' : 'Tablete')}
+              </text>
             </g>
           </svg>
 
@@ -312,24 +350,30 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
               <table className="w-full text-center">
                 <thead className="bg-slate-900 text-slate-400">
                   <tr>
-                    <th className="p-2 border-r border-slate-800 text-left">Serie / Categorie</th>
-                    <th className="p-2 border-r border-slate-800">Trimestrul 1</th>
-                    <th className="p-2 border-r border-slate-800">Trimestrul 2</th>
-                    <th className="p-2">Trimestrul 3</th>
+                    <th className="p-2 border-r border-slate-800 text-left">
+                      {lang === 'en' ? 'Series / Category' : 'Serie / Categorie'}
+                    </th>
+                    <th className="p-2 border-r border-slate-800">{lang === 'en' ? 'Quarter 1' : 'Trimestrul 1'}</th>
+                    <th className="p-2 border-r border-slate-800">{lang === 'en' ? 'Quarter 2' : 'Trimestrul 2'}</th>
+                    <th className="p-2">{lang === 'en' ? 'Quarter 3' : 'Trimestrul 3'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800 bg-slate-950 text-slate-200">
                   <tr>
-                    <td className="p-2 border-r border-slate-800 text-left font-bold" style={{ color: paletteColors.text1 }}>Laptopuri</td>
-                    <td className="p-2 border-r border-slate-800">70 buc</td>
-                    <td className="p-2 border-r border-slate-800">95 buc</td>
-                    <td className="p-2">120 buc</td>
+                    <td className="p-2 border-r border-slate-800 text-left font-bold" style={{ color: paletteColors.text1 }}>
+                      {lang === 'en' ? 'Laptops' : 'Laptopuri'}
+                    </td>
+                    <td className="p-2 border-r border-slate-800">{lang === 'en' ? '70 pcs' : '70 buc'}</td>
+                    <td className="p-2 border-r border-slate-800">{lang === 'en' ? '95 pcs' : '95 buc'}</td>
+                    <td className="p-2">{lang === 'en' ? '120 pcs' : '120 buc'}</td>
                   </tr>
                   <tr>
-                    <td className="p-2 border-r border-slate-800 text-left font-bold" style={{ color: paletteColors.text2 }}>Tablete</td>
-                    <td className="p-2 border-r border-slate-800">45 buc</td>
-                    <td className="p-2 border-r border-slate-800">60 buc</td>
-                    <td className="p-2">85 buc</td>
+                    <td className="p-2 border-r border-slate-800 text-left font-bold" style={{ color: paletteColors.text2 }}>
+                      {lang === 'en' ? 'Tablets' : 'Tablete'}
+                    </td>
+                    <td className="p-2 border-r border-slate-800">{lang === 'en' ? '45 pcs' : '45 buc'}</td>
+                    <td className="p-2 border-r border-slate-800">{lang === 'en' ? '60 pcs' : '60 buc'}</td>
+                    <td className="p-2">{lang === 'en' ? '85 pcs' : '85 buc'}</td>
                   </tr>
                 </tbody>
               </table>
@@ -345,23 +389,38 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Reflecție Pedagogică: Manipularea Axelor & Opțiuni de Formatare</h2>
-            <p className="text-xs text-slate-400">Manual Art Klett pag. 32–33</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Pedagogical Reflection: Axis Manipulation & Formatting Options'
+                : 'Reflecție Pedagogică: Manipularea Axelor & Opțiuni de Formatare'}
+            </h2>
+            <p className="text-xs text-slate-400">{lang === 'en' ? 'Art Klett Textbook p. 32–33' : 'Manual Art Klett pag. 32–33'}</p>
           </div>
         </div>
 
         {/* Question 1 */}
         <div className="space-y-3">
           <div className="text-sm font-semibold text-slate-200">
-            1. Ce efect produce comanda <span className="text-violet-300 font-bold">„Comutare rând/coloană” (Switch Row/Column)</span> din tab-ul Proiectare diagramă?
+            {lang === 'en' ? (
+              <>1. What is the effect of the <span className="text-violet-300 font-bold">"Switch Row/Column"</span> command in the Chart Design tab?</>
+            ) : (
+              <>1. Ce efect produce comanda <span className="text-violet-300 font-bold">„Comutare rând/coloană” (Switch Row/Column)</span> din tab-ul Proiectare diagramă?</>
+            )}
           </div>
-          <QuestionHint hint="Observă ce se întâmplă cu elementele de pe axa orizontală X și cu seriile din legendă." />
+          <QuestionHint
+            hintRo="Observă ce se întâmplă cu elementele de pe axa orizontală X și cu seriile din legendă."
+            hintEn="Notice what happens to the items on horizontal X-axis and the series listed in the legend."
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'Inverts the data between category X-axis and legend series, providing a fresh analytical perspective without modifying the original cell grid', correct: true },
+              { text: 'Deletes all numbers in the sheet and replaces them with zeros', correct: false },
+              { text: 'Instantly turns vertical columns into a pie chart', correct: false }
+            ] : [
               { text: 'Inversează datele de pe axa categoriilor X cu seriile din legendă, oferind o nouă perspectivă de analiză fără a modifica tabelul original de celule', correct: true },
               { text: 'Șterge toate numerele din foaie și le înlocuiește cu zero', correct: false },
               { text: 'Transformă instant coloanele verticale într-o diagramă circulară', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l3_q1';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -388,22 +447,37 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l3_q1'] || 0} />
           )}
           {quizSubmitted['d1_l3_q1'] && (
-            <AnswerExplanation explanation="Corect! Manual pag. 32: Switch Row/Column transferă datele din linii în coloane pe axa reprezentării grafice. Acest lucru permite observarea rapidă fie a evoluției pe trimestre, fie a comparației între produse." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Correct! Curriculum p. 32: Switch Row/Column toggles row series into column series on the graphic axes. This allows rapid inspection of trends by quarters or product comparisons.'
+                : 'Corect! Manual pag. 32: Switch Row/Column transferă datele din linii în coloane pe axa reprezentării grafice. Acest lucru permite observarea rapidă fie a evoluției pe trimestre, fie a comparației între produse.'}
+            />
           )}
         </div>
 
         {/* Question 2 */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <div className="text-sm font-semibold text-slate-200">
-            2. Când este utilă o diagramă cu <span className="text-violet-300 font-bold">Coloane Stivuite (Stacked Column)</span> față de Coloane Grupate (Clustered Column)?
+            {lang === 'en' ? (
+              <>2. When is a <span className="text-violet-300 font-bold">Stacked Column</span> chart beneficial compared to Clustered Columns?</>
+            ) : (
+              <>2. Când este utilă o diagramă cu <span className="text-violet-300 font-bold">Coloane Stivuite (Stacked Column)</span> față de Coloane Grupate (Clustered Column)?</>
+            )}
           </div>
-          <QuestionHint hint="La coloanele stivuite, valorile se adună una peste alta formând o singură coloană înaltă." />
+          <QuestionHint
+            hintRo="La coloanele stivuite, valorile se adună una peste alta formând o singură coloană înaltă."
+            hintEn="In stacked columns, values are added on top of each other forming a combined column height."
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'When we wish to emphasize both the cumulative total of a category and the relative contribution of each component part', correct: true },
+              { text: 'Only when all values are negative numbers', correct: false },
+              { text: 'Never recommended because bars overlap and mask each other', correct: false }
+            ] : [
               { text: 'Când dorim să evidențiem simultan atât totalul cumulat al categoriei, cât și contribuția relativă a fiecărui element component', correct: true },
               { text: 'Doar când valorile sunt toate negative', correct: false },
               { text: 'Nu se recomandă niciodată deoarece barele se suprapun și maschează datele', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l3_q2';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -430,7 +504,11 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l3_q2'] || 0} />
           )}
           {quizSubmitted['d1_l3_q2'] && (
-            <AnswerExplanation explanation="Exact! Manual pag. 33: Diagramele stivuite (Stacked) arată totalul general prin înălțimea completă a barei, iar segmentele colorate arată ponderea fiecărei componente." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Exactly! Curriculum p. 33: Stacked Column charts convey the overall sum via total column height while colored segments display individual contribution shares.'
+                : 'Exact! Manual pag. 33: Diagramele stivuite (Stacked) arată totalul general prin înălțimea completă a barei, iar segmentele colorate arată ponderea fiecărei componente.'}
+            />
           )}
         </div>
       </div>
@@ -444,7 +522,7 @@ export const D1Level3_ChartCustomizationTools: React.FC<D1Level3Props> = ({
           if (onCompletePage) onCompletePage(100);
           else if (onComplete) onComplete();
         }}
-        nextLabel="Spre Nivelul 4: Laborator Interdisciplinar Geografie & Climă"
+        nextLabel={lang === 'en' ? 'To Level 4: Interdisciplinary Geography & Climate Lab' : 'Spre Nivelul 4: Laborator Interdisciplinar Geografie & Climă'}
       />
     </div>
   );

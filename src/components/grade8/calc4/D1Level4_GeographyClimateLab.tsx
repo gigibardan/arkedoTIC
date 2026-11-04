@@ -20,6 +20,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface D1Level4Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -29,23 +30,24 @@ interface D1Level4Props {
 
 interface MonthData {
   month: string;
+  monthEn: string;
   temp: number; // °C
   precip: number; // mm
 }
 
 const CLIMATE_DATA: MonthData[] = [
-  { month: 'Ian', temp: -2.5, precip: 38 },
-  { month: 'Feb', temp: 0.2, precip: 32 },
-  { month: 'Mar', temp: 5.8, precip: 40 },
-  { month: 'Apr', temp: 11.5, precip: 52 },
-  { month: 'Mai', temp: 17.2, precip: 68 },
-  { month: 'Iun', temp: 21.0, precip: 85 },
-  { month: 'Iul', temp: 23.5, precip: 72 },
-  { month: 'Aug', temp: 22.8, precip: 55 },
-  { month: 'Sep', temp: 17.4, precip: 48 },
-  { month: 'Oct', temp: 11.0, precip: 42 },
-  { month: 'Nov', temp: 4.8, precip: 45 },
-  { month: 'Dec', temp: -0.8, precip: 40 },
+  { month: 'Ian', monthEn: 'Jan', temp: -2.5, precip: 38 },
+  { month: 'Feb', monthEn: 'Feb', temp: 0.2, precip: 32 },
+  { month: 'Mar', monthEn: 'Mar', temp: 5.8, precip: 40 },
+  { month: 'Apr', monthEn: 'Apr', temp: 11.5, precip: 52 },
+  { month: 'Mai', monthEn: 'May', temp: 17.2, precip: 68 },
+  { month: 'Iun', monthEn: 'Jun', temp: 21.0, precip: 85 },
+  { month: 'Iul', monthEn: 'Jul', temp: 23.5, precip: 72 },
+  { month: 'Aug', monthEn: 'Aug', temp: 22.8, precip: 55 },
+  { month: 'Sep', monthEn: 'Sep', temp: 17.4, precip: 48 },
+  { month: 'Oct', monthEn: 'Oct', temp: 11.0, precip: 42 },
+  { month: 'Nov', monthEn: 'Nov', temp: 4.8, precip: 45 },
+  { month: 'Dec', monthEn: 'Dec', temp: -0.8, precip: 40 },
 ];
 
 export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
@@ -53,6 +55,7 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const [viewMode, setViewMode] = useState<'combo' | 'tempOnly' | 'precipOnly'>('combo');
   const [highlightMonth, setHighlightMonth] = useState<string | null>('Iul');
 
@@ -89,18 +92,24 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 33–34</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • p. 33–34' : 'Manual Art Klett 2025 • Pag. 33–34'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Compass className="w-8 h-8 text-emerald-400" />
-              Nivelul 4: Laborator Interdisciplinar Geografie & Climă
+              {lang === 'en'
+                ? 'Level 4: Interdisciplinary Geography & Climate Lab'
+                : 'Nivelul 4: Laborator Interdisciplinar Geografie & Climă'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Construiește o Climodiagramă oficială (Walter & Lieth): îmbină curba temperaturilor lunare cu barele de precipitații și calculează amplitudinea termică a României.
+              {lang === 'en'
+                ? 'Build an official Walter & Lieth Climodiagram: combine the monthly temperature curve with precipitation bars and calculate Romania’s thermal amplitude.'
+                : 'Construiește o Climodiagramă oficială (Walter & Lieth): îmbină curba temperaturilor lunare cu barele de precipitații și calculează amplitudinea termică a României.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-emerald-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Amplitudine Termică</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">
+              {lang === 'en' ? 'Thermal Amplitude' : 'Amplitudine Termică'}
+            </div>
             <div className="text-2xl font-black text-emerald-400">{amplitude}°C</div>
             <div className="text-[11px] text-slate-400">Tmax: {maxTemp}°C • Tmin: {minTemp}°C</div>
           </div>
@@ -115,8 +124,16 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
               <Activity className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Climodiagrama României (Regim Termic & Precipitații)</h2>
-              <p className="text-xs text-slate-400">Diagramă combinată (Combo Chart): Linie pentru temperaturi, Coloane pentru precipitații</p>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Climodiagram of Romania (Thermal Regime & Precipitation)'
+                  : 'Climodiagrama României (Regim Termic & Precipitații)'}
+              </h2>
+              <p className="text-xs text-slate-400">
+                {lang === 'en'
+                  ? 'Combo Chart: Line for temperatures, Columns for precipitation'
+                  : 'Diagramă combinată (Combo Chart): Linie pentru temperaturi, Coloane pentru precipitații'}
+              </p>
             </div>
           </div>
 
@@ -128,7 +145,7 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
                 viewMode === 'combo' ? 'bg-emerald-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Combinată (Combo)
+              {lang === 'en' ? 'Combo' : 'Combinată (Combo)'}
             </button>
             <button
               onClick={() => { sounds.playClick(); setViewMode('tempOnly'); }}
@@ -136,7 +153,7 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
                 viewMode === 'tempOnly' ? 'bg-emerald-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Doar Temperaturi
+              {lang === 'en' ? 'Temperatures Only' : 'Doar Temperaturi'}
             </button>
             <button
               onClick={() => { sounds.playClick(); setViewMode('precipOnly'); }}
@@ -144,7 +161,7 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
                 viewMode === 'precipOnly' ? 'bg-emerald-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Doar Precipitații
+              {lang === 'en' ? 'Precipitation Only' : 'Doar Precipitații'}
             </button>
           </div>
         </div>
@@ -154,13 +171,17 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
           <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
             <div className="flex items-center gap-4 text-xs font-mono">
               <span className="flex items-center gap-1.5 text-rose-400">
-                <span className="w-3 h-1 bg-rose-500 rounded"></span> Temperatură (°C) - Axa Primară
+                <span className="w-3 h-1 bg-rose-500 rounded"></span>{' '}
+                {lang === 'en' ? 'Temperature (°C) - Primary Axis' : 'Temperatură (°C) - Axa Primară'}
               </span>
               <span className="flex items-center gap-1.5 text-sky-400">
-                <span className="w-3 h-3 bg-sky-500 rounded-sm"></span> Precipitații (mm) - Axa Secundară
+                <span className="w-3 h-3 bg-sky-500 rounded-sm"></span>{' '}
+                {lang === 'en' ? 'Precipitation (mm) - Secondary Axis' : 'Precipitații (mm) - Axa Secundară'}
               </span>
             </div>
-            <span className="text-xs text-slate-400 font-mono">Total anual: {totalPrecip} mm</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'en' ? `Annual total: ${totalPrecip} mm` : `Total anual: ${totalPrecip} mm`}
+            </span>
           </div>
 
           <svg className="w-full h-64" viewBox="0 0 540 220">
@@ -264,7 +285,7 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
                   fontSize="10"
                   fontWeight={isSelected ? 'bold' : 'normal'}
                 >
-                  {d.month}
+                  {lang === 'en' ? d.monthEn : d.month}
                 </text>
               );
             })}
@@ -281,17 +302,27 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
                   {mData.temp >= 15 ? <Sun className="w-5 h-5" /> : <Thermometer className="w-5 h-5" />}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Luna {mData.month} — Date Climatice</h3>
-                  <p className="text-xs text-slate-400">Fă click pe oricare altă lună din diagramă pentru comparare</p>
+                  <h3 className="text-sm font-bold text-white">
+                    {lang === 'en' ? `Month ${mData.monthEn} — Climate Data` : `Luna ${mData.month} — Date Climatice`}
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    {lang === 'en'
+                      ? 'Click any other month on the chart to compare'
+                      : 'Fă click pe oricare altă lună din diagramă pentru comparare'}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-6 font-mono text-sm">
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 uppercase block">Temperatură Medie</span>
+                  <span className="text-[10px] text-slate-400 uppercase block">
+                    {lang === 'en' ? 'Average Temperature' : 'Temperatură Medie'}
+                  </span>
                   <span className="font-bold text-rose-400">{mData.temp}°C</span>
                 </div>
                 <div className="text-right border-l border-slate-800 pl-4">
-                  <span className="text-[10px] text-slate-400 uppercase block">Precipitații</span>
+                  <span className="text-[10px] text-slate-400 uppercase block">
+                    {lang === 'en' ? 'Precipitation' : 'Precipitații'}
+                  </span>
                   <span className="font-bold text-sky-400">{mData.precip} mm</span>
                 </div>
               </div>
@@ -307,23 +338,42 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Reflecție Pedagogică: Diagrame Combinate (Combo Charts)</h2>
-            <p className="text-xs text-slate-400">Manual Art Klett pag. 33–34: Analiză interdisciplinară Geografie-TIC</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Pedagogical Reflection: Combined Charts (Combo Charts)'
+                : 'Reflecție Pedagogică: Diagrame Combinate (Combo Charts)'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Art Klett Textbook p. 33–34: Interdisciplinary Geography-ICT analysis'
+                : 'Manual Art Klett pag. 33–34: Analiză interdisciplinară Geografie-TIC'}
+            </p>
           </div>
         </div>
 
         {/* Question 1 */}
         <div className="space-y-3">
           <div className="text-sm font-semibold text-slate-200">
-            1. De ce este necesară o <span className="text-emerald-400 font-bold">axă secundară (Secondary Axis)</span> la o climodiagramă care conține atât temperaturi cât și precipitații?
+            {lang === 'en' ? (
+              <>1. Why is a <span className="text-emerald-400 font-bold">Secondary Axis</span> required in a climodiagram showing both temperatures and precipitation?</>
+            ) : (
+              <>1. De ce este necesară o <span className="text-emerald-400 font-bold">axă secundară (Secondary Axis)</span> la o climodiagramă care conține atât temperaturi cât și precipitații?</>
+            )}
           </div>
-          <QuestionHint hint="Compară unitățile de măsură: grade Celsius (°C de la -5 la 25) vs milimetri (mm de la 30 la 100)." />
+          <QuestionHint
+            hintRo="Compară unitățile de măsură: grade Celsius (°C de la -5 la 25) vs milimetri (mm de la 30 la 100)."
+            hintEn="Compare units of measurement: degrees Celsius (°C from -5 to 25) vs millimeters (mm from 30 to 100)."
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'Because the two series have completely different units (°C vs mm) and different numerical scales; a single axis would flatten the temperature curve into illegibility', correct: true },
+              { text: 'To fill both borders of the display purely for decorative flair', correct: false },
+              { text: 'Excel strictly prevents line rendering without a secondary axis enabled', correct: false }
+            ] : [
               { text: 'Deoarece cele două serii au unități de măsură complet diferite (°C vs mm) și scări numerice diferite; o singură axă ar face curba temperaturilor aproape plată și ilizibilă', correct: true },
               { text: 'Pentru a ocupa ambele margini ale ecranului din motive decorative', correct: false },
               { text: 'Excel nu permite trasarea de linii fără axă secundară', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l4_q1';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -350,16 +400,25 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l4_q1'] || 0} />
           )}
           {quizSubmitted['d1_l4_q1'] && (
-            <AnswerExplanation explanation="Corect! Manual pag. 34: Când combinăm mărimi eterogene (grade Celsius pe stânga și milimetri de coloană de apă pe dreapta), activarea axei secundare (Secondary Axis) asigură proporționalitatea corectă a ambelor reprezentări." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Correct! Curriculum p. 34: When combining heterogeneous metrics (degrees Celsius on the left vs millimeters on the right), enabling a Secondary Axis ensures balanced proportional visualization for both variables.'
+                : 'Corect! Manual pag. 34: Când combinăm mărimi eterogene (grade Celsius pe stânga și milimetri de coloană de apă pe dreapta), activarea axei secundare (Secondary Axis) asigură proporționalitatea corectă a ambelor reprezentări.'}
+            />
           )}
         </div>
 
         {/* Question 2 */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <div className="text-sm font-semibold text-slate-200">
-            2. Cum se calculează formula amplitudinii termice anuale folosind celulele dintr-un tabel Excel?
+            {lang === 'en'
+              ? '2. How is the annual thermal amplitude formula constructed using cells in an Excel spreadsheet?'
+              : '2. Cum se calculează formula amplitudinii termice anuale folosind celulele dintr-un tabel Excel?'}
           </div>
-          <QuestionHint hint="Amplitudinea termică este diferența dintre temperatura maximă a anului și temperatura minimă a anului." />
+          <QuestionHint
+            hintRo="Amplitudinea termică este diferența dintre temperatura maximă a anului și temperatura minimă a anului."
+            hintEn="Thermal amplitude is the difference between maximum annual temperature and minimum annual temperature."
+          />
           <div className="space-y-2">
             {[
               { text: '=MAX(B2:B13) - MIN(B2:B13)', correct: true },
@@ -392,7 +451,11 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l4_q2'] || 0} />
           )}
           {quizSubmitted['d1_l4_q2'] && (
-            <AnswerExplanation explanation="Excelent! Amplitudinea termică = valoarea maximă a temperaturii minus valoarea minimă a temperaturii. În Excel se obține combinând cele două funcții: =MAX(interval) - MIN(interval)." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Excellent! Thermal amplitude = maximum temperature minus minimum temperature. In Excel we combine both functions: =MAX(range) - MIN(range).'
+                : 'Excelent! Amplitudinea termică = valoarea maximă a temperaturii minus valoarea minimă a temperaturii. În Excel se obține combinând cele două funcții: =MAX(interval) - MIN(interval).'}
+            />
           )}
         </div>
       </div>
@@ -406,7 +469,7 @@ export const D1Level4_GeographyClimateLab: React.FC<D1Level4Props> = ({
           if (onCompletePage) onCompletePage(100);
           else if (onComplete) onComplete();
         }}
-        nextLabel="Spre Nivelul 5: Laborator Bugetul Familial (Pie Chart)"
+        nextLabel={lang === 'en' ? 'To Level 5: Family Budget Lab (Pie Chart)' : 'Spre Nivelul 5: Laborator Bugetul Familial (Pie Chart)'}
       />
     </div>
   );

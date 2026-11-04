@@ -59,7 +59,72 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
     manualRef: string;
     proTip: string;
     color: string;
-  }> = {
+  }> = lang === 'en' ? {
+    quickAccess: {
+      title: 'Quick Access Toolbar',
+      subtitle: 'Frequent commands just one click away',
+      description: 'Located in the top-left corner (above or below the ribbon). Contains essential configurable buttons: Save (Ctrl+S), Undo (Ctrl+Z), Redo (Ctrl+Y).',
+      manualRef: 'Art Klett Textbook p. 13 - Fig. 2',
+      proTip: 'You can add Quick Print or Print Preview from the small dropdown arrow.',
+      color: 'border-cyan-500/40 bg-cyan-950/20 text-cyan-300'
+    },
+    titleBar: {
+      title: 'Title Bar & Window Control Buttons',
+      subtitle: 'File identification and window state control',
+      description: 'Displays current workbook name (e.g. Book1.xlsx - Excel), smart search bar, account status, and OS control buttons: Minimize, Maximize/Restore, and Close (X).',
+      manualRef: 'Art Klett Textbook p. 13',
+      proTip: 'Double-clicking the title bar instantly toggles between maximized and resizable window states.',
+      color: 'border-blue-500/40 bg-blue-950/20 text-blue-300'
+    },
+    ribbonOptions: {
+      title: 'Ribbon Display Options',
+      subtitle: 'Controlling visible workspace real estate',
+      description: 'Offers 3 essential modes: 1) Auto-hide Ribbon (full screen for massive tables), 2) Show Tabs Only (Home, Insert...), 3) Show Tabs and Commands (classic complete mode).',
+      manualRef: 'Art Klett Textbook p. 13 - Info box',
+      proTip: 'If your ribbon suddenly vanished, you accidentally pressed Ctrl+F1!',
+      color: 'border-amber-500/40 bg-amber-950/20 text-amber-300'
+    },
+    nameBox: {
+      title: 'Name Box',
+      subtitle: 'Active cell compass & address coordinate',
+      description: 'Displays the coordinates of the selected active cell (e.g. B2, G14) or defined named range. Typing an address here and pressing Enter jumps instantly to that cell!',
+      manualRef: 'Art Klett Textbook p. 14',
+      proTip: 'The Name Box always displays column letter first, followed by row number (never reversed!).',
+      color: 'border-purple-500/40 bg-purple-950/20 text-purple-300'
+    },
+    formulaBar: {
+      title: 'Formula Bar',
+      subtitle: 'The mathematical brain of the spreadsheet',
+      description: 'Displays actual content or underlying formula of the active cell. While the cell renders the evaluated result (e.g. 42), the formula bar reveals the raw formula (e.g. =A1*B1). Includes the fx button to insert functions.',
+      manualRef: 'Art Klett Textbook p. 14',
+      proTip: 'For extra-long formulas, expand the formula bar height with Ctrl+Shift+U.',
+      color: 'border-emerald-500/40 bg-emerald-950/20 text-emerald-300'
+    },
+    gridHeaders: {
+      title: 'Row & Column Grid Headers',
+      subtitle: 'Cartesian coordinate navigation system',
+      description: 'Columns are labeled vertically with letters (A, B, C... Z, AA... XFD = 16,384 columns). Rows are numbered horizontally (from 1 to 1,048,576 rows).',
+      manualRef: 'Art Klett Textbook p. 14',
+      proTip: 'Clicking a column header letter (e.g. column B) selects the entire 1-million-cell column instantly.',
+      color: 'border-teal-500/40 bg-teal-950/20 text-teal-300'
+    },
+    sheetTabs: {
+      title: 'Sheet Tab Bar & New Sheet Button (+)',
+      subtitle: 'Navigation between workbook sheets',
+      description: 'Switch between worksheets (Sheet1, Invoices, Grades). Double-click to rename, click [+] to add sheets, and right-click to apply tab colors for visual classification.',
+      manualRef: 'Art Klett Textbook p. 16',
+      proTip: 'To quickly duplicate a sheet, hold Ctrl and drag its tab to the right!',
+      color: 'border-pink-500/40 bg-pink-950/20 text-pink-300'
+    },
+    statusBar: {
+      title: 'Status Bar & Zoom Slider',
+      subtitle: 'Instant automatic statistics and canvas scaling',
+      description: 'Located at the bottom of the window. When numeric cells are selected, the status bar automatically calculates Average, Count, and Sum without typing any formula! Right side houses the Zoom slider (10% - 400%).',
+      manualRef: 'Art Klett Textbook pp. 13-14',
+      proTip: 'Instant status bar statistics are the quickest secret for professional data analysts.',
+      color: 'border-indigo-500/40 bg-indigo-950/20 text-indigo-300'
+    }
+  } : {
     quickAccess: {
       title: 'Bara de Instrumente pentru Acces Rapid (Quick Access)',
       subtitle: 'Comenzi frecvente la un singur clic distanță',
@@ -176,18 +241,20 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 13–14</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • pp. 13–14' : 'Manual Art Klett 2025 • Pag. 13–14'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <LayoutTemplate className="w-8 h-8 text-teal-400" />
-              Nivelul 2: Anatomia Ferestrei MS Excel & Panglica Ribbon
+              {lang === 'en' ? 'Level 2: MS Excel Window Anatomy & Ribbon Interface' : 'Nivelul 2: Anatomia Ferestrei MS Excel & Panglica Ribbon'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Explorează zonele cheie ale interfeței de calcul tabelar: Caseta de Nume, Bara de Formule, modurile panglicii și bara de stare cu statistici instantanee!
+              {lang === 'en'
+                ? 'Explore the key zones of a spreadsheet interface: Name Box, Formula Bar, Ribbon display modes, and the instant-calculation status bar!'
+                : 'Explorează zonele cheie ale interfeței de calcul tabelar: Caseta de Nume, Bara de Formule, modurile panglicii și bara de stare cu statistici instantanee!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Pas Curent</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Current Step' : 'Pas Curent'}</div>
             <div className="text-2xl font-black text-teal-400">2 / 7</div>
           </div>
         </div>
@@ -199,10 +266,10 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
         <div className="bg-slate-950 p-3 sm:px-6 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 text-slate-400 font-mono">
             <Command className="w-4 h-4 text-teal-400" />
-            <span>Simulator Interactiv Interfață Excel</span>
+            <span>{lang === 'en' ? 'Interactive Excel Interface Simulator' : 'Simulator Interactiv Interfață Excel'}</span>
           </div>
           <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
-            <span className="text-slate-400 px-2 font-medium">Mod Panglică:</span>
+            <span className="text-slate-400 px-2 font-medium">{lang === 'en' ? 'Ribbon Mode:' : 'Mod Panglică:'}</span>
             <button
               type="button"
               onClick={() => { sounds.playClick(); setRibbonMode('autohide'); }}
@@ -210,7 +277,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
                 ribbonMode === 'autohide' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'text-slate-400 hover:text-white'
               }`}
             >
-              1. Auto-ascundere
+              {lang === 'en' ? '1. Auto-hide' : '1. Auto-ascundere'}
             </button>
             <button
               type="button"
@@ -219,7 +286,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
                 ribbonMode === 'tabs' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40' : 'text-slate-400 hover:text-white'
               }`}
             >
-              2. Doar File
+              {lang === 'en' ? '2. Tabs Only' : '2. Doar File'}
             </button>
             <button
               type="button"
@@ -228,7 +295,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
                 ribbonMode === 'full' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'text-slate-400 hover:text-white'
               }`}
             >
-              3. File & Comenzi (Complet)
+              {lang === 'en' ? '3. Tabs & Commands (Full)' : '3. File & Comenzi (Complet)'}
             </button>
           </div>
         </div>
@@ -255,7 +322,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
 
           <div className="font-bold text-xs sm:text-sm text-slate-200 flex items-center gap-2">
             <span className="text-emerald-400">📗</span>
-            <span>Registru1.xlsx - Excel</span>
+            <span>{lang === 'en' ? 'Book1.xlsx - Excel' : 'Registru1.xlsx - Excel'}</span>
           </div>
 
           {/* Ribbon Options & Window Controls */}
@@ -267,7 +334,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
                 activeZone === 'ribbonOptions' ? 'border-amber-400 bg-amber-950/40 text-amber-300' : 'border-slate-800 text-slate-400 hover:text-white'
               }`}
             >
-              ⤢ Panglică
+              {lang === 'en' ? '⤢ Ribbon' : '⤢ Panglică'}
             </button>
             <div className="flex items-center gap-1 text-slate-500 ml-1">
               <span className="w-3 h-3 rounded-full bg-slate-700 inline-block"></span>
@@ -280,13 +347,13 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
         {/* Ribbon Tabs Header */}
         {ribbonMode !== 'autohide' && (
           <div className="bg-slate-900 border-b border-slate-800 px-4 flex items-center gap-1 sm:gap-2 text-xs overflow-x-auto">
-            <span className="px-3 py-2 bg-emerald-600 text-slate-950 font-bold rounded-t-lg">Fișier</span>
+            <span className="px-3 py-2 bg-emerald-600 text-slate-950 font-bold rounded-t-lg">{lang === 'en' ? 'File' : 'Fișier'}</span>
             {[
-              { id: 'home', name: 'Pornire (Home)' },
-              { id: 'insert', name: 'Inserare (Insert)' },
-              { id: 'formulas', name: 'Formule (Formulas)' },
-              { id: 'data', name: 'Date (Data)' },
-              { id: 'view', name: 'Vizualizare (View)' },
+              { id: 'home', name: lang === 'en' ? 'Home' : 'Pornire (Home)' },
+              { id: 'insert', name: lang === 'en' ? 'Insert' : 'Inserare (Insert)' },
+              { id: 'formulas', name: lang === 'en' ? 'Formulas' : 'Formule (Formulas)' },
+              { id: 'data', name: lang === 'en' ? 'Data' : 'Date (Data)' },
+              { id: 'view', name: lang === 'en' ? 'View' : 'Vizualizare (View)' },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -309,8 +376,8 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
           <div className="bg-slate-850 p-2 sm:p-3 border-b border-slate-800 flex items-center gap-4 text-xs overflow-x-auto">
             <div className="flex items-center gap-2 border-r border-slate-700/60 pr-3">
               <div className="text-[10px] text-slate-400 font-mono">Clipboard:</div>
-              <span className="px-2 py-1 bg-slate-800 rounded font-bold text-slate-200 text-[11px]">Lipire (Paste)</span>
-              <span className="px-2 py-1 bg-slate-800 rounded text-slate-300 text-[11px]">Copiere</span>
+              <span className="px-2 py-1 bg-slate-800 rounded font-bold text-slate-200 text-[11px]">{lang === 'en' ? 'Paste' : 'Lipire (Paste)'}</span>
+              <span className="px-2 py-1 bg-slate-800 rounded text-slate-300 text-[11px]">{lang === 'en' ? 'Copy' : 'Copiere'}</span>
             </div>
             <div className="flex items-center gap-2 border-r border-slate-700/60 pr-3">
               <div className="text-[10px] text-slate-400 font-mono">Font:</div>
@@ -321,9 +388,9 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
               <span className="underline px-1.5 py-0.5 bg-slate-800 rounded text-white">U</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="text-[10px] text-slate-400 font-mono">Număr:</div>
-              <span className="px-2 py-1 bg-slate-800 rounded text-amber-300 font-mono text-[11px] font-bold">Monedă (RON)</span>
-              <span className="px-2 py-1 bg-slate-800 rounded text-teal-300 font-mono text-[11px] font-bold">% Procent</span>
+              <div className="text-[10px] text-slate-400 font-mono">{lang === 'en' ? 'Number:' : 'Număr:'}</div>
+              <span className="px-2 py-1 bg-slate-800 rounded text-amber-300 font-mono text-[11px] font-bold">{lang === 'en' ? 'Currency ($)' : 'Monedă (RON)'}</span>
+              <span className="px-2 py-1 bg-slate-800 rounded text-teal-300 font-mono text-[11px] font-bold">{lang === 'en' ? '% Percent' : '% Procent'}</span>
             </div>
           </div>
         )}
@@ -340,7 +407,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             }`}
           >
             <span>B2</span>
-            <span className="text-[9px] text-slate-500 uppercase">Caseta Nume</span>
+            <span className="text-[9px] text-slate-500 uppercase">{lang === 'en' ? 'Name Box' : 'Caseta Nume'}</span>
           </div>
 
           {/* Formula Function button (fx) */}
@@ -359,7 +426,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
           >
             <span className="text-amber-400 font-bold">=</span>
             <span className="text-emerald-300 font-semibold">SUM(A2:A10) * 1.19</span>
-            <span className="ml-auto text-[9px] text-slate-500 uppercase hidden sm:inline">Bara de Formule</span>
+            <span className="ml-auto text-[9px] text-slate-500 uppercase hidden sm:inline">{lang === 'en' ? 'Formula Bar' : 'Bara de Formule'}</span>
           </div>
         </div>
 
@@ -375,7 +442,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             <div className="grid grid-cols-6 bg-slate-900 border-b border-slate-800 text-center font-bold text-slate-400">
               <div className="p-1.5 border-r border-slate-800 bg-slate-850">◢</div>
               <div className="p-1.5 border-r border-slate-800 hover:bg-slate-800 text-slate-300">A</div>
-              <div className="p-1.5 border-r border-slate-800 bg-emerald-500/20 text-emerald-300 font-black">B (Activă)</div>
+              <div className="p-1.5 border-r border-slate-800 bg-emerald-500/20 text-emerald-300 font-black">{lang === 'en' ? 'B (Active)' : 'B (Activă)'}</div>
               <div className="p-1.5 border-r border-slate-800 hover:bg-slate-800 text-slate-300">C</div>
               <div className="p-1.5 border-r border-slate-800 hover:bg-slate-800 text-slate-300">D</div>
               <div className="p-1.5 hover:bg-slate-800 text-slate-300">E</div>
@@ -383,16 +450,16 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             {/* Row 1 */}
             <div className="grid grid-cols-6 border-b border-slate-850 bg-slate-950/50">
               <div className="p-2 border-r border-slate-850 text-center bg-slate-900 font-bold text-slate-400">1</div>
-              <div className="p-2 border-r border-slate-850 text-slate-300">Produs</div>
-              <div className="p-2 border-r border-slate-850 text-slate-300">Preț Unitar</div>
-              <div className="p-2 border-r border-slate-850 text-slate-300">Cantitate</div>
-              <div className="p-2 border-r border-slate-850 text-slate-300">Total</div>
-              <div className="p-2 text-slate-400">TVA</div>
+              <div className="p-2 border-r border-slate-850 text-slate-300">{lang === 'en' ? 'Product' : 'Produs'}</div>
+              <div className="p-2 border-r border-slate-850 text-slate-300">{lang === 'en' ? 'Unit Price' : 'Preț Unitar'}</div>
+              <div className="p-2 border-r border-slate-850 text-slate-300">{lang === 'en' ? 'Quantity' : 'Cantitate'}</div>
+              <div className="p-2 border-r border-slate-850 text-slate-300">{lang === 'en' ? 'Total' : 'Total'}</div>
+              <div className="p-2 text-slate-400">{lang === 'en' ? 'VAT / Tax' : 'TVA'}</div>
             </div>
             {/* Row 2 (Active cell B2 highlighted) */}
             <div className="grid grid-cols-6 border-b border-slate-850 bg-slate-950/50">
               <div className="p-2 border-r border-slate-850 text-center bg-emerald-500/20 font-bold text-emerald-300">2</div>
-              <div className="p-2 border-r border-slate-850 text-slate-200">Caiet A4 Dictando</div>
+              <div className="p-2 border-r border-slate-850 text-slate-200">{lang === 'en' ? 'A4 Ruled Notebook' : 'Caiet A4 Dictando'}</div>
               <div className="p-2 border-r border-slate-850 bg-emerald-500/10 border-2 border-emerald-400 font-bold text-emerald-300 shadow-sm">
                 8.50 lei 📍
               </div>
@@ -403,7 +470,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             {/* Row 3 */}
             <div className="grid grid-cols-6 bg-slate-950/50">
               <div className="p-2 border-r border-slate-850 text-center bg-slate-900 font-bold text-slate-400">3</div>
-              <div className="p-2 border-r border-slate-850 text-slate-300">Stilou cu Peniță</div>
+              <div className="p-2 border-r border-slate-850 text-slate-300">{lang === 'en' ? 'Fountain Pen' : 'Stilou cu Peniță'}</div>
               <div className="p-2 border-r border-slate-850 text-right text-slate-300">25.00 lei</div>
               <div className="p-2 border-r border-slate-850 text-right text-slate-300">4</div>
               <div className="p-2 border-r border-slate-850 text-right text-emerald-300">100.00 lei</div>
@@ -421,14 +488,14 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
         >
           <div className="flex items-center gap-1 text-xs">
             <span className="px-3 py-1 rounded bg-slate-950 font-bold text-emerald-400 border border-slate-800">
-              Foaie1 (Tabla cu 6)
+              {lang === 'en' ? 'Sheet1 (Times Table 6)' : 'Foaie1 (Tabla cu 6)'}
             </span>
-            <span className="px-3 py-1 rounded text-slate-400 hover:text-white">Foaie2</span>
+            <span className="px-3 py-1 rounded text-slate-400 hover:text-white">{lang === 'en' ? 'Sheet2' : 'Foaie2'}</span>
             <span className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold font-mono">
               +
             </span>
           </div>
-          <span className="text-[10px] text-slate-500 font-mono">Bara de Etichete Foi</span>
+          <span className="text-[10px] text-slate-500 font-mono">{lang === 'en' ? 'Sheet Tab Bar' : 'Bara de Etichete Foi'}</span>
         </div>
 
         {/* Status Bar */}
@@ -439,11 +506,11 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
           }`}
         >
           <div className="flex items-center gap-3 text-slate-400">
-            <span className="text-emerald-400 font-bold">GATA (Ready)</span>
+            <span className="text-emerald-400 font-bold">{lang === 'en' ? 'READY' : 'GATA (Ready)'}</span>
             <span>|</span>
-            <span>Medie: 16.75</span>
-            <span>Numărătoare: 2</span>
-            <span className="text-teal-300 font-bold">Sumă: 33.50</span>
+            <span>{lang === 'en' ? 'Average: 16.75' : 'Medie: 16.75'}</span>
+            <span>{lang === 'en' ? 'Count: 2' : 'Numărătoare: 2'}</span>
+            <span className="text-teal-300 font-bold">{lang === 'en' ? 'Sum: 33.50' : 'Sumă: 33.50'}</span>
           </div>
           <div className="flex items-center gap-2 text-slate-400">
             <ZoomIn className="w-3.5 h-3.5" />
@@ -459,7 +526,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="text-xs uppercase font-mono tracking-wider opacity-80">
-                Element Selectat pentru Inspecție
+                {lang === 'en' ? 'Selected Element for Inspection' : 'Element Selectat pentru Inspecție'}
               </div>
               <h3 className="text-lg font-bold text-white mt-1">
                 {windowZones[activeZone].title}
@@ -475,7 +542,7 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
           </p>
           <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 text-xs text-amber-200 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-            <span><strong>Sfat de la Profesor:</strong> {windowZones[activeZone].proTip}</span>
+            <span><strong>{lang === 'en' ? "Teacher's Pro Tip:" : 'Sfat de la Profesor:'}</strong> {windowZones[activeZone].proTip}</span>
           </div>
         </div>
       )}
@@ -487,8 +554,12 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică a Interfeței</h2>
-            <p className="text-xs text-slate-400">Fixează terminologia exactă din programa națională</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Interface Check' : 'Verificare Pedagogică a Interfeței'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Locks in standard curriculum spreadsheet terminology' : 'Fixează terminologia exactă din programa națională'}
+            </p>
           </div>
         </div>
 
@@ -496,17 +567,19 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. În ce element al ferestrei Excel este afișată adresa celulei active (de exemplu, „B2”)?
+              {lang === 'en'
+                ? '1. Which Excel window element displays the active cell coordinates (e.g., "B2")?'
+                : '1. În ce element al ferestrei Excel este afișată adresa celulei active (de exemplu, „B2”)?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'nameBox', text: 'În Caseta de Nume (Name Box)' },
-              { id: 'statusBar', text: 'În Bara de Stare la Zoom 100%' },
-              { id: 'trash', text: 'În Coșul de Reciclare Windows' },
-              { id: 'quick', text: 'În butonul de Undo din Quick Access' },
+              { id: 'nameBox', text: lang === 'en' ? 'In the Name Box' : 'În Caseta de Nume (Name Box)' },
+              { id: 'statusBar', text: lang === 'en' ? 'In the Status Bar at 100% Zoom' : 'În Bara de Stare la Zoom 100%' },
+              { id: 'trash', text: lang === 'en' ? 'In the Windows Recycle Bin' : 'În Coșul de Reciclare Windows' },
+              { id: 'quick', text: lang === 'en' ? 'In the Undo button of Quick Access' : 'În butonul de Undo din Quick Access' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -526,11 +599,13 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             ))}
           </div>
 
-          <QuestionHint hint="Privește în stânga barei de formule: arată litera coloanei și numărul rândului celulei selectate." />
+          <QuestionHint hint={lang === 'en' ? 'Look to the left of the formula bar: it shows the column letter and row number of the selected cell.' : 'Privește în stânga barei de formule: arată litera coloanei și numărul rândului celulei selectate.'} />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Caseta de Nume (Name Box) afișează permanent coordonata celulei selectate (ex: B2) și permite saltul rapid tastând o altă adresă."
+              explanation={lang === 'en'
+                ? 'Correct! The Name Box permanently displays the coordinates of the selected active cell (e.g., B2) and allows fast jumps by typing an address.'
+                : 'Corect! Caseta de Nume (Name Box) afișează permanent coordonata celulei selectate (ex: B2) și permite saltul rapid tastând o altă adresă.'}
             />
           )}
         </div>
@@ -539,17 +614,19 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Care este deosebirea dintre ceea ce vezi în celula din tabel și ceea ce vezi în Bara de Formule?
+              {lang === 'en'
+                ? '2. What is the fundamental difference between what you see inside a table cell and what you see in the Formula Bar?'
+                : '2. Care este deosebirea dintre ceea ce vezi în celula din tabel și ceea ce vezi în Bara de Formule?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'formulaBar', text: 'În celulă vezi rezultatul calculat, iar în Bara de Formule vezi formula originară (ex: =SUM(A1:A5))' },
-              { id: 'same', text: 'Nu există nicio diferență; ambele afișează exact aceeași imagine grafică' },
-              { id: 'invert', text: 'În celulă vezi formula în limba engleză, iar în Bara de Formule se traduce în română' },
-              { id: 'color', text: 'Bara de Formule servește exclusiv la schimbarea culorii de fundal a paginii' },
+              { id: 'formulaBar', text: lang === 'en' ? 'The cell displays the evaluated result, while the Formula Bar shows the raw formula (e.g., =SUM(A1:A5))' : 'În celulă vezi rezultatul calculat, iar în Bara de Formule vezi formula originară (ex: =SUM(A1:A5))' },
+              { id: 'same', text: lang === 'en' ? 'There is no difference; both display the exact same bitmap graphic' : 'Nu există nicio diferență; ambele afișează exact aceeași imagine grafică' },
+              { id: 'invert', text: lang === 'en' ? 'In the cell you see English, while the Formula Bar automatically translates to Romanian' : 'În celulă vezi formula în limba engleză, iar în Bara de Formule se traduce în română' },
+              { id: 'color', text: lang === 'en' ? 'The Formula Bar is exclusively used for changing sheet background color' : 'Bara de Formule servește exclusiv la schimbarea culorii de fundal a paginii' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -569,11 +646,13 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             ))}
           </div>
 
-          <QuestionHint hint="Dacă într-o celulă este scris '=2+2', pe ecran apare cifra 4, dar formula reală rămâne în bara de formule." />
+          <QuestionHint hint={lang === 'en' ? "If a cell has '=2+2', the grid renders 4, but the true expression remains in the formula bar." : "Dacă într-o celulă este scris '=2+2', pe ecran apare cifra 4, dar formula reală rămâne în bara de formule."} />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! În celulă este randat rezultatul numeric evaluat, pe când Bara de Formule dezvăluie expresia matematică sau conținutul brut care a generat valoarea respectivă."
+              explanation={lang === 'en'
+                ? 'Excellent! The cell renders the evaluated numerical result, whereas the Formula Bar reveals the mathematical expression or raw input.'
+                : 'Excelent! În celulă este randat rezultatul numeric evaluat, pe când Bara de Formule dezvăluie expresia matematică sau conținutul brut care a generat valoarea respectivă.'}
             />
           )}
         </div>
@@ -582,17 +661,19 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Conform casetei din manual (pag. 13), ce mod de afișare al Panglicii (Ribbon) oferă cel mai mare spațiu vizual pe ecran?
+              {lang === 'en'
+                ? '3. According to textbook guidelines (p. 13), which Ribbon display mode provides the largest screen working area?'
+                : '3. Conform casetei din manual (pag. 13), ce mod de afișare al Panglicii (Ribbon) oferă cel mai mare spațiu vizual pe ecran?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'autohide', text: 'Ascundere automată panglică (Auto-hide Ribbon)' },
-              { id: 'full', text: 'Afișare file și comenzi (Show Tabs and Commands)' },
-              { id: 'zoom500', text: 'Mărire Zoom la 400%' },
-              { id: 'closeApp', text: 'Închiderea completă a calculatorului' },
+              { id: 'autohide', text: lang === 'en' ? 'Auto-hide Ribbon' : 'Ascundere automată panglică (Auto-hide Ribbon)' },
+              { id: 'full', text: lang === 'en' ? 'Show Tabs and Commands' : 'Afișare file și comenzi (Show Tabs and Commands)' },
+              { id: 'zoom500', text: lang === 'en' ? 'Zooming to 400%' : 'Mărire Zoom la 400%' },
+              { id: 'closeApp', text: lang === 'en' ? 'Shutting down the computer' : 'Închiderea completă a calculatorului' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -612,11 +693,13 @@ export const C1Level2_RibbonAnatomy: React.FC<C1Level2Props> = ({ onCompletePage
             ))}
           </div>
 
-          <QuestionHint hint="Modul 'Auto-hide' ascunde atât comenzile cât și filele, lăsând întregul monitor disponibil doar pentru celulele grilei." />
+          <QuestionHint hint={lang === 'en' ? "'Auto-hide' hides both commands and tabs, maximizing the display exclusively for grid cells." : "Modul 'Auto-hide' ascunde atât comenzile cât și filele, lăsând întregul monitor disponibil doar pentru celulele grilei."} />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Modul 'Auto-hide Ribbon' ascunde complet panglica până când utilizatorul face clic pe marginea superioară a ferestrei, maximizând aria vizibilă a tabelelor mari."
+              explanation={lang === 'en'
+                ? "Exact! 'Auto-hide Ribbon' mode completely collapses the ribbon until the user clicks the top bar, maximizing visible workspace for large datasets."
+                : "Exact! Modul 'Auto-hide Ribbon' ascunde complet panglica până când utilizatorul face clic pe marginea superioară a ferestrei, maximizând aria vizibilă a tabelelor mari."}
             />
           )}
         </div>

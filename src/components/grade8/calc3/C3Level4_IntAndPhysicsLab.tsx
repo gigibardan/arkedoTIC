@@ -91,18 +91,26 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 27 (Aplicație Fizică)</span>
+              <span>
+                {lang === 'en'
+                  ? 'Art Klett Textbook 2025 • Page 27 (Physics Application)'
+                  : 'Manual Art Klett 2025 • Pag. 27 (Aplicație Fizică)'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Compass className="w-8 h-8 text-teal-400" />
-              Nivelul 4: Funcția =INT() & Aplicația de Fizică (v = d / t)
+              {lang === 'en'
+                ? 'Level 4: The =INT() Function & Physics Application (v = d / t)'
+                : 'Nivelul 4: Funcția =INT() & Aplicația de Fizică (v = d / t)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Cum calculează un cercetător viteza medie a unui vehicul sau submarin și cum extragem partea întreagă a unui număr zecimal cu funcția INT?
+              {lang === 'en'
+                ? 'How does a researcher compute the average velocity of a vehicle or submarine and how do we extract the integer portion of a decimal number with the INT function?'
+                : 'Cum calculează un cercetător viteza medie a unui vehicul sau submarin și cum extragem partea întreagă a unui număr zecimal cu funcția INT?'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1C</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1C' : 'Modulul 1C'}</div>
             <div className="text-2xl font-black text-teal-400">4 / 7</div>
           </div>
         </div>
@@ -116,26 +124,32 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
               <Activity className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laborator Interdisciplinar: Fizică în Calcul Tabelar</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Interdisciplinary Lab: Physics in Spreadsheets'
+                  : 'Laborator Interdisciplinar: Fizică în Calcul Tabelar'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Calculează viteza v = d / t și aplică funcția <code>=INT(A2/B2)</code>
+                {lang === 'en'
+                  ? 'Calculate velocity v = d / t and apply the =INT(A2/B2) function'
+                  : 'Calculează viteza v = d / t și aplică funcția =INT(A2/B2)'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             {[
-              { d: 150, t: 15, label: 'Exemplul 1 (150m, 15s)' },
-              { d: 245, t: 18, label: 'Exemplul 2 (245m, 18s)' },
-              { d: 500, t: 37, label: 'Exemplul 3 (500m, 37s)' },
+              { d: 150, t: 15, labelRo: 'Exemplul 1 (150m, 15s)', labelEn: 'Example 1 (150m, 15s)' },
+              { d: 245, t: 18, labelRo: 'Exemplul 2 (245m, 18s)', labelEn: 'Example 2 (245m, 18s)' },
+              { d: 500, t: 37, labelRo: 'Exemplul 3 (500m, 37s)', labelEn: 'Example 3 (500m, 37s)' },
             ].map(ex => (
               <button
-                key={ex.label}
+                key={ex.labelRo}
                 type="button"
                 onClick={() => { sounds.playClick(); setDistance(ex.d); setTime(ex.t); }}
                 className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-600 text-slate-300 text-xs font-mono cursor-pointer"
               >
-                {ex.label}
+                {lang === 'en' ? ex.labelEn : ex.labelRo}
               </button>
             ))}
           </div>
@@ -144,7 +158,9 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
         {/* Inputs row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs">
           <div className="space-y-1">
-            <span className="text-slate-400 font-sans">Distanța parcursă (d în metri) — Celula A2:</span>
+            <span className="text-slate-400 font-sans">
+              {lang === 'en' ? 'Distance traveled (d in meters) — Cell A2:' : 'Distanța parcursă (d în metri) — Celula A2:'}
+            </span>
             <input
               type="number"
               value={distance}
@@ -153,7 +169,9 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
             />
           </div>
           <div className="space-y-1">
-            <span className="text-slate-400 font-sans">Timpul scurs (t în secunde) — Celula B2:</span>
+            <span className="text-slate-400 font-sans">
+              {lang === 'en' ? 'Elapsed time (t in seconds) — Cell B2:' : 'Timpul scurs (t în secunde) — Celula B2:'}
+            </span>
             <input
               type="number"
               value={time}
@@ -169,10 +187,12 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
             <thead>
               <tr className="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold">
                 <th className="p-2 border-r border-slate-800 w-12 bg-slate-850">◢</th>
-                <th className="p-2 border-r border-slate-800">A: Distanță (m)</th>
-                <th className="p-2 border-r border-slate-800">B: Timp (s)</th>
-                <th className="p-2 border-r border-slate-800">C: Viteză Exactă (=A2/B2)</th>
-                <th className="p-2 bg-emerald-950/40 text-emerald-300">D: Partea Întreagă (=INT(A2/B2))</th>
+                <th className="p-2 border-r border-slate-800">{lang === 'en' ? 'A: Distance (m)' : 'A: Distanță (m)'}</th>
+                <th className="p-2 border-r border-slate-800">{lang === 'en' ? 'B: Time (s)' : 'B: Timp (s)'}</th>
+                <th className="p-2 border-r border-slate-800">{lang === 'en' ? 'C: Exact Speed (=A2/B2)' : 'C: Viteză Exactă (=A2/B2)'}</th>
+                <th className="p-2 bg-emerald-950/40 text-emerald-300">
+                  {lang === 'en' ? 'D: Integer Portion (=INT(A2/B2))' : 'D: Partea Întreagă (=INT(A2/B2))'}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -192,9 +212,13 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
         </div>
 
         <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 text-xs text-slate-300 leading-relaxed">
-          <strong className="text-white">Cum funcționează funcția =INT() (Manual pag. 27):</strong>
+          <strong className="text-white">
+            {lang === 'en' ? 'How the =INT() function works (Textbook p. 27):' : 'Cum funcționează funcția =INT() (Manual pag. 27):'}
+          </strong>
           <p className="mt-1">
-            Sintaxa este <code>=INT(numar)</code>. Spre deosebire de rotunjirea uzuală, funcția INT extrage partea întreagă fără a ține cont de zecimale. Astfel, <code>=INT(9.85)</code> va rezulta în <strong>9</strong> (și NU 10!).
+            {lang === 'en'
+              ? 'Syntax is =INT(number). Unlike standard rounding, the INT function truncates decimals to the lower integer. Thus, =INT(9.85) yields 9 (and NOT 10!).'
+              : 'Sintaxa este =INT(numar). Spre deosebire de rotunjirea uzuală, funcția INT extrage partea întreagă fără a ține cont de zecimale. Astfel, =INT(9.85) va rezulta în 9 (și NU 10!).'}
           </p>
         </div>
       </div>
@@ -206,8 +230,16 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Funcția INT & Probleme de Fizică</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 5</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Pedagogical Check: The INT Function & Physics Problems'
+                : 'Verificare Pedagogică: Funcția INT & Probleme de Fizică'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 textbook questions correctly to unlock Level 5'
+                : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 5'}
+            </p>
           </div>
         </div>
 
@@ -215,17 +247,35 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Ce rezultat returnează funcția =INT() aplicată unui număr real pozitiv?
+              {lang === 'en'
+                ? '1. What result does the =INT() function return when applied to a positive real number?'
+                : '1. Ce rezultat returnează funcția =INT() aplicată unui număr real pozitiv?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'truncateDown', text: 'Partea întreagă a numărului, eliminând zecimalele (rotunjire în jos)' },
-              { id: 'roundUpAlways', text: 'Rotunjire în sus la cel mai mare număr întreg' },
-              { id: 'sqrtValue', text: 'Rădăcina pătrată' },
-              { id: 'oppositeSign', text: 'Numărul opus cu semn minus' },
+              {
+                id: 'truncateDown',
+                textRo: 'Partea întreagă a numărului, eliminând zecimalele (rotunjire în jos)',
+                textEn: 'The integer part of the number, dropping decimals (rounding down)'
+              },
+              {
+                id: 'roundUpAlways',
+                textRo: 'Rotunjire în sus la cel mai mare număr întreg',
+                textEn: 'Rounding up to the next highest integer'
+              },
+              {
+                id: 'sqrtValue',
+                textRo: 'Rădăcina pătrată',
+                textEn: 'The square root'
+              },
+              {
+                id: 'oppositeSign',
+                textRo: 'Numărul opus cu semn minus',
+                textEn: 'The opposite number with a minus sign'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -240,16 +290,23 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Numele vine de la 'Integer' (Număr Întreg)." />
+          <QuestionHint
+            hintRo="Numele vine de la 'Integer' (Număr Întreg)."
+            hintEn="The name comes from 'Integer' (whole number)."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Funcția =INT() taie zecimalele unui număr pozitiv, returnând partea întreagă a valorii."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! The =INT() function truncates decimals of a positive number, returning its integer part.'
+                  : 'Corect! Funcția =INT() taie zecimalele unui număr pozitiv, returnând partea întreagă a valorii.'
+              }
             />
           )}
         </div>
@@ -258,17 +315,35 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Dacă distanța parcursă se află în celula A2 și timpul în B2, cum se scrie formula vitezei conform manualului?
+              {lang === 'en'
+                ? '2. If distance traveled is in cell A2 and time is in B2, how is the velocity formula written?'
+                : '2. Dacă distanța parcursă se află în celula A2 și timpul în B2, cum se scrie formula vitezei conform manualului?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'slashDiv', text: '=A2/B2 (distanța împărțită la timp folosind bara oblică)' },
-              { id: 'multiply', text: '=A2*B2 (distanța înmulțită cu timpul)' },
-              { id: 'addTogether', text: '=A2+B2' },
-              { id: 'colonRange', text: '=A2:B2' },
+              {
+                id: 'slashDiv',
+                textRo: '=A2/B2 (distanța împărțită la timp folosind bara oblică)',
+                textEn: '=A2/B2 (distance divided by time using the forward slash)'
+              },
+              {
+                id: 'multiply',
+                textRo: '=A2*B2 (distanța înmulțită cu timpul)',
+                textEn: '=A2*B2 (distance multiplied by time)'
+              },
+              {
+                id: 'addTogether',
+                textRo: '=A2+B2',
+                textEn: '=A2+B2'
+              },
+              {
+                id: 'colonRange',
+                textRo: '=A2:B2',
+                textEn: '=A2:B2'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -283,16 +358,23 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Viteza din fizică este v = d / t." />
+          <QuestionHint
+            hintRo="Viteza din fizică este v = d / t."
+            hintEn="Physics velocity is v = d / t."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Operatorul de împărțire în Excel este bara oblică (/), formula corectă fiind =A2/B2."
+              explanation={
+                lang === 'en'
+                  ? 'Excellent! The division operator in Excel is the forward slash (/), making =A2/B2 the correct formula.'
+                  : 'Excelent! Operatorul de împărțire în Excel este bara oblică (/), formula corectă fiind =A2/B2.'
+              }
             />
           )}
         </div>
@@ -301,17 +383,35 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Ce rezultat va afișa formula =INT(9.85) conform manualului (pag. 27)?
+              {lang === 'en'
+                ? '3. What result will the formula =INT(9.85) display according to the textbook (p. 27)?'
+                : '3. Ce rezultat va afișa formula =INT(9.85) conform manualului (pag. 27)?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'nine', text: '9 (deoarece doar taie zecimalele, fără rotunjire clasică)' },
-              { id: 'ten', text: '10' },
-              { id: 'nineEight', text: '9.8' },
-              { id: 'errorRef', text: '#REF!' },
+              {
+                id: 'nine',
+                textRo: '9 (deoarece doar taie zecimalele, fără rotunjire clasică)',
+                textEn: '9 (since it merely drops decimals without standard rounding)'
+              },
+              {
+                id: 'ten',
+                textRo: '10',
+                textEn: '10'
+              },
+              {
+                id: 'nineEight',
+                textRo: '9.8',
+                textEn: '9.8'
+              },
+              {
+                id: 'errorRef',
+                textRo: '#REF!',
+                textEn: '#REF!'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -326,16 +426,23 @@ export const C3Level4_IntAndPhysicsLab: React.FC<C3Level4Props> = ({ onCompleteP
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Funcția INT nu rotunjește la cel mai apropiat număr, ci elimină zecimalele existente." />
+          <QuestionHint
+            hintRo="Funcția INT nu rotunjește la cel mai apropiat număr, ci elimină zecimalele existente."
+            hintEn="The INT function does not round to the nearest number, it discards all decimals."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! =INT(9.85) returnează 9. Pentru a obține 10 prin rotunjire matematică clasică, s-ar fi folosit funcția =ROUND(9.85, 0)."
+              explanation={
+                lang === 'en'
+                  ? 'Exactly! =INT(9.85) returns 9. To obtain 10 through conventional rounding, the =ROUND(9.85, 0) function would be used.'
+                  : 'Exact! =INT(9.85) returnează 9. Pentru a obține 10 prin rotunjire matematică clasică, s-ar fi folosit funcția =ROUND(9.85, 0).'
+              }
             />
           )}
         </div>

@@ -104,18 +104,26 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 28 (Aplicație Economică)</span>
+              <span>
+                {lang === 'en'
+                  ? 'Art Klett Textbook 2025 • Page 28 (Economics Application)'
+                  : 'Manual Art Klett 2025 • Pag. 28 (Aplicație Economică)'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Receipt className="w-8 h-8 text-teal-400" />
-              Nivelul 5: Atelier Economic — Calculul TVA-ului & Facturi Comerciale
+              {lang === 'en'
+                ? 'Level 5: Economics Workshop — VAT Calculations & Commercial Invoices'
+                : 'Nivelul 5: Atelier Economic — Calculul TVA-ului & Facturi Comerciale'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Cum calculează un magazin prețul brut al rechizitelor școlare adăugând TVA-ul legal de 19%? Învață formulele de bază din contabilitatea modernă.
+              {lang === 'en'
+                ? 'How does a store compute gross retail prices for school supplies by applying the standard 19% VAT? Master fundamental accounting formulas.'
+                : 'Cum calculează un magazin prețul brut al rechizitelor școlare adăugând TVA-ul legal de 19%? Învață formulele de bază din contabilitatea modernă.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1C</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1C' : 'Modulul 1C'}</div>
             <div className="text-2xl font-black text-teal-400">5 / 7</div>
           </div>
         </div>
@@ -129,15 +137,21 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
               <Coins className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Simulator Factură: Preț Net → TVA (19%) → Preț Brut</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Invoice Simulator: Net Price → VAT (19%) → Gross Price'
+                  : 'Simulator Factură: Preț Net → TVA (19%) → Preț Brut'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Formula din coloana C: <code>=B2*0.19</code> | Formula din coloana D: <code>=B2+C2</code>
+                {lang === 'en'
+                  ? 'Column C formula: =B2*0.19 | Column D formula: =B2+C2'
+                  : 'Formula din coloana C: =B2*0.19 | Formula din coloana D: =B2+C2'}
               </p>
             </div>
           </div>
 
           <div className="bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 font-mono text-xs flex items-center gap-2">
-            <span className="text-slate-400">Cotă legală TVA:</span>
+            <span className="text-slate-400">{lang === 'en' ? 'Standard VAT rate:' : 'Cotă legală TVA:'}</span>
             <span className="text-amber-400 font-black">19%</span>
           </div>
         </div>
@@ -148,28 +162,44 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
             <thead>
               <tr className="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold">
                 <th className="p-2.5 border-r border-slate-800 w-12 bg-slate-850">◢</th>
-                <th className="p-2.5 border-r border-slate-800 text-left pl-3">A: Denumire Produs</th>
-                <th className="p-2.5 border-r border-slate-800 text-right pr-4">B: Preț Fără TVA (Net)</th>
-                <th className="p-2.5 border-r border-slate-800 text-right pr-4 text-amber-300">C: TVA 19% (=B2*0.19)</th>
-                <th className="p-2.5 text-right pr-4 text-emerald-300 font-black">D: Preț Brut (=B2+C2)</th>
+                <th className="p-2.5 border-r border-slate-800 text-left pl-3">
+                  {lang === 'en' ? 'A: Product Description' : 'A: Denumire Produs'}
+                </th>
+                <th className="p-2.5 border-r border-slate-800 text-right pr-4">
+                  {lang === 'en' ? 'B: Price Excl. VAT (Net)' : 'B: Preț Fără TVA (Net)'}
+                </th>
+                <th className="p-2.5 border-r border-slate-800 text-right pr-4 text-amber-300">
+                  {lang === 'en' ? 'C: VAT 19% (=B2*0.19)' : 'C: TVA 19% (=B2*0.19)'}
+                </th>
+                <th className="p-2.5 text-right pr-4 text-emerald-300 font-black">
+                  {lang === 'en' ? 'D: Gross Price (=B2+C2)' : 'D: Preț Brut (=B2+C2)'}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-850">
               {products.map((p, idx) => {
                 const vat = p.netPrice * vatRate;
                 const gross = p.netPrice + vat;
+                const productNamesEn: Record<number, string> = {
+                  1: 'Ergonomic Backpack',
+                  2: 'Scientific Calculator',
+                  3: 'Geometry Tool Set',
+                  4: 'A4 Student Notebook'
+                };
                 return (
                   <tr key={p.id} className="hover:bg-slate-800/30">
                     <td className="p-2.5 border-r border-slate-850 bg-slate-900 text-slate-400 font-bold">{idx + 2}</td>
-                    <td className="p-2.5 border-r border-slate-850 text-left pl-3 text-white font-medium">{p.name}</td>
+                    <td className="p-2.5 border-r border-slate-850 text-left pl-3 text-white font-medium">
+                      {lang === 'en' ? (productNamesEn[p.id] || p.name) : p.name}
+                    </td>
                     <td className="p-2.5 border-r border-slate-850 text-right pr-4 text-slate-300">
-                      {p.netPrice.toFixed(2)} lei
+                      {p.netPrice.toFixed(2)} {lang === 'en' ? 'RON' : 'lei'}
                     </td>
                     <td className="p-2.5 border-r border-slate-850 text-right pr-4 text-amber-300 font-bold">
-                      {vat.toFixed(2)} lei
+                      {vat.toFixed(2)} {lang === 'en' ? 'RON' : 'lei'}
                     </td>
                     <td className="p-2.5 text-right pr-4 text-emerald-400 font-bold">
-                      {gross.toFixed(2)} lei
+                      {gross.toFixed(2)} {lang === 'en' ? 'RON' : 'lei'}
                     </td>
                   </tr>
                 );
@@ -179,16 +209,16 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
               <tr className="font-black bg-emerald-950/40 border-t-2 border-emerald-500/50 text-white">
                 <td className="p-3 border-r border-slate-850 bg-slate-900 font-bold text-slate-500">6</td>
                 <td className="p-3 text-right pr-4 text-emerald-300 font-bold">
-                  TOTAL GENERAL FACTURĂ:
+                  {lang === 'en' ? 'INVOICE GRAND TOTAL:' : 'TOTAL GENERAL FACTURĂ:'}
                 </td>
                 <td className="p-3 border-r border-slate-850 text-right pr-4 text-slate-300">
-                  {totalNet.toFixed(2)} lei
+                  {totalNet.toFixed(2)} {lang === 'en' ? 'RON' : 'lei'}
                 </td>
                 <td className="p-3 border-r border-slate-850 text-right pr-4 text-amber-300">
-                  {totalVat.toFixed(2)} lei
+                  {totalVat.toFixed(2)} {lang === 'en' ? 'RON' : 'lei'}
                 </td>
                 <td className="p-3 text-right pr-4 text-base text-emerald-300">
-                  {totalGross.toFixed(2)} lei
+                  {totalGross.toFixed(2)} {lang === 'en' ? 'RON' : 'lei'}
                 </td>
               </tr>
             </tbody>
@@ -197,7 +227,11 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
 
         {/* Quick Price Modifiers */}
         <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <span className="text-slate-400 font-semibold">Testează recalcularea modificând prețul ghiozdanului:</span>
+          <span className="text-slate-400 font-semibold">
+            {lang === 'en'
+              ? 'Test recalculation by adjusting the backpack price:'
+              : 'Testează recalcularea modificând prețul ghiozdanului:'}
+          </span>
           <div className="flex items-center gap-2">
             {[180, 200, 250, 300].map((pr) => (
               <button
@@ -210,7 +244,7 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
                     : 'bg-slate-900 text-slate-300 border-slate-700 hover:text-white'
                 }`}
               >
-                {pr} lei
+                {pr} {lang === 'en' ? 'RON' : 'lei'}
               </button>
             ))}
           </div>
@@ -224,8 +258,14 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Calcule Economice</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 6</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Economic Calculations' : 'Verificare Pedagogică: Calcule Economice'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 textbook questions correctly to unlock Level 6'
+                : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 6'}
+            </p>
           </div>
         </div>
 
@@ -233,17 +273,35 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Dacă prețul fără TVA se află în celula B2, cum se calculează valoarea TVA-ului de 19% conform manualului?
+              {lang === 'en'
+                ? '1. If the net price without VAT is in cell B2, how is the 19% VAT amount computed according to the textbook?'
+                : '1. Dacă prețul fără TVA se află în celula B2, cum se calculează valoarea TVA-ului de 19% conform manualului?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'mult019', text: '=B2 * 0.19 (sau =B2 * 19%)' },
-              { id: 'add19', text: '=B2 + 19' },
-              { id: 'div19', text: '=B2 / 19' },
-              { id: 'power19', text: '=B2 ^ 19' },
+              {
+                id: 'mult019',
+                textRo: '=B2 * 0.19 (sau =B2 * 19%)',
+                textEn: '=B2 * 0.19 (or =B2 * 19%)'
+              },
+              {
+                id: 'add19',
+                textRo: '=B2 + 19',
+                textEn: '=B2 + 19'
+              },
+              {
+                id: 'div19',
+                textRo: '=B2 / 19',
+                textEn: '=B2 / 19'
+              },
+              {
+                id: 'power19',
+                textRo: '=B2 ^ 19',
+                textEn: '=B2 ^ 19'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -258,16 +316,23 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="19% înseamnă fracția 19/100, adică numărul zecimal 0.19." />
+          <QuestionHint
+            hintRo="19% înseamnă fracția 19/100, adică numărul zecimal 0.19."
+            hintEn="19% equals the fraction 19/100, which is the decimal number 0.19."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Înmulțind prețul net cu 0.19 obținem exact valoarea taxei pe valoarea adăugată (TVA)."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! Multiplying the net price by 0.19 yields the exact value of the value-added tax (VAT).'
+                  : 'Corect! Înmulțind prețul net cu 0.19 obținem exact valoarea taxei pe valoarea adăugată (TVA).'
+              }
             />
           )}
         </div>
@@ -276,17 +341,35 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Dacă valoarea netă este în B2 și valoarea TVA-ului în C2, cum obții prețul brut (cu TVA inclus)?
+              {lang === 'en'
+                ? '2. If the net value is in B2 and the VAT amount is in C2, how do you obtain the gross price (including VAT)?'
+                : '2. Dacă valoarea netă este în B2 și valoarea TVA-ului în C2, cum obții prețul brut (cu TVA inclus)?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'netPlusVat', text: '=B2 + C2 (Prețul net adunat cu valoarea TVA-ului)' },
-              { id: 'netMinusVat', text: '=B2 - C2' },
-              { id: 'netTimesVat', text: '=B2 * C2' },
-              { id: 'sumAverage', text: '=AVERAGE(B2:C2)' },
+              {
+                id: 'netPlusVat',
+                textRo: '=B2 + C2 (Prețul net adunat cu valoarea TVA-ului)',
+                textEn: '=B2 + C2 (Net price added to VAT amount)'
+              },
+              {
+                id: 'netMinusVat',
+                textRo: '=B2 - C2',
+                textEn: '=B2 - C2'
+              },
+              {
+                id: 'netTimesVat',
+                textRo: '=B2 * C2',
+                textEn: '=B2 * C2'
+              },
+              {
+                id: 'sumAverage',
+                textRo: '=AVERAGE(B2:C2)',
+                textEn: '=AVERAGE(B2:C2)'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -301,16 +384,23 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Prețul final include ambele sume: prețul produsului și taxa statului." />
+          <QuestionHint
+            hintRo="Prețul final include ambele sume: prețul produsului și taxa statului."
+            hintEn="The final price incorporates both amounts: product price and government sales tax."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Prețul brut plătit de clientul final este suma dintre prețul net al comerciantului și taxa TVA: =B2+C2."
+              explanation={
+                lang === 'en'
+                  ? 'Excellent! The gross price paid by the final customer is the sum of the merchant\'s net price and VAT: =B2+C2.'
+                  : 'Excelent! Prețul brut plătit de clientul final este suma dintre prețul net al comerciantului și taxa TVA: =B2+C2.'
+              }
             />
           )}
         </div>
@@ -319,17 +409,35 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Ce formulă directă calculează prețul brut dintr-o singură mișcare pornind de la prețul net din celula B2?
+              {lang === 'en'
+                ? '3. Which direct formula computes the gross price in a single operation starting from net price in cell B2?'
+                : '3. Ce formulă directă calculează prețul brut dintr-o singură mișcare pornind de la prețul net din celula B2?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'mult119', text: '=B2 * 1.19 (100% preț + 19% TVA = 119% = 1.19)' },
-              { id: 'mult019wrong', text: '=B2 * 0.19' },
-              { id: 'mult200', text: '=B2 * 2' },
-              { id: 'plusOne', text: '=B2 + 1' },
+              {
+                id: 'mult119',
+                textRo: '=B2 * 1.19 (100% preț + 19% TVA = 119% = 1.19)',
+                textEn: '=B2 * 1.19 (100% price + 19% VAT = 119% = 1.19)'
+              },
+              {
+                id: 'mult019wrong',
+                textRo: '=B2 * 0.19',
+                textEn: '=B2 * 0.19'
+              },
+              {
+                id: 'mult200',
+                textRo: '=B2 * 2',
+                textEn: '=B2 * 2'
+              },
+              {
+                id: 'plusOne',
+                textRo: '=B2 + 1',
+                textEn: '=B2 + 1'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -344,16 +452,23 @@ export const C3Level5_EconomyVatLab: React.FC<C3Level5Props> = ({ onCompletePage
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Prețul întreg (1) plus cota TVA (0.19) dă factorul de multiplicare 1.19." />
+          <QuestionHint
+            hintRo="Prețul întreg (1) plus cota TVA (0.19) dă factorul de multiplicare 1.19."
+            hintEn="The full base price (1) plus VAT rate (0.19) produces the 1.19 multiplier factor."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Factorul 1.19 adaugă instantaneu cota de 19% la orice preț net dintr-o singură înmulțire: =B2*1.19."
+              explanation={
+                lang === 'en'
+                  ? 'Exactly! The 1.19 multiplier factor adds the 19% rate to any net price in a single multiplication: =B2*1.19.'
+                  : 'Exact! Factorul 1.19 adaugă instantaneu cota de 19% la orice preț net dintr-o singură înmulțire: =B2*1.19.'
+              }
             />
           )}
         </div>

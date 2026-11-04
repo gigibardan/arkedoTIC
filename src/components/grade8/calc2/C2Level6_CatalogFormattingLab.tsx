@@ -116,18 +116,26 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 24–25 (Fișă de Laborator)</span>
+              <span>
+                {lang === 'en'
+                  ? 'Art Klett Textbook 2025 • Pages 24–25 (Lab Worksheet)'
+                  : 'Manual Art Klett 2025 • Pag. 24–25 (Fișă de Laborator)'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <FileSpreadsheet className="w-8 h-8 text-teal-400" />
-              Nivelul 6: Atelier Practic — Formatarea & Sortarea Catalogului
+              {lang === 'en'
+                ? 'Level 6: Hands-on Lab — Gradebook Formatting & Sorting'
+                : 'Nivelul 6: Atelier Practic — Formatarea & Sortarea Catalogului'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Transformă un tabel brut de note într-un document școlar complet: unifică titlul (Merge & Center), fixează 2 zecimale, aplică borduri profesionale și ordonează elevii după Clasă și Medie!
+              {lang === 'en'
+                ? 'Transform a raw grade table into a polished school report: merge the title (Merge & Center), set 2 decimal places, apply professional borders, and sort students by Class and GPA!'
+                : 'Transformă un tabel brut de note într-un document școlar complet: unifică titlul (Merge & Center), fixează 2 zecimale, aplică borduri profesionale și ordonează elevii după Clasă și Medie!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1B</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1B' : 'Modulul 1B'}</div>
             <div className="text-2xl font-black text-teal-400">6 / 7</div>
           </div>
         </div>
@@ -138,12 +146,18 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
         <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-800 pb-4">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-400" />
-            <h2 className="text-base font-bold text-white">Obiective de Formatare & Sortare (Fișa Pag. 24)</h2>
+            <h2 className="text-base font-bold text-white">
+              {lang === 'en'
+                ? 'Formatting & Sorting Objectives (Worksheet p. 24)'
+                : 'Obiective de Formatare & Sortare (Fișa Pag. 24)'}
+            </h2>
           </div>
           <div className="flex items-center gap-2 bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 font-mono text-xs">
-            <span className="text-slate-400">Progres Atelier:</span>
+            <span className="text-slate-400">{lang === 'en' ? 'Lab Progress:' : 'Progres Atelier:'}</span>
             <span className="text-emerald-400 font-black">{totalScore}%</span>
-            <span className="text-slate-500">({criteriaPassed}/5 obiective)</span>
+            <span className="text-slate-500">
+              ({criteriaPassed}/5 {lang === 'en' ? 'objectives' : 'obiective'})
+            </span>
           </div>
         </div>
 
@@ -152,7 +166,7 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
             isTitleMerged ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">1.</span>
-            <span>Merge & Center pe Titlu (A1:E1)</span>
+            <span>{lang === 'en' ? 'Merge & Center on Title (A1:E1)' : 'Merge & Center pe Titlu (A1:E1)'}</span>
             {isTitleMerged && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -160,7 +174,7 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
             hasTwoDecimals ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">2.</span>
-            <span>Format Medii cu 2 Zecimale (.00)</span>
+            <span>{lang === 'en' ? 'GPA Format with 2 Decimals (.00)' : 'Format Medii cu 2 Zecimale (.00)'}</span>
             {hasTwoDecimals && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -168,7 +182,7 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
             hasAllBorders ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">3.</span>
-            <span>All Borders pe tot tabelul</span>
+            <span>{lang === 'en' ? 'All Borders across table' : 'All Borders pe tot tabelul'}</span>
             {hasAllBorders && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -176,7 +190,7 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
             hasDoubleBottomTotal ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">4.</span>
-            <span>Linie Dublă pe rândul Total/Medie</span>
+            <span>{lang === 'en' ? 'Double Bottom Line on Total/Avg' : 'Linie Dublă pe rândul Total/Medie'}</span>
             {hasDoubleBottomTotal && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
 
@@ -184,7 +198,7 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
             isMultiSorted ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-300' : 'bg-slate-950/60 border-slate-800 text-slate-400'
           }`}>
             <span className="font-bold">5.</span>
-            <span>Sortare Clasă (A-Z) & Medie (Z-A)</span>
+            <span>{lang === 'en' ? 'Sort Class (A-Z) & GPA (Z-A)' : 'Sortare Clasă (A-Z) & Medie (Z-A)'}</span>
             {isMultiSorted && <CheckCircle2 className="w-4 h-4 ml-auto text-emerald-400" />}
           </div>
         </div>
@@ -193,7 +207,9 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
       {/* Interactive Tool Actions */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-6 space-y-4 shadow-2xl">
         <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-950 p-3 rounded-2xl border border-slate-800 text-xs">
-          <span className="text-slate-300 font-bold">Unelte de Formatare & Sortare:</span>
+          <span className="text-slate-300 font-bold">
+            {lang === 'en' ? 'Formatting & Sorting Tools:' : 'Unelte de Formatare & Sortare:'}
+          </span>
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
@@ -204,7 +220,9 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:text-white'
               }`}
             >
-              1. {isTitleMerged ? '✓ Titlu Îmbinat' : 'Îmbină & Centrează Titlul'}
+              1. {isTitleMerged
+                ? (lang === 'en' ? '✓ Title Merged' : '✓ Titlu Îmbinat')
+                : (lang === 'en' ? 'Merge & Center Title' : 'Îmbină & Centrează Titlul')}
             </button>
             <button
               type="button"
@@ -215,7 +233,9 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:text-white'
               }`}
             >
-              2. {hasTwoDecimals ? '✓ Format 2 Zecimale' : 'Setează 2 Zecimale'}
+              2. {hasTwoDecimals
+                ? (lang === 'en' ? '✓ 2 Decimals Format' : '✓ Format 2 Zecimale')
+                : (lang === 'en' ? 'Set 2 Decimals' : 'Setează 2 Zecimale')}
             </button>
             <button
               type="button"
@@ -226,7 +246,9 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:text-white'
               }`}
             >
-              3. {hasAllBorders ? '✓ Borduri Complete' : 'Aplică Borduri & Linie Dublă'}
+              3. {hasAllBorders
+                ? (lang === 'en' ? '✓ Complete Borders' : '✓ Borduri Complete')
+                : (lang === 'en' ? 'Apply Borders & Double Line' : 'Aplică Borduri & Linie Dublă')}
             </button>
             <button
               type="button"
@@ -237,14 +259,16 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:text-white'
               }`}
             >
-              4. {isMultiSorted ? '✓ Sortat Multicriterial' : 'Sortare: Clasă + Medie'}
+              4. {isMultiSorted
+                ? (lang === 'en' ? '✓ Multi-Sorted' : '✓ Sortat Multicriterial')
+                : (lang === 'en' ? 'Sort: Class + GPA' : 'Sortare: Clasă + Medie')}
             </button>
             <button
               type="button"
               onClick={handleResetLab}
               className="px-2.5 py-1.5 rounded-xl bg-slate-850 text-slate-400 hover:text-white border border-slate-700 cursor-pointer text-xs"
             >
-              Reset
+              {lang === 'en' ? 'Reset' : 'Reset'}
             </button>
           </div>
         </div>
@@ -271,14 +295,16 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
                     colSpan={5}
                     className="p-3 text-center font-black text-white text-sm bg-gradient-to-r from-emerald-900/40 via-teal-900/50 to-emerald-900/40 text-emerald-200 tracking-wider"
                   >
-                    SITUAȚIA ȘCOLARĂ LA TIC — CLASELE A VIII-A (A1:E1 Îmbinat & Centrat)
+                    {lang === 'en'
+                      ? '8TH GRADE ICT GRADEBOOK REPORT (A1:E1 Merged & Centered)'
+                      : 'SITUAȚIA ȘCOLARĂ LA TIC — CLASELE A VIII-A (A1:E1 Îmbinat & Centrat)'}
                   </td>
                 ) : (
                   <>
-                    <td className="p-2.5 border-r border-slate-800 text-emerald-300 font-bold">SITUAȚIA</td>
-                    <td className="p-2.5 border-r border-slate-800 text-slate-500">ȘCOLARĂ</td>
+                    <td className="p-2.5 border-r border-slate-800 text-emerald-300 font-bold">{lang === 'en' ? 'REPORT' : 'SITUAȚIA'}</td>
+                    <td className="p-2.5 border-r border-slate-800 text-slate-500">{lang === 'en' ? 'SCHOOL' : 'ȘCOLARĂ'}</td>
                     <td className="p-2.5 border-r border-slate-800 text-slate-500">TIC</td>
-                    <td className="p-2.5 border-r border-slate-800 text-slate-500">CLASA 8</td>
+                    <td className="p-2.5 border-r border-slate-800 text-slate-500">{lang === 'en' ? 'GRADE 8' : 'CLASA 8'}</td>
                     <td className="p-2.5 text-slate-500">2026</td>
                   </>
                 )}
@@ -287,11 +313,21 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
               {/* Row 2: Column Headers */}
               <tr className={`border-b ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'} bg-slate-900 font-bold text-slate-200`}>
                 <td className="p-2 border-r border-slate-800 bg-slate-900 text-slate-400 font-bold">2</td>
-                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'} text-left pl-3`}>Nume & Prenume Elev</td>
-                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'}`}>Clasa</td>
-                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'}`}>Teză</td>
-                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'}`}>Oral</td>
-                <td className="p-2.5">Medie Finală</td>
+                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'} text-left pl-3`}>
+                  {lang === 'en' ? 'Student Full Name' : 'Nume & Prenume Elev'}
+                </td>
+                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'}`}>
+                  {lang === 'en' ? 'Class' : 'Clasa'}
+                </td>
+                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'}`}>
+                  {lang === 'en' ? 'Written Exam' : 'Teză'}
+                </td>
+                <td className={`p-2.5 border-r ${hasAllBorders ? 'border-slate-600' : 'border-slate-800'}`}>
+                  {lang === 'en' ? 'Oral Test' : 'Oral'}
+                </td>
+                <td className="p-2.5">
+                  {lang === 'en' ? 'Final GPA' : 'Medie Finală'}
+                </td>
               </tr>
 
               {/* Rows 3..7: Students Data */}
@@ -335,7 +371,7 @@ export const C2Level6_CatalogFormattingLab: React.FC<C2Level6Props> = ({ onCompl
               }`}>
                 <td className="p-2.5 border-r border-slate-850 bg-slate-900 font-bold text-slate-500">8</td>
                 <td colSpan={4} className="p-2.5 text-right pr-4 font-bold">
-                  MEDIA GENERALĂ A GRUPELOR:
+                  {lang === 'en' ? 'OVERALL COHORT AVERAGE:' : 'MEDIA GENERALĂ A GRUPELOR:'}
                 </td>
                 <td className="p-2.5 text-right pr-6 text-sm text-teal-300">
                   {classAvg}

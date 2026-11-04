@@ -90,18 +90,20 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 23–24</span>
+              <span>{lang === 'en' ? 'Art Klett 2025 Textbook • P. 23–24' : 'Manual Art Klett 2025 • Pag. 23–24'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Square className="w-8 h-8 text-teal-400" />
-              Nivelul 4: Borduri Profesionale & Linii de Grilă la Tipărire
+              {lang === 'en' ? 'Level 4: Professional Borders & Gridlines on Printing' : 'Nivelul 4: Borduri Profesionale & Linii de Grilă la Tipărire'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              De ce tabelele Excel tipărite ies fără linii dacă nu aplici borduri explicite? Învață standardul liniei duble de total și umplerea cu vopsea pentru tabele impecabile.
+              {lang === 'en'
+                ? 'Why do printed Excel sheets come out borderless if you do not apply explicit borders? Learn the standard double-line accounting total and fill colors for flawless tables.'
+                : 'De ce tabelele Excel tipărite ies fără linii dacă nu aplici borduri explicite? Învață standardul liniei duble de total și umplerea cu vopsea pentru tabele impecabile.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1B</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1B' : 'Modulul 1B'}</div>
             <div className="text-2xl font-black text-teal-400">4 / 7</div>
           </div>
         </div>
@@ -115,9 +117,13 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
               <Square className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Atelier: Borduri & Stiluri de Tabel</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Studio: Borders & Table Styles' : 'Atelier: Borduri & Stiluri de Tabel'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Schimbă bordura și activează Previzualizarea Tipăririi pentru a vedea cum arată pe foaia de hârtie A4
+                {lang === 'en'
+                  ? 'Change borders and toggle Print Preview to check how it appears on A4 paper'
+                  : 'Schimbă bordura și activează Previzualizarea Tipăririi pentru a vedea cum arată pe foaia de hârtie A4'}
               </p>
             </div>
           </div>
@@ -132,7 +138,7 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
                   : 'bg-slate-800 text-slate-400 border-slate-700'
               }`}
             >
-              🎨 Rânduri Alternate (Zebra)
+              {lang === 'en' ? '🎨 Alternating Rows (Zebra)' : '🎨 Rânduri Alternate (Zebra)'}
             </button>
             <button
               type="button"
@@ -144,7 +150,11 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
               }`}
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>{printPreviewMode ? 'Ieși din Previzualizare' : 'Previzualizare Imprimare A4'}</span>
+              <span>
+                {printPreviewMode
+                  ? (lang === 'en' ? 'Exit Print Preview' : 'Ieși din Previzualizare')
+                  : (lang === 'en' ? 'A4 Print Preview' : 'Previzualizare Imprimare A4')}
+              </span>
             </button>
           </div>
         </div>
@@ -152,10 +162,10 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
         {/* Border Type Selector */}
         <div className="flex flex-wrap gap-2 text-xs">
           {[
-            { id: 'none', label: 'Fără Borduri (Doar liniile gri de ecran)' },
-            { id: 'all', label: 'Toate Bordurile (All Borders)' },
-            { id: 'thickOutside', label: 'Chenar Exterior Îngroșat' },
-            { id: 'accountingTotal', label: 'Standard Total: Linie Dublă Dedesubt' },
+            { id: 'none', label: lang === 'en' ? 'No Borders (Screen gridlines only)' : 'Fără Borduri (Doar liniile gri de ecran)' },
+            { id: 'all', label: lang === 'en' ? 'All Borders' : 'Toate Bordurile (All Borders)' },
+            { id: 'thickOutside', label: lang === 'en' ? 'Thick Outside Box Border' : 'Chenar Exterior Îngroșat' },
+            { id: 'accountingTotal', label: lang === 'en' ? 'Standard Total: Double Bottom Border' : 'Standard Total: Linie Dublă Dedesubt' },
           ].map(opt => (
             <button
               key={opt.id}
@@ -180,7 +190,11 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
             <div className="bg-amber-100 border border-amber-300 p-2.5 rounded-xl text-amber-900 text-xs mb-3 font-sans flex items-center gap-2">
               <Printer className="w-4 h-4 shrink-0" />
               <span>
-                <strong>Mod Previzualizare Imprimare Activ:</strong> Liniile gri implicite au dispărut complet! Doar bordurile reale desenate de tine vor apărea pe cerneală.
+                {lang === 'en' ? (
+                  <><strong>Print Preview Mode Active:</strong> Default gray gridlines vanish! Only true drawn borders appear in ink.</>
+                ) : (
+                  <><strong>Mod Previzualizare Imprimare Activ:</strong> Liniile gri implicite au dispărut complet! Doar bordurile reale desenate de tine vor apărea pe cerneală.</>
+                )}
               </span>
             </div>
           )}
@@ -190,11 +204,11 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
               <tr className={`font-bold ${
                 printPreviewMode ? 'bg-slate-100 text-slate-900 border-b-2 border-slate-800' : 'bg-slate-900 text-slate-300 border-b border-slate-800'
               }`}>
-                <th className="p-2.5">Nr. Crt</th>
-                <th className="p-2.5">Obiectiv / Material Didactic</th>
-                <th className="p-2.5 text-right">Cantitate</th>
-                <th className="p-2.5 text-right">Preț Unitar</th>
-                <th className="p-2.5 text-right">Total</th>
+                <th className="p-2.5">{lang === 'en' ? 'No.' : 'Nr. Crt'}</th>
+                <th className="p-2.5">{lang === 'en' ? 'Item / Teaching Material' : 'Obiectiv / Material Didactic'}</th>
+                <th className="p-2.5 text-right">{lang === 'en' ? 'Quantity' : 'Cantitate'}</th>
+                <th className="p-2.5 text-right">{lang === 'en' ? 'Unit Price' : 'Preț Unitar'}</th>
+                <th className="p-2.5 text-right">{lang === 'en' ? 'Total' : 'Total'}</th>
               </tr>
             </thead>
             <tbody className={`divide-y ${
@@ -203,9 +217,9 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
                 : printPreviewMode ? 'divide-transparent' : 'divide-slate-850'
             }`}>
               {[
-                { id: 1, item: 'Licență Suită Birou 2026', qty: 25, price: '120.00 lei', total: '3.000.00 lei' },
-                { id: 2, item: 'Kit Robotică Educațională Mindstorms', qty: 5, price: '1.450.00 lei', total: '7.250.00 lei' },
-                { id: 3, item: 'Cabluri rețea Cat 6 UTP', qty: 30, price: '15.00 lei', total: '450.00 lei' },
+                { id: 1, item: lang === 'en' ? 'Office Suite License 2026' : 'Licență Suită Birou 2026', qty: 25, price: lang === 'en' ? '$120.00' : '120.00 lei', total: lang === 'en' ? '$3,000.00' : '3.000,00 lei' },
+                { id: 2, item: lang === 'en' ? 'Educational Robotics Kit Mindstorms' : 'Kit Robotică Educațională Mindstorms', qty: 5, price: lang === 'en' ? '$1,450.00' : '1.450,00 lei', total: lang === 'en' ? '$7,250.00' : '7.250,00 lei' },
+                { id: 3, item: lang === 'en' ? 'UTP Cat 6 Network Cables' : 'Cabluri rețea Cat 6 UTP', qty: 30, price: lang === 'en' ? '$15.00' : '15.00 lei', total: lang === 'en' ? '$450.00' : '450,00 lei' },
               ].map((row, idx) => (
                 <tr
                   key={row.id}
@@ -230,10 +244,10 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
                   : 'border-t border-slate-800'
               } ${printPreviewMode ? 'bg-slate-100 text-slate-950' : 'bg-emerald-950/40 text-emerald-200'}`}>
                 <td colSpan={4} className="p-3 text-right">
-                  TOTAL GENERAL BUGET TIC (cu TVA inclus):
+                  {lang === 'en' ? 'TOTAL ICT BUDGET (VAT included):' : 'TOTAL GENERAL BUGET TIC (cu TVA inclus):'}
                 </td>
                 <td className="p-3 text-right text-sm">
-                  10.700,00 lei
+                  {lang === 'en' ? '$10,700.00' : '10.700,00 lei'}
                 </td>
               </tr>
             </tbody>
@@ -248,8 +262,12 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Borduri & Tipărire</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 5</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Borders & Printing' : 'Verificare Pedagogică: Borduri & Tipărire'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Answer all 3 textbook questions correctly to unlock Level 5' : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 5'}
+            </p>
           </div>
         </div>
 
@@ -257,17 +275,19 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Ce se întâmplă la tipărirea pe imprimantă dacă lași celulele doar cu liniile gri implicite de pe ecran (fără a aplica comanda Borduri)?
+              {lang === 'en'
+                ? '1. What happens during physical printing if you leave cells with only default gray screen gridlines without applying Borders?'
+                : '1. Ce se întâmplă la tipărirea pe imprimantă dacă lași celulele doar cu liniile gri implicite de pe ecran (fără a aplica comanda Borduri)?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'invisibleOnPrint', text: 'Textul și numerele se tipăresc pe o foaie complet albă, fără nicio linie între celule' },
-              { id: 'blackBorderAuto', text: 'Imprimanta desenează automat borduri groase negre în jurul fiecărei celule' },
-              { id: 'paperJam', text: 'Imprimanta se blochează din cauza erorii de grilă' },
-              { id: 'soundAlarm', text: 'Calculatorul emite o alertă sonoră de avertizare' },
+              { id: 'invisibleOnPrint', text: lang === 'en' ? 'Text and numbers are printed on blank white paper without any cell dividing lines' : 'Textul și numerele se tipăresc pe o foaie complet albă, fără nicio linie între celule' },
+              { id: 'blackBorderAuto', text: lang === 'en' ? 'The printer automatically draws thick black borders around each cell' : 'Imprimanta desenează automat borduri groase negre în jurul fiecărei celule' },
+              { id: 'paperJam', text: lang === 'en' ? 'The printer jams due to grid line syntax error' : 'Imprimanta se blochează din cauza erorii de grilă' },
+              { id: 'soundAlarm', text: lang === 'en' ? 'The computer sounds an audible warning chime' : 'Calculatorul emite o alertă sonoră de avertizare' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -287,11 +307,15 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
             ))}
           </div>
 
-          <QuestionHint hint="Liniile gri de pe ecran (Gridlines) sunt doar un ghid vizual pentru lucru. Tipărirea necesită All Borders." />
+          <QuestionHint
+            hintRo="Liniile gri de pe ecran (Gridlines) sunt doar un ghid vizual pentru lucru. Tipărirea necesită All Borders."
+            hintEn="Default screen gridlines are merely a visual editing guide. Paper printing requires explicit Borders."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Liniile implicite de grilă nu sunt tipărite în mod standard. Pentru ca tabelul să aibă contururi pe foaie A4 sau în PDF, trebuie selectat domeniul și aplicat 'All Borders'."
+              explanationRo="Corect! Liniile implicite de grilă nu sunt tipărite în mod standard. Pentru ca tabelul să aibă contururi pe foaie A4 sau în PDF, trebuie selectat domeniul și aplicat 'All Borders'."
+              explanationEn="Correct! Gridlines are not printed by default. To output visible table borders on A4 or PDF, select the range and apply 'All Borders'."
             />
           )}
         </div>
@@ -300,17 +324,19 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce stil de bordură este standardul profesional pentru rândul final de TOTAL conform manualului?
+              {lang === 'en'
+                ? '2. What border style is the standard professional convention for the final TOTAL row?'
+                : '2. Ce stil de bordură este standardul profesional pentru rândul final de TOTAL conform manualului?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'doubleBottom', text: 'Bordură superioară simplă și bordură inferioară dublă (Top and Double Bottom Border)' },
-              { id: 'zigzag', text: 'Linii în zigzag roz' },
-              { id: 'noLine', text: 'Ștergerea completă a textului din celulă' },
-              { id: 'circles', text: 'Cerculețe colorate punctate' },
+              { id: 'doubleBottom', text: lang === 'en' ? 'Single top border and double bottom border (Top and Double Bottom Border)' : 'Bordură superioară simplă și bordură inferioară dublă (Top and Double Bottom Border)' },
+              { id: 'zigzag', text: lang === 'en' ? 'Pink zigzag wavy lines' : 'Linii în zigzag roz' },
+              { id: 'noLine', text: lang === 'en' ? 'Complete deletion of text in cell' : 'Ștergerea completă a textului din celulă' },
+              { id: 'circles', text: lang === 'en' ? 'Dotted color circles' : 'Cerculețe colorate punctate' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -330,11 +356,15 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
             ))}
           </div>
 
-          <QuestionHint hint="În contabilitate și rapoarte financiare, suma finală se marchează cu două linii orizontale dedesubt." />
+          <QuestionHint
+            hintRo="În contabilitate și rapoarte financiare, suma finală se marchează cu două linii orizontale dedesubt."
+            hintEn="In financial accounting and formal rosters, final balances are underlined with two horizontal lines."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Stilul 'Top and Double Bottom Border' semnalează clar încheierea calculului și totalul definitiv al coloanei."
+              explanationRo="Excelent! Stilul 'Top and Double Bottom Border' semnalează clar încheierea calculului și totalul definitiv al coloanei."
+              explanationEn="Excellent! 'Top and Double Bottom Border' universally denotes calculation finality and balance totals."
             />
           )}
         </div>
@@ -343,17 +373,19 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. De ce este recomandată colorarea alternantă a rândurilor (stilul zebră cu Fill Color)?
+              {lang === 'en'
+                ? '3. Why is alternating row coloring (Zebra striping with Fill Color) recommended?'
+                : '3. De ce este recomandată colorarea alternantă a rândurilor (stilul zebră cu Fill Color)?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'zebraShading', text: 'Facilitează urmărirea vizuală pe orizontală a datelor din tabele cu multe coloane' },
-              { id: 'reduceSize', text: 'Reduce dimensiunea fișierului pe hard disk cu 50%' },
-              { id: 'speedUpCpu', text: 'Accelerează procesorul calculatorului de 2 ori' },
-              { id: 'protectVirus', text: 'Protejează foaia de calcul împotriva virușilor' },
+              { id: 'zebraShading', text: lang === 'en' ? 'It makes reading across wide multi-column tables much easier for the human eye' : 'Facilitează urmărirea vizuală pe orizontală a datelor din tabele cu multe coloane' },
+              { id: 'reduceSize', text: lang === 'en' ? 'It reduces file size on hard drive by 50%' : 'Reduce dimensiunea fișierului pe hard disk cu 50%' },
+              { id: 'speedUpCpu', text: lang === 'en' ? 'It accelerates CPU speed twofold' : 'Accelerează procesorul calculatorului de 2 ori' },
+              { id: 'protectVirus', text: lang === 'en' ? 'It protects the spreadsheet from malware' : 'Protejează foaia de calcul împotriva virușilor' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -373,11 +405,15 @@ export const C2Level4_CellBordersStyling: React.FC<C2Level4Props> = ({ onComplet
             ))}
           </div>
 
-          <QuestionHint hint="Gândește-te la ochiul uman: când citești un rând cu 10 coloane, culorile alternante previn săritul pe alt rând." />
+          <QuestionHint
+            hintRo="Gândește-te la ochiul uman: când citești un rând cu 10 coloane, culorile alternante previn săritul pe alt rând."
+            hintEn="Think of human visual ergonomics: across wide tables, alternating tones guide the eye along the correct row."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Hașurarea alternantă (zebra striping) este un principiu de bază în ergonomia vizuală, călăuzind privirea cititorului de-a lungul întregului rând."
+              explanationRo="Exact! Hașurarea alternantă (zebra striping) este un principiu de bază în ergonomia vizuală, călăuzind privirea cititorului de-a lungul întregului rând."
+              explanationEn="Exactly! Zebra striping is a fundamental visual ergonomics principle that prevents accidental row skipping when scanning across columns."
             />
           )}
         </div>

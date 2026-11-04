@@ -5,8 +5,9 @@ import { useHints } from '../../context/HintContext';
 
 export interface QuestionHintProps {
   id?: string;
-  hintRo: string;
-  hintEn: string;
+  hint?: string;
+  hintRo?: string;
+  hintEn?: string;
   titleRo?: string;
   titleEn?: string;
   onHintUsed?: () => void;
@@ -14,6 +15,7 @@ export interface QuestionHintProps {
 
 export const QuestionHint: React.FC<QuestionHintProps> = ({
   id,
+  hint,
   hintRo,
   hintEn,
   titleRo = 'Ai nevoie de un indiciu?',
@@ -24,11 +26,14 @@ export const QuestionHint: React.FC<QuestionHintProps> = ({
   const { useHint } = useHints();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const effectiveRo = hintRo || hint || '';
+  const effectiveEn = hintEn || hint || '';
+
   const handleToggle = () => {
     const nextState = !isOpen;
     setIsOpen(nextState);
     if (nextState) {
-      const hintKey = id || hintRo.substring(0, 30);
+      const hintKey = id || (effectiveRo ? effectiveRo.substring(0, 30) : 'hint');
       useHint(hintKey);
       if (onHintUsed) onHintUsed();
     }
@@ -53,7 +58,7 @@ export const QuestionHint: React.FC<QuestionHintProps> = ({
             <span className="font-bold text-amber-300 mr-1">
               {lang === 'en' ? 'Smart Hint:' : 'Indiciu util:'}
             </span>
-            {lang === 'en' ? hintEn : hintRo}
+            {lang === 'en' ? effectiveEn : effectiveRo}
           </div>
         </div>
       )}

@@ -22,6 +22,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface D1Level1Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -32,39 +33,54 @@ interface D1Level1Props {
 interface Scenario {
   id: string;
   title: string;
+  titleEn: string;
   dataSummary: string;
+  dataSummaryEn: string;
   recommendedType: 'column' | 'pie' | 'line' | 'scatter';
   explanation: string;
+  explanationEn: string;
 }
 
 const SCENARIOS: Scenario[] = [
   {
     id: 'sc1',
     title: '1. Evoluția temperaturii în București pe parcursul celor 12 luni ale anului',
+    titleEn: '1. Evolution of Bucharest temperature across the 12 months of the year',
     dataSummary: 'Ian: -1°C, Feb: 1°C, Mar: 6°C, Apr: 12°C, Mai: 18°C, Iun: 22°C, Iul: 25°C, Aug: 24°C, Sep: 19°C, Oct: 13°C, Nov: 6°C, Dec: 1°C',
+    dataSummaryEn: 'Jan: -1°C, Feb: 1°C, Mar: 6°C, Apr: 12°C, May: 18°C, Jun: 22°C, Jul: 25°C, Aug: 24°C, Sep: 19°C, Oct: 13°C, Nov: 6°C, Dec: 1°C',
     recommendedType: 'line',
-    explanation: 'Manual pag. 29: Diagramele liniare (Line Charts) sunt ideale pentru reprezentarea dinamicii și a evoluției în timp a unor valori continue pe o perioadă cronologică.'
+    explanation: 'Manual pag. 29: Diagramele liniare (Line Charts) sunt ideale pentru reprezentarea dinamicii și a evoluției în timp a unor valori continue pe o perioadă cronologică.',
+    explanationEn: 'Curriculum p. 29: Line Charts are ideal for representing dynamics and continuous temporal trends over a chronological period.'
   },
   {
     id: 'sc2',
     title: '2. Ponderile cheltuielilor lunare ale unei familii din bugetul total (100%)',
+    titleEn: '2. Monthly family budget expense shares out of the total budget (100%)',
     dataSummary: 'Locuință: 35%, Hrană: 30%, Educație: 15%, Transport: 10%, Economii: 10%',
+    dataSummaryEn: 'Housing: 35%, Food: 30%, Education: 15%, Transport: 10%, Savings: 10%',
     recommendedType: 'pie',
-    explanation: 'Manual pag. 29: Diagramele circulare (Pie Charts / Plăcintă) redau raportul fiecărei părți componente față de întreg (proporții, procente din 100%).'
+    explanation: 'Manual pag. 29: Diagramele circulare (Pie Charts / Plăcintă) redau raportul fiecărei părți componente față de întreg (proporții, procente din 100%).',
+    explanationEn: 'Curriculum p. 29: Pie Charts show the proportion of each component relative to the whole (proportions, percentages out of 100%).'
   },
   {
     id: 'sc3',
     title: '3. Compararea numărului de locuitori între cele 5 mari municipii ale României',
+    titleEn: '3. Comparing population counts across the 5 major municipalities of Romania',
     dataSummary: 'Cluj-Napoca: 324.000, Timișoara: 319.000, Iași: 318.000, Constanța: 283.000, Craiova: 269.000',
+    dataSummaryEn: 'Cluj-Napoca: 324,000, Timișoara: 319,000, Iași: 318,000, Constanța: 283,000, Craiova: 269,000',
     recommendedType: 'column',
-    explanation: 'Manual pag. 29: Diagramele cu coloane (sau bare orizontale) sunt destinate comparării directe a unor valori cantitative distincte între categorii individuale.'
+    explanation: 'Manual pag. 29: Diagramele cu coloane (sau bare orizontale) sunt destinate comparării directe a unor valori cantitative distincte între categorii individuale.',
+    explanationEn: 'Curriculum p. 29: Column (or horizontal Bar) charts are designed for direct comparison of distinct quantitative values across individual categories.'
   },
   {
     id: 'sc4',
     title: '4. Corelația experimentală de laborator dintre tensiunea electrică (U) și intensitatea curentului (I)',
+    titleEn: '4. Experimental laboratory correlation between electric voltage (U) and electric current (I)',
     dataSummary: 'U (V): [1.5, 3.0, 4.5, 6.0, 7.5, 9.0], I (mA): [15, 29, 46, 61, 74, 89]',
+    dataSummaryEn: 'U (V): [1.5, 3.0, 4.5, 6.0, 7.5, 9.0], I (mA): [15, 29, 46, 61, 74, 89]',
     recommendedType: 'scatter',
-    explanation: 'Manual pag. 30: Diagramele de dispersie (XY Scatter) trasează perechi de coordonate numerice pentru a evidenția legături funcționale între două mărimi fizice.'
+    explanation: 'Manual pag. 30: Diagramele de dispersie (XY Scatter) trasează perechi de coordonate numerice pentru a evidenția legături funcționale între două mărimi fizice.',
+    explanationEn: 'Curriculum p. 30: XY Scatter charts plot pairs of numeric coordinates to highlight functional dependencies between two physical quantities.'
   }
 ];
 
@@ -73,6 +89,7 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
   const [selectedTypes, setSelectedTypes] = useState<{ [scId: string]: string }>({});
   const [solvedScenarios, setSolvedScenarios] = useState<string[]>([]);
@@ -91,7 +108,7 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
       sounds.playCorrect();
       setFeedback({
         isSuccess: true,
-        text: `Excelent! ${currentScenario.explanation}`
+        text: lang === 'en' ? `Excellent! ${currentScenario.explanationEn}` : `Excelent! ${currentScenario.explanation}`
       });
       if (!solvedScenarios.includes(currentScenario.id)) {
         setSolvedScenarios(prev => [...prev, currentScenario.id]);
@@ -100,7 +117,9 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
       sounds.playWrong();
       setFeedback({
         isSuccess: false,
-        text: `Tip de diagramă neoptim pentru aceste date. Manualul recomandă un tip diferit pentru a evidenția corect datele. Analizează dacă vorbim despre timp, comparație sau proporții!`
+        text: lang === 'en'
+          ? 'Suboptimal chart type for this data. The textbook recommends a different type to accurately highlight the data. Consider whether this represents time, comparison, or proportions!'
+          : 'Tip de diagramă neoptim pentru aceste date. Manualul recomandă un tip diferit pentru a evidenția corect datele. Analizează dacă vorbim despre timp, comparație sau proporții!'
       });
     }
   };
@@ -138,20 +157,22 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold border border-sky-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 29–30</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • p. 29–30' : 'Manual Art Klett 2025 • Pag. 29–30'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <BarChart3 className="w-8 h-8 text-sky-400" />
-              Nivelul 1: Tipuri de Diagrame & Destinația Pedagogică
+              {lang === 'en' ? 'Level 1: Chart Types & Pedagogical Purpose' : 'Nivelul 1: Tipuri de Diagrame & Destinația Pedagogică'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              O imagine valorează cât o mie de celule! Învață când să alegi diagrame cu coloane, linii, circulare sau de dispersie pentru a comunica eficient datele.
+              {lang === 'en'
+                ? 'A picture is worth a thousand cells! Learn when to choose column, line, pie, or scatter charts to communicate data effectively.'
+                : 'O imagine valorează cât o mie de celule! Învață când să alegi diagrame cu coloane, linii, circulare sau de dispersie pentru a comunica eficient datele.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-sky-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1D</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1D' : 'Modulul 1D'}</div>
             <div className="text-2xl font-black text-sky-400">{solvedScenarios.length}/{SCENARIOS.length}</div>
-            <div className="text-[11px] text-slate-400">Scenarii Soluționate</div>
+            <div className="text-[11px] text-slate-400">{lang === 'en' ? 'Solved Scenarios' : 'Scenarii Soluționate'}</div>
           </div>
         </div>
       </div>
@@ -161,6 +182,7 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
         {SCENARIOS.map((sc, idx) => {
           const isCurrent = idx === activeScenarioIdx;
           const isSolved = solvedScenarios.includes(sc.id);
+          const scTitle = lang === 'en' ? sc.titleEn : sc.title;
           return (
             <button
               key={sc.id}
@@ -178,14 +200,16 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-bold uppercase tracking-wider">Cazul {idx + 1}</span>
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  {lang === 'en' ? `Case ${idx + 1}` : `Cazul ${idx + 1}`}
+                </span>
                 {isSolved ? (
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 ) : (
                   <span className="w-2 h-2 rounded-full bg-slate-600"></span>
                 )}
               </div>
-              <p className="text-xs font-medium text-slate-300 line-clamp-1">{sc.title.split('.')[1] || sc.title}</p>
+              <p className="text-xs font-medium text-slate-300 line-clamp-1">{scTitle.split('.')[1] || scTitle}</p>
             </button>
           );
         })}
@@ -199,12 +223,16 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
               <Eye className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Stația de Diagnosticare Grafică</h2>
-              <p className="text-xs text-slate-400">Analizează natura datelor și alege reprezentarea optimă</p>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Graphical Diagnostic Station' : 'Stația de Diagnosticare Grafică'}
+              </h2>
+              <p className="text-xs text-slate-400">
+                {lang === 'en' ? 'Analyze the nature of the data and choose the optimal representation' : 'Analizează natura datelor și alege reprezentarea optimă'}
+              </p>
             </div>
           </div>
           <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-            Scenariul {activeScenarioIdx + 1} din {SCENARIOS.length}
+            {lang === 'en' ? `Scenario ${activeScenarioIdx + 1} of ${SCENARIOS.length}` : `Scenariul ${activeScenarioIdx + 1} din ${SCENARIOS.length}`}
           </span>
         </div>
 
@@ -212,24 +240,44 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
         <div className="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 space-y-3">
           <div className="text-sm font-bold text-white flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-sky-400" />
-            {currentScenario.title}
+            {lang === 'en' ? currentScenario.titleEn : currentScenario.title}
           </div>
           <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 font-mono text-xs text-sky-300 leading-relaxed">
-            {currentScenario.dataSummary}
+            {lang === 'en' ? currentScenario.dataSummaryEn : currentScenario.dataSummary}
           </div>
         </div>
 
         {/* Chart Options Selector */}
         <div>
           <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">
-            Alege tipul optim de diagramă conform programei:
+            {lang === 'en' ? 'Choose the optimal chart type according to the curriculum:' : 'Alege tipul optim de diagramă conform programei:'}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { type: 'column', label: 'Coloane (Column)', icon: BarChart3, desc: 'Comparare valori între categorii' },
-              { type: 'line', label: 'Linie (Line)', icon: LineChart, desc: 'Evoluție & tendințe în timp' },
-              { type: 'pie', label: 'Circulară (Pie)', icon: PieChart, desc: 'Proporții & procente din total' },
-              { type: 'scatter', label: 'Dispersie (XY)', icon: ScatterChart, desc: 'Corelații științifice' }
+              {
+                type: 'column',
+                label: lang === 'en' ? 'Columns (Column)' : 'Coloane (Column)',
+                icon: BarChart3,
+                desc: lang === 'en' ? 'Compare values across categories' : 'Comparare valori între categorii'
+              },
+              {
+                type: 'line',
+                label: lang === 'en' ? 'Line' : 'Linie (Line)',
+                icon: LineChart,
+                desc: lang === 'en' ? 'Evolution & trends over time' : 'Evoluție & tendințe în timp'
+              },
+              {
+                type: 'pie',
+                label: lang === 'en' ? 'Pie' : 'Circulară (Pie)',
+                icon: PieChart,
+                desc: lang === 'en' ? 'Proportions & % of total' : 'Proporții & procente din total'
+              },
+              {
+                type: 'scatter',
+                label: lang === 'en' ? 'Scatter (XY)' : 'Dispersie (XY)',
+                icon: ScatterChart,
+                desc: lang === 'en' ? 'Scientific correlations' : 'Corelații științifice'
+              }
             ].map(item => {
               const isSelected = selectedTypes[currentScenario.id] === item.type;
               const isCorrectType = currentScenario.recommendedType === item.type;
@@ -258,10 +306,12 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-sky-400" /> Previzualizare Dinamică a Diagramei
+              <TrendingUp className="w-4 h-4 text-sky-400" /> {lang === 'en' ? 'Dynamic Chart Preview' : 'Previzualizare Dinamică a Diagramei'}
             </span>
             <span className="text-[11px] font-mono text-sky-400">
-              {selectedTypes[currentScenario.id] ? `Tip activ: ${selectedTypes[currentScenario.id].toUpperCase()}` : 'Alege un tip de diagramă'}
+              {selectedTypes[currentScenario.id]
+                ? (lang === 'en' ? `Active type: ${selectedTypes[currentScenario.id].toUpperCase()}` : `Tip activ: ${selectedTypes[currentScenario.id].toUpperCase()}`)
+                : (lang === 'en' ? 'Choose a chart type' : 'Alege un tip de diagramă')}
             </span>
           </div>
 
@@ -298,11 +348,11 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
                 <circle cx="170" cy="30" r="4" fill="#f59e0b" />
                 <circle cx="230" cy="70" r="4" fill="#38bdf8" />
                 <circle cx="270" cy="120" r="4" fill="#38bdf8" />
-                <text x="35" y="145" fill="#94a3b8" fontSize="9">Ian</text>
-                <text x="105" y="145" fill="#94a3b8" fontSize="9">Apr</text>
-                <text x="165" y="145" fill="#94a3b8" fontSize="9">Iul</text>
-                <text x="225" y="145" fill="#94a3b8" fontSize="9">Oct</text>
-                <text x="265" y="145" fill="#94a3b8" fontSize="9">Dec</text>
+                <text x="35" y="145" fill="#94a3b8" fontSize="9">{lang === 'en' ? 'Jan' : 'Ian'}</text>
+                <text x="105" y="145" fill="#94a3b8" fontSize="9">{lang === 'en' ? 'Apr' : 'Apr'}</text>
+                <text x="165" y="145" fill="#94a3b8" fontSize="9">{lang === 'en' ? 'Jul' : 'Iul'}</text>
+                <text x="225" y="145" fill="#94a3b8" fontSize="9">{lang === 'en' ? 'Oct' : 'Oct'}</text>
+                <text x="265" y="145" fill="#94a3b8" fontSize="9">{lang === 'en' ? 'Dec' : 'Dec'}</text>
               </svg>
             )}
 
@@ -326,13 +376,13 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
                 <circle cx="220" cy="46" r="5" fill="#38bdf8" />
                 <circle cx="260" cy="30" r="5" fill="#38bdf8" />
                 <line x1="40" y1="125" x2="270" y2="25" stroke="#38bdf8" strokeDasharray="4" strokeWidth="1.5" />
-                <text x="140" y="145" fill="#94a3b8" fontSize="9">Tensiune U (V)</text>
+                <text x="140" y="145" fill="#94a3b8" fontSize="9">{lang === 'en' ? 'Voltage U (V)' : 'Tensiune U (V)'}</text>
               </svg>
             )}
 
             {!selectedTypes[currentScenario.id] && (
               <div className="text-slate-500 text-xs italic flex items-center gap-2">
-                <HelpCircle className="w-4 h-4" /> Selectează un tip de diagramă de mai sus pentru a vedea randarea vizuală
+                <HelpCircle className="w-4 h-4" /> {lang === 'en' ? 'Select a chart type above to view visual rendering' : 'Selectează un tip de diagramă de mai sus pentru a vedea randarea vizuală'}
               </div>
             )}
           </div>
@@ -361,7 +411,7 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
               onClick={handleNextScenario}
               className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg flex items-center gap-2"
             >
-              Următorul Scenariu <ArrowRight className="w-4 h-4" />
+              {lang === 'en' ? 'Next Scenario' : 'Următorul Scenariu'} <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         )}
@@ -374,23 +424,36 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Reflecție Pedagogică: Teoria Reprezentării Grafice</h2>
-            <p className="text-xs text-slate-400">Manual Art Klett pag. 29–30: Criterii de decizie vizuală</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Reflection: Graphical Representation Theory' : 'Reflecție Pedagogică: Teoria Reprezentării Grafice'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Art Klett Textbook p. 29–30: Visual decision criteria' : 'Manual Art Klett pag. 29–30: Criterii de decizie vizuală'}
+            </p>
           </div>
         </div>
 
         {/* Quiz Question 1 */}
         <div className="space-y-3">
           <div className="text-sm font-semibold text-slate-200">
-            1. Dacă avem o serie de date care însumează 100% și dorim să arătăm ponderea fiecărei categorii dintr-un întreg, ce tip de diagramă este interzis sau contraindicat conform bunelor practici?
+            {lang === 'en'
+              ? '1. If we have a dataset totaling 100% and want to show the share of each category from the whole, which chart type is discouraged or counterproductive according to best practices?'
+              : '1. Dacă avem o serie de date care însumează 100% și dorim să arătăm ponderea fiecărei categorii dintr-un întreg, ce tip de diagramă este interzis sau contraindicat conform bunelor practici?'}
           </div>
-          <QuestionHint hint="Gândește-te ce diagramă este rezervată exclusiv pentru evoluții cronologice continue, nu pentru fracțiuni statice dintr-un total." />
+          <QuestionHint
+            hintRo="Gândește-te ce diagramă este rezervată exclusiv pentru evoluții cronologice continue, nu pentru fracțiuni statice dintr-un total."
+            hintEn="Consider which chart is strictly intended for continuous chronological trends rather than static portions of a whole."
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'Line Chart — because it does not convey partition of a whole, but a continuous temporal progression', correct: true },
+              { text: 'Pie Chart — which is forbidden for percentages', correct: false },
+              { text: 'Doughnut Chart — which cannot display percentages', correct: false }
+            ] : [
               { text: 'Diagrama liniară (Line Chart) — deoarece nu sugerează o împărțire a unui întreg, ci o evoluție temporală continuă', correct: true },
               { text: 'Diagrama circulară (Pie Chart) — care este interzisă la procente', correct: false },
               { text: 'Diagrama cu inele (Doughnut Chart) — care nu suportă procente', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l1_q1';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -417,22 +480,35 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l1_q1'] || 0} />
           )}
           {quizSubmitted['d1_l1_q1'] && (
-            <AnswerExplanation explanation="Corect! Pentru compoziția unui întreg se recomandă Pie Chart (sau Bar Chart procentual). Diagrama de linii ar crea impresia falsă a unei dinamici temporale între categorii independente." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Correct! For composition of a whole, Pie Charts (or 100% stacked bar charts) are recommended. A line chart would create the false impression of chronological progression between independent categories.'
+                : 'Corect! Pentru compoziția unui întreg se recomandă Pie Chart (sau Bar Chart procentual). Diagrama de linii ar crea impresia falsă a unei dinamici temporale între categorii independente.'}
+            />
           )}
         </div>
 
         {/* Quiz Question 2 */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <div className="text-sm font-semibold text-slate-200">
-            2. Care este diferența esențială dintre o diagramă cu coloane (Column) și una cu bare (Bar)?
+            {lang === 'en'
+              ? '2. What is the fundamental difference between a Column chart and a Bar chart?'
+              : '2. Care este diferența esențială dintre o diagramă cu coloane (Column) și una cu bare (Bar)?'}
           </div>
-          <QuestionHint hint="Observă orientarea axelor: verticală vs orizontală." />
+          <QuestionHint
+            hintRo="Observă orientarea axelor: verticală vs orizontală."
+            hintEn="Observe axis orientation: vertical vs horizontal."
+          />
           <div className="space-y-2">
-            {[
+            {(lang === 'en' ? [
+              { text: 'In Column, bars are vertical, whereas in Bar, bars are horizontal (very useful when category labels are lengthy)', correct: true },
+              { text: 'Column is strictly for even numbers, while Bar is strictly for odd numbers', correct: false },
+              { text: 'There is no technical or visual difference', correct: false }
+            ] : [
               { text: 'La Column coloanele sunt verticale, iar la Bar barele sunt orizontale (foarte utilă când etichetele categoriilor au denumiri lungi)', correct: true },
               { text: 'Column se folosește doar pentru numere pare, iar Bar doar pentru numere impare', correct: false },
               { text: 'Nu există nicio diferență tehnică sau vizuală', correct: false }
-            ].map((opt, idx) => {
+            ]).map((opt, idx) => {
               const qId = 'd1_l1_q2';
               const isSelected = quizAnswers[qId] === idx;
               const isSub = quizSubmitted[qId];
@@ -459,7 +535,11 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['d1_l1_q2'] || 0} />
           )}
           {quizSubmitted['d1_l1_q2'] && (
-            <AnswerExplanation explanation="Exact! Manual pag. 29: Diagramele cu bare orizontale (Bar) oferă spațiu generos pe axa verticală pentru etichete de text lungi fără a le înclina sau tăia." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Exactly! Curriculum p. 29: Horizontal Bar charts offer plenty of vertical room for lengthy text labels without rotating or clipping them.'
+                : 'Exact! Manual pag. 29: Diagramele cu bare orizontale (Bar) oferă spațiu generos pe axa verticală pentru etichete de text lungi fără a le înclina sau tăia.'}
+            />
           )}
         </div>
       </div>
@@ -473,7 +553,7 @@ export const D1Level1_ChartTypesSelector: React.FC<D1Level1Props> = ({
           if (onCompletePage) onCompletePage(100);
           else if (onComplete) onComplete();
         }}
-        nextLabel="Spre Nivelul 2: Anatomia Diagramei"
+        nextLabel={lang === 'en' ? 'To Level 2: Chart Anatomy' : 'Spre Nivelul 2: Anatomia Diagramei'}
       />
     </div>
   );

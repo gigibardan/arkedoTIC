@@ -42,28 +42,40 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
 
   const seriesData = {
     days: {
-      title: 'Zilele Săptămânii (Română)',
-      base: ['Luni', 'Marți'],
-      full: ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'],
-      description: 'Excel recunoaște lista predefinită a zilelor săptămânii. Trăgând de „Luni”, generează automat zilele următoare.',
+      title: lang === 'en' ? 'Days of the Week' : 'Zilele Săptămânii (Română)',
+      base: lang === 'en' ? ['Monday', 'Tuesday'] : ['Luni', 'Marți'],
+      full: lang === 'en'
+        ? ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        : ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'],
+      description: lang === 'en'
+        ? 'Excel recognizes the built-in day sequence. Dragging from "Monday" automatically fills the subsequent weekdays.'
+        : 'Excel recunoaște lista predefinită a zilelor săptămânii. Trăgând de „Luni”, generează automat zilele următoare.',
     },
     months: {
-      title: 'Lunile Anului',
-      base: ['Ianuarie', 'Februarie'],
-      full: ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie'],
-      description: 'Listă cronologică standard. După „Decembrie”, ciclul se reia automat cu „Ianuarie”.',
+      title: lang === 'en' ? 'Months of the Year' : 'Lunile Anului',
+      base: lang === 'en' ? ['January', 'February'] : ['Ianuarie', 'Februarie'],
+      full: lang === 'en'
+        ? ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+        : ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie'],
+      description: lang === 'en'
+        ? 'Standard calendar sequence. After "December", it automatically wraps around to "January".'
+        : 'Listă cronologică standard. După „Decembrie”, ciclul se reia automat cu „Ianuarie”.',
     },
     numbersCtrl: {
-      title: 'Numere cu tasta Ctrl (sau selecție 1, 2)',
+      title: lang === 'en' ? 'Numbers with Ctrl (or selecting 1, 2)' : 'Numere cu tasta Ctrl (sau selecție 1, 2)',
       base: ['1', '2'],
       full: ['1', '2', '3', '4', '5', '6', '7'],
-      description: 'Dacă tragi o singură cifră (1) fără Ctrl, Excel o duplică (1, 1, 1). Dacă ții apăsat Ctrl sau selectezi 1 și 2, generează seria incrementată cu pasul 1.',
+      description: lang === 'en'
+        ? 'Dragging a single "1" duplicates it (1, 1, 1). Holding Ctrl or selecting both 1 and 2 increments the sequence by step +1.'
+        : 'Dacă tragi o singură cifră (1) fără Ctrl, Excel o duplică (1, 1, 1). Dacă ții apăsat Ctrl sau selectezi 1 și 2, generează seria incrementată cu pasul 1.',
     },
     pattern2: {
-      title: 'Progresie Aritmetică cu pasul 5',
+      title: lang === 'en' ? 'Arithmetic Progression step +5' : 'Progresie Aritmetică cu pasul 5',
       base: ['5', '10'],
       full: ['5', '10', '15', '20', '25', '30', '35'],
-      description: 'Selectând celulele cu valorile 5 și 10, Excel calculează diferența (10 - 5 = 5) și continuă pasul aritmetic: 15, 20, 25...',
+      description: lang === 'en'
+        ? 'Selecting 5 and 10 allows Excel to calculate the difference (10 - 5 = 5) and continue: 15, 20, 25, 30...'
+        : 'Selectând celulele cu valorile 5 și 10, Excel calculează diferența (10 - 5 = 5) și continuă pasul aritmetic: 15, 20, 25...',
     }
   };
 
@@ -131,18 +143,20 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 21–22</span>
+              <span>{lang === 'en' ? 'Art Klett 2025 Textbook • P. 21–22' : 'Manual Art Klett 2025 • Pag. 21–22'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Repeat className="w-8 h-8 text-teal-400" />
-              Nivelul 1: Generarea Seriilor de Date & Mânerul de Umplere (Autofill)
+              {lang === 'en' ? 'Level 1: Autofill Data Series & The Fill Handle' : 'Nivelul 1: Generarea Seriilor de Date & Mânerul de Umplere (Autofill)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Cum poți scrie numerele de la 1 la 100 sau lunile anului în doar 2 secunde fără să le tastezi pe fiecare? Descoperă magia funcției Autofill și rolul tastei Ctrl!
+              {lang === 'en'
+                ? 'How can you write numbers 1 to 100 or the months of the year in 2 seconds without typing each one? Discover the magic of Autofill and the Ctrl key!'
+                : 'Cum poți scrie numerele de la 1 la 100 sau lunile anului în doar 2 secunde fără să le tastezi pe fiecare? Descoperă magia funcției Autofill și rolul tastei Ctrl!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1B</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1B' : 'Modulul 1B'}</div>
             <div className="text-2xl font-black text-teal-400">1 / 7</div>
           </div>
         </div>
@@ -156,9 +170,13 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
               <MousePointer className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Simulator Interactiv: Mânerul de Umplere (Fill Handle)</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Interactive Simulator: The Fill Handle' : 'Simulator Interactiv: Mânerul de Umplere (Fill Handle)'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Alege tipul de serie și trage mânerul din colțul celulei pentru a extinde datele
+                {lang === 'en'
+                  ? 'Choose a series type and drag the bottom-right corner handle to extend the data'
+                  : 'Alege tipul de serie și trage mânerul din colțul celulei pentru a extinde datele'}
               </p>
             </div>
           </div>
@@ -170,7 +188,7 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
               disabled={fillLength >= currentSeries.full.length}
               className="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <span>Trage Mânerul în Jos (↓)</span>
+              <span>{lang === 'en' ? 'Drag Handle Down (↓)' : 'Trage Mânerul în Jos (↓)'}</span>
             </button>
             <button
               type="button"
@@ -185,10 +203,10 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
         {/* Series Type Selector Tabs */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {[
-            { id: 'days', label: 'Zilele Săptămânii' },
-            { id: 'months', label: 'Lunile Anului' },
-            { id: 'numbersCtrl', label: 'Numere cu Ctrl (1, 2..)' },
-            { id: 'pattern2', label: 'Pas Aritmetic (+5)' },
+            { id: 'days', label: lang === 'en' ? 'Days of the Week' : 'Zilele Săptămânii' },
+            { id: 'months', label: lang === 'en' ? 'Months of the Year' : 'Lunile Anului' },
+            { id: 'numbersCtrl', label: lang === 'en' ? 'Numbers with Ctrl (1, 2..)' : 'Numere cu Ctrl (1, 2..)' },
+            { id: 'pattern2', label: lang === 'en' ? 'Arithmetic Step (+5)' : 'Pas Aritmetic (+5)' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -213,8 +231,10 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           <div className="md:col-span-6 bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3 text-slate-400">
-              <span>Coloana A (Foaia de calcul)</span>
-              <span className="text-teal-400 font-bold">{fillLength} celule completate</span>
+              <span>{lang === 'en' ? 'Column A (Worksheet)' : 'Coloana A (Foaia de calcul)'}</span>
+              <span className="text-teal-400 font-bold">
+                {lang === 'en' ? `${fillLength} cells filled` : `${fillLength} celule completate`}
+              </span>
             </div>
 
             <div className="space-y-1">
@@ -237,12 +257,12 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
                     {isLast && (
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-500/40">
-                          Celula Activă
+                          {lang === 'en' ? 'Active Cell' : 'Celula Activă'}
                         </span>
                         {/* Little Fill Handle box */}
                         <div
                           className="w-3.5 h-3.5 bg-emerald-400 border border-slate-950 shadow cursor-crosshair rounded-xs"
-                          title="Mânerul de umplere (Fill handle)"
+                          title={lang === 'en' ? 'Fill handle' : 'Mânerul de umplere (Fill handle)'}
                         ></div>
                       </div>
                     )}
@@ -264,9 +284,11 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-slate-300">
-              <strong className="text-white">Regula Fundamentală din Manual (pag. 21):</strong>
+              <strong className="text-white">{lang === 'en' ? 'Core Textbook Rule (p. 21):' : 'Regula Fundamentală din Manual (pag. 21):'}</strong>
               <p className="leading-relaxed">
-                Mânerul de umplere este micul pătrat negru/verde situat în colțul din <strong>dreapta-jos</strong> al celulei active. Când plasezi cursorul mouse-ului peste el, cursorul se transformă dintr-o cruce albă groasă într-o <strong>cruce subțire neagră (+)</strong>.
+                {lang === 'en'
+                  ? <>The fill handle is the small black/green square located in the <strong>bottom-right</strong> corner of the active cell. Hovering over it transforms the mouse pointer from a thick white cross into a <strong>thin black cross (+)</strong>.</>
+                  : <>Mânerul de umplere este micul pătrat negru/verde situat în colțul din <strong>dreapta-jos</strong> al celulei active. Când plasezi cursorul mouse-ului peste el, cursorul se transformă dintr-o cruce albă groasă într-o <strong>cruce subțire neagră (+)</strong>.</>}
               </p>
             </div>
           </div>
@@ -280,8 +302,12 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Seriile Autofill</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 2</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Autofill Series' : 'Verificare Pedagogică: Seriile Autofill'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Answer all 3 textbook questions correctly to unlock Level 2' : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 2'}
+            </p>
           </div>
         </div>
 
@@ -289,17 +315,19 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Conform manualului (pag. 21), ce tastă trebuie să ții apăsată în timp ce tragi mânerul celulei cu valoarea „1” pentru a obține seria 1, 2, 3, 4, 5?
+              {lang === 'en'
+                ? '1. According to the textbook (p. 21), which key must you hold while dragging a cell with value "1" to generate the series 1, 2, 3, 4, 5?'
+                : '1. Conform manualului (pag. 21), ce tastă trebuie să ții apăsată în timp ce tragi mânerul celulei cu valoarea „1” pentru a obține seria 1, 2, 3, 4, 5?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'ctrlKey', text: 'Tasta Ctrl (Control)' },
-              { id: 'spaceBar', text: 'Bara de spațiu apăsată continuu' },
-              { id: 'capsLock', text: 'Tasta Caps Lock' },
-              { id: 'f1Key', text: 'Tasta de ajutor F1' },
+              { id: 'ctrlKey', text: lang === 'en' ? 'Ctrl (Control) Key' : 'Tasta Ctrl (Control)' },
+              { id: 'spaceBar', text: lang === 'en' ? 'Holding Space Bar continuously' : 'Bara de spațiu apăsată continuu' },
+              { id: 'capsLock', text: lang === 'en' ? 'Caps Lock Key' : 'Tasta Caps Lock' },
+              { id: 'f1Key', text: lang === 'en' ? 'F1 Help Key' : 'Tasta de ajutor F1' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -319,11 +347,15 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
             ))}
           </div>
 
-          <QuestionHint hint="Tasta Ctrl îi indică programului Excel să incrementeze seria cu +1 în loc să copieze aceeași cifră." />
+          <QuestionHint
+            hintRo="Tasta Ctrl îi indică programului Excel să incrementeze seria cu +1 în loc să copieze aceeași cifră."
+            hintEn="The Ctrl key instructs Excel to increment the series by +1 instead of duplicating the same number."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Dacă tragi cifra 1 simplu, se obține 1, 1, 1... Dacă ții apăsată tasta Ctrl, apare un mic plus (+) deasupra cursorului și se generează seria crescătoare 1, 2, 3, 4, 5."
+              explanationRo="Corect! Dacă tragi cifra 1 simplu, se obține 1, 1, 1... Dacă ții apăsată tasta Ctrl, apare un mic plus (+) deasupra cursorului și se generează seria crescătoare 1, 2, 3, 4, 5."
+              explanationEn="Correct! Dragging 1 normally yields 1, 1, 1... Holding the Ctrl key reveals a tiny plus (+) badge above the pointer and generates the ascending sequence 1, 2, 3, 4, 5."
             />
           )}
         </div>
@@ -332,17 +364,19 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Unde este poziționat mânerul de umplere (fill handle) al celulei active?
+              {lang === 'en'
+                ? '2. Where is the fill handle located on the active cell?'
+                : '2. Unde este poziționat mânerul de umplere (fill handle) al celulei active?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'bottomRight', text: 'În colțul din dreapta-jos al chenarului celulei active' },
-              { id: 'topLeft', text: 'În colțul din stânga-sus' },
-              { id: 'taskbar', text: 'În bara de activități Windows de pe desktop' },
-              { id: 'center', text: 'În centrul exact al foii de calcul' },
+              { id: 'bottomRight', text: lang === 'en' ? 'In the bottom-right corner of the active cell border' : 'În colțul din dreapta-jos al chenarului celulei active' },
+              { id: 'topLeft', text: lang === 'en' ? 'In the top-left corner' : 'În colțul din stânga-sus' },
+              { id: 'taskbar', text: lang === 'en' ? 'In the Windows taskbar on the desktop' : 'În bara de activități Windows de pe desktop' },
+              { id: 'center', text: lang === 'en' ? 'In the exact center of the worksheet' : 'În centrul exact al foii de calcul' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -362,11 +396,15 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
             ))}
           </div>
 
-          <QuestionHint hint="Privește conturul verde al celulei selectate: unde se află micul pătrățel plin?" />
+          <QuestionHint
+            hintRo="Privește conturul verde al celulei selectate: unde se află micul pătrățel plin?"
+            hintEn="Look at the green outline of the active cell: where is the solid little square?"
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Mânerul de umplere este situat întotdeauna în colțul dreapta-jos al celulei sau selecției curente."
+              explanationRo="Excelent! Mânerul de umplere este situat întotdeauna în colțul dreapta-jos al celulei sau selecției curente."
+              explanationEn="Excellent! The fill handle is always located in the bottom-right corner of the active cell or selection."
             />
           )}
         </div>
@@ -375,17 +413,19 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Dacă selectezi simultan două celule consecutive care conțin valorile 10 și 20, ce valori va genera tragerea mânerului de umplere?
+              {lang === 'en'
+                ? '3. If you select two consecutive cells containing 10 and 20, what values will dragging the fill handle produce?'
+                : '3. Dacă selectezi simultan două celule consecutive care conțin valorile 10 și 20, ce valori va genera tragerea mânerului de umplere?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'detectStep', text: '30, 40, 50... calculând automat rația de +10' },
-              { id: 'repeat1020', text: '10, 20, 10, 20... fără nicio creștere aritmetică' },
-              { id: 'randomNum', text: 'Numere prime aleatorii' },
-              { id: 'crash', text: 'Programul se blochează și cere parola de administrator' },
+              { id: 'detectStep', text: lang === 'en' ? '30, 40, 50... automatically calculating the +10 step' : '30, 40, 50... calculând automat rația de +10' },
+              { id: 'repeat1020', text: lang === 'en' ? '10, 20, 10, 20... repeating without increment' : '10, 20, 10, 20... fără nicio creștere aritmetică' },
+              { id: 'randomNum', text: lang === 'en' ? 'Random prime numbers' : 'Numere prime aleatorii' },
+              { id: 'crash', text: lang === 'en' ? 'The application freezes and asks for admin password' : 'Programul se blochează și cere parola de administrator' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -405,11 +445,15 @@ export const C2Level1_AutofillSeries: React.FC<C2Level1Props> = ({ onCompletePag
             ))}
           </div>
 
-          <QuestionHint hint="Excel analizează diferența dintre cele două celule: 20 - 10 = 10, continuând seria cu același pas." />
+          <QuestionHint
+            hintRo="Excel analizează diferența dintre cele două celule: 20 - 10 = 10, continuând seria cu același pas."
+            hintEn="Excel analyzes the difference between the two cells: 20 - 10 = 10, continuing the series with that same step."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Când selectezi cel puțin două valori inițiale, Excel deduce pasul progresiei aritmetice și continuă seria adăugând acea diferență (+10) la fiecare pas."
+              explanationRo="Exact! Când selectezi cel puțin două valori inițiale, Excel deduce pasul progresiei aritmetice și continuă seria adăugând acea diferență (+10) la fiecare pas."
+              explanationEn="Exactly! When you select two or more initial values, Excel deduces the arithmetic step (+10) and extends the series accordingly."
             />
           )}
         </div>

@@ -97,18 +97,26 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
               <Award className="w-3.5 h-3.5" />
-              <span>Test Oficial de Autoevaluare • Manual Art Klett 2025 Pag. 25</span>
+              <span>
+                {lang === 'en'
+                  ? 'Official Self-Assessment Test • Art Klett Textbook 2025 p. 25'
+                  : 'Test Oficial de Autoevaluare • Manual Art Klett 2025 Pag. 25'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <GraduationCap className="w-8 h-8 text-amber-400" />
-              Nivelul 7: Evaluarea Sumativă a Modulului 1B (Formatare & Sortare)
+              {lang === 'en'
+                ? 'Level 7: Module 1B Summative Assessment (Formatting & Sorting)'
+                : 'Nivelul 7: Evaluarea Sumativă a Modulului 1B (Formatare & Sortare)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Verifică-ți cunoștințele din Lecția 4 a manualului: autofill, îmbinare celule, formate procentuale și sortare pe niveluri multiple pentru a obține Nota 10 și Diploma de Merit!
+              {lang === 'en'
+                ? 'Test your knowledge from Lesson 4 of the textbook: autofill, cell merging, percentage formats, and multi-level sorting to earn a Grade 10 and Certificate of Merit!'
+                : 'Verifică-ți cunoștințele din Lecția 4 a manualului: autofill, îmbinare celule, formate procentuale și sortare pe niveluri multiple pentru a obține Nota 10 și Diploma de Merit!'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-amber-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Evaluare Finală</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Final Exam' : 'Evaluare Finală'}</div>
             <div className="text-2xl font-black text-amber-400">7 / 7</div>
           </div>
         </div>
@@ -121,11 +129,11 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
             {correctCount === 4 ? '10' : correctCount === 3 ? '8' : correctCount === 2 ? '6' : correctCount === 1 ? '4' : '1'}
           </div>
           <div>
-            <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Notă Estimată</div>
+            <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">{lang === 'en' ? 'Estimated Grade' : 'Notă Estimată'}</div>
             <div className="text-base font-bold text-white">
               {correctCount === 4
-                ? '🌟 Notă Maximă: 10 (Deblochează Diploma Oficială!)'
-                : `${correctCount} din 4 răspunsuri corecte validate`}
+                ? (lang === 'en' ? '🌟 Top Grade: 10 (Unlocks Official Diploma!)' : '🌟 Notă Maximă: 10 (Deblochează Diploma Oficială!)')
+                : (lang === 'en' ? `${correctCount} of 4 correct answers validated` : `${correctCount} din 4 răspunsuri corecte validate`)}
             </div>
           </div>
         </div>
@@ -155,17 +163,35 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Dacă introduci valoarea 0.25 într-o celulă și aplici formatul Procent (Percentage), ce va afișa Excel?
+              {lang === 'en'
+                ? '1. If you enter the value 0.25 into a cell and apply the Percentage format, what will Excel display?'
+                : '1. Dacă introduci valoarea 0.25 într-o celulă și aplici formatul Procent (Percentage), ce va afișa Excel?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'pct25', text: '25% (deoarece 0.25 se multiplică automat cu 100)' },
-              { id: 'pct025', text: '0.25% (fără nicio multiplicare numerică)' },
-              { id: 'pct2500', text: '2500% cu două zerouri suplimentare' },
-              { id: 'errValue', text: 'Mesajul de eroare #VALUE!' },
+              {
+                id: 'pct25',
+                textRo: '25% (deoarece 0.25 se multiplică automat cu 100)',
+                textEn: '25% (since 0.25 is automatically multiplied by 100)'
+              },
+              {
+                id: 'pct025',
+                textRo: '0.25% (fără nicio multiplicare numerică)',
+                textEn: '0.25% (without any numeric multiplication)'
+              },
+              {
+                id: 'pct2500',
+                textRo: '2500% cu două zerouri suplimentare',
+                textEn: '2500% with two additional zeros'
+              },
+              {
+                id: 'errValue',
+                textRo: 'Mesajul de eroare #VALUE!',
+                textEn: 'The #VALUE! error message'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -180,16 +206,23 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="0.25 reprezintă un sfert dintr-un întreg (25 din 100)." />
+          <QuestionHint
+            hintRo="0.25 reprezintă un sfert dintr-un întreg (25 din 100)."
+            hintEn="0.25 represents one quarter of a whole (25 out of 100)."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Formatul de procent înmulțește valoarea celulei cu 100 și afișează simbolul %, astfel încât 0.25 devine 25%."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! The percentage format multiplies the cell value by 100 and appends the % symbol, converting 0.25 into 25%.'
+                  : 'Corect! Formatul de procent înmulțește valoarea celulei cu 100 și afișează simbolul %, astfel încât 0.25 devine 25%.'
+              }
             />
           )}
         </div>
@@ -198,17 +231,35 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Dacă selectezi domeniul A1:D1 unde A1 conține „Rezultate”, iar B1 conține „Semestrul I”, și apeși comanda Merge & Center, ce se întâmplă?
+              {lang === 'en'
+                ? '2. If you select range A1:D1 where A1 contains "Results" and B1 contains "Semester 1", and click Merge & Center, what happens?'
+                : '2. Dacă selectezi domeniul A1:D1 unde A1 conține „Rezultate”, iar B1 conține „Semestrul I”, și apeși comanda Merge & Center, ce se întâmplă?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'onlyRezultate', text: 'Rămâne doar textul „Rezultate” (din celula din stânga-sus), conținutul din B1 fiind șters' },
-              { id: 'bothJoined', text: 'Cele două texte se concatenează ca „Rezultate Semestrul I”' },
-              { id: 'allErased', text: 'Toate celulele devin complet goale' },
-              { id: 'secondKept', text: 'Se păstrează doar textul din ultima celulă D1' },
+              {
+                id: 'onlyRezultate',
+                textRo: 'Rămâne doar textul „Rezultate” (din celula din stânga-sus), conținutul din B1 fiind șters',
+                textEn: 'Only the text "Results" (from upper-left cell) is kept, discarding content in B1'
+              },
+              {
+                id: 'bothJoined',
+                textRo: 'Cele două texte se concatenează ca „Rezultate Semestrul I”',
+                textEn: 'Both texts concatenate as "Results Semester 1"'
+              },
+              {
+                id: 'allErased',
+                textRo: 'Toate celulele devin complet goale',
+                textEn: 'All cells become completely empty'
+              },
+              {
+                id: 'secondKept',
+                textRo: 'Se păstrează doar textul din ultima celulă D1',
+                textEn: 'Only the text from the last cell D1 is preserved'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -223,16 +274,23 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Amintește-ți de avertismentul oficial Excel: păstrează doar celula din stânga-sus (upper-left cell)." />
+          <QuestionHint
+            hintRo="Amintește-ți de avertismentul oficial Excel: păstrează doar celula din stânga-sus (upper-left cell)."
+            hintEn="Recall the official Excel warning: it only retains the upper-left cell."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Comanda 'Merge & Center' păstrează exclusiv conținutul primei celule din colțul stânga-sus, datele din celelalte celule selectate fiind eliminate."
+              explanation={
+                lang === 'en'
+                  ? 'Excellent! The "Merge & Center" command preserves only the content of the upper-left cell, discarding data in all other selected cells.'
+                  : 'Excelent! Comanda \'Merge & Center\' păstrează exclusiv conținutul primei celule din colțul stânga-sus, datele din celelalte celule selectate fiind eliminate.'
+              }
             />
           )}
         </div>
@@ -241,17 +299,35 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. De ce la sortarea unei tabele trebuie să alegi opțiunea „Expand the selection” (Extinde selecția)?
+              {lang === 'en'
+                ? '3. Why must you choose "Expand the selection" when sorting a data table?'
+                : '3. De ce la sortarea unei tabele trebuie să alegi opțiunea „Expand the selection” (Extinde selecția)?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'keepIntegrity', text: 'Pentru ca întregul rând (Nume, Notă, Clasă) să fie mutat împreună, evitând amestecarea notelor' },
-              { id: 'makeBold', text: 'Pentru a îngroșa fontul pe tot ecranul' },
-              { id: 'saveDisk', text: 'Pentru a crea o arhivă ZIP pe disc' },
-              { id: 'printDirect', text: 'Pentru a trimite fișierul direct la tipar' },
+              {
+                id: 'keepIntegrity',
+                textRo: 'Pentru ca întregul rând (Nume, Notă, Clasă) să fie mutat împreună, evitând amestecarea notelor',
+                textEn: 'So the entire row (Name, Grade, Class) moves together, preventing grades from getting mismatched'
+              },
+              {
+                id: 'makeBold',
+                textRo: 'Pentru a îngroșa fontul pe tot ecranul',
+                textEn: 'To make font bold across the entire screen'
+              },
+              {
+                id: 'saveDisk',
+                textRo: 'Pentru a crea o arhivă ZIP pe disc',
+                textEn: 'To create a ZIP archive on the drive'
+              },
+              {
+                id: 'printDirect',
+                textRo: 'Pentru a trimite fișierul direct la tipar',
+                textEn: 'To send the file straight to the printer'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -266,16 +342,23 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Dacă sortezi doar notele, acestea nu vor mai corespunde elevilor care le-au obținut." />
+          <QuestionHint
+            hintRo="Dacă sortezi doar notele, acestea nu vor mai corespunde elevilor care le-au obținut."
+            hintEn="If you only sort grades, they will no longer match the students who earned them."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Corect! 'Expand the selection' păstrează integritatea înregistrărilor, mutând sincron toate coloanele asociate fiecărui elev."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! "Expand the selection" maintains record integrity, synchronously moving all columns linked to each student.'
+                  : 'Corect! \'Expand the selection\' păstrează integritatea înregistrărilor, mutând sincron toate coloanele asociate fiecărui elev.'
+              }
             />
           )}
         </div>
@@ -284,17 +367,35 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              4. Cum completezi automat lunile anului pornind de la celula ce conține „Ianuarie”?
+              {lang === 'en'
+                ? '4. How do you autofill the months of the year starting from a cell containing "January"?'
+                : '4. Cum completezi automat lunile anului pornind de la celula ce conține „Ianuarie”?'}
             </h3>
             {cooldowns.q4 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q4} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'dragFillHandle', text: 'Trăgând mânerul de umplere (pătrățelul din colțul dreapta-jos) în jos pe coloană' },
-              { id: 'typeAllManual', text: 'Tastând manual fiecare lună de la tastatură timp de 10 minute' },
-              { id: 'formatCurrency', text: 'Aplicând formatul Monedă (lei)' },
-              { id: 'wrapTextRule', text: 'Apăsând comanda Wrap Text' },
+              {
+                id: 'dragFillHandle',
+                textRo: 'Trăgând mânerul de umplere (pătrățelul din colțul dreapta-jos) în jos pe coloană',
+                textEn: 'Dragging the fill handle (the square in bottom-right corner) down the column'
+              },
+              {
+                id: 'typeAllManual',
+                textRo: 'Tastând manual fiecare lună de la tastatură timp de 10 minute',
+                textEn: 'Manually typing each month by hand for 10 minutes'
+              },
+              {
+                id: 'formatCurrency',
+                textRo: 'Aplicând formatul Monedă (lei)',
+                textEn: 'Applying Currency format'
+              },
+              {
+                id: 'wrapTextRule',
+                textRo: 'Apăsând comanda Wrap Text',
+                textEn: 'Clicking the Wrap Text command'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -309,16 +410,23 @@ export const C2Level7_FormattingExam: React.FC<C2Level7Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Mânerul de umplere (Fill Handle) utilizează listele predefinite de serii cronologice din Excel." />
+          <QuestionHint
+            hintRo="Mânerul de umplere (Fill Handle) utilizează listele predefinite de serii cronologice din Excel."
+            hintEn="The Fill Handle utilizes Excel's built-in chronological series lists."
+          />
           {q4Answer && (
             <AnswerExplanation
               isCorrect={isQ4Correct}
-              explanation="Exact! Funcția Autofill recunoaște lunile anului și generează automat Februarie, Martie, Aprilie etc. prin simpla glisare a mânerului de umplere."
+              explanation={
+                lang === 'en'
+                  ? 'Exactly! The Autofill feature recognizes calendar months and automatically produces February, March, April, etc. just by dragging the fill handle.'
+                  : 'Exact! Funcția Autofill recunoaște lunile anului și generează automat Februarie, Martie, Aprilie etc. prin simpla glisare a mânerului de umplere.'
+              }
             />
           )}
         </div>

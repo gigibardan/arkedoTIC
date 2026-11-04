@@ -48,49 +48,67 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
     general: {
       name: 'General',
       render: '0.19',
-      desc: 'Formatul implicit; afișează numerele și textele exact așa cum sunt tastate, fără simboluri sau zecimale impuse.',
+      desc: lang === 'en'
+        ? 'Default format; displays numbers and text exactly as typed without enforced symbols or decimals.'
+        : 'Formatul implicit; afișează numerele și textele exact așa cum sunt tastate, fără simboluri sau zecimale impuse.',
       icon: Hash
     },
     number: {
-      name: 'Număr (Number)',
+      name: lang === 'en' ? 'Number' : 'Număr (Number)',
       render: (0.19).toFixed(decimals),
-      desc: `Afișează valoarea cu exact ${decimals} zecimale fixe și permite separarea miilor prin punct sau virgulă.`,
+      desc: lang === 'en'
+        ? `Displays value with exactly ${decimals} fixed decimals and optional thousand separators.`
+        : `Afișează valoarea cu exact ${decimals} zecimale fixe și permite separarea miilor prin punct sau virgulă.`,
       icon: Sliders
     },
     currency: {
-      name: 'Monedă (Currency)',
-      render: `${(1900.5).toLocaleString('ro-RO', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })} lei`,
-      desc: 'Adaugă simbolul valutar (lei, RON, €) și afișează numerele negative în roșu sau cu semnul minus.',
+      name: lang === 'en' ? 'Currency' : 'Monedă (Currency)',
+      render: lang === 'en'
+        ? `$${(1900.5).toFixed(decimals)}`
+        : `${(1900.5).toLocaleString('ro-RO', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })} lei`,
+      desc: lang === 'en'
+        ? 'Appends currency symbol ($, €, lei) and displays negative numbers in red or with minus sign.'
+        : 'Adaugă simbolul valutar (lei, RON, €) și afișează numerele negative în roșu sau cu semnul minus.',
       icon: DollarSign
     },
     accounting: {
-      name: 'Contabilitate (Accounting)',
-      render: `lei  ${(1900.5).toFixed(decimals)}`,
-      desc: 'Aliniază simbolul monetar la marginea stângă și zecimalele pe o coloană perfect dreaptă. Zero este redat printr-o cratimă (-).',
+      name: lang === 'en' ? 'Accounting' : 'Contabilitate (Accounting)',
+      render: lang === 'en' ? `$  ${(1900.5).toFixed(decimals)}` : `lei  ${(1900.5).toFixed(decimals)}`,
+      desc: lang === 'en'
+        ? 'Aligns currency symbols at left margin and decimal points in a straight vertical column. Zero displays as a dash (-).'
+        : 'Aliniază simbolul monetar la marginea stângă și zecimalele pe o coloană perfect dreaptă. Zero este redat printr-o cratimă (-).',
       icon: Layers
     },
     shortDate: {
-      name: 'Dată Scurtă (Short Date)',
-      render: '15/09/2026',
-      desc: 'Convertește un număr serial (în Excel data 1 este 01/01/1900) în formatul clasic zi/lună/an.',
+      name: lang === 'en' ? 'Short Date' : 'Dată Scurtă (Short Date)',
+      render: lang === 'en' ? '9/15/2026' : '15/09/2026',
+      desc: lang === 'en'
+        ? 'Converts serial date numbers (Excel date 1 is 01/01/1900) into standard day/month/year format.'
+        : 'Convertește un număr serial (în Excel data 1 este 01/01/1900) în formatul clasic zi/lună/an.',
       icon: Calendar
     },
     longDate: {
-      name: 'Dată Lungă (Long Date)',
-      render: 'Marți, 15 septembrie 2026',
-      desc: 'Numele zilei și al lunii sunt scrise complet cu litere, ideal pentru diplome și rapoarte formale.',
+      name: lang === 'en' ? 'Long Date' : 'Dată Lungă (Long Date)',
+      render: lang === 'en' ? 'Tuesday, September 15, 2026' : 'Marți, 15 septembrie 2026',
+      desc: lang === 'en'
+        ? 'Full day of week and month spelled out, ideal for diplomas and formal reports.'
+        : 'Numele zilei și al lunii sunt scrise complet cu litere, ideal pentru diplome și rapoarte formale.',
       icon: Calendar
     },
     percent: {
-      name: 'Procent (Percentage)',
+      name: lang === 'en' ? 'Percentage' : 'Procent (Percentage)',
       render: `${(rawNumber * 100).toFixed(decimals === 0 ? 0 : decimals)}%`,
-      desc: 'Înmulțește valoarea celulei cu 100 și atașează simbolul %. De exemplu, 0.19 devine 19% (cota legală de TVA din România).',
+      desc: lang === 'en'
+        ? 'Multiplies cell value by 100 and attaches % symbol. For example, 0.19 becomes 19%.'
+        : 'Înmulțește valoarea celulei cu 100 și atașează simbolul %. De exemplu, 0.19 devine 19% (cota legală de TVA din România).',
       icon: Percent
     },
     fraction: {
-      name: 'Fracție (Fraction)',
+      name: lang === 'en' ? 'Fraction' : 'Fracție (Fraction)',
       render: '1/5 (aprox. 19/100)',
-      desc: 'Convertește fracțiile zecimale în fracții ordinare cu numărător și numitor.',
+      desc: lang === 'en'
+        ? 'Converts decimal fractions into traditional numerator and denominator fractions.'
+        : 'Convertește fracțiile zecimale în fracții ordinare cu numărător și numitor.',
       icon: Binary
     }
   };
@@ -145,18 +163,20 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 23</span>
+              <span>{lang === 'en' ? 'Art Klett 2025 Textbook • P. 23' : 'Manual Art Klett 2025 • Pag. 23'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Percent className="w-8 h-8 text-teal-400" />
-              Nivelul 3: Categoriile de Formate Numerice, Valute & Procente
+              {lang === 'en' ? 'Level 3: Number Format Categories, Currencies & Percentages' : 'Nivelul 3: Categoriile de Formate Numerice, Valute & Procente'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Cum transformi 0.19 în 19% fără să greșești calculele? Învață diferența dintre formatul Monedă, Contabilitate, Dată calendaristică și controlul zecimalelor.
+              {lang === 'en'
+                ? 'How do you turn 0.19 into 19% without math errors? Learn the difference between Currency, Accounting, Calendar Dates, and decimal control.'
+                : 'Cum transformi 0.19 în 19% fără să greșești calculele? Învață diferența dintre formatul Monedă, Contabilitate, Dată calendaristică și controlul zecimalelor.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1B</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1B' : 'Modulul 1B'}</div>
             <div className="text-2xl font-black text-teal-400">3 / 7</div>
           </div>
         </div>
@@ -170,21 +190,27 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
               <DollarSign className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laborator: Galeria Categoriilor de Formate</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en' ? 'Lab: Number Formats Category Gallery' : 'Laborator: Galeria Categoriilor de Formate'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Alege un format pentru a vedea cum se transformă vizual celula
+                {lang === 'en'
+                  ? 'Select a format to preview how the cell visually transforms'
+                  : 'Alege un format pentru a vedea cum se transformă vizual celula'}
               </p>
             </div>
           </div>
 
           {/* Decimals adjuster */}
           <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs">
-            <span className="text-slate-400 px-2 font-mono">Zecimale: {decimals}</span>
+            <span className="text-slate-400 px-2 font-mono">
+              {lang === 'en' ? `Decimals: ${decimals}` : `Zecimale: ${decimals}`}
+            </span>
             <button
               type="button"
               onClick={() => { sounds.playClick(); setDecimals(prev => Math.min(prev + 1, 4)); }}
               className="px-2.5 py-1 bg-slate-800 text-slate-200 hover:text-white rounded-lg font-mono font-bold cursor-pointer"
-              title="Mărește numărul de zecimale"
+              title={lang === 'en' ? 'Increase decimals' : 'Mărește numărul de zecimale'}
             >
               .00 → .000
             </button>
@@ -192,7 +218,7 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
               type="button"
               onClick={() => { sounds.playClick(); setDecimals(prev => Math.max(prev - 1, 0)); }}
               className="px-2.5 py-1 bg-slate-800 text-slate-200 hover:text-white rounded-lg font-mono font-bold cursor-pointer"
-              title="Micșorează numărul de zecimale"
+              title={lang === 'en' ? 'Decrease decimals' : 'Micșorează numărul de zecimale'}
             >
               .000 → .00
             </button>
@@ -218,7 +244,7 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
               >
                 <div className="flex items-center justify-between">
                   <Icon className={`w-4 h-4 ${isSelected ? 'text-teal-400' : 'text-slate-500'}`} />
-                  {isSelected && <span className="text-[10px] text-teal-300 font-bold">ACTIV</span>}
+                  {isSelected && <span className="text-[10px] text-teal-300 font-bold">{lang === 'en' ? 'ACTIVE' : 'ACTIV'}</span>}
                 </div>
                 <div className="text-xs font-bold">{item.name}</div>
               </button>
@@ -230,15 +256,21 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
         <div className="p-6 rounded-3xl bg-slate-950 border border-slate-800 space-y-4 font-mono">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
             <div className="space-y-1 text-center sm:text-left">
-              <span className="text-xs text-slate-400 font-sans">Valoare stocată în memoria celulei:</span>
-              <div className="text-lg font-bold text-slate-300">0.19 (număr curat)</div>
+              <span className="text-xs text-slate-400 font-sans">
+                {lang === 'en' ? 'Raw value stored in cell memory:' : 'Valoare stocată în memoria celulei:'}
+              </span>
+              <div className="text-lg font-bold text-slate-300">
+                {lang === 'en' ? '0.19 (pure numeric float)' : '0.19 (număr curat)'}
+              </div>
             </div>
 
             <ArrowRight className="w-6 h-6 text-teal-400 shrink-0 hidden sm:block" />
 
             <div className="space-y-1 text-center sm:text-right">
               <span className="text-xs text-emerald-400 font-sans font-bold">
-                Afișat pe ecran cu formatul [{formatDefinitions[activeFormat].name}]:
+                {lang === 'en'
+                  ? `Displayed on screen with [${formatDefinitions[activeFormat].name}] format:`
+                  : `Afișat pe ecran cu formatul [${formatDefinitions[activeFormat].name}]:`}
               </span>
               <div className="text-2xl font-black text-emerald-300 bg-emerald-500/10 px-4 py-1.5 rounded-xl border border-emerald-500/30">
                 {formatDefinitions[activeFormat].render}
@@ -247,7 +279,7 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
           </div>
 
           <p className="text-xs text-slate-300 font-sans leading-relaxed pt-2">
-            <strong>Descriere tehnică:</strong> {formatDefinitions[activeFormat].desc}
+            <strong>{lang === 'en' ? 'Technical description:' : 'Descriere tehnică:'}</strong> {formatDefinitions[activeFormat].desc}
           </p>
         </div>
       </div>
@@ -259,8 +291,12 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Formate Numerice</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 4</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: Number Formats' : 'Verificare Pedagogică: Formate Numerice'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Answer all 3 textbook questions correctly to unlock Level 4' : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 4'}
+            </p>
           </div>
         </div>
 
@@ -268,17 +304,19 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Conform regulii din manual (pag. 23), ce calcul efectuează Excel când aplici formatul Procent (Percentage) unei celule?
+              {lang === 'en'
+                ? '1. According to the textbook rule (p. 23), what calculation does Excel perform when applying Percentage format to a cell?'
+                : '1. Conform regulii din manual (pag. 23), ce calcul efectuează Excel când aplici formatul Procent (Percentage) unei celule?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'mult100', text: 'Înmulțește valoarea cu 100 și atașează simbolul % (ex: 0.19 devine 19%)' },
-              { id: 'div100', text: 'Împarte valoarea la 100 și șterge toate zecimalele' },
-              { id: 'sqrt', text: 'Extrage rădăcina pătrată din număr' },
-              { id: 'textOnly', text: 'Nu face niciun calcul, doar schimbă culoarea fontului' },
+              { id: 'mult100', text: lang === 'en' ? 'Multiplies value by 100 and attaches % symbol (e.g., 0.19 becomes 19%)' : 'Înmulțește valoarea cu 100 și atașează simbolul % (ex: 0.19 devine 19%)' },
+              { id: 'div100', text: lang === 'en' ? 'Divides value by 100 and deletes all decimals' : 'Împarte valoarea la 100 și șterge toate zecimalele' },
+              { id: 'sqrt', text: lang === 'en' ? 'Extracts square root of the number' : 'Extrage rădăcina pătrată din număr' },
+              { id: 'textOnly', text: lang === 'en' ? 'Performs no math calculation, only changes font color' : 'Nu face niciun calcul, doar schimbă culoarea fontului' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -298,11 +336,15 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
             ))}
           </div>
 
-          <QuestionHint hint="19% înseamnă 19 sutimi (19/100 = 0.19). Pentru a afișa 19%, numărul 0.19 este înmulțit cu 100." />
+          <QuestionHint
+            hintRo="19% înseamnă 19 sutimi (19/100 = 0.19). Pentru a afișa 19%, numărul 0.19 este înmulțit cu 100."
+            hintEn="19% represents 19 hundredths (19/100 = 0.19). To display 19%, the value 0.19 is multiplied by 100."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Formatul Percentage multiplică automat numărul cu 100 și plasează caracterul %, păstrând valoarea matematică reală."
+              explanationRo="Corect! Formatul Percentage multiplică automat numărul cu 100 și plasează caracterul %, păstrând valoarea matematică reală."
+              explanationEn="Correct! Percentage format automatically multiplies by 100 and appends the % symbol, preserving actual numeric math values."
             />
           )}
         </div>
@@ -311,17 +353,19 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce distincție vizuală are formatul Contabilitate (Accounting) față de formatul Monedă (Currency)?
+              {lang === 'en'
+                ? '2. What visual distinction does the Accounting format have compared to Currency format?'
+                : '2. Ce distincție vizuală are formatul Contabilitate (Accounting) față de formatul Monedă (Currency)?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'accountingDash', text: 'Aliniază simbolul valutar în stânga și redă valoarea zero printr-o cratimă (-)' },
-              { id: 'noDecimals', text: 'În contabilitate este interzis să folosești bani cu zecimale (bani/cenți)' },
-              { id: 'euroOnly', text: 'Formatul de contabilitate funcționează exclusiv în moneda Euro' },
-              { id: 'soundBeep', text: 'Emite un sunet de casă de marcat la fiecare apăsare de tastă' },
+              { id: 'accountingDash', text: lang === 'en' ? 'Aligns currency symbol to the left margin and renders zero as a dash (-)' : 'Aliniază simbolul valutar în stânga și redă valoarea zero printr-o cratimă (-)' },
+              { id: 'noDecimals', text: lang === 'en' ? 'Accounting forbids using decimals (cents)' : 'În contabilitate este interzis să folosești bani cu zecimale (bani/cenți)' },
+              { id: 'euroOnly', text: lang === 'en' ? 'Accounting format operates exclusively in Euros' : 'Formatul de contabilitate funcționează exclusiv în moneda Euro' },
+              { id: 'soundBeep', text: lang === 'en' ? 'Emits cash register chime on every keypress' : 'Emite un sunet de casă de marcat la fiecare apăsare de tastă' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -341,11 +385,15 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
             ))}
           </div>
 
-          <QuestionHint hint="Privește cardul demonstrativ din laborator: simbolul valutar stă la stânga, iar zero devine o liniuță discretă." />
+          <QuestionHint
+            hintRo="Privește cardul demonstrativ din laborator: simbolul valutar stă la stânga, iar zero devine o liniuță discretă."
+            hintEn="Check the preview card above: currency symbols sit on the left, and zero becomes a neat dash."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Formatul Accounting este conceput pentru registre contabile: aliniază simbolurile la stânga, zecimalele pe o verticală perfectă și afișează 0 ca o cratimă."
+              explanationRo="Excelent! Formatul Accounting este conceput pentru registre contabile: aliniază simbolurile la stânga, zecimalele pe o verticală perfectă și afișează 0 ca o cratimă."
+              explanationEn="Excellent! Accounting format is designed for financial ledgers: left-aligning symbols, lining up decimal points vertically, and showing 0 as a dash."
             />
           )}
         </div>
@@ -354,17 +402,19 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Cum poți ajusta rapid numărul de cifre de după virgulă fără a intra în meniul complet de formatare?
+              {lang === 'en'
+                ? '3. How can you quickly adjust the number of decimal digits without opening full format dialogs?'
+                : '3. Cum poți ajusta rapid numărul de cifre de după virgulă fără a intra în meniul complet de formatare?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'adjustDecimals', text: 'Folosind butoanele Mărire/Micșorare zecimale (.00 → .0) din grupul Număr' },
-              { id: 'backspace', text: 'Ștergând cifrele cu tasta Backspace direct de la tastatură' },
-              { id: 'capsLock', text: 'Ținând apăsată tasta Caps Lock' },
-              { id: 'paint', text: 'Colorând cifrele nedorite cu vopsea albă în fundal' },
+              { id: 'adjustDecimals', text: lang === 'en' ? 'Using Increase/Decrease Decimal buttons (.00 → .0) in the Number ribbon group' : 'Folosind butoanele Mărire/Micșorare zecimale (.00 → .0) din grupul Număr' },
+              { id: 'backspace', text: lang === 'en' ? 'Deleting decimal digits with Backspace directly on keyboard' : 'Ștergând cifrele cu tasta Backspace direct de la tastatură' },
+              { id: 'capsLock', text: lang === 'en' ? 'Holding down Caps Lock' : 'Ținând apăsată tasta Caps Lock' },
+              { id: 'paint', text: lang === 'en' ? 'Painting unwanted digits with white background color' : 'Colorând cifrele nedorite cu vopsea albă în fundal' },
             ].map((option) => (
               <button
                 key={option.id}
@@ -384,11 +434,15 @@ export const C2Level3_NumberFormatsCatalog: React.FC<C2Level3Props> = ({ onCompl
             ))}
           </div>
 
-          <QuestionHint hint="Privește butoanele de zecimale din antetul laboratorului de mai sus." />
+          <QuestionHint
+            hintRo="Privește butoanele de zecimale din antetul laboratorului de mai sus."
+            hintEn="Notice the decimal adjustment buttons in the lab header above."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Butoanele 'Increase Decimal' și 'Decrease Decimal' permit adăugarea sau rotunjirea vizuală a zecimalelor printr-un simplu clic."
+              explanationRo="Exact! Butoanele 'Increase Decimal' și 'Decrease Decimal' permit adăugarea sau rotunjirea vizuală a zecimalelor printr-un simplu clic."
+              explanationEn="Exactly! 'Increase Decimal' and 'Decrease Decimal' buttons let you visually expand or round decimal precision in one click."
             />
           )}
         </div>

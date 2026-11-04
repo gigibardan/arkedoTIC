@@ -17,6 +17,7 @@ interface PageNavigationFooterProps {
   earnedScore?: number;
   isCompleted?: boolean;
   onNextPage?: () => void;
+  onNext?: () => void;
   nextButtonLabelRo?: string;
   nextButtonLabelEn?: string;
 }
@@ -35,6 +36,7 @@ export const PageNavigationFooter: React.FC<PageNavigationFooterProps> = ({
   earnedScore,
   isCompleted,
   onNextPage,
+  onNext,
   nextButtonLabelRo,
   nextButtonLabelEn,
 }) => {
@@ -53,6 +55,8 @@ export const PageNavigationFooter: React.FC<PageNavigationFooterProps> = ({
       onProceed();
     } else if (onNextPage) {
       onNextPage();
+    } else if (onNext) {
+      onNext();
     }
   };
 

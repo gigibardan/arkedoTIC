@@ -91,18 +91,22 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 27</span>
+              <span>{lang === 'en' ? 'Art Klett Textbook 2025 • Page 27' : 'Manual Art Klett 2025 • Pag. 27'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <GitBranch className="w-8 h-8 text-teal-400" />
-              Nivelul 3: Decizia Logică — Funcția =IF(test, dacă_adevărat, dacă_fals)
+              {lang === 'en'
+                ? 'Level 3: Logical Decision — The =IF(test, true_val, false_val) Function'
+                : 'Nivelul 3: Decizia Logică — Funcția =IF(test, dacă_adevărat, dacă_fals)'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Cum iei decizii automate în funcție de notele elevilor? Învață sintaxa cu 3 argumente a funcției IF și cum testezi dacă un elev este Promovat sau Corigent.
+              {lang === 'en'
+                ? 'How do you automate decisions based on student grades? Master the 3-argument syntax of the IF function and test whether a student has Passed or Needs Retest.'
+                : 'Cum iei decizii automate în funcție de notele elevilor? Învață sintaxa cu 3 argumente a funcției IF și cum testezi dacă un elev este Promovat sau Corigent.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-teal-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Modulul 1C</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">{lang === 'en' ? 'Module 1C' : 'Modulul 1C'}</div>
             <div className="text-2xl font-black text-teal-400">3 / 7</div>
           </div>
         </div>
@@ -116,9 +120,15 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
               <GitBranch className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Simulator Decizional: =IF(B2 &gt;= 5, &quot;Promovat&quot;, &quot;Corigent&quot;)</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Decision Simulator: =IF(B2 >= 5, "Passed", "Failed")'
+                  : 'Simulator Decizional: =IF(B2 >= 5, "Promovat", "Corigent")'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Ajustează nota din celula B2 pentru a vedea cum se comută decizia logică în timp real
+                {lang === 'en'
+                  ? 'Adjust the grade in cell B2 to watch the logical decision toggle in real time'
+                  : 'Ajustează nota din celula B2 pentru a vedea cum se comută decizia logică în timp real'}
               </p>
             </div>
           </div>
@@ -136,7 +146,7 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
                     : 'bg-slate-950 text-slate-300 border-slate-800 hover:text-white'
                 }`}
               >
-                Nota {val}
+                {lang === 'en' ? `Grade ${val}` : `Nota ${val}`}
               </button>
             ))}
           </div>
@@ -150,9 +160,9 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
               <thead>
                 <tr className="bg-slate-900 text-slate-400 font-bold border-b border-slate-800">
                   <th className="p-2 border-r border-slate-800 w-12 bg-slate-850">◢</th>
-                  <th className="p-2 border-r border-slate-800">A: Nume Elev</th>
-                  <th className="p-2 border-r border-slate-800 w-24">B: Notă (B2)</th>
-                  <th className="p-2">C: Situație (=IF)</th>
+                  <th className="p-2 border-r border-slate-800">{lang === 'en' ? 'A: Student Name' : 'A: Nume Elev'}</th>
+                  <th className="p-2 border-r border-slate-800 w-24">{lang === 'en' ? 'B: Grade (B2)' : 'B: Notă (B2)'}</th>
+                  <th className="p-2">{lang === 'en' ? 'C: Status (=IF)' : 'C: Situație (=IF)'}</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,7 +175,9 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
                   <td className={`p-3 font-black text-sm transition ${
                     isPassed ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
                   }`}>
-                    {isPassed ? 'Promovat ✓' : 'Corigent ✗'}
+                    {isPassed
+                      ? (lang === 'en' ? 'Passed ✓' : 'Promovat ✓')
+                      : (lang === 'en' ? 'Failed ✗' : 'Corigent ✗')}
                   </td>
                 </tr>
               </tbody>
@@ -175,24 +187,40 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
           {/* Syntax Anatomy Breakdown */}
           <div className="md:col-span-6 space-y-3 font-mono text-xs">
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-slate-400 font-sans block text-[11px]">Sintaxa celor 3 argumente conform manualului:</span>
+              <span className="text-slate-400 font-sans block text-[11px]">
+                {lang === 'en'
+                  ? '3-argument syntax conforming to textbook:'
+                  : 'Sintaxa celor 3 argumente conform manualului:'}
+              </span>
               <div className="text-sm font-bold text-white bg-slate-900 p-2.5 rounded-xl border border-slate-700">
-                =IF(<span className="text-amber-400">B2 &gt;= 5</span>, <span className="text-emerald-400">&quot;Promovat&quot;</span>, <span className="text-rose-400">&quot;Corigent&quot;</span>)
+                =IF(<span className="text-amber-400">B2 &gt;= 5</span>,{' '}
+                <span className="text-emerald-400">&quot;{lang === 'en' ? 'Passed' : 'Promovat'}&quot;</span>,{' '}
+                <span className="text-rose-400">&quot;{lang === 'en' ? 'Failed' : 'Corigent'}&quot;</span>)
               </div>
             </div>
 
             <div className="space-y-1.5 font-sans text-xs">
               <div className="p-2.5 rounded-xl bg-amber-950/20 border border-amber-500/30 flex items-center justify-between text-amber-200">
-                <span>1. Testul Logic: {testScore} &gt;= 5.0</span>
-                <span className="font-bold font-mono">{isPassed ? 'Adevărat (TRUE)' : 'Fals (FALSE)'}</span>
+                <span>
+                  {lang === 'en' ? `1. Logical Test: ${testScore} >= 5.0` : `1. Testul Logic: ${testScore} >= 5.0`}
+                </span>
+                <span className="font-bold font-mono">
+                  {isPassed
+                    ? (lang === 'en' ? 'TRUE' : 'Adevărat (TRUE)')
+                    : (lang === 'en' ? 'FALSE' : 'Fals (FALSE)')}
+                </span>
               </div>
               <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-slate-300">
-                <span>2. Valoare dacă Adevărat:</span>
-                <span className="font-bold text-emerald-400 font-mono">&quot;Promovat&quot;</span>
+                <span>{lang === 'en' ? '2. Value if True:' : '2. Valoare dacă Adevărat:'}</span>
+                <span className="font-bold text-emerald-400 font-mono">
+                  &quot;{lang === 'en' ? 'Passed' : 'Promovat'}&quot;
+                </span>
               </div>
               <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-slate-300">
-                <span>3. Valoare dacă Fals:</span>
-                <span className="font-bold text-rose-400 font-mono">&quot;Corigent&quot;</span>
+                <span>{lang === 'en' ? '3. Value if False:' : '3. Valoare dacă Fals:'}</span>
+                <span className="font-bold text-rose-400 font-mono">
+                  &quot;{lang === 'en' ? 'Failed' : 'Corigent'}&quot;
+                </span>
               </div>
             </div>
           </div>
@@ -206,8 +234,14 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificare Pedagogică: Funcția IF</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 4</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Pedagogical Check: The IF Function' : 'Verificare Pedagogică: Funcția IF'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 textbook questions correctly to unlock Level 4'
+                : 'Răspunde corect la cele 3 întrebări din manual pentru a debloca Nivelul 4'}
+            </p>
           </div>
         </div>
 
@@ -215,17 +249,35 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Câte argumente (parametri) primește în mod standard funcția =IF() în Excel?
+              {lang === 'en'
+                ? '1. How many arguments (parameters) does the =IF() function standardly accept in Excel?'
+                : '1. Câte argumente (parametri) primește în mod standard funcția =IF() în Excel?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'threeArgs', text: '3 argumente: testul logic, valoarea dacă e adevărat și valoarea dacă e fals' },
-              { id: 'oneArg', text: '1 singur argument: doar un număr' },
-              { id: 'infinite', text: 'Un număr nelimitat de peste 1000 de argumente' },
-              { id: 'zeroArgs', text: 'Niciun argument, funcționează automat fără paranteze' },
+              {
+                id: 'threeArgs',
+                textRo: '3 argumente: testul logic, valoarea dacă e adevărat și valoarea dacă e fals',
+                textEn: '3 arguments: logical test, value if true, and value if false'
+              },
+              {
+                id: 'oneArg',
+                textRo: '1 singur argument: doar un număr',
+                textEn: 'Only 1 argument: just a single number'
+              },
+              {
+                id: 'infinite',
+                textRo: 'Un număr nelimitat de peste 1000 de argumente',
+                textEn: 'An unlimited number over 1000 arguments'
+              },
+              {
+                id: 'zeroArgs',
+                textRo: 'Niciun argument, funcționează automat fără paranteze',
+                textEn: 'Zero arguments, works automatically without parentheses'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -240,16 +292,23 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Privește structura funcției: IF(condiție, ce_faci_dacă_da, ce_faci_dacă_nu)." />
+          <QuestionHint
+            hintRo="Privește structura funcției: IF(condiție, ce_faci_dacă_da, ce_faci_dacă_nu)."
+            hintEn="Look at the structure: IF(condition, do_if_yes, do_if_no)."
+          />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Funcția IF are exact 3 parametri despărțiți prin virgulă sau punct și virgulă: test_logic, valoare_dacă_adevărat, valoare_dacă_fals."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! The IF function takes exactly 3 arguments separated by commas or semicolons: logical_test, value_if_true, value_if_false.'
+                  : 'Corect! Funcția IF are exact 3 parametri despărțiți prin virgulă sau punct și virgulă: test_logic, valoare_dacă_adevărat, valoare_dacă_fals.'
+              }
             />
           )}
         </div>
@@ -258,17 +317,35 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. De ce textele precum „Promovat” sau „Corigent” trebuie încadrate obligatoriu între ghilimele duble (&quot;&quot;) în formula IF?
+              {lang === 'en'
+                ? '2. Why must text literals such as "Passed" or "Failed" be enclosed in double quotation marks ("") in an IF formula?'
+                : '2. De ce textele precum „Promovat” sau „Corigent” trebuie încadrate obligatoriu între ghilimele duble ("") în formula IF?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'quotesNeeded', text: 'Pentru ca Excel să le recunoască drept șiruri de caractere (text) și să nu le confunde cu numele unor funcții' },
-              { id: 'secretKey', text: 'Pentru a ascunde textul de ochii profesorului' },
-              { id: 'printA4', text: 'Pentru a mări fontul la imprimare' },
-              { id: 'soundBeep', text: 'Pentru a declanșa o alarmă sonoră' },
+              {
+                id: 'quotesNeeded',
+                textRo: 'Pentru ca Excel să le recunoască drept șiruri de caractere (text) și să nu le confunde cu numele unor funcții',
+                textEn: 'So Excel recognizes them as text strings rather than confusing them with function or range names'
+              },
+              {
+                id: 'secretKey',
+                textRo: 'Pentru a ascunde textul de ochii profesorului',
+                textEn: 'To conceal the text from the teacher'
+              },
+              {
+                id: 'printA4',
+                textRo: 'Pentru a mări fontul la imprimare',
+                textEn: 'To enlarge the font when printing'
+              },
+              {
+                id: 'soundBeep',
+                textRo: 'Pentru a declanșa o alarmă sonoră',
+                textEn: 'To sound an audible alert beep'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -283,16 +360,23 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Dacă scrii cuvinte fără ghilimele într-o formulă, Excel crede că sunt alte funcții și dă eroarea #NAME?." />
+          <QuestionHint
+            hintRo="Dacă scrii cuvinte fără ghilimele într-o formulă, Excel crede că sunt alte funcții și dă eroarea #NAME?."
+            hintEn="If you type text without quotes in a formula, Excel assumes it is a function name and returns #NAME?."
+          />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! În orice formulă Excel, constantele de tip text (literal strings) trebuie delimitate prin ghilimele drepte (\&quot;\&quot;), altfel programul returnează eroarea #NAME?."
+              explanation={
+                lang === 'en'
+                  ? 'Excellent! In any Excel formula, text constants (literal strings) must be bounded by double quotes (""), otherwise the software throws the #NAME? error.'
+                  : 'Excelent! În orice formulă Excel, constantele de tip text (literal strings) trebuie delimitate prin ghilimele drepte (""), altfel programul returnează eroarea #NAME?.'
+              }
             />
           )}
         </div>
@@ -301,17 +385,35 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Dacă în celula B2 avem nota 7, ce va afișa formula =IF(B2&gt;=5, &quot;Promovat&quot;, &quot;Corigent&quot;)?
+              {lang === 'en'
+                ? '3. If cell B2 contains the grade 7, what will the formula =IF(B2>=5, "Passed", "Failed") display?'
+                : '3. Dacă în celula B2 avem nota 7, ce va afișa formula =IF(B2>=5, "Promovat", "Corigent")?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'promovat', text: 'Promovat (deoarece 7 >= 5 este Adevărat)' },
-              { id: 'corigent', text: 'Corigent' },
-              { id: 'errorDiv', text: 'Eroare #DIV/0!' },
-              { id: 'blank', text: 'Celula rămâne goală' },
+              {
+                id: 'promovat',
+                textRo: 'Promovat (deoarece 7 >= 5 este Adevărat)',
+                textEn: 'Passed (since 7 >= 5 evaluates to TRUE)'
+              },
+              {
+                id: 'corigent',
+                textRo: 'Corigent',
+                textEn: 'Failed'
+              },
+              {
+                id: 'errorDiv',
+                textRo: 'Eroare #DIV/0!',
+                textEn: 'Error #DIV/0!'
+              },
+              {
+                id: 'blank',
+                textRo: 'Celula rămâne goală',
+                textEn: 'The cell remains empty'
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -326,16 +428,23 @@ export const C3Level3_LogicalDecisionIf: React.FC<C3Level3Props> = ({ onComplete
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="7 este mai mare sau egal cu 5? Testul logic este TRUE." />
+          <QuestionHint
+            hintRo="7 este mai mare sau egal cu 5? Testul logic este TRUE."
+            hintEn="Is 7 greater than or equal to 5? The logical condition is TRUE."
+          />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Exact! Testul 7 >= 5 fiind adevărat, funcția evaluează și afișează primul rezultat ('Promovat')."
+              explanation={
+                lang === 'en'
+                  ? 'Exactly! The test 7 >= 5 is true, so the formula evaluates and outputs the first argument ("Passed").'
+                  : 'Exact! Testul 7 >= 5 fiind adevărat, funcția evaluează și afișează primul rezultat (\'Promovat\').'
+              }
             />
           )}
         </div>
