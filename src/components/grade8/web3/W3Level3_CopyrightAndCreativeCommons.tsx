@@ -19,6 +19,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface W3Level3Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -28,59 +29,77 @@ interface W3Level3Props {
 
 interface LicenseType {
   code: string;
-  name: string;
+  nameRo: string;
+  nameEn: string;
   badge: string;
   commercial: boolean;
   derivative: 'yes' | 'sharealike' | 'no';
-  summary: string;
-  schoolContext: string;
+  summaryRo: string;
+  summaryEn: string;
+  schoolContextRo: string;
+  schoolContextEn: string;
 }
 
 const LICENSES: LicenseType[] = [
   {
     code: 'CC BY',
-    name: 'Atribuire (Attribution)',
+    nameRo: 'Atribuire (Attribution)',
+    nameEn: 'Attribution',
     badge: 'BY',
     commercial: true,
     derivative: 'yes',
-    summary: 'Permite redistribuirea, modificarea și utilizarea comercială sau necomercială, cu condiția obligatorie de a credita autorul.',
-    schoolContext: 'Cea mai flexibilă licență. Excelentă pentru articole școlare și tutoriale deschise.'
+    summaryRo: 'Permite redistribuirea, modificarea și utilizarea comercială sau necomercială, cu condiția obligatorie de a credita autorul.',
+    summaryEn: 'Permits redistribution, remixing, and both commercial and non-commercial reuse, provided mandatory author attribution.',
+    schoolContextRo: 'Cea mai flexibilă licență. Excelentă pentru articole școlare și tutoriale deschise.',
+    schoolContextEn: 'Most accommodating license. Ideal for open school articles, collaborative guides, and tutorials.'
   },
   {
     code: 'CC BY-SA',
-    name: 'Atribuire - Distribuire în condiții identice (ShareAlike)',
+    nameRo: 'Atribuire - Distribuire în condiții identice (ShareAlike)',
+    nameEn: 'Attribution - ShareAlike',
     badge: 'BY-SA',
     commercial: true,
     derivative: 'sharealike',
-    summary: 'Permite adaptarea lucrării, dar orice lucrare derivată trebuie distribuită sub exact aceeași licență (modelul Wikipedia).',
-    schoolContext: 'Ideală pentru proiecte comunitare deschise dezvoltate împreună cu alte școli.'
+    summaryRo: 'Permite adaptarea lucrării, dar orice lucrare derivată trebuie distribuită sub exact aceeași licență (modelul Wikipedia).',
+    summaryEn: 'Permits remixing and adaptations, provided all derivative works carry the identical license terms (the Wikipedia model).',
+    schoolContextRo: 'Ideală pentru proiecte comunitare deschise dezvoltate împreună cu alte școli.',
+    schoolContextEn: 'Ideal for open community projects co-created with partner schools.'
   },
   {
     code: 'CC BY-NC',
-    name: 'Atribuire - Necomercial (NonCommercial)',
+    nameRo: 'Atribuire - Necomercial (NonCommercial)',
+    nameEn: 'Attribution - NonCommercial',
     badge: 'BY-NC',
     commercial: false,
     derivative: 'yes',
-    summary: 'Permite descărcarea și modificarea operei, dar exclusiv în scopuri necomerciale (educaționale, non-profit).',
-    schoolContext: 'Licența standard pentru materialele didactice școlare, fișe de lucru și reviste ale elevilor.'
+    summaryRo: 'Permite descărcarea și modificarea operei, dar exclusiv în scopuri necomerciale (educaționale, non-profit).',
+    summaryEn: 'Allows downloading and modifying the work, strictly restricted to non-commercial (educational, non-profit) purposes.',
+    schoolContextRo: 'Licența standard pentru materialele didactice școlare, fișe de lucru și reviste ale elevilor.',
+    schoolContextEn: 'Standard baseline for school worksheets, study guides, and student journalism.'
   },
   {
     code: 'CC BY-NC-ND',
-    name: 'Atribuire - Necomercial - Fără derivate (NoDerivs)',
+    nameRo: 'Atribuire - Necomercial - Fără derivate (NoDerivs)',
+    nameEn: 'Attribution - NonCommercial - NoDerivs',
     badge: 'BY-NC-ND',
     commercial: false,
     derivative: 'no',
-    summary: 'Cea mai restrictivă licență CC: permite doar descărcarea și partajarea operei intacte, fără modificări și fără scop comercial.',
-    schoolContext: 'Potrivită pentru poezii, eseuri premiate la olimpiadă sau fotografii oficiale de arhivă.'
+    summaryRo: 'Cea mai restrictivă licență CC: permite doar descărcarea și partajarea operei intacte, fără modificări și fără scop comercial.',
+    summaryEn: 'Most restrictive CC license: permits downloading and sharing only intact originals, with no derivatives or commercial use.',
+    schoolContextRo: 'Potrivită pentru poezii, eseuri premiate la olimpiadă sau fotografii oficiale de arhivă.',
+    schoolContextEn: 'Suitable for literature prize essays, school anthem compositions, or historical archives.'
   },
   {
     code: 'CC0',
-    name: 'Domeniu Public (Public Domain Dedication)',
+    nameRo: 'Domeniu Public (Public Domain Dedication)',
+    nameEn: 'Public Domain Dedication',
     badge: '0',
     commercial: true,
     derivative: 'yes',
-    summary: 'Autorul a renunțat complet la drepturile de autor; opera poate fi utilizată liber fără nicio restricție.',
-    schoolContext: 'Resurse preluate de pe platforme gratuite precum Unsplash sau Wikimedia Commons.'
+    summaryRo: 'Autorul a renunțat complet la drepturile de autor; opera poate fi utilizată liber fără nicio restricție.',
+    summaryEn: 'The creator waives copyright completely; the work is free for all uses without restrictions.',
+    schoolContextRo: 'Resurse preluate de pe platforme gratuite precum Unsplash sau Wikimedia Commons.',
+    schoolContextEn: 'Public domain assets sourced from Unsplash, Pixabay, or Wikimedia Commons.'
   }
 ];
 
@@ -89,6 +108,7 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   // License Generator State
@@ -148,18 +168,27 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
           <div>
             <div className="flex items-center gap-2 text-amber-200 text-sm font-semibold tracking-wide uppercase mb-1">
               <Scale className="w-5 h-5 text-amber-300" />
-              <span>Unitatea 2: Pagini Web & Proiecte Online • Modulul 2C</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Unitatea 2: Pagini Web & Proiecte Online • Modulul 2C'
+                  : 'Unit 2: Web Pages & Online Projects • Module 2C'}
+              </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-              Lecția 3: Drepturi de Autor (Copyright) & Licențe Creative Commons
+              {lang === 'ro'
+                ? 'Lecția 3: Drepturi de Autor (Copyright) & Licențe Creative Commons'
+                : 'Lesson 3: Copyright & Creative Commons Licensing'}
             </h1>
             <p className="text-amber-100 text-sm md:text-base mt-1 max-w-3xl">
-              Manual Art Klett pag. 54–55: Înțelege proprietatea intelectuală în mediul digital, riscurile plagiatului,
-              cum se folosesc legal imaginile de pe internet și cum atribui corect o licență Creative Commons proiectului tău.
+              {lang === 'ro'
+                ? 'Manual Art Klett pag. 54–55: Înțelege proprietatea intelectuală în mediul digital, riscurile plagiatului, cum se folosesc legal imaginile de pe internet și cum atribui corect o licență Creative Commons proiectului tău.'
+                : 'Curriculum p. 54–55: Understand digital intellectual property, plagiarism risks, lawful image sourcing, and how to apply standard Creative Commons license badges to your project.'}
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-center">
-            <span className="text-xs uppercase tracking-wider text-amber-200 font-bold block">Nivel</span>
+            <span className="text-xs uppercase tracking-wider text-amber-200 font-bold block">
+              {lang === 'ro' ? 'Nivel' : 'Level'}
+            </span>
             <span className="text-2xl font-black text-white">3 / 7</span>
           </div>
         </div>
@@ -170,40 +199,45 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
         <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
           <BookOpen className="w-6 h-6 text-indigo-600 flex-shrink-0" />
           <h2 className="text-lg font-bold text-slate-800">
-            Repere Teoretice: Proprietate Intelectuală & Etică Digitală (Manual pag. 54–55)
+            {lang === 'ro'
+              ? 'Repere Teoretice: Proprietate Intelectuală & Etică Digitală (Manual pag. 54–55)'
+              : 'Theoretical Reference: Intellectual Property & Digital Ethics (Curriculum p. 54–55)'}
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-700">
           <div className="bg-rose-50/70 p-4 rounded-xl border border-rose-100 space-y-2">
             <div className="font-bold text-rose-900 flex items-center gap-2">
               <Copyright className="w-4 h-4 text-rose-600" />
-              Dreptul de Autor (Copyright ©)
+              {lang === 'ro' ? 'Dreptul de Autor (Copyright ©)' : 'Copyright Law (©)'}
             </div>
             <p className="text-slate-600 text-xs">
-              Conform Legii nr. 8/1996, orice creație originală (texte, fotografii, ilustrații, clipuri video)
-              este protejată automat. Faptul că o imagine apare pe Google Images <strong>nu înseamnă</strong> că este liberă de drepturi!
+              {lang === 'ro'
+                ? 'Conform Legii nr. 8/1996, orice creație originală (texte, fotografii, ilustrații, clipuri video) este protejată automat. Faptul că o imagine apare pe Google Images nu înseamnă că este liberă de drepturi!'
+                : 'Under copyright laws, every original creation (text, photography, illustrations, videos) is automatically protected. Simply appearing in Google Images does NOT mean an asset is public domain!'}
             </p>
           </div>
 
           <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-100 space-y-2">
             <div className="font-bold text-amber-900 flex items-center gap-2">
               <Scale className="w-4 h-4 text-amber-600" />
-              Licențele Creative Commons (CC)
+              {lang === 'ro' ? 'Licențele Creative Commons (CC)' : 'Creative Commons (CC) Framework'}
             </div>
             <p className="text-slate-600 text-xs">
-              Sunt licențe juridice standardizate care permit autorilor să ofere dreptul de reutilizare publicului,
-              păstrând controlul prin clauze: <strong>BY</strong> (Atribuire), <strong>NC</strong> (Necomercial), <strong>SA</strong> (Condiții identice), <strong>ND</strong> (Fără derivate).
+              {lang === 'ro'
+                ? 'Sunt licențe juridice standardizate care permit autorilor să ofere dreptul de reutilizare publicului, păstrând controlul prin clauze: BY (Atribuire), NC (Necomercial), SA (Condiții identice), ND (Fără derivate).'
+                : 'Standardized legal licenses allowing authors to grant public reuse while retaining rights via clauses: BY (Attribution), NC (NonCommercial), SA (ShareAlike), and ND (NoDerivs).'}
             </p>
           </div>
 
           <div className="bg-emerald-50/70 p-4 rounded-xl border border-emerald-100 space-y-2">
             <div className="font-bold text-emerald-900 flex items-center gap-2">
               <FileCheck className="w-4 h-4 text-emerald-600" />
-              Formula Corectă de Atribuire
+              {lang === 'ro' ? 'Formula Corectă de Atribuire' : 'Correct Attribution Syntax'}
             </div>
             <p className="text-slate-600 text-xs">
-              Pentru a respecta etica, o citare completă include: <em>Titlul operei</em>, <em>Autorul</em>,
-              <em>Sursa (link web)</em> și <em>Tipul de licență aplicat</em> (ex: „Foto realizată de Ion Popescu sub licență CC BY 4.0”).
+              {lang === 'ro'
+                ? 'Pentru a respecta etica, o citare completă include: Titlul operei, Autorul, Sursa (link web) și Tipul de licență aplicat (ex: „Foto realizată de Ion Popescu sub licență CC BY 4.0”).'
+                : 'Ethical attribution requires TASL: Title of work, Author, Source (hyperlink), and specific License type applied (e.g. "Photo by Jane Doe under CC BY 4.0").'}
             </p>
           </div>
         </div>
@@ -215,11 +249,13 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-600" />
             <h3 className="font-bold text-slate-800 text-lg">
-              Simulator Interactiv: Generatorul de Licențe Creative Commons
+              {lang === 'ro'
+                ? 'Simulator Interactiv: Generatorul de Licențe Creative Commons'
+                : 'Interactive Simulator: Creative Commons License Generator'}
             </h3>
           </div>
           <span className="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold">
-            Laborator Juridic & Etic
+            {lang === 'ro' ? 'Laborator Juridic & Etic' : 'Legal & Ethics Lab'}
           </span>
         </div>
 
@@ -228,27 +264,27 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
-                Titlul Proiectului Școlar & Autorul:
+                {lang === 'ro' ? 'Titlul Proiectului Școlar & Autorul:' : 'School Project Title & Author:'}
               </label>
               <input
                 type="text"
                 value={workTitle}
                 onChange={(e) => setWorkTitle(e.target.value)}
                 className="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white outline-none"
-                placeholder="Titlul proiectului"
+                placeholder={lang === 'ro' ? 'Titlul proiectului' : 'Project title'}
               />
               <input
                 type="text"
                 value={authorName}
                 onChange={(e) => setAuthorName(e.target.value)}
                 className="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white outline-none"
-                placeholder="Numele elevului / Echipei"
+                placeholder={lang === 'ro' ? 'Numele elevului / Echipei' : 'Student / Team name'}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
-                1. Permiteți utilizarea comercială a operei?
+                {lang === 'ro' ? '1. Permiteți utilizarea comercială a operei?' : '1. Allow commercial uses of your work?'}
               </label>
               <div className="flex gap-2">
                 <button
@@ -262,7 +298,7 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
                       : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  Da (Comercial permis)
+                  {lang === 'ro' ? 'Da (Comercial permis)' : 'Yes (Commercial allowed)'}
                 </button>
                 <button
                   onClick={() => {
@@ -275,20 +311,22 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
                       : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  Nu (Exclusiv Necomercial - NC)
+                  {lang === 'ro' ? 'Nu (Exclusiv Necomercial - NC)' : 'No (NonCommercial only - NC)'}
                 </button>
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
-                2. Permiteți altora să modifice lucrarea (opere derivate)?
+                {lang === 'ro'
+                  ? '2. Permiteți altora să modifice lucrarea (opere derivate)?'
+                  : '2. Allow adaptations of your work (derivatives)?'}
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { id: 'yes', label: 'Da (Modificări libere)' },
-                  { id: 'sharealike', label: 'Da, ShareAlike (SA)' },
-                  { id: 'no', label: 'Nu (Fără derivate - ND)' }
+                  { id: 'yes', labelRo: 'Da (Modificări libere)', labelEn: 'Yes (Freely)' },
+                  { id: 'sharealike', labelRo: 'Da, ShareAlike (SA)', labelEn: 'Yes, ShareAlike (SA)' },
+                  { id: 'no', labelRo: 'Nu (Fără derivate - ND)', labelEn: 'No (NoDerivs - ND)' }
                 ].map(item => (
                   <button
                     key={item.id}
@@ -302,7 +340,7 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
                         : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                     }`}
                   >
-                    {item.label}
+                    {lang === 'ro' ? item.labelRo : item.labelEn}
                   </button>
                 ))}
               </div>
@@ -314,7 +352,7 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
             <div>
               <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
                 <span className="text-xs uppercase tracking-wider text-amber-400 font-bold">
-                  Insignă Generată Oficială
+                  {lang === 'ro' ? 'Insignă Generată Oficială' : 'Generated Official Badge'}
                 </span>
                 <span className="font-mono text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full font-bold">
                   {currentLicenseCode}
@@ -326,8 +364,13 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
                   Creative Commons {currentLicenseCode} 4.0 International
                 </div>
                 <p className="text-slate-300 leading-relaxed text-xs">
-                  Această operă („{workTitle || 'Titlu Proiect'}”) creată de{' '}
-                  <strong className="text-amber-300">{authorName || 'Autor'}</strong> este pusă la dispoziție conform termenilor licenței{' '}
+                  {lang === 'ro'
+                    ? `Această operă („${workTitle || 'Titlu Proiect'}”) creată de `
+                    : `This work ("${workTitle || 'Project Title'}") created by `}
+                  <strong className="text-amber-300">{authorName || (lang === 'ro' ? 'Autor' : 'Author')}</strong>
+                  {lang === 'ro'
+                    ? ` este pusă la dispoziție conform termenilor licenței `
+                    : ` is licensed under `}
                   <span className="text-white font-bold">{currentLicenseCode}</span>.
                 </p>
               </div>
@@ -336,11 +379,30 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
             <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-[11px] text-slate-300 space-y-1">
               <div className="font-bold text-amber-400 flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5" />
-                Ce permite această licență vizitatorilor:
+                {lang === 'ro' ? 'Ce permite această licență vizitatorilor:' : 'What visitors are permitted to do:'}
               </div>
-              <div>• Atribuire obligatorie: <strong>DA (Trebuie citat autorul)</strong></div>
-              <div>• Utilizare comercială: <strong>{commercialAllowed ? 'PERMISĂ' : 'INTERZISĂ (Doar educațional / non-profit)'}</strong></div>
-              <div>• Modificări / Remix: <strong>{modificationsAllowed === 'yes' ? 'PERMISE' : modificationsAllowed === 'sharealike' ? 'PERMISE DOAR SUB ACEEAȘI LICENȚĂ (SA)' : 'INTERZISE (ND)'}</strong></div>
+              <div>
+                • {lang === 'ro' ? 'Atribuire obligatorie: ' : 'Attribution required: '}
+                <strong>{lang === 'ro' ? 'DA (Trebuie citat autorul)' : 'YES (Must credit creator)'}</strong>
+              </div>
+              <div>
+                • {lang === 'ro' ? 'Utilizare comercială: ' : 'Commercial use: '}
+                <strong>
+                  {commercialAllowed
+                    ? lang === 'ro' ? 'PERMISĂ' : 'ALLOWED'
+                    : lang === 'ro' ? 'INTERZISĂ (Doar educațional / non-profit)' : 'PROHIBITED (Educational / non-profit only)'}
+                </strong>
+              </div>
+              <div>
+                • {lang === 'ro' ? 'Modificări / Remix: ' : 'Modifications / Remixes: '}
+                <strong>
+                  {modificationsAllowed === 'yes'
+                    ? lang === 'ro' ? 'PERMISE' : 'ALLOWED'
+                    : modificationsAllowed === 'sharealike'
+                    ? lang === 'ro' ? 'PERMISE DOAR SUB ACEEAȘI LICENȚĂ (SA)' : 'ALLOWED UNDER SAME LICENSE ONLY (SA)'
+                    : lang === 'ro' ? 'INTERZISE (ND)' : 'PROHIBITED (ND)'}
+                </strong>
+              </div>
             </div>
           </div>
         </div>
@@ -351,7 +413,9 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
           <HelpCircle className="w-5 h-5 text-amber-600" />
           <h3 className="font-bold text-slate-800 text-lg">
-            Verificare Pedagogică: Drepturi de Autor & Etică Web (Manual pag. 54–55)
+            {lang === 'ro'
+              ? 'Verificare Pedagogică: Drepturi de Autor & Etică Web (Manual pag. 54–55)'
+              : 'Pedagogical Check: Copyright & Web Ethics (Curriculum p. 54–55)'}
           </h3>
         </div>
 
@@ -359,10 +423,13 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-2">
             <span className="text-sm font-bold text-slate-800">
-              Cerința 1: Cauți imagini pe Google pentru o pagină despre animale pe cale de dispariție. Care este comportamentul etic și legal corect conform manualului de clasa a VIII-a?
+              {lang === 'ro'
+                ? 'Cerința 1: Cauți imagini pe Google pentru o pagină despre animale pe cale de dispariție. Care este comportamentul etic și legal corect conform manualului de clasa a VIII-a?'
+                : 'Requirement 1: You are searching Google Images for an endangered species project. What is the lawful, ethical procedure taught in the 8th grade curriculum?'}
             </span>
             <QuestionHint
-              hint="Manual pag. 54: Motoarele de căutare au un filtru dedicat în fila „Instrumente” -> „Drepturi de utilizare” pentru a găsi exclusiv imagini cu licență liberă Creative Commons."
+              hintRo="Manual pag. 54: Motoarele de căutare au un filtru dedicat în fila „Instrumente” -> „Drepturi de utilizare” pentru a găsi exclusiv imagini cu licență liberă Creative Commons."
+              hintEn="Curriculum p. 54: Search engines provide a dedicated filter under Tools -> Usage Rights to locate Creative Commons licensed images exclusively."
               isOpen={showHint['q1'] || false}
               onToggle={() => setShowHint(prev => ({ ...prev, q1: !prev.q1 }))}
             />
@@ -374,10 +441,26 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
 
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { id: 'opt_a', label: 'A. Descarci prima poză găsită fără să verifici, deoarece tot ce e pe Google este gratuit și fără proprietar' },
-              { id: 'opt_b', label: 'B. Folosești filtrul „Licențe Creative Commons” sau bănci de imagini libere (ex: Wikimedia Commons, Pixabay) și menționezi autorul în descrierea imaginii' },
-              { id: 'opt_c', label: 'C. Ștergi sigla autorului din colțul pozei cu Paint pentru a nu se vedea' },
-              { id: 'opt_d', label: 'D. Trimiți o scrisoare tipărită fiecărui vizitator al site-ului' }
+              {
+                id: 'opt_a',
+                labelRo: 'A. Descarci prima poză găsită fără să verifici, deoarece tot ce e pe Google este gratuit și fără proprietar',
+                labelEn: 'A. Download the first photo you find without checking, assuming everything on Google is unowned and free'
+              },
+              {
+                id: 'opt_b',
+                labelRo: 'B. Folosești filtrul „Licențe Creative Commons” sau bănci de imagini libere (ex: Wikimedia Commons, Pixabay) și menționezi autorul în descrierea imaginii',
+                labelEn: 'B. Use the "Creative Commons licenses" filter or free repositories (e.g. Wikimedia Commons, Pixabay) and credit the creator in the image caption'
+              },
+              {
+                id: 'opt_c',
+                labelRo: 'C. Ștergi sigla autorului din colțul pozei cu Paint pentru a nu se vedea',
+                labelEn: 'C. Erase the author\'s watermark in Paint so no one notices'
+              },
+              {
+                id: 'opt_d',
+                labelRo: 'D. Trimiți o scrisoare tipărită fiecărui vizitator al site-ului',
+                labelEn: 'D. Mail a printed letter to every visitor of the site'
+              }
             ].map(opt => (
               <button
                 key={opt.id}
@@ -389,7 +472,7 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {opt.label}
+                {lang === 'ro' ? opt.labelRo : opt.labelEn}
               </button>
             ))}
           </div>
@@ -400,12 +483,16 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
               disabled={!answers['q1'] || isLocked('q1')}
               className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
             >
-              <span>Verifică Răspunsul</span>
+              <span>{lang === 'ro' ? 'Verifică Răspunsul' : 'Check Answer'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <AnswerExplanation
-              explanation="Corect! Utilizarea filtrului pentru licențe Creative Commons și creditarea autorului constituie respectarea legii dreptului de autor și a eticii cibernetice."
+              explanation={
+                lang === 'ro'
+                  ? 'Corect! Utilizarea filtrului pentru licențe Creative Commons și creditarea autorului constituie respectarea legii dreptului de autor și a eticii cibernetice.'
+                  : 'Correct! Applying the Creative Commons license filter and properly crediting creators upholds copyright law and sound digital ethics.'
+              }
               isCorrect={true}
             />
           )}
@@ -415,10 +502,13 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
         <div className="space-y-3 pt-4 border-t border-slate-100">
           <div className="flex items-start justify-between gap-2">
             <span className="text-sm font-bold text-slate-800">
-              Cerința 2: Ce semnifică pictograma „NC” (NonCommercial) din componența unei licențe Creative Commons (CC BY-NC)?
+              {lang === 'ro'
+                ? 'Cerința 2: Ce semnifică pictograma „NC” (NonCommercial) din componența unei licențe Creative Commons (CC BY-NC)?'
+                : 'Requirement 2: What does the "NC" (NonCommercial) symbol signify in a Creative Commons license (CC BY-NC)?'}
             </span>
             <QuestionHint
-              hint="Manual pag. 55: Clauza NC interzice utilizarea creației în activități care aduc profit financiar sau vânzări comerciale."
+              hintRo="Manual pag. 55: Clauza NC interzice utilizarea creației în activități care aduc profit financiar sau vânzări comerciale."
+              hintEn="Curriculum p. 55: The NC clause restricts reuse exclusively to non-monetized educational or cultural endeavors."
               isOpen={showHint['q2'] || false}
               onToggle={() => setShowHint(prev => ({ ...prev, q2: !prev.q2 }))}
             />
@@ -430,10 +520,26 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
 
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { id: 'opt_a', label: 'A. Că opera este interzisă copiilor (No Children)' },
-              { id: 'opt_b', label: 'B. Că opera poate fi folosită doar în scopuri necomerciale (educație, cercetare, uz personal fără profit)' },
-              { id: 'opt_c', label: 'C. Că opera nu conține conexiune la rețea (No Connection)' },
-              { id: 'opt_d', label: 'D. Că site-ul nu acceptă culori (No Colors)' }
+              {
+                id: 'opt_a',
+                labelRo: 'A. Că opera este interzisă copiilor (No Children)',
+                labelEn: 'A. That the work is prohibited for children (No Children)'
+              },
+              {
+                id: 'opt_b',
+                labelRo: 'B. Că opera poate fi folosită doar în scopuri necomerciale (educație, cercetare, uz personal fără profit)',
+                labelEn: 'B. That the work may only be used for non-commercial purposes (education, scholarship, personal non-profit use)'
+              },
+              {
+                id: 'opt_c',
+                labelRo: 'C. Că opera nu conține conexiune la rețea (No Connection)',
+                labelEn: 'C. That the file requires no internet connection (No Connection)'
+              },
+              {
+                id: 'opt_d',
+                labelRo: 'D. Că site-ul nu acceptă culori (No Colors)',
+                labelEn: 'D. That the site cannot render colors (No Colors)'
+              }
             ].map(opt => (
               <button
                 key={opt.id}
@@ -445,7 +551,7 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {opt.label}
+                {lang === 'ro' ? opt.labelRo : opt.labelEn}
               </button>
             ))}
           </div>
@@ -456,12 +562,16 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
               disabled={!answers['q2'] || isLocked('q2')}
               className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
             >
-              <span>Verifică Răspunsul</span>
+              <span>{lang === 'ro' ? 'Verifică Răspunsul' : 'Check Answer'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <AnswerExplanation
-              explanation="Excelent! Clauza „NC” (NonCommercial) asigură că munca creatorului este utilizată exclusiv pentru binele comun, învățământ sau cultură, fără a fi exploatată financiar de terțe părți."
+              explanation={
+                lang === 'ro'
+                  ? 'Excelent! Clauza „NC” (NonCommercial) asigură că munca creatorului este utilizată exclusiv pentru binele comun, învățământ sau cultură, fără a fi exploatată financiar de terțe părți.'
+                  : 'Excellent! The "NC" (NonCommercial) clause ensures creator contributions benefit the common good, education, and culture without being monetized by third parties.'
+              }
               isCorrect={true}
             />
           )}
@@ -475,7 +585,11 @@ export const W3Level3_CopyrightAndCreativeCommons: React.FC<W3Level3Props> = ({
         isCompleted={allQuizzesPassed}
         onPrev={onPrev}
         onNext={handleFinish}
-        nextLabel="Continuă cu Lecția 4: Securitate Web & Protocolul HTTPS"
+        nextLabel={
+          lang === 'ro'
+            ? 'Continuă cu Lecția 4: Securitate Web & Protocolul HTTPS'
+            : 'Continue to Lesson 4: Web Security & The HTTPS Protocol'
+        }
       />
     </div>
   );

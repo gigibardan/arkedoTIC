@@ -20,6 +20,7 @@ import {
   Eye,
   PanelRight
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
@@ -36,46 +37,67 @@ interface W2Level1Props {
 interface WorkspaceZone {
   id: string;
   name: string;
+  nameEn: string;
   location: string;
+  locationEn: string;
   manualDesc: string;
+  manualDescEn: string;
 }
 
 const WORKSPACE_ZONES: WorkspaceZone[] = [
   {
     id: 'header_banner',
     name: 'Antetul Paginii (Header / Banner)',
+    nameEn: 'Page Header (Header / Banner)',
     location: 'Zona superioară a pânzei',
-    manualDesc: 'Manual pag. 44: Zona vizuală de impact ce conține titlul paginii și o imagine de fundal personalizabilă (disponibil în 4 formate: Doar titlu, Banner, Banner mare, Copertă).'
+    locationEn: 'Upper area of the canvas',
+    manualDesc: 'Manual pag. 44: Zona vizuală de impact ce conține titlul paginii și o imagine de fundal personalizabilă (disponibil în 4 formate: Doar titlu, Banner, Banner mare, Copertă).',
+    manualDescEn: 'Textbook page 44: High-impact visual zone featuring the page title and customizable backdrop image (available in 4 formats: Title only, Banner, Large banner, Cover).'
   },
   {
     id: 'body_canvas',
     name: 'Pânza de Lucru / Corpul Paginii (Body Canvas)',
+    nameEn: 'Working Canvas / Page Body',
     location: 'Centrul spațiului de editare',
-    manualDesc: 'Manual pag. 44: Suprafața principală organizată pe secțiuni orizontale unde se plasează blocurile de conținut, textele, imaginile și widgeturile interactive.'
+    locationEn: 'Central editing workspace',
+    manualDesc: 'Manual pag. 44: Suprafața principală organizată pe secțiuni orizontale unde se plasează blocurile de conținut, textele, imaginile și widgeturile interactive.',
+    manualDescEn: 'Textbook page 44: Primary surface organized into horizontal sections where content layout blocks, text boxes, images, and interactive widgets are dropped.'
   },
   {
     id: 'sidebar_insert',
     name: 'Fila „Inserare” (Insert Tab)',
+    nameEn: '"Insert" Tab',
     location: 'Panoul lateral dreapta, prima filă',
-    manualDesc: 'Manual pag. 45: Biblioteca de elemente: Casete text, Imagini, Încorporare cod (Embed), Google Drive, Blocuri de conținut predefinite, Butoane, YouTube, Hartă, Formulare.'
+    locationEn: 'Right sidebar, first tab',
+    manualDesc: 'Manual pag. 45: Biblioteca de elemente: Casete text, Imagini, Încorporare cod (Embed), Google Drive, Blocuri de conținut predefinite, Butoane, YouTube, Hartă, Formulare.',
+    manualDescEn: 'Textbook page 45: Element library: Text boxes, Images, Embed code/URL, Google Drive, Content layout blocks, Buttons, YouTube embeds, Maps, Forms.'
   },
   {
     id: 'sidebar_pages',
     name: 'Fila „Pagini” (Pages Tab)',
+    nameEn: '"Pages" Tab',
     location: 'Panoul lateral dreapta, a doua filă',
-    manualDesc: 'Manual pag. 45: Gestionează structura ierarhică a sitului: adăugarea de pagini noi (+), ordonarea lor și crearea de sub-pagini pentru meniul derulant (dropdown).'
+    locationEn: 'Right sidebar, second tab',
+    manualDesc: 'Manual pag. 45: Gestionează structura ierarhică a sitului: adăugarea de pagini noi (+), ordonarea lor și crearea de sub-pagini pentru meniul derulant (dropdown).',
+    manualDescEn: 'Textbook page 45: Manages hierarchical site taxonomy: adding new pages (+), reordering items, and creating subpages for dropdown navigation bars.'
   },
   {
     id: 'sidebar_themes',
     name: 'Fila „Teme” (Themes Tab)',
+    nameEn: '"Themes" Tab',
     location: 'Panoul lateral dreapta, a treia filă',
-    manualDesc: 'Manual pag. 45: Controlează identitatea vizuală globală: paletele cromatice ale sitului și stilurile de fonturi (Simple, Aristotle, Diplomat, Vision).'
+    locationEn: 'Right sidebar, third tab',
+    manualDesc: 'Manual pag. 45: Controlează identitatea vizuală globală: paletele cromatice ale sitului și stilurile de fonturi (Simple, Aristotle, Diplomat, Vision).',
+    manualDescEn: 'Textbook page 45: Governs site-wide visual branding: palette colors and coordinated typography pairs (Simple, Aristotle, Diplomat, Vision).'
   },
   {
     id: 'topbar_publish',
     name: 'Bara de Acțiuni & Butonul „Publicare”',
+    nameEn: 'Top Action Bar & "Publish" Button',
     location: 'Bara superioară dreapta',
-    manualDesc: 'Manual pag. 44: Conține butoanele de Undo/Redo, Previzualizare pe Desktop/Tabletă/Telefon, Partajare colaborativă și butonul albastru Publicare (Publish).'
+    locationEn: 'Top right toolbar',
+    manualDesc: 'Manual pag. 44: Conține butoanele de Undo/Redo, Previzualizare pe Desktop/Tabletă/Telefon, Partajare colaborativă și butonul albastru Publicare (Publish).',
+    manualDescEn: 'Textbook page 44: Houses Undo/Redo, Multi-device Preview (Desktop/Tablet/Mobile), Collaborative Sharing, and the primary blue Publish button.'
   }
 ];
 
@@ -84,6 +106,7 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const [activeZoneId, setActiveZoneId] = useState<string>('header_banner');
   const [discoveredZones, setDiscoveredZones] = useState<string[]>(['header_banner']);
   const [activeTab, setActiveTab] = useState<'insert' | 'pages' | 'themes'>('insert');
@@ -127,20 +150,28 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-500/30">
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Manual Art Klett 2025 • Pag. 44–45</span>
+              <span>{lang === 'en' ? 'Art Klett Manual 2025 • Pages 44–45' : 'Manual Art Klett 2025 • Pag. 44–45'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <Layout className="w-8 h-8 text-blue-400" />
-              Nivelul 1: Mediul de Lucru Google Sites & Panoul Lateral
+              {lang === 'en'
+                ? 'Level 1: Google Sites Workspace & Sidebar Anatomy'
+                : 'Nivelul 1: Mediul de Lucru Google Sites & Panoul Lateral'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-              Descoperă interfața vizuală intuitivă a aplicației Google Sites: pânza de editare, cele 3 file din panoul lateral (Inserare, Pagini, Teme) și bara de publicare.
+              {lang === 'en'
+                ? 'Explore the intuitive visual interface of Google Sites: the canvas editor, the 3 sidebar tabs (Insert, Pages, Themes), and the publishing toolbar.'
+                : 'Descoperă interfața vizuală intuitivă a aplicației Google Sites: pânza de editare, cele 3 file din panoul lateral (Inserare, Pagini, Teme) și bara de publicare.'}
             </p>
           </div>
           <div className="text-right shrink-0 bg-slate-900/80 px-4 py-3 rounded-2xl border border-blue-500/20">
-            <div className="text-xs text-slate-400 uppercase font-semibold">Zone Explorate</div>
+            <div className="text-xs text-slate-400 uppercase font-semibold">
+              {lang === 'en' ? 'Explored Zones' : 'Zone Explorate'}
+            </div>
             <div className="text-2xl font-black text-blue-400">{discoveredZones.length}/{WORKSPACE_ZONES.length}</div>
-            <div className="text-[11px] text-slate-400">Interfață Studio</div>
+            <div className="text-[11px] text-slate-400">
+              {lang === 'en' ? 'Studio Interface' : 'Interfață Studio'}
+            </div>
           </div>
         </div>
       </div>
@@ -149,9 +180,14 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-wider">
-            <PanelRight className="w-4 h-4" /> Simulator Interactiv al Interfeței Google Sites
+            <PanelRight className="w-4 h-4" />
+            {lang === 'en'
+              ? 'Interactive Google Sites UI Simulator'
+              : 'Simulator Interactiv al Interfeței Google Sites'}
           </div>
-          <span className="text-xs text-slate-400 font-mono">Fă click pe zone pentru analiză</span>
+          <span className="text-xs text-slate-400 font-mono">
+            {lang === 'en' ? 'Click zones to inspect' : 'Fă click pe zone pentru analiză'}
+          </span>
         </div>
 
         {/* Mock Google Sites App Frame */}
@@ -167,20 +203,24 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
               <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-xs">
                 S
               </div>
-              <span className="text-xs font-bold text-white">Situl Meu Școlar • Google Sites</span>
+              <span className="text-xs font-bold text-white">
+                {lang === 'en' ? 'My School Website • Google Sites' : 'Situl Meu Școlar • Google Sites'}
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-lg text-slate-300 text-xs">
                 <Eye className="w-3.5 h-3.5 text-sky-400" />
-                <span className="hidden sm:inline text-[11px]">Previzualizare</span>
+                <span className="hidden sm:inline text-[11px]">
+                  {lang === 'en' ? 'Preview' : 'Previzualizare'}
+                </span>
               </div>
               <div className="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-lg text-slate-300 text-xs">
                 <Share2 className="w-3.5 h-3.5 text-emerald-400" />
               </div>
-              <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md">
+              <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md cursor-pointer">
                 <UploadCloud className="w-3.5 h-3.5" />
-                Publică
+                {lang === 'en' ? 'Publish' : 'Publică'}
               </button>
             </div>
           </div>
@@ -199,10 +239,17 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
                 }`}
               >
                 <div className="text-[10px] uppercase font-bold text-blue-400 mb-1 flex items-center justify-center gap-1">
-                  <Layout className="w-3 h-3" /> Antetul Paginii (Header / Banner)
+                  <Layout className="w-3 h-3" />
+                  {lang === 'en'
+                    ? 'Page Header (Header / Banner)'
+                    : 'Antetul Paginii (Header / Banner)'}
                 </div>
-                <h3 className="text-lg font-black text-white">PROIECT DE ROBOTICĂ & TIC</h3>
-                <p className="text-xs text-slate-400 mt-1">Școala Gimnazială • Clasa a VIII-a</p>
+                <h3 className="text-lg font-black text-white">
+                  {lang === 'en' ? 'ROBOTICS & ICT SCHOOL PROJECT' : 'PROIECT DE ROBOTICĂ & TIC'}
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  {lang === 'en' ? 'Middle School • 8th Grade' : 'Școala Gimnazială • Clasa a VIII-a'}
+                </p>
               </div>
 
               {/* Body Canvas Zone */}
@@ -215,20 +262,25 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
                 }`}
               >
                 <div className="text-[10px] uppercase font-bold text-emerald-400 mb-2 flex items-center gap-1">
-                  <Layers className="w-3 h-3" /> Pânza Principală (Body Canvas)
+                  <Layers className="w-3 h-3" />
+                  {lang === 'en' ? 'Main Canvas (Body Canvas)' : 'Pânza Principală (Body Canvas)'}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg text-xs space-y-1">
                     <div className="w-full h-12 bg-slate-800 rounded flex items-center justify-center text-slate-500 text-[10px]">
-                      Imagine 1
+                      {lang === 'en' ? 'Image 1' : 'Imagine 1'}
                     </div>
-                    <div className="font-bold text-white text-[11px]">Senzori Ultrasonici</div>
+                    <div className="font-bold text-white text-[11px]">
+                      {lang === 'en' ? 'Ultrasonic Sensors' : 'Senzori Ultrasonici'}
+                    </div>
                   </div>
                   <div className="p-3 bg-slate-900 border border-slate-800 rounded-lg text-xs space-y-1">
                     <div className="w-full h-12 bg-slate-800 rounded flex items-center justify-center text-slate-500 text-[10px]">
-                      Imagine 2
+                      {lang === 'en' ? 'Image 2' : 'Imagine 2'}
                     </div>
-                    <div className="font-bold text-white text-[11px]">Motoare DC & Drivere</div>
+                    <div className="font-bold text-white text-[11px]">
+                      {lang === 'en' ? 'DC Motors & Drivers' : 'Motoare DC & Drivere'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -240,27 +292,27 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
               <div className="grid grid-cols-3 border-b border-slate-800 text-xs text-center font-bold">
                 <button
                   onClick={() => { sounds.playClick(); setActiveTab('insert'); handleSelectZone('sidebar_insert'); }}
-                  className={`py-2.5 transition-all ${
+                  className={`py-2.5 transition-all cursor-pointer ${
                     activeTab === 'insert' ? 'text-blue-400 border-b-2 border-blue-500 bg-blue-500/10' : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Inserare
+                  {lang === 'en' ? 'Insert' : 'Inserare'}
                 </button>
                 <button
                   onClick={() => { sounds.playClick(); setActiveTab('pages'); handleSelectZone('sidebar_pages'); }}
-                  className={`py-2.5 transition-all ${
+                  className={`py-2.5 transition-all cursor-pointer ${
                     activeTab === 'pages' ? 'text-blue-400 border-b-2 border-blue-500 bg-blue-500/10' : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Pagini
+                  {lang === 'en' ? 'Pages' : 'Pagini'}
                 </button>
                 <button
                   onClick={() => { sounds.playClick(); setActiveTab('themes'); handleSelectZone('sidebar_themes'); }}
-                  className={`py-2.5 transition-all ${
+                  className={`py-2.5 transition-all cursor-pointer ${
                     activeTab === 'themes' ? 'text-blue-400 border-b-2 border-blue-500 bg-blue-500/10' : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Teme
+                  {lang === 'en' ? 'Themes' : 'Teme'}
                 </button>
               </div>
 
@@ -268,43 +320,49 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
               <div className="p-4 flex-1 text-xs space-y-3">
                 {activeTab === 'insert' && (
                   <div className="space-y-2">
-                    <div className="text-[10px] uppercase font-bold text-slate-400">Elemente de bază:</div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400">
+                      {lang === 'en' ? 'Basic Elements:' : 'Elemente de bază:'}
+                    </div>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="p-2 rounded bg-slate-950 border border-slate-800 text-center font-semibold text-slate-300">
-                        Casetă text
+                        {lang === 'en' ? 'Text box' : 'Casetă text'}
                       </div>
                       <div className="p-2 rounded bg-slate-950 border border-slate-800 text-center font-semibold text-slate-300">
-                        Imagini
+                        {lang === 'en' ? 'Images' : 'Imagini'}
                       </div>
                       <div className="p-2 rounded bg-slate-950 border border-slate-800 text-center font-semibold text-slate-300">
-                        Încorporare
+                        {lang === 'en' ? 'Embed' : 'Încorporare'}
                       </div>
                       <div className="p-2 rounded bg-slate-950 border border-slate-800 text-center font-semibold text-slate-300">
                         Drive
                       </div>
                     </div>
-                    <div className="text-[10px] uppercase font-bold text-slate-400 pt-2">Blocuri de Conținut:</div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400 pt-2">
+                      {lang === 'en' ? 'Content Blocks:' : 'Blocuri de Conținut:'}
+                    </div>
                     <div className="p-2 rounded bg-slate-950 border border-slate-800 text-center text-slate-400">
-                      Layout 2/3/4 coloane
+                      {lang === 'en' ? '2/3/4 Column Layouts' : 'Layout 2/3/4 coloane'}
                     </div>
                   </div>
                 )}
 
                 {activeTab === 'pages' && (
                   <div className="space-y-2">
-                    <div className="text-[10px] uppercase font-bold text-slate-400">Structură Pagini Sit:</div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400">
+                      {lang === 'en' ? 'Site Page Hierarchy:' : 'Structură Pagini Sit:'}
+                    </div>
                     <div className="space-y-1 font-mono text-slate-300">
                       <div className="p-2 bg-slate-950 rounded border border-blue-500/40 text-blue-300 font-bold">
-                        📄 Pagina principală (Home)
+                        📄 {lang === 'en' ? 'Home' : 'Pagina principală (Home)'}
                       </div>
                       <div className="p-2 bg-slate-950 rounded border border-slate-800 pl-4">
-                        ↳ 📄 Despre Proiect
+                        ↳ 📄 {lang === 'en' ? 'About the Project' : 'Despre Proiect'}
                       </div>
                       <div className="p-2 bg-slate-950 rounded border border-slate-800 pl-4">
-                        ↳ 📄 Galerie Foto
+                        ↳ 📄 {lang === 'en' ? 'Photo Gallery' : 'Galerie Foto'}
                       </div>
                       <div className="p-2 bg-slate-950 rounded border border-slate-800">
-                        📄 Contact
+                        📄 {lang === 'en' ? 'Contact' : 'Contact'}
                       </div>
                     </div>
                   </div>
@@ -312,9 +370,13 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
 
                 {activeTab === 'themes' && (
                   <div className="space-y-2">
-                    <div className="text-[10px] uppercase font-bold text-slate-400">Teme Vizuale Predefinite:</div>
+                    <div className="text-[10px] uppercase font-bold text-slate-400">
+                      {lang === 'en' ? 'Preset Visual Themes:' : 'Teme Vizuale Predefinite:'}
+                    </div>
                     <div className="grid grid-cols-2 gap-2 text-center font-semibold">
-                      <div className="p-2 bg-slate-950 border border-blue-500/40 rounded text-blue-300">Simplu</div>
+                      <div className="p-2 bg-slate-950 border border-blue-500/40 rounded text-blue-300">
+                        {lang === 'en' ? 'Simple' : 'Simplu'}
+                      </div>
                       <div className="p-2 bg-slate-950 border border-slate-800 rounded text-slate-400">Aristotle</div>
                       <div className="p-2 bg-slate-950 border border-slate-800 rounded text-slate-400">Diplomat</div>
                       <div className="p-2 bg-slate-950 border border-slate-800 rounded text-slate-400">Vision</div>
@@ -331,11 +393,15 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-blue-300 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-blue-400" />
-              {currentZone.name}
+              {lang === 'en' ? currentZone.nameEn : currentZone.name}
             </h3>
-            <span className="text-xs text-slate-400 font-mono">{currentZone.location}</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'en' ? currentZone.locationEn : currentZone.location}
+            </span>
           </div>
-          <p className="text-slate-200 text-sm leading-relaxed">{currentZone.manualDesc}</p>
+          <p className="text-slate-200 text-sm leading-relaxed">
+            {lang === 'en' ? currentZone.manualDescEn : currentZone.manualDesc}
+          </p>
         </div>
       </div>
 
@@ -346,22 +412,45 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Reflecție Pedagogică: Structura Spațiului de Lucru Google Sites</h2>
-            <p className="text-xs text-slate-400">Manual Art Klett pag. 44–45</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Pedagogical Reflection: Google Sites Workspace Structure'
+                : 'Reflecție Pedagogică: Structura Spațiului de Lucru Google Sites'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Art Klett Manual pages 44–45' : 'Manual Art Klett pag. 44–45'}
+            </p>
           </div>
         </div>
 
         {/* Question 1 */}
         <div className="space-y-3">
           <div className="text-sm font-semibold text-slate-200">
-            1. Care sunt cele trei file esențiale din panoul lateral din dreapta al aplicației Google Sites?
+            {lang === 'en'
+              ? '1. What are the three essential tabs in the right sidebar of Google Sites?'
+              : '1. Care sunt cele trei file esențiale din panoul lateral din dreapta al aplicației Google Sites?'}
           </div>
-          <QuestionHint hint="Verifică antetul panoului lateral din dreapta pe care l-ai explorat adineauri." />
+          <QuestionHint
+            hintRo="Verifică antetul panoului lateral din dreapta pe care l-ai explorat adineauri."
+            hintEn="Check the header of the right sidebar you just explored."
+          />
           <div className="space-y-2">
             {[
-              { text: 'Inserare (Insert), Pagini (Pages) și Teme (Themes)', correct: true },
-              { text: 'Copiere, Tăiere și Lipire', correct: false },
-              { text: 'Calcul, Formule și Sortare', correct: false }
+              {
+                textRo: 'Inserare (Insert), Pagini (Pages) și Teme (Themes)',
+                textEn: 'Insert, Pages, and Themes',
+                correct: true
+              },
+              {
+                textRo: 'Copiere, Tăiere și Lipire',
+                textEn: 'Copy, Cut, and Paste',
+                correct: false
+              },
+              {
+                textRo: 'Calcul, Formule și Sortare',
+                textEn: 'Calculation, Formulas, and Sorting',
+                correct: false
+              }
             ].map((opt, idx) => {
               const qId = 'w2_l1_q1';
               const isSelected = quizAnswers[qId] === idx;
@@ -371,7 +460,7 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
                   key={idx}
                   onClick={() => handleQuizAnswer(qId, idx, opt.correct)}
                   disabled={isSub || isLocked(qId)}
-                  className={`w-full text-left p-3.5 rounded-xl border text-sm transition-all flex items-center justify-between ${
+                  className={`w-full text-left p-3.5 rounded-xl border text-sm transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
                       ? opt.correct
                         ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
@@ -379,7 +468,7 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
                       : 'border-slate-800 bg-slate-950/40 text-slate-300 hover:border-slate-700'
                   }`}
                 >
-                  <span>{opt.text}</span>
+                  <span>{lang === 'en' ? opt.textEn : opt.textRo}</span>
                   {isSelected && (opt.correct ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertTriangle className="w-4 h-4 text-rose-400" />)}
                 </button>
               );
@@ -389,21 +478,42 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['w2_l1_q1'] || 0} />
           )}
           {quizSubmitted['w2_l1_q1'] && (
-            <AnswerExplanation explanation="Corect! Manual pag. 45: Panoul din dreapta grupează toate funcțiile de creație: Inserare (adăugare conținut), Pagini (organizarea structurii) și Teme (stilul grafic general)." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Correct! Textbook page 45: The right sidebar consolidates all authoring capabilities: Insert (adding components), Pages (site hierarchy), and Themes (global graphic styling).'
+                : 'Corect! Manual pag. 45: Panoul din dreapta grupează toate funcțiile de creație: Inserare (adăugare conținut), Pagini (organizarea structurii) și Teme (stilul grafic general).'}
+            />
           )}
         </div>
 
         {/* Question 2 */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <div className="text-sm font-semibold text-slate-200">
-            2. Ce rol are butonul de „Previzualizare” (Preview) din bara superioară a aplicației Google Sites?
+            {lang === 'en'
+              ? '2. What purpose does the "Preview" button serve in the top bar of Google Sites?'
+              : '2. Ce rol are butonul de „Previzualizare” (Preview) din bara superioară a aplicației Google Sites?'}
           </div>
-          <QuestionHint hint="Permite simularea modului în care vizitatorii vor vedea situl pe diferite dispozitive." />
+          <QuestionHint
+            hintRo="Permite simularea modului în care vizitatorii vor vedea situl pe diferite dispozitive."
+            hintEn="Simulates how visitors will experience the site across different screen sizes."
+          />
           <div className="space-y-2">
             {[
-              { text: 'Permite testarea modului în care situl se va afișa pe ecranul unui calculator (Desktop), al unei tablete și al unui smartphone mobil înainte de a fi publicat', correct: true },
-              { text: 'Trimite situl prin e-mail tuturor colegilor de clasă', correct: false },
-              { text: 'Șterge toate fișierele din Google Drive', correct: false }
+              {
+                textRo: 'Permite testarea modului în care situl se va afișa pe ecranul unui calculator (Desktop), al unei tablete și al unui smartphone mobil înainte de a fi publicat',
+                textEn: 'Allows testing how the website renders on Desktop, Tablet, and Mobile screens prior to public release',
+                correct: true
+              },
+              {
+                textRo: 'Trimite situl prin e-mail tuturor colegilor de clasă',
+                textEn: 'Sends the website via email to all classmates',
+                correct: false
+              },
+              {
+                textRo: 'Șterge toate fișierele din Google Drive',
+                textEn: 'Deletes all files from Google Drive',
+                correct: false
+              }
             ].map((opt, idx) => {
               const qId = 'w2_l1_q2';
               const isSelected = quizAnswers[qId] === idx;
@@ -413,7 +523,7 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
                   key={idx}
                   onClick={() => handleQuizAnswer(qId, idx, opt.correct)}
                   disabled={isSub || isLocked(qId)}
-                  className={`w-full text-left p-3.5 rounded-xl border text-sm transition-all flex items-center justify-between ${
+                  className={`w-full text-left p-3.5 rounded-xl border text-sm transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
                       ? opt.correct
                         ? 'border-emerald-500 bg-emerald-500/10 text-emerald-300'
@@ -421,7 +531,7 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
                       : 'border-slate-800 bg-slate-950/40 text-slate-300 hover:border-slate-700'
                   }`}
                 >
-                  <span>{opt.text}</span>
+                  <span>{lang === 'en' ? opt.textEn : opt.textRo}</span>
                   {isSelected && (opt.correct ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <AlertTriangle className="w-4 h-4 text-rose-400" />)}
                 </button>
               );
@@ -431,7 +541,11 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
             <PedagogicalReflectionBanner remainingSeconds={cooldowns['w2_l1_q2'] || 0} />
           )}
           {quizSubmitted['w2_l1_q2'] && (
-            <AnswerExplanation explanation="Exact! Manual pag. 44: Funcția Preview oferă trei vizualizări responsive (Desktop, Tablet, Mobile) pentru a ne asigura că situl este ușor de citit pe orice dimensiune de ecran." />
+            <AnswerExplanation
+              explanation={lang === 'en'
+                ? 'Exactly! Textbook page 44: The Preview feature provides three responsive viewports (Desktop, Tablet, Mobile) to ensure readability on any screen dimension.'
+                : 'Exact! Manual pag. 44: Funcția Preview oferă trei vizualizări responsive (Desktop, Tablet, Mobile) pentru a ne asigura că situl este ușor de citit pe orice dimensiune de ecran.'}
+            />
           )}
         </div>
       </div>
@@ -445,7 +559,9 @@ export const W2Level1_GoogleSitesWorkspace: React.FC<W2Level1Props> = ({
           if (onCompletePage) onCompletePage(100);
           else if (onComplete) onComplete();
         }}
-        nextLabel="Spre Nivelul 2: Arhitectura Sitului & Ierarhia Paginilor"
+        nextLabel={lang === 'en'
+          ? 'To Level 2: Site Architecture & Page Hierarchy'
+          : 'Spre Nivelul 2: Arhitectura Sitului & Ierarhia Paginilor'}
       />
     </div>
   );

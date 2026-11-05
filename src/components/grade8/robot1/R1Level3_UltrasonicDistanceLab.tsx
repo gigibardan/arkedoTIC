@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   Zap
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface R1Level3Props {
@@ -29,6 +30,7 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
   // Target obstacle distance in cm (between 5 and 150)
   const [distanceCm, setDistanceCm] = useState<number>(45);
   const [isPinging, setIsPinging] = useState<boolean>(false);
@@ -77,10 +79,14 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-teal-400 font-semibold">
-                Nivelul 3 • Unitatea 4: Robotică (Manual pag. 94–95)
+                {lang === 'ro'
+                  ? 'Nivelul 3 • Unitatea 4: Robotică (Manual pag. 94–95)'
+                  : 'Level 3 • Unit 4: Robotics (Textbook pp. 94–95)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Laborator Senzor Ultrasonic HC-SR04 &amp; Calcul Distanță
+                {lang === 'ro'
+                  ? 'Laborator Senzor Ultrasonic HC-SR04 & Calcul Distanță'
+                  : 'HC-SR04 Ultrasonic Sensor Lab & Distance Calculation'}
               </h1>
             </div>
           </div>
@@ -89,9 +95,19 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          Senzorul HC-SR04 emite un impuls acustic la <strong>40 kHz</strong> (imperceptibil pentru urechea umană).
-          Măsurând durata în microsecunde în care ecoul se întoarce la capsula receptoare,
-          microcontrollerul calculează distanța exactă aplicând formula fizică: <code>distanță = (timp * 0.0343) / 2</code>.
+          {lang === 'ro' ? (
+            <>
+              Senzorul HC-SR04 emite un impuls acustic la <strong>40 kHz</strong> (imperceptibil pentru urechea umană).
+              Măsurând durata în microsecunde în care ecoul se întoarce la capsula receptoare,
+              microcontrollerul calculează distanța exactă aplicând formula fizică: <code>distanță = (timp * 0.0343) / 2</code>.
+            </>
+          ) : (
+            <>
+              The HC-SR04 sensor emits an acoustic pulse at <strong>40 kHz</strong> (ultrasonic, inaudible to humans).
+              By measuring the duration in microseconds until the echo returns to the receiver module,
+              the microcontroller calculates exact distance using the physics formula: <code>distance = (time * 0.0343) / 2</code>.
+            </>
+          )}
         </p>
       </div>
 
@@ -102,7 +118,9 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
           <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider">
-                Banc de Măsurare Metrică Ultrasonică
+                {lang === 'ro'
+                  ? 'Banc de Măsurare Metrică Ultrasonică'
+                  : 'Ultrasonic Metric Measurement Bench'}
               </span>
               <button
                 onClick={handleTriggerPing}
@@ -113,14 +131,16 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
                 }`}
               >
                 <Zap className="w-3.5 h-3.5 fill-current" />
-                Emite Puls Ultrasonic (Trigger)
+                {lang === 'ro' ? 'Emite Puls Ultrasonic (Trigger)' : 'Emit Ultrasonic Pulse (Trigger)'}
               </button>
             </div>
 
             {/* Slider to adjust distance */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-mono">
-                <span className="text-slate-400">Poziționează Obstacolul:</span>
+                <span className="text-slate-400">
+                  {lang === 'ro' ? 'Poziționează Obstacolul:' : 'Position Obstacle:'}
+                </span>
                 <span className="text-teal-300 font-bold">{distanceCm} cm</span>
               </div>
               <input
@@ -184,7 +204,7 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
               >
                 <span className="text-2xl">🧱</span>
                 <span className="text-[10px] font-mono font-bold mt-1">
-                  Obstacol
+                  {lang === 'ro' ? 'Obstacol' : 'Obstacle'}
                 </span>
               </div>
             </div>
@@ -193,13 +213,13 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
             <div className="grid grid-cols-2 gap-3 font-mono text-center">
               <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
                 <span className="text-[10px] text-slate-400 block mb-1">
-                  Durata Ecou Dus-Întors (pulseIn)
+                  {lang === 'ro' ? 'Durata Ecou Dus-Întors (pulseIn)' : 'Round-Trip Echo Duration (pulseIn)'}
                 </span>
                 <span className="text-xl font-bold text-cyan-400">
                   {roundTripTimeUs} µs
                 </span>
                 <span className="text-[9px] text-slate-500 block mt-0.5">
-                  microsecunde
+                  {lang === 'ro' ? 'microsecunde' : 'microseconds'}
                 </span>
               </div>
 
@@ -211,13 +231,17 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
                 }`}
               >
                 <span className="text-[10px] text-slate-400 block mb-1">
-                  Alertă Proximitate (&lt; 20 cm)
+                  {lang === 'ro' ? 'Alertă Proximitate (< 20 cm)' : 'Proximity Alert (< 20 cm)'}
                 </span>
                 <span className="text-lg font-bold block">
-                  {isDangerZone ? 'PERICOL COLIZIUNE' : 'TRAIECTORIE SIGURĂ'}
+                  {isDangerZone
+                    ? lang === 'ro' ? 'PERICOL COLIZIUNE' : 'COLLISION HAZARD'
+                    : lang === 'ro' ? 'TRAIECTORIE SIGURĂ' : 'CLEAR TRAJECTORY'}
                 </span>
                 <span className="text-[9px] text-slate-500 block mt-0.5">
-                  {isDangerZone ? 'Buzzer Activ • Robot Oprit' : 'Înainte cu viteză normală'}
+                  {isDangerZone
+                    ? lang === 'ro' ? 'Buzzer Activ • Robot Oprit' : 'Active Buzzer • Robot Stopped'
+                    : lang === 'ro' ? 'Înainte cu viteză normală' : 'Forward at normal speed'}
                 </span>
               </div>
             </div>
@@ -229,10 +253,11 @@ export const R1Level3_UltrasonicDistanceLab: React.FC<R1Level3Props> = ({
           {/* C++ Code Box */}
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 font-mono text-xs space-y-2">
             <span className="text-[11px] font-bold text-teal-400 block pb-1 border-b border-slate-800">
-              Algoritmul C++ din Manual (pag. 95):
+              {lang === 'ro' ? 'Algoritmul C++ din Manual (pag. 95):' : 'Textbook C++ Algorithm (p. 95):'}
             </span>
             <pre className="text-slate-300 text-[11px] leading-relaxed overflow-x-auto">
-{`// 1. Emisie impuls 10 microsecunde
+{lang === 'ro'
+  ? `// 1. Emisie impuls 10 microsecunde
 digitalWrite(trigPin, HIGH);
 delayMicroseconds(10);
 digitalWrite(trigPin, LOW);
@@ -241,7 +266,17 @@ digitalWrite(trigPin, LOW);
 durata = pulseIn(echoPin, HIGH);
 
 // 3. Calcul distanță dus-întors
-distanta = (durata * 0.0343) / 2;`}
+distanta = (durata * 0.0343) / 2;`
+  : `// 1. Emit 10-microsecond pulse
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+
+// 2. Measure echo reception duration
+duration = pulseIn(echoPin, HIGH);
+
+// 3. Calculate round-trip distance
+distance = (duration * 0.0343) / 2;`}
             </pre>
           </div>
 
@@ -249,23 +284,35 @@ distanta = (durata * 0.0343) / 2;`}
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-amber-400">
               <HelpCircle className="w-4 h-4" />
-              <span>Verificare Înțelegere (Manual pag. 95)</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Verificare Înțelegere (Manual pag. 95)'
+                  : 'Comprehension Check (Textbook p. 95)'}
+              </span>
             </div>
 
             {/* Question 1 */}
             <div className="space-y-2 text-xs">
               <p className="text-slate-300 font-medium">
-                1. De ce este obligatorie împărțirea la 2 în formula distanței: <code>(durata * 0.0343) / 2</code>?
+                {lang === 'ro'
+                  ? '1. De ce este obligatorie împărțirea la 2 în formula distanței: (durata * 0.0343) / 2?'
+                  : '1. Why is dividing by 2 mandatory in the distance formula: (duration * 0.0343) / 2?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
                   {
                     id: 'dus_intors',
-                    text: 'Deoarece unda sonoră parcurge distanța de două ori: de la emițător la obstacol (dus) și înapoi la receptor (întors).'
+                    text:
+                      lang === 'ro'
+                        ? 'Deoarece unda sonoră parcurge distanța de două ori: de la emițător la obstacol (dus) și înapoi la receptor (întors).'
+                        : 'Because the sound wave travels the distance twice: from emitter to obstacle (out) and back to receiver (return).'
                   },
                   {
                     id: 'baterie',
-                    text: 'Pentru a economisi jumătate din bateria robotului.'
+                    text:
+                      lang === 'ro'
+                        ? 'Pentru a economisi jumătate din bateria robotului.'
+                        : 'To save half of the robot\'s battery charge.'
                   }
                 ].map((opt) => (
                   <button
@@ -291,7 +338,9 @@ distanta = (durata * 0.0343) / 2;`}
             {/* Question 2 */}
             <div className="space-y-2 text-xs pt-2 border-t border-slate-800">
               <p className="text-slate-300 font-medium">
-                2. Ce funcție C++ măsoară timpul cât un pin rămâne în starea HIGH (durata pulsului)?
+                {lang === 'ro'
+                  ? '2. Ce funcție C++ măsoară timpul cât un pin rămâne în starea HIGH (durata pulsului)?'
+                  : '2. Which C++ function measures how long a pin stays in the HIGH state (pulse duration)?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
@@ -336,11 +385,17 @@ distanta = (durata * 0.0343) / 2;`}
           <div>
             <div className="text-sm font-semibold text-white">
               {isLevelCompleted
-                ? 'Nivelul 3 Finalizat cu Succes!'
-                : 'Cerințe: Testează bancul ultrasonic și răspunde corect la cele 2 întrebări.'}
+                ? lang === 'ro'
+                  ? 'Nivelul 3 Finalizat cu Succes!'
+                  : 'Level 3 Successfully Completed!'
+                : lang === 'ro'
+                ? 'Cerințe: Testează bancul ultrasonic și răspunde corect la cele 2 întrebări.'
+                : 'Requirements: Test the ultrasonic bench and answer both questions correctly.'}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și deblocarea Laboratorului de Motoare &amp; Actuatori (Nivelul 4).
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și deblocarea Laboratorului de Motoare & Actuatori (Nivelul 4).'
+                : 'Reward: +150 XP points and unlocking the Motors & Actuators Lab (Level 4).'}
             </div>
           </div>
         </div>
@@ -354,7 +409,7 @@ distanta = (durata * 0.0343) / 2;`}
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Nivelul 4</span>
+          <span>{lang === 'ro' ? 'Continuă spre Nivelul 4' : 'Continue to Level 4'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

@@ -19,6 +19,7 @@ import {
   Volume2
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface R2Level2Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -30,13 +31,14 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
   onCompletePage,
   onComplete,
 }) => {
+  const { lang } = useLanguage();
+
   // State
   const MAX_SPOTS = 4;
   const [freeSpots, setFreeSpots] = useState<number>(3);
   const [distanceCm, setDistanceCm] = useState<number>(45); // distance to ultrasonic sensor
   const [servoAngle, setServoAngle] = useState<number>(0); // 0 = Closed (horizontal), 90 = Open (vertical)
   const [carState, setCarState] = useState<'NONE' | 'APPROACHING' | 'WAITING' | 'PASSING' | 'PARKED'>('NONE');
-  const [gateClosingTimer, setGateClosingTimer] = useState<number>(0);
 
   // Challenges
   const [testedEntryPass, setTestedEntryPass] = useState<boolean>(false);
@@ -129,22 +131,30 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                  Modulul 4B • Pasul 2 din 7
+                  {lang === 'ro' ? 'Modulul 4B • Pasul 2 din 7' : 'Module 4B • Step 2 of 7'}
                 </span>
-                <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 102–104</span>
+                <span className="text-xs text-slate-400 font-mono">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 102–104' : 'Art Klett Textbook pp. 102–104'}
+                </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
-                Barieră Inteligentă de Parcare (Smart Parking Gate)
+                {lang === 'ro'
+                  ? 'Barieră Inteligentă de Parcare (Smart Parking Gate)'
+                  : 'Smart Parking Barrier Gate'}
               </h1>
               <p className="text-slate-300 text-sm mt-1 max-w-2xl">
-                Controlează accesul vehiculelor cu senzorul ultrasonic HC-SR04, un servomotor SG90 (0°..90°) și o variabilă contor pentru locurile libere.
+                {lang === 'ro'
+                  ? 'Controlează accesul vehiculelor cu senzorul ultrasonic HC-SR04, un servomotor SG90 (0°..90°) și o variabilă contor pentru locurile libere.'
+                  : 'Control vehicle access with the HC-SR04 ultrasonic sensor, an SG90 servo motor (0°..90°), and a counter variable for available parking spots.'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-4 bg-slate-900/80 px-4 py-2.5 rounded-xl border border-slate-700/60">
             <div className="text-right">
-              <div className="text-xs text-slate-400">Locuri Libere</div>
+              <div className="text-xs text-slate-400">
+                {lang === 'ro' ? 'Locuri Libere' : 'Available Spots'}
+              </div>
               <div className={`text-xl font-bold font-mono ${freeSpots > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {freeSpots} / {MAX_SPOTS}
               </div>
@@ -161,14 +171,14 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
             <h2 className="text-base font-semibold text-slate-200 flex items-center justify-between mb-4">
               <span className="flex items-center gap-2">
                 <Eye className="w-5 h-5 text-indigo-400" />
-                Vedere Poartă Acces & Simulare 2D Parcări
+                {lang === 'ro' ? 'Vedere Poartă Acces & Simulare 2D Parcări' : 'Access Gate View & 2D Parking Simulation'}
               </span>
               <button
                 onClick={handleReset}
-                className="text-xs flex items-center gap-1 text-slate-400 hover:text-white px-2 py-1 rounded bg-slate-800"
+                className="text-xs flex items-center gap-1 text-slate-400 hover:text-white px-2 py-1 rounded bg-slate-800 transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                Resetare
+                {lang === 'ro' ? 'Resetare' : 'Reset'}
               </button>
             </h2>
 
@@ -187,11 +197,15 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                           : 'border-emerald-500/60 bg-emerald-950/20 text-emerald-300 border-dashed'
                       }`}
                     >
-                      <span className="text-[10px] font-mono font-bold">Loc #{idx + 1}</span>
+                      <span className="text-[10px] font-mono font-bold">
+                        {lang === 'ro' ? `Loc #${idx + 1}` : `Spot #${idx + 1}`}
+                      </span>
                       {isOccupied ? (
                         <span className="text-2xl mt-1">🚗</span>
                       ) : (
-                        <span className="text-xs text-emerald-400/80 font-bold mt-2">LIBER</span>
+                        <span className="text-xs text-emerald-400/80 font-bold mt-2">
+                          {lang === 'ro' ? 'LIBER' : 'FREE'}
+                        </span>
                       )}
                     </div>
                   );
@@ -204,7 +218,14 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                 <div
                   className="transition-all duration-700 flex items-center gap-2"
                   style={{
-                    transform: carState === 'NONE' ? 'translateX(-80px)' : carState === 'WAITING' ? 'translateX(40px)' : carState === 'PASSING' ? 'translateX(180px)' : 'translateX(-80px)'
+                    transform:
+                      carState === 'NONE'
+                        ? 'translateX(-80px)'
+                        : carState === 'WAITING'
+                        ? 'translateX(40px)'
+                        : carState === 'PASSING'
+                        ? 'translateX(180px)'
+                        : 'translateX(-80px)'
                   }}
                 >
                   <span className="text-3xl">🚙</span>
@@ -219,9 +240,21 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                 <div className="relative flex flex-col items-center">
                   {/* Gate status LED */}
                   <div className="flex items-center gap-1.5 mb-1 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800">
-                    <div className={`w-2.5 h-2.5 rounded-full ${isBarrierOpen ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'}`} />
+                    <div
+                      className={`w-2.5 h-2.5 rounded-full ${
+                        isBarrierOpen
+                          ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]'
+                          : 'bg-red-500 shadow-[0_0_8px_#ef4444]'
+                      }`}
+                    />
                     <span className="text-[10px] font-mono font-bold text-slate-300">
-                      {isBarrierOpen ? 'LIBER (90°)' : 'STOP (0°)'}
+                      {isBarrierOpen
+                        ? lang === 'ro'
+                          ? 'LIBER (90°)'
+                          : 'OPEN (90°)'
+                        : lang === 'ro'
+                        ? 'STOP (0°)'
+                        : 'STOP (0°)'}
                     </span>
                   </div>
 
@@ -248,7 +281,7 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                     <div className="w-3 h-3 rounded-full bg-cyan-500/40 border border-cyan-400" />
                     <div className="w-3 h-3 rounded-full bg-cyan-500/40 border border-cyan-400" />
                   </div>
-                  <span className="text-[9px] text-slate-400 mt-1">Trig/Echo</span>
+                  <span className="text-[9px] text-slate-400 mt-1">Trig / Echo</span>
                 </div>
               </div>
             </div>
@@ -257,7 +290,11 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
             <div className="mt-6 space-y-4">
               <div>
                 <div className="flex justify-between items-center text-sm font-medium text-slate-300 mb-1">
-                  <span>Distanță vehicul față de barieră (HC-SR04):</span>
+                  <span>
+                    {lang === 'ro'
+                      ? 'Distanță vehicul față de barieră (HC-SR04):'
+                      : 'Vehicle distance from barrier (HC-SR04):'}
+                  </span>
                   <span className="font-mono text-cyan-400 font-bold">{distanceCm} cm</span>
                 </div>
                 <input
@@ -274,8 +311,10 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                   className="w-full accent-cyan-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex justify-between text-[11px] text-slate-400 mt-1">
-                  <span className="text-emerald-400 font-semibold">Zona declanșare: &le; 15 cm</span>
-                  <span>Zonă liberă: &gt; 15 cm</span>
+                  <span className="text-emerald-400 font-semibold">
+                    {lang === 'ro' ? 'Zona declanșare: ≤ 15 cm' : 'Trigger zone: ≤ 15 cm'}
+                  </span>
+                  <span>{lang === 'ro' ? 'Zonă liberă: > 15 cm' : 'Clear zone: > 15 cm'}</span>
                 </div>
               </div>
 
@@ -286,7 +325,7 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                   className="px-3.5 py-2 rounded-xl font-bold text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all"
                 >
                   <Car className="w-3.5 h-3.5 text-blue-400" />
-                  1. Apropie Mașină (d = 8 cm)
+                  {lang === 'ro' ? '1. Apropie Mașină (d = 8 cm)' : '1. Approach Car (d = 8 cm)'}
                 </button>
 
                 <button
@@ -299,7 +338,7 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                   }`}
                 >
                   <ArrowRight className="w-3.5 h-3.5" />
-                  2. Mașina trece și parchează
+                  {lang === 'ro' ? '2. Mașina trece și parchează' : '2. Car passes and parks'}
                 </button>
 
                 <button
@@ -308,7 +347,9 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                   className="px-3.5 py-2 rounded-xl font-bold text-xs bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 flex items-center gap-1.5 transition-all"
                 >
                   <Car className="w-3.5 h-3.5 text-amber-400" />
-                  3. O mașină părăsește parcarea (+1 loc)
+                  {lang === 'ro'
+                    ? '3. O mașină părăsește parcarea (+1 loc)'
+                    : '3. A car exits parking (+1 spot)'}
                 </button>
 
                 <button
@@ -316,7 +357,7 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
                   className="px-3.5 py-2 rounded-xl font-bold text-xs bg-red-950/40 hover:bg-red-900/50 text-red-300 border border-red-800/50 flex items-center gap-1.5 ml-auto transition-all"
                 >
                   <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
-                  Umple parcarea (0 locuri)
+                  {lang === 'ro' ? 'Umple parcarea (0 locuri)' : 'Fill parking lot (0 spots)'}
                 </button>
               </div>
             </div>
@@ -338,30 +379,30 @@ export const R2Level2_SmartParkingBarrier: React.FC<R2Level2Props> = ({
             <pre className="mt-3 text-[11px] font-mono text-slate-300 leading-relaxed overflow-x-auto bg-slate-900/90 p-3 rounded-xl border border-slate-800/80">
               <code>{`#include <Servo.h>
 
-Servo barieră;
-int locuriLibere = ${freeSpots};
-const int PRAG_DIST = 15; // cm
+Servo barrierServo;
+int freeSpots = ${freeSpots};
+const int DIST_THRESHOLD = 15; // cm
 
 void setup() {
-  barieră.attach(9);
-  barieră.write(${servoAngle}); // 0 = Închis, 90 = Deschis
-  pinMode(ledVerde, OUTPUT);
-  pinMode(ledRosu, OUTPUT);
+  barrierServo.attach(9);
+  barrierServo.write(${servoAngle}); // ${lang === 'ro' ? '0 = Închis, 90 = Deschis' : '0 = Closed, 90 = Open'}
+  pinMode(greenLed, OUTPUT);
+  pinMode(redLed, OUTPUT);
 }
 
 void loop() {
-  long d = masoaraDistantaUltrasonic();
+  long d = measureUltrasonicDistance();
 
-  if (d <= PRAG_DIST && locuriLibere > 0) {
-    // Acces permis: ridică bariera la 90 grade
-    barieră.write(90);
-    digitalWrite(ledVerde, HIGH);
-    digitalWrite(ledRosu, LOW);
+  if (d <= DIST_THRESHOLD && freeSpots > 0) {
+    // ${lang === 'ro' ? 'Acces permis: ridică bariera la 90 grade' : 'Access granted: raise barrier to 90 degrees'}
+    barrierServo.write(90);
+    digitalWrite(greenLed, HIGH);
+    digitalWrite(redLed, LOW);
   } else {
-    // Închis / Parcare Plină
-    barieră.write(0);
-    digitalWrite(ledVerde, LOW);
-    digitalWrite(ledRosu, HIGH);
+    // ${lang === 'ro' ? 'Închis / Parcare Plină' : 'Closed / Full Parking'}
+    barrierServo.write(0);
+    digitalWrite(greenLed, LOW);
+    digitalWrite(redLed, HIGH);
   }
 }`}</code>
             </pre>
@@ -371,32 +412,66 @@ void loop() {
           <div className="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg space-y-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-blue-400" />
-              Obiective Laborator Smart Parking
+              {lang === 'ro' ? 'Obiective Laborator Smart Parking' : 'Smart Parking Lab Objectives'}
             </h3>
             <p className="text-xs text-slate-300">
-              Urmează cei 3 pași metodici din manualul de Informatică (pag. 103):
+              {lang === 'ro'
+                ? 'Urmează cei 3 pași metodici din manualul de Informatică (pag. 103):'
+                : 'Follow the 3 methodical steps from the textbook (p. 103):'}
             </p>
 
             <div className="space-y-2 text-xs">
-              <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                testedEntryPass ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
-              }`}>
-                <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedEntryPass ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>1. Deschide bariera (&le; 15 cm) și permite parcarea unei mașini</span>
+              <div
+                className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
+                  testedEntryPass
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}
+              >
+                <CheckCircle2
+                  className={`w-4 h-4 shrink-0 ${testedEntryPass ? 'text-emerald-400' : 'text-slate-600'}`}
+                />
+                <span>
+                  {lang === 'ro'
+                    ? '1. Deschide bariera (≤ 15 cm) și permite parcarea unei mașini'
+                    : '1. Open barrier (≤ 15 cm) and allow a car to park'}
+                </span>
               </div>
 
-              <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                testedFullBlock || freeSpots === 0 ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
-              }`}>
-                <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedFullBlock || freeSpots === 0 ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>2. Testează scenariul Parcare Plină (0 locuri &rarr; bariera rămâne la 0°)</span>
+              <div
+                className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
+                  testedFullBlock || freeSpots === 0
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}
+              >
+                <CheckCircle2
+                  className={`w-4 h-4 shrink-0 ${
+                    testedFullBlock || freeSpots === 0 ? 'text-emerald-400' : 'text-slate-600'
+                  }`}
+                />
+                <span>
+                  {lang === 'ro'
+                    ? '2. Testează scenariul Parcare Plină (0 locuri → bariera rămâne la 0°)'
+                    : '2. Test Full Parking scenario (0 spots → barrier remains at 0°)'}
+                </span>
               </div>
 
-              <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                testedExitCar ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
-              }`}>
-                <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedExitCar ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>3. Eliberează un loc (plecare mașină) și verifică reactivarea accesului</span>
+              <div
+                className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
+                  testedExitCar
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}
+              >
+                <CheckCircle2
+                  className={`w-4 h-4 shrink-0 ${testedExitCar ? 'text-emerald-400' : 'text-slate-600'}`}
+                />
+                <span>
+                  {lang === 'ro'
+                    ? '3. Eliberează un loc (plecare mașină) și verifică reactivarea accesului'
+                    : '3. Free up a spot (car leaves) and verify access reactivation'}
+                </span>
               </div>
             </div>
 
@@ -411,7 +486,11 @@ void loop() {
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                 }`}
               >
-                <span>Continuă spre Nivelul 3: Alertă Gaz & Securitate</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Continuă spre Nivelul 3: Alertă Gaz & Securitate'
+                    : 'Continue to Level 3: Gas & Fire Safety System'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

@@ -14,6 +14,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level1Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -25,13 +26,15 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   // Vector size and initial values
   const [vectorSize, setVectorSize] = useState<number>(5);
   const [elements, setElements] = useState<number[]>([14, 28, 7, 42, 9]);
   const [selectedCellIdx, setSelectedCellIdx] = useState<number | null>(null);
   const [hasInspectedCells, setHasInspectedCells] = useState<boolean>(false);
 
-  // Base RAM address simulation (e.g. 0x1000)
+  // Base RAM address simulation (e.g. 0x2000)
   const baseAddress = 0x2000;
   const bytesPerElement = 4; // sizeof(int) = 4 bytes
 
@@ -78,22 +81,42 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/30 text-blue-200 border border-blue-400/30">
-                  Modulul 3D • Nivelul 1 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 1 din 7' : 'Module 3D • Level 1 of 7'}
                 </span>
-                <span className="text-xs text-blue-300">Manual Art Klett pag. 77–78</span>
+                <span className="text-xs text-blue-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 77–78' : 'Art Klett Textbook pp. 77–78'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Tablouri Unidimensionale (Vectori): Declarare, Indexare & Memoria RAM
+                {lang === 'ro'
+                  ? 'Tablouri Unidimensionale (Vectori): Declarare, Indexare & Memoria RAM'
+                  : 'One-Dimensional Arrays (Vectors): Declaration, Indexing & RAM Memory'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-blue-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 1: Declarare & RAM</span>
+            <span className="text-xs text-blue-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 1: Declarare & RAM' : 'Level 1: Declaration & RAM'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-blue-100/90 leading-relaxed max-w-3xl">
-          Până acum am lucrat cu variabile individuale (o variabilă = o singură valoare). Un <strong>tablou unidimensional (vector)</strong> este o colecție ordonată de variabile de același tip, memorate în locații succesive și contigue de memorie RAM, accesibile printr-un nume comun și un indice (<code className="bg-blue-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">v[i]</code>).
+          {lang === 'ro' ? (
+            <>
+              Până acum am lucrat cu variabile individuale (o variabilă = o singură valoare). Un{' '}
+              <strong>tablou unidimensional (vector)</strong> este o colecție ordonată de variabile de același tip, memorate în locații succesive și contigue de memorie RAM, accesibile printr-un nume comun și un indice (
+              <code className="bg-blue-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">v[i]</code>).
+            </>
+          ) : (
+            <>
+              So far we worked with individual variables (one variable = a single value). A{' '}
+              <strong>one-dimensional array (vector)</strong> is an ordered collection of variables of the same data type, stored in consecutive and contiguous RAM memory locations, accessed via a shared name and an index (
+              <code className="bg-blue-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">v[i]</code>).
+            </>
+          )}
         </p>
       </div>
 
@@ -102,15 +125,21 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <Cpu className="w-4 h-4 text-cyan-400" />
-            Vizualizator Interactiv: Alocarea Continuă în Memoria RAM (Manual pag. 78)
+            {lang === 'ro'
+              ? 'Vizualizator Interactiv: Alocarea Continuă în Memoria RAM (Manual pag. 78)'
+              : 'Interactive Visualizer: Contiguous RAM Memory Allocation (Textbook p. 78)'}
           </h3>
-          <span className="text-xs text-slate-400 font-mono">int v[100]; // 4 octeți per element</span>
+          <span className="text-xs text-slate-400 font-mono">
+            {lang === 'ro' ? 'int v[100]; // 4 octeți per element' : 'int v[100]; // 4 bytes per element'}
+          </span>
         </div>
 
         {/* The Vector Cells Representation */}
         <div className="space-y-3">
           <span className="text-xs text-slate-300 font-medium block">
-            Fă click pe oricare celulă de mai jos pentru a inspecta adresa de memorie și valoarea din RAM:
+            {lang === 'ro'
+              ? 'Fă click pe oricare celulă de mai jos pentru a inspecta adresa de memorie și valoarea din RAM:'
+              : 'Click any cell below to inspect its memory address and RAM value:'}
           </span>
 
           <div className="grid grid-cols-5 gap-3">
@@ -135,7 +164,9 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
                   <div className="text-xs font-semibold text-indigo-400 font-mono">
                     v[{idx}]
                   </div>
-                  <div className="text-[9px] text-slate-500">4 Octeți</div>
+                  <div className="text-[9px] text-slate-500">
+                    {lang === 'ro' ? '4 Octeți' : '4 Bytes'}
+                  </div>
                 </div>
               );
             })}
@@ -146,13 +177,19 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
         {selectedCellIdx !== null ? (
           <div className="p-4 bg-slate-950 rounded-xl border border-blue-500/30 space-y-2 text-xs">
             <div className="flex justify-between items-center text-cyan-300 font-bold">
-              <span>Element Selectat: <code className="text-amber-300 font-mono">v[{selectedCellIdx}]</code></span>
+              <span>
+                {lang === 'ro' ? 'Element Selectat: ' : 'Selected Element: '}
+                <code className="text-amber-300 font-mono">v[{selectedCellIdx}]</code>
+              </span>
               <span className="text-[11px] font-mono text-slate-400">
-                Adresă Fizică RAM: 0x{(baseAddress + selectedCellIdx * bytesPerElement).toString(16).toUpperCase()}
+                {lang === 'ro' ? 'Adresă Fizică RAM: ' : 'Physical RAM Address: '}
+                0x{(baseAddress + selectedCellIdx * bytesPerElement).toString(16).toUpperCase()}
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-slate-300">Modifică valoarea din celulă:</span>
+              <span className="text-slate-300">
+                {lang === 'ro' ? 'Modifică valoarea din celulă:' : 'Edit cell value:'}
+              </span>
               <input
                 type="number"
                 value={elements[selectedCellIdx]}
@@ -160,13 +197,16 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
                 className="w-24 bg-slate-900 border border-slate-700 rounded p-1 font-mono text-cyan-300 text-center"
               />
               <span className="text-[11px] text-slate-500">
-                Instrucțiunea C++ corespunzătoare: <code className="text-cyan-300 font-mono">v[{selectedCellIdx}] = {elements[selectedCellIdx]};</code>
+                {lang === 'ro' ? 'Instrucțiunea C++ corespunzătoare: ' : 'Corresponding C++ statement: '}
+                <code className="text-cyan-300 font-mono">v[{selectedCellIdx}] = {elements[selectedCellIdx]};</code>
               </span>
             </div>
           </div>
         ) : (
           <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 text-xs text-slate-500 italic text-center">
-            Apasă pe oricare dintre cele 5 celule de memorie pentru a vizualiza detaliile tehnice.
+            {lang === 'ro'
+              ? 'Apasă pe oricare dintre cele 5 celule de memorie pentru a vizualiza detaliile tehnice.'
+              : 'Click on any of the 5 memory cells to view its technical details.'}
           </div>
         )}
       </div>
@@ -175,14 +215,20 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <Terminal className="w-4 h-4 text-emerald-400" />
-          Sintaxa Canonică de Citire și Afișare a unui Vector (Manual pag. 78)
+          {lang === 'ro'
+            ? 'Sintaxa Canonică de Citire și Afișare a unui Vector (Manual pag. 78)'
+            : 'Canonical Syntax for Reading and Printing an Array (Textbook p. 78)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
           {/* Read loop */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
-            <span className="text-cyan-400 font-sans font-bold text-xs block mb-1">1. Citirea vectorului de la tastatură:</span>
-            <div className="text-slate-400">// n reprezintă numărul efectiv de elemente</div>
+            <span className="text-cyan-400 font-sans font-bold text-xs block mb-1">
+              {lang === 'ro' ? '1. Citirea vectorului de la tastatură:' : '1. Reading the array from keyboard:'}
+            </span>
+            <div className="text-slate-400">
+              {lang === 'ro' ? '// n reprezintă numărul efectiv de elemente' : '// n is the actual element count'}
+            </div>
             <div className="text-slate-300"><span className="text-indigo-400">int</span> n, v[<span className="text-amber-300">100</span>];</div>
             <div className="text-slate-300">cin &gt;&gt; n;</div>
             <div className="text-slate-300">
@@ -194,8 +240,12 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
 
           {/* Print loop */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
-            <span className="text-purple-400 font-sans font-bold text-xs block mb-1">2. Afișarea vectorului pe ecran:</span>
-            <div className="text-slate-400">// Se parcurg indicii de la 0 la n - 1</div>
+            <span className="text-purple-400 font-sans font-bold text-xs block mb-1">
+              {lang === 'ro' ? '2. Afișarea vectorului pe ecran:' : '2. Displaying the array on screen:'}
+            </span>
+            <div className="text-slate-400">
+              {lang === 'ro' ? '// Se parcurg indicii de la 0 la n - 1' : '// Traversing indices from 0 to n - 1'}
+            </div>
             <div className="text-slate-300">
               <span className="text-pink-400">for</span> (<span className="text-indigo-400">int</span> i = <span className="text-amber-300">0</span>; i &lt; n; i++) &#123;
             </div>
@@ -210,21 +260,37 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 77–78)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 77–78)' : 'Official C++ Checkpoint (Textbook pp. 77–78)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Dacă declarăm vectorul <code className="text-amber-300 font-mono">int v[10];</code>, care sunt indicii valizi pentru elementele acestui tablou în limbajul C++?
+              {lang === 'ro'
+                ? 'Dacă declarăm vectorul int v[10];, care sunt indicii valizi pentru elementele acestui tablou în limbajul C++?'
+                : 'If we declare the array int v[10];, what are the valid indices for elements of this array in C++?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'De la 1 la 10' },
-                { id: 'b', label: 'De la 0 la 9 (indexarea începe întotdeauna de la 0, iar ultimul element este la dimensiune - 1)' },
-                { id: 'c', label: 'De la -5 la +5' }
+                {
+                  id: 'a',
+                  labelRo: 'De la 1 la 10',
+                  labelEn: 'From 1 to 10'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'De la 0 la 9 (indexarea începe întotdeauna de la 0, iar ultimul element este la dimensiune - 1)',
+                  labelEn: 'From 0 to 9 (indexing always begins at 0, and the last element is at size - 1)'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'De la -5 la +5',
+                  labelEn: 'From -5 to +5'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -241,7 +307,7 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -250,15 +316,31 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Ce se întâmplă dacă un program încearcă să citească sau să modifice <code className="text-rose-400 font-mono">v[10]</code> într-un vector declarat de 10 elemente (<code className="text-amber-300 font-mono">int v[10];</code>)?
+              {lang === 'ro'
+                ? 'Ce se întâmplă dacă un program încearcă să citească sau să modifice v[10] într-un vector declarat de 10 elemente (int v[10];)?'
+                : 'What happens if a program tries to access or modify v[10] in an array declared with 10 elements (int v[10];)?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Depășire de tablou (Out of Bounds / Segment Violations) — acces la o zonă de memorie nealocată, provocând erori imprevizibile sau blocarea programului' },
-                { id: 'b', label: 'Vectorul se extinde automat la 11 elemente' },
-                { id: 'c', label: 'Valoarea se salvează automat pe desktop' }
+                {
+                  id: 'a',
+                  labelRo: 'Depășire de tablou (Out of Bounds / Segment Violation) — acces la o zonă de memorie nealocată, provocând erori imprevizibile sau blocarea programului',
+                  labelEn: 'Out of bounds memory violation — accessing unallocated memory, causing unpredictable errors or program crashes'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Vectorul se extinde automat la 11 elemente',
+                  labelEn: 'The array automatically expands to 11 elements'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Valoarea se salvează automat pe desktop',
+                  labelEn: 'The value is automatically saved to the desktop'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -275,7 +357,7 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -294,8 +376,12 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai înțeles declararea vectorilor, indexarea de la 0 și alocarea în memoria RAM.'
-              : 'Inspectează cel puțin o celulă din memoria RAM și răspunde corect la cele 2 întrebări.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai înțeles declararea vectorilor, indexarea de la 0 și alocarea în memoria RAM.'
+                : 'Excellent! You understood array declaration, 0-based indexing, and RAM contiguous allocation.'
+              : lang === 'ro'
+              ? 'Inspectează cel puțin o celulă din memoria RAM și răspunde corect la cele 2 întrebări.'
+              : 'Inspect at least one RAM cell and correctly answer both questions.'}
           </span>
         </div>
         <button
@@ -307,7 +393,7 @@ export const A4Level1_VectorDeclarationAndMemory: React.FC<A4Level1Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Parcurgere, Sumă & Min/Max</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Parcurgere, Sumă & Min/Max' : 'Next Level: Traversal, Sum & Min/Max'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

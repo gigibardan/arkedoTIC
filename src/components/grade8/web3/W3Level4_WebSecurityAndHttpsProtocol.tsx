@@ -21,6 +21,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface W3Level4Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -33,6 +34,7 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   const [protocol, setProtocol] = useState<'http' | 'https'>('https');
@@ -77,18 +79,27 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
           <div>
             <div className="flex items-center gap-2 text-emerald-200 text-sm font-semibold tracking-wide uppercase mb-1">
               <ShieldCheck className="w-5 h-5 text-emerald-300" />
-              <span>Unitatea 2: Pagini Web & Proiecte Online • Modulul 2C</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Unitatea 2: Pagini Web & Proiecte Online • Modulul 2C'
+                  : 'Unit 2: Web Pages & Online Projects • Module 2C'}
+              </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-              Lecția 4: Securitate Web, Protocolul HTTPS & Protecția Datelor (GDPR)
+              {lang === 'ro'
+                ? 'Lecția 4: Securitate Web, Protocolul HTTPS & Protecția Datelor (GDPR)'
+                : 'Lesson 4: Web Security, HTTPS Protocol & Data Protection (GDPR)'}
             </h1>
             <p className="text-emerald-100 text-sm md:text-base mt-1 max-w-3xl">
-              Manual Art Klett pag. 55–56: Înțelege diferența vitală dintre HTTP și HTTPS, rolul criptării SSL/TLS,
-              simbolul lacătului din browser și normele de protecție a datelor personale pe un site școlar.
+              {lang === 'ro'
+                ? 'Manual Art Klett pag. 55–56: Înțelege diferența vitală dintre HTTP și HTTPS, rolul criptării SSL/TLS, simbolul lacătului din browser și normele de protecție a datelor personale pe un site școlar.'
+                : 'Curriculum p. 55–56: Grasp the vital difference between HTTP and HTTPS, SSL/TLS cryptographic handshakes, the browser padlock indicator, and student privacy standards.'}
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-center">
-            <span className="text-xs uppercase tracking-wider text-emerald-200 font-bold block">Nivel</span>
+            <span className="text-xs uppercase tracking-wider text-emerald-200 font-bold block">
+              {lang === 'ro' ? 'Nivel' : 'Level'}
+            </span>
             <span className="text-2xl font-black text-white">4 / 7</span>
           </div>
         </div>
@@ -99,40 +110,45 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
         <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
           <BookOpen className="w-6 h-6 text-indigo-600 flex-shrink-0" />
           <h2 className="text-lg font-bold text-slate-800">
-            Repere Teoretice: Criptare Web & Confidențialitate (Manual pag. 55–56)
+            {lang === 'ro'
+              ? 'Repere Teoretice: Criptare Web & Confidențialitate (Manual pag. 55–56)'
+              : 'Theoretical Reference: Web Encryption & Privacy (Curriculum p. 55–56)'}
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-700">
           <div className="bg-emerald-50/70 p-4 rounded-xl border border-emerald-100 space-y-2">
             <div className="font-bold text-emerald-900 flex items-center gap-2">
               <Lock className="w-4 h-4 text-emerald-600" />
-              HTTPS & Certificatul SSL/TLS
+              {lang === 'ro' ? 'HTTPS & Certificatul SSL/TLS' : 'HTTPS & SSL/TLS Certificates'}
             </div>
             <p className="text-slate-600 text-xs">
-              <strong>HTTPS</strong> adaugă un strat criptografic de securitate. Toate pachetele de date
-              dintre vizitator și server sunt cifrate cu chei matematice, fiind protejate de interceptare chiar și pe rețele Wi-Fi publice.
+              {lang === 'ro'
+                ? 'HTTPS adaugă un strat criptografic de securitate. Toate pachetele de date dintre vizitator și server sunt cifrate cu chei matematice, fiind protejate de interceptare chiar și pe rețele Wi-Fi publice.'
+                : 'HTTPS injects a cryptographic security layer. All network packets between client and server are ciphered mathematically, preventing eavesdropping even over untrusted public Wi-Fi.'}
             </p>
           </div>
 
           <div className="bg-rose-50/70 p-4 rounded-xl border border-rose-100 space-y-2">
             <div className="font-bold text-rose-900 flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-rose-600" />
-              Pericolul HTTP Tradițional
+              {lang === 'ro' ? 'Pericolul HTTP Tradițional' : 'Cleartext HTTP Vulnerabilities'}
             </div>
             <p className="text-slate-600 text-xs">
-              Pe o conexiune simplă <strong>HTTP</strong>, datele călătoresc în text clar (Plain Text).
-              Orice intermediar rău intenționat din rețea poate citi parolele, mesajele sau răspunsurile la chestionare.
+              {lang === 'ro'
+                ? 'Pe o conexiune simplă HTTP, datele călătoresc în text clar (Plain Text). Orice intermediar rău intenționat din rețea poate citi parolele, mesajele sau răspunsurile la chestionare.'
+                : 'On plain HTTP, packets travel in cleartext. Any intermediary sniffing the wire can read plaintext passwords, confidential messages, or quiz submissions in clear sight.'}
             </p>
           </div>
 
           <div className="bg-blue-50/70 p-4 rounded-xl border border-blue-100 space-y-2">
             <div className="font-bold text-blue-900 flex items-center gap-2">
               <FileWarning className="w-4 h-4 text-blue-600" />
-              Protecția Datelor Personale (GDPR)
+              {lang === 'ro' ? 'Protecția Datelor Personale (GDPR)' : 'Student Data Privacy (GDPR)'}
             </div>
             <p className="text-slate-600 text-xs">
-              Pe site-ul clasei este <strong>strict interzisă</strong> publicarea datelor cu caracter personal:
-              CNP, adrese de domiciliu, numere de telefon sau fotografii ale minorilor fără acordul scris al părinților.
+              {lang === 'ro'
+                ? 'Pe site-ul clasei este strict interzisă publicarea datelor cu caracter personal: CNP, adrese de domiciliu, numere de telefon sau fotografii ale minorilor fără acordul scris al părinților.'
+                : 'On class websites, publishing personally identifiable information (PII)—national IDs, home addresses, phone numbers, or photos of minors without parental consent—is strictly prohibited.'}
             </p>
           </div>
         </div>
@@ -144,11 +160,13 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-emerald-600" />
             <h3 className="font-bold text-slate-800 text-lg">
-              Simulator Interactiv: Inspectorul de Pachete de Rețea (HTTP vs HTTPS)
+              {lang === 'ro'
+                ? 'Simulator Interactiv: Inspectorul de Pachete de Rețea (HTTP vs HTTPS)'
+                : 'Interactive Simulator: Network Packet Inspector (HTTP vs HTTPS)'}
             </h3>
           </div>
           <span className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">
-            Laborator Criptografie
+            {lang === 'ro' ? 'Laborator Criptografie' : 'Cryptography Lab'}
           </span>
         </div>
 
@@ -166,7 +184,11 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
             }`}
           >
             <Lock className="w-4 h-4 text-emerald-300" />
-            <span>Conexiune HTTPS Securizată (Port 443 + TLS)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Conexiune HTTPS Securizată (Port 443 + TLS)'
+                : 'Secure HTTPS Connection (Port 443 + TLS)'}
+            </span>
           </button>
 
           <button
@@ -181,7 +203,11 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
             }`}
           >
             <Unlock className="w-4 h-4 text-rose-300" />
-            <span>Conexiune HTTP Nesecurizată (Port 80 - Text Clar)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Conexiune HTTP Nesecurizată (Port 80 - Text Clar)'
+                : 'Insecure HTTP Connection (Port 80 - Cleartext)'}
+            </span>
           </button>
         </div>
 
@@ -195,7 +221,7 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
           ) : (
             <span className="flex items-center gap-1 text-rose-700 font-bold bg-rose-100 px-2 py-0.5 rounded">
               <Unlock className="w-3.5 h-3.5 text-rose-600" />
-              http:// (Nesigur!)
+              {lang === 'ro' ? 'http:// (Nesigur!)' : 'http:// (Not Secure!)'}
             </span>
           )}
           <span className="text-slate-800">sites.google.com/view/revista-infoteen-8/login</span>
@@ -205,7 +231,9 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-700 block">
-              Date transmise de elev în formularul de autentificare:
+              {lang === 'ro'
+                ? 'Date transmise de elev în formularul de autentificare:'
+                : 'Data submitted in the user login form:'}
             </label>
             <input
               type="text"
@@ -214,15 +242,19 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
               className="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 font-mono"
             />
             <span className="text-[11px] text-slate-500 block">
-              Modifică textul pentru a vedea cum se transformă datele în tranzitul pe rețea.
+              {lang === 'ro'
+                ? 'Modifică textul pentru a vedea cum se transformă datele în tranzitul pe rețea.'
+                : 'Edit text above to observe real-time packet serialization over the wire.'}
             </span>
           </div>
 
           <div className="bg-slate-900 text-white p-4 rounded-xl font-mono text-xs space-y-2 border border-slate-800">
             <div className="text-[11px] text-slate-400 border-b border-slate-800 pb-1 flex justify-between">
-              <span>Ce vede un hacker / interceptor de rețea (Sniffer):</span>
-              <span className={protocol === 'https' ? 'text-emerald-400' : 'text-rose-400'}>
-                {protocol === 'https' ? 'Criptat AES-256' : 'EXPUS ÎN CLAR!'}
+              <span>{lang === 'ro' ? 'Ce vede un interceptor de rețea (Sniffer):' : 'What a network sniffer intercepts:'}</span>
+              <span className={protocol === 'https' ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+                {protocol === 'https'
+                  ? lang === 'ro' ? 'Criptat AES-256' : 'AES-256 Encrypted'
+                  : lang === 'ro' ? 'EXPUS ÎN CLAR!' : 'EXPOSED IN CLEARTEXT!'}
               </span>
             </div>
 
@@ -235,7 +267,7 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
                 <span className="text-rose-400 font-bold">
                   POST /login HTTP/1.1<br />
                   Host: sites.google.com<br />
-                  password={formInput || 'gol'}
+                  password={formInput || 'empty'}
                 </span>
               )}
             </div>
@@ -248,7 +280,9 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
           <HelpCircle className="w-5 h-5 text-emerald-600" />
           <h3 className="font-bold text-slate-800 text-lg">
-            Verificare Pedagogică: Securitate Web & Date Personale (Manual pag. 55–56)
+            {lang === 'ro'
+              ? 'Verificare Pedagogică: Securitate Web & Date Personale (Manual pag. 55–56)'
+              : 'Pedagogical Check: Web Security & Privacy (Curriculum p. 55–56)'}
           </h3>
         </div>
 
@@ -256,10 +290,13 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-2">
             <span className="text-sm font-bold text-slate-800">
-              Cerința 1: Ce indică prezența pictogramei în formă de lacăt închis din bara de adrese a browserului atunci când vizitezi un site Google Sites?
+              {lang === 'ro'
+                ? 'Cerința 1: Ce indică prezența pictogramei în formă de lacăt închis din bara de adrese a browserului atunci când vizitezi un site Google Sites?'
+                : 'Requirement 1: What does the locked padlock icon in your browser address bar signify when visiting a Google Sites page?'}
             </span>
             <QuestionHint
-              hint="Manual pag. 55: Lacătul simbolizează prezența unui certificat de securitate valid și folosirea protocolului securizat HTTPS."
+              hintRo="Manual pag. 55: Lacătul simbolizează prezența unui certificat de securitate valid și folosirea protocolului securizat HTTPS."
+              hintEn="Curriculum p. 55: The padlock confirms the presence of an active SSL/TLS certificate encrypting communications over HTTPS."
               isOpen={showHint['q1'] || false}
               onToggle={() => setShowHint(prev => ({ ...prev, q1: !prev.q1 }))}
             />
@@ -271,10 +308,26 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
 
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { id: 'opt_a', label: 'A. Că site-ul este blocat și nu mai poate fi accesat niciodată' },
-              { id: 'opt_b', label: 'B. Că datele dintre utilizator și server sunt criptate prin protocolul HTTPS și conexiunea este sigură' },
-              { id: 'opt_c', label: 'C. Că trebuie să introduci o cheie metalică în unitatea centrală' },
-              { id: 'opt_d', label: 'D. Că site-ul nu funcționează fără conexiune prin cablu TV' }
+              {
+                id: 'opt_a',
+                labelRo: 'A. Că site-ul este blocat și nu mai poate fi accesat niciodată',
+                labelEn: 'A. That the website is blocked and can never be loaded again'
+              },
+              {
+                id: 'opt_b',
+                labelRo: 'B. Că datele dintre utilizator și server sunt criptate prin protocolul HTTPS și conexiunea este sigură',
+                labelEn: 'B. That data between browser and server is ciphered via HTTPS, guaranteeing a secure session'
+              },
+              {
+                id: 'opt_c',
+                labelRo: 'C. Că trebuie să introduci o cheie metalică în unitatea centrală',
+                labelEn: 'C. That you must insert a physical brass key into your PC chassis'
+              },
+              {
+                id: 'opt_d',
+                labelRo: 'D. Că site-ul nu funcționează fără conexiune prin cablu TV',
+                labelEn: 'D. That the site requires coaxial TV cabling to function'
+              }
             ].map(opt => (
               <button
                 key={opt.id}
@@ -286,7 +339,7 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {opt.label}
+                {lang === 'ro' ? opt.labelRo : opt.labelEn}
               </button>
             ))}
           </div>
@@ -297,12 +350,16 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
               disabled={!answers['q1'] || isLocked('q1')}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
             >
-              <span>Verifică Răspunsul</span>
+              <span>{lang === 'ro' ? 'Verifică Răspunsul' : 'Check Answer'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <AnswerExplanation
-              explanation="Corect! Lacătul închis confirmă că site-ul folosește un certificat digital valid și protocolul HTTPS, protejând datele împotriva interceptării pe traseu."
+              explanation={
+                lang === 'ro'
+                  ? 'Corect! Lacătul închis confirmă că site-ul folosește un certificat digital valid și protocolul HTTPS, protejând datele împotriva interceptării pe traseu.'
+                  : 'Correct! The padlock validates that the site employs an authentic digital certificate and HTTPS encryption, insulating data against man-in-the-middle packet snooping.'
+              }
               isCorrect={true}
             />
           )}
@@ -312,10 +369,13 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
         <div className="space-y-3 pt-4 border-t border-slate-100">
           <div className="flex items-start justify-between gap-2">
             <span className="text-sm font-bold text-slate-800">
-              Cerința 2: În cadrul proiectului online al clasei, care dintre următoarele elemente este STRICT INTERZIS să fie publicat pe site conform legislației de protecție a datelor (GDPR)?
+              {lang === 'ro'
+                ? 'Cerința 2: În cadrul proiectului online al clasei, care dintre următoarele elemente este STRICT INTERZIS să fie publicat pe site conform legislației de protecție a datelor (GDPR)?'
+                : 'Requirement 2: On a school class website, which of the following items is STRICTLY FORBIDDEN to publish under data privacy laws (GDPR)?'}
             </span>
             <QuestionHint
-              hint="Manual pag. 56: Datele cu caracter personal care pot identifica sau localiza fizic un minor în viața reală trebuie strict protejate."
+              hintRo="Manual pag. 56: Datele cu caracter personal care pot identifica sau localiza fizic un minor în viața reală trebuie strict protejate."
+              hintEn="Curriculum p. 56: Personally identifiable data capable of locating or identifying a minor in real life must be guarded rigorously."
               isOpen={showHint['q2'] || false}
               onToggle={() => setShowHint(prev => ({ ...prev, q2: !prev.q2 }))}
             />
@@ -327,10 +387,26 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
 
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { id: 'opt_a', label: 'A. Titlul proiectului și descrierea temei alese de echipă' },
-              { id: 'opt_b', label: 'B. Datele personale sensibile ale elevilor: CNP, adresa de domiciliu și numărul de telefon privat' },
-              { id: 'opt_c', label: 'C. O schemă logică sau un cod sursă C++ scris la ore' },
-              { id: 'opt_d', label: 'D. Numele profesorului îndrumător' }
+              {
+                id: 'opt_a',
+                labelRo: 'A. Titlul proiectului și descrierea temei alese de echipă',
+                labelEn: 'A. Project title and topic summary selected by the team'
+              },
+              {
+                id: 'opt_b',
+                labelRo: 'B. Datele personale sensibile ale elevilor: CNP, adresa de domiciliu și numărul de telefon privat',
+                labelEn: 'B. Sensitive student PII: national identification numbers (SSN/CNP), private home addresses, and cell phone numbers'
+              },
+              {
+                id: 'opt_c',
+                labelRo: 'C. O schemă logică sau un cod sursă C++ scris la ore',
+                labelEn: 'C. Flowcharts or C++ algorithm source codes developed in class'
+              },
+              {
+                id: 'opt_d',
+                labelRo: 'D. Numele profesorului îndrumător',
+                labelEn: 'D. Name of the faculty project advisor'
+              }
             ].map(opt => (
               <button
                 key={opt.id}
@@ -342,7 +418,7 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {opt.label}
+                {lang === 'ro' ? opt.labelRo : opt.labelEn}
               </button>
             ))}
           </div>
@@ -353,12 +429,16 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
               disabled={!answers['q2'] || isLocked('q2')}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
             >
-              <span>Verifică Răspunsul</span>
+              <span>{lang === 'ro' ? 'Verifică Răspunsul' : 'Check Answer'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <AnswerExplanation
-              explanation="Excelent! CNP-ul, adresa locuinței și numerele de telefon constituie date cu caracter personal cu risc ridicat și nu trebuie publicate niciodată pe pagini web publice."
+              explanation={
+                lang === 'ro'
+                  ? 'Excelent! CNP-ul, adresa locuinței și numerele de telefon constituie date cu caracter personal cu risc ridicat și nu trebuie publicate niciodată pe pagini web publice.'
+                  : 'Excellent! National IDs, home residences, and private phone numbers constitute high-risk personally identifiable data that must never be exposed on public websites.'
+              }
               isCorrect={true}
             />
           )}
@@ -372,7 +452,11 @@ export const W3Level4_WebSecurityAndHttpsProtocol: React.FC<W3Level4Props> = ({
         isCompleted={allQuizzesPassed}
         onPrev={onPrev}
         onNext={handleFinish}
-        nextLabel="Continuă cu Lecția 5: Optimizare pentru Motoarele de Căutare (SEO)"
+        nextLabel={
+          lang === 'ro'
+            ? 'Continuă cu Lecția 5: Optimizare pentru Motoarele de Căutare (SEO)'
+            : 'Continue to Lesson 5: Search Engine Optimization (SEO)'
+        }
       />
     </div>
   );

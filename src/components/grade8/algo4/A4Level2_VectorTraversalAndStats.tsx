@@ -14,6 +14,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level2Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -25,6 +26,8 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   // Vector data
   const [arrayData, setArrayData] = useState<number[]>([15, 42, 8, 93, 27, 4, 61, 38]);
   const [currentIdx, setCurrentIdx] = useState<number>(-1);
@@ -108,22 +111,38 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-500/30 text-teal-200 border border-teal-400/30">
-                  Modulul 3D • Nivelul 2 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 2 din 7' : 'Module 3D • Level 2 of 7'}
                 </span>
-                <span className="text-xs text-teal-300">Manual Art Klett pag. 78–79</span>
+                <span className="text-xs text-teal-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 78–79' : 'Art Klett Textbook pp. 78–79'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Parcurgerea Vectorilor: Sumă, Medie, Numărare & Min / Max
+                {lang === 'ro'
+                  ? 'Parcurgerea Vectorilor: Sumă, Medie, Numărare & Min / Max'
+                  : 'Array Traversal: Sum, Average, Counting & Min / Max'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-teal-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 2: Statistici Vector</span>
+            <span className="text-xs text-teal-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 2: Statistici Vector' : 'Level 2: Array Statistics'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-teal-100/90 leading-relaxed max-w-3xl">
-          Parcurgerea element cu element a unui vector este nucleul algoritmilor de analiză a datelor. Folosind o buclă <code className="bg-teal-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">for (int i = 0; i &lt; n; i++)</code>, putem calcula suma, media reală, elementele pare și identifica poziția valorii maxime și minime!
+          {lang === 'ro' ? (
+            <>
+              Parcurgerea element cu element a unui vector este nucleul algoritmilor de analiză a datelor. Folosind o buclă <code className="bg-teal-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">for (int i = 0; i &lt; n; i++)</code>, putem calcula suma, media reală, elementele pare și identifica poziția valorii maxime și minime!
+            </>
+          ) : (
+            <>
+              Element-by-element array traversal is at the heart of data analysis algorithms. Using a loop <code className="bg-teal-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">for (int i = 0; i &lt; n; i++)</code>, we can compute the sum, floating-point average, even counts, and pinpoint the positions of the maximum and minimum values!
+            </>
+          )}
         </p>
       </div>
 
@@ -132,7 +151,9 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-emerald-400" />
-            Simulator Vizual de Parcurgere Pas-cu-Pas
+            {lang === 'ro'
+              ? 'Simulator Vizual de Parcurgere Pas-cu-Pas'
+              : 'Step-by-Step Traversal Visualizer'}
           </h3>
           <div className="flex gap-2">
             <button
@@ -140,14 +161,14 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
               className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs font-medium flex items-center gap-1 border border-slate-700"
             >
               <RotateCcw className="w-3 h-3" />
-              Generează Vector Nou
+              {lang === 'ro' ? 'Generează Vector Nou' : 'Generate New Array'}
             </button>
             <button
               onClick={runTraversalAnimation}
               className="px-3 py-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded text-xs font-medium flex items-center gap-1.5 shadow"
             >
               <Play className="w-3 h-3 fill-white" />
-              Parcurge Vectorul
+              {lang === 'ro' ? 'Parcurge Vectorul' : 'Traverse Array'}
             </button>
           </div>
         </div>
@@ -195,26 +216,34 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
         {/* Statistical Summary Panel */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
           <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-0.5">
-            <span className="text-slate-400 text-[11px] block">Suma Elementelor:</span>
+            <span className="text-slate-400 text-[11px] block">
+              {lang === 'ro' ? 'Suma Elementelor:' : 'Sum of Elements:'}
+            </span>
             <div className="text-lg font-bold font-mono text-cyan-300">{sum}</div>
             <div className="text-[10px] text-slate-500 font-mono">sum += v[i]</div>
           </div>
           <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-0.5">
-            <span className="text-slate-400 text-[11px] block">Media Aritmetică:</span>
+            <span className="text-slate-400 text-[11px] block">
+              {lang === 'ro' ? 'Media Aritmetică:' : 'Arithmetic Average:'}
+            </span>
             <div className="text-lg font-bold font-mono text-purple-300">{average}</div>
             <div className="text-[10px] text-slate-500 font-mono">(double)sum / n</div>
           </div>
           <div className="bg-slate-950 p-3 rounded-lg border border-emerald-500/30 space-y-0.5">
-            <span className="text-emerald-400 text-[11px] block font-semibold">Element Maxim:</span>
+            <span className="text-emerald-400 text-[11px] block font-semibold">
+              {lang === 'ro' ? 'Element Maxim:' : 'Maximum Element:'}
+            </span>
             <div className="text-lg font-bold font-mono text-emerald-300">
-              {maxVal} <span className="text-xs text-slate-400">(la v[{maxIdx}])</span>
+              {maxVal} <span className="text-xs text-slate-400">({lang === 'ro' ? 'la' : 'at'} v[{maxIdx}])</span>
             </div>
             <div className="text-[10px] text-slate-500 font-mono">poz_max = {maxIdx}</div>
           </div>
           <div className="bg-slate-950 p-3 rounded-lg border border-rose-500/30 space-y-0.5">
-            <span className="text-rose-400 text-[11px] block font-semibold">Element Minim:</span>
+            <span className="text-rose-400 text-[11px] block font-semibold">
+              {lang === 'ro' ? 'Element Minim:' : 'Minimum Element:'}
+            </span>
             <div className="text-lg font-bold font-mono text-rose-300">
-              {minVal} <span className="text-xs text-slate-400">(la v[{minIdx}])</span>
+              {minVal} <span className="text-xs text-slate-400">({lang === 'ro' ? 'la' : 'at'} v[{minIdx}])</span>
             </div>
             <div className="text-[10px] text-slate-500 font-mono">poz_min = {minIdx}</div>
           </div>
@@ -225,21 +254,37 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 78–79)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 78–79)' : 'Official C++ Checkpoint (Textbook pp. 78–79)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              De ce este necesară conversia explicită <code className="text-purple-300 font-mono">(double)sum / n</code> la calculul mediei elementelor întregi?
+              {lang === 'ro'
+                ? 'De ce este necesară conversia explicită (double)sum / n la calculul mediei elementelor întregi?'
+                : 'Why is the explicit cast (double)sum / n necessary when calculating the average of integers?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Pentru a preveni împărțirea întreagă din C++, care ar tăia partea zecimală a mediei' },
-                { id: 'b', label: 'Pentru că funcția cout nu știe să afișeze numere întregi' },
-                { id: 'c', label: 'Este o comandă decorativă opțională' }
+                {
+                  id: 'a',
+                  labelRo: 'Pentru a preveni împărțirea întreagă din C++, care ar tăia partea zecimală a mediei',
+                  labelEn: 'To prevent integer division in C++, which would truncate the decimal part of the average'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Pentru că funcția cout nu știe să afișeze numere întregi',
+                  labelEn: 'Because cout does not know how to display integers'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Este o comandă decorativă opțională',
+                  labelEn: 'It is an optional cosmetic command'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -256,7 +301,7 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -265,15 +310,31 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Cum inițializăm corect variabila <code className="text-emerald-400 font-mono">maxim</code> înainte de a parcurge vectorul pentru a găsi cel mai mare număr?
+              {lang === 'ro'
+                ? 'Cum inițializăm corect variabila maxim înainte de a parcurge vectorul pentru a găsi cel mai mare număr?'
+                : 'How should we correctly initialize the maximum variable before traversing the array to find the largest number?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'maxim = 0 (greșit dacă vectorul conține doar numere negative!)' },
-                { id: 'b', label: 'maxim = v[0] (primul element al vectorului este asumat inițial ca maxim, parcurgând apoi de la i = 1)' },
-                { id: 'c', label: 'maxim = 100000' }
+                {
+                  id: 'a',
+                  labelRo: 'maxim = 0 (greșit dacă vectorul conține doar numere negative!)',
+                  labelEn: 'maxim = 0 (incorrect if the array contains only negative numbers!)'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'maxim = v[0] (primul element al vectorului este asumat inițial ca maxim, parcurgând apoi de la i = 1)',
+                  labelEn: 'maxim = v[0] (the first element is assumed as max initially, then loop runs from i = 1)'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'maxim = 100000',
+                  labelEn: 'maxim = 100000'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -290,7 +351,7 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -309,8 +370,12 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai explorat statisticile complete și algoritmul canonic de parcurgere a vectorilor.'
-              : 'Rulează parcurgerea vectorului și răspunde corect la cele 2 întrebări.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai explorat statisticile complete și algoritmul canonic de parcurgere a vectorilor.'
+                : 'Excellent! You explored full statistics and canonical array traversal algorithms.'
+              : lang === 'ro'
+              ? 'Rulează parcurgerea vectorului și răspunde corect la cele 2 întrebări.'
+              : 'Run the array traversal and correctly answer both questions.'}
           </span>
         </div>
         <button
@@ -322,7 +387,7 @@ export const A4Level2_VectorTraversalAndStats: React.FC<A4Level2Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Căutarea Liniară</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Căutarea Liniară' : 'Next Level: Linear Search'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

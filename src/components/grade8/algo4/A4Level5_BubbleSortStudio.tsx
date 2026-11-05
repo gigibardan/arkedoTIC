@@ -14,6 +14,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level5Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -25,6 +26,8 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [arrayData, setArrayData] = useState<number[]>([45, 12, 89, 34, 7, 23]);
   const [activePair, setActivePair] = useState<[number, number] | null>(null);
   const [passCount, setPassCount] = useState<number>(0);
@@ -109,22 +112,38 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/30 text-amber-200 border border-amber-400/30">
-                  Modulul 3D • Nivelul 5 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 5 din 7' : 'Module 3D • Level 5 of 7'}
                 </span>
-                <span className="text-xs text-amber-300">Manual Art Klett pag. 81–82</span>
+                <span className="text-xs text-amber-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 81–82' : 'Art Klett Textbook pp. 81–82'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Algoritmul de Sortare prin Metoda Bulelor (Bubble Sort)
+                {lang === 'ro'
+                  ? 'Algoritmul de Sortare prin Metoda Bulelor (Bubble Sort)'
+                  : 'Bubble Sort Algorithm'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-amber-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 5: Bubble Sort</span>
+            <span className="text-xs text-amber-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 5: Bubble Sort' : 'Level 5: Bubble Sort'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-amber-100/90 leading-relaxed max-w-3xl">
-          <strong>Metoda Bulelor</strong> compară elemente vecine două câte două: dacă elementul din stânga este mai mare decât cel din dreapta, valorile sunt interschimbate (<code className="text-cyan-300 font-mono">swap</code>). La fiecare trecere, cele mai mari valori „urcă la suprafață” spre capătul vectorului, exact ca bulele de aer în apă!
+          {lang === 'ro' ? (
+            <>
+              <strong>Metoda Bulelor</strong> compară elemente vecine două câte două: dacă elementul din stânga este mai mare decât cel din dreapta, valorile sunt interschimbate (<code className="text-cyan-300 font-mono">swap</code>). La fiecare trecere, cele mai mari valori „urcă la suprafață” spre capătul vectorului, exact ca bulele de aer în apă!
+            </>
+          ) : (
+            <>
+              <strong>Bubble Sort</strong> compares adjacent elements pairwise: if the left element is greater than the right one, values are swapped (<code className="text-cyan-300 font-mono">swap</code>). With each pass, the largest remaining values "bubble up" to the end of the array, just like air bubbles in water!
+            </>
+          )}
         </p>
       </div>
 
@@ -133,7 +152,7 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <Zap className="w-4 h-4 text-amber-400" />
-            Simulator Vizual Bubble Sort
+            {lang === 'ro' ? 'Simulator Vizual Bubble Sort' : 'Bubble Sort Visual Simulator'}
           </h3>
           <div className="flex gap-2">
             <button
@@ -142,7 +161,7 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
               className="p-1.5 px-3 bg-slate-800 hover:bg-slate-700 disabled:bg-slate-950 text-slate-300 rounded text-xs border border-slate-700 flex items-center gap-1"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Resetare
+              {lang === 'ro' ? 'Resetare' : 'Reset'}
             </button>
             <button
               onClick={runBubbleSort}
@@ -150,7 +169,7 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
               className="px-4 py-1.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 disabled:bg-slate-800 text-white rounded text-xs font-semibold flex items-center gap-1.5 shadow"
             >
               <Play className="w-3.5 h-3.5 fill-white" />
-              Pornește Bubble Sort
+              {lang === 'ro' ? 'Pornește Bubble Sort' : 'Start Bubble Sort'}
             </button>
           </div>
         </div>
@@ -197,21 +216,37 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
         {/* Stats Row */}
         <div className="grid grid-cols-3 gap-3 text-xs">
           <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-            <span className="text-slate-400 block text-[11px]">Trecerea curentă (Pass):</span>
+            <span className="text-slate-400 block text-[11px]">
+              {lang === 'ro' ? 'Trecerea curentă (Pass):' : 'Current Pass:'}
+            </span>
             <span className="font-mono font-bold text-cyan-300 text-sm">#{passCount}</span>
           </div>
           <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-            <span className="text-slate-400 block text-[11px]">Interschimbări (Swaps):</span>
+            <span className="text-slate-400 block text-[11px]">
+              {lang === 'ro' ? 'Interschimbări (Swaps):' : 'Swaps:'}
+            </span>
             <span className="font-mono font-bold text-amber-400 text-sm">{swapCount}</span>
           </div>
           <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-            <span className="text-slate-400 block text-[11px]">Stare vector:</span>
+            <span className="text-slate-400 block text-[11px]">
+              {lang === 'ro' ? 'Stare vector:' : 'Array status:'}
+            </span>
             <span
               className={`font-sans font-bold text-sm ${
                 isSorted ? 'text-emerald-400' : 'text-slate-400'
               }`}
             >
-              {isSorted ? 'SORTAT CRESCĂTOR ✓' : isSorting ? 'În curs de sortare...' : 'Nesortat'}
+              {isSorted
+                ? lang === 'ro'
+                  ? 'SORTAT CRESCĂTOR ✓'
+                  : 'SORTED ASCENDING ✓'
+                : isSorting
+                ? lang === 'ro'
+                  ? 'În curs de sortare...'
+                  : 'Sorting in progress...'
+                : lang === 'ro'
+                ? 'Nesortat'
+                : 'Unsorted'}
             </span>
           </div>
         </div>
@@ -221,12 +256,18 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-3 font-mono text-xs">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2 font-sans border-b border-slate-800 pb-2">
           <Terminal className="w-4 h-4 text-emerald-400" />
-          Implementare Canonică C++ cu Flag de Optimizare (Manual pag. 82)
+          {lang === 'ro'
+            ? 'Implementare Canonică C++ cu Flag de Optimizare (Manual pag. 82)'
+            : 'Canonical C++ Implementation with Optimization Flag (Textbook p. 82)'}
         </h3>
         <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1 text-slate-300">
           <div><span className="text-indigo-400">bool</span> sortat;</div>
           <div><span className="text-pink-400 font-semibold">do</span> &#123;</div>
-          <div className="pl-4 text-slate-400">sortat = <span className="text-emerald-400">true</span>; <span className="text-slate-500">// presupunem ordonat</span></div>
+          <div className="pl-4 text-slate-400">
+            sortat = <span className="text-emerald-400">true</span>; <span className="text-slate-500">
+              {lang === 'ro' ? '// presupunem ordonat' : '// assume sorted'}
+            </span>
+          </div>
           <div className="pl-4">
             <span className="text-pink-400">for</span> (<span className="text-indigo-400">int</span> i = <span className="text-amber-300">0</span>; i &lt; n - <span className="text-amber-300">1</span>; i++) &#123;
           </div>
@@ -234,7 +275,11 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
             <span className="text-pink-400">if</span> (v[i] &gt; v[i + <span className="text-amber-300">1</span>]) &#123;
           </div>
           <div className="pl-12 text-amber-300">swap(v[i], v[i + 1]);</div>
-          <div className="pl-12 text-rose-300">sortat = <span className="text-rose-400">false</span>; <span className="text-slate-500">// s-a produs o inversiune</span></div>
+          <div className="pl-12 text-rose-300">
+            sortat = <span className="text-rose-400">false</span>; <span className="text-slate-500">
+              {lang === 'ro' ? '// s-a produs o inversiune' : '// an inversion occurred'}
+            </span>
+          </div>
           <div className="pl-8">&#125;</div>
           <div className="pl-4">&#125;</div>
           <div>&#125; <span className="text-pink-400 font-semibold">while</span> (!sortat);</div>
@@ -245,21 +290,37 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 81–82)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 81–82)' : 'Official C++ Checkpoint (Textbook pp. 81–82)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Ce se întâmplă la fiecare trecere completă a buclei interioare prin vector în algoritmul Bubble Sort?
+              {lang === 'ro'
+                ? 'Ce se întâmplă la fiecare trecere completă a buclei interioare prin vector în algoritmul Bubble Sort?'
+                : 'What occurs after every full pass of the inner loop across the array in Bubble Sort?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Cel mai mare element încă neordonat ajunge garantat pe poziția sa finală la sfârșitul vectorului' },
-                { id: 'b', label: 'Toate elementele se dublează ca valoare' },
-                { id: 'c', label: 'Vectorul se împarte în două jumătăți' }
+                {
+                  id: 'a',
+                  labelRo: 'Cel mai mare element încă neordonat ajunge garantat pe poziția sa finală la sfârșitul vectorului',
+                  labelEn: 'The largest unsorted element is guaranteed to reach its final position at the end of the array'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Toate elementele se dublează ca valoare',
+                  labelEn: 'All elements double in value'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Vectorul se împarte în două jumătăți',
+                  labelEn: 'The array splits into two halves'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -276,7 +337,7 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -285,15 +346,31 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Cum ajută variabila indicator <code className="text-amber-300 font-mono">bool sortat</code> la optimizarea algoritmului?
+              {lang === 'ro'
+                ? 'Cum ajută variabila indicator bool sortat la optimizarea algoritmului?'
+                : 'How does the bool sortat flag optimize the algorithm?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Transformă numerele în șiruri de caractere' },
-                { id: 'b', label: 'Dacă la o trecere nu s-a făcut nicio interschimbare, oprește bucla imediat, evitând treceri inutile pe un vector deja ordonat' },
-                { id: 'c', label: 'Nu are niciun efect util' }
+                {
+                  id: 'a',
+                  labelRo: 'Transformă numerele în șiruri de caractere',
+                  labelEn: 'Transforms numbers into strings'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Dacă la o trecere nu s-a făcut nicio interschimbare, oprește bucla imediat, evitând treceri inutile pe un vector deja ordonat',
+                  labelEn: 'If no swap happened during a pass, stops the loop immediately, avoiding useless passes on already sorted arrays'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Nu are niciun efect util',
+                  labelEn: 'Has no beneficial effect'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -310,7 +387,7 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -329,8 +406,12 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai explorat sortarea prin metoda bulelor și optimizarea cu indicator boolean.'
-              : 'Rulează sortarea Bubble Sort și răspunde corect la cele 2 întrebări.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai explorat sortarea prin metoda bulelor și optimizarea cu indicator boolean.'
+                : 'Excellent! You mastered bubble sort and the boolean flag early exit optimization.'
+              : lang === 'ro'
+              ? 'Rulează sortarea Bubble Sort și răspunde corect la cele 2 întrebări.'
+              : 'Run Bubble Sort and correctly answer both questions.'}
           </span>
         </div>
         <button
@@ -342,7 +423,7 @@ export const A4Level5_BubbleSortStudio: React.FC<A4Level5Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Căutarea Binară</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Căutarea Binară' : 'Next Level: Binary Search'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

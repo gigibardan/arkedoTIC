@@ -17,6 +17,7 @@ import {
   ArrowDown,
   Square
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface R1Level4Props {
@@ -29,6 +30,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
   // Servo State (0° to 180°)
   const [servoAngle, setServoAngle] = useState<number>(90);
 
@@ -71,21 +73,39 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-amber-400 font-semibold">
-                Nivelul 4 • Unitatea 4: Robotică (Manual pag. 95–96)
+                {lang === 'ro'
+                  ? 'Nivelul 4 • Unitatea 4: Robotică (Manual pag. 95–96)'
+                  : 'Level 4 • Unit 4: Robotics (Textbook pp. 95–96)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Actuatori Robotici: Servomotoare &amp; Motoare DC cu Punte H
+                {lang === 'ro'
+                  ? 'Actuatori Robotici: Servomotoare & Motoare DC cu Punte H'
+                  : 'Robotic Actuators: Servomotors & DC Motors with H-Bridge'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-900/40 border border-amber-700/50 rounded-lg text-amber-300 text-sm font-mono">
-            <span>PWM 0..255 • Unghi 0°..180°</span>
+            <span>
+              {lang === 'ro'
+                ? 'PWM 0..255 • Unghi 0°..180°'
+                : 'PWM 0..255 • Angle 0°..180°'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          Dacă senzorii reprezintă simțurile, <strong>actuatorii sunt „mușchii” robotului</strong>.
-          Pentru orientare precisă (ex. rotirea capului ultrasonic) folosim un <strong>servomotor (0°..180°)</strong>,
-          iar pentru propulsie folosim <strong>motoare de curent continuu (DC)</strong> comandate printr-un driver punte H (L298N).
+          {lang === 'ro' ? (
+            <>
+              Dacă senzorii reprezintă simțurile, <strong>actuatorii sunt „mușchii” robotului</strong>.
+              Pentru orientare precisă (ex. rotirea capului ultrasonic) folosim un <strong>servomotor (0°..180°)</strong>,
+              iar pentru propulsie folosim <strong>motoare de curent continuu (DC)</strong> comandate printr-un driver punte H (L298N).
+            </>
+          ) : (
+            <>
+              While sensors provide the senses, <strong>actuators are the robot&apos;s &quot;muscles&quot;</strong>.
+              For precise angular orientation (e.g. pivoting the ultrasonic head) we use a <strong>servomotor (0°..180°)</strong>,
+              and for propulsion we employ <strong>direct current (DC) motors</strong> commanded via an H-Bridge driver (L298N).
+            </>
+          )}
         </p>
       </div>
 
@@ -97,7 +117,11 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2 text-amber-400 font-mono text-sm font-semibold">
                 <Compass className="w-4 h-4" />
-                <span>Servomotor SG90 (Poziționare Unghiulară)</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Servomotor SG90 (Poziționare Unghiulară)'
+                    : 'SG90 Servomotor (Angular Positioning)'}
+                </span>
               </div>
               <span className="text-xs bg-slate-800 text-amber-300 px-2 py-0.5 rounded font-mono">
                 Servo.write({servoAngle}°)
@@ -123,8 +147,12 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
               </div>
 
               <div className="mt-3 text-xs font-mono text-center">
-                <span className="text-slate-400">Unghi curent: </span>
-                <strong className="text-amber-300 text-sm">{servoAngle} grade</strong>
+                <span className="text-slate-400">
+                  {lang === 'ro' ? 'Unghi curent: ' : 'Current angle: '}
+                </span>
+                <strong className="text-amber-300 text-sm">
+                  {servoAngle} {lang === 'ro' ? 'grade' : 'degrees'}
+                </strong>
               </div>
             </div>
 
@@ -138,7 +166,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                     : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                0° (Stânga)
+                0° ({lang === 'ro' ? 'Stânga' : 'Left'})
               </button>
               <button
                 onClick={() => handleSetServo(90)}
@@ -148,7 +176,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                     : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                90° (Centru)
+                90° ({lang === 'ro' ? 'Centru' : 'Center'})
               </button>
               <button
                 onClick={() => handleSetServo(180)}
@@ -158,7 +186,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                     : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                180° (Dreapta)
+                180° ({lang === 'ro' ? 'Dreapta' : 'Right'})
               </button>
             </div>
 
@@ -182,7 +210,11 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm font-semibold">
                 <Gauge className="w-4 h-4" />
-                <span>Motor DC &amp; Driver Punte H (L298N)</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Motor DC & Driver Punte H (L298N)'
+                    : 'DC Motor & H-Bridge Driver (L298N)'}
+                </span>
               </div>
               <span className="text-xs bg-slate-800 text-cyan-300 px-2 py-0.5 rounded font-mono">
                 PWM: {motorSpeedPwm} / 255
@@ -210,7 +242,9 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
               </div>
 
               <div className="mt-3 text-xs font-mono text-center">
-                <span className="text-slate-400">Sens &amp; Stare: </span>
+                <span className="text-slate-400">
+                  {lang === 'ro' ? 'Sens & Stare: ' : 'Direction & State: '}
+                </span>
                 <strong
                   className={
                     motorDirection === 'forward'
@@ -221,10 +255,16 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                   }
                 >
                   {motorDirection === 'forward'
-                    ? 'ÎNAINTE (IN1=HIGH, IN2=LOW)'
+                    ? lang === 'ro'
+                      ? 'ÎNAINTE (IN1=HIGH, IN2=LOW)'
+                      : 'FORWARD (IN1=HIGH, IN2=LOW)'
                     : motorDirection === 'reverse'
-                    ? 'ÎNAPOI (IN1=LOW, IN2=HIGH)'
-                    : 'OPRIT (IN1=LOW, IN2=LOW)'}
+                    ? lang === 'ro'
+                      ? 'ÎNAPOI (IN1=LOW, IN2=HIGH)'
+                      : 'REVERSE (IN1=LOW, IN2=HIGH)'
+                    : lang === 'ro'
+                    ? 'OPRIT (IN1=LOW, IN2=LOW)'
+                    : 'STOPPED (IN1=LOW, IN2=LOW)'}
                 </strong>
               </div>
             </div>
@@ -240,7 +280,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                 }`}
               >
                 <ArrowUp className="w-3.5 h-3.5" />
-                Înainte
+                {lang === 'ro' ? 'Înainte' : 'Forward'}
               </button>
               <button
                 onClick={() => handleSetMotorDir('stop')}
@@ -251,7 +291,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                 }`}
               >
                 <Square className="w-3.5 h-3.5" />
-                Stop
+                {lang === 'ro' ? 'Stop' : 'Stop'}
               </button>
               <button
                 onClick={() => handleSetMotorDir('reverse')}
@@ -262,14 +302,16 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
                 }`}
               >
                 <ArrowDown className="w-3.5 h-3.5" />
-                Înapoi
+                {lang === 'ro' ? 'Înapoi' : 'Reverse'}
               </button>
             </div>
 
             {/* Speed PWM Slider */}
             <div className="space-y-1">
               <div className="flex justify-between text-xs font-mono">
-                <span className="text-slate-400">Viteză Rotație (PWM analogWrite):</span>
+                <span className="text-slate-400">
+                  {lang === 'ro' ? 'Viteză Rotație (PWM analogWrite):' : 'Rotation Speed (PWM analogWrite):'}
+                </span>
                 <span className="text-cyan-300 font-bold">{motorSpeedPwm} / 255</span>
               </div>
               <input
@@ -289,24 +331,36 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
       <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2 text-sm font-semibold text-amber-400">
           <HelpCircle className="w-4 h-4" />
-          <span>Verificare Înțelegere Actuatori (Manual pag. 96)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Verificare Înțelegere Actuatori (Manual pag. 96)'
+              : 'Actuator Comprehension Check (Textbook p. 96)'}
+          </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="space-y-2 text-xs">
             <p className="text-slate-300 font-medium">
-              1. De ce este necesară o punte H (circuitul L298N) pentru comanda unui motor de curent continuu?
+              {lang === 'ro'
+                ? '1. De ce este necesară o punte H (circuitul L298N) pentru comanda unui motor de curent continuu?'
+                : '1. Why is an H-Bridge driver (such as L298N) necessary for controlling a DC motor?'}
             </p>
             <div className="space-y-2">
               {[
                 {
                   id: 'punte_h_sens',
-                  text: 'Permite inversarea sensului de rotație (înainte/înapoi) și amplifică curentul fără a arde pinii plăcii Arduino.'
+                  text:
+                    lang === 'ro'
+                      ? 'Permite inversarea sensului de rotație (înainte/înapoi) și amplifică curentul fără a arde pinii plăcii Arduino.'
+                      : 'It allows reversing rotation direction (forward/reverse) and amplifies current without burning the Arduino board pins.'
                 },
                 {
                   id: 'punte_h_sunet',
-                  text: 'Transformă motorul într-un difuzor muzical pentru sonerii.'
+                  text:
+                    lang === 'ro'
+                      ? 'Transformă motorul într-un difuzor muzical pentru sonerii.'
+                      : 'It converts the motor into a musical buzzer for melodies.'
                 }
               ].map((opt) => (
                 <button
@@ -332,17 +386,25 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
           {/* Question 2 */}
           <div className="space-y-2 text-xs">
             <p className="text-slate-300 font-medium">
-              2. Prin ce se deosebește fundamental un servomotor SG90 de un motor DC clasic?
+              {lang === 'ro'
+                ? '2. Prin ce se deosebește fundamental un servomotor SG90 de un motor DC clasic?'
+                : '2. How does an SG90 servo fundamentally differ from a standard DC motor?'}
             </p>
             <div className="space-y-2">
               {[
                 {
                   id: 'servo_unghi',
-                  text: 'Servomotorul se poziționează la un unghi precis (0°..180°), în timp ce motorul DC se rotește continuu.'
+                  text:
+                    lang === 'ro'
+                      ? 'Servomotorul se poziționează la un unghi precis (0°..180°), în timp ce motorul DC se rotește continuu.'
+                      : 'The servomotor accurately holds a specific angle (0°..180°), whereas a DC motor rotates continuously.'
                 },
                 {
                   id: 'servo_viteza',
-                  text: 'Servomotorul funcționează doar cu combustibil lichid.'
+                  text:
+                    lang === 'ro'
+                      ? 'Servomotorul funcționează doar cu combustibil lichid.'
+                      : 'The servomotor runs exclusively on liquid fuel.'
                 }
               ].map((opt) => (
                 <button
@@ -382,11 +444,17 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
           <div>
             <div className="text-sm font-semibold text-white">
               {isLevelCompleted
-                ? 'Nivelul 4 Finalizat cu Succes!'
-                : 'Cerințe: Răspunde corect la cele 2 întrebări despre actuatori, servomotoare și puntea H.'}
+                ? lang === 'ro'
+                  ? 'Nivelul 4 Finalizat cu Succes!'
+                  : 'Level 4 Successfully Completed!'
+                : lang === 'ro'
+                ? 'Cerințe: Răspunde corect la cele 2 întrebări despre actuatori, servomotoare și puntea H.'
+                : 'Requirements: Correctly answer the 2 questions about actuators, servos, and the H-Bridge.'}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și deblocarea Robotului Autonom Evitator de Obstacole (Nivelul 5).
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și deblocarea Robotului Autonom Evitator de Obstacole (Nivelul 5).'
+                : 'Reward: +150 XP points and unlocking the Autonomous Obstacle Avoider Robot (Level 5).'}
             </div>
           </div>
         </div>
@@ -400,7 +468,7 @@ export const R1Level4_ActuatorsMotorsServos: React.FC<R1Level4Props> = ({
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Nivelul 5</span>
+          <span>{lang === 'ro' ? 'Continuă spre Nivelul 5' : 'Continue to Level 5'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

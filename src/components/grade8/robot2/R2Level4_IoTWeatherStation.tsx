@@ -19,6 +19,7 @@ import {
   Wind
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface R2Level4Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -30,6 +31,8 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
   onCompletePage,
   onComplete,
 }) => {
+  const { lang } = useLanguage();
+
   // Environmental sliders
   const [temperature, setTemperature] = useState<number>(24); // °C
   const [humidity, setHumidity] = useState<number>(55); // %
@@ -41,24 +44,24 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
   const [testedFrost, setTestedFrost] = useState<boolean>(false);
 
   // Compute thermal comfort index
-  let comfortLevel = 'CONFORT OPTIM';
+  let comfortLevel = lang === 'ro' ? 'CONFORT OPTIM' : 'OPTIMAL COMFORT';
   let comfortColor = 'text-emerald-400';
   let comfortBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
 
   if (temperature <= 0) {
-    comfortLevel = 'RISC INGHET!';
+    comfortLevel = lang === 'ro' ? 'RISC INGHET!' : 'FREEZING RISK!';
     comfortColor = 'text-cyan-400';
     comfortBadge = 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40';
   } else if (temperature >= 32 && humidity >= 60) {
-    comfortLevel = 'CANICULA PERICOL';
+    comfortLevel = lang === 'ro' ? 'CANICULA PERICOL' : 'HEATWAVE DANGER';
     comfortColor = 'text-red-400';
     comfortBadge = 'bg-red-500/20 text-red-300 border-red-500/40';
   } else if (temperature >= 28) {
-    comfortLevel = 'DISCONFORT CALD';
+    comfortLevel = lang === 'ro' ? 'DISCONFORT CALD' : 'WARM DISCOMFORT';
     comfortColor = 'text-amber-400';
     comfortBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
   } else if (temperature < 18) {
-    comfortLevel = 'RACOROS';
+    comfortLevel = lang === 'ro' ? 'RACOROS' : 'COOL / CHILLY';
     comfortColor = 'text-blue-400';
     comfortBadge = 'bg-blue-500/20 text-blue-300 border-blue-500/40';
   }
@@ -104,22 +107,30 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                  Modulul 4B • Pasul 4 din 7
+                  {lang === 'ro' ? 'Modulul 4B • Pasul 4 din 7' : 'Module 4B • Step 4 of 7'}
                 </span>
-                <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 106–107</span>
+                <span className="text-xs text-slate-400 font-mono">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 106–107' : 'Art Klett Textbook pp. 106–107'}
+                </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
-                Stație Meteo Urbană IoT & Ecran LCD 1602 I2C
+                {lang === 'ro'
+                  ? 'Stație Meteo Urbană IoT & Ecran LCD 1602 I2C'
+                  : 'Urban IoT Weather Station & 1602 I2C LCD'}
               </h1>
               <p className="text-slate-300 text-sm mt-1 max-w-2xl">
-                Citește senzorul digital DHT11/22 pentru temperatură și umiditate, calculează indicele de confort termic și afișează datele pe ecranul cu cristale lichide 16x2 caractere via protocolul I2C.
+                {lang === 'ro'
+                  ? 'Citește senzorul digital DHT11/22 pentru temperatură și umiditate, calculează indicele de confort termic și afișează datele pe ecranul cu cristale lichide 16x2 caractere via protocolul I2C.'
+                  : 'Read DHT11/22 digital sensor for temperature and humidity, compute thermal comfort index, and display real-time metrics on a 16x2 character LCD via I2C protocol.'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 bg-slate-900/80 px-4 py-2.5 rounded-xl border border-slate-700/60">
             <div className="text-right">
-              <div className="text-xs text-slate-400">Indice Termic</div>
+              <div className="text-xs text-slate-400">
+                {lang === 'ro' ? 'Indice Termic' : 'Thermal Index'}
+              </div>
               <div className={`text-sm font-bold font-mono ${comfortColor}`}>{comfortLevel}</div>
             </div>
           </div>
@@ -134,13 +145,13 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
             <h2 className="text-base font-semibold text-slate-200 flex items-center justify-between mb-4">
               <span className="flex items-center gap-2">
                 <Monitor className="w-5 h-5 text-cyan-400" />
-                Display LCD 1602 I2C (Adresă 0x27)
+                {lang === 'ro' ? 'Display LCD 1602 I2C (Adresă 0x27)' : '1602 I2C LCD Display (Address 0x27)'}
               </span>
               <button
                 onClick={() => setLcdBacklight((prev) => !prev)}
-                className="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1"
+                className="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1 transition-colors"
               >
-                Backlight: {lcdBacklight ? 'ON (Pornit)' : 'OFF (Stins)'}
+                Backlight: {lcdBacklight ? 'ON' : 'OFF'}
               </button>
             </h2>
 
@@ -189,7 +200,9 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                 <div className="flex justify-between items-center text-sm font-medium text-slate-300 mb-1">
                   <span className="flex items-center gap-1.5">
                     <Thermometer className="w-4 h-4 text-rose-400" />
-                    Temperatură Ambientală (DHT pin D4):
+                    {lang === 'ro'
+                      ? 'Temperatură Ambientală (DHT pin D4):'
+                      : 'Ambient Temperature (DHT pin D4):'}
                   </span>
                   <span className="font-mono text-rose-400 font-bold">{temperature}°C</span>
                 </div>
@@ -202,9 +215,9 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                   className="w-full accent-rose-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex justify-between text-[11px] text-slate-400 mt-1">
-                  <span>-10°C (Îngheț)</span>
-                  <span className="text-emerald-400">22°C (Confort)</span>
-                  <span>45°C (Caniculă extremă)</span>
+                  <span>{lang === 'ro' ? '-10°C (Îngheț)' : '-10°C (Frost)'}</span>
+                  <span className="text-emerald-400">{lang === 'ro' ? '22°C (Confort)' : '22°C (Comfort)'}</span>
+                  <span>{lang === 'ro' ? '45°C (Caniculă extremă)' : '45°C (Extreme heatwave)'}</span>
                 </div>
               </div>
 
@@ -213,7 +226,7 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                 <div className="flex justify-between items-center text-sm font-medium text-slate-300 mb-1">
                   <span className="flex items-center gap-1.5">
                     <Droplets className="w-4 h-4 text-cyan-400" />
-                    Umiditate Relativă (%):
+                    {lang === 'ro' ? 'Umiditate Relativă (%):' : 'Relative Humidity (%):'}
                   </span>
                   <span className="font-mono text-cyan-400 font-bold">{humidity}%</span>
                 </div>
@@ -226,9 +239,9 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                   className="w-full accent-cyan-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex justify-between text-[11px] text-slate-400 mt-1">
-                  <span>10% (Aer foarte uscat)</span>
-                  <span className="text-emerald-400">50% (Optim)</span>
-                  <span>95% (Aer saturat / Ceață)</span>
+                  <span>{lang === 'ro' ? '10% (Aer foarte uscat)' : '10% (Very dry air)'}</span>
+                  <span className="text-emerald-400">{lang === 'ro' ? '50% (Optim)' : '50% (Optimal)'}</span>
+                  <span>{lang === 'ro' ? '95% (Aer saturat / Ceață)' : '95% (Saturated / Fog)'}</span>
                 </div>
               </div>
 
@@ -240,9 +253,9 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                     setTemperature(23);
                     setHumidity(50);
                   }}
-                  className="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700"
+                  className="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 transition-colors"
                 >
-                  🌱 Preset Confort (23°C / 50%)
+                  {lang === 'ro' ? '🌱 Preset Confort (23°C / 50%)' : '🌱 Comfort Preset (23°C / 50%)'}
                 </button>
                 <button
                   onClick={() => {
@@ -250,9 +263,9 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                     setTemperature(37);
                     setHumidity(75);
                   }}
-                  className="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-red-300 border border-slate-700"
+                  className="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-red-300 border border-slate-700 transition-colors"
                 >
-                  ☀️ Preset Caniculă (37°C / 75%)
+                  {lang === 'ro' ? '☀️ Preset Caniculă (37°C / 75%)' : '☀️ Heatwave Preset (37°C / 75%)'}
                 </button>
                 <button
                   onClick={() => {
@@ -260,9 +273,9 @@ export const R2Level4_IoTWeatherStation: React.FC<R2Level4Props> = ({
                     setTemperature(-4);
                     setHumidity(85);
                   }}
-                  className="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700"
+                  className="px-3 py-1.5 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition-colors"
                 >
-                  ❄️ Preset Îngheț (-4°C / 85%)
+                  {lang === 'ro' ? '❄️ Preset Îngheț (-4°C / 85%)' : '❄️ Frost Preset (-4°C / 85%)'}
                 </button>
               </div>
             </div>
@@ -302,17 +315,17 @@ void loop() {
   float temp = ${temperature};
   float umid = ${humidity};
 
-  lcd.setCursor(0, 0); // Linia 1
+  lcd.setCursor(0, 0); // ${lang === 'ro' ? 'Linia 1' : 'Line 1'}
   lcd.print("T:");
   lcd.print(temp, 1);
   lcd.print("C  H:");
   lcd.print((int)umid);
   lcd.print("%");
 
-  lcd.setCursor(0, 1); // Linia 2
+  lcd.setCursor(0, 1); // ${lang === 'ro' ? 'Linia 2' : 'Line 2'}
   lcd.print("${lcdLine2.trim()}");
 
-  delay(2000); // Rata recomandată DHT11
+  delay(2000); // ${lang === 'ro' ? 'Rata recomandată DHT11' : 'Recommended DHT11 sampling rate'}
 }`}</code>
             </pre>
           </div>
@@ -321,32 +334,64 @@ void loop() {
           <div className="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg space-y-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              Misiuni Laborator Stație Meteo
+              {lang === 'ro' ? 'Misiuni Laborator Stație Meteo' : 'Weather Station Lab Missions'}
             </h3>
             <p className="text-xs text-slate-300">
-              Urmărește cele 3 praguri climatice din manual (pag. 106):
+              {lang === 'ro'
+                ? 'Urmărește cele 3 praguri climatice din manual (pag. 106):'
+                : 'Follow the 3 climate thresholds from the textbook (p. 106):'}
             </p>
 
             <div className="space-y-2 text-xs">
-              <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                testedComfort ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
-              }`}>
-                <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedComfort ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>1. Reglează parametrii pentru Confort Optim (20..25°C, 40..60% umiditate)</span>
+              <div
+                className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
+                  testedComfort
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}
+              >
+                <CheckCircle2
+                  className={`w-4 h-4 shrink-0 ${testedComfort ? 'text-emerald-400' : 'text-slate-600'}`}
+                />
+                <span>
+                  {lang === 'ro'
+                    ? '1. Reglează parametrii pentru Confort Optim (20..25°C, 40..60% umiditate)'
+                    : '1. Adjust parameters for Optimal Comfort (20..25°C, 40..60% humidity)'}
+                </span>
               </div>
 
-              <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                testedHeatwave ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
-              }`}>
-                <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedHeatwave ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>2. Declanșează alarma de caniculă (&ge; 33°C și &ge; 65% umiditate)</span>
+              <div
+                className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
+                  testedHeatwave
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}
+              >
+                <CheckCircle2
+                  className={`w-4 h-4 shrink-0 ${testedHeatwave ? 'text-emerald-400' : 'text-slate-600'}`}
+                />
+                <span>
+                  {lang === 'ro'
+                    ? '2. Declanșează alarma de caniculă (≥ 33°C și ≥ 65% umiditate)'
+                    : '2. Trigger heatwave warning (≥ 33°C and ≥ 65% humidity)'}
+                </span>
               </div>
 
-              <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
-                testedFrost ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
-              }`}>
-                <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedFrost ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>3. Simulează îngheț (&le; 0°C &rarr; mesaj Risc Îngheț pe ecranul LCD)</span>
+              <div
+                className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
+                  testedFrost
+                    ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-400'
+                }`}
+              >
+                <CheckCircle2
+                  className={`w-4 h-4 shrink-0 ${testedFrost ? 'text-emerald-400' : 'text-slate-600'}`}
+                />
+                <span>
+                  {lang === 'ro'
+                    ? '3. Simulează îngheț (≤ 0°C → mesaj Risc Îngheț pe ecranul LCD)'
+                    : '3. Simulate frost (≤ 0°C → Freezing Risk on LCD screen)'}
+                </span>
               </div>
             </div>
 
@@ -361,7 +406,11 @@ void loop() {
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                 }`}
               >
-                <span>Continuă spre Nivelul 5: Proiectul Master Hub Smart City</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Continuă spre Nivelul 5: Proiectul Master Hub Smart City'
+                    : 'Continue to Level 5: Smart City Master Hub Project'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

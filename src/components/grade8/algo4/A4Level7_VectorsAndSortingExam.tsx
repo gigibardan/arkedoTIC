@@ -19,7 +19,7 @@ import { useQuestionCooldowns } from '../../../utils/pedagogicalGrading';
 import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown';
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
-import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level7Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -30,105 +30,197 @@ interface A4Level7Props {
 interface ExamQuestion {
   id: string;
   questionNumber: number;
-  title: string;
-  questionText: string;
-  hint: string;
-  options: { id: string; text: string }[];
+  titleRo: string;
+  titleEn: string;
+  questionTextRo: string;
+  questionTextEn: string;
+  hintRo: string;
+  hintEn: string;
+  options: { id: string; textRo: string; textEn: string }[];
   correctOptionId: string;
-  explanation: string;
-  manualRef: string;
+  explanationRo: string;
+  explanationEn: string;
+  manualRefRo: string;
+  manualRefEn: string;
 }
 
 const EXAM_QUESTIONS: ExamQuestion[] = [
   {
     id: 'q1',
     questionNumber: 1,
-    title: 'Declararea & Indexarea Tablourilor în C++',
-    questionText:
-      'Dacă declarăm vectorul `int v[50];`, care este intervalul de indici valizi pentru accesarea elementelor sale conform standardului C++ (pag. 77–78)?',
-    hint: 'În C++, primul element are întotdeauna indicele 0, iar ultimul are indicele dimensiune - 1.',
+    titleRo: 'Declararea & Indexarea Tablourilor în C++',
+    titleEn: 'Array Declaration & Indexing in C++',
+    questionTextRo:
+      'Dacă declarăm vectorul int v[50];, care este intervalul de indici valizi pentru accesarea elementelor sale conform standardului C++ (pag. 77–78)?',
+    questionTextEn:
+      'If we declare the array int v[50];, what is the valid index range for accessing its elements according to the C++ standard (pp. 77–78)?',
+    hintRo: 'În C++, primul element are întotdeauna indicele 0, iar ultimul are indicele dimensiune - 1.',
+    hintEn: 'In C++, the first element always has index 0, and the last has index size - 1.',
     options: [
-      { id: 'a', text: 'A. De la 1 la 50' },
-      { id: 'b', text: 'B. De la 0 la 49' },
-      { id: 'c', label: 'C. De la 1 la 49' } as any,
-      { id: 'd', text: 'D. De la 0 la 50' }
+      { id: 'a', textRo: 'A. De la 1 la 50', textEn: 'A. From 1 to 50' },
+      { id: 'b', textRo: 'B. De la 0 la 49', textEn: 'B. From 0 to 49' },
+      { id: 'c', textRo: 'C. De la 1 la 49', textEn: 'C. From 1 to 49' },
+      { id: 'd', textRo: 'D. De la 0 la 50', textEn: 'D. From 0 to 50' }
     ],
     correctOptionId: 'b',
-    explanation:
+    explanationRo:
       'Corect! În limbajul C++, tablourile sunt indexate de la 0. Prin urmare, pentru un vector declarat cu 50 de elemente, indicii valizi sunt de la 0 (primul element) până la 49 (al 50-lea element).',
-    manualRef: 'Manual pag. 77–78'
+    explanationEn:
+      'Correct! In C++, arrays are 0-indexed. Therefore, for an array declared with 50 elements, valid indices are from 0 (first element) to 49 (50th element).',
+    manualRefRo: 'Manual pag. 77–78',
+    manualRefEn: 'Textbook pp. 77–78'
   },
   {
     id: 'q2',
     questionNumber: 2,
-    title: 'Găsirea Maximului și a Poziției Sale',
-    questionText:
-      'Cum este corect să inițializăm variabilele `maxim` și `poz_max` înainte de a parcurge un vector `v` cu `n` elemente oarecare (pozitive sau negative) (pag. 78–79)?',
-    hint: 'Nu presupune că numerele sunt pozitive; inițializează cu chiar primul element din vector.',
+    titleRo: 'Găsirea Maximului și a Poziției Sale',
+    titleEn: 'Finding the Maximum and its Position',
+    questionTextRo:
+      'Cum este corect să inițializăm variabilele maxim și poz_max înainte de a parcurge un vector v cu n elemente oarecare (pozitive sau negative) (pag. 78–79)?',
+    questionTextEn:
+      'How should we correctly initialize the variables maxim and poz_max before traversing an array v with n arbitrary elements (positive or negative) (pp. 78–79)?',
+    hintRo: 'Nu presupune că numerele sunt pozitive; inițializează cu chiar primul element din vector.',
+    hintEn: 'Do not assume numbers are positive; initialize with the very first element of the array.',
     options: [
-      { id: 'a', text: 'A. maxim = 0; poz_max = 0;' },
-      { id: 'b', text: 'B. maxim = v[0]; poz_max = 0; (apoi bucla for parcurge de la i = 1 la n - 1)' },
-      { id: 'c', text: 'C. maxim = 99999; poz_max = n;' },
-      { id: 'd', text: 'D. maxim = n; poz_max = -1;' }
+      { id: 'a', textRo: 'A. maxim = 0; poz_max = 0;', textEn: 'A. maxim = 0; poz_max = 0;' },
+      {
+        id: 'b',
+        textRo: 'B. maxim = v[0]; poz_max = 0; (apoi bucla for parcurge de la i = 1 la n - 1)',
+        textEn: 'B. maxim = v[0]; poz_max = 0; (then the for loop traverses from i = 1 to n - 1)'
+      },
+      { id: 'c', textRo: 'C. maxim = 99999; poz_max = n;', textEn: 'C. maxim = 99999; poz_max = n;' },
+      { id: 'd', textRo: 'D. maxim = n; poz_max = -1;', textEn: 'D. maxim = n; poz_max = -1;' }
     ],
     correctOptionId: 'b',
-    explanation:
+    explanationRo:
       'Corect! Dacă vectorul ar conține doar numere negative (de ex: -15, -40, -8), inițializarea cu 0 ar produce un rezultat complet eronat. Inițializarea corectă este maxim = v[0] și poz_max = 0.',
-    manualRef: 'Manual pag. 78–79'
+    explanationEn:
+      'Correct! If the array contained only negative numbers (e.g., -15, -40, -8), initializing with 0 would produce an incorrect result. The correct initialization is maxim = v[0] and poz_max = 0.',
+    manualRefRo: 'Manual pag. 78–79',
+    manualRefEn: 'Textbook pp. 78–79'
   },
   {
     id: 'q3',
     questionNumber: 3,
-    title: 'Inserarea unui Element pe Poziția k',
-    questionText:
-      'În ce ordine trebuie realizată deplasarea elementelor pentru a insera o valoare nouă `X` pe poziția `k` a unui tablou cu `n` elemente (pag. 80–81)?',
-    hint: 'Trebuie să începem deplasarea de la capătul din dreapta spre stânga, altfel valorile se suprascriu.',
+    titleRo: 'Inserarea unui Element pe Poziția k',
+    titleEn: 'Inserting an Element at Position k',
+    questionTextRo:
+      'În ce ordine trebuie realizată deplasarea elementelor pentru a insera o valoare nouă X pe poziția k a unui tablou cu n elemente (pag. 80–81)?',
+    questionTextEn:
+      'In what order must elements be shifted to insert a new value X at position k of an array with n elements (pp. 80–81)?',
+    hintRo: 'Trebuie să începem deplasarea de la capătul din dreapta spre stânga, altfel valorile se suprascriu.',
+    hintEn: 'We must begin shifting from the right end towards the left, otherwise existing values get overwritten.',
     options: [
-      { id: 'a', text: 'A. De la stânga la dreapta: for (int i = k; i < n; i++) v[i+1] = v[i];' },
-      { id: 'b', text: 'B. De la dreapta la stânga: for (int i = n; i > k; i--) v[i] = v[i-1]; apoi v[k] = X; n++;' },
-      { id: 'c', text: 'C. Nu este nevoie de nicio deplasare, C++ inserează automat' },
-      { id: 'd', text: 'D. Se șterg toate celelalte elemente' }
+      {
+        id: 'a',
+        textRo: 'A. De la stânga la dreapta: for (int i = k; i < n; i++) v[i+1] = v[i];',
+        textEn: 'A. From left to right: for (int i = k; i < n; i++) v[i+1] = v[i];'
+      },
+      {
+        id: 'b',
+        textRo: 'B. De la dreapta la stânga: for (int i = n; i > k; i--) v[i] = v[i-1]; apoi v[k] = X; n++;',
+        textEn: 'B. From right to left: for (int i = n; i > k; i--) v[i] = v[i-1]; then v[k] = X; n++;'
+      },
+      {
+        id: 'c',
+        textRo: 'C. Nu este nevoie de nicio deplasare, C++ inserează automat',
+        textEn: 'C. No shifting needed, C++ inserts automatically'
+      },
+      {
+        id: 'd',
+        textRo: 'D. Se șterg toate celelalte elemente',
+        textEn: 'D. All other elements are deleted'
+      }
     ],
     correctOptionId: 'b',
-    explanation:
+    explanationRo:
       'Corect! Pentru a face loc noului element fără a suprascrie valorile existente, elementele trebuie deplasate spre dreapta începând de la ultimul element spre poziția k (for i de la n descrescător la k + 1).',
-    manualRef: 'Manual pag. 80–81'
+    explanationEn:
+      'Correct! To make room for the new element without overwriting existing data, elements must be shifted rightwards starting from the last element down to position k (for i descending from n to k + 1).',
+    manualRefRo: 'Manual pag. 80–81',
+    manualRefEn: 'Textbook pp. 80–81'
   },
   {
     id: 'q4',
     questionNumber: 4,
-    title: 'Algoritmul de Sortare Bubble Sort',
-    questionText:
+    titleRo: 'Algoritmul de Sortare Bubble Sort',
+    titleEn: 'Bubble Sort Algorithm',
+    questionTextRo:
       'Care este principiul de funcționare al sortării prin metoda bulelor (Bubble Sort) (pag. 81–82)?',
-    hint: 'Comparațiile se fac exclusiv între elemente vecine (adiacente).',
+    questionTextEn:
+      'What is the operational principle of Bubble Sort (pp. 81–82)?',
+    hintRo: 'Comparațiile se fac exclusiv între elemente vecine (adiacente).',
+    hintEn: 'Comparisons are strictly made between adjacent neighbor elements.',
     options: [
-      { id: 'a', text: 'A. Compară elemente adiacente v[i] și v[i+1] și le interschimbă dacă v[i] > v[i+1], repetând procesul până când nu mai are loc nicio inversiune' },
-      { id: 'b', text: 'B. Împarte vectorul în 3 bucăți egale' },
-      { id: 'c', text: 'C. Calculează suma tuturor elementelor și le împarte la 2' },
-      { id: 'd', text: 'D. Ordonează elementele folosind un zar electronic' }
+      {
+        id: 'a',
+        textRo: 'A. Compară elemente adiacente v[i] și v[i+1] și le interschimbă dacă v[i] > v[i+1], repetând procesul până când nu mai are loc nicio inversiune',
+        textEn: 'A. Compares adjacent elements v[i] and v[i+1] and swaps them if v[i] > v[i+1], repeating until no inversions occur'
+      },
+      {
+        id: 'b',
+        textRo: 'B. Împarte vectorul în 3 bucăți egale',
+        textEn: 'B. Splits the array into 3 equal pieces'
+      },
+      {
+        id: 'c',
+        textRo: 'C. Calculează suma tuturor elementelor și le împarte la 2',
+        textEn: 'C. Calculates the sum of all elements and divides by 2'
+      },
+      {
+        id: 'd',
+        textRo: 'D. Ordonează elementele folosind un zar electronic',
+        textEn: 'D. Orders elements using an electronic dice'
+      }
     ],
     correctOptionId: 'a',
-    explanation:
+    explanationRo:
       'Corect! Bubble Sort compară elemente vecine două câte două, interschimbându-le dacă sunt în ordine greșită. La fiecare parcurgere, elementul cel mai mare urcă la capătul vectorului ca o bulă de aer.',
-    manualRef: 'Manual pag. 81–82'
+    explanationEn:
+      'Correct! Bubble Sort compares neighbor elements pairwise, swapping them if out of order. In each pass, the largest remaining element bubbles up to the end of the array.',
+    manualRefRo: 'Manual pag. 81–82',
+    manualRefEn: 'Textbook pp. 81–82'
   },
   {
     id: 'q5',
     questionNumber: 5,
-    title: 'Căutarea Liniară vs Căutarea Binară',
-    questionText:
+    titleRo: 'Căutarea Liniară vs Căutarea Binară',
+    titleEn: 'Linear Search vs Binary Search',
+    questionTextRo:
       'De ce algoritmul de Căutare Binară este considerabil mai rapid decât Căutarea Liniară și care este cerința sa obligatorie (pag. 82–83)?',
-    hint: 'La fiecare pas se elimină jumătate din elementele rămase, dar vectorul trebuie să fie ordonat.',
+    questionTextEn:
+      'Why is Binary Search significantly faster than Linear Search, and what is its mandatory prerequisite (pp. 82–83)?',
+    hintRo: 'La fiecare pas se elimină jumătate din elementele rămase, dar vectorul trebuie să fie ordonat.',
+    hintEn: 'At each step half of the remaining elements are discarded, but the array must be sorted.',
     options: [
-      { id: 'a', text: 'A. Căutarea binară funcționează doar pe telefoane mobile' },
-      { id: 'b', text: 'B. Necesită ca vectorul să fie obligatoriu sortat; comparând direct cu mijlocul intervalului (mij = (st + dr) / 2), înjumătățește spațiul de căutare la fiecare pas' },
-      { id: 'c', text: 'C. Căutarea binară caută doar elementele de valoare 0 sau 1' },
-      { id: 'd', text: 'D. Căutarea binară face exact același număr de comparații ca cea liniară' }
+      {
+        id: 'a',
+        textRo: 'A. Căutarea binară funcționează doar pe telefoane mobile',
+        textEn: 'A. Binary search only works on mobile phones'
+      },
+      {
+        id: 'b',
+        textRo: 'B. Necesită ca vectorul să fie obligatoriu sortat; comparând direct cu mijlocul intervalului (mij = (st + dr) / 2), înjumătățește spațiul de căutare la fiecare pas',
+        textEn: 'B. Requires the array to be sorted; comparing directly to the midpoint (mid = (left + right) / 2), it halves the search space at each step'
+      },
+      {
+        id: 'c',
+        textRo: 'C. Căutarea binară caută doar elementele de valoare 0 sau 1',
+        textEn: 'C. Binary search only searches for 0 or 1 values'
+      },
+      {
+        id: 'd',
+        textRo: 'D. Căutarea binară face exact același număr de comparații ca cea liniară',
+        textEn: 'D. Binary search performs the exact same number of comparisons as linear search'
+      }
     ],
     correctOptionId: 'b',
-    explanation:
+    explanationRo:
       'Corect! Căutarea binară presupune ca vectorul să fie ordonat. Comparând valoarea căutată cu elementul median, elimină la fiecare iterație jumătate din elemente, obținând o complexitate logaritmică extraordinar de rapidă.',
-    manualRef: 'Manual pag. 82–83'
+    explanationEn:
+      'Correct! Binary search requires a sorted array. Comparing the target with the median element, it discards half of the candidate elements in every iteration, achieving remarkably fast logarithmic complexity.',
+    manualRefRo: 'Manual pag. 82–83',
+    manualRefEn: 'Textbook pp. 82–83'
   }
 ];
 
@@ -136,6 +228,8 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [activeHintId, setActiveHintId] = useState<string | null>(null);
@@ -209,22 +303,38 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
-                  Modulul 3D • Nivelul 7 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 7 din 7' : 'Module 3D • Level 7 of 7'}
                 </span>
-                <span className="text-xs text-indigo-300">Manual Art Klett pag. 84</span>
+                <span className="text-xs text-indigo-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 84' : 'Art Klett Textbook p. 84'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Evaluare Sumativă: Tablouri Unidimensionale (Vectori), Căutare & Sortare
+                {lang === 'ro'
+                  ? 'Evaluare Sumativă: Tablouri Unidimensionale (Vectori), Căutare & Sortare'
+                  : 'Summative Exam: One-Dimensional Arrays (Vectors), Search & Sorting'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-indigo-300 uppercase tracking-wider block">Standard Național</span>
-            <span className="text-lg font-bold text-cyan-300">5 Întrebări Oficiale</span>
+            <span className="text-xs text-indigo-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Standard Național' : 'National Standard'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? '5 Întrebări Oficiale' : '5 Official Questions'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-indigo-100/90 leading-relaxed max-w-3xl">
-          Demonstrează stăpânirea structurilor de date liniare (vectori), indexării de la 0, algoritmilor de căutare (liniară și binară), inserării/ștergerii și sortării Bubble Sort pentru a obține <strong>Diploma Oficială C++: Arrays & Data Structures Specialist</strong>!
+          {lang === 'ro' ? (
+            <>
+              Demonstrează stăpânirea structurilor de date liniare (vectori), indexării de la 0, algoritmilor de căutare (liniară și binară), inserării/ștergerii și sortării Bubble Sort pentru a obține <strong>Diploma Oficială C++: Arrays & Data Structures Specialist</strong>!
+            </>
+          ) : (
+            <>
+              Demonstrate mastery of linear data structures (vectors/arrays), 0-based indexing, searching algorithms (linear & binary), insertion/deletion, and Bubble Sort to earn your <strong>Official C++ Certificate: Arrays & Data Structures Specialist</strong>!
+            </>
+          )}
         </p>
       </div>
 
@@ -256,14 +366,18 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
                     {q.questionNumber}
                   </span>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-100">{q.title}</h3>
-                    <span className="text-[11px] text-slate-400 font-medium">{q.manualRef}</span>
+                    <h3 className="text-sm font-bold text-slate-100">
+                      {lang === 'ro' ? q.titleRo : q.titleEn}
+                    </h3>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      {lang === 'ro' ? q.manualRefRo : q.manualRefEn}
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <QuestionHint
-                    hint={q.hint}
+                    hint={lang === 'ro' ? q.hintRo : q.hintEn}
                     isOpen={activeHintId === q.id}
                     onToggle={() => setActiveHintId(activeHintId === q.id ? null : q.id)}
                   />
@@ -278,12 +392,12 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
                       {isCorrect ? (
                         <>
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>Corect (+20p)</span>
+                          <span>{lang === 'ro' ? 'Corect (+20p)' : 'Correct (+20p)'}</span>
                         </>
                       ) : (
                         <>
                           <AlertTriangle className="w-3.5 h-3.5" />
-                          <span>Incorect (0p)</span>
+                          <span>{lang === 'ro' ? 'Incorect (0p)' : 'Incorrect (0p)'}</span>
                         </>
                       )}
                     </span>
@@ -293,7 +407,9 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
 
               {/* Question Body */}
               <div className="p-5 space-y-4">
-                <p className="text-sm text-slate-200 leading-relaxed font-medium">{q.questionText}</p>
+                <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                  {lang === 'ro' ? q.questionTextRo : q.questionTextEn}
+                </p>
 
                 {/* Cooldown banner if wrong */}
                 {locked && <PedagogicalReflectionBanner remainingSeconds={remainingCooldown} />}
@@ -340,7 +456,9 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
                         >
                           {opt.id.toUpperCase()}
                         </span>
-                        <span className="flex-1 leading-snug">{opt.text}</span>
+                        <span className="flex-1 leading-snug">
+                          {lang === 'ro' ? opt.textRo : opt.textEn}
+                        </span>
                       </button>
                     );
                   })}
@@ -349,9 +467,13 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
                 {/* Explanation */}
                 {submitted && (
                   <AnswerExplanation
-                    explanation={q.explanation}
+                    explanation={lang === 'ro' ? q.explanationRo : q.explanationEn}
                     isCorrect={isCorrect}
-                    correctAnswerText={q.options.find((o) => o.id === q.correctOptionId)?.text}
+                    correctAnswerText={
+                      lang === 'ro'
+                        ? q.options.find((o) => o.id === q.correctOptionId)?.textRo
+                        : q.options.find((o) => o.id === q.correctOptionId)?.textEn
+                    }
                   />
                 )}
               </div>
@@ -365,11 +487,17 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
         {!submitted ? (
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-semibold text-slate-200">Finalizare Evaluare Sumativă</h3>
+              <h3 className="text-sm font-semibold text-slate-200">
+                {lang === 'ro' ? 'Finalizare Evaluare Sumativă' : 'Complete Summative Evaluation'}
+              </h3>
               <p className="text-xs text-slate-400">
                 {allAnswered
-                  ? 'Ai răspuns la toate cele 5 întrebări! Apasă butonul pentru corectare oficială.'
-                  : `Ai răspuns la ${Object.keys(selectedAnswers).length} din 5 întrebări.`}
+                  ? lang === 'ro'
+                    ? 'Ai răspuns la toate cele 5 întrebări! Apasă butonul pentru corectare oficială.'
+                    : 'You answered all 5 questions! Click the button for official grading.'
+                  : lang === 'ro'
+                  ? `Ai răspuns la ${Object.keys(selectedAnswers).length} din 5 întrebări.`
+                  : `You answered ${Object.keys(selectedAnswers).length} out of 5 questions.`}
               </p>
             </div>
             <button
@@ -382,25 +510,33 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
               }`}
             >
               <FileCheck className="w-4 h-4" />
-              <span>Trimite Evaluarea spre Notare</span>
+              <span>{lang === 'ro' ? 'Trimite Evaluarea spre Notare' : 'Submit Evaluation for Grading'}</span>
             </button>
           </div>
         ) : (
           <div className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
               <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 block">Rezultat Evaluare Sumativă</span>
+                <span className="text-xs uppercase tracking-wider text-slate-400 block">
+                  {lang === 'ro' ? 'Rezultat Evaluare Sumativă' : 'Summative Evaluation Result'}
+                </span>
                 <div className="text-2xl font-black text-white flex items-center space-x-2 mt-0.5">
                   <span className={score >= 70 ? 'text-emerald-400' : 'text-rose-400'}>
-                    Nota {romanianGrade} / 10
+                    {lang === 'ro' ? `Nota ${romanianGrade} / 10` : `Grade ${romanianGrade} / 10`}
                   </span>
-                  <span className="text-sm font-normal text-slate-400">({score} puncte din 100)</span>
+                  <span className="text-sm font-normal text-slate-400">
+                    ({score} {lang === 'ro' ? 'puncte din 100' : 'points out of 100'})
+                  </span>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-slate-400 block">Condiție Promovare:</span>
-                <span className="text-xs font-bold text-cyan-300">Minim Nota 7.00 (70%)</span>
+                <span className="text-xs text-slate-400 block">
+                  {lang === 'ro' ? 'Condiție Promovare:' : 'Passing Requirement:'}
+                </span>
+                <span className="text-xs font-bold text-cyan-300">
+                  {lang === 'ro' ? 'Minim Nota 7.00 (70%)' : 'Minimum Grade 7.00 (70%)'}
+                </span>
               </div>
             </div>
 
@@ -408,17 +544,27 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-start space-x-3 text-emerald-200">
                 <Sparkles className="w-5 h-5 flex-shrink-0 text-emerald-400 mt-0.5" />
                 <div className="text-xs leading-relaxed">
-                  <strong>Felicitări! Ai promovat cu succes Evaluarea Sumativă a Modulului 3D!</strong>
+                  <strong>
+                    {lang === 'ro'
+                      ? 'Felicitări! Ai promovat cu succes Evaluarea Sumativă a Modulului 3D!'
+                      : 'Congratulations! You passed the Module 3D Summative Evaluation!'}
+                  </strong>
                   <br />
-                  Ai demonstrat o înțelegere avansată a tablourilor unidimensionale, a indexării continue în RAM, a algoritmilor de căutare și a sortării Bubble Sort. Apasă butonul de mai jos pentru a revendica <strong>Diploma Oficială C++ de Arrays & Data Structures Specialist</strong>!
+                  {lang === 'ro'
+                    ? 'Ai demonstrat o înțelegere avansată a tablourilor unidimensionale, a indexării continue în RAM, a algoritmilor de căutare și a sortării Bubble Sort. Apasă butonul de mai jos pentru a revendica Diploma Oficială C++ de Arrays & Data Structures Specialist!'
+                    : 'You demonstrated advanced mastery of one-dimensional arrays, RAM contiguous indexing, search algorithms, and Bubble Sort. Click the button below to claim your Official C++ Arrays & Data Structures Specialist Certificate!'}
                 </div>
               </div>
             ) : (
               <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 flex items-start space-x-3 text-rose-200">
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 text-rose-400 mt-0.5" />
                 <div className="text-xs leading-relaxed">
-                  <strong>Punctaj insuficient pentru promovare.</strong> Este necesară nota minimă 7.00.
-                  Revizuiește conceptele, citește explicațiile detaliate și încearcă din nou!
+                  <strong>
+                    {lang === 'ro' ? 'Punctaj insuficient pentru promovare.' : 'Insufficient score to pass.'}
+                  </strong>{' '}
+                  {lang === 'ro'
+                    ? 'Este necesară nota minimă 7.00. Revizuiește conceptele, citește explicațiile detaliate și încearcă din nou!'
+                    : 'A minimum grade of 7.00 is required. Review the concepts, read the detailed explanations, and try again!'}
                 </div>
               </div>
             )}
@@ -433,7 +579,11 @@ export const A4Level7_VectorsAndSortingExam: React.FC<A4Level7Props> = ({
                     : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
                 }`}
               >
-                <span>Revendică Diploma & Finalizează Modulul 3D</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Revendică Diploma & Finalizează Modulul 3D'
+                    : 'Claim Certificate & Complete Module 3D'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

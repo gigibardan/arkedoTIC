@@ -14,6 +14,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level3Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -25,6 +26,8 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [arrayElements, setArrayElements] = useState<number[]>([18, 45, 9, 27, 45, 63, 12, 84]);
   const [targetX, setTargetX] = useState<number>(45);
   const [scannedIdx, setScannedIdx] = useState<number>(-1);
@@ -95,22 +98,38 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
-                  Modulul 3D • Nivelul 3 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 3 din 7' : 'Module 3D • Level 3 of 7'}
                 </span>
-                <span className="text-xs text-indigo-300">Manual Art Klett pag. 79–80</span>
+                <span className="text-xs text-indigo-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 79–80' : 'Art Klett Textbook pp. 79–80'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Algoritmul de Căutare Secvențială (Liniară) în Tablouri
+                {lang === 'ro'
+                  ? 'Algoritmul de Căutare Secvențială (Liniară) în Tablouri'
+                  : 'Sequential (Linear) Search Algorithm in Arrays'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-indigo-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 3: Căutare Liniară</span>
+            <span className="text-xs text-indigo-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 3: Căutare Liniară' : 'Level 3: Linear Search'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-indigo-100/90 leading-relaxed max-w-3xl">
-          Căutarea secvențială (liniară) examinează elementele vectorului pe rând, de la primul până la ultimul, comparând fiecare valoare <code className="bg-indigo-950 px-1 rounded text-cyan-300 font-mono">v[i]</code> cu cheia căutată <code className="bg-indigo-950 px-1 rounded text-amber-300 font-mono">X</code>. Funcționează pe orice tablou, indiferent dacă este sortat sau nu!
+          {lang === 'ro' ? (
+            <>
+              Căutarea secvențială (liniară) examinează elementele vectorului pe rând, de la primul până la ultimul, comparând fiecare valoare <code className="bg-indigo-950 px-1 rounded text-cyan-300 font-mono">v[i]</code> cu cheia căutată <code className="bg-indigo-950 px-1 rounded text-amber-300 font-mono">X</code>. Funcționează pe orice tablou, indiferent dacă este sortat sau nu!
+            </>
+          ) : (
+            <>
+              Sequential (linear) search examines array elements one by one, from first to last, comparing each value <code className="bg-indigo-950 px-1 rounded text-cyan-300 font-mono">v[i]</code> with search key <code className="bg-indigo-950 px-1 rounded text-amber-300 font-mono">X</code>. It works on any array, whether sorted or unsorted!
+            </>
+          )}
         </p>
       </div>
 
@@ -119,11 +138,13 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
         <div className="flex flex-wrap items-center justify-between border-b border-slate-800 pb-3 gap-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <Eye className="w-4 h-4 text-cyan-400" />
-            Scaner Liniar Vizual în Timp Real
+            {lang === 'ro' ? 'Scaner Liniar Vizual în Timp Real' : 'Real-Time Visual Linear Scanner'}
           </h3>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-300">Valoare căutată (X):</span>
+            <span className="text-xs text-slate-300">
+              {lang === 'ro' ? 'Valoare căutată (X):' : 'Search target (X):'}
+            </span>
             <input
               type="number"
               value={targetX}
@@ -141,7 +162,7 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
               className="px-4 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:bg-slate-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow"
             >
               <Play className="w-3.5 h-3.5 fill-white" />
-              Pornește Căutarea
+              {lang === 'ro' ? 'Pornește Căutarea' : 'Start Search'}
             </button>
           </div>
         </div>
@@ -170,7 +191,19 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
                   <div className="text-[10px] text-slate-500 font-mono mb-1">v[{idx}]</div>
                   <div className="text-lg font-bold font-mono">{val}</div>
                   <div className="text-[10px] mt-1 font-semibold">
-                    {isMatch ? 'GĂSIT! ✓' : isBeingScanned ? 'Testare...' : isAlreadyScanned ? '!= X' : 'În așteptare'}
+                    {isMatch
+                      ? lang === 'ro'
+                        ? 'GĂSIT! ✓'
+                        : 'FOUND! ✓'
+                      : isBeingScanned
+                      ? lang === 'ro'
+                        ? 'Testare...'
+                        : 'Testing...'
+                      : isAlreadyScanned
+                      ? '!= X'
+                      : lang === 'ro'
+                      ? 'În așteptare'
+                      : 'Waiting'}
                   </div>
                 </div>
               );
@@ -191,18 +224,29 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span>
                 {foundIndices.length > 0 ? (
-                  <>
-                    Valoarea <strong>X = {targetX}</strong> a fost găsită de{' '}
-                    <strong className="text-cyan-300">{foundIndices.length} ori</strong>, la indicii:{' '}
-                    <span className="font-mono font-bold">[{foundIndices.join(', ')}]</span>.
-                  </>
-                ) : (
+                  lang === 'ro' ? (
+                    <>
+                      Valoarea <strong>X = {targetX}</strong> a fost găsită de{' '}
+                      <strong className="text-cyan-300">{foundIndices.length} ori</strong>, la indicii:{' '}
+                      <span className="font-mono font-bold">[{foundIndices.join(', ')}]</span>.
+                    </>
+                  ) : (
+                    <>
+                      Value <strong>X = {targetX}</strong> was found{' '}
+                      <strong className="text-cyan-300">{foundIndices.length} time(s)</strong> at indices:{' '}
+                      <span className="font-mono font-bold">[{foundIndices.join(', ')}]</span>.
+                    </>
+                  )
+                ) : lang === 'ro' ? (
                   <>Valoarea <strong>X = {targetX}</strong> NU a fost găsită în vector după 8 comparații.</>
+                ) : (
+                  <>Value <strong>X = {targetX}</strong> was NOT found in the array after 8 comparisons.</>
                 )}
               </span>
             </div>
             <span className="text-[11px] font-mono text-slate-400">
-              Comparații efectuate: {arrayElements.length}
+              {lang === 'ro' ? 'Comparații efectuate: ' : 'Comparisons performed: '}
+              {arrayElements.length}
             </span>
           </div>
         )}
@@ -212,7 +256,9 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-3 font-mono text-xs">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2 font-sans border-b border-slate-800 pb-2">
           <Terminal className="w-4 h-4 text-emerald-400" />
-          Implementare C++ cu Indicator Boolean & Ieșire Rapidă (Manual pag. 80)
+          {lang === 'ro'
+            ? 'Implementare C++ cu Indicator Boolean & Ieșire Rapidă (Manual pag. 80)'
+            : 'C++ Implementation with Boolean Flag & Early Exit (Textbook p. 80)'}
         </h3>
         <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1 text-slate-300">
           <div><span className="text-indigo-400">bool</span> gasit = <span className="text-pink-400">false</span>;</div>
@@ -224,7 +270,11 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
             <span className="text-pink-400">if</span> (v[i] == X) &#123;
           </div>
           <div className="pl-8 text-emerald-300">gasit = true; pozitie = i;</div>
-          <div className="pl-8 text-purple-300">break; <span className="text-slate-500">// oprim bucla dacă căutăm doar prima apariție!</span></div>
+          <div className="pl-8 text-purple-300">
+            break; <span className="text-slate-500">
+              {lang === 'ro' ? '// oprim bucla dacă căutăm doar prima apariție!' : '// stop loop if searching for first occurrence!'}
+            </span>
+          </div>
           <div className="pl-4">&#125;</div>
           <div>&#125;</div>
         </div>
@@ -234,21 +284,37 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 79–80)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 79–80)' : 'Official C++ Checkpoint (Textbook pp. 79–80)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Care este numărul maxim de comparații efectuate de algoritmul de căutare liniară într-un vector cu <code className="text-amber-300 font-mono">n</code> elemente?
+              {lang === 'ro'
+                ? 'Care este numărul maxim de comparații efectuate de algoritmul de căutare liniară într-un vector cu n elemente?'
+                : 'What is the maximum number of comparisons performed by linear search in an array with n elements?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: '1 comparație' },
-                { id: 'b', label: 'Exact n / 2 comparații mereu' },
-                { id: 'c', label: 'n comparații (în cel mai defavorabil caz, când elementul este pe ultima poziție sau nu există deloc)' }
+                {
+                  id: 'a',
+                  labelRo: '1 comparație',
+                  labelEn: '1 comparison'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Exact n / 2 comparații mereu',
+                  labelEn: 'Always exactly n / 2 comparisons'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'n comparații (în cel mai defavorabil caz, când elementul este pe ultima poziție sau nu există deloc)',
+                  labelEn: 'n comparisons (in the worst case, when element is in the last position or absent)'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -265,7 +331,7 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'c' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -274,15 +340,31 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Ce rol are instrucțiunea <code className="text-purple-300 font-mono">break;</code> plasată în interiorul condiției <code className="text-pink-400 font-mono">if (v[i] == X)</code>?
+              {lang === 'ro'
+                ? 'Ce rol are instrucțiunea break; plasată în interiorul condiției if (v[i] == X)?'
+                : 'What is the role of the break; statement placed inside the condition if (v[i] == X)?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Șterge elementul din memorie' },
-                { id: 'b', label: 'Oprește imediat parcurgerea buclei de îndată ce am găsit prima apariție a lui X, economisind timp de execuție' },
-                { id: 'c', label: 'Inversează ordinea elementelor din tablou' }
+                {
+                  id: 'a',
+                  labelRo: 'Șterge elementul din memorie',
+                  labelEn: 'Deletes the element from memory'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Oprește imediat parcurgerea buclei de îndată ce am găsit prima apariție a lui X, economisind timp de execuție',
+                  labelEn: 'Immediately stops loop traversal once first occurrence of X is found, saving execution time'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Inversează ordinea elementelor din tablou',
+                  labelEn: 'Reverses the order of elements in the array'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -299,7 +381,7 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -318,8 +400,12 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai explorat algoritmul de căutare secvențială și optimizarea cu break.'
-              : 'Rulează căutarea liniară și răspunde corect la cele două întrebări.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai explorat algoritmul de căutare secvențială și optimizarea cu break.'
+                : 'Excellent! You mastered sequential search and break optimization.'
+              : lang === 'ro'
+              ? 'Rulează căutarea liniară și răspunde corect la cele două întrebări.'
+              : 'Run linear search and correctly answer both questions.'}
           </span>
         </div>
         <button
@@ -331,7 +417,7 @@ export const A4Level3_LinearSearchLab: React.FC<A4Level3Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Inserare & Ștergere</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Inserare & Ștergere' : 'Next Level: Insertion & Deletion'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

@@ -14,6 +14,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level6Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -27,19 +28,22 @@ interface BinaryStepLog {
   dr: number;
   mij: number;
   valMij: number;
-  decision: string;
+  decisionRo: string;
+  decisionEn: string;
+  isMatch?: boolean;
 }
 
 export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   // Sorted array for Binary Search
   const sortedArray = [3, 7, 12, 18, 25, 31, 42, 56, 64, 73, 81, 95];
   const [targetX, setTargetX] = useState<number>(42);
   const [binaryLogs, setBinaryLogs] = useState<BinaryStepLog[]>([]);
   const [activeMij, setActiveMij] = useState<number | null>(null);
-  const [activeInterval, setActiveInterval] = useState<[number, number] | null>(null);
   const [searchFound, setSearchFound] = useState<boolean | null>(null);
   const [hasRunSearch, setHasRunSearch] = useState<boolean>(false);
 
@@ -51,7 +55,6 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
     sounds.playClick();
     setBinaryLogs([]);
     setActiveMij(null);
-    setActiveInterval(null);
     setSearchFound(null);
 
     let st = 0;
@@ -71,7 +74,9 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
           dr,
           mij,
           valMij,
-          decision: `EGALITATE! v[mij] == ${targetX}. Elementul a fost găsit pe indexul [${mij}]!`
+          decisionRo: `EGALITATE! v[mij] == ${targetX}. Elementul a fost găsit pe indexul [${mij}]!`,
+          decisionEn: `EQUALITY! v[mij] == ${targetX}. Element found at index [${mij}]!`,
+          isMatch: true
         });
         found = true;
         break;
@@ -82,7 +87,8 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
           dr,
           mij,
           valMij,
-          decision: `${valMij} < ${targetX} &rarr; Căutăm în jumătatea DREAPTĂ: st devine ${mij + 1}`
+          decisionRo: `${valMij} < ${targetX} → Căutăm în jumătatea DREAPTĂ: st devine ${mij + 1}`,
+          decisionEn: `${valMij} < ${targetX} → Searching RIGHT half: left boundary becomes ${mij + 1}`
         });
         st = mij + 1;
       } else {
@@ -92,7 +98,8 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
           dr,
           mij,
           valMij,
-          decision: `${valMij} > ${targetX} &rarr; Căutăm în jumătatea STÂNGĂ: dr devine ${mij - 1}`
+          decisionRo: `${valMij} > ${targetX} → Căutăm în jumătatea STÂNGĂ: dr devine ${mij - 1}`,
+          decisionEn: `${valMij} > ${targetX} → Searching LEFT half: right boundary becomes ${mij - 1}`
         });
         dr = mij - 1;
       }
@@ -106,7 +113,8 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
         dr,
         mij: -1,
         valMij: -1,
-        decision: `Interval epuizat (st > dr). Elementul ${targetX} NU se află în vector!`
+        decisionRo: `Interval epuizat (st > dr). Elementul ${targetX} NU se află în vector!`,
+        decisionEn: `Interval exhausted (left > right). Element ${targetX} is NOT in the array!`
       });
     }
 
@@ -150,22 +158,38 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-500/30 text-teal-200 border border-teal-400/30">
-                  Modulul 3D • Nivelul 6 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 6 din 7' : 'Module 3D • Level 6 of 7'}
                 </span>
-                <span className="text-xs text-teal-300">Manual Art Klett pag. 82–83</span>
+                <span className="text-xs text-teal-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 82–83' : 'Art Klett Textbook pp. 82–83'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Căutarea Binară (Binary Search) pe Tablouri Sortate
+                {lang === 'ro'
+                  ? 'Căutarea Binară (Binary Search) pe Tablouri Sortate'
+                  : 'Binary Search on Sorted Arrays'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-teal-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 6: Căutare Binară</span>
+            <span className="text-xs text-teal-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 6: Căutare Binară' : 'Level 6: Binary Search'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-teal-100/90 leading-relaxed max-w-3xl">
-          Pe un vector deja ordonat crescător, nu mai este nevoie să căutăm element cu element! Prin <strong>Căutarea Binară</strong> comparăm cheia căutată direct cu elementul din mijloc (<code className="bg-teal-950 px-1 rounded text-cyan-300 font-mono">mij = (st + dr) / 2</code>) și eliminăm dintr-o singură lovitură jumătate din elementele rămase. Este cel mai rapid algoritm de căutare din programa de gimnaziu!
+          {lang === 'ro' ? (
+            <>
+              Pe un vector deja ordonat crescător, nu mai este nevoie să căutăm element cu element! Prin <strong>Căutarea Binară</strong> comparăm cheia căutată direct cu elementul din mijloc (<code className="bg-teal-950 px-1 rounded text-cyan-300 font-mono">mij = (st + dr) / 2</code>) și eliminăm dintr-o singură lovitură jumătate din elementele rămase. Este cel mai rapid algoritm de căutare din programa de gimnaziu!
+            </>
+          ) : (
+            <>
+              On an already sorted array, there is no need to check element by element! With <strong>Binary Search</strong> we compare the target directly to the middle element (<code className="bg-teal-950 px-1 rounded text-cyan-300 font-mono">mid = (left + right) / 2</code>) and eliminate half of the search range in a single step. It is the fastest search algorithm in middle school computer science!
+            </>
+          )}
         </p>
       </div>
 
@@ -174,11 +198,15 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
         <div className="flex flex-wrap items-center justify-between border-b border-slate-800 pb-3 gap-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <GitCompare className="w-4 h-4 text-cyan-400" />
-            Simulator Vizual de Înjumătățire a Intervalului [st, dr]
+            {lang === 'ro'
+              ? 'Simulator Vizual de Înjumătățire a Intervalului [st, dr]'
+              : 'Visual Interval Halving Simulator [left, right]'}
           </h3>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-300">Valoare de căutat (X):</span>
+            <span className="text-xs text-slate-300">
+              {lang === 'ro' ? 'Valoare de căutat (X):' : 'Search value (X):'}
+            </span>
             <input
               type="number"
               value={targetX}
@@ -193,14 +221,16 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
               className="px-4 py-1.5 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow"
             >
               <Play className="w-3.5 h-3.5 fill-white" />
-              Execută Căutarea Binară
+              {lang === 'ro' ? 'Execută Căutarea Binară' : 'Execute Binary Search'}
             </button>
           </div>
         </div>
 
         {/* Sorted Vector Display */}
         <div className="space-y-2 pt-2">
-          <span className="text-xs text-slate-400 block font-mono">Vector Sortat Crescător (12 elemente):</span>
+          <span className="text-xs text-slate-400 block font-mono">
+            {lang === 'ro' ? 'Vector Sortat Crescător (12 elemente):' : 'Sorted Array in Ascending Order (12 elements):'}
+          </span>
           <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-2">
             {sortedArray.map((val, idx) => {
               const isFoundMatch = searchFound && val === targetX;
@@ -226,22 +256,28 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
         {hasRunSearch && (
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2.5 font-mono text-xs">
             <span className="text-slate-400 font-sans font-semibold block text-xs">
-              Traseul Deciziilor Algoritmice (Număr Pași: {binaryLogs.length}):
+              {lang === 'ro'
+                ? `Traseul Deciziilor Algoritmice (Număr Pași: ${binaryLogs.length}):`
+                : `Algorithmic Decision Trail (Step Count: ${binaryLogs.length}):`}
             </span>
             <div className="space-y-1.5">
               {binaryLogs.map((log) => (
                 <div
                   key={log.step}
                   className={`p-2 rounded border flex flex-wrap items-center justify-between gap-2 ${
-                    log.decision.startsWith('EGALITATE')
+                    log.isMatch
                       ? 'bg-emerald-950/70 border-emerald-500 text-emerald-300 font-bold'
                       : 'bg-slate-900 border-slate-800 text-slate-300'
                   }`}
                 >
                   <span>
-                    Pasul #{log.step}: Interval [{log.st} ... {log.dr}] &rarr; mij = {log.mij} (valoare: {log.valMij})
+                    {lang === 'ro'
+                      ? `Pasul #${log.step}: Interval [${log.st} ... ${log.dr}] → mij = ${log.mij} (valoare: ${log.valMij})`
+                      : `Step #${log.step}: Range [${log.st} ... ${log.dr}] → mid = ${log.mij} (value: ${log.valMij})`}
                   </span>
-                  <span className="text-[11px] font-sans font-medium text-cyan-300">{log.decision}</span>
+                  <span className="text-[11px] font-sans font-medium text-cyan-300">
+                    {lang === 'ro' ? log.decisionRo : log.decisionEn}
+                  </span>
                 </div>
               ))}
             </div>
@@ -253,21 +289,37 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 82–83)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 82–83)' : 'Official C++ Checkpoint (Textbook pp. 82–83)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Care este condiția preliminară <strong>obligatorie</strong> pentru a putea aplica algoritmul de Căutare Binară pe un vector?
+              {lang === 'ro'
+                ? 'Care este condiția preliminară obligatorie pentru a putea aplica algoritmul de Căutare Binară pe un vector?'
+                : 'What is the mandatory prerequisite to apply Binary Search on an array?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Elementele vectorului trebuie să fie toate numere pare' },
-                { id: 'b', label: 'Vectorul trebuie să fie ordonat (sortat crescător sau descrescător)' },
-                { id: 'c', label: 'Vectorul trebuie să aibă cel puțin 1000 de elemente' }
+                {
+                  id: 'a',
+                  labelRo: 'Elementele vectorului trebuie să fie toate numere pare',
+                  labelEn: 'Array elements must all be even numbers'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Vectorul trebuie să fie ordonat (sortat crescător sau descrescător)',
+                  labelEn: 'The array must be ordered (sorted ascending or descending)'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Vectorul trebuie să aibă cel puțin 1000 de elemente',
+                  labelEn: 'The array must have at least 1000 elements'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -284,7 +336,7 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -293,15 +345,31 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Câte comparații face cel mult căutarea binară într-un tablou sortat de 1024 de elemente?
+              {lang === 'ro'
+                ? 'Câte comparații face cel mult căutarea binară într-un tablou sortat de 1024 de elemente?'
+                : 'How many comparisons does binary search perform at most in a sorted array of 1024 elements?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Doar aproximativ 10 sau 11 comparații (deoarece 2^10 = 1024) — viteză excepțională!' },
-                { id: 'b', label: '1024 de comparații' },
-                { id: 'c', label: '512 comparații' }
+                {
+                  id: 'a',
+                  labelRo: 'Doar aproximativ 10 sau 11 comparații (deoarece 2^10 = 1024) — viteză excepțională!',
+                  labelEn: 'Only around 10 or 11 comparisons (since 2^10 = 1024) — exceptional speed!'
+                },
+                {
+                  id: 'b',
+                  labelRo: '1024 de comparații',
+                  labelEn: '1024 comparisons'
+                },
+                {
+                  id: 'c',
+                  labelRo: '512 comparații',
+                  labelEn: '512 comparisons'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -318,7 +386,7 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -337,8 +405,12 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai explorat căutarea binară și eficiența logaritmică a înjumătățirii intervalului.'
-              : 'Rulează o căutare binară în simulator și răspunde corect la cele 2 întrebări.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai explorat căutarea binară și eficiența logaritmică a înjumătățirii intervalului.'
+                : 'Excellent! You mastered binary search and logarithmic search range halving.'
+              : lang === 'ro'
+              ? 'Rulează o căutare binară în simulator și răspunde corect la cele 2 întrebări.'
+              : 'Run a binary search in the simulator and correctly answer both questions.'}
           </span>
         </div>
         <button
@@ -350,7 +422,7 @@ export const A4Level6_SelectionSortAndBinarySearch: React.FC<A4Level6Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Examenul Sumativ Modulul 3D</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Examenul Sumativ Modulul 3D' : 'Next Level: Module 3D Final Exam'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

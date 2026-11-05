@@ -15,6 +15,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A5Level2Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -26,6 +27,8 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [valX, setValX] = useState<number>(10);
   const [valY, setValY] = useState<number>(20);
 
@@ -45,25 +48,33 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
 
   const handleTestPassByValue = () => {
     sounds.playClick();
-    // In pass-by-value: copy is swapped inside function, but x and y in caller remain 10 and 20!
     setActualX(valX);
     setActualY(valY);
     setTestedMode('value');
     setTestedBoth((prev) => ({ ...prev, value: true }));
 
-    setLogMessages([
-      `1. main(): x = ${valX}, y = ${valY}`,
-      `2. Apel: swapPrinValoare(x, y) &rarr; s-au creat COPII locale: a = ${valX}, b = ${valY}`,
-      `3. În funcție: a și b au fost interschimbate (a devine ${valY}, b devine ${valX})`,
-      `4. Ieșire din funcție: copiile locale a și b sunt ȘTERSE din memorie!`,
-      `5. Rezultat în main(): x = ${valX}, y = ${valY} (NESCHIMBATE! swap-ul a eșuat în main)`
-    ]);
+    if (lang === 'ro') {
+      setLogMessages([
+        `1. main(): x = ${valX}, y = ${valY}`,
+        `2. Apel: swapPrinValoare(x, y) → s-au creat COPII locale: a = ${valX}, b = ${valY}`,
+        `3. În funcție: a și b au fost interschimbate (a devine ${valY}, b devine ${valX})`,
+        `4. Ieșire din funcție: copiile locale a și b sunt ȘTERSE din memorie!`,
+        `5. Rezultat în main(): x = ${valX}, y = ${valY} (NESCHIMBATE! swap-ul a eșuat în main)`
+      ]);
+    } else {
+      setLogMessages([
+        `1. main(): x = ${valX}, y = ${valY}`,
+        `2. Call: swapByValue(x, y) → local COPIES created: a = ${valX}, b = ${valY}`,
+        `3. Inside function: a and b were swapped (a becomes ${valY}, b becomes ${valX})`,
+        `4. Function exit: local copies a and b are DELETED from stack memory!`,
+        `5. Result in main(): x = ${valX}, y = ${valY} (UNCHANGED! swap failed to affect main)`
+      ]);
+    }
     sounds.playWrong();
   };
 
   const handleTestPassByReference = () => {
     sounds.playClick();
-    // In pass-by-reference: caller's x and y are actually swapped!
     const swappedX = valY;
     const swappedY = valX;
     setActualX(swappedX);
@@ -71,13 +82,23 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
     setTestedMode('reference');
     setTestedBoth((prev) => ({ ...prev, reference: true }));
 
-    setLogMessages([
-      `1. main(): x = ${valX}, y = ${valY}`,
-      `2. Apel: swapPrinReferinta(int &a, int &b) &rarr; NU s-au creat copii!`,
-      `3. Parametrii &a și &b sunt ALIASURI (referințe directe) la adresele lui x și y din main!`,
-      `4. În funcție: valorile de la adresele originale au fost inversate`,
-      `5. Rezultat în main(): x = ${swappedX}, y = ${swappedY} (SUCCES! Interschimbare realizată)`
-    ]);
+    if (lang === 'ro') {
+      setLogMessages([
+        `1. main(): x = ${valX}, y = ${valY}`,
+        `2. Apel: swapPrinReferinta(int &a, int &b) → NU s-au creat copii!`,
+        `3. Parametrii &a și &b sunt ALIASURI (referințe directe) la adresele lui x și y din main!`,
+        `4. În funcție: valorile de la adresele originale au fost inversate`,
+        `5. Rezultat în main(): x = ${swappedX}, y = ${swappedY} (SUCCES! Interschimbare realizată)`
+      ]);
+    } else {
+      setLogMessages([
+        `1. main(): x = ${valX}, y = ${valY}`,
+        `2. Call: swapByReference(int &a, int &b) → NO copies were created!`,
+        `3. Parameters &a and &b are ALIASES (direct references) to memory addresses of x and y in main!`,
+        `4. Inside function: values at original addresses were swapped`,
+        `5. Result in main(): x = ${swappedX}, y = ${swappedY} (SUCCESS! In-place swap completed)`
+      ]);
+    }
     sounds.playCorrect();
   };
 
@@ -117,22 +138,38 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/30 text-purple-200 border border-purple-400/30">
-                  Modulul 3E • Nivelul 2 din 7
+                  {lang === 'ro' ? 'Modulul 3E • Nivelul 2 din 7' : 'Module 3E • Level 2 of 7'}
                 </span>
-                <span className="text-xs text-purple-300">Manual Art Klett pag. 86</span>
+                <span className="text-xs text-purple-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 86' : 'Art Klett Textbook p. 86'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Transmiterea Parametrilor: Prin Valoare (Copie) vs Prin Referință (&)
+                {lang === 'ro'
+                  ? 'Transmiterea Parametrilor: Prin Valoare (Copie) vs Prin Referință (&)'
+                  : 'Parameter Passing: Pass-by-Value (Copy) vs Pass-by-Reference (&)'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-purple-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 2: Parametri & Referințe</span>
+            <span className="text-xs text-purple-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 2: Parametri & Referințe' : 'Level 2: Parameters & References'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-purple-100/90 leading-relaxed max-w-3xl">
-          Cea mai frecventă capcană la funcții în C++: dacă transmiți o variabilă simplă fără caracterul <code className="bg-purple-950 px-1 rounded text-cyan-300 font-mono">&</code>, funcția primește o <strong>copie</strong> a valorii! Pentru ca modificările dintr-o funcție să se întoarcă în programul principal (de ex. la o funcție de swap sau de citire), este obligatorie transmiterea <strong>prin referință</strong> (<code className="bg-purple-950 px-1 rounded text-amber-300 font-mono">&</code>).
+          {lang === 'ro' ? (
+            <>
+              Cea mai frecventă capcană la funcții în C++: dacă transmiți o variabilă simplă fără caracterul <code className="bg-purple-950 px-1 rounded text-cyan-300 font-mono">&</code>, funcția primește o <strong>copie</strong> a valorii! Pentru ca modificările dintr-o funcție să se întoarcă în programul principal (de ex. la o funcție de swap sau de citire), este obligatorie transmiterea <strong>prin referință</strong> (<code className="bg-purple-950 px-1 rounded text-amber-300 font-mono">&</code>).
+            </>
+          ) : (
+            <>
+              The most common trap with functions in C++: if you pass a simple variable without the <code className="bg-purple-950 px-1 rounded text-cyan-300 font-mono">&</code> character, the function receives a local <strong>copy</strong> of the value! For function modifications to persist back in the calling program (e.g. for swap or input functions), passing <strong>by reference</strong> (<code className="bg-purple-950 px-1 rounded text-amber-300 font-mono">&</code>) is mandatory.
+            </>
+          )}
         </p>
       </div>
 
@@ -143,20 +180,22 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
               <Code2 className="w-4 h-4 text-cyan-400" />
-              Variabilele din funcția main()
+              {lang === 'ro' ? 'Variabilele din funcția main()' : 'Variables in main() function'}
             </h3>
             <button
               onClick={handleReset}
               className="p-1 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs flex items-center gap-1"
             >
               <RotateCcw className="w-3 h-3" />
-              Reset
+              {lang === 'ro' ? 'Reset' : 'Reset'}
             </button>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-slate-400 block mb-1">x inițial:</label>
+              <label className="text-xs text-slate-400 block mb-1">
+                {lang === 'ro' ? 'x inițial:' : 'initial x:'}
+              </label>
               <input
                 type="number"
                 value={valX}
@@ -165,7 +204,9 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
               />
             </div>
             <div>
-              <label className="text-xs text-slate-400 block mb-1">y inițial:</label>
+              <label className="text-xs text-slate-400 block mb-1">
+                {lang === 'ro' ? 'y inițial:' : 'initial y:'}
+              </label>
               <input
                 type="number"
                 value={valY}
@@ -183,7 +224,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
             >
               <span className="flex items-center gap-2">
                 <Copy className="w-4 h-4 text-rose-400" />
-                <span>1. Testează Transmitere PRIN VALOARE (fără &)</span>
+                <span>{lang === 'ro' ? '1. Testează Transmitere PRIN VALOARE (fără &)' : '1. Test Pass-by-Value (without &)'}</span>
               </span>
               <span className="font-mono text-[10px] text-rose-400">swap(x, y)</span>
             </button>
@@ -194,7 +235,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
             >
               <span className="flex items-center gap-2">
                 <Link2 className="w-4 h-4 text-amber-300" />
-                <span>2. Testează Transmitere PRIN REFERINȚĂ (cu &)</span>
+                <span>{lang === 'ro' ? '2. Testează Transmitere PRIN REFERINȚĂ (cu &)' : '2. Test Pass-by-Reference (with &)'}</span>
               </span>
               <span className="font-mono text-[10px] text-amber-200">swap(&a, &b)</span>
             </button>
@@ -210,7 +251,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Testat Prin Valoare</span>
+              <span>{lang === 'ro' ? 'Testat Prin Valoare' : 'Pass-by-Value Tested'}</span>
             </div>
             <div
               className={`p-2 rounded-lg border flex items-center gap-1.5 ${
@@ -220,7 +261,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Testat Prin Referință</span>
+              <span>{lang === 'ro' ? 'Testat Prin Referință' : 'Pass-by-Ref Tested'}</span>
             </div>
           </div>
         </div>
@@ -230,7 +271,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
           <h3 className="text-sm font-semibold text-slate-200 flex items-center justify-between border-b border-slate-800 pb-3">
             <span className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-emerald-400" />
-              Starea Variabilelor în main() după Apel
+              {lang === 'ro' ? 'Starea Variabilelor în main() după Apel' : 'Variables in main() after Invocation'}
             </span>
             {testedMode && (
               <span
@@ -240,7 +281,9 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
                     : 'bg-rose-950 text-rose-300 border border-rose-500/40'
                 }`}
               >
-                Mod: {testedMode === 'reference' ? 'PRIN REFERINȚĂ (&)' : 'PRIN VALOARE'}
+                {lang === 'ro'
+                  ? `Mod: ${testedMode === 'reference' ? 'PRIN REFERINȚĂ (&)' : 'PRIN VALOARE'}`
+                  : `Mode: ${testedMode === 'reference' ? 'PASS-BY-REFERENCE (&)' : 'PASS-BY-VALUE'}`}
               </span>
             )}
           </h3>
@@ -248,30 +291,38 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
           {/* Current Values Display */}
           <div className="grid grid-cols-2 gap-4 font-mono text-center">
             <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span className="text-slate-400 text-xs block mb-1">x în main():</span>
+              <span className="text-slate-400 text-xs block mb-1">
+                {lang === 'ro' ? 'x în main():' : 'x in main():'}
+              </span>
               <span className="text-2xl font-bold text-cyan-300">{actualX}</span>
             </div>
             <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span className="text-slate-400 text-xs block mb-1">y în main():</span>
+              <span className="text-slate-400 text-xs block mb-1">
+                {lang === 'ro' ? 'y în main():' : 'y in main():'}
+              </span>
               <span className="text-2xl font-bold text-amber-300">{actualY}</span>
             </div>
           </div>
 
           {/* Trace Logs */}
           <div className="bg-black/90 p-3 rounded-lg border border-slate-800 font-mono text-xs space-y-1 min-h-[140px] max-h-[180px] overflow-y-auto">
-            <div className="text-slate-500 text-[11px]">// Jurnal pas-cu-pas al memoriei:</div>
+            <div className="text-slate-500 text-[11px]">
+              {lang === 'ro' ? '// Jurnal pas-cu-pas al memoriei:' : '// Step-by-step memory trace:'}
+            </div>
             {logMessages.length === 0 ? (
               <span className="text-slate-600 italic font-sans">
-                Apasă butoanele din stânga pentru a simula cele două moduri de transmitere...
+                {lang === 'ro'
+                  ? 'Apasă butoanele din stânga pentru a simula cele două moduri de transmitere...'
+                  : 'Click the buttons on the left to simulate both passing modes...'}
               </span>
             ) : (
               logMessages.map((msg, idx) => (
                 <div
                   key={idx}
                   className={
-                    msg.includes('SUCCES')
+                    msg.includes('SUCCES') || msg.includes('SUCCESS')
                       ? 'text-emerald-400 font-bold'
-                      : msg.includes('NESCHIMBATE')
+                      : msg.includes('NESCHIMBATE') || msg.includes('UNCHANGED')
                       ? 'text-rose-400 font-bold'
                       : 'text-slate-300'
                   }
@@ -288,21 +339,37 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 86)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 86)' : 'Official C++ Checkpoint (Textbook p. 86)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              De ce o funcție <code className="text-rose-400 font-mono">void swapGresit(int a, int b)</code> scrisă fără caracterul <code className="text-amber-300 font-mono">&</code> nu reușește să inverseze valorile din apelant?
+              {lang === 'ro'
+                ? 'De ce o funcție void swapGresit(int a, int b) scrisă fără caracterul & nu reușește să inverseze valorile din apelant?'
+                : 'Why does a function void swapWrong(int a, int b) written without & fail to invert caller values?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Pentru că variabilele a și b sunt simple copii temporare; la încheierea funcției copiile dispar, iar valorile originale rămân neatinse' },
-                { id: 'b', label: 'Pentru că funcția swap este interzisă în C++' },
-                { id: 'c', label: 'Pentru că procesorul inversează doar numere negative' }
+                {
+                  id: 'a',
+                  labelRo: 'Pentru că variabilele a și b sunt simple copii temporare; la încheierea funcției copiile dispar, iar valorile originale rămân neatinse',
+                  labelEn: 'Because variables a and b are temporary copies; on function exit copies are destroyed, leaving originals untouched'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Pentru că funcția swap este interzisă în C++',
+                  labelEn: 'Because swap functions are forbidden in C++'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Pentru că procesorul inversează doar numere negative',
+                  labelEn: 'Because the CPU only inverts negative numbers'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -319,7 +386,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -328,15 +395,23 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Cum trebuie să arate antetul unei funcții care citește de la tastatură dimensiunea <code className="text-cyan-300 font-mono">n</code> a unui tablou astfel încât noul <code className="text-cyan-300 font-mono">n</code> să fie cunoscut și în <code className="text-amber-300 font-mono">main()</code>?
+              {lang === 'ro'
+                ? 'Cum trebuie să arate antetul unei funcții care citește de la tastatură dimensiunea n a unui tablou astfel încât noul n să fie cunoscut și în main()?'
+                : 'How must the header of a function look that reads array dimension n from keyboard so that updated n is known in main()?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'void citire(int n)' },
-                { id: 'b', label: 'int citire(void)' },
-                { id: 'c', label: 'void citire(int &n) (cu transmitere prin referință folosind &)' }
+                { id: 'a', labelRo: 'void citire(int n)', labelEn: 'void read(int n)' },
+                { id: 'b', labelRo: 'int citire(void)', labelEn: 'int read(void)' },
+                {
+                  id: 'c',
+                  labelRo: 'void citire(int &n) (cu transmitere prin referință folosind &)',
+                  labelEn: 'void read(int &n) (pass-by-reference using &)'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -353,7 +428,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'c' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -372,8 +447,12 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai explorat diferența critică dintre transmiterea prin valoare și prin referință.'
-              : 'Testează ambele metode de transmitere în simulator și răspunde corect la cele două întrebări.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai explorat diferența critică dintre transmiterea prin valoare și prin referință.'
+                : 'Excellent! You mastered the critical difference between pass-by-value and pass-by-reference.'
+              : lang === 'ro'
+              ? 'Testează ambele metode de transmitere în simulator și răspunde corect la cele două întrebări.'
+              : 'Test both passing methods in the simulator and correctly answer both questions.'}
           </span>
         </div>
         <button
@@ -385,7 +464,7 @@ export const A5Level2_ParameterPassingLab: React.FC<A5Level2Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Vectori Transmiși în Funcții</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Vectori Transmiși în Funcții' : 'Next Level: Arrays in Functions'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

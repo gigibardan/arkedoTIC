@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Repeat,
   CheckCircle2,
@@ -15,6 +15,7 @@ import {
   ShieldAlert
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A3Level1Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -24,8 +25,11 @@ interface A3Level1Props {
 
 export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
   onCompletePage,
-  onComplete
+  onComplete,
+  onPrev
 }) => {
+  const { lang } = useLanguage();
+
   // While loop simulator state
   const [initialN, setInitialN] = useState<number>(5);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -52,13 +56,23 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
       // Demonstrate infinite loop safeguard
       sounds.playWrong();
       setInfiniteLoopTriggered(true);
-      setLoopLogs([
-        'Pasul 1: i = 1, conditie 1 <= 5 (ADEVĂRAT)',
-        'Pasul 2: i = 1 (uitat i++), conditie 1 <= 5 (ADEVĂRAT)',
-        'Pasul 3: i = 1, conditie 1 <= 5 (ADEVĂRAT)',
-        'Pasul 4: i = 1, conditie 1 <= 5 (ADEVĂRAT)...',
-        '🚨 STOP DE URGENȚĂ CPU! Buclă infinită detectată (i nu se modifică în corpul buclei)!'
-      ]);
+      if (lang === 'ro') {
+        setLoopLogs([
+          'Pasul 1: i = 1, conditie 1 <= 5 (ADEVĂRAT)',
+          'Pasul 2: i = 1 (uitat i++), conditie 1 <= 5 (ADEVĂRAT)',
+          'Pasul 3: i = 1, conditie 1 <= 5 (ADEVĂRAT)',
+          'Pasul 4: i = 1, conditie 1 <= 5 (ADEVĂRAT)...',
+          '🚨 STOP DE URGENȚĂ CPU! Buclă infinită detectată (i nu se modifică în corpul buclei)!'
+        ]);
+      } else {
+        setLoopLogs([
+          'Step 1: i = 1, condition 1 <= 5 (TRUE)',
+          'Step 2: i = 1 (forgot i++), condition 1 <= 5 (TRUE)',
+          'Step 3: i = 1, condition 1 <= 5 (TRUE)',
+          'Step 4: i = 1, condition 1 <= 5 (TRUE)...',
+          '🚨 CPU EMERGENCY SHUTDOWN! Infinite loop intercepted (loop variable does not update towards termination)!'
+        ]);
+      }
       setIsRunning(false);
       return;
     }
@@ -67,13 +81,23 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
     let count = initialN;
     let step = 1;
 
-    logs.push(`// Început buclă: n = ${count}`);
-    while (count > 0) {
-      logs.push(`Pasul ${step}: Se afișează ${count}; se execută n = n - 1 (rămâne ${count - 1})`);
-      count--;
-      step++;
+    if (lang === 'ro') {
+      logs.push(`// Început buclă: n = ${count}`);
+      while (count > 0) {
+        logs.push(`Pasul ${step}: Se afișează ${count}; se execută n = n - 1 (rămâne ${count - 1})`);
+        count--;
+        step++;
+      }
+      logs.push(`// Ieșire din buclă: n = 0, condiția (n > 0) este FALSĂ! Bucla se termină.`);
+    } else {
+      logs.push(`// Loop initialization: n = ${count}`);
+      while (count > 0) {
+        logs.push(`Step ${step}: Prints ${count}; decrements n = n - 1 (leaves ${count - 1})`);
+        count--;
+        step++;
+      }
+      logs.push(`// Loop termination: n = 0, condition (n > 0) evaluates to FALSE! Execution exits loop.`);
     }
-    logs.push(`// Ieșire din buclă: n = 0, condiția (n > 0) este FALSĂ! Bucla se termină.`);
 
     setLoopLogs(logs);
     setHasCompletedRun(true);
@@ -107,22 +131,32 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/30 text-cyan-200 border border-cyan-400/30">
-                  Modulul 3C • Nivelul 1 din 7
+                  {lang === 'ro' ? 'Modulul 3C • Nivelul 1 din 7' : 'Module 3C • Level 1 of 7'}
                 </span>
-                <span className="text-xs text-cyan-300">Manual Art Klett pag. 71–72</span>
+                <span className="text-xs text-cyan-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 71–72' : 'Art Klett Textbook pp. 71–72'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Structura Repetitivă cu Test Inițial: while & Prevenirea Buclelor Infinite
+                {lang === 'ro'
+                  ? 'Structura Repetitivă cu Test Inițial: while & Prevenirea Buclelor Infinite'
+                  : 'Pre-Test Repetitive Structure: while & Preventing Infinite Loops'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-cyan-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 1: Bucla while</span>
+            <span className="text-xs text-cyan-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 1: Bucla while' : 'Level 1: The while Loop'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-cyan-100/90 leading-relaxed max-w-3xl">
-          Când nu știm dinainte exact câți pași va rula un algoritm (de exemplu la prelucrarea cifrelor sau validarea intrărilor), folosim o <strong>structură repetitivă cu test inițial</strong> (<code className="bg-cyan-950 px-1.5 py-0.5 rounded text-cyan-300 font-mono">while</code>). Condiția se verifică <em>înainte</em> de executarea instrucțiunilor: dacă e falsă de la început, bucla nu se execută nici măcar o dată!
+          {lang === 'ro'
+            ? 'Când nu știm dinainte exact câți pași va rula un algoritm (de exemplu la prelucrarea cifrelor sau validarea intrărilor), folosim o structură repetitivă cu test inițial (while). Condiția se verifică înainte de executarea instrucțiunilor: dacă e falsă de la început, bucla nu se execută nici măcar o dată!'
+            : 'When the exact number of iterations is unknown beforehand (such as numerical digit extraction or input validation), we deploy a pre-test repetitive loop (while). The condition is inspected prior to executing the loop body: if initially false, body statements never execute at all!'}
         </p>
       </div>
 
@@ -132,12 +166,12 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
         <div className="lg:col-span-5 bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-3">
             <Code2 className="w-4 h-4 text-cyan-400" />
-            Configurare Simulator while
+            {lang === 'ro' ? 'Configurare Simulator while' : 'Configure while Simulator'}
           </h3>
 
           <div className="space-y-2">
             <label className="text-xs font-medium text-slate-300 flex justify-between">
-              <span>Valoare inițială <code className="text-amber-300">n</code> (Numărătoare inversă):</span>
+              <span>{lang === 'ro' ? 'Valoare inițială n (Numărătoare inversă):' : 'Initial value n (Countdown):'}</span>
               <span className="font-mono text-cyan-300 font-bold text-sm">n = {initialN}</span>
             </label>
             <input
@@ -152,9 +186,9 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
               className="w-full accent-cyan-400 cursor-pointer h-2 bg-slate-700 rounded-lg"
             />
             <div className="flex justify-between text-[11px] text-slate-500 font-mono">
-              <span>1 pas</span>
-              <span>5 pași</span>
-              <span>10 pași</span>
+              <span>{lang === 'ro' ? '1 pas' : '1 step'}</span>
+              <span>{lang === 'ro' ? '5 pași' : '5 steps'}</span>
+              <span>{lang === 'ro' ? '10 pași' : '10 steps'}</span>
             </div>
           </div>
 
@@ -171,9 +205,13 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
                 className="mt-0.5 accent-rose-500 rounded"
               />
               <div>
-                <span className="font-semibold text-rose-300">Simulează Omisiunea Actualizării (Bug Clasic)</span>
+                <span className="font-semibold text-rose-300">
+                  {lang === 'ro' ? 'Simulează Omisiunea Actualizării (Bug Clasic)' : 'Simulate Omitted Variable Update (Classic Trap)'}
+                </span>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  Elimină comanda <code className="text-rose-400 font-mono">n--</code> din corpul buclei pentru a declanșa o buclă infinită!
+                  {lang === 'ro'
+                    ? 'Elimină comanda n-- din corpul buclei pentru a declanșa o buclă infinită!'
+                    : 'Omits the n-- statement from the loop body to trigger an infinite loop!'}
                 </p>
               </div>
             </label>
@@ -184,7 +222,7 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
             className="w-full py-2.5 px-4 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-lg font-medium text-xs flex items-center justify-center gap-2 shadow-lg transition-all"
           >
             <Play className="w-4 h-4 fill-white" />
-            Execută Bucla while în CPU
+            {lang === 'ro' ? 'Execută Bucla while în CPU' : 'Execute while Loop in CPU'}
           </button>
 
           {/* Completion badges */}
@@ -197,7 +235,7 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Execuție Normală</span>
+              <span>{lang === 'ro' ? 'Execuție Normală' : 'Normal Execution'}</span>
             </div>
             <div
               className={`p-2 rounded-lg border flex items-center gap-1.5 ${
@@ -207,7 +245,7 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Test Buclă Infinită</span>
+              <span>{lang === 'ro' ? 'Test Buclă Infinită' : 'Infinite Loop Test'}</span>
             </div>
           </div>
         </div>
@@ -217,7 +255,7 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
               <Terminal className="w-4 h-4 text-emerald-400" />
-              Cod Sursă & Terminal de Execuție
+              {lang === 'ro' ? 'Cod Sursă & Terminal de Execuție' : 'Source Code & Execution Console'}
             </h3>
             <span className="text-xs text-slate-400 font-mono">while (n &gt; 0)</span>
           </div>
@@ -234,21 +272,34 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
             <div className="pl-4">
               {omittedIncrement ? (
                 <span className="text-rose-400 font-bold bg-rose-950/50 px-1 rounded">
-                  // [EROARE]: Linia n--; a fost omisă!
+                  {lang === 'ro' ? '// [EROARE]: Linia n--; a fost omisă!' : '// [ERROR]: Line n--; was omitted!'}
                 </span>
               ) : (
-                <span className="text-cyan-300">n--; <span className="text-slate-500">// modifică condiția spre fals</span></span>
+                <span className="text-cyan-300">
+                  n--;{' '}
+                  <span className="text-slate-500">
+                    {lang === 'ro' ? '// modifică condiția spre fals' : '// moves state towards termination'}
+                  </span>
+                </span>
               )}
             </div>
             <div>&#125;</div>
-            <div className="text-slate-400">cout &lt;&lt; <span className="text-amber-200">"Lansare!"</span>;</div>
+            <div className="text-slate-400">
+              cout &lt;&lt; <span className="text-amber-200">"{lang === 'ro' ? 'Lansare!' : 'Blast off!'}"</span>;
+            </div>
           </div>
 
           {/* Output log */}
           <div className="bg-black/90 p-3 rounded-lg border border-slate-800 font-mono text-xs space-y-1 min-h-[120px] max-h-[180px] overflow-y-auto">
-            <div className="text-slate-500 text-[11px]">// Jurnal de execuție CPU:</div>
+            <div className="text-slate-500 text-[11px]">
+              {lang === 'ro' ? '// Jurnal de execuție CPU:' : '// CPU execution trace log:'}
+            </div>
             {loopLogs.length === 0 ? (
-              <span className="text-slate-600 italic">Apasă „Execută Bucla while” pentru a porni urmărirea pas cu pas...</span>
+              <span className="text-slate-600 italic">
+                {lang === 'ro'
+                  ? 'Apasă „Execută Bucla while” pentru a porni urmărirea pas cu pas...'
+                  : 'Press "Execute while Loop" to observe trace log...'}
+              </span>
             ) : (
               loopLogs.map((log, idx) => (
                 <div
@@ -273,21 +324,39 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 71–72)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 71–72)' : 'C++ Conceptual Check (Textbook pp. 71–72)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              De câte ori se va executa instrucțiunea din corpul buclei dacă condiția inițială este falsă de la început (de ex: <code className="text-pink-400 font-mono">int n = 0; while (n &gt; 0)</code>)?
+              {lang === 'ro' ? (
+                <>De câte ori se va executa instrucțiunea din corpul buclei dacă condiția inițială este falsă de la început (de ex: <code className="text-pink-400 font-mono">int n = 0; while (n &gt; 0)</code>)?</>
+              ) : (
+                <>How many times does the while loop body execute if the condition evaluates to false at the outset (e.g.: <code className="text-pink-400 font-mono">int n = 0; while (n &gt; 0)</code>)?</>
+              )}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Exact o singură dată' },
-                { id: 'b', label: 'Nici măcar o dată (0 ori), deoarece testul este efectuat înainte de prima rulare' },
-                { id: 'c', label: 'La infinit' }
+                {
+                  id: 'a',
+                  labelRo: 'Exact o singură dată',
+                  labelEn: 'Exactly once'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Nici măcar o dată (0 ori), deoarece testul este efectuat înainte de prima rulare',
+                  labelEn: 'Zero times (0), because the test executes prior to the first iteration'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'La infinit',
+                  labelEn: 'Infinitely'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -304,7 +373,7 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -313,15 +382,33 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Ce este o „buclă infinită” (infinite loop) și cum poate fi prevenită în programare?
+              {lang === 'ro' ? (
+                <>Ce este o „buclă infinită” (infinite loop) și cum poate fi prevenită în programare?</>
+              ) : (
+                <>What is an "infinite loop" and how is it prevented in algorithmic programming?</>
+              )}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'O buclă a cărei condiție nu devine niciodată falsă; se previne asigurându-ne că cel puțin o variabilă din condiție se modifică în corpul buclei spre atingerea valorii de oprire' },
-                { id: 'b', label: 'O buclă care consumă prea mult curent electric' },
-                { id: 'c', label: 'O buclă care are mai mult de 100 de linii de cod' }
+                {
+                  id: 'a',
+                  labelRo: 'O buclă a cărei condiție nu devine niciodată falsă; se previne asigurându-ne că cel puțin o variabilă din condiție se modifică în corpul buclei spre atingerea valorii de oprire',
+                  labelEn: 'A loop whose termination condition never becomes false; prevented by ensuring a state variable advances towards the termination predicate within the body'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'O buclă care consumă prea mult curent electric',
+                  labelEn: 'A loop consuming high electrical power'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'O buclă care are mai mult de 100 de linii de cod',
+                  labelEn: 'A loop spanning over 100 lines of code'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -338,7 +425,7 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -357,22 +444,36 @@ export const A3Level1_WhileLoopStudio: React.FC<A3Level1Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai înțeles structura repetitivă cu test inițial și riscurile buclelor infinite.'
-              : 'Rulează o execuție normală, simulează bucla infinită și răspunde la cele două întrebări.'}
+              ? (lang === 'ro'
+                ? 'Excelent! Ai înțeles structura repetitivă cu test inițial și riscurile buclelor infinite.'
+                : 'Excellent! You understood the pre-test while loop and infinite loop safeguards.')
+              : (lang === 'ro'
+                ? 'Rulează o execuție normală, simulează bucla infinită și răspunde la cele două întrebări.'
+                : 'Run normal execution, simulate an infinite loop, and answer both quiz questions.')}
           </span>
         </div>
-        <button
-          onClick={handleFinish}
-          disabled={!isLevelCompleted}
-          className={`py-2 px-5 rounded-lg font-medium text-xs flex items-center gap-2 transition-all ${
-            isLevelCompleted
-              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg cursor-pointer'
-              : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
-          }`}
-        >
-          <span>Următorul Nivel: Bucla do-while</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          {onPrev && (
+            <button
+              onClick={onPrev}
+              className="py-2 px-4 rounded-lg font-medium text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition"
+            >
+              {lang === 'ro' ? 'Înapoi' : 'Back'}
+            </button>
+          )}
+          <button
+            onClick={handleFinish}
+            disabled={!isLevelCompleted}
+            className={`py-2 px-5 rounded-lg font-medium text-xs flex items-center gap-2 transition-all ${
+              isLevelCompleted
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg cursor-pointer'
+                : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
+            }`}
+          >
+            <span>{lang === 'ro' ? 'Următorul Nivel: Bucla do-while' : 'Next Level: The do-while Loop'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

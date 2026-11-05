@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Activity
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface R1Level1Props {
@@ -28,60 +29,74 @@ interface R1Level1Props {
 
 interface PinInfo {
   id: string;
-  name: string;
+  nameRo: string;
+  nameEn: string;
   type: 'digital' | 'pwm' | 'analog' | 'power' | 'comm';
   voltage: string;
-  description: string;
+  descriptionRo: string;
+  descriptionEn: string;
   codeSnippet: string;
 }
 
 const BOARD_PINS: PinInfo[] = [
   {
     id: 'd13',
-    name: 'Pin D13 (LED Integrat)',
+    nameRo: 'Pin D13 (LED Integrat)',
+    nameEn: 'Pin D13 (Built-in LED)',
     type: 'digital',
     voltage: '0V / 5V',
-    description: 'Pin digital conectat direct la LED-ul galben marcat "L" de pe placă. Folosit pentru testul clasic Blink.',
+    descriptionRo: 'Pin digital conectat direct la LED-ul galben marcat "L" de pe placă. Folosit pentru testul clasic Blink.',
+    descriptionEn: 'Digital pin wired directly to onboard yellow LED labeled "L". Used for the classic Blink test.',
     codeSnippet: 'pinMode(13, OUTPUT);\ndigitalWrite(13, HIGH);'
   },
   {
     id: 'd9',
-    name: 'Pin ~D9 (PWM)',
+    nameRo: 'Pin ~D9 (PWM)',
+    nameEn: 'Pin ~D9 (PWM)',
     type: 'pwm',
     voltage: '0V..5V (PWM)',
-    description: 'Pin capabil de modulație în lățime a impulsurilor (Pulse Width Modulation, 490Hz). Permite reglarea intensității luminoase sau a turației motoarelor.',
-    codeSnippet: 'analogWrite(9, 128); // 50% ciclu activ'
+    descriptionRo: 'Pin capabil de modulație în lățime a impulsurilor (Pulse Width Modulation, 490Hz). Permite reglarea intensității luminoase sau a turației motoarelor.',
+    descriptionEn: 'Pin capable of Pulse Width Modulation (PWM, 490Hz). Enables smooth dimming of LEDs or DC motor speed regulation.',
+    codeSnippet: 'analogWrite(9, 128); // 50% duty cycle'
   },
   {
     id: 'a0',
-    name: 'Pin A0 (Analog IN)',
+    nameRo: 'Pin A0 (Analog IN)',
+    nameEn: 'Pin A0 (Analog IN)',
     type: 'analog',
     voltage: '0V..5V -> 0..1023',
-    description: 'Pin de intrare analogică conectat la convertorul ADC pe 10 biți. Măsoară tensiuni continue de la senzori (ex. fotorezistență LDR, potențiometru).',
-    codeSnippet: 'int lumina = analogRead(A0);'
+    descriptionRo: 'Pin de intrare analogică conectat la convertorul ADC pe 10 biți. Măsoară tensiuni continue de la senzori (ex. fotorezistență LDR, potențiometru).',
+    descriptionEn: 'Analog input pin routed to the 10-bit ADC converter. Reads continuous voltages from sensors (e.g. LDR photoresistor, potentiometer).',
+    codeSnippet: 'int light = analogRead(A0);'
   },
   {
     id: 'pin5v',
-    name: 'Pin 5V (Alimentare)',
+    nameRo: 'Pin 5V (Alimentare)',
+    nameEn: 'Pin 5V (Power Output)',
     type: 'power',
     voltage: '5.0V stabilizat',
-    description: 'Ieșire de tensiune continuă stabilizată de 5V din regulatorul plăcii. Alimentează senzorii și cipurile logice (curent max ~400mA).',
-    codeSnippet: '// Conectat la pinul VCC al senzorilor'
+    descriptionRo: 'Ieșire de tensiune continuă stabilizată de 5V din regulatorul plăcii. Alimentează senzorii și cipurile logice (curent max ~400mA).',
+    descriptionEn: 'Stabilized 5.0V DC output from the onboard voltage regulator. Powers sensors and logic chips (max current ~400mA).',
+    codeSnippet: '// Connect to sensor VCC pin'
   },
   {
     id: 'gnd',
-    name: 'Pin GND (Masă comună)',
+    nameRo: 'Pin GND (Masă comună)',
+    nameEn: 'Pin GND (Common Ground)',
     type: 'power',
     voltage: '0V (Referință)',
-    description: 'Potențialul de referință 0V (Ground). Toate circuitele, senzorii și actuatorii trebuie să aibă masa comună (GND) legată la placă!',
-    codeSnippet: '// Toate circuitele se închid la GND'
+    descriptionRo: 'Potențialul de referință 0V (Ground). Toate circuitele, senzorii și actuatorii trebuie să aibă masa comună (GND) legată la placă!',
+    descriptionEn: 'Reference potential 0V (Ground). All external circuits, sensors, and motor drivers must share a common ground (GND) tied to the board!',
+    codeSnippet: '// All circuits close at GND'
   },
   {
     id: 'tx_rx',
-    name: 'Pini D0(RX) / D1(TX)',
+    nameRo: 'Pini D0(RX) / D1(TX)',
+    nameEn: 'Pins D0(RX) / D1(TX)',
     type: 'comm',
     voltage: 'Serial UART',
-    description: 'Linii de comunicație serială prin USB cu calculatorul. Evită conectarea altor senzori pe D0 și D1 pentru a nu bloca încărcarea programelor!',
+    descriptionRo: 'Linii de comunicație serială prin USB cu calculatorul. Evită conectarea altor senzori pe D0 și D1 pentru a nu bloca încărcarea programelor!',
+    descriptionEn: 'Serial UART communication lines with the PC over USB. Avoid hooking sensors to D0 & D1 to prevent locking program uploads!',
     codeSnippet: 'Serial.begin(9600);\nSerial.println("Hello Robot!");'
   }
 ];
@@ -90,12 +105,17 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
   const [selectedPinId, setSelectedPinId] = useState<string>('d13');
   const [led13State, setLed13State] = useState<boolean>(false);
   const [exploredPins, setExploredPins] = useState<Set<string>>(new Set(['d13']));
   const [consoleLogs, setConsoleLogs] = useState<string[]>([
-    'Placa Arduino Uno ATmega328P conectată la USB COM3 (16 MHz).',
-    'Selectează pinii pentru a inspecta caracteristicile electrice și rolul fiecărui bloc.'
+    lang === 'ro'
+      ? 'Placa Arduino Uno ATmega328P conectată la USB COM3 (16 MHz).'
+      : 'Arduino Uno ATmega328P board connected to USB COM3 (16 MHz).',
+    lang === 'ro'
+      ? 'Selectează pinii pentru a inspecta caracteristicile electrice și rolul fiecărui bloc.'
+      : 'Select pins to inspect electrical characteristics and the role of each hardware block.'
   ]);
 
   // Quiz states
@@ -108,9 +128,12 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
     sounds.playClick();
     setSelectedPinId(pin.id);
     setExploredPins((prev) => new Set([...prev, pin.id]));
+    const pinName = lang === 'ro' ? pin.nameRo : pin.nameEn;
     setConsoleLogs((prev) => [
       ...prev.slice(-4),
-      `Inspectare [${pin.name}]: Tip ${pin.type.toUpperCase()} | Tensiune: ${pin.voltage}`
+      lang === 'ro'
+        ? `Inspectare [${pinName}]: Tip ${pin.type.toUpperCase()} | Tensiune: ${pin.voltage}`
+        : `Inspecting [${pinName}]: Type ${pin.type.toUpperCase()} | Voltage: ${pin.voltage}`
     ]);
   };
 
@@ -123,9 +146,13 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
     }
     setConsoleLogs((prev) => [
       ...prev.slice(-4),
-      `digitalWrite(13, ${nextState ? 'HIGH' : 'LOW'}) -> Tensiune la pin: ${
-        nextState ? '4.98V' : '0.01V'
-      } | LED "L": ${nextState ? 'APRINS' : 'STINS'}`
+      lang === 'ro'
+        ? `digitalWrite(13, ${nextState ? 'HIGH' : 'LOW'}) -> Tensiune la pin: ${
+            nextState ? '4.98V' : '0.01V'
+          } | LED "L": ${nextState ? 'APRINS' : 'STINS'}`
+        : `digitalWrite(13, ${nextState ? 'HIGH' : 'LOW'}) -> Pin voltage: ${
+            nextState ? '4.98V' : '0.01V'
+          } | LED "L": ${nextState ? 'ON' : 'OFF'}`
     ]);
   };
 
@@ -152,21 +179,39 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-cyan-400 font-semibold">
-                Nivelul 1 • Unitatea 4: Robotică (Manual pag. 89–92)
+                {lang === 'ro'
+                  ? 'Nivelul 1 • Unitatea 4: Robotică (Manual pag. 89–92)'
+                  : 'Level 1 • Unit 4: Robotics (Textbook pp. 89–92)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Arhitectura Plăcii de Dezvoltare &amp; Microcontrollerul
+                {lang === 'ro'
+                  ? 'Arhitectura Plăcii de Dezvoltare & Microcontrollerul'
+                  : 'Development Board Architecture & Microcontroller'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-900/40 border border-cyan-700/50 rounded-lg text-cyan-300 text-sm font-mono">
-            <span>{exploredPins.size} / 6 Pini Explorați</span>
+            <span>
+              {lang === 'ro'
+                ? `${exploredPins.size} / 6 Pini Explorați`
+                : `${exploredPins.size} / 6 Pins Explored`}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          Microcontrollerul (cipul <strong>ATmega328P</strong>) reprezintă „creierul” oricărui robot autonom.
-          Pentru a controla senzori și motoare, trebuie să stăpânești organizarea pinilor săi: <strong>pini digitali</strong> (0/1),
-          <strong>pini PWM</strong> (modulație variabilă ~) și <strong>pini analogici</strong> (canale ADC 0..1023).
+          {lang === 'ro' ? (
+            <>
+              Microcontrollerul (cipul <strong>ATmega328P</strong>) reprezintă „creierul” oricărui robot autonom.
+              Pentru a controla senzori și motoare, trebuie să stăpânești organizarea pinilor săi: <strong>pini digitali</strong> (0/1),
+              <strong>pini PWM</strong> (modulație variabilă ~) și <strong>pini analogici</strong> (canale ADC 0..1023).
+            </>
+          ) : (
+            <>
+              The microcontroller (the <strong>ATmega328P</strong> chip) represents the &quot;brain&quot; of any autonomous robot.
+              To control sensors and motors, you must master its pinout organization: <strong>digital pins</strong> (0/1),
+              <strong>PWM pins</strong> (variable pulse modulation ~), and <strong>analog pins</strong> (ADC channels 0..1023).
+            </>
+          )}
         </p>
       </div>
 
@@ -178,7 +223,11 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm font-semibold">
                 <Layers className="w-4 h-4" />
-                <span>Placa Virtuală Arduino Uno R3 (Simulator Interactiv)</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Placa Virtuală Arduino Uno R3 (Simulator Interactiv)'
+                    : 'Virtual Arduino Uno R3 Board (Interactive Simulator)'}
+                </span>
               </div>
               <span className="text-xs bg-cyan-950 border border-cyan-800 text-cyan-300 px-2.5 py-0.5 rounded-full font-mono">
                 16 MHz Crystal
@@ -229,7 +278,9 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
                     }`}
                   />
                   <span className="text-xs font-mono font-bold text-slate-200">
-                    LED Integrat (Pin 13 &quot;L&quot;)
+                    {lang === 'ro'
+                      ? 'LED Integrat (Pin 13 "L")'
+                      : 'Built-in LED (Pin 13 "L")'}
                   </span>
                 </div>
                 <button
@@ -241,19 +292,24 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
                   }`}
                 >
                   <Power className="w-3.5 h-3.5" />
-                  {led13State ? 'Comută LOW (0V)' : 'Comută HIGH (5V)'}
+                  {lang === 'ro'
+                    ? led13State ? 'Comută LOW (0V)' : 'Comută HIGH (5V)'
+                    : led13State ? 'Toggle LOW (0V)' : 'Toggle HIGH (5V)'}
                 </button>
               </div>
 
               {/* Pin Header Buttons */}
               <div className="space-y-2">
                 <span className="text-[11px] font-mono text-slate-400 block font-semibold">
-                  Selectează un pin pentru inspecție detaliată:
+                  {lang === 'ro'
+                    ? 'Selectează un pin pentru inspecție detaliată:'
+                    : 'Select a pin for detailed inspection:'}
                 </span>
                 <div className="grid grid-cols-3 gap-2">
                   {BOARD_PINS.map((pin) => {
                     const isSelected = selectedPinId === pin.id;
                     const isExplored = exploredPins.has(pin.id);
+                    const name = lang === 'ro' ? pin.nameRo : pin.nameEn;
 
                     return (
                       <button
@@ -266,7 +322,7 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
                         }`}
                       >
                         <div className="font-bold flex items-center justify-between">
-                          <span className="text-cyan-300 text-[11px]">{pin.name.split(' ')[1]}</span>
+                          <span className="text-cyan-300 text-[11px]">{name.split(' ')[1]}</span>
                           {isExplored && (
                             <Check className="w-3.5 h-3.5 text-emerald-400" />
                           )}
@@ -285,7 +341,11 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
             <div className="mt-4 bg-slate-950 p-3 rounded-xl border border-slate-800/80 font-mono text-xs space-y-1">
               <div className="flex items-center gap-2 text-slate-400 text-[11px] pb-1 border-b border-slate-800">
                 <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Serial Monitor &amp; Multimetru Virtual</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Serial Monitor & Multimetru Virtual'
+                    : 'Serial Monitor & Virtual Multimeter'}
+                </span>
               </div>
               <div className="space-y-1 pt-1 min-h-[70px]">
                 {consoleLogs.map((log, idx) => (
@@ -304,7 +364,7 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
           <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">
-                Fișă Tehnică Pin
+                {lang === 'ro' ? 'Fișă Tehnică Pin' : 'Pin Technical Datasheet'}
               </span>
               <span className="text-xs font-mono bg-cyan-950 text-cyan-300 px-2.5 py-0.5 rounded border border-cyan-800">
                 {selectedPin.voltage}
@@ -313,16 +373,16 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
 
             <div>
               <h3 className="text-base font-bold text-white font-mono">
-                {selectedPin.name}
+                {lang === 'ro' ? selectedPin.nameRo : selectedPin.nameEn}
               </h3>
               <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                {selectedPin.description}
+                {lang === 'ro' ? selectedPin.descriptionRo : selectedPin.descriptionEn}
               </p>
             </div>
 
             <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 font-mono text-xs text-emerald-300">
               <span className="text-slate-500 block text-[10px] uppercase mb-1">
-                Sintaxă C++ (Arduino IDE):
+                {lang === 'ro' ? 'Sintaxă C++ (Arduino IDE):' : 'C++ Syntax (Arduino IDE):'}
               </span>
               <pre className="text-[11px]">{selectedPin.codeSnippet}</pre>
             </div>
@@ -332,18 +392,36 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-amber-400">
               <HelpCircle className="w-4 h-4" />
-              <span>Verificare Înțelegere Hardware (Manual pag. 90)</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Verificare Înțelegere Hardware (Manual pag. 90)'
+                  : 'Hardware Comprehension Check (Textbook p. 90)'}
+              </span>
             </div>
 
             {/* Question 1 */}
             <div className="space-y-2 text-xs">
               <p className="text-slate-300 font-medium">
-                1. Care este cipul microcontroller ce îndeplinește rolul de „creier” pe placa Arduino Uno?
+                {lang === 'ro'
+                  ? '1. Care este cipul microcontroller ce îndeplinește rolul de „creier” pe placa Arduino Uno?'
+                  : '1. Which microcontroller chip acts as the "brain" on the Arduino Uno board?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
-                  { id: 'atmega', text: 'ATmega328P (cu memorie Flash de 32 KB și frecvență de 16 MHz)' },
-                  { id: 'intel', text: 'Intel Core i9 cu răcire pe lichid' }
+                  {
+                    id: 'atmega',
+                    text:
+                      lang === 'ro'
+                        ? 'ATmega328P (cu memorie Flash de 32 KB și frecvență de 16 MHz)'
+                        : 'ATmega328P (with 32 KB Flash memory and 16 MHz clock frequency)'
+                  },
+                  {
+                    id: 'intel',
+                    text:
+                      lang === 'ro'
+                        ? 'Intel Core i9 cu răcire pe lichid'
+                        : 'Intel Core i9 with liquid cooling'
+                  }
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -368,12 +446,26 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
             {/* Question 2 */}
             <div className="space-y-2 text-xs pt-2 border-t border-slate-800">
               <p className="text-slate-300 font-medium">
-                2. Cum recunoaștem pe placa Arduino pinii capabili de modulație PWM (tensiune variabilă pentru motoare)?
+                {lang === 'ro'
+                  ? '2. Cum recunoaștem pe placa Arduino pinii capabili de modulație PWM (tensiune variabilă pentru motoare)?'
+                  : '2. How do we recognize PWM-capable pins on the Arduino board (variable voltage for motors)?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
-                  { id: 'pwm_tilde', text: 'Sunt marcați cu simbolul tildă (~) lângă număr (de ex: ~3, ~5, ~6, ~9, ~10, ~11)' },
-                  { id: 'pwm_err', text: 'Sunt vopsiți exclusiv cu vopsea aurie' }
+                  {
+                    id: 'pwm_tilde',
+                    text:
+                      lang === 'ro'
+                        ? 'Sunt marcați cu simbolul tildă (~) lângă număr (de ex: ~3, ~5, ~6, ~9, ~10, ~11)'
+                        : 'They are marked with a tilde symbol (~) next to their number (e.g.: ~3, ~5, ~6, ~9, ~10, ~11)'
+                  },
+                  {
+                    id: 'pwm_err',
+                    text:
+                      lang === 'ro'
+                        ? 'Sunt vopsiți exclusiv cu vopsea aurie'
+                        : 'They are exclusively painted in gold color'
+                  }
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -413,11 +505,17 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
           <div>
             <div className="text-sm font-semibold text-white">
               {isLevelCompleted
-                ? 'Nivelul 1 Finalizat cu Succes!'
-                : `Cerințe: Explorează cel puțin 4 pini (${exploredPins.size}/4) și răspunde corect la cele 2 întrebări.`}
+                ? lang === 'ro'
+                  ? 'Nivelul 1 Finalizat cu Succes!'
+                  : 'Level 1 Successfully Completed!'
+                : lang === 'ro'
+                ? `Cerințe: Explorează cel puțin 4 pini (${exploredPins.size}/4) și răspunde corect la cele 2 întrebări.`
+                : `Requirements: Explore at least 4 pins (${exploredPins.size}/4) and correctly answer the 2 questions.`}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și deblocarea Laboratorului de Senzori (Nivelul 2).
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și deblocarea Laboratorului de Senzori (Nivelul 2).'
+                : 'Reward: +150 XP points and unlocking the Sensor Lab (Level 2).'}
             </div>
           </div>
         </div>
@@ -431,7 +529,7 @@ export const R1Level1_MicrocontrollerArchitecture: React.FC<R1Level1Props> = ({
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Nivelul 2</span>
+          <span>{lang === 'ro' ? 'Continuă spre Nivelul 2' : 'Continue to Level 2'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

@@ -19,6 +19,7 @@ import {
   LayoutGrid
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A5Level5Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -36,6 +37,8 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [students, setStudents] = useState<StudentGrade[]>([
     { id: 1, nume: 'Andrei Popa', nota: 8 },
     { id: 2, nume: 'Elena Dobre', nota: 10 },
@@ -70,31 +73,36 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
     {
       id: 1,
       title: '1. citireNote(note, n)',
-      desc: 'Citește numărul de elevi și vectorul de note',
+      descRo: 'Citește numărul de elevi și vectorul de note',
+      descEn: 'Reads student count and grades array',
       snippet: 'void citireNote(int v[], int &n)'
     },
     {
       id: 2,
       title: '2. calculMedie(note, n)',
-      desc: 'Calculează media aritmetică a clasei',
+      descRo: 'Calculează media aritmetică a clasei',
+      descEn: 'Calculates class arithmetic average',
       snippet: 'double calculMedie(int v[], int n)'
     },
     {
       id: 3,
       title: '3. notaMaxima(note, n)',
-      desc: 'Identifică cea mai mare notă obținută',
+      descRo: 'Identifică cea mai mare notă obținută',
+      descEn: 'Identifies highest grade achieved',
       snippet: 'int notaMaxima(int v[], int n)'
     },
     {
       id: 4,
       title: '4. numarCorigenti(note, n)',
-      desc: 'Numără elevii cu nota sub 5',
+      descRo: 'Numără elevii cu nota sub 5',
+      descEn: 'Counts students with grade below 5',
       snippet: 'int numarCorigenti(int v[], int n)'
     },
     {
       id: 5,
       title: '5. sortareNote(note, n)',
-      desc: 'Sortează catalogul descrescător după performanță',
+      descRo: 'Sortează catalogul descrescător după performanță',
+      descEn: 'Sorts gradebook in descending order',
       snippet: 'void sortareDescrescatoare(int v[], int n)'
     }
   ];
@@ -106,7 +114,9 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
     if (stepIdx === 1) {
       setPipelineLogs((prev) => [
         ...prev,
-        `[Step 1] citireNote(): S-au încărcat ${students.length} înregistrări în vectorul note[].`
+        lang === 'ro'
+          ? `[Step 1] citireNote(): S-au încărcat ${students.length} înregistrări în vectorul note[].`
+          : `[Step 1] readGrades(): Loaded ${students.length} records into grades[] array.`
       ]);
     } else if (stepIdx === 2) {
       const sum = students.reduce((acc, curr) => acc + curr.nota, 0);
@@ -114,21 +124,27 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
       setStats((prev) => ({ ...prev, medie: avg }));
       setPipelineLogs((prev) => [
         ...prev,
-        `[Step 2] calculMedie(): Suma notelor = ${sum}, Media generală a clasei = ${avg}.`
+        lang === 'ro'
+          ? `[Step 2] calculMedie(): Suma notelor = ${sum}, Media generală a clasei = ${avg}.`
+          : `[Step 2] calcAverage(): Sum of grades = ${sum}, Class overall average = ${avg}.`
       ]);
     } else if (stepIdx === 3) {
       const mx = Math.max(...students.map((s) => s.nota));
       setStats((prev) => ({ ...prev, maxNota: mx }));
       setPipelineLogs((prev) => [
         ...prev,
-        `[Step 3] notaMaxima(): Nota maximă găsită în vector este ${mx}.`
+        lang === 'ro'
+          ? `[Step 3] notaMaxima(): Nota maximă găsită în vector este ${mx}.`
+          : `[Step 3] maxGrade(): Highest grade found in array is ${mx}.`
       ]);
     } else if (stepIdx === 4) {
       const cor = students.filter((s) => s.nota < 5).length;
       setStats((prev) => ({ ...prev, corigenti: cor }));
       setPipelineLogs((prev) => [
         ...prev,
-        `[Step 4] numarCorigenti(): S-au identificat ${cor} elevi corigenți (nota < 5).`
+        lang === 'ro'
+          ? `[Step 4] numarCorigenti(): S-au identificat ${cor} elevi corigenți (nota < 5).`
+          : `[Step 4] countFailing(): Identified ${cor} failing students (grade < 5).`
       ]);
     } else if (stepIdx === 5) {
       const sorted = [...students].sort((a, b) => b.nota - a.nota);
@@ -136,7 +152,9 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
       setStats((prev) => ({ ...prev, isSorted: true }));
       setPipelineLogs((prev) => [
         ...prev,
-        `[Step 5] sortareDescrescatoare(): Catalogul a fost ordonat descrescător după medii!`
+        lang === 'ro'
+          ? `[Step 5] sortareDescrescatoare(): Catalogul a fost ordonat descrescător după medii!`
+          : `[Step 5] sortDescending(): Gradebook sorted in descending order of grades!`
       ]);
     }
   };
@@ -157,15 +175,28 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
       isSorted: true
     });
     setActiveStep(5);
-    setPipelineLogs([
-      `=== EXECUTIE PIPELINE MODULAR INTEGRATOR ===`,
-      `[main()] -> citireNote(note, n); // S-au încărcat ${students.length} elevi`,
-      `[main()] -> medie = calculMedie(note, n); // Media: ${avg}`,
-      `[main()] -> max = notaMaxima(note, n); // Nota maximă: ${mx}`,
-      `[main()] -> corig = numarCorigenti(note, n); // Corigenți: ${cor}`,
-      `[main()] -> sortareDescrescatoare(note, n); // Catalog ordonat cu succes!`,
-      `=== PIPELINE FINALIZAT: COD CURAT, FĂRĂ LINII REDUNDANTE ===`
-    ]);
+
+    if (lang === 'ro') {
+      setPipelineLogs([
+        `=== EXECUTIE PIPELINE MODULAR INTEGRATOR ===`,
+        `[main()] -> citireNote(note, n); // S-au încărcat ${students.length} elevi`,
+        `[main()] -> medie = calculMedie(note, n); // Media: ${avg}`,
+        `[main()] -> max = notaMaxima(note, n); // Nota maximă: ${mx}`,
+        `[main()] -> corig = numarCorigenti(note, n); // Corigenți: ${cor}`,
+        `[main()] -> sortareDescrescatoare(note, n); // Catalog ordonat cu succes!`,
+        `=== PIPELINE FINALIZAT: COD CURAT, FĂRĂ LINII REDUNDANTE ===`
+      ]);
+    } else {
+      setPipelineLogs([
+        `=== MODULAR INTEGRATOR PIPELINE EXECUTION ===`,
+        `[main()] -> readGrades(grades, n); // Loaded ${students.length} students`,
+        `[main()] -> average = calcAverage(grades, n); // Average: ${avg}`,
+        `[main()] -> max = maxGrade(grades, n); // Highest grade: ${mx}`,
+        `[main()] -> failing = countFailing(grades, n); // Failing count: ${cor}`,
+        `[main()] -> sortDescending(grades, n); // Gradebook sorted successfully!`,
+        `=== PIPELINE COMPLETED: CLEAN ARCHITECTURE, ZERO REDUNDANCY ===`
+      ]);
+    }
   };
 
   const isCompleted =
@@ -191,28 +222,38 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-purple-400 font-semibold">
-                Nivelul 5 • Unitatea 3 (Manual pag. 87–88)
+                {lang === 'ro' ? 'Nivelul 5 • Unitatea 3 (Manual pag. 87–88)' : 'Level 5 • Unit 3 (Textbook pp. 87–88)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Proiect Integrator C++: Catalogul Școlar Modular
+                {lang === 'ro' ? 'Proiect Integrator C++: Catalogul Școlar Modular' : 'C++ Integrator Project: Modular School Gradebook'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-900/40 border border-purple-700/50 rounded-lg text-purple-300 text-sm font-mono">
-            <span>Arhitectură de Sistem C++</span>
+            <span>{lang === 'ro' ? 'Arhitectură de Sistem C++' : 'C++ System Architecture'}</span>
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          Punctul culminant al programării de clasa a VIII-a: integrarea tuturor conceptelor (vectori, decizii,
-          bucle, căutare și sortare) într-un <strong>proiect modular complet</strong>. Funcția <code>main()</code> devine
-          un dirijor elegant de orchestră, apelând subprograme dedicate.
+          {lang === 'ro' ? (
+            <>
+              Punctul culminant al programării de clasa a VIII-a: integrarea tuturor conceptelor (vectori, decizii,
+              bucle, căutare și sortare) într-un <strong>proiect modular complet</strong>. Funcția <code>main()</code> devine
+              un dirijor elegant de orchestră, apelând subprograme dedicate.
+            </>
+          ) : (
+            <>
+              The capstone of 8th grade computer science: integrating all core concepts (arrays, decisions,
+              loops, searching, and sorting) into a <strong>complete modular project</strong>. The <code>main()</code> function becomes
+              an elegant conductor, coordinating specialized subprograms.
+            </>
+          )}
         </p>
       </div>
 
       {/* Code Architecture Switcher */}
       <div className="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
         <span className="text-xs font-mono text-slate-400">
-          Comparație Arhitecturală de Cod:
+          {lang === 'ro' ? 'Comparație Arhitecturală de Cod:' : 'Code Architecture Comparison:'}
         </span>
         <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
           <button
@@ -226,7 +267,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Cod Modular (Clean C++)
+            {lang === 'ro' ? 'Cod Modular (Clean C++)' : 'Modular Code (Clean C++)'}
           </button>
           <button
             onClick={() => {
@@ -239,7 +280,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Cod Monolitic (Spaghetti)
+            {lang === 'ro' ? 'Cod Monolitic (Spaghetti)' : 'Monolithic Code (Spaghetti)'}
           </button>
         </div>
       </div>
@@ -249,18 +290,27 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
         <div className="bg-rose-950/30 border border-rose-800/50 rounded-xl p-4 font-mono text-xs text-rose-300 space-y-1">
           <div className="flex items-center gap-2 font-bold text-rose-400">
             <AlertTriangle className="w-4 h-4" />
-            <span>Anti-Pattern: Cod Monolitic într-un singur main() gigantic</span>
+            <span>
+              {lang === 'ro'
+                ? 'Anti-Pattern: Cod Monolitic într-un singur main() gigantic'
+                : 'Anti-Pattern: Monolithic Code in a single gigantic main()'}
+            </span>
           </div>
           <p className="text-slate-400 text-[11px] leading-relaxed">
-            Peste 100 de linii într-o singură funcție! Dacă apare un bug la calculul mediei sau sortare,
-            trebuie recitit tot fișierul. Greu de testat, imposibil de refolosit într-un alt proiect.
+            {lang === 'ro'
+              ? 'Peste 100 de linii într-o singură funcție! Dacă apare un bug la calculul mediei sau sortare, trebuie recitit tot fișierul. Greu de testat, imposibil de refolosit într-un alt proiect.'
+              : 'Over 100 lines inside a single function! If a bug occurs in average calculation or sorting, the entire file must be re-read. Hard to test, impossible to reuse in another project.'}
           </p>
         </div>
       ) : (
         <div className="bg-purple-950/30 border border-purple-800/50 rounded-xl p-4 font-mono text-xs text-purple-300 space-y-1">
           <div className="flex items-center gap-2 font-bold text-purple-400">
             <Sparkles className="w-4 h-4" />
-            <span>Best Practice: Funcția main() devine un pipeline limpede</span>
+            <span>
+              {lang === 'ro'
+                ? 'Best Practice: Funcția main() devine un pipeline limpede'
+                : 'Best Practice: The main() function becomes a clean pipeline'}
+            </span>
           </div>
           <pre className="text-slate-300 text-[11px] overflow-x-auto">
 {`int main() {
@@ -282,14 +332,14 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3 shadow-lg">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-mono font-semibold text-purple-300 uppercase tracking-wider">
-                Etape Pipeline Subprograme
+                {lang === 'ro' ? 'Etape Pipeline Subprograme' : 'Subprograms Pipeline Steps'}
               </span>
               <button
                 onClick={handleRunFullPipeline}
                 className="flex items-center gap-1.5 px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded text-xs font-mono font-bold transition-colors"
               >
                 <Play className="w-3.5 h-3.5 fill-white" />
-                Rulează Tot Pipeline-ul
+                {lang === 'ro' ? 'Rulează Tot Pipeline-ul' : 'Run Full Pipeline'}
               </button>
             </div>
 
@@ -315,7 +365,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                     )}
                   </div>
                   <div className="text-[11px] text-slate-400 mt-0.5">
-                    {step.desc}
+                    {lang === 'ro' ? step.descRo : step.descEn}
                   </div>
                   <div className="text-[10px] font-mono text-purple-400 mt-1">
                     <code>{step.snippet}</code>
@@ -329,12 +379,14 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
             <div className="flex items-center gap-2 text-xs font-mono text-slate-400 mb-2">
               <Terminal className="w-4 h-4 text-purple-400" />
-              <span>Consola de Execuție main()</span>
+              <span>{lang === 'ro' ? 'Consola de Execuție main()' : 'main() Execution Console'}</span>
             </div>
             <div className="bg-slate-950 p-3 rounded border border-slate-800/80 font-mono text-xs space-y-1 max-h-[140px] overflow-y-auto">
               {pipelineLogs.length === 0 ? (
                 <div className="text-slate-500 italic">
-                  Apasă pe oricare etapă sau &quot;Rulează Tot Pipeline-ul&quot;.
+                  {lang === 'ro'
+                    ? 'Apasă pe oricare etapă sau "Rulează Tot Pipeline-ul".'
+                    : 'Click any step or "Run Full Pipeline".'}
                 </div>
               ) : (
                 pipelineLogs.map((log, idx) => (
@@ -353,12 +405,12 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2 text-emerald-400 font-mono text-sm font-semibold">
                 <GraduationCap className="w-5 h-5" />
-                <span>Catalogul Clasei a VIII-a</span>
+                <span>{lang === 'ro' ? 'Catalogul Clasei a VIII-a' : 'Grade 8 Student Gradebook'}</span>
               </div>
               {stats.isSorted && (
                 <span className="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800/60 px-2.5 py-0.5 rounded-full font-mono flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" />
-                  Sortat descrescător
+                  {lang === 'ro' ? 'Sortat descrescător' : 'Sorted descending'}
                 </span>
               )}
             </div>
@@ -369,9 +421,9 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                 <thead>
                   <tr className="border-b border-slate-800 text-slate-400">
                     <th className="py-2 px-3">#</th>
-                    <th className="py-2 px-3">Nume Elev</th>
-                    <th className="py-2 px-3 text-right">Notă C++</th>
-                    <th className="py-2 px-3 text-right">Statut</th>
+                    <th className="py-2 px-3">{lang === 'ro' ? 'Nume Elev' : 'Student Name'}</th>
+                    <th className="py-2 px-3 text-right">{lang === 'ro' ? 'Notă C++' : 'C++ Grade'}</th>
+                    <th className="py-2 px-3 text-right">{lang === 'ro' ? 'Statut' : 'Status'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
@@ -394,15 +446,15 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                       <td className="py-2 px-3 text-right">
                         {st.nota === 10 ? (
                           <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-mono font-bold">
-                            Premiant
+                            {lang === 'ro' ? 'Premiant' : 'Top Student'}
                           </span>
                         ) : st.nota >= 5 ? (
                           <span className="text-[10px] bg-blue-950 text-blue-400 border border-blue-800 px-2 py-0.5 rounded font-mono">
-                            Promovat
+                            {lang === 'ro' ? 'Promovat' : 'Passed'}
                           </span>
                         ) : (
                           <span className="text-[10px] bg-rose-950 text-rose-400 border border-rose-800 px-2 py-0.5 rounded font-mono font-bold">
-                            Corigent
+                            {lang === 'ro' ? 'Corigent' : 'Failing'}
                           </span>
                         )}
                       </td>
@@ -416,7 +468,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
             <div className="grid grid-cols-3 gap-3 pt-2">
               <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-center">
                 <span className="text-[10px] text-slate-400 font-mono block">
-                  Media Clasei
+                  {lang === 'ro' ? 'Media Clasei' : 'Class Average'}
                 </span>
                 <span className="text-xl font-bold font-mono text-purple-400">
                   {stats.medie}
@@ -424,7 +476,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
               </div>
               <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-center">
                 <span className="text-[10px] text-slate-400 font-mono block">
-                  Nota Maximă
+                  {lang === 'ro' ? 'Nota Maximă' : 'Highest Grade'}
                 </span>
                 <span className="text-xl font-bold font-mono text-emerald-400">
                   {stats.maxNota}
@@ -432,7 +484,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
               </div>
               <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-center">
                 <span className="text-[10px] text-slate-400 font-mono block">
-                  Corigenți (&lt;5)
+                  {lang === 'ro' ? 'Corigenți (<5)' : 'Failing (<5)'}
                 </span>
                 <span className="text-xl font-bold font-mono text-rose-400">
                   {stats.corigenti}
@@ -445,23 +497,27 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-amber-400">
               <HelpCircle className="w-4 h-4" />
-              <span>Verificare Înțelegere Arhitectură (Manual pag. 88)</span>
+              <span>{lang === 'ro' ? 'Verificare Înțelegere Arhitectură (Manual pag. 88)' : 'Architecture Checkpoint (Textbook p. 88)'}</span>
             </div>
 
             {/* Question 1 */}
             <div className="space-y-2 text-xs">
               <p className="text-slate-300 font-medium">
-                1. Ce rol are funcția <code>main()</code> într-o aplicație C++ modulară proiectată corect?
+                {lang === 'ro'
+                  ? '1. Ce rol are funcția main() într-o aplicație C++ modulară proiectată corect?'
+                  : '1. What is the role of main() in a properly architected modular C++ program?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
                   {
                     id: 'main_curat',
-                    text: 'Coordonează fluxul programului, apelând pe rând subprogramele specializate.'
+                    textRo: 'Coordonează fluxul programului, apelând pe rând subprogramele specializate.',
+                    textEn: 'Coordinates program flow, invoking specialized subprograms in sequence.'
                   },
                   {
                     id: 'main_spaghetti',
-                    text: 'Trebuie să conțină toți algoritmii scriși cap-coadă fără nicio altă funcție.'
+                    textRo: 'Trebuie să conțină toți algoritmii scriși cap-coadă fără nicio altă funcție.',
+                    textEn: 'Must contain all algorithms written end-to-end without any external functions.'
                   }
                 ].map((opt) => (
                   <button
@@ -478,7 +534,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                         : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    {opt.text}
+                    {lang === 'ro' ? opt.textRo : opt.textEn}
                   </button>
                 ))}
               </div>
@@ -487,17 +543,21 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
             {/* Question 2 */}
             <div className="space-y-2 text-xs pt-2 border-t border-slate-800">
               <p className="text-slate-300 font-medium">
-                2. Dacă dorim să schimbăm algoritmul de sortare (de ex. din Bubble Sort în Selection Sort), ce modificăm într-un proiect modular?
+                {lang === 'ro'
+                  ? '2. Dacă dorim să schimbăm algoritmul de sortare (de ex. din Bubble Sort în Selection Sort), ce modificăm într-un proiect modular?'
+                  : '2. If we want to replace the sorting algorithm (e.g. from Bubble Sort to Selection Sort), what is modified in a modular project?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
                   {
                     id: 'modular_reducere',
-                    text: 'Modificăm doar corpul funcției sortareNote(), restul programului și main() rămânând intacte.'
+                    textRo: 'Modificăm doar corpul funcției sortareNote(), restul programului și main() rămânând intacte.',
+                    textEn: 'We modify only the body of sortGrades(), leaving main() and the rest of the code intact.'
                   },
                   {
                     id: 'tot_codul',
-                    text: 'Trebuie să rescriem complet de la zero întreg programul.'
+                    textRo: 'Trebuie să rescriem complet de la zero întreg programul.',
+                    textEn: 'We must rewrite the entire program from scratch.'
                   }
                 ].map((opt) => (
                   <button
@@ -514,7 +574,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
                         : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    {opt.text}
+                    {lang === 'ro' ? opt.textRo : opt.textEn}
                   </button>
                 ))}
               </div>
@@ -538,11 +598,17 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
           <div>
             <div className="text-sm font-semibold text-white">
               {isCompleted
-                ? 'Proiectul Integrator Finalizat cu Succes!'
-                : 'Cerințe: Parcurge pipeline-ul complet (sau apasă Rulează Tot) și răspunde corect la întrebări.'}
+                ? lang === 'ro'
+                  ? 'Proiectul Integrator Finalizat cu Succes!'
+                  : 'Integrator Project Completed Successfully!'
+                : lang === 'ro'
+                ? 'Cerințe: Parcurge pipeline-ul complet (sau apasă Rulează Tot) și răspunde corect la întrebări.'
+                : 'Requirements: Run the complete pipeline (or click Run Full Pipeline) and answer both questions.'}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și deblocarea Clinicii de Depanare (Nivelul 6).
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și deblocarea Clinicii de Depanare (Nivelul 6).'
+                : 'Reward: +150 XP points and unlock the Debugging Clinic (Level 6).'}
             </div>
           </div>
         </div>
@@ -556,7 +622,7 @@ export const A5Level5_ModularProjectIntegrator: React.FC<A5Level5Props> = ({
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Nivelul 6</span>
+          <span>{lang === 'ro' ? 'Continuă spre Nivelul 6' : 'Continue to Level 6'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

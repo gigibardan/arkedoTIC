@@ -19,6 +19,7 @@ import {
   Flame,
   Clock
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface R2Level1Props {
@@ -31,6 +32,7 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
   onCompletePage,
   onComplete,
 }) => {
+  const { lang } = useLanguage();
   // Simulator State
   const [ambientLux, setAmbientLux] = useState<number>(200); // 0 (beznă) .. 1000 (soare puternic)
   const [pirMotion, setPirMotion] = useState<boolean>(false);
@@ -121,22 +123,28 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  Modulul 4B • Pasul 1 din 7
+                  {lang === 'ro' ? 'Modulul 4B • Pasul 1 din 7' : 'Module 4B • Step 1 of 7'}
                 </span>
-                <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 99–101</span>
+                <span className="text-xs text-slate-400 font-mono">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 99–101' : 'Art Klett Textbook pp. 99–101'}
+                </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
-                Sistem Inteligent de Iluminat Public (Smart Streetlight)
+                {lang === 'ro'
+                  ? 'Sistem Inteligent de Iluminat Public (Smart Streetlight)'
+                  : 'Smart Public Streetlighting System'}
               </h1>
               <p className="text-slate-300 text-sm mt-1 max-w-2xl">
-                Automatizează iluminatul stradal folosind un senzor de lumină ambientală (LDR), un senzor piroelectric de mișcare (PIR) și modulație PWM pentru economisirea energiei cu până la 70%.
+                {lang === 'ro'
+                  ? 'Automatizează iluminatul stradal folosind un senzor de lumină ambientală (LDR), un senzor piroelectric de mișcare (PIR) și modulație PWM pentru economisirea energiei cu până la 70%.'
+                  : 'Automate public streetlighting using an ambient light sensor (LDR), a pyroelectric motion detector (PIR), and PWM modulation to save up to 70% electrical energy.'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 bg-slate-900/80 px-4 py-2.5 rounded-xl border border-slate-700/60">
             <div className="text-right">
-              <div className="text-xs text-slate-400">Economie Energie</div>
+              <div className="text-xs text-slate-400">{lang === 'ro' ? 'Economie Energie' : 'Energy Savings'}</div>
               <div className="text-lg font-bold text-emerald-400 font-mono">
                 {lampMode === 'OFF' ? '100%' : lampMode === 'DIMMED' ? '70%' : '0%'}
               </div>
@@ -152,7 +160,9 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
           <div className="bg-slate-900/70 border border-slate-700/60 rounded-2xl p-6 shadow-lg relative overflow-hidden">
             <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2 mb-4">
               <Eye className="w-5 h-5 text-teal-400" />
-              Simulare Stradală în Timp Real: Zi / Noapte & Mișcare
+              {lang === 'ro'
+                ? 'Simulare Stradală în Timp Real: Zi / Noapte & Mișcare'
+                : 'Real-time Street Simulation: Day / Night & Motion'}
             </h2>
 
             {/* Visual Environment Canvas */}
@@ -170,12 +180,16 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
                 {ambientLux > 400 ? (
                   <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-1.5 rounded-full border border-amber-400/40 backdrop-blur-sm">
                     <Sun className="w-6 h-6 text-amber-300 animate-spin" style={{ animationDuration: '30s' }} />
-                    <span className="text-xs font-bold text-amber-200">Soare ({ambientLux} Lux)</span>
+                    <span className="text-xs font-bold text-amber-200">
+                      {lang === 'ro' ? `Soare (${ambientLux} Lux)` : `Daylight (${ambientLux} Lux)`}
+                    </span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 bg-indigo-500/20 px-3 py-1.5 rounded-full border border-indigo-400/40 backdrop-blur-sm">
                     <Moon className="w-5 h-5 text-indigo-200" />
-                    <span className="text-xs font-bold text-indigo-200">Noapte ({ambientLux} Lux)</span>
+                    <span className="text-xs font-bold text-indigo-200">
+                      {lang === 'ro' ? `Noapte (${ambientLux} Lux)` : `Night (${ambientLux} Lux)`}
+                    </span>
                   </div>
                 )}
               </div>
@@ -218,13 +232,15 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
                   <div className="flex flex-col items-center animate-bounce">
                     <span className="text-2xl">🚶</span>
                     <span className="text-[10px] bg-emerald-500/90 text-black font-extrabold px-1.5 py-0.5 rounded shadow">
-                      PIR DETECTAT!
+                      {lang === 'ro' ? 'PIR DETECTAT!' : 'PIR DETECTED!'}
                     </span>
                   </div>
                 ) : (
                   <div className="opacity-40 flex flex-col items-center">
                     <span className="text-2xl filter grayscale">🛣️</span>
-                    <span className="text-[10px] text-slate-400">Zonă Liberă</span>
+                    <span className="text-[10px] text-slate-400">
+                      {lang === 'ro' ? 'Zonă Liberă' : 'Clear Area'}
+                    </span>
                   </div>
                 )}
               </div>
@@ -241,7 +257,9 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
                 <div className="flex justify-between items-center text-sm font-medium text-slate-300 mb-1">
                   <span className="flex items-center gap-1.5">
                     <Sun className="w-4 h-4 text-amber-400" />
-                    Intensitate Lumină Ambientală (LDR pe pinul A0):
+                    {lang === 'ro'
+                      ? 'Intensitate Lumină Ambientală (LDR pe pinul A0):'
+                      : 'Ambient Light Intensity (LDR on pin A0):'}
                   </span>
                   <span className="font-mono text-emerald-400 font-bold">
                     {ambientLux} Lux &rarr; ADC: {adcValue} / 1023
@@ -257,9 +275,11 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
                   className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex justify-between text-[11px] text-slate-400 mt-1">
-                  <span>0 Lux (Noapte adâncă)</span>
-                  <span className="text-amber-400 font-semibold">Prag comutare: ~{lightThreshold} ADC</span>
-                  <span>1000 Lux (Amiază senină)</span>
+                  <span>{lang === 'ro' ? '0 Lux (Noapte adâncă)' : '0 Lux (Pitch Night)'}</span>
+                  <span className="text-amber-400 font-semibold">
+                    {lang === 'ro' ? `Prag comutare: ~${lightThreshold} ADC` : `Switch threshold: ~${lightThreshold} ADC`}
+                  </span>
+                  <span>{lang === 'ro' ? '1000 Lux (Amiază senină)' : '1000 Lux (Bright Noon)'}</span>
                 </div>
               </div>
 
@@ -270,16 +290,22 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
                   className="px-4 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white shadow-lg flex items-center gap-2 active:scale-95 transition-all"
                 >
                   <Activity className="w-4 h-4" />
-                  Simulează Pieton / Vehicul (Declanșare PIR)
+                  {lang === 'ro'
+                    ? 'Simulează Pieton / Vehicul (Declanșare PIR)'
+                    : 'Simulate Pedestrian / Vehicle (PIR Trigger)'}
                 </button>
 
                 {motionTimer > 0 ? (
                   <div className="flex items-center gap-2 bg-amber-500/20 text-amber-300 px-3 py-1.5 rounded-lg border border-amber-500/40 text-xs font-mono font-bold animate-pulse">
                     <Clock className="w-3.5 h-3.5" />
-                    Reținere mișcare: {motionTimer}s
+                    {lang === 'ro'
+                      ? `Reținere mișcare: ${motionTimer}s`
+                      : `Motion hold: ${motionTimer}s`}
                   </div>
                 ) : (
-                  <span className="text-xs text-slate-400">PIR în repaus (LOW)</span>
+                  <span className="text-xs text-slate-400">
+                    {lang === 'ro' ? 'PIR în repaus (LOW)' : 'PIR idle (LOW)'}
+                  </span>
                 )}
               </div>
             </div>
@@ -288,17 +314,25 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
           {/* Status Diagnostic Card */}
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl text-center">
-              <div className="text-xs text-slate-400">Stare LDR (A0)</div>
+              <div className="text-xs text-slate-400">
+                {lang === 'ro' ? 'Stare LDR (A0)' : 'LDR State (A0)'}
+              </div>
               <div className="text-sm font-bold mt-1 text-white">
-                {isNight ? '🌙 Noapte' : '☀️ Zi'}
+                {isNight
+                  ? lang === 'ro' ? '🌙 Noapte' : '🌙 Night'
+                  : lang === 'ro' ? '☀️ Zi' : '☀️ Day'}
               </div>
               <div className="text-[11px] font-mono text-emerald-400">{adcValue} ADC</div>
             </div>
 
             <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl text-center">
-              <div className="text-xs text-slate-400">Senzor PIR (D2)</div>
+              <div className="text-xs text-slate-400">
+                {lang === 'ro' ? 'Senzor PIR (D2)' : 'PIR Sensor (D2)'}
+              </div>
               <div className="text-sm font-bold mt-1 text-white">
-                {pirMotion || motionTimer > 0 ? '🚶 DETECTAT' : '💤 REPAUS'}
+                {pirMotion || motionTimer > 0
+                  ? lang === 'ro' ? '🚶 DETECTAT' : '🚶 DETECTED'
+                  : lang === 'ro' ? '💤 REPAUS' : '💤 IDLE'}
               </div>
               <div className="text-[11px] font-mono text-amber-400">
                 {pirMotion || motionTimer > 0 ? 'HIGH (5V)' : 'LOW (0V)'}
@@ -306,9 +340,15 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
             </div>
 
             <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-xl text-center">
-              <div className="text-xs text-slate-400">Lampă PWM (~D9)</div>
+              <div className="text-xs text-slate-400">
+                {lang === 'ro' ? 'Lampă PWM (~D9)' : 'PWM Lamp (~D9)'}
+              </div>
               <div className="text-sm font-bold mt-1 text-white">
-                {lampMode === 'OFF' ? 'STINS' : lampMode === 'DIMMED' ? 'ECO (30%)' : 'MAX (100%)'}
+                {lampMode === 'OFF'
+                  ? lang === 'ro' ? 'STINS' : 'OFF'
+                  : lampMode === 'DIMMED'
+                  ? 'ECO (30%)'
+                  : 'MAX (100%)'}
               </div>
               <div className="text-[11px] font-mono text-teal-400">{pwmValue} / 255 PWM</div>
             </div>
@@ -328,7 +368,8 @@ export const R2Level1_SmartStreetlightLab: React.FC<R2Level1Props> = ({
             </div>
 
             <pre className="mt-3 text-[11px] font-mono text-slate-300 leading-relaxed overflow-x-auto bg-slate-900/90 p-3 rounded-xl border border-slate-800/80">
-              <code>{`// Pini & Praguri
+              <code>{lang === 'ro'
+                ? `// Pini & Praguri
 const int pinLDR = A0;      // Senzor lumină
 const int pinPIR = 2;       // Senzor mișcare
 const int pinLED = 9;       // Lampă stradală (PWM)
@@ -353,6 +394,32 @@ void loop() {
     // Noapte fără mișcare: Mod Eco 30%
     analogWrite(pinLED, 75);
   }
+}`
+                : `// Pins & Thresholds
+const int pinLDR = A0;      // Ambient light sensor
+const int pinPIR = 2;       // Motion sensor
+const int pinLED = 9;       // Street lamp (PWM)
+const int LIGHT_THRESH = ${lightThreshold};
+
+void setup() {
+  pinMode(pinPIR, INPUT);
+  pinMode(pinLED, OUTPUT);
+}
+
+void loop() {
+  int light = analogRead(pinLDR);   // 0..1023
+  int motion = digitalRead(pinPIR); // 0 or 1
+
+  if (light > LIGHT_THRESH) {
+    // Day: Turned completely off for max savings
+    analogWrite(pinLED, 0);
+  } else if (motion == HIGH) {
+    // Night + Motion: Full 100% illumination
+    analogWrite(pinLED, 255);
+  } else {
+    // Night idle: Eco 30% illumination
+    analogWrite(pinLED, 75);
+  }
 }`}</code>
             </pre>
           </div>
@@ -361,10 +428,12 @@ void loop() {
           <div className="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-5 shadow-lg space-y-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              Laborator Interactiv: Misiuni de Testare
+              {lang === 'ro' ? 'Laborator Interactiv: Misiuni de Testare' : 'Interactive Lab: Testing Missions'}
             </h3>
             <p className="text-xs text-slate-300">
-              Verifică cele 3 scenarii de eficiență energetică din manualul de Informatică (pag. 100):
+              {lang === 'ro'
+                ? 'Verifică cele 3 scenarii de eficiență energetică din manualul de Informatică (pag. 100):'
+                : 'Verify the 3 energy efficiency scenarios from the CS textbook (p. 100):'}
             </p>
 
             <div className="space-y-2 text-xs">
@@ -372,21 +441,33 @@ void loop() {
                 testedDayEco ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
               }`}>
                 <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedDayEco ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>1. Reglează lumina la peste 500 Lux (Zi: Lampa stinsă la 0V)</span>
+                <span>
+                  {lang === 'ro'
+                    ? '1. Reglează lumina la peste 500 Lux (Zi: Lampa stinsă la 0V)'
+                    : '1. Adjust light to above 500 Lux (Day: Lamp turned off at 0V)'}
+                </span>
               </div>
 
               <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
                 testedNightDim ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
               }`}>
                 <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedNightDim ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>2. Coboară lumina sub 300 Lux (Noapte fără pietoni: Mod Eco 30% PWM)</span>
+                <span>
+                  {lang === 'ro'
+                    ? '2. Coboară lumina sub 300 Lux (Noapte fără pietoni: Mod Eco 30% PWM)'
+                    : '2. Drop light below 300 Lux (Night without pedestrians: Eco Mode 30% PWM)'}
+                </span>
               </div>
 
               <div className={`flex items-center gap-2 p-2.5 rounded-xl border transition-all ${
                 testedNightMotion ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200' : 'bg-slate-800/50 border-slate-700 text-slate-400'
               }`}>
                 <CheckCircle2 className={`w-4 h-4 shrink-0 ${testedNightMotion ? 'text-emerald-400' : 'text-slate-600'}`} />
-                <span>3. Declanșează senzorul PIR noaptea (Iluminare maximă 100% PWM 255)</span>
+                <span>
+                  {lang === 'ro'
+                    ? '3. Declanșează senzorul PIR noaptea (Iluminare maximă 100% PWM 255)'
+                    : '3. Trigger the PIR sensor at night (Maximum illumination 100% PWM 255)'}
+                </span>
               </div>
             </div>
 
@@ -401,7 +482,11 @@ void loop() {
                     : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
                 }`}
               >
-                <span>Continuă spre Nivelul 2: Barieră de Parcare</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Continuă spre Nivelul 2: Barieră de Parcare'
+                    : 'Continue to Level 2: Smart Parking Barrier'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

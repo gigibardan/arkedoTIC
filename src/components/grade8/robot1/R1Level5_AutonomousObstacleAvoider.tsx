@@ -15,6 +15,7 @@ import {
   Zap,
   Pause
 } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface R1Level5Props {
@@ -33,11 +34,16 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [robot, setRobot] = useState<RobotPos>({ x: 30, y: 150, angle: 0 });
   const [decisionLogs, setDecisionLogs] = useState<string[]>([
-    'Sistem autonom inițializat. Senzor HC-SR04 calibrat pe servomotor SG90.',
-    'Apasă "Pornește Navigarea Autonomă" pentru a rula mașina de stări C++.'
+    lang === 'ro'
+      ? 'Sistem autonom inițializat. Senzor HC-SR04 calibrat pe servomotor SG90.'
+      : 'Autonomous system initialized. HC-SR04 sensor calibrated on SG90 servo.',
+    lang === 'ro'
+      ? 'Apasă "Pornește Navigarea Autonomă" pentru a rula mașina de stări C++.'
+      : 'Press "Start Navigation" to execute the C++ finite state machine.'
   ]);
 
   // Goal point
@@ -71,7 +77,9 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
           sounds.playLevelComplete();
           setDecisionLogs((logs) => [
             ...logs.slice(-4),
-            '🏆 SUCCES! Robotul a navigat autonom și a atins Ținta fără coliziuni!'
+            lang === 'ro'
+              ? '🏆 SUCCES! Robotul a navigat autonom și a atins Ținta fără coliziuni!'
+              : '🏆 SUCCESS! Robot navigated autonomously and reached the Goal without collisions!'
           ]);
           return prev;
         }
@@ -101,7 +109,9 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
           const newAngle = (prev.angle + 45) % 360;
           setDecisionLogs((logs) => [
             ...logs.slice(-4),
-            `[DECISION C++]: Obstacol la ${Math.round(lookAheadDist)}cm! Stop motoare -> Rotire la ${newAngle}°`
+            lang === 'ro'
+              ? `[DECISION C++]: Obstacol la ${Math.round(lookAheadDist)}cm! Stop motoare -> Rotire la ${newAngle}°`
+              : `[DECISION C++]: Obstacle at ${Math.round(lookAheadDist)}cm! Stop motors -> Turn to ${newAngle}°`
           ]);
           return { ...prev, angle: newAngle };
         } else {
@@ -126,14 +136,18 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
     }, 100);
 
     return () => clearInterval(timer);
-  }, [isRunning, hasReachedGoal]);
+  }, [isRunning, hasReachedGoal, lang]);
 
   const handleReset = () => {
     sounds.playClick();
     setIsRunning(false);
     setHasReachedGoal(false);
     setRobot({ x: 30, y: 150, angle: 0 });
-    setDecisionLogs(['Robot repoziționat la start. Algoritm pregătit.']);
+    setDecisionLogs([
+      lang === 'ro'
+        ? 'Robot repoziționat la start. Algoritm pregătit.'
+        : 'Robot repositioned at start. Algorithm ready.'
+    ]);
   };
 
   const isLevelCompleted =
@@ -157,21 +171,35 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold">
-                Nivelul 5 • Unitatea 4: Robotică (Manual pag. 95–97)
+                {lang === 'ro'
+                  ? 'Nivelul 5 • Unitatea 4: Robotică (Manual pag. 95–97)'
+                  : 'Level 5 • Unit 4: Robotics (Textbook pp. 95–97)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Robotul Autonom Evitator de Obstacole
+                {lang === 'ro'
+                  ? 'Robotul Autonom Evitator de Obstacole'
+                  : 'Autonomous Obstacle Avoider Robot'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-900/40 border border-emerald-700/50 rounded-lg text-emerald-300 text-sm font-mono">
-            <span>Mașină de Stări C++</span>
+            <span>{lang === 'ro' ? 'Mașină de Stări C++' : 'C++ State Machine'}</span>
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          Culmea roboticii practice: integrarea senzorului ultrasonic HC-SR04, a servomotorului SG90 și
-          a punții H L298N într-un <strong>algoritm de navigare autonomă</strong>. Robotul sondează spațiul,
-          ia decizii în timp real și ocolește obstacolele fără intervenție umană.
+          {lang === 'ro' ? (
+            <>
+              Culmea roboticii practice: integrarea senzorului ultrasonic HC-SR04, a servomotorului SG90 și
+              a punții H L298N într-un <strong>algoritm de navigare autonomă</strong>. Robotul sondează spațiul,
+              ia decizii în timp real și ocolește obstacolele fără intervenție umană.
+            </>
+          ) : (
+            <>
+              The pinnacle of hands-on robotics: integrating the HC-SR04 ultrasonic sensor, SG90 servo,
+              and L298N H-Bridge into an <strong>autonomous navigation algorithm</strong>. The robot probes its surroundings,
+              makes real-time decisions, and maneuvers around obstacles without human intervention.
+            </>
+          )}
         </p>
       </div>
 
@@ -182,7 +210,9 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
           <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                Arenă Virtuală de Testare (Top-Down View)
+                {lang === 'ro'
+                  ? 'Arenă Virtuală de Testare (Top-Down View)'
+                  : 'Virtual Testing Arena (Top-Down View)'}
               </span>
               <div className="flex items-center gap-2">
                 <button
@@ -197,12 +227,14 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
                   }`}
                 >
                   {isRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
-                  {isRunning ? 'Pauză Navigare' : 'Pornește Navigarea'}
+                  {isRunning
+                    ? lang === 'ro' ? 'Pauză Navigare' : 'Pause Navigation'
+                    : lang === 'ro' ? 'Pornește Navigarea' : 'Start Navigation'}
                 </button>
                 <button
                   onClick={handleReset}
                   className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors"
-                  title="Resetează la Start"
+                  title={lang === 'ro' ? 'Resetează la Start' : 'Reset to Start'}
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -239,7 +271,7 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
                       fontFamily="monospace"
                       textAnchor="middle"
                     >
-                      ZID
+                      {lang === 'ro' ? 'ZID' : 'WALL'}
                     </text>
                   </g>
                 ))}
@@ -261,7 +293,7 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
                     fontWeight="bold"
                     textAnchor="middle"
                   >
-                    🚩 ȚINTĂ
+                    {lang === 'ro' ? '🚩 ȚINTĂ' : '🚩 GOAL'}
                   </text>
                 </g>
 
@@ -301,7 +333,11 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
             <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 font-mono text-xs space-y-1">
               <div className="flex items-center gap-2 text-slate-400 text-[11px] pb-1 border-b border-slate-800">
                 <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Log-uri Algoritmice Decizionale în Timp Real</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Log-uri Algoritmice Decizionale în Timp Real'
+                    : 'Real-Time Algorithmic Decision Logs'}
+                </span>
               </div>
               <div className="space-y-1 pt-1 min-h-[70px]">
                 {decisionLogs.map((log, idx) => (
@@ -328,10 +364,13 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
           {/* C++ State Machine Breakdown */}
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 font-mono text-xs space-y-2">
             <span className="text-[11px] font-bold text-emerald-400 block pb-1 border-b border-slate-800">
-              Structura Buclă C++ loop() (Manual pag. 97):
+              {lang === 'ro'
+                ? 'Structura Buclă C++ loop() (Manual pag. 97):'
+                : 'C++ loop() State Machine Structure (Textbook p. 97):'}
             </span>
             <pre className="text-slate-300 text-[11px] leading-relaxed overflow-x-auto">
-{`void loop() {
+{lang === 'ro'
+  ? `void loop() {
   int dist = masoaraDistanta();
   if (dist > 25) {
     mergiInainte();
@@ -342,6 +381,18 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
     if (distS > distD) viraStanga();
     else viraDreapta();
   }
+}`
+  : `void loop() {
+  int dist = measureDistance();
+  if (dist > 25) {
+    moveForward();
+  } else {
+    stopMotors();
+    int distL = scanLeft();
+    int distR = scanRight();
+    if (distL > distR) turnLeft();
+    else turnRight();
+  }
 }`}
             </pre>
           </div>
@@ -350,18 +401,36 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-amber-400">
               <HelpCircle className="w-4 h-4" />
-              <span>Verificare Înțelegere (Manual pag. 97)</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Verificare Înțelegere (Manual pag. 97)'
+                  : 'Comprehension Check (Textbook p. 97)'}
+              </span>
             </div>
 
             {/* Question 1 */}
             <div className="space-y-2 text-xs">
               <p className="text-slate-300 font-medium">
-                1. Cum se numește modelul algoritmic în care robotul comută între stări distincte (Mers Înainte, Oprire, Scanare, Viraj)?
+                {lang === 'ro'
+                  ? '1. Cum se numește modelul algoritmic în care robotul comută între stări distincte (Mers Înainte, Oprire, Scanare, Viraj)?'
+                  : '1. What is the algorithmic model called where the robot transitions between discrete states (Move Forward, Stop, Scan, Turn)?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
-                  { id: 'state_machine', text: 'Mașină cu stări finite (Finite State Machine)' },
-                  { id: 'random_walk', text: 'Mișcare aleatorie fără memorie sau logică' }
+                  {
+                    id: 'state_machine',
+                    text:
+                      lang === 'ro'
+                        ? 'Mașină cu stări finite (Finite State Machine)'
+                        : 'Finite State Machine (FSM)'
+                  },
+                  {
+                    id: 'random_walk',
+                    text:
+                      lang === 'ro'
+                        ? 'Mișcare aleatorie fără memorie sau logică'
+                        : 'Random walk without memory or logic'
+                  }
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -386,12 +455,26 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
             {/* Question 2 */}
             <div className="space-y-2 text-xs pt-2 border-t border-slate-800">
               <p className="text-slate-300 font-medium">
-                2. De ce se montează senzorul ultrasonic pe un servomotor rotativ?
+                {lang === 'ro'
+                  ? '2. De ce se montează senzorul ultrasonic pe un servomotor rotativ?'
+                  : '2. Why is the ultrasonic sensor mounted onto a rotating servo motor?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
-                  { id: 'radar_servo', text: 'Permite rotirea senzorului la stânga și la dreapta pentru a căuta traiectoria liberă fără a roti întreg șasiul' },
-                  { id: 'racire', text: 'Pentru a crea vânt și a răci senzorul' }
+                  {
+                    id: 'radar_servo',
+                    text:
+                      lang === 'ro'
+                        ? 'Permite rotirea senzorului la stânga și la dreapta pentru a căuta traiectoria liberă fără a roti întreg șasiul'
+                        : 'Allows rotating the sensor left and right to scout for clear trajectories without rotating the entire chassis'
+                  },
+                  {
+                    id: 'racire',
+                    text:
+                      lang === 'ro'
+                        ? 'Pentru a crea vânt și a răci senzorul'
+                        : 'To generate airflow and cool the sensor'
+                  }
                 ].map((opt) => (
                   <button
                     key={opt.id}
@@ -431,11 +514,17 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
           <div>
             <div className="text-sm font-semibold text-white">
               {isLevelCompleted
-                ? 'Nivelul 5 Finalizat cu Succes! Ținta Atinsă!'
-                : 'Cerințe: Pornește navigarea și lasă robotul să atingă Ținta 🚩, apoi răspunde la ambele întrebări.'}
+                ? lang === 'ro'
+                  ? 'Nivelul 5 Finalizat cu Succes! Ținta Atinsă!'
+                  : 'Level 5 Successfully Completed! Goal Reached!'
+                : lang === 'ro'
+                ? 'Cerințe: Pornește navigarea și lasă robotul să atingă Ținta 🚩, apoi răspunde la ambele întrebări.'
+                : 'Requirements: Start navigation and let the robot reach the Goal 🚩, then answer both questions.'}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și deblocarea Clinicii de Depanare Hardware (Nivelul 6).
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și deblocarea Clinicii de Depanare Hardware (Nivelul 6).'
+                : 'Reward: +150 XP points and unlocking the Hardware Debugging Clinic (Level 6).'}
             </div>
           </div>
         </div>
@@ -449,7 +538,7 @@ export const R1Level5_AutonomousObstacleAvoider: React.FC<R1Level5Props> = ({
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Nivelul 6</span>
+          <span>{lang === 'ro' ? 'Continuă spre Nivelul 6' : 'Continue to Level 6'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

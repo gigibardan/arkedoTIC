@@ -13,6 +13,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A3Level2Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -22,8 +23,11 @@ interface A3Level2Props {
 
 export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
   onCompletePage,
-  onComplete
+  onComplete,
+  onPrev
 }) => {
+  const { lang } = useLanguage();
+
   // Input Validation Simulator
   const [enteredGrade, setEnteredGrade] = useState<number>(12);
   const [historyAttempts, setHistoryAttempts] = useState<{ val: number; valid: boolean }[]>([]);
@@ -89,22 +93,32 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/30 text-blue-200 border border-blue-400/30">
-                  Modulul 3C • Nivelul 2 din 7
+                  {lang === 'ro' ? 'Modulul 3C • Nivelul 2 din 7' : 'Module 3C • Level 2 of 7'}
                 </span>
-                <span className="text-xs text-blue-300">Manual Art Klett pag. 72–73</span>
+                <span className="text-xs text-blue-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 72–73' : 'Art Klett Textbook pp. 72–73'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Structura Repetitivă cu Test Final: do ... while & Validarea Datelor
+                {lang === 'ro'
+                  ? 'Structura Repetitivă cu Test Final: do ... while & Validarea Datelor'
+                  : 'Post-Test Repetitive Structure: do ... while & Data Validation'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-blue-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 2: Bucla do-while</span>
+            <span className="text-xs text-blue-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 2: Bucla do-while' : 'Level 2: The do-while Loop'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-blue-100/90 leading-relaxed max-w-3xl">
-          Spre deosebire de <code className="bg-blue-950 px-1 rounded text-cyan-300 font-mono">while</code>, bucla <code className="bg-blue-950 px-1 rounded text-cyan-300 font-mono">do ... while (condiție);</code> execută corpul de instrucțiuni <strong>cel puțin o dată garantat</strong>, verificând condiția abia la final. Este ideală pentru citirea și validarea datelor de la tastatură!
+          {lang === 'ro'
+            ? 'Spre deosebire de while, bucla do ... while (condiție); execută corpul de instrucțiuni cel puțin o dată garantat, verificând condiția abia la final. Este ideală pentru citirea și validarea datelor de la tastatură!'
+            : 'Unlike while, the do ... while (condition); construct guarantees execution of its body at least once, evaluating the predicate only at the end. It is the premier paradigm for user input sanitation and keyboard data validation!'}
         </p>
       </div>
 
@@ -113,7 +127,9 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            Aplicație Practică: Validarea Notei Școlare (Manual pag. 73)
+            {lang === 'ro'
+              ? 'Aplicație Practică: Validarea Notei Școlare (Manual pag. 73)'
+              : 'Practical Lab: School Grade Validation (Textbook p. 73)'}
           </h3>
           <span className="text-xs text-slate-400 font-mono">do &#123; cin &gt;&gt; nota; &#125; while (nota &lt; 1 || nota &gt; 10);</span>
         </div>
@@ -122,7 +138,7 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
           <div className="lg:col-span-5 space-y-3">
             <div>
               <label className="text-xs text-slate-300 flex justify-between">
-                <span>Introdu o notă de la tastatură:</span>
+                <span>{lang === 'ro' ? 'Introdu o notă de la tastatură:' : 'Enter grade from keyboard:'}</span>
                 <span className="font-mono text-cyan-300 font-bold">{enteredGrade}</span>
               </label>
               <div className="flex gap-2 mt-1">
@@ -136,32 +152,34 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
                   onClick={handleSimulateInput}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold whitespace-nowrap"
                 >
-                  Trimite (cin &gt;&gt;)
+                  {lang === 'ro' ? 'Trimite (cin >>)' : 'Submit (cin >>)'}
                 </button>
               </div>
             </div>
 
             {/* Quick buttons */}
             <div>
-              <span className="text-[11px] text-slate-400 block mb-1 font-medium">Exemple rapide de testat:</span>
+              <span className="text-[11px] text-slate-400 block mb-1 font-medium">
+                {lang === 'ro' ? 'Exemple rapide de testat:' : 'Quick test values:'}
+              </span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setEnteredGrade(-3)}
                   className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 text-xs border border-slate-700"
                 >
-                  -3 (Invalid)
+                  -3 ({lang === 'ro' ? 'Invalid' : 'Invalid'})
                 </button>
                 <button
                   onClick={() => setEnteredGrade(15)}
                   className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 text-xs border border-slate-700"
                 >
-                  15 (Invalid)
+                  15 ({lang === 'ro' ? 'Invalid' : 'Invalid'})
                 </button>
                 <button
                   onClick={() => setEnteredGrade(10)}
                   className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 text-xs border border-slate-700"
                 >
-                  10 (Valid!)
+                  10 ({lang === 'ro' ? 'Valid!' : 'Valid!'})
                 </button>
               </div>
             </div>
@@ -176,17 +194,27 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span>
                 {hasValidatedSuccessfully
-                  ? 'Validare reușită! Bucla do-while s-a oprit deoarece nota este în intervalul [1, 10].'
-                  : 'Introdu o notă validă între 1 și 10 pentru a opri bucla de validare.'}
+                  ? (lang === 'ro'
+                    ? 'Validare reușită! Bucla do-while s-a oprit deoarece nota este în intervalul [1, 10].'
+                    : 'Validation successful! The do-while loop terminated because grade lies in [1, 10].')
+                  : (lang === 'ro'
+                    ? 'Introdu o notă validă între 1 și 10 pentru a opri bucla de validare.'
+                    : 'Input a valid grade between 1 and 10 to conclude the validation loop.')}
               </span>
             </div>
           </div>
 
           {/* Right: Terminal logs */}
           <div className="lg:col-span-7 bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
-            <div className="text-slate-500 text-[11px]">// Istoric iterații buclă:</div>
+            <div className="text-slate-500 text-[11px]">
+              {lang === 'ro' ? '// Istoric iterații buclă:' : '// Loop iteration history:'}
+            </div>
             {historyAttempts.length === 0 ? (
-              <span className="text-slate-600 italic">Introdu valori în stânga pentru a simula citirea repetată...</span>
+              <span className="text-slate-600 italic">
+                {lang === 'ro'
+                  ? 'Introdu valori în stânga pentru a simula citirea repetată...'
+                  : 'Submit values on the left to simulate repeated input parsing...'}
+              </span>
             ) : (
               <div className="space-y-1.5 max-h-[140px] overflow-y-auto">
                 {historyAttempts.map((att, idx) => (
@@ -199,10 +227,12 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
                     }`}
                   >
                     <span>
-                      Iterația #{idx + 1}: nota = {att.val}
+                      {lang === 'ro' ? `Iterația #${idx + 1}: nota = ${att.val}` : `Iteration #${idx + 1}: grade = ${att.val}`}
                     </span>
                     <span className="font-sans font-bold text-[11px]">
-                      {att.valid ? 'ACCEPTAT (Stop Buclă)' : 'RESPINS (Reia citirea)'}
+                      {att.valid
+                        ? (lang === 'ro' ? 'ACCEPTAT (Stop Buclă)' : 'ACCEPTED (Loop Terminates)')
+                        : (lang === 'ro' ? 'RESPINS (Reia citirea)' : 'REJECTED (Loop Repeats)')}
                     </span>
                   </div>
                 ))}
@@ -217,21 +247,27 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <Code2 className="w-4 h-4 text-cyan-400" />
-            Comparație Directă: Condiție Inițial FALSĂ (<code className="text-amber-300 font-mono">int n = 0;</code>)
+            {lang === 'ro' ? (
+              <>Comparație Directă: Condiție Inițial FALSĂ (<code className="text-amber-300 font-mono">int n = 0;</code>)</>
+            ) : (
+              <>Side-by-Side Comparison: Initially FALSE Condition (<code className="text-amber-300 font-mono">int n = 0;</code>)</>
+            )}
           </h3>
           <button
             onClick={handleRunSideComparison}
             className="px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 shadow"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
-            Execută ambele structuri
+            {lang === 'ro' ? 'Execută ambele structuri' : 'Execute both constructs'}
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* While card */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
-            <span className="text-cyan-400 font-sans font-bold text-xs block">1. Bucla cu Test Inițial (while)</span>
+            <span className="text-cyan-400 font-sans font-bold text-xs block">
+              {lang === 'ro' ? '1. Bucla cu Test Inițial (while)' : '1. Pre-Test Loop (while)'}
+            </span>
             <div className="text-slate-300 space-y-0.5">
               <div><span className="text-pink-400">int</span> n = <span className="text-amber-300">0</span>;</div>
               <div><span className="text-pink-400">while</span> (n &gt; <span className="text-amber-300">0</span>) &#123;</div>
@@ -239,16 +275,22 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
               <div>&#125;</div>
             </div>
             <div className="pt-2 border-t border-slate-800">
-              <span className="text-slate-400 font-sans text-[11px] block">Rezultat execuție:</span>
+              <span className="text-slate-400 font-sans text-[11px] block">
+                {lang === 'ro' ? 'Rezultat execuție:' : 'Execution Outcome:'}
+              </span>
               <span className="text-cyan-300 font-bold text-sm">
-                {whileExecutions !== null ? `${whileExecutions} rulări (0 instrucțiuni executate)` : 'Neexecutat'}
+                {whileExecutions !== null
+                  ? (lang === 'ro' ? `${whileExecutions} rulări (0 instrucțiuni executate)` : `${whileExecutions} iterations (0 body statements executed)`)
+                  : (lang === 'ro' ? 'Neexecutat' : 'Not executed')}
               </span>
             </div>
           </div>
 
           {/* Do-While card */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
-            <span className="text-purple-400 font-sans font-bold text-xs block">2. Bucla cu Test Final (do ... while)</span>
+            <span className="text-purple-400 font-sans font-bold text-xs block">
+              {lang === 'ro' ? '2. Bucla cu Test Final (do ... while)' : '2. Post-Test Loop (do ... while)'}
+            </span>
             <div className="text-slate-300 space-y-0.5">
               <div><span className="text-pink-400">int</span> n = <span className="text-amber-300">0</span>;</div>
               <div><span className="text-pink-400">do</span> &#123;</div>
@@ -256,9 +298,13 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
               <div>&#125; <span className="text-pink-400">while</span> (n &gt; <span className="text-amber-300">0</span>)<span className="text-amber-400 font-bold">;</span></div>
             </div>
             <div className="pt-2 border-t border-slate-800">
-              <span className="text-slate-400 font-sans text-[11px] block">Rezultat execuție:</span>
+              <span className="text-slate-400 font-sans text-[11px] block">
+                {lang === 'ro' ? 'Rezultat execuție:' : 'Execution Outcome:'}
+              </span>
               <span className="text-purple-300 font-bold text-sm">
-                {doWhileExecutions !== null ? `${doWhileExecutions} rulare (executat cel puțin o dată!)` : 'Neexecutat'}
+                {doWhileExecutions !== null
+                  ? (lang === 'ro' ? `${doWhileExecutions} rulare (executat cel puțin o dată!)` : `${doWhileExecutions} iteration (guaranteed at least once!)`)
+                  : (lang === 'ro' ? 'Neexecutat' : 'Not executed')}
               </span>
             </div>
           </div>
@@ -269,21 +315,39 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 72–73)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 72–73)' : 'C++ Regulatory Check (Textbook pp. 72–73)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Ce element de punctuație este <strong>strict obligatoriu</strong> la finalul structurii <code className="text-pink-400 font-mono">do &#123; ... &#125; while (condiție)</code>?
+              {lang === 'ro' ? (
+                <>Ce element de punctuație este <strong>strict obligatoriu</strong> la finalul structurii <code className="text-pink-400 font-mono">do &#123; ... &#125; while (condiție)</code>?</>
+              ) : (
+                <>Which punctuation token is <strong>strictly mandatory</strong> at the end of a <code className="text-pink-400 font-mono">do &#123; ... &#125; while (condition)</code> construct?</>
+              )}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Punctul și virgula (;) imediat după paranteza închisă a condiției' },
-                { id: 'b', label: 'Semnul întrebării (?)' },
-                { id: 'c', label: 'Nu se pune nimic' }
+                {
+                  id: 'a',
+                  labelRo: 'Punctul și virgula (;) imediat după paranteza închisă a condiției',
+                  labelEn: 'A semicolon (;) directly following the closing parenthesis of the condition'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Semnul întrebării (?)',
+                  labelEn: 'A question mark (?)'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Nu se pune nimic',
+                  labelEn: 'No punctuation token is required'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -300,7 +364,7 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -309,15 +373,33 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Care este diferența esențială între <code className="text-cyan-300 font-mono">while</code> și <code className="text-purple-300 font-mono">do ... while</code>?
+              {lang === 'ro' ? (
+                <>Care este diferența esențială între <code className="text-cyan-300 font-mono">while</code> și <code className="text-purple-300 font-mono">do ... while</code>?</>
+              ) : (
+                <>What is the core distinction between <code className="text-cyan-300 font-mono">while</code> and <code className="text-purple-300 font-mono">do ... while</code>?</>
+              )}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Do-while funcționează doar cu numere negative' },
-                { id: 'b', label: 'Do-while execută corpul buclei cel puțin o dată, pe când while poate să nu îl execute niciodată dacă testul inițial e fals' },
-                { id: 'c', label: 'While este o instrucțiune interzisă în C++ modern' }
+                {
+                  id: 'a',
+                  labelRo: 'Do-while funcționează doar cu numere negative',
+                  labelEn: 'Do-while only functions with negative integers'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Do-while execută corpul buclei cel puțin o dată, pe când while poate să nu îl execute niciodată dacă testul inițial e fals',
+                  labelEn: 'Do-while executes the loop body at least once unconditionally, whereas while may execute zero times if the pre-test is false'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'While este o instrucțiune interzisă în C++ modern',
+                  labelEn: 'While is prohibited in modern C++'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -334,7 +416,7 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -353,22 +435,36 @@ export const A3Level2_DoWhilePostTestLab: React.FC<A3Level2Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai explorat validarea datelor cu do-while și diferențele față de while.'
-              : 'Validează cel puțin o notă corectă, rulează comparația directă și rezolvă întrebările.'}
+              ? (lang === 'ro'
+                ? 'Excelent! Ai explorat validarea datelor cu do-while și diferențele față de while.'
+                : 'Excellent! You explored data validation with do-while and contrasted it with while.')
+              : (lang === 'ro'
+                ? 'Validează cel puțin o notă corectă, rulează comparația directă și rezolvă întrebările.'
+                : 'Validate at least one grade, run side-by-side comparison, and answer both questions.')}
           </span>
         </div>
-        <button
-          onClick={handleFinish}
-          disabled={!isLevelCompleted}
-          className={`py-2 px-5 rounded-lg font-medium text-xs flex items-center gap-2 transition-all ${
-            isLevelCompleted
-              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg cursor-pointer'
-              : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
-          }`}
-        >
-          <span>Următorul Nivel: Bucla for & Suma Gauss</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          {onPrev && (
+            <button
+              onClick={onPrev}
+              className="py-2 px-4 rounded-lg font-medium text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition"
+            >
+              {lang === 'ro' ? 'Înapoi' : 'Back'}
+            </button>
+          )}
+          <button
+            onClick={handleFinish}
+            disabled={!isLevelCompleted}
+            className={`py-2 px-5 rounded-lg font-medium text-xs flex items-center gap-2 transition-all ${
+              isLevelCompleted
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg cursor-pointer'
+                : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
+            }`}
+          >
+            <span>{lang === 'ro' ? 'Următorul Nivel: Bucla for & Suma Gauss' : 'Next Level: The for Loop & Gauss Sum'}</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

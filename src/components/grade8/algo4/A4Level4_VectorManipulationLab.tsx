@@ -16,6 +16,7 @@ import {
   Check
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A4Level4Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -27,6 +28,8 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [arrayElements, setArrayElements] = useState<number[]>([10, 20, 30, 40, 50]);
   const [insertVal, setInsertVal] = useState<number>(99);
   const [insertPos, setInsertPos] = useState<number>(2);
@@ -47,10 +50,13 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
     }
     sounds.playClick();
     const updated = [...arrayElements];
-    // Shift right from end to insertPos
     updated.splice(insertPos, 0, insertVal);
     setArrayElements(updated);
-    setLastAction(`Inserat ${insertVal} la indexul [${insertPos}]. Elementele de la [${insertPos}] au fost deplasate spre dreapta! (n crește de la ${arrayElements.length} la ${updated.length})`);
+    setLastAction(
+      lang === 'ro'
+        ? `Inserat ${insertVal} la indexul [${insertPos}]. Elementele de la [${insertPos}] au fost deplasate spre dreapta! (n crește de la ${arrayElements.length} la ${updated.length})`
+        : `Inserted ${insertVal} at index [${insertPos}]. Elements from [${insertPos}] shifted to the right! (n increases from ${arrayElements.length} to ${updated.length})`
+    );
     setHasInserted(true);
     sounds.playCorrect();
   };
@@ -64,14 +70,18 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
     const removedVal = arrayElements[deletePos];
     const updated = arrayElements.filter((_, idx) => idx !== deletePos);
     setArrayElements(updated);
-    setLastAction(`Șters elementul ${removedVal} de la indexul [${deletePos}]. Elementele din dreapta s-au deplasat spre stânga! (n scade de la ${arrayElements.length} la ${updated.length})`);
+    setLastAction(
+      lang === 'ro'
+        ? `Șters elementul ${removedVal} de la indexul [${deletePos}]. Elementele din dreapta s-au deplasat spre stânga! (n scade de la ${arrayElements.length} la ${updated.length})`
+        : `Deleted element ${removedVal} from index [${deletePos}]. Elements to the right shifted to the left! (n decreases from ${arrayElements.length} to ${updated.length})`
+    );
     setHasDeleted(true);
     sounds.playCorrect();
   };
 
   const handleReset = () => {
     setArrayElements([10, 20, 30, 40, 50]);
-    setLastAction('Vector reinițializat la starea inițială.');
+    setLastAction(lang === 'ro' ? 'Vector reinițializat la starea inițială.' : 'Array reset to initial state.');
     sounds.playClick();
   };
 
@@ -101,22 +111,38 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/30 text-cyan-200 border border-cyan-400/30">
-                  Modulul 3D • Nivelul 4 din 7
+                  {lang === 'ro' ? 'Modulul 3D • Nivelul 4 din 7' : 'Module 3D • Level 4 of 7'}
                 </span>
-                <span className="text-xs text-cyan-300">Manual Art Klett pag. 80–81</span>
+                <span className="text-xs text-cyan-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 80–81' : 'Art Klett Textbook pp. 80–81'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Modificarea Tablourilor: Inserarea & Ștergerea de Elemente
+                {lang === 'ro'
+                  ? 'Modificarea Tablourilor: Inserarea & Ștergerea de Elemente'
+                  : 'Array Mutation: Insertion & Deletion of Elements'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-cyan-300 uppercase tracking-wider block">Progres Misiune</span>
-            <span className="text-lg font-bold text-cyan-300">Nivelul 4: Inserare & Ștergere</span>
+            <span className="text-xs text-cyan-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Progres Misiune' : 'Mission Progress'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? 'Nivelul 4: Inserare & Ștergere' : 'Level 4: Insertion & Deletion'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-cyan-100/90 leading-relaxed max-w-3xl">
-          Spre deosebire de listele dinamice, într-un tablou static elementele sunt stocate în poziții adiacente. Pentru a insera un element, trebuie să <strong>deplasăm valorile spre dreapta</strong> (de la coadă la cap). Pentru a șterge, <strong>deplasăm valorile spre stânga</strong> pentru a umple golul creat!
+          {lang === 'ro' ? (
+            <>
+              Spre deosebire de listele dinamice, într-un tablou static elementele sunt stocate în poziții adiacente. Pentru a insera un element, trebuie să <strong>deplasăm valorile spre dreapta</strong> (de la coadă la cap). Pentru a șterge, <strong>deplasăm valorile spre stânga</strong> pentru a umple golul creat!
+            </>
+          ) : (
+            <>
+              Unlike dynamic lists, in a static array elements are stored in adjacent memory positions. To insert an element, we must <strong>shift values to the right</strong> (from end to front). To delete, we <strong>shift values to the left</strong> to fill the created gap!
+            </>
+          )}
         </p>
       </div>
 
@@ -125,16 +151,21 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">
           <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
             <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
-            Simulator Vizual de Deplasare a Celulelor de Memorie
+            {lang === 'ro'
+              ? 'Simulator Vizual de Deplasare a Celulelor de Memorie'
+              : 'Visual Memory Cell Shifting Simulator'}
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400 font-mono">Dimensiune curentă: n = {arrayElements.length}</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Dimensiune curentă: n = ' : 'Current size: n = '}
+              {arrayElements.length}
+            </span>
             <button
               onClick={handleReset}
               className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs border border-slate-700 flex items-center gap-1"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Reset
+              {lang === 'ro' ? 'Reset' : 'Reset'}
             </button>
           </div>
         </div>
@@ -156,7 +187,7 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
                 key={`empty-${idx}`}
                 className="w-16 h-18 rounded-xl bg-slate-950/30 border border-dashed border-slate-800 flex flex-col items-center justify-center text-slate-600 text-xs shrink-0"
               >
-                <span className="text-[10px]">Liber</span>
+                <span className="text-[10px]">{lang === 'ro' ? 'Liber' : 'Empty'}</span>
               </div>
             ))}
           </div>
@@ -168,17 +199,19 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
           <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2.5">
             <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
               <Plus className="w-4 h-4" />
-              Operația 1: Inserare Element (Deplasare spre Dreapta &rarr;)
+              {lang === 'ro'
+                ? 'Operația 1: Inserare Element (Deplasare spre Dreapta →)'
+                : 'Operation 1: Element Insertion (Shift Right →)'}
             </span>
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-slate-400">Valoare:</span>
+              <span className="text-slate-400">{lang === 'ro' ? 'Valoare:' : 'Value:'}</span>
               <input
                 type="number"
                 value={insertVal}
                 onChange={(e) => setInsertVal(Number(e.target.value))}
                 className="w-16 bg-slate-900 border border-slate-700 rounded p-1 font-mono text-cyan-300 text-center"
               />
-              <span className="text-slate-400">La indexul:</span>
+              <span className="text-slate-400">{lang === 'ro' ? 'La indexul:' : 'At index:'}</span>
               <select
                 value={insertPos}
                 onChange={(e) => setInsertPos(Number(e.target.value))}
@@ -189,14 +222,16 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
                     v[{idx}]
                   </option>
                 ))}
-                <option value={arrayElements.length}>v[{arrayElements.length}] (Final)</option>
+                <option value={arrayElements.length}>
+                  v[{arrayElements.length}] ({lang === 'ro' ? 'Final' : 'End'})
+                </option>
               </select>
               <button
                 onClick={handleInsert}
                 disabled={arrayElements.length >= 8}
                 className="ml-auto px-3 py-1 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 text-white rounded text-xs font-semibold"
               >
-                Inserează
+                {lang === 'ro' ? 'Inserează' : 'Insert'}
               </button>
             </div>
           </div>
@@ -205,10 +240,12 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
           <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2.5">
             <span className="text-xs font-semibold text-rose-400 flex items-center gap-1.5">
               <Trash2 className="w-4 h-4" />
-              Operația 2: Ștergere Element (Deplasare spre Stânga &larr;)
+              {lang === 'ro'
+                ? 'Operația 2: Ștergere Element (Deplasare spre Stânga ←)'
+                : 'Operation 2: Element Deletion (Shift Left ←)'}
             </span>
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-slate-400">Șterge de la indexul:</span>
+              <span className="text-slate-400">{lang === 'ro' ? 'Șterge de la indexul:' : 'Delete from index:'}</span>
               <select
                 value={deletePos}
                 onChange={(e) => setDeletePos(Number(e.target.value))}
@@ -225,7 +262,7 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
                 disabled={arrayElements.length <= 2}
                 className="ml-auto px-3 py-1 bg-rose-600 hover:bg-rose-500 disabled:bg-slate-800 text-white rounded text-xs font-semibold"
               >
-                Șterge
+                {lang === 'ro' ? 'Șterge' : 'Delete'}
               </button>
             </div>
           </div>
@@ -243,21 +280,37 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
       <div className="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-md space-y-4">
         <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-cyan-400" />
-          Verificare Regulamentară C++ (Manual pag. 80–81)
+          {lang === 'ro' ? 'Verificare Regulamentară C++ (Manual pag. 80–81)' : 'Official C++ Checkpoint (Textbook pp. 80–81)'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Question 1 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 1:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 1:' : 'Question 1:'}
+            </span>
             <p className="text-xs text-slate-300">
-              De ce la inserarea unui element pe poziția <code className="text-amber-300 font-mono">k</code> deplasarea elementelor trebuie efectuată <strong>obligatoriu de la dreapta spre stânga</strong> (<code className="text-pink-400 font-mono">for (int i = n; i &gt; k; i--) v[i] = v[i-1];</code>)?
+              {lang === 'ro'
+                ? 'De ce la inserarea unui element pe poziția k deplasarea elementelor trebuie efectuată obligatoriu de la dreapta spre stânga (for (int i = n; i > k; i--) v[i] = v[i-1];)?'
+                : 'Why must element shifting during insertion at index k be done strictly from right to left (for (int i = n; i > k; i--) v[i] = v[i-1];)?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'Pentru că dacă am parcurge de la stânga la dreapta, prima valoare copiată ar suprascrie elementul vecin și s-ar multiplica pe tot restul vectorului' },
-                { id: 'b', label: 'Pentru că de la stânga la dreapta este interzis de compilator' },
-                { id: 'c', label: 'Nu contează sensul de parcurgere' }
+                {
+                  id: 'a',
+                  labelRo: 'Pentru că dacă am parcurge de la stânga la dreapta, prima valoare copiată ar suprascrie elementul vecin și s-ar multiplica pe tot restul vectorului',
+                  labelEn: 'Because traversing left-to-right would cause the first copied value to overwrite its neighbor and duplicate across the rest of the array'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'Pentru că de la stânga la dreapta este interzis de compilator',
+                  labelEn: 'Because left-to-right traversal is forbidden by compiler'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'Nu contează sensul de parcurgere',
+                  labelEn: 'The direction of traversal does not matter'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -274,7 +327,7 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q1Answer === opt.id && opt.id === 'a' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -283,15 +336,31 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
 
           {/* Question 2 */}
           <div className="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
-            <span className="text-xs font-semibold text-cyan-300">Întrebarea 2:</span>
+            <span className="text-xs font-semibold text-cyan-300">
+              {lang === 'ro' ? 'Întrebarea 2:' : 'Question 2:'}
+            </span>
             <p className="text-xs text-slate-300">
-              Ce se întâmplă cu numărul de elemente <code className="text-amber-300 font-mono">n</code> al vectorului după ce ștergem un element de pe o poziție dată?
+              {lang === 'ro'
+                ? 'Ce se întâmplă cu numărul de elemente n al vectorului după ce ștergem un element de pe o poziție dată?'
+                : 'What happens to the array element count n after deleting an element from a given position?'}
             </p>
             <div className="space-y-1.5">
               {[
-                { id: 'a', label: 'n rămâne neschimbat' },
-                { id: 'b', label: 'n trebuie decrementat obligatoriu (n--) deoarece vectorul conține acum cu un element mai puțin' },
-                { id: 'c', label: 'n devine 0' }
+                {
+                  id: 'a',
+                  labelRo: 'n rămâne neschimbat',
+                  labelEn: 'n remains unchanged'
+                },
+                {
+                  id: 'b',
+                  labelRo: 'n trebuie decrementat obligatoriu (n--) deoarece vectorul conține acum cu un element mai puțin',
+                  labelEn: 'n must be decremented (n--) because the array now contains one less element'
+                },
+                {
+                  id: 'c',
+                  labelRo: 'n devine 0',
+                  labelEn: 'n becomes 0'
+                }
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -308,7 +377,7 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
                       : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
                   }`}
                 >
-                  <span>{opt.label}</span>
+                  <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                   {q2Answer === opt.id && opt.id === 'b' && <Check className="w-4 h-4 text-emerald-400" />}
                 </button>
               ))}
@@ -327,8 +396,12 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
           />
           <span className="text-xs text-slate-300">
             {isLevelCompleted
-              ? 'Excelent! Ai testat cu succes inserarea și ștergerea elementelor dintr-un tablou.'
-              : 'Efectuează cel puțin o inserare și o ștergere în simulator și rezolvă întrebările.'}
+              ? lang === 'ro'
+                ? 'Excelent! Ai testat cu succes inserarea și ștergerea elementelor dintr-un tablou.'
+                : 'Excellent! You successfully tested element insertion and deletion in an array.'
+              : lang === 'ro'
+              ? 'Efectuează cel puțin o inserare și o ștergere în simulator și rezolvă întrebările.'
+              : 'Perform at least one insertion and one deletion in the simulator and solve the questions.'}
           </span>
         </div>
         <button
@@ -340,7 +413,7 @@ export const A4Level4_VectorManipulationLab: React.FC<A4Level4Props> = ({
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Următorul Nivel: Sortarea prin Metoda Bulelor</span>
+          <span>{lang === 'ro' ? 'Următorul Nivel: Sortarea prin Metoda Bulelor' : 'Next Level: Bubble Sort Method'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

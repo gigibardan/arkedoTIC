@@ -17,6 +17,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A5Level6Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -28,6 +29,8 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   const [selectedCase, setSelectedCase] = useState<number>(1);
   const [solvedCases, setSolvedCases] = useState<{ [key: number]: boolean }>({
     1: false,
@@ -51,15 +54,29 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
   const handleTestBug1 = () => {
     sounds.playClick();
     if (!shadowFixed) {
-      setDebuggerLog([
-        '[EROARE LOGICĂ] Variabila locală "int x = 50" a mascat (shadowed) variabila globală "x".',
-        'În main(), variabila globală x a rămas 10! Modificarea a fost pierdută.'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[EROARE LOGICĂ] Variabila locală "int x = 50" a mascat (shadowed) variabila globală "x".',
+              'În main(), variabila globală x a rămas 10! Modificarea a fost pierdută.'
+            ]
+          : [
+              '[LOGICAL ERROR] Local variable "int x = 50" shadowed the global variable "x".',
+              'In main(), global x remained 10! The modification was lost.'
+            ]
+      );
     } else {
-      setDebuggerLog([
-        '[REPARAT] Variabila locală redundantă a fost eliminată sau s-a folosit referința corectă.',
-        'În main(), x are valoarea corectă: 50. Test validat!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[REPARAT] Variabila locală redundantă a fost eliminată sau s-a folosit referința corectă.',
+              'În main(), x are valoarea corectă: 50. Test validat!'
+            ]
+          : [
+              '[FIXED] Redundant local variable removed.',
+              'In main(), x has the correct value: 50. Test passed!'
+            ]
+      );
       setSolvedCases((prev) => ({ ...prev, 1: true }));
     }
   };
@@ -67,15 +84,29 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
   const handleTestBug2 = () => {
     sounds.playClick();
     if (!returnFixed) {
-      setDebuggerLog([
-        '[AVERTISMENT COMPILATOR / UB] Funcția "int maxim(int a, int b)" nu conține o instrucțiune "return" pe ramura secundară!',
-        'Când a <= b, funcția returnează o valoare reziduală (gunoi din memorie): ex. 32767. Rezultat incorect!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[AVERTISMENT COMPILATOR / UB] Funcția "int maxim(int a, int b)" nu conține o instrucțiune "return" pe ramura secundară!',
+              'Când a <= b, funcția returnează o valoare reziduală (gunoi din memorie): ex. 32767. Rezultat incorect!'
+            ]
+          : [
+              '[COMPILER WARNING / UB] Function "int maxim(int a, int b)" lacks a "return" statement on the secondary branch!',
+              'When a <= b, function returns garbage stack memory: e.g. 32767. Incorrect output!'
+            ]
+      );
     } else {
-      setDebuggerLog([
-        '[REPARAT] S-a adăugat instrucțiunea "return b;" pe ramura else.',
-        'maxim(15, 29) returnează acum corect 29 în toate cazurile!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[REPARAT] S-a adăugat instrucțiunea "return b;" pe ramura else.',
+              'maxim(15, 29) returnează acum corect 29 în toate cazurile!'
+            ]
+          : [
+              '[FIXED] Added "return b;" statement on the else branch.',
+              'maxim(15, 29) now reliably returns 29 in all branches!'
+            ]
+      );
       setSolvedCases((prev) => ({ ...prev, 2: true }));
     }
   };
@@ -83,16 +114,31 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
   const handleTestBug3 = () => {
     sounds.playClick();
     if (!refFixed) {
-      setDebuggerLog([
-        '[EROARE CRITICĂ] Antetul void citire(int v[], int n) transmite n PRIN VALOARE!',
-        'În interiorul funcției s-a citit n = 5, dar în main() variabila n a rămas 0!',
-        'Vectorul apare ca având 0 elemente!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[EROARE CRITICĂ] Antetul void citire(int v[], int n) transmite n PRIN VALOARE!',
+              'În interiorul funcției s-a citit n = 5, dar în main() variabila n a rămas 0!',
+              'Vectorul apare ca având 0 elemente!'
+            ]
+          : [
+              '[CRITICAL BUG] Header void read(int v[], int n) passes n BY VALUE!',
+              'Inside function n = 5 was read, but in main() variable n remained 0!',
+              'The array appears to contain 0 elements!'
+            ]
+      );
     } else {
-      setDebuggerLog([
-        '[REPARAT] Antetul a fost corectat: void citire(int v[], int &n).',
-        'Parametrul n primește & (referință), astfel încât n = 5 este transmis cu succes în main()!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[REPARAT] Antetul a fost corectat: void citire(int v[], int &n).',
+              'Parametrul n primește & (referință), astfel încât n = 5 este transmis cu succes în main()!'
+            ]
+          : [
+              '[FIXED] Header corrected to void read(int v[], int &n).',
+              'Parameter n now has & (reference), so n = 5 is successfully passed back to main()!'
+            ]
+      );
       setSolvedCases((prev) => ({ ...prev, 3: true }));
     }
   };
@@ -100,16 +146,31 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
   const handleTestBug4 = () => {
     sounds.playClick();
     if (!refactorFixed) {
-      setDebuggerLog([
-        '[COD MONOLITIC REDUNDANT] Același algoritm de inversare a fost duplicat de două ori pentru numărul a și numărul b.',
-        'Dacă apare o greșeală, trebuie modificat în 2 locuri diferite!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[COD MONOLITIC REDUNDANT] Același algoritm de inversare a fost duplicat de două ori pentru numărul a și numărul b.',
+              'Dacă apare o greșeală, trebuie modificat în 2 locuri diferite!'
+            ]
+          : [
+              '[REDUNDANT MONOLITHIC CODE] The same reversal loop was duplicated twice for number a and number b.',
+              'Any fix requires updating two separate blocks!'
+            ]
+      );
     } else {
-      setDebuggerLog([
-        '[REFACTORIZAT EXCELENT] S-a creat o singură funcție int oglindit(int n) refolosită:',
-        'if (oglindit(a) == a && oglindit(b) == b) cout << "Ambele palindroame";',
-        'Codul s-a redus de la 25 de linii la 5 linii curate!'
-      ]);
+      setDebuggerLog(
+        lang === 'ro'
+          ? [
+              '[REFACTORIZAT EXCELENT] S-a creat o singură funcție int oglindit(int n) refolosită:',
+              'if (oglindit(a) == a && oglindit(b) == b) cout << "Ambele palindroame";',
+              'Codul s-a redus de la 25 de linii la 5 linii curate!'
+            ]
+          : [
+              '[EXCELLENT REFACTORING] Created a single reusable function int mirrored(int n):',
+              'if (mirrored(a) == a && mirrored(b) == b) cout << "Both are palindromes";',
+              'Code reduced from 25 repetitive lines to 5 clean lines!'
+            ]
+      );
       setSolvedCases((prev) => ({ ...prev, 4: true }));
     }
   };
@@ -135,31 +196,65 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-rose-400 font-semibold">
-                Nivelul 6 • Unitatea 3 (Manual pag. 88)
+                {lang === 'ro' ? 'Nivelul 6 • Unitatea 3 (Manual pag. 88)' : 'Level 6 • Unit 3 (Textbook p. 88)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Clinica de Depanare &amp; Refactorizare Funcții
+                {lang === 'ro'
+                  ? 'Clinica de Depanare & Refactorizare Funcții'
+                  : 'Function Debugging & Refactoring Clinic'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-900/40 border border-rose-700/50 rounded-lg text-rose-300 text-sm font-mono">
-            <span>{totalSolved} / 4 Cazuri Rezolvate</span>
+            <span>
+              {totalSolved} / 4 {lang === 'ro' ? 'Cazuri Rezolvate' : 'Cases Solved'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          Chiar și programatorii experimentați se lovesc de erori subtile la subprograme:
-          mascarea variabilelor (shadowing), uitarea instrucțiunii <code>return</code> sau omiterea operatorului <code>&amp;</code>.
-          Diagnostichează și repară fiecare din cele 4 cazuri clinice!
+          {lang === 'ro' ? (
+            <>
+              Chiar și programatorii experimentați se lovesc de erori subtile la subprograme:
+              mascarea variabilelor (shadowing), uitarea instrucțiunii <code>return</code> sau omiterea operatorului <code>&amp;</code>.
+              Diagnostichează și repară fiecare din cele 4 cazuri clinice!
+            </>
+          ) : (
+            <>
+              Even experienced developers encounter subtle bugs with functions:
+              variable shadowing, missing <code>return</code> statements, or omitting the <code>&amp;</code> reference operator.
+              Diagnose and repair all 4 clinical debugging cases!
+            </>
+          )}
         </p>
       </div>
 
       {/* Case Navigator */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { id: 1, title: 'Cazul 1: Shadowing', solved: solvedCases[1] },
-          { id: 2, title: 'Cazul 2: Missing Return', solved: solvedCases[2] },
-          { id: 3, title: 'Cazul 3: Omitere &', solved: solvedCases[3] },
-          { id: 4, title: 'Cazul 4: Refactorizare', solved: solvedCases[4] }
+          {
+            id: 1,
+            titleRo: 'Cazul 1: Shadowing',
+            titleEn: 'Case 1: Shadowing',
+            solved: solvedCases[1]
+          },
+          {
+            id: 2,
+            titleRo: 'Cazul 2: Missing Return',
+            titleEn: 'Case 2: Missing Return',
+            solved: solvedCases[2]
+          },
+          {
+            id: 3,
+            titleRo: 'Cazul 3: Omitere &',
+            titleEn: 'Case 3: Missing &',
+            solved: solvedCases[3]
+          },
+          {
+            id: 4,
+            titleRo: 'Cazul 4: Refactorizare',
+            titleEn: 'Case 4: Refactoring',
+            solved: solvedCases[4]
+          }
         ].map((c) => (
           <button
             key={c.id}
@@ -174,7 +269,7 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
             }`}
           >
             <div className="flex items-center justify-between text-xs font-mono font-semibold">
-              <span>{c.title}</span>
+              <span>{lang === 'ro' ? c.titleRo : c.titleEn}</span>
               {c.solved ? (
                 <Check className="w-4 h-4 text-emerald-400" />
               ) : (
@@ -182,7 +277,13 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
               )}
             </div>
             <div className="text-[11px] text-slate-500 mt-1">
-              {c.solved ? 'Test validat' : 'Bug activ'}
+              {c.solved
+                ? lang === 'ro'
+                  ? 'Test validat'
+                  : 'Test passed'
+                : lang === 'ro'
+                ? 'Bug activ'
+                : 'Bug active'}
             </div>
           </button>
         ))}
@@ -198,7 +299,9 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
               <>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <span className="text-xs font-mono font-bold text-amber-400">
-                    Cazul 1: Mascarea Variabilelor (Variable Shadowing)
+                    {lang === 'ro'
+                      ? 'Cazul 1: Mascarea Variabilelor (Variable Shadowing)'
+                      : 'Case 1: Variable Shadowing'}
                   </span>
                   <button
                     onClick={() => {
@@ -211,25 +314,33 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                         : 'bg-amber-600 text-white'
                     }`}
                   >
-                    {shadowFixed ? 'Comută la Cod Eronat' : 'Aplică Reparația'}
+                    {shadowFixed
+                      ? lang === 'ro'
+                        ? 'Comută la Cod Eronat'
+                        : 'Switch to Buggy Code'
+                      : lang === 'ro'
+                      ? 'Aplică Reparația'
+                      : 'Apply Fix'}
                   </button>
                 </div>
                 <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs leading-relaxed">
-                  <div className="text-slate-400">int x = 10; <span className="text-slate-500">// variabilă globală</span></div>
+                  <div className="text-slate-400">
+                    int x = 10; <span className="text-slate-500">{lang === 'ro' ? '// variabilă globală' : '// global variable'}</span>
+                  </div>
                   <div className="text-purple-400">void actualizare() &#123;</div>
                   {shadowFixed ? (
                     <div className="pl-4 text-emerald-400 font-bold">
-                      x = 50; <span className="text-slate-500">// modifică direct variabila vizibilă</span>
+                      x = 50; <span className="text-slate-500">{lang === 'ro' ? '// modifică direct variabila vizibilă' : '// modifies visible variable directly'}</span>
                     </div>
                   ) : (
                     <div className="pl-4 text-rose-400 font-bold">
-                      int x = 50; <span className="text-slate-500">// BUG: creează o variabilă locală nouă x ce maschează globala!</span>
+                      int x = 50; <span className="text-slate-500">{lang === 'ro' ? '// BUG: creează o variabilă locală nouă x ce maschează globala!' : '// BUG: creates local variable x shadowing the global!'}</span>
                     </div>
                   )}
                   <div className="text-purple-400">&#125;</div>
                   <div className="text-purple-400 mt-2">int main() &#123;</div>
                   <div className="pl-4 text-slate-300">actualizare();</div>
-                  <div className="pl-4 text-slate-300">cout &lt;&lt; x; <span className="text-slate-500">// Ce afișează?</span></div>
+                  <div className="pl-4 text-slate-300">cout &lt;&lt; x; <span className="text-slate-500">{lang === 'ro' ? '// Ce afișează?' : '// What does it print?'}</span></div>
                   <div className="text-purple-400">&#125;</div>
                 </div>
                 <button
@@ -237,7 +348,7 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                   className="w-full flex items-center justify-center gap-2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-mono font-bold transition-colors"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Compilează &amp; Testează Cazul 1
+                  {lang === 'ro' ? 'Compilează & Testează Cazul 1' : 'Compile & Test Case 1'}
                 </button>
               </>
             )}
@@ -247,7 +358,9 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
               <>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <span className="text-xs font-mono font-bold text-amber-400">
-                    Cazul 2: Return Lipsă pe o Ramură de Decizie
+                    {lang === 'ro'
+                      ? 'Cazul 2: Return Lipsă pe o Ramură de Decizie'
+                      : 'Case 2: Missing Return on Decision Branch'}
                   </span>
                   <button
                     onClick={() => {
@@ -260,7 +373,13 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                         : 'bg-amber-600 text-white'
                     }`}
                   >
-                    {returnFixed ? 'Comută la Cod Eronat' : 'Aplică Reparația'}
+                    {returnFixed
+                      ? lang === 'ro'
+                        ? 'Comută la Cod Eronat'
+                        : 'Switch to Buggy Code'
+                      : lang === 'ro'
+                      ? 'Aplică Reparația'
+                      : 'Apply Fix'}
                   </button>
                 </div>
                 <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs leading-relaxed">
@@ -270,11 +389,11 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                   <div className="pl-4 text-slate-300">&#125;</div>
                   {returnFixed ? (
                     <div className="pl-4 text-emerald-400 font-bold">
-                      else &#123; return b; &#125; <span className="text-slate-500">// REPARAT: garantează întoarcerea unei valori</span>
+                      else &#123; return b; &#125; <span className="text-slate-500">{lang === 'ro' ? '// REPARAT: garantează întoarcerea unei valori' : '// FIXED: guarantees returning a value'}</span>
                     </div>
                   ) : (
                     <div className="pl-4 text-rose-400 font-bold">
-                      <span className="text-slate-500">// BUG: dacă a &lt;= b, funcția iese fără nicio valoare returnată!</span>
+                      <span className="text-slate-500">{lang === 'ro' ? '// BUG: dacă a <= b, funcția iese fără nicio valoare returnată!' : '// BUG: if a <= b, function exits without any return value!'}</span>
                     </div>
                   )}
                   <div className="text-purple-400">&#125;</div>
@@ -284,7 +403,7 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                   className="w-full flex items-center justify-center gap-2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-mono font-bold transition-colors"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Compilează &amp; Testează Cazul 2
+                  {lang === 'ro' ? 'Compilează & Testează Cazul 2' : 'Compile & Test Case 2'}
                 </button>
               </>
             )}
@@ -294,7 +413,9 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
               <>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <span className="text-xs font-mono font-bold text-amber-400">
-                    Cazul 3: Omiterea &amp; pe Parametrul de Dimensiune
+                    {lang === 'ro'
+                      ? 'Cazul 3: Omiterea & pe Parametrul de Dimensiune'
+                      : 'Case 3: Omitting & on Array Size Parameter'}
                   </span>
                   <button
                     onClick={() => {
@@ -307,17 +428,23 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                         : 'bg-amber-600 text-white'
                     }`}
                   >
-                    {refFixed ? 'Comută la Cod Eronat' : 'Aplică Reparația'}
+                    {refFixed
+                      ? lang === 'ro'
+                        ? 'Comută la Cod Eronat'
+                        : 'Switch to Buggy Code'
+                      : lang === 'ro'
+                      ? 'Aplică Reparația'
+                      : 'Apply Fix'}
                   </button>
                 </div>
                 <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs leading-relaxed">
                   {refFixed ? (
                     <div className="text-emerald-400 font-bold">
-                      void citire(int v[], int &amp;n) &#123; <span className="text-slate-500">// REPARAT: n este referință!</span>
+                      void citire(int v[], int &amp;n) &#123; <span className="text-slate-500">{lang === 'ro' ? '// REPARAT: n este referință!' : '// FIXED: n is reference!'}</span>
                     </div>
                   ) : (
                     <div className="text-rose-400 font-bold">
-                      void citire(int v[], int n) &#123; <span className="text-slate-500">// BUG: n este transmis prin valoare (copie)!</span>
+                      void citire(int v[], int n) &#123; <span className="text-slate-500">{lang === 'ro' ? '// BUG: n este transmis prin valoare (copie)!' : '// BUG: n passed by value (copy)!'}</span>
                     </div>
                   )}
                   <div className="pl-4 text-slate-300">cin &gt;&gt; n;</div>
@@ -329,7 +456,7 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                   className="w-full flex items-center justify-center gap-2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-mono font-bold transition-colors"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Compilează &amp; Testează Cazul 3
+                  {lang === 'ro' ? 'Compilează & Testează Cazul 3' : 'Compile & Test Case 3'}
                 </button>
               </>
             )}
@@ -339,7 +466,9 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
               <>
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <span className="text-xs font-mono font-bold text-amber-400">
-                    Cazul 4: Refactorizare Cod Duplicat (DRY: Don&apos;t Repeat Yourself)
+                    {lang === 'ro'
+                      ? "Cazul 4: Refactorizare Cod Duplicat (DRY: Don't Repeat Yourself)"
+                      : "Case 4: Refactoring Duplicated Code (DRY)"}
                   </span>
                   <button
                     onClick={() => {
@@ -352,7 +481,13 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                         : 'bg-amber-600 text-white'
                     }`}
                   >
-                    {refactorFixed ? 'Comută la Cod Eronat' : 'Aplică Reparația'}
+                    {refactorFixed
+                      ? lang === 'ro'
+                        ? 'Comută la Cod Eronat'
+                        : 'Switch to Buggy Code'
+                      : lang === 'ro'
+                      ? 'Aplică Reparația'
+                      : 'Apply Fix'}
                   </button>
                 </div>
                 <div className="p-4 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs leading-relaxed">
@@ -363,12 +498,14 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                       <div className="pl-4">
                         if (oglindit(a) == a &amp;&amp; oglindit(b) == b)
                       </div>
-                      <div className="pl-8">cout &lt;&lt; &quot;Ambele sunt palindroame!&quot;;</div>
+                      <div className="pl-8">
+                        cout &lt;&lt; &quot;{lang === 'ro' ? 'Ambele sunt palindroame!' : 'Both are palindromes!'}&quot;;
+                      </div>
                       <div className="text-purple-400">&#125;</div>
                     </div>
                   ) : (
                     <div className="text-rose-300 space-y-1">
-                      <div className="text-slate-500">// Cod duplicat de 2 ori în main():</div>
+                      <div className="text-slate-500">{lang === 'ro' ? '// Cod duplicat de 2 ori în main():' : '// Duplicated twice in main():'}</div>
                       <div>int aux1 = a, inv1 = 0; while(aux1) &#123; inv1 = inv1*10 + aux1%10; aux1 /= 10; &#125;</div>
                       <div>int aux2 = b, inv2 = 0; while(aux2) &#123; inv2 = inv2*10 + aux2%10; aux2 /= 10; &#125;</div>
                     </div>
@@ -379,7 +516,7 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
                   className="w-full flex items-center justify-center gap-2 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-mono font-bold transition-colors"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Compilează &amp; Testează Cazul 4
+                  {lang === 'ro' ? 'Compilează & Testează Cazul 4' : 'Compile & Test Case 4'}
                 </button>
               </>
             )}
@@ -391,20 +528,22 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-3">
             <div className="flex items-center gap-2 text-xs font-mono font-semibold text-rose-400 pb-2 border-b border-slate-800">
               <Terminal className="w-4 h-4" />
-              <span>Consolă de Diagnosticare Compilator</span>
+              <span>{lang === 'ro' ? 'Consolă de Diagnosticare Compilator' : 'Compiler Diagnostic Console'}</span>
             </div>
 
             <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-xs space-y-2 min-h-[140px]">
               {debuggerLog.length === 0 ? (
                 <div className="text-slate-500 italic">
-                  Selectează un caz, comută reparația și apasă pe butonul de compilare pentru a inspecta avertismentele.
+                  {lang === 'ro'
+                    ? 'Selectează un caz, comută reparația și apasă pe butonul de compilare pentru a inspecta avertismentele.'
+                    : 'Select a case, toggle the fix, and click compile to inspect compiler warnings.'}
                 </div>
               ) : (
                 debuggerLog.map((log, idx) => (
                   <div
                     key={idx}
                     className={
-                      log.startsWith('[REPARAT]') || log.startsWith('[REFACTORIZAT')
+                      log.startsWith('[REPARAT]') || log.startsWith('[REFACTORIZAT') || log.startsWith('[FIXED]') || log.startsWith('[EXCELLENT')
                         ? 'text-emerald-400 font-semibold'
                         : 'text-rose-400'
                     }
@@ -416,9 +555,13 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
             </div>
 
             <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
-              <div className="font-semibold text-slate-300">Regula de aur a depanării:</div>
+              <div className="font-semibold text-slate-300">
+                {lang === 'ro' ? 'Regula de aur a depanării:' : 'Golden Rule of Debugging:'}
+              </div>
               <p>
-                Dacă o funcție nu modifică o variabilă transmisă din <code>main</code>, primul lucru verificat este prezența caracterului <code>&amp;</code> în antet!
+                {lang === 'ro'
+                  ? 'Dacă o funcție nu modifică o variabilă transmisă din main, primul lucru verificat este prezența caracterului & în antet!'
+                  : 'If a function does not modify a variable passed from main, the very first thing to check is the & operator in the signature!'}
               </p>
             </div>
           </div>
@@ -440,11 +583,17 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
           <div>
             <div className="text-sm font-semibold text-white">
               {isCompleted
-                ? 'Clinica de Depanare Finalizată cu Succes!'
-                : `Cerințe: Rezolvă toate cele 4 cazuri clinice (${totalSolved}/4 finalizate).`}
+                ? lang === 'ro'
+                  ? 'Clinica de Depanare Finalizată cu Succes!'
+                  : 'Debugging Clinic Completed Successfully!'
+                : lang === 'ro'
+                ? `Cerințe: Rezolvă toate cele 4 cazuri clinice (${totalSolved}/4 finalizate).`
+                : `Requirements: Solve all 4 clinical cases (${totalSolved}/4 completed).`}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și deblocarea Evaluării Sumative Finale a Unității 3.
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și deblocarea Evaluării Sumative Finale a Unității 3.'
+                : 'Reward: +150 XP points and unlock the Unit 3 Final Summative Exam.'}
             </div>
           </div>
         </div>
@@ -458,7 +607,7 @@ export const A5Level6_CodeRefactoringDebugger: React.FC<A5Level6Props> = ({
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Examenul Final (Nivelul 7)</span>
+          <span>{lang === 'ro' ? 'Continuă spre Examenul Final (Nivelul 7)' : 'Continue to Final Exam (Level 7)'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

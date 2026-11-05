@@ -16,6 +16,7 @@ import {
   Eye
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A5Level3Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -27,6 +28,8 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
   onCompletePage,
   onComplete
 }) => {
+  const { lang } = useLanguage();
+
   // Vector data in main()
   const [vectorData, setVectorData] = useState<number[]>([4, 7, 2, 9, 5]);
   const [activeTab, setActiveTab] = useState<'double' | 'stats' | 'filter'>('double');
@@ -46,7 +49,11 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
   const handleResetVector = () => {
     sounds.playClick();
     setVectorData([4, 7, 2, 9, 5]);
-    setExecutionLogs(['Vectorul din main() a fost resetat la valorile inițiale: [4, 7, 2, 9, 5]']);
+    setExecutionLogs([
+      lang === 'ro'
+        ? 'Vectorul din main() a fost resetat la valorile inițiale: [4, 7, 2, 9, 5]'
+        : 'Array in main() was reset to initial values: [4, 7, 2, 9, 5]'
+    ]);
     setCalculatedStats(null);
     setHasRunFunction(false);
   };
@@ -56,13 +63,23 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
     const updated = vectorData.map((val) => val * 2);
     setVectorData(updated);
     setHasRunFunction(true);
-    setExecutionLogs([
-      '1. Apel funcție: dublareElemente(v, n);',
-      '2. În antet: void dublareElemente(int a[], int n)',
-      '3. Observă: Nu s-a folosit simbolul & în fața lui a[], dar tabloul a primit adresa de start a lui v!',
-      `4. Modificare in-place: Fiecare element v[i] a fost dublat direct în memoria din main().`,
-      `5. Rezultat în main(): [${updated.join(', ')}]`
-    ]);
+    if (lang === 'ro') {
+      setExecutionLogs([
+        '1. Apel funcție: dublareElemente(v, n);',
+        '2. În antet: void dublareElemente(int a[], int n)',
+        '3. Observă: Nu s-a folosit simbolul & în fața lui a[], dar tabloul a primit adresa de start a lui v!',
+        `4. Modificare in-place: Fiecare element v[i] a fost dublat direct în memoria din main().`,
+        `5. Rezultat în main(): [${updated.join(', ')}]`
+      ]);
+    } else {
+      setExecutionLogs([
+        '1. Function call: doubleElements(v, n);',
+        '2. In signature: void doubleElements(int a[], int n)',
+        '3. Notice: No & symbol used before a[], yet the array received the starting address of v!',
+        `4. In-place modification: Each element v[i] was doubled directly in main() memory.`,
+        `5. Result in main(): [${updated.join(', ')}]`
+      ]);
+    }
   };
 
   const handleRunCalculateStats = () => {
@@ -79,12 +96,21 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
     const avg = Number((sum / vectorData.length).toFixed(2));
     setCalculatedStats({ sum, avg, min, max });
     setHasRunFunction(true);
-    setExecutionLogs([
-      '1. Apel funcție: calculStatistici(v, n, s, minim, maxim);',
-      '2. În antet: void calculStatistici(int a[], int n, int &s, int &mn, int &mx)',
-      '3. Transmitere: v[] este transmis prin adresă, n prin valoare, iar s, mn, mx prin referință (&) ca să întoarcă 3 rezultate!',
-      `4. Rezultate returnate în main(): Sumă = ${sum}, Medie = ${avg}, Min = ${min}, Max = ${max}`
-    ]);
+    if (lang === 'ro') {
+      setExecutionLogs([
+        '1. Apel funcție: calculStatistici(v, n, s, minim, maxim);',
+        '2. În antet: void calculStatistici(int a[], int n, int &s, int &mn, int &mx)',
+        '3. Transmitere: v[] este transmis prin adresă, n prin valoare, iar s, mn, mx prin referință (&) ca să întoarcă 3 rezultate!',
+        `4. Rezultate returnate în main(): Sumă = ${sum}, Medie = ${avg}, Min = ${min}, Max = ${max}`
+      ]);
+    } else {
+      setExecutionLogs([
+        '1. Function call: computeStats(v, n, s, minVal, maxVal);',
+        '2. In signature: void computeStats(int a[], int n, int &s, int &mn, int &mx)',
+        '3. Passing: v[] passed by address, n by value, and s, mn, mx by reference (&) to yield 3 outputs!',
+        `4. Results returned to main(): Sum = ${sum}, Average = ${avg}, Min = ${min}, Max = ${max}`
+      ]);
+    }
   };
 
   const handleRunFilterEvens = () => {
@@ -92,12 +118,21 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
     const evens = vectorData.map((x) => (x % 2 === 0 ? x : 0));
     setVectorData(evens);
     setHasRunFunction(true);
-    setExecutionLogs([
-      '1. Apel funcție: anuleazaImpare(v, n);',
-      '2. În corp: if (a[i] % 2 != 0) a[i] = 0;',
-      '3. Fiecare număr impar a fost transformat în 0 direct în memoria din main().',
-      `4. Noua stare a vectorului din main(): [${evens.join(', ')}]`
-    ]);
+    if (lang === 'ro') {
+      setExecutionLogs([
+        '1. Apel funcție: anuleazaImpare(v, n);',
+        '2. În corp: if (a[i] % 2 != 0) a[i] = 0;',
+        '3. Fiecare număr impar a fost transformat în 0 direct în memoria din main().',
+        `4. Noua stare a vectorului din main(): [${evens.join(', ')}]`
+      ]);
+    } else {
+      setExecutionLogs([
+        '1. Function call: zeroOutOdds(v, n);',
+        '2. In body: if (a[i] % 2 != 0) a[i] = 0;',
+        '3. Every odd number was set to 0 directly in main() memory.',
+        `4. New array state in main(): [${evens.join(', ')}]`
+      ]);
+    }
   };
 
   const isLevelCompleted =
@@ -121,22 +156,30 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold">
-                Nivelul 3 • Unitatea 3 (Manual pag. 86–87)
+                {lang === 'ro' ? 'Nivelul 3 • Unitatea 3 (Manual pag. 86–87)' : 'Level 3 • Unit 3 (Textbook pp. 86–87)'}
               </span>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Vectorii ca Parametri în Subprograme
+                {lang === 'ro' ? 'Vectorii ca Parametri în Subprograme' : 'Arrays as Parameters in Subprograms'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-900/40 border border-emerald-700/50 rounded-lg text-emerald-300 text-sm font-mono">
-            <span>Transmitere prin adresă</span>
+            <span>{lang === 'ro' ? 'Transmitere prin adresă' : 'Pass by address'}</span>
           </div>
         </div>
         <p className="mt-3 text-slate-300 text-sm leading-relaxed">
-          În C++, <strong>tablourile unidimensionale (vectorii)</strong> sunt transmise către funcții
-          în mod implicit <strong>prin adresă</strong> (adresa primului element <code>&amp;v[0]</code>). Astfel,
-          orice modificare asupra lui <code>v[i]</code> în interiorul funcției afectează <em>direct</em> vectorul din <code>main()</code>,
-          fără a necesita operatorul <code>&amp;</code> în fața numelui vectorului!
+          {lang === 'ro' ? (
+            <>
+              În C++, <strong>tablourile unidimensionale (vectorii)</strong> sunt transmise către funcții
+              în mod implicit <strong>prin adresă</strong> (adresa primului element <code>&amp;v[0]</code>). Astfel,
+              orice modificare asupra lui <code>v[i]</code> în interiorul funcției afectează <em>direct</em> vectorul din <code>main()</code>,
+              fără a necesita operatorul <code>&amp;</code> în fața numelui vectorului!
+            </>
+          ) : (
+            <>
+              In C++, <strong>one-dimensional arrays (vectors)</strong> are passed to functions by default <strong>by address</strong> (address of first element <code>&amp;v[0]</code>). Thus, any modification to <code>v[i]</code> inside the function affects the array in <code>main()</code> <em>directly</em>, without requiring an <code>&amp;</code> operator in front of the array parameter!
+            </>
+          )}
         </p>
       </div>
 
@@ -148,7 +191,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2 text-emerald-400 font-mono text-sm font-semibold">
                 <Code2 className="w-4 h-4" />
-                <span>Antet &amp; Cod Subprogram</span>
+                <span>{lang === 'ro' ? 'Antet & Cod Subprogram' : 'Signature & Subprogram Code'}</span>
               </div>
               {/* Tab Selector */}
               <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
@@ -163,7 +206,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  dublare()
+                  {lang === 'ro' ? 'dublare()' : 'double()'}
                 </button>
                 <button
                   onClick={() => {
@@ -176,7 +219,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  statistici()
+                  {lang === 'ro' ? 'statistici()' : 'stats()'}
                 </button>
                 <button
                   onClick={() => {
@@ -189,7 +232,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  filtrare()
+                  {lang === 'ro' ? 'filtrare()' : 'filter()'}
                 </button>
               </div>
             </div>
@@ -199,7 +242,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
               {activeTab === 'double' && (
                 <>
                   <div className="text-emerald-400 font-bold">
-                    // Vectorul a[] este transmis prin adresă!
+                    {lang === 'ro' ? '// Vectorul a[] este transmis prin adresă!' : '// Array a[] is passed by address!'}
                   </div>
                   <div className="text-purple-400 font-semibold">
                     void <span className="text-yellow-300">dublareElemente</span>(int a[], int n) &#123;
@@ -208,7 +251,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                     for (int i = 0; i &lt; n; i++) &#123;
                   </div>
                   <div className="pl-8 text-emerald-300">
-                    a[i] = a[i] * 2; <span className="text-slate-500">// modifică direct v[i] din main!</span>
+                    a[i] = a[i] * 2; <span className="text-slate-500">{lang === 'ro' ? '// modifică direct v[i] din main!' : '// modifies v[i] directly in main!'}</span>
                   </div>
                   <div className="pl-4 text-slate-400">&#125;</div>
                   <div className="text-purple-400 font-semibold">&#125;</div>
@@ -218,7 +261,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
               {activeTab === 'stats' && (
                 <>
                   <div className="text-emerald-400 font-bold">
-                    // Returnare multiplă prin parametri de referință &amp;
+                    {lang === 'ro' ? '// Returnare multiplă prin parametri de referință &' : '// Multiple returns via reference parameters &'}
                   </div>
                   <div className="text-purple-400 font-semibold">
                     void <span className="text-yellow-300">calculStatistici</span>(int a[], int n, int &amp;s, int &amp;mn, int &amp;mx) &#123;
@@ -236,7 +279,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
               {activeTab === 'filter' && (
                 <>
                   <div className="text-emerald-400 font-bold">
-                    // Anulare numere impare in-place
+                    {lang === 'ro' ? '// Anulare numere impare in-place' : '// In-place zeroing of odd numbers'}
                   </div>
                   <div className="text-purple-400 font-semibold">
                     void <span className="text-yellow-300">anuleazaImpare</span>(int a[], int n) &#123;
@@ -259,7 +302,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg shadow transition-colors text-sm"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Execută dublareElemente(v, 5)
+                  {lang === 'ro' ? 'Execută dublareElemente(v, 5)' : 'Run doubleElements(v, 5)'}
                 </button>
               )}
 
@@ -269,7 +312,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg shadow transition-colors text-sm"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Execută calculStatistici(v, 5, ...)
+                  {lang === 'ro' ? 'Execută calculStatistici(v, 5, ...)' : 'Run computeStats(v, 5, ...)'}
                 </button>
               )}
 
@@ -279,14 +322,14 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg shadow transition-colors text-sm"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  Execută anuleazaImpare(v, 5)
+                  {lang === 'ro' ? 'Execută anuleazaImpare(v, 5)' : 'Run zeroOutOdds(v, 5)'}
                 </button>
               )}
 
               <button
                 onClick={handleResetVector}
                 className="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm transition-colors flex items-center gap-1.5"
-                title="Resetează valorile din main"
+                title={lang === 'ro' ? 'Resetează valorile din main' : 'Reset values in main'}
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Reset</span>
@@ -298,12 +341,14 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
             <div className="flex items-center gap-2 text-xs font-mono text-slate-400 mb-2">
               <Terminal className="w-4 h-4 text-emerald-400" />
-              <span>Consolă &amp; Tracing Subprogram</span>
+              <span>{lang === 'ro' ? 'Consolă & Tracing Subprogram' : 'Console & Subprogram Trace'}</span>
             </div>
             <div className="bg-slate-950 p-3 rounded border border-slate-800/80 font-mono text-xs space-y-1.5 min-h-[90px]">
               {executionLogs.length === 0 ? (
                 <div className="text-slate-500 italic">
-                  Apasă pe butonul de execuție pentru a apela subprogramul și a trasa memoria.
+                  {lang === 'ro'
+                    ? 'Apasă pe butonul de execuție pentru a apela subprogramul și a trasa memoria.'
+                    : 'Click execute to call the subprogram and trace memory.'}
                 </div>
               ) : (
                 executionLogs.map((log, idx) => (
@@ -322,10 +367,10 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm font-semibold">
                 <Database className="w-4 h-4" />
-                <span>Memoria RAM în timp real: vectorul v[] din main()</span>
+                <span>{lang === 'ro' ? 'Memoria RAM în timp real: vectorul v[] din main()' : 'Live RAM: array v[] in main()'}</span>
               </div>
               <span className="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full font-mono">
-                n = {vectorData.length} elemente
+                n = {vectorData.length} {lang === 'ro' ? 'elemente' : 'elements'}
               </span>
             </div>
 
@@ -353,11 +398,12 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
             <div className="mt-4 p-3 bg-emerald-950/30 border border-emerald-800/50 rounded-lg text-xs text-slate-300 space-y-1">
               <div className="font-semibold text-emerald-300 flex items-center gap-1.5">
                 <Eye className="w-3.5 h-3.5" />
-                Ce se întâmplă la apelul funcției?
+                {lang === 'ro' ? 'Ce se întâmplă la apelul funcției?' : 'What happens during function call?'}
               </div>
               <p>
-                Când apelăm <code>dublareElemente(v, n)</code>, în stivă se transmite doar
-                adresa <code>0x3e8</code> a primului element. Parametrul formal <code>int a[]</code> indică spre exact aceleași căsuțe de memorie!
+                {lang === 'ro'
+                  ? 'Când apelăm dublareElemente(v, n), în stivă se transmite doar adresa 0x3e8 a primului element. Parametrul formal int a[] indică spre exact aceleași căsuțe de memorie!'
+                  : 'When calling doubleElements(v, n), only the memory address 0x3e8 of the first element is placed on the stack. Formal parameter int a[] points directly to those exact memory cells!'}
               </p>
             </div>
 
@@ -365,23 +411,23 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
             {calculatedStats && (
               <div className="mt-4 p-4 bg-slate-950 border border-cyan-800/50 rounded-lg">
                 <span className="text-xs font-mono font-semibold text-cyan-400 uppercase tracking-wider block mb-2">
-                  Rezultate calculate prin referință:
+                  {lang === 'ro' ? 'Rezultate calculate prin referință:' : 'Results computed via reference:'}
                 </span>
                 <div className="grid grid-cols-4 gap-2 text-center font-mono">
                   <div className="bg-slate-900 p-2 rounded border border-slate-800">
-                    <div className="text-[10px] text-slate-400">Sumă</div>
+                    <div className="text-[10px] text-slate-400">{lang === 'ro' ? 'Sumă' : 'Sum'}</div>
                     <div className="text-sm font-bold text-white">{calculatedStats.sum}</div>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800">
-                    <div className="text-[10px] text-slate-400">Medie</div>
+                    <div className="text-[10px] text-slate-400">{lang === 'ro' ? 'Medie' : 'Average'}</div>
                     <div className="text-sm font-bold text-cyan-300">{calculatedStats.avg}</div>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800">
-                    <div className="text-[10px] text-slate-400">Minim</div>
+                    <div className="text-[10px] text-slate-400">{lang === 'ro' ? 'Minim' : 'Minimum'}</div>
                     <div className="text-sm font-bold text-amber-300">{calculatedStats.min}</div>
                   </div>
                   <div className="bg-slate-900 p-2 rounded border border-slate-800">
-                    <div className="text-[10px] text-slate-400">Maxim</div>
+                    <div className="text-[10px] text-slate-400">{lang === 'ro' ? 'Maxim' : 'Maximum'}</div>
                     <div className="text-sm font-bold text-emerald-300">{calculatedStats.max}</div>
                   </div>
                 </div>
@@ -393,27 +439,32 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
           <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-amber-400">
               <HelpCircle className="w-4 h-4" />
-              <span>Verificare Înțelegere (Manual pag. 86)</span>
+              <span>{lang === 'ro' ? 'Verificare Înțelegere (Manual pag. 86)' : 'Comprehension Check (Textbook p. 86)'}</span>
             </div>
 
             {/* Question 1 */}
             <div className="space-y-2 text-xs">
               <p className="text-slate-300 font-medium">
-                1. De ce NU este necesar semnul <code>&amp;</code> în antetul <code>void f(int v[], int n)</code> pentru a modifica elementele vectorului?
+                {lang === 'ro'
+                  ? '1. De ce NU este necesar semnul & în antetul void f(int v[], int n) pentru a modifica elementele vectorului?'
+                  : '1. Why is the & symbol NOT required in the header void f(int v[], int n) to modify array elements?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
                   {
                     id: 'val',
-                    text: 'Elementele sunt copiate automat la ieșirea din funcție.'
+                    textRo: 'Elementele sunt copiate automat la ieșirea din funcție.',
+                    textEn: 'Elements are automatically copied back upon function exit.'
                   },
                   {
                     id: 'ref',
-                    text: 'Numele vectorului reprezintă deja adresa primului său element în memorie.'
+                    textRo: 'Numele vectorului reprezintă deja adresa primului său element în memorie.',
+                    textEn: 'The array name already represents the address of its first element in memory.'
                   },
                   {
                     id: 'compiler',
-                    text: 'Compilatorul interzice modificarea oricărui tablou în funcții.'
+                    textRo: 'Compilatorul interzice modificarea oricărui tablou în funcții.',
+                    textEn: 'The compiler forbids modifying any array within functions.'
                   }
                 ].map((opt) => (
                   <button
@@ -430,7 +481,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                         : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    {opt.text}
+                    {lang === 'ro' ? opt.textRo : opt.textEn}
                   </button>
                 ))}
               </div>
@@ -439,17 +490,21 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
             {/* Question 2 */}
             <div className="space-y-2 text-xs pt-2 border-t border-slate-800">
               <p className="text-slate-300 font-medium">
-                2. Dacă scriem un subprogram <code>void citire(int v[], int &amp;n)</code>, de ce parametrul <code>n</code> necesită <code>&amp;</code>?
+                {lang === 'ro'
+                  ? '2. Dacă scriem un subprogram void citire(int v[], int &n), de ce parametrul n necesită &?'
+                  : '2. If we write a subprogram void read(int v[], int &n), why does parameter n require &?'}
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {[
                   {
                     id: 'size_ref',
-                    text: 'Deoarece numărul de elemente n este o variabilă simplă citită în funcție ce trebuie transmisă înapoi în main.'
+                    textRo: 'Deoarece numărul de elemente n este o variabilă simplă citită în funcție ce trebuie transmisă înapoi în main.',
+                    textEn: 'Because element count n is a simple variable read inside the function that must be passed back to main.'
                   },
                   {
                     id: 'size_err',
-                    text: 'Toți parametrii întregi din C++ au obligatoriu &amp;.'
+                    textRo: 'Toți parametrii întregi din C++ au obligatoriu &.',
+                    textEn: 'All integer parameters in C++ mandatorily require &.'
                   }
                 ].map((opt) => (
                   <button
@@ -466,7 +521,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
                         : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    {opt.text}
+                    {lang === 'ro' ? opt.textRo : opt.textEn}
                   </button>
                 ))}
               </div>
@@ -490,11 +545,17 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
           <div>
             <div className="text-sm font-semibold text-white">
               {isLevelCompleted
-                ? 'Nivelul 3 Finalizat cu Succes!'
-                : 'Cerințe: Execută cel puțin un subprogram și răspunde corect la cele 2 întrebări.'}
+                ? lang === 'ro'
+                  ? 'Nivelul 3 Finalizat cu Succes!'
+                  : 'Level 3 Completed Successfully!'
+                : lang === 'ro'
+                ? 'Cerințe: Execută cel puțin un subprogram și răspunde corect la cele 2 întrebări.'
+                : 'Requirements: Run at least one subprogram and correctly answer both questions.'}
             </div>
             <div className="text-xs text-slate-400">
-              Recompensă: +150 puncte XP și progres către Diploma de Arhitect Modular C++.
+              {lang === 'ro'
+                ? 'Recompensă: +150 puncte XP și progres către Diploma de Arhitect Modular C++.'
+                : 'Reward: +150 XP points and progress toward C++ Modular Architect Certificate.'}
             </div>
           </div>
         </div>
@@ -508,7 +569,7 @@ export const A5Level3_ArrayFunctionsStudio: React.FC<A5Level3Props> = ({
               : 'bg-slate-800 text-slate-500 cursor-not-allowed'
           }`}
         >
-          <span>Continuă spre Nivelul 4</span>
+          <span>{lang === 'ro' ? 'Continuă spre Nivelul 4' : 'Continue to Level 4'}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

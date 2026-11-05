@@ -20,6 +20,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A1Level3Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -32,11 +33,14 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
   onComplete,
   onPrev
 }) => {
+  const { lang } = useLanguage();
   const { cooldowns, triggerCooldown, isLocked } = useQuestionCooldowns(5);
 
   // Number Dissector Simulator state
   const [currentNum, setCurrentNum] = useState<number>(8452);
-  const [history, setHistory] = useState<string[]>(['Număr inițial: n = 8452']);
+  const [history, setHistory] = useState<string[]>([
+    lang === 'ro' ? 'Număr inițial: n = 8452' : 'Initial number: n = 8452'
+  ]);
   const [testDivisor, setTestDivisor] = useState<number>(3);
 
   // Quiz state
@@ -46,39 +50,45 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
 
   const handleExtractLastDigit = () => {
     const lastDigit = Math.abs(currentNum % 10);
-    setHistory(prev => [`n % 10 = ${lastDigit} (Ultima cifră extrasă)`, ...prev.slice(0, 5)]);
+    const msg = lang === 'ro'
+      ? `n % 10 = ${lastDigit} (Ultima cifră extrasă)`
+      : `n % 10 = ${lastDigit} (Extracted last digit)`;
+    setHistory(prev => [msg, ...prev.slice(0, 5)]);
     sounds.playClick();
   };
 
   const handleCutLastDigit = () => {
     const newN = Math.trunc(currentNum / 10);
     setCurrentNum(newN);
-    setHistory(prev => [`n = n / 10 -> n devine ${newN} (Tăiată ultima cifră)`, ...prev.slice(0, 5)]);
+    const msg = lang === 'ro'
+      ? `n = n / 10 -> n devine ${newN} (Tăiată ultima cifră)`
+      : `n = n / 10 -> n becomes ${newN} (Truncated last digit)`;
+    setHistory(prev => [msg, ...prev.slice(0, 5)]);
     sounds.playClick();
   };
 
   const handleCheckParity = () => {
     const isEven = currentNum % 2 === 0;
-    setHistory(prev => [
-      `n % 2 == ${currentNum % 2} -> ${isEven ? 'Număr PAR' : 'Număr IMPAR'}`,
-      ...prev.slice(0, 5)
-    ]);
+    const msg = lang === 'ro'
+      ? `n % 2 == ${currentNum % 2} -> ${isEven ? 'Număr PAR' : 'Număr IMPAR'}`
+      : `n % 2 == ${currentNum % 2} -> ${isEven ? 'EVEN Number' : 'ODD Number'}`;
+    setHistory(prev => [msg, ...prev.slice(0, 5)]);
     sounds.playClick();
   };
 
   const handleCheckDivisibility = () => {
     const rem = currentNum % testDivisor;
     const isDiv = rem === 0;
-    setHistory(prev => [
-      `${currentNum} % ${testDivisor} = ${rem} -> ${isDiv ? 'DIVIZIBIL' : 'NEDIVIZIBIL'}`,
-      ...prev.slice(0, 5)
-    ]);
+    const msg = lang === 'ro'
+      ? `${currentNum} % ${testDivisor} = ${rem} -> ${isDiv ? 'DIVIZIBIL' : 'NEDIVIZIBIL'}`
+      : `${currentNum} % ${testDivisor} = ${rem} -> ${isDiv ? 'DIVISIBLE' : 'NOT DIVISIBLE'}`;
+    setHistory(prev => [msg, ...prev.slice(0, 5)]);
     sounds.playClick();
   };
 
   const handleResetNum = () => {
     setCurrentNum(8452);
-    setHistory(['Număr resetat la n = 8452']);
+    setHistory([lang === 'ro' ? 'Număr resetat la n = 8452' : 'Number reset to n = 8452']);
     sounds.playClick();
   };
 
@@ -116,18 +126,27 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
           <div>
             <div className="flex items-center gap-2 text-indigo-200 text-sm font-semibold tracking-wide uppercase mb-1">
               <Percent className="w-5 h-5 text-indigo-300" />
-              <span>Unitatea 3: Algoritmi & Programare C++ Avansată • Modulul 3A</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Unitatea 3: Algoritmi & Programare C++ Avansată • Modulul 3A'
+                  : 'Unit 3: Algorithms & Advanced C++ Programming • Module 3A'}
+              </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-              Lecția 3: Operatori Aritmetici, Împărțirea Întreagă & Magia Modulo (%)
+              {lang === 'ro'
+                ? 'Lecția 3: Operatori Aritmetici, Împărțirea Întreagă & Magia Modulo (%)'
+                : 'Lesson 3: Arithmetic Operators, Integer Division & Modulo Magic (%)'}
             </h1>
             <p className="text-indigo-100 text-sm md:text-base mt-1 max-w-3xl">
-              Manual Art Klett pag. 60–61: Însușește-ți tehnicile fundamentale pe cifrele unui număr:
-              extragerea ultimei cifre cu <code>% 10</code>, eliminarea ei cu <code>/ 10</code>, testul de paritate și diferența dintre împărțirea întreagă și cea reală.
+              {lang === 'ro'
+                ? 'Manual Art Klett pag. 60–61: Însușește-ți tehnicile fundamentale pe cifrele unui număr: extragerea ultimei cifre cu % 10, eliminarea ei cu / 10, testul de paritate și diferența dintre împărțirea întreagă și cea reală.'
+                : 'Curriculum p. 60–61: Master digit dissection arithmetic: extracting units via % 10, truncating units via / 10, parity testing (% 2), and integer vs floating-point division.'}
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 text-center">
-            <span className="text-xs uppercase tracking-wider text-indigo-200 font-bold block">Nivel</span>
+            <span className="text-xs uppercase tracking-wider text-indigo-200 font-bold block">
+              {lang === 'ro' ? 'Nivel' : 'Level'}
+            </span>
             <span className="text-2xl font-black text-white">3 / 7</span>
           </div>
         </div>
@@ -138,42 +157,45 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
         <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
           <BookOpen className="w-6 h-6 text-indigo-600 flex-shrink-0" />
           <h2 className="text-lg font-bold text-slate-800">
-            Repere Teoretice: Împărțirea C++ (Câtul / și Restul %) (Manual pag. 60–61)
+            {lang === 'ro'
+              ? 'Repere Teoretice: Împărțirea C++ (Câtul / și Restul %) (Manual pag. 60–61)'
+              : 'Theoretical Reference: C++ Division (Quotient / and Remainder %) (Curriculum p. 60–61)'}
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-700">
           <div className="bg-blue-50/70 p-4 rounded-xl border border-blue-100 space-y-2">
             <div className="font-bold text-blue-900 flex items-center gap-2">
               <Divide className="w-4 h-4 text-blue-600" />
-              Câtul Întreg (Operatorul /)
+              {lang === 'ro' ? 'Câtul Întreg (Operatorul /)' : 'Integer Quotient (Operator /)'}
             </div>
             <p className="text-slate-600 text-xs">
-              Dacă ambii operanzi sunt întregi (<code>int</code>), rezultatul este doar câtul fără zecimale:
-              <code>7 / 2 = 3</code> (nu 3.5!). Dacă vrei zecimale, cel puțin unul trebuie scris real: <code>7.0 / 2 = 3.5</code>.
+              {lang === 'ro'
+                ? 'Dacă ambii operanzi sunt întregi (int), rezultatul este doar câtul fără zecimale: 7 / 2 = 3 (nu 3.5!). Dacă vrei zecimale, cel puțin unul trebuie scris real: 7.0 / 2 = 3.5.'
+                : 'If both operands are integers (int), division discards decimals: 7 / 2 = 3 (not 3.5!). For floating-point precision, write at least one float: 7.0 / 2 = 3.5.'}
             </p>
           </div>
 
           <div className="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100 space-y-2">
             <div className="font-bold text-indigo-900 flex items-center gap-2">
               <Percent className="w-4 h-4 text-indigo-600" />
-              Restul Împărțirii (Modulo %)
+              {lang === 'ro' ? 'Restul Împărțirii (Modulo %)' : 'Remainder (Modulo %)'}
             </div>
             <p className="text-slate-600 text-xs">
-              Se aplică <strong>doar pe numere întregi</strong>! <code>14 % 4 = 2</code> (deoarece 14 = 4 * 3 + 2).
-              Este piatra de temelie pentru toți algoritmii pe cifre și divizibilitate.
+              {lang === 'ro'
+                ? 'Se aplică doar pe numere întregi! 14 % 4 = 2 (deoarece 14 = 4 * 3 + 2). Este piatra de temelie pentru toți algoritmii pe cifre și divizibilitate.'
+                : 'Applies strictly to integer types! 14 % 4 = 2 (since 14 = 4 * 3 + 2). Modulo is the foundational cornerstone for digit dissection and divisibility.'}
             </p>
           </div>
 
           <div className="bg-purple-50/70 p-4 rounded-xl border border-purple-100 space-y-2">
             <div className="font-bold text-purple-900 flex items-center gap-2">
               <Scissors className="w-4 h-4 text-purple-600" />
-              Algoritmul „Dezmembrării”
+              {lang === 'ro' ? 'Algoritmul „Dezmembrării”' : 'Digit Extraction Algorithm'}
             </div>
             <p className="text-slate-600 text-xs">
-              Pentru orice număr natural <code>n</code>:
-              <br />• Ultima cifră: <code>c = n % 10;</code>
-              <br />• Eliminarea ultimei cifre: <code>n = n / 10;</code>
-              <br />• Paritate: <code>n % 2 == 0;</code>
+              {lang === 'ro'
+                ? 'Pentru orice număr natural n: • Ultima cifră: c = n % 10; • Eliminarea ultimei cifre: n = n / 10; • Paritate: n % 2 == 0;'
+                : 'For any natural number n: • Last digit: c = n % 10; • Truncate unit: n = n / 10; • Parity check: n % 2 == 0;'}
             </p>
           </div>
         </div>
@@ -185,11 +207,13 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-indigo-600" />
             <h3 className="font-bold text-slate-800 text-lg">
-              Simulator Interactiv: „Dezmembrătorul de Numere” în C++
+              {lang === 'ro'
+                ? 'Simulator Interactiv: „Dezmembrătorul de Numere” în C++'
+                : 'Interactive Simulator: C++ Number Dissector Studio'}
             </h3>
           </div>
           <span className="text-xs bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full font-semibold">
-            Laborator Cifre
+            {lang === 'ro' ? 'Laborator Cifre' : 'Digits Lab'}
           </span>
         </div>
 
@@ -199,14 +223,14 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
             <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Valoarea Curentă a lui n:
+                  {lang === 'ro' ? 'Valoarea Curentă a lui n:' : 'Current Value of n:'}
                 </label>
                 <button
                   onClick={handleResetNum}
                   className="text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Resetează</span>
+                  <span>{lang === 'ro' ? 'Resetează' : 'Reset'}</span>
                 </button>
               </div>
               <div className="flex items-center gap-3">
@@ -226,7 +250,11 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
                 className="p-3 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl text-left transition"
               >
                 <div className="font-mono font-bold text-xs text-indigo-900">n % 10</div>
-                <div className="text-[11px] text-indigo-700">Extrage ultima cifră ({currentNum % 10})</div>
+                <div className="text-[11px] text-indigo-700">
+                  {lang === 'ro'
+                    ? `Extrage ultima cifră (${currentNum % 10})`
+                    : `Extract last digit (${currentNum % 10})`}
+                </div>
               </button>
 
               <button
@@ -234,7 +262,11 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
                 className="p-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl text-left transition"
               >
                 <div className="font-mono font-bold text-xs text-purple-900">n = n / 10</div>
-                <div className="text-[11px] text-purple-700">Taie ultima cifră (devine {Math.trunc(currentNum / 10)})</div>
+                <div className="text-[11px] text-purple-700">
+                  {lang === 'ro'
+                    ? `Taie ultima cifră (devine ${Math.trunc(currentNum / 10)})`
+                    : `Truncate unit (becomes ${Math.trunc(currentNum / 10)})`}
+                </div>
               </button>
 
               <button
@@ -242,7 +274,11 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
                 className="p-3 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl text-left transition"
               >
                 <div className="font-mono font-bold text-xs text-sky-900">n % 2 == 0</div>
-                <div className="text-[11px] text-sky-700">Test paritate: {currentNum % 2 === 0 ? 'Par' : 'Impar'}</div>
+                <div className="text-[11px] text-sky-700">
+                  {lang === 'ro'
+                    ? `Test paritate: ${currentNum % 2 === 0 ? 'Par' : 'Impar'}`
+                    : `Parity test: ${currentNum % 2 === 0 ? 'Even' : 'Odd'}`}
+                </div>
               </button>
 
               <div className="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-2">
@@ -268,8 +304,8 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
           <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3 font-mono text-xs shadow-xl">
             <div>
               <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3 text-slate-400">
-                <span>Registru Operații Executate:</span>
-                <span className="text-[11px] text-emerald-400">Status: Activ</span>
+                <span>{lang === 'ro' ? 'Registru Operații Executate:' : 'Execution History Log:'}</span>
+                <span className="text-[11px] text-emerald-400">Status: OK</span>
               </div>
               <div className="space-y-2">
                 {history.map((log, index) => (
@@ -288,7 +324,9 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
             </div>
 
             <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-800">
-              💡 Observă cum <code>n % 10</code> nu modifică valoarea lui <code>n</code>, în timp ce <code>n = n / 10</code> actualizează variabila.
+              💡 {lang === 'ro'
+                ? 'Observă cum n % 10 nu modifică valoarea lui n, în timp ce n = n / 10 actualizează variabila.'
+                : 'Notice how n % 10 evaluates without mutating n, whereas n = n / 10 updates the variable state.'}
             </div>
           </div>
         </div>
@@ -299,7 +337,9 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
           <HelpCircle className="w-5 h-5 text-indigo-600" />
           <h3 className="font-bold text-slate-800 text-lg">
-            Verificare Pedagogică: Operatori Aritmetici (Manual pag. 60–61)
+            {lang === 'ro'
+              ? 'Verificare Pedagogică: Operatori Aritmetici (Manual pag. 60–61)'
+              : 'Pedagogical Check: Arithmetic Operators (Curriculum p. 60–61)'}
           </h3>
         </div>
 
@@ -307,10 +347,13 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-2">
             <span className="text-sm font-bold text-slate-800">
-              Cerința 1: Dacă ai variabilele întregi <code>int a = 17, b = 5;</code>, care vor fi valorile expresiilor <code>a / b</code> și respectiv <code>a % b</code> în C++?
+              {lang === 'ro'
+                ? 'Cerința 1: Dacă ai variabilele întregi int a = 17, b = 5;, care vor fi valorile expresiilor a / b și respectiv a % b în C++?'
+                : 'Requirement 1: Given integers int a = 17, b = 5;, what are the evaluated values of a / b and a % b in C++?'}
             </span>
             <QuestionHint
-              hint="Manual pag. 60: La împărțirea a două numere întregi (int), operatorul / dă câtul întreg, iar operatorul % dă restul împărțirii (17 = 5 * 3 + 2)."
+              hintRo="Manual pag. 60: La împărțirea a două numere întregi (int), operatorul / dă câtul întreg, iar operatorul % dă restul împărțirii (17 = 5 * 3 + 2)."
+              hintEn="Curriculum p. 60: For integers, / computes integer quotient while % produces the remainder (17 = 5 * 3 + 2)."
               isOpen={showHint['q1'] || false}
               onToggle={() => setShowHint(prev => ({ ...prev, q1: !prev.q1 }))}
             />
@@ -322,10 +365,26 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
 
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { id: 'opt_a', label: 'A. a / b = 3.4 și a % b = 0' },
-              { id: 'opt_b', label: 'B. a / b = 3 și a % b = 2' },
-              { id: 'opt_c', label: 'C. a / b = 2 și a % b = 3' },
-              { id: 'opt_d', label: 'D. Se produce o eroare de compilare deoarece 17 nu se împarte exact la 5' }
+              {
+                id: 'opt_a',
+                labelRo: 'A. a / b = 3.4 și a % b = 0',
+                labelEn: 'A. a / b = 3.4 and a % b = 0'
+              },
+              {
+                id: 'opt_b',
+                labelRo: 'B. a / b = 3 și a % b = 2',
+                labelEn: 'B. a / b = 3 and a % b = 2'
+              },
+              {
+                id: 'opt_c',
+                labelRo: 'C. a / b = 2 și a % b = 3',
+                labelEn: 'C. a / b = 2 and a % b = 3'
+              },
+              {
+                id: 'opt_d',
+                labelRo: 'D. Se produce o eroare de compilare deoarece 17 nu se împarte exact la 5',
+                labelEn: 'D. A compile error occurs because 17 is not evenly divisible by 5'
+              }
             ].map(opt => (
               <button
                 key={opt.id}
@@ -337,7 +396,7 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {opt.label}
+                {lang === 'ro' ? opt.labelRo : opt.labelEn}
               </button>
             ))}
           </div>
@@ -348,12 +407,16 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
               disabled={!answers['q1'] || isLocked('q1')}
               className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
             >
-              <span>Verifică Răspunsul</span>
+              <span>{lang === 'ro' ? 'Verifică Răspunsul' : 'Check Answer'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <AnswerExplanation
-              explanation="Corect! Deoarece atât a cât și b sunt de tip int, a / b dă câtul întreg 3 (17 împărțit la 5 dă 3 rest 2), iar a % b returnează restul 2."
+              explanation={
+                lang === 'ro'
+                  ? 'Corect! Deoarece atât a cât și b sunt de tip int, a / b dă câtul întreg 3 (17 împărțit la 5 dă 3 rest 2), iar a % b returnează restul 2.'
+                  : 'Correct! Both operands being integers, a / b performs truncated integer division (3), while a % b calculates the mathematical remainder (2).'
+              }
               isCorrect={true}
             />
           )}
@@ -363,10 +426,13 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
         <div className="space-y-3 pt-4 border-t border-slate-100">
           <div className="flex items-start justify-between gap-2">
             <span className="text-sm font-bold text-slate-800">
-              Cerința 2: Cum poți extrage penultima cifră (cifra zecilor) a unui număr natural <code>n = 729</code> folosind operatorii învățați?
+              {lang === 'ro'
+                ? 'Cerința 2: Cum poți extrage penultima cifră (cifra zecilor) a unui număr natural n = 729 folosind operatorii învățați?'
+                : 'Requirement 2: How do you isolate the tens digit of a natural number n = 729 using the operators taught?'}
             </span>
             <QuestionHint
-              hint="Manual pag. 61: Mai întâi elimini ultima cifră cu / 10 (obținând 72), apoi iei ultima cifră a rezultatului cu % 10 (obținând 2)."
+              hintRo="Manual pag. 61: Mai întâi elimini ultima cifră cu / 10 (obținând 72), apoi iei ultima cifră a rezultatului cu % 10 (obținând 2)."
+              hintEn="Curriculum p. 61: First truncate the units digit with / 10 (yielding 72), then extract the new units digit with % 10 (yielding 2)."
               isOpen={showHint['q2'] || false}
               onToggle={() => setShowHint(prev => ({ ...prev, q2: !prev.q2 }))}
             />
@@ -378,10 +444,26 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
 
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { id: 'opt_a', label: 'A. n % 100 (care ar returna 29)' },
-              { id: 'opt_b', label: 'B. (n / 10) % 10 (taie unitățile prin / 10 și extrage noua ultimă cifră prin % 10)' },
-              { id: 'opt_c', label: 'C. n - 10' },
-              { id: 'opt_d', label: 'D. (n % 10) / 10' }
+              {
+                id: 'opt_a',
+                labelRo: 'A. n % 100 (care ar returna 29)',
+                labelEn: 'A. n % 100 (which returns 29)'
+              },
+              {
+                id: 'opt_b',
+                labelRo: 'B. (n / 10) % 10 (taie unitățile prin / 10 și extrage noua ultimă cifră prin % 10)',
+                labelEn: 'B. (n / 10) % 10 (truncates units via / 10 and extracts tens via % 10)'
+              },
+              {
+                id: 'opt_c',
+                labelRo: 'C. n - 10',
+                labelEn: 'C. n - 10'
+              },
+              {
+                id: 'opt_d',
+                labelRo: 'D. (n % 10) / 10',
+                labelEn: 'D. (n % 10) / 10'
+              }
             ].map(opt => (
               <button
                 key={opt.id}
@@ -393,7 +475,7 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
                     : 'border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {opt.label}
+                {lang === 'ro' ? opt.labelRo : opt.labelEn}
               </button>
             ))}
           </div>
@@ -404,12 +486,16 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
               disabled={!answers['q2'] || isLocked('q2')}
               className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5"
             >
-              <span>Verifică Răspunsul</span>
+              <span>{lang === 'ro' ? 'Verifică Răspunsul' : 'Check Answer'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <AnswerExplanation
-              explanation="Excelent! Expresia `(n / 10) % 10` taie unitățile (`729 / 10 = 72`), apoi aplică `% 10` pentru a extrage exact cifra zecilor (`72 % 10 = 2`)."
+              explanation={
+                lang === 'ro'
+                  ? 'Excelent! Expresia `(n / 10) % 10` taie unitățile (`729 / 10 = 72`), apoi aplică `% 10` pentru a extrage exact cifra zecilor (`72 % 10 = 2`).'
+                  : 'Excellent! The compound expression `(n / 10) % 10` first drops the units digit (729 / 10 = 72) and then extracts the new units digit (72 % 10 = 2).'
+              }
               isCorrect={true}
             />
           )}
@@ -423,7 +509,11 @@ export const A1Level3_ArithmeticAndModuloLab: React.FC<A1Level3Props> = ({
         isCompleted={allQuizzesPassed}
         onPrev={onPrev}
         onNext={handleFinish}
-        nextLabel="Continuă cu Lecția 4: Operatori Relaționali & Logici (&&, ||, !)"
+        nextLabel={
+          lang === 'ro'
+            ? 'Continuă cu Lecția 4: Operatori Relaționali & Logici (&&, ||, !)'
+            : 'Continue to Lesson 4: Relational & Logical Operators (&&, ||, !)'
+        }
       />
     </div>
   );

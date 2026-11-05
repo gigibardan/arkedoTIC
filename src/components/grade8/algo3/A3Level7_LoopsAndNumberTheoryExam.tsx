@@ -20,6 +20,7 @@ import { PedagogicalReflectionBanner } from '../../common/usePedagogicalCooldown
 import { QuestionHint } from '../../text1/QuestionHint';
 import { AnswerExplanation } from '../../text1/AnswerExplanation';
 import { PageNavigationFooter } from '../../text1/PageNavigationFooter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface A3Level7Props {
   onCompletePage?: (earnedScore: number) => void;
@@ -27,115 +28,243 @@ interface A3Level7Props {
   onPrev?: () => void;
 }
 
+interface ExamOption {
+  id: string;
+  textRo: string;
+  textEn: string;
+}
+
 interface ExamQuestion {
   id: string;
   questionNumber: number;
-  title: string;
-  questionText: string;
-  hint: string;
-  options: { id: string; text: string }[];
+  titleRo: string;
+  titleEn: string;
+  questionTextRo: string;
+  questionTextEn: string;
+  hintRo: string;
+  hintEn: string;
+  options: ExamOption[];
   correctOptionId: string;
-  explanation: string;
-  manualRef: string;
+  explanationRo: string;
+  explanationEn: string;
+  manualRefRo: string;
+  manualRefEn: string;
 }
 
 const EXAM_QUESTIONS: ExamQuestion[] = [
   {
     id: 'q1',
     questionNumber: 1,
-    title: 'Bucle cu Test Inițial vs Test Final',
-    questionText:
+    titleRo: 'Bucle cu Test Inițial vs Test Final',
+    titleEn: 'Pre-Test vs Post-Test Repetitive Loops',
+    questionTextRo:
       'Care este diferența majoră dintre bucla `while (cond)` și bucla `do { ... } while (cond);` în cazul în care condiția este evaluată ca FALSĂ încă de la prima iterație (pag. 71–73)?',
-    hint: 'Gândește-te la momentul în care se verifică condiția: înainte de execuție sau după prima execuție a corpului.',
+    questionTextEn:
+      'What is the fundamental distinction between `while (cond)` and `do { ... } while (cond);` when the condition evaluates to FALSE prior to the very first iteration (pp. 71–73)?',
+    hintRo: 'Gândește-te la momentul în care se verifică condiția: înainte de execuție sau după prima execuție a corpului.',
+    hintEn: 'Consider when the predicate is tested: before body execution or after the initial pass through the body.',
     options: [
-      { id: 'a', text: 'A. Ambele structuri se execută exact o singură dată' },
-      { id: 'b', text: 'B. Bucla while nu execută corpul nici măcar o dată (0 ori), în timp ce do-while execută corpul garantat cel puțin o dată (1 dată)' },
-      { id: 'c', text: 'C. Bucla while provoacă blocarea calculatorului' },
-      { id: 'd', text: 'D. Nu există nicio diferență între cele două structuri' }
+      {
+        id: 'a',
+        textRo: 'A. Ambele structuri se execută exact o singură dată',
+        textEn: 'A. Both constructs execute exactly once'
+      },
+      {
+        id: 'b',
+        textRo: 'B. Bucla while nu execută corpul nici măcar o dată (0 ori), în timp ce do-while execută corpul garantat cel puțin o dată (1 dată)',
+        textEn: 'B. The while loop executes zero times (0), whereas do-while executes the body at least once unconditionally (1 time)'
+      },
+      {
+        id: 'c',
+        textRo: 'C. Bucla while provoacă blocarea calculatorului',
+        textEn: 'C. The while loop triggers a system freeze'
+      },
+      {
+        id: 'd',
+        textRo: 'D. Nu există nicio diferență între cele două structuri',
+        textEn: 'D. There is no behavioral difference between the two'
+      }
     ],
     correctOptionId: 'b',
-    explanation:
+    explanationRo:
       'Corect! La bucla while, condiția se verifică înaintea executării instrucțiunilor (test inițial), deci dacă este falsă inițial, corpul nu se execută niciodată. La do-while, instrucțiunile se execută cel puțin o dată, condiția fiind verificată abia la final (test final).',
-    manualRef: 'Manual pag. 71–73'
+    explanationEn:
+      'Correct! The while loop checks its predicate before body execution; thus an initially false condition results in zero iterations. In contrast, do-while tests the condition at the end, ensuring at least one execution.',
+    manualRefRo: 'Manual pag. 71–73',
+    manualRefEn: 'Textbook pp. 71–73'
   },
   {
     id: 'q2',
     questionNumber: 2,
-    title: 'Mecanismul de Execuție al Buclei for',
-    questionText:
+    titleRo: 'Mecanismul de Execuție al Buclei for',
+    titleEn: 'Execution Sequence of the for Loop Header',
+    questionTextRo:
       'În instrucțiunea `for (int i = 1; i <= n; i++)`, care este ordinea corectă a operațiilor executate de procesor la fiecare pas (pag. 73–74)?',
-    hint: 'Inițializarea contorului (int i = 1) se execută o singură dată la început.',
+    questionTextEn:
+      'In `for (int i = 1; i <= n; i++)`, what is the exact operational sequence executed by the CPU at each iteration cycle (pp. 73–74)?',
+    hintRo: 'Inițializarea contorului (int i = 1) se execută o singură dată la început.',
+    hintEn: 'Counter initialization (int i = 1) runs solely once upon entering the loop.',
     options: [
-      { id: 'a', text: 'A. Incrementare (i++) &rarr; Verificare condiție (i <= n) &rarr; Corp buclă' },
-      { id: 'b', text: 'B. Corp buclă &rarr; Incrementare &rarr; Inițializare' },
-      { id: 'c', text: 'C. 1. Inițializare (o singură dată); 2. Testare condiție; 3. Executare corp; 4. Incrementare contor (i++); 5. Salt la pasul 2' },
-      { id: 'd', text: 'D. Toate se execută simultan în mod aleatoriu' }
+      {
+        id: 'a',
+        textRo: 'A. Incrementare (i++) &rarr; Verificare condiție (i <= n) &rarr; Corp buclă',
+        textEn: 'A. Increment (i++) &rarr; Test condition (i <= n) &rarr; Loop body'
+      },
+      {
+        id: 'b',
+        textRo: 'B. Corp buclă &rarr; Incrementare &rarr; Inițializare',
+        textEn: 'B. Loop body &rarr; Increment &rarr; Initialization'
+      },
+      {
+        id: 'c',
+        textRo: 'C. 1. Inițializare (o singură dată); 2. Testare condiție; 3. Executare corp; 4. Incrementare contor (i++); 5. Salt la pasul 2',
+        textEn: 'C. 1. Initialization (once); 2. Evaluate condition; 3. Execute body; 4. Increment counter (i++); 5. Loop back to step 2'
+      },
+      {
+        id: 'd',
+        textRo: 'D. Toate se execută simultan în mod aleatoriu',
+        textEn: 'D. All clauses execute concurrently in random order'
+      }
     ],
     correctOptionId: 'c',
-    explanation:
+    explanationRo:
       'Corect! Antetul buclei for execută inițializarea o singură dată la start, apoi repetă secvența: Verificare condiție -> Executare corp -> Incrementare pas -> Reverificare condiție.',
-    manualRef: 'Manual pag. 73–74'
+    explanationEn:
+      'Correct! The for loop executes initialization once, followed by the repeating cycle: Condition test -> Body execution -> Step update -> Next condition evaluation.',
+    manualRefRo: 'Manual pag. 73–74',
+    manualRefEn: 'Textbook pp. 73–74'
   },
   {
     id: 'q3',
     questionNumber: 3,
-    title: 'Algoritmul General de Prelucrare a Cifrelor',
-    questionText:
+    titleRo: 'Algoritmul General de Prelucrare a Cifrelor',
+    titleEn: 'Canonical Digit Extraction Schema',
+    questionTextRo:
       'Care este schema algoritmică canonică în C++ pentru a extrage pe rând toate cifrele unui număr natural oarecare `n` până când numărul se epuizează (pag. 74–75)?',
-    hint: 'Folosim restul împărțirii la 10 pentru ultima cifră și câtul împărțirii la 10 pentru a tăia cifra.',
+    questionTextEn:
+      'What is the canonical C++ algorithmic pattern to iteratively process each digit of an arbitrary integer `n` until digits are exhausted (pp. 74–75)?',
+    hintRo: 'Folosim restul împărțirii la 10 pentru ultima cifră și câtul împărțirii la 10 pentru a tăia cifra.',
+    hintEn: 'Use remainder modulo 10 to extract the trailing digit, and integer division by 10 to truncate it.',
     options: [
-      { id: 'a', text: 'A. while (n != 0) { c = n % 10; /* prelucrare */ n = n / 10; }' },
-      { id: 'b', text: 'B. for (int i = 1; i <= n; i++) { c = n + 10; }' },
-      { id: 'c', text: 'C. if (n > 0) { c = n / 10; }' },
-      { id: 'd', text: 'D. do { n = n * 10; } while (n > 0);' }
+      {
+        id: 'a',
+        textRo: 'A. while (n != 0) { c = n % 10; /* prelucrare */ n = n / 10; }',
+        textEn: 'A. while (n != 0) { c = n % 10; /* process */ n = n / 10; }'
+      },
+      {
+        id: 'b',
+        textRo: 'B. for (int i = 1; i <= n; i++) { c = n + 10; }',
+        textEn: 'B. for (int i = 1; i <= n; i++) { c = n + 10; }'
+      },
+      {
+        id: 'c',
+        textRo: 'C. if (n > 0) { c = n / 10; }',
+        textEn: 'C. if (n > 0) { c = n / 10; }'
+      },
+      {
+        id: 'd',
+        textRo: 'D. do { n = n * 10; } while (n > 0);',
+        textEn: 'D. do { n = n * 10; } while (n > 0);'
+      }
     ],
     correctOptionId: 'a',
-    explanation:
+    explanationRo:
       'Corect! Aceasta este schema clasică de descompunere: n % 10 izolează ultima cifră a numărului, iar n = n / 10 o elimină prin împărțire întreagă, procesul repetându-se până când n devine 0.',
-    manualRef: 'Manual pag. 74–75'
+    explanationEn:
+      'Correct! The canonical digit dissection pattern: n % 10 yields the trailing digit, and n = n / 10 truncates it through integer division until n reaches 0.',
+    manualRefRo: 'Manual pag. 74–75',
+    manualRefEn: 'Textbook pp. 74–75'
   },
   {
     id: 'q4',
     questionNumber: 4,
-    title: 'Algoritmul lui Euclid & Relația cu CMMMC',
-    questionText:
+    titleRo: 'Algoritmul lui Euclid & Relația cu CMMMC',
+    titleEn: 'Euclidean Algorithm & Relationship to LCM',
+    questionTextRo:
       'Cum se calculează Cel Mai Mic Multiplu Comun (CMMMC) a două numere naturale `a` și `b` după ce am determinat Cel Mai Mare Divizor Comun (CMMDC) prin algoritmul lui Euclid (pag. 75–76)?',
-    hint: 'Produsul a două numere naturale este egal cu produsul dintre CMMDC și CMMMC.',
+    questionTextEn:
+      'How do you compute the Least Common Multiple (LCM) of two natural numbers `a` and `b` after obtaining the Greatest Common Divisor (GCD) via Euclid (pp. 75–76)?',
+    hintRo: 'Produsul a două numere naturale este egal cu produsul dintre CMMDC și CMMMC.',
+    hintEn: 'The product of two positive integers equals the product of their GCD and LCM.',
     options: [
-      { id: 'a', text: 'A. cmmmc = a + b - cmmdc' },
-      { id: 'b', text: 'B. cmmmc = (a * b) / cmmdc (produsul numerelor împărțit la cel mai mare divizor comun)' },
-      { id: 'c', text: 'C. cmmmc = cmmdc * 2' },
-      { id: 'd', text: 'D. cmmmc = a * a + b * b' }
+      {
+        id: 'a',
+        textRo: 'A. cmmmc = a + b - cmmdc',
+        textEn: 'A. lcm = a + b - gcd'
+      },
+      {
+        id: 'b',
+        textRo: 'B. cmmmc = (a * b) / cmmdc (produsul numerelor împărțit la cel mai mare divizor comun)',
+        textEn: 'B. lcm = (a * b) / gcd (the product of the numbers divided by their greatest common divisor)'
+      },
+      {
+        id: 'c',
+        textRo: 'C. cmmmc = cmmdc * 2',
+        textEn: 'C. lcm = gcd * 2'
+      },
+      {
+        id: 'd',
+        textRo: 'D. cmmmc = a * a + b * b',
+        textEn: 'D. lcm = a * a + b * b'
+      }
     ],
     correctOptionId: 'b',
-    explanation:
+    explanationRo:
       'Corect! Conform teoremei fundamentale din aritmetică: a * b = CMMDC(a, b) * CMMMC(a, b). Prin urmare, CMMMC = (a * b) / CMMDC.',
-    manualRef: 'Manual pag. 75–76'
+    explanationEn:
+      'Correct! From the arithmetic theorem a * b = GCD(a, b) * LCM(a, b), the Least Common Multiple evaluates to LCM = (a * b) / GCD.',
+    manualRefRo: 'Manual pag. 75–76',
+    manualRefEn: 'Textbook pp. 75–76'
   },
   {
     id: 'q5',
     questionNumber: 5,
-    title: 'Testul de Primalitate Optimizat',
-    questionText:
+    titleRo: 'Testul de Primalitate Optimizat',
+    titleEn: 'Optimized Primality Testing Boundary',
+    questionTextRo:
       'De ce algoritmul optimizat de verificare dacă un număr natural `n` este prim testează existența unui divizor propriu doar până la `d * d <= n` (adică până la radicalul lui `n`) (pag. 75)?',
-    hint: 'Dacă un număr ar avea un divizor mai mare decât radicalul, perechea sa ar trebui să fie mai mică decât radicalul.',
+    questionTextEn:
+      'Why does the optimized primality test for integer `n` restrict divisor searching strictly up to `d * d <= n` (the square root of `n`) (p. 75)?',
+    hintRo: 'Dacă un număr ar avea un divizor mai mare decât radicalul, perechea sa ar trebui să fie mai mică decât radicalul.',
+    hintEn: 'If a composite number has a factor larger than its square root, its conjugate factor must be strictly smaller than the square root.',
     options: [
-      { id: 'a', text: 'A. Pentru că divizorii oricărui număr compus vin în perechi (d și n/d); dacă numărul nu are niciun divizor <= sqrt(n), este imposibil să aibă vreun divizor > sqrt(n)' },
-      { id: 'b', text: 'B. Numerele mai mari decât radicalul sunt interzise în C++' },
-      { id: 'c', text: 'C. Este o convenție fără fundament matematic' },
-      { id: 'd', text: 'D. Pentru că toate numerele impare sunt automat prime' }
+      {
+        id: 'a',
+        textRo: 'A. Pentru că divizorii oricărui număr compus vin în perechi (d și n/d); dacă numărul nu are niciun divizor <= sqrt(n), este imposibil să aibă vreun divizor > sqrt(n)',
+        textEn: 'A. Because divisors of any composite integer occur in conjugate pairs (d and n/d); if no divisor exists <= sqrt(n), none can exist > sqrt(n)'
+      },
+      {
+        id: 'b',
+        textRo: 'B. Numerele mai mari decât radicalul sunt interzise în C++',
+        textEn: 'B. Integers above the square root are forbidden by C++ standards'
+      },
+      {
+        id: 'c',
+        textRo: 'C. Este o convenție fără fundament matematic',
+        textEn: 'C. It is an arbitrary convention lacking mathematical proof'
+      },
+      {
+        id: 'd',
+        textRo: 'D. Pentru că toate numerele impare sunt automat prime',
+        textEn: 'D. Because all odd numbers are automatically prime'
+      }
     ],
     correctOptionId: 'a',
-    explanation:
+    explanationRo:
       'Corect! Dacă un număr compus n = a * b, cel puțin unul dintre factori (a sau b) trebuie să fie mai mic sau egal cu radicalul lui n. Dacă nu găsim niciun divizor în intervalul [2, sqrt(n)], numărul este garantat prim.',
-    manualRef: 'Manual pag. 75'
+    explanationEn:
+      'Correct! If n = a * b is composite, at least one factor must satisfy factor <= sqrt(n). If no divisor exists in [2, sqrt(n)], n is definitively proven prime.',
+    manualRefRo: 'Manual pag. 75',
+    manualRefEn: 'Textbook p. 75'
   }
 ];
 
 export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
   onCompletePage,
-  onComplete
+  onComplete,
+  onPrev
 }) => {
+  const { lang } = useLanguage();
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [activeHintId, setActiveHintId] = useState<string | null>(null);
@@ -209,22 +338,32 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-500/30 text-teal-200 border border-teal-400/30">
-                  Modulul 3C • Nivelul 7 din 7
+                  {lang === 'ro' ? 'Modulul 3C • Nivelul 7 din 7' : 'Module 3C • Level 7 of 7'}
                 </span>
-                <span className="text-xs text-teal-300">Manual Art Klett pag. 76</span>
+                <span className="text-xs text-teal-300">
+                  {lang === 'ro' ? 'Manual Art Klett pag. 76' : 'Art Klett Textbook p. 76'}
+                </span>
               </div>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Evaluare Sumativă: Structuri Repetitive & Teoria Numerelor C++
+                {lang === 'ro'
+                  ? 'Evaluare Sumativă: Structuri Repetitive & Teoria Numerelor C++'
+                  : 'Summative Assessment: Repetitive Structures & Number Theory in C++'}
               </h1>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs text-teal-300 uppercase tracking-wider block">Standard Național</span>
-            <span className="text-lg font-bold text-cyan-300">5 Întrebări Oficiale</span>
+            <span className="text-xs text-teal-300 uppercase tracking-wider block">
+              {lang === 'ro' ? 'Standard Național' : 'Curriculum Standard'}
+            </span>
+            <span className="text-lg font-bold text-cyan-300">
+              {lang === 'ro' ? '5 Întrebări Oficiale' : '5 Official Questions'}
+            </span>
           </div>
         </div>
         <p className="mt-3 text-sm text-teal-100/90 leading-relaxed max-w-3xl">
-          Demonstrează stăpânirea structurilor repetitive <code className="bg-teal-950 px-1 rounded text-cyan-300 font-mono">while</code>, <code className="bg-teal-950 px-1 rounded text-cyan-300 font-mono">do-while</code>, <code className="bg-teal-950 px-1 rounded text-cyan-300 font-mono">for</code>, descompunerii cifrelor unui număr oarecare, testului de primalitate optimizat și algoritmului lui Euclid pentru a obține <strong>Diploma Oficială C++: Loops & Number Theory Specialist</strong>!
+          {lang === 'ro'
+            ? 'Demonstrează stăpânirea structurilor repetitive while, do-while, for, descompunerii cifrelor unui număr oarecare, testului de primalitate optimizat și algoritmului lui Euclid pentru a obține Diploma Oficială C++: Loops & Number Theory Specialist!'
+            : 'Demonstrate mastery of while, do-while, for loops, arbitrary digit dissection, optimized primality testing, and Euclidean GCD/LCM to earn the C++: Loops & Number Theory Specialist Certificate!'}
         </p>
       </div>
 
@@ -256,14 +395,18 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
                     {q.questionNumber}
                   </span>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-100">{q.title}</h3>
-                    <span className="text-[11px] text-slate-400 font-medium">{q.manualRef}</span>
+                    <h3 className="text-sm font-bold text-slate-100">
+                      {lang === 'ro' ? q.titleRo : q.titleEn}
+                    </h3>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      {lang === 'ro' ? q.manualRefRo : q.manualRefEn}
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <QuestionHint
-                    hint={q.hint}
+                    hint={lang === 'ro' ? q.hintRo : q.hintEn}
                     isOpen={activeHintId === q.id}
                     onToggle={() => setActiveHintId(activeHintId === q.id ? null : q.id)}
                   />
@@ -278,12 +421,12 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
                       {isCorrect ? (
                         <>
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>Corect (+20p)</span>
+                          <span>{lang === 'ro' ? 'Corect (+20p)' : 'Correct (+20p)'}</span>
                         </>
                       ) : (
                         <>
                           <AlertTriangle className="w-3.5 h-3.5" />
-                          <span>Incorect (0p)</span>
+                          <span>{lang === 'ro' ? 'Incorect (0p)' : 'Incorrect (0p)'}</span>
                         </>
                       )}
                     </span>
@@ -293,7 +436,9 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
 
               {/* Question Body */}
               <div className="p-5 space-y-4">
-                <p className="text-sm text-slate-200 leading-relaxed font-medium">{q.questionText}</p>
+                <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                  {lang === 'ro' ? q.questionTextRo : q.questionTextEn}
+                </p>
 
                 {/* Cooldown banner if wrong */}
                 {locked && <PedagogicalReflectionBanner remainingSeconds={remainingCooldown} />}
@@ -340,7 +485,9 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
                         >
                           {opt.id.toUpperCase()}
                         </span>
-                        <span className="flex-1 leading-snug">{opt.text}</span>
+                        <span className="flex-1 leading-snug">
+                          {lang === 'ro' ? opt.textRo : opt.textEn}
+                        </span>
                       </button>
                     );
                   })}
@@ -349,9 +496,13 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
                 {/* Explanation */}
                 {submitted && (
                   <AnswerExplanation
-                    explanation={q.explanation}
+                    explanation={lang === 'ro' ? q.explanationRo : q.explanationEn}
                     isCorrect={isCorrect}
-                    correctAnswerText={q.options.find((o) => o.id === q.correctOptionId)?.text}
+                    correctAnswerText={
+                      lang === 'ro'
+                        ? q.options.find((o) => o.id === q.correctOptionId)?.textRo
+                        : q.options.find((o) => o.id === q.correctOptionId)?.textEn
+                    }
                   />
                 )}
               </div>
@@ -365,11 +516,17 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
         {!submitted ? (
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-semibold text-slate-200">Finalizare Evaluare Sumativă</h3>
+              <h3 className="text-sm font-semibold text-slate-200">
+                {lang === 'ro' ? 'Finalizare Evaluare Sumativă' : 'Complete Summative Assessment'}
+              </h3>
               <p className="text-xs text-slate-400">
                 {allAnswered
-                  ? 'Ai răspuns la toate cele 5 întrebări! Apasă butonul pentru corectare oficială.'
-                  : `Ai răspuns la ${Object.keys(selectedAnswers).length} din 5 întrebări.`}
+                  ? (lang === 'ro'
+                    ? 'Ai răspuns la toate cele 5 întrebări! Apasă butonul pentru corectare oficială.'
+                    : 'You answered all 5 questions! Click the button for official grading.')
+                  : (lang === 'ro'
+                    ? `Ai răspuns la ${Object.keys(selectedAnswers).length} din 5 întrebări.`
+                    : `You answered ${Object.keys(selectedAnswers).length} of 5 questions.`)}
               </p>
             </div>
             <button
@@ -382,25 +539,33 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
               }`}
             >
               <FileCheck className="w-4 h-4" />
-              <span>Trimite Evaluarea spre Notare</span>
+              <span>{lang === 'ro' ? 'Trimite Evaluarea spre Notare' : 'Submit Exam for Grading'}</span>
             </button>
           </div>
         ) : (
           <div className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
               <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 block">Rezultat Evaluare Sumativă</span>
+                <span className="text-xs uppercase tracking-wider text-slate-400 block">
+                  {lang === 'ro' ? 'Rezultat Evaluare Sumativă' : 'Summative Exam Outcome'}
+                </span>
                 <div className="text-2xl font-black text-white flex items-center space-x-2 mt-0.5">
                   <span className={score >= 70 ? 'text-emerald-400' : 'text-rose-400'}>
-                    Nota {romanianGrade} / 10
+                    {lang === 'ro' ? `Nota ${romanianGrade} / 10` : `Grade: ${romanianGrade} / 10`}
                   </span>
-                  <span className="text-sm font-normal text-slate-400">({score} puncte din 100)</span>
+                  <span className="text-sm font-normal text-slate-400">
+                    {lang === 'ro' ? `(${score} puncte din 100)` : `(${score} points out of 100)`}
+                  </span>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-slate-400 block">Condiție Promovare:</span>
-                <span className="text-xs font-bold text-cyan-300">Minim Nota 7.00 (70%)</span>
+                <span className="text-xs text-slate-400 block">
+                  {lang === 'ro' ? 'Condiție Promovare:' : 'Passing Threshold:'}
+                </span>
+                <span className="text-xs font-bold text-cyan-300">
+                  {lang === 'ro' ? 'Minim Nota 7.00 (70%)' : 'Minimum Grade 7.00 (70%)'}
+                </span>
               </div>
             </div>
 
@@ -408,17 +573,29 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-start space-x-3 text-emerald-200">
                 <Sparkles className="w-5 h-5 flex-shrink-0 text-emerald-400 mt-0.5" />
                 <div className="text-xs leading-relaxed">
-                  <strong>Felicitări! Ai promovat cu succes Evaluarea Sumativă a Modulului 3C!</strong>
+                  <strong>
+                    {lang === 'ro'
+                      ? 'Felicitări! Ai promovat cu succes Evaluarea Sumativă a Modulului 3C!'
+                      : 'Congratulations! You successfully passed Module 3C Summative Assessment!'}
+                  </strong>
                   <br />
-                  Ai demonstrat o înțelegere impecabilă a buclelor while, do-while, for, descompunerii cifrelor, numerelor prime și algoritmului lui Euclid. Apasă butonul de mai jos pentru a revendica <strong>Diploma Oficială C++ de Loops & Number Theory Specialist</strong>!
+                  {lang === 'ro'
+                    ? 'Ai demonstrat o înțelegere impecabilă a buclelor while, do-while, for, descompunerii cifrelor, numerelor prime și algoritmului lui Euclid. Apasă butonul de mai jos pentru a revendica Diploma Oficială C++ de Loops & Number Theory Specialist!'
+                    : 'You demonstrated comprehensive mastery of while, do-while, for loops, arbitrary digit dissection, optimized primality testing, and Euclidean GCD/LCM. Click below to claim your C++ Loops & Number Theory Specialist Certificate!'}
                 </div>
               </div>
             ) : (
               <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 flex items-start space-x-3 text-rose-200">
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 text-rose-400 mt-0.5" />
                 <div className="text-xs leading-relaxed">
-                  <strong>Punctaj insuficient pentru promovare.</strong> Este necesară nota minimă 7.00.
-                  Recitește explicațiile pedagogice, revizuiește conceptele și încearcă din nou!
+                  <strong>
+                    {lang === 'ro'
+                      ? 'Punctaj insuficient pentru promovare.'
+                      : 'Score insufficient for certificate passing.'}
+                  </strong>{' '}
+                  {lang === 'ro'
+                    ? 'Este necesară nota minimă 7.00. Recitește explicațiile pedagogice, revizuiește conceptele și încearcă din nou!'
+                    : 'A minimum grade of 7.00 is required. Review detailed pedagogical explanations, revisit textbook concepts, and reattempt the test!'}
                 </div>
               </div>
             )}
@@ -433,7 +610,11 @@ export const A3Level7_LoopsAndNumberTheoryExam: React.FC<A3Level7Props> = ({
                     : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
                 }`}
               >
-                <span>Revendică Diploma & Finalizează Modulul 3C</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Revendică Diploma & Finalizează Modulul 3C'
+                    : 'Claim Certificate & Finalize Module 3C'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
