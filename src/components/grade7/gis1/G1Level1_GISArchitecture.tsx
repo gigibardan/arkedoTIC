@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Map, Layers, Database, Search, Info, CheckCircle2, AlertTriangle, Sparkles, Compass, Eye, Mountain, Trees, Waves, Building } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface G1Level1Props {
   onPass: (score: number) => void;
@@ -8,69 +9,106 @@ interface G1Level1Props {
 
 interface RegionData {
   id: string;
-  name: string;
-  category: string;
-  elevation: string;
-  area: string;
-  rivers: string[];
-  climate: string;
+  nameRo: string;
+  nameEn: string;
+  categoryRo: string;
+  categoryEn: string;
+  elevationRo: string;
+  elevationEn: string;
+  areaRo: string;
+  areaEn: string;
+  riversRo: string[];
+  riversEn: string[];
+  climateRo: string;
+  climateEn: string;
   protectedSpecies: number;
-  highlight: string;
+  highlightRo: string;
+  highlightEn: string;
   icon: string;
 }
 
 const REGIONS: RegionData[] = [
   {
     id: 'carpati',
-    name: 'Munții Carpați (Carpații Meridionali)',
-    category: 'Relief Montan & Parcuri Naționale',
-    elevation: 'Vârful Moldoveanu (2.544 m), Vârful Negoiu (2.535 m)',
-    area: 'Peste 30.000 km²',
-    rivers: ['Olt', 'Argeș', 'Jiu', 'Lotru'],
-    climate: 'Alpin / Montan rece (-2°C iarna, +12°C vara)',
+    nameRo: 'Munții Carpați (Carpații Meridionali)',
+    nameEn: 'Carpathian Mountains (Southern Carpathians)',
+    categoryRo: 'Relief Montan & Parcuri Naționale',
+    categoryEn: 'Mountain Relief & National Parks',
+    elevationRo: 'Vârful Moldoveanu (2.544 m), Vârful Negoiu (2.535 m)',
+    elevationEn: 'Moldoveanu Peak (2,544 m), Negoiu Peak (2,535 m)',
+    areaRo: 'Peste 30.000 km²',
+    areaEn: 'Over 30,000 km²',
+    riversRo: ['Olt', 'Argeș', 'Jiu', 'Lotru'],
+    riversEn: ['Olt', 'Arges', 'Jiu', 'Lotru'],
+    climateRo: 'Alpin / Montan rece (-2°C iarna, +12°C vara)',
+    climateEn: 'Alpine / Cold mountain (-2°C winter, +12°C summer)',
     protectedSpecies: 142,
-    highlight: 'Cea mai mare populație de urși bruni, lupi și râși din Uniunea Europeană.',
+    highlightRo: 'Cea mai mare populație de urși bruni, lupi și râși din Uniunea Europeană.',
+    highlightEn: 'Hosts the largest brown bear, wolf, and lynx populations in the European Union.',
     icon: '🏔️'
   },
   {
     id: 'delta',
-    name: 'Delta Dunării (Rezervație a Biosferei UNESCO)',
-    category: 'Zonă Umedă & Hidrografie',
-    elevation: '0,5 m – 12 m (Grindul Letea)',
-    area: '5.165 km²',
-    rivers: ['Brațul Chilia', 'Brațul Sulina', 'Brațul Sfântu Gheorghe'],
-    climate: 'Temperat-continental cu influențe pontice (vânturi uscate)',
+    nameRo: 'Delta Dunării (Rezervație a Biosferei UNESCO)',
+    nameEn: 'Danube Delta (UNESCO Biosphere Reserve)',
+    categoryRo: 'Zonă Umedă & Hidrografie',
+    categoryEn: 'Wetlands & Hydrography',
+    elevationRo: '0,5 m – 12 m (Grindul Letea)',
+    elevationEn: '0.5 m – 12 m (Letea Sand Ridge)',
+    areaRo: '5.165 km²',
+    areaEn: '5,165 km²',
+    riversRo: ['Brațul Chilia', 'Brațul Sulina', 'Brațul Sfântu Gheorghe'],
+    riversEn: ['Chilia Branch', 'Sulina Branch', 'Sfantu Gheorghe Branch'],
+    climateRo: 'Temperat-continental cu influențe pontice (vânturi uscate)',
+    climateEn: 'Temperate-continental with Pontic marine influences (arid breezes)',
     protectedSpecies: 360,
-    highlight: 'Cel mai tânăr pământ al Europei, cu peste 300 de specii de păsări migratoare.',
+    highlightRo: 'Cel mai tânăr pământ al Europei, cu peste 300 de specii de păsări migratoare.',
+    highlightEn: 'Europe’s youngest natural terrain, hosting over 300 migratory avian species.',
     icon: '🦆'
   },
   {
     id: 'transilvania',
-    name: 'Podișul Transilvaniei',
-    category: 'Depresiune Colinară & Resurse Naturale',
-    elevation: '300 m – 700 m',
-    area: '25.000 km²',
-    rivers: ['Mureș', 'Someșul Mare', 'Someșul Mic', 'Târnava Mare'],
-    climate: 'Continental moderat, adăpostit de lanțul carpatic',
+    nameRo: 'Podișul Transilvaniei',
+    nameEn: 'Transylvanian Plateau',
+    categoryRo: 'Depresiune Colinară & Resurse Naturale',
+    categoryEn: 'Rolling Hills & Natural Resources',
+    elevationRo: '300 m – 700 m',
+    elevationEn: '300 m – 700 m',
+    areaRo: '25.000 km²',
+    areaEn: '25,000 km²',
+    riversRo: ['Mureș', 'Someșul Mare', 'Someșul Mic', 'Târnava Mare'],
+    riversEn: ['Mures', 'Great Somes', 'Little Somes', 'Great Tarnava'],
+    climateRo: 'Continental moderat, adăpostit de lanțul carpatic',
+    climateEn: 'Moderate continental, sheltered by the Carpathian horseshoe',
     protectedSpecies: 89,
-    highlight: 'Bogat în zăcăminte de gaz metan, saline istorice (Turda, Praid) și sate săsești fortificate.',
+    highlightRo: 'Bogat în zăcăminte de gaz metan, saline istorice (Turda, Praid) și sate săsești fortificate.',
+    highlightEn: 'Rich in natural gas dome reservoirs, historic salt mines (Turda, Praid), and fortified Saxon villages.',
     icon: '🏰'
   },
   {
     id: 'campia',
-    name: 'Câmpia Română & Lunca Dunării',
-    category: 'Zonă Agricolă & Urbanizare Densă',
-    elevation: '15 m – 100 m',
-    area: '50.000 km²',
-    rivers: ['Dunărea', 'Ialomița', 'Dâmbovița', 'Teleorman'],
-    climate: 'Continental de stepă (veri toride, ierni cu crivăț)',
+    nameRo: 'Câmpia Română & Lunca Dunării',
+    nameEn: 'Romanian Plain & Danube Floodplain',
+    categoryRo: 'Zonă Agricolă & Urbanizare Densă',
+    categoryEn: 'Agricultural Belt & High Urban Density',
+    elevationRo: '15 m – 100 m',
+    elevationEn: '15 m – 100 m',
+    areaRo: '50.000 km²',
+    areaEn: '50,000 km²',
+    riversRo: ['Dunărea', 'Ialomița', 'Dâmbovița', 'Teleorman'],
+    riversEn: ['Danube', 'Ialomita', 'Dambovita', 'Teleorman'],
+    climateRo: 'Continental de stepă (veri toride, ierni cu crivăț)',
+    climateEn: 'Continental steppe (torrid summers, harsh eastern winds in winter)',
     protectedSpecies: 54,
-    highlight: 'Grânarul României și gazda metropolei București (peste 2 milioane de locuitori).',
+    highlightRo: 'Grânarul României și gazda metropolei București (peste 2 milioane de locuitori).',
+    highlightEn: 'The breadbasket plain of Romania and home to the capital metropolis Bucharest (2M+ residents).',
     icon: '🌾'
   }
 ];
 
 export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Simulator State
   const [selectedRegionId, setSelectedRegionId] = useState<string>('carpati');
   const [activeViewMode, setActiveViewMode] = useState<'paper' | 'gis'>('gis');
@@ -104,13 +142,15 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
 
   const activeRegion = REGIONS.find((r) => r.id === selectedRegionId) || REGIONS[0];
 
-  const filteredRegions = REGIONS.filter((r) =>
-    r.name.toLowerCase().includes(gisSearchTerm.toLowerCase()) ||
-    r.category.toLowerCase().includes(gisSearchTerm.toLowerCase()) ||
-    r.rivers.some((riv) => riv.toLowerCase().includes(gisSearchTerm.toLowerCase()))
-  );
+  const filteredRegions = REGIONS.filter((r) => {
+    const term = gisSearchTerm.toLowerCase();
+    const nameMatch = (lang === 'ro' ? r.nameRo : r.nameEn).toLowerCase().includes(term);
+    const catMatch = (lang === 'ro' ? r.categoryRo : r.categoryEn).toLowerCase().includes(term);
+    const rivers = lang === 'ro' ? r.riversRo : r.riversEn;
+    const riverMatch = rivers.some((riv) => riv.toLowerCase().includes(term));
+    return nameMatch || catMatch || riverMatch;
+  });
 
-  // Q1 Check: What does GIS stand for?
   const handleAnswerQ1 = (val: string) => {
     if (q1Cooldown > 0) return;
     if (val === 'gis_def') {
@@ -121,11 +161,14 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
       sounds.playWrong();
       setQ1Answer(val);
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! GIS înseamnă Geographic Information System (Sistem Informațional Geografic), adică un sistem complet de captare, stocare, analiză și afișare pe straturi a datelor georeferențiate.');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! GIS înseamnă Geographic Information System (Sistem Informațional Geografic), adică un sistem complet de captare, stocare, analiză și afișare pe straturi a datelor georeferențiate.'
+          : 'Incorrect! GIS stands for Geographic Information System, a complete computerized framework for capturing, storing, checking, and displaying spatial data linked to positions on Earth’s surface.'
+      );
     }
   };
 
-  // Q2 Check: Difference between paper map and digital GIS
   const handleAnswerQ2 = (val: string) => {
     if (q2Cooldown > 0) return;
     if (val === 'gis_interactive') {
@@ -136,11 +179,14 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
       sounds.playWrong();
       setQ2Answer(val);
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! O hartă de hârtie este statică și devine rapid învechită. Un GIS este dinamic: permite interogarea prin clic a fiecărui punct, filtrarea straturilor, căutarea instantanee și actualizarea datelor în timp real.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! O hartă de hârtie este statică și devine rapid învechită. Un GIS este dinamic: permite interogarea prin clic a fiecărui punct, filtrarea straturilor, căutarea instantanee și actualizarea datelor în timp real.'
+          : 'Incorrect! A paper map is static and obsolete once printed. A GIS is dynamic: it enables point-and-click queries, layer toggling, instant attribute search, and live sensor updates.'
+      );
     }
   };
 
-  // Q3 Check: What are attribute data?
   const handleAnswerQ3 = (val: string) => {
     if (q3Cooldown > 0) return;
     if (val === 'attributes_table') {
@@ -151,7 +197,11 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
       sounds.playWrong();
       setQ3Answer(val);
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Datele atribut reprezintă informațiile descriptive tabelare asociate fiecărei locații de pe hartă (nume, populație, altitudine, debit, climă), nu doar desenul geometric al conturului.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Datele atribut reprezintă informațiile descriptive tabelare asociate fiecărei locații de pe hartă (nume, populație, altitudine, debit, climă), nu doar desenul geometric al conturului.'
+          : 'Incorrect! Attribute data represents descriptive tabular values tied to spatial geometry (name, elevation, population, water discharge, climate), not merely geometric outlines.'
+      );
     }
   };
 
@@ -177,25 +227,37 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[10px] font-mono font-bold uppercase">
-                  Nivelul 1 • Unitatea 3B (Manual pag. 57–63)
+                  {lang === 'ro'
+                    ? 'Nivelul 1 • Unitatea 3B (Manual pag. 57–63)'
+                    : 'Level 1 • Unit 3B (Textbook pp. 57–63)'}
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono">
-                  Arhitectură GIS
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono">
+                  {lang === 'ro' ? 'Arhitectură GIS' : 'GIS Architecture'}
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-1">
-                Ce este un GIS? Hartă pe Hârtie vs Sistem Informațional Geografic
+                {lang === 'ro'
+                  ? 'Ce este un GIS? Hartă pe Hârtie vs Sistem Informațional Geografic'
+                  : 'What is a GIS? Paper Maps vs. Geographic Information Systems'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-mono text-teal-300">
             <Compass className="w-4 h-4 text-cyan-400 animate-spin" style={{ animationDuration: '8s' }} />
-            <span>Georeferențiere Digitală</span>
+            <span>{lang === 'ro' ? 'Georeferențiere Digitală' : 'Digital Georeferencing'}</span>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
-          Timp de mii de ani, oamenii au folosit hărți desenate pe pergament și hârtie. În secolul digital, am inventat <strong className="text-cyan-300">GIS (Geographic Information System)</strong>: o revoluție tehnologică ce combină <strong className="text-teal-300">hărțile vizuale</strong> cu <strong className="text-amber-300">baze de date relaționale gigantice</strong>, permițând interogarea, filtrarea și analiza spațială în timp real.
+          {lang === 'ro' ? (
+            <>
+              Timp de mii de ani, oamenii au folosit hărți desenate pe pergament și hârtie. În secolul digital, am inventat <strong className="text-cyan-300">GIS (Geographic Information System)</strong>: o revoluție tehnologică ce combină <strong className="text-teal-300">hărțile vizuale</strong> cu <strong className="text-amber-300">baze de date relaționale gigantice</strong>, permițând interogarea, filtrarea și analiza spațială în timp real.
+            </>
+          ) : (
+            <>
+              For millennia, humankind navigated with parchment and paper maps. In the digital era, <strong className="text-cyan-300">GIS (Geographic Information Systems)</strong> revolutionized cartography by marrying <strong className="text-teal-300">spatial layers</strong> with <strong className="text-amber-300">relational databases</strong>, enabling point queries, layer filtering, and live spatial modeling.
+            </>
+          )}
         </p>
       </div>
 
@@ -205,10 +267,14 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
           <div>
             <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-teal-400" />
-              Laborator Interactiv • Simulator Cartografic Național
+              {lang === 'ro'
+                ? 'Laborator Interactiv • Simulator Cartografic Național'
+                : 'Interactive Lab • National Cartographic Simulator'}
             </span>
             <h2 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-              Comparație: Hartă Statică de Hârtie vs GIS cu Bază de Date Integrată
+              {lang === 'ro'
+                ? 'Comparație: Hartă Statică de Hârtie vs GIS cu Bază de Date Integrată'
+                : 'Comparison: Static Paper Map vs. Database-Driven Digital GIS'}
             </h2>
           </div>
 
@@ -225,7 +291,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <span>📜 Hartă Hârtie (1980)</span>
+              <span>{lang === 'ro' ? '📜 Hartă Hârtie (1980)' : '📜 Paper Map (1980)'}</span>
             </button>
             <button
               onClick={() => {
@@ -238,7 +304,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <span>🛰️ GIS Digital (2026)</span>
+              <span>{lang === 'ro' ? '🛰️ GIS Digital (2026)' : '🛰️ Digital GIS (2026)'}</span>
             </button>
           </div>
         </div>
@@ -249,14 +315,30 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
             <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-3xl mb-3">
               📜
             </div>
-            <h3 className="text-base font-bold text-amber-300">Hartă Tradițională pe Hârtie (Statică)</h3>
+            <h3 className="text-base font-bold text-amber-300">
+              {lang === 'ro' ? 'Hartă Tradițională pe Hârtie (Statică)' : 'Traditional Static Paper Map'}
+            </h3>
             <p className="text-xs text-slate-300 max-w-lg mt-2 leading-relaxed">
-              Dacă dai clic pe Vârful Moldoveanu sau pe Dunăre pe o foaie de hârtie, <span className="text-rose-400 font-bold">nu se întâmplă nimic</span>! Hârtia nu poate căuta orașe, nu poate măsura automat debite de apă, nu afișează vremea în direct și dacă se construiește o autostradă nouă, trebuie să tipărești și să cumperi o altă hartă.
+              {lang === 'ro' ? (
+                <>
+                  Dacă dai clic pe Vârful Moldoveanu sau pe Dunăre pe o foaie de hârtie, <span className="text-rose-400 font-bold">nu se întâmplă nimic</span>! Hârtia nu poate căuta orașe, nu poate măsura automat debite de apă, nu afișează vremea în direct și dacă se construiește o autostradă nouă, trebuie să tipărești și să cumperi o altă hartă.
+                </>
+              ) : (
+                <>
+                  If you click Moldoveanu Peak or the Danube River on a paper sheet, <span className="text-rose-400 font-bold">nothing happens</span>! Paper cannot search addresses, cannot query river discharge meters, cannot display live weather, and when a highway opens, you must print and purchase a brand new atlas.
+                </>
+              )}
             </p>
             <div className="mt-4 flex flex-wrap gap-2 justify-center text-[11px] font-mono">
-              <span className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300">❌ Fără căutare</span>
-              <span className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300">❌ Fără straturi decuplate</span>
-              <span className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300">❌ Date statice neactualizate</span>
+              <span className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300">
+                {lang === 'ro' ? '❌ Fără căutare' : '❌ No Search Bar'}
+              </span>
+              <span className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300">
+                {lang === 'ro' ? '❌ Fără straturi decuplate' : '❌ No Layer Toggles'}
+              </span>
+              <span className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300">
+                {lang === 'ro' ? '❌ Date statice neactualizate' : '❌ Outdated Static Ink'}
+              </span>
             </div>
             <button
               onClick={() => {
@@ -265,7 +347,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
               }}
               className="mt-5 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition cursor-pointer shadow-lg"
             >
-              Activează Sistemul GIS Digital 🛰️
+              {lang === 'ro' ? 'Activează Sistemul GIS Digital 🛰️' : 'Activate Digital GIS Engine 🛰️'}
             </button>
           </div>
         ) : (
@@ -278,7 +360,11 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
                 <input
                   type="text"
-                  placeholder="Caută în baza de date GIS (ex: Moldoveanu, Olt, Delta, Carpați)..."
+                  placeholder={
+                    lang === 'ro'
+                      ? 'Caută în baza de date GIS (ex: Moldoveanu, Olt, Delta, Carpați)...'
+                      : 'Search GIS relational database (e.g. Moldoveanu, Olt, Delta, Carpathians)...'
+                  }
                   value={gisSearchTerm}
                   onChange={(e) => setGisSearchTerm(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-teal-400 font-mono"
@@ -293,9 +379,11 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                 <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 relative z-10">
                   <span className="flex items-center gap-1.5 text-teal-400 font-bold">
                     <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-                    Proiecție România (Stereo 70 / WGS84)
+                    {lang === 'ro'
+                      ? 'Proiecție România (Stereo 70 / WGS84)'
+                      : 'Projection: Stereo 70 / WGS84 (Romania)'}
                   </span>
-                  <span>Scară: 1 : 1.500.000</span>
+                  <span>{lang === 'ro' ? 'Scară: 1 : 1.500.000' : 'Scale: 1 : 1,500,000'}</span>
                 </div>
 
                 {/* 4 Interactive Region Cards inside the Map */}
@@ -320,16 +408,19 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                           <span className="text-2xl group-hover:scale-110 transition-transform">{region.icon}</span>
                           {isSelected && (
                             <span className="px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 text-[10px] font-mono font-bold border border-teal-500/40">
-                              ACTIV
+                              {lang === 'ro' ? 'ACTIV' : 'ACTIVE'}
                             </span>
                           )}
                         </div>
                         <h4 className="text-xs sm:text-sm font-black text-white mt-1 group-hover:text-teal-300 transition-colors">
-                          {region.name}
+                          {lang === 'ro' ? region.nameRo : region.nameEn}
                         </h4>
-                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">{region.category}</div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                          {lang === 'ro' ? region.categoryRo : region.categoryEn}
+                        </div>
                         <div className="mt-2 text-[10px] text-teal-300/80 flex items-center gap-1 font-mono">
-                          <Eye className="w-3 h-3 text-teal-400" /> Clic pentru interogare date
+                          <Eye className="w-3 h-3 text-teal-400" />{' '}
+                          {lang === 'ro' ? 'Clic pentru interogare date' : 'Click to inspect attribute rows'}
                         </div>
                       </button>
                     );
@@ -343,14 +434,14 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
               </div>
             </div>
 
-            {/* Right: GIS Attribute Inspector (Table of attributes for active geometry) */}
+            {/* Right: GIS Attribute Inspector */}
             <div className="lg:col-span-5 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                   <div className="flex items-center gap-2">
                     <Database className="w-4 h-4 text-cyan-400" />
                     <span className="text-xs font-mono font-bold text-white">
-                      Tabel de Atribute Spațiale
+                      {lang === 'ro' ? 'Tabel de Atribute Spațiale' : 'Spatial Attribute Inspector'}
                     </span>
                   </div>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
@@ -361,30 +452,48 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                 {/* Attribute Fields */}
                 <div className="mt-3 space-y-2.5 text-xs font-mono">
                   <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                    <span className="text-slate-400 text-[10px] block">Regiune / Unitate Fizico-Geografică:</span>
-                    <strong className="text-white text-sm font-sans font-bold">{activeRegion.name}</strong>
+                    <span className="text-slate-400 text-[10px] block">
+                      {lang === 'ro' ? 'Regiune / Unitate Fizico-Geografică:' : 'Region / Geographic Unit:'}
+                    </span>
+                    <strong className="text-white text-sm font-sans font-bold">
+                      {lang === 'ro' ? activeRegion.nameRo : activeRegion.nameEn}
+                    </strong>
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                    <span className="text-slate-400 text-[10px] block">Altitudine & Cote Maxime:</span>
-                    <strong className="text-cyan-300 font-bold">{activeRegion.elevation}</strong>
+                    <span className="text-slate-400 text-[10px] block">
+                      {lang === 'ro' ? 'Altitudine & Cote Maxime:' : 'Elevation & Peak Heights:'}
+                    </span>
+                    <strong className="text-cyan-300 font-bold">
+                      {lang === 'ro' ? activeRegion.elevationRo : activeRegion.elevationEn}
+                    </strong>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                      <span className="text-slate-400 text-[10px] block">Suprafață Cartată:</span>
-                      <strong className="text-emerald-300 font-bold">{activeRegion.area}</strong>
+                      <span className="text-slate-400 text-[10px] block">
+                        {lang === 'ro' ? 'Suprafață Cartată:' : 'Mapped Area:'}
+                      </span>
+                      <strong className="text-emerald-300 font-bold">
+                        {lang === 'ro' ? activeRegion.areaRo : activeRegion.areaEn}
+                      </strong>
                     </div>
                     <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                      <span className="text-slate-400 text-[10px] block">Specii Protejate:</span>
-                      <strong className="text-amber-300 font-bold">{activeRegion.protectedSpecies} specii</strong>
+                      <span className="text-slate-400 text-[10px] block">
+                        {lang === 'ro' ? 'Specii Protejate:' : 'Protected Species:'}
+                      </span>
+                      <strong className="text-amber-300 font-bold">
+                        {activeRegion.protectedSpecies} {lang === 'ro' ? 'specii' : 'taxa'}
+                      </strong>
                     </div>
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                    <span className="text-slate-400 text-[10px] block">Rețea Hidrografică (Râuri principale):</span>
+                    <span className="text-slate-400 text-[10px] block">
+                      {lang === 'ro' ? 'Rețea Hidrografică (Râuri principale):' : 'Hydrographic Network (Major Rivers):'}
+                    </span>
                     <div className="flex flex-wrap gap-1 mt-1">
-                      {activeRegion.rivers.map((riv) => (
+                      {(lang === 'ro' ? activeRegion.riversRo : activeRegion.riversEn).map((riv) => (
                         <span key={riv} className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px]">
                           💧 {riv}
                         </span>
@@ -393,20 +502,32 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                    <span className="text-slate-400 text-[10px] block">Tip de Climă:</span>
-                    <span className="text-slate-200">{activeRegion.climate}</span>
+                    <span className="text-slate-400 text-[10px] block">
+                      {lang === 'ro' ? 'Tip de Climă:' : 'Climate Regime:'}
+                    </span>
+                    <span className="text-slate-200">
+                      {lang === 'ro' ? activeRegion.climateRo : activeRegion.climateEn}
+                    </span>
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-teal-950/40 border border-teal-800/60 text-slate-300">
-                    <span className="text-teal-400 font-bold text-[10px] block mb-1">Informație Analitică GIS:</span>
-                    <p className="text-[11px] leading-relaxed font-sans">{activeRegion.highlight}</p>
+                    <span className="text-teal-400 font-bold text-[10px] block mb-1">
+                      {lang === 'ro' ? 'Informație Analitică GIS:' : 'GIS Spatial Analysis Insight:'}
+                    </span>
+                    <p className="text-[11px] leading-relaxed font-sans">
+                      {lang === 'ro' ? activeRegion.highlightRo : activeRegion.highlightEn}
+                    </p>
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-teal-400 flex items-center gap-1 font-mono">
                 <CheckCircle2 className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                <span>Baza de date relațională este conectată la geometria hărții!</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Baza de date relațională este conectată la geometria hărții!'
+                    : 'Relational attribute table is bound to geographic polygon coordinates!'}
+                </span>
               </div>
             </div>
           </div>
@@ -418,10 +539,14 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
         <div>
           <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-            Verificare Cunoștințe Fundamentale • Clasa a VII-a
+            {lang === 'ro'
+              ? 'Verificare Cunoștințe Fundamentale • Clasa a VII-a'
+              : 'Fundamental Knowledge Check • Grade 7'}
           </span>
           <h2 className="text-lg font-black text-white font-heading mt-0.5">
-            Răspunde corect la cele 3 cerințe pentru a debloca Nivelul 2
+            {lang === 'ro'
+              ? 'Răspunde corect la cele 3 cerințe pentru a debloca Nivelul 2'
+              : 'Answer all 3 questions correctly to unlock Level 2'}
           </h2>
         </div>
 
@@ -429,11 +554,15 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              1. Ce reprezintă acronimul <strong className="text-teal-300">GIS</strong> și care este rolul său în informatică?
+              {lang === 'ro' ? (
+                <>1. Ce reprezintă acronimul <strong className="text-teal-300">GIS</strong> și care este rolul său în informatică?</>
+              ) : (
+                <>1. What does the acronym <strong className="text-teal-300">GIS</strong> stand for and what is its role in computing?</>
+              )}
             </div>
             {q1Answer === 'gis_def' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -448,7 +577,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Global Internet Search — un motor de căutare web pentru imagini satelitare
+              {lang === 'ro'
+                ? 'A. Global Internet Search — un motor de căutare web pentru imagini satelitare'
+                : 'A. Global Internet Search — a search engine for satellite photos'}
             </button>
 
             <button
@@ -460,7 +591,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Geographic Information System — sistem computerizat pentru stocarea, analiza și afișarea datelor spațiale
+              {lang === 'ro'
+                ? 'B. Geographic Information System — sistem computerizat pentru stocarea, analiza și afișarea datelor spațiale'
+                : 'B. Geographic Information System — computer system for capturing, managing, analyzing, and displaying spatial data'}
             </button>
 
             <button
@@ -472,7 +605,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. General Image Storage — un format comprimat de stocare a fișierelor grafice pe hard disk
+              {lang === 'ro'
+                ? 'C. General Image Storage — un format comprimat de stocare a fișierelor grafice pe hard disk'
+                : 'C. General Image Storage — a compression format for image files on disk'}
             </button>
 
             <button
@@ -484,7 +619,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Google International Satellite — un satelit lansat pe orbită de compania Google
+              {lang === 'ro'
+                ? 'D. Google International Satellite — un satelit lansat pe orbită de compania Google'
+                : 'D. Google International Satellite — an orbital satellite operated by Google'}
             </button>
           </div>
 
@@ -493,7 +630,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
               <span>{q1ErrorMsg}</span>
               {q1Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q1Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q1Cooldown}s...` : `Wait ${q1Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -504,11 +641,15 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              2. Care este principalul avantaj al unei hărți <strong className="text-cyan-300">GIS digitale</strong> comparativ cu o hartă clasică tipărită pe hârtie?
+              {lang === 'ro' ? (
+                <>2. Care este principalul avantaj al unei hărți <strong className="text-cyan-300">GIS digitale</strong> comparativ cu o hartă clasică tipărită pe hârtie?</>
+              ) : (
+                <>2. What is the fundamental advantage of a <strong className="text-cyan-300">digital GIS</strong> over a traditional printed paper map?</>
+              )}
             </div>
             {q2Answer === 'gis_interactive' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -523,7 +664,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Interactivitatea: permite filtrarea straturilor, interogarea atributelor prin clic, căutarea instantanee și actualizarea datelor
+              {lang === 'ro'
+                ? 'A. Interactivitatea: permite filtrarea straturilor, interogarea atributelor prin clic, căutarea instantanee și actualizarea datelor'
+                : 'A. Interactivity: supports layer toggling, clicking features for attribute inspection, instant queries, and live telemetry'}
             </button>
 
             <button
@@ -535,7 +678,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Harta GIS nu folosește deloc memorie de stocare sau calculatoare electronice
+              {lang === 'ro'
+                ? 'B. Harta GIS nu folosește deloc memorie de stocare sau calculatoare electronice'
+                : 'B. A GIS map uses zero computer memory or electronic processing'}
             </button>
 
             <button
@@ -547,7 +692,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. O hartă pe hârtie este mult mai precisă deoarece nu depinde de sateliți GPS
+              {lang === 'ro'
+                ? 'C. O hartă pe hârtie este mult mai precisă deoarece nu depinde de sateliți GPS'
+                : 'C. Paper maps are far more accurate because they do not rely on GPS'}
             </button>
 
             <button
@@ -559,7 +706,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Harta digitală nu poate fi vizualizată niciodată pe un ecran de telefon mobil
+              {lang === 'ro'
+                ? 'D. Harta digitală nu poate fi vizualizată niciodată pe un ecran de telefon mobil'
+                : 'D. Digital maps can never be displayed on mobile smartphone screens'}
             </button>
           </div>
 
@@ -568,7 +717,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
               <span>{q2ErrorMsg}</span>
               {q2Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q2Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q2Cooldown}s...` : `Wait ${q2Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -579,11 +728,15 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              3. Ce sunt <strong className="text-amber-300">datele atribut</strong> într-un sistem GIS?
+              {lang === 'ro' ? (
+                <>3. Ce sunt <strong className="text-amber-300">datele atribut</strong> într-un sistem GIS?</>
+              ) : (
+                <>3. What is <strong className="text-amber-300">attribute data</strong> in a GIS platform?</>
+              )}
             </div>
             {q3Answer === 'attributes_table' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -598,7 +751,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Culorile cu care este pictată coperta unui atlas geografic școlar
+              {lang === 'ro'
+                ? 'A. Culorile cu care este pictată coperta unui atlas geografic școlar'
+                : 'A. The cover art colors of a printed school geography atlas'}
             </button>
 
             <button
@@ -610,7 +765,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Doar coordonatele de latitudine și longitudine, fără alte informații suplimentare
+              {lang === 'ro'
+                ? 'B. Doar coordonatele de latitudine și longitudine, fără alte informații suplimentare'
+                : 'B. Solely latitude and longitude numbers with no auxiliary information'}
             </button>
 
             <button
@@ -622,7 +779,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Informațiile descriptive asociate fiecărui element geografic (ex: denumire, altitudine, populație, climă, debit)
+              {lang === 'ro'
+                ? 'C. Informațiile descriptive asociate fiecărui element geografic (ex: denumire, altitudine, populație, climă, debit)'
+                : 'C. Descriptive information tied to each feature (e.g. name, elevation, population, climate, river discharge)'}
             </button>
 
             <button
@@ -634,7 +793,9 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Viteza de rotație a satelitului GPS în jurul Pământului
+              {lang === 'ro'
+                ? 'D. Viteza de rotație a satelitului GPS în jurul Pământului'
+                : 'D. The orbital speed of GPS satellites around the globe'}
             </button>
           </div>
 
@@ -643,7 +804,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
               <span>{q3ErrorMsg}</span>
               {q3Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q3Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q3Cooldown}s...` : `Wait ${q3Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -656,10 +817,16 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
             {allAnsweredCorrectly ? (
               <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Toate răspunsurile sunt corecte! Poți trece la Nivelul 2.
+                {lang === 'ro'
+                  ? 'Toate răspunsurile sunt corecte! Poți trece la Nivelul 2.'
+                  : 'All answers are correct! You can advance to Level 2.'}
               </span>
             ) : (
-              <span>Răspunde corect la toate cele 3 întrebări pentru validare.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Răspunde corect la toate cele 3 întrebări pentru validare.'
+                  : 'Answer all 3 questions correctly for validation.'}
+              </span>
             )}
           </div>
 
@@ -672,7 +839,7 @@ export const G1Level1_GISArchitecture: React.FC<G1Level1Props> = ({ onPass }) =>
                 : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
             }`}
           >
-            <span>Continuă spre Nivelul 2</span>
+            <span>{lang === 'ro' ? 'Continuă spre Nivelul 2' : 'Advance to Level 2'}</span>
             <span>➔</span>
           </button>
         </div>

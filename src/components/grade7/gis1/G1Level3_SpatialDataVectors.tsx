@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MousePointer, MapPin, Route, Square, Database, Table, Sparkles, CheckCircle2, AlertTriangle, Plus, Trash2, Eye } from 'lucide-react';
+import { MapPin, Route, Square, Table, Sparkles, CheckCircle2, Plus, Trash2 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface G1Level3Props {
   onPass: (score: number) => void;
@@ -8,45 +9,59 @@ interface G1Level3Props {
 
 interface VectorFeature {
   id: string;
-  name: string;
+  nameRo: string;
+  nameEn: string;
   type: 'point' | 'polyline' | 'polygon';
   coordinates: string;
-  measure: string;
-  description: string;
+  measureRo: string;
+  measureEn: string;
+  descriptionRo: string;
+  descriptionEn: string;
   color: string;
 }
 
 const PRESET_FEATURES: VectorFeature[] = [
   {
     id: 'f1',
-    name: 'Vârful Moldoveanu',
+    nameRo: 'Vârful Moldoveanu',
+    nameEn: 'Moldoveanu Peak',
     type: 'point',
     coordinates: '45°35′58″ N, 24°44′10″ E',
-    measure: 'Alt: 2.544 m (0 km²)',
-    description: 'Punct topografic: cel mai înalt vârf din România (Munții Făgăraș)',
+    measureRo: 'Alt: 2.544 m (0 km²)',
+    measureEn: 'Elev: 2,544 m (0 km²)',
+    descriptionRo: 'Punct topografic: cel mai înalt vârf din România (Munții Făgăraș)',
+    descriptionEn: 'Topographic point: the highest peak in Romania (Făgăraș Mountains)',
     color: '#f59e0b'
   },
   {
     id: 'f2',
-    name: 'Cursul Râului Olt',
+    nameRo: 'Cursul Râului Olt',
+    nameEn: 'Olt River Course',
     type: 'polyline',
     coordinates: 'Izvor Hășmaș -> Vărsare Dunăre (Turnu Măgurele)',
-    measure: 'Lungime: 615 km',
-    description: 'Linie hidrografică: străbate Carpații prin Defileul Turnu Roșu',
+    measureRo: 'Lungime: 615 km',
+    measureEn: 'Length: 615 km',
+    descriptionRo: 'Linie hidrografică: străbate Carpații prin Defileul Turnu Roșu',
+    descriptionEn: 'Hydrographic polyline: traverses the Carpathians through Turnu Roșu Gorge',
     color: '#06b6d4'
   },
   {
     id: 'f3',
-    name: 'Parcul Național Retezat',
+    nameRo: 'Parcul Național Retezat',
+    nameEn: 'Retezat National Park',
     type: 'polygon',
     coordinates: 'Perimetru închis [45°22′N, 22°52′E ... 80 noduri]',
-    measure: 'Suprafață: 381,38 km²',
-    description: 'Poligon protejat: peste 50 de lacuri glaciare și faună carpatică',
+    measureRo: 'Suprafață: 381,38 km²',
+    measureEn: 'Area: 381.38 km²',
+    descriptionRo: 'Poligon protejat: peste 50 de lacuri glaciare și faună carpatică',
+    descriptionEn: 'Protected polygon: over 50 glacial lakes and Carpathian wildlife reserve',
     color: '#10b981'
   }
 ];
 
 export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Simulator State
   const [activeTool, setActiveTool] = useState<'point' | 'polyline' | 'polygon'>('point');
   const [features, setFeatures] = useState<VectorFeature[]>(PRESET_FEATURES);
@@ -87,11 +102,14 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
     if (activeTool === 'point') {
       const newPt: VectorFeature = {
         id: `user_pt_${count}`,
-        name: `Farul Sulina (Punct nou ${count})`,
+        nameRo: `Farul Sulina (Punct nou ${count})`,
+        nameEn: `Sulina Lighthouse (New point ${count})`,
         type: 'point',
         coordinates: '45°09′36″ N, 29°39′35″ E',
-        measure: 'Alt: 3 m (Coordonată unică)',
-        description: 'Punct de navigație maritim la vărsarea Dunării în Marea Neagră',
+        measureRo: 'Alt: 3 m (Coordonată unică)',
+        measureEn: 'Elev: 3 m (Single coordinate)',
+        descriptionRo: 'Punct de navigație maritim la vărsarea Dunării în Marea Neagră',
+        descriptionEn: 'Maritime navigation point at the mouth of the Danube into the Black Sea',
         color: '#f59e0b'
       };
       setFeatures((prev) => [...prev, newPt]);
@@ -99,11 +117,14 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
     } else if (activeTool === 'polyline') {
       const newLine: VectorFeature = {
         id: `user_line_${count}`,
-        name: `Autostrada A2 Soarelui (Linie nouă ${count})`,
+        nameRo: `Autostrada A2 Soarelui (Linie nouă ${count})`,
+        nameEn: `A2 Sun Highway (New polyline ${count})`,
         type: 'polyline',
         coordinates: 'București -> Fetești -> Cernavodă -> Constanța',
-        measure: 'Lungime: 202,8 km',
-        description: 'Linie vectorială ce conectează capitala de țărmul Mării Negre',
+        measureRo: 'Lungime: 202,8 km',
+        measureEn: 'Length: 202.8 km',
+        descriptionRo: 'Linie vectorială ce conectează capitala de țărmul Mării Negre',
+        descriptionEn: 'Vector polyline connecting the capital to the Black Sea coast',
         color: '#06b6d4'
       };
       setFeatures((prev) => [...prev, newLine]);
@@ -111,11 +132,14 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
     } else {
       const newPoly: VectorFeature = {
         id: `user_poly_${count}`,
-        name: `Lacul Vidraru (Poligon nou ${count})`,
+        nameRo: `Lacul Vidraru (Poligon nou ${count})`,
+        nameEn: `Lake Vidraru (New polygon ${count})`,
         type: 'polygon',
         coordinates: 'Contur închis râu Argeș [45°22′N, 24°37′E]',
-        measure: 'Suprafață: 8,93 km² • Vol: 465 mil m³',
-        description: 'Poligon cu suprafață și perimetru: lac de acumulare antropic',
+        measureRo: 'Suprafață: 8,93 km² • Vol: 465 mil m³',
+        measureEn: 'Area: 8.93 km² • Vol: 465M m³',
+        descriptionRo: 'Poligon cu suprafață și perimetru: lac de acumulare antropic',
+        descriptionEn: 'Polygon with surface area and perimeter: artificial reservoir lake',
         color: '#10b981'
       };
       setFeatures((prev) => [...prev, newPoly]);
@@ -143,7 +167,11 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
       sounds.playWrong();
       setQ1Answer(val);
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! Cele trei tipuri fundamentale de date vectoriale spațiale sunt: Punct (Point), Linie (Polyline / Line) și Poligon (Polygon / Area).');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Cele trei tipuri fundamentale de date vectoriale spațiale sunt: Punct (Point), Linie (Polyline / Line) și Poligon (Polygon / Area).'
+          : 'Incorrect! The three fundamental vector spatial geometry types are: Point, Line (Polyline), and Polygon (Area).'
+      );
     }
   };
 
@@ -158,7 +186,11 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
       sounds.playWrong();
       setQ2Answer(val);
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! Un râu sau o autostradă are o lungime continuă și un traseu șerpuit compus din sute de coordonate conectate. De aceea se reprezintă printr-o linie (Polyline), în timp ce un punct are o singură pereche de coordonate.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Un râu sau o autostradă are o lungime continuă și un traseu șerpuit compus din sute de coordonate conectate. De aceea se reprezintă printr-o linie (Polyline), în timp ce un punct are o singură pereche de coordonate.'
+          : 'Incorrect! A river or highway has continuous length and winding turns composed of chained coordinate vertices. Therefore it is represented as a Polyline, whereas a Point holds a single coordinate pair.'
+      );
     }
   };
 
@@ -173,7 +205,11 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
       sounds.playWrong();
       setQ3Answer(val);
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Un poligon este o buclă închisă (unde primul punct coincide cu ultimul) și permite calcularea automată a suprafeței (ex: în hectare sau km²) și a perimetrului.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Un poligon este o buclă închisă (unde primul punct coincide cu ultimul) și permite calcularea automată a suprafeței (ex: în hectare sau km²) și a perimetrului.'
+          : 'Incorrect! A polygon is a closed loop (start node connects back to end node) that allows automatic computation of surface area (hectares or sq km) and perimeter.'
+      );
     }
   };
 
@@ -187,8 +223,6 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
     }
   };
 
-  const selectedFeature = features.find((f) => f.id === selectedFeatureId) || features[0];
-
   return (
     <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
       {/* Header Info */}
@@ -201,24 +235,36 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[10px] font-mono font-bold uppercase">
-                  Nivelul 3 • Unitatea 3B (Manual pag. 57–63)
+                  {lang === 'ro' ? 'Nivelul 3 • Unitatea 3B (Manual pag. 57–63)' : 'Level 3 • Unit 3B (Textbook pp. 57–63)'}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
-                  Vectori: Punct, Linie, Poligon
+                  {lang === 'ro' ? 'Vectori: Punct, Linie, Poligon' : 'Vectors: Point, Polyline, Polygon'}
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-1">
-                Date Spațiale Vectoriale vs Date Atribut Descriptive
+                {lang === 'ro'
+                  ? 'Date Spațiale Vectoriale vs Date Atribut Descriptive'
+                  : 'Vector Spatial Geometries vs Descriptive Attribute Data'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-300 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
-            <span>{features.length} Obiecte Cartate</span>
+            <span>
+              {lang === 'ro' ? `${features.length} Obiecte Cartate` : `${features.length} Mapped Features`}
+            </span>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
-          În orice sistem GIS, lumea reală este tradusă digital prin 3 forme geometrice vectoriale simple: <strong className="text-amber-300">PUNCT (Point)</strong>, <strong className="text-cyan-300">LINIE (Polyline)</strong> și <strong className="text-emerald-300">POLIGON (Polygon)</strong>. Fiecare geometrie este legată indisolubil de un <strong className="text-white">Tabel de Atribute</strong> care descrie ce reprezintă acel element.
+          {lang === 'ro' ? (
+            <>
+              În orice sistem GIS, lumea reală este tradusă digital prin 3 forme geometrice vectoriale simple: <strong className="text-amber-300">PUNCT (Point)</strong>, <strong className="text-cyan-300">LINIE (Polyline)</strong> și <strong className="text-emerald-300">POLIGON (Polygon)</strong>. Fiecare geometrie este legată indisolubil de un <strong className="text-white">Tabel de Atribute</strong> care descrie ce reprezintă acel element.
+            </>
+          ) : (
+            <>
+              In any GIS, the real world is digitized through 3 fundamental vector geometries: <strong className="text-amber-300">POINT</strong>, <strong className="text-cyan-300">POLYLINE</strong>, and <strong className="text-emerald-300">POLYGON</strong>. Every spatial geometry is tied directly to an <strong className="text-white">Attribute Table</strong> defining its properties.
+            </>
+          )}
         </p>
       </div>
 
@@ -228,10 +274,10 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
           <div>
             <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-teal-400" />
-              Editor Vectorial GIS & Bază de Date Relațională
+              {lang === 'ro' ? 'Editor Vectorial GIS & Bază de Date Relațională' : 'GIS Vector Editor & Relational Attribute DB'}
             </span>
             <h2 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-              Instrumente de Desenare Vectorială & Sincronizare cu Tabelul
+              {lang === 'ro' ? 'Instrumente de Desenare Vectorială & Sincronizare cu Tabelul' : 'Vector Drawing Tools & Table Synchronization'}
             </h2>
           </div>
 
@@ -249,7 +295,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               }`}
             >
               <MapPin className="w-3.5 h-3.5" />
-              <span>1. Punct (Point)</span>
+              <span>{lang === 'ro' ? '1. Punct (Point)' : '1. Point'}</span>
             </button>
             <button
               onClick={() => {
@@ -263,7 +309,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               }`}
             >
               <Route className="w-3.5 h-3.5" />
-              <span>2. Linie (Polyline)</span>
+              <span>{lang === 'ro' ? '2. Linie (Polyline)' : '2. Polyline'}</span>
             </button>
             <button
               onClick={() => {
@@ -277,7 +323,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               }`}
             >
               <Square className="w-3.5 h-3.5" />
-              <span>3. Poligon (Area)</span>
+              <span>{lang === 'ro' ? '3. Poligon (Area)' : '3. Polygon'}</span>
             </button>
           </div>
         </div>
@@ -289,9 +335,13 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               {activeTool === 'point' ? '📍' : activeTool === 'polyline' ? '〰️' : '🟩'}
             </span>
             <span>
-              Instrument selectat:{' '}
+              {lang === 'ro' ? 'Instrument selectat:' : 'Selected Tool:'}{' '}
               <strong className="text-white font-mono uppercase">
-                {activeTool === 'point' ? 'Punct (Coordonată unică X, Y)' : activeTool === 'polyline' ? 'Linie (Noduri conectate fără arie)' : 'Poligon (Contur închis cu suprafață)'}
+                {activeTool === 'point'
+                  ? (lang === 'ro' ? 'Punct (Coordonată unică X, Y)' : 'Point (Single X, Y coordinate)')
+                  : activeTool === 'polyline'
+                  ? (lang === 'ro' ? 'Linie (Noduri conectate fără arie)' : 'Polyline (Connected vertices without area)')
+                  : (lang === 'ro' ? 'Poligon (Contur închis cu suprafață)' : 'Polygon (Closed loop with surface area)')}
               </strong>
             </span>
           </div>
@@ -301,7 +351,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
             className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shadow-md active:scale-95"
           >
             <Plus className="w-4 h-4" />
-            <span>Adaugă element pe hartă</span>
+            <span>{lang === 'ro' ? 'Adaugă element pe hartă' : 'Add feature to map'}</span>
           </button>
         </div>
 
@@ -310,14 +360,18 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#14b8a6_1px,transparent_1px)] [background-size:20px_20px]" />
 
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 relative z-10">
-            <span>CANVAS VECTORIAL GIS</span>
-            <span className="text-teal-400">Clic pe orice element pentru detalii</span>
+            <span>{lang === 'ro' ? 'CANVAS VECTORIAL GIS' : 'GIS VECTOR CANVAS'}</span>
+            <span className="text-teal-400">
+              {lang === 'ro' ? 'Clic pe orice element pentru detalii' : 'Click any feature for details'}
+            </span>
           </div>
 
           {/* Visual representations of vector features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-4 relative z-10">
             {features.map((feat) => {
               const isSelected = selectedFeatureId === feat.id;
+              const name = lang === 'ro' ? feat.nameRo : feat.nameEn;
+              const measure = lang === 'ro' ? feat.measureRo : feat.measureEn;
               return (
                 <div
                   key={feat.id}
@@ -336,7 +390,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                       {feat.type === 'point' && <MapPin className="w-4 h-4 text-amber-400" />}
                       {feat.type === 'polyline' && <Route className="w-4 h-4 text-cyan-400" />}
                       {feat.type === 'polygon' && <Square className="w-4 h-4 text-emerald-400" />}
-                      <span className="text-xs font-bold text-white truncate font-sans">{feat.name}</span>
+                      <span className="text-xs font-bold text-white truncate font-sans">{name}</span>
                     </div>
                     {features.length > 1 && (
                       <button
@@ -345,7 +399,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                           handleDeleteFeature(feat.id);
                         }}
                         className="text-slate-500 hover:text-rose-400 transition cursor-pointer p-0.5"
-                        title="Șterge element"
+                        title={lang === 'ro' ? 'Șterge element' : 'Delete feature'}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -354,7 +408,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
 
                   <div className="mt-2 text-[10px] font-mono text-slate-300">
                     <div className="text-slate-400 truncate">{feat.coordinates}</div>
-                    <div className="text-teal-300 font-bold mt-0.5">{feat.measure}</div>
+                    <div className="text-teal-300 font-bold mt-0.5">{measure}</div>
                   </div>
                 </div>
               );
@@ -362,8 +416,12 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
           </div>
 
           <div className="text-[10px] font-mono text-slate-500 relative z-10 border-t border-slate-900 pt-2 flex items-center justify-between">
-            <span>Tipuri active: Puncte, Linii, Poligoane</span>
-            <span className="text-amber-400">Total: {features.length} înregistrări în baza de date</span>
+            <span>{lang === 'ro' ? 'Tipuri active: Puncte, Linii, Poligoane' : 'Active types: Points, Polylines, Polygons'}</span>
+            <span className="text-amber-400">
+              {lang === 'ro'
+                ? `Total: ${features.length} înregistrări în baza de date`
+                : `Total: ${features.length} records in database`}
+            </span>
           </div>
         </div>
 
@@ -372,9 +430,13 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-slate-300 flex items-center gap-1.5">
               <Table className="w-3.5 h-3.5 text-cyan-400" />
-              TABELUL DE ATRIBUTE ASOCIAT HĂRȚII (Attribute Table)
+              {lang === 'ro'
+                ? 'TABELUL DE ATRIBUTE ASOCIAT HĂRȚII (Attribute Table)'
+                : 'ASSOCIATED MAP ATTRIBUTE TABLE'}
             </span>
-            <span className="text-[10px] font-mono text-slate-400">Sincronizat bidirecțional</span>
+            <span className="text-[10px] font-mono text-slate-400">
+              {lang === 'ro' ? 'Sincronizat bidirecțional' : 'Bidirectionally synchronized'}
+            </span>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950">
@@ -382,16 +444,19 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase text-[10px]">
                 <tr>
                   <th className="p-2.5">ID</th>
-                  <th className="p-2.5">Denumire Element</th>
-                  <th className="p-2.5">Tip Geometrie</th>
-                  <th className="p-2.5">Coordonate / Traseu</th>
-                  <th className="p-2.5">Măsurătoare</th>
-                  <th className="p-2.5">Descriere Atribut</th>
+                  <th className="p-2.5">{lang === 'ro' ? 'Denumire Element' : 'Feature Name'}</th>
+                  <th className="p-2.5">{lang === 'ro' ? 'Tip Geometrie' : 'Geometry Type'}</th>
+                  <th className="p-2.5">{lang === 'ro' ? 'Coordonate / Traseu' : 'Coordinates / Path'}</th>
+                  <th className="p-2.5">{lang === 'ro' ? 'Măsurătoare' : 'Measurement'}</th>
+                  <th className="p-2.5">{lang === 'ro' ? 'Descriere Atribut' : 'Attribute Description'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-850">
                 {features.map((feat) => {
                   const isSelected = selectedFeatureId === feat.id;
+                  const name = lang === 'ro' ? feat.nameRo : feat.nameEn;
+                  const measure = lang === 'ro' ? feat.measureRo : feat.measureEn;
+                  const desc = lang === 'ro' ? feat.descriptionRo : feat.descriptionEn;
                   return (
                     <tr
                       key={feat.id}
@@ -408,7 +473,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                         {feat.type === 'point' && '📍'}
                         {feat.type === 'polyline' && '〰️'}
                         {feat.type === 'polygon' && '🟩'}
-                        {feat.name}
+                        {name}
                       </td>
                       <td className="p-2.5">
                         <span
@@ -424,9 +489,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                         </span>
                       </td>
                       <td className="p-2.5 text-slate-400 text-[11px] max-w-[180px] truncate">{feat.coordinates}</td>
-                      <td className="p-2.5 text-teal-300 font-bold">{feat.measure}</td>
+                      <td className="p-2.5 text-teal-300 font-bold">{measure}</td>
                       <td className="p-2.5 text-slate-400 font-sans text-[11px] max-w-[220px] truncate">
-                        {feat.description}
+                        {desc}
                       </td>
                     </tr>
                   );
@@ -442,10 +507,12 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
         <div>
           <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-teal-400" />
-            Verificare Noțiuni • Punct, Linie, Poligon
+            {lang === 'ro' ? 'Verificare Noțiuni • Punct, Linie, Poligon' : 'Concepts Check • Point, Polyline, Polygon'}
           </span>
           <h2 className="text-lg font-black text-white font-heading mt-0.5">
-            Răspunde corect la cele 3 cerințe pentru a debloca Nivelul 4
+            {lang === 'ro'
+              ? 'Răspunde corect la cele 3 cerințe pentru a debloca Nivelul 4'
+              : 'Answer all 3 questions correctly to unlock Level 4'}
           </h2>
         </div>
 
@@ -453,11 +520,15 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              1. Care sunt cele <strong className="text-teal-300">trei forme geometrice vectoriale fundamentale</strong> utilizate în cartografia GIS?
+              {lang === 'ro' ? (
+                <>1. Care sunt cele <strong className="text-teal-300">trei forme geometrice vectoriale fundamentale</strong> utilizate în cartografia GIS?</>
+              ) : (
+                <>1. What are the <strong className="text-teal-300">three fundamental vector geometry primitives</strong> in GIS mapping?</>
+              )}
             </div>
             {q1Answer === 'point_line_poly' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -472,7 +543,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Punct (Point), Linie (Polyline) și Poligon (Polygon / Area)
+              {lang === 'ro'
+                ? 'A. Punct (Point), Linie (Polyline) și Poligon (Polygon / Area)'
+                : 'A. Point, Line (Polyline), and Polygon (Area)'}
             </button>
 
             <button
@@ -484,7 +557,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Cerc, Triunghi și Cub 3D
+              {lang === 'ro' ? 'B. Cerc, Triunghi și Cub 3D' : 'B. Circle, Triangle, and 3D Cube'}
             </button>
 
             <button
@@ -496,7 +569,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Text, Muzică și Fișier Video MP4
+              {lang === 'ro' ? 'C. Text, Muzică și Fișier Video MP4' : 'C. Text, Music, and MP4 Video File'}
             </button>
 
             <button
@@ -508,7 +581,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Doar pixeli colorați individual, fără formule matematice
+              {lang === 'ro'
+                ? 'D. Doar pixeli colorați individual, fără formule matematice'
+                : 'D. Only individual colored raster pixels without mathematical vector definitions'}
             </button>
           </div>
 
@@ -517,7 +592,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               <span>{q1ErrorMsg}</span>
               {q1Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q1Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q1Cooldown}s...` : `Wait ${q1Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -528,11 +603,15 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              2. De ce este necesar să reprezentăm un râu (precum Oltul sau Dunărea) printr-o <strong className="text-cyan-300">Linie (Polyline)</strong> și nu printr-un simplu Punct?
+              {lang === 'ro' ? (
+                <>2. De ce este necesar să reprezentăm un râu (precum Oltul sau Dunărea) printr-o <strong className="text-cyan-300">Linie (Polyline)</strong> și nu printr-un simplu Punct?</>
+              ) : (
+                <>2. Why must a river (such as the Olt or Danube) be modeled as a <strong className="text-cyan-300">Polyline</strong> rather than a simple Point?</>
+              )}
             </div>
             {q2Answer === 'river_polyline' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -547,7 +626,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Pentru că punctele nu pot fi vopsite cu culoarea albastră
+              {lang === 'ro' ? 'A. Pentru că punctele nu pot fi vopsite cu culoarea albastră' : 'A. Because points cannot be styled with blue color'}
             </button>
 
             <button
@@ -559,7 +638,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Râul are o lungime continuă și un traseu șerpuit compus dintr-o serie de puncte conectate; un punct are doar o singură coordonată fixă
+              {lang === 'ro'
+                ? 'B. Râul are o lungime continuă și un traseu șerpuit compus dintr-o serie de puncte conectate; un punct are doar o singură coordonată fixă'
+                : 'B. The river has continuous length and winding geometry made of connected vertices; a point has only a single coordinate pair'}
             </button>
 
             <button
@@ -571,7 +652,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Râurile nu au coordonate geografice în realitate
+              {lang === 'ro' ? 'C. Râurile nu au coordonate geografice în realitate' : 'C. Rivers do not have geographical coordinates in reality'}
             </button>
 
             <button
@@ -583,7 +664,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Doar autostrăzile se pot desena cu puncte, râurile niciodată
+              {lang === 'ro' ? 'D. Doar autostrăzile se pot desena cu puncte, râurile niciodată' : 'D. Only motorways can be drawn with points, never rivers'}
             </button>
           </div>
 
@@ -592,7 +673,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               <span>{q2ErrorMsg}</span>
               {q2Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q2Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q2Cooldown}s...` : `Wait ${q2Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -603,11 +684,15 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              3. Ce proprietate geometrică unică deține un <strong className="text-emerald-300">Poligon</strong> comparativ cu un Punct sau o Linie?
+              {lang === 'ro' ? (
+                <>3. Ce proprietate geometrică unică deține un <strong className="text-emerald-300">Poligon</strong> comparativ cu un Punct sau o Linie?</>
+              ) : (
+                <>3. What unique geometric property distinguishes a <strong className="text-emerald-300">Polygon</strong> from a Point or Polyline?</>
+              )}
             </div>
             {q3Answer === 'polygon_area' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -622,7 +707,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Poligonul nu are margini și se întinde la infinit pe tot ecranul
+              {lang === 'ro'
+                ? 'A. Poligonul nu are margini și se întinde la infinit pe tot ecranul'
+                : 'A. A polygon has no boundaries and extends infinitely across the screen'}
             </button>
 
             <button
@@ -634,7 +721,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Este un contur închis cu suprafață bidimensională (km², hectare) și perimetru (ex: un parc național sau un lac)
+              {lang === 'ro'
+                ? 'B. Este un contur închis cu suprafață bidimensională (km², hectare) și perimetru (ex: un parc național sau un lac)'
+                : 'B. It is an enclosed boundary possessing 2D surface area (sq km, hectares) and perimeter (e.g. national park, lake)'}
             </button>
 
             <button
@@ -646,7 +735,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Poligonul poate conține doar numere întregi negative
+              {lang === 'ro' ? 'C. Poligonul poate conține doar numere întregi negative' : 'C. A polygon can only contain negative integers'}
             </button>
 
             <button
@@ -658,7 +747,9 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Poligoanele nu pot fi salvate niciodată într-un tabel de date
+              {lang === 'ro'
+                ? 'D. Poligoanele nu pot fi salvate niciodată într-un tabel de date'
+                : 'D. Polygons can never be stored inside a database table'}
             </button>
           </div>
 
@@ -667,7 +758,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
               <span>{q3ErrorMsg}</span>
               {q3Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q3Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q3Cooldown}s...` : `Wait ${q3Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -680,10 +771,16 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
             {allAnsweredCorrectly ? (
               <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Toate răspunsurile sunt corecte! Poți trece la Nivelul 4.
+                {lang === 'ro'
+                  ? 'Toate răspunsurile sunt corecte! Poți trece la Nivelul 4.'
+                  : 'All answers are correct! You can advance to Level 4.'}
               </span>
             ) : (
-              <span>Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 4.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 4.'
+                  : 'Answer all 3 questions correctly to unlock Level 4.'}
+              </span>
             )}
           </div>
 
@@ -696,7 +793,7 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                 : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
             }`}
           >
-            <span>Continuă spre Nivelul 4</span>
+            <span>{lang === 'ro' ? 'Continuă spre Nivelul 4' : 'Continue to Level 4'}</span>
             <span>➔</span>
           </button>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Globe, Compass, Ruler, Mountain, Sparkles, CheckCircle2, AlertTriangle, RotateCcw, Eye, Camera, Layers, MapPin } from 'lucide-react';
+import { Globe, Compass, Ruler, Mountain, Sparkles, CheckCircle2, RotateCcw } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface G1Level5Props {
   onPass: (score: number) => void;
@@ -8,59 +9,81 @@ interface G1Level5Props {
 
 interface EarthLocation {
   id: string;
-  title: string;
-  region: string;
+  titleRo: string;
+  titleEn: string;
+  regionRo: string;
+  regionEn: string;
   coords: string;
-  alt: string;
+  altRo: string;
+  altEn: string;
   tiltAngle: number;
-  highlight: string;
+  highlightRo: string;
+  highlightEn: string;
   icon: string;
 }
 
 const LOCATIONS: EarthLocation[] = [
   {
     id: 'bicaz',
-    title: 'Cheile Bicazului & Lacul Roșu',
-    region: 'Carpații Orientali (Munții Hășmaș)',
+    titleRo: 'Cheile Bicazului & Lacul Roșu',
+    titleEn: 'Bicaz Gorge & Red Lake',
+    regionRo: 'Carpații Orientali (Munții Hășmaș)',
+    regionEn: 'Eastern Carpathians (Hășmaș Mountains)',
     coords: '46°48′43″ N, 25°49′08″ E',
-    alt: 'Altitudine pereți: 980 m – 1.150 m',
+    altRo: 'Altitudine pereți: 980 m – 1.150 m',
+    altEn: 'Cliff elevation: 980 m – 1,150 m',
     tiltAngle: 60,
-    highlight: 'Defileu stâncos spectaculos sculptat în calcare mezozoice, cu pereți verticali de peste 300 m.',
+    highlightRo: 'Defileu stâncos spectaculos sculptat în calcare mezozoice, cu pereți verticali de peste 300 m.',
+    highlightEn: 'Spectacular rock canyon carved through Mesozoic limestone, featuring sheer vertical cliffs exceeding 300 m.',
     icon: '⛰️'
   },
   {
     id: 'bran',
-    title: 'Castelul Bran & Pasul Rucăr-Bran',
-    region: 'Județul Brașov / Argeș',
+    titleRo: 'Castelul Bran & Pasul Rucăr-Bran',
+    titleEn: 'Bran Castle & Rucăr-Bran Pass',
+    regionRo: 'Județul Brașov / Argeș',
+    regionEn: 'Brașov / Argeș Counties',
     coords: '45°30′54″ N, 25°22′02″ E',
-    alt: 'Altitudine cetate: 760 m',
+    altRo: 'Altitudine cetate: 760 m',
+    altEn: 'Fortress elevation: 760 m',
     tiltAngle: 45,
-    highlight: 'Cetate medievală strategică ridicată pe o stâncă abruptă pentru apărarea văii comerciale.',
+    highlightRo: 'Cetate medievală strategică ridicată pe o stâncă abruptă pentru apărarea văii comerciale.',
+    highlightEn: 'Strategic medieval fortress erected upon a cliff face guarding the historic commercial mountain pass.',
     icon: '🏰'
   },
   {
     id: 'cazane',
-    title: 'Cazanele Dunării (Defileul Dunării)',
-    region: 'Parcul Natural Porțile de Fier (Mehedinți)',
+    titleRo: 'Cazanele Dunării (Defileul Dunării)',
+    titleEn: 'Danube Gorges (Iron Gates)',
+    regionRo: 'Parcul Natural Porțile de Fier (Mehedinți)',
+    regionEn: 'Iron Gates Natural Park (Mehedinți)',
     coords: '44°36′12″ N, 22°15′35″ E',
-    alt: 'Lățime minimă fluviu: 150 m • Adâncime: până la 75 m',
+    altRo: 'Lățime minimă fluviu: 150 m • Adâncime: până la 75 m',
+    altEn: 'Narrowest width: 150 m • Depth: up to 75 m',
     tiltAngle: 55,
-    highlight: 'Sectorul unde fluviul Dunărea străpunge Carpații între România și Serbia, străjuit de chipul lui Decebal.',
+    highlightRo: 'Sectorul unde fluviul Dunărea străpunge Carpații între România și Serbia, străjuit de chipul lui Decebal.',
+    highlightEn: 'The dramatic gorge where the Danube pierces through the Carpathians between Romania and Serbia, flanked by Decebalus’ rock sculpture.',
     icon: '🚢'
   },
   {
     id: 'delta',
-    title: 'Pădurea Letea & Dunele de Nisip',
-    region: 'Delta Dunării (Grindul Letea)',
+    titleRo: 'Pădurea Letea & Dunele de Nisip',
+    titleEn: 'Letea Forest & Sand Dunes',
+    regionRo: 'Delta Dunării (Grindul Letea)',
+    regionEn: 'Danube Delta (Letea Ridge)',
     coords: '45°19′20″ N, 29°31′24″ E',
-    alt: 'Altitudine medie: 2 m – 12 m',
+    altRo: 'Altitudine medie: 2 m – 12 m',
+    altEn: 'Average elevation: 2 m – 12 m',
     tiltAngle: 20,
-    highlight: 'Cea mai nordică pădure subtropicală a Europei, cu liane grecești și cai sălbăticiți pe dune marine.',
+    highlightRo: 'Cea mai nordică pădure subtropicală a Europei, cu liane grecești și cai sălbăticiți pe dune marine.',
+    highlightEn: 'Europe’s northernmost subtropical forest, hosting Greek lianas and feral horses roaming over maritime dunes.',
     icon: '🌴'
   }
 ];
 
 export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Simulator State
   const [selectedLocIndex, setSelectedLocIndex] = useState<number>(0);
   const [tiltDegrees, setTiltDegrees] = useState<number>(45); // 0 (2D nadir) to 70 (3D oblique)
@@ -117,7 +140,11 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
       sounds.playWrong();
       setQ1Answer(val);
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! Tasta R (Reset) în Google Earth resetează instantaneu unghiul de vizualizare: orientarea busolei este aliniată direct spre Nord (0°) și camera este adusă la o privire zenitală perpendiculară.');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Tasta R (Reset) în Google Earth resetează instantaneu unghiul de vizualizare: orientarea busolei este aliniată direct spre Nord (0°) și camera este adusă la o privire zenitală perpendiculară.'
+          : 'Incorrect! The R key (Reset) in Google Earth instantly resets camera orientation: compass heading snaps directly to North (0°) and camera aligns to an overhead perpendicular nadir view.'
+      );
     }
   };
 
@@ -132,7 +159,11 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
       sounds.playWrong();
       setQ2Answer(val);
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! Înclinarea camerei (Tilt) schimbă perspectiva de la o vedere de sus (2D plană) la o perspectivă oblică tridimensională 3D, evidențiind altitudinea versanților montani, adâncimea defileelor și clădirile 3D.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Înclinarea camerei (Tilt) schimbă perspectiva de la o vedere de sus (2D plană) la o perspectivă oblică tridimensională 3D, evidențiind altitudinea versanților montani, adâncimea defileelor și clădirile 3D.'
+          : 'Incorrect! Camera Tilt switches the perspective from a flat 2D top-down view to a 3D oblique angle, revealing mountain ridges, canyon depths, and 3D architectural volumes.'
+      );
     }
   };
 
@@ -147,7 +178,11 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
       sounds.playWrong();
       setQ3Answer(val);
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Instrumentul Riglă digitală (Measure Tool) permite măsurarea distanțelor în linie dreaptă (metri/km), a traseelor poligonale și calcularea suprafețelor (hectare sau km²) direct pe glob.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Instrumentul Riglă digitală (Measure Tool) permite măsurarea distanțelor în linie dreaptă (metri/km), a traseelor poligonale și calcularea suprafețelor (hectare sau km²) direct pe glob.'
+          : 'Incorrect! The Measure Ruler Tool measures straight-line distances (m/km), polygonal paths, and computes enclosed surface areas (hectares or sq km) directly across the globe.'
+      );
     }
   };
 
@@ -173,25 +208,35 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
             <div>
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[10px] font-mono font-bold uppercase">
-                  Nivelul 5 • Unitatea 3B (Manual pag. 57–63)
+                  {lang === 'ro' ? 'Nivelul 5 • Unitatea 3B (Manual pag. 57–63)' : 'Level 5 • Unit 3B (Textbook pp. 57–63)'}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-mono">
-                  Google Earth & Imagini Satelitare 3D
+                  {lang === 'ro' ? 'Google Earth & Imagini Satelitare 3D' : 'Google Earth & 3D Satellite Imagery'}
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-1">
-                Explorarea Satelitară 3D: Înclinare Tilt, Busolă & Riglă Digitală
+                {lang === 'ro'
+                  ? 'Explorarea Satelitară 3D: Înclinare Tilt, Busolă & Riglă Digitală'
+                  : '3D Satellite Exploration: Camera Tilt, Compass & Digital Ruler'}
               </h1>
             </div>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-mono text-sky-300 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
             <Globe className="w-4 h-4 text-sky-400" />
-            <span>Glob Virtual 3D</span>
+            <span>{lang === 'ro' ? 'Glob Virtual 3D' : 'Virtual 3D Globe'}</span>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
-          <strong className="text-sky-300">Google Earth</strong> reprezintă vârful de lance al explorării cartografice pentru publicul larg: un glob terestru 3D complet interactiv, compus din petabytes de <strong className="text-teal-300">imagini satelitare de înaltă rezoluție</strong> și modele digitale de teren. Aici putem măsura distanțe precise, înclina camera pentru a zbura printre munți și naviga cu busola.
+          {lang === 'ro' ? (
+            <>
+              <strong className="text-sky-300">Google Earth</strong> reprezintă vârful de lance al explorării cartografice pentru publicul larg: un glob terestru 3D complet interactiv, compus din petabytes de <strong className="text-teal-300">imagini satelitare de înaltă rezoluție</strong> și modele digitale de teren. Aici putem măsura distanțe precise, înclina camera pentru a zbura printre munți și naviga cu busola.
+            </>
+          ) : (
+            <>
+              <strong className="text-sky-300">Google Earth</strong> represents cutting-edge geographic visualization for global users: a fully interactive 3D terrestrial globe composed of petabytes of <strong className="text-teal-300">high-resolution satellite imagery</strong> and elevation models. We can measure distances, tilt into mountain valleys, and align with true north.
+            </>
+          )}
         </p>
       </div>
 
@@ -201,10 +246,12 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
           <div>
             <span className="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-sky-400" />
-              Simulator de Navigație Satelitară • România din Spațiu
+              {lang === 'ro' ? 'Simulator de Navigație Satelitară • România din Spațiu' : 'Satellite Navigation Simulator • Romania from Orbit'}
             </span>
             <h2 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-              Consola de Comandă a Globului Virtual (Google Earth Studio)
+              {lang === 'ro'
+                ? 'Consola de Comandă a Globului Virtual (Google Earth Studio)'
+                : 'Virtual Globe Command Console (Google Earth Studio)'}
             </h2>
           </div>
 
@@ -225,7 +272,9 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                 }`}
               >
                 <span>{loc.icon}</span>
-                <span className="hidden sm:inline">{loc.title.split('&')[0]}</span>
+                <span className="hidden sm:inline">
+                  {(lang === 'ro' ? loc.titleRo : loc.titleEn).split('&')[0]}
+                </span>
               </button>
             ))}
           </div>
@@ -242,7 +291,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                 <div
                   className="w-9 h-9 rounded-full bg-slate-900 border border-sky-500/40 flex items-center justify-center text-xs font-mono font-bold shadow-md cursor-pointer group"
                   onClick={handleResetNorth}
-                  title="Clic pentru Resetare Nord (Tasta R)"
+                  title={lang === 'ro' ? 'Clic pentru Resetare Nord (Tasta R)' : 'Click to reset North (Key R)'}
                 >
                   <Compass
                     className="w-5 h-5 text-rose-400 transition-transform"
@@ -255,7 +304,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 hover:border-sky-400 text-[11px] font-mono text-sky-300 transition cursor-pointer flex items-center gap-1"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>Reset Nord (Tasta R)</span>
+                  <span>{lang === 'ro' ? 'Reset Nord (Tasta R)' : 'Reset North (Key R)'}</span>
                 </button>
               </div>
 
@@ -269,7 +318,11 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                 }`}
               >
                 <Ruler className="w-3.5 h-3.5" />
-                <span>{rulerActive ? 'Rigla Activată (140 km)' : 'Activează Rigla'}</span>
+                <span>
+                  {rulerActive
+                    ? (lang === 'ro' ? 'Rigla Activată (140 km)' : 'Ruler Active (140 km)')
+                    : (lang === 'ro' ? 'Activează Rigla' : 'Activate Ruler')}
+                </span>
               </button>
             </div>
 
@@ -282,17 +335,25 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
               }}
             >
               <div className="text-4xl mb-2">{activeLoc.icon}</div>
-              <h3 className="text-lg font-black text-white font-heading">{activeLoc.title}</h3>
-              <div className="text-xs text-sky-300 font-mono mt-0.5">{activeLoc.region}</div>
+              <h3 className="text-lg font-black text-white font-heading">
+                {lang === 'ro' ? activeLoc.titleRo : activeLoc.titleEn}
+              </h3>
+              <div className="text-xs text-sky-300 font-mono mt-0.5">
+                {lang === 'ro' ? activeLoc.regionRo : activeLoc.regionEn}
+              </div>
               <div className="text-[11px] text-slate-400 font-mono mt-1">{activeLoc.coords}</div>
-              <div className="text-xs text-emerald-300 font-bold font-mono mt-2">{activeLoc.alt}</div>
+              <div className="text-xs text-emerald-300 font-bold font-mono mt-2">
+                {lang === 'ro' ? activeLoc.altRo : activeLoc.altEn}
+              </div>
 
               {/* Digital Ruler Line Overlay if active */}
               {rulerActive && (
                 <div className="mt-4 p-2.5 rounded-xl bg-amber-950/80 border border-amber-500 text-amber-200 text-xs font-mono flex items-center gap-2 animate-pulse">
                   <Ruler className="w-4 h-4 text-amber-400 shrink-0" />
                   <span>
-                    Segment măsurat în linie dreaptă: <strong>{measuredDistanceKm} km</strong> (~78 min cu autoturismul)
+                    {lang === 'ro'
+                      ? `Segment măsurat în linie dreaptă: ${measuredDistanceKm} km (~78 min cu autoturismul)`
+                      : `Measured straight-line distance: ${measuredDistanceKm} km (~78 min by car)`}
                   </span>
                 </div>
               )}
@@ -300,9 +361,13 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
 
             {/* Viewport Footer Telemetry */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-t border-slate-900 pt-2 text-[10px] font-mono text-slate-400 relative z-10">
-              <span>Orientare busolă: {compassHeading}° (N = 0°)</span>
-              <span>Unghi înclinare Tilt: {tiltDegrees}° ({tiltDegrees === 0 ? '2D Nadir' : '3D Oblic'})</span>
-              <span className="text-sky-300">Sursă satelit: Sentinel-2 / Landsat</span>
+              <span>{lang === 'ro' ? `Orientare busolă: ${compassHeading}° (N = 0°)` : `Heading: ${compassHeading}° (N = 0°)`}</span>
+              <span>
+                {lang === 'ro'
+                  ? `Unghi înclinare Tilt: ${tiltDegrees}° (${tiltDegrees === 0 ? '2D Nadir' : '3D Oblic'})`
+                  : `Tilt Angle: ${tiltDegrees}° (${tiltDegrees === 0 ? '2D Nadir' : '3D Oblique'})`}
+              </span>
+              <span className="text-sky-300">{lang === 'ro' ? 'Sursă satelit: Sentinel-2 / Landsat' : 'Satellite source: Sentinel-2 / Landsat'}</span>
             </div>
           </div>
 
@@ -310,10 +375,10 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
           <div className="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-4">
             <div>
               <span className="text-xs font-mono font-bold text-white block mb-1">
-                CONTROALE CAMERĂ 3D & PERSPECTIVĂ
+                {lang === 'ro' ? 'CONTROALE CAMERĂ 3D & PERSPECTIVĂ' : '3D CAMERA & PERSPECTIVE CONTROLS'}
               </span>
               <span className="text-[10px] text-slate-400 font-mono block">
-                Simulează gesturile cu mouse-ul din Google Earth:
+                {lang === 'ro' ? 'Simulează gesturile cu mouse-ul din Google Earth:' : 'Simulate mouse navigation in Google Earth:'}
               </span>
 
               {/* Tilt Slider */}
@@ -321,7 +386,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-slate-300 flex items-center gap-1">
                     <Mountain className="w-3.5 h-3.5 text-sky-400" />
-                    ÎNCLINARE 3D (TILT):
+                    {lang === 'ro' ? 'ÎNCLINARE 3D (TILT):' : '3D TILT ANGLE:'}
                   </span>
                   <strong className="text-sky-300 text-sm">{tiltDegrees}°</strong>
                 </div>
@@ -335,8 +400,8 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   className="w-full accent-sky-400 cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] font-mono text-slate-500">
-                  <span>0° (2D Vedere de sus)</span>
-                  <span>65° (Perspectivă 3D relieflată)</span>
+                  <span>{lang === 'ro' ? '0° (2D Vedere de sus)' : '0° (2D Nadir Top-down)'}</span>
+                  <span>{lang === 'ro' ? '65° (Perspectivă 3D relieflată)' : '65° (3D Relief Perspective)'}</span>
                 </div>
               </div>
 
@@ -345,7 +410,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-slate-300 flex items-center gap-1">
                     <Compass className="w-3.5 h-3.5 text-rose-400" />
-                    ROTIRE CAMERĂ (HEADING):
+                    {lang === 'ro' ? 'ROTIRE CAMERĂ (HEADING):' : 'CAMERA HEADING ROTATION:'}
                   </span>
                   <strong className="text-rose-300 text-sm">{compassHeading}°</strong>
                 </div>
@@ -359,9 +424,9 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   className="w-full accent-rose-400 cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] font-mono text-slate-500">
-                  <span>-90° (Vest)</span>
-                  <span>0° (Nord)</span>
-                  <span>+90° (Est)</span>
+                  <span>-90° ({lang === 'ro' ? 'Vest' : 'West'})</span>
+                  <span>0° ({lang === 'ro' ? 'Nord' : 'North'})</span>
+                  <span>+90° ({lang === 'ro' ? 'Est' : 'East'})</span>
                 </div>
               </div>
             </div>
@@ -369,9 +434,11 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
             {/* Geographical Fact Card */}
             <div className="p-3 rounded-xl bg-sky-950/40 border border-sky-800/60 text-slate-300 text-xs">
               <strong className="text-sky-300 block text-[11px] font-mono mb-1">
-                Fascinația Geografică a Locului:
+                {lang === 'ro' ? 'Fascinația Geografică a Locului:' : 'Geographical Highlight:'}
               </strong>
-              <p className="text-[11px] leading-relaxed font-sans">{activeLoc.highlight}</p>
+              <p className="text-[11px] leading-relaxed font-sans">
+                {lang === 'ro' ? activeLoc.highlightRo : activeLoc.highlightEn}
+              </p>
             </div>
           </div>
         </div>
@@ -382,10 +449,12 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
         <div>
           <span className="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-sky-400" />
-            Verificare Cunoștințe • Google Earth & Explorare 3D
+            {lang === 'ro' ? 'Verificare Cunoștințe • Google Earth & Explorare 3D' : 'Knowledge Check • Google Earth & 3D Exploration'}
           </span>
           <h2 className="text-lg font-black text-white font-heading mt-0.5">
-            Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 6
+            {lang === 'ro'
+              ? 'Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 6'
+              : 'Answer all 3 questions correctly to unlock Level 6'}
           </h2>
         </div>
 
@@ -393,11 +462,15 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              1. Ce comandă rapidă de la tastatură resetează instantaneu camera către <strong className="text-sky-300">Nordul geografic (0°)</strong> în Google Earth?
+              {lang === 'ro' ? (
+                <>1. Ce comandă rapidă de la tastatură resetează instantaneu camera către <strong className="text-sky-300">Nordul geografic (0°)</strong> în Google Earth?</>
+              ) : (
+                <>1. What keyboard shortcut instantly resets the camera toward <strong className="text-sky-300">true North (0°)</strong> in Google Earth?</>
+              )}
             </div>
             {q1Answer === 'key_r' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -412,7 +485,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Combinația Ctrl + Alt + Delete
+              {lang === 'ro' ? 'A. Combinația Ctrl + Alt + Delete' : 'A. The Ctrl + Alt + Delete shortcut'}
             </button>
 
             <button
@@ -424,7 +497,9 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Tasta R (Reset): orientează busola exact spre Nord și aduce camera la o vedere zenitală de sus
+              {lang === 'ro'
+                ? 'B. Tasta R (Reset): orientează busola exact spre Nord și aduce camera la o vedere zenitală de sus'
+                : 'B. The R key (Reset): aligns compass to true North and sets camera to top-down nadir view'}
             </button>
 
             <button
@@ -436,7 +511,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Tasta Spațiu, care oprește satelitul pe orbită
+              {lang === 'ro' ? 'C. Tasta Spațiu, care oprește satelitul pe orbită' : 'C. Spacebar, which stops the satellite in orbit'}
             </button>
 
             <button
@@ -448,7 +523,9 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. În Google Earth nu există nicio metodă de orientare către Nord
+              {lang === 'ro'
+                ? 'D. În Google Earth nu există nicio metodă de orientare către Nord'
+                : 'D. There is no compass reset function in Google Earth'}
             </button>
           </div>
 
@@ -457,7 +534,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
               <span>{q1ErrorMsg}</span>
               {q1Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q1Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q1Cooldown}s...` : `Wait ${q1Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -468,11 +545,15 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              2. Ce efect vizual produce funcția de <strong className="text-teal-300">Înclinare (Tilt / perspectivă 3D)</strong> a camerei în Google Earth?
+              {lang === 'ro' ? (
+                <>2. Ce efect vizual produce funcția de <strong className="text-teal-300">Înclinare (Tilt / perspectivă 3D)</strong> a camerei în Google Earth?</>
+              ) : (
+                <>2. What visual effect is produced by the <strong className="text-teal-300">Tilt (3D perspective)</strong> camera action in Google Earth?</>
+              )}
             </div>
             {q2Answer === 'tilt_perspective' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -487,7 +568,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Șterge automat toate râurile și drumurile de pe hartă
+              {lang === 'ro' ? 'A. Șterge automat toate râurile și drumurile de pe hartă' : 'A. Automatically deletes all rivers and roads from view'}
             </button>
 
             <button
@@ -499,7 +580,9 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Comută de la o vedere plană 2D la o perspectivă oblică tridimensională 3D ce scoate în relief munții, cheile și clădirile
+              {lang === 'ro'
+                ? 'B. Comută de la o vedere plană 2D la o perspectivă oblică tridimensională 3D ce scoate în relief munții, cheile și clădirile'
+                : 'B. Transitions from flat 2D top-down view to an oblique 3D relief perspective highlighting mountains, valleys, and buildings'}
             </button>
 
             <button
@@ -511,7 +594,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Inversează culorile satelitului în alb-negru
+              {lang === 'ro' ? 'C. Inversează culorile satelitului în alb-negru' : 'C. Inverts satellite palette into monochrome'}
             </button>
 
             <button
@@ -523,7 +606,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Înclinarea funcționează doar dacă deschizi fișiere Word
+              {lang === 'ro' ? 'D. Înclinarea funcționează doar dacă deschizi fișiere Word' : 'D. Tilt only works when Word documents are loaded'}
             </button>
           </div>
 
@@ -532,7 +615,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
               <span>{q2ErrorMsg}</span>
               {q2Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q2Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q2Cooldown}s...` : `Wait ${q2Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -543,11 +626,15 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
         <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex items-start justify-between gap-3">
             <div className="text-xs sm:text-sm font-bold text-white">
-              3. Ce măsurători concrete putem realiza cu ajutorul <strong className="text-amber-300">Riglăi Digitale (Measure Tool)</strong> din Google Earth?
+              {lang === 'ro' ? (
+                <>3. Ce măsurători concrete putem realiza cu ajutorul <strong className="text-amber-300">Riglăi Digitale (Measure Tool)</strong> din Google Earth?</>
+              ) : (
+                <>3. What measurements can be performed using the <strong className="text-amber-300">Digital Ruler (Measure Tool)</strong> in Google Earth?</>
+              )}
             </div>
             {q3Answer === 'ruler_line_area' && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[11px] font-mono font-bold flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
               </span>
             )}
           </div>
@@ -562,7 +649,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              A. Doar numărul de litere dintr-un paragraf de text
+              {lang === 'ro' ? 'A. Doar numărul de litere dintr-un paragraf de text' : 'A. Only character count in a text paragraph'}
             </button>
 
             <button
@@ -574,7 +661,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              B. Temperatura apei din oceane în timp real
+              {lang === 'ro' ? 'B. Temperatura apei din oceane în timp real' : 'B. Real-time sea surface temperature'}
             </button>
 
             <button
@@ -586,7 +673,9 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              C. Distanțe în linie dreaptă (metri/km), lungimea unor trasee curbe și calculul suprafețelor unor perimetre închise (hectare/km²)
+              {lang === 'ro'
+                ? 'C. Distanțe în linie dreaptă (metri/km), lungimea unor trasee curbe și calculul suprafețelor unor perimetre închise (hectare/km²)'
+                : 'C. Straight-line distances (m/km), polyline path lengths, and perimeter/surface area calculation of closed shapes (hectares/sq km)'}
             </button>
 
             <button
@@ -598,7 +687,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                   : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
               } disabled:cursor-not-allowed`}
             >
-              D. Greutatea fizică a sateliților meteorologici
+              {lang === 'ro' ? 'D. Greutatea fizică a sateliților meteorologici' : 'D. Physical weight of meteorological satellites'}
             </button>
           </div>
 
@@ -607,7 +696,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
               <span>{q3ErrorMsg}</span>
               {q3Cooldown > 0 && (
                 <span className="font-mono font-bold text-rose-400 shrink-0 ml-2">
-                  Așteaptă {q3Cooldown}s...
+                  {lang === 'ro' ? `Așteaptă ${q3Cooldown}s...` : `Wait ${q3Cooldown}s...`}
                 </span>
               )}
             </div>
@@ -620,10 +709,16 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
             {allAnsweredCorrectly ? (
               <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Toate răspunsurile sunt corecte! Poți trece la Nivelul 6.
+                {lang === 'ro'
+                  ? 'Toate răspunsurile sunt corecte! Poți trece la Nivelul 6.'
+                  : 'All answers are correct! You can advance to Level 6.'}
               </span>
             ) : (
-              <span>Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 6.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Răspunde corect la cele 3 întrebări pentru a debloca Nivelul 6.'
+                  : 'Answer all 3 questions correctly to unlock Level 6.'}
+              </span>
             )}
           </div>
 
@@ -636,7 +731,7 @@ export const G1Level5_GoogleEarthLab: React.FC<G1Level5Props> = ({ onPass }) => 
                 : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
             }`}
           >
-            <span>Continuă spre Nivelul 6</span>
+            <span>{lang === 'ro' ? 'Continuă spre Nivelul 6' : 'Continue to Level 6'}</span>
             <span>➔</span>
           </button>
         </div>

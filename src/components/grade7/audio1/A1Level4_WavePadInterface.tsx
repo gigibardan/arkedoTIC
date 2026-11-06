@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Square, ZoomIn, ZoomOut, Search, Volume2, AlertTriangle, CheckCircle2, Sparkles, HelpCircle, Activity, Scissors } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface A1Level4Props {
@@ -7,6 +8,8 @@ interface A1Level4Props {
 }
 
 export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // WavePad interface state
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTimeMs, setCurrentTimeMs] = useState<number>(1200); // 1.2s
@@ -117,7 +120,11 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
       sounds.playWrong();
       setQ1Answer(null);
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! Pe ecranul WavePad, axa orizontală reprezintă Timpul (minute, secunde, sutimi), iar axa verticală reprezintă Amplitudinea / Puterea undei sonore (-100% la +100% sau scala în decibeli). Așteaptă 5 secunde.');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Pe ecranul WavePad, axa orizontală reprezintă Timpul (minute, secunde, sutimi), iar axa verticală reprezintă Amplitudinea / Puterea undei sonore (-100% la +100% sau scala în decibeli). Așteaptă 5 secunde.'
+          : 'Incorrect! In WavePad, horizontal represents Time (min:sec.hundredths), vertical is Amplitude / acoustic power (-100% to +100% or decibel scale). Wait 5 seconds.'
+      );
     }
   };
 
@@ -131,7 +138,11 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
       sounds.playWrong();
       setQ2Answer(null);
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! Tasta SPAȚIU (Spacebar) este comanda rapidă universală pentru pornirea și oprirea redării (Play / Pause) în orice editor audio-video profesional. Așteaptă 5 secunde.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Tasta SPAȚIU (Spacebar) este comanda rapidă universală pentru pornirea și oprirea redării (Play / Pause) în orice editor audio-video profesional. Așteaptă 5 secunde.'
+          : 'Incorrect! The SPACEBAR is the universal shortcut to Play/Pause in any professional audio-video editor. Wait 5 seconds.'
+      );
     }
   };
 
@@ -145,7 +156,11 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
       sounds.playWrong();
       setQ3Answer(null);
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Pentru a inspecta detalii microscopice (un pocnet, un clic de limbă, un fâșâit de 50 milisecunde), folosim comanda Zoom In (sau Ctrl + Rotiță mouse) pentru a mări scara temporală. Așteaptă 5 secunde.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Pentru a inspecta detalii microscopice (un pocnet, un clic de limbă, un fâșâit de 50 milisecunde), folosim comanda Zoom In (sau Ctrl + Rotiță mouse) pentru a mări scara temporală. Așteaptă 5 secunde.'
+          : 'Incorrect! To inspect microscopic audio details (a 50 ms click or pop), we use Zoom In (or Ctrl + Mouse Wheel) to expand the time scale. Wait 5 seconds.'
+      );
     }
   };
 
@@ -171,11 +186,15 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
           </div>
           <div>
             <div className="text-[11px] font-mono uppercase tracking-wider text-sky-400 font-bold flex items-center gap-1.5">
-              <span>Unitatea 2: Acustică Digitală • Manual Art Klett pag. 32–33</span>
-              <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px]">Nivelul 4/7</span>
+              <span>{lang === 'ro' ? 'Unitatea 2: Acustică Digitală • Manual Art Klett pag. 32–33' : 'Unit 2: Digital Acoustics • Art Klett Textbook pp. 32–33'}</span>
+              <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px]">
+                {lang === 'ro' ? 'Nivelul 4/7' : 'Level 4/7'}
+              </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black font-heading tracking-tight text-white">
-              Interfața WavePad: Forma de Undă, Axele Timp/dB, Zoom & Redare
+              {lang === 'ro'
+                ? 'Interfața WavePad: Forma de Undă, Axele Timp/dB, Zoom & Redare'
+                : 'WavePad Interface: Waveform, Time/dB Axes, Zoom & Playback'}
             </h1>
           </div>
         </div>
@@ -183,7 +202,7 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
         <div className="flex items-center gap-2">
           <span className="px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-mono text-slate-300 border border-slate-700 flex items-center gap-1.5">
             <Activity className="w-3.5 h-3.5 text-sky-400" />
-            <span>Consola WavePad</span>
+            <span>{lang === 'ro' ? 'Consola WavePad' : 'WavePad Console'}</span>
           </span>
         </div>
       </div>
@@ -192,24 +211,24 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
       <div className="p-2.5 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           <span className="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold">
-            Acasă (Home)
+            {lang === 'ro' ? 'Acasă (Home)' : 'Home'}
           </span>
           <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800">
-            Editare (Edit)
+            {lang === 'ro' ? 'Editare (Edit)' : 'Edit'}
           </span>
           <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800">
-            Niveluri (Levels)
+            {lang === 'ro' ? 'Niveluri (Levels)' : 'Levels'}
           </span>
           <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800">
-            Efecte (Effects)
+            {lang === 'ro' ? 'Efecte (Effects)' : 'Effects'}
           </span>
           <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-400 border border-slate-800">
-            Liniște (Silence)
+            {lang === 'ro' ? 'Liniște (Silence)' : 'Silence'}
           </span>
         </div>
 
         <div className="flex items-center gap-2 text-[11px] text-slate-400">
-          <span>Proiect: <strong>interviu_liceu.wav</strong></span>
+          <span>{lang === 'ro' ? 'Proiect:' : 'Project:'} <strong>interview_school.wav</strong></span>
           <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300">44.1 kHz • 16-bit • Stereo</span>
         </div>
       </div>
@@ -233,7 +252,7 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
               }`}
             >
               {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
-              <span>{isPlaying ? 'Pauză (Space)' : 'Redare (Play)'}</span>
+              <span>{isPlaying ? (lang === 'ro' ? 'Pauză (Space)' : 'Pause (Space)') : (lang === 'ro' ? 'Redare (Play)' : 'Play (Space)')}</span>
             </button>
 
             <button
@@ -244,7 +263,7 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
                 sounds.playClick();
               }}
               className="p-2 rounded-xl bg-slate-850 hover:bg-slate-800 text-slate-300 border border-slate-700 cursor-pointer"
-              title="Stop și resetare la început"
+              title={lang === 'ro' ? 'Stop și resetare la început' : 'Stop and reset to beginning'}
             >
               <Square className="w-4 h-4 fill-current" />
             </button>
@@ -257,7 +276,9 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
 
           {/* Zoom Buttons & Glitch Hunter Mission */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400 font-mono hidden sm:inline">Scară Zoom:</span>
+            <span className="text-xs text-slate-400 font-mono hidden sm:inline">
+              {lang === 'ro' ? 'Scară Zoom:' : 'Zoom Level:'}
+            </span>
             <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
               {[1, 2, 4, 8].map((z) => (
                 <button
@@ -288,7 +309,11 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
               }`}
             >
               <Search className="w-3.5 h-3.5" />
-              <span>{foundGlitch ? 'Defect Identificat la 03.420s!' : 'Caută Clic Parazit'}</span>
+              <span>
+                {foundGlitch
+                  ? (lang === 'ro' ? 'Defect Identificat la 03.420s!' : 'Glitch Located at 03.420s!')
+                  : (lang === 'ro' ? 'Caută Clic Parazit' : 'Find Mic Click Glitch')}
+              </span>
             </button>
           </div>
         </div>
@@ -384,7 +409,9 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
                 }}
               >
                 <div className="absolute top-1 left-1 text-[9px] font-mono text-amber-300 font-bold bg-slate-900/90 px-1 rounded">
-                  Selecție: {selectionRange.endMs - selectionRange.startMs} ms (Defect Clic)
+                  {lang === 'ro'
+                    ? `Selecție: ${selectionRange.endMs - selectionRange.startMs} ms (Defect Clic)`
+                    : `Selection: ${selectionRange.endMs - selectionRange.startMs} ms (Click Glitch)`}
                 </div>
               </div>
             )}
@@ -415,21 +442,37 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
         <div className="flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-sky-400" />
           <h3 className="text-sm font-bold uppercase tracking-wider text-sky-300 font-mono">
-            Verificarea Competențelor Tehnice (3 Întrebări Pedagogice)
+            {lang === 'ro'
+              ? 'Verificarea Competențelor Tehnice (3 Întrebări Pedagogice)'
+              : 'Technical Competency Verification (3 Pedagogical Questions)'}
           </h3>
         </div>
 
         {/* Question 1 */}
         <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-2.5">
-            1. În fereastra de editare a aplicației WavePad, ce reprezintă axa orizontală și respectiv axa verticală ale formei de undă?
+            {lang === 'ro'
+              ? '1. În fereastra de editare a aplicației WavePad, ce reprezintă axa orizontală și respectiv axa verticală ale formei de undă?'
+              : '1. In WavePad editing window, what do the horizontal and vertical axes of the waveform represent?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Axa orizontală = viteza procesorului; Axa verticală = spațiul liber de pe disc.' },
-              { id: 'B', text: 'Axa orizontală = Timpul (minute:secunde.sutimi); Axa verticală = Amplitudinea / Puterea volumului sonor.' },
-              { id: 'C', text: 'Axa orizontală = numărul de difuzoare; Axa verticală = adresa IP a calculatorului.' },
+              {
+                id: 'A',
+                textRo: 'Axa orizontală = viteza procesorului; Axa verticală = spațiul liber de pe disc.',
+                textEn: 'Horizontal axis = CPU speed; Vertical axis = free disk space.',
+              },
+              {
+                id: 'B',
+                textRo: 'Axa orizontală = Timpul (minute:secunde.sutimi); Axa verticală = Amplitudinea / Puterea volumului sonor.',
+                textEn: 'Horizontal axis = Time (minutes:seconds.hundredths); Vertical axis = Amplitude / Acoustic volume power.',
+              },
+              {
+                id: 'C',
+                textRo: 'Axa orizontală = numărul de difuzoare; Axa verticală = adresa IP a calculatorului.',
+                textEn: 'Horizontal axis = speaker count; Vertical axis = computer IP address.',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -442,8 +485,10 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } disabled:opacity-50`}
               >
-                <div className="font-bold font-mono text-sky-400 mb-1">Opțiunea {opt.id}:</div>
-                {opt.text}
+                <div className="font-bold font-mono text-sky-400 mb-1">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}:` : `Option ${opt.id}:`}
+                </div>
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
@@ -451,13 +496,17 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
           {q1Cooldown > 0 && (
             <div className="mt-2.5 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{q1ErrorMsg} (Deblocare în: {q1Cooldown}s)</span>
+              <span>{q1ErrorMsg} ({lang === 'ro' ? 'Deblocare în:' : 'Unlocks in:'} {q1Cooldown}s)</span>
             </div>
           )}
           {q1Answer === 'B' && (
             <div className="mt-2.5 text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Corect! Orizontal = Timp, Vertical = Amplitudine (dB / procente).</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! Orizontal = Timp, Vertical = Amplitudine (dB / procente).'
+                  : 'Correct! Horizontal = Time, Vertical = Amplitude (dB / percentage).'}
+              </span>
             </div>
           )}
         </div>
@@ -465,14 +514,28 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
         {/* Question 2 */}
         <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-2.5">
-            2. Care este tasta rapidă standard de la tastatură pentru a porni (Play) sau pune pe pauză (Pause) redarea sunetului în WavePad?
+            {lang === 'ro'
+              ? '2. Care este tasta rapidă standard de la tastatură pentru a porni (Play) sau pune pe pauză (Pause) redarea sunetului în WavePad?'
+              : '2. What is the standard keyboard shortcut to Play or Pause sound playback in WavePad?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Tasta Escape (Esc)' },
-              { id: 'B', text: 'Combinația Alt + F4' },
-              { id: 'C', text: 'Bara de Spațiu (Spacebar)' },
+              {
+                id: 'A',
+                textRo: 'Tasta Escape (Esc)',
+                textEn: 'Escape Key (Esc)',
+              },
+              {
+                id: 'B',
+                textRo: 'Combinația Alt + F4',
+                textEn: 'Alt + F4 Shortcut',
+              },
+              {
+                id: 'C',
+                textRo: 'Bara de Spațiu (Spacebar)',
+                textEn: 'Spacebar',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -485,8 +548,10 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } disabled:opacity-50`}
               >
-                <div className="font-bold font-mono text-cyan-400 mb-1">Opțiunea {opt.id}:</div>
-                {opt.text}
+                <div className="font-bold font-mono text-cyan-400 mb-1">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}:` : `Option ${opt.id}:`}
+                </div>
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
@@ -494,13 +559,17 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
           {q2Cooldown > 0 && (
             <div className="mt-2.5 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{q2ErrorMsg} (Deblocare în: {q2Cooldown}s)</span>
+              <span>{q2ErrorMsg} ({lang === 'ro' ? 'Deblocare în:' : 'Unlocks in:'} {q2Cooldown}s)</span>
             </div>
           )}
           {q2Answer === 'C' && (
             <div className="mt-2.5 text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Excelent! Tasta Spațiu este scurtătura universală pentru Play/Pause în orice studio audio-video.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Excelent! Tasta Spațiu este scurtătura universală pentru Play/Pause în orice studio audio-video.'
+                  : 'Excellent! Spacebar is the universal shortcut for Play/Pause in audio editors.'}
+              </span>
             </div>
           )}
         </div>
@@ -508,14 +577,28 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
         {/* Question 3 */}
         <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-2.5">
-            3. Cum procedăm în WavePad pentru a izola cu precizie milimetrică un mic pocnet sau zgomot de microfon care durează câteva sutimi de secundă?
+            {lang === 'ro'
+              ? '3. Cum procedăm în WavePad pentru a izola cu precizie milimetrică un mic pocnet sau zgomot de microfon care durează câteva sutimi de secundă?'
+              : '3. How do we isolate with precision a small mic click or glitch lasting a few hundredths of a second in WavePad?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Mărim zoom-ul pe axa timpului (Zoom In sau Ctrl + Rotiță mouse) până când forma de undă afișează fiecare fracțiune de secundă.' },
-              { id: 'B', text: 'Reducem volumul difuzoarelor la 0 ca să dispară zgomotul.' },
-              { id: 'C', text: 'Închidem programul și reînregistrăm tot interviul de la zero.' },
+              {
+                id: 'A',
+                textRo: 'Mărim zoom-ul pe axa timpului (Zoom In sau Ctrl + Rotiță mouse) până când forma de undă afișează fiecare fracțiune de secundă.',
+                textEn: 'Zoom into the time axis (Zoom In or Ctrl + Mouse Wheel) until the waveform displays individual milliseconds.',
+              },
+              {
+                id: 'B',
+                textRo: 'Reducem volumul difuzoarelor la 0 ca să dispară zgomotul.',
+                textEn: 'Turn speaker volume down to 0 so the noise disappears.',
+              },
+              {
+                id: 'C',
+                textRo: 'Închidem programul și reînregistrăm tot interviul de la zero.',
+                textEn: 'Close the application and re-record the entire interview from scratch.',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -528,8 +611,10 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } disabled:opacity-50`}
               >
-                <div className="font-bold font-mono text-emerald-400 mb-1">Opțiunea {opt.id}:</div>
-                {opt.text}
+                <div className="font-bold font-mono text-emerald-400 mb-1">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}:` : `Option ${opt.id}:`}
+                </div>
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
@@ -537,13 +622,17 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
           {q3Cooldown > 0 && (
             <div className="mt-2.5 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{q3ErrorMsg} (Deblocare în: {q3Cooldown}s)</span>
+              <span>{q3ErrorMsg} ({lang === 'ro' ? 'Deblocare în:' : 'Unlocks in:'} {q3Cooldown}s)</span>
             </div>
           )}
           {q3Answer === 'A' && (
             <div className="mt-2.5 text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Corect! Zoom In permite vizualizarea și tăierea precisă a micro-defectelor.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! Zoom In permite vizualizarea și tăierea precisă a micro-defectelor.'
+                  : 'Correct! Zoom In reveals micro-imperfections for surgical editing.'}
+              </span>
             </div>
           )}
         </div>
@@ -553,11 +642,23 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
       <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
         <div className="text-xs text-slate-400 font-mono">
           {!foundGlitch ? (
-            <span className="text-amber-400">Apasă pe butonul „Caută Clic Parazit” pentru a localiza defectul pe forma de undă.</span>
+            <span className="text-amber-400">
+              {lang === 'ro'
+                ? 'Apasă pe butonul „Caută Clic Parazit” pentru a localiza defectul pe forma de undă.'
+                : 'Click "Find Mic Click Glitch" to pinpoint the anomaly on the waveform.'}
+            </span>
           ) : !isAllAnswered ? (
-            <span className="text-sky-400">Răspunde la cele 3 întrebări pentru a finaliza Nivelul 4.</span>
+            <span className="text-sky-400">
+              {lang === 'ro'
+                ? 'Răspunde la cele 3 întrebări pentru a finaliza Nivelul 4.'
+                : 'Answer all 3 questions to complete Level 4.'}
+            </span>
           ) : (
-            <span className="text-emerald-400 font-bold">Interfața WavePad și forma de undă au fost stăpânite!</span>
+            <span className="text-emerald-400 font-bold">
+              {lang === 'ro'
+                ? 'Interfața WavePad și forma de undă au fost stăpânite!'
+                : 'WavePad interface and waveform navigation mastered!'}
+            </span>
           )}
         </div>
 
@@ -567,7 +668,11 @@ export const A1Level4_WavePadInterface: React.FC<A1Level4Props> = ({ onPass }) =
           onClick={handleFinish}
           className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-sky-500/25 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
         >
-          <span>Treci la Nivelul 5: Tehnici de Editare (Trim, Cut, Silence)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Treci la Nivelul 5: Tehnici de Editare (Trim, Cut, Silence)'
+              : 'Proceed to Level 5: Editing Techniques (Trim, Cut, Silence)'}
+          </span>
           <Sparkles className="w-4 h-4" />
         </button>
       </div>

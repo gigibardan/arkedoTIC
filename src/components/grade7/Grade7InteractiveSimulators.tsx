@@ -145,15 +145,19 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
 
 // ==================== 1. C++ CODE RUNNER & AST STEPPER ====================
 const CppRunnerSimulator: React.FC = () => {
+  const { lang } = useLanguage();
   const [selectedPreset, setSelectedPreset] = useState<'linear' | 'decision' | 'while_digits'>('while_digits');
   const [inputValue, setInputValue] = useState<string>('3482');
   const [outputLogs, setOutputLogs] = useState<string[]>([]);
-  const [memoryVariables, setMemoryVariables] = useState<Record<string, number | string>>({ n: 3482, suma: 0, cifra: 0 });
+  const [memoryVariables, setMemoryVariables] = useState<Record<string, number | string>>({ n: 3482, sum: 0, digit: 0 });
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const presets = {
     linear: {
-      title: 'Structura Liniară: Aria Dreptunghiului & Algoritmul celor 3 Pahare',
+      title:
+        lang === 'en'
+          ? 'Linear Structure: Rectangle Area & The 3-Glasses Rule'
+          : 'Structura Liniară: Aria Dreptunghiului & Algoritmul celor 3 Pahare',
       code: `#include <iostream>
 using namespace std;
 
@@ -163,7 +167,7 @@ int main() {
     aria = L * l;
     cout << "Aria este: " << aria << endl;
     
-    // Regula celor 3 pahare
+    // Regula celor 3 pahare / 3-Glasses Swap
     aux = L;
     L = l;
     l = aux;
@@ -172,7 +176,10 @@ int main() {
 }`
     },
     decision: {
-      title: 'Structura Alternativă: Test Paritate & Nota Școlară',
+      title:
+        lang === 'en'
+          ? 'Alternative Decision Structure: Parity Test & Grades'
+          : 'Structura Alternativă: Test Paritate & Nota Școlară',
       code: `#include <iostream>
 using namespace std;
 
@@ -189,7 +196,10 @@ int main() {
 }`
     },
     while_digits: {
-      title: 'Structura Repetitivă: Prelucrarea Cifrelor unui Număr (Suma Cifrelor)',
+      title:
+        lang === 'en'
+          ? 'Repetitive Structure: Digit Processing (Sum of Digits)'
+          : 'Structura Repetitivă: Prelucrarea Cifrelor unui Număr (Suma Cifrelor)',
       code: `#include <iostream>
 using namespace std;
 
@@ -214,15 +224,26 @@ int main() {
     setOutputLogs([]);
 
     if (selectedPreset === 'linear') {
-      const logs = [
-        '>>> Compilare C++ cu gcc 14.2 (Code::Blocks Engine)...',
-        '>>> Execuție structură liniară:',
-        'Calcul arie: L=15 l=8',
-        'Aria este: 120',
-        'Paharul auxiliar aux a salvat 15.',
-        'După interschimbare celor 3 pahare: L=8 l=15',
-        '>>> Program finalizat cu codul de ieșire 0.'
-      ];
+      const logs =
+        lang === 'en'
+          ? [
+              '>>> Compiling C++ with gcc 14.2 (Code::Blocks Engine)...',
+              '>>> Executing linear structure:',
+              'Area calculation: L=15 l=8',
+              'Area is: 120',
+              'Auxiliary glass aux saved 15.',
+              'After 3-glasses swap: L=8 l=15',
+              '>>> Process returned 0 (0x0).'
+            ]
+          : [
+              '>>> Compilare C++ cu gcc 14.2 (Code::Blocks Engine)...',
+              '>>> Execuție structură liniară:',
+              'Calcul arie: L=15 l=8',
+              'Aria este: 120',
+              'Paharul auxiliar aux a salvat 15.',
+              'După interschimbare celor 3 pahare: L=8 l=15',
+              '>>> Program finalizat cu codul de ieșire 0.'
+            ];
       setOutputLogs(logs);
       setMemoryVariables({ L: 8, l: 15, aria: 120, aux: 15 });
       setIsRunning(false);
@@ -230,33 +251,52 @@ int main() {
     } else if (selectedPreset === 'decision') {
       const val = parseInt(inputValue, 10) || 42;
       const isEven = val % 2 === 0;
-      const logs = [
-        `>>> cin >> n: ${val}`,
-        `>>> Evaluare condiție: (${val} % 2 == 0) -> ${isEven ? 'TRUE' : 'FALSE'}`,
-        isEven ? `${val} este NUMAR PAR` : `${val} este NUMAR IMPAR`,
-        '>>> Program finalizat cu codul de ieșire 0.'
-      ];
+      const logs =
+        lang === 'en'
+          ? [
+              `>>> cin >> n: ${val}`,
+              `>>> Condition evaluation: (${val} % 2 == 0) -> ${isEven ? 'TRUE' : 'FALSE'}`,
+              isEven ? `${val} is EVEN (NUMAR PAR)` : `${val} is ODD (NUMAR IMPAR)`,
+              '>>> Process returned 0 (0x0).'
+            ]
+          : [
+              `>>> cin >> n: ${val}`,
+              `>>> Evaluare condiție: (${val} % 2 == 0) -> ${isEven ? 'TRUE' : 'FALSE'}`,
+              isEven ? `${val} este NUMAR PAR` : `${val} este NUMAR IMPAR`,
+              '>>> Program finalizat cu codul de ieșire 0.'
+            ];
       setOutputLogs(logs);
-      setMemoryVariables({ n: val, paritate: isEven ? 'PAR' : 'IMPAR' });
+      setMemoryVariables({ n: val, parity: isEven ? 'EVEN' : 'ODD' });
       setIsRunning(false);
       sounds.playSuccess();
     } else if (selectedPreset === 'while_digits') {
       let n = parseInt(inputValue, 10) || 3482;
       let s = 0;
-      const logs = [`>>> cin >> n: ${n}`, '>>> Intrare în bucla while (n > 0):'];
+      const logs =
+        lang === 'en'
+          ? [`>>> cin >> n: ${n}`, '>>> Entering while loop (n > 0):']
+          : [`>>> cin >> n: ${n}`, '>>> Intrare în bucla while (n > 0):'];
       let step = 1;
       while (n > 0) {
         const c = n % 10;
         s += c;
-        logs.push(`Pasul ${step}: c = ${n} % 10 = ${c} | suma = ${s} | n nou = ${Math.floor(n / 10)}`);
+        logs.push(
+          lang === 'en'
+            ? `Step ${step}: digit c = ${n} % 10 = ${c} | sum = ${s} | new n = ${Math.floor(n / 10)}`
+            : `Pasul ${step}: c = ${n} % 10 = ${c} | suma = ${s} | n nou = ${Math.floor(n / 10)}`
+        );
         n = Math.floor(n / 10);
         step++;
       }
-      logs.push(`>>> Ieșire din buclă (n a devenit 0).`);
-      logs.push(`Suma cifrelor este: ${s}`);
-      logs.push('>>> Program finalizat cu codul de ieșire 0.');
+      logs.push(
+        lang === 'en' ? `>>> Loop exited (n reached 0).` : `>>> Ieșire din buclă (n a devenit 0).`
+      );
+      logs.push(
+        lang === 'en' ? `Sum of digits is: ${s}` : `Suma cifrelor este: ${s}`
+      );
+      logs.push(lang === 'en' ? '>>> Process returned 0 (0x0).' : '>>> Program finalizat cu codul de ieșire 0.');
       setOutputLogs(logs);
-      setMemoryVariables({ n: 0, suma: s, pasi: step - 1 });
+      setMemoryVariables({ n: 0, sum: s, steps: step - 1 });
       setIsRunning(false);
       sounds.playSuccess();
     }
@@ -270,7 +310,7 @@ int main() {
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1">
               <Code className="w-3.5 h-3.5 text-violet-400" />
-              Editor C++ (Code::Blocks AST Sandbox)
+              {lang === 'en' ? 'C++ Editor (Code::Blocks AST Sandbox)' : 'Editor C++ (Code::Blocks AST Sandbox)'}
             </span>
           </div>
 
@@ -279,7 +319,7 @@ int main() {
               onClick={() => setSelectedPreset('while_digits')}
               className={`px-2 py-0.5 rounded-lg ${selectedPreset === 'while_digits' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400'}`}
             >
-              while (cifre)
+              {lang === 'en' ? 'while (digits)' : 'while (cifre)'}
             </button>
             <button
               onClick={() => setSelectedPreset('decision')}
@@ -291,7 +331,7 @@ int main() {
               onClick={() => setSelectedPreset('linear')}
               className={`px-2 py-0.5 rounded-lg ${selectedPreset === 'linear' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400'}`}
             >
-              liniar (3 pahare)
+              {lang === 'en' ? 'linear (3 glasses)' : 'liniar (3 pahare)'}
             </button>
           </div>
         </div>
@@ -306,7 +346,9 @@ int main() {
         {/* Input & Run Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/80 border border-slate-800">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-slate-400">Date cin &gt;&gt; :</span>
+            <span className="text-xs font-mono text-slate-400">
+              {lang === 'en' ? 'cin >> Input:' : 'Date cin >> :'}
+            </span>
             <input
               type="text"
               value={inputValue}
@@ -322,7 +364,7 @@ int main() {
             className="px-5 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-violet-600/30 active:scale-95 transition"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
-            <span>Compilare & Executare (F9)</span>
+            <span>{lang === 'en' ? 'Build & Run (F9)' : 'Compilare & Executare (F9)'}</span>
           </button>
         </div>
       </div>
@@ -333,7 +375,7 @@ int main() {
         <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 shadow-md">
           <div className="text-[11px] font-mono font-bold text-amber-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
             <Cpu className="w-3.5 h-3.5 text-amber-400" />
-            Sertare de Memorie RAM (Variabile)
+            {lang === 'en' ? 'RAM Variable Registry (Memory)' : 'Sertare de Memorie RAM (Variabile)'}
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono">
@@ -350,17 +392,19 @@ int main() {
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between h-64 shadow-inner">
           <div className="text-[11px] font-mono font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Consolă C++ (Terminal I/O)
+            {lang === 'en' ? 'C++ Console (Terminal I/O)' : 'Consolă C++ (Terminal I/O)'}
           </div>
 
           <div className="font-mono text-xs text-slate-300 flex-1 overflow-y-auto space-y-1">
             {outputLogs.length === 0 ? (
               <div className="text-slate-500 italic text-center py-10">
-                Apasă pe „Compilare & Executare (F9)” pentru a rula programul...
+                {lang === 'en'
+                  ? 'Click "Build & Run (F9)" to compile and run program...'
+                  : 'Apasă pe „Compilare & Executare (F9)” pentru a rula programul...'}
               </div>
             ) : (
               outputLogs.map((line, idx) => (
-                <div key={idx} className={line.startsWith('>>>') ? 'text-cyan-400' : line.includes('PAR') || line.includes('Suma') ? 'text-amber-300 font-bold' : 'text-slate-200'}>
+                <div key={idx} className={line.startsWith('>>>') ? 'text-cyan-400' : line.includes('PAR') || line.includes('EVEN') || line.includes('Suma') || line.includes('Sum') ? 'text-amber-300 font-bold' : 'text-slate-200'}>
                   {line}
                 </div>
               ))
@@ -374,6 +418,7 @@ int main() {
 
 // ==================== 2. WORD & TYPOGRAPHY VALIDATOR ====================
 const WordTypographySimulator: React.FC = () => {
+  const { lang } = useLanguage();
   const [inputText, setInputText] = useState<string>(
     'Informatica si TIC este materia mea preferata . Invatam reguli de  tehnoredactare "moderne" si cum sa scriem corect .'
   );
@@ -385,28 +430,44 @@ const WordTypographySimulator: React.FC = () => {
     // Check 1: Missing diacritics
     const hasDiacritics = /[ăâîșțĂÂÎȘȚ]/.test(text);
     if (!hasDiacritics) {
-      issues.push('Lipsesc diacriticele românești obligatorii (ă, â, î, ș, ț cu virgulă dedesubt).');
+      issues.push(
+        lang === 'en'
+          ? 'Missing mandatory Romanian diacritics (ă, â, î, ș, ț with comma below).'
+          : 'Lipsesc diacriticele românești obligatorii (ă, â, î, ș, ț cu virgulă dedesubt).'
+      );
       score -= 25;
     }
 
     // Check 2: Space before punctuation (. , ; ! ?)
     const spaceBeforePunct = /\s+([.,;:!?])/.test(text);
     if (spaceBeforePunct) {
-      issues.push('Semnele de punctuație (. , ; ! ?) trebuie lipite direct de cuvântul precedent, fără spațiu înainte!');
+      issues.push(
+        lang === 'en'
+          ? 'Punctuation marks (. , ; ! ?) must be attached directly to previous word without preceding space!'
+          : 'Semnele de punctuație (. , ; ! ?) trebuie lipite direct de cuvântul precedent, fără spațiu înainte!'
+      );
       score -= 25;
     }
 
     // Check 3: Double spaces
     const doubleSpaces = /\s{2,}/.test(text);
     if (doubleSpaces) {
-      issues.push('S-au detectat spații duble între cuvinte. Folosește întotdeauna un singur spațiu!');
+      issues.push(
+        lang === 'en'
+          ? 'Multiple consecutive spaces detected. Always use a single space between words!'
+          : 'S-au detectat spații duble între cuvinte. Folosește întotdeauna un singur spațiu!'
+      );
       score -= 20;
     }
 
     // Check 4: English quotes instead of Romanian
     const englishQuotes = /["']/.test(text);
     if (englishQuotes) {
-      issues.push('Ghilimele neconforme: în limba română folosim ghilimelele „jos” și ”sus” (Alt+0132 / Alt+0148).');
+      issues.push(
+        lang === 'en'
+          ? 'Non-standard quotation marks: In Romanian typography, standard quotes are „bottom” and ”top” (Alt+0132 / Alt+0148).'
+          : 'Ghilimele neconforme: în limba română folosim ghilimelele „jos” și ”sus” (Alt+0132 / Alt+0148).'
+      );
       score -= 15;
     }
 
@@ -433,16 +494,18 @@ const WordTypographySimulator: React.FC = () => {
         <div>
           <h4 className="text-base font-bold text-white flex items-center gap-2">
             <FileText className="w-4 h-4 text-blue-400" />
-            Inspector Tipografic & Machetare Word
+            {lang === 'en' ? 'Typography Inspector & Word Layout' : 'Inspector Tipografic & Machetare Word'}
           </h4>
           <p className="text-xs text-slate-400">
-            Analizează textul în timp real conform normelor oficiale de tehnoredactare din manual (pag. 18–27)
+            {lang === 'en'
+              ? 'Real-time text analysis following textbook typography guidelines (pp. 18–27)'
+              : 'Analizează textul în timp real conform normelor oficiale de tehnoredactare din manual (pag. 18–27)'}
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <div className="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2 font-mono text-xs">
-            <span className="text-slate-400">Scor Tipografic:</span>
+            <span className="text-slate-400">{lang === 'en' ? 'Typography Score:' : 'Scor Tipografic:'}</span>
             <span className={`font-black ${report.score >= 80 ? 'text-emerald-400' : report.score >= 50 ? 'text-amber-400' : 'text-rose-400'}`}>
               {report.score} / 100
             </span>
@@ -453,7 +516,7 @@ const WordTypographySimulator: React.FC = () => {
             className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Corectare Automată</span>
+            <span>{lang === 'en' ? 'Auto-Correct' : 'Corectare Automată'}</span>
           </button>
         </div>
       </div>
@@ -461,7 +524,7 @@ const WordTypographySimulator: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         <div className="lg:col-span-7 flex flex-col gap-2">
           <label className="text-xs font-mono text-slate-300">
-            Document de redactat (scrie sau lipește text):
+            {lang === 'en' ? 'Document to edit (type or paste text):' : 'Document de redactat (scrie sau lipește text):'}
           </label>
           <textarea
             value={inputText}
@@ -473,14 +536,18 @@ const WordTypographySimulator: React.FC = () => {
 
         <div className="lg:col-span-5 flex flex-col gap-3">
           <div className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
-            Diagnostic Didactic (Erori Detectate):
+            {lang === 'en' ? 'Pedagogical Diagnostic (Detected Issues):' : 'Diagnostic Didactic (Erori Detectate):'}
           </div>
 
           <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col gap-2.5 shadow-md">
             {report.issues.length === 0 ? (
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold py-4">
                 <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>Felicitări! Textul respectă 100% toate regulile de aur ale tipografiei românești.</span>
+                <span>
+                  {lang === 'en'
+                    ? 'Congratulations! The text adheres 100% to golden typography rules.'
+                    : 'Felicitări! Textul respectă 100% toate regulile de aur ale tipografiei românești.'}
+                </span>
               </div>
             ) : (
               report.issues.map((issue, idx) => (
@@ -499,6 +566,7 @@ const WordTypographySimulator: React.FC = () => {
 
 // ==================== 3. AUDIO WAVELAB & TONE GENERATOR ====================
 const AudioWaveSimulator: React.FC = () => {
+  const { lang } = useLanguage();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [frequency, setFrequency] = useState<number>(440); // 440 Hz = Standard Concert A
   const [waveformType, setWaveformType] = useState<OscillatorType>('sine');
@@ -564,10 +632,14 @@ const AudioWaveSimulator: React.FC = () => {
         <div>
           <h4 className="text-base font-bold text-white flex items-center gap-2">
             <Volume2 className="w-4 h-4 text-amber-400" />
-            WaveLab Studio — Generator de Frecvențe Acustice & Formă de Undă
+            {lang === 'en'
+              ? 'WaveLab Studio — Acoustic Frequency & Waveform Generator'
+              : 'WaveLab Studio — Generator de Frecvențe Acustice & Formă de Undă'}
           </h4>
           <p className="text-xs text-slate-400">
-            Experimentează fizica sunetului digital conform manualului (pag. 28–35): oscilații Hertz, amplitudine și tipuri de unde
+            {lang === 'en'
+              ? 'Experiment with digital sound physics (pp. 28–35): Hertz oscillations, amplitude, and wave types'
+              : 'Experimentează fizica sunetului digital conform manualului (pag. 28–35): oscilații Hertz, amplitudine și tipuri de unde'}
           </p>
         </div>
 
@@ -582,12 +654,12 @@ const AudioWaveSimulator: React.FC = () => {
           {isPlaying ? (
             <>
               <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
-              <span>Oprește Sunetul</span>
+              <span>{lang === 'en' ? 'Stop Sound' : 'Oprește Sunetul'}</span>
             </>
           ) : (
             <>
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Redă Unda Acustică</span>
+              <span>{lang === 'en' ? 'Play Acoustic Wave' : 'Redă Unda Acustică'}</span>
             </>
           )}
         </button>
@@ -598,8 +670,10 @@ const AudioWaveSimulator: React.FC = () => {
         <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col gap-4">
           <div>
             <div className="flex justify-between text-xs font-mono mb-1.5">
-              <span className="text-slate-400">Frecvență (Hz):</span>
-              <span className="text-amber-400 font-bold">{frequency} Hz ({frequency === 440 ? 'Nota LA 440 Hz' : frequency < 250 ? 'Bas / Grav' : 'Acut'})</span>
+              <span className="text-slate-400">{lang === 'en' ? 'Frequency (Hz):' : 'Frecvență (Hz):'}</span>
+              <span className="text-amber-400 font-bold">
+                {frequency} Hz ({frequency === 440 ? (lang === 'en' ? 'Concert Pitch A 440 Hz' : 'Nota LA 440 Hz') : frequency < 250 ? (lang === 'en' ? 'Bass / Low' : 'Bas / Grav') : (lang === 'en' ? 'Treble / High' : 'Acut')})
+              </span>
             </div>
             <input
               type="range"
@@ -613,7 +687,9 @@ const AudioWaveSimulator: React.FC = () => {
           </div>
 
           <div>
-            <div className="text-xs font-mono text-slate-400 mb-2">Tipul Undei Sonore:</div>
+            <div className="text-xs font-mono text-slate-400 mb-2">
+              {lang === 'en' ? 'Sound Waveform Type:' : 'Tipul Undei Sonore:'}
+            </div>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
               {(['sine', 'square', 'triangle', 'sawtooth'] as OscillatorType[]).map((type) => (
                 <button
@@ -631,7 +707,11 @@ const AudioWaveSimulator: React.FC = () => {
                       : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
-                  {type === 'sine' ? 'Sinusoidală ∿' : type === 'square' ? 'Dreptunghiulară ⎍' : type}
+                  {type === 'sine'
+                    ? lang === 'en' ? 'Sine ∿' : 'Sinusoidală ∿'
+                    : type === 'square'
+                    ? lang === 'en' ? 'Square ⎍' : 'Dreptunghiulară ⎍'
+                    : type}
                 </button>
               ))}
             </div>
@@ -641,7 +721,11 @@ const AudioWaveSimulator: React.FC = () => {
         {/* Waveform Graphic Display */}
         <div className="lg:col-span-2 bg-slate-950 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-inner">
           <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
-            <span>Osciloscop Digital • Eșantionare 44.100 Hz</span>
+            <span>
+              {lang === 'en'
+                ? 'Digital Oscilloscope • 44,100 Hz Sampling'
+                : 'Osciloscop Digital • Eșantionare 44.100 Hz'}
+            </span>
             <span className="text-emerald-400 font-bold">Stereo Hi-Fi • -6 dB</span>
           </div>
 
@@ -664,7 +748,9 @@ const AudioWaveSimulator: React.FC = () => {
           </div>
 
           <div className="text-[11px] font-mono text-slate-400 mt-3 text-center">
-            Urechea umană percepe sunete între 20 Hz și 20.000 Hz. Standardul calității de studio este 44.1 kHz pe 16 biți.
+            {lang === 'en'
+              ? 'The human ear perceives sounds between 20 Hz and 20,000 Hz. Standard studio quality is 44.1 kHz at 16 bits.'
+              : 'Urechea umană percepe sunete între 20 Hz și 20.000 Hz. Standardul calității de studio este 44.1 kHz pe 16 biți.'}
           </div>
         </div>
       </div>
@@ -674,6 +760,7 @@ const AudioWaveSimulator: React.FC = () => {
 
 // ==================== 4. GIS VECTOR MAP INSPECTOR ====================
 const GisMapSimulator: React.FC = () => {
+  const { lang } = useLanguage();
   const [layers, setLayers] = useState({
     relief: true,
     hydro: true,
@@ -682,10 +769,28 @@ const GisMapSimulator: React.FC = () => {
   });
   const [selectedPoint, setSelectedPoint] = useState<string>('Vf. Moldoveanu');
 
-  const pointsData: Record<string, { lat: string; long: string; alt: string; info: string }> = {
-    'Vf. Moldoveanu': { lat: '45°35′58″ N', long: '24°44′10″ E', alt: '2544 m', info: 'Cel mai înalt vârf muntos din România (Munții Făgăraș).' },
-    'București': { lat: '44°26′07″ N', long: '26°06′10″ E', alt: '85 m', info: 'Capitala României, centru administrativ și nod GIS național.' },
-    'Delta Dunării': { lat: '45°04′00″ N', long: '29°30′00″ E', alt: '2 m', info: 'Cea mai bine conservată deltă europeană, patrimoniu UNESCO.' }
+  const pointsData: Record<string, { lat: string; long: string; alt: string; infoRo: string; infoEn: string }> = {
+    'Vf. Moldoveanu': {
+      lat: '45°35′58″ N',
+      long: '24°44′10″ E',
+      alt: '2544 m',
+      infoRo: 'Cel mai înalt vârf muntos din România (Munții Făgăraș).',
+      infoEn: 'The highest mountain peak in Romania (Făgăraș Mountains).'
+    },
+    'București': {
+      lat: '44°26′07″ N',
+      long: '26°06′10″ E',
+      alt: '85 m',
+      infoRo: 'Capitala României, centru administrativ și nod GIS național.',
+      infoEn: 'Capital of Romania, administrative center and national GIS hub.'
+    },
+    'Delta Dunării': {
+      lat: '45°04′00″ N',
+      long: '29°30′00″ E',
+      alt: '2 m',
+      infoRo: 'Cea mai bine conservată deltă europeană, patrimoniu UNESCO.',
+      infoEn: 'Best preserved European river delta, UNESCO World Heritage site.'
+    }
   };
 
   return (
@@ -694,10 +799,14 @@ const GisMapSimulator: React.FC = () => {
         <div>
           <h4 className="text-base font-bold text-white flex items-center gap-2">
             <MapPin className="w-4 h-4 text-teal-400" />
-            GIS Layer Explorer — Harta Straturilor Tematice & Satelit
+            {lang === 'en'
+              ? 'GIS Layer Explorer — Thematic & Satellite Layers Map'
+              : 'GIS Layer Explorer — Harta Straturilor Tematice & Satelit'}
           </h4>
           <p className="text-xs text-slate-400">
-            Analiză spațială interactivă pe straturi tematice conform manualului de TIC (pag. 57–63)
+            {lang === 'en'
+              ? 'Interactive spatial analysis following the ICT textbook (pp. 57–63)'
+              : 'Analiză spațială interactivă pe straturi tematice conform manualului de TIC (pag. 57–63)'}
           </p>
         </div>
 
@@ -707,25 +816,25 @@ const GisMapSimulator: React.FC = () => {
             onClick={() => setLayers(prev => ({ ...prev, relief: !prev.relief }))}
             className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.relief ? 'bg-amber-950/60 border-amber-500 text-amber-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
-            ⛰️ Relief
+            ⛰️ {lang === 'en' ? 'Relief' : 'Relief'}
           </button>
           <button
             onClick={() => setLayers(prev => ({ ...prev, hydro: !prev.hydro }))}
             className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.hydro ? 'bg-blue-950/60 border-blue-500 text-blue-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
-            🌊 Râuri
+            🌊 {lang === 'en' ? 'Rivers' : 'Râuri'}
           </button>
           <button
             onClick={() => setLayers(prev => ({ ...prev, roads: !prev.roads }))}
             className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.roads ? 'bg-orange-950/60 border-orange-500 text-orange-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
-            🛣️ Drumuri
+            🛣️ {lang === 'en' ? 'Roads' : 'Drumuri'}
           </button>
           <button
             onClick={() => setLayers(prev => ({ ...prev, cities: !prev.cities }))}
             className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.cities ? 'bg-teal-950/60 border-teal-500 text-teal-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
-            🏙️ Orașe
+            🏙️ {lang === 'en' ? 'Cities' : 'Orașe'}
           </button>
         </div>
       </div>
@@ -734,7 +843,7 @@ const GisMapSimulator: React.FC = () => {
         {/* Interactive Map Visualizer */}
         <div className="lg:col-span-8 bg-slate-950 border border-slate-800 rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between h-72 shadow-inner">
           <div className="absolute top-3 left-3 text-[11px] font-mono text-slate-400 z-10">
-            Harta Vectorială GIS România (EPSG:4326 WGS84)
+            {lang === 'en' ? 'GIS Vector Map Romania (EPSG:4326 WGS84)' : 'Harta Vectorială GIS România (EPSG:4326 WGS84)'}
           </div>
 
           {/* SVG Map Canvas */}
@@ -798,31 +907,33 @@ const GisMapSimulator: React.FC = () => {
         <div className="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-md">
           <div>
             <div className="text-[11px] font-mono font-bold text-teal-400 uppercase tracking-wider mb-2">
-              Interogare Atribute GIS (Click pe hartă):
+              {lang === 'en' ? 'GIS Attribute Query (Click map marker):' : 'Interogare Atribute GIS (Click pe hartă):'}
             </div>
             <h5 className="text-lg font-black text-white font-heading">{selectedPoint}</h5>
             <p className="text-xs text-slate-300 mt-1 mb-4 leading-relaxed">
-              {pointsData[selectedPoint]?.info}
+              {lang === 'en' ? pointsData[selectedPoint]?.infoEn : pointsData[selectedPoint]?.infoRo}
             </p>
 
             <div className="space-y-2 text-xs font-mono">
               <div className="flex justify-between p-2 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-slate-400">Latitudine:</span>
+                <span className="text-slate-400">{lang === 'en' ? 'Latitude:' : 'Latitudine:'}</span>
                 <span className="text-cyan-300 font-bold">{pointsData[selectedPoint]?.lat}</span>
               </div>
               <div className="flex justify-between p-2 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-slate-400">Longitudine:</span>
+                <span className="text-slate-400">{lang === 'en' ? 'Longitude:' : 'Longitudine:'}</span>
                 <span className="text-cyan-300 font-bold">{pointsData[selectedPoint]?.long}</span>
               </div>
               <div className="flex justify-between p-2 rounded-lg bg-slate-900 border border-slate-800">
-                <span className="text-slate-400">Altitudine:</span>
+                <span className="text-slate-400">{lang === 'en' ? 'Altitude:' : 'Altitudine:'}</span>
                 <span className="text-amber-300 font-bold">{pointsData[selectedPoint]?.alt}</span>
               </div>
             </div>
           </div>
 
           <div className="text-[10px] text-slate-500 font-mono mt-3">
-            Sistemul GIS leagă geometria spațială de date descriptive tabelare.
+            {lang === 'en'
+              ? 'GIS links spatial vector geometry with tabular descriptive attributes.'
+              : 'Sistemul GIS leagă geometria spațială de date descriptive tabelare.'}
           </div>
         </div>
       </div>
@@ -832,9 +943,9 @@ const GisMapSimulator: React.FC = () => {
 
 // ==================== 5. ROBOSIM 2D SENSOR CANVAS ====================
 const RoboCanvasSimulator: React.FC = () => {
+  const { lang } = useLanguage();
   const [robotPos, setRobotPos] = useState<{ x: number; y: number; angle: number }>({ x: 60, y: 150, angle: 0 });
   const [sensorDistance, setSensorDistance] = useState<number>(28);
-  const [isAutoNavigating, setIsAutoNavigating] = useState<boolean>(false);
 
   const moveForward = () => {
     setRobotPos(prev => {
@@ -877,10 +988,14 @@ const RoboCanvasSimulator: React.FC = () => {
         <div>
           <h4 className="text-base font-bold text-white flex items-center gap-2">
             <Bot className="w-4 h-4 text-emerald-400" />
-            RoboSim 2D — Simulator Robotic & Senzor Ultrasonic
+            {lang === 'en'
+              ? 'RoboSim 2D — Robotics Simulator & Ultrasonic Sensor'
+              : 'RoboSim 2D — Simulator Robotic & Senzor Ultrasonic'}
           </h4>
           <p className="text-xs text-slate-400">
-            Programarea roboților virtuali conform manualului (pag. 103–108): traiectorii hexagonale și evitare obstacole
+            {lang === 'en'
+              ? 'Virtual robot programming from textbook (pp. 103–108): hexagonal trajectories and obstacle avoidance'
+              : 'Programarea roboților virtuali conform manualului (pag. 103–108): traiectorii hexagonale și evitare obstacole'}
           </p>
         </div>
 
@@ -890,7 +1005,7 @@ const RoboCanvasSimulator: React.FC = () => {
             className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Traiectorie Hexagon (pag. 104)</span>
+            <span>{lang === 'en' ? 'Hexagon Trajectory (p. 104)' : 'Traiectorie Hexagon (pag. 104)'}</span>
           </button>
           <button
             onClick={() => {
@@ -920,7 +1035,9 @@ const RoboCanvasSimulator: React.FC = () => {
 
             {/* Obstacle Walls */}
             <rect x="390" y="20" width="15" height="210" fill="#dc2626" rx="4" />
-            <text x="395" y="130" fill="#ffffff" fontSize="9" transform="rotate(90, 395, 130)" fontFamily="monospace">PERETE</text>
+            <text x="395" y="130" fill="#ffffff" fontSize="9" transform="rotate(90, 395, 130)" fontFamily="monospace">
+              {lang === 'en' ? 'WALL' : 'PERETE'}
+            </text>
 
             {/* Ultrasonic Beam */}
             <line
@@ -951,18 +1068,18 @@ const RoboCanvasSimulator: React.FC = () => {
         <div className="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-md">
           <div className="space-y-3 font-mono text-xs">
             <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
-              Telemetrie Senzori Robot
+              {lang === 'en' ? 'Robot Sensor Telemetry' : 'Telemetrie Senzori Robot'}
             </div>
 
             <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center">
-              <span className="text-slate-400">Senzor Distanță:</span>
+              <span className="text-slate-400">{lang === 'en' ? 'Distance Sensor:' : 'Senzor Distanță:'}</span>
               <span className={`font-bold ${sensorDistance <= 15 ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
                 {sensorDistance} cm
               </span>
             </div>
 
             <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center">
-              <span className="text-slate-400">Unghi Orientare:</span>
+              <span className="text-slate-400">{lang === 'en' ? 'Orientation Angle:' : 'Unghi Orientare:'}</span>
               <span className="text-cyan-300 font-bold">{robotPos.angle}°</span>
             </div>
           </div>
@@ -973,13 +1090,13 @@ const RoboCanvasSimulator: React.FC = () => {
               onClick={moveForward}
               className="p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition shadow-md"
             >
-              Înainte (20 px)
+              {lang === 'en' ? 'Forward (20 px)' : 'Înainte (20 px)'}
             </button>
             <button
               onClick={turnRight}
               className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition"
             >
-              Virează 60°
+              {lang === 'en' ? 'Turn 60°' : 'Virează 60°'}
             </button>
           </div>
         </div>

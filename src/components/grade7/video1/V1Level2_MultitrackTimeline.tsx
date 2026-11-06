@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Layers, Eye, EyeOff, Volume2, VolumeX, Lock, Unlock, Play, Square, Info, CheckCircle2, AlertTriangle, HelpCircle, Film, Music, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface V1Level2Props {
@@ -7,6 +8,8 @@ interface V1Level2Props {
 }
 
 export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Track states
   const [videoTrack2Visible, setVideoTrack2Visible] = useState<boolean>(true); // Overlay / Lower-Third / Logo
   const [videoTrack1Visible, setVideoTrack1Visible] = useState<boolean>(true); // Base Video
@@ -75,7 +78,11 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
     } else {
       sounds.playFailure();
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! În editarea video, pista superioară (Video Track 2) este desenată peste pista inferioară (Video Track 1), acoperind-o dacă este complet opacă. Gândește-te la foi de hârtie așezate una peste alta!');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! În editarea video, pista superioară (Video Track 2) este desenată peste pista inferioară (Video Track 1), acoperind-o dacă este complet opacă. Gândește-te la foi de hârtie așezate una peste alta!'
+          : 'Incorrect! In video editing, upper tracks (V2) layer over lower tracks (V1), like transparent or opaque acetate sheets stacked vertically.'
+      );
     }
   };
 
@@ -88,7 +95,11 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
     } else {
       sounds.playFailure();
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! Tehnica se numește „Audio Ducking” (atenuare): muzica de fundal este coborâtă la 20-30% din volum în momentele în care cineva vorbește, pentru ca vocea să rămână clară și inteligibilă.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Tehnica se numește „Audio Ducking” (atenuare): muzica de fundal este coborâtă la 20-30% din volum în momentele în care cineva vorbește, pentru ca vocea să rămână clară și inteligibilă.'
+          : 'Incorrect! The technique is Audio Ducking: background music is attenuated to 20-30% during dialogue so voices stay clear and intelligible.'
+      );
     }
   };
 
@@ -101,7 +112,11 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
     } else {
       sounds.playFailure();
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Butonul cu simbolul unui ochi (Eye) ascunde pista din previzualizare și randare, iar butonul cu lacăt (Lock) o blochează împotriva deplasării, tăierii sau ștergerii accidentale.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Butonul cu simbolul unui ochi (Eye) ascunde pista din previzualizare și randare, iar butonul cu lacăt (Lock) o blochează împotriva deplasării, tăierii sau ștergerii accidentale.'
+          : 'Incorrect! The eye icon hides tracks from preview, while the lock icon prevents accidental edits, ripples, or cuts.'
+      );
     }
   };
 
@@ -121,14 +136,25 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
         <div className="absolute right-0 top-0 w-80 h-full bg-radial from-rose-500/10 to-transparent pointer-events-none" />
         <div className="flex items-center gap-3 text-rose-400 font-mono text-xs uppercase tracking-wider mb-2">
           <Layers className="w-4 h-4" />
-          <span>Nivelul 2 • Cronologie & Straturi Suprapuse (Manual pag. 38–39)</span>
+          <span>{lang === 'ro' ? 'Nivelul 2 • Cronologie & Straturi Suprapuse (Manual pag. 38–39)' : 'Level 2 • Timeline & Overlay Layers (Textbook pp. 38–39)'}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
-          Piste Paralele în VideoPad: Video Track vs. Audio Track
+          {lang === 'ro'
+            ? 'Piste Paralele în VideoPad: Video Track vs. Audio Track'
+            : 'Parallel Tracks in VideoPad: Video Track vs. Audio Track'}
         </h1>
         <p className="text-slate-300 text-sm leading-relaxed max-w-3xl">
-          Spre deosebire de un simplu player video, un program de montaj profesional funcționează ca o{' '}
-          <strong className="text-white">stivă de straturi</strong>. Înțelegerea ierarhiei pistelor (piste superioare peste piste inferioare) și separarea dialogului de muzica de fundal sunt bazele oricărei producții televizate.
+          {lang === 'ro' ? (
+            <>
+              Spre deosebire de un simplu player video, un program de montaj profesional funcționează ca o{' '}
+              <strong className="text-white">stivă de straturi</strong>. Înțelegerea ierarhiei pistelor (piste superioare peste piste inferioare) și separarea dialogului de muzica de fundal sunt bazele oricărei producții televizate.
+            </>
+          ) : (
+            <>
+              Unlike a simple media player, a professional video editor functions as a{' '}
+              <strong className="text-white">multi-layer stack</strong>. Understanding track hierarchy (higher tracks rendering over lower tracks) and separating dialog from music beds are foundational to television and video production.
+            </>
+          )}
         </p>
       </div>
 
@@ -137,30 +163,66 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-md flex flex-col gap-3">
           <div className="flex items-center gap-2 text-rose-400 font-bold text-sm">
             <Film className="w-4 h-4" />
-            <span>Pistele Video (Video Tracks): Regula Stivei</span>
+            <span>
+              {lang === 'ro'
+                ? 'Pistele Video (Video Tracks): Regula Stivei'
+                : 'Video Tracks: Layer Stack Rules'}
+            </span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed">
-            Pistele video sunt etajate vertical. <strong className="text-amber-300">Video Track 2 (superioară)</strong> se află deasupra pistei <strong className="text-amber-300">Video Track 1 (de bază)</strong>.
+            {lang === 'ro' ? (
+              <>Pistele video sunt etajate vertical. <strong className="text-amber-300">Video Track 2 (superioară)</strong> se află deasupra pistei <strong className="text-amber-300">Video Track 1 (de bază)</strong>.</>
+            ) : (
+              <>Video tracks are stacked vertically. <strong className="text-amber-300">Video Track 2 (top)</strong> sits directly above <strong className="text-amber-300">Video Track 1 (base layer)</strong>.</>
+            )}
           </p>
           <ul className="text-xs text-slate-400 space-y-1.5 list-disc list-inside">
-            <li>Un clip complet opac pe Pista 2 acoperă în totalitate ce se află dedesubt pe Pista 1.</li>
-            <li>Dacă folosim grafică cu fundal transparent (PNG, titluri, sigle, burtiere), elementul grafic plutește elegant peste clipul din Pista 1!</li>
-            <li>Tehnica <em>Picture-in-Picture (PiP)</em> permite redimensionarea unui clip de pe Pista 2 pentru a crea ferestre mici (ex: ecranul profesorului în colț).</li>
+            {lang === 'ro' ? (
+              <>
+                <li>Un clip complet opac pe Pista 2 acoperă în totalitate ce se află dedesubt pe Pista 1.</li>
+                <li>Dacă folosim grafică cu fundal transparent (PNG, titluri, sigle, burtiere), elementul grafic plutește elegant peste clipul din Pista 1!</li>
+                <li>Tehnica <em>Picture-in-Picture (PiP)</em> permite redimensionarea unui clip de pe Pista 2 pentru a crea ferestre mici (ex: ecranul profesorului în colț).</li>
+              </>
+            ) : (
+              <>
+                <li>A fully opaque clip on Track 2 completely conceals whatever lies beneath on Track 1.</li>
+                <li>Transparent graphics (PNG titles, school logos, lower thirds) float cleanly above Track 1 footage!</li>
+                <li>The <em>Picture-in-Picture (PiP)</em> technique scales a Track 2 video into an inset box (e.g., webcam corner window).</li>
+              </>
+            )}
           </ul>
         </div>
 
         <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-md flex flex-col gap-3">
           <div className="flex items-center gap-2 text-pink-400 font-bold text-sm">
             <Music className="w-4 h-4" />
-            <span>Pistele Audio (Audio Tracks) & Audio Ducking</span>
+            <span>
+              {lang === 'ro'
+                ? 'Pistele Audio (Audio Tracks) & Audio Ducking'
+                : 'Audio Tracks & Audio Ducking'}
+            </span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed">
-            Sunetele de pe toate pistele audio active se <strong className="text-white">mixează (se aud simultan)</strong>. De aceea este vitală separarea rolurilor:
+            {lang === 'ro' ? (
+              <>Sunetele de pe toate pistele audio active se <strong className="text-white">mixează (se aud simultan)</strong>. De aceea este vitală separarea rolurilor:</>
+            ) : (
+              <>Audio across all unmuted tracks is <strong className="text-white">mixed (heard simultaneously)</strong>. Separating audio roles is vital:</>
+            )}
           </p>
           <ul className="text-xs text-slate-400 space-y-1.5 list-disc list-inside">
-            <li><strong className="text-pink-300">Audio Track 1 (Dialog / Voce):</strong> Înregistrarea de la microfon. Trebuie ținută la volum 90–100% pentru claritate.</li>
-            <li><strong className="text-pink-300">Audio Track 2 (Muzică Bed):</strong> Melodia de atmosferă. În timpul discursului se reduce la 20–30% (ducking) pentru a nu concura cu vocea.</li>
-            <li><strong className="text-pink-300">Audio Track 3 (Efecte FX):</strong> Zgomote scurte (sunete de pași, tranziții sonore).</li>
+            {lang === 'ro' ? (
+              <>
+                <li><strong className="text-pink-300">Audio Track 1 (Dialog / Voce):</strong> Înregistrarea de la microfon. Trebuie ținută la volum 90–100% pentru claritate.</li>
+                <li><strong className="text-pink-300">Audio Track 2 (Muzică Bed):</strong> Melodia de atmosferă. În timpul discursului se reduce la 20–30% (ducking) pentru a nu concura cu vocea.</li>
+                <li><strong className="text-pink-300">Audio Track 3 (Efecte FX):</strong> Zgomote scurte (sunete de pași, tranziții sonore).</li>
+              </>
+            ) : (
+              <>
+                <li><strong className="text-pink-300">Audio Track 1 (Dialogue / Voice):</strong> Microphone recording. Keep at 90–100% for maximum clarity.</li>
+                <li><strong className="text-pink-300">Audio Track 2 (Music Bed):</strong> Ambient score. Attenuate to 20–30% (ducking) during speech so words remain clear.</li>
+                <li><strong className="text-pink-300">Audio Track 3 (Sound FX):</strong> Short punctuation noises (whooshes, footsteps, chimes).</li>
+              </>
+            )}
           </ul>
         </div>
       </div>
@@ -169,8 +231,14 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
           <div>
-            <span className="text-xs font-mono uppercase text-rose-400 tracking-wider">Laborator Practic Interactiv</span>
-            <h3 className="text-lg font-bold text-white">Consola Multitrack & Monitorul de Control VideoPad</h3>
+            <span className="text-xs font-mono uppercase text-rose-400 tracking-wider">
+              {lang === 'ro' ? 'Laborator Practic Interactiv' : 'Interactive Practical Lab'}
+            </span>
+            <h3 className="text-lg font-bold text-white">
+              {lang === 'ro'
+                ? 'Consola Multitrack & Monitorul de Control VideoPad'
+                : 'Multitrack Console & VideoPad Control Monitor'}
+            </h3>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -184,10 +252,10 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
               }`}
             >
               {isPlaying ? <Square className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
-              <span>{isPlaying ? 'Pauză' : 'Redă Montajul'}</span>
+              <span>{isPlaying ? (lang === 'ro' ? 'Pauză' : 'Pause') : (lang === 'ro' ? 'Redă Montajul' : 'Play Timeline')}</span>
             </button>
             <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-              Cursor: 00:0{Math.floor(playheadPos / 10)}.{playheadPos % 10}s
+              {lang === 'ro' ? 'Cursor:' : 'Playhead:'} 00:0{Math.floor(playheadPos / 10)}.{playheadPos % 10}s
             </span>
           </div>
         </div>
@@ -203,14 +271,18 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     🎓
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-white">Reportaj: Curtea Școlii & Laboratorul TIC</div>
-                    <div className="text-xs text-sky-300">Pista Video 1 (Cadru Principal de Bază)</div>
+                    <div className="text-sm font-bold text-white">
+                      {lang === 'ro' ? 'Reportaj: Curtea Școlii & Laboratorul TIC' : 'Report: School Courtyard & Computer Lab'}
+                    </div>
+                    <div className="text-xs text-sky-300">
+                      {lang === 'ro' ? 'Pista Video 1 (Cadru Principal de Bază)' : 'Video Track 1 (Primary Base Layer)'}
+                    </div>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="absolute inset-0 bg-black flex items-center justify-center text-slate-600 text-xs font-mono">
-                [Pista Video 1 este Ascunsă - Ecran Negru]
+                {lang === 'ro' ? '[Pista Video 1 este Ascunsă - Ecran Negru]' : '[Video Track 1 is Hidden - Black Screen]'}
               </div>
             )}
 
@@ -222,8 +294,14 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     TIC
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-rose-300">Andrei Ionescu • Clasa a VII-a B</div>
-                    <div className="text-[10px] text-slate-400">Pista Video 2 (Overlay Transparent / Burtieră)</div>
+                    <div className="text-xs font-bold text-rose-300">
+                      {lang === 'ro' ? 'Andrei Ionescu • Clasa a VII-a B' : 'Alex Jones • 7th Grade B'}
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      {lang === 'ro'
+                        ? 'Pista Video 2 (Overlay Transparent / Burtieră)'
+                        : 'Video Track 2 (Transparent Lower-Third Overlay)'}
+                    </div>
                   </div>
                 </div>
                 <span className="text-[10px] font-mono bg-rose-950/60 text-rose-400 px-2 py-0.5 rounded border border-rose-800">
@@ -237,13 +315,13 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
               <div className="flex items-center gap-1.5">
                 <span className="text-slate-400">A1:</span>
                 <span className={audioTrack1Muted ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
-                  {audioTrack1Muted ? 'MUT' : `${audioTrack1Volume}%`}
+                  {audioTrack1Muted ? (lang === 'ro' ? 'MUT' : 'MUTE') : `${audioTrack1Volume}%`}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 border-l border-slate-700 pl-2">
                 <span className="text-slate-400">A2:</span>
                 <span className={audioTrack2Muted ? 'text-rose-400 font-bold' : 'text-amber-400 font-bold'}>
-                  {audioTrack2Muted ? 'MUT' : `${audioTrack2Volume}%`}
+                  {audioTrack2Muted ? (lang === 'ro' ? 'MUT' : 'MUTE') : `${audioTrack2Volume}%`}
                 </span>
               </div>
             </div>
@@ -254,21 +332,29 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
             {isOptimalAudioBalance && videoTrack1Visible && videoTrack2Visible ? (
               <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4" />
-                Echilibru Regizoral Excelent: Vocea este clară (100%), muzica este discretă sub ea (≤35%), iar grafica V2 este vizibilă!
+                {lang === 'ro'
+                  ? 'Echilibru Regizoral Excelent: Vocea este clară (100%), muzica este discretă sub ea (≤35%), iar grafica V2 este vizibilă!'
+                  : 'Excellent Directorial Balance: Voice is distinct (100%), music is subtle underneath (≤35%), and V2 overlay is visible!'}
               </span>
             ) : audioTrack2Volume > 50 && !audioTrack2Muted ? (
               <span className="text-amber-400 flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4" />
-                Atenție: Muzica de pe A2 ({audioTrack2Volume}%) acoperă vocea elevului. Redu volumul sub 35% pentru ducking optim!
+                {lang === 'ro'
+                  ? `Atenție: Muzica de pe A2 (${audioTrack2Volume}%) acoperă vocea elevului. Redu volumul sub 35% pentru ducking optim!`
+                  : `Warning: Music bed on A2 (${audioTrack2Volume}%) drowns out voice. Lower volume below 35% for optimal ducking!`}
               </span>
             ) : !videoTrack1Visible ? (
               <span className="text-rose-400 flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4" />
-                Pista Video 1 este oprită! Activează ochiul pe V1 pentru a reda cadrul principal.
+                {lang === 'ro'
+                  ? 'Pista Video 1 este oprită! Activează ochiul pe V1 pentru a reda cadrul principal.'
+                  : 'Video Track 1 is hidden! Toggle eye icon on V1 to display the main picture.'}
               </span>
             ) : (
               <span className="text-slate-400">
-                Ajustează glisoarele de volum și butoanele de vizibilitate pentru a testa cum reacționează montajul.
+                {lang === 'ro'
+                  ? 'Ajustează glisoarele de volum și butoanele de vizibilitate pentru a testa cum reacționează montajul.'
+                  : 'Adjust volume sliders and track visibility toggles to see how the sequence responds.'}
               </span>
             )}
           </div>
@@ -277,8 +363,10 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
         {/* Timeline Tracks UI */}
         <div className="bg-slate-950 rounded-xl p-4 border border-slate-800 flex flex-col gap-3 relative">
           <div className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
-            <span>Cronologie Multitrack (VideoPad Timeline)</span>
-            <span className="text-[11px] text-slate-500 font-normal">Cursorul roșu indică poziția de redare</span>
+            <span>{lang === 'ro' ? 'Cronologie Multitrack (VideoPad Timeline)' : 'Multitrack Timeline (VideoPad Timeline)'}</span>
+            <span className="text-[11px] text-slate-500 font-normal">
+              {lang === 'ro' ? 'Cursorul roșu indică poziția de redare' : 'Red playhead marks playback position'}
+            </span>
           </div>
 
           {/* Timeline Playhead line */}
@@ -304,7 +392,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     setVideoTrack2Visible(!videoTrack2Visible);
                   }}
                   className={`p-1 rounded cursor-pointer ${videoTrack2Visible ? 'text-slate-300 hover:text-white' : 'text-rose-500 bg-rose-950/50'}`}
-                  title={videoTrack2Visible ? 'Ascunde Pista 2' : 'Arată Pista 2'}
+                  title={videoTrack2Visible ? (lang === 'ro' ? 'Ascunde Pista 2' : 'Hide Track 2') : (lang === 'ro' ? 'Arată Pista 2' : 'Show Track 2')}
                 >
                   {videoTrack2Visible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                 </button>
@@ -315,7 +403,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     setVideoTrack2Locked(!videoTrack2Locked);
                   }}
                   className={`p-1 rounded cursor-pointer ${videoTrack2Locked ? 'text-amber-400 bg-amber-950/40' : 'text-slate-500 hover:text-slate-300'}`}
-                  title={videoTrack2Locked ? 'Pistă Blocată' : 'Blochează Pista'}
+                  title={videoTrack2Locked ? (lang === 'ro' ? 'Pistă Blocată' : 'Track Locked') : (lang === 'ro' ? 'Blochează Pista' : 'Lock Track')}
                 >
                   {videoTrack2Locked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
                 </button>
@@ -325,7 +413,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
             {/* Track Content Lane */}
             <div className="flex-1 bg-slate-950 rounded h-10 border border-slate-800/80 relative overflow-hidden flex items-center px-2">
               <div className="w-2/5 h-7 rounded bg-rose-900/70 border border-rose-500/60 flex items-center px-3 gap-2 text-xs text-rose-100 ml-[25%] shadow">
-                <span className="font-bold">Burtieră_Elev_Nume.png</span>
+                <span className="font-bold">{lang === 'ro' ? 'Burtieră_Elev_Nume.png' : 'LowerThird_Student_Name.png'}</span>
                 <span className="text-[10px] text-rose-300 font-mono">(Overlay Alpha)</span>
               </div>
             </div>
@@ -346,7 +434,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     setVideoTrack1Visible(!videoTrack1Visible);
                   }}
                   className={`p-1 rounded cursor-pointer ${videoTrack1Visible ? 'text-slate-300 hover:text-white' : 'text-rose-500 bg-rose-950/50'}`}
-                  title={videoTrack1Visible ? 'Ascunde Pista 1' : 'Arată Pista 1'}
+                  title={videoTrack1Visible ? (lang === 'ro' ? 'Ascunde Pista 1' : 'Hide Track 1') : (lang === 'ro' ? 'Arată Pista 1' : 'Show Track 1')}
                 >
                   {videoTrack1Visible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                 </button>
@@ -357,7 +445,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     setVideoTrack1Locked(!videoTrack1Locked);
                   }}
                   className={`p-1 rounded cursor-pointer ${videoTrack1Locked ? 'text-amber-400 bg-amber-950/40' : 'text-slate-500 hover:text-slate-300'}`}
-                  title={videoTrack1Locked ? 'Pistă Blocată' : 'Blochează Pista'}
+                  title={videoTrack1Locked ? (lang === 'ro' ? 'Pistă Blocată' : 'Track Locked') : (lang === 'ro' ? 'Blochează Pista' : 'Lock Track')}
                 >
                   {videoTrack1Locked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
                 </button>
@@ -367,11 +455,11 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
             {/* Track Content Lane */}
             <div className="flex-1 bg-slate-950 rounded h-10 border border-slate-800/80 relative overflow-hidden flex items-center gap-1 px-1">
               <div className="flex-1 h-7 rounded bg-sky-950/80 border border-sky-600/50 flex items-center px-3 gap-2 text-xs text-sky-200">
-                <span className="font-bold">Cadru1_Curte_Scoala.mp4</span>
+                <span className="font-bold">{lang === 'ro' ? 'Cadru1_Curte_Scoala.mp4' : 'Clip1_School_Yard.mp4'}</span>
                 <span className="text-[10px] text-sky-400 font-mono">(1080p 30fps)</span>
               </div>
               <div className="flex-1 h-7 rounded bg-indigo-950/80 border border-indigo-600/50 flex items-center px-3 gap-2 text-xs text-indigo-200">
-                <span className="font-bold">Cadru2_Interviu_Laborator.mp4</span>
+                <span className="font-bold">{lang === 'ro' ? 'Cadru2_Interviu_Laborator.mp4' : 'Clip2_Lab_Interview.mp4'}</span>
               </div>
             </div>
           </div>
@@ -391,7 +479,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     setAudioTrack1Muted(!audioTrack1Muted);
                   }}
                   className={`p-1 rounded cursor-pointer ${audioTrack1Muted ? 'text-rose-500 bg-rose-950/50' : 'text-slate-300 hover:text-white'}`}
-                  title={audioTrack1Muted ? 'Activează Sunetul' : 'Oprește Sunetul (Mute)'}
+                  title={audioTrack1Muted ? (lang === 'ro' ? 'Activează Sunetul' : 'Unmute Audio') : (lang === 'ro' ? 'Oprește Sunetul (Mute)' : 'Mute Audio')}
                 >
                   {audioTrack1Muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
                 </button>
@@ -403,7 +491,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     value={audioTrack1Volume}
                     onChange={(e) => setAudioTrack1Volume(Number(e.target.value))}
                     className="w-12 h-1 accent-pink-500 cursor-pointer"
-                    title={`Volum Dialog: ${audioTrack1Volume}%`}
+                    title={`${lang === 'ro' ? 'Volum Dialog:' : 'Dialogue Volume:'} ${audioTrack1Volume}%`}
                   />
                   <span className="text-[9px] font-mono text-slate-400 w-6">{audioTrack1Volume}%</span>
                 </div>
@@ -413,8 +501,8 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
             {/* Track Content Lane */}
             <div className="flex-1 bg-slate-950 rounded h-10 border border-slate-800/80 relative overflow-hidden flex items-center px-1">
               <div className="w-3/5 h-7 rounded bg-pink-950/70 border border-pink-500/50 flex items-center px-3 gap-2 text-xs text-pink-200 ml-[30%]">
-                <span className="font-bold">Voce_Interviu_Elev.wav</span>
-                <span className="text-[10px] text-pink-400 font-mono">(Voce Principală)</span>
+                <span className="font-bold">{lang === 'ro' ? 'Voce_Interviu_Elev.wav' : 'Voice_Student_Interview.wav'}</span>
+                <span className="text-[10px] text-pink-400 font-mono">({lang === 'ro' ? 'Voce Principală' : 'Primary Dialogue'})</span>
               </div>
             </div>
           </div>
@@ -434,7 +522,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     setAudioTrack2Muted(!audioTrack2Muted);
                   }}
                   className={`p-1 rounded cursor-pointer ${audioTrack2Muted ? 'text-rose-500 bg-rose-950/50' : 'text-slate-300 hover:text-white'}`}
-                  title={audioTrack2Muted ? 'Activează Muzica' : 'Oprește Muzica'}
+                  title={audioTrack2Muted ? (lang === 'ro' ? 'Activează Muzica' : 'Unmute Music') : (lang === 'ro' ? 'Oprește Muzica' : 'Mute Music')}
                 >
                   {audioTrack2Muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
                 </button>
@@ -446,7 +534,7 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     value={audioTrack2Volume}
                     onChange={(e) => setAudioTrack2Volume(Number(e.target.value))}
                     className="w-12 h-1 accent-purple-500 cursor-pointer"
-                    title={`Volum Muzică: ${audioTrack2Volume}%`}
+                    title={`${lang === 'ro' ? 'Volum Muzică:' : 'Music Volume:'} ${audioTrack2Volume}%`}
                   />
                   <span className="text-[9px] font-mono text-slate-400 w-6">{audioTrack2Volume}%</span>
                 </div>
@@ -456,8 +544,8 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
             {/* Track Content Lane */}
             <div className="flex-1 bg-slate-950 rounded h-10 border border-slate-800/80 relative overflow-hidden flex items-center px-1">
               <div className="w-full h-7 rounded bg-purple-950/70 border border-purple-500/50 flex items-center px-3 gap-2 text-xs text-purple-200">
-                <span className="font-bold">Muzica_Ambientala_CC_BY.mp3</span>
-                <span className="text-[10px] text-purple-400 font-mono">(Muzică de fundal ducked)</span>
+                <span className="font-bold">{lang === 'ro' ? 'Muzica_Ambientala_CC_BY.mp3' : 'Ambient_Music_CC_BY.mp3'}</span>
+                <span className="text-[10px] text-purple-400 font-mono">({lang === 'ro' ? 'Muzică de fundal ducked' : 'Ducked background bed'})</span>
               </div>
             </div>
           </div>
@@ -468,19 +556,37 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-6">
         <div className="flex items-center gap-2 text-rose-400 font-mono text-xs uppercase tracking-wider">
           <HelpCircle className="w-4 h-4" />
-          <span>Verificare Pedagogică • Testul Pistelor VideoPad (Manual pag. 38–39)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Verificare Pedagogică • Testul Pistelor VideoPad (Manual pag. 38–39)'
+              : 'Pedagogical Check • VideoPad Tracks Test (Textbook pp. 38–39)'}
+          </span>
         </div>
 
         {/* Q1 */}
         <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 flex flex-col gap-3">
           <div className="font-semibold text-sm text-white">
-            1. Dacă plasezi un titlu text pe Video Track 2 și un cadru video cu școala pe Video Track 1, ce se va vedea pe ecranul final?
+            {lang === 'ro'
+              ? '1. Dacă plasezi un titlu text pe Video Track 2 și un cadru video cu școala pe Video Track 1, ce se va vedea pe ecranul final?'
+              : '1. If you place title text on Video Track 2 and school footage on Video Track 1, what appears on the final display?'}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Doar cadrul cu școala, deoarece Video Track 1 are mereu prioritate absolută.' },
-              { id: 'B', text: 'Titlul text plutind deasupra cadrului cu școala, deoarece pista superioară (V2) se suprapune peste pista inferioară (V1).' },
-              { id: 'C', text: 'Un ecran complet negru, deoarece două clipuri video pe piste diferite intră în conflict.' }
+              {
+                id: 'A',
+                textRo: 'Doar cadrul cu școala, deoarece Video Track 1 are mereu prioritate absolută.',
+                textEn: 'Only the school footage, because Video Track 1 always takes absolute priority.',
+              },
+              {
+                id: 'B',
+                textRo: 'Titlul text plutind deasupra cadrului cu școala, deoarece pista superioară (V2) se suprapune peste pista inferioară (V1).',
+                textEn: 'The title text floating atop the school footage, because upper tracks (V2) layer above lower tracks (V1).',
+              },
+              {
+                id: 'C',
+                textRo: 'Un ecran complet negru, deoarece două clipuri video pe piste diferite intră în conflict.',
+                textEn: 'A completely black screen, because two video clips on separate tracks conflict.',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -493,21 +599,27 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } ${q1Cooldown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span className="font-bold text-rose-400">Opțiunea {opt.id}</span>
-                <span>{opt.text}</span>
+                <span className="font-bold text-rose-400">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}` : `Option ${opt.id}`}
+                </span>
+                <span>{lang === 'ro' ? opt.textRo : opt.textEn}</span>
               </button>
             ))}
           </div>
           {q1Cooldown > 0 && (
             <div className="text-xs text-rose-400 font-mono flex items-center gap-2 mt-1 animate-pulse">
               <AlertTriangle className="w-4 h-4" />
-              <span>{q1ErrorMsg} (Așteaptă {q1Cooldown}s pentru a reîncerca)</span>
+              <span>{q1ErrorMsg} ({lang === 'ro' ? `Așteaptă ${q1Cooldown}s pentru a reîncerca` : `Wait ${q1Cooldown}s to retry`})</span>
             </div>
           )}
           {q1Answer === 'B' && (
             <div className="text-xs text-emerald-400 font-mono flex items-center gap-2 mt-1">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Corect! VideoPad respectă regula straturilor (layering): pista 2 se așază peste pista 1.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! VideoPad respectă regula straturilor (layering): pista 2 se așază peste pista 1.'
+                  : 'Correct! VideoPad respects visual layering: track 2 sits directly atop track 1.'}
+              </span>
             </div>
           )}
         </div>
@@ -515,13 +627,27 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
         {/* Q2 */}
         <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 flex flex-col gap-3">
           <div className="font-semibold text-sm text-white">
-            2. Cum procedăm profesional când avem un reportaj în care vorbește un elev pe Audio Track 1 și avem muzică pe Audio Track 2?
+            {lang === 'ro'
+              ? '2. Cum procedăm profesional când avem un reportaj în care vorbește un elev pe Audio Track 1 și avem muzică pe Audio Track 2?'
+              : '2. How do we professionally mix audio when student dialogue is on Audio Track 1 and music is on Audio Track 2?'}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Lăsăm muzica la 100% și vocea la 100%, pentru ca ambele să aibă putere maximă.' },
-              { id: 'B', text: 'Ștergem complet muzica, deoarece un videoclip nu poate conține niciodată două piste audio.' },
-              { id: 'C', text: 'Aplicăm tehnica de Ducking: reducem muzica la 20–30% pe durata vorbirii, pentru ca vocea să fie clar inteligibilă.' }
+              {
+                id: 'A',
+                textRo: 'Lăsăm muzica la 100% și vocea la 100%, pentru ca ambele să aibă putere maximă.',
+                textEn: 'Leave music at 100% and speech at 100% so both blast at maximum power.',
+              },
+              {
+                id: 'B',
+                textRo: 'Ștergem complet muzica, deoarece un videoclip nu poate conține niciodată două piste audio.',
+                textEn: 'Completely delete music, because videos can never contain dual audio tracks.',
+              },
+              {
+                id: 'C',
+                textRo: 'Aplicăm tehnica de Ducking: reducem muzica la 20–30% pe durata vorbirii, pentru ca vocea să fie clar inteligibilă.',
+                textEn: 'Apply audio ducking: reduce music to 20–30% during speech so dialogue remains pristine and intelligible.',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -534,21 +660,27 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } ${q2Cooldown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span className="font-bold text-rose-400">Opțiunea {opt.id}</span>
-                <span>{opt.text}</span>
+                <span className="font-bold text-rose-400">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}` : `Option ${opt.id}`}
+                </span>
+                <span>{lang === 'ro' ? opt.textRo : opt.textEn}</span>
               </button>
             ))}
           </div>
           {q2Cooldown > 0 && (
             <div className="text-xs text-rose-400 font-mono flex items-center gap-2 mt-1 animate-pulse">
               <AlertTriangle className="w-4 h-4" />
-              <span>{q2ErrorMsg} (Așteaptă {q2Cooldown}s pentru a reîncerca)</span>
+              <span>{q2ErrorMsg} ({lang === 'ro' ? `Așteaptă ${q2Cooldown}s pentru a reîncerca` : `Wait ${q2Cooldown}s to retry`})</span>
             </div>
           )}
           {q2Answer === 'C' && (
             <div className="text-xs text-emerald-400 font-mono flex items-center gap-2 mt-1">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Corect! Ducking-ul audio garantează că ascultătorul înțelege clar mesajul vorbit fără a fi distras.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! Ducking-ul audio garantează că ascultătorul înțelege clar mesajul vorbit fără a fi distras.'
+                  : 'Correct! Audio ducking guarantees viewers easily comprehend spoken dialogue without distraction.'}
+              </span>
             </div>
           )}
         </div>
@@ -556,13 +688,27 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
         {/* Q3 */}
         <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 flex flex-col gap-3">
           <div className="font-semibold text-sm text-white">
-            3. De ce este recomandat să folosim pictograma cu Lacăt (Lock) pe o pistă după ce am terminat aranjarea acesteia?
+            {lang === 'ro'
+              ? '3. De ce este recomandat să folosim pictograma cu Lacăt (Lock) pe o pistă după ce am terminat aranjarea acesteia?'
+              : '3. Why is it recommended to use the Lock icon on a track after completing its arrangement?'}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Pentru a preveni deplasarea, tăierea sau ștergerea accidentală a clipurilor în timp ce edităm alte piste.' },
-              { id: 'B', text: 'Pentru a cripta fișierul video cu o parolă secretă împotriva piratării.' },
-              { id: 'C', text: 'Pentru a opri automat sunetul de pe toate boxele calculatorului.' }
+              {
+                id: 'A',
+                textRo: 'Pentru a preveni deplasarea, tăierea sau ștergerea accidentală a clipurilor în timp ce edităm alte piste.',
+                textEn: 'To prevent accidental movement, slicing, or deletion of clips while working on other tracks.',
+              },
+              {
+                id: 'B',
+                textRo: 'Pentru a cripta fișierul video cu o parolă secretă împotriva piratării.',
+                textEn: 'To encrypt the video with a secret password against piracy.',
+              },
+              {
+                id: 'C',
+                textRo: 'Pentru a opri automat sunetul de pe toate boxele calculatorului.',
+                textEn: 'To automatically mute all PC speakers.',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -575,21 +721,27 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } ${q3Cooldown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span className="font-bold text-rose-400">Opțiunea {opt.id}</span>
-                <span>{opt.text}</span>
+                <span className="font-bold text-rose-400">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}` : `Option ${opt.id}`}
+                </span>
+                <span>{lang === 'ro' ? opt.textRo : opt.textEn}</span>
               </button>
             ))}
           </div>
           {q3Cooldown > 0 && (
             <div className="text-xs text-rose-400 font-mono flex items-center gap-2 mt-1 animate-pulse">
               <AlertTriangle className="w-4 h-4" />
-              <span>{q3ErrorMsg} (Așteaptă {q3Cooldown}s pentru a reîncerca)</span>
+              <span>{q3ErrorMsg} ({lang === 'ro' ? `Așteaptă ${q3Cooldown}s pentru a reîncerca` : `Wait ${q3Cooldown}s to retry`})</span>
             </div>
           )}
           {q3Answer === 'A' && (
             <div className="text-xs text-emerald-400 font-mono flex items-center gap-2 mt-1">
               <CheckCircle2 className="w-4 h-4" />
-              <span>Corect! Blocarea pistelor finalizate este o practică esențială pentru a evita decalarea asincronă a sunetului de imagine.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! Blocarea pistelor finalizate este o practică esențială pentru a evita decalarea asincronă a sunetului de imagine.'
+                  : 'Correct! Locking completed tracks is standard practice to safeguard against accidental sync slips.'}
+              </span>
             </div>
           )}
         </div>
@@ -599,7 +751,11 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900 border border-slate-800">
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Completează cele 3 întrebări corect pentru a debloca Nivelul 3.</span>
+          <span>
+            {lang === 'ro'
+              ? 'Completează cele 3 întrebări corect pentru a debloca Nivelul 3.'
+              : 'Answer all 3 questions correctly to unlock Level 3.'}
+          </span>
         </div>
 
         <button
@@ -612,7 +768,11 @@ export const V1Level2_MultitrackTimeline: React.FC<V1Level2Props> = ({ onPass })
               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
           }`}
         >
-          <span>Finalizează Nivelul 2 & Mergi la Tăieri Split</span>
+          <span>
+            {lang === 'ro'
+              ? 'Finalizează Nivelul 2 & Mergi la Tăieri Split'
+              : 'Complete Level 2 & Proceed to Split Edits'}
+          </span>
           <CheckCircle2 className="w-4 h-4" />
         </button>
       </div>

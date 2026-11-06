@@ -110,19 +110,29 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-mono font-bold border border-cyan-500/40">
               <Ruler className="w-3.5 h-3.5 text-cyan-400" />
-              <span>NIVELUL 3 DIN 7 • METRICA PARAGRAFELOR & RIGLA WORD</span>
+              <span>
+                {lang === 'en'
+                  ? 'LEVEL 3 OF 7 • PARAGRAPH METRICS & WORD RULER'
+                  : 'NIVELUL 3 DIN 7 • METRICA PARAGRAFELOR & RIGLA WORD'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
-              Rigla Orizontală, Indentare & Aliniere Justified
+              {lang === 'en'
+                ? 'Horizontal Ruler, Indentation & Justified Alignment'
+                : 'Rigla Orizontală, Indentare & Aliniere Justified'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              La nivel de paragraf, tehnoredactorul digital stăpânește marcajele riglei: alineatul standard de 1.25 cm, alinierea armonioasă Justify (Ctrl+J) și spațierea între paragrafe fără tastarea haotică de rânduri goale cu Enter.
+              {lang === 'en'
+                ? 'At the paragraph level, digital typesetters command ruler markers: the standard 1.25 cm first-line indent, harmonious Justify alignment (Ctrl+J), and paragraph spacing without chaotic repeated Enter keystrokes.'
+                : 'La nivel de paragraf, tehnoredactorul digital stăpânește marcajele riglei: alineatul standard de 1.25 cm, alinierea armonioasă Justify (Ctrl+J) și spațierea între paragrafe fără tastarea haotică de rânduri goale cu Enter.'}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="px-4 py-2 rounded-2xl bg-slate-900/80 border border-cyan-500/40 text-right">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block">Punctaj Nivel 3</span>
+              <span className="text-[11px] font-mono uppercase text-slate-400 block">
+                {lang === 'en' ? 'Level 3 Score' : 'Punctaj Nivel 3'}
+              </span>
               <span className="text-2xl font-black font-mono text-cyan-400">{totalScore} / 100 XP</span>
             </div>
           </div>
@@ -137,16 +147,22 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
               <Ruler className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Simulatorul Interactiv: Rigla Digitală & Panoul de Paragraf</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Interactive Simulator: Digital Ruler & Paragraph Panel'
+                  : 'Simulatorul Interactiv: Rigla Digitală & Panoul de Paragraf'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Atinge specificațiile academice cerute pentru referate: Alineat 1.25 cm, Justify, Interlinie 1.5, Spațiu 6 pt.
+                {lang === 'en'
+                  ? 'Achieve academic paper specifications: 1.25 cm First Line Indent, Justify, 1.5 Line Spacing, 6 pt Space After.'
+                  : 'Atinge specificațiile academice cerute pentru referate: Alineat 1.25 cm, Justify, Interlinie 1.5, Spațiu 6 pt.'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono text-cyan-300 bg-cyan-950/80 px-3 py-1.5 rounded-full border border-cyan-500/40">
-              Obiective atinse: <b className="text-white">{targetGoalsMetCount} / 4</b>
+              {lang === 'en' ? 'Goals met:' : 'Obiective atinse:'} <b className="text-white">{targetGoalsMetCount} / 4</b>
             </span>
           </div>
         </div>
@@ -160,8 +176,14 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                 : 'bg-slate-950 border-slate-800 text-slate-400'
             }`}
           >
-            <div className="font-bold mb-0.5">1. Alineat (Indent)</div>
-            <div>{isTargetIndentMet ? '✓ 1.25 cm corect' : 'Țintă: 1.25 cm'}</div>
+            <div className="font-bold mb-0.5">
+              {lang === 'en' ? '1. First Line Indent' : '1. Alineat (Indent)'}
+            </div>
+            <div>
+              {isTargetIndentMet
+                ? lang === 'en' ? '✓ 1.25 cm correct' : '✓ 1.25 cm corect'
+                : lang === 'en' ? 'Target: 1.25 cm' : 'Țintă: 1.25 cm'}
+            </div>
           </div>
 
           <div
@@ -171,8 +193,14 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                 : 'bg-slate-950 border-slate-800 text-slate-400'
             }`}
           >
-            <div className="font-bold mb-0.5">2. Aliniere Text</div>
-            <div>{isTargetAlignMet ? '✓ Justify activ' : 'Țintă: Justify (Ctrl+J)'}</div>
+            <div className="font-bold mb-0.5">
+              {lang === 'en' ? '2. Text Alignment' : '2. Aliniere Text'}
+            </div>
+            <div>
+              {isTargetAlignMet
+                ? lang === 'en' ? '✓ Justify active' : '✓ Justify activ'
+                : lang === 'en' ? 'Target: Justify (Ctrl+J)' : 'Țintă: Justify (Ctrl+J)'}
+            </div>
           </div>
 
           <div
@@ -182,8 +210,14 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                 : 'bg-slate-950 border-slate-800 text-slate-400'
             }`}
           >
-            <div className="font-bold mb-0.5">3. Interlinie (Rânduri)</div>
-            <div>{isTargetSpacingMet ? '✓ 1.5 Linii' : 'Țintă: 1.5 Linii'}</div>
+            <div className="font-bold mb-0.5">
+              {lang === 'en' ? '3. Line Spacing' : '3. Interlinie (Rânduri)'}
+            </div>
+            <div>
+              {isTargetSpacingMet
+                ? lang === 'en' ? '✓ 1.5 Lines' : '✓ 1.5 Linii'
+                : lang === 'en' ? 'Target: 1.5 Lines' : 'Țintă: 1.5 Linii'}
+            </div>
           </div>
 
           <div
@@ -193,15 +227,21 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                 : 'bg-slate-950 border-slate-800 text-slate-400'
             }`}
           >
-            <div className="font-bold mb-0.5">4. Spațiu După Paragraf</div>
-            <div>{isTargetSpaceAfterMet ? '✓ 6 pt activ' : 'Țintă: 6 pt'}</div>
+            <div className="font-bold mb-0.5">
+              {lang === 'en' ? '4. Space After' : '4. Spațiu După Paragraf'}
+            </div>
+            <div>
+              {isTargetSpaceAfterMet
+                ? lang === 'en' ? '✓ 6 pt active' : '✓ 6 pt activ'
+                : lang === 'en' ? 'Target: 6 pt' : 'Țintă: 6 pt'}
+            </div>
           </div>
         </div>
 
         {/* Word-like Ruler Component */}
         <div className="bg-slate-950 rounded-2xl border border-slate-800 p-4 space-y-3">
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
-            <span>Rigla Orizontală Word (cm)</span>
+            <span>{lang === 'en' ? 'Horizontal Word Ruler (cm)' : 'Rigla Orizontală Word (cm)'}</span>
             <span className="text-cyan-400 font-bold">First Line Indent: {firstLineIndent.toFixed(2)} cm</span>
           </div>
 
@@ -232,7 +272,7 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
             <div
               className="absolute top-0 bottom-0 w-0.5 bg-amber-400/60 pointer-events-none"
               style={{ left: 'calc(16px + (1.25 / 16) * (100% - 32px))' }}
-              title="Obiectiv: 1.25 cm"
+              title={lang === 'en' ? 'Target: 1.25 cm' : 'Obiectiv: 1.25 cm'}
             >
               <div className="absolute -top-1 -left-1 text-[9px] font-mono bg-amber-500 text-slate-950 px-1 rounded-sm">
                 1.25
@@ -250,7 +290,9 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
 
           {/* Quick Buttons for First Line Indent */}
           <div className="flex items-center gap-2 pt-1">
-            <span className="text-xs font-mono text-slate-400">Selectează alineat:</span>
+            <span className="text-xs font-mono text-slate-400">
+              {lang === 'en' ? 'Select indent:' : 'Selectează alineat:'}
+            </span>
             {[0, 0.5, 1.0, 1.25, 2.0].map((val) => (
               <button
                 key={val}
@@ -267,7 +309,9 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                {val === 0 ? 'Fără (0 cm)' : `${val} cm${val === 1.25 ? ' ★' : ''}`}
+                {val === 0
+                  ? lang === 'en' ? 'None (0 cm)' : 'Fără (0 cm)'
+                  : `${val} cm${val === 1.25 ? ' ★' : ''}`}
               </button>
             ))}
           </div>
@@ -277,13 +321,15 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Alignment */}
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-            <span className="text-xs font-mono uppercase font-bold text-slate-400 block">Aliniere Paragraf</span>
+            <span className="text-xs font-mono uppercase font-bold text-slate-400 block">
+              {lang === 'en' ? 'Paragraph Alignment' : 'Aliniere Paragraf'}
+            </span>
             <div className="grid grid-cols-4 gap-1.5">
               {[
-                { id: 'left', icon: AlignLeft, label: 'Stânga' },
-                { id: 'center', icon: AlignCenter, label: 'Centru' },
-                { id: 'right', icon: AlignRight, label: 'Dreapta' },
-                { id: 'justify', icon: AlignJustify, label: 'Justify' },
+                { id: 'left', icon: AlignLeft, labelRo: 'Stânga', labelEn: 'Left' },
+                { id: 'center', icon: AlignCenter, labelRo: 'Centru', labelEn: 'Center' },
+                { id: 'right', icon: AlignRight, labelRo: 'Dreapta', labelEn: 'Right' },
+                { id: 'justify', icon: AlignJustify, labelRo: 'Justify', labelEn: 'Justify' },
               ].map((btn) => {
                 const Icon = btn.icon;
                 const isSelected = alignment === btn.id;
@@ -302,10 +348,10 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                           : 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
                         : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                     }`}
-                    title={btn.label}
+                    title={lang === 'en' ? btn.labelEn : btn.labelRo}
                   >
                     <Icon className="w-4 h-4" />
-                    <span className="text-[10px] font-mono">{btn.label}</span>
+                    <span className="text-[10px] font-mono">{lang === 'en' ? btn.labelEn : btn.labelRo}</span>
                   </button>
                 );
               })}
@@ -315,7 +361,8 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
           {/* Line Spacing */}
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
             <span className="text-xs font-mono uppercase font-bold text-slate-400 block">
-              Interlinie (Line Spacing): <b className="text-cyan-400">{lineSpacing}x</b>
+              {lang === 'en' ? 'Line Spacing:' : 'Interlinie (Line Spacing):'}{' '}
+              <b className="text-cyan-400">{lineSpacing}x</b>
             </span>
             <div className="grid grid-cols-4 gap-1.5">
               {[1.0, 1.15, 1.5, 2.0].map((spacing) => (
@@ -343,7 +390,8 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
           {/* Space After */}
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
             <span className="text-xs font-mono uppercase font-bold text-slate-400 block">
-              Spațiu După Paragraf: <b className="text-cyan-400">{spaceAfter} pt</b>
+              {lang === 'en' ? 'Space After Paragraph:' : 'Spațiu După Paragraf:'}{' '}
+              <b className="text-cyan-400">{spaceAfter} pt</b>
             </span>
             <div className="grid grid-cols-4 gap-1.5">
               {[0, 6, 12, 18].map((pt) => (
@@ -372,7 +420,7 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
         {/* Live Document Canvas */}
         <div className="p-8 rounded-2xl bg-white text-slate-900 shadow-2xl space-y-4 min-h-[220px] font-serif border border-slate-300">
           <div className="text-xs font-sans font-bold uppercase tracking-wider text-slate-400 pb-2 border-b border-slate-200">
-            Previzualizare Pagină A4 (Microsoft Word)
+            {lang === 'en' ? 'A4 Page Preview (Microsoft Word)' : 'Previzualizare Pagină A4 (Microsoft Word)'}
           </div>
 
           {/* Paragraph 1 */}
@@ -385,7 +433,9 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
             }}
             className="text-sm sm:text-base text-slate-800"
           >
-            Tehnoredactarea modernă reprezintă arta de a echilibra frumusețea tipografică cu lizibilitatea matematică a textului. În documentele academice și oficiale din România, fiecare paragraf nou debutează cu un alineat ferm de 1.25 cm, iar corpul textului este aliniat la ambele capete pentru a crea blocuri regulate de lectură.
+            {lang === 'en'
+              ? 'Modern document typography is the craft of balancing visual elegance with mathematical legibility. In formal and academic papers, every new paragraph begins with a distinct 1.25 cm first-line indent, and body text is justified across both margins to produce uniform, structured reading blocks.'
+              : 'Tehnoredactarea modernă reprezintă arta de a echilibra frumusețea tipografică cu lizibilitatea matematică a textului. În documentele academice și oficiale din România, fiecare paragraf nou debutează cu un alineat ferm de 1.25 cm, iar corpul textului este aliniat la ambele capete pentru a crea blocuri regulate de lectură.'}
           </p>
 
           {/* Paragraph 2 */}
@@ -398,7 +448,9 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
             }}
             className="text-sm sm:text-base text-slate-800"
           >
-            Distanța verticală de 6 sau 12 puncte configurată la opțiunea „Spațiu după paragraf” separă vizual ideile fără a forța introducerea unor linii albe suplimentare cu tasta Enter. Astfel, structura documentului rămâne curată, fluidă și gata de tipar.
+            {lang === 'en'
+              ? 'A vertical distance of 6 or 12 points configured under "Spacing After" separates concepts cleanly without cluttering the page with empty Enter linebreaks. The resulting layout remains fluid, organized, and print-ready.'
+              : 'Distanța verticală de 6 sau 12 puncte configurată la opțiunea „Spațiu după paragraf” separă vizual ideile fără a forța introducerea unor linii albe suplimentare cu tasta Enter. Astfel, structura documentului rămâne curată, fluidă și gata de tipar.'}
           </p>
         </div>
       </div>
@@ -410,8 +462,16 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificarea Cunoștințelor: Metrica Paragrafelor</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări despre riglă și spațiere.</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Knowledge Check: Paragraph Metrics'
+                : 'Verificarea Cunoștințelor: Metrica Paragrafelor'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 questions about rulers and spacing correctly.'
+                : 'Răspunde corect la cele 3 întrebări despre riglă și spațiere.'}
+            </p>
           </div>
         </div>
 
@@ -419,7 +479,9 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Ce marcaj de pe rigla orizontală Word reglează exclusiv primul rând al fiecărui paragraf (alineatul)?
+              {lang === 'en'
+                ? '1. Which marker on the Word horizontal ruler adjusts only the first line of each paragraph (indentation)?'
+                : '1. Ce marcaj de pe rigla orizontală Word reglează exclusiv primul rând al fiecărui paragraf (alineatul)?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
@@ -428,19 +490,25 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
             {[
               {
                 id: 'top_triangle',
-                text: 'Triunghiul superior orientat în jos (First Line Indent), poziționat standard la 1.25 cm.',
+                textRo:
+                  'Triunghiul superior orientat în jos (First Line Indent), poziționat standard la 1.25 cm.',
+                textEn:
+                  'The downward-pointing top triangle (First Line Indent), positioned by default at 1.25 cm.',
               },
               {
                 id: 'bottom_square',
-                text: 'Pătrățelul de la bază (Left Indent), care deplasează tot paragraful ca un bloc.',
+                textRo: 'Pătrățelul de la bază (Left Indent), care deplasează tot paragraful ca un bloc.',
+                textEn: 'The bottom square (Left Indent), shifting the entire paragraph block.',
               },
               {
                 id: 'right_triangle',
-                text: 'Triunghiul din marginea dreaptă (Right Indent).',
+                textRo: 'Triunghiul din marginea dreaptă (Right Indent).',
+                textEn: 'The right margin triangle (Right Indent).',
               },
               {
                 id: 'hanging_triangle',
-                text: 'Triunghiul din mijloc (Hanging Indent) care mută doar rândul al doilea.',
+                textRo: 'Triunghiul din mijloc (Hanging Indent) care mută doar rândul al doilea.',
+                textEn: 'The middle upward triangle (Hanging Indent) moving subsequent lines.',
               },
             ].map((option) => (
               <button
@@ -456,18 +524,26 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Privește cele trei piese din stânga riglei: sus e un triunghi orientat în jos, la mijloc un triunghi orientat în sus, iar jos un dreptunghi."
+            hint={
+              lang === 'en'
+                ? 'Look at the triad of markers on the left ruler: top downward triangle, middle upward triangle, and bottom rectangle.'
+                : 'Privește cele trei piese din stânga riglei: sus e un triunghi orientat în jos, la mijloc un triunghi orientat în sus, iar jos un dreptunghi.'
+            }
           />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Triunghiul superior (First Line Indent) controlează exclusiv deplasarea primului rând din paragraf, fără a afecta restul rândurilor."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! The top triangle (First Line Indent) exclusively governs the offset of the first line of a paragraph without altering subsequent body lines.'
+                  : 'Corect! Triunghiul superior (First Line Indent) controlează exclusiv deplasarea primului rând din paragraf, fără a afecta restul rândurilor.'
+              }
             />
           )}
         </div>
@@ -476,7 +552,9 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. De ce este o greșeală gravă să apeși tasta Enter de mai multe ori pentru a crea distanță între paragrafe?
+              {lang === 'en'
+                ? '2. Why is pressing the Enter key multiple times to space out paragraphs considered a severe typesetting error?'
+                : '2. De ce este o greșeală gravă să apeși tasta Enter de mai multe ori pentru a crea distanță între paragrafe?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
@@ -485,19 +563,25 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
             {[
               {
                 id: 'spacing_after_rule',
-                text: 'Creează paragrafe goale parazite (simbolul ¶) care decalază titlurile și paginile la orice modificare ulterioară; soluția corectă este setarea opțiunii „Spațiu după” (Spacing After).',
+                textRo:
+                  'Creează paragrafe goale parazite (simbolul ¶) care decalază titlurile și paginile la orice modificare ulterioară; soluția corectă este setarea opțiunii „Spațiu după” (Spacing After).',
+                textEn:
+                  'It generates ghost paragraph marks (¶) that disrupt headings and page breaks upon any edit; the correct solution is setting "Spacing After" in paragraph options.',
               },
               {
                 id: 'pc_crash',
-                text: 'Aplicația Microsoft Word se blochează dacă documentul are mai mult de trei simboluri Enter.',
+                textRo: 'Aplicația Microsoft Word se blochează dacă documentul are mai mult de trei simboluri Enter.',
+                textEn: 'Microsoft Word crashes if a document contains more than three Enter symbols.',
               },
               {
                 id: 'font_change',
-                text: 'Tasta Enter schimbă automat fontul textului din Times New Roman în Comic Sans.',
+                textRo: 'Tasta Enter schimbă automat fontul textului din Times New Roman în Comic Sans.',
+                textEn: 'Pressing Enter automatically switches the font from Times New Roman to Comic Sans.',
               },
               {
                 id: 'printer_jam',
-                text: 'Imprimanta refuză fizic să tragă foaia de hârtie dacă detectează un Enter gol.',
+                textRo: 'Imprimanta refuză fizic să tragă foaia de hârtie dacă detectează un Enter gol.',
+                textEn: 'The printer physically jams if it detects an empty Enter break.',
               },
             ].map((option) => (
               <button
@@ -513,18 +597,26 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Dacă apeși Enter, inserezi un paragraf complet gol. Dacă adaugi două rânduri mai sus, un titlu poate aluneca greșit pe fundul unei pagini!"
+            hint={
+              lang === 'en'
+                ? 'Hitting Enter creates an empty paragraph. When you add or delete lines earlier in the document, headings can get pushed awkwardly to the bottom of a page!'
+                : 'Dacă apeși Enter, inserezi un paragraf complet gol. Dacă adaugi două rânduri mai sus, un titlu poate aluneca greșit pe fundul unei pagini!'
+            }
           />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Foarte adevărat! Tehnoredactorii profesioniști setează spațierea din proprietățile de paragraf (Spacing After: 6pt sau 12pt). Enter se folosește strict pentru trecerea la o idee nouă."
+              explanation={
+                lang === 'en'
+                  ? 'Very true! Professional typesetters control paragraph separation through paragraph attributes (Spacing After: 6pt or 12pt). Enter is strictly reserved for beginning a new thought.'
+                  : 'Foarte adevărat! Tehnoredactorii profesioniști setează spațierea din proprietățile de paragraf (Spacing After: 6pt sau 12pt). Enter se folosește strict pentru trecerea la o idee nouă.'
+              }
             />
           )}
         </div>
@@ -533,14 +625,16 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Care este scurtătura de tastatură universală pentru alinierea textului Justified (stânga-dreapta)?
+              {lang === 'en'
+                ? '3. What is the universal keyboard shortcut for Justified (flush left and right) alignment?'
+                : '3. Care este scurtătura de tastatură universală pentru alinierea textului Justified (stânga-dreapta)?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'ctrl_j', text: 'Ctrl + J (de la Justify)' },
+              { id: 'ctrl_j', text: 'Ctrl + J (Justify)' },
               { id: 'ctrl_l', text: 'Ctrl + L (Left)' },
               { id: 'ctrl_e', text: 'Ctrl + E (Center)' },
               { id: 'ctrl_r', text: 'Ctrl + R (Right)' },
@@ -564,12 +658,20 @@ export const W1Level3_ParagraphMetrics: React.FC<W1Level3Props> = ({ onCompleteP
           </div>
 
           <QuestionHint
-            hint="Ține minte: L vine de la Left, R de la Right, E de la cEnter, iar J de la Justify."
+            hint={
+              lang === 'en'
+                ? 'Remember: L is for Left, R for Right, E for cEnter, and J for Justify.'
+                : 'Ține minte: L vine de la Left, R de la Right, E de la cEnter, iar J de la Justify.'
+            }
           />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Corect! Ctrl + J aplică alinierea Justified instantaneu, distribuind spațiile dintre cuvinte pentru a alinia ambele laturi ale coloanei de text."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! Ctrl + J instantly formats text as Justified, expanding inter-word spacing to align both left and right edges cleanly.'
+                  : 'Corect! Ctrl + J aplică alinierea Justified instantaneu, distribuind spațiile dintre cuvinte pentru a alinia ambele laturi ale coloanei de text.'
+              }
             />
           )}
         </div>

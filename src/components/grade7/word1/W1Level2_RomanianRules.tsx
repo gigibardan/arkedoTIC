@@ -29,7 +29,8 @@ interface CorruptedToken {
   original: string;
   fixed: string;
   type: 'sedilla' | 'punct_space' | 'quotes' | 'parenthesis' | 'hyphen';
-  rule: string;
+  ruleRo: string;
+  ruleEn: string;
 }
 
 export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage }) => {
@@ -42,49 +43,56 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
       original: '"',
       fixed: '„',
       type: 'quotes',
-      rule: 'Ghilimelele românești se deschid jos (forma 99)',
+      ruleRo: 'Ghilimelele românești se deschid jos (forma 99)',
+      ruleEn: 'Romanian quotes open at bottom (99 shape)',
     },
     {
       id: 't2',
       original: 'Şcoala',
       fixed: 'Școala',
       type: 'sedilla',
-      rule: 'Diacritică cu virgulă dedesubt (Ș), nu sedilă turcească (Ş)',
+      ruleRo: 'Diacritică cu virgulă dedesubt (Ș), nu sedilă turcească (Ş)',
+      ruleEn: 'Comma-below diacritic (Ș), not Turkish cedilla (Ş)',
     },
     {
       id: 't3',
       original: 'Românească "',
       fixed: 'Românească”',
       type: 'quotes',
-      rule: 'Ghilimelele românești se închid sus (forma 99 sus)',
+      ruleRo: 'Ghilimelele românești se închid sus (forma 99 sus)',
+      ruleEn: 'Romanian quotes close at top (99 upper shape)',
     },
     {
       id: 't4',
       original: 'elevii ,profesorii',
       fixed: 'elevii, profesorii',
       type: 'punct_space',
-      rule: 'Virgula se lipește de cuvântul precedent și este urmată de un spațiu',
+      ruleRo: 'Virgula se lipește de cuvântul precedent și este urmată de un spațiu',
+      ruleEn: 'Comma attaches to previous word and is followed by a space',
     },
     {
       id: 't5',
       original: '( o comunitate )',
       fixed: '(o comunitate)',
       type: 'parenthesis',
-      rule: 'Parantezele se lipesc de textul interior fără spații parazite',
+      ruleRo: 'Parantezele se lipesc de textul interior fără spații parazite',
+      ruleEn: 'Parentheses attach to enclosed text without parasitic spaces',
     },
     {
       id: 't6',
       original: 's -au',
       fixed: 's-au',
       type: 'hyphen',
-      rule: 'Cratima de legătură leagă cuvintele fără spații',
+      ruleRo: 'Cratima de legătură leagă cuvintele fără spații',
+      ruleEn: 'Hyphen connects words/syllables without spaces',
     },
     {
       id: 't7',
       original: 'învăţătură',
       fixed: 'învățătură',
       type: 'sedilla',
-      rule: 'Litera ț cere virgulă dedesubt conform standardului SR 13411',
+      ruleRo: 'Litera ț cere virgulă dedesubt conform standardului SR 13411',
+      ruleEn: 'Letter ț requires comma-below under standard SR 13411',
     },
   ];
 
@@ -176,19 +184,29 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-mono font-bold border border-indigo-500/40">
               <SpellCheck className="w-3.5 h-3.5 text-indigo-400" />
-              <span>NIVELUL 2 DIN 7 • REGULILE DE AUR ALE TIPOGRAFIEI ROMÂNEȘTI</span>
+              <span>
+                {lang === 'en'
+                  ? 'LEVEL 2 OF 7 • GOLDEN RULES OF ROMANIAN TYPOGRAPHY'
+                  : 'NIVELUL 2 DIN 7 • REGULILE DE AUR ALE TIPOGRAFIEI ROMÂNEȘTI'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
-              Standardul SR 13411, Diacritice & Ghilimele Românești
+              {lang === 'en'
+                ? 'SR 13411 Standard, Diacritics & Romanian Quotes'
+                : 'Standardul SR 13411, Diacritice & Ghilimele Românești'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              O tehnoredactare de nota 10 respectă normele Academiei Române: diacritice cu virgulă dedesubt (nu sedilă turcească!), semne de punctuație lipite de cuvânt și ghilimele românești „99 jos / 99 sus”.
+              {lang === 'en'
+                ? 'Top-tier typesetting follows Romanian Academy standards: comma-below diacritics (not Turkish cedilla!), punctuation attached directly to preceding word, and standard 99 bottom / 99 top quotation marks.'
+                : 'O tehnoredactare de nota 10 respectă normele Academiei Române: diacritice cu virgulă dedesubt (nu sedilă turcească!), semne de punctuație lipite de cuvânt și ghilimele românești „99 jos / 99 sus”.'}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="px-4 py-2 rounded-2xl bg-slate-900/80 border border-indigo-500/40 text-right">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block">Punctaj Nivel 2</span>
+              <span className="text-[11px] font-mono uppercase text-slate-400 block">
+                {lang === 'en' ? 'Level 2 Score' : 'Punctaj Nivel 2'}
+              </span>
               <span className="text-2xl font-black font-mono text-cyan-400">{totalScore} / 100 XP</span>
             </div>
           </div>
@@ -203,9 +221,15 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
               <SpellCheck className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laboratorul Interactiv: Scanarea & Corectarea Textului Contaminat</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Interactive Lab: Scanning & Fixing Contaminated Text'
+                  : 'Laboratorul Interactiv: Scanarea & Corectarea Textului Contaminat'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Apasă pe fiecare cuvânt marcat în roșu pentru a aplica norma tipografică corectă.
+                {lang === 'en'
+                  ? 'Click on each highlighted token to apply the correct typographical rule.'
+                  : 'Apasă pe fiecare cuvânt marcat în roșu pentru a aplica norma tipografică corectă.'}
               </p>
             </div>
           </div>
@@ -215,7 +239,7 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
               type="button"
               onClick={handleResetTokens}
               className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white border border-slate-700 text-xs font-mono transition cursor-pointer"
-              title="Resetează textul"
+              title={lang === 'en' ? 'Reset text' : 'Resetează textul'}
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -225,7 +249,7 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
               className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold font-mono flex items-center gap-1.5 transition cursor-pointer shadow-md"
             >
               <Wand2 className="w-3.5 h-3.5" />
-              <span>Corectează Automat Tot</span>
+              <span>{lang === 'en' ? 'Auto-Fix All' : 'Corectează Automat Tot'}</span>
             </button>
           </div>
         </div>
@@ -233,9 +257,10 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
         {/* Live Article Text Box */}
         <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
           <div className="flex items-center justify-between text-xs font-mono text-slate-400 pb-2 border-b border-slate-800">
-            <span>Fragment din revista liceului:</span>
+            <span>{lang === 'en' ? 'Excerpt from school magazine:' : 'Fragment din revista liceului:'}</span>
             <span>
-              Erori remediate: <b className="text-cyan-400">{fixedCount} / {initialTokens.length}</b>
+              {lang === 'en' ? 'Errors resolved:' : 'Erori remediate:'}{' '}
+              <b className="text-cyan-400">{fixedCount} / {initialTokens.length}</b>
             </span>
           </div>
 
@@ -330,9 +355,13 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
           <div className="p-4 rounded-2xl bg-indigo-950/60 border border-indigo-500/40 text-indigo-200 text-xs sm:text-sm flex items-start gap-3">
             <Info className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold block text-white mb-0.5">Norma aplicată: {selectedToken.rule}</span>
+              <span className="font-bold block text-white mb-0.5">
+                {lang === 'en' ? 'Applied rule:' : 'Norma aplicată:'}{' '}
+                {lang === 'en' ? selectedToken.ruleEn : selectedToken.ruleRo}
+              </span>
               <span className="text-slate-300 font-mono text-xs">
-                Modificare: <span className="line-through text-rose-400">{selectedToken.original}</span> ➔{' '}
+                {lang === 'en' ? 'Adjustment:' : 'Modificare:'}{' '}
+                <span className="line-through text-rose-400">{selectedToken.original}</span> ➔{' '}
                 <span className="text-emerald-400 font-bold">{selectedToken.fixed}</span>
               </span>
             </div>
@@ -347,8 +376,16 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificarea Cunoștințelor: Norme Tipografice Românești</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări de conformitate editorială.</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Knowledge Check: Romanian Typography Standards'
+                : 'Verificarea Cunoștințelor: Norme Tipografice Românești'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 editorial compliance questions correctly.'
+                : 'Răspunde corect la cele 3 întrebări de conformitate editorială.'}
+            </p>
           </div>
         </div>
 
@@ -356,7 +393,9 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Care este diferența tehnică și vizuală dintre diacriticele corecte românești și cele turcești?
+              {lang === 'en'
+                ? '1. What is the technical and visual difference between correct Romanian diacritics and Turkish ones?'
+                : '1. Care este diferența tehnică și vizuală dintre diacriticele corecte românești și cele turcești?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
@@ -365,19 +404,25 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
             {[
               {
                 id: 'comma_below',
-                text: 'În limba română (SR 13411), literele ș și ț au virgulă dedesubt detașată, pe când în turcă (ş, ţ) au o sedilă lipită de literă.',
+                textRo:
+                  'În limba română (SR 13411), literele ș și ț au virgulă dedesubt detașată, pe când în turcă (ş, ţ) au o sedilă lipită de literă.',
+                textEn:
+                  'In Romanian (SR 13411), letters ș and ț have a detached comma below, whereas Turkish (ş, ţ) has a connected cedilla hook.',
               },
               {
                 id: 'same_thing',
-                text: 'Sunt identice și nu există nicio diferență de codare Unicode sau aspect vizual.',
+                textRo: 'Sunt identice și nu există nicio diferență de codare Unicode sau aspect vizual.',
+                textEn: 'They are identical with zero visual or Unicode distinction.',
               },
               {
                 id: 'cedilla_romanian',
-                text: 'Sedila este standardul oficial românesc din anul 2024, iar virgula a fost retrasă.',
+                textRo: 'Sedila este standardul oficial românesc din anul 2024, iar virgula a fost retrasă.',
+                textEn: 'The cedilla is the official Romanian standard since 2024, and the comma was deprecated.',
               },
               {
                 id: 'only_t',
-                text: 'Doar litera ţ are voie să aibă sedilă, litera ș folosește obligatoriu un punct.',
+                textRo: 'Doar litera ţ are voie să aibă sedilă, litera ș folosește obligatoriu un punct.',
+                textEn: 'Only the letter ţ may feature a cedilla, while ș strictly mandates a dot.',
               },
             ].map((option) => (
               <button
@@ -393,18 +438,26 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Privește cu atenție codul Unicode U+0219 (S with comma below) vs U+015F (S with cedilla). Academia Română cere virgulă!"
+            hint={
+              lang === 'en'
+                ? 'Check Unicode codepoints: U+0219 (S with comma below) vs U+015F (S with cedilla). The Romanian Academy mandates the detached comma!'
+                : 'Privește cu atenție codul Unicode U+0219 (S with comma below) vs U+015F (S with cedilla). Academia Română cere virgulă!'
+            }
           />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Exact! Standardul național SR 13411 impune virgula dedesubt (comma below) pentru caracterele ș și ț. Sedila turcească este o greșeală moștenită din sistemele de operare vechi."
+              explanation={
+                lang === 'en'
+                  ? 'Exactly! National standard SR 13411 mandates the detached comma-below for characters ș and ț. The Turkish cedilla was a legacy workaround from obsolete operating systems.'
+                  : 'Exact! Standardul național SR 13411 impune virgula dedesubt (comma below) pentru caracterele ș și ț. Sedila turcească este o greșeală moștenită din sistemele de operare vechi.'
+              }
             />
           )}
         </div>
@@ -413,7 +466,9 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Care este regula universală de tehnoredactare pentru semnele de punctuație (. , ; : ! ?)?
+              {lang === 'en'
+                ? '2. What is the universal typesetting rule for punctuation marks (. , ; : ! ?)?'
+                : '2. Care este regula universală de tehnoredactare pentru semnele de punctuație (. , ; : ! ?)?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
@@ -422,19 +477,25 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
             {[
               {
                 id: 'punct_attached',
-                text: 'Se lipesc întotdeauna de cuvântul din stânga (fără spațiu înainte) și sunt urmate obligatoriu de exact un spațiu.',
+                textRo:
+                  'Se lipesc întotdeauna de cuvântul din stânga (fără spațiu înainte) și sunt urmate obligatoriu de exact un spațiu.',
+                textEn:
+                  'They must always attach directly to the preceding word on the left (no space before) and be followed by exactly one space.',
               },
               {
                 id: 'space_both',
-                text: 'Se pun spații atât înainte, cât și după semnul de punctuație (ex: salut , prieteni).',
+                textRo: 'Se pun spații atât înainte, cât și după semnul de punctuație (ex: salut , prieteni).',
+                textEn: 'Spaces belong both before and after the punctuation mark (e.g. hello , friends).',
               },
               {
                 id: 'no_space_after',
-                text: 'Se pune spațiu înainte de virgulă, dar niciun spațiu după.',
+                textRo: 'Se pune spațiu înainte de virgulă, dar niciun spațiu după.',
+                textEn: 'A space is inserted prior to the comma, but none afterwards.',
               },
               {
                 id: 'double_space',
-                text: 'Orice punct de la sfârșitul frazei cere obligatoriu trei spații consecutive.',
+                textRo: 'Orice punct de la sfârșitul frazei cere obligatoriu trei spații consecutive.',
+                textEn: 'Every sentence-ending period mandates three consecutive spaces.',
               },
             ].map((option) => (
               <button
@@ -450,18 +511,26 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Gândește-te la un magnet: semnul de punctuație este atras ca un magnet de cuvântul de dinainte, iar după el se ia o pauză de respirație (un spațiu)."
+            hint={
+              lang === 'en'
+                ? 'Think of a magnet: punctuation is attracted to the word before it. A space afterward gives the reader breathing room.'
+                : 'Gândește-te la un magnet: semnul de punctuație este atras ca un magnet de cuvântul de dinainte, iar după el se ia o pauză de respirație (un spațiu).'
+            }
           />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Perfect! Dacă pui spațiu înainte de virgulă sau punct, procesorul de text ar putea împinge semnul singuratic pe rândul următor (greșeală gravă de tipar numită orfană)."
+              explanation={
+                lang === 'en'
+                  ? 'Perfect! Inserting a space before a comma or period causes word processors to wrap the mark alone onto the next line (creating an unacceptable typographic orphan).'
+                  : 'Perfect! Dacă pui spațiu înainte de virgulă sau punct, procesorul de text ar putea împinge semnul singuratic pe rândul următor (greșeală gravă de tipar numită orfană).'
+              }
             />
           )}
         </div>
@@ -470,17 +539,35 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Care este forma corectă a ghilimelelor românești în tehnoredactarea documentelor?
+              {lang === 'en'
+                ? '3. What is the correct standard shape of Romanian quotation marks in document typography?'
+                : '3. Care este forma corectă a ghilimelelor românești în tehnoredactarea documentelor?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'quotes_ro', text: '„deschidere jos (99 jos) și ”închidere sus (99 sus)' },
-              { id: 'quotes_us', text: '"" ghilimele duble drepte de tip mașină de scris' },
-              { id: 'quotes_french', text: '« » ghilimele franțuzești tip paranteză ascuțită' },
-              { id: 'quotes_single', text: "'' apostrofuri simple repetate" },
+              {
+                id: 'quotes_ro',
+                textRo: '„deschidere jos (99 jos) și ”închidere sus (99 sus)',
+                textEn: '„opening bottom (99 below) and ”closing top (99 above)',
+              },
+              {
+                id: 'quotes_us',
+                textRo: '"" ghilimele duble drepte de tip mașină de scris',
+                textEn: '"" straight double typewriter quotes',
+              },
+              {
+                id: 'quotes_french',
+                textRo: '« » ghilimele franțuzești tip paranteză ascuțită',
+                textEn: '« » French angular guillemets',
+              },
+              {
+                id: 'quotes_single',
+                textRo: "'' apostrofuri simple repetate",
+                textEn: "'' repeated single apostrophes",
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -488,25 +575,33 @@ export const W1Level2_RomanianRules: React.FC<W1Level2Props> = ({ onCompletePage
                 disabled={isLocked('q3')}
                 onClick={() => handleQ3(option.id)}
                 className={`p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
-                  q3Answer === option.id
+                  q2Answer === option.id
                     ? option.id === 'quotes_ro'
                       ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200'
                       : 'bg-rose-500/20 border-rose-400 text-rose-200'
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Ține minte regula „99 jos / 99 sus”: paranteza citatului pornește de la baza textului și se încheie la înălțimea majusculei."
+            hint={
+              lang === 'en'
+                ? 'Remember the "99 bottom / 99 top" mnemonic: quotation quotes begin at baseline and conclude at capital height.'
+                : 'Ține minte regula „99 jos / 99 sus”: paranteza citatului pornește de la baza textului și se încheie la înălțimea majusculei.'
+            }
           />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Corect! Ghilimelele românești oficiale sunt „la deschidere” și ”la închidere”. Ghilimelele drepte sunt o limitare a vechilor tastaturi americane."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! Official Romanian quotes are „opening at base” and ”closing aloft”. Straight typewriter quotes were a compromise of early mechanical keyboards.'
+                  : 'Corect! Ghilimelele românești oficiale sunt „la deschidere” și ”la închidere”. Ghilimelele drepte sunt o limitare a vechilor tastaturi americane.'
+              }
             />
           )}
         </div>

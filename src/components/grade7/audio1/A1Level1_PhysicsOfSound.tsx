@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Play, Square, Info, HelpCircle, CheckCircle2, AlertTriangle, Sparkles, Activity, Waves } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface A1Level1Props {
@@ -7,6 +8,8 @@ interface A1Level1Props {
 }
 
 export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Simulator State: Frequency in Hz and Amplitude in dB
   const [frequency, setFrequency] = useState<number>(440); // 440 Hz is concert pitch A4
   const [amplitudeDb, setAmplitudeDb] = useState<number>(-12); // -12 dB normal safe volume
@@ -206,28 +209,126 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
 
   // Audio tone presets
   const presets = [
-    { label: 'Bass profund (60 Hz)', hz: 60, desc: 'Toba mare / Subwoofer' },
-    { label: 'La de concert (440 Hz)', hz: 440, desc: 'Acordaj instrumente' },
-    { label: 'Voce feminină (1.000 Hz)', hz: 1000, desc: 'Claritate dicție' },
-    { label: 'Sunet înalt (5.000 Hz)', hz: 5000, desc: 'Cinel / Țipăt de pasăre' },
-    { label: 'Limită auz (14.000 Hz)', hz: 14000, desc: 'Frecvență ultra-acută' },
+    {
+      labelRo: 'Bass profund (60 Hz)',
+      labelEn: 'Deep Bass (60 Hz)',
+      hz: 60,
+      descRo: 'Toba mare / Subwoofer',
+      descEn: 'Bass drum / Subwoofer',
+    },
+    {
+      labelRo: 'La de concert (440 Hz)',
+      labelEn: 'Concert Pitch A4 (440 Hz)',
+      hz: 440,
+      descRo: 'Acordaj instrumente',
+      descEn: 'Instrument tuning standard',
+    },
+    {
+      labelRo: 'Voce feminină (1.000 Hz)',
+      labelEn: 'Human Voice (1,000 Hz)',
+      hz: 1000,
+      descRo: 'Claritate dicție',
+      descEn: 'Speech intelligibility',
+    },
+    {
+      labelRo: 'Sunet înalt (5.000 Hz)',
+      labelEn: 'High Treble (5,000 Hz)',
+      hz: 5000,
+      descRo: 'Cinel / Țipăt de pasăre',
+      descEn: 'Cymbal / High chirp',
+    },
+    {
+      labelRo: 'Limită auz (14.000 Hz)',
+      labelEn: 'Hearing Ceiling (14,000 Hz)',
+      hz: 14000,
+      descRo: 'Frecvență ultra-acută',
+      descEn: 'Ultra-high frequency',
+    },
   ];
 
   // Acoustic Category Label
   const getPitchCategory = (hz: number) => {
-    if (hz < 20) return { label: 'Infrasunet (< 20 Hz)', color: 'text-purple-400', desc: 'Inaudibil pentru urechea umană (cutremure, balene)' };
-    if (hz <= 250) return { label: 'Tonalitate Joasă / Gravă (Bass)', color: 'text-amber-400', desc: 'Vibrații profunde, tobe, motoare' };
-    if (hz <= 2000) return { label: 'Tonalitate Medie (Medii)', color: 'text-emerald-400', desc: 'Vocea umană vorbită, pian, chitară' };
-    if (hz <= 20000) return { label: 'Tonalitate Înaltă / Acută (Treble)', color: 'text-cyan-400', desc: 'Cinele, fluiere, șuierături' };
-    return { label: 'Ultrasunet (> 20.000 Hz)', color: 'text-rose-400', desc: 'Inaudibil pentru om (lilieci, delfini, sonare)' };
+    if (hz < 20) {
+      return {
+        label: lang === 'ro' ? 'Infrasunet (< 20 Hz)' : 'Infrasound (< 20 Hz)',
+        color: 'text-purple-400',
+        desc: lang === 'ro'
+          ? 'Inaudibil pentru urechea umană (cutremure, balene)'
+          : 'Inaudible to human ear (earthquakes, whales)',
+      };
+    }
+    if (hz <= 250) {
+      return {
+        label: lang === 'ro' ? 'Tonalitate Joasă / Gravă (Bass)' : 'Low Pitch / Deep Tone (Bass)',
+        color: 'text-amber-400',
+        desc: lang === 'ro'
+          ? 'Vibrații profunde, tobe, motoare'
+          : 'Deep vibrations, drums, engine hum',
+      };
+    }
+    if (hz <= 2000) {
+      return {
+        label: lang === 'ro' ? 'Tonalitate Medie (Medii)' : 'Mid Frequencies (Mids)',
+        color: 'text-emerald-400',
+        desc: lang === 'ro'
+          ? 'Vocea umană vorbită, pian, chitară'
+          : 'Spoken human voice, piano, acoustic guitar',
+      };
+    }
+    if (hz <= 20000) {
+      return {
+        label: lang === 'ro' ? 'Tonalitate Înaltă / Acută (Treble)' : 'High Pitch / Sharp (Treble)',
+        color: 'text-cyan-400',
+        desc: lang === 'ro'
+          ? 'Cinele, fluiere, șuierături'
+          : 'Cymbals, flutes, whistles, hiss',
+      };
+    }
+    return {
+      label: lang === 'ro' ? 'Ultrasunet (> 20.000 Hz)' : 'Ultrasound (> 20,000 Hz)',
+      color: 'text-rose-400',
+      desc: lang === 'ro'
+        ? 'Inaudibil pentru om (lilieci, delfini, sonare)'
+        : 'Inaudible to humans (bats, dolphins, sonar equipment)',
+    };
   };
 
   const getDbCategory = (db: number) => {
-    if (db <= -36) return { label: 'Foarte silențios (~20 dB)', color: 'text-slate-400', desc: 'Șoaptă sau foșnet de frunze' };
-    if (db <= -18) return { label: 'Confortabil (~50 dB)', color: 'text-emerald-400', desc: 'Liniște de bibliotecă / fundal' };
-    if (db <= -6) return { label: 'Normal / Voce (~65 dB)', color: 'text-cyan-400', desc: 'Conversație la 1 metru' };
-    if (db < 0) return { label: 'Puternic (~85 dB)', color: 'text-amber-400', desc: 'Trafic urban intens, limită de siguranță' };
-    return { label: '0 dB (PRAG DIGITAL MAXIM)', color: 'text-rose-400', desc: 'Peste 0 dB apare clipping (distorsiune)' };
+    if (db <= -36) {
+      return {
+        label: lang === 'ro' ? 'Foarte silențios (~20 dB)' : 'Very quiet (~20 dB)',
+        color: 'text-slate-400',
+        desc: lang === 'ro' ? 'Șoaptă sau foșnet de frunze' : 'Whisper or rustling leaves',
+      };
+    }
+    if (db <= -18) {
+      return {
+        label: lang === 'ro' ? 'Confortabil (~50 dB)' : 'Comfortable (~50 dB)',
+        color: 'text-emerald-400',
+        desc: lang === 'ro' ? 'Liniște de bibliotecă / fundal' : 'Quiet library / subtle ambient background',
+      };
+    }
+    if (db <= -6) {
+      return {
+        label: lang === 'ro' ? 'Normal / Voce (~65 dB)' : 'Normal / Speech (~65 dB)',
+        color: 'text-cyan-400',
+        desc: lang === 'ro' ? 'Conversație la 1 metru' : 'Normal conversation at 1 meter',
+      };
+    }
+    if (db < 0) {
+      return {
+        label: lang === 'ro' ? 'Puternic (~85 dB)' : 'Loud (~85 dB)',
+        color: 'text-amber-400',
+        desc: lang === 'ro' ? 'Trafic urban intens, limită de siguranță' : 'Heavy city traffic, auditory safety threshold',
+      };
+    }
+    return {
+      label: lang === 'ro' ? '0 dB (PRAG DIGITAL MAXIM)' : '0 dB (MAXIMUM DIGITAL CEILING)',
+      color: 'text-rose-400',
+      desc: lang === 'ro'
+        ? 'Peste 0 dB apare clipping (distorsiune)'
+        : 'Above 0 dB harsh digital clipping distortion occurs',
+    };
   };
 
   const pitchInfo = getPitchCategory(frequency);
@@ -245,7 +346,11 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
       sounds.playWrong();
       setQ1Answer(null);
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! Frecvența reprezintă numărul de oscilații pe secundă măsurat în Hertz (Hz), iar spectrul auzului uman este de la 20 Hz până la 20.000 Hz (20 kHz). Așteaptă 5 secunde.');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Frecvența reprezintă numărul de oscilații pe secundă măsurat în Hertz (Hz), iar spectrul auzului uman este de la 20 Hz până la 20.000 Hz (20 kHz). Așteaptă 5 secunde.'
+          : 'Incorrect! Frequency represents oscillations per second in Hertz (Hz), and the human hearing range spans 20 Hz to 20,000 Hz (20 kHz). Wait 5 seconds.'
+      );
     }
   };
 
@@ -259,7 +364,11 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
       sounds.playWrong();
       setQ2Answer(null);
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! Amplitudinea undei măsoară energia și puterea volumului sonor în decibeli (dB). În mediul digital, pragul de 0 dB este maximul absolut înainte de distorsiune (clipping). Așteaptă 5 secunde.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Amplitudinea undei măsoară energia și puterea volumului sonor în decibeli (dB). În mediul digital, pragul de 0 dB este maximul absolut înainte de distorsiune (clipping). Așteaptă 5 secunde.'
+          : 'Incorrect! Wave amplitude measures volume power in decibels (dB). In digital audio, 0 dB is the absolute maximum ceiling before clipping occurs. Wait 5 seconds.'
+      );
     }
   };
 
@@ -273,7 +382,11 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
       sounds.playWrong();
       setQ3Answer(null);
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Vibrațiile sonore sub 20 Hz se numesc Infrasunete, iar cele peste 20.000 Hz se numesc Ultrasunete (folosite de lilieci și aparate medicale). Așteaptă 5 secunde.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Vibrațiile sonore sub 20 Hz se numesc Infrasunete, iar cele peste 20.000 Hz se numesc Ultrasunete (folosite de lilieci și aparate medicale). Așteaptă 5 secunde.'
+          : 'Incorrect! Sound vibrations below 20 Hz are termed Infrasound, and those above 20,000 Hz are Ultrasound (used by bats, dolphins, and medical sonars). Wait 5 seconds.'
+      );
     }
   };
 
@@ -293,11 +406,15 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           </div>
           <div>
             <div className="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1.5">
-              <span>Unitatea 2: Acustică Digitală • Manual Art Klett pag. 28–30</span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">Nivelul 1/7</span>
+              <span>{lang === 'ro' ? 'Unitatea 2: Acustică Digitală • Manual Art Klett pag. 28–30' : 'Unit 2: Digital Acoustics • Art Klett Textbook pp. 28–30'}</span>
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">
+                {lang === 'ro' ? 'Nivelul 1/7' : 'Level 1/7'}
+              </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black font-heading tracking-tight text-white">
-              Fizica Sunetului: Frecvență (Hz), Volum (dB) & Praguri Auditive
+              {lang === 'ro'
+                ? 'Fizica Sunetului: Frecvență (Hz), Volum (dB) & Praguri Auditive'
+                : 'Physics of Sound: Frequency (Hz), Amplitude (dB) & Auditory Thresholds'}
             </h1>
           </div>
         </div>
@@ -305,7 +422,7 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         <div className="flex items-center gap-2">
           <span className="px-3 py-1.5 rounded-xl bg-slate-800 text-xs font-mono text-slate-300 border border-slate-700 flex items-center gap-1.5">
             <Activity className="w-3.5 h-3.5 text-amber-400" />
-            <span>Osciloscop Live</span>
+            <span>{lang === 'ro' ? 'Osciloscop Live' : 'Live Oscilloscope'}</span>
           </span>
         </div>
       </div>
@@ -315,9 +432,15 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-start gap-3">
           <span className="text-2xl">〰️</span>
           <div>
-            <div className="text-xs font-bold text-amber-400 font-mono uppercase">Frecvența (Hertz - Hz)</div>
+            <div className="text-xs font-bold text-amber-400 font-mono uppercase">
+              {lang === 'ro' ? 'Frecvența (Hertz - Hz)' : 'Frequency (Hertz - Hz)'}
+            </div>
             <div className="text-xs text-slate-300 mt-0.5 leading-relaxed">
-              Numărul de vibrații complete pe secundă. Determină dacă sunetul este <strong>grav/bas</strong> (zeci de Hz) sau <strong>ascuțit/înalt</strong> (mii de Hz).
+              {lang === 'ro' ? (
+                <>Numărul de vibrații complete pe secundă. Determină dacă sunetul este <strong>grav/bas</strong> (zeci de Hz) sau <strong>ascuțit/înalt</strong> (mii de Hz).</>
+              ) : (
+                <>Number of complete cycles per second. Determines whether sound is <strong>deep/bass</strong> (tens of Hz) or <strong>high-pitched/treble</strong> (thousands of Hz).</>
+              )}
             </div>
           </div>
         </div>
@@ -325,9 +448,15 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-start gap-3">
           <span className="text-2xl">📢</span>
           <div>
-            <div className="text-xs font-bold text-cyan-400 font-mono uppercase">Amplitudinea (Decibeli - dB)</div>
+            <div className="text-xs font-bold text-cyan-400 font-mono uppercase">
+              {lang === 'ro' ? 'Amplitudinea (Decibeli - dB)' : 'Amplitude (Decibels - dB)'}
+            </div>
             <div className="text-xs text-slate-300 mt-0.5 leading-relaxed">
-              Înălțimea undei sonore reflectă puterea volumului. În audio digital, <strong>0 dB</strong> este pragul de vârf maxim; depășirea lui generează <em>clipping</em>.
+              {lang === 'ro' ? (
+                <>Înălțimea undei sonore reflectă puterea volumului. În audio digital, <strong>0 dB</strong> este pragul de vârf maxim; depășirea lui generează <em>clipping</em>.</>
+              ) : (
+                <>The waveform height reflects acoustic power and loudness. In digital audio, <strong>0 dB</strong> is the absolute maximum peak; exceeding it causes <em>clipping</em>.</>
+              )}
             </div>
           </div>
         </div>
@@ -335,9 +464,15 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-start gap-3">
           <span className="text-2xl">👂</span>
           <div>
-            <div className="text-xs font-bold text-rose-400 font-mono uppercase">Spectrul Urechei Umane</div>
+            <div className="text-xs font-bold text-rose-400 font-mono uppercase">
+              {lang === 'ro' ? 'Spectrul Urechii Umane' : 'Human Hearing Range'}
+            </div>
             <div className="text-xs text-slate-300 mt-0.5 leading-relaxed">
-              Omul aude între <strong>20 Hz</strong> și <strong>20.000 Hz (20 kHz)</strong>. Sub 20 Hz avem <em>Infrasunete</em>, iar peste 20 kHz avem <em>Ultrasunete</em>.
+              {lang === 'ro' ? (
+                <>Omul aude între <strong>20 Hz</strong> și <strong>20.000 Hz (20 kHz)</strong>. Sub 20 Hz avem <em>Infrasunete</em>, iar peste 20 kHz avem <em>Ultrasunete</em>.</>
+              ) : (
+                <>Humans hear between <strong>20 Hz</strong> and <strong>20,000 Hz (20 kHz)</strong>. Below 20 Hz are <em>Infrasounds</em>, and above 20 kHz are <em>Ultrasounds</em>.</>
+              )}
             </div>
           </div>
         </div>
@@ -349,7 +484,9 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           <div className="flex items-center gap-2">
             <Waves className="w-5 h-5 text-sky-400 animate-pulse" />
             <h2 className="text-base font-bold text-white font-heading">
-              Simulator Acustic Interactiv: Generator de Unde & Monitor Osciloscop
+              {lang === 'ro'
+                ? 'Simulator Acustic Interactiv: Generator de Unde & Monitor Osciloscop'
+                : 'Interactive Acoustic Simulator: Wave Generator & Oscilloscope Monitor'}
             </h2>
           </div>
 
@@ -366,12 +503,12 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
             {isPlayingTone ? (
               <>
                 <Square className="w-4 h-4 fill-current" />
-                <span>Oprește Tonul Acustic</span>
+                <span>{lang === 'ro' ? 'Oprește Tonul Acustic' : 'Stop Acoustic Tone'}</span>
               </>
             ) : (
               <>
                 <Play className="w-4 h-4 fill-current" />
-                <span>Ascultă Frecvența Live</span>
+                <span>{lang === 'ro' ? 'Ascultă Frecvența Live' : 'Listen to Live Tone'}</span>
               </>
             )}
           </button>
@@ -387,7 +524,11 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           />
           <div className="absolute top-2 left-3 flex items-center gap-2 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-700/60 font-mono text-[11px]">
             <span className={`w-2 h-2 rounded-full ${isPlayingTone ? 'bg-sky-400 animate-ping' : 'bg-slate-500'}`} />
-            <span className="text-slate-300">Osciloscop: {isPlayingTone ? 'Semnal Activ' : 'Standby'}</span>
+            <span className="text-slate-300">
+              {lang === 'ro'
+                ? `Osciloscop: ${isPlayingTone ? 'Semnal Activ' : 'Standby'}`
+                : `Oscilloscope: ${isPlayingTone ? 'Signal Active' : 'Standby'}`}
+            </span>
           </div>
 
           <div className="absolute top-2 right-3 flex items-center gap-2 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-700/60 font-mono text-[11px]">
@@ -403,7 +544,7 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
               <label htmlFor="freq-slider" className="text-xs font-bold text-amber-300 font-mono flex items-center gap-1.5">
-                <span>Frecvență Tonală:</span>
+                <span>{lang === 'ro' ? 'Frecvență Tonală:' : 'Pitch Frequency:'}</span>
                 <span className="text-white text-sm font-black">{frequency.toLocaleString()} Hz</span>
               </label>
               <span className={`text-[11px] font-bold font-mono ${pitchInfo.color}`}>
@@ -426,10 +567,10 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
             />
 
             <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-              <span>20 Hz (Bas Infrasonic)</span>
-              <span>440 Hz (La4)</span>
+              <span>{lang === 'ro' ? '20 Hz (Bas Infrasonic)' : '20 Hz (Sub-bass)'}</span>
+              <span>440 Hz (A4)</span>
               <span>1.000 Hz</span>
-              <span>16.000 Hz (Acut)</span>
+              <span>{lang === 'ro' ? '16.000 Hz (Acut)' : '16,000 Hz (Treble)'}</span>
             </div>
 
             <p className="text-[11px] text-slate-400 mt-1 italic">
@@ -452,9 +593,9 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
                       ? 'bg-amber-500 text-slate-950 font-bold border-amber-400'
                       : 'bg-slate-850 hover:bg-slate-800 text-slate-300 border-slate-700'
                   }`}
-                  title={p.desc}
+                  title={lang === 'ro' ? p.descRo : p.descEn}
                 >
-                  {p.label}
+                  {lang === 'ro' ? p.labelRo : p.labelEn}
                 </button>
               ))}
             </div>
@@ -464,7 +605,7 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
               <label htmlFor="amp-slider" className="text-xs font-bold text-cyan-300 font-mono flex items-center gap-1.5">
-                <span>Amplitudine / Putere:</span>
+                <span>{lang === 'ro' ? 'Amplitudine / Putere:' : 'Amplitude / Power:'}</span>
                 <span className="text-white text-sm font-black">{amplitudeDb} dB</span>
               </label>
               <span className={`text-[11px] font-bold font-mono ${dbInfo.color}`}>
@@ -487,10 +628,10 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
             />
 
             <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-              <span>-48 dB (Foșnet)</span>
+              <span>{lang === 'ro' ? '-48 dB (Foșnet)' : '-48 dB (Whisper)'}</span>
               <span>-24 dB</span>
-              <span>-12 dB (Sigur)</span>
-              <span className="text-rose-400 font-bold">0 dB (Max Digital)</span>
+              <span>{lang === 'ro' ? '-12 dB (Sigur)' : '-12 dB (Safe)'}</span>
+              <span className="text-rose-400 font-bold">0 dB ({lang === 'ro' ? 'Max Digital' : 'Digital Ceiling'})</span>
             </div>
 
             <p className="text-[11px] text-slate-400 mt-1 italic">
@@ -501,7 +642,11 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
             {amplitudeDb >= -1 && (
               <div className="mt-2 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 flex items-center gap-2 text-rose-300 text-xs">
                 <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>Atenție: Volumul atinge 0 dB! În WavePad, orice depășire taie vârfurile undei și provoacă distorsiuni (clipping).</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Atenție: Volumul atinge 0 dB! În WavePad, orice depășire taie vârfurile undei și provoacă distorsiuni (clipping).'
+                    : 'Warning: Volume reaches 0 dB! In WavePad, exceeding 0 dB clips waveform peaks and creates harsh distortion (clipping).'}
+                </span>
               </div>
             )}
           </div>
@@ -513,21 +658,37 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         <div className="flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-amber-400" />
           <h3 className="text-sm font-bold uppercase tracking-wider text-amber-300 font-mono">
-            Verificarea Competențelor Acustice (3 Întrebări Pedagogice)
+            {lang === 'ro'
+              ? 'Verificarea Competențelor Acustice (3 Întrebări Pedagogice)'
+              : 'Acoustic Skills Assessment (3 Pedagogical Questions)'}
           </h3>
         </div>
 
         {/* Question 1 */}
         <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-2.5">
-            1. Ce proprietate a sunetului este măsurată în Hertz (Hz) și care este intervalul de frecvențe perceput de auzul uman sănătos?
+            {lang === 'ro'
+              ? '1. Ce proprietate a sunetului este măsurată în Hertz (Hz) și care este intervalul de frecvențe perceput de auzul uman sănătos?'
+              : '1. What property of sound is measured in Hertz (Hz) and what is the frequency range perceived by healthy human hearing?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Frecvența (tonalitatea gravă/acută) • Interval: 20 Hz – 20.000 Hz' },
-              { id: 'B', text: 'Amplitudinea (tăria volumului) • Interval: 0 dB – 100 dB' },
-              { id: 'C', text: 'Rata de compresie MP3 • Interval: 128 kbps – 320 kbps' },
+              {
+                id: 'A',
+                textRo: 'Frecvența (tonalitatea gravă/acută) • Interval: 20 Hz – 20.000 Hz',
+                textEn: 'Frequency (pitch / low to high tones) • Range: 20 Hz – 20,000 Hz',
+              },
+              {
+                id: 'B',
+                textRo: 'Amplitudinea (tăria volumului) • Interval: 0 dB – 100 dB',
+                textEn: 'Amplitude (volume loudness) • Range: 0 dB – 100 dB',
+              },
+              {
+                id: 'C',
+                textRo: 'Rata de compresie MP3 • Interval: 128 kbps – 320 kbps',
+                textEn: 'MP3 compression bitrate • Range: 128 kbps – 320 kbps',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -540,8 +701,10 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } disabled:opacity-50`}
               >
-                <div className="font-bold font-mono text-amber-400 mb-1">Opțiunea {opt.id}:</div>
-                {opt.text}
+                <div className="font-bold font-mono text-amber-400 mb-1">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}:` : `Option ${opt.id}:`}
+                </div>
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
@@ -549,13 +712,17 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           {q1Cooldown > 0 && (
             <div className="mt-2.5 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{q1ErrorMsg} (Deblocare în: {q1Cooldown}s)</span>
+              <span>{q1ErrorMsg} ({lang === 'ro' ? 'Deblocare în:' : 'Unlocks in:'} {q1Cooldown}s)</span>
             </div>
           )}
           {q1Answer === 'A' && (
             <div className="mt-2.5 text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Corect! Frecvența (Hz) definește tonalitatea (joasă/înaltă), iar spectrul uman este 20 Hz – 20 kHz.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! Frecvența (Hz) definește tonalitatea (joasă/înaltă), iar spectrul uman este 20 Hz – 20 kHz.'
+                  : 'Correct! Frequency (Hz) defines pitch (low/high), and the human hearing range spans 20 Hz to 20 kHz.'}
+              </span>
             </div>
           )}
         </div>
@@ -563,14 +730,28 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         {/* Question 2 */}
         <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-2.5">
-            2. În aplicațiile profesionale de editare audio precum WavePad, ce se întâmplă dacă semnalul sonor depășește nivelul de 0 dB?
+            {lang === 'ro'
+              ? '2. În aplicațiile profesionale de editare audio precum WavePad, ce se întâmplă dacă semnalul sonor depășește nivelul de 0 dB?'
+              : '2. In professional audio editors like WavePad, what happens if the audio signal exceeds 0 dB?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Sunetul devine automat surround 5.1 fără nicio pierdere de calitate.' },
-              { id: 'B', text: 'Programul salvează fișierul instantaneu pe disc pentru protecție.' },
-              { id: 'C', text: 'Apare fenomenul de clipping (distorsiune dură prin tăierea vârfurilor undei sonore).' },
+              {
+                id: 'A',
+                textRo: 'Sunetul devine automat surround 5.1 fără nicio pierdere de calitate.',
+                textEn: 'Sound automatically converts to 5.1 surround with no loss of quality.',
+              },
+              {
+                id: 'B',
+                textRo: 'Programul salvează fișierul instantaneu pe disc pentru protecție.',
+                textEn: 'The program immediately saves the file to disk for safety.',
+              },
+              {
+                id: 'C',
+                textRo: 'Apare fenomenul de clipping (distorsiune dură prin tăierea vârfurilor undei sonore).',
+                textEn: 'Clipping occurs (harsh digital distortion from shaving off waveform peaks).',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -583,8 +764,10 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } disabled:opacity-50`}
               >
-                <div className="font-bold font-mono text-cyan-400 mb-1">Opțiunea {opt.id}:</div>
-                {opt.text}
+                <div className="font-bold font-mono text-cyan-400 mb-1">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}:` : `Option ${opt.id}:`}
+                </div>
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
@@ -592,13 +775,17 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           {q2Cooldown > 0 && (
             <div className="mt-2.5 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{q2ErrorMsg} (Deblocare în: {q2Cooldown}s)</span>
+              <span>{q2ErrorMsg} ({lang === 'ro' ? 'Deblocare în:' : 'Unlocks in:'} {q2Cooldown}s)</span>
             </div>
           )}
           {q2Answer === 'C' && (
             <div className="mt-2.5 text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Excelent! 0 dB este limita maximă a scalei dBFS (Full Scale). Peste 0 dB se produce clipping digital.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Excelent! 0 dB este limita maximă a scalei dBFS (Full Scale). Peste 0 dB se produce clipping digital.'
+                  : 'Excellent! 0 dB is the ceiling on the dBFS (Full Scale) meter. Exceeding 0 dB causes harsh digital clipping.'}
+              </span>
             </div>
           )}
         </div>
@@ -606,14 +793,28 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
         {/* Question 3 */}
         <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800">
           <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-2.5">
-            3. Cum se numesc undele sonore situate sub limita de 20 Hz și respectiv cele de peste 20.000 Hz?
+            {lang === 'ro'
+              ? '3. Cum se numesc undele sonore situate sub limita de 20 Hz și respectiv cele de peste 20.000 Hz?'
+              : '3. What are acoustic waves below 20 Hz and above 20,000 Hz called?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Microunde (sub 20 Hz) și Unde Radio (peste 20 kHz).' },
-              { id: 'B', text: 'Infrasunete (sub 20 Hz) și Ultrasunete (peste 20 kHz).' },
-              { id: 'C', text: 'Unde Gamma (sub 20 Hz) și Raze X (peste 20 kHz).' },
+              {
+                id: 'A',
+                textRo: 'Microunde (sub 20 Hz) și Unde Radio (peste 20 kHz).',
+                textEn: 'Microwaves (under 20 Hz) and Radio Waves (over 20 kHz).',
+              },
+              {
+                id: 'B',
+                textRo: 'Infrasunete (sub 20 Hz) și Ultrasunete (peste 20 kHz).',
+                textEn: 'Infrasound (under 20 Hz) and Ultrasound (over 20 kHz).',
+              },
+              {
+                id: 'C',
+                textRo: 'Unde Gamma (sub 20 Hz) și Raze X (peste 20 kHz).',
+                textEn: 'Gamma Rays (under 20 Hz) and X-Rays (over 20 kHz).',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -626,8 +827,10 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
                     : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300'
                 } disabled:opacity-50`}
               >
-                <div className="font-bold font-mono text-rose-400 mb-1">Opțiunea {opt.id}:</div>
-                {opt.text}
+                <div className="font-bold font-mono text-rose-400 mb-1">
+                  {lang === 'ro' ? `Opțiunea ${opt.id}:` : `Option ${opt.id}:`}
+                </div>
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
@@ -635,13 +838,17 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           {q3Cooldown > 0 && (
             <div className="mt-2.5 p-2 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-              <span>{q3ErrorMsg} (Deblocare în: {q3Cooldown}s)</span>
+              <span>{q3ErrorMsg} ({lang === 'ro' ? 'Deblocare în:' : 'Unlocks in:'} {q3Cooldown}s)</span>
             </div>
           )}
           {q3Answer === 'B' && (
             <div className="mt-2.5 text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Corect! Sub 20 Hz sunt Infrasunetele (animale mari, fenomene seismice), iar peste 20 kHz sunt Ultrasunetele (lilieci, sonare).</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Corect! Sub 20 Hz sunt Infrasunetele (animale mari, fenomene seismice), iar peste 20 kHz sunt Ultrasunetele (lilieci, sonare).'
+                  : 'Correct! Under 20 Hz are Infrasounds (large mammals, seismic activity), and over 20 kHz are Ultrasounds (bats, sonars).'}
+              </span>
             </div>
           )}
         </div>
@@ -651,9 +858,17 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
       <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
         <div className="text-xs text-slate-400 font-mono">
           {!isAllAnswered ? (
-            <span className="text-amber-400">Răspunde corect la cele 3 întrebări pentru a finaliza Nivelul 1.</span>
+            <span className="text-amber-400">
+              {lang === 'ro'
+                ? 'Răspunde corect la cele 3 întrebări pentru a finaliza Nivelul 1.'
+                : 'Answer all 3 questions correctly to complete Level 1.'}
+            </span>
           ) : (
-            <span className="text-emerald-400 font-bold">Toate cerințele acustice au fost validate cu succes!</span>
+            <span className="text-emerald-400 font-bold">
+              {lang === 'ro'
+                ? 'Toate cerințele acustice au fost validate cu succes!'
+                : 'All acoustic criteria have been successfully validated!'}
+            </span>
           )}
         </div>
 
@@ -663,7 +878,11 @@ export const A1Level1_PhysicsOfSound: React.FC<A1Level1Props> = ({ onPass }) => 
           onClick={handleFinish}
           className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-amber-500/25 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
         >
-          <span>Treci la Nivelul 2: Eșantionare & Canale Audio</span>
+          <span>
+            {lang === 'ro'
+              ? 'Treci la Nivelul 2: Eșantionare & Canale Audio'
+              : 'Proceed to Level 2: Sampling & Audio Channels'}
+          </span>
           <Sparkles className="w-4 h-4" />
         </button>
       </div>

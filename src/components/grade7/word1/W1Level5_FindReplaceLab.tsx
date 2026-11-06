@@ -65,7 +65,11 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
     if (!findStr) return;
     sounds.playClick();
     if (!documentText.includes(findStr)) {
-      setLastActionInfo(`Nicio potrivire găsită pentru: "${findStr}"`);
+      setLastActionInfo(
+        lang === 'en'
+          ? `No matches found for: "${findStr}"`
+          : `Nicio potrivire găsită pentru: "${findStr}"`
+      );
       return;
     }
 
@@ -78,7 +82,11 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
 
     setDocumentText(updated);
     sounds.playCorrect();
-    setLastActionInfo(`S-au efectuat înlocuiri pentru "${findStr}" ➔ "${repStr}".`);
+    setLastActionInfo(
+      lang === 'en'
+        ? `Replacements performed for "${findStr}" ➔ "${repStr}".`
+        : `S-au efectuat înlocuiri pentru "${findStr}" ➔ "${repStr}".`
+    );
   };
 
   const handleQuickPreset = (findStr: string, repStr: string) => {
@@ -92,7 +100,11 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
     setDocumentText(initialDocumentText);
     setFindQuery('  ');
     setReplaceQuery(' ');
-    setLastActionInfo('Textul a fost resetat la starea inițială contaminată.');
+    setLastActionInfo(
+      lang === 'en'
+        ? 'Text reset to contaminated initial state.'
+        : 'Textul a fost resetat la starea inițială contaminată.'
+    );
   };
 
   const handleQ1 = (id: string) => {
@@ -149,19 +161,29 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono font-bold border border-blue-500/40">
               <Replace className="w-3.5 h-3.5 text-blue-400" />
-              <span>NIVELUL 5 DIN 7 • CĂUTARE ȘI ÎNLOCUIRE AVANSATĂ (CTRL+H)</span>
+              <span>
+                {lang === 'en'
+                  ? 'LEVEL 5 OF 7 • ADVANCED FIND & REPLACE (CTRL+H)'
+                  : 'NIVELUL 5 DIN 7 • CĂUTARE ȘI ÎNLOCUIRE AVANSATĂ (CTRL+H)'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
-              Curățarea Automată în Loturi & Caractere Speciale
+              {lang === 'en'
+                ? 'Batch Auto-Cleaning & Special Characters'
+                : 'Curățarea Automată în Loturi & Caractere Speciale'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Când primești un manuscris de 80 de pagini plin de spații duble, sedile greșite și punctuație defectuoasă, nu corectezi manual cuvânt cu cuvânt! Folosești instrumentul „Find and Replace” (Ctrl+H) și codurile speciale (^p, ^t) pentru curățare instantanee.
+              {lang === 'en'
+                ? 'When you receive an 80-page manuscript riddled with double spaces, corrupted cedillas, and detached punctuation, you do not fix it word-by-word! You utilize Find & Replace (Ctrl+H) and special tokens (^p, ^t) for instant global hygiene.'
+                : 'Când primești un manuscris de 80 de pagini plin de spații duble, sedile greșite și punctuație defectuoasă, nu corectezi manual cuvânt cu cuvânt! Folosești instrumentul „Find and Replace” (Ctrl+H) și codurile speciale (^p, ^t) pentru curățare instantanee.'}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="px-4 py-2 rounded-2xl bg-slate-900/80 border border-blue-500/40 text-right">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block">Punctaj Nivel 5</span>
+              <span className="text-[11px] font-mono uppercase text-slate-400 block">
+                {lang === 'en' ? 'Level 5 Score' : 'Punctaj Nivel 5'}
+              </span>
               <span className="text-2xl font-black font-mono text-cyan-400">{totalScore} / 100 XP</span>
             </div>
           </div>
@@ -176,9 +198,15 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
               <Replace className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laboratorul Interactiv: Consola Word Find & Replace (Ctrl+H)</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Interactive Lab: Word Find & Replace Console (Ctrl+H)'
+                  : 'Laboratorul Interactiv: Consola Word Find & Replace (Ctrl+H)'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Curăță textul contaminat folosind comenzile rapide sau completând manual câmpurile de căutare.
+                {lang === 'en'
+                  ? 'Clean the contaminated text using quick presets or manual find/replace fields.'
+                  : 'Curăță textul contaminat folosind comenzile rapide sau completând manual câmpurile de căutare.'}
               </p>
             </div>
           </div>
@@ -186,26 +214,29 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
           <button
             type="button"
             onClick={handleResetDocument}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+            className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer self-start sm:self-auto transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Resetează Textul</span>
+            <span>{lang === 'en' ? 'Reset Text' : 'Resetează Textul'}</span>
           </button>
         </div>
 
         {/* Live Document Preview Box */}
         <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
           <div className="flex items-center justify-between text-xs font-mono text-slate-400">
-            <span>Manuscris în lucru:</span>
+            <span>{lang === 'en' ? 'Working manuscript:' : 'Manuscris în lucru:'}</span>
             <span className="flex items-center gap-2">
-              Stare igienă text:{' '}
+              {lang === 'en' ? 'Text hygiene status:' : 'Stare igienă text:'}{' '}
               {isDocumentPristine ? (
                 <span className="text-emerald-400 font-bold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> 100% Curat & Conform
+                  <CheckCircle2 className="w-3.5 h-3.5" />{' '}
+                  {lang === 'en' ? '100% Clean & Compliant' : '100% Curat & Conform'}
                 </span>
               ) : (
                 <span className="text-amber-400 font-bold">
-                  {remainingFlaws} {remainingFlaws === 1 ? 'problemă rămasă' : 'probleme rămase'}
+                  {lang === 'en'
+                    ? `${remainingFlaws} ${remainingFlaws === 1 ? 'issue remaining' : 'issues remaining'}`
+                    : `${remainingFlaws} ${remainingFlaws === 1 ? 'problemă rămasă' : 'probleme rămase'}`}
                 </span>
               )}
             </span>
@@ -224,7 +255,13 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                   : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
               }`}
             >
-              {hasDoubleSpaces ? '✗ Spații duble detectate' : '✓ Fără spații duble'}
+              {hasDoubleSpaces
+                ? lang === 'en'
+                  ? '✗ Double spaces detected'
+                  : '✗ Spații duble detectate'
+                : lang === 'en'
+                ? '✓ No double spaces'
+                : '✓ Fără spații duble'}
             </span>
             <span
               className={`px-2 py-0.5 rounded-md border ${
@@ -233,7 +270,13 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                   : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
               }`}
             >
-              {hasSedillaS ? '✗ Sedilă turcească „ş” detectată' : '✓ Virgulă „ș” conformă'}
+              {hasSedillaS
+                ? lang === 'en'
+                  ? '✗ Turkish cedilla "ş" detected'
+                  : '✗ Sedilă turcească „ş” detectată'
+                : lang === 'en'
+                ? '✓ Proper "ș" comma-below'
+                : '✓ Virgulă „ș” conformă'}
             </span>
             <span
               className={`px-2 py-0.5 rounded-md border ${
@@ -242,7 +285,13 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                   : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
               }`}
             >
-              {hasSedillaT ? '✗ Sedilă turcească „ţ” detectată' : '✓ Virgulă „ț” conformă'}
+              {hasSedillaT
+                ? lang === 'en'
+                  ? '✗ Turkish cedilla "ţ" detected'
+                  : '✗ Sedilă turcească „ţ” detectată'
+                : lang === 'en'
+                ? '✓ Proper "ț" comma-below'
+                : '✓ Virgulă „ț” conformă'}
             </span>
             <span
               className={`px-2 py-0.5 rounded-md border ${
@@ -251,7 +300,13 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                   : 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
               }`}
             >
-              {hasSpaceBeforeDot ? '✗ Spațiu înainte de punct „ .”' : '✓ Punct lipit corect'}
+              {hasSpaceBeforeDot
+                ? lang === 'en'
+                  ? '✗ Space before period " ."'
+                  : '✗ Spațiu înainte de punct „ .”'
+                : lang === 'en'
+                ? '✓ Period properly attached'
+                : '✓ Punct lipit corect'}
             </span>
           </div>
         </div>
@@ -259,7 +314,9 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
         {/* Quick Batch Fixes (Pre-set Macros) */}
         <div className="space-y-2">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-            Macro-Comenzi Rapide de Curățare (Recomandate de Tipografi):
+            {lang === 'en'
+              ? 'Quick Batch Cleaning Macros (Typesetter Recommended):'
+              : 'Macro-Comenzi Rapide de Curățare (Recomandate de Tipografi):'}
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             <button
@@ -269,7 +326,7 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
             >
               <div className="text-xs font-bold text-white flex items-center gap-1.5 mb-1">
                 <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Elimină spații duble</span>
+                <span>{lang === 'en' ? 'Remove double spaces' : 'Elimină spații duble'}</span>
               </div>
               <div className="text-[11px] font-mono text-slate-400">"  " ➔ " "</div>
             </button>
@@ -281,7 +338,7 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
             >
               <div className="text-xs font-bold text-white flex items-center gap-1.5 mb-1">
                 <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Repară sedila ş</span>
+                <span>{lang === 'en' ? 'Fix cedilla ş' : 'Repară sedila ş'}</span>
               </div>
               <div className="text-[11px] font-mono text-slate-400">"ş" ➔ "ș"</div>
             </button>
@@ -293,7 +350,7 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
             >
               <div className="text-xs font-bold text-white flex items-center gap-1.5 mb-1">
                 <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Repară sedila ţ</span>
+                <span>{lang === 'en' ? 'Fix cedilla ţ' : 'Repară sedila ţ'}</span>
               </div>
               <div className="text-[11px] font-mono text-slate-400">"ţ" ➔ "ț"</div>
             </button>
@@ -305,7 +362,7 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
             >
               <div className="text-xs font-bold text-white flex items-center gap-1.5 mb-1">
                 <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Lipește punctele</span>
+                <span>{lang === 'en' ? 'Attach periods' : 'Lipește punctele'}</span>
               </div>
               <div className="text-[11px] font-mono text-slate-400">" ." ➔ "."</div>
             </button>
@@ -315,28 +372,34 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
         {/* Manual Find & Replace Form */}
         <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
           <div className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-            Caseta Oficială Word „Găsire și Înlocuire” (Find and Replace)
+            {lang === 'en'
+              ? 'Official Word "Find and Replace" Dialog Box'
+              : 'Caseta Oficială Word „Găsire și Înlocuire” (Find and Replace)'}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">Ce se caută (Find what):</label>
+              <label className="text-xs font-mono text-slate-400">
+                {lang === 'en' ? 'Find what:' : 'Ce se caută (Find what):'}
+              </label>
               <input
                 type="text"
                 value={findQuery}
                 onChange={(e) => setFindQuery(e.target.value)}
-                placeholder="Ex: ş sau dublu spațiu"
+                placeholder={lang === 'en' ? 'E.g. ş or double space' : 'Ex: ş sau dublu spațiu'}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-cyan-500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-mono text-slate-400">Înlocuire cu (Replace with):</label>
+              <label className="text-xs font-mono text-slate-400">
+                {lang === 'en' ? 'Replace with:' : 'Înlocuire cu (Replace with):'}
+              </label>
               <input
                 type="text"
                 value={replaceQuery}
                 onChange={(e) => setReplaceQuery(e.target.value)}
-                placeholder="Ex: ș sau un singur spațiu"
+                placeholder={lang === 'en' ? 'E.g. ș or single space' : 'Ex: ș sau un singur spațiu'}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-cyan-500"
               />
             </div>
@@ -344,7 +407,7 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <div className="text-xs font-mono text-cyan-400">
-              {lastActionInfo || 'Gata pentru executare comandă.'}
+              {lastActionInfo || (lang === 'en' ? 'Ready for command execution.' : 'Gata pentru executare comandă.')}
             </div>
 
             <button
@@ -353,7 +416,7 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
               className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm font-mono flex items-center gap-2 transition cursor-pointer shadow-lg shadow-blue-600/30"
             >
               <Replace className="w-4 h-4" />
-              <span>Înlocuire Peste Tot (Replace All)</span>
+              <span>{lang === 'en' ? 'Replace All' : 'Înlocuire Peste Tot (Replace All)'}</span>
             </button>
           </div>
         </div>
@@ -366,8 +429,16 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificarea Cunoștințelor: Găsire și Înlocuire</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări de eficiență editorială.</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Knowledge Check: Find and Replace'
+                : 'Verificarea Cunoștințelor: Găsire și Înlocuire'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 editorial efficiency questions correctly.'
+                : 'Răspunde corect la cele 3 întrebări de eficiență editorială.'}
+            </p>
           </div>
         </div>
 
@@ -375,7 +446,9 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. Ce combinație de taste deschide direct fereastra „Înlocuire” (Replace) în Microsoft Word?
+              {lang === 'en'
+                ? '1. Which keyboard shortcut directly opens the "Replace" dialog in Microsoft Word?'
+                : '1. Ce combinație de taste deschide direct fereastra „Înlocuire” (Replace) în Microsoft Word?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
@@ -383,9 +456,21 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { id: 'ctrl_h', text: 'Ctrl + H' },
-              { id: 'ctrl_f', text: 'Ctrl + F (deschide doar căutarea simplă)' },
-              { id: 'ctrl_r', text: 'Ctrl + R (aliniază la dreapta)' },
-              { id: 'f5', text: 'F5 (salt la pagină)' },
+              {
+                id: 'ctrl_f',
+                textRo: 'Ctrl + F (deschide doar căutarea simplă)',
+                textEn: 'Ctrl + F (opens simple search only)',
+              },
+              {
+                id: 'ctrl_r',
+                textRo: 'Ctrl + R (aliniază la dreapta)',
+                textEn: 'Ctrl + R (right aligns text)',
+              },
+              {
+                id: 'f5',
+                textRo: 'F5 (salt la pagină)',
+                textEn: 'F5 (Go to page)',
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -400,18 +485,26 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {option.textEn && lang === 'en' ? option.textEn : option.textRo || option.text}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Ține minte: Ctrl+F este pentru Find (Găsire simplă), iar Ctrl+H deschide direct fila Înlocuire."
+            hint={
+              lang === 'en'
+                ? 'Remember: Ctrl+F is for Find (simple search), while Ctrl+H opens directly into the Replace tab.'
+                : 'Ține minte: Ctrl+F este pentru Find (Găsire simplă), iar Ctrl+H deschide direct fila Înlocuire.'
+            }
           />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Ctrl + H este scurtătura standardizată care deschide fereastra Find and Replace cu focus direct pe câmpurile de substituție."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! Ctrl + H is the standardized shortcut that opens the Find and Replace dialog focused directly on replacement fields.'
+                  : 'Corect! Ctrl + H este scurtătura standardizată care deschide fereastra Find and Replace cu focus direct pe câmpurile de substituție.'
+              }
             />
           )}
         </div>
@@ -420,15 +513,25 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Ce cod special se folosește în câmpul de căutare Word pentru a identifica un marcaj de sfârșit de paragraf (apăsarea tastei Enter)?
+              {lang === 'en'
+                ? '2. Which special token is used in Word Find box to target a paragraph break (Enter key mark)?'
+                : '2. Ce cod special se folosește în câmpul de căutare Word pentru a identifica un marcaj de sfârșit de paragraf (apăsarea tastei Enter)?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'caret_p', text: '^p (de la Paragraph break)' },
-              { id: 'caret_t', text: '^t (de la Tabulator)' },
+              {
+                id: 'caret_p',
+                textRo: '^p (de la Paragraph break)',
+                textEn: '^p (Paragraph mark)',
+              },
+              {
+                id: 'caret_t',
+                textRo: '^t (de la Tabulator)',
+                textEn: '^t (Tab character)',
+              },
               { id: 'enter_word', text: '[ENTER]' },
               { id: 'slash_n', text: '\\endl' },
             ].map((option) => (
@@ -445,18 +548,26 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {option.textEn && lang === 'en' ? option.textEn : option.textRo || option.text}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Simbolul ^ (caret, obținut cu Shift+6) urmat de prima literă din cuvântul 'paragraph'."
+            hint={
+              lang === 'en'
+                ? 'The caret symbol ^ (Shift+6) followed by the first letter of "paragraph".'
+                : 'Simbolul ^ (caret, obținut cu Shift+6) urmat de prima literă din cuvântul \'paragraph\'.'
+            }
           />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Exact! ^p reprezintă caracterul invizibil de paragraf (Pilcrow ¶). De exemplu, căutând ^p^p și înlocuind cu ^p elimini toate paragrafele goale consecutive create din greșeală."
+              explanation={
+                lang === 'en'
+                  ? 'Exactly! ^p represents the invisible paragraph symbol (Pilcrow ¶). For instance, finding ^p^p and replacing with ^p eliminates all unintentional blank lines.'
+                  : 'Exact! ^p reprezintă caracterul invizibil de paragraf (Pilcrow ¶). De exemplu, căutând ^p^p și înlocuind cu ^p elimini toate paragrafele goale consecutive create din greșeală.'
+              }
             />
           )}
         </div>
@@ -465,7 +576,9 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Cum se procedează corect pentru a curăța rapid toate spațiile duble sau triple dintr-un document lung?
+              {lang === 'en'
+                ? '3. What is the standard professional method to eliminate all double or triple spaces from a long document?'
+                : '3. Cum se procedează corect pentru a curăța rapid toate spațiile duble sau triple dintr-un document lung?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
@@ -474,19 +587,25 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
             {[
               {
                 id: 'repeat_replace_all',
-                text: 'Se caută două spații consecutive („  ”), se înlocuiesc cu un spațiu („ ”) și se apasă „Înlocuire peste tot” (Replace All) repetat până când Word raportează 0 înlocuiri.',
+                textRo:
+                  'Se caută două spații consecutive („  ”), se înlocuiesc cu un spațiu („ ”) și se apasă „Înlocuire peste tot” (Replace All) repetat până când Word raportează 0 înlocuiri.',
+                textEn:
+                  'Search for two consecutive spaces ("  "), replace with a single space (" "), and click "Replace All" repeatedly until Word reports 0 replacements made.',
               },
               {
                 id: 'manual_backspace',
-                text: 'Se citește documentul rând cu rând și se apasă tasta Backspace de fiecare dată.',
+                textRo: 'Se citește documentul rând cu rând și se apasă tasta Backspace de fiecare dată.',
+                textEn: 'Read through the manuscript line-by-line and hit Backspace manually each time.',
               },
               {
                 id: 'delete_document',
-                text: 'Se șterge tot textul și se rescrie de la zero cu atenție sporită.',
+                textRo: 'Se șterge tot textul și se rescrie de la zero cu atenție sporită.',
+                textEn: 'Delete all content and retype from scratch with heightened care.',
               },
               {
                 id: 'font_size',
-                text: 'Se mărește dimensiunea fontului la 48pt pentru a acoperi spațiile albe.',
+                textRo: 'Se mărește dimensiunea fontului la 48pt pentru a acoperi spațiile albe.',
+                textEn: 'Increase font size to 48pt to camouflage the white space.',
               },
             ].map((option) => (
               <button
@@ -502,18 +621,26 @@ export const W1Level5_FindReplaceLab: React.FC<W1Level5Props> = ({ onCompletePag
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Dacă într-un loc au fost 4 spații, prima înlocuire le reduce la 2 spații. O a doua rulare le reduce la 1 spațiu perfect!"
+            hint={
+              lang === 'en'
+                ? 'If there were 4 spaces in a row, the first pass cuts them to 2. A second run reduces them to 1 pristine space!'
+                : 'Dacă într-un loc au fost 4 spații, prima înlocuire le reduce la 2 spații. O a doua rulare le reduce la 1 spațiu perfect!'
+            }
           />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Foarte adevărat! Rularea repetată a înlocuirii „  ” ➔ „ ” reduce exponențial orice succesiune de spații multiple la un singur spațiu regulamentar."
+              explanation={
+                lang === 'en'
+                  ? 'Very true! Repeatedly running "  " ➔ " " exponentially halves any string of multiple spaces down to a single standard space.'
+                  : 'Foarte adevărat! Rularea repetată a înlocuirii „  ” ➔ „ ” reduce exponențial orice succesiune de spații multiple la un singur spațiu regulamentar.'
+              }
             />
           )}
         </div>

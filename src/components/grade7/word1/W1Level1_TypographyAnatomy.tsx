@@ -47,54 +47,87 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
   const fontFamilies = {
     serif: {
       name: 'Times New Roman / Georgia',
-      family: 'Serif (Cu piciorușe)',
-      sample: 'Tipografia Românească — Tradiție & Eleganță',
+      family: lang === 'en' ? 'Serif (With Feet)' : 'Serif (Cu piciorușe)',
+      sample: lang === 'en' ? 'Romanian Typography — Tradition & Elegance' : 'Tipografia Românească — Tradiție & Eleganță',
       cssFont: 'font-serif',
-      description: 'Prezintă terminații fine (serife/piciorușe) la capetele literelor. Călăuzește privirea cititorului de-a lungul rândului tipărit.',
-      bestFor: 'Cărți, romane, ziare tipărite, referate academice formale.',
+      description:
+        lang === 'en'
+          ? 'Features fine decorative extensions (serifs) at stroke endpoints. Guides the reader eyes across printed book lines.'
+          : 'Prezintă terminații fine (serife/piciorușe) la capetele literelor. Călăuzește privirea cititorului de-a lungul rândului tipărit.',
+      bestFor:
+        lang === 'en'
+          ? 'Printed books, novels, newspapers, formal academic research papers.'
+          : 'Cărți, romane, ziare tipărite, referate academice formale.',
     },
     sans: {
       name: 'Calibri / Arial / Segoe UI',
-      family: 'Sans-Serif (Fără piciorușe)',
-      sample: 'Interfețe Digitale & Lizibilitate pe Ecrane',
+      family: lang === 'en' ? 'Sans-Serif (Without Feet)' : 'Sans-Serif (Fără piciorușe)',
+      sample: lang === 'en' ? 'Digital Interfaces & Screen Readability' : 'Interfețe Digitale & Lizibilitate pe Ecrane',
       cssFont: 'font-sans',
-      description: 'Litere curate, geometrice, fără terminații decorative. Nu obosesc ochiul la rezoluții de ecran și sunt ușor de citit de la distanță.',
-      bestFor: 'Site-uri web, prezentări pe proiector, titluri de capitole, e-mailuri.',
+      description:
+        lang === 'en'
+          ? 'Clean, geometric strokes without decorative feet. High clarity at screen resolutions, easy to read from distance.'
+          : 'Litere curate, geometrice, fără terminații decorative. Nu obosesc ochiul la rezoluții de ecran și sunt ușor de citit de la distanță.',
+      bestFor:
+        lang === 'en'
+          ? 'Websites, slide presentations, chapter headings, emails.'
+          : 'Site-uri web, prezentări pe proiector, titluri de capitole, e-mailuri.',
     },
     mono: {
       name: 'Consolas / Courier New / Fira Code',
-      family: 'Monospațiat (Monospace)',
+      family: lang === 'en' ? 'Monospace (Fixed Width)' : 'Monospațiat (Monospace)',
       sample: '#include <iostream> int x = 42;',
       cssFont: 'font-mono',
-      description: 'Fiecare caracter ocupă exact aceeași lățime orizontală (litera „i” are aceeași lățime ca „w”). Păstrează indentarea codului aliniată perfect.',
-      bestFor: 'Cod sursă C++, tabele textuale, adrese IP, terminale de comandă.',
+      description:
+        lang === 'en'
+          ? 'Each character occupies the exact same horizontal width. Preserves perfect indentation and vertical column alignment.'
+          : 'Fiecare caracter ocupă exact aceeași lățime orizontală (litera „i” are aceeași lățime ca „w”). Păstrează indentarea codului aliniată perfect.',
+      bestFor:
+        lang === 'en'
+          ? 'C++ source code, tabular text data, IP addresses, terminal shells.'
+          : 'Cod sursă C++, tabele textuale, adrese IP, terminale de comandă.',
     },
   };
 
   const anatomyParts: Record<string, { title: string; desc: string; color: string }> = {
     serif: {
-      title: 'Serifă (Picioruș terminal)',
-      desc: 'Extensie decorativă sau de ghidaj la capătul unei trăsături de literă. Oferă ritm optic lecturii cursive pe hârtie.',
+      title: lang === 'en' ? 'Serif (Terminal Foot)' : 'Serifă (Picioruș terminal)',
+      desc:
+        lang === 'en'
+          ? 'Decorative or guidance stroke at character extremities. Creates an optical rhythm for smooth reading on paper.'
+          : 'Extensie decorativă sau de ghidaj la capătul unei trăsături de literă. Oferă ritm optic lecturii cursive pe hârtie.',
       color: 'text-amber-400 border-amber-500/40 bg-amber-500/10',
     },
     baseline: {
-      title: 'Linia de Bază (Baseline)',
-      desc: 'Linia orizontală invizibilă pe care „se așază” toate caracterele majuscule și corpul literelor mici (cu excepția cozilor descendente).',
+      title: lang === 'en' ? 'Baseline' : 'Linia de Bază (Baseline)',
+      desc:
+        lang === 'en'
+          ? 'The invisible horizontal line on which uppercase and lowercase bodies sit (excluding descenders).'
+          : 'Linia orizontală invizibilă pe care „se așază” toate caracterele majuscule și corpul literelor mici (cu excepția cozilor descendente).',
       color: 'text-cyan-400 border-cyan-500/40 bg-cyan-500/10',
     },
     xheight: {
-      title: 'Înălțimea x (x-Height)',
-      desc: 'Înălțimea corpului literelor mici fără tije (cum ar fi x, a, e, o, m). Cu cât x-height este mai mare, cu atât fontul pare mai lizibil la dimensiuni mici.',
+      title: lang === 'en' ? 'x-Height' : 'Înălțimea x (x-Height)',
+      desc:
+        lang === 'en'
+          ? 'Height of lowercase glyph bodies without ascenders/descenders (e.g. x, a, e, o, m). Larger x-height enhances small text legibility.'
+          : 'Înălțimea corpului literelor mici fără tije (cum ar fi x, a, e, o, m). Cu cât x-height este mai mare, cu atât fontul pare mai lizibil la dimensiuni mici.',
       color: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
     },
     ascender: {
-      title: 'Tijă Ascendentă (Ascender)',
-      desc: 'Partea unei litere mici care se înalță deasupra înălțimii x (ex: la literele b, d, h, k, l, t).',
+      title: lang === 'en' ? 'Ascender' : 'Tijă Ascendentă (Ascender)',
+      desc:
+        lang === 'en'
+          ? 'The portion of a lowercase letter extending above the x-height (e.g. b, d, h, k, l, t).'
+          : 'Partea unei litere mici care se înalță deasupra înălțimii x (ex: la literele b, d, h, k, l, t).',
       color: 'text-violet-400 border-violet-500/40 bg-violet-500/10',
     },
     descender: {
-      title: 'Coadă Descendentă (Descender)',
-      desc: 'Porțiunea literei care coboară sub linia de bază (baseline), întâlnită la literele p, q, y, g, j.',
+      title: lang === 'en' ? 'Descender' : 'Coadă Descendentă (Descender)',
+      desc:
+        lang === 'en'
+          ? 'The portion of a lowercase letter extending below the baseline (e.g. p, q, y, g, j).'
+          : 'Porțiunea literei care coboară sub linia de bază (baseline), întâlnită la literele p, q, y, g, j.',
       color: 'text-rose-400 border-rose-500/40 bg-rose-500/10',
     },
   };
@@ -169,19 +202,29 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono font-bold border border-blue-500/40">
               <Type className="w-3.5 h-3.5 text-blue-400" />
-              <span>NIVELUL 1 DIN 7 • ANATOMIA TIPOGRAFICĂ & CLASIFICAREA FONTURILOR</span>
+              <span>
+                {lang === 'en'
+                  ? 'LEVEL 1 OF 7 • TYPOGRAPHY ANATOMY & FONT FAMILIES'
+                  : 'NIVELUL 1 DIN 7 • ANATOMIA TIPOGRAFICĂ & CLASIFICAREA FONTURILOR'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
-              Anatomia Literelor & Familiile de Fonturi
+              {lang === 'en'
+                ? 'Letter Anatomy & Font Families'
+                : 'Anatomia Literelor & Familiile de Fonturi'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Înainte de a tehnoredacta un document profesional, trebuie să înțelegem fizica vizuală a caracterelor: de ce cărțile tipărite folosesc serife, de ce ecranele preferă fonturile Sans-serif și de ce programatorii scriu cod doar cu fonturi monospațiate.
+              {lang === 'en'
+                ? 'Before typesetting a professional document, we must understand character visual physics: why printed books use serifs, why screens favor Sans-serif, and why programmers write code exclusively with monospaced fonts.'
+                : 'Înainte de a tehnoredacta un document profesional, trebuie să înțelegem fizica vizuală a caracterelor: de ce cărțile tipărite folosesc serife, de ce ecranele preferă fonturile Sans-serif și de ce programatorii scriu cod doar cu fonturi monospațiate.'}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="px-4 py-2 rounded-2xl bg-slate-900/80 border border-blue-500/40 text-right">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block">Punctaj Nivel 1</span>
+              <span className="text-[11px] font-mono uppercase text-slate-400 block">
+                {lang === 'en' ? 'Level 1 Score' : 'Punctaj Nivel 1'}
+              </span>
               <span className="text-2xl font-black font-mono text-cyan-400">{totalScore} / 100 XP</span>
             </div>
           </div>
@@ -196,8 +239,16 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
               <Eye className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laboratorul Interactiv: Exploratorul de Anatomie Tipografică</h2>
-              <p className="text-xs text-slate-400">Comută între familiile de fonturi și apasă pe componentele anatomice pentru detalii.</p>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Interactive Lab: Typography Anatomy Explorer'
+                  : 'Laboratorul Interactiv: Exploratorul de Anatomie Tipografică'}
+              </h2>
+              <p className="text-xs text-slate-400">
+                {lang === 'en'
+                  ? 'Switch between font families and click on anatomical parts for definitions.'
+                  : 'Comută între familiile de fonturi și apasă pe componentele anatomice pentru detalii.'}
+              </p>
             </div>
           </div>
 
@@ -207,10 +258,18 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
               sounds.playClick();
               setShowAnatomyLines(!showAnatomyLines);
             }}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+            className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer self-start sm:self-auto transition-colors"
           >
             <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{showAnatomyLines ? 'Ascunde Liniile Ghid' : 'Afișează Liniile Ghid'}</span>
+            <span>
+              {showAnatomyLines
+                ? lang === 'en'
+                  ? 'Hide Guide Lines'
+                  : 'Ascunde Liniile Ghid'
+                : lang === 'en'
+                ? 'Show Guide Lines'
+                : 'Afișează Liniile Ghid'}
+            </span>
           </button>
         </div>
 
@@ -253,25 +312,25 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
               {/* Ascender line */}
               <div className="w-full border-t border-dashed border-violet-500/40 relative mb-8">
                 <span className="absolute -top-3.5 right-2 text-[10px] font-mono text-violet-400 bg-slate-950 px-1">
-                  Ascender Line (Tije superioare: b, d, h)
+                  {lang === 'en' ? 'Ascender Line (Upper stems: b, d, h)' : 'Ascender Line (Tije superioare: b, d, h)'}
                 </span>
               </div>
               {/* x-Height line */}
               <div className="w-full border-t border-dashed border-emerald-500/50 relative mb-12">
                 <span className="absolute -top-3.5 right-2 text-[10px] font-mono text-emerald-400 bg-slate-950 px-1">
-                  x-Height (Înălțimea literei mici x)
+                  {lang === 'en' ? 'x-Height (Height of lowercase x)' : 'x-Height (Înălțimea literei mici x)'}
                 </span>
               </div>
               {/* Baseline */}
               <div className="w-full border-t-2 border-cyan-500/80 relative mb-8">
                 <span className="absolute -top-3.5 right-2 text-[10px] font-mono font-bold text-cyan-300 bg-slate-950 px-1">
-                  Baseline (Linia de Bază a Textului)
+                  {lang === 'en' ? 'Baseline (Text baseline grid)' : 'Baseline (Linia de Bază a Textului)'}
                 </span>
               </div>
               {/* Descender line */}
               <div className="w-full border-t border-dashed border-rose-500/40 relative">
                 <span className="absolute -top-3.5 right-2 text-[10px] font-mono text-rose-400 bg-slate-950 px-1">
-                  Descender Line (Cozi inferioare: p, q, y)
+                  {lang === 'en' ? 'Descender Line (Lower tails: p, q, y)' : 'Descender Line (Cozi inferioare: p, q, y)'}
                 </span>
               </div>
             </div>
@@ -282,7 +341,7 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
             <div
               className={`text-4xl sm:text-5xl md:text-6xl font-normal tracking-wide text-white transition-all duration-300 ${fontFamilies[activeFontFamily].cssFont}`}
             >
-              Tipografie Spil
+              {lang === 'en' ? 'Typography Glyphs' : 'Tipografie Spil'}
             </div>
             <div className="text-xs sm:text-sm text-slate-400 font-mono">
               {fontFamilies[activeFontFamily].sample}
@@ -293,7 +352,7 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
         {/* Anatomy Clickable Chips */}
         <div className="space-y-2">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-            Selectează o noțiune anatomică pentru definiție:
+            {lang === 'en' ? 'Select an anatomical concept for definition:' : 'Selectează o noțiune anatomică pentru definiție:'}
           </span>
           <div className="flex flex-wrap gap-2">
             {Object.entries(anatomyParts).map(([key, part]) => {
@@ -336,8 +395,14 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Exercițiul Practic: Clasificatorul de Fonturi</h2>
-            <p className="text-xs text-slate-400">Atribuie fiecărui font popular categoria corectă de stil tipografic.</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en' ? 'Practical Exercise: Font Classifier' : 'Exercițiul Practic: Clasificatorul de Fonturi'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Assign each popular font its proper typographical category.'
+                : 'Atribuie fiecărui font popular categoria corectă de stil tipografic.'}
+            </p>
           </div>
         </div>
 
@@ -354,11 +419,11 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
                     <span className="text-xs font-mono flex items-center gap-1">
                       {isCorrect ? (
                         <span className="text-emerald-400 flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                          <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'en' ? 'Correct' : 'Corect'}
                         </span>
                       ) : (
                         <span className="text-rose-400 flex items-center gap-1">
-                          <XCircle className="w-3.5 h-3.5" /> Greșit
+                          <XCircle className="w-3.5 h-3.5" /> {lang === 'en' ? 'Wrong' : 'Greșit'}
                         </span>
                       )}
                     </span>
@@ -389,10 +454,13 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
         </div>
 
         <div className="text-xs font-mono text-slate-400 flex items-center justify-between pt-2">
-          <span>Clasificări corecte: <b className="text-cyan-400">{correctClassificationsCount} / 4</b></span>
+          <span>
+            {lang === 'en' ? 'Correct classifications:' : 'Clasificări corecte:'}{' '}
+            <b className="text-cyan-400">{correctClassificationsCount} / 4</b>
+          </span>
           {correctClassificationsCount === 4 && (
             <span className="text-emerald-400 font-bold flex items-center gap-1">
-              <CheckCircle2 className="w-4 h-4" /> +25 Puncte acumulate!
+              <CheckCircle2 className="w-4 h-4" /> {lang === 'en' ? '+25 Points earned!' : '+25 Puncte acumulate!'}
             </span>
           )}
         </div>
@@ -405,8 +473,16 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificarea Cunoștințelor: Întrebări Pedagogice</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări de teorie și aplicabilitate.</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Knowledge Check: Pedagogical Questions'
+                : 'Verificarea Cunoștințelor: Întrebări Pedagogice'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 theory and applied questions correctly.'
+                : 'Răspunde corect la cele 3 întrebări de teorie și aplicabilitate.'}
+            </p>
           </div>
         </div>
 
@@ -414,7 +490,9 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. De ce cărțile, revistele tipărite și ziarele folosesc în mod tradițional fonturi Serif (cu piciorușe)?
+              {lang === 'en'
+                ? '1. Why do printed books, magazines, and newspapers traditionally use Serif fonts?'
+                : '1. De ce cărțile, revistele tipărite și ziarele folosesc în mod tradițional fonturi Serif (cu piciorușe)?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
@@ -423,19 +501,25 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
             {[
               {
                 id: 'serif_print',
-                text: 'Serifele creează o linie optică invizibilă care călăuzește ochii de la stânga la dreapta de-a lungul rândurilor lungi.',
+                textRo:
+                  'Serifele creează o linie optică invizibilă care călăuzește ochii de la stânga la dreapta de-a lungul rândurilor lungi.',
+                textEn:
+                  'Serifs create an invisible optical guideline that navigates the reader eyes smoothly across long printed lines.',
               },
               {
                 id: 'ink_saving',
-                text: 'Piciorușele literelor consumă cu 50% mai puțin tuș la tipărirea pe imprimante laser.',
+                textRo: 'Piciorușele literelor consumă cu 50% mai puțin tuș la tipărirea pe imprimante laser.',
+                textEn: 'Letter feet consume 50% less toner when printing on laser printers.',
               },
               {
                 id: 'computer_rule',
-                text: 'Monitoarele vechi din anii 1980 nu puteau afișa altceva decât caractere cu serife.',
+                textRo: 'Monitoarele vechi din anii 1980 nu puteau afișa altceva decât caractere cu serife.',
+                textEn: '1980s monitors were unable to render anything other than serif glyphs.',
               },
               {
                 id: 'short_only',
-                text: 'Sunt destinate doar titlurilor de maxim trei cuvinte și reclamelor scurte.',
+                textRo: 'Sunt destinate doar titlurilor de maxim trei cuvinte și reclamelor scurte.',
+                textEn: 'They are intended solely for short three-word headings and billboards.',
               },
             ].map((option) => (
               <button
@@ -451,18 +535,26 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Gândește-te la modul în care privirea ta urmărește un rând lung dintr-un roman. Terminațiile literelor Serif leagă caracterele vizual."
+            hint={
+              lang === 'en'
+                ? 'Think about how your eyes track a long line of printed text. Serif endings visually connect adjacent letters.'
+                : 'Gândește-te la modul în care privirea ta urmărește un rând lung dintr-un roman. Terminațiile literelor Serif leagă caracterele vizual.'
+            }
           />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Serifele (piciorușele) funcționează ca o călăuză orizontală pentru privire, micșorând oboseala ochilor la citirea textelor compacte lungi pe suport de hârtie."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! Serifs serve as an optical horizontal guide, significantly reducing eye strain during extended reading on paper.'
+                  : 'Corect! Serifele (piciorușele) funcționează ca o călăuză orizontală pentru privire, micșorând oboseala ochilor la citirea textelor compacte lungi pe suport de hârtie.'
+              }
             />
           )}
         </div>
@@ -471,7 +563,9 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. De ce în programare (C++, Code::Blocks, Scratch) este obligatorie utilizarea unui font Monospațiat?
+              {lang === 'en'
+                ? '2. Why is using a Monospaced font mandatory in programming (C++, Code::Blocks, Scratch)?'
+                : '2. De ce în programare (C++, Code::Blocks, Scratch) este obligatorie utilizarea unui font Monospațiat?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
@@ -480,19 +574,25 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
             {[
               {
                 id: 'mono_alignment',
-                text: 'Fiecare caracter are exact aceeași lățime, astfel acoladele, variabilele și coloanele de cod rămân aliniate perfect vertical.',
+                textRo:
+                  'Fiecare caracter are exact aceeași lățime, astfel acoladele, variabilele și coloanele de cod rămân aliniate perfect vertical.',
+                textEn:
+                  'Every character has the exact same width, keeping curly braces, variables, and columns vertically aligned.',
               },
               {
                 id: 'fast_compile',
-                text: 'Compilatorul GNU GCC rulează de 3 ori mai rapid dacă fișierul .cpp e redactat cu Consolas.',
+                textRo: 'Compilatorul GNU GCC rulează de 3 ori mai rapid dacă fișierul .cpp e redactat cu Consolas.',
+                textEn: 'The GNU GCC compiler runs 3x faster when the .cpp file is typed in Consolas.',
               },
               {
                 id: 'no_vowels',
-                text: 'Fonturile monospațiate nu permit tastarea vocalelor, eliminând greșelile de ortografie.',
+                textRo: 'Fonturile monospațiate nu permit tastarea vocalelor, eliminând greșelile de ortografie.',
+                textEn: 'Monospace fonts disallow typing vowels, eliminating spelling mistakes.',
               },
               {
                 id: 'lower_res',
-                text: 'Ocupă mai puțin spațiu pe hard disk decât fonturile proporționale.',
+                textRo: 'Ocupă mai puțin spațiu pe hard disk decât fonturile proporționale.',
+                textEn: 'They take up less hard drive space than proportional fonts.',
               },
             ].map((option) => (
               <button
@@ -508,18 +608,26 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Compară litera 'i' cu litera 'w'. Într-un font proporțional obișnuit 'w' e de 3 ori mai lat decât 'i'. Într-un font monospațiat au aceeași căsuță!"
+            hint={
+              lang === 'en'
+                ? 'Compare letter "i" with "w". In proportional fonts "w" is 3x wider than "i". In monospace fonts they share the exact same bounding box!'
+                : 'Compară litera \'i\' cu litera \'w\'. Într-un font proporțional obișnuit \'w\' e de 3 ori mai lat decât \'i\'. Într-un font monospațiat au aceeași căsuță!'
+            }
           />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Într-un font monospațiat (Consolas, Courier New), fiecare simbol are o lățime identică, garantând indentarea precisă a blocurilor de cod și lizibilitatea sintaxei."
+              explanation={
+                lang === 'en'
+                  ? 'Excellent! In a monospaced font (Consolas, Courier New), every glyph shares the exact same horizontal width, guaranteeing flawless code indentation and syntax clarity.'
+                  : 'Excelent! Într-un font monospațiat (Consolas, Courier New), fiecare simbol are o lățime identică, garantând indentarea precisă a blocurilor de cod și lizibilitatea sintaxei.'
+              }
             />
           )}
         </div>
@@ -528,17 +636,35 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. În anatomia literei mici „p” sau „q”, cum se numește porțiunea care coboară sub linia de bază (baseline)?
+              {lang === 'en'
+                ? '3. In the anatomy of lowercase "p" or "q", what is the portion extending below the baseline called?'
+                : '3. În anatomia literei mici „p” sau „q”, cum se numește porțiunea care coboară sub linia de bază (baseline)?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'descender', text: 'Descender (Coadă descendentă)' },
-              { id: 'ascender', text: 'Ascender (Tijă ascendentă)' },
-              { id: 'serif', text: 'Serifă unghiulară' },
-              { id: 'stem', text: 'Trăsătură dorsală de legătură' },
+              {
+                id: 'descender',
+                textRo: 'Descender (Coadă descendentă)',
+                textEn: 'Descender',
+              },
+              {
+                id: 'ascender',
+                textRo: 'Ascender (Tijă ascendentă)',
+                textEn: 'Ascender',
+              },
+              {
+                id: 'serif',
+                textRo: 'Serifă unghiulară',
+                textEn: 'Angular Serif',
+              },
+              {
+                id: 'stem',
+                textRo: 'Trăsătură dorsală de legătură',
+                textEn: 'Dorsal Stem',
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -553,18 +679,26 @@ export const W1Level1_TypographyAnatomy: React.FC<W1Level1Props> = ({ onComplete
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Cuvântul vine din limba latină 'descendere' (a coborî). Privește linia de bază peste care litera p își lasă coada în jos."
+            hint={
+              lang === 'en'
+                ? 'The term originates from Latin "descendere" (to descend/drop down). Observe how the tail of "p" drops below the baseline.'
+                : 'Cuvântul vine din limba latină \'descendere\' (a coborî). Privește linia de bază peste care litera p își lasă coada în jos.'
+            }
           />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Corect! Coada descendentă (Descender) este elementul care coboară sub baseline, fiind specific literelor g, j, p, q, y."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! The Descender is the anatomical part extending below the baseline, characteristic of letters g, j, p, q, and y.'
+                  : 'Corect! Coada descendentă (Descender) este elementul care coboară sub baseline, fiind specific literelor g, j, p, q, y.'
+              }
             />
           )}
         </div>

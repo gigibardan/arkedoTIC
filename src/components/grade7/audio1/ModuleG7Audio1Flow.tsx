@@ -8,6 +8,7 @@ import { A1Level5_AudioEditingTechniques } from './A1Level5_AudioEditingTechniqu
 import { A1Level6_RadioJingleStudio } from './A1Level6_RadioJingleStudio';
 import { A1Level7_AcousticWavePadExam } from './A1Level7_AcousticWavePadExam';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface ModuleG7Audio1FlowProps {
@@ -25,6 +26,8 @@ export const ModuleG7Audio1Flow: React.FC<ModuleG7Audio1FlowProps> = ({
   onRestartMission,
   onReturnToCatalog,
 }) => {
+  const { lang } = useLanguage();
+
   const handlePassCurrentLevel = (score: number) => {
     onCompletePage(score);
   };
@@ -44,19 +47,24 @@ export const ModuleG7Audio1Flow: React.FC<ModuleG7Audio1FlowProps> = ({
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Catalog Misiuni</span>
+              <span>{lang === 'ro' ? 'Catalog Misiuni' : 'Missions Catalog'}</span>
             </button>
           )}
 
           <div className="text-xs text-slate-400 font-mono hidden sm:inline">
-            Modulul 2A: <span className="text-amber-400 font-bold">Acustică & WavePad (Manual pag. 28–35)</span>
+            {lang === 'ro' ? 'Modulul 2A:' : 'Module 2A:'}{' '}
+            <span className="text-amber-400 font-bold">
+              {lang === 'ro'
+                ? 'Acustică & WavePad (Manual pag. 28–35)'
+                : 'Acoustics & WavePad (Textbook pp. 28–35)'}
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           {studentName && (
             <div className="text-xs font-mono text-slate-300 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
-              Elev: <span className="text-amber-300 font-bold">{studentName}</span>
+              {lang === 'ro' ? 'Elev:' : 'Student:'} <span className="text-amber-300 font-bold">{studentName}</span>
             </div>
           )}
 
@@ -64,16 +72,21 @@ export const ModuleG7Audio1Flow: React.FC<ModuleG7Audio1FlowProps> = ({
             <button
               type="button"
               onClick={() => {
-                if (window.confirm('Ești sigur că vrei să reiei Misiunea 2A de la început?')) {
+                const confirmed = window.confirm(
+                  lang === 'ro'
+                    ? 'Ești sigur că vrei să reiei Misiunea 2A de la început?'
+                    : 'Are you sure you want to restart Mission 2A from the beginning?'
+                );
+                if (confirmed) {
                   sounds.playClick();
                   onRestartMission();
                 }
               }}
               className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-rose-400 border border-slate-700 text-xs font-mono transition flex items-center gap-1 cursor-pointer"
-              title="Reia Misiunea 2A de la Nivelul 1"
+              title={lang === 'ro' ? 'Reia Misiunea 2A de la Nivelul 1' : 'Restart Mission 2A from Level 1'}
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reia Misiunea</span>
+              <span className="hidden sm:inline">{lang === 'ro' ? 'Reia Misiunea' : 'Restart Mission'}</span>
             </button>
           )}
         </div>

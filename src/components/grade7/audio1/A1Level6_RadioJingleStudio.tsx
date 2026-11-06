@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Radio, Volume2, Sparkles, AlertTriangle, CheckCircle2, Play, Square, Sliders, Award, Layers } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 import { sounds } from '../../../utils/audio';
 
 interface A1Level6Props {
@@ -7,6 +8,8 @@ interface A1Level6Props {
 }
 
 export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Mixer Sliders
   const [voiceVolume, setVoiceVolume] = useState<number>(85); // Ideal: 80-90%
   const [musicVolume, setMusicVolume] = useState<number>(20); // Ideal: 15-25%
@@ -100,11 +103,15 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
           </div>
           <div>
             <div className="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1.5">
-              <span>Unitatea 2: Acustică Digitală • Manual Art Klett pag. 34–35</span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">Nivelul 6/7</span>
+              <span>{lang === 'ro' ? 'Unitatea 2: Acustică Digitală • Manual Art Klett pag. 34–35' : 'Unit 2: Digital Acoustics • Art Klett Textbook pp. 34–35'}</span>
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">
+                {lang === 'ro' ? 'Nivelul 6/7' : 'Level 6/7'}
+              </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black font-heading tracking-tight text-white">
-              Studio Jingle Radio Școlar: Tehnica Paste Mix & Reglaj de Volum
+              {lang === 'ro'
+                ? 'Studio Jingle Radio Școlar: Tehnica Paste Mix & Reglaj de Volum'
+                : 'School Radio Jingle Studio: Paste Mix Technique & Volume Levels'}
             </h1>
           </div>
         </div>
@@ -122,16 +129,24 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
         <div>
           <h2 className="text-sm font-bold text-white font-heading flex items-center gap-2">
             <Award className="w-4 h-4 text-amber-400" />
-            <span>Criteriile Tehnice ale Comisiei Radio (Grilă de Notare)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Criteriile Tehnice ale Comisiei Radio (Grilă de Notare)'
+                : 'Broadcast Board Technical Criteria (Rubric)'}
+            </span>
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Mixează vocea naratorului peste melodia electronică folosind Paste Mix. Vocea trebuie să fie clară, muzica discretă, fără clipping și cu Fade Out la final!
+            {lang === 'ro'
+              ? 'Mixează vocea naratorului peste melodia electronică folosind Paste Mix. Vocea trebuie să fie clară, muzica discretă, fără clipping și cu Fade Out la final!'
+              : 'Mix narrator voice over electronic music bed using Paste Mix. Voice must be distinct, music subtle, zero clipping, with a clean Fade Out at the end!'}
           </p>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
           <div className="text-right">
-            <div className="text-[10px] font-mono uppercase text-slate-400 font-bold">Nota de Producție:</div>
+            <div className="text-[10px] font-mono uppercase text-slate-400 font-bold">
+              {lang === 'ro' ? 'Nota de Producție:' : 'Production Grade:'}
+            </div>
             <div className={`text-2xl font-black font-mono ${finalGrade >= 9 ? 'text-emerald-400' : 'text-amber-400'}`}>
               {finalGrade.toFixed(1)} / 10
             </div>
@@ -144,7 +159,11 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white font-black text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/30 cursor-pointer disabled:opacity-50"
           >
             {isPlaying ? <Square className="w-4 h-4 fill-current animate-spin" /> : <Play className="w-4 h-4 fill-current" />}
-            <span>{isPlaying ? 'Redare Jingle...' : 'Ascultă Mixajul'}</span>
+            <span>
+              {isPlaying
+                ? (lang === 'ro' ? 'Redare Jingle...' : 'Playing Jingle...')
+                : (lang === 'ro' ? 'Ascultă Mixajul' : 'Listen to Mix')}
+            </span>
           </button>
         </div>
       </div>
@@ -154,10 +173,17 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
         <div className="flex items-center justify-between border-b border-slate-850 pb-3">
           <h3 className="text-sm font-bold text-white font-heading flex items-center gap-2">
             <Sliders className="w-4 h-4 text-amber-400" />
-            <span>Consola de Mixaj Paste Mix (Voce + Muzică de Fundal)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Consola de Mixaj Paste Mix (Voce + Muzică de Fundal)'
+                : 'Paste Mix Console (Voice + Background Music Bed)'}
+            </span>
           </h3>
           <span className="text-xs font-mono text-slate-400">
-            Scurtătură WavePad: <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-amber-300 font-bold">Ctrl + Shift + V</kbd>
+            {lang === 'ro' ? 'Scurtătură WavePad:' : 'WavePad Shortcut:'}{' '}
+            <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-amber-300 font-bold">
+              Ctrl + Shift + V
+            </kbd>
           </span>
         </div>
 
@@ -166,7 +192,7 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
           <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-sky-400 flex items-center gap-1.5">
-                <span>🎙️ Canal 1: Voce Narator</span>
+                <span>{lang === 'ro' ? '🎙️ Canal 1: Voce Narator' : '🎙️ Channel 1: Voice Track'}</span>
               </span>
               <span className="text-sm font-black font-mono text-white bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700">
                 {voiceVolume}%
@@ -174,7 +200,9 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             </div>
 
             <p className="text-[11px] text-slate-400">
-              „Bună dimineața, elevi și profesori! Aici Radio Școala Noastră cu știrile zilei!”
+              {lang === 'ro'
+                ? '„Bună dimineața, elevi și profesori! Aici Radio Școala Noastră cu știrile zilei!”'
+                : '"Good morning, students and teachers! This is School Radio with the morning news bulletin!"'}
             </p>
 
             <input
@@ -187,18 +215,19 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             />
 
             <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-              <span>20% (Prea slab)</span>
-              <span className="text-sky-300 font-bold">80-90% (Optim)</span>
+              <span>{lang === 'ro' ? '20% (Prea slab)' : '20% (Too quiet)'}</span>
+              <span className="text-sky-300 font-bold">{lang === 'ro' ? '80-90% (Optim)' : '80-90% (Optimal)'}</span>
               <span>100%</span>
             </div>
 
             {isVoiceClear ? (
               <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Voce clară și perfect inteligibilă
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {lang === 'ro' ? 'Voce clară și perfect inteligibilă' : 'Clear and perfectly intelligible voice'}
               </span>
             ) : (
               <span className="text-[11px] text-amber-400 font-semibold flex items-center gap-1">
-                ⚠️ Ajustează volumul vocii între 75% și 90%
+                ⚠️ {lang === 'ro' ? 'Ajustează volumul vocii între 75% și 90%' : 'Adjust voice volume between 75% and 90%'}
               </span>
             )}
           </div>
@@ -207,7 +236,7 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
           <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold text-amber-400 flex items-center gap-1.5">
-                <span>🎵 Canal 2: Melodie Instrumentală</span>
+                <span>{lang === 'ro' ? '🎵 Canal 2: Melodie Instrumentală' : '🎵 Channel 2: Music Bed'}</span>
               </span>
               <span className="text-sm font-black font-mono text-white bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700">
                 {musicVolume}%
@@ -215,7 +244,9 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             </div>
 
             <p className="text-[11px] text-slate-400">
-              Ritm modern sintetizat (Paste Mix în fundal sub vorbire)
+              {lang === 'ro'
+                ? 'Ritm modern sintetizat (Paste Mix în fundal sub vorbire)'
+                : 'Modern synth bed (Paste Mix in background under speech)'}
             </p>
 
             <input
@@ -228,18 +259,19 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             />
 
             <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-              <span>5% (Abia auzit)</span>
-              <span className="text-amber-300 font-bold">15-25% (Optim)</span>
-              <span>60% (Acoperă vocea!)</span>
+              <span>{lang === 'ro' ? '5% (Abia auzit)' : '5% (Barely audible)'}</span>
+              <span className="text-amber-300 font-bold">{lang === 'ro' ? '15-25% (Optim)' : '15-25% (Optimal)'}</span>
+              <span>{lang === 'ro' ? '60% (Acoperă vocea!)' : '60% (Overpowers voice!)'}</span>
             </div>
 
             {isMusicSubtle ? (
               <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Fundal sonor echilibrat (nu acoperă vorbirea)
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {lang === 'ro' ? 'Fundal sonor echilibrat (nu acoperă vorbirea)' : 'Balanced music bed (does not mask voice)'}
               </span>
             ) : (
               <span className="text-[11px] text-amber-400 font-semibold flex items-center gap-1">
-                ⚠️ Ajustează muzica între 15% și 25% pentru a nu masca vocea
+                ⚠️ {lang === 'ro' ? 'Ajustează muzica între 15% și 25% pentru a nu masca vocea' : 'Adjust music between 15% and 25% to avoid masking speech'}
               </span>
             )}
           </div>
@@ -248,9 +280,14 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
         {/* Master Output & Clipping Warning */}
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col gap-3">
           <div className="flex items-center justify-between text-xs font-mono">
-            <span className="text-slate-300 font-bold">Suma Nivelurilor (Voce + Muzică):</span>
+            <span className="text-slate-300 font-bold">
+              {lang === 'ro' ? 'Suma Nivelurilor (Voce + Muzică):' : 'Sum Level (Voice + Music):'}
+            </span>
             <span className={`text-sm font-black ${isClipping ? 'text-rose-400' : 'text-emerald-400'}`}>
-              {totalVolume}% {isClipping ? '(CLIPPING DIGITAL DETECTAT!)' : '(Nivel Sigur < 100%)'}
+              {totalVolume}%{' '}
+              {isClipping
+                ? (lang === 'ro' ? '(CLIPPING DIGITAL DETECTAT!)' : '(DIGITAL CLIPPING DETECTED!)')
+                : (lang === 'ro' ? '(Nivel Sigur < 100%)' : '(Safe Level < 100%)')}
             </span>
           </div>
 
@@ -272,7 +309,9 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             <div className="p-2.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
               <span>
-                Pericol de distorsiune! Suma depășește 100% (0 dB). În WavePad, scădeți volumul muzicii sau al vocii pentru a preveni tăierea vârfurilor undei.
+                {lang === 'ro'
+                  ? 'Pericol de distorsiune! Suma depășește 100% (0 dB). În WavePad, scădeți volumul muzicii sau al vocii pentru a preveni tăierea vârfurilor undei.'
+                  : 'Distortion danger! Combined levels exceed 100% (0 dB). In WavePad, lower music bed or vocal volume to avoid waveform clipping.'}
               </span>
             </div>
           )}
@@ -294,8 +333,12 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             }`}
           >
             <div>
-              <div className="text-xs font-bold font-mono">Fade In (Intrare lină)</div>
-              <div className="text-[10px] text-slate-400">Creștere volum 0.6s</div>
+              <div className="text-xs font-bold font-mono">
+                {lang === 'ro' ? 'Fade In (Intrare lină)' : 'Fade In (Gradual Intro)'}
+              </div>
+              <div className="text-[10px] text-slate-400">
+                {lang === 'ro' ? 'Creștere volum 0.6s' : '0.6s volume swell'}
+              </div>
             </div>
             <span className="text-base">{hasFadeIn ? '✅' : '⬜'}</span>
           </button>
@@ -314,8 +357,12 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             }`}
           >
             <div>
-              <div className="text-xs font-bold font-mono">Fade Out (Ieșire lină)</div>
-              <div className="text-[10px] text-slate-400">Scădere la 0 în final</div>
+              <div className="text-xs font-bold font-mono">
+                {lang === 'ro' ? 'Fade Out (Ieșire lină)' : 'Fade Out (Smooth Outro)'}
+              </div>
+              <div className="text-[10px] text-slate-400">
+                {lang === 'ro' ? 'Scădere la 0 în final' : 'Decays to 0 at ending'}
+              </div>
             </div>
             <span className="text-base">{hasFadeOut ? '✅' : '⬜'}</span>
           </button>
@@ -334,8 +381,12 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
             }`}
           >
             <div>
-              <div className="text-xs font-bold font-mono">Normalize (-0.5 dB)</div>
-              <div className="text-[10px] text-slate-400">Volum maxim fără clipping</div>
+              <div className="text-xs font-bold font-mono">
+                Normalize (-0.5 dB)
+              </div>
+              <div className="text-[10px] text-slate-400">
+                {lang === 'ro' ? 'Volum maxim fără clipping' : 'Max volume without clipping'}
+              </div>
             </div>
             <span className="text-base">{isNormalized ? '✅' : '⬜'}</span>
           </button>
@@ -346,9 +397,17 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
       <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
         <div className="text-xs text-slate-400 font-mono">
           {!isPassable ? (
-            <span className="text-amber-400">Reglează volumele și efectele pentru a atinge cel puțin Nota 9.0 (fără clipping).</span>
+            <span className="text-amber-400">
+              {lang === 'ro'
+                ? 'Reglează volumele și efectele pentru a atinge cel puțin Nota 9.0 (fără clipping).'
+                : 'Adjust faders and effects to achieve at least Grade 9.0 (no clipping).'}
+            </span>
           ) : (
-            <span className="text-emerald-400 font-bold">Jingle-ul Radio îndeplinește toate standardele profesionale! (Nota {finalGrade.toFixed(1)})</span>
+            <span className="text-emerald-400 font-bold">
+              {lang === 'ro'
+                ? `Jingle-ul Radio îndeplinește toate standardele profesionale! (Nota ${finalGrade.toFixed(1)})`
+                : `Radio jingle meets all broadcast standards! (Grade ${finalGrade.toFixed(1)})`}
+            </span>
           )}
         </div>
 
@@ -358,7 +417,11 @@ export const A1Level6_RadioJingleStudio: React.FC<A1Level6Props> = ({ onPass }) 
           onClick={handleFinish}
           className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white font-black text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-amber-500/25 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
         >
-          <span>Treci la Nivelul 7: Marele Examen de Acustică & WavePad</span>
+          <span>
+            {lang === 'ro'
+              ? 'Treci la Nivelul 7: Marele Examen de Acustică & WavePad'
+              : 'Proceed to Level 7: Comprehensive Acoustics & WavePad Exam'}
+          </span>
           <Sparkles className="w-4 h-4" />
         </button>
       </div>

@@ -71,19 +71,29 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono font-bold border border-blue-500/40">
               <FileText className="w-3.5 h-3.5 text-blue-400" />
-              <span>NIVELUL 6 DIN 7 • ATELIERUL EDITORIAL DE NOTA 10</span>
+              <span>
+                {lang === 'ro'
+                  ? 'NIVELUL 6 DIN 7 • ATELIERUL EDITORIAL DE NOTA 10'
+                  : 'LEVEL 6 OF 7 • TOP EDITORIAL STUDIO'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
-              Machetarea Articolului de Revistă Școlară
+              {lang === 'ro'
+                ? 'Machetarea Articolului de Revistă Școlară'
+                : 'School Magazine Article Layout & Typesetting'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Ești redactorul-șef al revistei școlii! Machetează articolul brut folosind panglica Ribbon: aplică Titlu 1 și Titlu 2, alinierea Justified cu alineat 1.25 cm, activează Letrina (Drop Cap) și configurează antetul și subsolul pentru tipar.
+              {lang === 'ro'
+                ? 'Ești redactorul-șef al revistei școlii! Machetează articolul brut folosind panglica Ribbon: aplică Titlu 1 și Titlu 2, alinierea Justified cu alineat 1.25 cm, activează Letrina (Drop Cap) și configurează antetul și subsolul pentru tipar.'
+                : 'You are the editor-in-chief of the school magazine! Format raw copy using the Ribbon bar: apply Heading 1 and Heading 2, Justified alignment with 1.25 cm indent, enable Drop Cap, and configure headers and footers for print.'}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="px-4 py-2 rounded-2xl bg-slate-900/80 border border-blue-500/40 text-right">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block">Punctaj Rubrică</span>
+              <span className="text-[11px] font-mono uppercase text-slate-400 block">
+                {lang === 'ro' ? 'Punctaj Rubrică' : 'Rubric Score'}
+              </span>
               <span className="text-2xl font-black font-mono text-cyan-400">{totalScore} / 100 XP</span>
             </div>
           </div>
@@ -101,21 +111,23 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
               <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
             </div>
             <span className="text-xs font-mono text-slate-400 pl-3">
-              Revista_Eco_Gimnaziu_2026.docx — Microsoft Word
+              {lang === 'ro'
+                ? 'Revista_Eco_Gimnaziu_2026.docx — Microsoft Word'
+                : 'Eco_Magazine_MiddleSchool_2026.docx — Microsoft Word'}
             </span>
           </div>
 
           <span className="text-xs font-mono text-blue-400 font-bold bg-blue-950/80 px-2.5 py-0.5 rounded-full border border-blue-500/30">
-            Salvat pe Cloud • OneDrive
+            {lang === 'ro' ? 'Salvat pe Cloud • OneDrive' : 'Saved to Cloud • OneDrive'}
           </span>
         </div>
 
         {/* Ribbon Tabs Header */}
         <div className="bg-slate-900 border-b border-slate-800 px-5 flex items-center gap-2">
           {[
-            { id: 'home', label: 'Pornire (Home)' },
-            { id: 'insert', label: 'Inserare (Insert)' },
-            { id: 'layout', label: 'Machetare (Layout)' },
+            { id: 'home', label: lang === 'ro' ? 'Pornire (Home)' : 'Home' },
+            { id: 'insert', label: lang === 'ro' ? 'Inserare (Insert)' : 'Insert' },
+            { id: 'layout', label: lang === 'ro' ? 'Machetare (Layout)' : 'Layout' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -141,7 +153,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
             <>
               {/* Styles Group */}
               <div className="flex items-center gap-2 pr-4 border-r border-slate-700">
-                <span className="text-[10px] text-slate-400 uppercase block">Stiluri:</span>
+                <span className="text-[10px] text-slate-400 uppercase block">
+                  {lang === 'ro' ? 'Stiluri:' : 'Styles:'}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -154,7 +168,7 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
-                  Titlu 1
+                  {lang === 'ro' ? 'Titlu 1' : 'Heading 1'}
                 </button>
                 <button
                   type="button"
@@ -168,13 +182,15 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
-                  Titlu 2
+                  {lang === 'ro' ? 'Titlu 2' : 'Heading 2'}
                 </button>
               </div>
 
               {/* Alignment Group */}
               <div className="flex items-center gap-1.5 pr-4 border-r border-slate-700">
-                <span className="text-[10px] text-slate-400 uppercase block">Aliniere:</span>
+                <span className="text-[10px] text-slate-400 uppercase block">
+                  {lang === 'ro' ? 'Aliniere:' : 'Alignment:'}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -184,7 +200,7 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                   className={`p-1.5 rounded-lg border cursor-pointer ${
                     bodyAlignment === 'left' ? 'bg-blue-600 text-white border-blue-400' : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
-                  title="Aliniere la stânga (Ctrl+L)"
+                  title={lang === 'ro' ? 'Aliniere la stânga (Ctrl+L)' : 'Align Left (Ctrl+L)'}
                 >
                   <AlignLeft className="w-4 h-4" />
                 </button>
@@ -197,7 +213,7 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                   className={`p-1.5 rounded-lg border cursor-pointer ${
                     bodyAlignment === 'center' ? 'bg-blue-600 text-white border-blue-400' : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
-                  title="Centrat (Ctrl+E)"
+                  title={lang === 'ro' ? 'Centrat (Ctrl+E)' : 'Center (Ctrl+E)'}
                 >
                   <AlignCenter className="w-4 h-4" />
                 </button>
@@ -210,7 +226,7 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                   className={`p-1.5 rounded-lg border cursor-pointer ${
                     bodyAlignment === 'justify' ? 'bg-emerald-600 text-white border-emerald-400' : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
-                  title="Aliniere stânga-dreapta Justified (Ctrl+J)"
+                  title={lang === 'ro' ? 'Aliniere stânga-dreapta Justified (Ctrl+J)' : 'Justify (Ctrl+J)'}
                 >
                   <AlignJustify className="w-4 h-4" />
                 </button>
@@ -218,7 +234,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
 
               {/* Spacing & Indent Group */}
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 uppercase block">Paragraf:</span>
+                <span className="text-[10px] text-slate-400 uppercase block">
+                  {lang === 'ro' ? 'Paragraf:' : 'Paragraph:'}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -231,7 +249,7 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
-                  Alineat 1.25 cm
+                  {lang === 'ro' ? 'Alineat 1.25 cm' : 'Indent 1.25 cm'}
                 </button>
 
                 <button
@@ -246,7 +264,7 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
-                  Interlinie 1.5x
+                  {lang === 'ro' ? 'Interlinie 1.5x' : 'Line Spacing 1.5x'}
                 </button>
 
                 <button
@@ -261,7 +279,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-amber-600 text-white border-amber-400 animate-pulse'
                   }`}
                 >
-                  {diacriticsCleaned ? '✓ Diacritice Curățate' : 'Curăță Diacritice & Ghilimele'}
+                  {diacriticsCleaned
+                    ? (lang === 'ro' ? '✓ Tipografie & Ghilimele Curățate' : '✓ Typography & Quotes Cleaned')
+                    : (lang === 'ro' ? 'Curăță Diacritice & Ghilimele' : 'Clean Typography & Quotes')}
                 </button>
               </div>
             </>
@@ -270,7 +290,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
           {activeRibbonTab === 'insert' && (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 uppercase block">Text Artistic & Tipar:</span>
+                <span className="text-[10px] text-slate-400 uppercase block">
+                  {lang === 'ro' ? 'Text Artistic & Tipar:' : 'Artistic Text & Print:'}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -283,7 +305,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
-                  {hasDropCap ? '✓ Letrină (Drop Cap) Activată' : 'Inserează Letrină (Drop Cap)'}
+                  {hasDropCap
+                    ? (lang === 'ro' ? '✓ Letrină (Drop Cap) Activată' : '✓ Drop Cap Enabled')
+                    : (lang === 'ro' ? 'Inserează Letrină (Drop Cap)' : 'Insert Drop Cap')}
                 </button>
               </div>
 
@@ -300,7 +324,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
-                  {hasHeaderFooter ? '✓ Antet & Subsol Activate' : 'Inserează Antet & Numerotare Pagină'}
+                  {hasHeaderFooter
+                    ? (lang === 'ro' ? '✓ Antet & Subsol Activate' : '✓ Header & Footer Enabled')
+                    : (lang === 'ro' ? 'Inserează Antet & Numerotare Pagină' : 'Insert Header & Page Numbering')}
                 </button>
               </div>
             </div>
@@ -308,9 +334,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
 
           {activeRibbonTab === 'layout' && (
             <div className="flex items-center gap-4 text-slate-300 text-xs">
-              <span>Format Pagină: <b className="text-white">A4 (210 x 297 mm)</b></span>
-              <span>Margini: <b className="text-white">2.54 cm (Normal)</b></span>
-              <span>Orientare: <b className="text-white">Portret</b></span>
+              <span>{lang === 'ro' ? 'Format Pagină: ' : 'Page Size: '}<b className="text-white">A4 (210 x 297 mm)</b></span>
+              <span>{lang === 'ro' ? 'Margini: ' : 'Margins: '}<b className="text-white">2.54 cm ({lang === 'ro' ? 'Normal' : 'Normal'})</b></span>
+              <span>{lang === 'ro' ? 'Orientare: ' : 'Orientation: '}<b className="text-white">{lang === 'ro' ? 'Portret' : 'Portrait'}</b></span>
             </div>
           )}
         </div>
@@ -322,8 +348,12 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
             {/* Header (Antet) */}
             {hasHeaderFooter && (
               <div className="border-b border-slate-300 pb-2 flex items-center justify-between text-[11px] font-sans text-slate-500 uppercase tracking-wider">
-                <span>Revista „Eco-Generația” • Nr. 4 / Octombrie 2026</span>
-                <span>Proiect TIC Clasa a VII-a</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Revista „Eco-Generația” • Nr. 4 / Octombrie 2026'
+                    : '“Eco-Generation” Magazine • Issue 4 / October 2026'}
+                </span>
+                <span>{lang === 'ro' ? 'Proiect TIC Clasa a VII-a' : 'Grade 7 ICT Project'}</span>
               </div>
             )}
 
@@ -336,7 +366,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                     : 'text-base font-normal text-slate-800'
                 }`}
               >
-                Pădurile Urbane — Plămânii Verzi ai Orașului Nostru
+                {lang === 'ro'
+                  ? 'Pădurile Urbane — Plămânii Verzi ai Orașului Nostru'
+                  : 'Urban Forests — The Green Lungs of Our Community'}
               </h1>
 
               {/* Subtitle */}
@@ -347,7 +379,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                     : 'text-xs font-normal text-slate-700'
                 }`}
               >
-                Investigație editorială realizată de redacția elevilor de gimnaziu
+                {lang === 'ro'
+                  ? 'Investigație editorială realizată de redacția elevilor de gimnaziu'
+                  : 'Editorial investigation conducted by middle school student reporters'}
               </h2>
             </div>
 
@@ -362,17 +396,29 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
             >
               {hasDropCap && (
                 <span className="float-left text-5xl font-black text-blue-900 leading-none mr-2 font-heading">
-                  P
+                  {lang === 'ro' ? 'P' : 'U'}
                 </span>
               )}
-              {diacriticsCleaned ? (
-                <>
-                  {hasDropCap ? 'ădurile' : 'Pădurile'} și parcurile din proximitatea școlilor românești nu reprezintă simple oaze de relaxare, ci adevărate bariere ecologice care purifică aerul și absorb dioxidul de carbon. Conform studiilor recente menționate în revista „Natura Vie”, fiecare arbore matur produce zilnic oxigenul necesar pentru trei persoane și reduce poluarea fonică din marile bulevarde.
-                </>
+              {lang === 'ro' ? (
+                diacriticsCleaned ? (
+                  <>
+                    {hasDropCap ? 'ădurile' : 'Pădurile'} și parcurile din proximitatea școlilor românești nu reprezintă simple oaze de relaxare, ci adevărate bariere ecologice care purifică aerul și absorb dioxidul de carbon. Conform studiilor recente menționate în revista „Natura Vie”, fiecare arbore matur produce zilnic oxigenul necesar pentru trei persoane și reduce poluarea fonică din marile bulevarde.
+                  </>
+                ) : (
+                  <>
+                    {hasDropCap ? 'ădurile' : 'Pădurile'} şi parcurile din proximitatea şcolilor româneşti nu reprezintă simple oaze de relaxare ,ci adevărate bariere ecologice .Conform studiilor menţionate în "Natura Vie" ,fiecare arbore produce oxigen .
+                  </>
+                )
               ) : (
-                <>
-                  {hasDropCap ? 'ădurile' : 'Pădurile'} şi parcurile din proximitatea şcolilor româneşti nu reprezintă simple oaze de relaxare ,ci adevărate bariere ecologice .Conform studiilor menţionate în "Natura Vie" ,fiecare arbore produce oxigen .
-                </>
+                diacriticsCleaned ? (
+                  <>
+                    {hasDropCap ? 'rban' : 'Urban'} forests and parks near community schools are not mere leisure zones, but essential ecological shields that purify air and absorb carbon dioxide. According to recent research published in “Living Nature”, every mature tree generates daily oxygen for three people while dampening avenue traffic noise.
+                  </>
+                ) : (
+                  <>
+                    {hasDropCap ? 'rban' : 'Urban'} forests and parks near community schools are not mere leisure zones ,but essential ecological shields .According to research in "Living Nature" ,each tree makes oxygen .
+                  </>
+                )
               )}
             </div>
 
@@ -385,22 +431,34 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
               }}
               className="text-sm sm:text-base text-slate-800"
             >
-              {diacriticsCleaned ? (
-                <>
-                  Implicarea comunității elevilor a demonstrat că tehnologia și grija pentru mediu pot merge mână în mână. Prin realizarea unei hărți digitale cu arborii seculari și tehnoredactarea unor ghiduri de reciclare distribuite în format PDF, tinerii au demonstrat o responsabilitate civică demnă de toată lauda.
-                </>
+              {lang === 'ro' ? (
+                diacriticsCleaned ? (
+                  <>
+                    Implicarea comunității elevilor a demonstrat că tehnologia și grija pentru mediu pot merge mână în mână. Prin realizarea unei hărți digitale cu arborii seculari și tehnoredactarea unor ghiduri de reciclare distribuite în format PDF, tinerii au demonstrat o responsabilitate civică demnă de toată lauda.
+                  </>
+                ) : (
+                  <>
+                    Implicarea comunităţii a demonstrat că tehnologia şi grija pentru mediu pot merge mână în mână .Elevii au realizat o revistă distribuită în şcoală .
+                  </>
+                )
               ) : (
-                <>
-                  Implicarea comunităţii a demonstrat că tehnologia şi grija pentru mediu pot merge mână în mână .Elevii au realizat o revistă distribuită în şcoală .
-                </>
+                diacriticsCleaned ? (
+                  <>
+                    Active student engagement proved that technology and environmental stewardship go hand in hand. By building digital maps of historic trees and desktop-publishing recycling manuals in PDF format, youth demonstrated exemplary civic responsibility.
+                  </>
+                ) : (
+                  <>
+                    Student involvement showed that technology and eco care go hand in hand .Students made a magazine distributed in school .
+                  </>
+                )
               )}
             </p>
 
             {/* Footer (Subsol) */}
             {hasHeaderFooter && (
               <div className="pt-8 border-t border-slate-300 flex items-center justify-between text-[11px] font-sans text-slate-500">
-                <span>Colegiul Național • Ediție Tipografică</span>
-                <span className="font-bold text-slate-800">Pagina 1</span>
+                <span>{lang === 'ro' ? 'Colegiul Național • Ediție Tipografică' : 'National Academy • Print Edition'}</span>
+                <span className="font-bold text-slate-800">{lang === 'ro' ? 'Pagina 1' : 'Page 1'}</span>
               </div>
             )}
           </div>
@@ -410,9 +468,13 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
             <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
               <Award className="w-5 h-5 text-amber-400" />
               <div>
-                <h3 className="text-sm font-bold text-white">Barem de Evaluare Tipografică</h3>
+                <h3 className="text-sm font-bold text-white">
+                  {lang === 'ro' ? 'Barem de Evaluare Tipografică' : 'Typography Evaluation Rubric'}
+                </h3>
                 <span className="text-[11px] font-mono text-cyan-400">
-                  {completedCriteriaCount} din 6 cerințe îndeplinite
+                  {lang === 'ro'
+                    ? `${completedCriteriaCount} din 6 cerințe îndeplinite`
+                    : `${completedCriteriaCount} of 6 criteria completed`}
                 </span>
               </div>
             </div>
@@ -428,7 +490,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                 ) : (
                   <XCircle className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
                 )}
-                <span>1. Titlu principal stilizat Titlu 1</span>
+                <span>
+                  {lang === 'ro' ? '1. Titlu principal stilizat Titlu 1' : '1. Main title styled with Heading 1'}
+                </span>
               </div>
 
               <div
@@ -441,7 +505,9 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                 ) : (
                   <XCircle className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
                 )}
-                <span>2. Subtitlu stilizat Titlu 2</span>
+                <span>
+                  {lang === 'ro' ? '2. Subtitlu stilizat Titlu 2' : '2. Subtitle styled with Heading 2'}
+                </span>
               </div>
 
               <div
@@ -454,7 +520,11 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                 ) : (
                   <XCircle className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
                 )}
-                <span>3. Aliniere Justified + Alineat 1.25 cm + Interlinie 1.5</span>
+                <span>
+                  {lang === 'ro'
+                    ? '3. Aliniere Justified + Alineat 1.25 cm + Interlinie 1.5'
+                    : '3. Justified alignment + 1.25 cm indent + 1.5 line spacing'}
+                </span>
               </div>
 
               <div
@@ -467,7 +537,11 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                 ) : (
                   <XCircle className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
                 )}
-                <span>4. Diacritice cu virgulă & ghilimele conforme</span>
+                <span>
+                  {lang === 'ro'
+                    ? '4. Diacritice cu virgulă & ghilimele conforme'
+                    : '4. Clean punctuation spacing & standard quotes'}
+                </span>
               </div>
 
               <div
@@ -480,7 +554,11 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                 ) : (
                   <XCircle className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
                 )}
-                <span>5. Inserare Letrină (Drop Cap) la debut</span>
+                <span>
+                  {lang === 'ro'
+                    ? '5. Inserare Letrină (Drop Cap) la debut'
+                    : '5. Insert Drop Cap at first paragraph start'}
+                </span>
               </div>
 
               <div
@@ -493,14 +571,22 @@ export const W1Level6_EditorialStudio: React.FC<W1Level6Props> = ({ onCompletePa
                 ) : (
                   <XCircle className="w-4 h-4 text-slate-600 shrink-0 mt-0.5" />
                 )}
-                <span>6. Antet & Numerotare Pagină în subsol</span>
+                <span>
+                  {lang === 'ro'
+                    ? '6. Antet & Numerotare Pagină în subsol'
+                    : '6. Header & Page Numbering in footer'}
+                </span>
               </div>
             </div>
 
             {completedCriteriaCount >= 5 && (
               <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Document pregătit pentru tipar și publicare PDF!</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Document pregătit pentru tipar și publicare PDF!'
+                    : 'Document ready for press and PDF publication!'}
+                </span>
               </div>
             )}
           </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { History, Clock, RotateCcw, Tag, CheckCircle2, AlertTriangle, HelpCircle, Sparkles, User, ShieldAlert, Check } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface C1Level5Props {
   onPass: (score: number) => void;
@@ -8,50 +9,72 @@ interface C1Level5Props {
 
 interface VersionItem {
   id: string;
-  timestamp: string;
-  author: string;
+  timestampRo: string;
+  timestampEn: string;
+  authorRo: string;
+  authorEn: string;
   color: string;
-  title: string;
-  description: string;
+  titleRo: string;
+  titleEn: string;
+  descriptionRo: string;
+  descriptionEn: string;
   wordCount: number;
-  previewSnippet: string;
+  previewSnippetRo: string;
+  previewSnippetEn: string;
   isCorrupted?: boolean;
 }
 
 export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Versions history list
   const versions: VersionItem[] = [
     {
       id: 'v3',
-      timestamp: 'Azi, 14:15 (Curent)',
-      author: 'Anonim / Utilizator Necunoscut',
+      timestampRo: 'Azi, 14:15 (Curent)',
+      timestampEn: 'Today, 14:15 (Current)',
+      authorRo: 'Anonim / Utilizator Necunoscut',
+      authorEn: 'Anonymous / Unknown Visitor',
       color: 'text-rose-400',
-      title: 'Modificare neautorizată',
-      description: 'Capitolele 2 și 3 au fost șterse complet; a rămas doar un text parazit!',
+      titleRo: 'Modificare neautorizată',
+      titleEn: 'Unauthorized Modification',
+      descriptionRo: 'Capitolele 2 și 3 au fost șterse complet; a rămas doar un text parazit!',
+      descriptionEn: 'Chapters 2 & 3 completely erased; only junk defacement remains!',
       wordCount: 12,
-      previewSnippet: 'HAHAHA v-am sters referatul... (Capitole lipsa!)',
+      previewSnippetRo: 'HAHAHA v-am sters referatul... (Capitole lipsa!)',
+      previewSnippetEn: 'HAHAHA erased your report... (Chapters missing!)',
       isCorrupted: true
     },
     {
       id: 'v2',
-      timestamp: 'Azi, 10:30',
-      author: 'Tu, Maria & Andrei',
+      timestampRo: 'Azi, 10:30',
+      timestampEn: 'Today, 10:30',
+      authorRo: 'Tu, Maria & Andrei',
+      authorEn: 'You, Maria & Andrew',
       color: 'text-emerald-400',
-      title: 'Versiune completă de echipă',
-      description: 'Toate cele 3 capitole redactate impecabil cu bibliografie și imagini.',
+      titleRo: 'Versiune completă de echipă',
+      titleEn: 'Comprehensive Team Master Version',
+      descriptionRo: 'Toate cele 3 capitole redactate impecabil cu bibliografie și imagini.',
+      descriptionEn: 'All 3 chapters drafted with full bibliography and citations.',
       wordCount: 650,
-      previewSnippet: 'Parcul Național Retezat: Istoric, Floră, Faună și Măsuri de Conservare...',
+      previewSnippetRo: 'Parcul Național Retezat: Istoric, Floră, Faună și Măsuri de Conservare...',
+      previewSnippetEn: 'Retezat National Park: History, Flora, Fauna and Habitat Protection...',
       isCorrupted: false
     },
     {
       id: 'v1',
-      timestamp: 'Ieri, 16:00',
-      author: 'Maria Popescu',
+      timestampRo: 'Ieri, 16:00',
+      timestampEn: 'Yesterday, 16:00',
+      authorRo: 'Maria Popescu',
+      authorEn: 'Maria Miller',
       color: 'text-blue-400',
-      title: 'Ciornă inițială',
-      description: 'Structura inițială a documentului și titlurile mari.',
+      titleRo: 'Ciornă inițială',
+      titleEn: 'Initial Outline Draft',
+      descriptionRo: 'Structura inițială a documentului și titlurile mari.',
+      descriptionEn: 'Early document scaffolding with headline markers.',
       wordCount: 120,
-      previewSnippet: 'Proiect Ecologie: Introducere și obiective de cercetare...',
+      previewSnippetRo: 'Proiect Ecologie: Introducere și obiective de cercetare...',
+      previewSnippetEn: 'Ecology Project: Introduction and research scope...',
       isCorrupted: false
     }
   ];
@@ -115,7 +138,11 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
     } else {
       sounds.playFailure();
       setQ1Cooldown(5);
-      setQ1ErrorMsg('Incorect! Istoricul versiunilor înregistrează data, ora, autorul fiecărei modificări și evidențiază colorat adăugirile și ștergerile.');
+      setQ1ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Istoricul versiunilor înregistrează data, ora, autorul fiecărei modificări și evidențiază colorat adăugirile și ștergerile.'
+          : 'Incorrect! Version history logs timestamp, author, and color-coded diffs of all insertions and deletions.'
+      );
     }
   };
 
@@ -128,7 +155,11 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
     } else {
       sounds.playFailure();
       setQ2Cooldown(5);
-      setQ2ErrorMsg('Incorect! Nu este nevoie să rescrii nimic: deschizi istoricul versiunilor și apeși pe „Restaurați această versiune”.');
+      setQ2ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Nu este nevoie să rescrii nimic: deschizi istoricul versiunilor și apeși pe „Restaurați această versiune”.'
+          : 'Incorrect! No need to retype from scratch: simply open version history, pick the healthy snapshot, and click "Restore this version".'
+      );
     }
   };
 
@@ -141,7 +172,11 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
     } else {
       sounds.playFailure();
       setQ3Cooldown(5);
-      setQ3ErrorMsg('Incorect! Denumirea unei versiuni (ex: „Varianta Trimisă la Concurs”) permite regăsirea instantanee a etapelor cheie fără a căuta prin zeci de salvări automate mărunte.');
+      setQ3ErrorMsg(
+        lang === 'ro'
+          ? 'Incorect! Denumirea unei versiuni (ex: „Varianta Trimisă la Concurs”) permite regăsirea instantanee a etapelor cheie fără a căuta prin zeci de salvări automate mărunte.'
+          : 'Incorrect! Naming milestones (e.g. "Competition Master Final") enables instant retrieval without combing through dozens of granular auto-saves.'
+      );
     }
   };
 
@@ -166,14 +201,28 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
             <History className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">Nivelul 5 • Manual Art Klett pag. 50–51, 56</span>
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
+              {lang === 'ro'
+                ? 'Nivelul 5 • Manual Art Klett pag. 50–51, 56'
+                : 'Level 5 • Art Klett Textbook pp. 50–51, 56'}
+            </span>
             <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Istoricul Versiunilor & Mașina Timpului în Cloud
+              {lang === 'ro'
+                ? 'Istoricul Versiunilor & Mașina Timpului în Cloud'
+                : 'Version History & The Cloud Time Machine'}
             </h2>
           </div>
         </div>
         <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">
-          Descoperă cum funcționează <strong>Mașina Timpului (Version History)</strong>: cum inspectezi cine a modificat textul, cum recuperezi instantaneu capitole șterse din greșeală și cum denumești versiunile cheie ale proiectului tău.
+          {lang === 'ro' ? (
+            <>
+              Descoperă cum funcționează <strong>Mașina Timpului (Version History)</strong>: cum inspectezi cine a modificat textul, cum recuperezi instantaneu capitole șterse din greșeală și cum denumești versiunile cheie ale proiectului tău.
+            </>
+          ) : (
+            <>
+              Discover the power of the <strong>Cloud Time Machine (Version History)</strong>: inspect granular author edits, roll back accidental erasures instantly, and assign custom milestone tags to team deliverables.
+            </>
+          )}
         </p>
       </div>
 
@@ -183,25 +232,32 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-emerald-400" />
             <h3 className="text-base sm:text-lg font-bold text-white">
-              Simulator Panou: „Vedeți Istoricul Versiunilor” (Ctrl + Alt + Shift + H)
+              {lang === 'ro'
+                ? 'Simulator Panou: „Vedeți Istoricul Versiunilor” (Ctrl + Alt + Shift + H)'
+                : 'Panel Simulator: "See Version History" (Ctrl + Alt + Shift + H)'}
             </h3>
           </div>
 
           <div className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
-            Stare curentă: {activeRestoredVersion === 'v2' ? (
-              <span className="text-emerald-400 font-bold">Document Restaurat cu Succes! ✓</span>
+            {lang === 'ro' ? 'Stare curentă: ' : 'Current State: '}
+            {activeRestoredVersion === 'v2' ? (
+              <span className="text-emerald-400 font-bold">
+                {lang === 'ro' ? 'Document Restaurat cu Succes! ✓' : 'Document Restored Successfully! ✓'}
+              </span>
             ) : (
-              <span className="text-rose-400 font-bold">ALERTA: Document Compromis / Șters! ⚠️</span>
+              <span className="text-rose-400 font-bold">
+                {lang === 'ro' ? 'ALERTA: Document Compromis / Șters! ⚠️' : 'ALERT: Document Defaced / Compromised! ⚠️'}
+              </span>
             )}
           </div>
         </div>
 
-        {/* The Split Interface: Version List (Sidebar) & Live Preview (Center) */}
+        {/* The Split Interface */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Version List Sidebar */}
           <div className="flex flex-col gap-3">
             <span className="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono">
-              Jurnal Versiuni Salvate:
+              {lang === 'ro' ? 'Jurnal Versiuni Salvate:' : 'Saved Version Snapshots:'}
             </span>
 
             {versions.map((ver) => (
@@ -215,24 +271,30 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white">{ver.timestamp}</span>
+                  <span className="text-xs font-bold text-white">
+                    {lang === 'ro' ? ver.timestampRo : ver.timestampEn}
+                  </span>
                   {ver.isCorrupted ? (
                     <span className="text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full border border-rose-500/40">
-                      Compromis
+                      {lang === 'ro' ? 'Compromis' : 'Defaced'}
                     </span>
                   ) : (
                     <span className="text-[10px] font-mono text-emerald-400 font-bold">
-                      {ver.wordCount} cuvinte
+                      {ver.wordCount} {lang === 'ro' ? 'cuvinte' : 'words'}
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-1.5 text-xs text-slate-300">
                   <User className="w-3.5 h-3.5 text-slate-400" />
-                  <span className={`font-semibold ${ver.color}`}>{ver.author}</span>
+                  <span className={`font-semibold ${ver.color}`}>
+                    {lang === 'ro' ? ver.authorRo : ver.authorEn}
+                  </span>
                 </div>
 
-                <span className="text-[11px] text-slate-400 leading-snug">{ver.title}</span>
+                <span className="text-[11px] text-slate-400 leading-snug">
+                  {lang === 'ro' ? ver.titleRo : ver.titleEn}
+                </span>
               </button>
             ))}
           </div>
@@ -243,10 +305,17 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <div>
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>Previzualizare: {currentPreview.timestamp}</span>
-                    <span className={`text-xs ${currentPreview.color}`}>({currentPreview.author})</span>
+                    <span>
+                      {lang === 'ro' ? 'Previzualizare: ' : 'Preview: '}
+                      {lang === 'ro' ? currentPreview.timestampRo : currentPreview.timestampEn}
+                    </span>
+                    <span className={`text-xs ${currentPreview.color}`}>
+                      ({lang === 'ro' ? currentPreview.authorRo : currentPreview.authorEn})
+                    </span>
                   </h4>
-                  <span className="text-xs text-slate-400">{currentPreview.description}</span>
+                  <span className="text-xs text-slate-400">
+                    {lang === 'ro' ? currentPreview.descriptionRo : currentPreview.descriptionEn}
+                  </span>
                 </div>
 
                 {/* Restore Button */}
@@ -260,7 +329,9 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                   }`}
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Restaurați această versiune</span>
+                  <span>
+                    {lang === 'ro' ? 'Restaurați această versiune' : 'Restore this version'}
+                  </span>
                 </button>
               </div>
 
@@ -270,12 +341,22 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                   <div className="text-rose-400 flex flex-col gap-2">
                     <div className="flex items-center gap-2 font-mono font-bold text-xs bg-rose-950/60 p-2 rounded border border-rose-500/40">
                       <ShieldAlert className="w-4 h-4 text-rose-400" />
-                      <span>Conținut compromis de un utilizator neautorizat la 14:15!</span>
+                      <span>
+                        {lang === 'ro'
+                          ? 'Conținut compromis de un utilizator neautorizat la 14:15!'
+                          : 'Content defaced by an unauthorized visitor at 14:15!'}
+                      </span>
                     </div>
                     <p className="line-through text-slate-500">
-                      [Capitolele 1, 2, 3 și bibliografia au fost eliminate din document]
+                      {lang === 'ro'
+                        ? '[Capitolele 1, 2, 3 și bibliografia au fost eliminate din document]'
+                        : '[Chapters 1, 2, 3 and bibliography were excised from the file]'}
                     </p>
-                    <p className="font-mono text-rose-300">„HAHAHA v-am sters tot referatul...”</p>
+                    <p className="font-mono text-rose-300">
+                      {lang === 'ro'
+                        ? '„HAHAHA v-am sters tot referatul...”'
+                        : '“HAHAHA erased your report...”'}
+                    </p>
                   </div>
                 )}
 
@@ -283,26 +364,52 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                   <div className="text-slate-200 flex flex-col gap-3">
                     <div className="flex items-center gap-2 font-mono font-bold text-xs bg-emerald-950/60 p-2 rounded border border-emerald-500/40 text-emerald-300">
                       <Check className="w-4 h-4 text-emerald-400" />
-                      <span>Versiune completă salvată înainte de incident (Azi, 10:30)</span>
+                      <span>
+                        {lang === 'ro'
+                          ? 'Versiune completă salvată înainte de incident (Azi, 10:30)'
+                          : 'Pristine master version prior to incident (Today, 10:30)'}
+                      </span>
                     </div>
-                    <p className="font-bold text-white text-sm">Parcul Național Retezat — Studiu Interdisciplinar</p>
-                    <p>
-                      <strong>1. Cadrul Natural:</strong> Cel mai vechi parc național din România, cu 82 de lacuri glaciare și vârfuri alpine de peste 2500m.
+                    <p className="font-bold text-white text-sm">
+                      {lang === 'ro'
+                        ? 'Parcul Național Retezat — Studiu Interdisciplinar'
+                        : 'Retezat National Park — Interdisciplinary Study'}
                     </p>
                     <p>
-                      <strong>2. Biodiversitate:</strong> Adăpostește lupi, capre negre, râși și peste 1190 specii de plante vasculare superioare.
+                      <strong>{lang === 'ro' ? '1. Cadrul Natural:' : '1. Physical Geography:'}</strong>{' '}
+                      {lang === 'ro'
+                        ? 'Cel mai vechi parc național din România, cu 82 de lacuri glaciare și vârfuri alpine de peste 2500m.'
+                        : 'Oldest national park in Romania, protecting 82 glacial lakes and alpine peaks above 2,500m.'}
+                    </p>
+                    <p>
+                      <strong>{lang === 'ro' ? '2. Biodiversitate:' : '2. Biodiversity:'}</strong>{' '}
+                      {lang === 'ro'
+                        ? 'Adăpostește lupi, capre negre, râși și peste 1190 specii de plante vasculare superioare.'
+                        : 'Home to wolves, chamois, lynx, and over 1,190 vascular plant species.'}
                     </p>
                     <p className="text-xs text-slate-400">
-                      [Formatare Justified, diacritice conforme, referințe bibliografice validate]
+                      {lang === 'ro'
+                        ? '[Formatare Justified, diacritice conforme, referințe bibliografice validate]'
+                        : '[Justified formatting, standardized typography, validated citations]'}
                     </p>
                   </div>
                 )}
 
                 {currentPreview.id === 'v1' && (
                   <div className="text-slate-300 flex flex-col gap-2">
-                    <span className="text-xs font-mono text-blue-400">Ciornă inițială (Ieri, 16:00)</span>
-                    <p className="font-bold text-white">Proiect Ecologie: Parcul Național Retezat</p>
-                    <p>Obiectiv: Cercetarea rezervațiilor biosferei din România...</p>
+                    <span className="text-xs font-mono text-blue-400">
+                      {lang === 'ro' ? 'Ciornă inițială (Ieri, 16:00)' : 'Initial outline (Yesterday, 16:00)'}
+                    </span>
+                    <p className="font-bold text-white">
+                      {lang === 'ro'
+                        ? 'Proiect Ecologie: Parcul Național Retezat'
+                        : 'Ecology Project: Retezat National Park'}
+                    </p>
+                    <p>
+                      {lang === 'ro'
+                        ? 'Obiectiv: Cercetarea rezervațiilor biosferei din România...'
+                        : 'Objective: Surveying Romanian biosphere reserves...'}
+                    </p>
                   </div>
                 )}
               </div>
@@ -313,7 +420,11 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
               <div className="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-xs text-slate-300">
                   <Tag className="w-4 h-4 text-emerald-400" />
-                  <span>Denumește această versiune restaurată:</span>
+                  <span>
+                    {lang === 'ro'
+                      ? 'Denumește această versiune restaurată:'
+                      : 'Assign milestone name to restored version:'}
+                  </span>
                 </div>
 
                 {!isVersionNamed ? (
@@ -322,7 +433,11 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                       type="text"
                       value={customVersionName}
                       onChange={(e) => setCustomVersionName(e.target.value)}
-                      placeholder="Ex: Varianta Oficială Concurs..."
+                      placeholder={
+                        lang === 'ro'
+                          ? 'Ex: Varianta Oficială Concurs...'
+                          : 'e.g. Official Competition Master...'
+                      }
                       className="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-400"
                     />
                     <button
@@ -330,12 +445,12 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                       disabled={!customVersionName.trim()}
                       className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition cursor-pointer"
                     >
-                      Salvează Nume
+                      {lang === 'ro' ? 'Salvează Nume' : 'Save Name'}
                     </button>
                   </div>
                 ) : (
                   <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-xl border border-emerald-500/40">
-                    Etichetă salvată: „{customVersionName}” ✓
+                    {lang === 'ro' ? 'Etichetă salvată: ' : 'Milestone saved: '}„{customVersionName}” ✓
                   </span>
                 )}
               </div>
@@ -349,22 +464,40 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
         <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
           <HelpCircle className="w-5 h-5 text-emerald-400" />
           <h3 className="text-base sm:text-lg font-bold text-white">
-            Verificare Noțiuni: Istoricul Versiunilor (3 Întrebări Interactive)
+            {lang === 'ro'
+              ? 'Verificare Noțiuni: Istoricul Versiunilor (3 Întrebări Interactive)'
+              : 'Knowledge Check: Version History (3 Interactive Questions)'}
           </h3>
         </div>
 
         {/* Q1 */}
         <div className="flex flex-col gap-3 p-4 rounded-2xl bg-slate-950/50 border border-slate-800">
-          <div className="text-xs font-mono text-emerald-400 font-bold uppercase">Întrebarea 1 din 3</div>
+          <div className="text-xs font-mono text-emerald-400 font-bold uppercase">
+            {lang === 'ro' ? 'Întrebarea 1 din 3' : 'Question 1 of 3'}
+          </div>
           <p className="text-sm font-semibold text-slate-200">
-            Ce informații precise salvează Google Docs în panoul „Istoricul versiunilor”?
+            {lang === 'ro'
+              ? 'Ce informații precise salvează Google Docs în panoul „Istoricul versiunilor”?'
+              : 'What precise metadata does Google Docs log in the "Version History" panel?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Data, ora exactă a fiecărei salvări, numele autorului și modificările colorate pe text' },
-              { id: 'B', text: 'Doar numărul de litere fără a ști cine a scris' },
-              { id: 'C', text: 'O copie audio a tastaturii elevului' }
+              {
+                id: 'A',
+                textRo: 'Data, ora exactă a fiecărei salvări, numele autorului și modificările colorate pe text',
+                textEn: 'Exact timestamp of each save, author identity, and color-coded text diffs'
+              },
+              {
+                id: 'B',
+                textRo: 'Doar numărul de litere fără a ști cine a scris',
+                textEn: 'Only the total character count without author attribution'
+              },
+              {
+                id: 'C',
+                textRo: 'O copie audio a tastaturii elevului',
+                textEn: 'An audio recording of student keystrokes'
+              }
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -378,30 +511,49 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                     : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-slate-500'
                 } ${q1Cooldown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span className="font-bold font-mono mr-1.5">[{opt.id}]</span> {opt.text}
+                <span className="font-bold font-mono mr-1.5">[{opt.id}]</span>{' '}
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
 
           {q1Cooldown > 0 && (
             <div className="text-xs text-amber-400 font-mono animate-pulse">
-              Cooldown activ: {q1Cooldown}s până la următoarea încercare. {q1ErrorMsg}
+              {lang === 'ro'
+                ? `Cooldown activ: ${q1Cooldown}s până la următoarea încercare. ${q1ErrorMsg}`
+                : `Cooldown active: ${q1Cooldown}s until next attempt. ${q1ErrorMsg}`}
             </div>
           )}
         </div>
 
         {/* Q2 */}
         <div className="flex flex-col gap-3 p-4 rounded-2xl bg-slate-950/50 border border-slate-800">
-          <div className="text-xs font-mono text-emerald-400 font-bold uppercase">Întrebarea 2 din 3</div>
+          <div className="text-xs font-mono text-emerald-400 font-bold uppercase">
+            {lang === 'ro' ? 'Întrebarea 2 din 3' : 'Question 2 of 3'}
+          </div>
           <p className="text-sm font-semibold text-slate-200">
-            Cum poți recupera rapid un capitol întreg șters din greșeală de un coleg cu 30 de minute în urmă?
+            {lang === 'ro'
+              ? 'Cum poți recupera rapid un capitol întreg șters din greșeală de un coleg cu 30 de minute în urmă?'
+              : 'How can you instantly recover an entire section accidentally deleted by a peer 30 minutes ago?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Trebuie să reinstalezi sistemul de operare Windows' },
-              { id: 'B', text: 'Apeși tasta Backspace de 500 de ori' },
-              { id: 'C', text: 'Deschizi Istoricul versiunilor, selectezi versiunea de acum 35 de minute și apeși pe „Restaurați această versiune”' }
+              {
+                id: 'A',
+                textRo: 'Trebuie să reinstalezi sistemul de operare Windows',
+                textEn: 'You must reinstall the Windows operating system'
+              },
+              {
+                id: 'B',
+                textRo: 'Apeși tasta Backspace de 500 de ori',
+                textEn: 'Press the Backspace key 500 times'
+              },
+              {
+                id: 'C',
+                textRo: 'Deschizi Istoricul versiunilor, selectezi versiunea de acum 35 de minute și apeși pe „Restaurați această versiune”',
+                textEn: 'Open Version History, select the snapshot from 35 minutes ago, and click "Restore this version"'
+              }
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -415,30 +567,49 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                     : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-slate-500'
                 } ${q2Cooldown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span className="font-bold font-mono mr-1.5">[{opt.id}]</span> {opt.text}
+                <span className="font-bold font-mono mr-1.5">[{opt.id}]</span>{' '}
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
 
           {q2Cooldown > 0 && (
             <div className="text-xs text-amber-400 font-mono animate-pulse">
-              Cooldown activ: {q2Cooldown}s până la următoarea încercare. {q2ErrorMsg}
+              {lang === 'ro'
+                ? `Cooldown activ: ${q2Cooldown}s până la următoarea încercare. ${q2ErrorMsg}`
+                : `Cooldown active: ${q2Cooldown}s until next attempt. ${q2ErrorMsg}`}
             </div>
           )}
         </div>
 
         {/* Q3 */}
         <div className="flex flex-col gap-3 p-4 rounded-2xl bg-slate-950/50 border border-slate-800">
-          <div className="text-xs font-mono text-emerald-400 font-bold uppercase">Întrebarea 3 din 3</div>
+          <div className="text-xs font-mono text-emerald-400 font-bold uppercase">
+            {lang === 'ro' ? 'Întrebarea 3 din 3' : 'Question 3 of 3'}
+          </div>
           <p className="text-sm font-semibold text-slate-200">
-            De ce este util să denumești anumite versiuni din istoric (ex: „Varianta Oficială Trimisă la Concurs”)?
+            {lang === 'ro'
+              ? 'De ce este util să denumești anumite versiuni din istoric (ex: „Varianta Oficială Trimisă la Concurs”)?'
+              : 'Why is it recommended to assign names to specific milestones (e.g. "Official Competition Submission")?'}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
-              { id: 'A', text: 'Deoarece altfel documentul nu se va putea salva pe internet' },
-              { id: 'B', text: 'Permite regăsirea instantanee a etapelor cheie ale proiectului fără a căuta prin zeci de salvări automate mici' },
-              { id: 'C', text: 'Pentru a ascunde numele colegilor din echipă' }
+              {
+                id: 'A',
+                textRo: 'Deoarece altfel documentul nu se va putea salva pe internet',
+                textEn: 'Because otherwise the document cannot be stored on the internet'
+              },
+              {
+                id: 'B',
+                textRo: 'Permite regăsirea instantanee a etapelor cheie ale proiectului fără a căuta prin zeci de salvări automate mici',
+                textEn: 'Enables instant retrieval of key project milestones without searching through dozens of minor auto-saves'
+              },
+              {
+                id: 'C',
+                textRo: 'Pentru a ascunde numele colegilor din echipă',
+                textEn: 'To conceal the identities of team members'
+              }
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -452,14 +623,17 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
                     : 'bg-slate-900/90 border-slate-700/80 text-slate-300 hover:border-slate-500'
                 } ${q3Cooldown > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span className="font-bold font-mono mr-1.5">[{opt.id}]</span> {opt.text}
+                <span className="font-bold font-mono mr-1.5">[{opt.id}]</span>{' '}
+                {lang === 'ro' ? opt.textRo : opt.textEn}
               </button>
             ))}
           </div>
 
           {q3Cooldown > 0 && (
             <div className="text-xs text-amber-400 font-mono animate-pulse">
-              Cooldown activ: {q3Cooldown}s până la următoarea încercare. {q3ErrorMsg}
+              {lang === 'ro'
+                ? `Cooldown activ: ${q3Cooldown}s până la următoarea încercare. ${q3ErrorMsg}`
+                : `Cooldown active: ${q3Cooldown}s until next attempt. ${q3ErrorMsg}`}
             </div>
           )}
         </div>
@@ -470,10 +644,16 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
             {isRestorationSuccessful && allAnsweredCorrectly ? (
               <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Documentul a fost salvat prin Mașina Timpului și testul este rezolvat!
+                {lang === 'ro'
+                  ? 'Documentul a fost salvat prin Mașina Timpului și testul este rezolvat!'
+                  : 'Document recovered via Time Machine and knowledge check passed!'}
               </span>
             ) : (
-              <span>Restaurează versiunea sănătoasă de la 10:30 și răspunde la întrebări.</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Restaurează versiunea sănătoasă de la 10:30 și răspunde la întrebări.'
+                  : 'Restore the healthy 10:30 milestone and complete the quiz questions.'}
+              </span>
             )}
           </div>
 
@@ -487,7 +667,9 @@ export const C1Level5_VersionHistoryTimeMachine: React.FC<C1Level5Props> = ({ on
             }`}
           >
             <Sparkles className="w-4 h-4" />
-            <span>Finalizează Nivelul 5 (+100 XP)</span>
+            <span>
+              {lang === 'ro' ? 'Finalizează Nivelul 5 (+100 XP)' : 'Complete Level 5 (+100 XP)'}
+            </span>
           </button>
         </div>
       </div>

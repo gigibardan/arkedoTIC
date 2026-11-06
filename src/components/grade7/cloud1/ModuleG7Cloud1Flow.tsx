@@ -8,6 +8,7 @@ import { C1Level6_TeamPresentationStudio } from './C1Level6_TeamPresentationStud
 import { C1Level7_CloudNetiquetteExam } from './C1Level7_CloudNetiquetteExam';
 import { ArrowLeft, RotateCcw, Cloud, Users } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface ModuleG7Cloud1FlowProps {
   currentLevel: number;
@@ -24,6 +25,8 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
   onRestartMission,
   onReturnToCatalog,
 }) => {
+  const { lang } = useLanguage();
+
   const handlePassCurrentLevel = (score: number) => {
     onCompletePage(score);
   };
@@ -43,14 +46,18 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Catalog Misiuni</span>
+              <span>{lang === 'ro' ? 'Catalog Misiuni' : 'Missions Catalog'}</span>
             </button>
           )}
 
           <div className="text-xs text-slate-400 font-mono hidden sm:inline flex items-center gap-1.5">
             <Cloud className="w-3.5 h-3.5 text-emerald-400 inline" />
-            <span>Modulul 3A: </span>
-            <span className="text-emerald-400 font-bold">Aplicații Colaborative în Cloud (Manual pag. 48–56)</span>
+            <span>{lang === 'ro' ? 'Modulul 3A: ' : 'Module 3A: '}</span>
+            <span className="text-emerald-400 font-bold">
+              {lang === 'ro'
+                ? 'Aplicații Colaborative în Cloud (Manual pag. 48–56)'
+                : 'Cloud Collaborative Apps (Textbook pp. 48–56)'}
+            </span>
           </div>
         </div>
 
@@ -58,7 +65,8 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
           {studentName && (
             <div className="text-xs font-mono text-slate-300 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Coordonator:</span> <span className="text-emerald-300 font-bold">{studentName}</span>
+              <span>{lang === 'ro' ? 'Coordonator:' : 'Coordinator:'}</span>{' '}
+              <span className="text-emerald-300 font-bold">{studentName}</span>
             </div>
           )}
 
@@ -66,16 +74,23 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
             <button
               type="button"
               onClick={() => {
-                if (window.confirm('Ești sigur că vrei să reiei Misiunea 3A de la nivelul 1? Punctajul va fi resetat.')) {
+                const confirmed = window.confirm(
+                  lang === 'ro'
+                    ? 'Ești sigur că vrei să reiei Misiunea 3A de la nivelul 1? Punctajul va fi resetat.'
+                    : 'Are you sure you want to restart Mission 3A from Level 1? Progress will be reset.'
+                );
+                if (confirmed) {
                   sounds.playClick();
                   onRestartMission();
                 }
               }}
               className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-rose-300 border border-slate-700 text-xs font-medium transition flex items-center gap-1 cursor-pointer"
-              title="Resetează misiunea de la Nivelul 1"
+              title={lang === 'ro' ? 'Resetează misiunea de la Nivelul 1' : 'Restart mission from Level 1'}
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reia Misiunea</span>
+              <span className="hidden sm:inline">
+                {lang === 'ro' ? 'Reia Misiunea' : 'Restart Mission'}
+              </span>
             </button>
           )}
         </div>

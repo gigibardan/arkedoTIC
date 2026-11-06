@@ -88,15 +88,19 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-purple-400 text-xs font-mono font-bold tracking-wider uppercase mb-1">
-              <span>Misiunea 1B • Nivelul 3 din 7</span>
+              <span>{lang === 'ro' ? 'Misiunea 1B • Nivelul 3 din 7' : 'Mission 1B • Level 3 of 7'}</span>
               <span>•</span>
-              <span>Manual pag. 22-24</span>
+              <span>{lang === 'ro' ? 'Manual pag. 22-24' : 'Textbook pp. 22-24'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading">
-              Ruperi de Secțiune vs Ruperi de Pagină
+              {lang === 'ro'
+                ? 'Ruperi de Secțiune vs Ruperi de Pagină'
+                : 'Section Breaks vs. Page Breaks'}
             </h1>
             <p className="text-slate-300 text-sm mt-1 max-w-2xl leading-relaxed">
-              Învață secretul documentelor complexe hibride: de ce o simplă rupere de pagină (<code className="text-purple-300 font-mono">Ctrl+Enter</code>) nu poate roti o singură pagină în Landscape și cum izolăm tabelele largi folosind <code className="text-cyan-300 font-mono">Section Break (Next Page)</code>.
+              {lang === 'ro'
+                ? 'Învață secretul documentelor complexe hibride: de ce o simplă rupere de pagină (Ctrl+Enter) nu poate roti o singură pagină în Landscape și cum izolăm tabelele largi folosind Section Break (Next Page).'
+                : 'Discover the secret to hybrid documents: why a simple Page Break (Ctrl+Enter) cannot rotate a single sheet to Landscape, and how to isolate wide tables using Section Break (Next Page).'}
             </p>
           </div>
           <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-2xl text-purple-400 self-start sm:self-auto">
@@ -110,30 +114,36 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
         <div className="bg-slate-850/80 border border-slate-700/70 rounded-2xl p-4 sm:p-5">
           <div className="flex items-center gap-2 text-cyan-400 font-bold mb-2">
             <Scissors className="w-5 h-5" />
-            <span>Rupere de Pagină (Page Break)</span>
+            <span>{lang === 'ro' ? 'Rupere de Pagină (Page Break)' : 'Page Break (Ctrl+Enter)'}</span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed">
-            Se introduce instant cu <strong>Ctrl + Enter</strong>. Forțează textul să continue pe o pagină nouă curată, dar <strong>păstrează aceleași margini, orientare și antet</strong> pentru întregul fișier.
+            {lang === 'ro'
+              ? 'Se introduce instant cu Ctrl + Enter. Forțează textul să continue pe o pagină nouă curată, dar păstrează aceleași margini, orientare și antet pentru întregul fișier.'
+              : 'Inserted instantly with Ctrl + Enter. Pushes following text to a clean new page, but preserves identical margins, orientation, and headers across the document.'}
           </p>
         </div>
 
         <div className="bg-slate-850/80 border border-slate-700/70 rounded-2xl p-4 sm:p-5">
           <div className="flex items-center gap-2 text-purple-400 font-bold mb-2">
             <SplitSquareVertical className="w-5 h-5" />
-            <span>Rupere Secțiune: Pagina Următoare</span>
+            <span>{lang === 'ro' ? 'Rupere Secțiune: Pagina Următoare' : 'Section Break: Next Page'}</span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed">
-            Creează o barieră completă de configurare. Doar o secțiune nouă poate avea <strong>orientare diferită (Vedere/Landscape)</strong>, numerotare repornită de la 1 sau margini unice!
+            {lang === 'ro'
+              ? 'Creează o barieră completă de configurare. Doar o secțiune nouă poate avea orientare diferită (Vedere/Landscape), numerotare repornită de la 1 sau margini unice!'
+              : 'Creates a complete formatting boundary. Only a new section can have different orientation (Landscape), restarted page numbering, or unique margins!'}
           </p>
         </div>
 
         <div className="bg-slate-850/80 border border-slate-700/70 rounded-2xl p-4 sm:p-5">
           <div className="flex items-center gap-2 text-emerald-400 font-bold mb-2">
             <Columns className="w-5 h-5" />
-            <span>Rupere Secțiune Continuă</span>
+            <span>{lang === 'ro' ? 'Rupere Secțiune Continuă' : 'Continuous Section Break'}</span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed">
-            Nu trece pe o pagină nouă, ci împarte aceeași foaie! Esențială când vrei ca titlul să fie pe o coloană lată, iar articolul de dedesubt să fie <strong>aranjat pe 2 coloane paralele de ziar</strong>.
+            {lang === 'ro'
+              ? 'Nu trece pe o pagină nouă, ci împarte aceeași foaie! Esențială când vrei ca titlul să fie pe o coloană lată, iar articolul de dedesubt să fie aranjat pe 2 coloane paralele de ziar.'
+              : 'Does not jump to a new page, but splits the current sheet! Crucial when you need a single-column banner headline above 2 parallel newspaper-style columns.'}
           </p>
         </div>
       </div>
@@ -142,12 +152,20 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
       <div className="bg-slate-900/90 border border-slate-700/80 rounded-3xl p-6 sm:p-7 shadow-2xl flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
           <div>
-            <span className="text-xs text-indigo-400 font-mono font-bold uppercase tracking-wider">Laborator Practic</span>
-            <h2 className="text-xl font-black text-white">Misiune: Rotește doar Pagina 3 cu Tabelul în Landscape!</h2>
+            <span className="text-xs text-indigo-400 font-mono font-bold uppercase tracking-wider">
+              {lang === 'ro' ? 'Laborator Practic' : 'Hands-on Lab'}
+            </span>
+            <h2 className="text-xl font-black text-white">
+              {lang === 'ro'
+                ? 'Misiune: Rotește doar Pagina 3 cu Tabelul în Landscape!'
+                : 'Mission: Rotate Only Page 3 with the Table to Landscape!'}
+            </h2>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400 font-medium">Examinare:</span>
+            <span className="text-xs text-slate-400 font-medium">
+              {lang === 'ro' ? 'Examinare:' : 'Inspection:'}
+            </span>
             {[1, 2, 3, 4].map((p) => (
               <button
                 key={p}
@@ -161,7 +179,7 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                     : 'text-slate-400 hover:text-white bg-slate-800'
                 }`}
               >
-                P{p} {p === 3 ? '(Tabel)' : ''}
+                P{p} {p === 3 ? (lang === 'ro' ? '(Tabel)' : '(Table)') : ''}
               </button>
             ))}
           </div>
@@ -171,7 +189,9 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
           {/* Controls & Tools */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex flex-col gap-3.5">
-              <span className="text-xs font-bold text-slate-300">Instrumente Machetare & Ruperi:</span>
+              <span className="text-xs font-bold text-slate-300">
+                {lang === 'ro' ? 'Instrumente Machetare & Ruperi:' : 'Layout Tools & Breaks:'}
+              </span>
 
               {/* Step 1: Break before P3 */}
               <button
@@ -186,9 +206,15 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                 }`}
               >
                 <div>
-                  <span className="text-xs font-bold block">1. Inserează Rupere Secțiune ÎNAINTE de Pagina 3</span>
+                  <span className="text-xs font-bold block">
+                    {lang === 'ro'
+                      ? '1. Inserează Rupere Secțiune ÎNAINTE de Pagina 3'
+                      : '1. Insert Section Break BEFORE Page 3'}
+                  </span>
                   <span className="text-[11px] text-slate-400 block mt-0.5">
-                    Separă pagina 2 de pagina 3 într-o secțiune autonomă.
+                    {lang === 'ro'
+                      ? 'Separă pagina 2 de pagina 3 într-o secțiune autonomă.'
+                      : 'Separates Page 2 from Page 3 into an autonomous section.'}
                   </span>
                 </div>
                 {hasSectionBreakBeforeP3 ? <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0" /> : <Scissors className="w-5 h-5 text-slate-500 shrink-0" />}
@@ -196,7 +222,9 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
 
               {/* Step 2: Rotate P3 */}
               <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-700">
-                <span className="text-xs font-bold text-slate-300 block mb-2">2. Orientare Pagina 3:</span>
+                <span className="text-xs font-bold text-slate-300 block mb-2">
+                  {lang === 'ro' ? '2. Orientare Pagina 3:' : '2. Page 3 Orientation:'}
+                </span>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => {
@@ -207,7 +235,7 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                       p3Orientation === 'portrait' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
                     }`}
                   >
-                    Portret (210 mm)
+                    {lang === 'ro' ? 'Portret (210 mm)' : 'Portrait (210 mm)'}
                   </button>
                   <button
                     onClick={() => {
@@ -218,7 +246,7 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                       p3Orientation === 'landscape' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
                     }`}
                   >
-                    Vedere (297 mm) 📐
+                    {lang === 'ro' ? 'Vedere (297 mm) 📐' : 'Landscape (297 mm) 📐'}
                   </button>
                 </div>
               </div>
@@ -236,9 +264,15 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                 }`}
               >
                 <div>
-                  <span className="text-xs font-bold block">3. Inserează Rupere Secțiune DUPĂ Pagina 3</span>
+                  <span className="text-xs font-bold block">
+                    {lang === 'ro'
+                      ? '3. Inserează Rupere Secțiune DUPĂ Pagina 3'
+                      : '3. Insert Section Break AFTER Page 3'}
+                  </span>
                   <span className="text-[11px] text-slate-400 block mt-0.5">
-                    Permite Paginii 4 (Concluzii) să revină la orientarea verticală Portret.
+                    {lang === 'ro'
+                      ? 'Permite Paginii 4 (Concluzii) să revină la orientarea verticală Portret.'
+                      : 'Allows Page 4 (Conclusions) to revert back to vertical Portrait orientation.'}
                   </span>
                 </div>
                 {hasSectionBreakAfterP3 ? <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0" /> : <Scissors className="w-5 h-5 text-slate-500 shrink-0" />}
@@ -250,8 +284,12 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
               <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs text-rose-300 flex items-start gap-2.5">
                 <AlertTriangle className="w-5 h-5 shrink-0 text-rose-400" />
                 <div>
-                  <strong className="block font-bold">Eroare tipică în Word!</strong>
-                  Ai rotit pagina în Landscape fără ambele Ruperi de Secțiune. Fără secțiuni izolate, Word va roti automat întregul referat sau va lăsa pagina 4 decuplată incorect!
+                  <strong className="block font-bold">
+                    {lang === 'ro' ? 'Eroare tipică în Word!' : 'Classic Word Formatting Issue!'}
+                  </strong>
+                  {lang === 'ro'
+                    ? 'Ai rotit pagina în Landscape fără ambele Ruperi de Secțiune. Fără secțiuni izolate, Word va roti automat întregul referat sau va lăsa pagina 4 decuplată incorect!'
+                    : 'You rotated the page to Landscape without both Section Breaks. Without isolated boundaries, Word rotates the entire file or leaves Page 4 misaligned!'}
                 </div>
               </div>
             )}
@@ -260,8 +298,12 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
               <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-300 flex items-start gap-2.5">
                 <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
                 <div>
-                  <strong className="block font-bold">Document Hibrid Impecabil! 🎉</strong>
-                  Pagina 1 și 2 sunt în Portret, Pagina 3 cu tabelul amplu este izolată în Landscape, iar Pagina 4 revine la Portret. O realizare de profesionist!
+                  <strong className="block font-bold">
+                    {lang === 'ro' ? 'Document Hibrid Impecabil! 🎉' : 'Flawless Hybrid Document! 🎉'}
+                  </strong>
+                  {lang === 'ro'
+                    ? 'Pagina 1 și 2 sunt în Portret, Pagina 3 cu tabelul amplu este izolată în Landscape, iar Pagina 4 revine la Portret. O realizare de profesionist!'
+                    : 'Pages 1 and 2 are in Portrait, Page 3 with the wide table is isolated in Landscape, and Page 4 returns to Portrait. Outstanding professional publishing!'}
                 </div>
               </div>
             )}
@@ -270,7 +312,9 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
           {/* Interactive Document Flow Mockup */}
           <div className="lg:col-span-7 flex flex-col items-center bg-slate-950/80 border border-slate-800 rounded-3xl p-6 min-h-[380px]">
             <span className="text-xs font-mono text-slate-400 mb-4">
-              Harta Secțiunilor Documentului (Vizualizare de Ansamblu):
+              {lang === 'ro'
+                ? 'Harta Secțiunilor Documentului (Vizualizare de Ansamblu):'
+                : 'Document Section Map (Overview):'}
             </span>
 
             {/* Thumbnail representation of all 4 pages */}
@@ -279,6 +323,15 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                 const isP3 = pNum === 3;
                 const isLand = isP3 && p3Orientation === 'landscape' && hasSectionBreakBeforeP3;
                 const isCorrupted = isDocumentBroken;
+
+                const pageLabel =
+                  pNum === 1
+                    ? 'Intro'
+                    : pNum === 2
+                    ? 'Text'
+                    : pNum === 3
+                    ? (lang === 'ro' ? 'Tabel' : 'Table')
+                    : (lang === 'ro' ? 'Concluzii' : 'Summary');
 
                 return (
                   <div
@@ -303,7 +356,7 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                       }`}
                     >
                       <div className="font-bold border-b border-slate-300 pb-0.5 truncate">
-                        P{pNum}: {pNum === 1 ? 'Intro' : pNum === 2 ? 'Text' : pNum === 3 ? 'Tabel' : 'Concluzii'}
+                        P{pNum}: {pageLabel}
                       </div>
                       <div className="space-y-0.5 my-auto">
                         <div className="h-0.5 bg-slate-300 rounded w-full"></div>
@@ -326,12 +379,16 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
               <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
                 <span className="font-bold text-white flex items-center gap-2">
                   <FileSpreadsheet className="w-4 h-4 text-cyan-400" />
-                  Pagina {activeViewPage}: {activeViewPage === 3 ? 'Tabel Date Olimpiade (Lățime mare)' : 'Conținut Standard'}
+                  {lang === 'ro' ? 'Pagina ' : 'Page '}
+                  {activeViewPage}:{' '}
+                  {activeViewPage === 3
+                    ? (lang === 'ro' ? 'Tabel Date Olimpiade (Lățime mare)' : 'Olympiad Results Table (Wide)')
+                    : (lang === 'ro' ? 'Conținut Standard' : 'Standard Content')}
                 </span>
                 <span className="font-mono text-slate-400 text-[11px]">
                   {activeViewPage === 3 && p3Orientation === 'landscape' && hasSectionBreakBeforeP3 && hasSectionBreakAfterP3
-                    ? 'Secțiunea 2 • Landscape (297 mm)'
-                    : 'Secțiunea 1 • Portrait (210 mm)'}
+                    ? (lang === 'ro' ? 'Secțiunea 2 • Landscape (297 mm)' : 'Section 2 • Landscape (297 mm)')
+                    : (lang === 'ro' ? 'Secțiunea 1 • Portrait (210 mm)' : 'Section 1 • Portrait (210 mm)')}
                 </span>
               </div>
 
@@ -340,44 +397,50 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                   <table className="w-full text-[10px] text-left border-collapse border border-slate-700">
                     <thead>
                       <tr className="bg-slate-800 text-cyan-300">
-                        <th className="border border-slate-700 p-1.5">Elev</th>
-                        <th className="border border-slate-700 p-1.5">Clasa</th>
-                        <th className="border border-slate-700 p-1.5">Disciplina</th>
-                        <th className="border border-slate-700 p-1.5">Punctaj</th>
-                        <th className="border border-slate-700 p-1.5">Premiu</th>
-                        <th className="border border-slate-700 p-1.5">Calificare Națională</th>
+                        <th className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Elev' : 'Student'}</th>
+                        <th className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Clasa' : 'Class'}</th>
+                        <th className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Disciplina' : 'Subject'}</th>
+                        <th className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Punctaj' : 'Score'}</th>
+                        <th className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Premiu' : 'Award'}</th>
+                        <th className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Calificare Națională' : 'National Qualification'}</th>
                       </tr>
                     </thead>
                     <tbody className="text-slate-300">
                       <tr>
                         <td className="border border-slate-700 p-1.5">Popescu Andrei</td>
                         <td className="border border-slate-700 p-1.5">7A</td>
-                        <td className="border border-slate-700 p-1.5">Informatică & TIC</td>
+                        <td className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Informatică & TIC' : 'Computer Science & ICT'}</td>
                         <td className="border border-slate-700 p-1.5 font-mono text-emerald-400">98.50</td>
-                        <td className="border border-slate-700 p-1.5">Premiul I</td>
-                        <td className="border border-slate-700 p-1.5 text-cyan-400 font-bold">DA</td>
+                        <td className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Premiul I' : '1st Prize'}</td>
+                        <td className="border border-slate-700 p-1.5 text-cyan-400 font-bold">{lang === 'ro' ? 'DA' : 'YES'}</td>
                       </tr>
                       <tr>
                         <td className="border border-slate-700 p-1.5">Ionescu Elena</td>
                         <td className="border border-slate-700 p-1.5">7B</td>
-                        <td className="border border-slate-700 p-1.5">Informatică & TIC</td>
+                        <td className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Informatică & TIC' : 'Computer Science & ICT'}</td>
                         <td className="border border-slate-700 p-1.5 font-mono text-emerald-400">95.00</td>
-                        <td className="border border-slate-700 p-1.5">Premiul II</td>
-                        <td className="border border-slate-700 p-1.5 text-cyan-400 font-bold">DA</td>
+                        <td className="border border-slate-700 p-1.5">{lang === 'ro' ? 'Premiul II' : '2nd Prize'}</td>
+                        <td className="border border-slate-700 p-1.5 text-cyan-400 font-bold">{lang === 'ro' ? 'DA' : 'YES'}</td>
                       </tr>
                     </tbody>
                   </table>
                   <span className="text-[10px] text-slate-400 block mt-2 italic">
-                    Acest tabel are 6 coloane dense. Pe formatul vertical (Portret) textul s-ar fi înghesuit inestetic!
+                    {lang === 'ro'
+                      ? 'Acest tabel are 6 coloane dense. Pe formatul vertical (Portret) textul s-ar fi înghesuit inestetic!'
+                      : 'This table has 6 dense columns. In vertical Portrait mode, text would be cramped and visually cluttered!'}
                   </span>
                 </div>
               ) : (
                 <div className="space-y-1.5 text-slate-300 text-xs">
                   <p>
-                    Textul din pagina {activeViewPage} curge în format Portret standard, cu marginile clasice de 2.54 cm.
+                    {lang === 'ro'
+                      ? `Textul din pagina ${activeViewPage} curge în format Portret standard, cu marginile clasice de 2.54 cm.`
+                      : `Body text on page ${activeViewPage} flows in standard Portrait format with classic 2.54 cm margins.`}
                   </p>
                   <p className="text-slate-400 text-[11px]">
-                    Datorită ruperilor de secțiune, modificarea paginii 3 nu a afectat alinierea acestor paragrafe.
+                    {lang === 'ro'
+                      ? 'Datorită ruperilor de secțiune, modificarea paginii 3 nu a afectat alinierea acestor paragrafe.'
+                      : 'Thanks to section breaks, modifying page 3 did not alter the formatting of these paragraphs.'}
                   </p>
                 </div>
               )}
@@ -391,7 +454,9 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
         <div className="flex items-center gap-2 text-indigo-400">
           <BookOpen className="w-5 h-5" />
           <h2 className="text-xl font-black text-white font-heading">
-            Verificarea Cunoștințelor • Ruperi de Secțiune & Pagină
+            {lang === 'ro'
+              ? 'Verificarea Cunoștințelor • Ruperi de Secțiune & Pagină'
+              : 'Knowledge Check • Section Breaks & Page Breaks'}
           </h2>
         </div>
 
@@ -399,10 +464,16 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
         <div className="flex flex-col gap-3 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
           <PedagogicalReflectionBanner
             cooldownSeconds={cooldowns['q1'] || 0}
-            message="Timp de reflecție: amintește-ți scurtătura universală de rupere de pagină curată!"
+            message={
+              lang === 'ro'
+                ? 'Timp de reflecție: amintește-ți scurtătura universală de rupere de pagină curată!'
+                : 'Reflection time: remember the universal clean page break shortcut!'
+            }
           />
           <span className="text-sm font-bold text-slate-200">
-            1. Care este combinația rapidă de taste pentru inserarea unei Ruperi de Pagină (Page Break) în Word?
+            {lang === 'ro'
+              ? '1. Care este combinația rapidă de taste pentru inserarea unei Ruperi de Pagină (Page Break) în Word?'
+              : '1. What is the keyboard shortcut to insert a Page Break in Word?'}
           </span>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -430,10 +501,20 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
             ))}
           </div>
 
-          <QuestionHint hint="Tastează Ctrl concomitent cu tasta Enter pentru a trece instant pe foaia nouă fără să apeși Enter de 20 de ori." />
+          <QuestionHint
+            hint={
+              lang === 'ro'
+                ? 'Tastează Ctrl concomitent cu tasta Enter pentru a trece instant pe foaia nouă fără să apeși Enter de 20 de ori.'
+                : 'Press Ctrl simultaneously with Enter to immediately jump to a new page without hitting Enter repeatedly.'
+            }
+          />
           <AnswerExplanation
             isCorrect={isQ1Correct}
-            explanation="Corect! Ctrl + Enter este comanda rapidă standard pentru inserarea unei ruperi de pagină curate (Page Break)."
+            explanation={
+              lang === 'ro'
+                ? 'Corect! Ctrl + Enter este comanda rapidă standard pentru inserarea unei ruperi de pagină curate (Page Break).'
+                : 'Correct! Ctrl + Enter is the universal shortcut to insert a clean Page Break.'
+            }
           />
         </div>
 
@@ -441,18 +522,40 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
         <div className="flex flex-col gap-3 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
           <PedagogicalReflectionBanner
             cooldownSeconds={cooldowns['q2'] || 0}
-            message="Timp de reflecție: gândește-te ce se întâmplă dacă documentul conține o singură secțiune globală!"
+            message={
+              lang === 'ro'
+                ? 'Timp de reflecție: gândește-te ce se întâmplă dacă documentul conține o singură secțiune globală!'
+                : 'Reflection time: think about what happens when a document has only a single global section!'
+            }
           />
           <span className="text-sm font-bold text-slate-200">
-            2. Ce se întâmplă dacă încerci să schimbi orientarea unei singure pagini în Vedere (Landscape) fără a insera Ruperi de Secțiune?
+            {lang === 'ro'
+              ? '2. Ce se întâmplă dacă încerci să schimbi orientarea unei singure pagini în Vedere (Landscape) fără a insera Ruperi de Secțiune?'
+              : '2. What happens if you try to change orientation of a single page to Landscape without inserting Section Breaks?'}
           </span>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {[
-              { id: 'a', label: 'Procesorul Word se va închide forțat cu eroare critică' },
-              { id: 'b', label: 'Toate paginile din întregul document se vor roti automat în Landscape' },
-              { id: 'c', label: 'Doar imaginile din pagină se vor roti cu 90 de grade' },
-              { id: 'd', label: 'Numerele de pagină se vor șterge automat' },
+              {
+                id: 'a',
+                labelRo: 'Procesorul Word se va închide forțat cu eroare critică',
+                labelEn: 'Word will crash immediately with a critical system error',
+              },
+              {
+                id: 'b',
+                labelRo: 'Toate paginile din întregul document se vor roti automat în Landscape',
+                labelEn: 'All pages across the entire document will rotate to Landscape',
+              },
+              {
+                id: 'c',
+                labelRo: 'Doar imaginile din pagină se vor roti cu 90 de grade',
+                labelEn: 'Only inline pictures on the page will rotate 90 degrees',
+              },
+              {
+                id: 'd',
+                labelRo: 'Numerele de pagină se vor șterge automat',
+                labelEn: 'Page numbers will be deleted automatically',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -466,16 +569,26 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                     : 'bg-slate-800/60 hover:bg-slate-800 border-slate-700 text-slate-300'
                 } ${isLocked('q2') ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span>{opt.label}</span>
+                <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                 {q2Answer === opt.id && (opt.id === 'b' ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /> : <XCircle className="w-4 h-4 text-rose-400 shrink-0" />)}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="În Word, orientarea și marginile sunt proprietăți definite la nivel de secțiune, nu la nivel de pagină individuală!" />
+          <QuestionHint
+            hint={
+              lang === 'ro'
+                ? 'În Word, orientarea și marginile sunt proprietăți definite la nivel de secțiune, nu la nivel de pagină individuală!'
+                : 'In word processors, orientation and margins are section-level properties, not individual page properties!'
+            }
+          />
           <AnswerExplanation
             isCorrect={isQ2Correct}
-            explanation="Exact! Orientarea paginii este o proprietate a secțiunii. Dacă nu creezi o secțiune nouă cu Section Break (Next Page), comanda de orientare se va propaga peste tot documentul!"
+            explanation={
+              lang === 'ro'
+                ? 'Exact! Orientarea paginii este o proprietate a secțiunii. Dacă nu creezi o secțiune nouă cu Section Break (Next Page), comanda de orientare se va propaga peste tot documentul!'
+                : 'Exactly! Page orientation is a section-level setting. Without a Section Break (Next Page), applying landscape rotates every single page in the entire document!'
+            }
           />
         </div>
 
@@ -483,18 +596,40 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
         <div className="flex flex-col gap-3 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
           <PedagogicalReflectionBanner
             cooldownSeconds={cooldowns['q3'] || 0}
-            message="Timp de reflecție: gândește-te la o rupere care nu sare pe pagina următoare, ci continuă pe aceeași foaie!"
+            message={
+              lang === 'ro'
+                ? 'Timp de reflecție: gândește-te la o rupere care nu sare pe pagina următoare, ci continuă pe aceeași foaie!'
+                : 'Reflection time: think of a break that does not jump pages, but continues on the same sheet!'
+            }
           />
           <span className="text-sm font-bold text-slate-200">
-            3. Ce tip de rupere de secțiune se folosește când vrem ca titlul să ocupe toată lățimea paginii, iar textul de dedesubt să fie împărțit pe 2 coloane pe aceeași foaie?
+            {lang === 'ro'
+              ? '3. Ce tip de rupere de secțiune se folosește când vrem ca titlul să ocupe toată lățimea paginii, iar textul de dedesubt să fie împărțit pe 2 coloane pe aceeași foaie?'
+              : '3. What type of section break is used when a headline spans the whole page width and body text underneath divides into 2 columns on the same sheet?'}
           </span>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {[
-              { id: 'a', label: 'Rupere de pagină simplă (Page Break)' },
-              { id: 'b', label: 'Rupere de coloană (Column Break)' },
-              { id: 'c', label: 'Rupere de secțiune Continuă (Continuous Section Break)' },
-              { id: 'd', label: 'Rupere de paragraf forțată (Shift + Enter)' },
+              {
+                id: 'a',
+                labelRo: 'Rupere de pagină simplă (Page Break)',
+                labelEn: 'Simple Page Break',
+              },
+              {
+                id: 'b',
+                labelRo: 'Rupere de coloană (Column Break)',
+                labelEn: 'Column Break',
+              },
+              {
+                id: 'c',
+                labelRo: 'Rupere de secțiune Continuă (Continuous Section Break)',
+                labelEn: 'Continuous Section Break',
+              },
+              {
+                id: 'd',
+                labelRo: 'Rupere de paragraf forțată (Shift + Enter)',
+                labelEn: 'Line Break (Shift + Enter)',
+              },
             ].map((opt) => (
               <button
                 key={opt.id}
@@ -508,16 +643,26 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
                     : 'bg-slate-800/60 hover:bg-slate-800 border-slate-700 text-slate-300'
                 } ${isLocked('q3') ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <span>{opt.label}</span>
+                <span>{lang === 'ro' ? opt.labelRo : opt.labelEn}</span>
                 {q3Answer === opt.id && (opt.id === 'c' ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /> : <XCircle className="w-4 h-4 text-rose-400 shrink-0" />)}
               </button>
             ))}
           </div>
 
-          <QuestionHint hint="Termenul „Continuu” indică faptul că secțiunea nouă începe pe același rând al foii curente, fără a forța o pagină albă nouă." />
+          <QuestionHint
+            hint={
+              lang === 'ro'
+                ? 'Termenul „Continuu” indică faptul că secțiunea nouă începe pe același rând al foii curente, fără a forța o pagină albă nouă.'
+                : '“Continuous” indicates that the new section begins right on the current page, without forcing a page leap.'
+            }
+          />
           <AnswerExplanation
             isCorrect={isQ3Correct}
-            explanation="Corect! Ruperea de secțiune Continuă (Continuous) permite schimbarea numărului de coloane (de la 1 la 2 sau 3) pe exact aceeași pagină, tehnica de bază folosită la machetarea ziarelor și revistelor."
+            explanation={
+              lang === 'ro'
+                ? 'Corect! Ruperea de secțiune Continuă (Continuous) permite schimbarea numărului de coloane (de la 1 la 2 sau 3) pe exact aceeași pagină, tehnica de bază folosită la machetarea ziarelor și revistelor.'
+                : 'Correct! Continuous section breaks allow altering column layouts (from 1 to 2 or 3) on the exact same page, the foundational technique for newspaper and magazine spreads.'
+            }
           />
         </div>
       </div>
@@ -529,7 +674,11 @@ export const W2Level3_SectionBreaks: React.FC<W2Level3Props> = ({ onCompletePage
           sounds.playFanfare();
           onCompletePage(calculateScore());
         }}
-        promptText={allCorrect ? 'Ai stăpânit ruperile de secțiune! Treci la Tabele Profesionale!' : 'Răspunde corect la cele 3 întrebări de verificare pentru a debloca nivelul următor!'}
+        promptText={
+          allCorrect
+            ? (lang === 'ro' ? 'Ai stăpânit ruperile de secțiune! Treci la Tabele Profesionale!' : 'You mastered section breaks! Proceed to Professional Tables!')
+            : (lang === 'ro' ? 'Răspunde corect la cele 3 întrebări de verificare pentru a debloca nivelul următor!' : 'Answer all 3 verification questions correctly to unlock the next level!')
+        }
       />
     </div>
   );

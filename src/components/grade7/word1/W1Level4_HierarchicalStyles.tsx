@@ -28,8 +28,10 @@ interface W1Level4Props {
 
 interface DocumentSection {
   id: string;
-  title: string;
-  body: string;
+  titleRo: string;
+  titleEn: string;
+  bodyRo: string;
+  bodyEn: string;
   correctStyle: 'h1' | 'h2';
   pageNumber: number;
 }
@@ -40,29 +42,45 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
   const sections: DocumentSection[] = [
     {
       id: 's1',
-      title: 'Introducere în Tehnoredactarea Digitală',
-      body: 'Documentele moderne nu sunt simple foi tipărite, ci structuri logice compuse din capitole și subcapitole.',
+      titleRo: 'Introducere în Tehnoredactarea Digitală',
+      titleEn: 'Introduction to Digital Typesetting',
+      bodyRo:
+        'Documentele moderne nu sunt simple foi tipărite, ci structuri logice compuse din capitole și subcapitole.',
+      bodyEn:
+        'Modern documents are not merely printed sheets, but logical hierarchical structures built from chapters and sections.',
       correctStyle: 'h1',
       pageNumber: 1,
     },
     {
       id: 's2',
-      title: 'Evoluția de la Mașina Mecanică de Scris',
-      body: 'La mașina de scris nu existau fonturi variabile și stiluri ierarhice; spațierea se făcea mecanic cu carul.',
+      titleRo: 'Evoluția de la Mașina Mecanică de Scris',
+      titleEn: 'Evolution from Mechanical Typewriters',
+      bodyRo:
+        'La mașina de scris nu existau fonturi variabile și stiluri ierarhice; spațierea se făcea mecanic cu carul.',
+      bodyEn:
+        'Typewriters lacked variable fonts and styles; letter spacing was carried out mechanically via the carriage.',
       correctStyle: 'h2',
       pageNumber: 2,
     },
     {
       id: 's3',
-      title: 'Standardele de Formatare Academică',
-      body: 'Ghidurile universitare impun corp de text de 12pt, interlinie de 1.5 și titluri ierarhizate strict.',
+      titleRo: 'Standardele de Formatare Academică',
+      titleEn: 'Academic Formatting Standards',
+      bodyRo:
+        'Ghidurile universitare impun corp de text de 12pt, interlinie de 1.5 și titluri ierarhizate strict.',
+      bodyEn:
+        'University guidelines require 12pt body text, 1.5 line spacing, and strictly hierarchical headings.',
       correctStyle: 'h2',
       pageNumber: 3,
     },
     {
       id: 's4',
-      title: 'Concluzii și Bune Practici Editoriale',
-      body: 'Un tehnoredactor eficient economisește zeci de ore aplicând stiluri rapide în loc de formatare manuală.',
+      titleRo: 'Concluzii și Bune Practici Editoriale',
+      titleEn: 'Conclusions & Editorial Best Practices',
+      bodyRo:
+        'Un tehnoredactor eficient economisește zeci de ore aplicând stiluri rapide în loc de formatare manuală.',
+      bodyEn:
+        'An efficient typesetter saves dozens of hours applying global styles instead of manual formatting.',
       correctStyle: 'h1',
       pageNumber: 5,
     },
@@ -145,19 +163,29 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/20 text-violet-300 text-xs font-mono font-bold border border-violet-500/40">
               <ListTree className="w-3.5 h-3.5 text-violet-400" />
-              <span>NIVELUL 4 DIN 7 • STILURI STRUCTURATE & CUPRINS AUTOMAT</span>
+              <span>
+                {lang === 'en'
+                  ? 'LEVEL 4 OF 7 • STRUCTURED STYLES & AUTOMATIC TOC'
+                  : 'NIVELUL 4 DIN 7 • STILURI STRUCTURATE & CUPRINS AUTOMAT'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white font-heading tracking-tight">
-              Stiluri Ierarhice (Heading 1 & 2) vs Formatare Manuală
+              {lang === 'en'
+                ? 'Hierarchical Styles (Heading 1 & 2) vs Manual Formatting'
+                : 'Stiluri Ierarhice (Heading 1 & 2) vs Formatare Manuală'}
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Formatarea manuală (mărire font + Bold) este marea capcană a începătorilor. Doar aplicând stilurile semantice „Titlu 1” și „Titlu 2” permiți editorului să genereze Cuprinsul automat în câteva secunde și să ofere navigare instantanee prin capitole.
+              {lang === 'en'
+                ? 'Manual formatting (font enlargement + Bold) is the beginner trap. Only applying semantic "Heading 1" and "Heading 2" styles enables Word to build a live Table of Contents in seconds and provide instant chapter navigation.'
+                : 'Formatarea manuală (mărire font + Bold) este marea capcană a începătorilor. Doar aplicând stilurile semantice „Titlu 1” și „Titlu 2” permiți editorului să genereze Cuprinsul automat în câteva secunde și să ofere navigare instantanee prin capitole.'}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2 shrink-0">
             <div className="px-4 py-2 rounded-2xl bg-slate-900/80 border border-violet-500/40 text-right">
-              <span className="text-[11px] font-mono uppercase text-slate-400 block">Punctaj Nivel 4</span>
+              <span className="text-[11px] font-mono uppercase text-slate-400 block">
+                {lang === 'en' ? 'Level 4 Score' : 'Punctaj Nivel 4'}
+              </span>
               <span className="text-2xl font-black font-mono text-cyan-400">{totalScore} / 100 XP</span>
             </div>
           </div>
@@ -172,16 +200,22 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
               <ListTree className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Laboratorul Interactiv: Galeria de Stiluri & Cuprinsul Dinamic</h2>
+              <h2 className="text-lg font-bold text-white">
+                {lang === 'en'
+                  ? 'Interactive Lab: Styles Gallery & Dynamic Table of Contents'
+                  : 'Laboratorul Interactiv: Galeria de Stiluri & Cuprinsul Dinamic'}
+              </h2>
               <p className="text-xs text-slate-400">
-                Atribuie fiecărei secțiuni stilul corect (Titlu 1 pentru capitole mari, Titlu 2 pentru subcapitole) și privește cum se construiește Cuprinsul automat!
+                {lang === 'en'
+                  ? 'Assign each section its proper style (Heading 1 for main chapters, Heading 2 for subheadings) and watch the Table of Contents build automatically!'
+                  : 'Atribuie fiecărei secțiuni stilul corect (Titlu 1 pentru capitole mari, Titlu 2 pentru subcapitole) și privește cum se construiește Cuprinsul automat!'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono text-violet-300 bg-violet-950/80 px-3 py-1.5 rounded-full border border-violet-500/40">
-              Stiluri corecte: <b className="text-white">{correctStylesCount} / 4</b>
+              {lang === 'en' ? 'Correct styles:' : 'Stiluri corecte:'} <b className="text-white">{correctStylesCount} / 4</b>
             </span>
           </div>
         </div>
@@ -191,7 +225,7 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
           {/* Left Column: Sections to style */}
           <div className="lg:col-span-7 space-y-4">
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-              Document de Lucru — Aplică Stilurile din Panglică:
+              {lang === 'en' ? 'Working Document — Apply Ribbon Styles:' : 'Document de Lucru — Aplică Stilurile din Panglică:'}
             </span>
 
             {sections.map((sec, idx) => {
@@ -210,7 +244,9 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-mono text-slate-500">Secțiunea {idx + 1}</span>
+                    <span className="text-xs font-mono text-slate-500">
+                      {lang === 'en' ? `Section ${idx + 1}` : `Secțiunea ${idx + 1}`}
+                    </span>
                     <div className="flex items-center gap-1">
                       {(['normal', 'h1', 'h2'] as const).map((styleOpt) => (
                         <button
@@ -227,7 +263,15 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                               : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                           }`}
                         >
-                          {styleOpt === 'normal' ? 'Normal' : styleOpt === 'h1' ? 'Titlu 1' : 'Titlu 2'}
+                          {styleOpt === 'normal'
+                            ? 'Normal'
+                            : styleOpt === 'h1'
+                            ? lang === 'en'
+                              ? 'Heading 1'
+                              : 'Titlu 1'
+                            : lang === 'en'
+                            ? 'Heading 2'
+                            : 'Titlu 2'}
                         </button>
                       ))}
                     </div>
@@ -246,9 +290,11 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                     >
                       {currentStyle === 'h1' && '1. '}
                       {currentStyle === 'h2' && '1.1. '}
-                      {sec.title}
+                      {lang === 'en' ? sec.titleEn : sec.titleRo}
                     </h3>
-                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{sec.body}</p>
+                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                      {lang === 'en' ? sec.bodyEn : sec.bodyRo}
+                    </p>
                   </div>
                 </div>
               );
@@ -261,7 +307,9 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <FileText className="w-4 h-4 text-violet-400" />
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-white">
-                  Cuprins Automat Generat (Table of Contents)
+                  {lang === 'en'
+                    ? 'Auto-Generated Table of Contents'
+                    : 'Cuprins Automat Generat (Table of Contents)'}
                 </span>
               </div>
 
@@ -282,12 +330,14 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                       }`}
                     >
                       <span className="truncate pr-2">
-                        {isH1 ? 'Cap. ' : '– '}
-                        {sec.title}
+                        {isH1 ? (lang === 'en' ? 'Ch. ' : 'Cap. ') : '– '}
+                        {lang === 'en' ? sec.titleEn : sec.titleRo}
                       </span>
                       <span className="shrink-0 text-slate-500 flex items-center gap-1">
                         <span className="hidden sm:inline">...............</span>
-                        <span className="text-cyan-400 font-bold">pag. {sec.pageNumber}</span>
+                        <span className="text-cyan-400 font-bold">
+                          {lang === 'en' ? `p. ${sec.pageNumber}` : `pag. ${sec.pageNumber}`}
+                        </span>
                       </span>
                     </div>
                   );
@@ -295,9 +345,15 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
 
                 {Object.values(sectionStyles).every((s) => s === 'normal') && (
                   <div className="text-center py-8 text-slate-500 space-y-1">
-                    <p className="italic">Niciun titlu detectat în document.</p>
+                    <p className="italic">
+                      {lang === 'en'
+                        ? 'No headings detected in document.'
+                        : 'Niciun titlu detectat în document.'}
+                    </p>
                     <p className="text-[11px] text-slate-600">
-                      Word are nevoie de stiluri Titlu 1 sau Titlu 2 pentru a genera cuprinsul!
+                      {lang === 'en'
+                        ? 'Word requires Heading 1 or Heading 2 styles to generate a Table of Contents!'
+                        : 'Word are nevoie de stiluri Titlu 1 sau Titlu 2 pentru a genera cuprinsul!'}
                     </p>
                   </div>
                 )}
@@ -307,7 +363,11 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
             {correctStylesCount === 4 && (
               <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Structură ierarhică validată! Cuprinsul este sincronizat.</span>
+                <span>
+                  {lang === 'en'
+                    ? 'Hierarchical structure verified! Table of Contents is synchronized.'
+                    : 'Structură ierarhică validată! Cuprinsul este sincronizat.'}
+                </span>
               </div>
             )}
           </div>
@@ -321,8 +381,16 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Verificarea Cunoștințelor: Stiluri Ierarhice & Cuprins</h2>
-            <p className="text-xs text-slate-400">Răspunde corect la cele 3 întrebări de arhitectură a documentelor.</p>
+            <h2 className="text-lg font-bold text-white">
+              {lang === 'en'
+                ? 'Knowledge Check: Hierarchical Styles & TOC'
+                : 'Verificarea Cunoștințelor: Stiluri Ierarhice & Cuprins'}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {lang === 'en'
+                ? 'Answer the 3 document architecture questions correctly.'
+                : 'Răspunde corect la cele 3 întrebări de arhitectură a documentelor.'}
+            </p>
           </div>
         </div>
 
@@ -330,7 +398,9 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
         <div className="space-y-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              1. De ce este recomandată folosirea stilurilor „Titlu 1” și „Titlu 2” în locul măririi manuale a fontului la 18pt și îngroșat (Bold)?
+              {lang === 'en'
+                ? '1. Why is using "Heading 1" and "Heading 2" styles strongly recommended over manually increasing font size to 18pt and Bold?'
+                : '1. De ce este recomandată folosirea stilurilor „Titlu 1” și „Titlu 2” în locul măririi manuale a fontului la 18pt și îngroșat (Bold)?'}
             </h3>
             {cooldowns.q1 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q1} />}
           </div>
@@ -339,19 +409,25 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
             {[
               {
                 id: 'auto_toc',
-                text: 'Permite generarea automată a Cuprinsului (Table of Contents), numerotarea automată a capitolelor și navigarea rapidă prin document.',
+                textRo:
+                  'Permite generarea automată a Cuprinsului (Table of Contents), numerotarea automată a capitolelor și navigarea rapidă prin document.',
+                textEn:
+                  'It enables automatic generation of the Table of Contents, automatic chapter numbering, and rapid navigation across the document.',
               },
               {
                 id: 'smaller_file',
-                text: 'Face fișierul Word de 10 ori mai mic pe disc la salvare.',
+                textRo: 'Face fișierul Word de 10 ori mai mic pe disc la salvare.',
+                textEn: 'Makes the Word file 10x smaller on disk upon saving.',
               },
               {
                 id: 'color_only',
-                text: 'Este singura metodă prin care un text poate fi colorat în albastru.',
+                textRo: 'Este singura metodă prin care un text poate fi colorat în albastru.',
+                textEn: 'It is the only technique that allows coloring text blue.',
               },
               {
                 id: 'anti_virus',
-                text: 'Protejează documentul împotriva virușilor de tip troian.',
+                textRo: 'Protejează documentul împotriva virușilor de tip troian.',
+                textEn: 'Protects the document against Trojan horse computer viruses.',
               },
             ].map((option) => (
               <button
@@ -367,18 +443,26 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Gândește-te la un referat de 50 de pagini: dacă ai 20 de capitole, cum construiești cuprinsul manual fără să verifici fiecare număr de pagină?"
+            hint={
+              lang === 'en'
+                ? 'Think of a 50-page research thesis with 20 chapters: how do you build a table of contents without manually checking every page number?'
+                : 'Gândește-te la un referat de 50 de pagini: dacă ai 20 de capitole, cum construiești cuprinsul manual fără să verifici fiecare număr de pagină?'
+            }
           />
           {q1Answer && (
             <AnswerExplanation
               isCorrect={isQ1Correct}
-              explanation="Corect! Stilurile semantice oferă textului un rol ierarhic. Cuprinsul automat citește exact aceste stiluri și actualizează numerele de pagină fără erori umane."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! Semantic styles provide text with a structural role. The automatic Table of Contents reads these exact styles and synchronizes page numbers without human error.'
+                  : 'Corect! Stilurile semantice oferă textului un rol ierarhic. Cuprinsul automat citește exact aceste stiluri și actualizează numerele de pagină fără erori umane.'
+              }
             />
           )}
         </div>
@@ -387,7 +471,9 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              2. Dacă ai o carte de 200 de pagini și modifici culoarea sau fontul stilului „Titlu 1”, ce se întâmplă în tot documentul?
+              {lang === 'en'
+                ? '2. If you have a 200-page book and modify the font or color of the "Heading 1" style, what happens across the entire document?'
+                : '2. Dacă ai o carte de 200 de pagini și modifici culoarea sau fontul stilului „Titlu 1”, ce se întâmplă în tot documentul?'}
             </h3>
             {cooldowns.q2 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q2} />}
           </div>
@@ -396,19 +482,25 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
             {[
               {
                 id: 'global_update',
-                text: 'Toate titlurile de nivel 1 din întreaga carte se actualizează automat și instantaneu la noul aspect.',
+                textRo:
+                  'Toate titlurile de nivel 1 din întreaga carte se actualizează automat și instantaneu la noul aspect.',
+                textEn:
+                  'Every level 1 heading across the entire book updates automatically and instantly to the new styling.',
               },
               {
                 id: 'first_only',
-                text: 'Se modifică doar primul titlu de pe prima pagină, restul rămân neschimbate.',
+                textRo: 'Se modifică doar primul titlu de pe prima pagină, restul rămân neschimbate.',
+                textEn: 'Only the first heading on page 1 changes; the rest remain untouched.',
               },
               {
                 id: 'error_prompt',
-                text: 'Apare o eroare și trebuie să rescrii toate capitolele de la capăt.',
+                textRo: 'Apare o eroare și trebuie să rescrii toate capitolele de la capăt.',
+                textEn: 'An error prompt appears and all chapters must be retyped from scratch.',
               },
               {
                 id: 'delete_toc',
-                text: 'Se șterge automat tot cuprinsul fără posibilitate de recuperare.',
+                textRo: 'Se șterge automat tot cuprinsul fără posibilitate de recuperare.',
+                textEn: 'The entire table of contents is permanently deleted with no undo.',
               },
             ].map((option) => (
               <button
@@ -424,18 +516,26 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Aceasta este magia stilurilor centralizate: schimbi definiția într-un singur loc și efectul se propagă pe toate sutele de pagini!"
+            hint={
+              lang === 'en'
+                ? 'This is the superpower of centralized styles: modify the definition once, and the effect ripples across hundreds of pages!'
+                : 'Aceasta este magia stilurilor centralizate: schimbi definiția într-un singur loc și efectul se propagă pe toate sutele de pagini!'
+            }
           />
           {q2Answer && (
             <AnswerExplanation
               isCorrect={isQ2Correct}
-              explanation="Excelent! Aceasta este consistența designului digital: modificând proprietățile stilului, toate instanțele din document preiau modificarea în timp real."
+              explanation={
+                lang === 'en'
+                  ? 'Excellent! This is design system consistency: altering the style definition instantly propagates across every instance in the file.'
+                  : 'Excelent! Aceasta este consistența designului digital: modificând proprietățile stilului, toate instanțele din document preiau modificarea în timp real.'
+              }
             />
           )}
         </div>
@@ -444,17 +544,35 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
         <div className="space-y-4 pt-6 border-t border-slate-800">
           <div className="flex items-start justify-between gap-3">
             <h3 className="text-base font-bold text-white">
-              3. Ce panou din Microsoft Word (deschis rapid cu Ctrl+F) afișează arborele de capitole și permite reordonarea lor prin drag-and-drop?
+              {lang === 'en'
+                ? '3. Which Microsoft Word pane (opened with Ctrl+F) displays the chapter tree and allows drag-and-drop reorganization?'
+                : '3. Ce panou din Microsoft Word (deschis rapid cu Ctrl+F) afișează arborele de capitole și permite reordonarea lor prin drag-and-drop?'}
             </h3>
             {cooldowns.q3 && <PedagogicalReflectionBanner secondsLeft={cooldowns.q3} />}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: 'nav_pane', text: 'Panoul de Navigare (Navigation Pane — fila Titluri)' },
-              { id: 'font_dialog', text: 'Caseta de dialog Font (Ctrl+D)' },
-              { id: 'spell_check', text: 'Panoul de verificare ortografică F7' },
-              { id: 'clip_board', text: 'Panoul Clipboard Office' },
+              {
+                id: 'nav_pane',
+                textRo: 'Panoul de Navigare (Navigation Pane — fila Titluri)',
+                textEn: 'Navigation Pane (Headings tab)',
+              },
+              {
+                id: 'font_dialog',
+                textRo: 'Caseta de dialog Font (Ctrl+D)',
+                textEn: 'Font Dialog Box (Ctrl+D)',
+              },
+              {
+                id: 'spell_check',
+                textRo: 'Panoul de verificare ortografică F7',
+                textEn: 'Spelling & Grammar Check pane (F7)',
+              },
+              {
+                id: 'clip_board',
+                textRo: 'Panoul Clipboard Office',
+                textEn: 'Office Clipboard task pane',
+              },
             ].map((option) => (
               <button
                 key={option.id}
@@ -469,18 +587,26 @@ export const W1Level4_HierarchicalStyles: React.FC<W1Level4Props> = ({ onComplet
                     : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
                 }`}
               >
-                {option.text}
+                {lang === 'en' ? option.textEn : option.textRo}
               </button>
             ))}
           </div>
 
           <QuestionHint
-            hint="Apasă tasta F5 sau combinația Ctrl+F și privește în stânga ecranului: ai 'Titluri', 'Pagini' și 'Rezultate'."
+            hint={
+              lang === 'en'
+                ? 'Press F5 or Ctrl+F and look on the left side of the screen: you have Headings, Pages, and Results.'
+                : 'Apasă tasta F5 sau combinația Ctrl+F și privește în stânga ecranului: ai \'Titluri\', \'Pagini\' și \'Rezultate\'.'
+            }
           />
           {q3Answer && (
             <AnswerExplanation
               isCorrect={isQ3Correct}
-              explanation="Corect! Panoul de Navigare (Navigation Pane) listează toate stilurile Heading într-o hartă interactivă a documentului, permițând sărirea directă la orice capitol."
+              explanation={
+                lang === 'en'
+                  ? 'Correct! The Navigation Pane displays all Heading styles in an interactive document map, allowing users to jump directly to any section.'
+                  : 'Corect! Panoul de Navigare (Navigation Pane) listează toate stilurile Heading într-o hartă interactivă a documentului, permițând sărirea directă la orice capitol.'
+              }
             />
           )}
         </div>
