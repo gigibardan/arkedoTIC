@@ -2,20 +2,12 @@ import React, { useState } from 'react';
 import {
   Terminal,
   Play,
-  RotateCcw,
   CheckCircle2,
-  AlertTriangle,
   ArrowRight,
-  Sparkles,
-  Bug,
-  HelpCircle,
-  Lightbulb,
-  Cpu,
-  FileCode,
-  Layers,
-  Settings
+  Bug
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -25,23 +17,31 @@ type ChallengeId = 'c1' | 'c2' | 'c3';
 
 interface Challenge {
   id: ChallengeId;
-  title: string;
-  bookPage: string;
+  titleRo: string;
+  titleEn: string;
+  bookPageRo: string;
+  bookPageEn: string;
   initialCode: string;
   hasBug: boolean;
   bugLine?: number;
-  bugDescription?: string;
+  bugDescriptionRo?: string;
+  bugDescriptionEn?: string;
   fixedCode?: string;
-  expectedConsoleOutput: string;
-  goal: string;
+  expectedConsoleOutputRo: string;
+  expectedConsoleOutputEn: string;
+  goalRo: string;
+  goalEn: string;
 }
 
 const CHALLENGES: Challenge[] = [
   {
     id: 'c1',
-    title: 'Exercițiul 1: Primul Mesaj în Consolă',
-    bookPage: 'Manual Art Klett pag. 68',
-    goal: 'Apasă butonul [F9: Build and Run] pentru a compila codul și a lansa consola de execuție.',
+    titleRo: 'Exercițiul 1: Primul Mesaj în Consolă',
+    titleEn: 'Exercise 1: First Console Output Message',
+    bookPageRo: 'Manual Art Klett pag. 68',
+    bookPageEn: 'Art Klett Textbook p. 68',
+    goalRo: 'Apasă butonul [F9: Build and Run] pentru a compila codul și a lansa consola de execuție.',
+    goalEn: 'Press [F9: Build and Run] to compile code and launch the runtime execution console.',
     initialCode: `#include <iostream>
 using namespace std;
 
@@ -50,7 +50,12 @@ int main() {
     return 0;
 }`,
     hasBug: false,
-    expectedConsoleOutput: `Salut, clasa a 7-a! Am trecut la C++!
+    expectedConsoleOutputRo: `Salut, clasa a 7-a! Am trecut la C++!
+
+--------------------------------
+Process returned 0 (0x0)   execution time : 0.003 s
+Press any key to continue . . .`,
+    expectedConsoleOutputEn: `Salut, clasa a 7-a! Am trecut la C++!
 
 --------------------------------
 Process returned 0 (0x0)   execution time : 0.003 s
@@ -58,9 +63,12 @@ Press any key to continue . . .`
   },
   {
     id: 'c2',
-    title: 'Exercițiul 2: Declarare Variabile & Vârstă',
-    bookPage: 'Manual Art Klett pag. 71',
-    goal: 'Urmărește declararea a 3 variabile întregi (int) și calculul vârstei. Compilează cu F9!',
+    titleRo: 'Exercițiul 2: Declarare Variabile & Vârstă',
+    titleEn: 'Exercise 2: Variable Declaration & Age Calculation',
+    bookPageRo: 'Manual Art Klett pag. 71',
+    bookPageEn: 'Art Klett Textbook p. 71',
+    goalRo: 'Urmărește declararea a 3 variabile întregi (int) și calculul vârstei. Compilează cu F9!',
+    goalEn: 'Examine declaration of 3 integer variables (int) and age calculation. Build & Run with F9!',
     initialCode: `#include <iostream>
 using namespace std;
 
@@ -73,7 +81,12 @@ int main() {
     return 0;
 }`,
     hasBug: false,
-    expectedConsoleOutput: `Varsta elevului este: 14 ani.
+    expectedConsoleOutputRo: `Varsta elevului este: 14 ani.
+
+--------------------------------
+Process returned 0 (0x0)   execution time : 0.002 s
+Press any key to continue . . .`,
+    expectedConsoleOutputEn: `Varsta elevului este: 14 ani.
 
 --------------------------------
 Process returned 0 (0x0)   execution time : 0.002 s
@@ -81,9 +94,12 @@ Press any key to continue . . .`
   },
   {
     id: 'c3',
-    title: 'Exercițiul 3: Depanare Eroare de Compilare',
-    bookPage: 'Manual Art Klett pag. 73',
-    goal: 'La linia 5 lipsește caracterul punct și virgulă (;). Apasă F9 pentru a citi eroarea în Build Log, apoi apasă [Repară Sintaxa] și re-compilează!',
+    titleRo: 'Exercițiul 3: Depanare Eroare de Compilare',
+    titleEn: 'Exercise 3: Compilation Error Debugging',
+    bookPageRo: 'Manual Art Klett pag. 73',
+    bookPageEn: 'Art Klett Textbook p. 73',
+    goalRo: 'La linia 5 lipsește caracterul punct și virgulă (;). Apasă F9 pentru a citi eroarea în Build Log, apoi apasă [Repară Sintaxa] și re-compilează!',
+    goalEn: 'Line 5 lacks a semicolon (;). Press F9 to inspect compiler diagnostics in Build Log, click [Fix Syntax] and re-build!',
     initialCode: `#include <iostream>
 using namespace std;
 
@@ -93,7 +109,8 @@ int main() {
 }`,
     hasBug: true,
     bugLine: 5,
-    bugDescription: `main.cpp:5: error: expected ';' before 'return'`,
+    bugDescriptionRo: `main.cpp:5: error: expected ';' before 'return'`,
+    bugDescriptionEn: `main.cpp:5: error: expected ';' before 'return'`,
     fixedCode: `#include <iostream>
 using namespace std;
 
@@ -101,7 +118,12 @@ int main() {
     cout << "Test compilare laborator TIC";
     return 0;
 }`,
-    expectedConsoleOutput: `Test compilare laborator TIC
+    expectedConsoleOutputRo: `Test compilare laborator TIC
+
+--------------------------------
+Process returned 0 (0x0)   execution time : 0.004 s
+Press any key to continue . . .`,
+    expectedConsoleOutputEn: `Test compilare laborator TIC
 
 --------------------------------
 Process returned 0 (0x0)   execution time : 0.004 s
@@ -110,6 +132,7 @@ Press any key to continue . . .`
 ];
 
 export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [activeChallengeIdx, setActiveChallengeIdx] = useState<number>(0);
   const [currentCode, setCurrentCode] = useState<string>(CHALLENGES[0].initialCode);
   const [isCompiling, setIsCompiling] = useState<boolean>(false);
@@ -162,7 +185,8 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
         // Open black console window
         setTimeout(() => {
           setConsoleOpen(true);
-          setConsoleText(currentChallenge.expectedConsoleOutput);
+          const out = lang === 'ro' ? currentChallenge.expectedConsoleOutputRo : currentChallenge.expectedConsoleOutputEn;
+          setConsoleText(out);
           setCompletedChallenges(prev => new Set(prev).add(currentChallenge.id));
         }, 500);
       }
@@ -194,10 +218,16 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
           </div>
           <div>
             <div className="text-[11px] font-mono font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
-              <span>Unitatea 4 • Limbajul C++ (Manual Art Klett pag. 68–73)</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Unitatea 4 • Limbajul C++ (Manual Art Klett pag. 68–73)'
+                  : 'Unit 4 • C++ Programming (Art Klett Textbook pp. 68–73)'}
+              </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Simulatorul Virtual Code::Blocks Studio
+              {lang === 'ro'
+                ? 'Simulatorul Virtual Code::Blocks Studio'
+                : 'Virtual Code::Blocks Studio Simulator'}
             </h2>
           </div>
         </div>
@@ -214,7 +244,7 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <span>Ex {idx + 1}</span>
+              <span>{lang === 'ro' ? `Ex ${idx + 1}` : `Ex ${idx + 1}`}</span>
               {completedChallenges.has(ch.id) && (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
               )}
@@ -227,14 +257,14 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
       <div className="p-3.5 rounded-2xl bg-slate-950 border border-violet-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div>
           <span className="font-bold text-violet-300 font-heading text-sm">
-            {currentChallenge.title}
+            {lang === 'ro' ? currentChallenge.titleRo : currentChallenge.titleEn}
           </span>
           <p className="text-slate-400 mt-0.5">
-            {currentChallenge.goal}
+            {lang === 'ro' ? currentChallenge.goalRo : currentChallenge.goalEn}
           </p>
         </div>
         <span className="text-[10px] font-mono font-bold text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/30 whitespace-nowrap self-start sm:self-auto">
-          {currentChallenge.bookPage}
+          {lang === 'ro' ? currentChallenge.bookPageRo : currentChallenge.bookPageEn}
         </span>
       </div>
 
@@ -260,7 +290,11 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
               className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition cursor-pointer disabled:opacity-50"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>{isCompiling ? 'Compilare...' : 'Build & Run (F9)'}</span>
+              <span>
+                {isCompiling
+                  ? (lang === 'ro' ? 'Compilare...' : 'Compiling...')
+                  : 'Build & Run (F9)'}
+              </span>
             </button>
 
             {currentChallenge.hasBug && !hasRepairedBug && (
@@ -269,7 +303,11 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
                 className="px-3 py-1.5 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/40 text-xs font-bold flex items-center gap-1 transition cursor-pointer"
               >
                 <Bug className="w-3.5 h-3.5 text-rose-400" />
-                <span>Repară Sintaxa (Adaugă ;)</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Repară Sintaxa (Adaugă ;)'
+                    : 'Fix Syntax (Add ;)'}
+                </span>
               </button>
             )}
           </div>
@@ -301,11 +339,17 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
         <div className="bg-slate-900 border-t border-slate-800 p-3 flex flex-col gap-1 text-[11px]">
           <div className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1.5">
             <Terminal className="w-3 h-3 text-cyan-400" />
-            <span>Build log (Consolă de Compilare):</span>
+            <span>
+              {lang === 'ro' ? 'Build Log (Consolă de Compilare):' : 'Build Log (Compiler Output):'}
+            </span>
           </div>
           <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 font-mono text-[11px] min-h-[50px] space-y-1">
             {buildLogs.length === 0 ? (
-              <span className="text-slate-600 italic">Apasă pe butonul "Build & Run (F9)" pentru a începe compilarea...</span>
+              <span className="text-slate-600 italic">
+                {lang === 'ro'
+                  ? 'Apasă pe butonul "Build & Run (F9)" pentru a începe compilarea...'
+                  : 'Press "Build & Run (F9)" to start compilation...'}
+              </span>
             ) : (
               buildLogs.map((log, i) => (
                 <div
@@ -332,7 +376,7 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
               onClick={() => setConsoleOpen(false)}
               className="text-slate-500 hover:text-white cursor-pointer"
             >
-              ✕ Închide Consola
+              {lang === 'ro' ? '✕ Închide Consola' : '✕ Close Console'}
             </button>
           </div>
 
@@ -341,8 +385,12 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
           </div>
 
           <div className="flex items-center justify-between pt-2 border-t border-slate-900 text-[11px] text-slate-500">
-            <span>Rulare încheiată cu succes (Cod 0)</span>
-            <span className="text-emerald-400 font-bold">100% Executat</span>
+            <span>
+              {lang === 'ro'
+                ? 'Rulare încheiată cu succes (Cod 0)'
+                : 'Execution finished successfully (Exit code 0)'}
+            </span>
+            <span className="text-emerald-400 font-bold">100% {lang === 'ro' ? 'Executat' : 'Executed'}</span>
           </div>
         </div>
       )}
@@ -353,7 +401,9 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
           <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs sm:text-sm">
             <CheckCircle2 className="w-5 h-5 text-emerald-400" />
             <span>
-              Felicitări! Ai rulat cu succes toate cele 3 exerciții C++ în simulatorul Code::Blocks!
+              {lang === 'ro'
+                ? 'Felicitări! Ai rulat cu succes toate cele 3 exerciții C++ în simulatorul Code::Blocks!'
+                : 'Congratulations! You successfully compiled and ran all 3 C++ exercises in Code::Blocks!'}
             </span>
           </div>
 
@@ -361,7 +411,11 @@ export const CPLevel6_VirtualCodeBlocksStudio: React.FC<Props> = ({ onPass }) =>
             onClick={handleFinish}
             className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-violet-600/30 cursor-pointer"
           >
-            <span>Treci la Nivelul 7: Examenul de Calificare & Certificat</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 7: Examenul de Calificare & Certificat'
+                : 'Advance to Level 7: Qualification Exam & Certificate'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

@@ -4,8 +4,6 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertTriangle,
-  RotateCcw,
-  Play,
   Lightbulb,
   Check,
   ChevronRight,
@@ -17,6 +15,7 @@ import {
   Eye
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -24,57 +23,76 @@ interface Props {
 
 interface RobotPart {
   id: string;
-  name: string;
+  nameRo: string;
+  nameEn: string;
   category: 'chassis' | 'actuator' | 'brain' | 'sensor';
   icon: string;
-  role: string;
-  specs: string;
+  roleRo: string;
+  roleEn: string;
+  specsRo: string;
+  specsEn: string;
 }
 
 const ROBOT_COMPONENTS: RobotPart[] = [
   {
     id: 'chassis',
-    name: 'Șasiu & Structură Mecanică',
+    nameRo: 'Șasiu & Structură Mecanică',
+    nameEn: 'Chassis & Mechanical Structure',
     category: 'chassis',
     icon: '🚙',
-    role: 'Susține toate componentele electronice, roțile și bateria robotului.',
-    specs: 'Polimer ABS rezistent la șocuri, roată pivotantă omnidirecțională.'
+    roleRo: 'Susține toate componentele electronice, roțile și bateria robotului.',
+    roleEn: 'Supports all electronic components, wheels, and the battery of the robot.',
+    specsRo: 'Polimer ABS rezistent la șocuri, roată pivotantă omnidirecțională.',
+    specsEn: 'Shock-resistant ABS polymer, omnidirectional caster wheel.'
   },
   {
     id: 'motors',
-    name: 'Motoare Electrice (Actuatori)',
+    nameRo: 'Motoare Electrice (Actuatori)',
+    nameEn: 'Electric Motors (Actuators)',
     category: 'actuator',
     icon: '⚙️',
-    role: 'Transformă impulsurile electrice din program în rotație mecanică precisă.',
-    specs: '2 motoare DC cu reductor de turație (viteză reglabilă prin semnal PWM).'
+    roleRo: 'Transformă impulsurile electrice din program în rotație mecanică precisă.',
+    roleEn: 'Converts electrical signals from software into precise mechanical rotation.',
+    specsRo: '2 motoare DC cu reductor de turație (viteză reglabilă prin semnal PWM).',
+    specsEn: '2 DC gearmotors with speed reduction (speed adjustable via PWM signal).'
   },
   {
     id: 'controller',
-    name: 'Microcontroler (Creierul Robotului)',
+    nameRo: 'Microcontroler (Creierul Robotului)',
+    nameEn: 'Microcontroller (Robot Brain)',
     category: 'brain',
     icon: '🧠',
-    role: 'Rulează programul C++, procesează datele de la senzori și comandă motoarele.',
-    specs: 'Procesor 32-bit compatibil Arduino/ESP32 cu memorie Flash și port USB.'
+    roleRo: 'Rulează programul C++, procesează datele de la senzori și comandă motoarele.',
+    roleEn: 'Runs the C++ program, processes sensor inputs, and controls the motors.',
+    specsRo: 'Procesor 32-bit compatibil Arduino/ESP32 cu memorie Flash și port USB.',
+    specsEn: '32-bit Arduino/ESP32-compatible processor with Flash memory and USB port.'
   },
   {
     id: 'ultrasonic',
-    name: 'Senzor Ultrasonic de Distanță',
+    nameRo: 'Senzor Ultrasonic de Distanță',
+    nameEn: 'Ultrasonic Distance Sensor',
     category: 'sensor',
     icon: '📡',
-    role: 'Măsoară distanța până la obstacole emițând unde sonore de 40 kHz.',
-    specs: 'Interval măsurare: 2 cm – 400 cm, precizie 3 mm, unghi con 15°.'
+    roleRo: 'Măsoară distanța până la obstacole emițând unde sonore de 40 kHz.',
+    roleEn: 'Measures distance to obstacles by emitting 40 kHz sound waves.',
+    specsRo: 'Interval măsurare: 2 cm – 400 cm, precizie 3 mm, unghi con 15°.',
+    specsEn: 'Measurement range: 2 cm – 400 cm, 3 mm precision, 15° cone angle.'
   },
   {
     id: 'linetracker',
-    name: 'Senzor Optic de Linie (Infraroșu)',
+    nameRo: 'Senzor Optic de Linie (Infraroșu)',
+    nameEn: 'Optical Line Sensor (Infrared)',
     category: 'sensor',
     icon: '👀',
-    role: 'Detectează banda neagră de pe podea pe baza reflexiei luminii IR.',
-    specs: 'LED emițător IR + fototranzistor receptor (alb reflectă, negru absoarbe).'
+    roleRo: 'Detectează banda neagră de pe podea pe baza reflexiei luminii IR.',
+    roleEn: 'Detects black tape on the floor based on IR light reflection.',
+    specsRo: 'LED emițător IR + fototranzistor receptor (alb reflectă, negru absoarbe).',
+    specsEn: 'IR emitter LED + phototransistor receiver (white reflects, black absorbs).'
   }
 ];
 
 export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [selectedPart, setSelectedPart] = useState<RobotPart>(ROBOT_COMPONENTS[0]);
   const [inspectedParts, setInspectedParts] = useState<Record<string, boolean>>({ chassis: true });
 
@@ -92,37 +110,91 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
 
   const CHALLENGES = [
     {
-      question: 'Care sunt cele 3 mari subsisteme componente ale oricărui robot autonom (Manual pag. 103)?',
+      questionRo: 'Care sunt cele 3 mari subsisteme componente ale oricărui robot autonom (Manual pag. 103)?',
+      questionEn: 'What are the 3 major component subsystems of any autonomous robot (Textbook p. 103)?',
       code: null,
       options: [
-        { label: 'Partea mecanică (corp/șasiu), Actuatorii (motoarele) și Sistemul senzorial/creierul (procesorul și senzorii)', correct: true },
-        { label: 'Tastatura, Monitorul și Mouse-ul', correct: false },
-        { label: 'Cablul de alimentare, Becul și Priza', correct: false },
-        { label: 'Doar roțile și bateria', correct: false }
+        {
+          labelRo: 'Partea mecanică (corp/șasiu), Actuatorii (motoarele) și Sistemul senzorial/creierul (procesorul și senzorii)',
+          labelEn: 'Mechanical structure (body/chassis), Actuators (motors), and Sensory/brain system (processor & sensors)',
+          correct: true
+        },
+        {
+          labelRo: 'Tastatura, Monitorul și Mouse-ul',
+          labelEn: 'Keyboard, Monitor, and Mouse',
+          correct: false
+        },
+        {
+          labelRo: 'Cablul de alimentare, Becul și Priza',
+          labelEn: 'Power cable, Light bulb, and Wall outlet',
+          correct: false
+        },
+        {
+          labelRo: 'Doar roțile și bateria',
+          labelEn: 'Only the wheels and battery',
+          correct: false
+        }
       ],
-      explanation: 'Orice robot autonom funcționează pe triada: Corp fizic (structură) + Mușchi (actuatori/motoare) + Simțuri & Creier (senzori și microcontroler)!'
+      explanationRo: 'Orice robot autonom funcționează pe triada: Corp fizic (structură) + Mușchi (actuatori/motoare) + Simțuri & Creier (senzori și microcontroler)!',
+      explanationEn: 'Every autonomous robot relies on the triad: Physical Body (structure) + Muscles (actuators/motors) + Senses & Brain (sensors and microcontroller)!'
     },
     {
-      question: 'Ce rol are un „Actuator” într-un sistem robotic?',
-      code: '// robot.setViteza(100); -> transmite comanda catre actuator',
+      questionRo: 'Ce rol are un „Actuator” într-un sistem robotic?',
+      questionEn: 'What is the role of an "Actuator" in a robotic system?',
+      code: '// robot.setSpeed(100); -> command to actuator',
       options: [
-        { label: 'Convertește comenzile software în forță mecanică și deplasare fizică', correct: true },
-        { label: 'Afișează text pe ecranul calculatorului', correct: false },
-        { label: 'Măsoară temperatura ambientală', correct: false },
-        { label: 'Salvează fișierele în format PDF', correct: false }
+        {
+          labelRo: 'Convertește comenzile software în forță mecanică și deplasare fizică',
+          labelEn: 'Converts software commands into mechanical torque and physical motion',
+          correct: true
+        },
+        {
+          labelRo: 'Afișează text pe ecranul calculatorului',
+          labelEn: 'Displays text on the computer screen',
+          correct: false
+        },
+        {
+          labelRo: 'Măsoară temperatura ambientală',
+          labelEn: 'Measures ambient temperature',
+          correct: false
+        },
+        {
+          labelRo: 'Salvează fișierele în format PDF',
+          labelEn: 'Saves files as PDF documents',
+          correct: false
+        }
       ],
-      explanation: 'Actuatorii sunt elementele de execuție mecanică (motoare, pistoane, servomotoare) prin care robotul acționează asupra mediului înconjurător!'
+      explanationRo: 'Actuatorii sunt elementele de execuție mecanică (motoare, pistoane, servomotoare) prin care robotul acționează asupra mediului înconjurător!',
+      explanationEn: 'Actuators are mechanical execution elements (motors, pistons, servomotors) through which the robot exerts action upon its surroundings!'
     },
     {
-      question: 'Cum „vede” senzorul ultrasonic distanța până la un perete?',
-      code: '// Emitator: Emite impuls sunet 40 kHz\n// Receptor: Asteapta ecoul reflectat\n// Distanta = (Viteza sunet * Timp) / 2',
+      questionRo: 'Cum „vede” senzorul ultrasonic distanța până la un perete?',
+      questionEn: 'How does an ultrasonic sensor "see" distance to a wall?',
+      code: '// Emitter: Emits 40 kHz ultrasonic pulse\n// Receiver: Waits for reflected echo\n// Distance = (Speed of sound * Time) / 2',
       options: [
-        { label: 'Emite o undă sonoră de înaltă frecvență și măsoară timpul de întoarcere a ecoului reflectat', correct: true },
-        { label: 'Face o fotografie digitală color', correct: false },
-        { label: 'Folosește un termometru cu mercur', correct: false },
-        { label: 'Trimite un mesaj pe internet prin rețeaua Wi-Fi', correct: false }
+        {
+          labelRo: 'Emite o undă sonoră de înaltă frecvență și măsoară timpul de întoarcere a ecoului reflectat',
+          labelEn: 'Emits a high-frequency sound wave and measures the return travel time of the reflected echo',
+          correct: true
+        },
+        {
+          labelRo: 'Face o fotografie digitală color',
+          labelEn: 'Takes a color digital photograph',
+          correct: false
+        },
+        {
+          labelRo: 'Folosește un termometru cu mercur',
+          labelEn: 'Uses a mercury thermometer',
+          correct: false
+        },
+        {
+          labelRo: 'Trimite un mesaj pe internet prin rețeaua Wi-Fi',
+          labelEn: 'Sends an internet packet over the Wi-Fi network',
+          correct: false
+        }
       ],
-      explanation: 'Senzorul ultrasonic funcționează exact ca ecolocația liliecilor sau sonarul submarinelor: măsoară durata ecoului reflectat de obstacol!'
+      explanationRo: 'Senzorul ultrasonic funcționează exact ca ecolocația liliecilor sau sonarul submarinelor: măsoară durata ecoului reflectat de obstacol!',
+      explanationEn: 'The ultrasonic sensor works exactly like bat echolocation or submarine sonar: it measures the round-trip echo time from an obstacle!'
     }
   ];
 
@@ -133,10 +205,16 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
 
     if (isCorrect) {
       sounds.playCorrect();
-      setChallengeFeedback('Corect! ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback(
+        (lang === 'ro' ? 'Corect! ' : 'Correct! ') +
+        (lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn)
+      );
     } else {
       sounds.playWrong();
-      setChallengeFeedback('Incorect. ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback(
+        (lang === 'ro' ? 'Incorect. ' : 'Incorrect. ') +
+        (lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn)
+      );
     }
   };
 
@@ -158,6 +236,25 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
 
   const inspectedCount = Object.keys(inspectedParts).length;
 
+  const getCategoryLabel = (category: RobotPart['category']) => {
+    if (lang === 'ro') {
+      return category === 'sensor'
+        ? 'Senzor (Simț)'
+        : category === 'actuator'
+        ? 'Actuator (Motor)'
+        : category === 'brain'
+        ? 'Creier (Microcontroler)'
+        : 'Structură Mecanică';
+    }
+    return category === 'sensor'
+      ? 'Sensor (Perception)'
+      : category === 'actuator'
+      ? 'Actuator (Motor)'
+      : category === 'brain'
+      ? 'Brain (Microcontroller)'
+      : 'Mechanical Chassis';
+  };
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
       {/* Header Banner */}
@@ -168,13 +265,17 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30 mb-2">
               <Bot className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Nivelul 1 din 7 • Modulul 4F</span>
+              <span>{lang === 'ro' ? 'Nivelul 1 din 7 • Modulul 4F' : 'Level 1 of 7 • Module 4F'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Anatomia Robotului Virtual: Corp, Motoare &amp; Senzori (Manual pag. 103)
+              {lang === 'ro'
+                ? 'Anatomia Robotului Virtual: Corp, Motoare & Senzori (Manual pag. 103)'
+                : 'Virtual Robot Anatomy: Chassis, Motors & Sensors (Textbook p. 103)'}
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-              Descoperă componentele hardware ale unui robot educațional: șasiul mecanic, motoarele (actuatori), creierul de procesare și senzorii care îi conferă „simțuri” în lumea reală.
+              {lang === 'ro'
+                ? 'Descoperă componentele hardware ale unui robot educațional: șasiul mecanic, motoarele (actuatori), creierul de procesare și senzorii care îi conferă „simțuri” în lumea reală.'
+                : 'Discover the hardware components of an educational robot: mechanical chassis, motors (actuators), processing brain, and sensors that give it real-world senses.'}
             </p>
           </div>
 
@@ -191,7 +292,11 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xl">
         <div className="flex items-center gap-2.5 mb-4 text-emerald-400 font-bold text-sm uppercase tracking-wider font-mono">
           <Lightbulb className="w-4 h-4 text-emerald-400" />
-          <span>Laborator Interactiv de Inspecție Hardware (Explorează toate cele 5 componente)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Laborator Interactiv de Inspecție Hardware (Explorează toate cele 5 componente)'
+              : 'Interactive Hardware Inspection Lab (Explore all 5 components)'}
+          </span>
         </div>
 
         {/* Component Selector Tabs */}
@@ -199,6 +304,7 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
           {ROBOT_COMPONENTS.map((part) => {
             const isSelected = selectedPart.id === part.id;
             const hasInspected = inspectedParts[part.id];
+            const name = lang === 'ro' ? part.nameRo : part.nameEn;
             return (
               <button
                 key={part.id}
@@ -214,7 +320,7 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
                   <div className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400" />
                 )}
                 <span className="text-2xl">{part.icon}</span>
-                <span className="text-[11px] font-bold font-mono line-clamp-1">{part.name.split(' ')[0]}</span>
+                <span className="text-[11px] font-bold font-mono line-clamp-1">{name.split(' ')[0]}</span>
               </button>
             );
           })}
@@ -228,34 +334,38 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
                 {selectedPart.icon}
               </div>
               <div>
-                <h3 className="text-lg font-black text-white">{selectedPart.name}</h3>
+                <h3 className="text-lg font-black text-white">
+                  {lang === 'ro' ? selectedPart.nameRo : selectedPart.nameEn}
+                </h3>
                 <span className="text-xs font-mono text-emerald-400 uppercase font-bold">
-                  Categorie: {selectedPart.category === 'sensor' ? 'Senzor (Simț)' : selectedPart.category === 'actuator' ? 'Actuator (Motor)' : selectedPart.category === 'brain' ? 'Creier (Microcontroler)' : 'Structură'}
+                  {lang === 'ro' ? 'Categorie: ' : 'Category: '}
+                  {getCategoryLabel(selectedPart.category)}
                 </span>
               </div>
             </div>
 
             <div className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-400">
-              Componente explorate: <strong className="text-emerald-300">{inspectedCount} / 5</strong>
+              {lang === 'ro' ? 'Componente explorate: ' : 'Explored components: '}
+              <strong className="text-emerald-300">{inspectedCount} / 5</strong>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="font-bold text-white uppercase text-[10px] font-mono tracking-wider block mb-1 text-slate-400">
-                Rolul în Funcționarea Robotului:
+                {lang === 'ro' ? 'Rolul în Funcționarea Robotului:' : 'Role in Robot Operation:'}
               </span>
               <p className="text-slate-200 leading-relaxed text-sm">
-                {selectedPart.role}
+                {lang === 'ro' ? selectedPart.roleRo : selectedPart.roleEn}
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
               <span className="font-bold text-white uppercase text-[10px] font-mono tracking-wider block mb-1 text-slate-400">
-                Specificații Tehnice Educaționale:
+                {lang === 'ro' ? 'Specificații Tehnice Educaționale:' : 'Educational Technical Specifications:'}
               </span>
               <p className="text-emerald-300 font-mono leading-relaxed">
-                {selectedPart.specs}
+                {lang === 'ro' ? selectedPart.specsRo : selectedPart.specsEn}
               </p>
             </div>
           </div>
@@ -266,14 +376,18 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider font-mono">
               <HelpCircle className="w-4 h-4 text-emerald-400" />
-              <span>Verificare Înțelegere: Anatomia Robotului ({challengeStep + 1} din {CHALLENGES.length})</span>
+              <span>
+                {lang === 'ro'
+                  ? `Verificare Înțelegere: Anatomia Robotului (${challengeStep + 1} din ${CHALLENGES.length})`
+                  : `Comprehension Check: Robot Anatomy (${challengeStep + 1} of ${CHALLENGES.length})`}
+              </span>
             </div>
           </div>
 
           {!completedChallenge ? (
             <div className="flex flex-col gap-4">
               <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
-                {CHALLENGES[challengeStep].question}
+                {lang === 'ro' ? CHALLENGES[challengeStep].questionRo : CHALLENGES[challengeStep].questionEn}
               </h4>
 
               {CHALLENGES[challengeStep].code && (
@@ -285,6 +399,7 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
               <div className="grid grid-cols-1 gap-2.5">
                 {CHALLENGES[challengeStep].options.map((opt, oIdx) => {
                   const isSelected = selectedAnswers[challengeStep] === oIdx;
+                  const label = lang === 'ro' ? opt.labelRo : opt.labelEn;
                   return (
                     <button
                       key={oIdx}
@@ -298,7 +413,7 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
                           : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300 hover:text-white'
                       }`}
                     >
-                      <span>{opt.label}</span>
+                      <span>{label}</span>
                       {isSelected && (
                         opt.correct ? <Check className="w-4 h-4 text-emerald-400 shrink-0" /> : <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
                       )}
@@ -308,7 +423,7 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
               </div>
 
               {challengeFeedback && (
-                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
+                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') || challengeFeedback.startsWith('Correct') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
                   {challengeFeedback}
                 </div>
               )}
@@ -319,7 +434,11 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
                   onClick={handleNextChallenge}
                   className="self-end py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  <span>{challengeStep < CHALLENGES.length - 1 ? 'Următoarea Întrebare' : 'Finalizează Nivelul 1'}</span>
+                  <span>
+                    {challengeStep < CHALLENGES.length - 1
+                      ? lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question'
+                      : lang === 'ro' ? 'Finalizează Nivelul 1' : 'Complete Level 1'}
+                  </span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}
@@ -329,16 +448,24 @@ export const RobotLevel1_RobotAnatomyAndHardware: React.FC<Props> = ({ onPass })
               <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-black text-white">Nivelul 1 Finalizat cu Succes!</h4>
+              <h4 className="text-lg font-black text-white">
+                {lang === 'ro' ? 'Nivelul 1 Finalizat cu Succes!' : 'Level 1 Completed Successfully!'}
+              </h4>
               <p className="text-xs text-slate-300 max-w-md">
-                Ai asimilat structura hardware a robotului autonom: șasiul mecanic, actuatorii de mișcare și senzorii de percepție a mediului.
+                {lang === 'ro'
+                  ? 'Ai asimilat structura hardware a robotului autonom: șasiul mecanic, actuatorii de mișcare și senzorii de percepție a mediului.'
+                  : 'You mastered the autonomous robot hardware architecture: mechanical chassis, motion actuators, and environmental perception sensors.'}
               </p>
               <button
                 type="button"
                 onClick={handleFinishLevel}
                 className="mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
               >
-                <span>Treci la Nivelul 2: Traiectorii Geometrice &amp; Unghiul de Rotație 360°/n</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Treci la Nivelul 2: Traiectorii Geometrice & Unghiul de Rotație 360°/n'
+                    : 'Proceed to Level 2: Geometric Trajectories & 360°/n Rotation Angle'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

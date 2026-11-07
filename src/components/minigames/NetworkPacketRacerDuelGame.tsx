@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { DuelRoomData, updateDuelProgress } from '../../lib/duelService';
 import { sounds } from '../../utils/audio';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface NetworkPacketRacerDuelGameProps {
   roomData: DuelRoomData | null;
@@ -33,9 +34,11 @@ interface NetworkPacket {
   destIp: string;
   protocol: string;
   summary: string;
+  summaryEn?: string;
   target: RoutingTarget;
   isThreat: boolean;
   conceptRo: string;
+  conceptEn?: string;
 }
 
 const PACKET_STREAM: NetworkPacket[] = [
@@ -45,9 +48,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '142.250.180.195:443',
     protocol: 'HTTPS (SSL/TLS)',
     summary: 'Cerere pagină web securizată [Google Classroom]',
+    summaryEn: 'Secure webpage request [Google Classroom]',
     target: 'port_443',
     isThreat: false,
-    conceptRo: 'Portul 443 este standardul internațional pentru navigare web criptată securizată (HTTPS).'
+    conceptRo: 'Portul 443 este standardul internațional pentru navigare web criptată securizată (HTTPS).',
+    conceptEn: 'Port 443 is the global standard for secure encrypted web browsing (HTTPS).'
   },
   {
     id: 2,
@@ -55,9 +60,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '8.8.8.8:53',
     protocol: 'DNS Query (UDP)',
     summary: 'Interogare nume domeniu: "edu.ro" -> Ce adresă IP are?',
+    summaryEn: 'Domain name query: "edu.ro" -> What is the IP address?',
     target: 'port_53',
     isThreat: false,
-    conceptRo: 'Portul 53 (DNS) rezolvă denumirile textuale ale site-urilor în adrese IP numerice.'
+    conceptRo: 'Portul 53 (DNS) rezolvă denumirile textuale ale site-urilor în adrese IP numerice.',
+    conceptEn: 'Port 53 (DNS) translates textual domain names into numeric IP addresses.'
   },
   {
     id: 3,
@@ -65,9 +72,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '192.168.1.1:0',
     protocol: 'SYN Flood DDOS',
     summary: 'ATAC MALȚIOS! 50.000 pachete false pentru blocarea routerului!',
+    summaryEn: 'MALICIOUS ATTACK! 50,000 bogus packets flooding to crash the router!',
     target: 'firewall_drop',
     isThreat: true,
-    conceptRo: 'Atacurile de tip Denial of Service (DDoS) trebuie blocate imediat în Firewall (Drop Packet).'
+    conceptRo: 'Atacurile de tip Denial of Service (DDoS) trebuie blocate imediat în Firewall (Drop Packet).',
+    conceptEn: 'Denial of Service (DDoS) attacks must be dropped immediately by the Firewall (Drop Packet).'
   },
   {
     id: 4,
@@ -75,9 +84,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: 'mail.scoala.ro:587',
     protocol: 'SMTP / Mail Transfer',
     summary: 'Trimitere mesaj email cu tema la TIC către profesor',
+    summaryEn: 'Sending email message with ICT homework to the teacher',
     target: 'port_25',
     isThreat: false,
-    conceptRo: 'Protocoalele SMTP (port 25 / 587) se ocupă de transmiterea mesajelor de poștă electronică (email).'
+    conceptRo: 'Protocoalele SMTP (port 25 / 587) se ocupă de transmiterea mesajelor de poștă electronică (email).',
+    conceptEn: 'SMTP protocols (port 25 / 587) handle transferring outgoing electronic mail (email).'
   },
   {
     id: 5,
@@ -85,9 +96,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '151.101.65.140:443',
     protocol: 'HTTPS Stream',
     summary: 'Descărcare librărie JavaScript securizată pentru proiect',
+    summaryEn: 'Downloading secure JavaScript library for project',
     target: 'port_443',
     isThreat: false,
-    conceptRo: 'Traficul securizat web utilizează certificate digitale TLS pe portul 443.'
+    conceptRo: 'Traficul securizat web utilizează certificate digitale TLS pe portul 443.',
+    conceptEn: 'Secure web traffic relies on TLS digital certificates over port 443.'
   },
   {
     id: 6,
@@ -95,9 +108,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '192.168.1.100:445',
     protocol: 'WannaCry Ransomware Probe',
     summary: 'Scanare SMB vulnerabilă pentru criptare forțată de fișiere!',
+    summaryEn: 'Vulnerable SMB probe attempting forced file ransomware encryption!',
     target: 'firewall_drop',
     isThreat: true,
-    conceptRo: 'Pachetele de scanare neautorizate sunt detectate de sistemul IDS/IPS și carantinate.'
+    conceptRo: 'Pachetele de scanare neautorizate sunt detectate de sistemul IDS/IPS și carantinate.',
+    conceptEn: 'Unauthorized network scanning probes are caught by IDS/IPS and quarantined.'
   },
   {
     id: 7,
@@ -105,9 +120,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '1.1.1.1:53',
     protocol: 'DNS Lookup',
     summary: 'Află serverul pentru "wikipedia.org"',
+    summaryEn: 'Lookup host server for "wikipedia.org"',
     target: 'port_53',
     isThreat: false,
-    conceptRo: 'DNS-ul funcționează ca o carte de telefon a întregului internet mondial.'
+    conceptRo: 'DNS-ul funcționează ca o carte de telefon a întregului internet mondial.',
+    conceptEn: 'DNS operates like the universal phonebook of the entire World Wide Web.'
   },
   {
     id: 8,
@@ -115,9 +132,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: 'smtp.gmail.com:25',
     protocol: 'SMTP Relay',
     summary: 'Notificare automată notă test laborator TIC',
+    summaryEn: 'Automated ICT lab exam grade notification dispatch',
     target: 'port_25',
     isThreat: false,
-    conceptRo: 'Releele SMTP transmit corespondența între serverele de mail instituționale.'
+    conceptRo: 'Releele SMTP transmit corespondența între serverele de mail instituționale.',
+    conceptEn: 'SMTP relays transfer mail correspondence between institutional mail servers.'
   },
   {
     id: 9,
@@ -125,9 +144,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: 'netflix.com:443',
     protocol: 'HTTPS Video Stream',
     summary: 'Stream video documentar științific 1080p',
+    summaryEn: '1080p scientific documentary video stream',
     target: 'port_443',
     isThreat: false,
-    conceptRo: 'Datele criptate pe 443 previn interceptarea conținutului de către intruși (Man-in-the-Middle).'
+    conceptRo: 'Datele criptate pe 443 previn interceptarea conținutului de către intruși (Man-in-the-Middle).',
+    conceptEn: 'Encrypted traffic on 443 prevents eavesdropping or Man-in-the-Middle tampering.'
   },
   {
     id: 10,
@@ -135,9 +156,11 @@ const PACKET_STREAM: NetworkPacket[] = [
     destIp: '192.168.1.254:22',
     protocol: 'Brute Force SSH Script',
     summary: 'Încercare de ghicire parolă root terminal server!',
+    summaryEn: 'Brute force root password guessing attempt on terminal server!',
     target: 'firewall_drop',
     isThreat: true,
-    conceptRo: 'Conexiunile de forțare brute-force din surse necunoscute sunt blocate automat de Firewall.'
+    conceptRo: 'Conexiunile de forțare brute-force din surse necunoscute sunt blocate automat de Firewall.',
+    conceptEn: 'Brute-force connection attacks from untrusted IPs are automatically blocked by the Firewall.'
   }
 ];
 
@@ -149,6 +172,7 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
   onFinish,
   onBack
 }) => {
+  const { lang } = useLanguage();
   const [packetIndex, setPacketIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -224,7 +248,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
 
       setFeedback({
         isCorrect: true,
-        text: `Excelent! ${currentPacket.conceptRo}`
+        text: lang === 'en'
+          ? `⚡ Excellent! ${currentPacket.conceptEn || currentPacket.conceptRo}`
+          : `⚡ Excelent! ${currentPacket.conceptRo}`
       });
 
       setTimeout(() => {
@@ -252,7 +278,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
 
       setFeedback({
         isCorrect: false,
-        text: `Coliziune de pachet! Eroare de rutare: ${currentPacket.conceptRo}`
+        text: lang === 'en'
+          ? `⚠️ Packet collision! Routing error: ${currentPacket.conceptEn || currentPacket.conceptRo}`
+          : `Coliziune de pachet! Eroare de rutare: ${currentPacket.conceptRo}`
       });
 
       setTimeout(() => {
@@ -295,11 +323,13 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
                 Network Packet Racer 1v1
               </h3>
               <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold uppercase">
-                Pachet {packetIndex + 1}/{PACKET_STREAM.length}
+                {lang === 'en' ? 'Packet' : 'Pachet'} {packetIndex + 1}/{PACKET_STREAM.length}
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Rutează pachetele de date către portul corect sau blochează atacurile în Firewall!
+              {lang === 'en'
+                ? 'Route data packets to the correct port or drop attacks at the Firewall!'
+                : 'Rutează pachetele de date către portul corect sau blochează atacurile în Firewall!'}
             </p>
           </div>
         </div>
@@ -314,7 +344,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
           </div>
 
           <div className="text-right">
-            <span className="text-[10px] text-slate-400 uppercase font-mono block">Scor Rutare</span>
+            <span className="text-[10px] text-slate-400 uppercase font-mono block">
+              {lang === 'en' ? 'Routing Score' : 'Scor Rutare'}
+            </span>
             <span className="text-base font-black text-amber-300 font-mono">+{score} XP</span>
           </div>
 
@@ -333,7 +365,7 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
           <div className="flex justify-between items-center text-xs mb-1">
             <span className="font-bold text-white flex items-center gap-1.5">
               <span>{studentAvatar}</span>
-              <span>{studentName} (Tu)</span>
+              <span>{studentName} {lang === 'en' ? '(You)' : '(Tu)'}</span>
             </span>
             <span className="font-mono font-bold text-cyan-400">{myProgress}%</span>
           </div>
@@ -370,7 +402,7 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
             GATEWAY SWITCH ROUTER [RX BUFFER]
           </span>
           <span className="text-[11px] text-amber-300">
-            Tastatură: Tastele [1], [2], [3] sau [4 / Space]
+            {lang === 'en' ? 'Keyboard: Keys [1], [2], [3] or [4 / Space]' : 'Tastatură: Tastele [1], [2], [3] sau [4 / Space]'}
           </span>
         </div>
 
@@ -388,20 +420,22 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
                 {currentPacket.protocol}
               </span>
               <span className="text-xs font-mono text-slate-400">
-                IP Sursă: <strong className="text-slate-200">{currentPacket.sourceIp}</strong>
+                {lang === 'en' ? 'Source IP:' : 'IP Sursă:'} <strong className="text-slate-200">{currentPacket.sourceIp}</strong>
               </span>
             </div>
 
             <div className="text-xs font-mono text-slate-400">
-              Destinație: <strong className="text-amber-300">{currentPacket.destIp}</strong>
+              {lang === 'en' ? 'Destination:' : 'Destinație:'} <strong className="text-amber-300">{currentPacket.destIp}</strong>
             </div>
           </div>
 
           <h4 className="text-base sm:text-lg font-bold text-white mb-1">
-            {currentPacket.summary}
+            {(lang === 'en' ? currentPacket.summaryEn : currentPacket.summary) || currentPacket.summary}
           </h4>
           <p className="text-xs text-slate-400">
-            Identifică destinația corectă a pachetului și direcționează-l prin apăsarea butonului corespunzător.
+            {lang === 'en'
+              ? 'Identify the correct packet destination and direct it by pressing the corresponding button.'
+              : 'Identifică destinația corectă a pachetului și direcționează-l prin apăsarea butonului corespunzător.'}
           </p>
 
           {/* Feedback Overlay */}
@@ -432,11 +466,15 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
                 PORT 443 (HTTPS)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">
-                [Tasta 1]
+                {lang === 'en' ? '[Key 1]' : '[Tasta 1]'}
               </span>
             </div>
-            <span className="text-sm font-bold text-white block">Trafic Web Criptat SSL</span>
-            <span className="text-[11px] text-slate-400 block mt-0.5">Google Classroom, Wikipedia, Streaming securizat</span>
+            <span className="text-sm font-bold text-white block">
+              {lang === 'en' ? 'SSL Encrypted Web Traffic' : 'Trafic Web Criptat SSL'}
+            </span>
+            <span className="text-[11px] text-slate-400 block mt-0.5">
+              {lang === 'en' ? 'Google Classroom, Wikipedia, Secure streaming' : 'Google Classroom, Wikipedia, Streaming securizat'}
+            </span>
           </button>
 
           {/* Option 2: Port 53 DNS */}
@@ -452,11 +490,15 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
                 PORT 53 (DNS Resolver)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">
-                [Tasta 2]
+                {lang === 'en' ? '[Key 2]' : '[Tasta 2]'}
               </span>
             </div>
-            <span className="text-sm font-bold text-white block">Rezolvare Nume Domeniu</span>
-            <span className="text-[11px] text-slate-400 block mt-0.5">Translatare adrese text (edu.ro) în adrese IP numerice</span>
+            <span className="text-sm font-bold text-white block">
+              {lang === 'en' ? 'Domain Name Resolution' : 'Rezolvare Nume Domeniu'}
+            </span>
+            <span className="text-[11px] text-slate-400 block mt-0.5">
+              {lang === 'en' ? 'Translating textual domain names into numeric IP addresses' : 'Translatare adrese text (edu.ro) în adrese IP numerice'}
+            </span>
           </button>
 
           {/* Option 3: Port 25 / 587 SMTP Mail */}
@@ -472,11 +514,15 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
                 PORT 25 / 587 (SMTP Mail)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
-                [Tasta 3]
+                {lang === 'en' ? '[Key 3]' : '[Tasta 3]'}
               </span>
             </div>
-            <span className="text-sm font-bold text-white block">Server Mesagerie Email</span>
-            <span className="text-[11px] text-slate-400 block mt-0.5">Trimitere teme și corespondență electronică școlară</span>
+            <span className="text-sm font-bold text-white block">
+              {lang === 'en' ? 'Email Messaging Server' : 'Server Mesagerie Email'}
+            </span>
+            <span className="text-[11px] text-slate-400 block mt-0.5">
+              {lang === 'en' ? 'Sending homework and school email correspondence' : 'Trimitere teme și corespondență electronică școlară'}
+            </span>
           </button>
 
           {/* Option 4: FIREWALL DROP (Malware / DDOS) */}
@@ -492,11 +538,15 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
                 🚨 FIREWALL DROP (BLOCK)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/30 text-rose-300 font-bold">
-                [Tasta 4 / Space]
+                {lang === 'en' ? '[Key 4 / Space]' : '[Tasta 4 / Space]'}
               </span>
             </div>
-            <span className="text-sm font-bold text-white block">Blochează Atacul Malțios</span>
-            <span className="text-[11px] text-slate-400 block mt-0.5">Carantinează DDOS, viermi ransomware și atacuri brute-force</span>
+            <span className="text-sm font-bold text-white block">
+              {lang === 'en' ? 'Block Malicious Attack' : 'Blochează Atacul Malțios'}
+            </span>
+            <span className="text-[11px] text-slate-400 block mt-0.5">
+              {lang === 'en' ? 'Quarantine DDoS, ransomware worms, and brute-force probes' : 'Carantinează DDOS, viermi ransomware și atacuri brute-force'}
+            </span>
           </button>
         </div>
       </div>
@@ -508,11 +558,11 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
           onClick={onBack}
           className="text-xs text-slate-400 hover:text-white transition cursor-pointer"
         >
-          ← Părăsește Duelul
+          ← {lang === 'en' ? 'Leave Duel' : 'Părăsește Duelul'}
         </button>
 
         <span className="text-xs text-slate-500 font-mono">
-          Progres: {packetIndex}/{PACKET_STREAM.length} Pachete Direcționate
+          {lang === 'en' ? 'Progress:' : 'Progres:'} {packetIndex}/{PACKET_STREAM.length} {lang === 'en' ? 'Packets Routed' : 'Pachete Direcționate'}
         </span>
       </div>
     </div>

@@ -14,6 +14,7 @@ import {
   Eye
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -22,6 +23,8 @@ interface Props {
 type PatternType = 'santa' | 'tree' | 'checker' | 'triangle';
 
 export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   const [selectedPattern, setSelectedPattern] = useState<PatternType>('santa');
   const [linesCount, setLinesCount] = useState<number>(5);
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -82,51 +85,77 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
 
   const CHALLENGES = [
     {
-      question: 'Într-un algoritm cu două bucle for imbricate (ex: for i; for j), ce rol are de regulă bucla exterioară (i)?',
+      questionRo: 'Într-un algoritm cu două bucle for imbricate (ex: for i; for j), ce rol are de regulă bucla exterioară (i)?',
+      questionEn: 'In an algorithm with two nested for loops (e.g., for i; for j), what role does the outer loop (i) typically play?',
       code: 'for (int i = 1; i <= n; i++) { // bucla exterioara\n    for (int j = 1; j <= m; j++) { // bucla interioara\n        cout << "*";\n    }\n    cout << endl;\n}',
-      options: [
+      optionsRo: [
         { label: 'Controlează numărul de linii (rânduri orizontale) afișate', correct: true },
         { label: 'Controlează viteza de calcul a procesorului', correct: false },
         { label: 'Afișează doar cifrele impare', correct: false },
         { label: 'Șterge ecranul consolei', correct: false }
       ],
-      explanation: 'În mod tradițional, i parcurge liniile de sus în jos (1 la n), iar bucla interioară j desenează caracterele de pe linia curentă, urmată de cout << endl pentru a trece la rândul nou!'
+      optionsEn: [
+        { label: 'Controls the number of printed lines (horizontal rows)', correct: true },
+        { label: 'Controls processor computing speed', correct: false },
+        { label: 'Prints only odd digits', correct: false },
+        { label: 'Clears the console screen', correct: false }
+      ],
+      explanationRo: 'În mod tradițional, i parcurge liniile de sus în jos (1 la n), iar bucla interioară j desenează caracterele de pe linia curentă, urmată de cout << endl pentru a trece la rândul nou!',
+      explanationEn: 'Conventionally, i iterates lines top to bottom (1 to n), while inner loop j draws characters across the current line, followed by cout << endl to advance!'
     },
     {
-      question: 'La desenarea unei piramide centrate (pag. 94), de ce numărul de caractere de pe linia i este 2 * i - 1?',
+      questionRo: 'La desenarea unei piramide centrate (pag. 94), de ce numărul de caractere de pe linia i este 2 * i - 1?',
+      questionEn: 'When drawing a centered pyramid (p. 94), why is the symbol count on line i equal to 2 * i - 1?',
       code: '// Linia 1: 2*1 - 1 = 1 caracter  (     &     )\n// Linia 2: 2*2 - 1 = 3 caractere (    &&&    )\n// Linia 3: 2*3 - 1 = 5 caractere (   &&&&&   )',
-      options: [
+      optionsRo: [
         { label: 'Pentru că orice număr de forma 2*i - 1 este impar, permițând simetria perfectă în jurul axei centrale', correct: true },
         { label: 'Este o eroare din manualul de informatică', correct: false },
         { label: 'Pentru că ecranul suportă doar numere impare', correct: false },
         { label: 'Pentru a economisi memoria RAM', correct: false }
       ],
-      explanation: 'O piramidă are mereu un vârf de 1 caracter, urmat de numere impare (1, 3, 5, 7...) pentru a se extinde uniform la stânga și la dreapta!'
+      optionsEn: [
+        { label: 'Because 2*i - 1 is always odd, ensuring exact bilateral symmetry around the central axis', correct: true },
+        { label: 'It is a mistake in the textbook', correct: false },
+        { label: 'Because terminals only support odd quantities', correct: false },
+        { label: 'To conserve RAM memory', correct: false }
+      ],
+      explanationRo: 'O piramidă are mereu un vârf de 1 caracter, urmat de numere impare (1, 3, 5, 7...) pentru a se extinde uniform la stânga și la dreapta!',
+      explanationEn: 'A pyramid always starts with a 1-character peak, followed by odd numbers (1, 3, 5, 7...) to expand evenly on both sides!'
     },
     {
-      question: 'Câte caractere „*” se vor afișa în total dacă rulăm: for (int i = 1; i <= 3; i++) for (int j = 1; j <= 4; j++) cout << "*"; ?',
+      questionRo: 'Câte caractere „*” se vor afișa în total dacă rulăm: for (int i = 1; i <= 3; i++) for (int j = 1; j <= 4; j++) cout << "*"; ?',
+      questionEn: 'How many "*" symbols are displayed overall by: for (int i = 1; i <= 3; i++) for (int j = 1; j <= 4; j++) cout << "*"; ?',
       code: 'for (int i = 1; i <= 3; i++)\n    for (int j = 1; j <= 4; j++)\n        cout << "*";',
-      options: [
+      optionsRo: [
         { label: '12 caractere (3 linii × 4 coloane = 12)', correct: true },
         { label: '7 caractere (3 + 4)', correct: false },
         { label: '4 caractere', correct: false },
         { label: '3 caractere', correct: false }
       ],
-      explanation: 'Pentru fiecare dintre cele 3 valori ale lui i, bucla j rulează de 4 ori: 3 × 4 = 12 execuții în total!'
+      optionsEn: [
+        { label: '12 characters (3 lines × 4 columns = 12)', correct: true },
+        { label: '7 characters (3 + 4)', correct: false },
+        { label: '4 characters', correct: false },
+        { label: '3 characters', correct: false }
+      ],
+      explanationRo: 'Pentru fiecare dintre cele 3 valori ale lui i, bucla j rulează de 4 ori: 3 × 4 = 12 execuții în total!',
+      explanationEn: 'For each of the 3 iterations of i, the j loop executes 4 times: 3 × 4 = 12 executions total!'
     }
   ];
 
   const handleSelectOption = (qIdx: number, optIdx: number) => {
     sounds.playClick();
     setSelectedAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
-    const isCorrect = CHALLENGES[qIdx].options[optIdx].correct;
+    const opts = lang === 'ro' ? CHALLENGES[qIdx].optionsRo : CHALLENGES[qIdx].optionsEn;
+    const isCorrect = opts[optIdx].correct;
+    const explanation = lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn;
 
     if (isCorrect) {
       sounds.playCorrect();
-      setChallengeFeedback('Corect! ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback((lang === 'ro' ? 'Corect! ' : 'Correct! ') + explanation);
     } else {
       sounds.playWrong();
-      setChallengeFeedback('Incorect. ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback((lang === 'ro' ? 'Incorect. ' : 'Incorrect. ') + explanation);
     }
   };
 
@@ -156,13 +185,19 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-mono font-bold border border-purple-500/30 mb-2">
               <Grid className="w-3.5 h-3.5 text-purple-400" />
-              <span>Nivelul 4 din 7 • Modulul 4E</span>
+              <span>{lang === 'ro' ? 'Nivelul 4 din 7 • Modulul 4E' : 'Level 4 of 7 • Module 4E'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Bucle Îmbricate &amp; Modele Grafice ASCII (Manual pag. 94–95)
+              {lang === 'ro' ? (
+                <>Bucle Îmbricate &amp; Modele Grafice ASCII (Manual pag. 94–95)</>
+              ) : (
+                <>Nested Loops &amp; ASCII Graphic Patterns (Textbook p. 94–95)</>
+              )}
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-              Descoperă magia buclelor în două dimensiuni: bucla exterioară generează liniile, iar bucla interioară desenează coloanele, spațiile și caracterele grafice.
+              {lang === 'ro'
+                ? 'Descoperă magia buclelor în două dimensiuni: bucla exterioară generează liniile, iar bucla interioară desenează coloanele, spațiile și caracterele grafice.'
+                : 'Discover two-dimensional loops: the outer loop drives row lines while the inner loop crafts columns, spaces, and graphic glyphs.'}
             </p>
           </div>
 
@@ -179,20 +214,26 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xl">
         <div className="flex items-center gap-2.5 mb-4 text-purple-400 font-bold text-sm uppercase tracking-wider font-mono">
           <Lightbulb className="w-4 h-4 text-purple-400" />
-          <span>Formula Matematică a Piramidei: Spații (n - i) &amp; Simboluri (2 * i - 1)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Formula Matematică a Piramidei: Spații (n - i) & Simboluri (2 * i - 1)'
+              : 'Mathematical Formula for Pyramids: Spaces (n - i) & Symbols (2 * i - 1)'}
+          </span>
         </div>
 
         {/* Theoretical Breakdown */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="bg-slate-950 border border-purple-500/30 rounded-2xl p-4 font-mono text-xs">
-            <div className="text-purple-300 font-bold mb-2 uppercase">Cod C++: Căciula lui Moș Crăciun (pag. 94)</div>
+            <div className="text-purple-300 font-bold mb-2 uppercase">
+              {lang === 'ro' ? 'Cod C++: Căciula lui Moș Crăciun (pag. 94)' : 'C++ Code: Santa Hat Pattern (p. 94)'}
+            </div>
             <div className="text-slate-200 leading-relaxed bg-slate-900 p-3 rounded-xl border border-slate-800">
               <span className="text-purple-400 font-bold">for</span> (int i = 1; i &lt;= n; i++) &#123;<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-400">// 1. Afișare spații pentru centrare:</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-400">{lang === 'ro' ? '// 1. Afișare spații pentru centrare:' : '// 1. Print centering spaces:'}</span><br />
               &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400 font-bold">for</span> (int s = 1; s &lt;= n - i; s++) cout &lt;&lt; <span className="text-amber-300">" "</span>;<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-400">// 2. Afișare caractere &amp;:</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-400">{lang === 'ro' ? '// 2. Afișare caractere &:' : '// 2. Print & symbols:'}</span><br />
               &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400 font-bold">for</span> (int c = 1; c &lt;= 2 * i - 1; c++) cout &lt;&lt; <span className="text-cyan-300">"&amp;"</span>;<br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-400">// 3. Trecere la rând nou:</span><br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-slate-400">{lang === 'ro' ? '// 3. Trecere la rând nou:' : '// 3. Newline feed:'}</span><br />
               &nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; endl;<br />
               &#125;
             </div>
@@ -200,20 +241,39 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
 
           <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 flex flex-col justify-between">
             <div>
-              <span className="font-bold text-white text-sm block mb-2">Cum funcționează formula pas-cu-pas?</span>
+              <span className="font-bold text-white text-sm block mb-2">
+                {lang === 'ro' ? 'Cum funcționează formula pas-cu-pas?' : 'How the formula works step-by-step'}
+              </span>
               <p className="leading-relaxed mb-3">
-                Pentru <code className="text-purple-300">n = 5</code> linii:
+                {lang === 'ro' ? 'Pentru n = 5 linii:' : 'For n = 5 lines:'}
               </p>
               <ul className="space-y-1.5 font-mono text-[11px] text-slate-300">
-                <li className="p-1 rounded bg-slate-900/80">Linia 1: 5 - 1 = <strong className="text-amber-300">4 spații</strong>, 2*1 - 1 = <strong className="text-cyan-300">1 de &amp;</strong></li>
-                <li className="p-1 rounded bg-slate-900/80">Linia 2: 5 - 2 = <strong className="text-amber-300">3 spații</strong>, 2*2 - 1 = <strong className="text-cyan-300">3 de &amp;</strong></li>
-                <li className="p-1 rounded bg-slate-900/80">Linia 3: 5 - 3 = <strong className="text-amber-300">2 spații</strong>, 2*3 - 1 = <strong className="text-cyan-300">5 de &amp;</strong></li>
-                <li className="p-1 rounded bg-slate-900/80">Linia 4: 5 - 4 = <strong className="text-amber-300">1 spațiu</strong>, 2*4 - 1 = <strong className="text-cyan-300">7 de &amp;</strong></li>
-                <li className="p-1 rounded bg-slate-900/80">Linia 5: 5 - 5 = <strong className="text-amber-300">0 spații</strong>, 2*5 - 1 = <strong className="text-cyan-300">9 de &amp;</strong></li>
+                <li className="p-1 rounded bg-slate-900/80">
+                  {lang === 'ro' ? 'Linia 1: 5 - 1 = ' : 'Line 1: 5 - 1 = '}
+                  <strong className="text-amber-300">{lang === 'ro' ? '4 spații' : '4 spaces'}</strong>, 2*1 - 1 = <strong className="text-cyan-300">1 &amp;</strong>
+                </li>
+                <li className="p-1 rounded bg-slate-900/80">
+                  {lang === 'ro' ? 'Linia 2: 5 - 2 = ' : 'Line 2: 5 - 2 = '}
+                  <strong className="text-amber-300">{lang === 'ro' ? '3 spații' : '3 spaces'}</strong>, 2*2 - 1 = <strong className="text-cyan-300">3 &amp;</strong>
+                </li>
+                <li className="p-1 rounded bg-slate-900/80">
+                  {lang === 'ro' ? 'Linia 3: 5 - 3 = ' : 'Line 3: 5 - 3 = '}
+                  <strong className="text-amber-300">{lang === 'ro' ? '2 spații' : '2 spaces'}</strong>, 2*3 - 1 = <strong className="text-cyan-300">5 &amp;</strong>
+                </li>
+                <li className="p-1 rounded bg-slate-900/80">
+                  {lang === 'ro' ? 'Linia 4: 5 - 4 = ' : 'Line 4: 5 - 4 = '}
+                  <strong className="text-amber-300">{lang === 'ro' ? '1 spațiu' : '1 space'}</strong>, 2*4 - 1 = <strong className="text-cyan-300">7 &amp;</strong>
+                </li>
+                <li className="p-1 rounded bg-slate-900/80">
+                  {lang === 'ro' ? 'Linia 5: 5 - 5 = ' : 'Line 5: 5 - 5 = '}
+                  <strong className="text-amber-300">{lang === 'ro' ? '0 spații' : '0 spaces'}</strong>, 2*5 - 1 = <strong className="text-cyan-300">9 &amp;</strong>
+                </li>
               </ul>
             </div>
             <p className="text-[11px] text-emerald-400 mt-2 font-mono">
-              Rezultatul este o formă geometrică perfect centrată pe axa ecranului!
+              {lang === 'ro'
+                ? 'Rezultatul este o formă geometrică perfect centrată pe axa ecranului!'
+                : 'The result is a geometric figure symmetrically centered on the screen!'}
             </p>
           </div>
         </div>
@@ -224,10 +284,14 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Eye className="w-4 h-4 text-purple-400" />
-                <span>Studio Interactiv de Generare Grafică 2D</span>
+                <span>
+                  {lang === 'ro' ? 'Studio Interactiv de Generare Grafică 2D' : 'Interactive 2D Graphics Studio'}
+                </span>
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                Alege modelul grafic și numărul de linii, apoi generează linie cu linie!
+                {lang === 'ro'
+                  ? 'Alege modelul grafic și numărul de linii, apoi generează linie cu linie!'
+                  : 'Choose a pattern and line count, then generate line by line!'}
               </p>
             </div>
 
@@ -240,7 +304,7 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
                   selectedPattern === 'santa' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-750'
                 }`}
               >
-                🎅 Căciulă &amp;
+                🎅 {lang === 'ro' ? 'Căciulă &' : 'Santa Hat &'}
               </button>
               <button
                 type="button"
@@ -249,7 +313,7 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
                   selectedPattern === 'tree' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-750'
                 }`}
               >
-                🎄 Brad *
+                🎄 {lang === 'ro' ? 'Brad *' : 'Tree *'}
               </button>
               <button
                 type="button"
@@ -258,7 +322,7 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
                   selectedPattern === 'triangle' ? 'bg-cyan-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-750'
                 }`}
               >
-                📐 Triunghi Dreptunghic #
+                📐 {lang === 'ro' ? 'Triunghi #' : 'Triangle #'}
               </button>
               <button
                 type="button"
@@ -267,7 +331,7 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
                   selectedPattern === 'checker' ? 'bg-amber-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-750'
                 }`}
               >
-                🏁 Tablă Șah
+                🏁 {lang === 'ro' ? 'Tablă Șah' : 'Chessboard'}
               </button>
             </div>
           </div>
@@ -275,7 +339,9 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
           {/* Controls: linesCount + Stepper */}
           <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-900 border border-slate-800 mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-slate-400">Număr linii n:</span>
+              <span className="text-xs font-mono text-slate-400">
+                {lang === 'ro' ? 'Număr linii n:' : 'Line count n:'}
+              </span>
               {[3, 5, 7].map((num) => (
                 <button
                   key={num}
@@ -302,14 +368,20 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
                 }`}
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
-                <span>{activeStep === 0 ? 'Generează Linia 1' : activeStep >= linesCount ? 'Desen Complet!' : `Următoarea Linie (${activeStep + 1}/${linesCount})`}</span>
+                <span>
+                  {activeStep === 0
+                    ? (lang === 'ro' ? 'Generează Linia 1' : 'Generate Line 1')
+                    : activeStep >= linesCount
+                    ? (lang === 'ro' ? 'Desen Complet!' : 'Drawing Complete!')
+                    : (lang === 'ro' ? `Următoarea Linie (${activeStep + 1}/${linesCount})` : `Next Line (${activeStep + 1}/${linesCount})`)}
+                </span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleResetPattern()}
                 className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
-                title="Resetează desenul"
+                title={lang === 'ro' ? 'Resetează desenul' : 'Reset drawing'}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -319,12 +391,16 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
           {/* Console Canvas */}
           <div className="bg-black/95 border border-slate-800 rounded-2xl p-4 sm:p-6 font-mono text-center flex flex-col items-center justify-center min-h-[160px]">
             <div className="text-[11px] text-slate-600 mb-3 uppercase tracking-wider">
-              Ecran Consolă Virtuală (Linii active: {activeStep} din {linesCount})
+              {lang === 'ro'
+                ? `Ecran Consolă Virtuală (Linii active: ${activeStep} din ${linesCount})`
+                : `Virtual Console Screen (Active lines: ${activeStep} of ${linesCount})`}
             </div>
 
             {activeStep === 0 ? (
               <div className="text-slate-600 text-xs italic py-6">
-                Apasă pe „Generează Linia 1” pentru a porni iterațiile buclei exterioare...
+                {lang === 'ro'
+                  ? 'Apasă pe „Generează Linia 1” pentru a porni iterațiile buclei exterioare...'
+                  : 'Click "Generate Line 1" to start outer loop iterations...'}
               </div>
             ) : (
               <div className="flex flex-col items-center text-sm sm:text-base leading-tight font-black tracking-widest text-cyan-300 whitespace-pre">
@@ -350,14 +426,18 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2 text-purple-400 font-bold text-xs uppercase tracking-wider font-mono">
               <HelpCircle className="w-4 h-4 text-purple-400" />
-              <span>Verificare Înțelegere: Bucle Îmbricate ({challengeStep + 1} din {CHALLENGES.length})</span>
+              <span>
+                {lang === 'ro'
+                  ? `Verificare Înțelegere: Bucle Îmbricate (${challengeStep + 1} din ${CHALLENGES.length})`
+                  : `Comprehension Check: Nested Loops (${challengeStep + 1} of ${CHALLENGES.length})`}
+              </span>
             </div>
           </div>
 
           {!completedChallenge ? (
             <div className="flex flex-col gap-4">
               <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
-                {CHALLENGES[challengeStep].question}
+                {lang === 'ro' ? CHALLENGES[challengeStep].questionRo : CHALLENGES[challengeStep].questionEn}
               </h4>
 
               {CHALLENGES[challengeStep].code && (
@@ -367,7 +447,7 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
               )}
 
               <div className="grid grid-cols-1 gap-2.5">
-                {CHALLENGES[challengeStep].options.map((opt, oIdx) => {
+                {(lang === 'ro' ? CHALLENGES[challengeStep].optionsRo : CHALLENGES[challengeStep].optionsEn).map((opt, oIdx) => {
                   const isSelected = selectedAnswers[challengeStep] === oIdx;
                   return (
                     <button
@@ -392,7 +472,7 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
               </div>
 
               {challengeFeedback && (
-                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
+                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') || challengeFeedback.startsWith('Correct') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
                   {challengeFeedback}
                 </div>
               )}
@@ -403,7 +483,11 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
                   onClick={handleNextChallenge}
                   className="self-end py-2 px-5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  <span>{challengeStep < CHALLENGES.length - 1 ? 'Următoarea Întrebare' : 'Finalizează Nivelul 4'}</span>
+                  <span>
+                    {challengeStep < CHALLENGES.length - 1
+                      ? (lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question')
+                      : (lang === 'ro' ? 'Finalizează Nivelul 4' : 'Complete Level 4')}
+                  </span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}
@@ -413,16 +497,24 @@ export const StemLevel4_NestedLoopsArt: React.FC<Props> = ({ onPass }) => {
               <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-black text-white">Nivelul 4 Finalizat cu Succes!</h4>
+              <h4 className="text-lg font-black text-white">
+                {lang === 'ro' ? 'Nivelul 4 Finalizat cu Succes!' : 'Level 4 Successfully Completed!'}
+              </h4>
               <p className="text-xs text-slate-300 max-w-md">
-                Ai stăpânit coordonarea buclelor imbricate pe linii și coloane, generarea spațiilor pentru centrare și arta modelelor ASCII.
+                {lang === 'ro'
+                  ? 'Ai stăpânit coordonarea buclelor imbricate pe linii și coloane, generarea spațiilor pentru centrare și arta modelelor ASCII.'
+                  : 'You mastered 2D nested loop coordination on rows and columns, centering spaces, and ASCII graphic patterns.'}
               </p>
               <button
                 type="button"
                 onClick={handleFinishLevel}
                 className="mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
               >
-                <span>Treci la Nivelul 5: Laboratorul STEM de Fizică în C++</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Treci la Nivelul 5: Laboratorul STEM de Fizică în C++'
+                    : 'Proceed to Level 5: Physics STEM Lab in C++'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

@@ -421,7 +421,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
       setExecutionMessage({
         type: 'success',
         text: lang === 'en'
-          ? `🎉 Mission Complete! Reached ${activeChallenge.targetName} (+${levelScore} pts)`
+          ? `🎉 Mission Complete! Reached ${activeChallenge.targetNameEn || activeChallenge.targetName} (+${levelScore} pts)`
           : `🎉 Misiune Îndeplinită! Arky a ajuns la ${activeChallenge.targetName} (+${levelScore} XP)`
       });
 
@@ -441,7 +441,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
       setExecutionMessage({
         type: 'error',
         text: lang === 'en'
-          ? `⚠️ Script finished, but Arky did not reach ${activeChallenge.targetName}. Keep coding!`
+          ? `⚠️ Script finished, but Arky did not reach ${activeChallenge.targetNameEn || activeChallenge.targetName}. Keep coding!`
           : `⚠️ Scriptul s-a încheiat, dar Arky nu a ajuns la ${activeChallenge.targetName}. Mai adaugă pași!`
       });
     }
@@ -472,14 +472,14 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
               {lang === 'en' ? `Level ${currentLevelIndex + 1} of ${totalLevels}` : `Nivelul ${currentLevelIndex + 1} din ${totalLevels}`}
             </span>
             <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
-              {activeChallenge.concept}
+              {(lang === 'en' ? activeChallenge.conceptEn : activeChallenge.concept) || activeChallenge.concept}
             </span>
           </div>
           <h3 className="text-lg font-black text-white flex items-center gap-2 font-heading">
-            🧩 {activeChallenge.title}
+            🧩 {(lang === 'en' ? activeChallenge.titleEn : activeChallenge.title) || activeChallenge.title}
           </h3>
           <p className="text-xs text-slate-300 max-w-xl">
-            {activeChallenge.story}
+            {(lang === 'en' ? activeChallenge.storyEn : activeChallenge.story) || activeChallenge.story}
           </p>
         </div>
 
@@ -630,7 +630,9 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                 <span className="font-bold text-amber-300 block mb-0.5">
                   {lang === 'en' ? 'Algorithm Strategy Hint:' : 'Indiciu de Algoritm TIC:'}
                 </span>
-                <p className="text-[11px] text-slate-300 leading-relaxed">{activeChallenge.hint}</p>
+                <p className="text-[11px] text-slate-300 leading-relaxed">
+                  {(lang === 'en' ? activeChallenge.hintEn : activeChallenge.hint) || activeChallenge.hint}
+                </p>
               </div>
             </div>
           </div>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { DuelRoomData, updateDuelProgress } from '../../lib/duelService';
 import { sounds } from '../../utils/audio';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface PixelClashDuelGameProps {
   roomData: DuelRoomData | null;
@@ -28,23 +29,25 @@ interface PixelClashDuelGameProps {
 interface SpriteChallenge {
   id: number;
   name: string;
+  nameEn?: string;
   difficulty: string;
+  difficultyEn?: string;
   targetGrid: string[][]; // 8x8 hex strings
   accentColor: string;
 }
 
 // 8x8 Palette
 const PALETTE_COLORS = [
-  { name: 'Negru', hex: '#0f172a' },
-  { name: 'Alb', hex: '#ffffff' },
-  { name: 'Roșu', hex: '#ef4444' },
-  { name: 'Cyan Neon', hex: '#06b6d4' },
-  { name: 'Galben Aur', hex: '#eab308' },
-  { name: 'Verde Smarald', hex: '#10b981' },
-  { name: 'Mov Cosmic', hex: '#a855f7' },
-  { name: 'Albastru Cobalt', hex: '#3b82f6' },
-  { name: 'Portocaliu', hex: '#f97316' },
-  { name: 'Gradiant Gol', hex: '#1e293b' } // Empty / canvas background
+  { name: 'Negru', nameEn: 'Black', hex: '#0f172a' },
+  { name: 'Alb', nameEn: 'White', hex: '#ffffff' },
+  { name: 'Roșu', nameEn: 'Red', hex: '#ef4444' },
+  { name: 'Cyan Neon', nameEn: 'Neon Cyan', hex: '#06b6d4' },
+  { name: 'Galben Aur', nameEn: 'Golden Yellow', hex: '#eab308' },
+  { name: 'Verde Smarald', nameEn: 'Emerald Green', hex: '#10b981' },
+  { name: 'Mov Cosmic', nameEn: 'Cosmic Purple', hex: '#a855f7' },
+  { name: 'Albastru Cobalt', nameEn: 'Cobalt Blue', hex: '#3b82f6' },
+  { name: 'Portocaliu', nameEn: 'Orange', hex: '#f97316' },
+  { name: 'Gradiant Gol', nameEn: 'Empty Canvas', hex: '#1e293b' } // Empty / canvas background
 ];
 
 const EMPTY_COLOR = '#1e293b';
@@ -59,7 +62,9 @@ const SPRITE_CHALLENGES: SpriteChallenge[] = [
   {
     id: 1,
     name: 'Inimă 8-bit (Pixel Heart)',
+    nameEn: '8-bit Heart (Pixel Heart)',
     difficulty: 'Ușor',
+    difficultyEn: 'Easy',
     accentColor: '#ef4444',
     targetGrid: [
       [EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR],
@@ -75,7 +80,9 @@ const SPRITE_CHALLENGES: SpriteChallenge[] = [
   {
     id: 2,
     name: 'Dischetă Floppy 3.5" (Save Disk)',
+    nameEn: '3.5" Floppy Disk (Save Disk)',
     difficulty: 'Mediu',
+    difficultyEn: 'Medium',
     accentColor: '#3b82f6',
     targetGrid: [
       ['#0f172a', '#0f172a', '#0f172a', '#0f172a', '#0f172a', '#0f172a', '#0f172a', EMPTY_COLOR],
@@ -91,7 +98,9 @@ const SPRITE_CHALLENGES: SpriteChallenge[] = [
   {
     id: 3,
     name: 'Sabie de Diamant (Pixel Sword)',
+    nameEn: 'Diamond Sword (Pixel Sword)',
     difficulty: 'Avansat',
+    difficultyEn: 'Hard',
     accentColor: '#06b6d4',
     targetGrid: [
       [EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, EMPTY_COLOR, '#ffffff', '#06b6d4'],
@@ -107,7 +116,9 @@ const SPRITE_CHALLENGES: SpriteChallenge[] = [
   {
     id: 4,
     name: 'Extraterestru Space Invader',
+    nameEn: 'Space Invader Alien',
     difficulty: 'Maestru',
+    difficultyEn: 'Master',
     accentColor: '#10b981',
     targetGrid: [
       [EMPTY_COLOR, EMPTY_COLOR, '#10b981', EMPTY_COLOR, EMPTY_COLOR, '#10b981', EMPTY_COLOR, EMPTY_COLOR],
@@ -123,7 +134,9 @@ const SPRITE_CHALLENGES: SpriteChallenge[] = [
   {
     id: 5,
     name: 'Cupa Campionilor de Aur',
+    nameEn: 'Golden Champion Trophy',
     difficulty: 'Final Boss',
+    difficultyEn: 'Final Boss',
     accentColor: '#eab308',
     targetGrid: [
       ['#eab308', '#eab308', '#eab308', '#eab308', '#eab308', '#eab308', '#eab308', '#eab308'],
@@ -146,6 +159,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
   onFinish,
   onBack
 }) => {
+  const { lang } = useLanguage();
   const [currentStage, setCurrentStage] = useState(0);
   const [grid, setGrid] = useState<string[][]>(createEmptyGrid());
   const [selectedColor, setSelectedColor] = useState<string>('#ef4444');
@@ -308,11 +322,11 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                 Pixel Art Sprite Clash 1v1
               </h3>
               <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold uppercase">
-                Etapa {currentStage + 1}/{SPRITE_CHALLENGES.length}
+                {lang === 'en' ? 'Stage' : 'Etapa'} {currentStage + 1}/{SPRITE_CHALLENGES.length}
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              {currentChallenge.name} • Precizie Necesare: 100%
+              {(lang === 'en' ? currentChallenge.nameEn : currentChallenge.name) || currentChallenge.name} • {lang === 'en' ? 'Required Accuracy: 100%' : 'Precizie Necesară: 100%'}
             </p>
           </div>
         </div>
@@ -320,7 +334,9 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
         {/* Live Score & Streak */}
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <span className="text-[10px] text-slate-400 uppercase font-mono block">Scor Jucător</span>
+            <span className="text-[10px] text-slate-400 uppercase font-mono block">
+              {lang === 'en' ? 'Player Score' : 'Scor Jucător'}
+            </span>
             <span className="text-base font-black text-amber-300 font-mono">+{score} XP</span>
           </div>
           {streak > 0 && (
@@ -338,7 +354,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
           <div className="flex justify-between items-center text-xs mb-1">
             <span className="font-bold text-white flex items-center gap-1.5">
               <span>{studentAvatar}</span>
-              <span>{studentName} (Tu)</span>
+              <span>{studentName} {lang === 'en' ? '(You)' : '(Tu)'}</span>
             </span>
             <span className="font-mono font-bold text-cyan-400">{accuracy}%</span>
           </div>
@@ -375,12 +391,16 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
-                Model Țintă (Sprite Rețetă)
+                {lang === 'en' ? 'Target Model (Sprite Recipe)' : 'Model Țintă (Sprite Rețetă)'}
               </span>
-              <span className="text-[10px] font-mono text-slate-400">8 x 8 Pixeli</span>
+              <span className="text-[10px] font-mono text-slate-400">
+                {lang === 'en' ? '8 x 8 Pixels' : '8 x 8 Pixeli'}
+              </span>
             </div>
             <p className="text-xs text-slate-300 mb-3">
-              Reprodu pe pânza din dreapta exact acest sprite colorat!
+              {lang === 'en'
+                ? 'Replicate this exact colored sprite onto your canvas on the right!'
+                : 'Reprodu pe pânza din dreapta exact acest sprite colorat!'}
             </p>
 
             {/* Target 8x8 Visual Grid */}
@@ -399,8 +419,12 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
 
           {/* Quick Tip on Resolution & RGB */}
           <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400">
-            <span className="text-purple-300 font-bold block mb-0.5">💡 Concept TIC Gimnaziu:</span>
-            Grafica raster (bitmap) este alcătuită dintr-o matrice bidimensională de pixeli colorați prin amestec RGB.
+            <span className="text-purple-300 font-bold block mb-0.5">
+              {lang === 'en' ? '💡 Middle School ICT Concept:' : '💡 Concept TIC Gimnaziu:'}
+            </span>
+            {lang === 'en'
+              ? 'Raster (bitmap) graphics are made of a 2D matrix of colored pixels blended via additive RGB values.'
+              : 'Grafica raster (bitmap) este alcătuită dintr-o matrice bidimensională de pixeli colorați prin amestec RGB.'}
           </div>
         </div>
 
@@ -422,7 +446,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                 }`}
               >
                 <PenTool className="w-3.5 h-3.5" />
-                <span>Pensulă</span>
+                <span>{lang === 'en' ? 'Brush' : 'Pensulă'}</span>
               </button>
 
               <button
@@ -438,7 +462,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                 }`}
               >
                 <PaintBucket className="w-3.5 h-3.5" />
-                <span>Umplere</span>
+                <span>{lang === 'en' ? 'Bucket' : 'Umplere'}</span>
               </button>
 
               <button
@@ -454,7 +478,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                 }`}
               >
                 <Eraser className="w-3.5 h-3.5" />
-                <span>Radieră</span>
+                <span>{lang === 'en' ? 'Eraser' : 'Radieră'}</span>
               </button>
             </div>
 
@@ -471,17 +495,17 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                     ? 'bg-emerald-600 text-white ring-2 ring-emerald-400/40 shadow-md'
                     : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
                 }`}
-                title="Sincronizează coloana opusă orizontal pentru viteză 2x"
+                title={lang === 'en' ? 'Mirror opposite horizontal column for 2x speed' : 'Sincronizează coloana opusă orizontal pentru viteză 2x'}
               >
                 <FlipHorizontal className="w-3.5 h-3.5" />
-                <span>Oglindă X</span>
+                <span>{lang === 'en' ? 'Mirror X' : 'Oglindă X'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleResetCanvas}
                 className="p-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-rose-300 border border-slate-800 transition cursor-pointer"
-                title="Curăță Pânza"
+                title={lang === 'en' ? 'Clear Canvas' : 'Curăță Pânza'}
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
@@ -490,7 +514,9 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
 
           {/* Color Palette Grid */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Culoare:</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">
+              {lang === 'en' ? 'Color:' : 'Culoare:'}
+            </span>
             {PALETTE_COLORS.map((col) => {
               const isSelected = selectedColor === col.hex && activeTool !== 'eraser';
               return (
@@ -508,7 +534,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                       : 'border-slate-800 hover:scale-110'
                   }`}
                   style={{ backgroundColor: col.hex }}
-                  title={col.name}
+                  title={lang === 'en' ? (col.nameEn || col.name) : col.name}
                 />
               );
             })}
@@ -559,12 +585,12 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
               onClick={onBack}
               className="text-xs text-slate-400 hover:text-white transition cursor-pointer"
             >
-              ← Părăsește Duelul
+              ← {lang === 'en' ? 'Leave Duel' : 'Părăsește Duelul'}
             </button>
 
             <div className="text-right">
               <span className="text-xs font-black text-emerald-400">
-                {accuracy >= 100 ? '✅ Etapă Perfectă!' : `Potrivire Pixeli: ${accuracy}%`}
+                {lang === 'en' ? (accuracy >= 100 ? '✅ Perfect Stage!' : `Pixel Accuracy: ${accuracy}%`) : (accuracy >= 100 ? '✅ Etapă Perfectă!' : `Potrivire Pixeli: ${accuracy}%`)}
               </span>
             </div>
           </div>

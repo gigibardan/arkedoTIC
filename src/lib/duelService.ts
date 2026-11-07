@@ -46,18 +46,23 @@ export interface BlockCodingChallenge {
   id: number;
   level: number;
   title: string;
+  titleEn?: string;
   story: string;
+  storyEn?: string;
   concept: string;
+  conceptEn?: string;
   gridSize: { width: number; height: number };
   startPos: GridCoord;
   startDirection: 'N' | 'E' | 'S' | 'W';
   targetPos: GridCoord;
   targetName: string;
+  targetNameEn?: string;
   obstacles: GridCoord[];
   collectibles: GridCoord[];
   parBlocks: number;
   allowedBlocks: CodeBlockType[];
   hint: string;
+  hintEn?: string;
 }
 
 export interface DuelPlayer {
@@ -88,23 +93,33 @@ export interface QuizQuestionItem {
 export interface CyberShieldItem {
   id: number;
   sender: string;
+  senderEn?: string;
   subject: string;
+  subjectEn?: string;
   body: string;
+  bodyEn?: string;
   linkOrAttachment?: string;
+  linkOrAttachmentEn?: string;
   isThreat: boolean; // true = Phishing / Malware / Fake; false = Safe / Official
   threatType?: string; // e.g. 'Phishing Link', 'Malware .exe', 'Parolă Cerută', 'Mesaj Sigur de la Școală'
+  threatTypeEn?: string;
   explanation: string;
+  explanationEn?: string;
 }
 
 export interface PCRushPart {
   id: string;
   name: string;
+  nameEn?: string;
   slot: string; // 'cpu' | 'cooler' | 'ram1' | 'ram2' | 'gpu' | 'ssd' | 'psu'
   slotLabel: string;
+  slotLabelEn?: string;
   icon: string;
   specs: string;
+  specsEn?: string;
   stepOrder: number; // 1 to 6
   hint: string;
+  hintEn?: string;
 }
 
 export interface DuelRoomData {
@@ -116,6 +131,7 @@ export interface DuelRoomData {
   host: DuelPlayer;
   guest: DuelPlayer | null;
   textSnippet?: string; // For Cyber Sprint typing
+  textSnippetEn?: string; // English Cyber Sprint typing
   questions?: QuizQuestionItem[]; // For Quiz Blitz
   shieldItems?: CyberShieldItem[]; // For Cyber Shield
   pcPartsOrder?: PCRushPart[]; // For Hardware PC Rush
@@ -159,6 +175,15 @@ export const CYBER_SPRINT_TEXTS: string[] = [
   'Nu deschide fisiere atasate suspecte primite pe email de la adrese necunoscute de phishing.',
   'Placa de baza conecteaza procesorul CPU, memoria RAM si unitatea de stocare rapida SSD.',
   'Imaginile digitale sunt formate din pixeli compusi din cele trei culori primare: Rosu, Verde si Albastru.'
+];
+
+export const CYBER_SPRINT_TEXTS_EN: string[] = [
+  'A strong password contains uppercase, lowercase, numbers and symbols to defeat malicious attacks.',
+  'The firewall inspects inbound network packets and shields computer networks from virus infection.',
+  'One byte consists of eight bits, and one gigabyte contains 1024 megabytes of digital storage.',
+  'Never open suspicious email attachments sent from unknown or unverified phishing addresses.',
+  'The motherboard connects the central processor CPU, volatile RAM and ultra-fast NVMe SSD storage.',
+  'Digital raster graphics consist of bitmap pixels made from primary additive colors: Red, Green, and Blue.'
 ];
 
 // Curated Quiz Blitz Questions with Complete Explanations & Bilingual Support
@@ -370,82 +395,130 @@ export const DUEL_CYBER_SHIELD_ITEMS: CyberShieldItem[] = [
   {
     id: 1,
     sender: 'security@ro-bancaa-alert.xyz',
+    senderEn: 'security@bank-alert-security.xyz',
     subject: '🚨 URGENT: Contul tău a fost blocat!',
+    subjectEn: '🚨 URGENT: Your bank account has been locked!',
     body: 'Contul bancar va fi suspendat în 10 minute dacă nu confirmi parola și CNP-ul făcând click pe butonul de mai jos.',
+    bodyEn: 'Your account will be suspended in 10 minutes unless you verify your password and personal ID by clicking below.',
     linkOrAttachment: 'http://verificare-card-urgent.net/login',
+    linkOrAttachmentEn: 'http://urgent-verify-card.net/login',
     isThreat: true,
     threatType: 'Phishing Bancar',
-    explanation: 'Domeniu fals (.xyz, .net), sentiment de panică falsă și cerere directă de parolă.'
+    threatTypeEn: 'Bank Phishing',
+    explanation: 'Domeniu fals (.xyz, .net), sentiment de panică falsă și cerere directă de parolă.',
+    explanationEn: 'Fraudulent domain (.xyz, .net), false urgency, and an outright credential harvesting request.'
   },
   {
     id: 2,
     sender: 'secretariat@scoala-arkedo.edu.ro',
+    senderEn: 'registrar@arkedo-academy.edu',
     subject: '📚 Orarul cursurilor TIC pentru semestrul 2',
+    subjectEn: '📚 Computer Science Lab Schedule - Semester 2',
     body: 'Bună ziua! Vă trimitem atașat noul tabel cu laboratoarele de informatică pentru clasa a V-a.',
+    bodyEn: 'Hello! Attached please find the updated timetable for the 5th Grade Computer Science labs.',
     linkOrAttachment: 'Orar_TIC_Clasa5.pdf',
+    linkOrAttachmentEn: 'CS_Lab_Schedule_Grade5.pdf',
     isThreat: false,
     threatType: 'Email Școlar Sigur',
-    explanation: 'Adresă oficială .edu.ro, conținut legitim și fișier de tip document .pdf sigur.'
+    threatTypeEn: 'Official School Email',
+    explanation: 'Adresă oficială .edu.ro, conținut legitim și fișier de tip document .pdf sigur.',
+    explanationEn: 'Official .edu institutional domain, legitimate educational context, and safe .pdf document.'
   },
   {
     id: 3,
     sender: 'giveaway@free-robux-fortnite.club',
+    senderEn: 'giveaway@free-robux-fortnite.club',
     subject: '🎁 Ai câștigat 10.000 V-Bucks & Robux GRATIS!',
+    subjectEn: '🎁 You won 10,000 FREE V-Bucks & Robux!',
     body: 'Felicitări! Ești al 1.000-lea vizitator. Descarcă generatorul gratuit și instalează-l pentru monede!',
+    bodyEn: 'Congratulations! You are our 1,000th visitor. Download this free generator and install it to claim your coins!',
     linkOrAttachment: 'Free_Robux_Generator_2026.exe',
+    linkOrAttachmentEn: 'Free_Robux_Generator_2026.exe',
     isThreat: true,
     threatType: 'Troian / Malware Executabil',
-    explanation: 'Fișierul .exe de la o sursă necunoscută este malware/virus ascuns!'
+    threatTypeEn: 'Trojan / Executable Malware',
+    explanation: 'Fișierul .exe de la o sursă necunoscută este malware/virus ascuns!',
+    explanationEn: 'An executable .exe from an untrusted source is trojanized malware!'
   },
   {
     id: 4,
     sender: 'noreply@google.com',
+    senderEn: 'noreply@google.com',
     subject: 'Cod de verificare securitate Google',
+    subjectEn: 'Google Security Verification Code',
     body: 'Codul tău de verificare în 2 pași este 492810. Dacă nu ai solicitat tu acest cod, ignoră mesajul.',
+    bodyEn: 'Your 2-step verification code is 492810. If you did not request this code, safely ignore this message.',
     linkOrAttachment: 'https://myaccount.google.com/security',
+    linkOrAttachmentEn: 'https://myaccount.google.com/security',
     isThreat: false,
     threatType: 'Notificare 2FA Oficială',
-    explanation: 'Email legitim de la domeniul oficial google.com pentru autentificare în 2 pași.'
+    threatTypeEn: 'Official 2FA Notification',
+    explanation: 'Email legitim de la domeniul oficial google.com pentru autentificare în 2 pași.',
+    explanationEn: 'Legitimate email from the official google.com domain for two-factor authentication.'
   },
   {
     id: 5,
     sender: 'admin@insta-unfollowers-tracker.top',
+    senderEn: 'admin@insta-unfollowers-tracker.top',
     subject: '⚠️ Vezi cine ți-a dat unfollow pe Instagram!',
+    subjectEn: '⚠️ See who unfollowed you on Instagram!',
     body: 'Introdu numele de utilizator și parola contului tău pentru a debloca raportul complet secret.',
+    bodyEn: 'Enter your account username and password to unlock your complete secret unfollower report.',
     linkOrAttachment: 'http://insta-hack-spy.top/auth',
+    linkOrAttachmentEn: 'http://insta-hack-spy.top/auth',
     isThreat: true,
     threatType: 'Furt de Conturi Social Media',
-    explanation: 'Aplicațiile terțe care îți cer parola sunt capcane de phishing pentru a fura conturi.'
+    threatTypeEn: 'Social Media Credential Theft',
+    explanation: 'Aplicațiile terțe care îți cer parola sunt capcane de phishing pentru a fura conturi.',
+    explanationEn: 'Third-party tools asking for social passwords are credential phishing traps.'
   },
   {
     id: 6,
     sender: 'profesor.geografie@scoala.ro',
+    senderEn: 'geography.teacher@school.edu',
     subject: 'Harta interactivă pentru test',
+    subjectEn: 'Interactive Map Resource for Tomorrow\'s Exam',
     body: 'Dragi elevi, găsiți link-ul către harta oficială pentru recapitularea de mâine.',
+    bodyEn: 'Dear students, here is the official national educational map link for tomorrow\'s review.',
     linkOrAttachment: 'https://geografie.edu.ro/harti',
+    linkOrAttachmentEn: 'https://maps.school.edu/geography',
     isThreat: false,
     threatType: 'Material Didactic Sigur',
-    explanation: 'Link securizat HTTPS pe domeniul educațional național.'
+    threatTypeEn: 'Safe Educational Material',
+    explanation: 'Link securizat HTTPS pe domeniul educațional național.',
+    explanationEn: 'Secure HTTPS connection hosted on a verified national educational domain.'
   },
   {
     id: 7,
     sender: 'lottery-intl@win-billion-cash.biz',
+    senderEn: 'lottery-intl@win-billion-cash.biz',
     subject: '💰 Ați moștenit 500.000 EUR din Elveția',
+    subjectEn: '💰 You inherited 500,000 EUR in Switzerland',
     body: 'Pentru a transfera fondurile în contul dvs., trimiteți o taxă notarială de 50 EUR prin crypto.',
+    bodyEn: 'To wire funds directly to your account, please send an upfront 50 EUR notary processing fee in crypto.',
     linkOrAttachment: 'http://transfer-fonduri-securizat.biz',
+    linkOrAttachmentEn: 'http://secure-funds-transfer.biz',
     isThreat: true,
     threatType: 'Scam Financiar (Înșelătorie)',
-    explanation: 'Nicio loterie sau bancă reală nu cere plăți în avans pentru a debloca presupuse premii.'
+    threatTypeEn: 'Advance-Fee Scam',
+    explanation: 'Nicio loterie sau bancă reală nu cere plăți în avans pentru a debloca presupuse premii.',
+    explanationEn: 'Legitimate institutions never request upfront wire transfer fees to claim supposed inheritances.'
   },
   {
     id: 8,
     sender: 'support@discord.com',
+    senderEn: 'support@discord.com',
     subject: 'Confirmare activare cont Discord',
+    subjectEn: 'Verify your Discord Account',
     body: 'Bine ai venit pe serverul educațional al clasei! Apasă pentru a verifica adresa de email.',
+    bodyEn: 'Welcome to your class study server! Please click to verify your email address.',
     linkOrAttachment: 'https://discord.com/verify',
+    linkOrAttachmentEn: 'https://discord.com/verify',
     isThreat: false,
     threatType: 'Verificare Serviciu Sigur',
-    explanation: 'Domeniu oficial discord.com cu certificat SSL valid.'
+    threatTypeEn: 'Legitimate Account Verification',
+    explanation: 'Domeniu oficial discord.com cu certificat SSL valid.',
+    explanationEn: 'Official discord.com domain with valid HTTPS SSL certificates.'
   }
 ];
 
@@ -454,62 +527,86 @@ export const DUEL_PC_PARTS: PCRushPart[] = [
   {
     id: 'cpu',
     name: 'Procesor Central (CPU)',
+    nameEn: 'Central Processing Unit (CPU)',
     slot: 'cpu',
     slotLabel: 'Socket Procesor (LGA)',
+    slotLabelEn: 'CPU Socket (LGA)',
     icon: '🧠',
     specs: 'Octa-Core 4.2 GHz',
+    specsEn: 'Octa-Core 4.2 GHz',
     stepOrder: 1,
-    hint: 'Pasul 1: Se instalează mai întâi creierul PC-ului direct în socket-ul plăcii de bază.'
+    hint: 'Pasul 1: Se instalează mai întâi creierul PC-ului direct în socket-ul plăcii de bază.',
+    hintEn: 'Step 1: Install the brain of the PC directly into the motherboard socket first.'
   },
   {
     id: 'cooler',
     name: 'Cooler & Pastă Termică',
+    nameEn: 'CPU Cooler & Thermal Paste',
     slot: 'cooler',
     slotLabel: 'Sistem Răcire CPU',
+    slotLabelEn: 'CPU Cooling Unit',
     icon: '❄️',
     specs: 'Ventilator Silențios 120mm',
+    specsEn: 'Quiet 120mm Fan Assembly',
     stepOrder: 2,
-    hint: 'Pasul 2: Se montează deasupra procesorului pentru a preveni supraîncălzirea.'
+    hint: 'Pasul 2: Se montează deasupra procesorului pentru a preveni supraîncălzirea.',
+    hintEn: 'Step 2: Mount firmly above the CPU to prevent dangerous thermal overheating.'
   },
   {
     id: 'ram',
     name: 'Memorie RAM Dual-Channel',
+    nameEn: 'Dual-Channel RAM Memory',
     slot: 'ram',
     slotLabel: 'Sloturi DIMM RAM (DDR5)',
+    slotLabelEn: 'DIMM RAM Slots (DDR5)',
     icon: '⚡',
     specs: '16GB DDR5 5600MHz',
+    specsEn: '16GB DDR5 5600MHz',
     stepOrder: 3,
-    hint: 'Pasul 3: Se clipsează în sloturile DIMM pentru memorie de lucru ultrarapidă.'
+    hint: 'Pasul 3: Se clipsează în sloturile DIMM pentru memorie de lucru ultrarapidă.',
+    hintEn: 'Step 3: Clip into the DIMM slots for high-speed active working memory.'
   },
   {
     id: 'ssd',
     name: 'Unitate Stocare NVMe SSD',
+    nameEn: 'NVMe Solid-State Drive (SSD)',
     slot: 'ssd',
     slotLabel: 'Slot M.2 PCIe Gen4',
+    slotLabelEn: 'M.2 PCIe Gen4 Slot',
     icon: '💾',
     specs: '1TB NVMe (7000 MB/s)',
+    specsEn: '1TB NVMe (7000 MB/s)',
     stepOrder: 4,
-    hint: 'Pasul 4: Se fixează în slotul M.2 pentru sistemul de operare și fișiere.'
+    hint: 'Pasul 4: Se fixează în slotul M.2 pentru sistemul de operare și fișiere.',
+    hintEn: 'Step 4: Secure into the M.2 slot for operating system and high-speed file storage.'
   },
   {
     id: 'gpu',
     name: 'Placă Video Dedicată (GPU)',
+    nameEn: 'Dedicated Graphics Card (GPU)',
     slot: 'gpu',
     slotLabel: 'Slot PCIe x16 (Grafică)',
+    slotLabelEn: 'PCIe x16 Slot (Graphics)',
     icon: '🎮',
     specs: '8GB GDDR6 Ray-Tracing',
+    specsEn: '8GB GDDR6 Ray-Tracing',
     stepOrder: 5,
-    hint: 'Pasul 5: Se introduce ferm în slotul lung PCIe pentru randare grafică 3D.'
+    hint: 'Pasul 5: Se introduce ferm în slotul lung PCIe pentru randare grafică 3D.',
+    hintEn: 'Step 5: Firmly seat into the primary long PCIe bus for 3D visual rendering.'
   },
   {
     id: 'psu',
     name: 'Sursă de Alimentare (PSU)',
+    nameEn: 'Power Supply Unit (PSU)',
     slot: 'psu',
     slotLabel: 'Conectori Alimentare 24-Pin',
+    slotLabelEn: '24-Pin ATX Power Rails',
     icon: '🔌',
     specs: '650W 80+ Gold Modular',
+    specsEn: '650W 80+ Gold Modular',
     stepOrder: 6,
-    hint: 'Pasul 6: Alimentează toate componentele cu energie electrică stabilă!'
+    hint: 'Pasul 6: Alimentează toate componentele cu energie electrică stabilă!',
+    hintEn: 'Step 6: Deliver stable electrical power to all motherboard and chassis hardware!'
   }
 ];
 
@@ -519,13 +616,17 @@ export const DUEL_BLOCK_CODING_CHALLENGES: BlockCodingChallenge[] = [
     id: 1,
     level: 1,
     title: 'Nivelul 1: Primul Script Liniar',
+    titleEn: 'Level 1: First Linear Script',
     story: 'Arky a detectat Serverul Central la 4 pași distanță! Scrie algoritmul corect pentru a colecta steaua de date și a ajunge la destinație.',
+    storyEn: 'Arky detected the Central Server 4 steps ahead! Write the correct algorithm to harvest the data star and reach destination.',
     concept: 'Secvențialitate & Pași Înainte',
+    conceptEn: 'Sequencing & Linear Forward Steps',
     gridSize: { width: 5, height: 5 },
     startPos: { x: 0, y: 2 },
     startDirection: 'E',
     targetPos: { x: 4, y: 2 },
     targetName: 'Serverul Central',
+    targetNameEn: 'Central Server',
     obstacles: [
       { x: 2, y: 1 },
       { x: 2, y: 3 }
@@ -535,19 +636,24 @@ export const DUEL_BLOCK_CODING_CHALLENGES: BlockCodingChallenge[] = [
     ],
     parBlocks: 4,
     allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'collect', 'repeat_2', 'repeat_3'],
-    hint: 'Apasă pe „Mergi în față” de 4 ori sau folosește bucla repetă pentru un traseu direct!'
+    hint: 'Apasă pe „Mergi în față” de 4 ori sau folosește bucla repetă pentru un traseu direct!',
+    hintEn: 'Click "Move Forward" 4 times or leverage the repeat loop block for direct routing!'
   },
   {
     id: 2,
     level: 2,
     title: 'Nivelul 2: Ocolirea Zidului Firewall',
+    titleEn: 'Level 2: Bypassing the Firewall Wall',
     story: 'Un firewall de securitate blochează drumul direct! Ghidează-l pe Arky făcând viraje precise la 90° pentru a ocoli obstacolele.',
+    storyEn: 'A security firewall blocks direct passage! Guide Arky using precise 90° turns to detour around defensive barriers.',
     concept: 'Viraje la 90° (Stânga / Dreapta)',
+    conceptEn: '90° Directional Turns (Left / Right)',
     gridSize: { width: 5, height: 5 },
     startPos: { x: 0, y: 4 },
     startDirection: 'N',
     targetPos: { x: 3, y: 1 },
     targetName: 'Terminalul Școlii',
+    targetNameEn: 'School Terminal Hub',
     obstacles: [
       { x: 0, y: 1 },
       { x: 1, y: 1 },
@@ -561,19 +667,24 @@ export const DUEL_BLOCK_CODING_CHALLENGES: BlockCodingChallenge[] = [
     ],
     parBlocks: 7,
     allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'collect', 'repeat_2', 'repeat_3'],
-    hint: 'Mergi 2 pași spre Nord, virează la Dreapta (Est) 3 pași, apoi virează la Stânga (Nord) spre Terminal!'
+    hint: 'Mergi 2 pași spre Nord, virează la Dreapta (Est) 3 pași, apoi virează la Stânga (Nord) spre Terminal!',
+    hintEn: 'Walk 2 steps North, turn Right (East) 3 steps, then turn Left (North) directly into the Terminal!'
   },
   {
     id: 3,
     level: 3,
     title: 'Nivelul 3: Bucle & Structuri Repetitive',
+    titleEn: 'Level 3: Loops & Repetitive Structures',
     story: 'Traseul are un tipar de scară repetitiv! Folosește blocul de buclă „Repetă de 3 ori” pentru a scurta scriptul și a depăși oponentul.',
+    storyEn: 'The path follows a repetitive staircase rhythm! Use the "Repeat 3x" loop block to minimize code length and outpace your rival.',
     concept: 'Bucle Scratch (Repetă de 3x)',
+    conceptEn: 'Scratch Repeat Loops (Repeat 3x)',
     gridSize: { width: 6, height: 6 },
     startPos: { x: 0, y: 5 },
     startDirection: 'N',
     targetPos: { x: 5, y: 0 },
     targetName: 'Portalul Cuantic TIC',
+    targetNameEn: 'Quantum ICT Gateway',
     obstacles: [
       { x: 1, y: 4 },
       { x: 2, y: 3 },
@@ -587,19 +698,24 @@ export const DUEL_BLOCK_CODING_CHALLENGES: BlockCodingChallenge[] = [
     ],
     parBlocks: 6,
     allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'repeat_2', 'repeat_3', 'collect'],
-    hint: 'Observă modelul de urcare: pas, viraj, pas, viraj! Buclele îți salvează timp prețios în duel.'
+    hint: 'Observă modelul de urcare: pas, viraj, pas, viraj! Buclele îți salvează timp prețios în duel.',
+    hintEn: 'Notice the climbing pattern: step, turn, step, turn! Iteration loops save critical execution seconds.'
   },
   {
     id: 4,
     level: 4,
     title: 'Nivelul 4: Labirintul Bug-urilor Hackerilor',
+    titleEn: 'Level 4: Hacker Bug Labyrinth',
     story: 'Misiunea finală de campion! Navighează prin rețeaua infectată de bug-uri, evită capcanele laser și activează Baza de Date Securizată.',
+    storyEn: 'Championship grand finale! Navigate the bug-infested matrix, evade laser tripwires, and ignite the Secured Encrypted Database.',
     concept: 'Gândire Algoritmică Avansată',
+    conceptEn: 'Advanced Algorithmic Computational Thinking',
     gridSize: { width: 6, height: 6 },
     startPos: { x: 0, y: 0 },
     startDirection: 'E',
     targetPos: { x: 5, y: 5 },
     targetName: 'Baza de Date Criptată',
+    targetNameEn: 'Encrypted Vault Database',
     obstacles: [
       { x: 1, y: 0 },
       { x: 1, y: 1 },
@@ -616,7 +732,8 @@ export const DUEL_BLOCK_CODING_CHALLENGES: BlockCodingChallenge[] = [
     ],
     parBlocks: 10,
     allowedBlocks: ['move_forward', 'turn_left', 'turn_right', 'repeat_2', 'repeat_3', 'collect'],
-    hint: 'Gândește întregul traseu înainte de rulare! O singură greșeală declanșează alarma de firewall.'
+    hint: 'Gândește întregul traseu înainte de rulare! O singură greșeală declanșează alarma de firewall.',
+    hintEn: 'Trace the entire trajectory mentally before pressing run! A single misstep triggers the firewall alarm.'
   }
 ];
 
@@ -642,7 +759,9 @@ export async function createDuelRoom(
     lastActive: Date.now()
   };
 
-  const textSnippet = CYBER_SPRINT_TEXTS[Math.floor(Math.random() * CYBER_SPRINT_TEXTS.length)];
+  const snippetIdx = Math.floor(Math.random() * CYBER_SPRINT_TEXTS.length);
+  const textSnippet = CYBER_SPRINT_TEXTS[snippetIdx];
+  const textSnippetEn = CYBER_SPRINT_TEXTS_EN[snippetIdx] || CYBER_SPRINT_TEXTS_EN[0];
   const shuffledQuestions = [...DUEL_QUIZ_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
   const shuffledShieldItems = [...DUEL_CYBER_SHIELD_ITEMS].sort(() => Math.random() - 0.5).slice(0, 6);
   const pcParts = [...DUEL_PC_PARTS];
@@ -657,6 +776,7 @@ export async function createDuelRoom(
     host: hostPlayer,
     guest: null,
     textSnippet,
+    textSnippetEn,
     questions: shuffledQuestions,
     shieldItems: shuffledShieldItems,
     pcPartsOrder: pcParts,

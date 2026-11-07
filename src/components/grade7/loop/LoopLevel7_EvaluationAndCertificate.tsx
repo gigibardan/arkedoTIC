@@ -14,6 +14,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -22,84 +23,135 @@ interface Props {
 
 interface Question {
   id: string;
-  question: string;
-  options: string[];
+  questionRo: string;
+  questionEn: string;
+  optionsRo: string[];
+  optionsEn: string[];
   correctIndex: number;
-  explanation: string;
+  explanationRo: string;
+  explanationEn: string;
 }
 
 const EVALUATION_QUESTIONS: Question[] = [
   {
     id: 'q1',
-    question: 'Care este caracteristica principală a buclei while (structură repetitivă cu test inițial)?',
-    options: [
+    questionRo: 'Care este caracteristica principală a buclei while (structură repetitivă cu test inițial)?',
+    questionEn: 'What is the primary characteristic of the while loop (pre-test loop structure)?',
+    optionsRo: [
       'Condiția se evaluează ÎNAINTE de fiecare pas; dacă la început este falsă, corpul buclei nu se execută niciodată.',
       'Corpul buclei se execută întotdeauna cel puțin o dată, indiferent de condiție.',
       'Numărul de repetări este fixat dinainte de compilator și nu se poate schimba.',
       'Bucla se poate folosi doar pentru operații cu litere și texte.'
     ],
+    optionsEn: [
+      'The condition is evaluated BEFORE each step; if initially false, the loop body never executes.',
+      'The loop body always executes at least once, regardless of condition truth value.',
+      'The number of repetitions is fixed beforehand by the compiler and cannot vary.',
+      'The loop can only be used for character and string operations.'
+    ],
     correctIndex: 0,
-    explanation: 'while este o structură repetitivă condiționată anterior (cu test inițial). Condiția este verificată la fiecare intrare în buclă.'
+    explanationRo: 'while este o structură repetitivă condiționată anterior (cu test inițial). Condiția este verificată la fiecare intrare în buclă.',
+    explanationEn: 'while is a pre-tested loop structure. The condition is verified prior to each entrance into the loop body.'
   },
   {
     id: 'q2',
-    question: 'Cum extragem cifra unităților (ultima cifră din dreapta) a unui număr natural n în C++?',
-    options: [
+    questionRo: 'Cum extragem cifra unităților (ultima cifră din dreapta) a unui număr natural n în C++?',
+    questionEn: 'How do we extract the units digit (rightmost digit) of a natural number n in C++?',
+    optionsRo: [
       'cifra = n % 10; (restul împărțirii întregi la 10)',
       'cifra = n / 10;',
       'cifra = n - 10;',
       'cifra = n * 10;'
     ],
+    optionsEn: [
+      'digit = n % 10; (remainder of integer division by 10)',
+      'digit = n / 10;',
+      'digit = n - 10;',
+      'digit = n * 10;'
+    ],
     correctIndex: 0,
-    explanation: 'Operatorul modulo 10 (n % 10) returnează restul împărțirii la 10, adică ultima cifră a numărului în baza 10.'
+    explanationRo: 'Operatorul modulo 10 (n % 10) returnează restul împărțirii la 10, adică ultima cifră a numărului în baza 10.',
+    explanationEn: 'The modulo 10 operator (n % 10) returns the remainder modulo 10, i.e. the base-10 units digit.'
   },
   {
     id: 'q3',
-    question: 'Cum eliminăm (tăiem) ultima cifră a numărului n pentru a trece la cifra următoare?',
-    options: [
+    questionRo: 'Cum eliminăm (tăiem) ultima cifră a numărului n pentru a trece la cifra următoare?',
+    questionEn: 'How do we truncate (chop) the last digit of number n to proceed to the next digit?',
+    optionsRo: [
       'n = n / 10; (câtul împărțirii întregi)',
       'n = n % 10;',
       'n = n - 1;',
       'n = 0;'
     ],
+    optionsEn: [
+      'n = n / 10; (integer quotient of division by 10)',
+      'n = n % 10;',
+      'n = n - 1;',
+      'n = 0;'
+    ],
     correctIndex: 0,
-    explanation: 'Împărțirea întreagă la 10 (n = n / 10) șterge ultima cifră din număr.'
+    explanationRo: 'Împărțirea întreagă la 10 (n = n / 10) șterge ultima cifră din număr.',
+    explanationEn: 'Integer division by 10 (n = n / 10) drops the rightmost digit.'
   },
   {
     id: 'q4',
-    question: 'Ce cauzează apariția unei bucle infinite (infinite loop) într-un program C++?',
-    options: [
+    questionRo: 'Ce cauzează apariția unei bucle infinite (infinite loop) într-un program C++?',
+    questionEn: 'What causes an infinite loop in a C++ program?',
+    optionsRo: [
       'Omiterea instrucțiunii de pas sau scrierea unei condiții care rămâne permanent adevărată.',
       'Utilizarea tipului de date int în loc de float.',
       'Afișarea unui mesaj cu instrucțiunea cout.',
       'Declararea mai multor variabile în aceeași linie.'
     ],
+    optionsEn: [
+      'Omitting the step instruction or creating a condition that evaluates to true indefinitely.',
+      'Using the int data type instead of float.',
+      'Printing a message via the cout statement.',
+      'Declaring multiple variables on the same line.'
+    ],
     correctIndex: 0,
-    explanation: 'O buclă devine infinită atunci când variabila care guvernează condiția nu se apropie niciodată de oprire, blocând procesorul.'
+    explanationRo: 'O buclă devine infinită atunci când variabila care guvernează condiția nu se apropie niciodată de oprire, blocând procesorul.',
+    explanationEn: 'A loop turns infinite when the controlling variable never approaches the stopping condition, freezing CPU execution.'
   },
   {
     id: 'q5',
-    question: 'Care este formula matematică corectă pentru construirea numărului oglindit?',
-    options: [
+    questionRo: 'Care este formula matematică corectă pentru construirea numărului oglindit?',
+    questionEn: 'What is the correct mathematical formula for building a reversed number?',
+    optionsRo: [
+      'ogl = ogl * 10 + n % 10;',
+      'ogl = ogl + n % 10;',
+      'ogl = ogl * 10;',
+      'ogl = n % 10 * 10;'
+    ],
+    optionsEn: [
       'ogl = ogl * 10 + n % 10;',
       'ogl = ogl + n % 10;',
       'ogl = ogl * 10;',
       'ogl = n % 10 * 10;'
     ],
     correctIndex: 0,
-    explanation: 'ogl * 10 deplasează cifrele deja oglindite cu un ordin spre stânga, permițând adăugarea noii cifre n % 10 la unități.'
+    explanationRo: 'ogl * 10 deplasează cifrele deja oglindite cu un ordin spre stânga, permițând adăugarea noii cifre n % 10 la unități.',
+    explanationEn: 'ogl * 10 shifts already accumulated digits one place leftwards, allowing the fresh digit n % 10 to occupy units.'
   },
   {
     id: 'q6',
-    question: 'De ce salvăm copia clona = n înainte de bucla de calcul a oglinditului?',
-    options: [
+    questionRo: 'De ce salvăm copia clona = n înainte de bucla de calcul a oglinditului?',
+    questionEn: 'Why do we store a copy clona = n before running the reversed number loop?',
+    optionsRo: [
       'Deoarece algoritmul while (n > 0) taie cifrele succesiv, lăsând numărul n egal cu 0 la final.',
       'Pentru că variabila n se șterge automat din memoria RAM.',
       'Pentru a putea schimba tipul variabilei din int în double.',
       'Este o instrucțiune decorativă fără impact matematic.'
     ],
+    optionsEn: [
+      'Because the while (n > 0) algorithm chops digits sequentially, leaving n equal to 0 at the end.',
+      'Because the variable n gets automatically deleted from RAM.',
+      'To enable converting the variable type from int to double.',
+      'It is merely decorative without mathematical consequence.'
+    ],
     correctIndex: 0,
-    explanation: 'Prin împărțiri repetate la 10, valoarea lui n este distrusă și devine 0. Copia clona este necesară pentru verificarea finală: clona == ogl.'
+    explanationRo: 'Prin împărțiri repetate la 10, valoarea lui n este distrusă și devine 0. Copia clona este necesară pentru verificarea finală: clona == ogl.',
+    explanationEn: 'Repeated divisions by 10 destroy the original value of n, making it 0. The clone copy is needed for the final comparison: clona == ogl.'
   }
 ];
 
@@ -107,6 +159,7 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
   onPass,
   studentName = 'Elev Programator'
 }) => {
+  const { lang } = useLanguage();
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -122,18 +175,20 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
     newAnswers[currentQIndex] = optionIdx;
     setSelectedAnswers(newAnswers);
 
+    const explanation = lang === 'ro' ? currentQ.explanationRo : currentQ.explanationEn;
+
     if (isCorrect) {
       sounds.playSuccess();
       setScore(s => s + Math.round(100 / EVALUATION_QUESTIONS.length));
       setFeedback({
         isCorrect: true,
-        text: `Excelent! ${currentQ.explanation}`
+        text: `${lang === 'ro' ? 'Excelent!' : 'Excellent!'} ${explanation}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Răspuns incorect. ${currentQ.explanation}`
+        text: `${lang === 'ro' ? 'Răspuns incorect.' : 'Incorrect answer.'} ${explanation}`
       });
     }
   };
@@ -162,21 +217,31 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 7 din 7 • Evaluare &amp; Certificare
+              {lang === 'ro' ? 'Nivelul 7 din 7 • Evaluare & Certificare' : 'Level 7 of 7 • Assessment & Certification'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Curriculum Național OMEN 3393/2017 &amp; OM 5420/2024</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro'
+                ? 'Curriculum Național OMEN 3393/2017 & OM 5420/2024'
+                : 'National Curriculum OMEN 3393/2017 & OM 5420/2024'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Award className="w-6 h-6 text-orange-400" />
-            <span>Evaluare Finală: Bucle while &amp; Prelucrarea Cifrelor</span>
+            <span>
+              {lang === 'ro'
+                ? 'Evaluare Finală: Bucle while & Prelucrarea Cifrelor'
+                : 'Final Assessment: while Loops & Digit Processing'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Răspunde corect la cele 6 întrebări oficiale pentru a valida cunoștințele din Modulul 4D și a obține Certificatul Oficial de Competență Digitală!
+            {lang === 'ro'
+              ? 'Răspunde corect la cele 6 întrebări oficiale pentru a valida cunoștințele din Modulul 4D și a obține Certificatul Oficial de Competență Digitală!'
+              : 'Answer the 6 official questions correctly to validate knowledge from Module 4D and earn your Official Digital Competence Certificate!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Progres Examen:</span>
+          <span className="text-[11px] font-mono text-slate-400">{lang === 'ro' ? 'Progres Examen:' : 'Exam Progress:'}</span>
           <span className="text-xl sm:text-2xl font-black font-mono text-orange-400">
             {isExamCompleted ? '100%' : `${currentQIndex + 1} / ${EVALUATION_QUESTIONS.length}`}
           </span>
@@ -192,21 +257,23 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
                 {currentQIndex + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Întrebarea {currentQIndex + 1} din {EVALUATION_QUESTIONS.length}
+                {lang === 'ro'
+                  ? `Întrebarea ${currentQIndex + 1} din ${EVALUATION_QUESTIONS.length}`
+                  : `Question ${currentQIndex + 1} of ${EVALUATION_QUESTIONS.length}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Notare conform baremului Art Klett
+              {lang === 'ro' ? 'Notare conform baremului Art Klett' : 'Graded per Art Klett criteria'}
             </span>
           </div>
 
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-sans text-sm sm:text-base text-white font-semibold leading-relaxed">
-            {currentQ.question}
+            {lang === 'ro' ? currentQ.questionRo : currentQ.questionEn}
           </div>
 
           {/* Options */}
           <div className="flex flex-col gap-3">
-            {currentQ.options.map((opt, idx) => {
+            {(lang === 'ro' ? currentQ.optionsRo : currentQ.optionsEn).map((opt, idx) => {
               const isSelected = selectedAnswers[currentQIndex] === idx;
               const hasAnswered = selectedAnswers[currentQIndex] !== undefined;
 
@@ -268,8 +335,8 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
               >
                 <span>
                   {currentQIndex + 1 === EVALUATION_QUESTIONS.length
-                    ? 'Vezi Diploma & Certificatul Oficial'
-                    : 'Următoarea Întrebare'}
+                    ? (lang === 'ro' ? 'Vezi Diploma & Certificatul Oficial' : 'View Diploma & Official Certificate')
+                    : (lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question')}
                 </span>
                 <Check className="w-4 h-4" />
               </button>
@@ -288,33 +355,51 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
             {/* Header / Republica Romania / Minister */}
             <div className="border-b-2 border-orange-500/30 pb-6 mb-6">
               <div className="text-[11px] font-mono uppercase tracking-widest text-orange-400 font-bold mb-1">
-                MINISTERUL EDUCAȚIEI &bull; ROMÂNIA
+                {lang === 'ro' ? 'MINISTERUL EDUCAȚIEI • ROMÂNIA' : 'MINISTRY OF EDUCATION • ROMANIA'}
               </div>
               <div className="text-xs font-serif text-slate-400 uppercase tracking-wider mb-2">
-                Conform Programei Școlare Naționale OMEN 3393/2017 &amp; OM 5420/2024 &bull; Manual Art Klett
+                {lang === 'ro'
+                  ? 'Conform Programei Școlare Naționale OMEN 3393/2017 & OM 5420/2024 • Manual Art Klett'
+                  : 'According to National Curriculum OMEN 3393/2017 & OM 5420/2024 • Art Klett Textbook'}
               </div>
               <h1 className="text-2xl sm:text-4xl font-serif font-black text-white tracking-wide uppercase">
-                CERTIFICAT DE COMPETENȚĂ DIGITALĂ
+                {lang === 'ro' ? 'CERTIFICAT DE COMPETENȚĂ DIGITALĂ' : 'CERTIFICATE OF DIGITAL COMPETENCE'}
               </h1>
               <div className="text-sm font-mono text-orange-400 font-bold mt-1">
-                DISCIPLINA: INFORMATICĂ ȘI TIC &bull; CLASA A VII-A
+                {lang === 'ro'
+                  ? 'DISCIPLINA: INFORMATICĂ ȘI TIC • CLASA A VII-A'
+                  : 'SUBJECT: COMPUTER SCIENCE & ICT • GRADE 7'}
               </div>
             </div>
 
             {/* Recipient */}
             <div className="my-6 space-y-2">
               <div className="text-xs uppercase tracking-wider text-slate-400 font-mono">
-                Se acordă cu distincție elevului / programatorului:
+                {lang === 'ro'
+                  ? 'Se acordă cu distincție elevului / programatorului:'
+                  : 'Conferred with distinction to student / programmer:'}
               </div>
               <div className="text-2xl sm:text-3xl font-serif font-bold text-orange-300 underline underline-offset-8 decoration-orange-500/50">
                 {studentName}
               </div>
               <div className="text-xs text-slate-300 max-w-xl mx-auto pt-2 leading-relaxed font-sans">
-                Pentru absolvirea cu succes a probei de evaluare practică și teoretică a Modulului 4D:
-                <br />
-                <strong className="text-white">
-                  &bdquo;Structura Repetitivă while &amp; Algoritmi pe Cifrele unui Număr în C++&rdquo;
-                </strong>
+                {lang === 'ro' ? (
+                  <>
+                    Pentru absolvirea cu succes a probei de evaluare practică și teoretică a Modulului 4D:
+                    <br />
+                    <strong className="text-white">
+                      „Structura Repetitivă while & Algoritmi pe Cifrele unui Număr în C++”
+                    </strong>
+                  </>
+                ) : (
+                  <>
+                    For the successful completion of the theoretical and practical evaluation for Module 4D:
+                    <br />
+                    <strong className="text-white">
+                      &quot;while Loop Structure & Digit Algorithms in C++&quot;
+                    </strong>
+                  </>
+                )}
               </div>
             </div>
 
@@ -322,21 +407,27 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-6 text-left text-xs font-mono">
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300">
                 <div className="text-emerald-400 font-bold mb-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Competența 2.1
+                  <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Competența 2.1' : 'Competency 2.1'}
                 </div>
-                Descompunerea algoritmilor de prelucrare a numerelor în bucle condiționate anterior (while).
+                {lang === 'ro'
+                  ? 'Descompunerea algoritmilor de prelucrare a numerelor în bucle condiționate anterior (while).'
+                  : 'Decomposition of number processing algorithms into pre-tested conditional loops (while).'}
               </div>
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300">
                 <div className="text-cyan-400 font-bold mb-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Competența 2.2
+                  <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Competența 2.2' : 'Competency 2.2'}
                 </div>
-                Stăpânirea mecanismului de aur: extragerea ultimei cifre (n % 10) și tăierea cifrelor (n / 10).
+                {lang === 'ro'
+                  ? 'Stăpânirea mecanismului de aur: extragerea ultimei cifre (n % 10) și tăierea cifrelor (n / 10).'
+                  : 'Mastery of the golden mechanism: extracting the units digit (n % 10) and truncating (n / 10).'}
               </div>
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300">
                 <div className="text-amber-400 font-bold mb-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Algoritmi Cifre
+                  <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Algoritmi Cifre' : 'Digit Algorithms'}
                 </div>
-                Calculul sumei cifrelor, contorizarea cifrelor pare, cifra minimă/maximă și testul de număr palindrom.
+                {lang === 'ro'
+                  ? 'Calculul sumei cifrelor, contorizarea cifrelor pare, cifra minimă/maximă și testul de număr palindrom.'
+                  : 'Digit sum calculation, even digit counter, min/max digit, and palindrome testing.'}
               </div>
             </div>
 
@@ -347,20 +438,29 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
                   🛡️
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-bold">Sigiliu Digital Ark3do</div>
+                  <div className="text-white font-bold">{lang === 'ro' ? 'Sigiliu Digital Ark3do' : 'Ark3do Digital Seal'}</div>
                   <div className="text-[10px]">ID: CERT-G7-LOOP-{Date.now().toString().slice(-6)}</div>
-                  <div className="text-[10px] text-emerald-400">Validat &bull; Nota 10 (Zece)</div>
+                  <div className="text-[10px] text-emerald-400">
+                    {lang === 'ro' ? 'Validat • Nota 10 (Zece)' : 'Validated • Grade 10 (A+)'}
+                  </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-orange-400" />
-                <span>Data emiterii: {new Date().toLocaleDateString('ro-RO')}</span>
+                <span>
+                  {lang === 'ro' ? 'Data emiterii: ' : 'Issue Date: '}
+                  {new Date().toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-US')}
+                </span>
               </div>
 
               <div className="text-center sm:text-right">
-                <div className="font-serif italic text-white text-sm">Arky &bull; Asistent Inteligent TIC</div>
-                <div className="text-[10px] text-slate-500">Semnătură Criptografică Oficială</div>
+                <div className="font-serif italic text-white text-sm">
+                  {lang === 'ro' ? 'Arky • Asistent Inteligent TIC' : 'Arky • Intelligent ICT Assistant'}
+                </div>
+                <div className="text-[10px] text-slate-500">
+                  {lang === 'ro' ? 'Semnătură Criptografică Oficială' : 'Official Cryptographic Signature'}
+                </div>
               </div>
             </div>
           </div>
@@ -373,7 +473,7 @@ export const LoopLevel7_EvaluationAndCertificate: React.FC<Props> = ({
               className="px-6 py-3 rounded-2xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-black text-sm transition shadow-lg shadow-orange-500/20 flex items-center gap-2 cursor-pointer active:scale-95 font-sans"
             >
               <Printer className="w-4 h-4" />
-              <span>Imprimă / Salvează Certificatul ca PDF</span>
+              <span>{lang === 'ro' ? 'Imprimă / Salvează Certificatul ca PDF' : 'Print / Save Certificate as PDF'}</span>
             </button>
           </div>
         </div>

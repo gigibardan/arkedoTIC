@@ -308,7 +308,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             {title}
           </h2>
           <p className="text-xs text-rose-300 font-mono mt-1 font-bold">
-            {lang === 'en' ? 'Acest joc este închis de profesor' : 'Acest joc este închis de profesor'}
+            {lang === 'en' ? 'This game is currently locked by the teacher' : 'Acest joc este închis de profesor'}
           </p>
           <div className="my-4 p-4 rounded-2xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-300 text-left">
             <p className="font-semibold text-indigo-300 mb-1">
@@ -743,7 +743,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           isGameOpen(gameSettings, 'mouse_v2') ? 'border-cyan-500/40 hover:border-cyan-400 shadow-cyan-950/30' : 'border-rose-500/40 opacity-95'
         }`}>
           <div className="absolute top-0 right-0 px-3 py-0.5 bg-gradient-to-l from-amber-500 to-cyan-500 text-slate-950 font-black text-[9px] uppercase tracking-wider rounded-bl-xl font-mono shadow-md">
-            🔥 VERSIUNEA 2.0 PRO
+            {lang === 'en' ? '🔥 PRO VERSION 2.0' : '🔥 VERSIUNEA 2.0 PRO'}
           </div>
 
           <div>

@@ -14,6 +14,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -21,14 +22,19 @@ interface Props {
 
 interface BugScenario {
   id: string;
-  title: string;
+  titleRo: string;
+  titleEn: string;
   badCode: string;
-  whyInfinite: string;
-  question: string;
+  whyInfiniteRo: string;
+  whyInfiniteEn: string;
+  questionRo: string;
+  questionEn: string;
   options: {
-    label: string;
+    labelRo: string;
+    labelEn: string;
     isCorrect: boolean;
-    explanation: string;
+    explanationRo: string;
+    explanationEn: string;
   }[];
   fixedCode: string;
 }
@@ -36,75 +42,102 @@ interface BugScenario {
 const BUG_SCENARIOS: BugScenario[] = [
   {
     id: 'b1',
-    title: 'Uitarea Instrucțiunii de Pas (Lipsa lui i++)',
+    titleRo: 'Uitarea Instrucțiunii de Pas (Lipsa lui i++)',
+    titleEn: 'Missing the Step Instruction (Missing i++)',
     badCode: 'int i = 1;\nwhile (i <= 10) {\n    cout << i << " ";\n    // Lipseste incrementarea!\n}',
-    whyInfinite: 'i rămâne mereu 1! Condiția 1 <= 10 este etern adevărată, iar bucla va afișa „1 1 1 1...” la infinit.',
-    question: 'De ce această buclă devine infinită și blochează procesorul?',
+    whyInfiniteRo: 'i rămâne mereu 1! Condiția 1 <= 10 este etern adevărată, iar bucla va afișa „1 1 1 1...” la infinit.',
+    whyInfiniteEn: 'i stays 1 forever! 1 <= 10 remains perpetually true, and the loop prints "1 1 1 1..." infinitely.',
+    questionRo: 'De ce această buclă devine infinită și blochează procesorul?',
+    questionEn: 'Why does this loop become infinite and lock the CPU?',
     options: [
       {
-        label: 'Variabila i nu este modificată niciodată în interiorul acoladelor, rămânând mereu 1 <= 10.',
+        labelRo: 'Variabila i nu este modificată niciodată în interiorul acoladelor, rămânând mereu 1 <= 10.',
+        labelEn: 'Variable i is never updated inside the braces, always remaining 1 <= 10.',
         isCorrect: true,
-        explanation: 'Corect! Pentru ca o buclă să se oprească, variabila testată în condiție trebuie să se apropie de valoarea de oprire la fiecare pas (ex: i++).'
+        explanationRo: 'Corect! Pentru ca o buclă să se oprească, variabila testată în condiție trebuie să se apropie de valoarea de oprire la fiecare pas (ex: i++).',
+        explanationEn: 'Correct! For a loop to stop, the variable tested in the condition must approach the exit condition at each step (e.g., i++).'
       },
       {
-        label: 'C++ nu suportă numere până la 10 în bucle.',
+        labelRo: 'C++ nu suportă numere până la 10 în bucle.',
+        labelEn: 'C++ does not support numbers up to 10 in loops.',
         isCorrect: false,
-        explanation: 'Fals, C++ poate număra până la miliarde.'
+        explanationRo: 'Fals, C++ poate număra până la miliarde.',
+        explanationEn: 'False, C++ can count up to billions.'
       },
       {
-        label: 'Trebuia folosit operatorul == în loc de <=.',
+        labelRo: 'Trebuia folosit operatorul == în loc de <=.',
+        labelEn: 'The == operator should have been used instead of <=.',
         isCorrect: false,
-        explanation: 'Operatorul <= este corect pentru parcurgerea unui interval, problema este lipsa pasului.'
+        explanationRo: 'Operatorul <= este corect pentru parcurgerea unui interval, problema este lipsa pasului.',
+        explanationEn: '<= is appropriate for traversing an interval; the issue is the lack of a step.'
       }
     ],
     fixedCode: 'int i = 1;\nwhile (i <= 10) {\n    cout << i << " ";\n    i++; // Pasul care apropie i de 10!\n}'
   },
   {
     id: 'b2',
-    title: 'Sensul Greșit de Deplasare (Scădere în loc de Adunare)',
+    titleRo: 'Sensul Greșit de Deplasare (Scădere în loc de Adunare)',
+    titleEn: 'Wrong Direction of Movement (Decrement instead of Increment)',
     badCode: 'int i = 1;\nwhile (i < 100) {\n    cout << i << " ";\n    i--; // In loc sa creasca spre 100, i scade!\n}',
-    whyInfinite: 'i devine 0, -1, -2, -3... îndepărtându-se la infinit de 100! Condiția i < 100 va fi MEREU adevărată.',
-    question: 'Ce eroare logică gravă a comis programatorul?',
+    whyInfiniteRo: 'i devine 0, -1, -2, -3... îndepărtându-se la infinit de 100! Condiția i < 100 va fi MEREU adevărată.',
+    whyInfiniteEn: 'i becomes 0, -1, -2, -3... moving infinitely away from 100! i < 100 will ALWAYS be true.',
+    questionRo: 'Ce eroare logică gravă a comis programatorul?',
+    questionEn: 'What serious logical error did the programmer make?',
     options: [
       {
-        label: 'A scris i-- în loc de i++. Variabila scade în valori negative și nu va ajunge niciodată la 100!',
+        labelRo: 'A scris i-- în loc de i++. Variabila scade în valori negative și nu va ajunge niciodată la 100!',
+        labelEn: 'They wrote i-- instead of i++. The variable decreases into negatives and will never reach 100!',
         isCorrect: true,
-        explanation: 'Exact! Când căutăm o limită superioară (i < 100), contorul trebuie să crească (i++), nu să scadă.'
+        explanationRo: 'Exact! Când căutăm o limită superioară (i < 100), contorul trebuie să crească (i++), nu să scadă.',
+        explanationEn: 'Exactly! When targeting an upper boundary (i < 100), the counter must increment (i++), not decrement.'
       },
       {
-        label: 'Numărul 100 este prea mare pentru o buclă.',
+        labelRo: 'Numărul 100 este prea mare pentru o buclă.',
+        labelEn: 'The number 100 is too large for a loop.',
         isCorrect: false,
-        explanation: 'Numărul 100 este foarte mic pentru un procesor modern.'
+        explanationRo: 'Numărul 100 este foarte mic pentru un procesor modern.',
+        explanationEn: '100 is trivial for modern processors.'
       },
       {
-        label: 'Lipsesc ghilimelele din jurul condiției.',
+        labelRo: 'Lipsesc ghilimelele din jurul condiției.',
+        labelEn: 'Quotes are missing around the condition.',
         isCorrect: false,
-        explanation: 'Condițiile nu se pun niciodată între ghilimele.'
+        explanationRo: 'Condițiile nu se pun niciodată între ghilimele.',
+        explanationEn: 'Conditions are never enclosed in quotation marks.'
       }
     ],
     fixedCode: 'int i = 1;\nwhile (i < 100) {\n    cout << i << " ";\n    i++; // Creste corect spre 100\n}'
   },
   {
     id: 'b3',
-    title: 'Tăierea cifrelor: Uitarea lui n = n / 10',
+    titleRo: 'Tăierea cifrelor: Uitarea lui n = n / 10',
+    titleEn: 'Digit Truncation: Missing n = n / 10',
     badCode: 'int n = 458;\nwhile (n > 0) {\n    int u = n % 10;\n    cout << u << " ";\n    // Am uitat sa taiem ultima cifra!\n}',
-    whyInfinite: 'Fără n = n / 10, numărul rămâne mereu 458, afișând ultima cifră 8 la infinit!',
-    question: 'Care este instrucțiunea indispensabilă care reduce numărul la fiecare pas?',
+    whyInfiniteRo: 'Fără n = n / 10, numărul rămâne mereu 458, afișând ultima cifră 8 la infinit!',
+    whyInfiniteEn: 'Without n = n / 10, the number remains 458 forever, outputting the last digit 8 infinitely!',
+    questionRo: 'Care este instrucțiunea indispensabilă care reduce numărul la fiecare pas?',
+    questionEn: 'What is the indispensable instruction that reduces the number at each step?',
     options: [
       {
-        label: 'n = n / 10; (care taie ultima cifră și transformă 458 -> 45 -> 4 -> 0).',
+        labelRo: 'n = n / 10; (care taie ultima cifră și transformă 458 -> 45 -> 4 -> 0).',
+        labelEn: 'n = n / 10; (which chops the last digit and transforms 458 -> 45 -> 4 -> 0).',
         isCorrect: true,
-        explanation: 'Bravo! Fără împărțirea întreagă la 10, numărul n nu va ajunge niciodată la 0, iar bucla nu se va opri.'
+        explanationRo: 'Bravo! Fără împărțirea întreagă la 10, numărul n nu va ajunge niciodată la 0, iar bucla nu se va opri.',
+        explanationEn: 'Bravo! Without integer division by 10, number n will never reach 0, and the loop will never stop.'
       },
       {
-        label: 'n = n % 10;',
+        labelRo: 'n = n % 10;',
+        labelEn: 'n = n % 10;',
         isCorrect: false,
-        explanation: 'Aceasta extrage cifra unităților, dar nu reduce numărul întreg.'
+        explanationRo: 'Aceasta extrage cifra unităților, dar nu reduce numărul întreg.',
+        explanationEn: 'This extracts the units digit, but does not truncate the whole number.'
       },
       {
-        label: 'n = 0;',
+        labelRo: 'n = 0;',
+        labelEn: 'n = 0;',
         isCorrect: false,
-        explanation: 'Dacă punem direct n = 0, bucla se oprește după o singură cifră fără a le prelucra pe celelalte.'
+        explanationRo: 'Dacă punem direct n = 0, bucla se oprește după o singură cifră fără a le prelucra pe celelalte.',
+        explanationEn: 'If we assign n = 0 directly, the loop halts after just one digit without processing the others.'
       }
     ],
     fixedCode: 'int n = 458;\nwhile (n > 0) {\n    int u = n % 10;\n    cout << u << " ";\n    n = n / 10; // Taie ultima cifra!\n}'
@@ -112,6 +145,7 @@ const BUG_SCENARIOS: BugScenario[] = [
 ];
 
 export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptIdx, setSelectedOptIdx] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -141,7 +175,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
   const handleStartInfiniteSimulation = () => {
     sounds.playWrong();
     setIsSimulatingLoop(true);
-    setSimOutput(['[START EXECUȚIE PROIECT FĂRĂ INSTRUCȚIUNE DE PAS]']);
+    setSimOutput([lang === 'ro' ? '[START EXECUȚIE PROIECT FĂRĂ INSTRUCȚIUNE DE PAS]' : '[START PROJECT EXECUTION WITHOUT STEP STATEMENT]']);
   };
 
   const handleEmergencyStop = () => {
@@ -150,8 +184,8 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
     setCpuTemp(42);
     setSimOutput(prev => [
       ...prev,
-      '>>> SEMNAL TRANSMIS: Ctrl + C <<<',
-      '[PROCES OPRIT DE URGENȚĂ. CPU RĂCIT.]'
+      lang === 'ro' ? '>>> SEMNAL TRANSMIS: Ctrl + C <<<' : '>>> SIGNAL SENT: Ctrl + C <<<',
+      lang === 'ro' ? '[PROCES OPRIT DE URGENȚĂ. CPU RĂCIT.]' : '[EMERGENCY PROCESS HALTED. CPU COOLED.]'
     ]);
   };
 
@@ -160,18 +194,19 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
     setSelectedOptIdx(idx);
 
     const opt = currentScenario.options[idx];
+    const explanation = lang === 'ro' ? opt.explanationRo : opt.explanationEn;
     if (opt.isCorrect) {
       sounds.playSuccess();
       setScore(s => s + 35);
       setFeedback({
         isCorrect: true,
-        text: `Excelent observat! ${opt.explanation}`
+        text: `${lang === 'ro' ? 'Excelent observat!' : 'Great catch!'} ${explanation}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Atenție! ${opt.explanation}`
+        text: `${lang === 'ro' ? 'Atenție!' : 'Careful!'} ${explanation}`
       });
     }
   };
@@ -198,21 +233,25 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 2 din 7 • Modulul 4D
+              {lang === 'ro' ? 'Nivelul 2 din 7 • Modulul 4D' : 'Level 2 of 7 • Module 4D'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 81</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 81' : 'Art Klett Textbook p. 81'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Flame className="w-6 h-6 text-red-400 animate-pulse" />
-            <span>Capcana Buclei Infinite (Infinite Loop Trap)</span>
+            <span>{lang === 'ro' ? 'Capcana Buclei Infinite (Infinite Loop Trap)' : 'Infinite Loop Trap'}</span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Cea mai periculoasă capcană la structurile repetitive: Dacă uiți să apropii contorul de condiția de oprire, programul rulează la nesfârșit și îngheață calculatorul!
+            {lang === 'ro'
+              ? 'Cea mai periculoasă capcană la structurile repetitive: Dacă uiți să apropii contorul de condiția de oprire, programul rulează la nesfârșit și îngheață calculatorul!'
+              : 'The most dangerous loop pitfall: if you forget to advance the counter toward the exit condition, the program spins forever and freezes the computer!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Scor Nivel 2:</span>
+          <span className="text-[11px] font-mono text-slate-400">{lang === 'ro' ? 'Scor Nivel 2:' : 'Level 2 Score:'}</span>
           <span className="text-xl sm:text-2xl font-black font-mono text-red-400">{score} / 100 XP</span>
         </div>
       </div>
@@ -226,10 +265,14 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-white">
-                Simulator de Încălzire Procesor (100% CPU Consumption)
+                {lang === 'ro'
+                  ? 'Simulator de Încălzire Procesor (100% CPU Consumption)'
+                  : 'CPU Thermal Simulator (100% CPU Consumption)'}
               </h3>
               <p className="text-xs text-slate-400">
-                Testează ce se întâmplă când pornești o buclă fără condiție de oprire și folosește scurtătura salvatoare <code className="text-amber-300 font-bold">Ctrl + C</code>!
+                {lang === 'ro'
+                  ? 'Testează ce se întâmplă când pornești o buclă fără condiție de oprire și folosește scurtătura salvatoare Ctrl + C!'
+                  : 'See what happens when running a loop with no stopping progress and trigger the emergency Ctrl + C shortcut!'}
               </p>
             </div>
           </div>
@@ -242,7 +285,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
                 className="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-mono font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-red-600/30"
               >
                 <Flame className="w-3.5 h-3.5" />
-                <span>Simulează Bucla Infinită!</span>
+                <span>{lang === 'ro' ? 'Simulează Bucla Infinită!' : 'Simulate Infinite Loop!'}</span>
               </button>
             ) : (
               <button
@@ -251,7 +294,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
                 className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-mono font-black transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-500/40 animate-bounce"
               >
                 <Power className="w-4 h-4" />
-                <span>APASĂ Ctrl + C (OPREȘTE FORȚAT!)</span>
+                <span>{lang === 'ro' ? 'APASĂ Ctrl + C (OPREȘTE FORȚAT!)' : 'PRESS Ctrl + C (FORCE STOP!)'}</span>
               </button>
             )}
           </div>
@@ -262,12 +305,12 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
           <div className="md:col-span-5 bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3 font-mono text-xs">
             <div className="flex items-center justify-between">
               <span className="text-slate-400 flex items-center gap-1">
-                <Cpu className="w-3.5 h-3.5 text-cyan-400" /> Temperatură Nucleu CPU:
+                <Cpu className="w-3.5 h-3.5 text-cyan-400" /> {lang === 'ro' ? 'Temperatură Nucleu CPU:' : 'CPU Core Temperature:'}
               </span>
               <span className={`text-base font-black ${
                 cpuTemp >= 80 ? 'text-red-400 animate-pulse' : cpuTemp >= 60 ? 'text-amber-400' : 'text-emerald-400'
               }`}>
-                {cpuTemp}&deg;C {cpuTemp >= 90 ? '🔥 CRITIC!' : ''}
+                {cpuTemp}&deg;C {cpuTemp >= 90 ? (lang === 'ro' ? '🔥 CRITIC!' : '🔥 CRITICAL!') : ''}
               </span>
             </div>
 
@@ -285,18 +328,23 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
             </div>
 
             <div className="text-[11px] text-slate-400 leading-snug">
-              💡 <strong>Regula de Aur din Manual:</strong> Orice buclă <code className="text-orange-400">while</code> trebuie să conțină o instrucțiune care modifică variabila testată, garantând atingerea condiției de oprire!
+              💡 <strong>{lang === 'ro' ? 'Regula de Aur din Manual:' : 'Golden Rule from Textbook:'}</strong>{' '}
+              {lang === 'ro'
+                ? 'Orice buclă while trebuie să conțină o instrucțiune care modifică variabila testată, garantând atingerea condiției de oprire!'
+                : 'Every while loop must contain a statement modifying the tested variable, ensuring the exit condition is eventually met!'}
             </div>
           </div>
 
           {/* Console Output Dump */}
           <div className="md:col-span-7 bg-black p-3.5 rounded-2xl border border-slate-800 font-mono text-[11px] h-32 overflow-y-auto flex flex-col justify-end">
-            <div className="text-slate-600 mb-1">// Monitor ieșire ecran:</div>
+            <div className="text-slate-600 mb-1">{lang === 'ro' ? '// Monitor ieșire ecran:' : '// Screen output monitor:'}</div>
             {simOutput.length === 0 ? (
-              <div className="text-slate-600 italic">Sistem în stare de repaus normală (idle).</div>
+              <div className="text-slate-600 italic">
+                {lang === 'ro' ? 'Sistem în stare de repaus normală (idle).' : 'System is idle.'}
+              </div>
             ) : (
               simOutput.map((line, i) => (
-                <div key={i} className={line.includes('OPRIT') ? 'text-emerald-400 font-bold' : line.includes('START') ? 'text-amber-400' : 'text-red-400'}>
+                <div key={i} className={line.includes('OPRIT') || line.includes('HALTED') ? 'text-emerald-400 font-bold' : line.includes('START') ? 'text-amber-400' : 'text-red-400'}>
                   {line}
                 </div>
               ))
@@ -314,11 +362,13 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
                 {currentIdx + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Detectorul de Bucle Infinite {currentIdx + 1}/{BUG_SCENARIOS.length}: {currentScenario.title}
+                {lang === 'ro'
+                  ? `Detectorul de Bucle Infinite ${currentIdx + 1}/${BUG_SCENARIOS.length}: ${currentScenario.titleRo}`
+                  : `Infinite Loop Detector ${currentIdx + 1}/${BUG_SCENARIOS.length}: ${currentScenario.titleEn}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Cazul {currentIdx + 1}/{BUG_SCENARIOS.length}
+              {lang === 'ro' ? `Cazul ${currentIdx + 1}/${BUG_SCENARIOS.length}` : `Case ${currentIdx + 1}/${BUG_SCENARIOS.length}`}
             </span>
           </div>
 
@@ -326,7 +376,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
           <div className="bg-slate-950 p-4 rounded-2xl border border-red-500/40 font-mono text-xs sm:text-sm">
             <div className="flex items-center justify-between text-[11px] text-red-400 mb-2">
               <span className="flex items-center gap-1 font-bold">
-                <Bug className="w-3.5 h-3.5" /> Cod greșit cu risc de buclă infinită:
+                <Bug className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Cod greșit cu risc de buclă infinită:' : 'Buggy code risking infinite loop:'}
               </span>
             </div>
             <pre className="text-red-200 overflow-x-auto">
@@ -335,7 +385,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
           </div>
 
           <div className="text-sm font-bold text-white">
-            {currentScenario.question}
+            {lang === 'ro' ? currentScenario.questionRo : currentScenario.questionEn}
           </div>
 
           {/* Options */}
@@ -368,7 +418,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
                     {String.fromCharCode(65 + idx)}
                   </span>
                   <div className="text-xs sm:text-sm leading-relaxed font-sans">
-                    {opt.label}
+                    {lang === 'ro' ? opt.labelRo : opt.labelEn}
                   </div>
                 </button>
               );
@@ -397,7 +447,8 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
               <div className="bg-slate-950 p-3.5 rounded-2xl border border-emerald-500/40 font-mono text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                   <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-0.5 flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Soluția corectă (fără buclă infinită):
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />{' '}
+                    {lang === 'ro' ? 'Soluția corectă (fără buclă infinită):' : 'Correct solution (no infinite loop):'}
                   </div>
                   <pre className="text-emerald-300 text-xs">{currentScenario.fixedCode}</pre>
                 </div>
@@ -407,7 +458,7 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
                   onClick={handleNext}
                   className="px-4 py-2 rounded-xl bg-red-500 hover:bg-red-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer shadow-md self-end sm:self-auto font-sans"
                 >
-                  <span>Continuă</span>
+                  <span>{lang === 'ro' ? 'Continuă' : 'Continue'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -422,15 +473,17 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Protecție Împotriva Buclelor Infinite Asigurată!
+              {lang === 'ro' ? 'Protecție Împotriva Buclelor Infinite Asigurată!' : 'Infinite Loop Protection Secured!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Ai învățat să identifici lipsa instrucțiunilor de pas, să alegi sensul corect de parcurgere și să asiguri oprirea algoritmilor!
+              {lang === 'ro'
+                ? 'Ai învățat să identifici lipsa instrucțiunilor de pas, să alegi sensul corect de parcurgere și să asiguri oprirea algoritmilor!'
+                : 'You have learned how to spot missing step instructions, select the right direction, and ensure algorithms always terminate!'}
             </p>
           </div>
 
           <div className="bg-slate-950/80 px-6 py-2.5 rounded-2xl border border-slate-800 text-red-400 font-mono font-bold text-sm">
-            Scor obținut: +{score} XP
+            {lang === 'ro' ? `Scor obținut: +${score} XP` : `Earned Score: +${score} XP`}
           </div>
 
           <button
@@ -438,7 +491,11 @@ export const LoopLevel2_InfiniteLoopTrap: React.FC<Props> = ({ onPass }) => {
             onClick={handleFinishLevel}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 3: Mecanismul de Aur (Extragere n % 10 &amp; Tăiere n / 10)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 3: Mecanismul de Aur (Extragere n % 10 & Tăiere n / 10)'
+                : 'Proceed to Level 3: Golden Mechanism (Extract n % 10 & Truncate n / 10)'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

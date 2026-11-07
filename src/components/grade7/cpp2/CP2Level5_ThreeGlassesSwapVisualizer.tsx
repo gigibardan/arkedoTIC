@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Sparkles, CheckCircle2, ArrowRight, RotateCcw, Play, GlassWater, Droplets, HelpCircle, Lightbulb, Check } from 'lucide-react';
+import { Sparkles, CheckCircle2, ArrowRight, RotateCcw, GlassWater, Droplets, HelpCircle } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -9,14 +10,10 @@ interface Props {
 type LiquidType = 'orange' | 'cyan' | 'empty';
 
 export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }) => {
-  // Step in swap:
-  // 0: Initial state (A=Orange/42, B=Cyan/88, AUX=Empty/0)
-  // 1: After aux = a; (AUX gets Orange/42, A retains 42 in RAM copy, but conceptually "available")
-  // 2: After a = b; (A gets Cyan/88)
-  // 3: After b = aux; (B gets Orange/42) -> SWAP COMPLETE!
+  const { lang } = useLanguage();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [completedSuccessfully, setCompletedSuccessfully] = useState<boolean>(false);
-  const [selectedInstruction, setSelectedInstruction] = useState<string | null>(null);
+  const [, setSelectedInstruction] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Values in memory
@@ -42,7 +39,11 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
         setCurrentStep(1);
       } else {
         sounds.playError();
-        setErrorMsg('Greșit! Primul pas trebuie să fie salvarea valorii lui a în paharul auxiliar: aux = a;');
+        setErrorMsg(
+          lang === 'ro'
+            ? 'Greșit! Primul pas trebuie să fie salvarea valorii lui a în paharul auxiliar: aux = a;'
+            : 'Incorrect! The first step must save the value of a into the auxiliary glass: aux = a;'
+        );
       }
     } else if (currentStep === 1) {
       if (instruction === 'a = b;') {
@@ -52,7 +53,11 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
         setCurrentStep(2);
       } else {
         sounds.playError();
-        setErrorMsg('Greșit! Paharul A poate primi acum valoarea lui B: a = b;');
+        setErrorMsg(
+          lang === 'ro'
+            ? 'Greșit! Paharul A poate primi acum valoarea lui B: a = b;'
+            : 'Incorrect! Glass A can now receive the value of B: a = b;'
+        );
       }
     } else if (currentStep === 2) {
       if (instruction === 'b = aux;') {
@@ -63,7 +68,11 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
         setCompletedSuccessfully(true);
       } else {
         sounds.playError();
-        setErrorMsg('Greșit! Ultimul pas este transferarea valorii salvate în aux în paharul b: b = aux;');
+        setErrorMsg(
+          lang === 'ro'
+            ? 'Greșit! Ultimul pas este transferarea valorii salvate în aux în paharul b: b = aux;'
+            : 'Incorrect! The final step is copying the value saved in aux into glass b: b = aux;'
+        );
       }
     }
   };
@@ -95,20 +104,39 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 text-teal-300 text-xs font-mono mb-3">
               <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-              <span>Nivelul 5 • Clasa a VII-a • Manual Art Klett pag. 76</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Nivelul 5 • Clasa a VII-a • Manual Art Klett pag. 76'
+                  : 'Level 5 • 7th Grade • Art Klett Textbook p. 76'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Regula celor 3 Pahare: <span className="text-teal-400 font-mono">Algoritmul de Interschimbare (Swap)</span>
+              {lang === 'ro' ? 'Regula celor 3 Pahare: ' : 'The 3 Glasses Rule: '}
+              <span className="text-teal-400 font-mono">
+                {lang === 'ro' ? 'Algoritmul de Interschimbare (Swap)' : 'The Swap Algorithm'}
+              </span>
             </h1>
             <p className="text-slate-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-              Cum schimbi sucul din două pahare pline fără să verși nicio picătură? Folosești un <strong>al treilea pahar gol</strong> (<code className="text-teal-300 font-mono">aux</code>)! În C++, această tehnică este cel mai celebru algoritm de bază.
+              {lang === 'ro' ? (
+                <>
+                  Cum schimbi sucul din două pahare pline fără să verși nicio picătură? Folosești un <strong>al treilea pahar gol</strong> (<code className="text-teal-300 font-mono">aux</code>)! În C++, această tehnică este cel mai celebru algoritm de bază.
+                </>
+              ) : (
+                <>
+                  How do you swap juices between two full glasses without spilling a drop? You introduce a <strong>third empty glass</strong> (<code className="text-teal-300 font-mono">aux</code>)! In C++, this pattern is the classic foundational swap algorithm.
+                </>
+              )}
             </p>
           </div>
 
           <div className="flex md:flex-col items-center md:items-end justify-between w-full md:w-auto bg-slate-950/60 p-3 rounded-2xl border border-teal-500/20">
-            <span className="text-xs text-teal-400 font-mono">Stare Swap</span>
+            <span className="text-xs text-teal-400 font-mono">
+              {lang === 'ro' ? 'Stare Swap' : 'Swap State'}
+            </span>
             <span className="text-sm font-bold text-teal-300 font-mono">
-              {currentStep === 3 ? 'Completat 100%' : `Pasul ${currentStep + 1} / 3`}
+              {currentStep === 3
+                ? (lang === 'ro' ? 'Completat 100%' : '100% Completed')
+                : (lang === 'ro' ? `Pasul ${currentStep + 1} / 3` : `Step ${currentStep + 1} / 3`)}
             </span>
           </div>
         </div>
@@ -119,7 +147,11 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
         <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-6">
           <div className="flex items-center gap-2 text-white font-bold text-sm">
             <GlassWater className="w-4 h-4 text-teal-400" />
-            <span>Laboratorul celor 3 Pahare (Simulare Fluidă de Memorie)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Laboratorul celor 3 Pahare (Simulare Fluidă de Memorie)'
+                : 'The 3 Glasses Lab (Fluid Memory Simulation)'}
+            </span>
           </div>
           <button
             type="button"
@@ -127,7 +159,7 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
             className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Resetează Paharele</span>
+            <span>{lang === 'ro' ? 'Resetează Paharele' : 'Reset Glasses'}</span>
           </button>
         </div>
 
@@ -136,8 +168,10 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
           {/* Glass A */}
           <div className="flex flex-col items-center">
             <div className="text-xs font-mono font-bold text-amber-300 mb-2 flex items-center gap-1">
-              <span>Paharul [a]</span>
-              <span className="text-slate-500 font-normal">(Variabilă int)</span>
+              <span>{lang === 'ro' ? 'Paharul [a]' : 'Glass [a]'}</span>
+              <span className="text-slate-500 font-normal">
+                {lang === 'ro' ? '(Variabilă int)' : '(int variable)'}
+              </span>
             </div>
 
             {/* Glass Container */}
@@ -165,7 +199,8 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
 
             <div className="mt-3 text-center">
               <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-300">
-                Valoare curentă: <strong className="text-amber-300">{valA}</strong>
+                {lang === 'ro' ? 'Valoare curentă: ' : 'Current value: '}
+                <strong className="text-amber-300">{valA}</strong>
               </span>
             </div>
           </div>
@@ -173,8 +208,10 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
           {/* Glass AUX (Middle) */}
           <div className="flex flex-col items-center">
             <div className="text-xs font-mono font-bold text-teal-300 mb-2 flex items-center gap-1">
-              <span>Paharul [aux]</span>
-              <span className="text-teal-500 font-normal">(Variabilă Auxiliară)</span>
+              <span>{lang === 'ro' ? 'Paharul [aux]' : 'Glass [aux]'}</span>
+              <span className="text-teal-500 font-normal">
+                {lang === 'ro' ? '(Variabilă Auxiliară)' : '(Auxiliary variable)'}
+              </span>
             </div>
 
             {/* Glass Container */}
@@ -189,14 +226,17 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
                 </div>
               ) : (
                 <div className="h-full flex items-center justify-center text-xs text-slate-600 font-mono italic">
-                  [Pahar Gol de Rezervă]
+                  {lang === 'ro' ? '[Pahar Gol de Rezervă]' : '[Empty Reserve Glass]'}
                 </div>
               )}
             </div>
 
             <div className="mt-3 text-center">
               <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-300">
-                Valoare aux: <strong className="text-teal-300">{valAux !== null ? valAux : 'gol (0)'}</strong>
+                {lang === 'ro' ? 'Valoare aux: ' : 'Aux value: '}
+                <strong className="text-teal-300">
+                  {valAux !== null ? valAux : (lang === 'ro' ? 'gol (0)' : 'empty (0)')}
+                </strong>
               </span>
             </div>
           </div>
@@ -204,8 +244,10 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
           {/* Glass B */}
           <div className="flex flex-col items-center">
             <div className="text-xs font-mono font-bold text-sky-300 mb-2 flex items-center gap-1">
-              <span>Paharul [b]</span>
-              <span className="text-slate-500 font-normal">(Variabilă int)</span>
+              <span>{lang === 'ro' ? 'Paharul [b]' : 'Glass [b]'}</span>
+              <span className="text-slate-500 font-normal">
+                {lang === 'ro' ? '(Variabilă int)' : '(int variable)'}
+              </span>
             </div>
 
             {/* Glass Container */}
@@ -227,7 +269,8 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
 
             <div className="mt-3 text-center">
               <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-950 border border-slate-800 text-slate-300">
-                Valoare curentă: <strong className="text-sky-300">{valB}</strong>
+                {lang === 'ro' ? 'Valoare curentă: ' : 'Current value: '}
+                <strong className="text-sky-300">{valB}</strong>
               </span>
             </div>
           </div>
@@ -237,8 +280,12 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
         <div className="mt-8 pt-6 border-t border-slate-800">
           <label className="block text-xs font-mono text-slate-400 mb-3">
             {completedSuccessfully
-              ? '🎉 Swap Reușit! Cele 3 instrucțiuni au fost executate în ordinea perfectă:'
-              : `Selectează instrucțiunea pe care vrei să o execuți pentru Pasul ${currentStep + 1}:`}
+              ? (lang === 'ro'
+                  ? '🎉 Swap Reușit! Cele 3 instrucțiuni au fost executate în ordinea perfectă:'
+                  : '🎉 Swap Successful! All 3 instructions were executed in perfect sequence:')
+              : (lang === 'ro'
+                  ? `Selectează instrucțiunea pe care vrei să o execuți pentru Pasul ${currentStep + 1}:`
+                  : `Select the instruction you want to execute for Step ${currentStep + 1}:`)}
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -255,7 +302,9 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
               }`}
             >
               <span>aux = a;</span>
-              <span className="text-[11px] font-sans font-normal text-slate-400">Pasul 1: Salvează a în aux</span>
+              <span className="text-[11px] font-sans font-normal text-slate-400">
+                {lang === 'ro' ? 'Pasul 1: Salvează a în aux' : 'Step 1: Save a into aux'}
+              </span>
             </button>
 
             <button
@@ -271,7 +320,9 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
               }`}
             >
               <span>a = b;</span>
-              <span className="text-[11px] font-sans font-normal text-slate-400">Pasul 2: Copiază b în a</span>
+              <span className="text-[11px] font-sans font-normal text-slate-400">
+                {lang === 'ro' ? 'Pasul 2: Copiază b în a' : 'Step 2: Copy b into a'}
+              </span>
             </button>
 
             <button
@@ -287,7 +338,9 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
               }`}
             >
               <span>b = aux;</span>
-              <span className="text-[11px] font-sans font-normal text-slate-400">Pasul 3: Pune aux în b</span>
+              <span className="text-[11px] font-sans font-normal text-slate-400">
+                {lang === 'ro' ? 'Pasul 3: Pune aux în b' : 'Step 3: Put aux into b'}
+              </span>
             </button>
           </div>
 
@@ -303,7 +356,16 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
               <div className="flex items-center gap-3">
                 <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
                 <div className="text-xs sm:text-sm text-emerald-200">
-                  <span className="font-bold">Succes Absolut!</span> Valoarea inițială a lui <code className="text-white font-mono">a (42)</code> este acum în <code className="text-white font-mono">b</code>, iar valoarea inițială a lui <code className="text-white font-mono">b (88)</code> este acum în <code className="text-white font-mono">a</code>!
+                  <span className="font-bold">{lang === 'ro' ? 'Succes Absolut!' : 'Total Success!'}</span>{' '}
+                  {lang === 'ro' ? (
+                    <>
+                      Valoarea inițială a lui <code className="text-white font-mono">a (42)</code> este acum în <code className="text-white font-mono">b</code>, iar valoarea inițială a lui <code className="text-white font-mono">b (88)</code> este acum în <code className="text-white font-mono">a</code>!
+                    </>
+                  ) : (
+                    <>
+                      The original value of <code className="text-white font-mono">a (42)</code> is now in <code className="text-white font-mono">b</code>, and the original value of <code className="text-white font-mono">b (88)</code> is now in <code className="text-white font-mono">a</code>!
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -312,7 +374,7 @@ export const CP2Level5_ThreeGlassesSwapVisualizer: React.FC<Props> = ({ onPass }
                 onClick={handleFinish}
                 className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-2 shrink-0 shadow-lg shadow-emerald-500/20 cursor-pointer"
               >
-                <span>Treci la Nivelul 6: Laborator Code::Blocks</span>
+                <span>{lang === 'ro' ? 'Treci la Nivelul 6: Laborator Code::Blocks' : 'Advance to Level 6: Code::Blocks Lab'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

@@ -4,14 +4,10 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertTriangle,
-  Divide,
-  Calculator,
-  Check,
-  RotateCcw,
-  Binary,
-  Code
+  Divide
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -19,112 +15,159 @@ interface Props {
 
 interface ParityQuiz {
   id: string;
-  title: string;
-  problemStatement: string;
+  titleRo: string;
+  titleEn: string;
+  problemStatementRo: string;
+  problemStatementEn: string;
   codeSnippet: string;
   options: {
-    label: string;
+    labelRo: string;
+    labelEn: string;
     isCorrect: boolean;
-    explanation: string;
+    explanationRo: string;
+    explanationEn: string;
   }[];
 }
 
 const PARITY_QUIZZES: ParityQuiz[] = [
   {
     id: 'p1',
-    title: 'Condiția Standard de Paritate',
-    problemStatement: 'Care este expresia corectă în C++ pentru a testa dacă numărul întreg n este număr par?',
-    codeSnippet: 'if (_______) {\n    cout << "Numar PAR";\n} else {\n    cout << "Numar IMPAR";\n}',
+    titleRo: 'Condiția Standard de Paritate',
+    titleEn: 'Standard Evenness Condition',
+    problemStatementRo: 'Care este expresia corectă în C++ pentru a testa dacă numărul întreg n este număr par?',
+    problemStatementEn: 'What is the correct C++ expression to test if integer n is an even number?',
+    codeSnippet: `if (_______) {
+    cout << "Numar PAR";
+} else {
+    cout << "Numar IMPAR";
+}`,
     options: [
       {
-        label: 'n % 2 == 0 (restul împărțirii lui n la 2 este egal cu zero)',
+        labelRo: 'n % 2 == 0 (restul împărțirii lui n la 2 este egal cu zero)',
+        labelEn: 'n % 2 == 0 (remainder of dividing n by 2 equals zero)',
         isCorrect: true,
-        explanation: 'Corect! Un număr este par dacă se divide exact cu 2, adică n % 2 este 0.'
+        explanationRo: 'Corect! Un număr este par dacă se divide exact cu 2, adică n % 2 este 0.',
+        explanationEn: 'Correct! A number is even if it divides evenly by 2, meaning n % 2 is 0.'
       },
       {
-        label: 'n / 2 == 0 (câtul împărțirii lui n la 2 este zero)',
+        labelRo: 'n / 2 == 0 (câtul împărțirii lui n la 2 este zero)',
+        labelEn: 'n / 2 == 0 (quotient of dividing n by 2 is zero)',
         isCorrect: false,
-        explanation: 'Incorect! Operatorul / dă câtul întreg. n / 2 == 0 este adevărat doar pentru 0 și 1.'
+        explanationRo: 'Incorect! Operatorul / dă câtul întreg. n / 2 == 0 este adevărat doar pentru 0 și 1.',
+        explanationEn: 'Incorrect! Operator / computes integer quotient. n / 2 == 0 is only true for 0 and 1.'
       },
       {
-        label: 'n % 2 = 0 (cu un singur semn egal)',
+        labelRo: 'n % 2 = 0 (cu un singur semn egal)',
+        labelEn: 'n % 2 = 0 (single equals sign)',
         isCorrect: false,
-        explanation: 'Atenție la capcana de la Nivelul 2! Cu un singur egal este atribuire, ceea ce ar fi greșit într-o condiție.'
+        explanationRo: 'Atenție la capcană! Cu un singur egal este atribuire, ceea ce ar fi greșit într-o condiție.',
+        explanationEn: 'Watch out! Single equals is an assignment operator, which is invalid inside an if condition.'
       }
     ]
   },
   {
     id: 'p2',
-    title: 'Testarea Imparității',
-    problemStatement: 'Cum putem testa direct dacă un număr n este impar, fără a folosi ramura else?',
-    codeSnippet: 'if (_______) {\n    cout << "Numar IMPAR detectat!";\n}',
+    titleRo: 'Testarea Imparității',
+    titleEn: 'Oddness Testing',
+    problemStatementRo: 'Cum putem testa direct dacă un număr n este impar, fără a folosi ramura else?',
+    problemStatementEn: 'How can we directly test if number n is odd, without relying on an else branch?',
+    codeSnippet: `if (_______) {
+    cout << "Numar IMPAR detectat!";
+}`,
     options: [
       {
-        label: 'n % 2 != 0  (sau  n % 2 == 1)',
+        labelRo: 'n % 2 != 0  (sau  n % 2 == 1)',
+        labelEn: 'n % 2 != 0  (or  n % 2 == 1)',
         isCorrect: true,
-        explanation: 'Excelent! Un număr este impar dacă restul împărțirii la 2 este diferit de zero (!= 0) sau egal cu 1.'
+        explanationRo: 'Excelent! Un număr este impar dacă restul împărțirii la 2 este diferit de zero (!= 0) sau egal cu 1.',
+        explanationEn: 'Excellent! A number is odd if the remainder modulo 2 is non-zero (!= 0) or equal to 1.'
       },
       {
-        label: 'n % 2 == 2',
+        labelRo: 'n % 2 == 2',
+        labelEn: 'n % 2 == 2',
         isCorrect: false,
-        explanation: 'Imposibil! Restul împărțirii la 2 poate fi doar 0 sau 1. Restul nu poate fi niciodată 2.'
+        explanationRo: 'Imposibil! Restul împărțirii la 2 poate fi doar 0 sau 1. Restul nu poate fi niciodată 2.',
+        explanationEn: 'Impossible! The remainder modulo 2 can strictly only be 0 or 1; it can never be 2.'
       },
       {
-        label: 'n / 2 != 0',
+        labelRo: 'n / 2 != 0',
+        labelEn: 'n / 2 != 0',
         isCorrect: false,
-        explanation: 'Operatorul / dă câtul, nu restul!'
+        explanationRo: 'Operatorul / dă câtul, nu restul!',
+        explanationEn: 'Operator / produces the quotient, not the remainder!'
       }
     ]
   },
   {
     id: 'p3',
-    title: 'Divizibilitate cu 5 și Ultima Cifră',
-    problemStatement: 'Un număr este divizibil cu 5 dacă ultima sa cifră este 0 sau 5. Cum scriem condiția în C++?',
-    codeSnippet: 'if (_______) {\n    cout << "Divizibil cu 5";\n}',
+    titleRo: 'Divizibilitate cu 5 și Ultima Cifră',
+    titleEn: 'Divisibility by 5 and the Last Digit',
+    problemStatementRo: 'Un număr este divizibil cu 5 dacă ultima sa cifră este 0 sau 5. Cum scriem condiția în C++?',
+    problemStatementEn: 'A number is divisible by 5 if its last digit is 0 or 5. How is this written in C++?',
+    codeSnippet: `if (_______) {
+    cout << "Divizibil cu 5";
+}`,
     options: [
       {
-        label: 'n % 5 == 0  (sau n % 10 == 0 || n % 10 == 5)',
+        labelRo: 'n % 5 == 0  (sau n % 10 == 0 || n % 10 == 5)',
+        labelEn: 'n % 5 == 0  (or n % 10 == 0 || n % 10 == 5)',
         isCorrect: true,
-        explanation: 'Foarte bine! Fie verificăm direct n % 5 == 0, fie verificăm dacă ultima cifră (obținută cu n % 10) este 0 sau 5.'
+        explanationRo: 'Foarte bine! Fie verificăm direct n % 5 == 0, fie verificăm dacă ultima cifră (obținută cu n % 10) este 0 sau 5.',
+        explanationEn: 'Very good! Either test n % 5 == 0 directly, or check whether last digit (n % 10) is 0 or 5.'
       },
       {
-        label: 'n % 10 == 0 && n % 10 == 5',
+        labelRo: 'n % 10 == 0 && n % 10 == 5',
+        labelEn: 'n % 10 == 0 && n % 10 == 5',
         isCorrect: false,
-        explanation: 'Ultima cifră nu poate fi simultan și 0 și 5 (&& ar fi mereu fals)!'
+        explanationRo: 'Ultima cifră nu poate fi simultan și 0 și 5 (&& ar fi mereu fals)!',
+        explanationEn: 'The last digit cannot simultaneously be both 0 and 5 (&& is always false)!'
       },
       {
-        label: 'n / 5 == 0',
+        labelRo: 'n / 5 == 0',
+        labelEn: 'n / 5 == 0',
         isCorrect: false,
-        explanation: 'Divizibilitatea depinde de restul împărțirii (%), nu de cât (/).'
+        explanationRo: 'Divizibilitatea depinde de restul împărțirii (%), nu de cât (/).',
+        explanationEn: 'Divisibility relies on division remainder (%), not quotient (/).'
       }
     ]
   },
   {
     id: 'p4',
-    title: 'Număr de Exact Două Cifre',
-    problemStatement: 'Cum verificăm dacă un număr natural n are exact 2 cifre (adică este între 10 și 99 inclusiv)?',
-    codeSnippet: 'if (_______) {\n    cout << "Numar de 2 cifre!";\n}',
+    titleRo: 'Număr de Exact Două Cifre',
+    titleEn: 'Exact Two-Digit Number',
+    problemStatementRo: 'Cum verificăm dacă un număr natural n are exact 2 cifre (adică este între 10 și 99 inclusiv)?',
+    problemStatementEn: 'How do we check if a natural number n has exactly 2 digits (between 10 and 99 inclusive)?',
+    codeSnippet: `if (_______) {
+    cout << "Numar de 2 cifre!";
+}`,
     options: [
       {
-        label: 'n >= 10 && n <= 99',
+        labelRo: 'n >= 10 && n <= 99',
+        labelEn: 'n >= 10 && n <= 99',
         isCorrect: true,
-        explanation: 'Perfect! Intervalul numerelor naturale de 2 cifre începe la 10 și se termină la 99.'
+        explanationRo: 'Perfect! Intervalul numerelor naturale de 2 cifre începe la 10 și se termină la 99.',
+        explanationEn: 'Perfect! The range of 2-digit natural numbers spans from 10 to 99 inclusive.'
       },
       {
-        label: '10 <= n <= 99',
+        labelRo: '10 <= n <= 99',
+        labelEn: '10 <= n <= 99',
         isCorrect: false,
-        explanation: 'Capcana de sintaxă C++! Scrierea înlănțuită nu funcționează corect în C++ și este evaluată greșit.'
+        explanationRo: 'Capcana de sintaxă C++! Scrierea înlănțuită nu funcționează corect în C++ și este evaluată greșit.',
+        explanationEn: 'C++ syntax trap! Chained inequalities are evaluated left-to-right into boolean booleans and fail.'
       },
       {
-        label: 'n > 9 || n < 100',
+        labelRo: 'n > 9 || n < 100',
+        labelEn: 'n > 9 || n < 100',
         isCorrect: false,
-        explanation: 'Dacă folosim || (SAU), orice număr din univers (chiar și 5 sau 500) ar satisface condiția!'
+        explanationRo: 'Dacă folosim || (SAU), orice număr din univers (chiar și 5 sau 500) ar satisface condiția!',
+        explanationEn: 'If we use || (OR), every number in the universe satisfies at least one condition!'
       }
     ]
   }
 ];
 
 export const DecLevel4_ParityAndModuloDecision: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptIdx, setSelectedOptIdx] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -150,13 +193,13 @@ export const DecLevel4_ParityAndModuloDecision: React.FC<Props> = ({ onPass }) =
       setScore(s => s + 25);
       setFeedback({
         isCorrect: true,
-        text: `Corect! ${opt.explanation}`
+        text: lang === 'ro' ? `Corect! ${opt.explanationRo}` : `Correct! ${opt.explanationEn}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Mai încearcă! ${opt.explanation}`
+        text: lang === 'ro' ? `Mai încearcă! ${opt.explanationRo}` : `Try again! ${opt.explanationEn}`
       });
     }
   };
@@ -180,21 +223,31 @@ export const DecLevel4_ParityAndModuloDecision: React.FC<Props> = ({ onPass }) =
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 4 din 7 • Modulul 4C
+              {lang === 'ro' ? 'Nivelul 4 din 7 • Modulul 4C' : 'Level 4 of 7 • Module 4C'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 78</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 78' : 'Art Klett Textbook p. 78'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Divide className="w-6 h-6 text-emerald-400" />
-            <span>Problema Parității &amp; Divizibilității (n % 2 == 0)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Problema Parității & Divizibilității (n % 2 == 0)'
+                : 'Parity & Divisibility Algorithms (n % 2 == 0)'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Algoritmul fundamental din manualul de clasa a 7-a: află cum verificăm paritatea, ultima cifră și divizibilitatea folosind operatorul modulo (<code className="text-emerald-400 font-bold">%</code>)!
+            {lang === 'ro'
+              ? 'Algoritmul fundamental din manualul de clasa a 7-a: află cum verificăm paritatea, ultima cifră și divizibilitatea folosind operatorul modulo (%)!'
+              : 'The fundamental algorithm from 7th grade curriculum: discover how to verify parity, extract last digits, and check divisibility with modulo (%)!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Scor Nivel 4:</span>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'ro' ? 'Scor Nivel 4:' : 'Level 4 Score:'}
+          </span>
           <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400">{score} / 100 XP</span>
         </div>
       </div>
@@ -208,10 +261,14 @@ export const DecLevel4_ParityAndModuloDecision: React.FC<Props> = ({ onPass }) =
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-white">
-                Laborator Vizual de Testare: Teorema Împărțirii cu Rest
+                {lang === 'ro'
+                  ? 'Laborator Vizual de Testare: Teorema Împărțirii cu Rest'
+                  : 'Visual Testing Lab: Division with Remainder Theorem'}
               </h3>
               <p className="text-xs text-slate-400">
-                Tastează orice număr natural sau alege una dintre valorile rapide de mai jos:
+                {lang === 'ro'
+                  ? 'Tastează orice număr natural sau alege una dintre valorile rapide de mai jos:'
+                  : 'Type any natural number or select one of the presets below:'}
               </p>
             </div>
           </div>
@@ -237,7 +294,9 @@ export const DecLevel4_ParityAndModuloDecision: React.FC<Props> = ({ onPass }) =
           {/* User Input & Calculation Breakdown */}
           <div className="lg:col-span-5 bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3 font-mono text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Introdu număr n:</span>
+              <span className="text-slate-400">
+                {lang === 'ro' ? 'Introdu număr n:' : 'Enter number n:'}
+              </span>
               <input
                 type="number"
                 min="0"
@@ -249,21 +308,32 @@ export const DecLevel4_ParityAndModuloDecision: React.FC<Props> = ({ onPass }) =
             </div>
 
             <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-slate-300">
-              <div className="text-[11px] text-slate-400">// Calcul matematic:</div>
-              <div>Câtul împărțirii: <span className="text-cyan-400 font-bold">{userNumberInput} / 2 = {quotient}</span></div>
-              <div>Restul împărțirii: <span className="text-amber-400 font-bold">{userNumberInput} % 2 = {remainder}</span></div>
+              <div className="text-[11px] text-slate-400">
+                {lang === 'ro' ? '// Calcul matematic:' : '// Mathematical breakdown:'}
+              </div>
+              <div>
+                {lang === 'ro' ? 'Câtul împărțirii: ' : 'Quotient: '}
+                <span className="text-cyan-400 font-bold">{userNumberInput} / 2 = {quotient}</span>
+              </div>
+              <div>
+                {lang === 'ro' ? 'Restul împărțirii: ' : 'Remainder: '}
+                <span className="text-amber-400 font-bold">{userNumberInput} % 2 = {remainder}</span>
+              </div>
               <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
-                Formula Euclid: {userNumberInput} = 2 &times; {quotient} + {remainder}
+                {lang === 'ro' ? 'Formula Euclid: ' : 'Euclidean Formula: '}
+                {userNumberInput} = 2 &times; {quotient} + {remainder}
               </div>
             </div>
 
             <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-[11px]">
-              <span className="text-slate-400">// Codul C++ din manual:</span>
+              <span className="text-slate-400">
+                {lang === 'ro' ? '// Codul C++ din manual:' : '// Textbook C++ code:'}
+              </span>
               <pre className="text-teal-300 mt-1">
 {`if (n % 2 == 0)
-    cout << "Numar par";
+    cout << "${lang === 'ro' ? 'Numar par' : 'Even number'}";
 else
-    cout << "Numar impar";`}
+    cout << "${lang === 'ro' ? 'Numar impar' : 'Odd number'}";`}
               </pre>
             </div>
           </div>
@@ -280,7 +350,9 @@ else
                 🟢
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm">COȘUL NUMERELOR PARE</h4>
+                <h4 className="font-bold text-white text-sm">
+                  {lang === 'ro' ? 'COȘUL NUMERELOR PARE' : 'EVEN NUMBERS BUCKET'}
+                </h4>
                 <div className="text-xs font-mono text-emerald-300 mt-1">
                   conditie: n % 2 == 0
                 </div>
@@ -288,7 +360,9 @@ else
               <div className={`mt-3 px-3 py-1 rounded-full text-xs font-bold font-mono ${
                 isEven ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-500'
               }`}>
-                {isEven ? `Numărul ${userNumberInput} este PAR!` : 'Inactiv'}
+                {isEven
+                  ? (lang === 'ro' ? `Numărul ${userNumberInput} este PAR!` : `Number ${userNumberInput} is EVEN!`)
+                  : (lang === 'ro' ? 'Inactiv' : 'Inactive')}
               </div>
             </div>
 
@@ -302,7 +376,9 @@ else
                 🟡
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm">COȘUL NUMERELOR IMPARE</h4>
+                <h4 className="font-bold text-white text-sm">
+                  {lang === 'ro' ? 'COȘUL NUMERELOR IMPARE' : 'ODD NUMBERS BUCKET'}
+                </h4>
                 <div className="text-xs font-mono text-amber-300 mt-1">
                   conditie: n % 2 != 0
                 </div>
@@ -310,7 +386,9 @@ else
               <div className={`mt-3 px-3 py-1 rounded-full text-xs font-bold font-mono ${
                 !isEven ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-500'
               }`}>
-                {!isEven ? `Numărul ${userNumberInput} este IMPAR!` : 'Inactiv'}
+                {!isEven
+                  ? (lang === 'ro' ? `Numărul ${userNumberInput} este IMPAR!` : `Number ${userNumberInput} is ODD!`)
+                  : (lang === 'ro' ? 'Inactiv' : 'Inactive')}
               </div>
             </div>
           </div>
@@ -326,17 +404,21 @@ else
                 {currentIdx + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Provocarea {currentIdx + 1}/{PARITY_QUIZZES.length}: {currentQuiz.title}
+                {lang === 'ro'
+                  ? `Provocarea ${currentIdx + 1}/${PARITY_QUIZZES.length}: ${currentQuiz.titleRo}`
+                  : `Challenge ${currentIdx + 1}/${PARITY_QUIZZES.length}: ${currentQuiz.titleEn}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Întrebarea {currentIdx + 1}/{PARITY_QUIZZES.length}
+              {lang === 'ro'
+                ? `Întrebarea ${currentIdx + 1}/${PARITY_QUIZZES.length}`
+                : `Question ${currentIdx + 1}/${PARITY_QUIZZES.length}`}
             </span>
           </div>
 
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs sm:text-sm">
             <div className="text-slate-300 text-xs sm:text-sm mb-3 font-sans leading-relaxed">
-              {currentQuiz.problemStatement}
+              {lang === 'ro' ? currentQuiz.problemStatementRo : currentQuiz.problemStatementEn}
             </div>
             <pre className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-emerald-300 overflow-x-auto text-xs">
               {currentQuiz.codeSnippet}
@@ -344,7 +426,7 @@ else
           </div>
 
           <div className="text-sm font-bold text-white">
-            Selectează expresia corectă:
+            {lang === 'ro' ? 'Selectează expresia corectă:' : 'Select the correct condition:'}
           </div>
 
           <div className="flex flex-col gap-3">
@@ -376,7 +458,7 @@ else
                     {String.fromCharCode(65 + idx)}
                   </span>
                   <div className="text-xs sm:text-sm leading-relaxed font-sans">
-                    {opt.label}
+                    {lang === 'ro' ? opt.labelRo : opt.labelEn}
                   </div>
                 </button>
               );
@@ -405,7 +487,7 @@ else
                 onClick={handleNext}
                 className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer shadow-md font-sans"
               >
-                <span>Următoarea Problemă</span>
+                <span>{lang === 'ro' ? 'Următoarea Problemă' : 'Next Problem'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -419,15 +501,19 @@ else
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Expert în Paritate &amp; Divizibilitate!
+              {lang === 'ro' ? 'Expert în Paritate & Divizibilitate!' : 'Parity & Divisibility Expert!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Stăpânești la perfecție utilizarea operatorului <code className="text-emerald-400 font-bold">%</code> pentru a testa paritatea, ultima cifră și apartenența la intervale numerice!
+              {lang === 'ro' ? (
+                <>Stăpânești la perfecție utilizarea operatorului <code className="text-emerald-400 font-bold">%</code> pentru a testa paritatea, ultima cifră și apartenența la intervale numerice!</>
+              ) : (
+                <>You have mastered operator <code className="text-emerald-400 font-bold">%</code> to test parity, last-digit properties, and bounded numerical ranges!</>
+              )}
             </p>
           </div>
 
           <div className="bg-slate-950/80 px-6 py-2.5 rounded-2xl border border-slate-800 text-emerald-400 font-mono font-bold text-sm">
-            Scor obținut: +{score} XP
+            {lang === 'ro' ? `Scor obținut: +${score} XP` : `Score Earned: +${score} XP`}
           </div>
 
           <button
@@ -435,7 +521,11 @@ else
             onClick={handleFinishLevel}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 5: Probleme Clasice (Maxim, Minim &amp; Triunghi)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 5: Probleme Clasice (Maxim, Minim & Triunghi)'
+                : 'Advance to Level 5: Classic Algorithms (Max, Min & Triangle)'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

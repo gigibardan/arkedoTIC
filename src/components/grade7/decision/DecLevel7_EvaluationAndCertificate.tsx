@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
   Award,
   CheckCircle2,
   AlertTriangle,
-  RotateCcw,
   Printer,
-  ShieldCheck,
   Check,
-  QrCode,
-  GraduationCap,
-  Calendar,
-  BookOpen
+  Calendar
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -22,84 +17,135 @@ interface Props {
 
 interface Question {
   id: string;
-  question: string;
-  options: string[];
+  questionRo: string;
+  questionEn: string;
+  optionsRo: string[];
+  optionsEn: string[];
   correctIndex: number;
-  explanation: string;
+  explanationRo: string;
+  explanationEn: string;
 }
 
 const EVALUATION_QUESTIONS: Question[] = [
   {
     id: 'q1',
-    question: 'Care este rolul fundamental al structurii de decizie (alternative) într-un algoritm C++?',
-    options: [
+    questionRo: 'Care este rolul fundamental al structurii de decizie (alternative) într-un algoritm C++?',
+    questionEn: 'What is the fundamental role of the decision (alternative) structure in a C++ algorithm?',
+    optionsRo: [
       'Ramifică execuția programului pe căi diferite în funcție de adevărul unei condiții logice.',
       'Repetă aceleași instrucțiuni la infinit până la oprirea calculatorului.',
       'Șterge variabilele din memoria RAM pentru a elibera spațiu de stocare.',
       'Traduce codul sursă în limbaj de asamblare binar.'
     ],
+    optionsEn: [
+      'Branches program execution along different paths based on whether a boolean condition is true or false.',
+      'Repeats the same instructions indefinitely until the computer shuts down.',
+      'Deletes variables from RAM memory to reclaim disk space.',
+      'Compiles source code into raw binary machine instructions.'
+    ],
     correctIndex: 0,
-    explanation: 'Structura de decizie permite algoritmului să aleagă între două sau mai multe ramuri de execuție pe baza evaluării unei condiții booleene (true/false).'
+    explanationRo: 'Structura de decizie permite algoritmului să aleagă între două sau mai multe ramuri de execuție pe baza evaluării unei condiții booleene (true/false).',
+    explanationEn: 'The decision structure allows algorithms to choose between alternate execution paths following boolean evaluation.'
   },
   {
     id: 'q2',
-    question: 'Care este diferența critică dintre operatorul simplu (=) și operatorul dublu (==) în C++?',
-    options: [
+    questionRo: 'Care este diferența critică dintre operatorul simplu (=) și operatorul dublu (==) în C++?',
+    questionEn: 'What is the critical distinction between single equals (=) and double equals (==) in C++?',
+    optionsRo: [
       '= realizează atribuirea unei valori într-o variabilă, iar == verifică egalitatea matematică.',
       'Sunt perfect identici și interschimbabili în orice linie de cod.',
       '= se folosește doar pentru texte, iar == doar pentru numere zecimale.',
       '== este folosit pentru a aduna două numere întregi.'
     ],
+    optionsEn: [
+      '= performs value assignment into a variable, whereas == evaluates mathematical equality.',
+      'They are completely identical and interchangeable anywhere in code.',
+      '= is only for text strings, while == is exclusively for decimal numbers.',
+      '== is used to sum two integer numbers.'
+    ],
     correctIndex: 0,
-    explanation: 'În C++, operatorul = este operator de atribuire (stochează date), în timp ce == este operator relațional de testare a egalității.'
+    explanationRo: 'În C++, operatorul = este operator de atribuire (stochează date), în timp ce == este operator relațional de testare a egalității.',
+    explanationEn: 'In C++, = is an assignment operator (mutates state), while == is a relational equality tester.'
   },
   {
     id: 'q3',
-    question: 'Ce operator logic returnează true dacă cel puțin una dintre condiții este adevărată?',
-    options: [
+    questionRo: 'Ce operator logic returnează true dacă cel puțin una dintre condiții este adevărată?',
+    questionEn: 'Which logical operator returns true if at least one of the conditions is true?',
+    optionsRo: [
       '|| (SAU logic / disjuncție)',
       '&& (ȘI logic / conjuncție)',
       '! (Negație logică / NOT)',
       '== (Egalitate relațională)'
     ],
+    optionsEn: [
+      '|| (logical OR / disjunction)',
+      '&& (logical AND / conjunction)',
+      '! (logical NOT / negation)',
+      '== (relational equality)'
+    ],
     correctIndex: 0,
-    explanation: 'Operatorul || returnează adevărat dacă oricare dintre condițiile comparate este adevărată.'
+    explanationRo: 'Operatorul || returnează adevărat dacă oricare dintre condițiile comparate este adevărată.',
+    explanationEn: 'The || operator returns true if any of the compared conditions evaluates to true.'
   },
   {
     id: 'q4',
-    question: 'Care este instrucțiunea corectă pentru a verifica dacă un număr natural n este par?',
-    options: [
+    questionRo: 'Care este instrucțiunea corectă pentru a verifica dacă un număr natural n este par?',
+    questionEn: 'What is the correct statement to verify if a natural number n is even?',
+    optionsRo: [
+      'if (n % 2 == 0)',
+      'if (n / 2 == 0)',
+      'if (n % 2 = 0)',
+      'if (n * 2 == 0)'
+    ],
+    optionsEn: [
       'if (n % 2 == 0)',
       'if (n / 2 == 0)',
       'if (n % 2 = 0)',
       'if (n * 2 == 0)'
     ],
     correctIndex: 0,
-    explanation: 'Un număr este par dacă restul împărțirii sale la 2 este 0 (n % 2 == 0).'
+    explanationRo: 'Un număr este par dacă restul împărțirii sale la 2 este 0 (n % 2 == 0).',
+    explanationEn: 'A number is even if its division remainder modulo 2 is zero (n % 2 == 0).'
   },
   {
     id: 'q5',
-    question: 'Conform manualului Art Klett, trei numere a, b, c pot forma un triunghi dacă:',
-    options: [
+    questionRo: 'Conform manualului Art Klett, trei numere a, b, c pot forma un triunghi dacă:',
+    questionEn: 'According to curriculum standards, three numbers a, b, c can form a triangle if:',
+    optionsRo: [
       'a + b > c && a + c > b && b + c > a (suma oricăror două laturi este strict mai mare decât a treia).',
       'a + b + c == 180 (suma laturilor este 180).',
       'a == b && b == c (toate laturile sunt obligatoriu egale).',
       'a * b > c || a * c > b (produsul laturilor este pozitiv).'
     ],
+    optionsEn: [
+      'a + b > c && a + c > b && b + c > a (sum of any two sides is strictly greater than the third).',
+      'a + b + c == 180 (sum of sides equals 180).',
+      'a == b && b == c (all sides must be identical).',
+      'a * b > c || a * c > b (side product is positive).'
+    ],
     correctIndex: 0,
-    explanation: 'Inegalitatea triunghiului impune ca suma oricăror două laturi să fie strict mai mare decât lungimea celei de-a treia laturi.'
+    explanationRo: 'Inegalitatea triunghiului impune ca suma oricăror două laturi să fie strict mai mare decât lungimea celei de-a treia laturi.',
+    explanationEn: 'The triangle inequality requires the sum of any two side lengths to be strictly greater than the remaining side.'
   },
   {
     id: 'q6',
-    question: 'Este clauza „else” obligatorie la orice instrucțiune „if” în limbajul C++?',
-    options: [
+    questionRo: 'Este clauza „else” obligatorie la orice instrucțiune „if” în limbajul C++?',
+    questionEn: 'Is the "else" clause required for every "if" statement in C++?',
+    optionsRo: [
       'Nu! Clauza else este complet opțională; se folosește doar când avem instrucțiuni de executat și pe caz de fals.',
       'Da, lipsa lui else generează eroare fatală de compilare.',
       'Da, doar dacă numărul de instrucțiuni depășește 10 rânduri.',
       'Nu, dar numai dacă programul conține și instrucțiunea return 0.'
     ],
+    optionsEn: [
+      'No! The else clause is completely optional; it is used only when an action is needed on false.',
+      'Yes, omitting else generates a fatal compilation error.',
+      'Yes, whenever the block spans more than 10 lines of code.',
+      'No, but only if the main function terminates with return 0.'
+    ],
     correctIndex: 0,
-    explanation: 'În C++, clauza else este opțională. Putem avea structuri alternative simple: if (conditie) { ... } fără ramură de else.'
+    explanationRo: 'În C++, clauza else este opțională. Putem avea structuri alternative simple: if (conditie) { ... } fără ramură de else.',
+    explanationEn: 'In C++, else is optional. Single-branch alternative structures: if (condition) { ... } are completely valid.'
   }
 ];
 
@@ -107,11 +153,12 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
   onPass,
   studentName = 'Elev Programator'
 }) => {
+  const { lang } = useLanguage();
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
   const [isExamCompleted, setIsExamCompleted] = useState(false);
-  const [score, setScore] = useState(0);
+  const [, setScore] = useState(0);
 
   const currentQ = EVALUATION_QUESTIONS[currentQIndex];
 
@@ -127,13 +174,13 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
       setScore(s => s + Math.round(100 / EVALUATION_QUESTIONS.length));
       setFeedback({
         isCorrect: true,
-        text: `Excelent! ${currentQ.explanation}`
+        text: lang === 'ro' ? `Excelent! ${currentQ.explanationRo}` : `Excellent! ${currentQ.explanationEn}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Răspuns incorect. ${currentQ.explanation}`
+        text: lang === 'ro' ? `Răspuns incorect. ${currentQ.explanationRo}` : `Incorrect answer. ${currentQ.explanationEn}`
       });
     }
   };
@@ -162,21 +209,33 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 7 din 7 • Evaluare &amp; Certificare
+              {lang === 'ro' ? 'Nivelul 7 din 7 • Evaluare & Certificare' : 'Level 7 of 7 • Assessment & Certification'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Curriculum Național OMEN 3393/2017 &amp; OM 5420/2024</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro'
+                ? 'Curriculum Național OMEN 3393/2017 & OM 5420/2024'
+                : 'National Curriculum OMEN 3393/2017 & OM 5420/2024'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Award className="w-6 h-6 text-amber-400" />
-            <span>Evaluare Finală: Structura Alternativă &amp; Operatori Logici</span>
+            <span>
+              {lang === 'ro'
+                ? 'Evaluare Finală: Structura Alternativă & Operatori Logici'
+                : 'Final Assessment: Alternative Structure & Logical Operators'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Răspunde corect la cele 6 întrebări oficiale pentru a valida cunoștințele din Modulul 4C și a primi Diploma Digitală Oficială!
+            {lang === 'ro'
+              ? 'Răspunde corect la cele 6 întrebări oficiale pentru a valida cunoștințele din Modulul 4C și a primi Diploma Digitală Oficială!'
+              : 'Answer the 6 questions correctly to validate your mastery of Module 4C and unlock your Official Digital Diploma!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Progres Examen:</span>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'ro' ? 'Progres Examen:' : 'Exam Progress:'}
+          </span>
           <span className="text-xl sm:text-2xl font-black font-mono text-amber-400">
             {isExamCompleted ? '100%' : `${currentQIndex + 1} / ${EVALUATION_QUESTIONS.length}`}
           </span>
@@ -192,21 +251,23 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
                 {currentQIndex + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Întrebarea {currentQIndex + 1} din {EVALUATION_QUESTIONS.length}
+                {lang === 'ro'
+                  ? `Întrebarea ${currentQIndex + 1} din ${EVALUATION_QUESTIONS.length}`
+                  : `Question ${currentQIndex + 1} of ${EVALUATION_QUESTIONS.length}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Notare conform baremului Art Klett
+              {lang === 'ro' ? 'Notare conform baremului Art Klett' : 'Graded per Art Klett standards'}
             </span>
           </div>
 
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-sans text-sm sm:text-base text-white font-semibold leading-relaxed">
-            {currentQ.question}
+            {lang === 'ro' ? currentQ.questionRo : currentQ.questionEn}
           </div>
 
           {/* Options */}
           <div className="flex flex-col gap-3">
-            {currentQ.options.map((opt, idx) => {
+            {(lang === 'ro' ? currentQ.optionsRo : currentQ.optionsEn).map((opt, idx) => {
               const isSelected = selectedAnswers[currentQIndex] === idx;
               const hasAnswered = selectedAnswers[currentQIndex] !== undefined;
 
@@ -268,8 +329,8 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
               >
                 <span>
                   {currentQIndex + 1 === EVALUATION_QUESTIONS.length
-                    ? 'Vezi Diploma & Certificatul Oficial'
-                    : 'Următoarea Întrebare'}
+                    ? (lang === 'ro' ? 'Vezi Diploma & Certificatul Oficial' : 'View Diploma & Official Certificate')
+                    : (lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question')}
                 </span>
                 <Check className="w-4 h-4" />
               </button>
@@ -288,33 +349,49 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
             {/* Header / Republica Romania / Minister */}
             <div className="border-b-2 border-amber-500/30 pb-6 mb-6">
               <div className="text-[11px] font-mono uppercase tracking-widest text-amber-400 font-bold mb-1">
-                MINISTERUL EDUCAȚIEI &bull; ROMÂNIA
+                {lang === 'ro' ? 'MINISTERUL EDUCAȚIEI • ROMÂNIA' : 'MINISTRY OF EDUCATION • ROMANIA'}
               </div>
               <div className="text-xs font-serif text-slate-400 uppercase tracking-wider mb-2">
-                Conform Programei Școlare Naționale OMEN 3393/2017 &amp; OM 5420/2024 &bull; Manual Art Klett
+                {lang === 'ro'
+                  ? 'Conform Programei Școlare Naționale OMEN 3393/2017 & OM 5420/2024 • Manual Art Klett'
+                  : 'Aligned with National Curriculum OMEN 3393/2017 & OM 5420/2024 • Art Klett Textbook'}
               </div>
               <h1 className="text-2xl sm:text-4xl font-serif font-black text-white tracking-wide uppercase">
-                CERTIFICAT DE COMPETENȚĂ DIGITALĂ
+                {lang === 'ro' ? 'CERTIFICAT DE COMPETENȚĂ DIGITALĂ' : 'CERTIFICATE OF DIGITAL COMPETENCE'}
               </h1>
               <div className="text-sm font-mono text-amber-400 font-bold mt-1">
-                DISCIPLINA: INFORMATICĂ ȘI TIC &bull; CLASA A VII-A
+                {lang === 'ro' ? 'DISCIPLINA: INFORMATICĂ ȘI TIC • CLASA A VII-A' : 'SUBJECT: COMPUTER SCIENCE & ICT • 7TH GRADE'}
               </div>
             </div>
 
             {/* Recipient */}
             <div className="my-6 space-y-2">
               <div className="text-xs uppercase tracking-wider text-slate-400 font-mono">
-                Se acordă cu distincție elevului / programatorului:
+                {lang === 'ro'
+                  ? 'Se acordă cu distincție elevului / programatorului:'
+                  : 'Awarded with distinction to student / programmer:'}
               </div>
               <div className="text-2xl sm:text-3xl font-serif font-bold text-amber-300 underline underline-offset-8 decoration-amber-500/50">
                 {studentName}
               </div>
               <div className="text-xs text-slate-300 max-w-xl mx-auto pt-2 leading-relaxed">
-                Pentru absolvirea cu succes a probei de evaluare practică și teoretică a Modulului 4C:
-                <br />
-                <strong className="text-white">
-                  &bdquo;Structura Alternativă: Instrucțiunea if / else &amp; Operatori Logici în C++&rdquo;
-                </strong>
+                {lang === 'ro' ? (
+                  <>
+                    Pentru absolvirea cu succes a probei de evaluare practică și teoretică a Modulului 4C:
+                    <br />
+                    <strong className="text-white">
+                      &bdquo;Structura Alternativă: Instrucțiunea if / else &amp; Operatori Logici în C++&rdquo;
+                    </strong>
+                  </>
+                ) : (
+                  <>
+                    For the successful theoretical and practical assessment completion in Module 4C:
+                    <br />
+                    <strong className="text-white">
+                      &ldquo;Alternative Structure: The if / else Statement &amp; Logical Operators in C++&rdquo;
+                    </strong>
+                  </>
+                )}
               </div>
             </div>
 
@@ -322,21 +399,30 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-6 text-left text-xs font-mono">
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300">
                 <div className="text-emerald-400 font-bold mb-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Competența 2.1
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{lang === 'ro' ? 'Competența 2.1' : 'Competency 2.1'}</span>
                 </div>
-                Analiza condițiilor booleene și ramificarea algoritmilor cu decizii if/else.
+                {lang === 'ro'
+                  ? 'Analiza condițiilor booleene și ramificarea algoritmilor cu decizii if/else.'
+                  : 'Analysis of boolean expressions and algorithmic branching with if/else decisions.'}
               </div>
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300">
                 <div className="text-cyan-400 font-bold mb-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Competența 2.2
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{lang === 'ro' ? 'Competența 2.2' : 'Competency 2.2'}</span>
                 </div>
-                Utilizarea operatorilor logici compuși (&amp;&amp;, ||, !) și relaționali (==, !=, &lt;=, &gt;=).
+                {lang === 'ro'
+                  ? 'Utilizarea operatorilor logici compuși (&&, ||, !) și relaționali (==, !=, <=, >=).'
+                  : 'Usage of compound logical (&&, ||, !) and relational (==, !=, <=, >=) operators.'}
               </div>
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300">
                 <div className="text-amber-400 font-bold mb-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Algoritmi Clasici
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{lang === 'ro' ? 'Algoritmi Clasici' : 'Classical Algorithms'}</span>
                 </div>
-                Rezolvarea problemelor de paritate (n % 2 == 0), maxim/minim și inegalitatea triunghiului.
+                {lang === 'ro'
+                  ? 'Rezolvarea problemelor de paritate (n % 2 == 0), maxim/minim și inegalitatea triunghiului.'
+                  : 'Solving parity (n % 2 == 0), min/max, and triangle inequality geometric problems.'}
               </div>
             </div>
 
@@ -347,20 +433,31 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
                   🛡️
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-bold">Sigiliu Digital Ark3do</div>
-                  <div className="text-[10px]">ID: CERT-G7-DEC-{Date.now().toString().slice(-6)}</div>
-                  <div className="text-[10px] text-emerald-400">Validat &bull; Nota 10 (Zece)</div>
+                  <div className="text-white font-bold">
+                    {lang === 'ro' ? 'Sigiliu Digital Ark3do' : 'Ark3do Digital Seal'}
+                  </div>
+                  <div className="text-[10px]">ID: CERT-G7-DEC-2026</div>
+                  <div className="text-[10px] text-emerald-400">
+                    {lang === 'ro' ? 'Validat • Nota 10 (Zece)' : 'Validated • Grade 10 (Max)'}
+                  </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-amber-400" />
-                <span>Data emiterii: {new Date().toLocaleDateString('ro-RO')}</span>
+                <span>
+                  {lang === 'ro' ? 'Data emiterii: ' : 'Issued: '}
+                  {new Date().toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-US')}
+                </span>
               </div>
 
               <div className="text-center sm:text-right">
-                <div className="font-serif italic text-white text-sm">Arky &bull; Asistent Inteligent TIC</div>
-                <div className="text-[10px] text-slate-500">Semnătură Criptografică Oficială</div>
+                <div className="font-serif italic text-white text-sm">
+                  {lang === 'ro' ? 'Arky • Asistent Inteligent TIC' : 'Arky • AI CS Mentor'}
+                </div>
+                <div className="text-[10px] text-slate-500">
+                  {lang === 'ro' ? 'Semnătură Criptografică Oficială' : 'Official Cryptographic Signature'}
+                </div>
               </div>
             </div>
           </div>
@@ -373,7 +470,7 @@ export const DecLevel7_EvaluationAndCertificate: React.FC<Props> = ({
               className="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm transition shadow-lg shadow-amber-500/20 flex items-center gap-2 cursor-pointer active:scale-95"
             >
               <Printer className="w-4 h-4" />
-              <span>Imprimă / Salvează Certificatul ca PDF</span>
+              <span>{lang === 'ro' ? 'Imprimă / Salvează Certificatul ca PDF' : 'Print / Save Certificate as PDF'}</span>
             </button>
           </div>
         </div>

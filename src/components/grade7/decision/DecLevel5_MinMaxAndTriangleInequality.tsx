@@ -4,15 +4,10 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertTriangle,
-  Triangle,
-  Maximize2,
-  Minimize2,
-  Check,
-  RotateCcw,
-  Sliders,
-  Code
+  Triangle
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -20,112 +15,158 @@ interface Props {
 
 interface AlgQuiz {
   id: string;
-  title: string;
-  question: string;
+  titleRo: string;
+  titleEn: string;
+  questionRo: string;
+  questionEn: string;
   codeSnippet: string;
   options: {
-    label: string;
+    labelRo: string;
+    labelEn: string;
     isCorrect: boolean;
-    explanation: string;
+    explanationRo: string;
+    explanationEn: string;
   }[];
 }
 
 const ALG_QUIZZES: AlgQuiz[] = [
   {
     id: 'a1',
-    title: 'Determinarea Maximului a 2 Numere',
-    question: 'Avem două numere citite a și b. Ce cod C++ va memora în variabila max valoarea cea mai mare?',
-    codeSnippet: 'int a, b, max;\ncin >> a >> b;\n// Care este structura de decizie corectă?',
+    titleRo: 'Determinarea Maximului a 2 Numere',
+    titleEn: 'Finding the Maximum of 2 Numbers',
+    questionRo: 'Avem două numere citite a și b. Ce cod C++ va memora în variabila max valoarea cea mai mare?',
+    questionEn: 'Given two input numbers a and b, which C++ code stores the greatest value in variable max?',
+    codeSnippet: `int a, b, max;
+cin >> a >> b;
+// Care este structura de decizie corecta?`,
     options: [
       {
-        label: 'if (a > b) max = a; else max = b;',
+        labelRo: 'if (a > b) max = a; else max = b;',
+        labelEn: 'if (a > b) max = a; else max = b;',
         isCorrect: true,
-        explanation: 'Corect! Dacă a este strict mai mare decât b, max devine a; în caz contrar (b este mai mare sau egal cu a), max devine b.'
+        explanationRo: 'Corect! Dacă a este strict mai mare decât b, max devine a; în caz contrar (b este mai mare sau egal cu a), max devine b.',
+        explanationEn: 'Correct! If a is strictly greater than b, max becomes a; otherwise max becomes b.'
       },
       {
-        label: 'if (a > b) max = b; else max = a;',
+        labelRo: 'if (a > b) max = b; else max = a;',
+        labelEn: 'if (a > b) max = b; else max = a;',
         isCorrect: false,
-        explanation: 'Inversat! Aceasta ar calcula minimul, nu maximul.'
+        explanationRo: 'Inversat! Aceasta ar calcula minimul, nu maximul.',
+        explanationEn: 'Reversed! This computes the minimum, not the maximum.'
       },
       {
-        label: 'max = a + b;',
+        labelRo: 'max = a + b;',
+        labelEn: 'max = a + b;',
         isCorrect: false,
-        explanation: 'Suma numerelor nu este maximul lor.'
+        explanationRo: 'Suma numerelor nu este maximul lor.',
+        explanationEn: 'The arithmetic sum is not the maximum.'
       }
     ]
   },
   {
     id: 'a2',
-    title: 'Condiția Inegalității Triunghiului',
-    question: 'Trei segmente a, b, c pot forma un triunghi dacă suma oricăror două laturi este strict mai mare decât a treia. Cum formulăm condiția?',
-    codeSnippet: 'if (_______) {\n    cout << "Pot forma un triunghi valid!";\n} else {\n    cout << "Imposibil geometric!";\n}',
+    titleRo: 'Condiția Inegalității Triunghiului',
+    titleEn: 'The Triangle Inequality Theorem',
+    questionRo: 'Trei segmente a, b, c pot forma un triunghi dacă suma oricăror două laturi este strict mai mare decât a treia. Cum formulăm condiția?',
+    questionEn: 'Three line segments a, b, c can form a triangle if the sum of any two sides is strictly greater than the third. How is this written?',
+    codeSnippet: `if (_______) {
+    cout << "Pot forma un triunghi valid!";
+} else {
+    cout << "Imposibil geometric!";
+}`,
     options: [
       {
-        label: 'a + b > c && a + c > b && b + c > a',
+        labelRo: 'a + b > c && a + c > b && b + c > a',
+        labelEn: 'a + b > c && a + c > b && b + c > a',
         isCorrect: true,
-        explanation: 'Excelent! Toate cele 3 inegalități trebuie să fie simultan satisfăcute, deci le legăm cu operatorul conjuncției logice &&.'
+        explanationRo: 'Excelent! Toate cele 3 inegalități trebuie să fie simultan satisfăcute, deci le legăm cu operatorul conjuncției logice &&.',
+        explanationEn: 'Excellent! All 3 inequalities must be satisfied simultaneously, so we link them with &&.'
       },
       {
-        label: 'a + b > c || a + c > b || b + c > a',
+        labelRo: 'a + b > c || a + c > b || b + c > a',
+        labelEn: 'a + b > c || a + c > b || b + c > a',
         isCorrect: false,
-        explanation: 'Dacă folosim || (SAU), ar fi de ajuns o singură condiție satisfăcută, ceea ce permite segmente imposibile precum 1, 2, 100!'
+        explanationRo: 'Dacă folosim || (SAU), ar fi de ajuns o singură condiție satisfăcută, ceea ce permite segmente imposibile precum 1, 2, 100!',
+        explanationEn: 'If we use || (OR), a single satisfied condition allows impossible sides like 1, 2, 100!'
       },
       {
-        label: 'a + b + c > 0',
+        labelRo: 'a + b + c > 0',
+        labelEn: 'a + b + c > 0',
         isCorrect: false,
-        explanation: 'Simpla pozitivitate a sumei nu garantează că laturile se pot uni la capete într-un poligon închis.'
+        explanationRo: 'Simpla pozitivitate a sumei nu garantează că laturile se pot uni la capete într-un poligon închis.',
+        explanationEn: 'Positive sum alone does not guarantee side ends meet in a closed polygon.'
       }
     ]
   },
   {
     id: 'a3',
-    title: 'Maximul dintre 3 Numere (a, b, c)',
-    question: 'Care este modalitatea cea mai eficientă de a găsi maximul a 3 numere folosind if?',
-    codeSnippet: 'int max = a;\nif (b > max) max = b;\nif (c > max) max = c;',
+    titleRo: 'Maximul dintre 3 Numere (a, b, c)',
+    titleEn: 'Maximum Among 3 Numbers (a, b, c)',
+    questionRo: 'Care este modalitatea cea mai eficientă de a găsi maximul a 3 numere folosind if?',
+    questionEn: 'What is the cleanest way to find the maximum among 3 numbers using if?',
+    codeSnippet: `int max = a;
+if (b > max) max = b;
+if (c > max) max = c;`,
     options: [
       {
-        label: 'Presupunem inițial că a este maximul, apoi comparăm succesiv cu b și c.',
+        labelRo: 'Presupunem inițial că a este maximul, apoi comparăm succesiv cu b și c.',
+        labelEn: 'Assume a is initial maximum, then compare sequentially with b and c.',
         isCorrect: true,
-        explanation: 'Bravo! Aceasta este tehnica fanionului (sau a maximului curent) recomandată în manualul de clasa a 7-a.'
+        explanationRo: 'Bravo! Aceasta este tehnica fanionului (sau a maximului curent) recomandată în manualul de clasa a 7-a.',
+        explanationEn: 'Well done! This current-max technique is the standard pattern taught in 7th grade curriculum.'
       },
       {
-        label: 'Codul este greșit deoarece lipsește clauza else.',
+        labelRo: 'Codul este greșit deoarece lipsește clauza else.',
+        labelEn: 'Code is invalid because else clause is missing.',
         isCorrect: false,
-        explanation: 'Clauza else este opțională. Aici actualizăm max doar dacă găsim o valoare strict superioară.'
+        explanationRo: 'Clauza else este opțională. Aici actualizăm max doar dacă găsim o valoare strict superioară.',
+        explanationEn: 'The else clause is optional. Here we only update max when a strictly larger value appears.'
       },
       {
-        label: 'Codul funcționează doar pentru numere pozitive.',
+        labelRo: 'Codul funcționează doar pentru numere pozitive.',
+        labelEn: 'This code only works for positive integers.',
         isCorrect: false,
-        explanation: 'Funcționează ireproșabil pentru orice numere întregi (inclusiv negative sau zero).'
+        explanationRo: 'Funcționează ireproșabil pentru orice numere întregi (inclusiv negative sau zero).',
+        explanationEn: 'It works seamlessly across all integers, including negative numbers and zero.'
       }
     ]
   },
   {
     id: 'a4',
-    title: 'Test Geometric: Segmentele 3, 4, 10',
-    question: 'Pot forma segmentele cu lungimile a = 3, b = 4, c = 10 laturile unui triunghi?',
-    codeSnippet: 'a = 3; b = 4; c = 10;\nif (a + b > c && a + c > b && b + c > a)',
+    titleRo: 'Test Geometric: Segmentele 3, 4, 10',
+    titleEn: 'Geometric Test: Segments 3, 4, 10',
+    questionRo: 'Pot forma segmentele cu lungimile a = 3, b = 4, c = 10 laturile unui triunghi?',
+    questionEn: 'Can segments with lengths a = 3, b = 4, c = 10 form the sides of a triangle?',
+    codeSnippet: `a = 3; b = 4; c = 10;
+if (a + b > c && a + c > b && b + c > a)`,
     options: [
       {
-        label: 'NU, deoarece 3 + 4 = 7, care NU este strict mai mare decât 10 (7 > 10 este fals)!',
+        labelRo: 'NU, deoarece 3 + 4 = 7, care NU este strict mai mare decât 10 (7 > 10 este fals)!',
+        labelEn: 'NO, because 3 + 4 = 7, which is NOT strictly greater than 10 (7 > 10 is false)!',
         isCorrect: true,
-        explanation: 'Corect! Segmentele de lungime 3 și 4, chiar întinse în linie dreaptă, nu pot acoperi distanța de 10 pentru a se întâlni într-un vârf.'
+        explanationRo: 'Corect! Segmentele de lungime 3 și 4, chiar întinse în linie dreaptă, nu pot acoperi distanța de 10 pentru a se întâlni într-un vârf.',
+        explanationEn: 'Correct! Segments of lengths 3 and 4 cannot span length 10 to meet at a common vertex.'
       },
       {
-        label: 'DA, deoarece toate cele trei numere sunt pozitive.',
+        labelRo: 'DA, deoarece toate cele trei numere sunt pozitive.',
+        labelEn: 'YES, because all three numbers are positive.',
         isCorrect: false,
-        explanation: 'Pozitivitatea nu este suficientă; inegalitatea triunghiului este obligatorie.'
+        explanationRo: 'Pozitivitatea nu este suficientă; inegalitatea triunghiului este obligatorie.',
+        explanationEn: 'Positivity alone is insufficient; triangle inequality is mandatory.'
       },
       {
-        label: 'DA, este un triunghi obtuzunghic.',
+        labelRo: 'DA, este un triunghi obtuzunghic.',
+        labelEn: 'YES, it is an obtuse triangle.',
         isCorrect: false,
-        explanation: 'Nu se poate construi fizic niciun fel de triunghi cu aceste laturi.'
+        explanationRo: 'Nu se poate construi fizic niciun fel de triunghi cu aceste laturi.',
+        explanationEn: 'It is geometrically impossible to close a triangle with these dimensions.'
       }
     ]
   }
 ];
 
 export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptIdx, setSelectedOptIdx] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -154,13 +195,13 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
       setScore(s => s + 25);
       setFeedback({
         isCorrect: true,
-        text: `Excelent! ${opt.explanation}`
+        text: lang === 'ro' ? `Excelent! ${opt.explanationRo}` : `Excellent! ${opt.explanationEn}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Mai verifică o dată! ${opt.explanation}`
+        text: lang === 'ro' ? `Mai verifică o dată! ${opt.explanationRo}` : `Check again! ${opt.explanationEn}`
       });
     }
   };
@@ -184,21 +225,31 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 5 din 7 • Modulul 4C
+              {lang === 'ro' ? 'Nivelul 5 din 7 • Modulul 4C' : 'Level 5 of 7 • Module 4C'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 79–80</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 79–80' : 'Art Klett Textbook pp. 79–80'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Triangle className="w-6 h-6 text-orange-400" />
-            <span>Probleme Clasice: Maxim, Minim &amp; Inegalitatea Triunghiului</span>
+            <span>
+              {lang === 'ro'
+                ? 'Probleme Clasice: Maxim, Minim & Inegalitatea Triunghiului'
+                : 'Classic Problems: Maximum, Minimum & Triangle Inequality'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Află cum se combină geometria și algebra în algoritmii de clasa a 7-a! Testează segmentele geometrice și compararea valorilor numerice.
+            {lang === 'ro'
+              ? 'Află cum se combină geometria și algebra în algoritmii de clasa a 7-a! Testează segmentele geometrice și compararea valorilor numerice.'
+              : 'Discover how geometry and algebra combine in 7th-grade algorithms! Test geometric segment construction and numerical value comparisons.'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Scor Nivel 5:</span>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'ro' ? 'Scor Nivel 5:' : 'Level 5 Score:'}
+          </span>
           <span className="text-xl sm:text-2xl font-black font-mono text-orange-400">{score} / 100 XP</span>
         </div>
       </div>
@@ -212,10 +263,14 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-white">
-                Simulatorul Geometric al Inegalității Triunghiului
+                {lang === 'ro'
+                  ? 'Simulatorul Geometric al Inegalității Triunghiului'
+                  : 'Geometric Triangle Inequality Simulator'}
               </h3>
               <p className="text-xs text-slate-400">
-                Ajustează lungimile laturilor <code className="text-cyan-300">a</code>, <code className="text-teal-300">b</code> și <code className="text-amber-300">c</code> și privește construcția geometrică:
+                {lang === 'ro'
+                  ? 'Ajustează lungimile laturilor a, b și c și privește construcția geometrică:'
+                  : 'Adjust side lengths a, b, and c to verify triangle construction:'}
               </p>
             </div>
           </div>
@@ -231,7 +286,7 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
               }}
               className="px-2.5 py-1 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-xs font-mono transition cursor-pointer"
             >
-              Triunghi Dreptunghic (6, 8, 10)
+              {lang === 'ro' ? 'Triunghi Dreptunghic (6, 8, 10)' : 'Right Triangle (6, 8, 10)'}
             </button>
             <button
               type="button"
@@ -243,7 +298,7 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
               }}
               className="px-2.5 py-1 rounded-lg bg-rose-950/60 hover:bg-rose-900 border border-rose-500/40 text-rose-300 text-xs font-mono transition cursor-pointer"
             >
-              Segment Rupt Imposibil (2, 3, 10)
+              {lang === 'ro' ? 'Segment Rupt Imposibil (2, 3, 10)' : 'Broken Impossible Line (2, 3, 10)'}
             </button>
           </div>
         </div>
@@ -254,7 +309,9 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             {/* Side A */}
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-cyan-400 font-bold">Latura a = {sideA} cm</span>
+                <span className="text-cyan-400 font-bold">
+                  {lang === 'ro' ? `Latura a = ${sideA} cm` : `Side a = ${sideA} cm`}
+                </span>
                 <span className="text-slate-500">1..15 cm</span>
               </div>
               <input
@@ -270,7 +327,9 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             {/* Side B */}
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-teal-400 font-bold">Latura b = {sideB} cm</span>
+                <span className="text-teal-400 font-bold">
+                  {lang === 'ro' ? `Latura b = ${sideB} cm` : `Side b = ${sideB} cm`}
+                </span>
                 <span className="text-slate-500">1..15 cm</span>
               </div>
               <input
@@ -286,7 +345,9 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             {/* Side C */}
             <div>
               <div className="flex justify-between mb-1">
-                <span className="text-amber-400 font-bold">Latura c = {sideC} cm</span>
+                <span className="text-amber-400 font-bold">
+                  {lang === 'ro' ? `Latura c = ${sideC} cm` : `Side c = ${sideC} cm`}
+                </span>
                 <span className="text-slate-500">1..15 cm</span>
               </div>
               <input
@@ -301,15 +362,17 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
 
             {/* Detailed Conditions Breakdown */}
             <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1 text-[11px]">
-              <div className="text-slate-400 font-bold">// Testarea celor 3 inegalități:</div>
+              <div className="text-slate-400 font-bold">
+                {lang === 'ro' ? '// Testarea celor 3 inegalități:' : '// Testing the 3 inequalities:'}
+              </div>
               <div className={cond1 ? 'text-emerald-400' : 'text-rose-400 font-bold'}>
-                1. a + b &gt; c &rarr; {sideA} + {sideB} = {sideA + sideB} &gt; {sideC} ({cond1 ? 'ADEVĂRAT' : 'FALS!'})
+                1. a + b &gt; c &rarr; {sideA} + {sideB} = {sideA + sideB} &gt; {sideC} ({cond1 ? (lang === 'ro' ? 'ADEVĂRAT' : 'TRUE') : (lang === 'ro' ? 'FALS!' : 'FALSE!')})
               </div>
               <div className={cond2 ? 'text-emerald-400' : 'text-rose-400 font-bold'}>
-                2. a + c &gt; b &rarr; {sideA} + {sideC} = {sideA + sideC} &gt; {sideB} ({cond2 ? 'ADEVĂRAT' : 'FALS!'})
+                2. a + c &gt; b &rarr; {sideA} + {sideC} = {sideA + sideC} &gt; {sideB} ({cond2 ? (lang === 'ro' ? 'ADEVĂRAT' : 'TRUE') : (lang === 'ro' ? 'FALS!' : 'FALSE!')})
               </div>
               <div className={cond3 ? 'text-emerald-400' : 'text-rose-400 font-bold'}>
-                3. b + c &gt; a &rarr; {sideB} + {sideC} = {sideB + sideC} &gt; {sideA} ({cond3 ? 'ADEVĂRAT' : 'FALS!'})
+                3. b + c &gt; a &rarr; {sideB} + {sideC} = {sideB + sideC} &gt; {sideA} ({cond3 ? (lang === 'ro' ? 'ADEVĂRAT' : 'TRUE') : (lang === 'ro' ? 'FALS!' : 'FALSE!')})
               </div>
             </div>
           </div>
@@ -319,7 +382,6 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             {isTriangleValid ? (
               <div className="flex flex-col items-center gap-3 animate-fadeIn">
                 <svg width="220" height="150" viewBox="0 0 220 150" className="overflow-visible">
-                  {/* Triangle Polygon */}
                   <polygon
                     points="110,20 20,130 200,130"
                     fill="rgba(16, 185, 129, 0.2)"
@@ -327,30 +389,38 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
                     strokeWidth="3"
                     strokeLinejoin="round"
                   />
-                  {/* Side Labels */}
                   <text x="50" y="70" fill="#22d3ee" fontSize="12" fontWeight="bold">a={sideA}</text>
                   <text x="160" y="70" fill="#2dd4bf" fontSize="12" fontWeight="bold">b={sideB}</text>
                   <text x="110" y="145" fill="#f59e0b" fontSize="12" fontWeight="bold" textAnchor="middle">c={sideC}</text>
                 </svg>
                 <div className="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-xs font-mono font-bold flex items-center gap-1.5 shadow-md">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>TRIUNGHI GEOMETRIC VALID! Pot forma un triunghi.</span>
+                  <span>
+                    {lang === 'ro'
+                      ? 'TRIUNGHI GEOMETRIC VALID! Pot forma un triunghi.'
+                      : 'VALID GEOMETRIC TRIANGLE! Can form a closed triangle.'}
+                  </span>
                 </div>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-3 animate-fadeIn">
                 <svg width="220" height="120" viewBox="0 0 220 120" className="overflow-visible">
-                  {/* Broken Line Representation */}
                   <line x1="20" y1="100" x2="80" y2="100" stroke="#f43f5e" strokeWidth="3" strokeDasharray="4,4" />
                   <line x1="140" y1="100" x2="200" y2="100" stroke="#f43f5e" strokeWidth="3" strokeDasharray="4,4" />
                   <line x1="20" y1="100" x2="200" y2="100" stroke="#64748b" strokeWidth="2" />
                   <text x="50" y="90" fill="#f43f5e" fontSize="11" fontWeight="bold">a={sideA}</text>
                   <text x="170" y="90" fill="#f43f5e" fontSize="11" fontWeight="bold">b={sideB}</text>
-                  <text x="110" y="115" fill="#94a3b8" fontSize="11" fontWeight="bold" textAnchor="middle">c={sideC} (prea lung!)</text>
+                  <text x="110" y="115" fill="#94a3b8" fontSize="11" fontWeight="bold" textAnchor="middle">
+                    c={sideC} {lang === 'ro' ? '(prea lung!)' : '(too long!)'}
+                  </text>
                 </svg>
                 <div className="px-4 py-1.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/50 text-xs font-mono font-bold flex items-center gap-1.5 shadow-md">
                   <AlertTriangle className="w-4 h-4 text-rose-400" />
-                  <span>IMPOSIBIL GEOMETRIC! Suma laturilor nu acoperă a treia latură.</span>
+                  <span>
+                    {lang === 'ro'
+                      ? 'IMPOSIBIL GEOMETRIC! Suma laturilor nu acoperă a treia latură.'
+                      : 'GEOMETRICALLY IMPOSSIBLE! Sum of sides cannot span the third side.'}
+                  </span>
                 </div>
               </div>
             )}
@@ -358,7 +428,9 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             <div className="mt-2 text-center text-[11px] font-mono text-slate-400">
               C++: <code className="text-amber-300">if (a+b&gt;c &amp;&amp; a+c&gt;b &amp;&amp; b+c&gt;a)</code> &rarr;{' '}
               <span className={isTriangleValid ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
-                {isTriangleValid ? 'true (Adevărat)' : 'false (Fals)'}
+                {isTriangleValid
+                  ? (lang === 'ro' ? 'true (Adevărat)' : 'true (True)')
+                  : (lang === 'ro' ? 'false (Fals)' : 'false (False)')}
               </span>
             </div>
           </div>
@@ -374,17 +446,21 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
                 {currentIdx + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Provocarea {currentIdx + 1}/{ALG_QUIZZES.length}: {currentQuiz.title}
+                {lang === 'ro'
+                  ? `Provocarea ${currentIdx + 1}/${ALG_QUIZZES.length}: ${currentQuiz.titleRo}`
+                  : `Challenge ${currentIdx + 1}/${ALG_QUIZZES.length}: ${currentQuiz.titleEn}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Întrebarea {currentIdx + 1}/{ALG_QUIZZES.length}
+              {lang === 'ro'
+                ? `Întrebarea ${currentIdx + 1}/${ALG_QUIZZES.length}`
+                : `Question ${currentIdx + 1}/${ALG_QUIZZES.length}`}
             </span>
           </div>
 
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs sm:text-sm">
             <div className="text-slate-300 text-xs sm:text-sm mb-3 font-sans leading-relaxed">
-              {currentQuiz.question}
+              {lang === 'ro' ? currentQuiz.questionRo : currentQuiz.questionEn}
             </div>
             <pre className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-orange-300 overflow-x-auto text-xs">
               {currentQuiz.codeSnippet}
@@ -392,7 +468,7 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
           </div>
 
           <div className="text-sm font-bold text-white">
-            Alege varianta corectă:
+            {lang === 'ro' ? 'Alege varianta corectă:' : 'Select the correct option:'}
           </div>
 
           <div className="flex flex-col gap-3">
@@ -424,7 +500,7 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
                     {String.fromCharCode(65 + idx)}
                   </span>
                   <div className="text-xs sm:text-sm leading-relaxed font-sans">
-                    {opt.label}
+                    {lang === 'ro' ? opt.labelRo : opt.labelEn}
                   </div>
                 </button>
               );
@@ -453,7 +529,7 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
                 onClick={handleNext}
                 className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer shadow-md font-sans"
               >
-                <span>Următoarea Problemă</span>
+                <span>{lang === 'ro' ? 'Următoarea Problemă' : 'Next Problem'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -467,15 +543,19 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Maestru al Algoritmilor Clasici!
+              {lang === 'ro' ? 'Maestru al Algoritmilor Clasici!' : 'Master of Classic Algorithms!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Ai demonstrat că stăpânești logica determinării maximului și inegalitatea triunghiului în C++, conform manualului de clasa a 7-a!
+              {lang === 'ro' ? (
+                <>Ai demonstrat că stăpânești logica determinării maximului și inegalitatea triunghiului în C++, conform manualului de clasa a 7-a!</>
+              ) : (
+                <>You have proven your mastery over finding maximums and the triangle inequality in C++, aligned with the 7th-grade curriculum!</>
+              )}
             </p>
           </div>
 
           <div className="bg-slate-950/80 px-6 py-2.5 rounded-2xl border border-slate-800 text-orange-400 font-mono font-bold text-sm">
-            Scor obținut: +{score} XP
+            {lang === 'ro' ? `Scor obținut: +${score} XP` : `Earned Score: +${score} XP`}
           </div>
 
           <button
@@ -483,7 +563,11 @@ export const DecLevel5_MinMaxAndTriangleInequality: React.FC<Props> = ({ onPass 
             onClick={handleFinishLevel}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 6: Laborator Live Code::Blocks cu if - else if - else</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 6: Laborator Live Code::Blocks cu if - else if - else'
+                : 'Advance to Level 6: Live Code::Blocks Lab with if - else if - else'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

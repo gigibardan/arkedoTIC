@@ -6,12 +6,10 @@ import {
   AlertTriangle,
   Bug,
   ShieldCheck,
-  Check,
-  Code,
-  Lightbulb,
-  Search
+  Lightbulb
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -19,14 +17,18 @@ interface Props {
 
 interface BugChallenge {
   id: string;
-  title: string;
+  titleRo: string;
+  titleEn: string;
   badCode: string;
   variableInitial: string;
-  questionPrompt: string;
+  questionPromptRo: string;
+  questionPromptEn: string;
   options: {
-    label: string;
+    labelRo: string;
+    labelEn: string;
     isCorrect: boolean;
-    explanation: string;
+    explanationRo: string;
+    explanationEn: string;
   }[];
   correctFixedCode: string;
 }
@@ -34,100 +36,132 @@ interface BugChallenge {
 const BUG_CHALLENGES: BugChallenge[] = [
   {
     id: 'b1',
-    title: 'Capcana Clasică: Atribuire în loc de Egalitate',
+    titleRo: 'Capcana Clasică: Atribuire în loc de Egalitate',
+    titleEn: 'Classic Pitfall: Assignment instead of Equality',
     variableInitial: 'int nota = 7;',
     badCode: 'if (nota = 10) {\n    cout << "Felicitari, nota maxima!";\n} else {\n    cout << "Mai repeta materia!";\n}',
-    questionPrompt: 'Ce se întâmplă la execuția acestui fragment de cod?',
+    questionPromptRo: 'Ce se întâmplă la execuția acestui fragment de cod?',
+    questionPromptEn: 'What happens when this code snippet runs?',
     options: [
       {
-        label: 'Afișează "Felicitari, nota maxima!" chiar dacă nota inițială era 7!',
+        labelRo: 'Afișează "Felicitari, nota maxima!" chiar dacă nota inițială era 7!',
+        labelEn: 'It prints "Felicitari, nota maxima!" even though the initial grade was 7!',
         isCorrect: true,
-        explanation: 'Operatorul simplu (=) este operator de atribuire! nota devine 10, iar expresia (nota = 10) are valoarea 10 (orice număr diferit de zero este considerat true în C++). Ramura if se execută MEREU!'
+        explanationRo: 'Operatorul simplu (=) este operator de atribuire! nota devine 10, iar expresia (nota = 10) are valoarea 10 (orice număr diferit de zero este considerat true în C++). Ramura if se execută MEREU!',
+        explanationEn: 'The single equals (=) is an assignment operator! nota becomes 10, and expression (nota = 10) evaluates to 10 (any non-zero number is true in C++). The if branch ALWAYS runs!'
       },
       {
-        label: 'Afișează "Mai repeta materia!" deoarece 7 nu este egal cu 10.',
+        labelRo: 'Afișează "Mai repeta materia!" deoarece 7 nu este egal cu 10.',
+        labelEn: 'It prints "Mai repeta materia!" because 7 is not equal to 10.',
         isCorrect: false,
-        explanation: 'Fals! Codul folosește un singur egal (=), așadar nu compară, ci suprascrie variabila nota cu 10!'
+        explanationRo: 'Fals! Codul folosește un singur egal (=), așadar nu compară, ci suprascrie variabila nota cu 10!',
+        explanationEn: 'False! The code uses single equals (=), so it does not compare; it overwrites nota with 10!'
       },
       {
-        label: 'Compilatorul dă eroare fatală și programul refuză să pornească.',
+        labelRo: 'Compilatorul dă eroare fatală și programul refuză să pornească.',
+        labelEn: 'The compiler throws a fatal error and halts.',
         isCorrect: false,
-        explanation: 'În C++, atribuirea într-o condiție este sintactic permisă (deși periculoasă). Compilatorul poate da doar un avertisment (warning).'
+        explanationRo: 'În C++, atribuirea într-o condiție este sintactic permisă (deși periculoasă). Compilatorul poate da doar un avertisment (warning).',
+        explanationEn: 'In C++, assignment inside conditions is syntactically allowed (though dangerous). The compiler may issue a warning, but not a fatal syntax error.'
       }
     ],
     correctFixedCode: 'if (nota == 10) {\n    cout << "Felicitari, nota maxima!";\n}'
   },
   {
     id: 'b2',
-    title: 'Operatorul Relațional „Diferit de” (!=)',
+    titleRo: 'Operatorul Relațional „Diferit de” (!=)',
+    titleEn: 'The "Not Equal To" Relational Operator (!=)',
     variableInitial: 'int parola_introdusa = 1234, parola_corecta = 9999;',
     badCode: 'if (parola_introdusa =! parola_corecta) {\n    cout << "Parola gresita!";\n}',
-    questionPrompt: 'Observă atent ordinea caracterelor la semnul de diferit:',
+    questionPromptRo: 'Observă atent ordinea caracterelor la semnul de diferit:',
+    questionPromptEn: 'Look closely at the character order in the inequality symbol:',
     options: [
       {
-        label: 'Operatorul corect este != (semnul exclamării urmat de egal), nu =!',
+        labelRo: 'Operatorul corect este != (semnul exclamării urmat de egal), nu =!',
+        labelEn: 'The correct operator is != (exclamation followed by equals), not =!',
         isCorrect: true,
-        explanation: 'Exact! Semnul de diferit este compus din ! urmat imediat de = (fără spațiu: !=). Scris invers (=!), înseamnă atribuirea negației logice!'
+        explanationRo: 'Exact! Semnul de diferit este compus din ! urmat imediat de = (fără spațiu: !=). Scris invers (=!), înseamnă atribuirea negației logice!',
+        explanationEn: 'Exactly! The inequality operator is exclamation followed immediately by equals (!=). Reversed (=!), it parses as assigning a logical negation!'
       },
       {
-        label: 'Codul este perfect valid și conform standardului C++.',
+        labelRo: 'Codul este perfect valid și conform standardului C++.',
+        labelEn: 'The code is completely standard and valid C++.',
         isCorrect: false,
-        explanation: 'Incorect. Ordinea caracterelor este strictă: != înseamnă „diferit de”.'
+        explanationRo: 'Incorect. Ordinea caracterelor este strictă: != înseamnă „diferit de”.',
+        explanationEn: 'Incorrect. Character sequence is strict: != means "not equal to".'
       },
       {
-        label: 'În C++ nu există operator pentru diferit; se folosește doar <>.',
+        labelRo: 'În C++ nu există operator pentru diferit; se folosește doar <>.',
+        labelEn: 'In C++ there is no inequality operator; <> is used instead.',
         isCorrect: false,
-        explanation: 'Operatorul <> există în Pascal sau SQL, dar în limbajul C++ operatorul este exclusiv !=.'
+        explanationRo: 'Operatorul <> există în Pascal sau SQL, dar în limbajul C++ operatorul este exclusiv !=.',
+        explanationEn: 'The <> operator belongs to Pascal or SQL; in C++ it is strictly !=.'
       }
     ],
     correctFixedCode: 'if (parola_introdusa != parola_corecta) {\n    cout << "Parola gresita!";\n}'
   },
   {
     id: 'b3',
-    title: 'Operatorii „Mai Mic sau Egal” (<=) și „Mai Mare sau Egal” (>=)',
+    titleRo: 'Operatorii „Mai Mic sau Egal” (<=) și „Mai Mare sau Egal” (>=)',
+    titleEn: 'Operators "Less Than or Equal" (<=) and "Greater Than or Equal" (>=)',
     variableInitial: 'int varsta = 18;',
     badCode: 'if (varsta => 18) {\n    cout << "Major";\n}',
-    questionPrompt: 'De ce această instrucțiune generează eroare de sintaxă la compilare?',
+    questionPromptRo: 'De ce această instrucțiune generează eroare de sintaxă la compilare?',
+    questionPromptEn: 'Why does this statement trigger a syntax error on compile?',
     options: [
       {
-        label: 'Simbolul egal se pune întotdeauna al doilea: >= și <=, niciodată => sau =<',
+        labelRo: 'Simbolul egal se pune întotdeauna al doilea: >= și <=, niciodată => sau =<',
+        labelEn: 'The equals symbol always comes second: >= and <=, never => or =<',
         isCorrect: true,
-        explanation: 'Bravo! În C++, operatorii relaționali compuși se citesc și se scriu în ordinea: „mai mare sau egal” (>=) și „mai mic sau egal” (<=).'
+        explanationRo: 'Bravo! În C++, operatorii relaționali compuși se citesc și se scriu în ordinea: „mai mare sau egal” (>=) și „mai mic sau egal” (<=).',
+        explanationEn: 'Correct! In C++, compound relational operators are written as >= and <=, matching how we say them.'
       },
       {
-        label: 'Variabila varsta trebuia pusă între paranteze suplimentare.',
+        labelRo: 'Variabila varsta trebuia pusă între paranteze suplimentare.',
+        labelEn: 'The variable varsta required redundant inner parentheses.',
         isCorrect: false,
-        explanation: 'Parantezele exterioare ale if-ului sunt suficiente: if (varsta >= 18).'
+        explanationRo: 'Parantezele exterioare ale if-ului sunt suficiente: if (varsta >= 18).',
+        explanationEn: 'Standard outer parentheses are sufficient: if (varsta >= 18).'
       },
       {
-        label: 'Nu avem voie să comparăm numere cu 18.',
+        labelRo: 'Nu avem voie să comparăm numere cu 18.',
+        labelEn: 'We are not allowed to compare variables with literal 18.',
         isCorrect: false,
-        explanation: 'Comparația numerică este complet permisă, doar sintaxa operatorului era greșită.'
+        explanationRo: 'Comparația numerică este complet permisă, doar sintaxa operatorului era greșită.',
+        explanationEn: 'Literal comparison is standard, only the operator glyph order was flipped.'
       }
     ],
     correctFixedCode: 'if (varsta >= 18) {\n    cout << "Major";\n}'
   },
   {
     id: 'b4',
-    title: 'Comparație Relațională Multiplă (Capcana Matematică 1 <= x <= 10)',
+    titleRo: 'Comparație Relațională Multiplă (Capcana Matematică 1 <= x <= 10)',
+    titleEn: 'Chained Comparison (The Mathematical 1 <= x <= 10 Trap)',
     variableInitial: 'int nota = 7;',
     badCode: 'if (1 <= nota <= 10) {\n    cout << "Nota valida din catalog!";\n}',
-    questionPrompt: 'De ce scrierea matematică în lanț 1 <= nota <= 10 este o capcană ascunsă în C++?',
+    questionPromptRo: 'De ce scrierea matematică în lanț 1 <= nota <= 10 este o capcană ascunsă în C++?',
+    questionPromptEn: 'Why is chained mathematical 1 <= nota <= 10 a hidden trap in C++?',
     options: [
       {
-        label: 'C++ evaluează de la stânga la dreapta: (1 <= nota) devine 1 (true), iar apoi 1 <= 10 este mereu true!',
+        labelRo: 'C++ evaluează de la stânga la dreapta: (1 <= nota) devine 1 (true), iar apoi 1 <= 10 este mereu true!',
+        labelEn: 'C++ evaluates left-to-right: (1 <= nota) evaluates to 1 (true), and 1 <= 10 is then always true!',
         isCorrect: true,
-        explanation: 'Extraordinar! În C++ nu putem scrie inegalități duble înlănțuite. Trebuie separat cu operatorul logic ȘI (&&): if (nota >= 1 && nota <= 10).'
+        explanationRo: 'Extraordinar! În C++ nu putem scrie inegalități duble înlănțuite. Trebuie separat cu operatorul logic ȘI (&&): if (nota >= 1 && nota <= 10).',
+        explanationEn: 'Superb! In C++ we cannot chain relational operators. We must split them with the logical AND operator (&&): if (nota >= 1 && nota <= 10).'
       },
       {
-        label: 'Nu se pot compara numere cu constante numerice.',
+        labelRo: 'Nu se pot compara numere cu constante numerice.',
+        labelEn: 'Variables cannot be compared with numeric constants.',
         isCorrect: false,
-        explanation: 'Comparațiile cu constante sunt la baza oricărui algoritm.'
+        explanationRo: 'Comparațiile cu constante sunt la baza oricărui algoritm.',
+        explanationEn: 'Constant comparisons are standard across computer science.'
       },
       {
-        label: 'Compilatorul inversează automat semnele de comparare.',
+        labelRo: 'Compilatorul inversează automat semnele de comparare.',
+        labelEn: 'The compiler silently reverses comparison signs.',
         isCorrect: false,
-        explanation: 'Compilatorul respectă ordinea de precedență a operatorilor de la stânga la dreapta.'
+        explanationRo: 'Compilatorul respectă ordinea de precedență a operatorilor de la stânga la dreapta.',
+        explanationEn: 'The compiler evaluates expressions following strict left-to-right precedence.'
       }
     ],
     correctFixedCode: 'if (nota >= 1 && nota <= 10) {\n    cout << "Nota valida din catalog!";\n}'
@@ -135,6 +169,7 @@ const BUG_CHALLENGES: BugChallenge[] = [
 ];
 
 export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptIdx, setSelectedOptIdx] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -157,13 +192,17 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
       setScore(s => s + 25);
       setFeedback({
         isCorrect: true,
-        text: `Excelent observat! ${opt.explanation}`
+        text: lang === 'ro'
+          ? `Excelent observat! ${opt.explanationRo}`
+          : `Great catch! ${opt.explanationEn}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Atenție! ${opt.explanation}`
+        text: lang === 'ro'
+          ? `Atenție! ${opt.explanationRo}`
+          : `Careful! ${opt.explanationEn}`
       });
     }
   };
@@ -187,21 +226,33 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 2 din 7 • Modulul 4C
+              {lang === 'ro' ? 'Nivelul 2 din 7 • Modulul 4C' : 'Level 2 of 7 • Module 4C'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 77–78</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 77–78' : 'Art Klett Textbook pp. 77–78'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Bug className="w-6 h-6 text-orange-400" />
-            <span>Capcana = vs == &amp; Operatori Relaționali</span>
+            <span>
+              {lang === 'ro'
+                ? 'Capcana = vs == & Operatori Relaționali'
+                : 'The = vs == Trap & Relational Operators'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Greșeala numărul 1 a tuturor începătorilor în C++ este confuzia dintre operatorul de atribuire (<code className="text-rose-400 font-bold">=</code>) și operatorul de egalitate matematică (<code className="text-emerald-400 font-bold">==</code>). Învață să detectezi capcanele!
+            {lang === 'ro' ? (
+              <>Greșeala numărul 1 a tuturor începătorilor în C++ este confuzia dintre operatorul de atribuire (<code className="text-rose-400 font-bold">=</code>) și operatorul de egalitate matematică (<code className="text-emerald-400 font-bold">==</code>). Învață să detectezi capcanele!</>
+            ) : (
+              <>The #1 beginner mistake in C++ is confusing assignment (<code className="text-rose-400 font-bold">=</code>) with mathematical equality (<code className="text-emerald-400 font-bold">==</code>). Master the difference and avoid subtle bugs!</>
+            )}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Scor Nivel 2:</span>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'ro' ? 'Scor Nivel 2:' : 'Level 2 Score:'}
+          </span>
           <span className="text-xl sm:text-2xl font-black font-mono text-orange-400">{score} / 100 XP</span>
         </div>
       </div>
@@ -213,22 +264,26 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-mono font-bold text-rose-400 uppercase tracking-wider">
-                Operatorul = (Un Singur Egal)
+                {lang === 'ro' ? 'Operatorul = (Un Singur Egal)' : 'Operator = (Single Equals)'}
               </span>
               <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-bold">
-                ATRIBUIRE (Schimbă Valoarea)
+                {lang === 'ro' ? 'ATRIBUIRE (Schimbă Valoarea)' : 'ASSIGNMENT (Overwrites Value)'}
               </span>
             </div>
             <p className="text-xs text-slate-300 mb-3 leading-relaxed">
-              Copiază valoarea din dreapta în variabila din stânga. <strong>NU testează dacă sunt egale!</strong>
+              {lang === 'ro'
+                ? 'Copiază valoarea din dreapta în variabila din stânga. NU testează dacă sunt egale!'
+                : 'Copies value on right into variable on left. Does NOT test equality!'}
             </p>
             <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 font-mono text-xs text-rose-300">
-              int x = 5; // x primeste 5<br />
-              <span className="text-rose-400 font-bold">if (x = 10)</span> // x devine 10! Expresia este 10 != 0 (MEREU TRUE!)
+              int x = 5; // x = 5<br />
+              <span className="text-rose-400 font-bold">if (x = 10)</span> // x {lang === 'ro' ? 'devine 10! Expresia este 10 != 0 (MEREU TRUE!)' : 'becomes 10! Evaluates to 10 != 0 (ALWAYS TRUE!)'}
             </div>
           </div>
           <div className="mt-3 text-[11px] text-rose-400 font-medium">
-            ⚠️ Capcană: Dacă pui un singur egal în if, condiția va fi mereu adevărată!
+            {lang === 'ro'
+              ? '⚠️ Capcană: Dacă pui un singur egal în if, condiția va fi mereu adevărată!'
+              : '⚠️ Pitfall: Single equals in an if makes condition almost always evaluate to true!'}
           </div>
         </div>
 
@@ -237,22 +292,26 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                Operatorul == (Dublu Egal)
+                {lang === 'ro' ? 'Operatorul == (Dublu Egal)' : 'Operator == (Double Equals)'}
               </span>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
-                COMPARAȚIE (Nu Modifică Nimic)
+                {lang === 'ro' ? 'COMPARAȚIE (Nu Modifică Nimic)' : 'COMPARISON (Does Not Mutate)'}
               </span>
             </div>
             <p className="text-xs text-slate-300 mb-3 leading-relaxed">
-              Verifică egalitatea matematică între două expresii și returnează <code className="text-emerald-400">true</code> sau <code className="text-rose-400">false</code>.
+              {lang === 'ro'
+                ? 'Verifică egalitatea matematică între două expresii și returnează true sau false.'
+                : 'Tests mathematical equality between two expressions, returning true or false.'}
             </p>
             <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 font-mono text-xs text-emerald-300">
               int x = 5;<br />
-              <span className="text-emerald-400 font-bold">if (x == 10)</span> // Testează: este 5 egal cu 10? Răspuns: FALSE!
+              <span className="text-emerald-400 font-bold">if (x == 10)</span> // {lang === 'ro' ? 'Testează: este 5 egal cu 10? Răspuns: FALSE!' : 'Tests: is 5 equal to 10? Answer: FALSE!'}
             </div>
           </div>
           <div className="mt-3 text-[11px] text-emerald-400 font-medium">
-            ✅ Corect: În orice decizie if, verificarea egalității se face MEREU cu ==.
+            {lang === 'ro'
+              ? '✅ Corect: În orice decizie if, verificarea egalității se face MEREU cu ==.'
+              : '✅ Correct: In every if condition, equality check is ALWAYS ==.'}
           </div>
         </div>
       </div>
@@ -260,12 +319,15 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
       {/* Interactive Demonstration Simulator */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-xl">
         <div className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-          <Lightbulb className="w-4 h-4 text-amber-400" /> Laborator Interactiv de Testare:
+          <Lightbulb className="w-4 h-4 text-amber-400" />
+          <span>{lang === 'ro' ? 'Laborator Interactiv de Testare:' : 'Interactive Testing Sandbox:'}</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           <div className="md:col-span-5 bg-slate-950 p-3.5 rounded-2xl border border-slate-800 flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-400 font-mono">Valoare inițială variabilă:</span>
+              <span className="text-xs text-slate-400 font-mono">
+                {lang === 'ro' ? 'Valoare inițială variabilă:' : 'Initial variable value:'}
+              </span>
               <span className="font-mono font-bold text-cyan-400">int a = {testA};</span>
             </div>
             <input
@@ -277,7 +339,9 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
               className="w-full accent-cyan-500 cursor-pointer"
             />
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 font-mono">Operator testat:</span>
+              <span className="text-xs text-slate-400 font-mono">
+                {lang === 'ro' ? 'Operator testat:' : 'Tested operator:'}
+              </span>
               <button
                 type="button"
                 onClick={() => setOperatorChoice('==')}
@@ -287,7 +351,7 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
                     : 'bg-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                == (Egalitate)
+                == ({lang === 'ro' ? 'Egalitate' : 'Equality'})
               </button>
               <button
                 type="button"
@@ -298,13 +362,15 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
                     : 'bg-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                = (Atribuire - Capcana!)
+                = ({lang === 'ro' ? 'Atribuire - Capcana!' : 'Assignment - Trap!'})
               </button>
             </div>
           </div>
 
           <div className="md:col-span-7 bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs">
-            <div className="text-slate-400 mb-1">// Simulare execuție C++:</div>
+            <div className="text-slate-400 mb-1">
+              {lang === 'ro' ? '// Simulare execuție C++:' : '// C++ Execution Simulation:'}
+            </div>
             <div className="text-slate-300">
               int a = {testA};<br />
               <span className={operatorChoice === '=' ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
@@ -318,7 +384,9 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
             </div>
 
             <div className="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-slate-400">Rezultat ieșire consolă:</span>
+              <span className="text-slate-400">
+                {lang === 'ro' ? 'Rezultat ieșire consolă:' : 'Console output:'}
+              </span>
               <span className={`px-3 py-1 rounded-xl font-bold ${
                 operatorChoice === '='
                   ? 'bg-rose-950 text-rose-300 border border-rose-500/40'
@@ -327,10 +395,10 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
                   : 'bg-slate-900 text-slate-300 border border-slate-700'
               }`}>
                 {operatorChoice === '='
-                  ? 'CONDITIE TRUE! (a a devenit 10!)'
+                  ? (lang === 'ro' ? 'CONDITIE TRUE! (a a devenit 10!)' : 'CONDITION TRUE! (a mutated to 10!)')
                   : testA === 10
-                  ? 'CONDITIE TRUE! (7 == 10 este adevarat cand a e 10)'
-                  : 'CONDITIE FALSE! (a nu este 10)'}
+                  ? (lang === 'ro' ? 'CONDITIE TRUE! (10 == 10 este adevarat)' : 'CONDITION TRUE! (10 == 10 is true)')
+                  : (lang === 'ro' ? 'CONDITIE FALSE! (a nu este 10)' : 'CONDITION FALSE! (a is not 10)')}
               </span>
             </div>
           </div>
@@ -346,11 +414,15 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
                 {currentIdx + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Detectorul de Bug-uri {currentIdx + 1}/{BUG_CHALLENGES.length}: {currentChallenge.title}
+                {lang === 'ro'
+                  ? `Detectorul de Bug-uri ${currentIdx + 1}/${BUG_CHALLENGES.length}: ${currentChallenge.titleRo}`
+                  : `Bug Detector ${currentIdx + 1}/${BUG_CHALLENGES.length}: ${currentChallenge.titleEn}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Întrebarea {currentIdx + 1}/{BUG_CHALLENGES.length}
+              {lang === 'ro'
+                ? `Întrebarea ${currentIdx + 1}/${BUG_CHALLENGES.length}`
+                : `Question ${currentIdx + 1}/${BUG_CHALLENGES.length}`}
             </span>
           </div>
 
@@ -358,7 +430,8 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
           <div className="bg-slate-950 p-4 rounded-2xl border border-rose-500/40 font-mono text-xs sm:text-sm">
             <div className="flex items-center justify-between text-[11px] text-rose-400 mb-2">
               <span className="flex items-center gap-1">
-                <Bug className="w-3.5 h-3.5" /> Cod suspect analizat:
+                <Bug className="w-3.5 h-3.5" />
+                <span>{lang === 'ro' ? 'Cod suspect analizat:' : 'Suspicious code analyzed:'}</span>
               </span>
               <span className="text-slate-400">{currentChallenge.variableInitial}</span>
             </div>
@@ -368,7 +441,7 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
           </div>
 
           <div className="text-sm font-bold text-white">
-            {currentChallenge.questionPrompt}
+            {lang === 'ro' ? currentChallenge.questionPromptRo : currentChallenge.questionPromptEn}
           </div>
 
           {/* Options List */}
@@ -401,7 +474,7 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
                     {String.fromCharCode(65 + idx)}
                   </span>
                   <div className="text-xs sm:text-sm leading-relaxed">
-                    {opt.label}
+                    {lang === 'ro' ? opt.labelRo : opt.labelEn}
                   </div>
                 </button>
               );
@@ -430,7 +503,8 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
               <div className="bg-slate-950 p-3.5 rounded-2xl border border-emerald-500/40 font-mono text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div>
                   <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-0.5 flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Varianta corectată în C++:
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>{lang === 'ro' ? 'Varianta corectată în C++:' : 'Corrected C++ variant:'}</span>
                   </div>
                   <pre className="text-emerald-300 text-xs">{currentChallenge.correctFixedCode}</pre>
                 </div>
@@ -440,7 +514,7 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
                   onClick={handleNextChallenge}
                   className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer shadow-md self-end sm:self-auto"
                 >
-                  <span>Continuă</span>
+                  <span>{lang === 'ro' ? 'Continuă' : 'Continue'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -455,15 +529,19 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Detector de Bug-uri Certificat!
+              {lang === 'ro' ? 'Detector de Bug-uri Certificat!' : 'Certified Bug Detector!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              De acum înainte nu vei mai cădea în capcana operatorului <code className="text-rose-400 font-bold">=</code> în loc de <code className="text-emerald-400 font-bold">==</code> și stăpânești toți cei 6 operatori relaționali!
+              {lang === 'ro' ? (
+                <>De acum înainte nu vei mai cădea în capcana operatorului <code className="text-rose-400 font-bold">=</code> în loc de <code className="text-emerald-400 font-bold">==</code> și stăpânești toți cei 6 operatori relaționali!</>
+              ) : (
+                <>From now on you will never confuse <code className="text-rose-400 font-bold">=</code> with <code className="text-emerald-400 font-bold">==</code> and you have mastered all 6 relational operators!</>
+              )}
             </p>
           </div>
 
           <div className="bg-slate-950/80 px-6 py-2.5 rounded-2xl border border-slate-800 text-orange-400 font-mono font-bold text-sm">
-            Scor obținut: +{score} XP
+            {lang === 'ro' ? `Scor obținut: +${score} XP` : `Score Earned: +${score} XP`}
           </div>
 
           <button
@@ -471,7 +549,11 @@ export const DecLevel2_EqualityTrapAndRelational: React.FC<Props> = ({ onPass })
             onClick={handleFinishLevel}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 3: Operatori Logici Compuși (&amp;&amp;, ||, !)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 3: Operatori Logici Compuși (&&, ||, !)'
+                : 'Advance to Level 3: Compound Logical Operators (&&, ||, !)'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

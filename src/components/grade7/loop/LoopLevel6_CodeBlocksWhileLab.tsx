@@ -12,6 +12,7 @@ import {
   Code
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -21,18 +22,21 @@ interface TestCase {
   id: string;
   inputN: number;
   expectedOutput: number;
-  label: string;
+  labelRo: string;
+  labelEn: string;
   passed?: boolean;
 }
 
 const INITIAL_TESTS: TestCase[] = [
-  { id: 't1', inputN: 2468, expectedOutput: 4, label: 'Toate cifrele pare (2, 4, 6, 8)', passed: false },
-  { id: 't2', inputN: 1357, expectedOutput: 0, label: 'Toate cifrele impare (1, 3, 5, 7)', passed: false },
-  { id: 't3', inputN: 2026, expectedOutput: 4, label: 'Conține cifra zero (2, 0, 2, 6 - zero este par!)', passed: false },
-  { id: 't4', inputN: 90514, expectedOutput: 2, label: 'Număr mixt de 5 cifre (0 și 4)', passed: false }
+  { id: 't1', inputN: 2468, expectedOutput: 4, labelRo: 'Toate cifrele pare (2, 4, 6, 8)', labelEn: 'All even digits (2, 4, 6, 8)', passed: false },
+  { id: 't2', inputN: 1357, expectedOutput: 0, labelRo: 'Toate cifrele impare (1, 3, 5, 7)', labelEn: 'All odd digits (1, 3, 5, 7)', passed: false },
+  { id: 't3', inputN: 2026, expectedOutput: 4, labelRo: 'Conține cifra zero (2, 0, 2, 6 - zero este par!)', labelEn: 'Contains zero (2, 0, 2, 6 - zero is even!)', passed: false },
+  { id: 't4', inputN: 90514, expectedOutput: 2, labelRo: 'Număr mixt de 5 cifre (0 și 4)', labelEn: 'Mixed 5-digit number (0 and 4)', passed: false }
 ];
 
 export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Selectable code snippets to complete the algorithm
   const [selectedWhileCond, setSelectedWhileCond] = useState<string>('n > 0');
   const [selectedExtract, setSelectedExtract] = useState<string>('n % 10');
@@ -80,12 +84,14 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
     sounds.playClick();
     setIsRunning(true);
     setConsoleOutput([
-      '=== COMPILARE PROIECT C++ (Target: mingw32-g++) ===',
+      lang === 'ro' ? '=== COMPILARE PROIECT C++ (Target: mingw32-g++) ===' : '=== C++ BUILD (Target: mingw32-g++) ===',
       'g++.exe -Wall -fexceptions -g -c main.cpp -o obj\\main.o',
       'g++.exe -o bin\\cifre_pare.exe obj\\main.o',
       'Process terminated with status 0 (0 error(s), 0 warning(s))',
       '--------------------------------------------------',
-      '=== EXECUTARE SUITĂ TESTE OFICIALE (Manual Art Klett pag. 85) ==='
+      lang === 'ro'
+        ? '=== EXECUTARE SUITĂ TESTE OFICIALE (Manual Art Klett pag. 85) ==='
+        : '=== EXECUTING OFFICIAL TEST SUITE (Art Klett Textbook p. 85) ==='
     ]);
 
     setTimeout(() => {
@@ -106,19 +112,31 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
       const logs: string[] = [];
       updated.forEach(tc => {
         const actual = runAlgorithm(tc.inputN);
-        logs.push(`Test [n = ${tc.inputN}]: Rezultat afișat: ${actual} | Așteptat: ${tc.expectedOutput} -> ${tc.passed ? 'PASSED [OK]' : 'FAILED'}`);
+        logs.push(
+          lang === 'ro'
+            ? `Test [n = ${tc.inputN}]: Rezultat afișat: ${actual} | Așteptat: ${tc.expectedOutput} -> ${tc.passed ? 'PASSED [OK]' : 'FAILED'}`
+            : `Test [n = ${tc.inputN}]: Output: ${actual} | Expected: ${tc.expectedOutput} -> ${tc.passed ? 'PASSED [OK]' : 'FAILED'}`
+        );
       });
 
       const ok = updated.every(t => t.passed);
       if (ok) {
         sounds.playVictory();
         logs.push('--------------------------------------------------');
-        logs.push('>>> TOATE CELE 4 TESTE AU FOST TRECUTE CU SUCCES! (100% SUITE PASS) <<<');
+        logs.push(
+          lang === 'ro'
+            ? '>>> TOATE CELE 4 TESTE AU FOST TRECUTE CU SUCCES! (100% SUITE PASS) <<<'
+            : '>>> ALL 4 TESTS PASSED SUCCESSFULLY! (100% SUITE PASS) <<<'
+        );
         setAllPassed(true);
       } else {
         sounds.playError();
         logs.push('--------------------------------------------------');
-        logs.push('>>> TESTE EȘUATE. VERIFICĂ EXTRAGEREA (%), VERIFICAREA PARITĂȚII ȘI TĂIEREA (/)! <<<');
+        logs.push(
+          lang === 'ro'
+            ? '>>> TESTE EȘUATE. VERIFICĂ EXTRAGEREA (%), VERIFICAREA PARITĂȚII ȘI TĂIEREA (/)! <<<'
+            : '>>> TESTS FAILED. CHECK EXTRACTION (%), PARITY CHECK AND TRUNCATION (/)! <<<'
+        );
       }
 
       setConsoleOutput(prev => [...prev, ...logs]);
@@ -130,7 +148,10 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
     sounds.playClick();
     const parsed = parseInt(customN);
     if (isNaN(parsed)) {
-      setConsoleOutput(prev => [...prev, `[Eroare]: "${customN}" nu este un număr valid.`]);
+      setConsoleOutput(prev => [
+        ...prev,
+        lang === 'ro' ? `[Eroare]: "${customN}" nu este un număr valid.` : `[Error]: "${customN}" is not a valid number.`
+      ]);
       return;
     }
 
@@ -139,7 +160,7 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
     setConsoleOutput(prev => [
       ...prev,
       `cin >> n; (${parsed})`,
-      `cout << "Numar cifre pare: " << ${res} << endl;`
+      `cout << "${lang === 'ro' ? 'Numar cifre pare: ' : 'Even digits count: '}" << ${res} << endl;`
     ]);
   };
 
@@ -155,23 +176,31 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 6 din 7 • Modulul 4D
+              {lang === 'ro' ? 'Nivelul 6 din 7 • Modulul 4D' : 'Level 6 of 7 • Module 4D'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 85</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 85' : 'Art Klett Textbook p. 85'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Laptop className="w-6 h-6 text-orange-400" />
-            <span>Laborator Live Code::Blocks: Numărarea Cifrelor Pare</span>
+            <span>
+              {lang === 'ro'
+                ? 'Laborator Live Code::Blocks: Numărarea Cifrelor Pare'
+                : 'Live Code::Blocks Lab: Counting Even Digits'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Laboratorul practic oficial: Scrie programul C++ care citește un număr natural și calculează câte cifre pare conține. Compilează cu F9 și trece toate cazurile de testare!
+            {lang === 'ro'
+              ? 'Laboratorul practic oficial: Scrie programul C++ care citește un număr natural și calculează câte cifre pare conține. Compilează cu F9 și trece toate cazurile de testare!'
+              : 'Official practical lab: Write the C++ program that reads a natural number and counts its even digits. Build with F9 and pass all test cases!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Status Teste:</span>
+          <span className="text-[11px] font-mono text-slate-400">{lang === 'ro' ? 'Status Teste:' : 'Tests Status:'}</span>
           <span className="text-lg sm:text-xl font-black font-mono text-orange-400">
-            {testCases.filter(t => t.passed).length} / 4 Teste Trecute
+            {testCases.filter(t => t.passed).length} / 4 {lang === 'ro' ? 'Teste Trecute' : 'Tests Passed'}
           </span>
         </div>
       </div>
@@ -197,7 +226,7 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
               disabled={isRunning}
               onClick={handleRunAllTests}
               className="px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-orange-600/30 active:scale-95"
-              title="Compilează și Execută Toate Testele (F9)"
+              title={lang === 'ro' ? 'Compilează și Execută Toate Testele (F9)' : 'Build and Run All Tests (F9)'}
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Build &amp; Run (F9)</span>
@@ -208,7 +237,9 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
         {/* Code Editor */}
         <div className="p-4 sm:p-5 bg-slate-950 font-mono text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed border-b border-slate-800">
           <div className="text-slate-500 text-xs mb-1">
-            // Problema din manual (pag. 85): Numărarea cifrelor pare ale unui număr
+            {lang === 'ro'
+              ? '// Problema din manual (pag. 85): Numărarea cifrelor pare ale unui număr'
+              : '// Problem from textbook (p. 85): Counting even digits of a number'}
           </div>
           <div><span className="text-purple-400">#include</span> <span className="text-emerald-400">&lt;iostream&gt;</span></div>
           <div><span className="text-purple-400">using namespace</span> <span className="text-amber-300">std</span>;</div>
@@ -226,7 +257,9 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
               className="bg-slate-900 border border-orange-500 text-orange-300 rounded px-2 py-0.5 text-xs font-mono focus:outline-none"
             >
               <option value="n > 0">n &gt; 0</option>
-              <option value="n >= 0">n &gt;= 0 (Pericol buclă infinită!)</option>
+              <option value="n >= 0">
+                {lang === 'ro' ? 'n >= 0 (Pericol buclă infinită!)' : 'n >= 0 (Infinite loop hazard!)'}
+              </option>
               <option value="n == 0">n == 0</option>
             </select>
             ) {'{'}
@@ -240,7 +273,9 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
               onChange={(e) => setSelectedExtract(e.target.value)}
               className="bg-slate-900 border border-orange-500 text-orange-300 rounded px-2 py-0.5 text-xs font-mono focus:outline-none"
             >
-              <option value="n % 10">n % 10 (Extrage ultima cifră)</option>
+              <option value="n % 10">
+                {lang === 'ro' ? 'n % 10 (Extrage ultima cifră)' : 'n % 10 (Extract last digit)'}
+              </option>
               <option value="n / 10">n / 10</option>
               <option value="n + 10">n + 10</option>
             </select>
@@ -255,8 +290,12 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
               onChange={(e) => setSelectedCheck(e.target.value)}
               className="bg-slate-900 border border-orange-500 text-orange-300 rounded px-2 py-0.5 text-xs font-mono focus:outline-none"
             >
-              <option value="c % 2 == 0">c % 2 == 0 (Cifra este pară)</option>
-              <option value="c % 2 != 0">c % 2 != 0 (Cifra este impară)</option>
+              <option value="c % 2 == 0">
+                {lang === 'ro' ? 'c % 2 == 0 (Cifra este pară)' : 'c % 2 == 0 (Digit is even)'}
+              </option>
+              <option value="c % 2 != 0">
+                {lang === 'ro' ? 'c % 2 != 0 (Cifra este impară)' : 'c % 2 != 0 (Digit is odd)'}
+              </option>
               <option value="c == 2">c == 2</option>
             </select>
             ){' '}
@@ -271,7 +310,9 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
               onChange={(e) => setSelectedChop(e.target.value)}
               className="bg-slate-900 border border-orange-500 text-orange-300 rounded px-2 py-0.5 text-xs font-mono focus:outline-none"
             >
-              <option value="n / 10">n / 10 (Taie ultima cifră)</option>
+              <option value="n / 10">
+                {lang === 'ro' ? 'n / 10 (Taie ultima cifră)' : 'n / 10 (Chop last digit)'}
+              </option>
               <option value="n % 10">n % 10</option>
               <option value="n - 1">n - 1</option>
             </select>
@@ -280,7 +321,13 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
 
           <div className="pl-6">{'}'}</div>
           <br />
-          <div className="pl-6"><span className="text-amber-400">cout</span> &lt;&lt; <span className="text-emerald-300">&quot;Cifre pare: &quot;</span> &lt;&lt; nr_pare &lt;&lt; <span className="text-amber-400">endl</span>;</div>
+          <div className="pl-6">
+            <span className="text-amber-400">cout</span> &lt;&lt;{' '}
+            <span className="text-emerald-300">
+              {lang === 'ro' ? '"Cifre pare: "' : '"Even digits: "'}
+            </span>{' '}
+            &lt;&lt; nr_pare &lt;&lt; <span className="text-amber-400">endl</span>;
+          </div>
           <div className="pl-6"><span className="text-purple-400">return</span> 0;</div>
           <div>{'}'}</div>
         </div>
@@ -290,14 +337,16 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
           <div className="flex items-center justify-between text-slate-400 border-b border-slate-900 pb-2">
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-orange-400" />
-              <span className="font-bold text-white">Consola Terminal &bull; bin/cifre_pare.exe</span>
+              <span className="font-bold text-white">
+                {lang === 'ro' ? 'Consola Terminal • bin/cifre_pare.exe' : 'Terminal Console • bin/cifre_pare.exe'}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 value={customN}
                 onChange={(e) => setCustomN(e.target.value)}
-                placeholder="Testează număr..."
+                placeholder={lang === 'ro' ? 'Testează număr...' : 'Test number...'}
                 className="w-32 bg-slate-900 border border-slate-800 rounded px-2 py-0.5 text-orange-300 text-xs focus:outline-none focus:border-orange-500"
               />
               <button
@@ -305,7 +354,7 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
                 onClick={handleTestCustom}
                 className="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer"
               >
-                Introdu n
+                {lang === 'ro' ? 'Introdu n' : 'Input n'}
               </button>
             </div>
           </div>
@@ -313,7 +362,9 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
           <div className="min-h-[100px] max-h-48 overflow-y-auto space-y-1 text-slate-300 text-[11px]">
             {consoleOutput.length === 0 ? (
               <div className="text-slate-600 italic">
-                Apasă pe butonul portocaliu &quot;Build &amp; Run (F9)&quot; pentru a compila codul și a rula testele automate.
+                {lang === 'ro'
+                  ? 'Apasă pe butonul portocaliu "Build & Run (F9)" pentru a compila codul și a rula testele automate.'
+                  : 'Click the orange "Build & Run (F9)" button to build the code and run automated tests.'}
               </div>
             ) : (
               consoleOutput.map((line, i) => (
@@ -344,11 +395,14 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
                   {tc.passed ? '✓ PASSED' : '○ PENDING'}
                 </span>
               </div>
-              <div className="font-bold text-xs text-white mb-0.5 font-sans">{tc.label}</div>
+              <div className="font-bold text-xs text-white mb-0.5 font-sans">
+                {lang === 'ro' ? tc.labelRo : tc.labelEn}
+              </div>
               <div className="text-[11px] text-cyan-400">cin &gt;&gt; {tc.inputN}</div>
             </div>
             <div className="mt-2 text-[10px] text-slate-400 border-t border-slate-800/80 pt-1.5">
-              Cifre pare așteptate: <span className="text-emerald-300 font-bold">{tc.expectedOutput}</span>
+              {lang === 'ro' ? 'Cifre pare așteptate:' : 'Expected even digits:'}{' '}
+              <span className="text-emerald-300 font-bold">{tc.expectedOutput}</span>
             </div>
           </div>
         ))}
@@ -362,10 +416,14 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Laborator C++ Finalizat cu Notă Maximă!
+              {lang === 'ro' ? 'Laborator C++ Finalizat cu Notă Maximă!' : 'C++ Lab Completed with Top Marks!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Ai configurat corect extragerea cu <code className="text-orange-300">n % 10</code>, paritatea cu <code className="text-orange-300">c % 2 == 0</code> și tăierea cu <code className="text-orange-300">n / 10</code>!
+              {lang === 'ro' ? (
+                <>Ai configurat corect extragerea cu <code className="text-orange-300">n % 10</code>, paritatea cu <code className="text-orange-300">c % 2 == 0</code> și tăierea cu <code className="text-orange-300">n / 10</code>!</>
+              ) : (
+                <>You properly configured extraction with <code className="text-orange-300">n % 10</code>, parity check with <code className="text-orange-300">c % 2 == 0</code> and truncation with <code className="text-orange-300">n / 10</code>!</>
+              )}
             </p>
           </div>
 
@@ -374,7 +432,11 @@ export const LoopLevel6_CodeBlocksWhileLab: React.FC<Props> = ({ onPass }) => {
             onClick={handleFinish}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 7: Evaluare Finală &amp; Certificat Digital</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 7: Evaluare Finală & Certificat Digital'
+                : 'Proceed to Level 7: Final Assessment & Digital Certificate'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

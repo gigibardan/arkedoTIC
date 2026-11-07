@@ -14,12 +14,15 @@ import {
   Binary
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
 }
 
 export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Divisor Scanner State
   const [testNumber, setTestNumber] = useState<number>(28);
   const [divisors, setDivisors] = useState<number[]>([1, 2, 4, 7, 14, 28]);
@@ -80,51 +83,77 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
 
   const CHALLENGES = [
     {
-      question: 'Până la ce limită este suficient să căutăm divizorii proprii ai unui număr n într-o buclă for?',
+      questionRo: 'Până la ce limită este suficient să căutăm divizorii proprii ai unui număr n într-o buclă for?',
+      questionEn: 'Up to what limit is it sufficient to search for proper divisors of n in a for loop?',
       code: 'for (int d = 2; d <= ???; d++) {\n    if (n % d == 0) cout << d << " ";\n}',
-      options: [
+      optionsRo: [
         { label: 'Până la n / 2 (deoarece niciun divizor propriu nu poate depăși jumătatea numărului)', correct: true },
         { label: 'Până la n + 1', correct: false },
         { label: 'Până la n * 2', correct: false },
         { label: 'Nu putem optimiza, trebuie căutat până la 1.000.000', correct: false }
       ],
-      explanation: 'Cel mai mare divizor propriu al unui număr par n este n/2 (ex: pentru 20 este 10). Dincolo de jumătate nu poate exista niciun divizor în afară de n însuși!'
+      optionsEn: [
+        { label: 'Up to n / 2 (since no proper divisor can exceed half of the number)', correct: true },
+        { label: 'Up to n + 1', correct: false },
+        { label: 'Up to n * 2', correct: false },
+        { label: 'Cannot optimize, must search up to 1,000,000', correct: false }
+      ],
+      explanationRo: 'Cel mai mare divizor propriu al unui număr par n este n/2 (ex: pentru 20 este 10). Dincolo de jumătate nu poate exista niciun divizor în afară de n însuși!',
+      explanationEn: 'The largest proper divisor of an even number n is n/2 (e.g. for 20 it is 10). Beyond half, no divisor can exist other than n itself!'
     },
     {
-      question: 'Câți divizori are un număr PRIM (cum ar fi 13 sau 29)?',
+      questionRo: 'Câți divizori are un număr PRIM (cum ar fi 13 sau 29)?',
+      questionEn: 'How many divisors does a PRIME number (like 13 or 29) possess?',
       code: null,
-      options: [
+      optionsRo: [
         { label: 'Exact 2 divizori: 1 și el însuși', correct: true },
         { label: 'Doar 1 singur divizor', correct: false },
         { label: '0 divizori', correct: false },
         { label: 'Un număr par de divizori mai mare decât 4', correct: false }
       ],
-      explanation: 'Prin definiție matematică, un număr natural p > 1 este prim dacă are exact 2 divizori: 1 și p.'
+      optionsEn: [
+        { label: 'Exactly 2 divisors: 1 and itself', correct: true },
+        { label: 'Only 1 single divisor', correct: false },
+        { label: '0 divisors', correct: false },
+        { label: 'An even count of divisors greater than 4', correct: false }
+      ],
+      explanationRo: 'Prin definiție matematică, un număr natural p > 1 este prim dacă are exact 2 divizori: 1 și p.',
+      explanationEn: 'By mathematical definition, a natural number p > 1 is prime if it has exactly 2 divisors: 1 and p.'
     },
     {
-      question: 'Ce este un „Număr Perfect” (studiat la pag. 89 în manual)?',
+      questionRo: 'Ce este un „Număr Perfect” (studiat la pag. 89 în manual)?',
+      questionEn: 'What is a "Perfect Number" (covered on p. 89 of the textbook)?',
       code: '// Exemplu: n = 6 -> divizorii mai mici ca 6 sunt 1, 2, 3\n// 1 + 2 + 3 = 6 (Număr Perfect!)',
-      options: [
+      optionsRo: [
         { label: 'Un număr egal cu suma divizorilor săi proprii (inclusiv 1, dar excluzând numărul însuși)', correct: true },
         { label: 'Un număr care are numai cifre de 9', correct: false },
         { label: 'Un număr divizibil atât cu 2 cât și cu 5', correct: false },
         { label: 'Un număr care se termină cu 00', correct: false }
       ],
-      explanation: 'Un număr perfect este egal cu suma divizorilor săi stricți (fără el însuși). Exemple celebre: 6 (1+2+3=6) și 28 (1+2+4+7+14=28)!'
+      optionsEn: [
+        { label: 'A number equal to the sum of its proper divisors (including 1, excluding the number itself)', correct: true },
+        { label: 'A number containing only 9s', correct: false },
+        { label: 'A number divisible by both 2 and 5', correct: false },
+        { label: 'A number ending in 00', correct: false }
+      ],
+      explanationRo: 'Un număr perfect este egal cu suma divizorilor săi stricți (fără el însuși). Exemple celebre: 6 (1+2+3=6) și 28 (1+2+4+7+14=28)!',
+      explanationEn: 'A perfect number equals the sum of its proper divisors (excluding itself). Famous examples: 6 (1+2+3=6) and 28 (1+2+4+7+14=28)!'
     }
   ];
 
   const handleSelectOption = (qIdx: number, optIdx: number) => {
     sounds.playClick();
     setSelectedAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
-    const isCorrect = CHALLENGES[qIdx].options[optIdx].correct;
+    const opts = lang === 'ro' ? CHALLENGES[qIdx].optionsRo : CHALLENGES[qIdx].optionsEn;
+    const isCorrect = opts[optIdx].correct;
+    const explanation = lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn;
 
     if (isCorrect) {
       sounds.playCorrect();
-      setChallengeFeedback('Corect! ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback((lang === 'ro' ? 'Corect! ' : 'Correct! ') + explanation);
     } else {
       sounds.playWrong();
-      setChallengeFeedback('Incorect. ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback((lang === 'ro' ? 'Incorect. ' : 'Incorrect. ') + explanation);
     }
   };
 
@@ -154,13 +183,19 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono font-bold border border-amber-500/30 mb-2">
               <Calculator className="w-3.5 h-3.5 text-amber-400" />
-              <span>Nivelul 3 din 7 • Modulul 4E</span>
+              <span>{lang === 'ro' ? 'Nivelul 3 din 7 • Modulul 4E' : 'Level 3 of 7 • Module 4E'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Algoritmul Divizorilor, Numere Prime &amp; Numere Perfecte (pag. 88–90)
+              {lang === 'ro' ? (
+                <>Algoritmul Divizorilor, Numere Prime &amp; Numere Perfecte (pag. 88–90)</>
+              ) : (
+                <>Divisor Algorithm, Prime Numbers &amp; Perfect Numbers (p. 88–90)</>
+              )}
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-              Aplică bucla <span className="text-amber-300 font-mono font-bold">for</span> pentru a detecta toți divizorii unui număr, a testa primalitatea și a descoperi proprietatea fascinantă a numerelor perfecte.
+              {lang === 'ro'
+                ? 'Aplică bucla for pentru a detecta toți divizorii unui număr, a testa primalitatea și a descoperi proprietatea fascinantă a numerelor perfecte.'
+                : 'Apply the for loop to detect all divisors of a number, test primality, and explore the fascinating property of perfect numbers.'}
             </p>
           </div>
 
@@ -177,23 +212,31 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xl">
         <div className="flex items-center gap-2.5 mb-4 text-amber-400 font-bold text-sm uppercase tracking-wider font-mono">
           <Lightbulb className="w-4 h-4 text-amber-400" />
-          <span>Algoritmul C++ de Determinare a Divizorilor</span>
+          <span>
+            {lang === 'ro'
+              ? 'Algoritmul C++ de Determinare a Divizorilor'
+              : 'C++ Algorithm for Divisor Finding'}
+          </span>
         </div>
 
         {/* C++ Code Blueprint */}
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 mb-6 font-mono text-xs text-slate-200">
-          <div className="text-slate-500 mb-1">// Testarea divizorilor și a numărului prim cu optimizarea d &lt;= n / 2</div>
+          <div className="text-slate-500 mb-1">
+            {lang === 'ro'
+              ? '// Testarea divizorilor și a numărului prim cu optimizarea d <= n / 2'
+              : '// Testing divisors and prime check with d <= n / 2 optimization'}
+          </div>
           <div><span className="text-purple-400 font-bold">int</span> nr_divizori = 0;</div>
           <div><span className="text-purple-400 font-bold">for</span> (<span className="text-purple-400 font-bold">int</span> d = 2; d &lt;= n / 2; d++) &#123;</div>
           <div className="pl-4 text-amber-300">
-            <span className="text-purple-400 font-bold">if</span> (n % d == 0) &#123; <span className="text-slate-400">// d divide exact pe n</span>
+            <span className="text-purple-400 font-bold">if</span> (n % d == 0) &#123; <span className="text-slate-400">// {lang === 'ro' ? 'd divide exact pe n' : 'd divides n evenly'}</span>
           </div>
           <div className="pl-8 text-emerald-300">cout &lt;&lt; d &lt;&lt; " ";</div>
           <div className="pl-8 text-cyan-300">nr_divizori++;</div>
           <div className="pl-4">&#125;</div>
           <div>&#125;</div>
           <div className="mt-1 text-slate-400">
-            <span className="text-purple-400 font-bold">if</span> (nr_divizori == 0 && n &gt; 1) cout &lt;&lt; <span className="text-emerald-300">"Numar prim!"</span>;
+            <span className="text-purple-400 font-bold">if</span> (nr_divizori == 0 && n &gt; 1) cout &lt;&lt; <span className="text-emerald-300">{lang === 'ro' ? '"Numar prim!"' : '"Prime number!"'}</span>;
           </div>
         </div>
 
@@ -203,10 +246,16 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Binary className="w-4 h-4 text-amber-400" />
-                <span>Scanner Interactiv de Divizori &amp; Numere Prime</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Scanner Interactiv de Divizori & Numere Prime'
+                    : 'Interactive Divisor & Prime Number Scanner'}
+                </span>
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                Introdu un număr sau alege dintre exemplele din manual (6, 17, 28, 47, 60, 100).
+                {lang === 'ro'
+                  ? 'Introdu un număr sau alege dintre exemplele din manual (6, 17, 28, 47, 60).'
+                  : 'Enter a number or pick one from the textbook examples (6, 17, 28, 47, 60).'}
               </p>
             </div>
 
@@ -220,7 +269,7 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition cursor-pointer ${
                     testNumber === num
                       ? 'bg-amber-500 text-slate-950'
-                      : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                      : 'bg-slate-800 text-slate-300 hover:bg-slate-750'
                   }`}
                 >
                   {num}
@@ -237,7 +286,7 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
                 max="1000"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
-                placeholder="Tastează un număr natural (1–1000)..."
+                placeholder={lang === 'ro' ? 'Tastează un număr natural (1–1000)...' : 'Type a natural number (1–1000)...'}
                 className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-mono text-xs sm:text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
@@ -245,7 +294,7 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
               type="submit"
               className="py-2 px-5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs sm:text-sm font-mono transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-600/20 active:scale-95"
             >
-              <span>Scanează Divizorii</span>
+              <span>{lang === 'ro' ? 'Scanează Divizorii' : 'Scan Divisors'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -253,30 +302,44 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
           {/* Scanner Results Display */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
             <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center text-center">
-              <span className="text-[11px] font-mono text-slate-400 uppercase">Număr Analizat</span>
+              <span className="text-[11px] font-mono text-slate-400 uppercase">
+                {lang === 'ro' ? 'Număr Analizat' : 'Analyzed Number'}
+              </span>
               <span className="text-2xl font-black font-mono text-white mt-0.5">{testNumber}</span>
               <span className="text-[10px] text-slate-500 font-mono mt-1">
-                {testNumber % 2 === 0 ? 'Număr par' : 'Număr impar'}
+                {testNumber % 2 === 0
+                  ? (lang === 'ro' ? 'Număr par' : 'Even number')
+                  : (lang === 'ro' ? 'Număr impar' : 'Odd number')}
               </span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center text-center">
-              <span className="text-[11px] font-mono text-slate-400 uppercase">Diagnostic Primalitate</span>
+              <span className="text-[11px] font-mono text-slate-400 uppercase">
+                {lang === 'ro' ? 'Diagnostic Primalitate' : 'Primality Diagnosis'}
+              </span>
               <span className={`text-lg font-black font-mono mt-0.5 ${isPrime ? 'text-emerald-400' : 'text-amber-300'}`}>
-                {isPrime ? 'NUMĂR PRIM' : 'NUMĂR COMPUS'}
+                {isPrime
+                  ? (lang === 'ro' ? 'NUMĂR PRIM' : 'PRIME NUMBER')
+                  : (lang === 'ro' ? 'NUMĂR COMPUS' : 'COMPOSITE NUMBER')}
               </span>
               <span className="text-[10px] text-slate-400 font-mono mt-1">
-                {isPrime ? 'Are exact 2 divizori (1 și el însuși)' : `${divisors.length} divizori totali`}
+                {isPrime
+                  ? (lang === 'ro' ? 'Are exact 2 divizori (1 și el însuși)' : 'Exactly 2 divisors (1 and itself)')
+                  : (lang === 'ro' ? `${divisors.length} divizori totali` : `${divisors.length} total divisors`)}
               </span>
             </div>
 
             <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center text-center">
-              <span className="text-[11px] font-mono text-slate-400 uppercase">Număr Perfect?</span>
+              <span className="text-[11px] font-mono text-slate-400 uppercase">
+                {lang === 'ro' ? 'Număr Perfect?' : 'Perfect Number?'}
+              </span>
               <span className={`text-lg font-black font-mono mt-0.5 ${isPerfect ? 'text-cyan-300' : 'text-slate-400'}`}>
-                {isPerfect ? 'DA! PERFECT' : 'NU'}
+                {isPerfect ? (lang === 'ro' ? 'DA! PERFECT' : 'YES! PERFECT') : (lang === 'ro' ? 'NU' : 'NO')}
               </span>
               <span className="text-[10px] text-slate-400 font-mono mt-1">
-                {isPerfect ? `Suma divizorilor proprii = ${testNumber}` : 'Suma divizorilor nu e egală cu n'}
+                {isPerfect
+                  ? (lang === 'ro' ? `Suma divizorilor proprii = ${testNumber}` : `Sum of proper divisors = ${testNumber}`)
+                  : (lang === 'ro' ? 'Suma divizorilor nu e egală cu n' : 'Divisor sum is not equal to n')}
               </span>
             </div>
           </div>
@@ -284,7 +347,9 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
           {/* Divisor Pills Matrix */}
           <div className="bg-slate-900/90 border border-slate-800 p-4 rounded-xl">
             <span className="text-xs font-mono text-slate-400 block mb-2 font-bold uppercase tracking-wider">
-              Divizorii lui {testNumber} ({divisors.length} divizori):
+              {lang === 'ro'
+                ? `Divizorii lui ${testNumber} (${divisors.length} divizori):`
+                : `Divisors of ${testNumber} (${divisors.length} divisors):`}
             </span>
             <div className="flex flex-wrap gap-2">
               {divisors.map((d) => {
@@ -298,7 +363,11 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
                         : 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm'
                     }`}
                   >
-                    {d} {isTrivial && <span className="text-[10px] text-slate-500 font-normal">({d === 1 ? 'impropriu' : 'impropriu'})</span>}
+                    {d} {isTrivial && (
+                      <span className="text-[10px] text-slate-500 font-normal">
+                        ({lang === 'ro' ? 'impropriu' : 'trivial'})
+                      </span>
+                    )}
                   </span>
                 );
               })}
@@ -306,13 +375,17 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
 
             {properDivisors.length > 0 && (
               <div className="mt-3 pt-3 border-t border-slate-800 text-xs font-mono text-slate-300">
-                Suma divizorilor proprii (excluzând {testNumber}):{' '}
+                {lang === 'ro'
+                  ? `Suma divizorilor proprii (excluzând ${testNumber}): `
+                  : `Sum of proper divisors (excluding ${testNumber}): `}
                 <span className="text-amber-300 font-bold">
                   {properDivisors.join(' + ')} = {properDivisors.reduce((a, b) => a + b, 0)}
                 </span>
                 {isPerfect && (
                   <span className="ml-2 text-cyan-300 font-bold">
-                    (Egal cu {testNumber} -&gt; Număr Perfect conform manual pag. 89!)
+                    {lang === 'ro'
+                      ? `(Egal cu ${testNumber} -> Număr Perfect conform manual pag. 89!)`
+                      : `(Equals ${testNumber} -> Perfect Number per textbook p. 89!)`}
                   </span>
                 )}
               </div>
@@ -325,14 +398,18 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider font-mono">
               <HelpCircle className="w-4 h-4 text-amber-400" />
-              <span>Verificare Înțelegere: Divizori &amp; Primalitate ({challengeStep + 1} din {CHALLENGES.length})</span>
+              <span>
+                {lang === 'ro'
+                  ? `Verificare Înțelegere: Divizori & Primalitate (${challengeStep + 1} din ${CHALLENGES.length})`
+                  : `Comprehension Check: Divisors & Primality (${challengeStep + 1} of ${CHALLENGES.length})`}
+              </span>
             </div>
           </div>
 
           {!completedChallenge ? (
             <div className="flex flex-col gap-4">
               <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
-                {CHALLENGES[challengeStep].question}
+                {lang === 'ro' ? CHALLENGES[challengeStep].questionRo : CHALLENGES[challengeStep].questionEn}
               </h4>
 
               {CHALLENGES[challengeStep].code && (
@@ -342,7 +419,7 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
               )}
 
               <div className="grid grid-cols-1 gap-2.5">
-                {CHALLENGES[challengeStep].options.map((opt, oIdx) => {
+                {(lang === 'ro' ? CHALLENGES[challengeStep].optionsRo : CHALLENGES[challengeStep].optionsEn).map((opt, oIdx) => {
                   const isSelected = selectedAnswers[challengeStep] === oIdx;
                   return (
                     <button
@@ -367,7 +444,7 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
               </div>
 
               {challengeFeedback && (
-                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
+                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') || challengeFeedback.startsWith('Correct') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
                   {challengeFeedback}
                 </div>
               )}
@@ -378,7 +455,11 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
                   onClick={handleNextChallenge}
                   className="self-end py-2 px-5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  <span>{challengeStep < CHALLENGES.length - 1 ? 'Următoarea Întrebare' : 'Finalizează Nivelul 3'}</span>
+                  <span>
+                    {challengeStep < CHALLENGES.length - 1
+                      ? (lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question')
+                      : (lang === 'ro' ? 'Finalizează Nivelul 3' : 'Complete Level 3')}
+                  </span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}
@@ -388,16 +469,24 @@ export const StemLevel3_DivisorsAndPrimes: React.FC<Props> = ({ onPass }) => {
               <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-black text-white">Nivelul 3 Finalizat cu Succes!</h4>
+              <h4 className="text-lg font-black text-white">
+                {lang === 'ro' ? 'Nivelul 3 Finalizat cu Succes!' : 'Level 3 Successfully Completed!'}
+              </h4>
               <p className="text-xs text-slate-300 max-w-md">
-                Stăpânești algoritmul optim de căutare a divizorilor până la n/2, noțiunea de număr prim și proprietatea numerelor perfecte.
+                {lang === 'ro'
+                  ? 'Stăpânești algoritmul optim de căutare a divizorilor până la n/2, noțiunea de număr prim și proprietatea numerelor perfecte.'
+                  : 'You mastered optimal divisor search up to n/2, prime identification, and perfect number attributes.'}
               </p>
               <button
                 type="button"
                 onClick={handleFinishLevel}
                 className="mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
               >
-                <span>Treci la Nivelul 4: Bucle Îmbricate &amp; Modele Grafice ASCII</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Treci la Nivelul 4: Bucle Îmbricate & Modele Grafice ASCII'
+                    : 'Proceed to Level 4: Nested Loops & ASCII Graphic Patterns'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

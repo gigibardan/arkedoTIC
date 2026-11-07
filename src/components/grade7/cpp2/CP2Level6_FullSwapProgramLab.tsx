@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Sparkles, CheckCircle2, ArrowRight, Play, Terminal, Code2, Copy, Check, Zap, Lightbulb, RotateCcw } from 'lucide-react';
+import { Sparkles, ArrowRight, Play, Terminal, Code2, Copy, Check, Zap } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
 }
 
 export const CP2Level6_FullSwapProgramLab: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [activeTab, setActiveTab] = useState<'classic' | 'mathTrick'>('classic');
   const [inputA, setInputA] = useState<number>(14);
   const [inputB, setInputB] = useState<number>(85);
@@ -15,7 +17,7 @@ export const CP2Level6_FullSwapProgramLab: React.FC<Props> = ({ onPass }) => {
   const [copied, setCopied] = useState<boolean>(false);
   const [hasRunAtLeastOnce, setHasRunAtLeastOnce] = useState<boolean>(false);
 
-  const classicCode = `#include <iostream>
+  const classicCodeRo = `#include <iostream>
 using namespace std;
 
 int main() {
@@ -41,7 +43,33 @@ int main() {
     return 0;
 }`;
 
-  const mathTrickCode = `#include <iostream>
+  const classicCodeEn = `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b, aux;
+    
+    // 1. Read input from keyboard
+    cout << "Enter value for a: ";
+    cin >> a;
+    cout << "Enter value for b: ";
+    cin >> b;
+
+    cout << "\\n=== BEFORE SWAP ===" << endl;
+    cout << "a = " << a << " | b = " << b << endl;
+
+    // 2. The 3 Glasses Rule (Classic Algorithm)
+    aux = a;   // Glass AUX receives contents of a
+    a = b;     // Glass a receives contents of b
+    b = aux;   // Glass b receives contents saved in AUX
+
+    cout << "\\n=== AFTER SWAP (SUCCESS!) ===" << endl;
+    cout << "a = " << a << " | b = " << b << endl;
+
+    return 0;
+}`;
+
+  const mathTrickCodeRo = `#include <iostream>
 using namespace std;
 
 int main() {
@@ -57,6 +85,27 @@ int main() {
     cout << "Dupa swap: a = " << a << ", b = " << b << endl;
     return 0;
 }`;
+
+  const mathTrickCodeEn = `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    // Input
+    cin >> a >> b;
+
+    // Olympic Arithmetic Trick without Auxiliary Variable:
+    a = a + b;  // a stores sum of both
+    b = a - b;  // b gets old a (sum - old b)
+    a = a - b;  // a gets old b (sum - new b)
+
+    cout << "After swap: a = " << a << ", b = " << b << endl;
+    return 0;
+}`;
+
+  const currentCode = activeTab === 'classic'
+    ? (lang === 'ro' ? classicCodeRo : classicCodeEn)
+    : (lang === 'ro' ? mathTrickCodeRo : mathTrickCodeEn);
 
   const handleRunProgram = () => {
     sounds.playClick();
@@ -74,46 +123,84 @@ int main() {
       const afterB = inputA;
 
       if (activeTab === 'classic') {
-        setExecutionOutput([
-          '-------------- Build: Debug in Ark3do_IDE (compiler: GNU GCC) ---------------',
-          'Target is up to date.',
-          'Nothing to be done (all items are up-to-date).',
-          '-------------- Run: Debug in Ark3do_IDE (compiler: GNU GCC) -----------------',
-          `Introdu valoarea lui a: ${beforeA}`,
-          `Introdu valoarea lui b: ${beforeB}`,
-          '',
-          '=== INAINTE DE SWAP ===',
-          `a = ${beforeA} | b = ${beforeB}`,
-          '',
-          '=== DUPA SWAP (REUSIT!) ===',
-          `a = ${afterA} | b = ${afterB}`,
-          '',
-          'Process returned 0 (0x0)   execution time : 0.042 s',
-          'Press any key to continue.'
-        ]);
+        if (lang === 'ro') {
+          setExecutionOutput([
+            '-------------- Build: Debug in Ark3do_IDE (compiler: GNU GCC) ---------------',
+            'Target is up to date.',
+            'Nothing to be done (all items are up-to-date).',
+            '-------------- Run: Debug in Ark3do_IDE (compiler: GNU GCC) -----------------',
+            `Introdu valoarea lui a: ${beforeA}`,
+            `Introdu valoarea lui b: ${beforeB}`,
+            '',
+            '=== INAINTE DE SWAP ===',
+            `a = ${beforeA} | b = ${beforeB}`,
+            '',
+            '=== DUPA SWAP (REUSIT!) ===',
+            `a = ${afterA} | b = ${afterB}`,
+            '',
+            'Process returned 0 (0x0)   execution time : 0.042 s',
+            'Press any key to continue.'
+          ]);
+        } else {
+          setExecutionOutput([
+            '-------------- Build: Debug in Ark3do_IDE (compiler: GNU GCC) ---------------',
+            'Target is up to date.',
+            'Nothing to be done (all items are up-to-date).',
+            '-------------- Run: Debug in Ark3do_IDE (compiler: GNU GCC) -----------------',
+            `Enter value for a: ${beforeA}`,
+            `Enter value for b: ${beforeB}`,
+            '',
+            '=== BEFORE SWAP ===',
+            `a = ${beforeA} | b = ${beforeB}`,
+            '',
+            '=== AFTER SWAP (SUCCESS!) ===',
+            `a = ${afterA} | b = ${afterB}`,
+            '',
+            'Process returned 0 (0x0)   execution time : 0.042 s',
+            'Press any key to continue.'
+          ]);
+        }
       } else {
-        setExecutionOutput([
-          '-------------- Build: Debug in Ark3do_IDE (compiler: GNU GCC) ---------------',
-          'Compiling math_swap.cpp with optimization -O2...',
-          'Target is up to date.',
-          '-------------- Run: Debug in Ark3do_IDE (compiler: GNU GCC) -----------------',
-          `Date de intrare: a = ${beforeA}, b = ${beforeB}`,
-          `Pas 1: a = a + b => a = ${beforeA + beforeB}`,
-          `Pas 2: b = a - b => b = ${afterB}`,
-          `Pas 3: a = a - b => a = ${afterA}`,
-          '',
-          `Dupa swap aritmetic: a = ${afterA}, b = ${afterB}`,
-          '',
-          'Process returned 0 (0x0)   execution time : 0.015 s',
-          'Press any key to continue.'
-        ]);
+        if (lang === 'ro') {
+          setExecutionOutput([
+            '-------------- Build: Debug in Ark3do_IDE (compiler: GNU GCC) ---------------',
+            'Compiling math_swap.cpp with optimization -O2...',
+            'Target is up to date.',
+            '-------------- Run: Debug in Ark3do_IDE (compiler: GNU GCC) -----------------',
+            `Date de intrare: a = ${beforeA}, b = ${beforeB}`,
+            `Pas 1: a = a + b => a = ${beforeA + beforeB}`,
+            `Pas 2: b = a - b => b = ${afterB}`,
+            `Pas 3: a = a - b => a = ${afterA}`,
+            '',
+            `Dupa swap aritmetic: a = ${afterA}, b = ${afterB}`,
+            '',
+            'Process returned 0 (0x0)   execution time : 0.015 s',
+            'Press any key to continue.'
+          ]);
+        } else {
+          setExecutionOutput([
+            '-------------- Build: Debug in Ark3do_IDE (compiler: GNU GCC) ---------------',
+            'Compiling math_swap.cpp with optimization -O2...',
+            'Target is up to date.',
+            '-------------- Run: Debug in Ark3do_IDE (compiler: GNU GCC) -----------------',
+            `Input values: a = ${beforeA}, b = ${beforeB}`,
+            `Step 1: a = a + b => a = ${beforeA + beforeB}`,
+            `Step 2: b = a - b => b = ${afterB}`,
+            `Step 3: a = a - b => a = ${afterA}`,
+            '',
+            `After arithmetic swap: a = ${afterA}, b = ${afterB}`,
+            '',
+            'Process returned 0 (0x0)   execution time : 0.015 s',
+            'Press any key to continue.'
+          ]);
+        }
       }
     }, 600);
   };
 
   const handleCopyCode = () => {
     sounds.playClick();
-    navigator.clipboard.writeText(activeTab === 'classic' ? classicCode : mathTrickCode);
+    navigator.clipboard.writeText(currentCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -131,18 +218,35 @@ int main() {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-mono mb-3">
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Nivelul 6 • Clasa a VII-a • Laborator Code::Blocks</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Nivelul 6 • Clasa a VII-a • Laborator Code::Blocks'
+                  : 'Level 6 • 7th Grade • Code::Blocks Lab'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Laborator Live: <span className="text-cyan-400 font-mono">Programul C++ Complet de Swap</span>
+              {lang === 'ro' ? 'Laborator Live: ' : 'Live Lab: '}
+              <span className="text-cyan-400 font-mono">
+                {lang === 'ro' ? 'Programul C++ Complet de Swap' : 'Complete C++ Swap Program'}
+              </span>
             </h1>
             <p className="text-slate-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-              Asamblează și rulează programul complet în mediul virtual Code::Blocks. Testează cu valori alese de tine și descoperă și trucul matematic folosit la olimpiade!
+              {lang === 'ro' ? (
+                <>
+                  Asamblează și rulează programul complet în mediul virtual Code::Blocks. Testează cu valori alese de tine și descoperă și trucul matematic folosit la olimpiade!
+                </>
+              ) : (
+                <>
+                  Assemble and run the full program inside our simulated Code::Blocks environment. Experiment with custom inputs and discover the math trick used in programming olympiads!
+                </>
+              )}
             </p>
           </div>
 
           <div className="flex md:flex-col items-center md:items-end justify-between w-full md:w-auto bg-slate-950/60 p-3 rounded-2xl border border-cyan-500/20">
-            <span className="text-xs text-slate-400 font-mono">Mediu Compilare</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Mediu Compilare' : 'Compiler Environment'}
+            </span>
             <span className="text-sm font-bold text-cyan-300 font-mono">GCC / Code::Blocks 20.03</span>
           </div>
         </div>
@@ -164,7 +268,11 @@ int main() {
           }`}
         >
           <Code2 className="w-4 h-4" />
-          <span>Algoritmul Clasic (cu aux) - Manual</span>
+          <span>
+            {lang === 'ro'
+              ? 'Algoritmul Clasic (cu aux) - Manual'
+              : 'Classic Algorithm (with aux) - Textbook'}
+          </span>
         </button>
 
         <button
@@ -181,7 +289,11 @@ int main() {
           }`}
         >
           <Zap className="w-4 h-4 text-amber-400" />
-          <span>Bonus Olimpic: Swap Aritmetic (fără aux)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Bonus Olimpic: Swap Aritmetic (fără aux)'
+              : 'Olympic Bonus: Arithmetic Swap (without aux)'}
+          </span>
         </button>
       </div>
 
@@ -200,7 +312,7 @@ int main() {
 
           {/* Test Inputs */}
           <div className="flex items-center gap-2 bg-slate-950 px-3 py-1 rounded-xl border border-slate-700 font-mono text-xs">
-            <span className="text-slate-400">Testează a:</span>
+            <span className="text-slate-400">{lang === 'ro' ? 'Testează a:' : 'Test a:'}</span>
             <input
               type="number"
               value={inputA}
@@ -222,10 +334,14 @@ int main() {
               type="button"
               onClick={handleCopyCode}
               className="px-2.5 py-1.5 rounded-lg bg-slate-750 hover:bg-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1 border border-slate-650 cursor-pointer"
-              title="Copiază codul C++"
+              title={lang === 'ro' ? 'Copiază codul C++' : 'Copy C++ code'}
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copiat!' : 'Copiază'}</span>
+              <span>
+                {copied
+                  ? (lang === 'ro' ? 'Copiat!' : 'Copied!')
+                  : (lang === 'ro' ? 'Copiază' : 'Copy')}
+              </span>
             </button>
 
             <button
@@ -235,7 +351,11 @@ int main() {
               className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold text-xs flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-emerald-900/40"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>{isCompiling ? 'Compilare...' : 'Build & Run (F9)'}</span>
+              <span>
+                {isCompiling
+                  ? (lang === 'ro' ? 'Compilare...' : 'Compiling...')
+                  : 'Build & Run (F9)'}
+              </span>
             </button>
           </div>
         </div>
@@ -243,7 +363,7 @@ int main() {
         {/* Code View Area */}
         <div className="bg-slate-950 p-4 sm:p-6 font-mono text-xs sm:text-sm overflow-x-auto text-slate-300 leading-relaxed border-b border-slate-800">
           <pre className="text-slate-200">
-            <code>{activeTab === 'classic' ? classicCode : mathTrickCode}</code>
+            <code>{currentCode}</code>
           </pre>
         </div>
 
@@ -253,14 +373,22 @@ int main() {
             <div className="flex items-center justify-between text-[11px] text-slate-500 border-b border-slate-900 pb-2 mb-3">
               <span className="flex items-center gap-1.5 text-slate-400">
                 <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Consola C++ de Execuție (Windows Command Prompt)</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Consola C++ de Execuție (Windows Command Prompt)'
+                    : 'C++ Execution Console (Windows Command Prompt)'}
+                </span>
               </span>
               <span>Mod: 64-bit Target</span>
             </div>
 
             {isCompiling && (
               <div className="flex items-center gap-2 text-cyan-400 animate-pulse">
-                <span>Compilare în curs... g++ -Wall -g -c main.cpp</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Compilare în curs... g++ -Wall -g -c main.cpp'
+                    : 'Compiling in progress... g++ -Wall -g -c main.cpp'}
+                </span>
               </div>
             )}
 
@@ -276,7 +404,9 @@ int main() {
 
             {!isCompiling && !executionOutput && (
               <div className="text-slate-600 italic">
-                Apasă pe butonul verde "Build &amp; Run (F9)" pentru a compila și rula programul C++...
+                {lang === 'ro'
+                  ? 'Apasă pe butonul verde "Build & Run (F9)" pentru a compila și rula programul C++...'
+                  : 'Click the green "Build & Run (F9)" button to compile and execute the C++ program...'}
               </div>
             )}
           </div>
@@ -288,7 +418,11 @@ int main() {
                 onClick={handleFinish}
                 className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer transition"
               >
-                <span>Treci la Nivelul 7: Evaluare Finală &amp; Certificat</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Treci la Nivelul 7: Evaluare Finală & Certificat'
+                    : 'Advance to Level 7: Final Assessment & Certificate'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

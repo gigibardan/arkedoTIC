@@ -285,7 +285,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   };
 
   // Cyber Sprint Typing Logic
-  const words = (currentRoom?.textSnippet || 'Securitate cibernetica si programare interactiva').split(' ');
+  const words = ((lang === 'en' && currentRoom?.textSnippetEn ? currentRoom.textSnippetEn : currentRoom?.textSnippet) || (lang === 'en' ? 'Cyber security and interactive computer programming' : 'Securitate cibernetica si programare interactiva')).split(' ');
 
   const handleTypingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (viewState !== 'playing' || hasFinishedLocal || !currentRoom) return;
@@ -693,6 +693,40 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const isOpponentWinner = currentRoom?.winnerId === opponent?.id;
 
   const getModeTitle = (mode?: DuelGameMode) => {
+    if (lang === 'en') {
+      switch (mode) {
+        case 'roblox_clicker':
+          return '🟥 Roblox Blox Clicker (1v1 Simulator)';
+        case 'cyber_sprint':
+          return '⚡ Cyber Sprint (Typing Race)';
+        case 'block_coding':
+          return '🧩 Algorithm Race (Block Coding Duel)';
+        case 'speed_crafting':
+          return '⛏️ Speed Crafting Duel (Minecraft ICT 1v1)';
+        case 'quiz_blitz':
+          return '🧠 Quiz Blitz (Battle of the Minds)';
+        case 'cyber_shield':
+          return '🛡️ Cyber Shield (Phishing Defense)';
+        case 'pc_rush':
+          return '🔧 Hardware PC Rush (Speed PC Assembly)';
+        case 'mouse_duel':
+          return '🎯 Cyber Cursor Clash (Mouse Agility Duel 1v1)';
+        case 'hacker_defense':
+          return '🛡️⚔️ Hacker vs Defender (Attack & Patch 1v1)';
+        case 'binary_clash':
+          return '🔢 Binary Clash (Bit Race & Conversions 1v1)';
+        case 'circuit_duel':
+          return '⚡ Circuit Clash (Smart City Electricians 1v1)';
+        case 'algo_race_cpp':
+          return '💻 C++ Code Racer (Fast Compiler Duel 1v1)';
+        case 'pixel_clash':
+          return '🎨 Pixel Art Sprite Clash (Digital Graphics 1v1)';
+        case 'network_racer':
+          return '🌐 Network Packet Racer (Packets & Switch 1v1)';
+        default:
+          return '⚔️ ICT 1v1 Duel';
+      }
+    }
     switch (mode) {
       case 'roblox_clicker':
         return '🟥 Roblox Blox Clicker (Simulator 1v1)';
@@ -798,11 +832,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-white">Cyber Sprint ⚡</h4>
-                      <span className="text-[10px] text-indigo-300 font-medium">Cursa de Tastare Rapidă</span>
+                      <span className="text-[10px] text-indigo-300 font-medium">
+                        {lang === 'en' ? 'Fast Typing Race' : 'Cursa de Tastare Rapidă'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Cine tastează cel mai repede și corect termenii informatici fără greșeli! Rachetele înaintează live pe ecran.
+                    {lang === 'en'
+                      ? 'Type computer science terms accurately and fast without errors! Rockets advance live on screen.'
+                      : 'Cine tastează cel mai repede și corect termenii informatici fără greșeli! Rachetele înaintează live pe ecran.'}
                   </p>
                 </button>
 
@@ -822,11 +860,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-white">Speed Crafting ⛏️</h4>
-                      <span className="text-[10px] text-amber-300 font-medium">Duel Rețete TIC & Binar (Minecraft 3x3)</span>
+                      <span className="text-[10px] text-amber-300 font-medium">
+                        {lang === 'en' ? 'ICT & Binary Recipe Duel (Minecraft 3x3)' : 'Duel Rețete TIC & Binar (Minecraft 3x3)'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Aranjează componentele pe masa de lucru 3x3 (CPU, RAM, SSD, cod binar, porți logice)! Primul la 5 diamante asamblate câștigă duelul!
+                    {lang === 'en'
+                      ? 'Arrange components on the 3x3 workbench (CPU, RAM, SSD, binary code, logic gates)! First to assemble 5 diamonds wins the duel!'
+                      : 'Aranjează componentele pe masa de lucru 3x3 (CPU, RAM, SSD, cod binar, porți logice)! Primul la 5 diamante asamblate câștigă duelul!'}
                   </p>
                 </button>
 
@@ -845,16 +887,22 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       <Puzzle className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Cursa Algoritmilor 🧩</h4>
-                      <span className="text-[10px] text-emerald-300 font-medium">Block Coding Duel (Tip Scratch)</span>
+                      <h4 className="text-sm font-bold text-white">
+                        {lang === 'en' ? 'Algorithm Race 🧩' : 'Cursa Algoritmilor 🧩'}
+                      </h4>
+                      <span className="text-[10px] text-emerald-300 font-medium">
+                        {lang === 'en' ? 'Block Coding Duel (Scratch Style)' : 'Block Coding Duel (Tip Scratch)'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Asamblează logic scriptul (Start, Mergi în față, Viraje 90°, Repetă de 3 ori) pentru a-l ghida pe Arky prin matrice! Primul care ajunge la destinație fără să lovească un obstacol câștigă runda!
+                    {lang === 'en'
+                      ? 'Assemble script logic (Start, Move Forward, 90° Turns, Repeat 3 times) to guide Arky across the grid! First to reach target wins!'
+                      : 'Asamblează logic scriptul (Start, Mergi în față, Viraje 90°, Repetă de 3 ori) pentru a-l ghida pe Arky prin matrice! Primul care ajunge la destinație fără să lovească un obstacol câștigă runda!'}
                   </p>
                 </button>
 
-                {/* Mode 4: Roblox Blox Clicker Duel (Simulator 1v1) - POZIȚIA 4 */}
+                {/* Mode 4: Roblox Blox Clicker Duel (Simulator 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('roblox_clicker')}
@@ -871,17 +919,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Roblox Blox Clicker 🟥</span>
-                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">HOT 🔥</span>
+                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'HOT 🔥' : 'HOT 🔥'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-amber-300 font-medium">Simulator Roblox 1v1 (Pets & Rebirths)</span>
+                      <span className="text-[10px] text-amber-300 font-medium">
+                        {lang === 'en' ? '1v1 Roblox Simulator (Pets & Rebirths)' : 'Simulator Roblox 1v1 (Pets & Rebirths)'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 5.000 Blox înaintea rivalului!
+                    {lang === 'en'
+                      ? 'Click the Blox core, hatch legendary pets from Gacha eggs, buy hardware and reach 5,000 Blox first!'
+                      : 'Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 5.000 Blox înaintea rivalului!'}
                   </p>
                 </button>
 
-                {/* Mode 3: Quiz Blitz */}
+                {/* Mode 5: Quiz Blitz */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('quiz_blitz')}
@@ -897,15 +951,19 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-white">Quiz Blitz 🧠</h4>
-                      <span className="text-[10px] text-purple-300 font-medium">Bătălia Creierelor TIC</span>
+                      <span className="text-[10px] text-purple-300 font-medium">
+                        {lang === 'en' ? 'ICT Brain Battle' : 'Bătălia Creierelor TIC'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    5 întrebări fulger de hardware, securitate și algoritmi. Punctaj bonus pentru răspunsuri ultrarapide!
+                    {lang === 'en'
+                      ? '5 lightning questions on hardware, cyber security, and algorithms. Bonus score for rapid answers!'
+                      : '5 întrebări fulger de hardware, securitate și algoritmi. Punctaj bonus pentru răspunsuri ultrarapide!'}
                   </p>
                 </button>
 
-                {/* Mode 3: Cyber Shield (Phishing defense) */}
+                {/* Mode 6: Cyber Shield (Phishing defense) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('cyber_shield')}
@@ -921,15 +979,19 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-white">Cyber Shield 🛡️</h4>
-                      <span className="text-[10px] text-rose-300 font-medium">Apărare Anti-Phishing 1v1</span>
+                      <span className="text-[10px] text-rose-300 font-medium">
+                        {lang === 'en' ? 'Anti-Phishing 1v1 Defense' : 'Apărare Anti-Phishing 1v1'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Analizează email-urile și link-urile primite în timp real! Blochează atacurile hackerilor și permite mesajele sigure.
+                    {lang === 'en'
+                      ? 'Analyze incoming emails and links in real-time! Block hacker cyber attacks and allow verified safe messages.'
+                      : 'Analizează email-urile și link-urile primite în timp real! Blochează atacurile hackerilor și permite mesajele sigure.'}
                   </p>
                 </button>
 
-                {/* Mode 4: Hardware PC Rush */}
+                {/* Mode 7: Hardware PC Rush */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('pc_rush')}
@@ -945,15 +1007,19 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-white">Hardware PC Rush 🔧</h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">Asamblare PC în Viteză</span>
+                      <span className="text-[10px] text-cyan-300 font-medium">
+                        {lang === 'en' ? 'High-Speed PC Assembly' : 'Asamblare PC în Viteză'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    Asamblează calculatorul în ordinea corectă pas cu pas (CPU, Cooler, RAM, SSD, GPU, Sursă)! Cine montează primul?
+                    {lang === 'en'
+                      ? 'Assemble the computer in correct order step by step (CPU, Cooler, RAM, SSD, GPU, PSU)! Who mounts it first?'
+                      : 'Asamblează calculatorul în ordinea corectă pas cu pas (CPU, Cooler, RAM, SSD, GPU, Sursă)! Cine montează primul?'}
                   </p>
                 </button>
 
-                {/* Mode 5: Cyber Cursor Clash (Duel Mouse Agility & Reflex) */}
+                {/* Mode 8: Cyber Cursor Clash (Duel Mouse Agility & Reflex) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('mouse_duel')}
@@ -970,17 +1036,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Cyber Cursor Clash 🎯</span>
-                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">Duel Agilitate Mouse & Touch 1v1</span>
+                      <span className="text-[10px] text-cyan-300 font-medium">
+                        {lang === 'en' ? 'Mouse & Touch Agility 1v1 Duel' : 'Duel Agilitate Mouse & Touch 1v1'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    7 runde de precizie extremă (Ținte, 2x Click, Urmărire Circuit Laser, Drag & Drop, Scut Deflector, Bouncing Bugs, Overclock Burst). Progres sincronizat în DB la 15, 30, 45, 60, 75, 90, 95, 100%!
+                    {lang === 'en'
+                      ? '7 precision rounds (Targets, 2x Click, Laser Trace, Drag & Drop, Deflector, Bouncing Bugs, Burst). Safe DB milestones!'
+                      : '7 runde de precizie extremă (Ținte, 2x Click, Urmărire Circuit Laser, Drag & Drop, Scut Deflector, Bouncing Bugs, Overclock Burst). Progres sincronizat în DB la 15, 30, 45, 60, 75, 90, 95, 100%!'}
                   </p>
                 </button>
 
-                {/* Mode 6: Hacker vs Defender (Atac & Peticire 1v1 - Securitate Cibernetică) */}
+                {/* Mode 9: Hacker vs Defender (Atac & Peticire 1v1 - Securitate Cibernetică) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('hacker_defense')}
@@ -997,17 +1069,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Hacker vs Defender ⚔️</span>
-                        <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-rose-300 font-medium">Atac & Peticire 1v1 (Inversare la 45s)</span>
+                      <span className="text-[10px] text-rose-300 font-medium">
+                        {lang === 'en' ? 'Attack & Patch 1v1 (Role Swap at 45s)' : 'Atac & Peticire 1v1 (Inversare la 45s)'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Un jucător lansează valuri de Troieni, Phishing și forțare parolă; celălalt activează Firewall, Antivirus sau 2FA. După 45 secunde, rolurile se inversează automat!
+                    {lang === 'en'
+                      ? 'One player launches Trojans, Phishing and Brute Force; the other activates Firewall, Antivirus or 2FA. Roles swap after 45s!'
+                      : 'Un jucător lansează valuri de Troieni, Phishing și forțare parolă; celălalt activează Firewall, Antivirus sau 2FA. După 45 secunde, rolurile se inversează automat!'}
                   </p>
                 </button>
 
-                {/* Mode 7: Binary Clash (Cursa Biților & Conversii 1v1) */}
+                {/* Mode 10: Binary Clash (Cursa Biților & Conversii 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('binary_clash')}
@@ -1024,17 +1102,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Binary Clash 1v1 🔢</span>
-                        <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-emerald-300 font-medium">Cursa Biților & Conversii Rapide (0/1)</span>
+                      <span className="text-[10px] text-emerald-300 font-medium">
+                        {lang === 'en' ? 'Bit Race & Fast Conversions (0/1)' : 'Cursa Biților & Conversii Rapide (0/1)'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Comută comutatoarele de biți (128, 64, 32, 16, 8, 4, 2, 1) pentru a atinge numărul zecimal țintă înaintea rivalului! Folosește porți NOT și multiplicatori.
+                    {lang === 'en'
+                      ? 'Toggle bit switches (128, 64, 32, 16, 8, 4, 2, 1) to match decimal target before your rival! Use NOT gates and multipliers.'
+                      : 'Comută comutatoarele de biți (128, 64, 32, 16, 8, 4, 2, 1) pentru a atinge numărul zecimal țintă înaintea rivalului! Folosește porți NOT și multiplicatori.'}
                   </p>
                 </button>
 
-                {/* Mode 8: Circuit Clash (Duelul Electricienilor Smart City 1v1) */}
+                {/* Mode 11: Circuit Clash (Duelul Electricienilor Smart City 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('circuit_duel')}
@@ -1051,17 +1135,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Circuit Clash 1v1 ⚡</span>
-                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-amber-300 font-medium">Cablare Breadboard Arduino & Senzori</span>
+                      <span className="text-[10px] text-amber-300 font-medium">
+                        {lang === 'en' ? 'Arduino Breadboard & Sensors Wiring' : 'Cablare Breadboard Arduino & Senzori'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Conectează contracronometru pini PWM, senzori LDR, ultrasonic HC-SR04, servomotoare SG90 și ecrane LCD I2C fără scurtcircuit!
+                    {lang === 'en'
+                      ? 'Connect PWM pins, LDR sensors, ultrasonic HC-SR04, SG90 servos, and I2C LCDs against the clock without short circuits!'
+                      : 'Conectează contracronometru pini PWM, senzori LDR, ultrasonic HC-SR04, servomotoare SG90 și ecrane LCD I2C fără scurtcircuit!'}
                   </p>
                 </button>
 
-                {/* Mode 9: C++ Code Racer (Duelul Compilatorului Rapid 1v1) */}
+                {/* Mode 12: C++ Code Racer (Duelul Compilatorului Rapid 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('algo_race_cpp')}
@@ -1078,17 +1168,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>C++ Code Racer 1v1 💻</span>
-                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">Bătălia Algoritmilor & Depanare C++</span>
+                      <span className="text-[10px] text-cyan-300 font-medium">
+                        {lang === 'en' ? 'Algorithms & Fast C++ Debugging' : 'Bătălia Algoritmilor & Depanare C++'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Găsește operatorul sau comanda lipsă din codul C++ (regula 3 pahare, while, bucle for Gauss, switch CNP, vectori)! Cine compilează primul fără eroare?
+                    {lang === 'en'
+                      ? 'Find missing operators and statements in C++ code (swap 3 cups, while loops, Gauss for, switch, arrays)! Who compiles first?'
+                      : 'Găsește operatorul sau comanda lipsă din codul C++ (regula 3 pahare, while, bucle for Gauss, switch CNP, vectori)! Cine compilează primul fără eroare?'}
                   </p>
                 </button>
 
-                {/* Mode 10: Pixel Art Sprite Clash (Duelul Graficii Digitale 1v1) */}
+                {/* Mode 13: Pixel Art Sprite Clash (Duelul Graficii Digitale 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('pixel_clash')}
@@ -1105,17 +1201,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Pixel Art Clash 1v1 🎨</span>
-                        <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-purple-300 font-medium">Grafică Bitmap 8x8 & Culori RGB</span>
+                      <span className="text-[10px] text-purple-300 font-medium">
+                        {lang === 'en' ? '8x8 Bitmap Graphics & RGB Colors' : 'Grafică Bitmap 8x8 & Culori RGB'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Reprodu sprite-urile retro pixel cu pixel (inimă 8-bit, floppy disk, sabie diamant)! Folosește instrumentul Oglindă X și umplerea rapidă.
+                    {lang === 'en'
+                      ? 'Replicate retro sprites pixel by pixel (8-bit heart, floppy disk, diamond sword)! Use the X-Mirror tool and quick flood fill.'
+                      : 'Reprodu sprite-urile retro pixel cu pixel (inimă 8-bit, floppy disk, sabie diamant)! Folosește instrumentul Oglindă X și umplerea rapidă.'}
                   </p>
                 </button>
 
-                {/* Mode 11: Network Packet Racer (Cursa Pachetelor & Internet Switch 1v1) */}
+                {/* Mode 14: Network Packet Racer (Cursa Pachetelor & Internet Switch 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('network_racer')}
@@ -1132,13 +1234,19 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     <div>
                       <h4 className="text-sm font-black text-white flex items-center gap-1.5">
                         <span>Network Packet Racer 1v1 🌐</span>
-                        <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 text-[9px] font-mono uppercase">NOU ✨</span>
+                        <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 text-[9px] font-mono uppercase">
+                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
+                        </span>
                       </h4>
-                      <span className="text-[10px] text-indigo-300 font-medium">Rutare Porturi (443/53/25) & Firewall</span>
+                      <span className="text-[10px] text-indigo-300 font-medium">
+                        {lang === 'en' ? 'Port Routing (443/53/25) & Firewall' : 'Rutare Porturi (443/53/25) & Firewall'}
+                      </span>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Comută pachetele sosite în router către porturile potrivite (Web HTTPS, DNS, Email) și carantinează atacurile DDoS și virușii în Firewall!
+                    {lang === 'en'
+                      ? 'Route inbound router packets to appropriate ports (Web HTTPS, DNS, Email) and quarantine DDoS floods and malware into the Firewall!'
+                      : 'Comută pachetele sosite în router către porturile potrivite (Web HTTPS, DNS, Email) și carantinează atacurile DDoS și virușii în Firewall!'}
                   </p>
                 </button>
               </div>
@@ -1150,8 +1258,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     {currentStudentAvatar || '⚡'}
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 block">Joci ca:</span>
-                    <span className="text-sm font-bold text-white">{currentStudentName || 'Campion TIC'}</span>
+                    <span className="text-xs text-slate-400 block">{lang === 'en' ? 'Playing as:' : 'Joci ca:'}</span>
+                    <span className="text-sm font-bold text-white">{currentStudentName || (lang === 'en' ? 'ICT Champion' : 'Campion TIC')}</span>
                   </div>
                 </div>
 
@@ -1187,11 +1295,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   {lang === 'en' ? '2. Or Join an Existing Duel:' : '2. Sau Conectează-te la un Coleg:'}
                 </h3>
                 <p className="text-xs text-slate-400 mb-5">
-                  Cere-i colegului de bancă codul camerei create de el (4 caractere) și intră direct în arenă!
+                  {lang === 'en'
+                    ? 'Ask your classmate for their 4-character room code and enter the arena directly!'
+                    : 'Cere-i colegului de bancă codul camerei create de el (4 caractere) și intră direct în arenă!'}
                 </p>
 
                 <div className="space-y-3">
-                  <label className="block text-xs font-semibold text-slate-400">Cod Cameră (Ex: 8X4B):</label>
+                  <label className="block text-xs font-semibold text-slate-400">
+                    {lang === 'en' ? 'Room Code (e.g., 8X4B):' : 'Cod Cameră (Ex: 8X4B):'}
+                  </label>
                   <div className="relative">
                     <input
                       type="text"
@@ -1239,7 +1351,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="text-7xl font-black text-amber-400 font-mono animate-bounce drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
                 {countdown === 0 ? 'START! 🚀' : countdown}
               </div>
-              <p className="text-xs text-slate-400 mt-4">Pregătește-te pentru victorie!</p>
+              <p className="text-xs text-slate-400 mt-4">
+                {lang === 'en' ? 'Get ready for victory!' : 'Pregătește-te pentru victorie!'}
+              </p>
             </div>
           )}
 
@@ -1249,19 +1363,23 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
                 {getModeTitle(currentRoom.mode)}
               </span>
-              <h3 className="text-2xl font-black text-white">Lobby Pregătire Meci 1v1</h3>
+              <h3 className="text-2xl font-black text-white">
+                {lang === 'en' ? '1v1 Match Preparation Lobby' : 'Lobby Pregătire Meci 1v1'}
+              </h3>
             </div>
 
             {/* Room Code Display Badge */}
             <div className="flex items-center gap-3 bg-slate-950 px-4 py-2.5 rounded-2xl border-2 border-indigo-500/60 shadow-lg">
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block text-right">Cod Cameră:</span>
+                <span className="text-[10px] uppercase font-bold text-slate-400 block text-right">
+                  {lang === 'en' ? 'Room Code:' : 'Cod Cameră:'}
+                </span>
                 <span className="font-mono text-2xl font-black text-amber-300 tracking-widest">{currentRoom.roomCode}</span>
               </div>
               <button
                 onClick={handleCopyCode}
                 className="p-2 rounded-xl bg-indigo-900/60 hover:bg-indigo-800 border border-indigo-500/50 text-indigo-200 transition-all cursor-pointer"
-                title="Copiază codul"
+                title={lang === 'en' ? 'Copy code' : 'Copiază codul'}
               >
                 {copiedCode ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
               </button>
@@ -1277,15 +1395,17 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold">Gazdă</span>
+                  <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold">
+                    {lang === 'en' ? 'Host' : 'Gazdă'}
+                  </span>
                   {currentRoom.host.id === myDeviceId && (
-                    <span className="text-[10px] text-amber-400 font-bold">(Tu)</span>
+                    <span className="text-[10px] text-amber-400 font-bold">{lang === 'en' ? '(You)' : '(Tu)'}</span>
                   )}
                 </div>
                 <h4 className="text-lg font-black text-white truncate">{currentRoom.host.name}</h4>
                 <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mt-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Pregătit de Luptă
+                  {lang === 'en' ? 'Ready for Battle' : 'Pregătit de Luptă'}
                 </div>
               </div>
             </div>
@@ -1310,15 +1430,17 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">Oaspete</span>
+                      <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">
+                        {lang === 'en' ? 'Guest' : 'Oaspete'}
+                      </span>
                       {currentRoom.guest.id === myDeviceId && (
-                        <span className="text-[10px] text-amber-400 font-bold">(Tu)</span>
+                        <span className="text-[10px] text-amber-400 font-bold">{lang === 'en' ? '(You)' : '(Tu)'}</span>
                       )}
                     </div>
                     <h4 className="text-lg font-black text-white truncate">{currentRoom.guest.name}</h4>
                     <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mt-1">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      Conectat
+                      {lang === 'en' ? 'Connected' : 'Conectat'}
                     </div>
                   </div>
                 </>
@@ -1327,9 +1449,12 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 mx-auto flex items-center justify-center mb-2 animate-bounce">
                     <Wifi className="w-4 h-4 text-slate-400" />
                   </div>
-                  <p className="text-xs font-semibold text-slate-400">Se așteaptă conectarea colegului...</p>
+                  <p className="text-xs font-semibold text-slate-400">
+                    {lang === 'en' ? 'Waiting for classmate to connect...' : 'Se așteaptă conectarea colegului...'}
+                  </p>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Spune-i colegului să introducă codul: <span className="font-mono text-amber-400 font-bold">{currentRoom.roomCode}</span>
+                    {lang === 'en' ? 'Tell your classmate to enter code:' : 'Spune-i colegului să introducă codul:'}{' '}
+                    <span className="font-mono text-amber-400 font-bold">{currentRoom.roomCode}</span>
                   </p>
                 </div>
               )}
@@ -1347,7 +1472,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               }}
               className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer"
             >
-              Anulează / Ieși din Cameră
+              {lang === 'en' ? 'Cancel / Leave Room' : 'Anulează / Ieși din Cameră'}
             </button>
 
             {isHost ? (
@@ -1357,12 +1482,16 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm tracking-wider shadow-xl shadow-emerald-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
               >
                 <Play className="w-4 h-4 fill-white" />
-                {currentRoom.guest ? 'START DUEL ACUM 🚀' : 'Se așteaptă oponentul...'}
+                {currentRoom.guest
+                  ? (lang === 'en' ? 'START DUEL NOW 🚀' : 'START DUEL ACUM 🚀')
+                  : (lang === 'en' ? 'Waiting for opponent...' : 'Se așteaptă oponentul...')}
               </button>
             ) : (
               <div className="text-xs text-indigo-300 font-semibold bg-indigo-950/60 px-4 py-2.5 rounded-xl border border-indigo-500/30 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                Gazda camerei va porni meciul în câteva momente...
+                {lang === 'en'
+                  ? 'The room host will start the match in a few moments...'
+                  : 'Gazda camerei va porni meciul în câteva momente...'}
               </div>
             )}
           </div>
@@ -1377,16 +1506,17 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           <div className="p-5 rounded-2xl bg-slate-900/95 border border-purple-500/40 shadow-xl space-y-4">
             <div className="flex items-center justify-between text-xs font-bold text-slate-400">
               <span className="flex items-center gap-1.5 text-amber-400">
-                <Flame className="w-4 h-4" /> Pistă Live de Concurs (Sincronizare în Timp Real)
+                <Flame className="w-4 h-4" />
+                {lang === 'en' ? 'Live Match Track (Real-time Cloud Sync)' : 'Pistă Live de Concurs (Sincronizare în Timp Real)'}
               </span>
-              <span>{currentRoom.mode === 'cyber_sprint' ? `${wpm} WPM (Viteză)` : `Scor: ${me?.score || 0} pts`}</span>
+              <span>{currentRoom.mode === 'cyber_sprint' ? (lang === 'en' ? `${wpm} WPM (Speed)` : `${wpm} WPM (Viteză)`) : (lang === 'en' ? `Score: ${me?.score || 0} pts` : `Scor: ${me?.score || 0} pts`)}</span>
             </div>
 
             {/* Track 1: Me */}
             <div className="space-y-1">
               <div className="flex justify-between text-xs font-bold">
                 <span className="text-indigo-300 flex items-center gap-1">
-                  <span>{me?.avatar}</span> {me?.name} (Tu)
+                  <span>{me?.avatar}</span> {me?.name} {lang === 'en' ? '(You)' : '(Tu)'}
                 </span>
                 <span className="font-mono text-indigo-200">{me?.progress || 0}%</span>
               </div>
@@ -1404,7 +1534,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             <div className="space-y-1">
               <div className="flex justify-between text-xs font-bold">
                 <span className="text-rose-300 flex items-center gap-1">
-                  <span>{opponent?.avatar || '👤'}</span> {opponent?.name || 'Oponent'}
+                  <span>{opponent?.avatar || '👤'}</span> {opponent?.name || (lang === 'en' ? 'Opponent' : 'Oponent')}
                 </span>
                 <span className="font-mono text-rose-200">{opponent?.progress || 0}%</span>
               </div>
@@ -1443,7 +1573,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               {/* Typing Input */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                  Tastează cuvântul curent urmat de [SPACE]:
+                  {lang === 'en' ? 'Type the current word followed by [SPACE]:' : 'Tastează cuvântul curent urmat de [SPACE]:'}
                 </label>
                 <input
                   ref={inputRef}
@@ -1451,7 +1581,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   value={typedInput}
                   onChange={handleTypingChange}
                   disabled={hasFinishedLocal}
-                  placeholder={hasFinishedLocal ? 'Ai terminat! Se așteaptă adversarul...' : 'Tastează aici...'}
+                  placeholder={hasFinishedLocal ? (lang === 'en' ? 'Finished! Waiting for opponent...' : 'Ai terminat! Se așteaptă adversarul...') : (lang === 'en' ? 'Type here...' : 'Tastează aici...')}
                   className="w-full px-5 py-4 rounded-2xl bg-slate-950 border-2 border-indigo-500 focus:border-cyan-400 text-white font-mono text-xl font-bold outline-none shadow-lg transition-all"
                   autoFocus
                 />
@@ -1713,7 +1843,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="flex justify-between items-center text-xs font-bold text-slate-400">
                 <span className="text-rose-300 font-mono flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-rose-400" />
-                  Scenariul de Securitate {shieldIndex + 1} din {shieldItems.length}
+                  {lang === 'en'
+                    ? `Security Scenario ${shieldIndex + 1} of ${shieldItems.length}`
+                    : `Scenariul de Securitate ${shieldIndex + 1} din ${shieldItems.length}`}
                 </span>
                 <span className="text-amber-400 flex items-center gap-1 font-mono">
                   <Flame className="w-4 h-4" /> Streak: x{shieldStreak} (+{shieldScore} XP)
@@ -1724,23 +1856,27 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="p-5 sm:p-6 rounded-2xl bg-slate-950 border-2 border-slate-800 relative overflow-hidden shadow-inner">
                 <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-800 text-xs">
                   <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
-                  <span className="text-slate-400">De la:</span>
-                  <span className="font-mono font-bold text-white truncate">{currentShieldItem.sender}</span>
+                  <span className="text-slate-400">{lang === 'en' ? 'From:' : 'De la:'}</span>
+                  <span className="font-mono font-bold text-white truncate">
+                    {lang === 'en' && currentShieldItem.senderEn ? currentShieldItem.senderEn : currentShieldItem.sender}
+                  </span>
                 </div>
 
                 <h4 className="text-base sm:text-lg font-black text-amber-200 font-heading mb-2">
-                  {currentShieldItem.subject}
+                  {lang === 'en' && currentShieldItem.subjectEn ? currentShieldItem.subjectEn : currentShieldItem.subject}
                 </h4>
 
                 <p className="text-sm text-slate-300 leading-relaxed mb-4">
-                  {currentShieldItem.body}
+                  {lang === 'en' && currentShieldItem.bodyEn ? currentShieldItem.bodyEn : currentShieldItem.body}
                 </p>
 
-                {currentShieldItem.linkOrAttachment && (
+                {(currentShieldItem.linkOrAttachment || currentShieldItem.linkOrAttachmentEn) && (
                   <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2 text-xs font-mono">
                     <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                    <span className="text-slate-400">Link / Atașament:</span>
-                    <span className="text-rose-300 font-bold truncate underline">{currentShieldItem.linkOrAttachment}</span>
+                    <span className="text-slate-400">{lang === 'en' ? 'Link / Attachment:' : 'Link / Atașament:'}</span>
+                    <span className="text-rose-300 font-bold truncate underline">
+                      {lang === 'en' && currentShieldItem.linkOrAttachmentEn ? currentShieldItem.linkOrAttachmentEn : currentShieldItem.linkOrAttachment}
+                    </span>
                   </div>
                 )}
               </div>
@@ -1755,8 +1891,14 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   <div className="flex items-start gap-3">
                     {shieldFeedback.isCorrect ? <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" /> : <XCircle className="w-6 h-6 text-rose-400 shrink-0 mt-0.5" />}
                     <div>
-                      <span className="font-black block">{shieldFeedback.isCorrect ? 'DECIZIE CORECTĂ! +150 XP' : 'DECIZIE GREȘITĂ! (0 XP)'}</span>
-                      <p className="text-xs mt-0.5 opacity-90">{shieldFeedback.explanation}</p>
+                      <span className="font-black block">
+                        {shieldFeedback.isCorrect
+                          ? (lang === 'en' ? 'CORRECT DECISION! +150 XP' : 'DECIZIE CORECTĂ! +150 XP')
+                          : (lang === 'en' ? 'WRONG DECISION! (0 XP)' : 'DECIZIE GREȘITĂ! (0 XP)')}
+                      </span>
+                      <p className="text-xs mt-0.5 opacity-90">
+                        {lang === 'en' && currentShieldItem.explanationEn ? currentShieldItem.explanationEn : shieldFeedback.explanation}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -1783,7 +1925,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   className="p-4 rounded-2xl bg-gradient-to-r from-rose-700 to-red-600 hover:from-rose-600 hover:to-red-500 text-white font-black text-base shadow-lg shadow-rose-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ShieldX className="w-5 h-5" />
-                  🚨 BLOCHEAZĂ ATACUL (Phishing/Virus)
+                  {lang === 'en' ? '🚨 BLOCK ATTACK (Phishing/Virus)' : '🚨 BLOCHEAZĂ ATACUL (Phishing/Virus)'}
                 </button>
 
                 <button
@@ -1793,7 +1935,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   className="p-4 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-600 hover:from-emerald-600 hover:to-teal-500 text-white font-black text-base shadow-lg shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <ShieldCheck className="w-5 h-5" />
-                  ✅ PERMITE (Mesaj Sigur / Oficial)
+                  {lang === 'en' ? '✅ ALLOW (Safe / Official Message)' : '✅ PERMITE (Mesaj Sigur / Oficial)'}
                 </button>
               </div>
             </div>
@@ -1805,10 +1947,14 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="flex justify-between items-center text-xs font-bold text-slate-400">
                 <span className="text-cyan-300 font-mono flex items-center gap-1.5">
                   <Cpu className="w-4 h-4 text-cyan-400" />
-                  Asamblare PC în Viteză (Pasul {expectedStep} din {pcParts.length})
+                  {lang === 'en'
+                    ? `Speed PC Assembly (Step ${expectedStep} of ${pcParts.length})`
+                    : `Asamblare PC în Viteză (Pasul ${expectedStep} din ${pcParts.length})`}
                 </span>
                 <span className="text-emerald-400 font-mono">
-                  Componente Montate: {assembledParts.length}/{pcParts.length} (+{pcScore} XP)
+                  {lang === 'en'
+                    ? `Mounted Components: ${assembledParts.length}/${pcParts.length} (+${pcScore} XP)`
+                    : `Componente Montate: ${assembledParts.length}/${pcParts.length} (+${pcScore} XP)`}
                 </span>
               </div>
 
@@ -1816,10 +1962,11 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <div className="p-5 rounded-2xl bg-slate-950 border-2 border-cyan-500/30 shadow-inner space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-bold">
-                    🖥️ Placă de Bază & Carcasă (Socketuri Active)
+                    {lang === 'en' ? '🖥️ Motherboard & Case (Active Sockets)' : '🖥️ Placă de Bază & Carcasă (Socketuri Active)'}
                   </h4>
                   <span className="text-[11px] text-amber-300 font-mono bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
-                    Următorul pas necesar: {currentExpectedPart?.slotLabel}
+                    {lang === 'en' ? 'Next required step: ' : 'Următorul pas necesar: '}
+                    {lang === 'en' && currentExpectedPart?.slotLabelEn ? currentExpectedPart.slotLabelEn : currentExpectedPart?.slotLabel}
                   </span>
                 </div>
 
@@ -1828,6 +1975,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   {pcParts.map((p) => {
                     const isMounted = assembledParts.includes(p.id);
                     const isNextTarget = p.stepOrder === expectedStep;
+                    const slotName = lang === 'en' && p.slotLabelEn ? p.slotLabelEn : p.slotLabel;
+                    const partName = lang === 'en' && p.nameEn ? p.nameEn : p.name;
 
                     return (
                       <div
@@ -1843,10 +1992,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                         <span className="text-2xl">{isMounted ? '✅' : p.icon}</span>
                         <div className="min-w-0">
                           <span className="text-[10px] font-mono text-slate-400 block truncate">
-                            {p.slotLabel}
+                            {slotName}
                           </span>
                           <span className="text-xs font-bold truncate block">
-                            {isMounted ? p.name : `[Slot ${p.stepOrder} Liber]`}
+                            {isMounted ? partName : (lang === 'en' ? `[Empty Slot ${p.stepOrder}]` : `[Slot ${p.stepOrder} Liber]`)}
                           </span>
                         </div>
                       </div>
@@ -1866,12 +2015,17 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               {/* Available Parts Shelf to click and install */}
               <div>
                 <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-3">
-                  📦 Raftul cu Piese Disponibile (Apasă pe piesa corectă pentru instalare):
+                  {lang === 'en'
+                    ? '📦 Available Parts Shelf (Click correct part to install):'
+                    : '📦 Raftul cu Piese Disponibile (Apasă pe piesa corectă pentru instalare):'}
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {pcParts.map((part) => {
                     const isInstalled = assembledParts.includes(part.id);
                     const isLocked = isInstalled || pcLockedUntil > Date.now();
+                    const partName = lang === 'en' && part.nameEn ? part.nameEn : part.name;
+                    const partSpecs = lang === 'en' && part.specsEn ? part.specsEn : part.specs;
+                    const partHint = lang === 'en' && part.hintEn ? part.hintEn : part.hint;
 
                     return (
                       <button
@@ -1889,9 +2043,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       >
                         <span className="text-3xl shrink-0">{part.icon}</span>
                         <div className="min-w-0 flex-1">
-                          <h5 className="text-xs sm:text-sm font-bold truncate">{part.name}</h5>
-                          <span className="text-[10px] font-mono text-cyan-300 block truncate">{part.specs}</span>
-                          <span className="text-[10px] text-slate-400 block truncate mt-0.5">{part.hint}</span>
+                          <h5 className="text-xs sm:text-sm font-bold truncate">{partName}</h5>
+                          <span className="text-[10px] font-mono text-cyan-300 block truncate">{partSpecs}</span>
+                          <span className="text-[10px] text-slate-400 block truncate mt-0.5">{partHint}</span>
                         </div>
                       </button>
                     );
@@ -2017,15 +2171,21 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
           <div>
             <span className="text-xs font-black text-amber-400 uppercase tracking-widest block">
-              Meci Încheiat!
+              {lang === 'en' ? 'Match Finished!' : 'Meci Încheiat!'}
             </span>
             <h3 className="text-3xl sm:text-4xl font-black text-white font-heading mt-1">
-              {isMeWinner ? '🎉 FELICITĂRI! AI CÂȘTIGAT DUELUL! 🎉' : `🏆 Câștigător: ${currentRoom.winnerName || 'Oponentul'}`}
+              {isMeWinner
+                ? (lang === 'en' ? '🎉 CONGRATULATIONS! YOU WON THE DUEL! 🎉' : '🎉 FELICITĂRI! AI CÂȘTIGAT DUELUL! 🎉')
+                : (lang === 'en' ? `🏆 Winner: ${currentRoom.winnerName || 'Opponent'}` : `🏆 Câștigător: ${currentRoom.winnerName || 'Oponentul'}`)}
             </h3>
             <p className="text-sm text-slate-300 mt-2">
               {isMeWinner
-                ? 'Ai demonstrat o viteză și precizie excepțională în laboratorul TIC! Ai primit +200 XP!'
-                : 'O luptă strânsă și spectaculoasă! Răzbună-te într-o revanșă fulger!'}
+                ? (lang === 'en'
+                    ? 'You demonstrated exceptional speed and accuracy in the ICT laboratory! You earned +200 XP!'
+                    : 'Ai demonstrat o viteză și precizie excepțională în laboratorul TIC! Ai primit +200 XP!')
+                : (lang === 'en'
+                    ? 'A close and thrilling duel! Seek vengeance in a fast rematch!'
+                    : 'O luptă strânsă și spectaculoasă! Răzbună-te într-o revanșă fulger!')}
             </p>
           </div>
 
@@ -2033,13 +2193,13 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto p-4 rounded-2xl bg-slate-950 border border-slate-800">
             <div className={`p-4 rounded-xl border ${isMeWinner ? 'bg-indigo-950/60 border-indigo-500' : 'bg-slate-900 border-slate-800'}`}>
               <span className="text-2xl block mb-1">{me?.avatar}</span>
-              <span className="text-xs font-bold text-slate-400">{me?.name} (Tu)</span>
+              <span className="text-xs font-bold text-slate-400">{me?.name} {lang === 'en' ? '(You)' : '(Tu)'}</span>
               <div className="font-mono text-xl font-black text-indigo-300 mt-1">{me?.score || 0} pts</div>
             </div>
 
             <div className={`p-4 rounded-xl border ${isOpponentWinner ? 'bg-rose-950/60 border-rose-500' : 'bg-slate-900 border-slate-800'}`}>
               <span className="text-2xl block mb-1">{opponent?.avatar || '👤'}</span>
-              <span className="text-xs font-bold text-slate-400">{opponent?.name || 'Oponent'}</span>
+              <span className="text-xs font-bold text-slate-400">{opponent?.name || (lang === 'en' ? 'Opponent' : 'Oponent')}</span>
               <div className="font-mono text-xl font-black text-rose-300 mt-1">{opponent?.score || 0} pts</div>
             </div>
           </div>

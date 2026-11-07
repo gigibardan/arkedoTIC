@@ -5,15 +5,11 @@ import {
   CheckCircle2,
   AlertTriangle,
   Play,
-  RotateCcw,
   Terminal,
-  Check,
-  Code,
-  Laptop,
-  Cpu,
-  Layers
+  Laptop
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -22,19 +18,22 @@ interface Props {
 interface TestCase {
   id: string;
   inputGrade: number;
-  expectedOutput: string;
-  category: string;
+  expectedOutputRo: string;
+  expectedOutputEn: string;
+  categoryRo: string;
+  categoryEn: string;
   passed?: boolean;
 }
 
 const INITIAL_TEST_CASES: TestCase[] = [
-  { id: 't1', inputGrade: 10, expectedOutput: 'Excelent!', category: 'Nota 10 (Maxim)', passed: false },
-  { id: 't2', inputGrade: 4, expectedOutput: 'Nepromovat', category: 'Nota 1..4 (Nepromovat)', passed: false },
-  { id: 't3', inputGrade: 8, expectedOutput: 'Bine', category: 'Nota 7..8 (Bine)', passed: false },
-  { id: 't4', inputGrade: 15, expectedOutput: 'Nota invalida!', category: 'Numar in afara intervalului', passed: false }
+  { id: 't1', inputGrade: 10, expectedOutputRo: 'Excelent!', expectedOutputEn: 'Excellent!', categoryRo: 'Nota 10 (Maxim)', categoryEn: 'Grade 10 (Max)', passed: false },
+  { id: 't2', inputGrade: 4, expectedOutputRo: 'Nepromovat', expectedOutputEn: 'Failed', categoryRo: 'Nota 1..4 (Nepromovat)', categoryEn: 'Grade 1..4 (Failed)', passed: false },
+  { id: 't3', inputGrade: 8, expectedOutputRo: 'Bine', expectedOutputEn: 'Good', categoryRo: 'Nota 7..8 (Bine)', categoryEn: 'Grade 7..8 (Good)', passed: false },
+  { id: 't4', inputGrade: 15, expectedOutputRo: 'Nota invalida!', expectedOutputEn: 'Invalid grade!', categoryRo: 'Numar in afara intervalului', categoryEn: 'Out-of-range number', passed: false }
 ];
 
 export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   // Code options for student to complete the multi-way branching
   const [selectedBranch1, setSelectedBranch1] = useState<string>('nota < 1 || nota > 10');
   const [selectedBranch2, setSelectedBranch2] = useState<string>('nota <= 4');
@@ -47,47 +46,50 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
   const [testCases, setTestCases] = useState<TestCase[]>(INITIAL_TEST_CASES);
   const [customInput, setCustomInput] = useState<string>('10');
   const [allTestsPassed, setAllTestsPassed] = useState<boolean>(false);
-  const [hasBuilt, setHasBuilt] = useState<boolean>(false);
 
   // Evaluate single grade with the current configured logic
-  const evaluateGrade = (grade: number): string => {
+  const evaluateGrade = (grade: number, targetLang: 'ro' | 'en'): string => {
     // Check invalid
     if (grade < 1 || grade > 10) {
-      return 'Nota invalida!';
+      return targetLang === 'ro' ? 'Nota invalida!' : 'Invalid grade!';
     }
     if (grade <= 4) {
-      return 'Nepromovat';
+      return targetLang === 'ro' ? 'Nepromovat' : 'Failed';
     }
     if (grade <= 6) {
-      return 'Suficient';
+      return targetLang === 'ro' ? 'Suficient' : 'Pass';
     }
     if (grade <= 8) {
-      return 'Bine';
+      return targetLang === 'ro' ? 'Bine' : 'Good';
     }
     if (grade === 9) {
-      return 'Foarte bine';
+      return targetLang === 'ro' ? 'Foarte bine' : 'Very good';
     }
-    return 'Excelent!';
+    return targetLang === 'ro' ? 'Excelent!' : 'Excellent!';
   };
 
   const handleRunAllTests = () => {
     sounds.playClick();
     setIsRunning(true);
-    setHasBuilt(true);
     setConsoleOutput([
-      '=== COMPILARE PROIECT C++ (Target: mingw32-g++) ===',
+      lang === 'ro'
+        ? '=== COMPILARE PROIECT C++ (Target: mingw32-g++) ==='
+        : '=== COMPILING C++ PROJECT (Target: mingw32-g++) ===',
       'g++.exe -Wall -fexceptions -g -c main.cpp -o obj\\main.o',
       'g++.exe -o bin\\catalog.exe obj\\main.o',
       'Output size is 1.42 MB',
       'Process terminated with status 0 (0 error(s), 0 warning(s))',
       '--------------------------------------------------',
-      '=== EXECUTARE TESTE AUTOMATE DIN MANUAL (Art Klett pag. 80) ==='
+      lang === 'ro'
+        ? '=== EXECUTARE TESTE AUTOMATE DIN MANUAL (Art Klett pag. 80) ==='
+        : '=== RUNNING AUTOMATED TEXTBOOK SUITE (Art Klett p. 80) ==='
     ]);
 
     setTimeout(() => {
       const updated = testCases.map(tc => {
-        const actual = evaluateGrade(tc.inputGrade);
-        const pass = actual.trim().toLowerCase() === tc.expectedOutput.trim().toLowerCase();
+        const actual = evaluateGrade(tc.inputGrade, lang);
+        const expected = lang === 'ro' ? tc.expectedOutputRo : tc.expectedOutputEn;
+        const pass = actual.trim().toLowerCase() === expected.trim().toLowerCase();
         return { ...tc, passed: pass };
       });
 
@@ -95,20 +97,32 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
 
       const logs: string[] = [];
       updated.forEach(tc => {
-        const actual = evaluateGrade(tc.inputGrade);
-        logs.push(`Test [nota = ${tc.inputGrade}]: Rezultat afisat: "${actual}" -> ${tc.passed ? 'PASSED [OK]' : 'FAILED'}`);
+        const actual = evaluateGrade(tc.inputGrade, lang);
+        logs.push(
+          lang === 'ro'
+            ? `Test [nota = ${tc.inputGrade}]: Rezultat afisat: "${actual}" -> ${tc.passed ? 'PASSED [OK]' : 'FAILED'}`
+            : `Test [grade = ${tc.inputGrade}]: Console output: "${actual}" -> ${tc.passed ? 'PASSED [OK]' : 'FAILED'}`
+        );
       });
 
       const allOk = updated.every(tc => tc.passed);
       if (allOk) {
         sounds.playVictory();
         logs.push('--------------------------------------------------');
-        logs.push('>>> TOATE CELE 4 TESTE AU TRECUT CU SUCCES! (100% SUITE PASS) <<<');
+        logs.push(
+          lang === 'ro'
+            ? '>>> TOATE CELE 4 TESTE AU TRECUT CU SUCCES! (100% SUITE PASS) <<<'
+            : '>>> ALL 4 TEST CASES PASSED SUCCESSFULLY! (100% SUITE PASS) <<<'
+        );
         setAllTestsPassed(true);
       } else {
         sounds.playError();
         logs.push('--------------------------------------------------');
-        logs.push('>>> EXISTA TESTE ESUATE. REVIZUIESTE CONDITIILE DECIZIEI! <<<');
+        logs.push(
+          lang === 'ro'
+            ? '>>> EXISTA TESTE ESUATE. REVIZUIESTE CONDITIILE DECIZIEI! <<<'
+            : '>>> SOME TESTS FAILED. REVIEW YOUR BRANCH CONDITIONS! <<<'
+        );
       }
 
       setConsoleOutput(prev => [...prev, ...logs]);
@@ -120,11 +134,16 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
     sounds.playClick();
     const parsed = parseInt(customInput);
     if (isNaN(parsed)) {
-      setConsoleOutput(prev => [...prev, `[Eroare]: "${customInput}" nu este un numar intreg valid.`]);
+      setConsoleOutput(prev => [
+        ...prev,
+        lang === 'ro'
+          ? `[Eroare]: "${customInput}" nu este un numar intreg valid.`
+          : `[Error]: "${customInput}" is not a valid integer.`
+      ]);
       return;
     }
 
-    const res = evaluateGrade(parsed);
+    const res = evaluateGrade(parsed, lang);
     sounds.playSuccess();
     setConsoleOutput(prev => [
       ...prev,
@@ -145,23 +164,33 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 6 din 7 • Modulul 4C
+              {lang === 'ro' ? 'Nivelul 6 din 7 • Modulul 4C' : 'Level 6 of 7 • Module 4C'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 80</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 80' : 'Art Klett Textbook p. 80'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Laptop className="w-6 h-6 text-teal-400" />
-            <span>Laborator Live Code::Blocks: Structura if - else if - else</span>
+            <span>
+              {lang === 'ro'
+                ? 'Laborator Live Code::Blocks: Structura if - else if - else'
+                : 'Live Code::Blocks Lab: if - else if - else Structure'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Laboratorul practic oficial din manual: Implementează algoritmul de acordare a calificativelor pentru nota citită de la tastatură și trece testele automate!
+            {lang === 'ro'
+              ? 'Laboratorul practic oficial din manual: Implementează algoritmul de acordare a calificativelor pentru nota citită de la tastatură și trece testele automate!'
+              : 'Official textbook practical lab: Implement multi-way grade evaluation logic for keyboard input and pass the automated test suite!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Status Teste:</span>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'ro' ? 'Status Teste:' : 'Test Status:'}
+          </span>
           <span className="text-lg sm:text-xl font-black font-mono text-teal-400">
-            {testCases.filter(t => t.passed).length} / 4 Teste Trecute
+            {testCases.filter(t => t.passed).length} / 4 {lang === 'ro' ? 'Teste Trecute' : 'Tests Passed'}
           </span>
         </div>
       </div>
@@ -187,7 +216,7 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
               disabled={isRunning}
               onClick={handleRunAllTests}
               className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-600/30 active:scale-95"
-              title="Compilează și Execută Toate Testele (F9)"
+              title="Build & Run (F9)"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Build &amp; Run (F9)</span>
@@ -198,17 +227,25 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
         {/* IDE Code Editor */}
         <div className="p-4 sm:p-5 bg-slate-950 font-mono text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed border-b border-slate-800">
           <div className="text-slate-500 text-xs mb-1">
-            // Problema din manualul de clasa a VII-a (pag. 80): Calificative Note Catalog
+            {lang === 'ro'
+              ? '// Problema din manualul de clasa a VII-a (pag. 80): Calificative Note Catalog'
+              : '// 7th Grade Textbook Problem (p. 80): Grade Evaluation System'}
           </div>
           <div><span className="text-purple-400">#include</span> <span className="text-emerald-400">&lt;iostream&gt;</span></div>
           <div><span className="text-purple-400">using namespace</span> <span className="text-amber-300">std</span>;</div>
           <br />
           <div><span className="text-blue-400">int</span> <span className="text-yellow-400">main</span>() {'{'}</div>
           <div className="pl-6"><span className="text-blue-400">int</span> nota;</div>
-          <div className="pl-6"><span className="text-amber-400">cout</span> &lt;&lt; <span className="text-emerald-300">&quot;Introdu nota elevului (1..10): &quot;</span>;</div>
+          <div className="pl-6">
+            <span className="text-amber-400">cout</span> &lt;&lt; <span className="text-emerald-300">&quot;{lang === 'ro' ? 'Introdu nota elevului (1..10): ' : 'Enter student grade (1..10): '}&quot;</span>;
+          </div>
           <div className="pl-6"><span className="text-amber-400">cin</span> &gt;&gt; nota;</div>
           <br />
-          <div className="pl-6 text-slate-400">// Structura alternativa cu ramificari multiple (if - else if - else):</div>
+          <div className="pl-6 text-slate-400">
+            {lang === 'ro'
+              ? '// Structura alternativa cu ramificari multiple (if - else if - else):'
+              : '// Multi-way branching alternative structure (if - else if - else):'}
+          </div>
           
           {/* Branch 1: Invalid */}
           <div className="pl-6 flex flex-wrap items-center gap-2 my-1">
@@ -224,7 +261,9 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
             </select>
             ) {'{'}
           </div>
-          <div className="pl-12 text-emerald-300">cout &lt;&lt; &quot;Nota invalida!&quot;;</div>
+          <div className="pl-12 text-emerald-300">
+            cout &lt;&lt; &quot;{lang === 'ro' ? 'Nota invalida!' : 'Invalid grade!'}&quot;;
+          </div>
           <div className="pl-6">{'}'} <span className="text-purple-400 font-bold">else if</span> (</div>
 
           {/* Branch 2: Nepromovat */}
@@ -240,7 +279,9 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
             </select>
             ) {'{'}
           </div>
-          <div className="pl-12 text-emerald-300">cout &lt;&lt; &quot;Nepromovat&quot;;</div>
+          <div className="pl-12 text-emerald-300">
+            cout &lt;&lt; &quot;{lang === 'ro' ? 'Nepromovat' : 'Failed'}&quot;;
+          </div>
           <div className="pl-6">{'}'} <span className="text-purple-400 font-bold">else if</span> (</div>
 
           {/* Branch 3: Suficient */}
@@ -256,7 +297,9 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
             </select>
             ) {'{'}
           </div>
-          <div className="pl-12 text-emerald-300">cout &lt;&lt; &quot;Suficient&quot;;</div>
+          <div className="pl-12 text-emerald-300">
+            cout &lt;&lt; &quot;{lang === 'ro' ? 'Suficient' : 'Pass'}&quot;;
+          </div>
           <div className="pl-6">{'}'} <span className="text-purple-400 font-bold">else if</span> (</div>
 
           {/* Branch 4: Bine */}
@@ -272,11 +315,17 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
             </select>
             ) {'{'}
           </div>
-          <div className="pl-12 text-emerald-300">cout &lt;&lt; &quot;Bine&quot;;</div>
+          <div className="pl-12 text-emerald-300">
+            cout &lt;&lt; &quot;{lang === 'ro' ? 'Bine' : 'Good'}&quot;;
+          </div>
           <div className="pl-6">{'}'} <span className="text-purple-400 font-bold">else if</span> (nota == 9) {'{'}</div>
-          <div className="pl-12 text-emerald-300">cout &lt;&lt; &quot;Foarte bine&quot;;</div>
+          <div className="pl-12 text-emerald-300">
+            cout &lt;&lt; &quot;{lang === 'ro' ? 'Foarte bine' : 'Very good'}&quot;;
+          </div>
           <div className="pl-6">{'}'} <span className="text-purple-400 font-bold">else</span> {'{'}</div>
-          <div className="pl-12 text-emerald-300">cout &lt;&lt; &quot;Excelent!&quot;; // Pentru nota 10</div>
+          <div className="pl-12 text-emerald-300">
+            cout &lt;&lt; &quot;{lang === 'ro' ? 'Excelent!' : 'Excellent!'}&quot;; // {lang === 'ro' ? 'Pentru nota 10' : 'For grade 10'}
+          </div>
           <div className="pl-6">{'}'}</div>
           <br />
           <div className="pl-6"><span className="text-purple-400">return</span> 0;</div>
@@ -295,15 +344,15 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
                 type="text"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
-                placeholder="Testează o notă..."
+                placeholder={lang === 'ro' ? 'Testează o notă...' : 'Test a grade...'}
                 className="w-32 bg-slate-900 border border-slate-800 rounded px-2 py-0.5 text-emerald-300 text-xs focus:outline-none focus:border-emerald-500"
               />
               <button
                 type="button"
                 onClick={handleTestCustom}
-                className="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer"
+                className="px-2.5 py-0.5 rounded bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-bold transition cursor-pointer"
               >
-                Introdu Notă
+                {lang === 'ro' ? 'Introdu Notă' : 'Enter Grade'}
               </button>
             </div>
           </div>
@@ -311,7 +360,9 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
           <div className="min-h-[100px] max-h-48 overflow-y-auto space-y-1 text-slate-300 text-[11px]">
             {consoleOutput.length === 0 ? (
               <div className="text-slate-600 italic">
-                Apasă pe butonul verde &quot;Build &amp; Run (F9)&quot; pentru a compila codul și a executa suita de teste automate.
+                {lang === 'ro'
+                  ? 'Apasă pe butonul verde "Build & Run (F9)" pentru a compila codul și a executa suita de teste automate.'
+                  : 'Click the green "Build & Run (F9)" button to compile code and execute the automated test suite.'}
               </div>
             ) : (
               consoleOutput.map((line, i) => (
@@ -342,11 +393,16 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
                   {tc.passed ? '✓ PASSED' : '○ PENDING'}
                 </span>
               </div>
-              <div className="font-bold text-xs text-white mb-0.5">{tc.category}</div>
+              <div className="font-bold text-xs text-white mb-0.5">
+                {lang === 'ro' ? tc.categoryRo : tc.categoryEn}
+              </div>
               <div className="text-[11px] font-mono text-cyan-400">cin &gt;&gt; {tc.inputGrade}</div>
             </div>
             <div className="mt-2 text-[10px] font-mono text-slate-400 border-t border-slate-800/80 pt-1.5">
-              Așteptat: <span className="text-emerald-300 font-bold">{tc.expectedOutput}</span>
+              {lang === 'ro' ? 'Așteptat: ' : 'Expected: '}
+              <span className="text-emerald-300 font-bold">
+                {lang === 'ro' ? tc.expectedOutputRo : tc.expectedOutputEn}
+              </span>
             </div>
           </div>
         ))}
@@ -360,10 +416,14 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Laborator C++ Finalizat cu Notă Maximă!
+              {lang === 'ro' ? 'Laborator C++ Finalizat cu Notă Maximă!' : 'C++ Lab Completed with Top Marks!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Ai configurat corect instrucțiunea ramificată <code className="text-teal-300">if - else if - else</code> și toate cele 4 cazuri de test au trecut cu succes!
+              {lang === 'ro' ? (
+                <>Ai configurat corect instrucțiunea ramificată <code className="text-teal-300">if - else if - else</code> și toate cele 4 cazuri de test au trecut cu succes!</>
+              ) : (
+                <>You have correctly structured the multi-way <code className="text-teal-300">if - else if - else</code> decision ladder and all 4 test cases passed!</>
+              )}
             </p>
           </div>
 
@@ -372,7 +432,11 @@ export const DecLevel6_ElseIfGradingLab: React.FC<Props> = ({ onPass }) => {
             onClick={handleFinish}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 7: Evaluare Finală &amp; Certificat Digital</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 7: Evaluare Finală & Certificat Digital'
+                : 'Advance to Level 7: Final Assessment & Digital Certificate'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

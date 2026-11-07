@@ -3,17 +3,13 @@ import {
   Award,
   CheckCircle2,
   XCircle,
-  HelpCircle,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
-  FileCheck,
   Printer,
-  Calendar,
-  User,
   RotateCcw
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -22,94 +18,146 @@ interface Props {
 
 interface Question {
   id: number;
-  question: string;
-  options: string[];
+  questionRo: string;
+  questionEn: string;
+  optionsRo: string[];
+  optionsEn: string[];
   correctIndex: number;
-  explanation: string;
+  explanationRo: string;
+  explanationEn: string;
 }
 
 const EXAM_QUESTIONS: Question[] = [
   {
     id: 1,
-    question: 'Care este directiva obligatorie pentru a include biblioteca de intrare/ieșire (cin/cout)?',
-    options: [
+    questionRo: 'Care este directiva obligatorie pentru a include biblioteca de intrare/ieșire (cin/cout)?',
+    questionEn: 'Which preprocessor directive is mandatory to include the standard I/O library (cin/cout)?',
+    optionsRo: [
+      '#include <iostream>',
+      '#import <math.h>',
+      'include studio.h',
+      '#library <scratch>'
+    ],
+    optionsEn: [
       '#include <iostream>',
       '#import <math.h>',
       'include studio.h',
       '#library <scratch>'
     ],
     correctIndex: 0,
-    explanation: '#include <iostream> (input-output stream) este directiva de preprocesor esențială pentru operațiile de consolă în C++.'
+    explanationRo: '#include <iostream> (input-output stream) este directiva de preprocesor esențială pentru operațiile de consolă în C++.',
+    explanationEn: '#include <iostream> (input-output stream) is the vital preprocessor directive for console operations in C++.'
   },
   {
     id: 2,
-    question: 'Unde începe execuția oricărui program scris în C++?',
-    options: [
+    questionRo: 'Unde începe execuția oricărui program scris în C++?',
+    questionEn: 'Where does the execution of any C++ program begin?',
+    optionsRo: [
       'În funcția specială main()',
       'La prima linie de comentarii',
       'În fișierul iostream.exe',
       'Direct în compilatorul GCC'
     ],
+    optionsEn: [
+      'Inside the special main() function',
+      'At the first comment line',
+      'Inside the iostream.exe file',
+      'Directly inside the GCC compiler'
+    ],
     correctIndex: 0,
-    explanation: 'Execuția începe întotdeauna de la prima instrucțiune din corpul funcției principale int main().'
+    explanationRo: 'Execuția începe întotdeauna de la prima instrucțiune din corpul funcției principale int main().',
+    explanationEn: 'Execution always starts from the first statement inside the body of the int main() function.'
   },
   {
     id: 3,
-    question: 'Ce caracter este obligatoriu la finalul fiecărei instrucțiuni simple în C++?',
-    options: [
+    questionRo: 'Ce caracter este obligatoriu la finalul fiecărei instrucțiuni simple în C++?',
+    questionEn: 'What character is mandatory at the end of each simple statement in C++?',
+    optionsRo: [
       'Punct și virgulă (;)',
       'Două puncte (:)',
       'Punct simplu (.)',
       'Semnul exclamării (!)'
     ],
+    optionsEn: [
+      'Semicolon (;)',
+      'Colon (:)',
+      'Period (.)',
+      'Exclamation mark (!)'
+    ],
     correctIndex: 0,
-    explanation: 'Punctul și virgula (;) este terminatorul obligatoriu de instrucțiune. Lipsa lui provoacă eroarea clasică de compilare.'
+    explanationRo: 'Punctul și virgula (;) este terminatorul obligatoriu de instrucțiune. Lipsa lui provoacă eroarea clasică de compilare.',
+    explanationEn: 'The semicolon (;) is the mandatory statement terminator in C++. Omitting it triggers a syntax compiler error.'
   },
   {
     id: 4,
-    question: 'Care dintre următoarele nume de variabilă este un IDENTIFICATOR VALID în C++?',
-    options: [
+    questionRo: 'Care dintre următoarele nume de variabilă este un IDENTIFICATOR VALID în C++?',
+    questionEn: 'Which of the following variable names is a VALID C++ IDENTIFIER?',
+    optionsRo: [
+      'nota_10',
+      '10_nota',
+      'nota elev',
+      'return'
+    ],
+    optionsEn: [
       'nota_10',
       '10_nota',
       'nota elev',
       'return'
     ],
     correctIndex: 0,
-    explanation: 'nota_10 este valid (conține litere, underscore și cifre, fără să înceapă cu o cifră și fără spații).'
+    explanationRo: 'nota_10 este valid (conține litere, underscore și cifre, fără să înceapă cu o cifră și fără spații).',
+    explanationEn: 'nota_10 is valid (contains letters, underscore, digits, does not start with digit, contains no spaces).'
   },
   {
     id: 5,
-    question: 'Ce tip de date fundamental este cel mai potrivit pentru a stoca media generală (ex: 9.75)?',
-    options: [
+    questionRo: 'Ce tip de date fundamental este cel mai potrivit pentru a stoca media generală (ex: 9.75)?',
+    questionEn: 'Which primitive data type is most appropriate to store a student GPA (e.g. 9.75)?',
+    optionsRo: [
       'double (sau float)',
       'int',
       'char',
       'bool'
     ],
+    optionsEn: [
+      'double (or float)',
+      'int',
+      'char',
+      'bool'
+    ],
     correctIndex: 0,
-    explanation: 'double reprezintă numere reale cu zecimale cu virgulă mobilă de dublă precizie.'
+    explanationRo: 'double reprezintă numere reale cu zecimale cu virgulă mobilă de dublă precizie.',
+    explanationEn: 'double represents double-precision 64-bit floating point real numbers with decimal fractions.'
   },
   {
     id: 6,
-    question: 'Ce tastă rapidă din Code::Blocks construiește și rulează programul (Build and Run)?',
-    options: [
+    questionRo: 'Ce tastă rapidă din Code::Blocks construiește și rulează programul (Build and Run)?',
+    questionEn: 'Which keyboard shortcut in Code::Blocks builds and runs the project (Build and Run)?',
+    optionsRo: [
       'Tasta F9',
       'Tasta F1',
       'Tasta F5',
       'Ctrl + P'
     ],
+    optionsEn: [
+      'F9 Key',
+      'F1 Key',
+      'F5 Key',
+      'Ctrl + P'
+    ],
     correctIndex: 0,
-    explanation: 'F9 este comanda rapidă esențială din Code::Blocks pentru compilare, link-editare și lansare în consolă.'
+    explanationRo: 'F9 este comanda rapidă esențială din Code::Blocks pentru compilare, link-editare și lansare în consolă.',
+    explanationEn: 'F9 is the standard Code::Blocks keyboard shortcut for compilation, linking, and terminal launching.'
   }
 ];
 
 export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, studentName }) => {
+  const { lang } = useLanguage();
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [showCertificate, setShowCertificate] = useState<boolean>(false);
 
-  const displayName = studentName || localStorage.getItem('arkedo_student_name') || 'Elev Clasa a VII-a';
-  const currentDate = new Date().toLocaleDateString('ro-RO', { day: '2-digit', month: 'long', year: 'numeric' });
+  const displayName = studentName || localStorage.getItem('arkedo_student_name') || (lang === 'ro' ? 'Elev Clasa a VII-a' : 'Grade 7 Student');
+  const currentDate = new Date().toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-US', { day: '2-digit', month: 'long', year: 'numeric' });
 
   const handleSelectAnswer = (qId: number, optIdx: number) => {
     if (submitted) return;
@@ -165,29 +213,48 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
           </div>
           <div>
             <div className="text-[11px] font-mono font-bold text-violet-400 uppercase tracking-wider flex items-center gap-1.5">
-              <span>Evaluare Formativă • Manual Art Klett pag. 64–73</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Evaluare Formativă • Manual Art Klett pag. 64–73'
+                  : 'Formative Assessment • Art Klett Textbook pp. 64–73'}
+              </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Examenul de Calificare TIC: C++ Junior Programmer
+              {lang === 'ro'
+                ? 'Examenul de Calificare TIC: C++ Junior Programmer'
+                : 'ICT Qualification Exam: C++ Junior Programmer'}
             </h2>
           </div>
         </div>
 
         <div className="text-xs font-mono text-cyan-300 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 self-start sm:self-auto">
-          Răspunsuri: {Object.keys(answers).length} / {EXAM_QUESTIONS.length}
+          {lang === 'ro'
+            ? `Răspunsuri: ${Object.keys(answers).length} / ${EXAM_QUESTIONS.length}`
+            : `Answered: ${Object.keys(answers).length} / ${EXAM_QUESTIONS.length}`}
         </div>
       </div>
 
       {!showCertificate ? (
         <div className="flex flex-col gap-6">
           <p className="text-xs sm:text-sm text-slate-300">
-            Răspunde la cele 6 întrebări din programa oficială. Obține minim 5 răspunsuri corecte pentru a debloca <strong>Certificatul Oficial C++ Junior Developer</strong>!
+            {lang === 'ro' ? (
+              <>
+                Răspunde la cele 6 întrebări din programa oficială. Obține minim 5 răspunsuri corecte pentru a debloca <strong>Certificatul Oficial C++ Junior Developer</strong>!
+              </>
+            ) : (
+              <>
+                Answer the 6 curriculum exam questions. Score at least 5 correct answers to unlock your <strong>Official C++ Junior Developer Certificate</strong>!
+              </>
+            )}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {EXAM_QUESTIONS.map((q, idx) => {
               const selectedOpt = answers[q.id];
               const isCorrect = selectedOpt === q.correctIndex;
+              const questionText = lang === 'ro' ? q.questionRo : q.questionEn;
+              const options = lang === 'ro' ? q.optionsRo : q.optionsEn;
+              const explanation = lang === 'ro' ? q.explanationRo : q.explanationEn;
 
               return (
                 <div
@@ -202,27 +269,27 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
                 >
                   <div>
                     <div className="text-xs font-mono font-bold text-violet-400 mb-1 flex items-center justify-between">
-                      <span>ÎNTREBAREA {idx + 1}</span>
+                      <span>{lang === 'ro' ? `ÎNTREBAREA ${idx + 1}` : `QUESTION ${idx + 1}`}</span>
                       {submitted && (
                         <span>
                           {isCorrect ? (
                             <span className="text-emerald-400 flex items-center gap-1 text-[11px]">
-                              <CheckCircle2 className="w-3.5 h-3.5" /> Corect
+                              <CheckCircle2 className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Corect' : 'Correct'}
                             </span>
                           ) : (
                             <span className="text-rose-400 flex items-center gap-1 text-[11px]">
-                              <XCircle className="w-3.5 h-3.5" /> Greșit
+                              <XCircle className="w-3.5 h-3.5" /> {lang === 'ro' ? 'Greșit' : 'Incorrect'}
                             </span>
                           )}
                         </span>
                       )}
                     </div>
                     <p className="text-xs sm:text-sm font-semibold text-slate-200 mb-3">
-                      {q.question}
+                      {questionText}
                     </p>
 
                     <div className="space-y-1.5">
-                      {q.options.map((opt, optIdx) => {
+                      {options.map((opt, optIdx) => {
                         const isChosen = selectedOpt === optIdx;
                         const isThisCorrect = optIdx === q.correctIndex;
 
@@ -255,7 +322,7 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
 
                   {submitted && (
                     <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-900 font-sans leading-snug">
-                      {q.explanation}
+                      {explanation}
                     </div>
                   )}
                 </div>
@@ -270,12 +337,13 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
                 onClick={handleSubmitExam}
                 className="w-full sm:w-auto ml-auto px-8 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 text-white font-bold font-heading text-sm shadow-lg shadow-violet-600/30 disabled:opacity-50 transition cursor-pointer"
               >
-                Trimite Răspunsurile & Evaluează
+                {lang === 'ro' ? 'Trimite Răspunsurile & Evaluează' : 'Submit Answers & Evaluate'}
               </button>
             ) : (
               <div className="flex flex-wrap items-center justify-between gap-3 w-full">
                 <div className="text-sm font-bold text-slate-200">
-                  Scor obținut: <span className="text-violet-400 font-mono">{correctCount} / {EXAM_QUESTIONS.length} ({percentage}%)</span>
+                  {lang === 'ro' ? 'Scor obținut: ' : 'Score earned: '}
+                  <span className="text-violet-400 font-mono">{correctCount} / {EXAM_QUESTIONS.length} ({percentage}%)</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -284,7 +352,7 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
                     className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Reia Testul</span>
+                    <span>{lang === 'ro' ? 'Reia Testul' : 'Retake Exam'}</span>
                   </button>
 
                   {correctCount >= 5 && (
@@ -293,7 +361,7 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
                       className="px-6 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 cursor-pointer"
                     >
                       <Award className="w-4 h-4" />
-                      <span>Vezi Certificatul</span>
+                      <span>{lang === 'ro' ? 'Vezi Certificatul' : 'View Certificate'}</span>
                     </button>
                   )}
                 </div>
@@ -314,36 +382,60 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
 
             <div>
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
-                MINISTERUL EDUCAȚIEI • PROGRAMA NAȚIONALĂ TIC (OMEN 3393/2017)
+                {lang === 'ro'
+                  ? 'MINISTERUL EDUCAȚIEI • PROGRAMA NAȚIONALĂ TIC (OMEN 3393/2017)'
+                  : 'MINISTRY OF EDUCATION • NATIONAL CURRICULUM ACCREDITATION'}
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
-                CERTIFICAT DE ABSOLVIRE
+                {lang === 'ro' ? 'CERTIFICAT DE ABSOLVIRE' : 'CERTIFICATE OF ACHIEVEMENT'}
               </h2>
               <div className="text-sm sm:text-base font-bold text-violet-300 mt-1">
-                Modulul 4A: Tranziția la C++ & Mediul Code::Blocks
+                {lang === 'ro'
+                  ? 'Modulul 4A: Tranziția la C++ & Mediul Code::Blocks'
+                  : 'Module 4A: Transition to C++ & Code::Blocks IDE'}
               </div>
             </div>
 
             <div className="max-w-xl text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Se conferă prezentul certificat elevului:
-              <div className="text-xl sm:text-3xl font-black text-white font-heading my-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-amber-200">
-                {displayName}
-              </div>
-              pentru asimilarea impecabilă a noțiunilor fundamentale de programare C++, a anatomiei mediului Code::Blocks, a compilării și a tipurilor de date primitive.
+              {lang === 'ro' ? (
+                <>
+                  Se conferă prezentul certificat elevului:
+                  <div className="text-xl sm:text-3xl font-black text-white font-heading my-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-amber-200">
+                    {displayName}
+                  </div>
+                  pentru asimilarea impecabilă a noțiunilor fundamentale de programare C++, a anatomiei mediului Code::Blocks, a compilării și a tipurilor de date primitive.
+                </>
+              ) : (
+                <>
+                  This certificate is awarded to student:
+                  <div className="text-xl sm:text-3xl font-black text-white font-heading my-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-amber-200">
+                    {displayName}
+                  </div>
+                  for demonstrating exceptional mastery of C++ core syntax, Code::Blocks IDE anatomy, compilation mechanics, and fundamental data types.
+                </>
+              )}
             </div>
 
             {/* Certificate Meta Details */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-lg pt-4 border-t border-slate-800 text-xs font-mono">
               <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
-                <div className="text-[10px] text-slate-500 uppercase">Calificativ</div>
-                <div className="font-bold text-emerald-400 text-sm">FOARTE BINE (10)</div>
+                <div className="text-[10px] text-slate-500 uppercase">
+                  {lang === 'ro' ? 'Calificativ' : 'Grade'}
+                </div>
+                <div className="font-bold text-emerald-400 text-sm">
+                  {lang === 'ro' ? 'FOARTE BINE (10)' : 'EXCELLENT (100%)'}
+                </div>
               </div>
               <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
-                <div className="text-[10px] text-slate-500 uppercase">Data Emiterii</div>
+                <div className="text-[10px] text-slate-500 uppercase">
+                  {lang === 'ro' ? 'Data Emiterii' : 'Issue Date'}
+                </div>
                 <div className="font-bold text-slate-300">{currentDate}</div>
               </div>
               <div className="col-span-2 sm:col-span-1 p-2 rounded-xl bg-slate-950/80 border border-slate-800">
-                <div className="text-[10px] text-slate-500 uppercase">Verificare</div>
+                <div className="text-[10px] text-slate-500 uppercase">
+                  {lang === 'ro' ? 'Verificare' : 'Verification'}
+                </div>
                 <div className="font-bold text-cyan-400 flex items-center justify-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" /> ID-C++2026
                 </div>
@@ -358,7 +450,7 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
               className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
             >
               <Printer className="w-4 h-4 text-cyan-400" />
-              <span>Tipărește / Salvează PDF</span>
+              <span>{lang === 'ro' ? 'Tipărește / Salvează PDF' : 'Print / Save PDF'}</span>
             </button>
 
             <button
@@ -366,7 +458,11 @@ export const CPLevel7_FinalExamCertificate: React.FC<Props> = ({ onPass, student
               className="w-full sm:w-auto px-8 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 text-slate-950 font-black font-heading text-sm shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 transition cursor-pointer active:scale-95"
             >
               <Award className="w-4 h-4" />
-              <span>Finalizează Misiunea 4A & Înregistrează Nota 10</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Finalizează Misiunea 4A & Înregistrează Nota 10'
+                  : 'Complete Unit 4A & Record Grade 10'}
+              </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

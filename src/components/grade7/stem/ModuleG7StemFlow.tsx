@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StemLevel1_ForLoopCounter } from './StemLevel1_ForLoopCounter';
 import { StemLevel2_DoWhileValidation } from './StemLevel2_DoWhileValidation';
 import { StemLevel3_DivisorsAndPrimes } from './StemLevel3_DivisorsAndPrimes';
@@ -6,8 +6,9 @@ import { StemLevel4_NestedLoopsArt } from './StemLevel4_NestedLoopsArt';
 import { StemLevel5_PhysicsLabMechanics } from './StemLevel5_PhysicsLabMechanics';
 import { StemLevel6_GeographyStatsLab } from './StemLevel6_GeographyStatsLab';
 import { StemLevel7_EvaluationAndCertificate } from './StemLevel7_EvaluationAndCertificate';
-import { ArrowLeft, RotateCcw, Activity, Cpu } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Activity, Cpu, AlertTriangle, X, Check } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface ModuleG7StemFlowProps {
   currentLevel: number;
@@ -24,6 +25,9 @@ export const ModuleG7StemFlow: React.FC<ModuleG7StemFlowProps> = ({
   onRestartMission,
   onReturnToCatalog,
 }) => {
+  const { lang } = useLanguage();
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
   const handlePassCurrentLevel = (score: number) => {
     onCompletePage(score);
   };
@@ -43,15 +47,17 @@ export const ModuleG7StemFlow: React.FC<ModuleG7StemFlowProps> = ({
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Catalog Misiuni</span>
+              <span>{lang === 'ro' ? 'Catalog Misiuni' : 'Missions Catalog'}</span>
             </button>
           )}
 
           <div className="text-xs text-slate-400 font-mono hidden sm:inline flex items-center gap-1.5">
             <Activity className="w-3.5 h-3.5 text-cyan-400 inline" />
-            <span>Modulul 4E: </span>
+            <span>{lang === 'ro' ? 'Modulul 4E: ' : 'Module 4E: '}</span>
             <span className="text-cyan-400 font-bold">
-              Bucle for, do-while &amp; Aplicații Interdisciplinare STEM (Manual pag. 86–102)
+              {lang === 'ro'
+                ? 'Bucle for, do-while & Aplicații Interdisciplinare STEM (Manual pag. 86–102)'
+                : 'for, do-while Loops & Interdisciplinary STEM Applications (Textbook p. 86–102)'}
             </span>
           </div>
         </div>
@@ -60,7 +66,7 @@ export const ModuleG7StemFlow: React.FC<ModuleG7StemFlowProps> = ({
           {studentName && (
             <div className="text-xs font-mono text-slate-300 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Programator:</span> <span className="text-cyan-300 font-bold">{studentName}</span>
+              <span>{lang === 'ro' ? 'Programator:' : 'Coder:'}</span> <span className="text-cyan-300 font-bold">{studentName}</span>
             </div>
           )}
 
@@ -68,20 +74,57 @@ export const ModuleG7StemFlow: React.FC<ModuleG7StemFlowProps> = ({
             <button
               type="button"
               onClick={() => {
-                if (window.confirm('Ești sigur că vrei să reiei Misiunea 4E de la nivelul 1? Punctajul va fi resetat.')) {
-                  sounds.playClick();
-                  onRestartMission();
-                }
+                sounds.playClick();
+                setShowResetConfirm(true);
               }}
               className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-rose-300 border border-slate-700 text-xs font-medium transition flex items-center gap-1 cursor-pointer"
-              title="Resetează misiunea de la Nivelul 1"
+              title={lang === 'ro' ? 'Resetează misiunea de la Nivelul 1' : 'Reset mission from Level 1'}
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reia Misiunea</span>
+              <span className="hidden sm:inline">{lang === 'ro' ? 'Reia Misiunea' : 'Restart Mission'}</span>
             </button>
           )}
         </div>
       </div>
+
+      {/* In-DOM Reset Confirmation Banner */}
+      {showResetConfirm && (
+        <div className="bg-rose-950/90 border-2 border-rose-500/60 p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xl animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+            <div className="text-xs sm:text-sm text-rose-200">
+              {lang === 'ro'
+                ? 'Ești sigur că vrei să reiei Misiunea 4E de la nivelul 1? Punctajul va fi resetat.'
+                : 'Are you sure you want to restart Mission 4E from Level 1? Score will be reset.'}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setShowResetConfirm(false);
+              }}
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>{lang === 'ro' ? 'Anulează' : 'Cancel'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setShowResetConfirm(false);
+                if (onRestartMission) onRestartMission();
+              }}
+              className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-md shadow-rose-600/30"
+            >
+              <Check className="w-3.5 h-3.5" />
+              <span>{lang === 'ro' ? 'Da, Reia' : 'Yes, Restart'}</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Dynamic Level Component Loading */}
       {currentLevel === 1 && <StemLevel1_ForLoopCounter onPass={handlePassCurrentLevel} />}

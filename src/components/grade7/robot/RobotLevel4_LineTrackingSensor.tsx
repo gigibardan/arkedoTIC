@@ -4,17 +4,14 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertTriangle,
-  RotateCcw,
-  Play,
   Lightbulb,
   Check,
   ChevronRight,
   Eye,
-  HelpCircle,
-  Binary,
-  Layers
+  HelpCircle
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -23,6 +20,7 @@ interface Props {
 type SensorState = 'center' | 'left_drift' | 'right_drift' | 'stop_line';
 
 export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [selectedState, setSelectedState] = useState<SensorState>('center');
 
   // Challenge State
@@ -37,40 +35,48 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
         return {
           leftVal: 0,
           rightVal: 0,
-          action: 'AVANSARE ÎNAINTE (Viteză Simetrică)',
+          actionRo: 'AVANSARE ÎNAINTE (Viteză Simetrică)',
+          actionEn: 'ADVANCE FORWARD (Symmetric Speed)',
           motorL: '100%',
           motorR: '100%',
-          explanation: 'Ambii senzori văd ALB (suprafață reflectantă). Traseul negru se află exact între ei.',
+          explanationRo: 'Ambii senzori văd ALB (suprafață reflectantă). Traseul negru se află exact între ei.',
+          explanationEn: 'Both sensors see WHITE (reflective floor). The black track is centered directly between them.',
           badgeColor: 'text-emerald-300 bg-emerald-950/60 border-emerald-500/40'
         };
       case 'left_drift':
         return {
           leftVal: 1,
           rightVal: 0,
-          action: 'CORECȚIE: VIRAJ STÂNGA',
-          motorL: '0% (Frână)',
-          motorR: '100% (Avans)',
-          explanation: 'Senzorul din stânga a atins banda NEAGRĂ. Robotul virează spre stânga pentru a reintra pe traseu.',
+          actionRo: 'CORECȚIE: VIRAJ STÂNGA',
+          actionEn: 'CORRECTION: TURN LEFT',
+          motorL: lang === 'ro' ? '0% (Frână)' : '0% (Brake)',
+          motorR: lang === 'ro' ? '100% (Avans)' : '100% (Forward)',
+          explanationRo: 'Senzorul din stânga a atins banda NEAGRĂ. Robotul virează spre stânga pentru a reintra pe traseu.',
+          explanationEn: 'The left sensor hit the BLACK tape. The robot pivots left to re-align onto the line.',
           badgeColor: 'text-amber-300 bg-amber-950/60 border-amber-500/40'
         };
       case 'right_drift':
         return {
           leftVal: 0,
           rightVal: 1,
-          action: 'CORECȚIE: VIRAJ DREAPTA',
-          motorL: '100% (Avans)',
-          motorR: '0% (Frână)',
-          explanation: 'Senzorul din dreapta a atins banda NEAGRĂ. Robotul virează spre dreapta pentru a reintra pe traseu.',
+          actionRo: 'CORECȚIE: VIRAJ DREAPTA',
+          actionEn: 'CORRECTION: TURN RIGHT',
+          motorL: lang === 'ro' ? '100% (Avans)' : '100% (Forward)',
+          motorR: lang === 'ro' ? '0% (Frână)' : '0% (Brake)',
+          explanationRo: 'Senzorul din dreapta a atins banda NEAGRĂ. Robotul virează spre dreapta pentru a reintra pe traseu.',
+          explanationEn: 'The right sensor hit the BLACK tape. The robot pivots right to re-align onto the line.',
           badgeColor: 'text-amber-300 bg-amber-950/60 border-amber-500/40'
         };
       case 'stop_line':
         return {
           leftVal: 1,
           rightVal: 1,
-          action: 'STOP TOTAL (Linie Transversală)',
+          actionRo: 'STOP TOTAL (Linie Transversală)',
+          actionEn: 'FULL STOP (Perpendicular Line)',
           motorL: '0%',
           motorR: '0%',
-          explanation: 'Ambii senzori văd NEGRU simultan. S-a atins linia de sosire sau o intersecție de trasee!',
+          explanationRo: 'Ambii senzori văd NEGRU simultan. S-a atins linia de sosire sau o intersecție de trasee!',
+          explanationEn: 'Both sensors read BLACK simultaneously. Finish line or course intersection reached!',
           badgeColor: 'text-rose-400 bg-rose-950/60 border-rose-500/40'
         };
     }
@@ -85,37 +91,91 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
 
   const CHALLENGES = [
     {
-      question: 'De ce o bandă neagră pe fundal alb generează semnalul digital 1 (HIGH) la senzorul optic de linie?',
+      questionRo: 'De ce o bandă neagră pe fundal alb generează semnalul digital 1 (HIGH) la senzorul optic de linie?',
+      questionEn: 'Why does black tape on a white floor generate digital signal 1 (HIGH) at the line tracking sensor?',
       code: '// Senzor Infrarosu (IR):\n// Suprafata alba -> reflecta lumina -> Receptor ON (0)\n// Banda neagra  -> absoarbe lumina -> Receptor OFF (1)',
       options: [
-        { label: 'Culoarea neagră absoarbe razele infraroșii, iar receptorul optic nu mai primește reflexie', correct: true },
-        { label: 'Culoarea neagră este mai fierbinte', correct: false },
-        { label: 'Senzorul detectează greutatea benzii izolatoare', correct: false },
-        { label: 'Este o setare inversată manual de profesor', correct: false }
+        {
+          labelRo: 'Culoarea neagră absoarbe razele infraroșii, iar receptorul optic nu mai primește reflexie',
+          labelEn: 'Black color absorbs infrared rays, preventing the photodiode receiver from receiving reflected light',
+          correct: true
+        },
+        {
+          labelRo: 'Culoarea neagră este mai fierbinte',
+          labelEn: 'Black color is hotter in temperature',
+          correct: false
+        },
+        {
+          labelRo: 'Senzorul detectează greutatea benzii izolatoare',
+          labelEn: 'The sensor measures the physical weight of the electrical tape',
+          correct: false
+        },
+        {
+          labelRo: 'Este o setare inversată manual de profesor',
+          labelEn: 'It is a custom inverted setting configured by the teacher',
+          correct: false
+        }
       ],
-      explanation: 'Fizica optică: albul reflectă lumina infraroșie, iar negrul o absoarbe, determinând căderea semnalului recepționat!'
+      explanationRo: 'Fizica optică: albul reflectă lumina infraroșie, iar negrul o absoarbe, determinând căderea semnalului recepționat!',
+      explanationEn: 'Optical physics: white reflects infrared rays while black absorbs them, cutting off the reflected receiver signal!'
     },
     {
-      question: 'Dacă senzorul din stânga atinge banda neagră (S1 = 1, S2 = 0), ce trebuie să facă motoarele?',
+      questionRo: 'Dacă senzorul din stânga atinge banda neagră (S1 = 1, S2 = 0), ce trebuie să facă motoarele?',
+      questionEn: 'If the left sensor touches the black line (S1 = 1, S2 = 0), how should the motors respond?',
       code: 'if (s1 == 1 && s2 == 0) {\n    // Ce comanda executam?\n}',
       options: [
-        { label: 'Să vireze stânga: oprește motorul stâng și accelerează motorul drept', correct: true },
-        { label: 'Să meargă cu viteză maximă înapoi', correct: false },
-        { label: 'Să accelereze ambele motoare', correct: false },
-        { label: 'Să claxoneze și să se oprească', correct: false }
+        {
+          labelRo: 'Să vireze stânga: oprește motorul stâng și accelerează motorul drept',
+          labelEn: 'Steer left: halt the left wheel motor and power the right wheel motor',
+          correct: true
+        },
+        {
+          labelRo: 'Să meargă cu viteză maximă înapoi',
+          labelEn: 'Reverse backwards at maximum speed',
+          correct: false
+        },
+        {
+          labelRo: 'Să accelereze ambele motoare',
+          labelEn: 'Accelerate both motors forward',
+          correct: false
+        },
+        {
+          labelRo: 'Să claxoneze și să se oprească',
+          labelEn: 'Beep the buzzer and stop permanently',
+          correct: false
+        }
       ],
-      explanation: 'Dacă senzorul stâng a ieșit pe negru, înseamnă că robotul a fugit spre dreapta! Pentru a reveni, roata stângă încetinește, iar roata dreaptă împinge spre stânga.'
+      explanationRo: 'Dacă senzorul stâng a ieșit pe negru, înseamnă că robotul a fugit spre dreapta! Pentru a reveni, roata stângă încetinește, iar roata dreaptă împinge spre stânga.',
+      explanationEn: 'If the left sensor hits black, the robot drifted right! To recover, left wheel brakes while right wheel pushes forward to pivot left.'
     },
     {
-      question: 'Ce indică situația în care ambii senzori citesc 1 (S1 == 1 && S2 == 1)?',
+      questionRo: 'Ce indică situația în care ambii senzori citesc 1 (S1 == 1 && S2 == 1)?',
+      questionEn: 'What does it indicate when both sensors read 1 (S1 == 1 && S2 == 1)?',
       code: 'if (s1 == 1 && s2 == 1) robot.stop();',
       options: [
-        { label: 'Linie de sosire sau traversare perpendiculară (oprire finală)', correct: true },
-        { label: 'Robotul a căzut de pe masă', correct: false },
-        { label: 'Bateria este descărcată', correct: false },
-        { label: 'Eroare de compilare C++', correct: false }
+        {
+          labelRo: 'Linie de sosire sau traversare perpendiculară (oprire finală)',
+          labelEn: 'Finish line or perpendicular intersection (final stop)',
+          correct: true
+        },
+        {
+          labelRo: 'Robotul a căzut de pe masă',
+          labelEn: 'The robot fell off the workbench',
+          correct: false
+        },
+        {
+          labelRo: 'Bateria este descărcată',
+          labelEn: 'The battery is depleted',
+          correct: false
+        },
+        {
+          labelRo: 'Eroare de compilare C++',
+          labelEn: 'C++ compilation syntax error',
+          correct: false
+        }
       ],
-      explanation: 'Dacă ambele fotodiode citesc negru simultan, robotul a traversat o bandă groasă orizontală, folosită ca reper de START/STOP sau intersecție!'
+      explanationRo: 'Dacă ambele fotodiode citesc negru simultan, robotul a traversat o bandă groasă orizontală, folosită ca reper de START/STOP sau intersecție!',
+      explanationEn: 'If both sensors read black simultaneously, the robot crossed a thick crosswise band marking START/FINISH or track intersection!'
     }
   ];
 
@@ -126,10 +186,16 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
 
     if (isCorrect) {
       sounds.playCorrect();
-      setChallengeFeedback('Corect! ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback(
+        (lang === 'ro' ? 'Corect! ' : 'Correct! ') +
+        (lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn)
+      );
     } else {
       sounds.playWrong();
-      setChallengeFeedback('Incorect. ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback(
+        (lang === 'ro' ? 'Incorect. ' : 'Incorrect. ') +
+        (lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn)
+      );
     }
   };
 
@@ -149,6 +215,13 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
     onPass(100);
   };
 
+  const STATE_ITEMS = [
+    { id: 'center', labelRo: '1. Centrat pe Linie [0, 0]', labelEn: '1. Centered on Line [0, 0]', icon: '⬆️' },
+    { id: 'left_drift', labelRo: '2. Deviat Dreapta [1, 0]', labelEn: '2. Drifted Right [1, 0]', icon: '⬅️' },
+    { id: 'right_drift', labelRo: '3. Deviat Stânga [0, 1]', labelEn: '3. Drifted Left [0, 1]', icon: '➡️' },
+    { id: 'stop_line', labelRo: '4. Linie Sosire [1, 1]', labelEn: '4. Finish Line [1, 1]', icon: '🛑' }
+  ];
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
       {/* Header Banner */}
@@ -159,13 +232,17 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30 mb-2">
               <Eye className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Nivelul 4 din 7 • Modulul 4F</span>
+              <span>{lang === 'ro' ? 'Nivelul 4 din 7 • Modulul 4F' : 'Level 4 of 7 • Module 4F'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Senzorul Optic de Linie (Line Tracking) &amp; Urmărirea Traseului (Manual pag. 105)
+              {lang === 'ro'
+                ? 'Senzorul Optic de Linie (Line Tracking) & Urmărirea Traseului (Manual pag. 105)'
+                : 'Optical Line Tracking Sensor & Path Following (Textbook p. 105)'}
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-              Înțelege reflexia luminii infraroșii (IR), citirea binară a suprafeței (Alb = 0, Negru = 1) și algoritmul decizional de viraj proporțional cu două fotodiode.
+              {lang === 'ro'
+                ? 'Înțelege reflexia luminii infraroșii (IR), citirea binară a suprafeței (Alb = 0, Negru = 1) și algoritmul decizional de viraj proporțional cu două fotodiode.'
+                : 'Understand infrared (IR) light reflection, binary floor reading (White = 0, Black = 1), and differential steering logic with dual optical sensors.'}
             </p>
           </div>
 
@@ -182,31 +259,33 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xl">
         <div className="flex items-center gap-2.5 mb-4 text-emerald-400 font-bold text-sm uppercase tracking-wider font-mono">
           <Lightbulb className="w-4 h-4 text-emerald-400" />
-          <span>Matricea Celor 4 Stări Logice ale Urmăritorului de Linie</span>
+          <span>
+            {lang === 'ro'
+              ? 'Matricea Celor 4 Stări Logice ale Urmăritorului de Linie'
+              : 'The 4 Logic States Matrix of the Line Follower'}
+          </span>
         </div>
 
         {/* State Selection Buttons */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
-          {[
-            { id: 'center', label: '1. Centrat pe Linie [0, 0]', icon: '⬆️' },
-            { id: 'left_drift', label: '2. Deviat Dreapta [1, 0]', icon: '⬅️' },
-            { id: 'right_drift', label: '3. Deviat Stânga [0, 1]', icon: '➡️' },
-            { id: 'stop_line', label: '4. Linie Sosire [1, 1]', icon: '🛑' }
-          ].map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleSelectState(item.id as SensorState)}
-              className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
-                selectedState === item.id
-                  ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                  : 'bg-slate-950/60 hover:bg-slate-850 border-slate-800 text-slate-300 hover:text-white'
-              }`}
-            >
-              <span className="text-xl">{item.icon}</span>
-              <span className="text-xs font-mono font-bold">{item.label}</span>
-            </button>
-          ))}
+          {STATE_ITEMS.map((item) => {
+            const label = lang === 'ro' ? item.labelRo : item.labelEn;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleSelectState(item.id as SensorState)}
+                className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                  selectedState === item.id
+                    ? 'bg-emerald-950/80 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                    : 'bg-slate-950/60 hover:bg-slate-850 border-slate-800 text-slate-300 hover:text-white'
+                }`}
+              >
+                <span className="text-xl">{item.icon}</span>
+                <span className="text-xs font-mono font-bold">{label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Visual Line Tracking Simulator */}
@@ -251,17 +330,21 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
             <div className="lg:col-span-6 flex flex-col justify-between gap-3">
               <div className={`p-4 rounded-2xl border text-xs ${currentDetails.badgeColor}`}>
                 <div className="text-[10px] font-mono uppercase tracking-wider opacity-80 mb-1">
-                  Decizie Algoritmică:
+                  {lang === 'ro' ? 'Decizie Algoritmică:' : 'Algorithmic Decision:'}
                 </div>
-                <h4 className="text-base font-black font-mono mb-1.5">{currentDetails.action}</h4>
+                <h4 className="text-base font-black font-mono mb-1.5">
+                  {lang === 'ro' ? currentDetails.actionRo : currentDetails.actionEn}
+                </h4>
                 <p className="text-[11px] leading-relaxed">
-                  {currentDetails.explanation}
+                  {lang === 'ro' ? currentDetails.explanationRo : currentDetails.explanationEn}
                 </p>
               </div>
 
               {/* Code Snippet */}
               <div className="bg-black/90 border border-slate-800 rounded-2xl p-4 font-mono text-xs text-slate-300">
-                <span className="text-slate-500 block mb-1">// Cod C++ Line Follower:</span>
+                <span className="text-slate-500 block mb-1">
+                  {lang === 'ro' ? '// Cod C++ Line Follower:' : '// C++ Line Follower Code:'}
+                </span>
                 <div><span className="text-purple-400 font-bold">int</span> s1 = robot.citesteLinieStanga(); <span className="text-slate-500">// {currentDetails.leftVal}</span></div>
                 <div><span className="text-purple-400 font-bold">int</span> s2 = robot.citesteLinieDreapta(); <span className="text-slate-500">// {currentDetails.rightVal}</span></div>
                 <div className="mt-2"><span className="text-purple-400 font-bold">if</span> (s1 == 0 && s2 == 0) robot.inainte(100);</div>
@@ -278,14 +361,18 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider font-mono">
               <HelpCircle className="w-4 h-4 text-emerald-400" />
-              <span>Verificare Înțelegere: Urmărirea Liniei ({challengeStep + 1} din {CHALLENGES.length})</span>
+              <span>
+                {lang === 'ro'
+                  ? `Verificare Înțelegere: Urmărirea Liniei (${challengeStep + 1} din ${CHALLENGES.length})`
+                  : `Comprehension Check: Line Tracking (${challengeStep + 1} of ${CHALLENGES.length})`}
+              </span>
             </div>
           </div>
 
           {!completedChallenge ? (
             <div className="flex flex-col gap-4">
               <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
-                {CHALLENGES[challengeStep].question}
+                {lang === 'ro' ? CHALLENGES[challengeStep].questionRo : CHALLENGES[challengeStep].questionEn}
               </h4>
 
               {CHALLENGES[challengeStep].code && (
@@ -297,6 +384,7 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
               <div className="grid grid-cols-1 gap-2.5">
                 {CHALLENGES[challengeStep].options.map((opt, oIdx) => {
                   const isSelected = selectedAnswers[challengeStep] === oIdx;
+                  const label = lang === 'ro' ? opt.labelRo : opt.labelEn;
                   return (
                     <button
                       key={oIdx}
@@ -310,7 +398,7 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
                           : 'bg-slate-900 hover:bg-slate-850 border-slate-800 text-slate-300 hover:text-white'
                       }`}
                     >
-                      <span>{opt.label}</span>
+                      <span>{label}</span>
                       {isSelected && (
                         opt.correct ? <Check className="w-4 h-4 text-emerald-400 shrink-0" /> : <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
                       )}
@@ -320,7 +408,7 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
               </div>
 
               {challengeFeedback && (
-                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
+                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') || challengeFeedback.startsWith('Correct') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
                   {challengeFeedback}
                 </div>
               )}
@@ -331,7 +419,11 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
                   onClick={handleNextChallenge}
                   className="self-end py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  <span>{challengeStep < CHALLENGES.length - 1 ? 'Următoarea Întrebare' : 'Finalizează Nivelul 4'}</span>
+                  <span>
+                    {challengeStep < CHALLENGES.length - 1
+                      ? lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question'
+                      : lang === 'ro' ? 'Finalizează Nivelul 4' : 'Complete Level 4'}
+                  </span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}
@@ -341,16 +433,22 @@ export const RobotLevel4_LineTrackingSensor: React.FC<Props> = ({ onPass }) => {
               <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-black text-white">Nivelul 4 Finalizat cu Succes!</h4>
+              <h4 className="text-lg font-black text-white">
+                {lang === 'ro' ? 'Nivelul 4 Finalizat cu Succes!' : 'Level 4 Completed Successfully!'}
+              </h4>
               <p className="text-xs text-slate-300 max-w-md">
-                Stăpânești logica binară a senzorilor optici de linie, corecțiile diferențiate ale motoarelor și detectarea punctelor de oprire.
+                {lang === 'ro'
+                  ? 'Stăpânești logica binară a senzorilor optici de linie, corecțiile diferențiate ale motoarelor și detectarea punctelor de oprire.'
+                  : 'You mastered binary optical line tracking, differential steering corrections, and endpoint detection.'}
               </p>
               <button
                 type="button"
                 onClick={handleFinishLevel}
                 className="mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
               >
-                <span>Treci la Nivelul 5: Navigare Autonomă în Labirint (RoboSim)</span>
+                <span>
+                  {lang === 'ro' ? 'Treci la Nivelul 5: Navigare Autonomă în Labirint (RoboSim)' : 'Proceed to Level 5: Autonomous Maze Navigation (RoboSim)'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

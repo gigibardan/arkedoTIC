@@ -188,12 +188,6 @@ const EXAM_QUESTIONS: ExamQuestion[] = [
       'PWM pins D9 and D10',
       'Power pins 3.3V and Vin'
     ],
-    optionsEn: [
-      'Digital pins D0 (RX) and D1 (TX)',
-      'Analog pins A4 (SDA - serial data) and A5 (SCL - serial clock)',
-      'PWM pins D9 and D10',
-      'Power pins 3.3V and Vin'
-    ],
     correctIndex: 1,
     hintRo:
       'I2C este un protocol pe două fire (date și ceas), mapat hardware pe ultimii doi pini analogici ai plăcii Uno.',

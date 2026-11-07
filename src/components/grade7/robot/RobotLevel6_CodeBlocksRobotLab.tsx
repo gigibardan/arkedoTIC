@@ -4,20 +4,15 @@ import {
   ArrowRight,
   CheckCircle2,
   AlertTriangle,
-  RotateCcw,
   Play,
   Lightbulb,
-  Check,
   ChevronRight,
   Code2,
   Terminal,
-  Cpu,
-  Bot,
-  Layers,
-  Settings,
-  HelpCircle
+  Cpu
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -25,21 +20,30 @@ interface Props {
 
 interface CodeLabTask {
   id: string;
-  title: string;
-  scenarioDesc: string;
-  manualRef: string;
+  titleRo: string;
+  titleEn: string;
+  scenarioDescRo: string;
+  scenarioDescEn: string;
+  manualRefRo: string;
+  manualRefEn: string;
   initialCode: string;
   expectedToken: string;
-  codeExplanation: string;
-  compilerOutputSuccess: string[];
+  validTokens: string[];
+  codeExplanationRo: string;
+  codeExplanationEn: string;
+  compilerOutputSuccessRo: string[];
+  compilerOutputSuccessEn: string[];
 }
 
 const TASKS: CodeLabTask[] = [
   {
     id: 'task1',
-    title: 'Misiunea 1: Patrulare Pătrată cu Buclă for',
-    scenarioDesc: 'Programează robotul să execute un traseu pătrat de latură 50 cm. Folosește o buclă for care se repetă de 4 ori și virează la 90° la fiecare colț.',
-    manualRef: 'Manual pag. 104',
+    titleRo: 'Misiunea 1: Patrulare Pătrată cu Buclă for',
+    titleEn: 'Mission 1: Square Patrol with for Loop',
+    scenarioDescRo: 'Programează robotul să execute un traseu pătrat de latură 50 cm. Folosește o buclă for care se repetă de 4 ori și virează la 90° la fiecare colț.',
+    scenarioDescEn: 'Program the robot to trace a 50 cm square path. Use a for loop repeating 4 times that turns 90° at each corner.',
+    manualRefRo: 'Manual pag. 104',
+    manualRefEn: 'Textbook p. 104',
     initialCode: `#include <iostream>
 #include <robotica.h>
 using namespace std;
@@ -58,8 +62,10 @@ int main() {
     return 0;
 }`,
     expectedToken: '90',
-    codeExplanation: 'Pătratul are 4 colțuri drepte de 90°. Virajul exterior la fiecare vârf este de exact 90°.',
-    compilerOutputSuccess: [
+    validTokens: ['90'],
+    codeExplanationRo: 'Pătratul are 4 colțuri drepte de 90°. Virajul exterior la fiecare vârf este de exact 90°.',
+    codeExplanationEn: 'A square has 4 right angles of 90°. The exterior turn at each vertex is exactly 90°.',
+    compilerOutputSuccessRo: [
       'Compilator GNU GCC: robotica.h detectat.',
       'Construire țintă: Debug in RobotProject (compiler: GNU GCC Compiler)',
       'Running: C:\\Proiecte\\Robotica\\bin\\Debug\\RobotProject.exe',
@@ -70,13 +76,28 @@ int main() {
       '[ROBOT] Latura 4: Înainte 50 cm -> Viraj Dreapta 90°',
       '[ROBOT] Circuit pătrat finalizat cu succes! Motoare oprite.',
       'Process returned 0 (0x0)   execution time : 0.420 s'
+    ],
+    compilerOutputSuccessEn: [
+      'GNU GCC Compiler: robotica.h detected.',
+      'Build target: Debug in RobotProject (compiler: GNU GCC Compiler)',
+      'Running: C:\\Projects\\Robotics\\bin\\Debug\\RobotProject.exe',
+      '[ROBOT] Starting motors...',
+      '[ROBOT] Side 1: Forward 50 cm -> Turn Right 90°',
+      '[ROBOT] Side 2: Forward 50 cm -> Turn Right 90°',
+      '[ROBOT] Side 3: Forward 50 cm -> Turn Right 90°',
+      '[ROBOT] Side 4: Forward 50 cm -> Turn Right 90°',
+      '[ROBOT] Square circuit completed successfully! Motors halted.',
+      'Process returned 0 (0x0)   execution time : 0.420 s'
     ]
   },
   {
     id: 'task2',
-    title: 'Misiunea 2: Frână de Urgență Ultrasonică cu Buclă while',
-    scenarioDesc: 'Robotul trebuie să meargă continuu înainte până când senzorul ultrasonic detectează un obstacol la o distanță mai mică de 20 cm.',
-    manualRef: 'Manual pag. 105',
+    titleRo: 'Misiunea 2: Frână de Urgență Ultrasonică cu Buclă while',
+    titleEn: 'Mission 2: Ultrasonic Emergency Brake with while Loop',
+    scenarioDescRo: 'Robotul trebuie să meargă continuu înainte până când senzorul ultrasonic detectează un obstacol la o distanță mai mică de 20 cm.',
+    scenarioDescEn: 'The robot must continuously advance until the ultrasonic sensor detects an obstacle closer than 20 cm.',
+    manualRefRo: 'Manual pag. 105',
+    manualRefEn: 'Textbook p. 105',
     initialCode: `#include <iostream>
 #include <robotica.h>
 using namespace std;
@@ -95,8 +116,10 @@ int main() {
     return 0;
 }`,
     expectedToken: '>',
-    codeExplanation: 'Condiția de continuare este ca distanța să fie strict mai mare de 20 ( > 20 ). Când distanța scade sub 20, bucla while se încheie și intervine oprirea.',
-    compilerOutputSuccess: [
+    validTokens: ['>'],
+    codeExplanationRo: 'Condiția de continuare este ca distanța să fie strict mai mare de 20 ( > 20 ). Când distanța scade sub 20, bucla while se încheie și intervine oprirea.',
+    codeExplanationEn: 'The loop continuation condition is distance strictly greater than 20 ( > 20 ). When distance drops below 20, the while loop terminates and braking engages.',
+    compilerOutputSuccessRo: [
       'Compilator GNU GCC: robotica.h detectat.',
       'Construire țintă: Debug in RobotProject',
       '[ROBOT] Senzor ultrasonic ping... Distanță: 110 cm -> Înainte 5 cm',
@@ -106,13 +129,27 @@ int main() {
       'Obstacol detectat! Frânare de urgență.',
       '[ROBOT] Motoare decuplate la 19.4 cm de perete. Coliziune evitată!',
       'Process returned 0 (0x0)   execution time : 0.380 s'
+    ],
+    compilerOutputSuccessEn: [
+      'GNU GCC Compiler: robotica.h detected.',
+      'Build target: Debug in RobotProject',
+      '[ROBOT] Ultrasonic ping... Distance: 110 cm -> Forward 5 cm',
+      '[ROBOT] Ultrasonic ping... Distance: 65 cm -> Forward 5 cm',
+      '[ROBOT] Ultrasonic ping... Distance: 28 cm -> Forward 5 cm',
+      '[ROBOT] Ultrasonic ping... Distance: 19 cm -> CRITICAL ALERT!',
+      'Obstacle detected! Emergency brake activated.',
+      '[ROBOT] Motors decoupled at 19.4 cm from wall. Collision avoided!',
+      'Process returned 0 (0x0)   execution time : 0.380 s'
     ]
   },
   {
     id: 'task3',
-    title: 'Misiunea 3: Corecție Automată Direcție (Line Follower)',
-    scenarioDesc: 'Robotul urmărește linia neagră. Dacă senzorul din stânga iese de pe bandă și vede negru (1), robotul trebuie să vireze la stânga.',
-    manualRef: 'Manual pag. 107',
+    titleRo: 'Misiunea 3: Corecție Automată Direcție (Line Follower)',
+    titleEn: 'Mission 3: Automatic Heading Correction (Line Follower)',
+    scenarioDescRo: 'Robotul urmărește linia neagră. Dacă senzorul din stânga iese de pe bandă și vede negru (1), robotul trebuie să vireze la stânga.',
+    scenarioDescEn: 'The robot follows a black line. If the left sensor hits black (1), the robot must steer left.',
+    manualRefRo: 'Manual pag. 107',
+    manualRefEn: 'Textbook p. 107',
     initialCode: `#include <iostream>
 #include <robotica.h>
 using namespace std;
@@ -139,8 +176,10 @@ int main() {
     return 0;
 }`,
     expectedToken: 'Stanga',
-    codeExplanation: 'Dacă senzorul stâng vede negru (sL == 1), robotul corectează traiectoria virând la stânga (vireazaStanga).',
-    compilerOutputSuccess: [
+    validTokens: ['stanga', 'stânga', 'left'],
+    codeExplanationRo: 'Dacă senzorul stâng vede negru (sL == 1), robotul corectează traiectoria virând la stânga (vireazaStanga).',
+    codeExplanationEn: 'If the left sensor detects black (sL == 1), the robot corrects course by steering left (vireazaStanga / steerLeft).',
+    compilerOutputSuccessRo: [
       'Compilator GNU GCC: robotica.h detectat.',
       'Construire țintă: Debug in RobotProject',
       '[LINE TRACKER] Segment drept: sL=0, sR=0 -> Înainte 10 cm',
@@ -149,11 +188,22 @@ int main() {
       '[LINE TRACKER] Curbă la dreapta: sL=0, sR=1 -> Corecție vireazaDreapta(15°)',
       '[LINE TRACKER] Punct SOSIRE atins cu succes!',
       'Process returned 0 (0x0)   execution time : 0.510 s'
+    ],
+    compilerOutputSuccessEn: [
+      'GNU GCC Compiler: robotica.h detected.',
+      'Build target: Debug in RobotProject',
+      '[LINE TRACKER] Straight segment: sL=0, sR=0 -> Forward 10 cm',
+      '[LINE TRACKER] Left curve: sL=1, sR=0 -> Correction steerLeft(15°)',
+      '[LINE TRACKER] Centered on track: sL=0, sR=0 -> Forward 10 cm',
+      '[LINE TRACKER] Right curve: sL=0, sR=1 -> Correction steerRight(15°)',
+      '[LINE TRACKER] FINISH point reached successfully!',
+      'Process returned 0 (0x0)   execution time : 0.510 s'
     ]
   }
 ];
 
 export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentTaskIndex, setCurrentTaskIndex] = useState<number>(0);
   const [userInputs, setUserInputs] = useState<Record<number, string>>({
     0: '',
@@ -173,25 +223,33 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
   const handleBuildAndRun = () => {
     setIsBuilding(true);
     sounds.playClick();
-    setRunLogs(['Compilare fișier main.cpp prin MinGW GCC 8.1.0...']);
+    setRunLogs([
+      lang === 'ro'
+        ? 'Compilare fișier main.cpp prin MinGW GCC 8.1.0...'
+        : 'Compiling main.cpp via MinGW GCC 8.1.0...'
+    ]);
 
     const currentInput = userInputs[currentTaskIndex]?.trim().toLowerCase() || '';
-    const expected = activeTask.expectedToken.toLowerCase();
+    const isValid = activeTask.validTokens.some(tok => tok.toLowerCase() === currentInput);
 
     setTimeout(() => {
       setIsBuilding(false);
 
-      if (currentInput === expected || (currentTaskIndex === 2 && (currentInput === 'stanga' || currentInput === 'stânga'))) {
+      if (isValid) {
         sounds.playSuccess();
         setTaskStatus(prev => ({ ...prev, [currentTaskIndex]: 'success' }));
-        setRunLogs(activeTask.compilerOutputSuccess);
+        setRunLogs(lang === 'ro' ? activeTask.compilerOutputSuccessRo : activeTask.compilerOutputSuccessEn);
       } else {
         sounds.playError();
         setTaskStatus(prev => ({ ...prev, [currentTaskIndex]: 'error' }));
         setRunLogs([
-          'Compilator GNU GCC: EROARE sintaxă sau logică.',
-          `Linie eroare: valoarea introdusă "${userInputs[currentTaskIndex]}" nu este conformă cu specificațiile robotului.`,
-          `Indiciu: ${activeTask.codeExplanation}`
+          lang === 'ro'
+            ? 'Compilator GNU GCC: EROARE sintaxă sau logică.'
+            : 'GNU GCC Compiler: Syntax or logic ERROR.',
+          lang === 'ro'
+            ? `Linie eroare: valoarea introdusă "${userInputs[currentTaskIndex]}" nu este conformă cu specificațiile robotului.`
+            : `Error line: entered value "${userInputs[currentTaskIndex]}" does not match robot specifications.`,
+          `${lang === 'ro' ? 'Indiciu: ' : 'Hint: '}${lang === 'ro' ? activeTask.codeExplanationRo : activeTask.codeExplanationEn}`
         ]);
       }
     }, 700);
@@ -209,15 +267,27 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
         </div>
         <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs font-semibold uppercase tracking-wider mb-2">
           <Terminal className="w-4 h-4" />
-          <span>Nivelul 6 • Laborator Code::Blocks &amp; Biblioteca &lt;robotica.h&gt; (Manual pag. 104–108)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Nivelul 6 • Laborator Code::Blocks & Biblioteca <robotica.h> (Manual pag. 104–108)'
+              : 'Level 6 • Code::Blocks Lab & <robotica.h> Library (Textbook pp. 104–108)'}
+          </span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-          Laborator de Programare Code::Blocks pentru Roboți
+          {lang === 'ro'
+            ? 'Laborator de Programare Code::Blocks pentru Roboți'
+            : 'Code::Blocks Programming Lab for Robots'}
         </h1>
         <p className="text-slate-300 text-sm max-w-3xl leading-relaxed">
-          În manualul de Informatică (pag. 104), roboții educaționali sunt programați în limbajul C++
-          utilizând funcții dedicate pentru motoare și senzori. Rezolvă cele 3 scenarii critice de programare,
-          apasă <strong className="text-amber-300 font-mono">Build &amp; Run (F9)</strong> și validează comportamentul robotului!
+          {lang === 'ro' ? (
+            <>În manualul de Informatică (pag. 104), roboții educaționali sunt programați în limbajul C++
+            utilizând funcții dedicate pentru motoare și senzori. Rezolvă cele 3 scenarii critice de programare,
+            apasă <strong className="text-amber-300 font-mono">Build &amp; Run (F9)</strong> și validează comportamentul robotului!</>
+          ) : (
+            <>In the Computer Science textbook (p. 104), educational robots are programmed in C++
+            using dedicated motor and sensor APIs. Solve the 3 critical programming scenarios,
+            press <strong className="text-amber-300 font-mono">Build &amp; Run (F9)</strong>, and validate robot behavior!</>
+          )}
         </p>
       </div>
 
@@ -226,6 +296,7 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
         {TASKS.map((task, idx) => {
           const status = taskStatus[idx];
           const isActive = currentTaskIndex === idx;
+          const title = lang === 'ro' ? task.titleRo : task.titleEn;
 
           return (
             <button
@@ -244,7 +315,7 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
                   : 'bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-850'
               }`}
             >
-              <span>{task.title.split(':')[0]}</span>
+              <span>{title.split(':')[0]}</span>
               {status === 'success' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
               {status === 'error' && <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />}
             </button>
@@ -264,7 +335,7 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
               <span className="ml-2 font-mono text-slate-400">Code::Blocks 20.03 • main.cpp</span>
             </div>
             <span className="text-[11px] font-mono text-indigo-400 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-900">
-              {activeTask.manualRef}
+              {lang === 'ro' ? activeTask.manualRefRo : activeTask.manualRefEn}
             </span>
           </div>
 
@@ -283,8 +354,12 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
         <div className="p-4 bg-slate-900/60 border-b border-slate-800 flex items-start gap-3">
           <Cpu className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
           <div>
-            <h3 className="text-sm font-bold text-white">{activeTask.title}</h3>
-            <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">{activeTask.scenarioDesc}</p>
+            <h3 className="text-sm font-bold text-white">
+              {lang === 'ro' ? activeTask.titleRo : activeTask.titleEn}
+            </h3>
+            <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+              {lang === 'ro' ? activeTask.scenarioDescRo : activeTask.scenarioDescEn}
+            </p>
           </div>
         </div>
 
@@ -296,7 +371,9 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
         {/* Formular de completare token lipsă */}
         <div className="p-4 bg-slate-900/90 border-t border-slate-800 flex flex-wrap items-center gap-3">
           <span className="text-xs font-mono text-slate-400">
-            Valoarea parametrului / operatorului lipsă (___):
+            {lang === 'ro'
+              ? 'Valoarea parametrului / operatorului lipsă (___):'
+              : 'Missing parameter / operator value (___):'}
           </span>
           <input
             type="text"
@@ -312,7 +389,7 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
                 ? 'Ex: 90'
                 : currentTaskIndex === 1
                 ? 'Ex: >'
-                : 'Ex: Stanga'
+                : lang === 'ro' ? 'Ex: Stanga' : 'Ex: Left'
             }
             className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:outline-none focus:border-indigo-500 w-36"
             onKeyDown={e => {
@@ -325,12 +402,13 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
             disabled={isBuilding || !userInputs[currentTaskIndex]?.trim()}
             className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-xs font-bold transition cursor-pointer"
           >
-            Verifică Codul
+            {lang === 'ro' ? 'Verifică Codul' : 'Verify Code'}
           </button>
 
           {taskStatus[currentTaskIndex] === 'success' && (
             <span className="text-xs font-mono text-emerald-400 flex items-center gap-1 font-bold">
-              <CheckCircle2 className="w-4 h-4" /> Soluție C++ Validată!
+              <CheckCircle2 className="w-4 h-4" />{' '}
+              {lang === 'ro' ? 'Soluție C++ Validată!' : 'C++ Solution Validated!'}
             </span>
           )}
         </div>
@@ -339,12 +417,18 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
         <div className="bg-black/90 p-4 border-t border-slate-800 font-mono text-xs">
           <div className="flex items-center gap-2 text-slate-500 mb-2 border-b border-slate-900 pb-1">
             <Terminal className="w-3.5 h-3.5" />
-            <span>Fereastră Execuție Program (Consolă Virtuală C++)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Fereastră Execuție Program (Consolă Virtuală C++)'
+                : 'Program Execution Window (Virtual C++ Console)'}
+            </span>
           </div>
 
           {runLogs.length === 0 ? (
             <div className="text-slate-600 italic">
-              Apasă &quot;Build &amp; Run (F9)&quot; pentru a compila codul și a rula robotul pe traseul virtual...
+              {lang === 'ro'
+                ? 'Apasă "Build & Run (F9)" pentru a compila codul și a rula robotul pe traseul virtual...'
+                : 'Click "Build & Run (F9)" to compile the code and execute the robot on the virtual path...'}
             </div>
           ) : (
             <div className="space-y-1">
@@ -352,9 +436,9 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
                 <div
                   key={i}
                   className={`${
-                    line.includes('ALERTĂ') || line.includes('EROARE')
+                    line.includes('ALERTĂ') || line.includes('EROARE') || line.includes('ALERT') || line.includes('ERROR')
                       ? 'text-rose-400 font-bold'
-                      : line.includes('SUCCES') || line.includes('finalizat') || line.includes('evitată')
+                      : line.includes('SUCCES') || line.includes('finalizat') || line.includes('evitată') || line.includes('SUCCESS') || line.includes('completed') || line.includes('avoided')
                       ? 'text-emerald-400 font-bold'
                       : line.includes('[ROBOT]') || line.includes('[LINE TRACKER]')
                       ? 'text-cyan-300'
@@ -374,8 +458,10 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
         <div className="bg-emerald-950/40 border border-emerald-500/40 rounded-2xl p-4 flex items-start gap-3 text-xs text-emerald-200">
           <Lightbulb className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold">Explicație Curriculară: </span>
-            {activeTask.codeExplanation}
+            <span className="font-bold">
+              {lang === 'ro' ? 'Explicație Curriculară: ' : 'Curricular Explanation: '}
+            </span>
+            {lang === 'ro' ? activeTask.codeExplanationRo : activeTask.codeExplanationEn}
           </div>
         </div>
       )}
@@ -383,8 +469,10 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
       {/* Pas final / completare laborator */}
       <div className="flex justify-between items-center mt-2">
         <div className="text-xs font-mono text-slate-400">
-          Progres Laborator: <span className="text-indigo-400 font-bold">
-            {Object.values(taskStatus).filter(s => s === 'success').length} / 3 Misiuni validate
+          {lang === 'ro' ? 'Progres Laborator: ' : 'Lab Progress: '}
+          <span className="text-indigo-400 font-bold">
+            {Object.values(taskStatus).filter(s => s === 'success').length} / 3{' '}
+            {lang === 'ro' ? 'Misiuni validate' : 'Missions validated'}
           </span>
         </div>
 
@@ -398,7 +486,11 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
             className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-sm font-bold transition flex items-center gap-2 shadow-xl shadow-emerald-600/30 cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
-            <span>Laborator Finalizat! Mergi la Evaluarea Finală &amp; Diplomă</span>
+            <span>
+              {lang === 'ro'
+                ? 'Laborator Finalizat! Mergi la Evaluarea Finală & Diplomă'
+                : 'Lab Completed! Proceed to Final Evaluation & Diploma'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         ) : (
@@ -412,7 +504,7 @@ export const RobotLevel6_CodeBlocksRobotLab: React.FC<Props> = ({ onPass }) => {
             }}
             className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
           >
-            <span>Misiunea Următoare</span>
+            <span>{lang === 'ro' ? 'Misiunea Următoare' : 'Next Mission'}</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         )}

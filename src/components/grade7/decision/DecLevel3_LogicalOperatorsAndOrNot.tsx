@@ -5,14 +5,11 @@ import {
   CheckCircle2,
   AlertTriangle,
   Zap,
-  Lightbulb,
-  Check,
   ToggleLeft,
-  ToggleRight,
-  Sliders,
-  Cpu
+  ToggleRight
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -20,23 +17,30 @@ interface Props {
 
 interface LogicChallenge {
   id: string;
-  title: string;
-  problemScenario: string;
+  titleRo: string;
+  titleEn: string;
+  problemScenarioRo: string;
+  problemScenarioEn: string;
   conditionFormula: string;
   testValues: { varName: string; val: string | number }[];
   options: {
-    label: string;
+    labelRo: string;
+    labelEn: string;
     isCorrect: boolean;
-    explanation: string;
+    explanationRo: string;
+    explanationEn: string;
   }[];
-  truthTableSummary: string;
+  truthTableSummaryRo: string;
+  truthTableSummaryEn: string;
 }
 
 const LOGIC_CHALLENGES: LogicChallenge[] = [
   {
     id: 'l1',
-    title: 'Operatorul ȘI Logic (&&) — Promovare Examen',
-    problemScenario: 'Pentru a promova, un elev trebuie să aibă nota la test de cel puțin 5 ȘI numărul de absențe strict sub 10.',
+    titleRo: 'Operatorul ȘI Logic (&&) — Promovare Examen',
+    titleEn: 'Logical AND Operator (&&) — Exam Passing',
+    problemScenarioRo: 'Pentru a promova, un elev trebuie să aibă nota la test de cel puțin 5 ȘI numărul de absențe strict sub 10.',
+    problemScenarioEn: 'To pass, a student must score at least 5 on the exam AND have strictly under 10 absences.',
     conditionFormula: 'if (nota >= 5 && absente < 10)',
     testValues: [
       { varName: 'nota', val: 7 },
@@ -44,107 +48,142 @@ const LOGIC_CHALLENGES: LogicChallenge[] = [
     ],
     options: [
       {
-        label: 'Adevărat (true) — Ambele condiții (7 >= 5 și 4 < 10) sunt simultan adevărate!',
+        labelRo: 'Adevărat (true) — Ambele condiții (7 >= 5 și 4 < 10) sunt simultan adevărate!',
+        labelEn: 'True — Both conditions (7 >= 5 and 4 < 10) are simultaneously true!',
         isCorrect: true,
-        explanation: 'Operatorul && (ȘI logic) returnează true numai atunci când AMBELE condiții sunt adevărate (true && true = true).'
+        explanationRo: 'Operatorul && (ȘI logic) returnează true numai atunci când AMBELE condiții sunt adevărate (true && true = true).',
+        explanationEn: 'The && operator (logical AND) yields true only when BOTH conditions are true (true && true = true).'
       },
       {
-        label: 'Fals (false) — Operatorul && are nevoie de 3 condiții adevărate.',
+        labelRo: 'Fals (false) — Operatorul && are nevoie de 3 condiții adevărate.',
+        labelEn: 'False — The && operator requires 3 true conditions.',
         isCorrect: false,
-        explanation: 'Nu, && compară două propoziții logice și returnează true dacă ambele sunt adevărate.'
+        explanationRo: 'Nu, && compară două propoziții logice și returnează true dacă ambele sunt adevărate.',
+        explanationEn: 'No, && connects two propositions and returns true if both are true.'
       },
       {
-        label: 'Eroare de compilare — && nu funcționează cu două variabile diferite.',
+        labelRo: 'Eroare de compilare — && nu funcționează cu două variabile diferite.',
+        labelEn: 'Compile error — && cannot work across distinct variables.',
         isCorrect: false,
-        explanation: 'Operatorul && poate combina oricâte variabile și expresii diferite.'
+        explanationRo: 'Operatorul && poate combina oricâte variabile și expresii diferite.',
+        explanationEn: 'Operator && freely combines any boolean expressions and variables.'
       }
     ],
-    truthTableSummary: 'A && B este adevărat NUMAI când ambele sunt ADEVĂRATE (1 && 1 = 1).'
+    truthTableSummaryRo: 'A && B este adevărat NUMAI când ambele sunt ADEVĂRATE (1 && 1 = 1).',
+    truthTableSummaryEn: 'A && B is true ONLY when both are TRUE (1 && 1 = 1).'
   },
   {
     id: 'l2',
-    title: 'Operatorul SAU Logic (||) — Zi de Odihnă sau Vacanță',
-    problemScenario: 'Nu mergem la școală dacă este Sâmbătă (ziua 6) SAU Duminică (ziua 7).',
+    titleRo: 'Operatorul SAU Logic (||) — Zi de Odihnă sau Vacanță',
+    titleEn: 'Logical OR Operator (||) — Weekend or Rest Day',
+    problemScenarioRo: 'Nu mergem la școală dacă este Sâmbătă (ziua 6) SAU Duminică (ziua 7).',
+    problemScenarioEn: 'We do not go to school if it is Saturday (day 6) OR Sunday (day 7).',
     conditionFormula: 'if (zi == 6 || zi == 7)',
     testValues: [
       { varName: 'zi', val: 6 }
     ],
     options: [
       {
-        label: 'Adevărat (true) — Este suficient ca cel puțin UNA dintre condiții să fie adevărată (6 == 6)!',
+        labelRo: 'Adevărat (true) — Este suficient ca cel puțin UNA dintre condiții să fie adevărată (6 == 6)!',
+        labelEn: 'True — It is sufficient for at least ONE of the conditions to be true (6 == 6)!',
         isCorrect: true,
-        explanation: 'Operatorul || (SAU logic) returnează true dacă oricare dintre cele două ramuri este adevărată (true || false = true).'
+        explanationRo: 'Operatorul || (SAU logic) returnează true dacă oricare dintre cele două ramuri este adevărată (true || false = true).',
+        explanationEn: 'The || operator (logical OR) returns true if either condition evaluates to true (true || false = true).'
       },
       {
-        label: 'Fals (false) — Trebuia ca ambele zile să fie simultan adevărate.',
+        labelRo: 'Fals (false) — Trebuia ca ambele zile să fie simultan adevărate.',
+        labelEn: 'False — Both days had to be true at the same time.',
         isCorrect: false,
-        explanation: 'O zi nu poate fi simultan și sâmbătă și duminică! Tocmai de aceea folosim SAU (||), nu ȘI (&&).'
+        explanationRo: 'O zi nu poate fi simultan și sâmbătă și duminică! Tocmai de aceea folosim SAU (||), nu ȘI (&&).',
+        explanationEn: 'A single day cannot simultaneously be Saturday and Sunday! That is exactly why we use OR (||), not AND (&&).'
       },
       {
-        label: 'Fals (false) — Operatorul || inversează rezultatul.',
+        labelRo: 'Fals (false) — Operatorul || inversează rezultatul.',
+        labelEn: 'False — The || operator inverts the result.',
         isCorrect: false,
-        explanation: 'Operatorul || nu inversează, ci adună logic (disjuncție).'
+        explanationRo: 'Operatorul || nu inversează, ci realizează disjuncția logică.',
+        explanationEn: 'The || operator does not invert; it evaluates logical disjunction.'
       }
     ],
-    truthTableSummary: 'A || B este adevărat dacă CEL PUȚIN UNA dintre condiții este ADEVĂRATĂ.'
+    truthTableSummaryRo: 'A || B este adevărat dacă CEL PUȚIN UNA dintre condiții este ADEVĂRATĂ.',
+    truthTableSummaryEn: 'A || B is true if AT LEAST ONE of the conditions is TRUE.'
   },
   {
     id: 'l3',
-    title: 'Operatorul de Negație (!) — Inversarea Adevărului',
-    problemScenario: 'Avem condiția inițială n % 2 == 0 (număr par). Ce înseamnă if (!(n % 2 == 0)) ?',
+    titleRo: 'Operatorul de Negație (!) — Inversarea Adevărului',
+    titleEn: 'Logical NOT Operator (!) — Inverting Truth Values',
+    problemScenarioRo: 'Avem condiția inițială n % 2 == 0 (număr par). Ce înseamnă if (!(n % 2 == 0)) ?',
+    problemScenarioEn: 'We have base condition n % 2 == 0 (even number). What does if (!(n % 2 == 0)) signify?',
     conditionFormula: 'if (!(n % 2 == 0))',
     testValues: [
       { varName: 'n', val: 9 }
     ],
     options: [
       {
-        label: 'Evaluează dacă n este IMPAR: 9 % 2 == 0 este fals, iar !false devine true!',
+        labelRo: 'Evaluează dacă n este IMPAR: 9 % 2 == 0 este fals, iar !false devine true!',
+        labelEn: 'Evaluates whether n is ODD: 9 % 2 == 0 is false, and !false flips to true!',
         isCorrect: true,
-        explanation: 'Operatorul ! (negație / NOT) transformă 0 (fals) în 1 (adevărat) și 1 (adevărat) în 0 (fals).'
+        explanationRo: 'Operatorul ! (negație / NOT) transformă 0 (fals) în 1 (adevărat) și 1 (adevărat) în 0 (fals).',
+        explanationEn: 'The ! operator (NOT / negation) flips 0 (false) into 1 (true) and 1 into 0.'
       },
       {
-        label: 'Evaluează dacă n este strict pozitiv.',
+        labelRo: 'Evaluează dacă n este strict pozitiv.',
+        labelEn: 'Checks if n is strictly positive.',
         isCorrect: false,
-        explanation: 'Negația unei egalități de paritate nu testează semnul numărului, ci imparitatea.'
+        explanationRo: 'Negația unei egalități de paritate nu testează semnul numărului, ci imparitatea.',
+        explanationEn: 'Negating an evenness test evaluates oddness, not arithmetic sign.'
       },
       {
-        label: 'Dă eroare de sintaxă deoarece semnul exclamării se pune după paranteze.',
+        labelRo: 'Dă eroare de sintaxă deoarece semnul exclamării se pune după paranteze.',
+        labelEn: 'Syntax error because the exclamation mark must follow parentheses.',
         isCorrect: false,
-        explanation: 'Semnul ! este un operator unar prefixat și se pune întotdeauna ÎNAINTEA expresiei negate.'
+        explanationRo: 'Semnul ! este un operator unar prefixat și se pune întotdeauna ÎNAINTEA expresiei negate.',
+        explanationEn: 'The ! symbol is a prefix unary operator that always precedes the negated term.'
       }
     ],
-    truthTableSummary: '!A inversează complet valoarea: !true devine false, iar !false devine true.'
+    truthTableSummaryRo: '!A inversează complet valoarea: !true devine false, iar !false devine true.',
+    truthTableSummaryEn: '!A flips truth value: !true becomes false, and !false becomes true.'
   },
   {
     id: 'l4',
-    title: 'Condiție Compusă de Interval: Validare Notă 1..10',
-    problemScenario: 'Vrem să ne asigurăm că nota introdusă de la tastatură este o notă validă în catalogul românesc (între 1 și 10 inclusiv).',
+    titleRo: 'Condiție Compusă de Interval: Validare Notă 1..10',
+    titleEn: 'Compound Range Condition: Validating Grades 1..10',
+    problemScenarioRo: 'Vrem să ne asigurăm că nota introdusă de la tastatură este o notă validă în catalogul românesc (între 1 și 10 inclusiv).',
+    problemScenarioEn: 'We want to verify that the grade typed from keyboard is valid (between 1 and 10 inclusive).',
     conditionFormula: 'if (nota >= 1 && nota <= 10)',
     testValues: [
       { varName: 'nota', val: 12 }
     ],
     options: [
       {
-        label: 'Fals (false) — 12 >= 1 este true, dar 12 <= 10 este FALSE! Deoarece e &&, întregul rezultat este fals!',
+        labelRo: 'Fals (false) — 12 >= 1 este true, dar 12 <= 10 este FALSE! Deoarece e &&, întregul rezultat este fals!',
+        labelEn: 'False — 12 >= 1 is true, but 12 <= 10 is FALSE! With &&, the entire condition evaluates to false!',
         isCorrect: true,
-        explanation: 'Exact! 12 nu aparține intervalului închis [1, 10]. Ramura if este sărită și se afișează "Notă invalidă!".'
+        explanationRo: 'Exact! 12 nu aparține intervalului închis [1, 10]. Ramura if este sărită și se afișează "Notă invalidă!".',
+        explanationEn: 'Exactly! 12 does not fall inside [1, 10]. The if branch is bypassed and else runs.'
       },
       {
-        label: 'Adevărat (true) — Deoarece 12 este mai mare decât 1.',
+        labelRo: 'Adevărat (true) — Deoarece 12 este mai mare decât 1.',
+        labelEn: 'True — Because 12 is greater than 1.',
         isCorrect: false,
-        explanation: 'La operatorul && ambele condiții sunt obligatorii! A doua condiție (12 <= 10) e falsă, deci totul devine fals.'
+        explanationRo: 'La operatorul && ambele condiții sunt obligatorii! A doua condiție (12 <= 10) e falsă, deci totul devine fals.',
+        explanationEn: 'With && both conditions are mandatory! The second clause (12 <= 10) fails, so the compound condition fails.'
       },
       {
-        label: 'Eroare de memorie la procesor.',
+        labelRo: 'Eroare de memorie la procesor.',
+        labelEn: 'CPU memory fault.',
         isCorrect: false,
-        explanation: 'Condiția este evaluată normal și returnează pur și simplu false.'
+        explanationRo: 'Condiția este evaluată normal și returnează pur și simplu false.',
+        explanationEn: 'The expression evaluates normally and outputs boolean false.'
       }
     ],
-    truthTableSummary: 'Pentru intervale închise [A, B] folosim mereu conjuncția: x >= A && x <= B.'
+    truthTableSummaryRo: 'Pentru intervale închise [A, B] folosim mereu conjuncția: x >= A && x <= B.',
+    truthTableSummaryEn: 'For closed intervals [A, B] we always use conjunction: x >= A && x <= B.'
   }
 ];
 
 export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptIdx, setSelectedOptIdx] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -177,13 +216,13 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
       setScore(s => s + 25);
       setFeedback({
         isCorrect: true,
-        text: `Excelent! ${opt.explanation}`
+        text: lang === 'ro' ? `Excelent! ${opt.explanationRo}` : `Excellent! ${opt.explanationEn}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Mai gândește-te puțin! ${opt.explanation}`
+        text: lang === 'ro' ? `Mai gândește-te puțin! ${opt.explanationRo}` : `Think a bit more! ${opt.explanationEn}`
       });
     }
   };
@@ -207,21 +246,31 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 3 din 7 • Modulul 4C
+              {lang === 'ro' ? 'Nivelul 3 din 7 • Modulul 4C' : 'Level 3 of 7 • Module 4C'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 78–79</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 78–79' : 'Art Klett Textbook pp. 78–79'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Zap className="w-6 h-6 text-yellow-400" />
-            <span>Operatori Logici Compuși: &amp;&amp; (ȘI), || (SAU), ! (NEGAȚIE)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Operatori Logici Compuși: && (ȘI), || (SAU), ! (NEGAȚIE)'
+                : 'Compound Logical Operators: && (AND), || (OR), ! (NOT)'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Învață să conectezi deciziile complexe precum circuitele logice! Descoperă tabelele de adevăr și cum se combină condițiile multiple în C++.
+            {lang === 'ro'
+              ? 'Învață să conectezi deciziile complexe precum circuitele logice! Descoperă tabelele de adevăr și cum se combină condițiile multiple în C++.'
+              : 'Learn to connect complex decisions like logic gates! Explore truth tables and see how multiple conditions combine seamlessly in C++.'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Scor Nivel 3:</span>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'ro' ? 'Scor Nivel 3:' : 'Level 3 Score:'}
+          </span>
           <span className="text-xl sm:text-2xl font-black font-mono text-yellow-400">{score} / 100 XP</span>
         </div>
       </div>
@@ -235,10 +284,14 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-white">
-                Circuit Logic Interactiv: Aprinde Becul Deciziei!
+                {lang === 'ro'
+                  ? 'Circuit Logic Interactiv: Aprinde Becul Deciziei!'
+                  : 'Interactive Logic Circuit: Light the Decision Bulb!'}
               </h3>
               <p className="text-xs text-slate-400">
-                Schimbă starea întrerupătoarelor A și B, selectează poarta logică și privește rezultatul instantaneu!
+                {lang === 'ro'
+                  ? 'Schimbă starea întrerupătoarelor A și B, selectează poarta logică și privește rezultatul instantaneu!'
+                  : 'Toggle inputs A and B, select the logic gate, and view the instantaneous output!'}
               </p>
             </div>
           </div>
@@ -257,7 +310,7 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              &amp;&amp; (ȘI)
+              &amp;&amp; ({lang === 'ro' ? 'ȘI' : 'AND'})
             </button>
             <button
               type="button"
@@ -271,7 +324,7 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              || (SAU)
+              || ({lang === 'ro' ? 'SAU' : 'OR'})
             </button>
             <button
               type="button"
@@ -285,7 +338,7 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              ! (NEGAȚIE)
+              ! ({lang === 'ro' ? 'NEGAȚIE' : 'NOT'})
             </button>
           </div>
         </div>
@@ -295,7 +348,9 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
           {/* Inputs A and B */}
           <div className="md:col-span-4 bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-300">Intrare A:</span>
+              <span className="text-xs font-mono font-bold text-slate-300">
+                {lang === 'ro' ? 'Intrare A:' : 'Input A:'}
+              </span>
               <button
                 type="button"
                 onClick={() => {
@@ -315,7 +370,9 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
 
             {activeGate !== '!' && (
               <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
-                <span className="text-xs font-mono font-bold text-slate-300">Intrare B:</span>
+                <span className="text-xs font-mono font-bold text-slate-300">
+                  {lang === 'ro' ? 'Intrare B:' : 'Input B:'}
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -335,7 +392,7 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
             )}
 
             <div className="text-[11px] font-mono text-slate-400 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
-              Expresie evaluată:<br />
+              {lang === 'ro' ? 'Expresie evaluată:' : 'Evaluated expression:'}<br />
               <span className="text-white font-bold">
                 {activeGate === '!'
                   ? `!(${switchA ? 'true' : 'false'})`
@@ -348,12 +405,18 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
           <div className="md:col-span-8 bg-slate-950/80 p-5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-around gap-6">
             {/* Operator Box */}
             <div className="flex flex-col items-center">
-              <div className="text-[10px] font-mono uppercase text-slate-400 mb-1">Poartă C++</div>
+              <div className="text-[10px] font-mono uppercase text-slate-400 mb-1">
+                {lang === 'ro' ? 'Poartă C++' : 'C++ Gate'}
+              </div>
               <div className="w-16 h-16 rounded-2xl bg-slate-900 border-2 border-yellow-500/60 flex items-center justify-center text-xl font-mono font-black text-yellow-300 shadow-lg shadow-yellow-500/10">
                 {activeGate}
               </div>
               <div className="text-[11px] font-mono text-slate-400 mt-1">
-                {activeGate === '&&' ? 'ȘI Logic' : activeGate === '||' ? 'SAU Logic' : 'Negație Logică'}
+                {activeGate === '&&'
+                  ? (lang === 'ro' ? 'ȘI Logic' : 'Logical AND')
+                  : activeGate === '||'
+                  ? (lang === 'ro' ? 'SAU Logic' : 'Logical OR')
+                  : (lang === 'ro' ? 'Negație Logică' : 'Logical NOT')}
               </div>
             </div>
 
@@ -364,7 +427,9 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
 
             {/* Output Bulb */}
             <div className="flex flex-col items-center">
-              <div className="text-[10px] font-mono uppercase text-slate-400 mb-1">Rezultat Curent</div>
+              <div className="text-[10px] font-mono uppercase text-slate-400 mb-1">
+                {lang === 'ro' ? 'Rezultat Curent' : 'Current Output'}
+              </div>
               <div className={`w-20 h-20 rounded-3xl flex items-center justify-center text-3xl transition-all duration-300 border-2 ${
                 gateResult
                   ? 'bg-yellow-500/30 border-yellow-400 text-yellow-300 shadow-2xl shadow-yellow-400/40 scale-110'
@@ -377,7 +442,9 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                   ? 'bg-yellow-500 text-slate-950 border-yellow-400 shadow'
                   : 'bg-slate-800 text-slate-400 border-slate-700'
               }`}>
-                {gateResult ? 'ADEVĂRAT (true / 1)' : 'FALS (false / 0)'}
+                {gateResult
+                  ? (lang === 'ro' ? 'ADEVĂRAT (true / 1)' : 'TRUE (true / 1)')
+                  : (lang === 'ro' ? 'FALS (false / 0)' : 'FALSE (false / 0)')}
               </div>
             </div>
           </div>
@@ -393,23 +460,29 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                 {currentIdx + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Provocarea {currentIdx + 1}/{LOGIC_CHALLENGES.length}: {currentChallenge.title}
+                {lang === 'ro'
+                  ? `Provocarea ${currentIdx + 1}/${LOGIC_CHALLENGES.length}: ${currentChallenge.titleRo}`
+                  : `Challenge ${currentIdx + 1}/${LOGIC_CHALLENGES.length}: ${currentChallenge.titleEn}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Întrebarea {currentIdx + 1}/{LOGIC_CHALLENGES.length}
+              {lang === 'ro'
+                ? `Întrebarea ${currentIdx + 1}/${LOGIC_CHALLENGES.length}`
+                : `Question ${currentIdx + 1}/${LOGIC_CHALLENGES.length}`}
             </span>
           </div>
 
           <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs sm:text-sm">
             <div className="text-slate-400 text-xs mb-2 leading-relaxed">
-              {currentChallenge.problemScenario}
+              {lang === 'ro' ? currentChallenge.problemScenarioRo : currentChallenge.problemScenarioEn}
             </div>
             <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-yellow-300 font-bold mb-3">
               {currentChallenge.conditionFormula}
             </div>
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-slate-400">Valori curente de test:</span>
+              <span className="text-slate-400">
+                {lang === 'ro' ? 'Valori curente de test:' : 'Current test values:'}
+              </span>
               {currentChallenge.testValues.map((v, i) => (
                 <span key={i} className="px-2.5 py-0.5 rounded-lg bg-slate-800 border border-slate-700 text-cyan-300 font-bold">
                   {v.varName} = {v.val}
@@ -419,7 +492,9 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
           </div>
 
           <div className="text-sm font-bold text-white">
-            Care este valoarea de adevăr a expresiei și de ce?
+            {lang === 'ro'
+              ? 'Care este valoarea de adevăr a expresiei și de ce?'
+              : 'What is the truth value of the expression and why?'}
           </div>
 
           <div className="flex flex-col gap-3">
@@ -451,7 +526,7 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                     {String.fromCharCode(65 + idx)}
                   </span>
                   <div className="text-xs sm:text-sm leading-relaxed">
-                    {opt.label}
+                    {lang === 'ro' ? opt.labelRo : opt.labelEn}
                   </div>
                 </button>
               );
@@ -480,7 +555,7 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
                 onClick={handleNext}
                 className="px-4 py-2 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer shadow-md"
               >
-                <span>Următoarea Provocare</span>
+                <span>{lang === 'ro' ? 'Următoarea Provocare' : 'Next Challenge'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -494,15 +569,19 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Stăpân al Circuitelor Logice!
+              {lang === 'ro' ? 'Stăpân al Circuitelor Logice!' : 'Master of Logic Circuits!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Ai deprins funcționarea operatorilor <code className="text-yellow-400 font-bold">&amp;&amp;</code>, <code className="text-yellow-400 font-bold">||</code> și <code className="text-yellow-400 font-bold">!</code> și poți formula condiții complexe fără eroare!
+              {lang === 'ro' ? (
+                <>Ai deprins funcționarea operatorilor <code className="text-yellow-400 font-bold">&amp;&amp;</code>, <code className="text-yellow-400 font-bold">||</code> și <code className="text-yellow-400 font-bold">!</code> și poți formula condiții complexe fără eroare!</>
+              ) : (
+                <>You have mastered operators <code className="text-yellow-400 font-bold">&amp;&amp;</code>, <code className="text-yellow-400 font-bold">||</code>, and <code className="text-yellow-400 font-bold">!</code> and can formulate complex boolean tests flawlessly!</>
+              )}
             </p>
           </div>
 
           <div className="bg-slate-950/80 px-6 py-2.5 rounded-2xl border border-slate-800 text-yellow-400 font-mono font-bold text-sm">
-            Scor obținut: +{score} XP
+            {lang === 'ro' ? `Scor obținut: +${score} XP` : `Earned Score: +${score} XP`}
           </div>
 
           <button
@@ -510,7 +589,11 @@ export const DecLevel3_LogicalOperatorsAndOrNot: React.FC<Props> = ({ onPass }) 
             onClick={handleFinishLevel}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 4: Problema Parității &amp; Divizibilității (n % 2 == 0)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 4: Problema Parității & Divizibilității (n % 2 == 0)'
+                : 'Advance to Level 4: Parity & Divisibility (n % 2 == 0)'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

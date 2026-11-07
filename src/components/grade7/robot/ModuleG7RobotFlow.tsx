@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RobotLevel1_RobotAnatomyAndHardware } from './RobotLevel1_RobotAnatomyAndHardware';
 import { RobotLevel2_GeometricPolygonTraversal } from './RobotLevel2_GeometricPolygonTraversal';
 import { RobotLevel3_UltrasonicDistanceSensor } from './RobotLevel3_UltrasonicDistanceSensor';
@@ -6,8 +6,9 @@ import { RobotLevel4_LineTrackingSensor } from './RobotLevel4_LineTrackingSensor
 import { RobotLevel5_AutonomousMazeRunner } from './RobotLevel5_AutonomousMazeRunner';
 import { RobotLevel6_CodeBlocksRobotLab } from './RobotLevel6_CodeBlocksRobotLab';
 import { RobotLevel7_EvaluationAndCertificate } from './RobotLevel7_EvaluationAndCertificate';
-import { ArrowLeft, RotateCcw, Bot, Cpu } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Bot, Cpu, AlertTriangle, Check, X } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface ModuleG7RobotFlowProps {
   currentLevel: number;
@@ -24,8 +25,19 @@ export const ModuleG7RobotFlow: React.FC<ModuleG7RobotFlowProps> = ({
   onRestartMission,
   onReturnToCatalog,
 }) => {
+  const { lang } = useLanguage();
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
   const handlePassCurrentLevel = (score: number) => {
     onCompletePage(score);
+  };
+
+  const handleConfirmReset = () => {
+    sounds.playClick();
+    setShowResetConfirm(false);
+    if (onRestartMission) {
+      onRestartMission();
+    }
   };
 
   return (
@@ -43,15 +55,17 @@ export const ModuleG7RobotFlow: React.FC<ModuleG7RobotFlowProps> = ({
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Catalog Misiuni</span>
+              <span>{lang === 'ro' ? 'Catalog Misiuni' : 'Mission Catalog'}</span>
             </button>
           )}
 
           <div className="text-xs text-slate-400 font-mono hidden sm:inline flex items-center gap-1.5">
             <Bot className="w-3.5 h-3.5 text-indigo-400 inline" />
-            <span>Modulul 4F: </span>
+            <span>{lang === 'ro' ? 'Modulul 4F: ' : 'Module 4F: '}</span>
             <span className="text-indigo-400 font-bold">
-              Robotică Educațională &amp; Roboți Virtuali cu Senzori (Manual pag. 103–108)
+              {lang === 'ro'
+                ? 'Robotică Educațională & Roboți Virtuali cu Senzori (Manual pag. 103–108)'
+                : 'Educational Robotics & Virtual Sensor Robots (Textbook pp. 103–108)'}
             </span>
           </div>
         </div>
@@ -60,7 +74,8 @@ export const ModuleG7RobotFlow: React.FC<ModuleG7RobotFlowProps> = ({
           {studentName && (
             <div className="text-xs font-mono text-slate-300 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 flex items-center gap-1.5">
               <Cpu className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Inginer Robotician:</span> <span className="text-indigo-300 font-bold">{studentName}</span>
+              <span>{lang === 'ro' ? 'Inginer Robotician:' : 'Robotics Engineer:'}</span>{' '}
+              <span className="text-indigo-300 font-bold">{studentName}</span>
             </div>
           )}
 
@@ -68,20 +83,53 @@ export const ModuleG7RobotFlow: React.FC<ModuleG7RobotFlowProps> = ({
             <button
               type="button"
               onClick={() => {
-                if (window.confirm('Ești sigur că vrei să reiei Misiunea 4F de la nivelul 1? Punctajul va fi resetat.')) {
-                  sounds.playClick();
-                  onRestartMission();
-                }
+                sounds.playClick();
+                setShowResetConfirm(true);
               }}
               className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-rose-300 border border-slate-700 text-xs font-medium transition flex items-center gap-1 cursor-pointer"
-              title="Resetează misiunea de la Nivelul 1"
+              title={lang === 'ro' ? 'Resetează misiunea de la Nivelul 1' : 'Restart mission from Level 1'}
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reia Misiunea</span>
+              <span className="hidden sm:inline">{lang === 'ro' ? 'Reia Misiunea' : 'Restart Mission'}</span>
             </button>
           )}
         </div>
       </div>
+
+      {/* In-DOM Reset Confirmation Dialog */}
+      {showResetConfirm && (
+        <div className="p-4 rounded-2xl bg-rose-950/80 border border-rose-500/50 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs animate-in fade-in duration-200">
+          <div className="flex items-center gap-2.5 text-rose-200 font-medium">
+            <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+            <span>
+              {lang === 'ro'
+                ? 'Ești sigur că vrei să reiei Misiunea 4F de la nivelul 1? Punctajul va fi resetat.'
+                : 'Are you sure you want to restart Mission 4F from Level 1? Your score will be reset.'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleConfirmReset}
+              className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              <span>{lang === 'ro' ? 'Da, Reia' : 'Yes, Restart'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setShowResetConfirm(false);
+              }}
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition flex items-center gap-1.5 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>{lang === 'ro' ? 'Anulează' : 'Cancel'}</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Dynamic Level Component Loading */}
       {currentLevel === 1 && <RobotLevel1_RobotAnatomyAndHardware onPass={handlePassCurrentLevel} />}

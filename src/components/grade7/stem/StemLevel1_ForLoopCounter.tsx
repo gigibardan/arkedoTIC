@@ -13,6 +13,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -27,6 +28,8 @@ interface StepTrace {
 }
 
 export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
+
   // Interactive Stepper State
   const [targetN, setTargetN] = useState<number>(5);
   const [step, setStep] = useState<number>(0);
@@ -103,51 +106,77 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
   // 3 Practice Questions
   const CHALLENGES = [
     {
-      question: 'Câte iterații (pași) efectuează bucla: for (int i = 1; i <= 6; i++) ?',
+      questionRo: 'Câte iterații (pași) efectuează bucla: for (int i = 1; i <= 6; i++) ?',
+      questionEn: 'How many iterations (steps) does the loop execute: for (int i = 1; i <= 6; i++) ?',
       code: 'for (int i = 1; i <= 6; i++) {\n    cout << i << " ";\n}',
-      options: [
+      optionsRo: [
         { label: '5 pași (1, 2, 3, 4, 5)', correct: false },
         { label: '6 pași (1, 2, 3, 4, 5, 6)', correct: true },
         { label: '7 pași (inclusiv când se oprește la 7)', correct: false },
         { label: 'Eroare de compilare', correct: false }
       ],
-      explanation: 'Variabila i pornește de la 1 și crește cu câte 1 unitate până la 6 inclusiv (1, 2, 3, 4, 5, 6), adică realizează exact 6 iterații!'
+      optionsEn: [
+        { label: '5 steps (1, 2, 3, 4, 5)', correct: false },
+        { label: '6 steps (1, 2, 3, 4, 5, 6)', correct: true },
+        { label: '7 steps (including stopping step at 7)', correct: false },
+        { label: 'Compilation error', correct: false }
+      ],
+      explanationRo: 'Variabila i pornește de la 1 și crește cu câte 1 unitate până la 6 inclusiv (1, 2, 3, 4, 5, 6), adică realizează exact 6 iterații!',
+      explanationEn: 'Variable i starts at 1 and increases by 1 up to 6 inclusive (1, 2, 3, 4, 5, 6), yielding exactly 6 iterations!'
     },
     {
-      question: 'Care este valoarea variabilei i IMEDIAT DUPĂ ce bucla for (int i = 1; i <= 5; i++) își termină execuția?',
+      questionRo: 'Care este valoarea variabilei i IMEDIAT DUPĂ ce bucla for (int i = 1; i <= 5; i++) își termină execuția?',
+      questionEn: 'What is the value of variable i RIGHT AFTER the loop for (int i = 1; i <= 5; i++) finishes execution?',
       code: 'int i;\nfor (i = 1; i <= 5; i++) {\n    // instructiuni\n}\ncout << i;',
-      options: [
+      optionsRo: [
         { label: 'i = 5', correct: false },
         { label: 'i = 6', correct: true },
         { label: 'i = 0', correct: false },
         { label: 'i = 1', correct: false }
       ],
-      explanation: 'Pentru ca condiția i <= 5 să devină falsă (false) și bucla să se oprească, i trebuie să fie incrementat la 6! Deci la ieșire i este 6.'
+      optionsEn: [
+        { label: 'i = 5', correct: false },
+        { label: 'i = 6', correct: true },
+        { label: 'i = 0', correct: false },
+        { label: 'i = 1', correct: false }
+      ],
+      explanationRo: 'Pentru ca condiția i <= 5 să devină falsă (false) și bucla să se oprească, i trebuie să fie incrementat la 6! Deci la ieșire i este 6.',
+      explanationEn: 'For condition i <= 5 to become false and terminate the loop, i must increment to 6! Hence upon exit i is 6.'
     },
     {
-      question: 'Ce va afișa pe ecran secvența: for (int i = 10; i >= 6; i -= 2) cout << i << " "; ?',
+      questionRo: 'Ce va afișa pe ecran secvența: for (int i = 10; i >= 6; i -= 2) cout << i << " "; ?',
+      questionEn: 'What does the snippet display: for (int i = 10; i >= 6; i -= 2) cout << i << " "; ?',
       code: 'for (int i = 10; i >= 6; i -= 2) {\n    cout << i << " ";\n}',
-      options: [
+      optionsRo: [
         { label: '10 8 6', correct: true },
         { label: '10 9 8 7 6', correct: false },
         { label: '10 8', correct: false },
         { label: 'Buclă infinită', correct: false }
       ],
-      explanation: 'Pasul este decrementare cu 2 (i -= 2): la pasul 1 i=10, pasul 2 i=8, pasul 3 i=6. La pasul următor i devine 4 <= 6 este fals, deci se oprește!'
+      optionsEn: [
+        { label: '10 8 6', correct: true },
+        { label: '10 9 8 7 6', correct: false },
+        { label: '10 8', correct: false },
+        { label: 'Infinite loop', correct: false }
+      ],
+      explanationRo: 'Pasul este decrementare cu 2 (i -= 2): la pasul 1 i=10, pasul 2 i=8, pasul 3 i=6. La pasul următor i devine 4 <= 6 este fals, deci se oprește!',
+      explanationEn: 'The step decrements by 2 (i -= 2): step 1 i=10, step 2 i=8, step 3 i=6. Next, i becomes 4, which is not >= 6, so it stops!'
     }
   ];
 
   const handleSelectOption = (qIdx: number, optIdx: number) => {
     sounds.playClick();
     setSelectedAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
-    const isCorrect = CHALLENGES[qIdx].options[optIdx].correct;
+    const opts = lang === 'ro' ? CHALLENGES[qIdx].optionsRo : CHALLENGES[qIdx].optionsEn;
+    const isCorrect = opts[optIdx].correct;
+    const explanation = lang === 'ro' ? CHALLENGES[qIdx].explanationRo : CHALLENGES[qIdx].explanationEn;
 
     if (isCorrect) {
       sounds.playCorrect();
-      setChallengeFeedback('Corect! ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback((lang === 'ro' ? 'Corect! ' : 'Correct! ') + explanation);
     } else {
       sounds.playWrong();
-      setChallengeFeedback('Incorect. Analizează cu atenție: ' + CHALLENGES[qIdx].explanation);
+      setChallengeFeedback((lang === 'ro' ? 'Incorect. Analizează cu atenție: ' : 'Incorrect. Study carefully: ') + explanation);
     }
   };
 
@@ -161,7 +190,8 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
       let scoreAcc = 0;
       CHALLENGES.forEach((c, idx) => {
         const picked = selectedAnswers[idx];
-        if (picked !== undefined && c.options[picked].correct) {
+        const opts = lang === 'ro' ? c.optionsRo : c.optionsEn;
+        if (picked !== undefined && opts[picked].correct) {
           scoreAcc += 33;
         }
       });
@@ -187,13 +217,19 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono font-bold border border-blue-500/30 mb-2">
               <Layers className="w-3.5 h-3.5 text-blue-400" />
-              <span>Nivelul 1 din 7 • Modulul 4E</span>
+              <span>{lang === 'ro' ? 'Nivelul 1 din 7 • Modulul 4E' : 'Level 1 of 7 • Module 4E'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Anatomia Buclei cu Contor <span className="text-cyan-400 font-mono">for</span> (Manual pag. 86–90)
+              {lang === 'ro' ? (
+                <>Anatomia Buclei cu Contor <span className="text-cyan-400 font-mono">for</span> (Manual pag. 86–90)</>
+              ) : (
+                <>Anatomy of the <span className="text-cyan-400 font-mono">for</span> Loop with Counter (Textbook p. 86–90)</>
+              )}
             </h1>
             <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-              Înțelege structura repetitivă cu număr cunoscut de pași. Descoperă rolul celor 3 componente din antetul buclei: <span className="text-amber-300 font-bold font-mono">inițializare</span>, <span className="text-emerald-300 font-bold font-mono">condiție</span> și <span className="text-cyan-300 font-bold font-mono">pas de incrementare</span>.
+              {lang === 'ro'
+                ? 'Înțelege structura repetitivă cu număr cunoscut de pași. Descoperă rolul celor 3 componente din antetul buclei: inițializare, condiție și pas de incrementare.'
+                : 'Understand the loop structure with a known number of steps. Discover the role of the 3 header elements: initialization, condition, and increment step.'}
             </p>
           </div>
 
@@ -210,7 +246,11 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xl">
         <div className="flex items-center gap-2.5 mb-4 text-cyan-400 font-bold text-sm uppercase tracking-wider font-mono">
           <Lightbulb className="w-4 h-4 text-cyan-400" />
-          <span>Antetul Buclei `for`: Cele 3 Elemente Separate prin Punct și Virgulă (;)</span>
+          <span>
+            {lang === 'ro'
+              ? 'Antetul Buclei `for`: Cele 3 Elemente Separate prin Punct și Virgulă (;)'
+              : 'The `for` Loop Header: 3 Elements Separated by Semicolons (;)'}
+          </span>
         </div>
 
         {/* Syntax Visualization Graphic */}
@@ -234,21 +274,33 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-800/80 text-xs">
             <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/30">
-              <span className="font-bold text-amber-300 block mb-1">1. Inițializarea (se execută o singură dată)</span>
+              <span className="font-bold text-amber-300 block mb-1">
+                {lang === 'ro' ? '1. Inițializarea (se execută o singură dată)' : '1. Initialization (executes only once)'}
+              </span>
               <p className="text-slate-300 leading-relaxed">
-                Setează valoarea inițială a contorului (<code className="text-amber-200">i = 1</code>). Are loc o singură dată, înainte de începerea buclei.
+                {lang === 'ro'
+                  ? 'Setează valoarea inițială a contorului (i = 1). Are loc o singură dată, înainte de începerea buclei.'
+                  : 'Sets the initial value of the counter (i = 1). Happens once, before loop execution begins.'}
               </p>
             </div>
             <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30">
-              <span className="font-bold text-emerald-300 block mb-1">2. Condiția de continuare (testată la fiecare pas)</span>
+              <span className="font-bold text-emerald-300 block mb-1">
+                {lang === 'ro' ? '2. Condiția de continuare (testată la fiecare pas)' : '2. Continuation condition (tested at each step)'}
+              </span>
               <p className="text-slate-300 leading-relaxed">
-                Se verifică la fiecare iterație. Dacă este <code className="text-emerald-200">true</code>, se execută corpul buclei; dacă este <code className="text-rose-300">false</code>, bucla se oprește imediat.
+                {lang === 'ro'
+                  ? 'Se verifică la fiecare iterație. Dacă este true, se execută corpul buclei; dacă este false, bucla se oprește imediat.'
+                  : 'Verified at each iteration. If true, the loop body executes; if false, the loop halts immediately.'}
               </p>
             </div>
             <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/30">
-              <span className="font-bold text-cyan-300 block mb-1">3. Pasul contorului (după fiecare iterație)</span>
+              <span className="font-bold text-cyan-300 block mb-1">
+                {lang === 'ro' ? '3. Pasul contorului (după fiecare iterație)' : '3. Counter step (after each iteration)'}
+              </span>
               <p className="text-slate-300 leading-relaxed">
-                Modifică contorul la finalul fiecărui pas (<code className="text-cyan-200">i++</code> adaugă 1, <code className="text-cyan-200">i += 2</code> adaugă 2, <code className="text-cyan-200">i--</code> scade 1).
+                {lang === 'ro'
+                  ? 'Modifică contorul la finalul fiecărui pas (i++ adaugă 1, i += 2 adaugă 2, i-- scade 1).'
+                  : 'Updates the counter after each step (i++ adds 1, i += 2 adds 2, i-- subtracts 1).'}
               </p>
             </div>
           </div>
@@ -260,16 +312,22 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Play className="w-4 h-4 text-cyan-400" />
-                <span>Simulator Interactiv: Suma lui Gauss (1 + 2 + ... + n)</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Simulator Interactiv: Suma lui Gauss (1 + 2 + ... + n)'
+                    : 'Interactive Simulator: Gauss Sum (1 + 2 + ... + n)'}
+                </span>
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                Apasă pe butonul <strong className="text-cyan-300">„Următorul Pas (i++)”</strong> pentru a urmări execuția linie cu linie.
+                {lang === 'ro'
+                  ? 'Apasă pe butonul „Următorul Pas (i++)” pentru a urmări execuția linie cu linie.'
+                  : 'Click "Next Step (i++)" to follow execution line by line.'}
               </p>
             </div>
 
             {/* Target n selector */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-slate-400">Alege n:</span>
+              <span className="text-xs font-mono text-slate-400">{lang === 'ro' ? 'Alege n:' : 'Choose n:'}</span>
               {[3, 5, 8].map((val) => (
                 <button
                   key={val}
@@ -286,7 +344,7 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
               <button
                 onClick={() => handleResetStepper()}
                 className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer ml-1"
-                title="Resetează simularea"
+                title={lang === 'ro' ? 'Resetează simularea' : 'Reset simulation'}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -297,7 +355,7 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
             {/* Left: Code Snippet */}
             <div className="lg:col-span-6 bg-slate-900 border border-slate-800 rounded-xl p-3.5 font-mono text-xs">
-              <div className="text-slate-500 mb-1">// Calculul sumei: 1 + 2 + ... + n</div>
+              <div className="text-slate-500 mb-1">{lang === 'ro' ? '// Calculul sumei: 1 + 2 + ... + n' : '// Sum calculation: 1 + 2 + ... + n'}</div>
               <div className="text-slate-300">int s = 0;</div>
               <div className={`p-1.5 rounded-lg transition-colors ${step > 0 && !isDone ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/40' : 'text-slate-200'}`}>
                 <span className="text-purple-400 font-bold">for</span> (int i = 1; i &lt;= {targetN}; i++) &#123;
@@ -307,7 +365,7 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
               </div>
               <div className="text-slate-200">&#125;</div>
               <div className={`mt-1.5 pt-1.5 border-t border-slate-800 transition-colors ${isDone ? 'text-emerald-300 font-bold' : 'text-slate-500'}`}>
-                cout &lt;&lt; s; <span className="text-slate-500">// Rezultat final: {isDone ? currentSum : '?'}</span>
+                cout &lt;&lt; s; <span className="text-slate-500">// {lang === 'ro' ? 'Rezultat final:' : 'Final result:'} {isDone ? currentSum : '?'}</span>
               </div>
             </div>
 
@@ -315,17 +373,17 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
             <div className="lg:col-span-6 flex flex-col gap-3">
               <div className="grid grid-cols-3 gap-2">
                 <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
-                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">Contor i</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">{lang === 'ro' ? 'Contor i' : 'Counter i'}</span>
                   <span className="text-xl font-mono font-black text-cyan-300">{step === 0 ? '-' : currentI}</span>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
-                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">Suma s</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">{lang === 'ro' ? 'Suma s' : 'Sum s'}</span>
                   <span className="text-xl font-mono font-black text-amber-300">{currentSum}</span>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
-                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">Condiție (i &lt;= {targetN})</span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400 block mb-0.5">{lang === 'ro' ? `Condiție (i <= ${targetN})` : `Condition (i <= ${targetN})`}</span>
                   <span className={`text-xs font-mono font-bold block mt-1 ${isDone ? 'text-rose-400' : step > 0 ? 'text-emerald-400' : 'text-slate-500'}`}>
-                    {step === 0 ? 'În așteptare' : isDone ? 'FALSE (Stop)' : 'TRUE (Continuă)'}
+                    {step === 0 ? (lang === 'ro' ? 'În așteptare' : 'Waiting') : isDone ? 'FALSE (Stop)' : 'TRUE (Continue)'}
                   </span>
                 </div>
               </div>
@@ -343,7 +401,13 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
                   }`}
                 >
                   <Play className="w-4 h-4 fill-current" />
-                  <span>{step === 0 ? 'Start Buclă (Inițializare i = 1)' : isDone ? 'Buclă Încheiată cu Succes!' : `Execută Pasul ${step + 1} (i = ${currentI + 1})`}</span>
+                  <span>
+                    {step === 0
+                      ? (lang === 'ro' ? 'Start Buclă (Inițializare i = 1)' : 'Start Loop (Init i = 1)')
+                      : isDone
+                      ? (lang === 'ro' ? 'Buclă Încheiată cu Succes!' : 'Loop Finished Successfully!')
+                      : (lang === 'ro' ? `Execută Pasul ${step + 1} (i = ${currentI + 1})` : `Execute Step ${step + 1} (i = ${currentI + 1})`)}
+                  </span>
                 </button>
 
                 <button
@@ -360,7 +424,11 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
                 <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>
-                    Suma primelor {targetN} numere naturale este <strong>{currentSum}</strong>. Verificare formula Gauss: <code>{targetN} * {targetN + 1} / 2 = {(targetN * (targetN + 1)) / 2}</code>!
+                    {lang === 'ro' ? (
+                      <>Suma primelor {targetN} numere naturale este <strong>{currentSum}</strong>. Verificare formula Gauss: <code>{targetN} * {targetN + 1} / 2 = {(targetN * (targetN + 1)) / 2}</code>!</>
+                    ) : (
+                      <>The sum of the first {targetN} natural numbers is <strong>{currentSum}</strong>. Gauss formula check: <code>{targetN} * {targetN + 1} / 2 = {(targetN * (targetN + 1)) / 2}</code>!</>
+                    )}
                   </span>
                 </div>
               )}
@@ -371,16 +439,16 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
           {traceHistory.length > 0 && (
             <div className="mt-4 pt-4 border-t border-slate-800 overflow-x-auto">
               <span className="text-[11px] font-mono text-slate-400 block mb-2 font-bold uppercase tracking-wider">
-                Tabel de Urmărire Pas-cu-Pas (Trace Table):
+                {lang === 'ro' ? 'Tabel de Urmărire Pas-cu-Pas (Trace Table):' : 'Step-by-Step Trace Table:'}
               </span>
               <table className="w-full text-xs font-mono text-left text-slate-300">
                 <thead className="bg-slate-900/90 text-slate-400 uppercase text-[10px] border-b border-slate-800">
                   <tr>
-                    <th className="p-2">Pas</th>
-                    <th className="p-2">Valoare i</th>
-                    <th className="p-2">Condiție (i &lt;= {targetN})</th>
-                    <th className="p-2">Calcul Efectuat</th>
-                    <th className="p-2 text-right">Noua Sumă s</th>
+                    <th className="p-2">{lang === 'ro' ? 'Pas' : 'Step'}</th>
+                    <th className="p-2">{lang === 'ro' ? 'Valoare i' : 'Value i'}</th>
+                    <th className="p-2">{lang === 'ro' ? `Condiție (i <= ${targetN})` : `Condition (i <= ${targetN})`}</th>
+                    <th className="p-2">{lang === 'ro' ? 'Calcul Efectuat' : 'Calculation'}</th>
+                    <th className="p-2 text-right">{lang === 'ro' ? 'Noua Sumă s' : 'New Sum s'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
@@ -404,17 +472,22 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs uppercase tracking-wider font-mono">
               <HelpCircle className="w-4 h-4 text-amber-400" />
-              <span>Verificare Înțelegere: Provocarea Contorului ({challengeStep + 1} din {CHALLENGES.length})</span>
+              <span>
+                {lang === 'ro'
+                  ? `Verificare Înțelegere: Provocarea Contorului (${challengeStep + 1} din ${CHALLENGES.length})`
+                  : `Comprehension Check: Counter Challenge (${challengeStep + 1} of ${CHALLENGES.length})`}
+              </span>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Scor obținut: <strong className="text-cyan-300">{challengeScore}/100</strong>
+              {lang === 'ro' ? 'Scor obținut: ' : 'Score earned: '}
+              <strong className="text-cyan-300">{challengeScore}/100</strong>
             </span>
           </div>
 
           {!completedChallenge ? (
             <div className="flex flex-col gap-4">
               <h4 className="text-sm sm:text-base font-bold text-white leading-snug">
-                {CHALLENGES[challengeStep].question}
+                {lang === 'ro' ? CHALLENGES[challengeStep].questionRo : CHALLENGES[challengeStep].questionEn}
               </h4>
 
               {CHALLENGES[challengeStep].code && (
@@ -424,7 +497,7 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {CHALLENGES[challengeStep].options.map((opt, oIdx) => {
+                {(lang === 'ro' ? CHALLENGES[challengeStep].optionsRo : CHALLENGES[challengeStep].optionsEn).map((opt, oIdx) => {
                   const isSelected = selectedAnswers[challengeStep] === oIdx;
                   return (
                     <button
@@ -449,7 +522,7 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
               </div>
 
               {challengeFeedback && (
-                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
+                <div className={`p-3 rounded-xl text-xs border ${challengeFeedback.startsWith('Corect') || challengeFeedback.startsWith('Correct') ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/40 border-rose-500/40 text-rose-300'}`}>
                   {challengeFeedback}
                 </div>
               )}
@@ -460,7 +533,11 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
                   onClick={handleNextChallenge}
                   className="self-end py-2 px-5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition flex items-center gap-2 cursor-pointer shadow-md"
                 >
-                  <span>{challengeStep < CHALLENGES.length - 1 ? 'Următoarea Întrebare' : 'Calculează Scorul'}</span>
+                  <span>
+                    {challengeStep < CHALLENGES.length - 1
+                      ? (lang === 'ro' ? 'Următoarea Întrebare' : 'Next Question')
+                      : (lang === 'ro' ? 'Calculează Scorul' : 'Calculate Score')}
+                  </span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}
@@ -470,16 +547,24 @@ export const StemLevel1_ForLoopCounter: React.FC<Props> = ({ onPass }) => {
               <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-black text-white">Nivelul 1 Finalizat cu Succes!</h4>
+              <h4 className="text-lg font-black text-white">
+                {lang === 'ro' ? 'Nivelul 1 Finalizat cu Succes!' : 'Level 1 Successfully Completed!'}
+              </h4>
               <p className="text-xs text-slate-300 max-w-md">
-                Ai stăpânit antetul buclei cu contor, funcționarea pas-cu-pas și evaluarea condiției de oprire.
+                {lang === 'ro'
+                  ? 'Ai stăpânit antetul buclei cu contor, funcționarea pas-cu-pas și evaluarea condiției de oprire.'
+                  : 'You mastered the counted loop header, step-by-step execution, and evaluating stop conditions.'}
               </p>
               <button
                 type="button"
                 onClick={handleFinishLevel}
                 className="mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
               >
-                <span>Treci la Nivelul 2: Bucla do-while &amp; Validarea Datelor</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Treci la Nivelul 2: Bucla do-while & Validarea Datelor'
+                    : 'Proceed to Level 2: do-while Loop & Data Validation'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

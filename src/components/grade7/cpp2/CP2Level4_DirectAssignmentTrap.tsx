@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Sparkles, AlertTriangle, ArrowRight, RotateCcw, Play, Flame, HelpCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Sparkles, AlertTriangle, ArrowRight, RotateCcw, Play, Flame, ShieldAlert } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
 }
 
 export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [step, setStep] = useState<number>(0); // 0: init, 1: after a=b, 2: after b=a
   const [valA, setValA] = useState<number>(5);
   const [valB, setValB] = useState<number>(9);
   const [logHistory, setLogHistory] = useState<string[]>([
-    'Stare inițială: a = 5, b = 9 în memoria RAM.'
+    lang === 'ro'
+      ? 'Stare inițială: a = 5, b = 9 în memoria RAM.'
+      : 'Initial state: a = 5, b = 9 in RAM memory.'
   ]);
   const [quizAnswer, setQuizAnswer] = useState<string | null>(null);
 
@@ -22,7 +26,9 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
       setValA(9);
       setLogHistory(prev => [
         ...prev,
-        '⚡ Executat: a = b; -> Valoarea lui b (9) a fost copiată în a. Valoarea inițială (5) a lui a a fost SUPRASCRISE și pierdută definitiv!'
+        lang === 'ro'
+          ? '⚡ Executat: a = b; -> Valoarea lui b (9) a fost copiată în a. Valoarea inițială (5) a lui a a fost SUPRASCRISĂ și pierdută definitiv!'
+          : '⚡ Executed: a = b; -> Value of b (9) was copied into a. Initial value (5) of a was OVERWRITTEN and permanently lost!'
       ]);
       setStep(1);
     } else if (step === 1) {
@@ -30,7 +36,9 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
       setValB(9);
       setLogHistory(prev => [
         ...prev,
-        '❌ Executat: b = a; -> Deoarece a este acum 9, b primește tot 9! Ambele variabile au acum valoarea 9. Swap eșuat!'
+        lang === 'ro'
+          ? '❌ Executat: b = a; -> Deoarece a este acum 9, b primește tot 9! Ambele variabile au acum valoarea 9. Swap eșuat!'
+          : '❌ Executed: b = a; -> Because a is now 9, b receives 9 as well! Both variables now contain 9. Swap failed!'
       ]);
       setStep(2);
       sounds.playError();
@@ -42,7 +50,11 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
     setStep(0);
     setValA(5);
     setValB(9);
-    setLogHistory(['Stare inițială: a = 5, b = 9 în memoria RAM.']);
+    setLogHistory([
+      lang === 'ro'
+        ? 'Stare inițială: a = 5, b = 9 în memoria RAM.'
+        : 'Initial state: a = 5, b = 9 in RAM memory.'
+    ]);
   };
 
   const handleSelectQuiz = (ans: string) => {
@@ -68,19 +80,38 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-mono mb-3">
               <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-              <span>Nivelul 4 • Clasa a VII-a • Manual Art Klett pag. 76</span>
+              <span>
+                {lang === 'ro'
+                  ? 'Nivelul 4 • Clasa a VII-a • Manual Art Klett pag. 76'
+                  : 'Level 4 • 7th Grade • Art Klett Textbook p. 76'}
+              </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Misterul Inversării: <span className="text-rose-400 font-mono">Capcana Atribuirii Directe</span>
+              {lang === 'ro' ? 'Misterul Inversării: ' : 'The Swap Mystery: '}
+              <span className="text-rose-400 font-mono">
+                {lang === 'ro' ? 'Capcana Atribuirii Directe' : 'Direct Assignment Trap'}
+              </span>
             </h1>
             <p className="text-slate-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
-              Cea mai frecventă greșeală a începătorilor: să creadă că instrucțiunile <code className="text-rose-300 font-mono">a = b; b = a;</code> vor schimba valorile între ele. Hai să vedem de ce această logică distruge datele în RAM!
+              {lang === 'ro' ? (
+                <>
+                  Cea mai frecventă greșeală a începătorilor: să creadă că instrucțiunile <code className="text-rose-300 font-mono">a = b; b = a;</code> vor schimba valorile între ele. Hai să vedem de ce această logică distruge datele în RAM!
+                </>
+              ) : (
+                <>
+                  The most frequent beginner pitfall: believing that the instructions <code className="text-rose-300 font-mono">a = b; b = a;</code> will swap values. Let's discover why this logic destroys data in RAM!
+                </>
+              )}
             </p>
           </div>
 
           <div className="flex md:flex-col items-center md:items-end justify-between w-full md:w-auto bg-slate-950/60 p-3 rounded-2xl border border-rose-500/20">
-            <span className="text-xs text-rose-400 font-mono">Avertisment Critic</span>
-            <span className="text-sm font-bold text-rose-300 font-mono">Pierdere de Date</span>
+            <span className="text-xs text-rose-400 font-mono">
+              {lang === 'ro' ? 'Avertisment Critic' : 'Critical Warning'}
+            </span>
+            <span className="text-sm font-bold text-rose-300 font-mono">
+              {lang === 'ro' ? 'Pierdere de Date' : 'Data Loss'}
+            </span>
           </div>
         </div>
       </div>
@@ -93,9 +124,11 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
             <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
               <span className="text-white font-bold text-sm flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-rose-400" />
-                <span>Simulare RAM a Codului Eronat</span>
+                <span>{lang === 'ro' ? 'Simulare RAM a Codului Eronat' : 'RAM Simulation of Faulty Code'}</span>
               </span>
-              <span className="text-xs font-mono text-slate-400">Pasul {step} din 2</span>
+              <span className="text-xs font-mono text-slate-400">
+                {lang === 'ro' ? `Pasul ${step} din 2` : `Step ${step} of 2`}
+              </span>
             </div>
 
             {/* RAM Containers */}
@@ -106,14 +139,19 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
                   ? 'bg-amber-950/30 border-amber-500/50'
                   : 'bg-rose-950/40 border-rose-500/60 ring-2 ring-rose-500/30'
               }`}>
-                <span className="text-xs font-mono text-slate-400 mb-1">Variabila [a] în RAM:</span>
+                <span className="text-xs font-mono text-slate-400 mb-1">
+                  {lang === 'ro' ? 'Variabila [a] în RAM:' : 'Variable [a] in RAM:'}
+                </span>
                 <span className="text-4xl font-mono font-black text-amber-300 my-1">{valA}</span>
                 <span className="text-[11px] font-mono mt-1">
                   {step === 0 ? (
-                    <span className="text-emerald-400">Valoare originală (5)</span>
+                    <span className="text-emerald-400">
+                      {lang === 'ro' ? 'Valoare originală (5)' : 'Original value (5)'}
+                    </span>
                   ) : (
                     <span className="text-rose-400 flex items-center gap-1 font-bold">
-                      <Flame className="w-3 h-3 text-rose-500" /> Suprascris cu 9! (5 a dispărut)
+                      <Flame className="w-3 h-3 text-rose-500" />
+                      {lang === 'ro' ? 'Suprascris cu 9! (5 a dispărut)' : 'Overwritten with 9! (5 is lost)'}
                     </span>
                   )}
                 </span>
@@ -121,24 +159,38 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
 
               {/* Variable B Box */}
               <div className="p-5 rounded-2xl border bg-indigo-950/30 border-indigo-500/50 text-center flex flex-col items-center justify-center min-h-[140px]">
-                <span className="text-xs font-mono text-slate-400 mb-1">Variabila [b] în RAM:</span>
+                <span className="text-xs font-mono text-slate-400 mb-1">
+                  {lang === 'ro' ? 'Variabila [b] în RAM:' : 'Variable [b] in RAM:'}
+                </span>
                 <span className="text-4xl font-mono font-black text-indigo-300 my-1">{valB}</span>
                 <span className="text-[11px] font-mono mt-1 text-slate-400">
-                  {step === 2 ? 'A rămas 9' : 'Valoare originală (9)'}
+                  {step === 2
+                    ? (lang === 'ro' ? 'A rămas 9' : 'Remained 9')
+                    : (lang === 'ro' ? 'Valoare originală (9)' : 'Original value (9)')}
                 </span>
               </div>
             </div>
 
             {/* Code Line Indicator */}
             <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 font-mono text-xs space-y-1.5">
-              <div className="text-slate-500 text-[11px] border-b border-slate-900 pb-1 mb-2">Instrucțiuni executate:</div>
+              <div className="text-slate-500 text-[11px] border-b border-slate-900 pb-1 mb-2">
+                {lang === 'ro' ? 'Instrucțiuni executate:' : 'Executed instructions:'}
+              </div>
               <div className={`p-2 rounded-lg flex items-center justify-between ${step === 1 ? 'bg-rose-950/60 border border-rose-500/40 text-rose-300' : 'text-slate-400'}`}>
                 <span>a = b;</span>
-                <span className="text-[10px]">{step >= 1 ? '✓ Executat' : 'În așteptare'}</span>
+                <span className="text-[10px]">
+                  {step >= 1
+                    ? (lang === 'ro' ? '✓ Executat' : '✓ Executed')
+                    : (lang === 'ro' ? 'În așteptare' : 'Pending')}
+                </span>
               </div>
               <div className={`p-2 rounded-lg flex items-center justify-between ${step === 2 ? 'bg-rose-950/60 border border-rose-500/40 text-rose-300' : 'text-slate-400'}`}>
                 <span>b = a;</span>
-                <span className="text-[10px]">{step >= 2 ? '✓ Executat' : 'În așteptare'}</span>
+                <span className="text-[10px]">
+                  {step >= 2
+                    ? (lang === 'ro' ? '✓ Executat' : '✓ Executed')
+                    : (lang === 'ro' ? 'În așteptare' : 'Pending')}
+                </span>
               </div>
             </div>
           </div>
@@ -152,12 +204,12 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
                 className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-rose-900/30 transition"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Execută {step === 0 ? 'a = b;' : 'b = a;'}</span>
+                <span>{lang === 'ro' ? `Execută ${step === 0 ? 'a = b;' : 'b = a;'}` : `Execute ${step === 0 ? 'a = b;' : 'b = a;'}`}</span>
               </button>
             ) : (
               <div className="text-xs font-mono text-rose-400 font-bold flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4 text-rose-500" />
-                <span>Catastrofă: a = 9 și b = 9!</span>
+                <span>{lang === 'ro' ? 'Catastrofă: a = 9 și b = 9!' : 'Disaster: a = 9 and b = 9!'}</span>
               </div>
             )}
 
@@ -167,7 +219,7 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
               className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-medium flex items-center gap-1.5 cursor-pointer border border-slate-700"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reia Simularea</span>
+              <span>{lang === 'ro' ? 'Reia Simularea' : 'Restart Simulation'}</span>
             </button>
           </div>
         </div>
@@ -177,8 +229,12 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
           <div className="bg-slate-900/95 rounded-3xl border border-slate-800 p-5 shadow-xl flex-1 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
-                <span className="text-xs font-bold text-slate-300">Ce s-a întâmplat în memorie?</span>
-                <span className="text-[10px] font-mono text-slate-500">Jurnal Hardware</span>
+                <span className="text-xs font-bold text-slate-300">
+                  {lang === 'ro' ? 'Ce s-a întâmplat în memorie?' : 'What happened in memory?'}
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">
+                  {lang === 'ro' ? 'Jurnal Hardware' : 'Hardware Log'}
+                </span>
               </div>
 
               <div className="space-y-2 text-xs font-mono">
@@ -192,7 +248,9 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
 
             {step === 2 && (
               <div className="mt-4 pt-3 border-t border-slate-800">
-                <p className="text-xs text-white font-bold mb-2">Concluzie Didactică: De ce a eșuat inversarea?</p>
+                <p className="text-xs text-white font-bold mb-2">
+                  {lang === 'ro' ? 'Concluzie Didactică: De ce a eșuat inversarea?' : 'Takeaway: Why did the swap fail?'}
+                </p>
                 <div className="space-y-2">
                   <button
                     type="button"
@@ -203,7 +261,9 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
                         : 'bg-slate-950 border-slate-800 hover:border-slate-700 text-slate-300'
                     }`}
                   >
-                    A apărut o eroare de compilare deoarece variabilele au același tip.
+                    {lang === 'ro'
+                      ? 'A apărut o eroare de compilare deoarece variabilele au același tip.'
+                      : 'A compilation error occurred because variables share the same type.'}
                   </button>
 
                   <button
@@ -215,7 +275,15 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
                         : 'bg-slate-950 border-slate-800 hover:border-slate-700 text-slate-300'
                     }`}
                   >
-                    Atribuirea <code>a = b</code> a suprascris și șters valoarea inițială a lui <code>a</code> înainte ca ea să poată fi salvată în <code>b</code>!
+                    {lang === 'ro' ? (
+                      <>
+                        Atribuirea <code>a = b</code> a suprascris și șters valoarea inițială a lui <code>a</code> înainte ca ea să poată fi salvată în <code>b</code>!
+                      </>
+                    ) : (
+                      <>
+                        The assignment <code>a = b</code> overwrote and erased the original value of <code>a</code> before it could be copied into <code>b</code>!
+                      </>
+                    )}
                   </button>
                 </div>
 
@@ -226,7 +294,9 @@ export const CP2Level4_DirectAssignmentTrap: React.FC<Props> = ({ onPass }) => {
                       onClick={handleFinish}
                       className="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition cursor-pointer"
                     >
-                      <span>Descoperă Soluția: Regula celor 3 Pahare!</span>
+                      <span>
+                        {lang === 'ro' ? 'Descoperă Soluția: Regula celor 3 Pahare!' : 'Discover the Solution: 3 Glasses Rule!'}
+                      </span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>

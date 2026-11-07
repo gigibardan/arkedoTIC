@@ -14,6 +14,7 @@ import {
   ArrowDown
 } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
+import { useLanguage } from '../../../context/LanguageContext';
 
 interface Props {
   onPass: (score: number) => void;
@@ -29,46 +30,74 @@ interface StepLog {
 const QUIZZES = [
   {
     id: 'q1',
-    title: 'Prima Cifră Extrasă',
-    question: 'Dacă n = 3489, care este prima cifră extrasă la intrarea în bucla while prin operația cifra = n % 10 ?',
-    options: [
+    titleRo: 'Prima Cifră Extrasă',
+    titleEn: 'First Extracted Digit',
+    questionRo: 'Dacă n = 3489, care este prima cifră extrasă la intrarea în bucla while prin operația cifra = n % 10 ?',
+    questionEn: 'If n = 3489, which digit is extracted first upon entering the while loop via digit = n % 10 ?',
+    optionsRo: [
       '9 (cifra unităților / ultima cifră din dreapta)',
       '3 (cifra miilor)',
       '8 (cifra zecilor)',
       '0'
     ],
+    optionsEn: [
+      '9 (units digit / rightmost digit)',
+      '3 (thousands digit)',
+      '8 (tens digit)',
+      '0'
+    ],
     correctIdx: 0,
-    explanation: 'Operația modulo 10 (n % 10) extrage întotdeauna ultima cifră din dreapta numărului (cifra unităților).'
+    explanationRo: 'Operația modulo 10 (n % 10) extrage întotdeauna ultima cifră din dreapta numărului (cifra unităților).',
+    explanationEn: 'The modulo 10 operator (n % 10) always extracts the rightmost digit of the number (units digit).'
   },
   {
     id: 'q2',
-    title: 'Tăierea Cifrei Unităților',
-    question: 'Dacă n = 3489, care este valoarea lui n după executarea instrucțiunii n = n / 10 ?',
-    options: [
+    titleRo: 'Tăierea Cifrei Unităților',
+    titleEn: 'Truncating the Units Digit',
+    questionRo: 'Dacă n = 3489, care este valoarea lui n după executarea instrucțiunii n = n / 10 ?',
+    questionEn: 'If n = 3489, what is the value of n after executing the statement n = n / 10 ?',
+    optionsRo: [
       '348 (câtul împărțirii întregi la 10)',
       '348.9 (număr cu virgulă)',
       '9',
       '34'
     ],
+    optionsEn: [
+      '348 (integer quotient of division by 10)',
+      '348.9 (floating-point number)',
+      '9',
+      '34'
+    ],
     correctIdx: 0,
-    explanation: 'Deoarece n este de tip int (întreg), împărțirea la 10 este împărțire întreagă fără rest, eliminând cifra unităților.'
+    explanationRo: 'Deoarece n este de tip int (întreg), împărțirea la 10 este împărțire întreagă fără rest, eliminând cifra unităților.',
+    explanationEn: 'Because n is an int (integer), dividing by 10 performs integer division without remainder, chopping off the units digit.'
   },
   {
     id: 'q3',
-    title: 'Condiția de Oprire',
-    question: 'De ce condiția buclei este while (n > 0) și nu while (n >= 0)?',
-    options: [
+    titleRo: 'Condiția de Oprire',
+    titleEn: 'Loop Termination Condition',
+    questionRo: 'De ce condiția buclei este while (n > 0) și nu while (n >= 0)?',
+    questionEn: 'Why is the loop condition while (n > 0) rather than while (n >= 0)?',
+    optionsRo: [
       'Dacă am pune n >= 0, când n devine 0 bucla ar continua la infinit (0 / 10 = 0 mereu >= 0)!',
       'Pentru că numerele naturale nu conțin cifra zero.',
       'C++ nu permite compararea cu zero.',
       'Este doar o preferință vizuală, sunt identice.'
     ],
+    optionsEn: [
+      'If we used n >= 0, once n reaches 0 the loop would run infinitely (0 / 10 = 0 which is always >= 0)!',
+      'Because natural numbers cannot contain zero.',
+      'C++ does not permit comparison with zero.',
+      'It is merely a stylistic choice, they behave identically.'
+    ],
     correctIdx: 0,
-    explanation: 'Dacă condiția ar fi n >= 0, bucla nu s-ar mai opri niciodată la 0, generând o buclă infinită cu cifre 0!'
+    explanationRo: 'Dacă condiția ar fi n >= 0, bucla nu s-ar mai opri niciodată la 0, generând o buclă infinită cu cifre 0!',
+    explanationEn: 'If the condition were n >= 0, the loop would never terminate at 0, spawning an infinite loop with zeroes!'
   }
 ];
 
 export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
+  const { lang } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOptIdx, setSelectedOptIdx] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; text: string } | null>(null);
@@ -118,18 +147,19 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
     setSelectedOptIdx(idx);
 
     const isCorrect = idx === currentQuiz.correctIdx;
+    const explanation = lang === 'ro' ? currentQuiz.explanationRo : currentQuiz.explanationEn;
     if (isCorrect) {
       sounds.playSuccess();
       setScore(s => s + 35);
       setFeedback({
         isCorrect: true,
-        text: `Corect! ${currentQuiz.explanation}`
+        text: `${lang === 'ro' ? 'Corect!' : 'Correct!'} ${explanation}`
       });
     } else {
       sounds.playError();
       setFeedback({
         isCorrect: false,
-        text: `Incorect. ${currentQuiz.explanation}`
+        text: `${lang === 'ro' ? 'Incorect.' : 'Incorrect.'} ${explanation}`
       });
     }
   };
@@ -153,21 +183,29 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold tracking-wider uppercase">
-              Nivelul 3 din 7 • Modulul 4D
+              {lang === 'ro' ? 'Nivelul 3 din 7 • Modulul 4D' : 'Level 3 of 7 • Module 4D'}
             </span>
-            <span className="text-xs text-slate-400 font-mono">Manual Art Klett pag. 82–83</span>
+            <span className="text-xs text-slate-400 font-mono">
+              {lang === 'ro' ? 'Manual Art Klett pag. 82–83' : 'Art Klett Textbook p. 82–83'}
+            </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white font-heading flex items-center gap-2.5">
             <Scissors className="w-6 h-6 text-amber-400" />
-            <span>Mecanismul de Aur: Extragerea (n % 10) &amp; Tăierea (n / 10)</span>
+            <span>
+              {lang === 'ro'
+                ? 'Mecanismul de Aur: Extragerea (n % 10) & Tăierea (n / 10)'
+                : 'The Golden Mechanism: Extraction (n % 10) & Truncation (n / 10)'}
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-            Inima algoritmilor de gimnaziu: Află cum se accesează cifrele oricărui număr natural de la dreapta la stânga, până când numărul devine 0!
+            {lang === 'ro'
+              ? 'Inima algoritmilor de gimnaziu: Află cum se accesează cifrele oricărui număr natural de la dreapta la stânga, până când numărul devine 0!'
+              : 'The core of middle school algorithms: Learn how to access digits from right to left until the number reaches 0!'}
           </p>
         </div>
 
         <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800">
-          <span className="text-[11px] font-mono text-slate-400">Scor Nivel 3:</span>
+          <span className="text-[11px] font-mono text-slate-400">{lang === 'ro' ? 'Scor Nivel 3:' : 'Level 3 Score:'}</span>
           <span className="text-xl sm:text-2xl font-black font-mono text-amber-400">{score} / 100 XP</span>
         </div>
       </div>
@@ -181,10 +219,14 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-bold text-white">
-                Banda Rulantă de Decojire a Cifrelor (Digit Peeler)
+                {lang === 'ro'
+                  ? 'Banda Rulantă de Decojire a Cifrelor (Digit Peeler)'
+                  : 'Digit Peeler Conveyor Belt'}
               </h3>
               <p className="text-xs text-slate-400">
-                Alege un număr și apasă pe buton pentru a vedea extragerea și tăierea fiecărei cifre pas cu pas:
+                {lang === 'ro'
+                  ? 'Alege un număr și apasă pe buton pentru a vedea extragerea și tăierea fiecărei cifre pas cu pas:'
+                  : 'Pick a number and click the button to see extraction and truncation digit by digit:'}
               </p>
             </div>
           </div>
@@ -215,7 +257,7 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
           {/* Controls & Current State */}
           <div className="lg:col-span-5 bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col gap-4 font-mono text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">Număr inițial de test:</span>
+              <span className="text-slate-400">{lang === 'ro' ? 'Număr inițial de test:' : 'Initial test number:'}</span>
               <input
                 type="number"
                 min="1"
@@ -232,13 +274,15 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
 
             <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-500 uppercase block">Valoarea Curentă din n:</span>
+                <span className="text-[10px] text-slate-500 uppercase block">{lang === 'ro' ? 'Valoarea Curentă din n:' : 'Current Value of n:'}</span>
                 <span className="text-2xl font-black text-amber-400">{currentN}</span>
               </div>
               <div className="text-right">
-                <span className="text-[10px] text-slate-500 uppercase block">Condiție while (n &gt; 0):</span>
+                <span className="text-[10px] text-slate-500 uppercase block">while (n &gt; 0):</span>
                 <span className={`text-xs font-bold ${currentN > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {currentN > 0 ? `${currentN} > 0 (ADEVĂRAT)` : '0 > 0 (FALS &bull; STOP)'}
+                  {currentN > 0
+                    ? (lang === 'ro' ? `${currentN} > 0 (ADEVĂRAT)` : `${currentN} > 0 (TRUE)`)
+                    : (lang === 'ro' ? '0 > 0 (FALS • STOP)' : '0 > 0 (FALSE • STOP)')}
                 </span>
               </div>
             </div>
@@ -250,7 +294,7 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
                 className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer flex-1"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reia Pasul 1</span>
+                <span>{lang === 'ro' ? 'Reia Pasul 1' : 'Reset Step 1'}</span>
               </button>
               <button
                 type="button"
@@ -263,7 +307,7 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
                 }`}
               >
                 <Scissors className="w-3.5 h-3.5" />
-                <span>Extrage &amp; Taie (Pas)</span>
+                <span>{lang === 'ro' ? 'Extrage & Taie (Pas)' : 'Extract & Chop (Step)'}</span>
               </button>
             </div>
           </div>
@@ -272,10 +316,10 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
           <div className="lg:col-span-7 bg-slate-950/90 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-400 font-bold uppercase tracking-wider text-[11px]">
-                Tăvița Cifrelor Extrase (De la dreapta la stânga):
+                {lang === 'ro' ? 'Tăvița Cifrelor Extrase (De la dreapta la stânga):' : 'Extracted Digits Tray (Right to Left):'}
               </span>
               <span className="text-xs text-amber-400 font-bold">
-                {history.length} cifre procesate
+                {history.length} {lang === 'ro' ? 'cifre procesate' : 'digits processed'}
               </span>
             </div>
 
@@ -283,14 +327,16 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
             <div className="min-h-[50px] flex items-center gap-2 flex-wrap">
               {history.length === 0 ? (
                 <span className="text-slate-600 italic">
-                  Apasă pe butonul &bdquo;Extrage &amp; Taie&rdquo; pentru a începe decuparea cifrelor.
+                  {lang === 'ro'
+                    ? 'Apasă pe butonul „Extrage & Taie” pentru a începe decuparea cifrelor.'
+                    : 'Click "Extract & Chop" to begin peeling digits.'}
                 </span>
               ) : (
                 history.map((h, i) => (
                   <div
                     key={i}
                     className="w-10 h-10 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-300 flex items-center justify-center text-lg font-black shadow-md shadow-amber-500/20 animate-fadeIn"
-                    title={`Pasul ${h.step}: Cifra ${h.extractedDigit}`}
+                    title={`${lang === 'ro' ? 'Pasul' : 'Step'} ${h.step}: ${lang === 'ro' ? 'Cifra' : 'Digit'} ${h.extractedDigit}`}
                   >
                     {h.extractedDigit}
                   </div>
@@ -302,9 +348,13 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
             <div className="max-h-36 overflow-y-auto space-y-1 text-[11px] border-t border-slate-800 pt-2 text-slate-300">
               {history.map((h, i) => (
                 <div key={i} className="flex items-center justify-between bg-slate-900/60 px-2 py-1 rounded">
-                  <span>Pas {h.step}: n = {h.initialN}</span>
-                  <span className="text-amber-300 font-bold">cifra = {h.initialN} % 10 = {h.extractedDigit}</span>
-                  <span className="text-cyan-300">n devine {h.initialN} / 10 = {h.remainingN}</span>
+                  <span>{lang === 'ro' ? 'Pas' : 'Step'} {h.step}: n = {h.initialN}</span>
+                  <span className="text-amber-300 font-bold">
+                    {lang === 'ro' ? 'cifra' : 'digit'} = {h.initialN} % 10 = {h.extractedDigit}
+                  </span>
+                  <span className="text-cyan-300">
+                    {lang === 'ro' ? `n devine ${h.initialN} / 10 = ${h.remainingN}` : `n becomes ${h.initialN} / 10 = ${h.remainingN}`}
+                  </span>
                 </div>
               ))}
             </div>
@@ -312,7 +362,11 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
             {isDonePeeling && (
               <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
-                <span>Toate cifrele au fost extrase! Numărul a devenit 0 și bucla s-a oprit cu succes.</span>
+                <span>
+                  {lang === 'ro'
+                    ? 'Toate cifrele au fost extrase! Numărul a devenit 0 și bucla s-a oprit cu succes.'
+                    : 'All digits extracted! Number became 0 and the loop stopped cleanly.'}
+                </span>
               </div>
             )}
           </div>
@@ -328,20 +382,22 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
                 {currentIdx + 1}
               </span>
               <h3 className="text-base font-bold text-white">
-                Provocarea {currentIdx + 1}/{QUIZZES.length}: {currentQuiz.title}
+                {lang === 'ro'
+                  ? `Provocarea ${currentIdx + 1}/${QUIZZES.length}: ${currentQuiz.titleRo}`
+                  : `Challenge ${currentIdx + 1}/${QUIZZES.length}: ${currentQuiz.titleEn}`}
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              Întrebarea {currentIdx + 1}/{QUIZZES.length}
+              {lang === 'ro' ? `Întrebarea ${currentIdx + 1}/${QUIZZES.length}` : `Question ${currentIdx + 1}/${QUIZZES.length}`}
             </span>
           </div>
 
           <div className="text-sm font-bold text-white">
-            {currentQuiz.question}
+            {lang === 'ro' ? currentQuiz.questionRo : currentQuiz.questionEn}
           </div>
 
           <div className="flex flex-col gap-3">
-            {currentQuiz.options.map((opt, idx) => {
+            {(lang === 'ro' ? currentQuiz.optionsRo : currentQuiz.optionsEn).map((opt, idx) => {
               const isSelected = selectedOptIdx === idx;
               return (
                 <button
@@ -398,7 +454,7 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
                 onClick={handleNext}
                 className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer shadow-md font-sans"
               >
-                <span>Următoarea Provocare</span>
+                <span>{lang === 'ro' ? 'Următoarea Provocare' : 'Next Challenge'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -412,15 +468,19 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
           </div>
           <div>
             <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
-              Mecanismul de Aur Stăpânit la Perfecție!
+              {lang === 'ro' ? 'Mecanismul de Aur Stăpânit la Perfecție!' : 'Golden Mechanism Mastered!'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-md mx-auto">
-              Știi exact cum funcționează <code className="text-amber-400 font-bold">n % 10</code> (extragerea) și <code className="text-cyan-400 font-bold">n / 10</code> (tăierea) în orice problemă de prelucrare a cifrelor!
+              {lang === 'ro' ? (
+                <>Știi exact cum funcționează <code className="text-amber-400 font-bold">n % 10</code> (extragerea) și <code className="text-cyan-400 font-bold">n / 10</code> (tăierea) în orice problemă de prelucrare a cifrelor!</>
+              ) : (
+                <>You know exactly how <code className="text-amber-400 font-bold">n % 10</code> (extracting) and <code className="text-cyan-400 font-bold">n / 10</code> (chopping) work in digit processing problems!</>
+              )}
             </p>
           </div>
 
           <div className="bg-slate-950/80 px-6 py-2.5 rounded-2xl border border-slate-800 text-amber-400 font-mono font-bold text-sm">
-            Scor obținut: +{score} XP
+            {lang === 'ro' ? `Scor obținut: +${score} XP` : `Earned Score: +${score} XP`}
           </div>
 
           <button
@@ -428,7 +488,11 @@ export const LoopLevel3_DigitExtractionChop: React.FC<Props> = ({ onPass }) => {
             onClick={handleFinishLevel}
             className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <span>Treci la Nivelul 4: Suma Cifrelor &amp; Numărarea Cifrelor Pare</span>
+            <span>
+              {lang === 'ro'
+                ? 'Treci la Nivelul 4: Suma Cifrelor & Numărarea Cifrelor Pare'
+                : 'Proceed to Level 4: Digit Sum & Even Digits Counter'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
