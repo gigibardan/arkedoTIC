@@ -18,6 +18,8 @@ import {
 import { CurriculaModule } from '../data/curriculaData';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
+import { GRADE_7_EN_MAP } from './grade7/Grade7CatalogSection';
+import { GRADE_8_EN_MAP } from './grade8/Grade8CatalogSection';
 
 interface CourseCurriculaModalProps {
   module: CurriculaModule | null;
@@ -35,6 +37,17 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
   const [copiedLink, setCopiedLink] = useState(false);
 
   if (!module) return null;
+
+  const g7En = module.missionId ? GRADE_7_EN_MAP[module.missionId] : undefined;
+  const g8En = module.missionId ? GRADE_8_EN_MAP[module.missionId] : undefined;
+  const resolvedTitle = (lang === 'en' && (g7En?.title || g8En?.title)) || module.title;
+  const resolvedUnit = (lang === 'en' && (g7En?.unit || g8En?.unit)) || module.unit;
+  const resolvedMeta = (lang === 'en' && (g7En?.metaDescription || g8En?.metaDescription)) || module.metaDescription;
+  const resolvedPracticalLab = (lang === 'en' && g7En?.practicalLab) || module.practicalLab;
+
+  const gradeLabel = lang === 'en'
+    ? (module.grade === 'Clasa a V-a' ? '5th Grade' : module.grade === 'Clasa a VI-a' ? '6th Grade' : module.grade === 'Clasa a VII-a' ? '7th Grade' : '8th Grade')
+    : module.grade;
 
   const handleCopyLink = () => {
     sounds.playClick();
@@ -71,17 +84,17 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               onClose();
             }}
             className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
-            aria-label="Închide"
+            aria-label={lang === 'en' ? 'Close' : 'Închide'}
           >
             <X className="w-5 h-5" />
           </button>
 
           <div className="flex flex-wrap items-center gap-2 mb-2.5">
             <span className="px-2.5 py-1 rounded-lg text-xs font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
-              {module.grade}
+              {gradeLabel}
             </span>
             <span className="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 bg-slate-800 border border-slate-700">
-              {module.unit}
+              {resolvedUnit}
             </span>
             <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1">
               <GraduationCap className="w-3.5 h-3.5" />
@@ -95,10 +108,10 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
             </div>
             <div className="min-w-0 pr-8">
               <h2 className="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">
-                {module.title}
+                {resolvedTitle}
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 line-clamp-2">
-                {module.metaDescription}
+                {resolvedMeta}
               </p>
             </div>
           </div>
@@ -117,7 +130,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              <span>Sinteză Teoretică</span>
+              <span>{lang === 'en' ? 'Theoretical Summary' : 'Sinteză Teoretică'}</span>
             </button>
 
             <button
@@ -132,7 +145,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               }`}
             >
               <Target className="w-4 h-4" />
-              <span>Competențe MEN</span>
+              <span>{lang === 'en' ? 'Curricular Competencies' : 'Competențe MEN'}</span>
             </button>
 
             <button
@@ -147,7 +160,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               }`}
             >
               <Lightbulb className="w-4 h-4" />
-              <span>Vocabular & Comenzi</span>
+              <span>{lang === 'en' ? 'Vocabulary & Commands' : 'Vocabular & Comenzi'}</span>
             </button>
 
             <button
@@ -162,7 +175,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               }`}
             >
               <HelpCircle className="w-4 h-4" />
-              <span>Auto-evaluare & Practică</span>
+              <span>{lang === 'en' ? 'Self-Assessment & Practice' : 'Auto-evaluare & Practică'}</span>
             </button>
           </div>
         </div>
@@ -204,10 +217,12 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
             <div className="space-y-4 animate-in fade-in">
               <div className="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 text-xs sm:text-sm text-indigo-200">
                 <p className="font-semibold text-white mb-1">
-                  📋 Aliniere Curriculară Națională:
+                  {lang === 'en' ? '📋 National Curriculum Alignment:' : '📋 Aliniere Curriculară Națională:'}
                 </p>
                 <p>
-                  Competențele specifice de mai jos sunt prevăzute în Programa Școlară pentru disciplina <strong>Informatică și TIC</strong> (Gimnaziu) aprobată prin OMEN nr. 3393/2017.
+                  {lang === 'en'
+                    ? 'The specific competencies below are defined in the national Informatics & ICT curriculum approved by the Ministry of Education.'
+                    : 'Competențele specifice de mai jos sunt prevăzute în Programa Școlară pentru disciplina Informatică și TIC (Gimnaziu) aprobată prin OMEN nr. 3393/2017.'}
                 </p>
               </div>
 
@@ -215,7 +230,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
                 {module.competencies.map((comp, idx) => (
                   <div key={idx} className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 flex items-start gap-3">
                     <span className="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 text-xs font-black font-mono border border-sky-500/30 shrink-0">
-                      C.S. {comp.code}
+                      {lang === 'en' ? 'Competency' : 'C.S.'} {comp.code}
                     </span>
                     <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
                       {comp.description}
@@ -225,7 +240,9 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               </div>
 
               <div className="mt-4 p-3 rounded-xl bg-slate-950/40 border border-slate-800 text-[11px] text-slate-400 font-mono">
-                💡 Recomandare didactică: Această fișă poate fi inclusă direct în planificarea calendaristică sau în proiectul de lecție pentru inspecții școlare.
+                {lang === 'en'
+                  ? '💡 Teaching recommendation: This sheet can be directly included in your lesson plans or inspection files.'
+                  : '💡 Recomandare didactică: Această fișă poate fi inclusă direct în planificarea calendaristică sau în proiectul de lecție pentru inspecții școlare.'}
               </div>
             </div>
           )}
@@ -236,7 +253,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               <div>
                 <h4 className="text-sm font-black text-white uppercase tracking-wider font-heading mb-3 flex items-center gap-2">
                   <Lightbulb className="w-4 h-4 text-amber-400" />
-                  Glosar de Termeni TIC Cheie
+                  {lang === 'en' ? 'Key ICT Glossary Terms' : 'Glosar de Termeni TIC Cheie'}
                 </h4>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {module.keyTerms.map((term, idx) => (
@@ -256,7 +273,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
                 <div>
                   <h4 className="text-sm font-black text-white uppercase tracking-wider font-heading mb-3 flex items-center gap-2">
                     <Command className="w-4 h-4 text-emerald-400" />
-                    Scurtături Utile de Tastatură (Laborator)
+                    {lang === 'en' ? 'Useful Keyboard Shortcuts (Lab)' : 'Scurtături Utile de Tastatură (Laborator)'}
                   </h4>
                   <div className="grid sm:grid-cols-2 gap-2">
                     {module.keyboardShortcuts.map((sc, idx) => (
@@ -279,10 +296,10 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               <div>
                 <h4 className="text-sm font-black text-white uppercase tracking-wider font-heading mb-3 flex items-center gap-2">
                   <HelpCircle className="w-4 h-4 text-sky-400" />
-                  Întrebări Frecvente & Auto-Evaluare
+                  {lang === 'en' ? 'Frequently Asked Questions & Self-Assessment' : 'Întrebări Frecvente & Auto-Evaluare'}
                 </h4>
                 <div className="space-y-3">
-                  {module.faqs.map((faq, idx) => (
+                  {module.faqs && module.faqs.map((faq, idx) => (
                     <div key={idx} className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
                       <div className="font-bold text-white text-xs sm:text-sm text-emerald-300 flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -296,14 +313,14 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
                 </div>
               </div>
 
-              {module.practicalLab && (
+              {resolvedPracticalLab && (
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/60 to-slate-950 border border-indigo-500/40">
                   <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs uppercase tracking-wider mb-2 font-mono">
                     <Sparkles className="w-4 h-4" />
-                    Exercițiul Practic de Laborator
+                    {lang === 'en' ? 'Practical Lab Exercise' : 'Exercițiul Practic de Laborator'}
                   </div>
                   <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                    {module.practicalLab}
+                    {resolvedPracticalLab}
                   </p>
                 </div>
               )}
@@ -317,19 +334,19 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
             <button
               onClick={handlePrint}
               className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              title="Tipărește fișa didactică pentru clasă"
+              title={lang === 'en' ? 'Print worksheet for classroom' : 'Tipărește fișa didactică pentru clasă'}
             >
               <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Tipărește Fișa</span>
+              <span className="hidden sm:inline">{lang === 'en' ? 'Print Worksheet' : 'Tipărește Fișa'}</span>
             </button>
 
             <button
               onClick={handleCopyLink}
               className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              title="Copiază link-ul direct pentru elevi/profesori"
+              title={lang === 'en' ? 'Copy direct link for students/teachers' : 'Copiază link-ul direct pentru elevi/profesori'}
             >
               {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedLink ? 'Link Copiat!' : 'Copiază Link'}</span>
+              <span>{copiedLink ? (lang === 'en' ? 'Link Copied!' : 'Link Copiat!') : (lang === 'en' ? 'Copy Link' : 'Copiază Link')}</span>
             </button>
           </div>
 
@@ -341,7 +358,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               }}
               className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white text-xs font-bold transition cursor-pointer"
             >
-              Închide
+              {lang === 'en' ? 'Close' : 'Închide'}
             </button>
 
             <button
@@ -349,7 +366,7 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
               className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-emerald-950/50 transition cursor-pointer hover:scale-105 active:scale-95"
             >
               <Play className="w-4 h-4 fill-white" />
-              <span>Lansează Misiunea Interactivă</span>
+              <span>{lang === 'en' ? 'Launch Interactive Mission' : 'Lansează Misiunea Interactivă'}</span>
             </button>
           </div>
         </div>

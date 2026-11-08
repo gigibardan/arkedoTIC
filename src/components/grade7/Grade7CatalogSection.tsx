@@ -31,7 +31,7 @@ interface Grade7CatalogSectionProps {
   completedMissions?: Record<string, boolean>;
 }
 
-const GRADE_7_EN_MAP: Record<string, {
+export const GRADE_7_EN_MAP: Record<string, {
   title: string;
   shortTitle: string;
   unit: string;
