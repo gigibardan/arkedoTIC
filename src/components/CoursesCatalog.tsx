@@ -1233,7 +1233,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                           <button
                             type="button"
                             onClick={() => setShowLoginPassword(!showLoginPassword)}
-                            className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white"
+                            aria-label={showLoginPassword ? (lang === 'en' ? 'Hide password' : 'Ascunde parola') : (lang === 'en' ? 'Show password' : 'Afișează parola')}
+                            className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white cursor-pointer"
                           >
                             {showLoginPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                           </button>
@@ -1338,7 +1339,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             <button
                               type="button"
                               onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white"
+                              aria-label={showRegisterPassword ? (lang === 'en' ? 'Hide password' : 'Ascunde parola') : (lang === 'en' ? 'Show password' : 'Afișează parola')}
+                              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white cursor-pointer"
                             >
                               {showRegisterPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                             </button>
@@ -1570,6 +1572,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               <img
                 src={studentName ? ARKY_IMAGES.success : ARKY_IMAGES.idle}
                 alt="Arky Mascota"
+                width={224}
+                height={315}
+                fetchPriority="high"
                 className="relative z-10 w-48 sm:w-56 h-auto object-contain drop-shadow-[0_15px_25px_rgba(20,184,166,0.35)] group-hover:scale-105 transition-all duration-300"
               />
 
@@ -1595,10 +1600,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
                 <School className="w-4 h-4 text-teal-400" />
                 {lang === 'en' ? 'Select Academic Grade Level (Official Art Klett Textbook)' : 'Comutator Nivel Gimnaziu • Programa Oficială Art Klett'}
-              </span>
+              </h2>
             </div>
             <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -1642,7 +1647,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade5'
                     ? 'bg-teal-500/20 border-teal-400 text-teal-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
                 }`}>
                   {selectedGrade === 'grade5' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
                 </div>
@@ -1689,7 +1694,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade6'
                     ? 'bg-orange-500/20 border-orange-400 text-orange-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
                 }`}>
                   {selectedGrade === 'grade6' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
                 </div>
@@ -1736,7 +1741,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade7'
                     ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
                 }`}>
                   {selectedGrade === 'grade7' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
                 </div>
@@ -1783,7 +1788,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade8'
                     ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-800 text-slate-500'
+                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
                 }`}>
                   {selectedGrade === 'grade8' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
                 </div>
@@ -1909,7 +1914,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                   isMissionDone('hardware')
                     ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
+                    : 'bg-teal-700 hover:bg-teal-600 text-white font-black shadow-teal-700/30'
                 }`}
               >
                 {isMissionDone('hardware') ? (
@@ -2026,7 +2031,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                     isMissionDone('files')
                       ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                      : 'bg-emerald-700 hover:bg-emerald-600 text-white font-black shadow-emerald-700/30'
                   }`}
                 >
                   {isMissionDone('files') ? (
@@ -2139,7 +2144,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                     isMissionDone('internet1')
                       ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/30'
+                      : 'bg-teal-700 hover:bg-teal-600 text-white font-black shadow-teal-700/30'
                   }`}
                 >
                   {isMissionDone('internet1') ? (
@@ -2500,7 +2505,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                     isMissionDone('text2')
                       ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                      : 'bg-emerald-700 hover:bg-emerald-600 text-white font-black shadow-emerald-700/30'
                   }`}
                 >
                   {isMissionDone('text2') ? (
@@ -2851,7 +2856,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
                     isMissionDone('scratch1')
                       ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
+                      : 'bg-orange-700 hover:bg-orange-600 text-white font-black shadow-orange-700/30'
                   }`}
                 >
                   {isMissionDone('scratch1') ? (

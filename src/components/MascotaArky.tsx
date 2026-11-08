@@ -137,6 +137,9 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
           <img
             src={mascotImgSrc}
             alt="Mascota Arky ArkyEdu"
+            width={112}
+            height={144}
+            fetchPriority="high"
             referrerPolicy="no-referrer"
             className="w-24 h-32 sm:w-28 sm:h-36 object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-105"
           />
@@ -300,6 +303,9 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
               <img
                 src={mascotImgSrc}
                 alt={`Mascota Arky - Stare: ${activeState}`}
+                width={128}
+                height={176}
+                fetchPriority="high"
                 referrerPolicy="no-referrer"
                 className="relative z-10 w-28 h-36 sm:w-32 sm:h-44 object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] filter transition-all duration-300"
               />

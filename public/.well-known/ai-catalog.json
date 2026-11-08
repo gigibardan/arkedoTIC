@@ -1,0 +1,27 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "ArkyEdu Platform",
+    "identifier": "arkyedu.com"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:arkyedu.com:llm:context",
+      "displayName": "ArkyEdu LLM Context",
+      "type": "text/markdown",
+      "url": "https://www.arkyedu.com/llms.txt"
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:llm:full-documentation",
+      "displayName": "ArkyEdu Full LLM Documentation",
+      "type": "text/markdown",
+      "url": "https://www.arkyedu.com/llms-full.txt"
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:curriculum:metadata",
+      "displayName": "National Middle School ICT Curriculum Catalog (Grades 5-8)",
+      "type": "application/json",
+      "url": "https://www.arkyedu.com/metadata.json"
+    }
+  ]
+}

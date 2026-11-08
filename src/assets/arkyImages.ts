@@ -1,7 +1,7 @@
-import arkyIdle from './images/arky_idle.png';
-import arkySuccess from './images/arky_success.png';
-import arkyError from './images/arky_error.png';
-import arkyMaster from './images/arky_master.png';
+import arkyIdle from './images/arky_idle.webp';
+import arkySuccess from './images/arky_success.webp';
+import arkyError from './images/arky_error.webp';
+import arkyMaster from './images/arky_master.webp';
 
 export type ArkyMascotState = 'idle' | 'success' | 'error' | 'finished';
 

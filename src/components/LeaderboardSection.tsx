@@ -302,9 +302,9 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {topThree[1].avatar || '🎓'}
                   </div>
 
-                  <h4 className="text-sm sm:text-base font-black text-white font-heading truncate max-w-full">
+                  <h3 className="text-sm sm:text-base font-black text-white font-heading truncate max-w-full">
                     {topThree[1].username}
-                  </h4>
+                  </h3>
 
                   <div className="mt-1 text-lg font-black text-slate-300 font-mono">
                     {getScoreValue(topThree[1]).toLocaleString()}
@@ -337,9 +337,9 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {topThree[0].avatar || '👑'}
                   </div>
 
-                  <h4 className="text-base sm:text-lg font-black text-amber-200 font-heading truncate max-w-full">
+                  <h3 className="text-base sm:text-lg font-black text-amber-200 font-heading truncate max-w-full">
                     {topThree[0].username}
-                  </h4>
+                  </h3>
 
                   <div className="mt-1 text-2xl font-black text-amber-400 font-mono tracking-tight">
                     {getScoreValue(topThree[0]).toLocaleString()}
@@ -372,9 +372,9 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {topThree[2].avatar || '🥉'}
                   </div>
 
-                  <h4 className="text-sm sm:text-base font-black text-white font-heading truncate max-w-full">
+                  <h3 className="text-sm sm:text-base font-black text-white font-heading truncate max-w-full">
                     {topThree[2].username}
-                  </h4>
+                  </h3>
 
                   <div className="mt-1 text-lg font-black text-amber-400 font-mono">
                     {getScoreValue(topThree[2]).toLocaleString()}

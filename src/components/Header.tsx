@@ -280,19 +280,21 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center bg-slate-950/95 p-0.5 rounded-xl border border-slate-700/80 shadow-inner">
               <button
                 onClick={() => handleLanguageChange('ro')}
-                className={`px-1.5 sm:px-2 py-1 rounded-lg text-[10px] sm:text-xs font-extrabold font-mono transition cursor-pointer ${
-                  lang === 'ro' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                className={`px-2 py-1 rounded-lg text-xs font-black font-mono transition cursor-pointer min-w-[32px] ${
+                  lang === 'ro' ? 'bg-emerald-500 text-slate-950 shadow-sm' : 'text-slate-200 hover:text-white'
                 }`}
                 title="Română"
+                aria-label="Comută limba în Română"
               >
                 RO
               </button>
               <button
                 onClick={() => handleLanguageChange('en')}
-                className={`px-1.5 sm:px-2 py-1 rounded-lg text-[10px] sm:text-xs font-extrabold font-mono transition cursor-pointer ${
-                  lang === 'en' ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
+                className={`px-2 py-1 rounded-lg text-xs font-black font-mono transition cursor-pointer min-w-[32px] ${
+                  lang === 'en' ? 'bg-emerald-500 text-slate-950 shadow-sm' : 'text-slate-200 hover:text-white'
                 }`}
                 title="English"
+                aria-label="Switch language to English"
               >
                 EN
               </button>

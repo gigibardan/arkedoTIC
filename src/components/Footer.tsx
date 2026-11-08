@@ -205,9 +205,9 @@ export const Footer: React.FC<FooterProps> = ({
                     sounds.playClick();
                     if (onNavigateToTeacher) onNavigateToTeacher();
                   }}
-                  className="hover:text-indigo-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
+                  className="hover:text-indigo-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-2"
                 >
-                  <GraduationCap className="w-3.5 h-3.5 text-indigo-400 group-hover:scale-110 transition-transform" />
+                  <GraduationCap className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
                   <span>{lang === 'en' ? 'Teacher Portal & Gradebook' : 'Portal Profesor & Catalog'}</span>
                 </button>
               </li>
@@ -218,9 +218,9 @@ export const Footer: React.FC<FooterProps> = ({
                       sounds.playClick();
                       onNavigateToSuperAdmin();
                     }}
-                    className="hover:text-purple-300 text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1.5 text-left w-full group text-[11px]"
+                    className="hover:text-purple-300 text-slate-200 hover:text-white transition-colors flex items-center gap-2 text-left w-full group text-xs py-2"
                   >
-                    <UserCheck className="w-3 h-3 text-purple-400" />
+                    <UserCheck className="w-4 h-4 text-purple-400" />
                     <span>{lang === 'en' ? 'School Admin Panel' : 'Administrare Școli & Clase'}</span>
                   </button>
                 </li>
@@ -375,8 +375,8 @@ export const Footer: React.FC<FooterProps> = ({
               </button>
             </div>
 
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+            <div className="flex items-center gap-1.5 text-xs text-slate-300">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               <span>{lang === 'en' ? 'Safe for schools & minors (No ads)' : 'Sigur pentru școli și elevi'}</span>
             </div>
           </div>
@@ -384,101 +384,101 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Bar: Copyright, Curricular note & Technical / AI links */}
-        <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-300">
           <div className="text-center md:text-left space-y-0.5">
-            <p>
-              © 2024 - 2026 <strong>ArkyEdu</strong> (arkyedu.com). {lang === 'en' ? 'All rights reserved.' : 'Toate drepturile rezervate.'}
+            <p className="text-slate-200">
+              © 2024 - 2026 <strong className="text-white">ArkyEdu</strong> (arkyedu.com). {lang === 'en' ? 'All rights reserved.' : 'Toate drepturile rezervate.'}
             </p>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-300">
               {t.footerSchoolCurriculum || 'Conform Programei Naționale de TIC pentru clasele V - VIII (OMEN 3393/2017) și Cadrului DigComp.'}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 text-xs">
+          <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 text-xs">
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('about');
               }}
-              className="hover:text-slate-300 transition-colors"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
             >
               {lang === 'en' ? 'About Story' : 'Povestea ArkyEdu'}
             </button>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('privacy');
               }}
-              className="hover:text-slate-300 transition-colors"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
             >
               GDPR & Confidențialitate
             </button>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('cookies');
               }}
-              className="hover:text-slate-300 transition-colors"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
             >
               Cookie-uri
             </button>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('terms');
               }}
-              className="hover:text-slate-300 transition-colors"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
             >
               Termeni
             </button>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('contact');
               }}
-              className="text-teal-400 hover:text-teal-300 transition-colors font-medium"
+              className="text-teal-300 hover:text-teal-200 transition-colors font-medium py-1.5 px-2"
             >
               Contact
             </button>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <a
               href="/llms.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-emerald-400 transition-colors font-mono text-[11px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800"
+              className="text-emerald-300 hover:text-emerald-200 transition-colors font-mono text-[11px] bg-slate-900 px-2 py-1 rounded border border-slate-700"
               title="Context structurat pentru LLM & Agenți AI (llmstxt.org)"
             >
               llms.txt (AI)
             </a>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <a
               href="/llms-full.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-cyan-400 transition-colors font-mono text-[11px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800"
+              className="text-cyan-300 hover:text-cyan-200 transition-colors font-mono text-[11px] bg-slate-900 px-2 py-1 rounded border border-slate-700"
               title="Documentație completă pentru modele de limbaj"
             >
               llms-full.txt
             </a>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <a
               href="/sitemap.xml"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-slate-300 transition-colors text-[11px]"
+              className="text-slate-300 hover:text-white transition-colors text-xs py-1.5 px-2"
             >
               Sitemap
             </a>
-            <span className="text-slate-700">•</span>
+            <span className="text-slate-600">•</span>
             <a
               href="/robots.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-slate-300 transition-colors text-[11px]"
+              className="text-slate-300 hover:text-white transition-colors text-xs py-1.5 px-2"
             >
               Robots.txt
             </a>

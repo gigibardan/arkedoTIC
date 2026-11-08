@@ -3,6 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function() {
+        try {
+          var _origFetch = window.fetch;
+          var _fetchDesc = Object.getOwnPropertyDescriptor(window, 'fetch');
+          if (!_fetchDesc || _fetchDesc.configurable) {
+            Object.defineProperty(window, 'fetch', {
+              get: function() { return _origFetch; },
+              set: function(v) { _origFetch = v; },
+              configurable: true,
+              enumerable: true
+            });
+          }
+        } catch (e) {}
+
+        try {
+          if (window.Window && window.Window.prototype) {
+            var _protoDesc = Object.getOwnPropertyDescriptor(window.Window.prototype, 'fetch');
+            if (_protoDesc && _protoDesc.configurable && !_protoDesc.set) {
+              Object.defineProperty(window.Window.prototype, 'fetch', {
+                get: function() { return _origFetch; },
+                set: function(v) { _origFetch = v; },
+                configurable: true,
+                enumerable: true
+              });
+            }
+          }
+        } catch (e) {}
+
+        window.addEventListener('error', function(event) {
+          var msg = (event && event.message) || '';
+          var file = (event && event.filename) || '';
+          if (
+            file.indexOf('chrome-extension://') !== -1 ||
+            msg.indexOf('Cannot set property fetch') !== -1 ||
+            msg.indexOf('chrome-extension://') !== -1
+          ) {
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+            if (event.preventDefault) event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reason = event && event.reason;
+          var msg = (reason && (reason.message || String(reason))) || '';
+          var stack = (reason && reason.stack) || '';
+          if (
+            msg.indexOf('Cannot set property fetch') !== -1 ||
+            stack.indexOf('chrome-extension://') !== -1
+          ) {
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+            if (event.preventDefault) event.preventDefault();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9NW97TZHH"></script>
     <script>
@@ -45,10 +103,19 @@
     <!-- AI & LLM Discovery Links -->
     <link rel="help" type="text/markdown" href="/llms.txt" title="LLM Context for AI Agents" />
     <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="Full LLM Documentation" />
+    <link rel="ai-catalog" type="application/json" href="/ai-catalog.json" title="Autonomous Agent AI Catalog" />
 
+    <!-- Performance: Preconnect to critical third-party origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    <link rel="preconnect" href="https://gen-lang-client-0536340872.firebaseapp.com">
+
+    <!-- Non-render-blocking Web Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap">
+    </noscript>
     
     <link rel="canonical" href="https://www.arkyedu.com/" />
     <meta property="og:url" content="https://www.arkyedu.com/" />
