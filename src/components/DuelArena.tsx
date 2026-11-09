@@ -33,7 +33,8 @@ import {
   Wrench,
   CheckCheck,
   Puzzle,
-  Boxes
+  Boxes,
+  Crosshair
 } from 'lucide-react';
 import {
   DuelGameMode,
@@ -51,6 +52,8 @@ import {
   PCRushPart,
   BlockCodingChallenge
 } from '../lib/duelService';
+import { CyberPrecisionDuelGame } from './minigames/CyberPrecisionDuelGame';
+import { CircuitOverdriveDuelGame } from './minigames/CircuitOverdriveDuelGame';
 import { BlockCodingDuelGame } from './minigames/BlockCodingDuelGame';
 import { SpeedCraftingDuelGame } from './minigames/SpeedCraftingDuelGame';
 import { RobloxClickerDuelGame } from './minigames/RobloxClickerDuelGame';
@@ -699,6 +702,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           return '🟥 Roblox Blox Clicker (1v1 Simulator)';
         case 'cyber_sprint':
           return '⚡ Cyber Sprint (Typing Race)';
+        case 'cyber_precision':
+          return '🎯 Cyber Precision Arena (AimLab & Osu! 1v1)';
+        case 'circuit_overdrive':
+          return '🔧 Circuit Overdrive (Server Hardware 1v1)';
         case 'block_coding':
           return '🧩 Algorithm Race (Block Coding Duel)';
         case 'speed_crafting':
@@ -732,6 +739,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🟥 Roblox Blox Clicker (Simulator 1v1)';
       case 'cyber_sprint':
         return '⚡ Cyber Sprint (Cursă Tastare)';
+      case 'cyber_precision':
+        return '🎯 Cyber Precision Arena (AimLab & Osu! TIC 1v1)';
+      case 'circuit_overdrive':
+        return '🔧 Circuit Overdrive (Hardware Server 1v1)';
       case 'block_coding':
         return '🧩 Cursa Algoritmilor (Block Coding Duel)';
       case 'speed_crafting':
@@ -844,7 +855,73 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </p>
                 </button>
 
-                {/* Mode 2: Speed Crafting Duel (Minecraft TIC 1v1) */}
+                {/* Mode 2: Cyber Precision Arena (AimLab & Osu! TIC 1v1) - Top Position #2 */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('cyber_precision')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'cyber_precision'
+                      ? 'bg-gradient-to-br from-cyan-950/90 via-indigo-950/80 to-purple-950/60 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/30">
+                      <Crosshair className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Cyber Precision 🎯</span>
+                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase font-black">
+                          {lang === 'en' ? 'NEW 🔥' : 'NOU 🔥'}
+                        </span>
+                      </h4>
+                      <span className="text-[10px] text-cyan-300 font-medium">
+                        {lang === 'en' ? 'AimLab & Osu! TIC 1v1 (High-Reflex Battle)' : 'AimLab & Osu! TIC 1v1 (Bătălia Reflexelor)'}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {lang === 'en'
+                      ? '6 complex precision stages (Osu! Nodes & Hold, Fiber Laser Trace, Malware Triage, Kinetic Deflector, Flick-Shot & Overclock Core). Screen scroll locked for pure accuracy!'
+                      : '6 etape de precizie extremă (Noduri Osu! & Hold, Urmărire Fibră Laser, Sortare Malware, Deflector Kinetic, Flick-Shot & Overclock CPU). Ecran blocat împotriva defilării!'}
+                  </p>
+                </button>
+
+                {/* Mode 3: Circuit Overdrive (Motherboard Hardware 1v1) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedMode('circuit_overdrive')}
+                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
+                    selectedMode === 'circuit_overdrive'
+                      ? 'bg-gradient-to-br from-amber-950/90 via-slate-900 to-rose-950/80 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
+                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-rose-600 text-white flex items-center justify-center shadow-md shadow-amber-500/30">
+                      <Zap className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
+                        <span>Circuit Overdrive 🔧⚡</span>
+                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase font-black">
+                          {lang === 'en' ? 'HOT 🔥' : 'NOU 🔥'}
+                        </span>
+                      </h4>
+                      <span className="text-[10px] text-amber-300 font-medium">
+                        {lang === 'en' ? 'Motherboard Hardware & Oscilloscope 1v1' : 'Hardware Placă de Bază & Osciloscop 1v1'}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {lang === 'en'
+                      ? '5 high-voltage stages: Scroll-to-Rotate CPU alignment, Bus Wire routing, Voltage surge deflector, Breaker switch bank & 5.0 GHz Oscilloscope lock!'
+                      : '5 etape de înaltă tensiune: Rotiță mouse pentru rotire CPU, Cablare trasee bus, Deflector scântei GND, Panou siguranțe & Sincronizare osciloscop 5.0 GHz!'}
+                  </p>
+                </button>
+
+                {/* Mode 4: Speed Crafting Duel (Minecraft TIC 1v1) */}
                 <button
                   type="button"
                   onClick={() => setSelectedMode('speed_crafting')}
@@ -1597,6 +1674,48 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               studentName={resolvedStudentName}
               studentAvatar={resolvedAvatar}
               onFinish={handleRobloxClickerFinish}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE: CYBER PRECISION ARENA (AIMLAB & OSU! TIC 1v1) */}
+          {currentRoom.mode === 'cyber_precision' && (
+            <CyberPrecisionDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(200, lang === 'en' ? 'Victory in Cyber Precision Arena 1v1!' : 'Victorie în Cyber Precision Arena 1v1!');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE: CIRCUIT OVERDRIVE (HARDWARE SERVER 1v1) */}
+          {currentRoom.mode === 'circuit_overdrive' && (
+            <CircuitOverdriveDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(200, lang === 'en' ? 'Victory in Circuit Overdrive 1v1!' : 'Victorie în Circuit Overdrive 1v1!');
+                }
+              }}
               onBack={() => {
                 if (currentRoom?.roomCode) {
                   leaveDuelRoom(currentRoom.roomCode, isHost);

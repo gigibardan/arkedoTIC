@@ -13,6 +13,8 @@ import { db } from './firebase';
 
 export type DuelGameMode =
   | 'cyber_sprint'
+  | 'cyber_precision'
+  | 'circuit_overdrive'
   | 'block_coding'
   | 'speed_crafting'
   | 'quiz_blitz'
