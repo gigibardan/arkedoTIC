@@ -482,6 +482,30 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Robots.txt
             </a>
+            <span className="text-slate-600">•</span>
+            <button
+              onClick={() => {
+                sounds.playSuccess();
+                if ('caches' in window) {
+                  caches.keys().then((names) => {
+                    return Promise.all(names.map((name) => caches.delete(name)));
+                  }).catch(() => {});
+                }
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then((regs) => {
+                    regs.forEach((r) => r.unregister());
+                  }).catch(() => {});
+                }
+                setTimeout(() => {
+                  window.location.reload();
+                }, 300);
+              }}
+              className="text-amber-400 hover:text-amber-300 font-mono text-[11px] bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded border border-amber-500/30 flex items-center gap-1 cursor-pointer transition-colors"
+              title={lang === 'en' ? 'Clear cache and reload latest version' : 'Curăță memoria cache și reîncarcă cea mai nouă versiune'}
+            >
+              <span>🔄</span>
+              <span>{lang === 'en' ? 'Update App' : 'Actualizează App'}</span>
+            </button>
           </div>
         </div>
 

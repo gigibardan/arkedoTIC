@@ -3,6 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+      (function() {
+        var APP_DEPLOY_VERSION = '2026.11.09.v5';
+        try {
+          var savedVersion = localStorage.getItem('arky_deploy_build_stamp');
+          if (savedVersion !== APP_DEPLOY_VERSION) {
+            localStorage.setItem('arky_deploy_build_stamp', APP_DEPLOY_VERSION);
+            if ('caches' in window) {
+              caches.keys().then(function(names) {
+                return Promise.all(names.map(function(n) { return caches.delete(n); }));
+              }).catch(function() {});
+            }
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for (var i = 0; i < registrations.length; i++) {
+                  registrations[i].update();
+                }
+              }).catch(function() {});
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script>
       (function() {
         try {
