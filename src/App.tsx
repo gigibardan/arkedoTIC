@@ -139,6 +139,7 @@ import { CyberCityView } from './components/cybercity/CyberCityView';
 import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
 import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthService';
+import { forceScrollToTop } from './utils/scrollHelper';
 
 function GameContent() {
   const { t } = useLanguage();
@@ -1490,9 +1491,9 @@ function GameContent() {
     ? g7RobotElapsedSeconds
     : filesElapsedSeconds;
 
-  // Automatically scroll to top on view or level change
+  // Automatically scroll to top on view, mission or level change
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    forceScrollToTop();
   }, [currentLevel, view, activeMission]);
 
   // Timer interval effect
@@ -1758,6 +1759,7 @@ function GameContent() {
 
   const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin') => {
     setView(newView);
+    forceScrollToTop();
     if (newView === 'superadmin') {
       window.history.pushState({}, '', '/superadmin');
     } else if (newView === 'teacher') {
@@ -1804,7 +1806,7 @@ function GameContent() {
     setIsTimerRunning(true);
     sounds.playClick();
     arky.triggerIdle();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    forceScrollToTop();
   };
 
   const handleResetActiveMission = () => {

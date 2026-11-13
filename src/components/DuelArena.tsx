@@ -34,7 +34,8 @@ import {
   CheckCheck,
   Puzzle,
   Boxes,
-  Crosshair
+  Crosshair,
+  Filter
 } from 'lucide-react';
 import {
   DuelGameMode,
@@ -69,6 +70,7 @@ import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 import { UnloggedNoticeBadge } from './common/UnloggedNoticeBadge';
+import { forceScrollToTop } from '../utils/scrollHelper';
 
 interface DuelArenaProps {
   lang?: 'ro' | 'en';
@@ -118,11 +120,276 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   // Navigation / Lobby States
   const [viewState, setViewState] = useState<'lobby' | 'room' | 'playing' | 'results'>('lobby');
   const [selectedMode, setSelectedMode] = useState<DuelGameMode>('cyber_sprint');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'precision' | 'speed' | 'algo' | 'hardware'>('all');
+  const [mobileLobbyTab, setMobileLobbyTab] = useState<'create' | 'join'>('create');
   const [inputRoomCode, setInputRoomCode] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
+  // Automatically scroll to top whenever entering room, playing, results or lobby
+  useEffect(() => {
+    forceScrollToTop();
+  }, [viewState]);
+
+  const joinBoxRef = useRef<HTMLDivElement>(null);
+  const createSectionRef = useRef<HTMLDivElement>(null);
+
+  const isModeInCategory = (modeKey: DuelGameMode, cat: 'all' | 'precision' | 'speed' | 'algo' | 'hardware') => {
+    if (cat === 'all') return true;
+    if (cat === 'precision') {
+      return ['cyber_precision', 'mouse_duel', 'pixel_clash', 'roblox_clicker'].includes(modeKey);
+    }
+    if (cat === 'speed') {
+      return ['cyber_sprint', 'quiz_blitz', 'binary_clash'].includes(modeKey);
+    }
+    if (cat === 'algo') {
+      return ['block_coding', 'algo_race_cpp', 'speed_crafting'].includes(modeKey);
+    }
+    if (cat === 'hardware') {
+      return ['circuit_overdrive', 'pc_rush', 'cyber_shield', 'hacker_defense', 'circuit_duel', 'network_racer'].includes(modeKey);
+    }
+    return true;
+  };
+
+  const MODES_CONFIG: {
+    key: DuelGameMode;
+    titleRo: string;
+    titleEn: string;
+    badgeRo?: string;
+    badgeEn?: string;
+    badgeClass?: string;
+    subtitleRo: string;
+    subtitleEn: string;
+    descRo: string;
+    descEn: string;
+    icon: React.ReactNode;
+    iconBg: string;
+    selectedGradient: string;
+  }[] = [
+    {
+      key: 'cyber_sprint',
+      titleRo: 'Cyber Sprint ⚡',
+      titleEn: 'Cyber Sprint ⚡',
+      subtitleRo: 'Cursa de Tastare Rapidă',
+      subtitleEn: 'Fast Typing Race',
+      descRo: 'Cine tastează cel mai repede și corect termenii informatici fără greșeli! Rachetele înaintează live pe ecran.',
+      descEn: 'Type computer science terms accurately and fast without errors! Rockets advance live on screen.',
+      icon: <Keyboard className="w-4 h-4 text-indigo-300" />,
+      iconBg: 'bg-indigo-500/20',
+      selectedGradient: 'bg-indigo-950/80 border-indigo-400 ring-2 ring-indigo-500/30 shadow-md',
+    },
+    {
+      key: 'cyber_precision',
+      titleRo: 'Cyber Precision 🎯',
+      titleEn: 'Cyber Precision 🎯',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'NEW 🔥',
+      badgeClass: 'bg-cyan-500/20 text-cyan-300',
+      subtitleRo: 'AimLab & Osu! TIC 1v1 (Bătălia Reflexelor)',
+      subtitleEn: 'AimLab & Osu! TIC 1v1 (High-Reflex Battle)',
+      descRo: '6 etape de precizie extremă (Noduri Osu! & Hold, Urmărire Fibră Laser, Sortare Malware, Deflector Kinetic, Flick-Shot & Overclock CPU). Ecran blocat împotriva defilării!',
+      descEn: '6 complex precision stages (Osu! Nodes & Hold, Fiber Laser Trace, Malware Triage, Kinetic Deflector, Flick-Shot & Overclock Core). Screen scroll locked for pure accuracy!',
+      icon: <Crosshair className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-cyan-500 to-blue-600 shadow-cyan-500/30',
+      selectedGradient: 'bg-gradient-to-br from-cyan-950/90 via-indigo-950/80 to-purple-950/60 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg',
+    },
+    {
+      key: 'circuit_overdrive',
+      titleRo: 'Circuit Overdrive 🔧⚡',
+      titleEn: 'Circuit Overdrive 🔧⚡',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'HOT 🔥',
+      badgeClass: 'bg-amber-500/20 text-amber-300',
+      subtitleRo: 'Hardware Placă de Bază & Osciloscop 1v1',
+      subtitleEn: 'Motherboard Hardware & Oscilloscope 1v1',
+      descRo: '5 etape de înaltă tensiune: Rotiță mouse pentru rotire CPU, Cablare trasee bus, Deflector scântei GND, Panou siguranțe & Sincronizare osciloscop 5.0 GHz!',
+      descEn: '5 high-voltage stages: Scroll-to-Rotate CPU alignment, Bus Wire routing, Voltage surge deflector, Breaker switch bank & 5.0 GHz Oscilloscope lock!',
+      icon: <Zap className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-amber-500 to-rose-600 shadow-amber-500/30',
+      selectedGradient: 'bg-gradient-to-br from-amber-950/90 via-slate-900 to-rose-950/80 border-amber-400 ring-2 ring-amber-500/40 shadow-lg',
+    },
+    {
+      key: 'speed_crafting',
+      titleRo: 'Speed Crafting ⛏️',
+      titleEn: 'Speed Crafting ⛏️',
+      subtitleRo: 'Duel Rețete TIC & Binar (Minecraft 3x3)',
+      subtitleEn: 'ICT & Binary Recipe Duel (Minecraft 3x3)',
+      descRo: 'Aranjează componentele pe masa de lucru 3x3 (CPU, RAM, SSD, cod binar, porți logice)! Primul la 5 diamante asamblate câștigă duelul!',
+      descEn: 'Arrange components on the 3x3 workbench (CPU, RAM, SSD, binary code, logic gates)! First to assemble 5 diamonds wins the duel!',
+      icon: <Boxes className="w-4 h-4 text-amber-300" />,
+      iconBg: 'bg-amber-500/20',
+      selectedGradient: 'bg-amber-950/80 border-amber-400 ring-2 ring-amber-500/30 shadow-md',
+    },
+    {
+      key: 'block_coding',
+      titleRo: 'Cursa Algoritmilor 🧩',
+      titleEn: 'Algorithm Race 🧩',
+      subtitleRo: 'Block Coding Duel (Tip Scratch)',
+      subtitleEn: 'Block Coding Duel (Scratch Style)',
+      descRo: 'Asamblează logic scriptul (Start, Mergi în față, Viraje 90°, Repetă de 3 ori) pentru a-l ghida pe Arky prin matrice! Primul care ajunge la destinație fără să lovească un obstacol câștigă runda!',
+      descEn: 'Assemble script logic (Start, Move Forward, 90° Turns, Repeat 3 times) to guide Arky across the grid! First to reach target wins!',
+      icon: <Puzzle className="w-4 h-4 text-emerald-300" />,
+      iconBg: 'bg-emerald-500/20',
+      selectedGradient: 'bg-emerald-950/80 border-emerald-400 ring-2 ring-emerald-500/30 shadow-md',
+    },
+    {
+      key: 'roblox_clicker',
+      titleRo: 'Roblox Blox Clicker 🟥',
+      titleEn: 'Roblox Blox Clicker 🟥',
+      badgeRo: 'HOT 🔥',
+      badgeEn: 'HOT 🔥',
+      badgeClass: 'bg-amber-500/20 text-amber-300',
+      subtitleRo: 'Simulator Roblox 1v1 (Pets & Rebirths)',
+      subtitleEn: '1v1 Roblox Simulator (Pets & Rebirths)',
+      descRo: 'Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 5.000 Blox înaintea rivalului!',
+      descEn: 'Click the Blox core, hatch legendary pets from Gacha eggs, buy hardware and reach 5,000 Blox first!',
+      icon: <span className="text-base">🧱</span>,
+      iconBg: 'bg-gradient-to-br from-rose-500 to-amber-500 shadow-rose-500/30',
+      selectedGradient: 'bg-gradient-to-br from-rose-950/90 via-purple-950/80 to-amber-950/60 border-amber-400 ring-2 ring-amber-500/40 shadow-lg',
+    },
+    {
+      key: 'quiz_blitz',
+      titleRo: 'Quiz Blitz 🧠',
+      titleEn: 'Quiz Blitz 🧠',
+      subtitleRo: 'Bătălia Creierelor TIC',
+      subtitleEn: 'ICT Brain Battle',
+      descRo: '5 întrebări fulger de hardware, securitate și algoritmi. Punctaj bonus pentru răspunsuri ultrarapide!',
+      descEn: '5 lightning questions on hardware, cyber security, and algorithms. Bonus score for rapid answers!',
+      icon: <HelpCircle className="w-4 h-4 text-purple-300" />,
+      iconBg: 'bg-purple-500/20',
+      selectedGradient: 'bg-purple-950/80 border-purple-400 ring-2 ring-purple-500/30 shadow-md',
+    },
+    {
+      key: 'cyber_shield',
+      titleRo: 'Cyber Shield 🛡️',
+      titleEn: 'Cyber Shield 🛡️',
+      subtitleRo: 'Apărare Anti-Phishing 1v1',
+      subtitleEn: 'Anti-Phishing 1v1 Defense',
+      descRo: 'Analizează email-urile și link-urile primite în timp real! Blochează atacurile hackerilor și permite mesajele sigure.',
+      descEn: 'Analyze incoming emails and links in real-time! Block hacker cyber attacks and allow verified safe messages.',
+      icon: <ShieldCheck className="w-4 h-4 text-rose-300" />,
+      iconBg: 'bg-rose-500/20',
+      selectedGradient: 'bg-rose-950/80 border-rose-400 ring-2 ring-rose-500/30 shadow-md',
+    },
+    {
+      key: 'pc_rush',
+      titleRo: 'Hardware PC Rush 🔧',
+      titleEn: 'Hardware PC Rush 🔧',
+      subtitleRo: 'Asamblare PC în Viteză',
+      subtitleEn: 'High-Speed PC Assembly',
+      descRo: 'Asamblează calculatorul în ordinea corectă pas cu pas (CPU, Cooler, RAM, SSD, GPU, Sursă)! Cine montează primul?',
+      descEn: 'Assemble the computer in correct order step by step (CPU, Cooler, RAM, SSD, GPU, PSU)! Who mounts it first?',
+      icon: <Cpu className="w-4 h-4 text-cyan-300" />,
+      iconBg: 'bg-cyan-500/20',
+      selectedGradient: 'bg-cyan-950/80 border-cyan-400 ring-2 ring-cyan-500/30 shadow-md',
+    },
+    {
+      key: 'mouse_duel',
+      titleRo: 'Cyber Cursor Clash 🎯',
+      titleEn: 'Cyber Cursor Clash 🎯',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-cyan-500/20 text-cyan-300',
+      subtitleRo: 'Duel Agilitate Mouse & Touch 1v1',
+      subtitleEn: 'Mouse & Touch Agility 1v1 Duel',
+      descRo: '7 runde de precizie extremă (Ținte, 2x Click, Urmărire Circuit Laser, Drag & Drop, Scut Deflector, Bouncing Bugs, Overclock Burst). Progres sincronizat în DB la 15, 30, 45, 60, 75, 90, 95, 100%!',
+      descEn: '7 precision rounds (Targets, 2x Click, Laser Trace, Drag & Drop, Deflector, Bouncing Bugs, Burst). Safe DB milestones!',
+      icon: <span className="text-base">🎯</span>,
+      iconBg: 'bg-cyan-500/20',
+      selectedGradient: 'bg-gradient-to-br from-cyan-950/90 via-indigo-950/80 to-teal-950/60 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg',
+    },
+    {
+      key: 'hacker_defense',
+      titleRo: 'Hacker vs Defender ⚔️',
+      titleEn: 'Hacker vs Defender ⚔️',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-rose-500/20 text-rose-300',
+      subtitleRo: 'Atac & Peticire 1v1 (Inversare la 45s)',
+      subtitleEn: 'Attack & Patch 1v1 (Role Swap at 45s)',
+      descRo: 'Un jucător lansează valuri de Troieni, Phishing și forțare parolă; celălalt activează Firewall, Antivirus sau 2FA. După 45 secunde, rolurile se inversează automat!',
+      descEn: 'One player launches Trojans, Phishing and Brute Force; the other activates Firewall, Antivirus or 2FA. Roles swap after 45s!',
+      icon: <span className="text-base">🛡️</span>,
+      iconBg: 'bg-rose-500/20',
+      selectedGradient: 'bg-gradient-to-br from-rose-950/90 via-slate-900 to-emerald-950/80 border-rose-400 ring-2 ring-rose-500/40 shadow-lg',
+    },
+    {
+      key: 'binary_clash',
+      titleRo: 'Binary Clash 1v1 🔢',
+      titleEn: 'Binary Clash 1v1 🔢',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-emerald-500/20 text-emerald-300',
+      subtitleRo: 'Cursa Biților & Conversii Rapide (0/1)',
+      subtitleEn: 'Bit Race & Fast Conversions (0/1)',
+      descRo: 'Comută comutatoarele de biți (128, 64, 32, 16, 8, 4, 2, 1) pentru a atinge numărul zecimal țintă înaintea rivalului! Folosește porți NOT și multiplicatori.',
+      descEn: 'Toggle bit switches (128, 64, 32, 16, 8, 4, 2, 1) to match decimal target before your rival! Use NOT gates and multipliers.',
+      icon: <span className="text-base">🔢</span>,
+      iconBg: 'bg-emerald-500/20',
+      selectedGradient: 'bg-gradient-to-br from-emerald-950/90 via-slate-900 to-cyan-950/80 border-emerald-400 ring-2 ring-emerald-500/40 shadow-lg',
+    },
+    {
+      key: 'circuit_duel',
+      titleRo: 'Circuit Clash 1v1 ⚡',
+      titleEn: 'Circuit Clash 1v1 ⚡',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-amber-500/20 text-amber-300',
+      subtitleRo: 'Cablare Breadboard Arduino & Senzori',
+      subtitleEn: 'Arduino Breadboard & Sensors Wiring',
+      descRo: 'Conectează contracronometru pini PWM, senzori LDR, ultrasonic HC-SR04, servomotoare SG90 și ecrane LCD I2C fără scurtcircuit!',
+      descEn: 'Connect PWM pins, LDR sensors, ultrasonic HC-SR04, SG90 servos, and I2C LCDs against the clock without short circuits!',
+      icon: <span className="text-base">⚡</span>,
+      iconBg: 'bg-amber-500/20',
+      selectedGradient: 'bg-gradient-to-br from-amber-950/90 via-slate-900 to-emerald-950/80 border-amber-400 ring-2 ring-amber-500/40 shadow-lg',
+    },
+    {
+      key: 'algo_race_cpp',
+      titleRo: 'C++ Code Racer 1v1 💻',
+      titleEn: 'C++ Code Racer 1v1 💻',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-cyan-500/20 text-cyan-300',
+      subtitleRo: 'Bătălia Algoritmilor & Depanare C++',
+      subtitleEn: 'Algorithms & Fast C++ Debugging',
+      descRo: 'Găsește operatorul sau comanda lipsă din codul C++ (regula 3 pahare, while, bucle for Gauss, switch CNP, vectori)! Cine compilează primul fără eroare?',
+      descEn: 'Find missing operators and statements in C++ code (swap 3 cups, while loops, Gauss for, switch, arrays)! Who compiles first?',
+      icon: <span className="text-base">💻</span>,
+      iconBg: 'bg-cyan-500/20',
+      selectedGradient: 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-purple-950/80 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg',
+    },
+    {
+      key: 'pixel_clash',
+      titleRo: 'Pixel Art Clash 1v1 🎨',
+      titleEn: 'Pixel Art Clash 1v1 🎨',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-purple-500/20 text-purple-300',
+      subtitleRo: 'Grafică Bitmap 8x8 & Culori RGB',
+      subtitleEn: '8x8 Bitmap Graphics & RGB Colors',
+      descRo: 'Reprodu sprite-urile retro pixel cu pixel (inimă 8-bit, floppy disk, sabie diamant)! Folosește instrumentul Oglindă X și umplerea rapidă.',
+      descEn: 'Replicate retro sprites pixel by pixel (8-bit heart, floppy disk, diamond sword)! Use the X-Mirror tool and quick flood fill.',
+      icon: <span className="text-base">🎨</span>,
+      iconBg: 'bg-purple-500/20',
+      selectedGradient: 'bg-gradient-to-br from-purple-950/90 via-slate-900 to-pink-950/80 border-purple-400 ring-2 ring-purple-500/40 shadow-lg',
+    },
+    {
+      key: 'network_racer',
+      titleRo: 'Network Packet Racer 1v1 🌐',
+      titleEn: 'Network Packet Racer 1v1 🌐',
+      badgeRo: 'NOU ✨',
+      badgeEn: 'NEW ✨',
+      badgeClass: 'bg-indigo-500/20 text-indigo-300',
+      subtitleRo: 'Rutare Porturi (443/53/25) & Firewall',
+      subtitleEn: 'Port Routing (443/53/25) & Firewall',
+      descRo: 'Comută pachetele sosite în router către porturile potrivite (Web HTTPS, DNS, Email) și carantinează atacurile DDoS și virușii în Firewall!',
+      descEn: 'Route inbound router packets to appropriate ports (Web HTTPS, DNS, Email) and quarantine DDoS floods and malware into the Firewall!',
+      icon: <span className="text-base">🌐</span>,
+      iconBg: 'bg-indigo-500/20',
+      selectedGradient: 'bg-gradient-to-br from-indigo-950/90 via-slate-900 to-cyan-950/80 border-indigo-400 ring-2 ring-indigo-500/40 shadow-lg',
+    },
+  ];
 
   // Active Room State
   const [currentRoom, setCurrentRoom] = useState<DuelRoomData | null>(null);
@@ -817,599 +1084,329 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
       {/* VIEW 1: LOBBY (Create / Join) */}
       {viewState === 'lobby' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Game Mode Selection */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg">
-              <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-400" />
-                {lang === 'en' ? '1. Select Duel Battle Mode:' : '1. Alege Tipul de Duel:'}
-              </h3>
+        <>
+          {/* Mobile Tab Switcher (Create vs Join with Code) */}
+          <div className="lg:hidden flex items-center bg-slate-950 p-1.5 rounded-2xl border border-slate-800 mb-4 shadow-lg">
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setMobileLobbyTab('create');
+              }}
+              className={`flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer ${
+                mobileLobbyTab === 'create'
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md font-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Swords className="w-4 h-4" />
+              <span>{lang === 'en' ? '1. Host a Duel (16 Modes)' : '1. Alege & Creează Meci'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setMobileLobbyTab('join');
+              }}
+              className={`flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer ${
+                mobileLobbyTab === 'join'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md font-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>{lang === 'en' ? '2. Join with Code' : '2. Intră cu Cod'}</span>
+            </button>
+          </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Mode 1: Cyber Sprint */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('cyber_sprint')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'cyber_sprint'
-                      ? 'bg-indigo-950/80 border-indigo-400 ring-2 ring-indigo-500/30 shadow-md'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center">
-                      <Keyboard className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">Cyber Sprint ⚡</h4>
-                      <span className="text-[10px] text-indigo-300 font-medium">
-                        {lang === 'en' ? 'Fast Typing Race' : 'Cursa de Tastare Rapidă'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Type computer science terms accurately and fast without errors! Rockets advance live on screen.'
-                      : 'Cine tastează cel mai repede și corect termenii informatici fără greșeli! Rachetele înaintează live pe ecran.'}
-                  </p>
-                </button>
-
-                {/* Mode 2: Cyber Precision Arena (AimLab & Osu! TIC 1v1) - Top Position #2 */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('cyber_precision')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'cyber_precision'
-                      ? 'bg-gradient-to-br from-cyan-950/90 via-indigo-950/80 to-purple-950/60 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-md shadow-cyan-500/30">
-                      <Crosshair className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Cyber Precision 🎯</span>
-                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase font-black">
-                          {lang === 'en' ? 'NEW 🔥' : 'NOU 🔥'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">
-                        {lang === 'en' ? 'AimLab & Osu! TIC 1v1 (High-Reflex Battle)' : 'AimLab & Osu! TIC 1v1 (Bătălia Reflexelor)'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? '6 complex precision stages (Osu! Nodes & Hold, Fiber Laser Trace, Malware Triage, Kinetic Deflector, Flick-Shot & Overclock Core). Screen scroll locked for pure accuracy!'
-                      : '6 etape de precizie extremă (Noduri Osu! & Hold, Urmărire Fibră Laser, Sortare Malware, Deflector Kinetic, Flick-Shot & Overclock CPU). Ecran blocat împotriva defilării!'}
-                  </p>
-                </button>
-
-                {/* Mode 3: Circuit Overdrive (Motherboard Hardware 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('circuit_overdrive')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'circuit_overdrive'
-                      ? 'bg-gradient-to-br from-amber-950/90 via-slate-900 to-rose-950/80 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-rose-600 text-white flex items-center justify-center shadow-md shadow-amber-500/30">
-                      <Zap className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Circuit Overdrive 🔧⚡</span>
-                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase font-black">
-                          {lang === 'en' ? 'HOT 🔥' : 'NOU 🔥'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-amber-300 font-medium">
-                        {lang === 'en' ? 'Motherboard Hardware & Oscilloscope 1v1' : 'Hardware Placă de Bază & Osciloscop 1v1'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? '5 high-voltage stages: Scroll-to-Rotate CPU alignment, Bus Wire routing, Voltage surge deflector, Breaker switch bank & 5.0 GHz Oscilloscope lock!'
-                      : '5 etape de înaltă tensiune: Rotiță mouse pentru rotire CPU, Cablare trasee bus, Deflector scântei GND, Panou siguranțe & Sincronizare osciloscop 5.0 GHz!'}
-                  </p>
-                </button>
-
-                {/* Mode 4: Speed Crafting Duel (Minecraft TIC 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('speed_crafting')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'speed_crafting'
-                      ? 'bg-amber-950/80 border-amber-400 ring-2 ring-amber-500/30 shadow-md'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
-                      <Boxes className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">Speed Crafting ⛏️</h4>
-                      <span className="text-[10px] text-amber-300 font-medium">
-                        {lang === 'en' ? 'ICT & Binary Recipe Duel (Minecraft 3x3)' : 'Duel Rețete TIC & Binar (Minecraft 3x3)'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Arrange components on the 3x3 workbench (CPU, RAM, SSD, binary code, logic gates)! First to assemble 5 diamonds wins the duel!'
-                      : 'Aranjează componentele pe masa de lucru 3x3 (CPU, RAM, SSD, cod binar, porți logice)! Primul la 5 diamante asamblate câștigă duelul!'}
-                  </p>
-                </button>
-
-                {/* Mode 3: Cursa Algoritmilor (Block Coding Duel - Tip Scratch) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('block_coding')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'block_coding'
-                      ? 'bg-emerald-950/80 border-emerald-400 ring-2 ring-emerald-500/30 shadow-md'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center">
-                      <Puzzle className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">
-                        {lang === 'en' ? 'Algorithm Race 🧩' : 'Cursa Algoritmilor 🧩'}
-                      </h4>
-                      <span className="text-[10px] text-emerald-300 font-medium">
-                        {lang === 'en' ? 'Block Coding Duel (Scratch Style)' : 'Block Coding Duel (Tip Scratch)'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Assemble script logic (Start, Move Forward, 90° Turns, Repeat 3 times) to guide Arky across the grid! First to reach target wins!'
-                      : 'Asamblează logic scriptul (Start, Mergi în față, Viraje 90°, Repetă de 3 ori) pentru a-l ghida pe Arky prin matrice! Primul care ajunge la destinație fără să lovească un obstacol câștigă runda!'}
-                  </p>
-                </button>
-
-                {/* Mode 4: Roblox Blox Clicker Duel (Simulator 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('roblox_clicker')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'roblox_clicker'
-                      ? 'bg-gradient-to-br from-rose-950/90 via-purple-950/80 to-amber-950/60 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-amber-500 text-slate-950 font-black flex items-center justify-center text-base shadow-md shadow-rose-500/30">
-                      🧱
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Roblox Blox Clicker 🟥</span>
-                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'HOT 🔥' : 'HOT 🔥'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-amber-300 font-medium">
-                        {lang === 'en' ? '1v1 Roblox Simulator (Pets & Rebirths)' : 'Simulator Roblox 1v1 (Pets & Rebirths)'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Click the Blox core, hatch legendary pets from Gacha eggs, buy hardware and reach 5,000 Blox first!'
-                      : 'Dă click pe nucleul Blox, eclozează animăluțe legendare din ouă Gacha, cumpără hardware și atinge primul 5.000 Blox înaintea rivalului!'}
-                  </p>
-                </button>
-
-                {/* Mode 5: Quiz Blitz */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('quiz_blitz')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'quiz_blitz'
-                      ? 'bg-purple-950/80 border-purple-400 ring-2 ring-purple-500/30 shadow-md'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center">
-                      <HelpCircle className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">Quiz Blitz 🧠</h4>
-                      <span className="text-[10px] text-purple-300 font-medium">
-                        {lang === 'en' ? 'ICT Brain Battle' : 'Bătălia Creierelor TIC'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? '5 lightning questions on hardware, cyber security, and algorithms. Bonus score for rapid answers!'
-                      : '5 întrebări fulger de hardware, securitate și algoritmi. Punctaj bonus pentru răspunsuri ultrarapide!'}
-                  </p>
-                </button>
-
-                {/* Mode 6: Cyber Shield (Phishing defense) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('cyber_shield')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'cyber_shield'
-                      ? 'bg-rose-950/80 border-rose-400 ring-2 ring-rose-500/30 shadow-md'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center">
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">Cyber Shield 🛡️</h4>
-                      <span className="text-[10px] text-rose-300 font-medium">
-                        {lang === 'en' ? 'Anti-Phishing 1v1 Defense' : 'Apărare Anti-Phishing 1v1'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Analyze incoming emails and links in real-time! Block hacker cyber attacks and allow verified safe messages.'
-                      : 'Analizează email-urile și link-urile primite în timp real! Blochează atacurile hackerilor și permite mesajele sigure.'}
-                  </p>
-                </button>
-
-                {/* Mode 7: Hardware PC Rush */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('pc_rush')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'pc_rush'
-                      ? 'bg-cyan-950/80 border-cyan-400 ring-2 ring-cyan-500/30 shadow-md'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center">
-                      <Cpu className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white">Hardware PC Rush 🔧</h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">
-                        {lang === 'en' ? 'High-Speed PC Assembly' : 'Asamblare PC în Viteză'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Assemble the computer in correct order step by step (CPU, Cooler, RAM, SSD, GPU, PSU)! Who mounts it first?'
-                      : 'Asamblează calculatorul în ordinea corectă pas cu pas (CPU, Cooler, RAM, SSD, GPU, Sursă)! Cine montează primul?'}
-                  </p>
-                </button>
-
-                {/* Mode 8: Cyber Cursor Clash (Duel Mouse Agility & Reflex) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('mouse_duel')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'mouse_duel'
-                      ? 'bg-gradient-to-br from-cyan-950/90 via-indigo-950/80 to-teal-950/60 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-base shadow-md shadow-cyan-500/30">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Game Mode Selection Column */}
+            <div className={`lg:col-span-7 space-y-4 ${mobileLobbyTab === 'join' ? 'hidden lg:block' : 'block'}`}>
+              <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg">
+                {/* Prominent Top Quick-Action Hero (Instant Create without scrolling) */}
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/90 via-indigo-950/80 to-slate-900 border-2 border-purple-500/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3.5 mb-5">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <div className="w-11 h-11 rounded-xl bg-purple-600/30 border border-purple-400/50 flex items-center justify-center text-xl shrink-0 shadow-inner">
                       🎯
                     </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Cyber Cursor Clash 🎯</span>
-                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">
-                        {lang === 'en' ? 'Mouse & Touch Agility 1v1 Duel' : 'Duel Agilitate Mouse & Touch 1v1'}
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10px] font-mono text-purple-300 font-bold uppercase tracking-wider block">
+                        {lang === 'en' ? 'Selected Battle Mode:' : 'Mod de Duel Selectat:'}
                       </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? '7 precision rounds (Targets, 2x Click, Laser Trace, Drag & Drop, Deflector, Bouncing Bugs, Burst). Safe DB milestones!'
-                      : '7 runde de precizie extremă (Ținte, 2x Click, Urmărire Circuit Laser, Drag & Drop, Scut Deflector, Bouncing Bugs, Overclock Burst). Progres sincronizat în DB la 15, 30, 45, 60, 75, 90, 95, 100%!'}
-                  </p>
-                </button>
-
-                {/* Mode 9: Hacker vs Defender (Atac & Peticire 1v1 - Securitate Cibernetică) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('hacker_defense')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'hacker_defense'
-                      ? 'bg-gradient-to-br from-rose-950/90 via-slate-900 to-emerald-950/80 border-rose-400 ring-2 ring-rose-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-300 flex items-center justify-center text-base shadow-md shadow-rose-500/30">
-                      🛡️
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Hacker vs Defender ⚔️</span>
-                        <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
+                      <h4 className="text-sm sm:text-base font-black text-white truncate">
+                        {getModeTitle(selectedMode)}
                       </h4>
-                      <span className="text-[10px] text-rose-300 font-medium">
-                        {lang === 'en' ? 'Attack & Patch 1v1 (Role Swap at 45s)' : 'Atac & Peticire 1v1 (Inversare la 45s)'}
-                      </span>
                     </div>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'One player launches Trojans, Phishing and Brute Force; the other activates Firewall, Antivirus or 2FA. Roles swap after 45s!'
-                      : 'Un jucător lansează valuri de Troieni, Phishing și forțare parolă; celălalt activează Firewall, Antivirus sau 2FA. După 45 secunde, rolurile se inversează automat!'}
-                  </p>
-                </button>
 
-                {/* Mode 10: Binary Clash (Cursa Biților & Conversii 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('binary_clash')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'binary_clash'
-                      ? 'bg-gradient-to-br from-emerald-950/90 via-slate-900 to-cyan-950/80 border-emerald-400 ring-2 ring-emerald-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-base shadow-md shadow-emerald-500/30">
-                      🔢
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Binary Clash 1v1 🔢</span>
-                        <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-emerald-300 font-medium">
-                        {lang === 'en' ? 'Bit Race & Fast Conversions (0/1)' : 'Cursa Biților & Conversii Rapide (0/1)'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Toggle bit switches (128, 64, 32, 16, 8, 4, 2, 1) to match decimal target before your rival! Use NOT gates and multipliers.'
-                      : 'Comută comutatoarele de biți (128, 64, 32, 16, 8, 4, 2, 1) pentru a atinge numărul zecimal țintă înaintea rivalului! Folosește porți NOT și multiplicatori.'}
-                  </p>
-                </button>
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={handleCreateRoom}
+                      disabled={isCreating}
+                      className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 hover:from-purple-400 hover:to-blue-400 text-white font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>{isCreating ? (lang === 'en' ? 'Creating...' : 'Se creează...') : (lang === 'en' ? 'Create Duel Room 🚀' : 'Creează Cameră Acum 🚀')}</span>
+                    </button>
 
-                {/* Mode 11: Circuit Clash (Duelul Electricienilor Smart City 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('circuit_duel')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'circuit_duel'
-                      ? 'bg-gradient-to-br from-amber-950/90 via-slate-900 to-emerald-950/80 border-amber-400 ring-2 ring-amber-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center text-base shadow-md shadow-amber-500/30">
-                      ⚡
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Circuit Clash 1v1 ⚡</span>
-                        <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-amber-300 font-medium">
-                        {lang === 'en' ? 'Arduino Breadboard & Sensors Wiring' : 'Cablare Breadboard Arduino & Senzori'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Connect PWM pins, LDR sensors, ultrasonic HC-SR04, SG90 servos, and I2C LCDs against the clock without short circuits!'
-                      : 'Conectează contracronometru pini PWM, senzori LDR, ultrasonic HC-SR04, servomotoare SG90 și ecrane LCD I2C fără scurtcircuit!'}
-                  </p>
-                </button>
-
-                {/* Mode 12: C++ Code Racer (Duelul Compilatorului Rapid 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('algo_race_cpp')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'algo_race_cpp'
-                      ? 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-purple-950/80 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-base shadow-md shadow-cyan-500/30">
-                      💻
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>C++ Code Racer 1v1 💻</span>
-                        <span className="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-cyan-300 font-medium">
-                        {lang === 'en' ? 'Algorithms & Fast C++ Debugging' : 'Bătălia Algoritmilor & Depanare C++'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Find missing operators and statements in C++ code (swap 3 cups, while loops, Gauss for, switch, arrays)! Who compiles first?'
-                      : 'Găsește operatorul sau comanda lipsă din codul C++ (regula 3 pahare, while, bucle for Gauss, switch CNP, vectori)! Cine compilează primul fără eroare?'}
-                  </p>
-                </button>
-
-                {/* Mode 13: Pixel Art Sprite Clash (Duelul Graficii Digitale 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('pixel_clash')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'pixel_clash'
-                      ? 'bg-gradient-to-br from-purple-950/90 via-slate-900 to-pink-950/80 border-purple-400 ring-2 ring-purple-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center text-base shadow-md shadow-purple-500/30">
-                      🎨
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Pixel Art Clash 1v1 🎨</span>
-                        <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-purple-300 font-medium">
-                        {lang === 'en' ? '8x8 Bitmap Graphics & RGB Colors' : 'Grafică Bitmap 8x8 & Culori RGB'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Replicate retro sprites pixel by pixel (8-bit heart, floppy disk, diamond sword)! Use the X-Mirror tool and quick flood fill.'
-                      : 'Reprodu sprite-urile retro pixel cu pixel (inimă 8-bit, floppy disk, sabie diamant)! Folosește instrumentul Oglindă X și umplerea rapidă.'}
-                  </p>
-                </button>
-
-                {/* Mode 14: Network Packet Racer (Cursa Pachetelor & Internet Switch 1v1) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedMode('network_racer')}
-                  className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMode === 'network_racer'
-                      ? 'bg-gradient-to-br from-indigo-950/90 via-slate-900 to-cyan-950/80 border-indigo-400 ring-2 ring-indigo-500/40 shadow-lg'
-                      : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-base shadow-md shadow-indigo-500/30">
-                      🌐
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black text-white flex items-center gap-1.5">
-                        <span>Network Packet Racer 1v1 🌐</span>
-                        <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 text-[9px] font-mono uppercase">
-                          {lang === 'en' ? 'NEW ✨' : 'NOU ✨'}
-                        </span>
-                      </h4>
-                      <span className="text-[10px] text-indigo-300 font-medium">
-                        {lang === 'en' ? 'Port Routing (443/53/25) & Firewall' : 'Rutare Porturi (443/53/25) & Firewall'}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {lang === 'en'
-                      ? 'Route inbound router packets to appropriate ports (Web HTTPS, DNS, Email) and quarantine DDoS floods and malware into the Firewall!'
-                      : 'Comută pachetele sosite în router către porturile potrivite (Web HTTPS, DNS, Email) și carantinează atacurile DDoS și virușii în Firewall!'}
-                  </p>
-                </button>
-              </div>
-
-              {/* Host / Create Button */}
-              <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-xl ring-2 ring-purple-500/50">
-                    {currentStudentAvatar || '⚡'}
-                  </div>
-                  <div>
-                    <span className="text-xs text-slate-400 block">{lang === 'en' ? 'Playing as:' : 'Joci ca:'}</span>
-                    <span className="text-sm font-bold text-white">{currentStudentName || (lang === 'en' ? 'ICT Champion' : 'Campion TIC')}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        setMobileLobbyTab('join');
+                        setTimeout(() => {
+                          joinBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 50);
+                      }}
+                      className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+                      title={lang === 'en' ? 'Jump to Join Room with code' : 'Sari direct la conectare cu cod'}
+                    >
+                      <Users className="w-4 h-4" />
+                      <span className="hidden sm:inline">{lang === 'en' ? 'Enter Code' : 'Am un Cod'}</span>
+                    </button>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleCreateRoom}
-                  disabled={isCreating}
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black text-sm tracking-wide shadow-lg shadow-indigo-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  {isCreating
-                    ? (lang === 'en' ? 'Creating Room...' : 'Se creează camera...')
-                    : (lang === 'en' ? 'Create Duel Room (Host)' : 'Creează Cameră de Meci')}
-                </button>
-              </div>
-            </div>
+                {/* Category Filter Pills (Avoid infinite scrolling) */}
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 mb-4">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 flex items-center gap-1 shrink-0 mr-1">
+                    <Filter className="w-3.5 h-3.5 text-cyan-400" />
+                    {lang === 'en' ? 'Filter:' : 'Filtru:'}
+                  </span>
+                  {[
+                    { id: 'all', labelRo: 'Toate (16)', labelEn: 'All (16)' },
+                    { id: 'precision', labelRo: '🎯 Precizie & Mouse (4)', labelEn: '🎯 Precision & Mouse (4)' },
+                    { id: 'speed', labelRo: '⚡ Viteză & Reacție (3)', labelEn: '⚡ Speed & Typing (3)' },
+                    { id: 'algo', labelRo: '🧠 Algoritmi & Logică (3)', labelEn: '🧠 Algorithms & Logic (3)' },
+                    { id: 'hardware', labelRo: '🔧 Hardware & Securitate (6)', labelEn: '🔧 Hardware & Cyber (6)' },
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveCategory(cat.id as any);
+                        sounds.playClick();
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold whitespace-nowrap transition cursor-pointer ${
+                        activeCategory === cat.id
+                          ? 'bg-cyan-500 text-slate-950 font-black shadow-sm'
+                          : 'bg-slate-950/80 text-slate-400 hover:text-white border border-slate-800'
+                      }`}
+                    >
+                      {lang === 'en' ? cat.labelEn : cat.labelRo}
+                    </button>
+                  ))}
+                </div>
 
-            {/* Error Banner if any */}
-            {errorMessage && (
-              <div className="p-3.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-200 text-xs flex items-center gap-2 animate-shake">
-                <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>{errorMessage}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Join Room Box */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col justify-between h-full">
-              <div>
-                <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-2">
-                  <Users className="w-4 h-4 text-cyan-400" />
-                  {lang === 'en' ? '2. Or Join an Existing Duel:' : '2. Sau Conectează-te la un Coleg:'}
+                <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-amber-400" />
+                  {lang === 'en' ? '1. Select Duel Battle Mode:' : '1. Alege Tipul de Duel:'}
                 </h3>
-                <p className="text-xs text-slate-400 mb-5">
-                  {lang === 'en'
-                    ? 'Ask your classmate for their 4-character room code and enter the arena directly!'
-                    : 'Cere-i colegului de bancă codul camerei create de el (4 caractere) și intră direct în arenă!'}
-                </p>
 
-                <div className="space-y-3">
-                  <label className="block text-xs font-semibold text-slate-400">
-                    {lang === 'en' ? 'Room Code (e.g., 8X4B):' : 'Cod Cameră (Ex: 8X4B):'}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      maxLength={6}
-                      value={inputRoomCode}
-                      onChange={(e) => setInputRoomCode(e.target.value.toUpperCase())}
-                      placeholder="ABCD"
-                      className="w-full px-4 py-3.5 rounded-xl bg-slate-950 border-2 border-indigo-500/40 focus:border-indigo-400 text-center font-mono text-2xl font-black text-amber-300 tracking-widest placeholder-slate-600 outline-none uppercase transition-all shadow-inner"
-                    />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {MODES_CONFIG.filter((m) => isModeInCategory(m.key, activeCategory)).map((mode) => {
+                    const isSelected = selectedMode === mode.key;
+                    return (
+                      <button
+                        key={mode.key}
+                        type="button"
+                        onClick={() => {
+                          sounds.playClick();
+                          setSelectedMode(mode.key);
+                        }}
+                        className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                          isSelected
+                            ? mode.selectedGradient
+                            : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
+                        }`}
+                      >
+                        <div>
+                          <div className="flex items-center gap-2.5 mb-2">
+                            <div className={`w-8 h-8 rounded-lg ${mode.iconBg} flex items-center justify-center shrink-0 shadow-md`}>
+                              {mode.icon}
+                            </div>
+                            <div className="min-w-0">
+                              <h4 className="text-sm font-black text-white flex items-center gap-1.5 flex-wrap">
+                                <span>{lang === 'en' ? mode.titleEn : mode.titleRo}</span>
+                                {mode.badgeRo && (
+                                  <span className={`px-1.5 py-0.2 rounded ${mode.badgeClass || 'bg-purple-500/20 text-purple-300'} text-[9px] font-mono uppercase font-black`}>
+                                    {lang === 'en' ? mode.badgeEn : mode.badgeRo}
+                                  </span>
+                                )}
+                              </h4>
+                              <span className={`text-[10px] font-medium block truncate ${isSelected ? 'text-indigo-200 font-semibold' : 'text-slate-400'}`}>
+                                {lang === 'en' ? mode.subtitleEn : mode.subtitleRo}
+                              </span>
+                            </div>
+                          </div>
+                          <p className={`text-xs leading-relaxed ${isSelected ? 'text-slate-200' : 'text-slate-400'}`}>
+                            {lang === 'en' ? mode.descEn : mode.descRo}
+                          </p>
+                        </div>
+
+                        {/* Instant Action on Selected Card */}
+                        {isSelected && (
+                          <div className="mt-3 pt-2.5 border-t border-purple-500/30 flex items-center justify-between gap-2 animate-fadeIn">
+                            <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              {lang === 'en' ? 'Selected' : 'Selectat'}
+                            </span>
+                            <span
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCreateRoom();
+                              }}
+                              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white font-black text-xs shadow-md flex items-center gap-1.5 active:scale-95 transition cursor-pointer"
+                            >
+                              <Sparkles className="w-3 h-3" />
+                              <span>{lang === 'en' ? 'Create Room 🚀' : 'Creează Cameră 🚀'}</span>
+                            </span>
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Host / Create Button */}
+                <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-xl ring-2 ring-purple-500/50">
+                      {currentStudentAvatar || '⚡'}
+                    </div>
+                    <div>
+                      <span className="text-xs text-slate-400 block">{lang === 'en' ? 'Playing as:' : 'Joci ca:'}</span>
+                      <span className="text-sm font-bold text-white">{currentStudentName || (lang === 'en' ? 'ICT Champion' : 'Campion TIC')}</span>
+                    </div>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={handleCreateRoom}
+                    disabled={isCreating}
+                    className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-black text-sm tracking-wide shadow-lg shadow-indigo-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    {isCreating
+                      ? (lang === 'en' ? 'Creating Room...' : 'Se creează camera...')
+                      : (lang === 'en' ? 'Create Duel Room (Host)' : 'Creează Cameră de Meci')}
+                  </button>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={handleJoinRoom}
-                  disabled={isJoining || !inputRoomCode.trim()}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-sm tracking-wide shadow-lg shadow-cyan-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
-                >
-                  <Play className="w-4 h-4 fill-white" />
-                  {isJoining
-                    ? (lang === 'en' ? 'Connecting...' : 'Se conectează...')
-                    : (lang === 'en' ? 'Join Duel Match' : 'Intră în Meci')}
-                </button>
+              {/* Error Banner if any */}
+              {errorMessage && (
+                <div className="p-3.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-200 text-xs flex items-center gap-2 animate-shake">
+                  <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Join Room Box */}
+            <div
+              ref={joinBoxRef}
+              className={`lg:col-span-5 space-y-4 ${mobileLobbyTab === 'create' ? 'hidden lg:block' : 'block'}`}
+            >
+              <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-lg flex flex-col justify-between h-full">
+                <div>
+                  {mobileLobbyTab === 'join' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        setMobileLobbyTab('create');
+                      }}
+                      className="lg:hidden w-full mb-3 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>{lang === 'en' ? '← Back to Mode Selection (16 Modes)' : '← Înapoi la Lista de Dueluri (16 Moduri)'}</span>
+                    </button>
+                  )}
+
+                  <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-cyan-400" />
+                    {lang === 'en' ? '2. Or Join an Existing Duel:' : '2. Sau Conectează-te la un Coleg:'}
+                  </h3>
+                  <p className="text-xs text-slate-400 mb-5">
+                    {lang === 'en'
+                      ? 'Ask your classmate for their 4-character room code and enter the arena directly!'
+                      : 'Cere-i colegului de bancă codul camerei create de el (4 caractere) și intră direct în arenă!'}
+                  </p>
+
+                  <div className="space-y-3">
+                    <label className="block text-xs font-semibold text-slate-400">
+                      {lang === 'en' ? 'Room Code (e.g., 8X4B):' : 'Cod Cameră (Ex: 8X4B):'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        maxLength={6}
+                        value={inputRoomCode}
+                        onChange={(e) => setInputRoomCode(e.target.value.toUpperCase())}
+                        placeholder="ABCD"
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-950 border-2 border-indigo-500/40 focus:border-indigo-400 text-center font-mono text-2xl font-black text-amber-300 tracking-widest placeholder-slate-600 outline-none uppercase transition-all shadow-inner"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={handleJoinRoom}
+                    disabled={isJoining || !inputRoomCode.trim()}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-sm tracking-wide shadow-lg shadow-cyan-500/20 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    {isJoining
+                      ? (lang === 'en' ? 'Connecting...' : 'Se conectează...')
+                      : (lang === 'en' ? 'Join Duel Match' : 'Intră în Meci')}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          {/* Floating Mobile Bottom Action Bar (Pinned for instant 1-tap room creation) */}
+          {mobileLobbyTab === 'create' && (
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-purple-500/50 p-3 backdrop-blur-md shadow-[0_-5px_25px_rgba(0,0,0,0.6)] flex items-center justify-between gap-2.5 animate-fadeIn">
+              <div className="min-w-0 flex-1">
+                <span className="text-[9px] font-mono text-purple-300 font-bold uppercase block truncate">
+                  {lang === 'en' ? 'Ready to duel:' : 'Gata de meci:'}
+                </span>
+                <span className="text-xs font-black text-white truncate block">
+                  {getModeTitle(selectedMode)}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleCreateRoom}
+                disabled={isCreating}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white font-black text-xs shadow-lg shadow-indigo-500/30 flex items-center gap-1.5 active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{isCreating ? '...' : (lang === 'en' ? 'Create (Host) 🚀' : 'Creează Cameră 🚀')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  setMobileLobbyTab('join');
+                  setTimeout(() => {
+                    joinBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }, 50);
+                }}
+                className="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white font-bold text-xs flex items-center gap-1 border border-slate-700 shrink-0 cursor-pointer"
+                title={lang === 'en' ? 'Join with code' : 'Intră cu cod'}
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? 'Code' : 'Cod'}</span>
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* VIEW 2: ROOM LOBBY (Waiting for 2nd Player / Countdown) */}

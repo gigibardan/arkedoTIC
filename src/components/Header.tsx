@@ -280,7 +280,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center bg-slate-950/95 p-0.5 rounded-xl border border-slate-700/80 shadow-inner">
               <button
                 onClick={() => handleLanguageChange('ro')}
-                className={`px-2 py-1 rounded-lg text-xs font-black font-mono transition cursor-pointer min-w-[32px] ${
+                className={`px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-black font-mono transition cursor-pointer min-w-[34px] min-h-[34px] flex items-center justify-center touch-manipulation active:scale-95 ${
                   lang === 'ro' ? 'bg-emerald-500 text-slate-950 shadow-sm' : 'text-slate-200 hover:text-white'
                 }`}
                 title="Română"
@@ -290,7 +290,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
               <button
                 onClick={() => handleLanguageChange('en')}
-                className={`px-2 py-1 rounded-lg text-xs font-black font-mono transition cursor-pointer min-w-[32px] ${
+                className={`px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-black font-mono transition cursor-pointer min-w-[34px] min-h-[34px] flex items-center justify-center touch-manipulation active:scale-95 ${
                   lang === 'en' ? 'bg-emerald-500 text-slate-950 shadow-sm' : 'text-slate-200 hover:text-white'
                 }`}
                 title="English"
@@ -303,14 +303,14 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Audio Sound Toggle */}
             <button
               onClick={onToggleSound}
-              className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition border border-slate-700/80 shadow-sm cursor-pointer"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition border border-slate-700/80 shadow-sm cursor-pointer min-w-[36px] min-h-[36px] flex items-center justify-center touch-manipulation active:scale-95"
               title={soundEnabled ? t.soundOn : t.soundOff}
               aria-label={t.soundLabel}
             >
               {soundEnabled ? (
-                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
+                <Volume2 className="w-4 h-4 text-emerald-400" />
               ) : (
-                <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" />
+                <VolumeX className="w-4 h-4 text-slate-400" />
               )}
             </button>
 
@@ -320,9 +320,9 @@ export const Header: React.FC<HeaderProps> = ({
                 sounds.playClick();
                 setIsMobileMenuOpen((prev) => !prev);
               }}
-              className={`md:hidden p-1.5 rounded-xl border transition cursor-pointer ${
+              className={`md:hidden p-2 rounded-xl border transition cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center touch-manipulation active:scale-95 ${
                 isMobileMenuOpen
-                  ? 'bg-emerald-600 text-white border-emerald-400 shadow-md'
+                  ? 'bg-emerald-600 text-white border-emerald-400 shadow-md ring-2 ring-emerald-500/30'
                   : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
               }`}
               aria-label="Meniu Opțiuni"
@@ -333,9 +333,18 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
+      {/* Mobile Drawer Backdrop Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="md:hidden fixed inset-0 z-20 bg-slate-950/70 backdrop-blur-sm transition-opacity"
+          aria-hidden="true"
+        />
+      )}
+
       {/* Mobile Slide-Down Quick Menu Sheet (Mobile < md) */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-x-0 top-[49px] z-30 bg-slate-900/98 backdrop-blur-xl border-b border-slate-800 shadow-2xl p-4 animate-in slide-in-from-top-4 duration-200">
+        <div className="md:hidden fixed inset-x-0 top-[49px] z-30 bg-slate-900/98 backdrop-blur-2xl border-b border-slate-800 shadow-2xl p-4 animate-in slide-in-from-top-4 duration-200">
           <div className="space-y-3 max-w-md mx-auto">
             {/* Student Profile Quick Card */}
             <div
@@ -343,7 +352,7 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onEditStudentName) onEditStudentName();
                 setIsMobileMenuOpen(false);
               }}
-              className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition"
+              className="p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition touch-manipulation active:scale-[0.98]"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xl shrink-0">
@@ -442,8 +451,8 @@ export const Header: React.FC<HeaderProps> = ({
       )}
 
       {/* Mobile Bottom Navigation Dock (Fixed at bottom for mobile screens) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800/90 shadow-[0_-8px_25px_rgba(0,0,0,0.6)] px-2 py-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-        <div className="max-w-md mx-auto grid grid-cols-5 gap-1">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/90 shadow-[0_-8px_25px_rgba(0,0,0,0.7)] px-2 py-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]">
+        <div className="max-w-md mx-auto grid grid-cols-5 gap-1.5">
           {/* Tab 1: Cursuri / Misiuni */}
           <button
             onClick={() => {
@@ -451,14 +460,14 @@ export const Header: React.FC<HeaderProps> = ({
               setIsMobileMenuOpen(false);
               onNavigateToCatalog();
             }}
-            className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all cursor-pointer active:scale-95 ${
+            className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all cursor-pointer touch-manipulation active:scale-90 min-h-[50px] ${
               currentView === 'catalog' || currentView === 'lesson'
-                ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shadow-inner'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/40 shadow-inner ring-1 ring-emerald-500/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
             }`}
           >
-            <BookOpen className={`w-5 h-5 ${currentView === 'catalog' || currentView === 'lesson' ? 'text-emerald-400 scale-105' : ''}`} />
-            <span className="text-[10px] mt-0.5 tracking-tight font-semibold">{lang === 'en' ? 'Courses' : 'Cursuri'}</span>
+            <BookOpen className={`w-5 h-5 ${currentView === 'catalog' || currentView === 'lesson' ? 'text-emerald-400 scale-110' : ''}`} />
+            <span className="text-[10px] mt-1 tracking-tight font-bold">{lang === 'en' ? 'Courses' : 'Cursuri'}</span>
           </button>
 
           {/* Tab 2: Arcade */}
@@ -469,14 +478,14 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMobileMenuOpen(false);
                 currentView === 'arcade' ? onNavigateToCatalog() : onNavigateToArcade();
               }}
-              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all cursor-pointer active:scale-95 ${
+              className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all cursor-pointer touch-manipulation active:scale-90 min-h-[50px] ${
                 currentView === 'arcade'
-                  ? 'bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30 shadow-inner'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-indigo-500/20 text-indigo-300 font-black border border-indigo-500/40 shadow-inner ring-1 ring-indigo-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
               }`}
             >
-              <Gamepad2 className={`w-5 h-5 ${currentView === 'arcade' ? 'text-indigo-400 scale-105' : ''}`} />
-              <span className="text-[10px] mt-0.5 tracking-tight font-semibold">{lang === 'en' ? 'Arcade' : 'Arcade'}</span>
+              <Gamepad2 className={`w-5 h-5 ${currentView === 'arcade' ? 'text-indigo-400 scale-110' : ''}`} />
+              <span className="text-[10px] mt-1 tracking-tight font-bold">{lang === 'en' ? 'Arcade' : 'Arcade'}</span>
             </button>
           )}
 
@@ -488,15 +497,15 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMobileMenuOpen(false);
                 currentView === 'duel' ? onNavigateToCatalog() : onNavigateToDuel();
               }}
-              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all cursor-pointer active:scale-95 relative ${
+              className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all cursor-pointer touch-manipulation active:scale-90 min-h-[50px] relative ${
                 currentView === 'duel'
-                  ? 'bg-rose-500/20 text-rose-300 font-bold border border-rose-500/30 shadow-inner'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-rose-500/20 text-rose-300 font-black border border-rose-500/40 shadow-inner ring-1 ring-rose-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
               }`}
             >
-              <Swords className={`w-5 h-5 ${currentView === 'duel' ? 'text-rose-400 scale-105' : ''}`} />
-              <span className="text-[10px] mt-0.5 tracking-tight font-semibold">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
-              <span className="absolute top-1.5 right-3 w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+              <Swords className={`w-5 h-5 ${currentView === 'duel' ? 'text-rose-400 scale-110' : ''}`} />
+              <span className="text-[10px] mt-1 tracking-tight font-bold">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
+              <span className="absolute top-1.5 right-2.5 w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
             </button>
           )}
 
@@ -508,14 +517,14 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMobileMenuOpen(false);
                 currentView === 'city' ? onNavigateToCatalog() : onNavigateToCity();
               }}
-              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all cursor-pointer active:scale-95 ${
+              className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all cursor-pointer touch-manipulation active:scale-90 min-h-[50px] ${
                 currentView === 'city'
-                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30 shadow-inner'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-cyan-500/20 text-cyan-300 font-black border border-cyan-500/40 shadow-inner ring-1 ring-cyan-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
               }`}
             >
-              <Building2 className={`w-5 h-5 ${currentView === 'city' ? 'text-cyan-400 scale-105' : ''}`} />
-              <span className="text-[10px] mt-0.5 tracking-tight font-semibold">{lang === 'en' ? 'City' : 'Orașul'}</span>
+              <Building2 className={`w-5 h-5 ${currentView === 'city' ? 'text-cyan-400 scale-110' : ''}`} />
+              <span className="text-[10px] mt-1 tracking-tight font-bold">{lang === 'en' ? 'City' : 'Orașul'}</span>
             </button>
           )}
 
@@ -527,14 +536,14 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMobileMenuOpen(false);
                 currentView === 'teacher' ? onNavigateToCatalog() : onNavigateToTeacher();
               }}
-              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all cursor-pointer active:scale-95 ${
+              className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all cursor-pointer touch-manipulation active:scale-90 min-h-[50px] ${
                 currentView === 'teacher'
-                  ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 shadow-inner'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-amber-500/20 text-amber-300 font-black border border-amber-500/40 shadow-inner ring-1 ring-amber-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
               }`}
             >
-              <School className={`w-5 h-5 ${currentView === 'teacher' ? 'text-amber-400 scale-105' : ''}`} />
-              <span className="text-[10px] mt-0.5 tracking-tight font-semibold">{lang === 'en' ? 'Teacher' : 'Profesor'}</span>
+              <School className={`w-5 h-5 ${currentView === 'teacher' ? 'text-amber-400 scale-110' : ''}`} />
+              <span className="text-[10px] mt-1 tracking-tight font-bold">{lang === 'en' ? 'Teacher' : 'Profesor'}</span>
             </button>
           )}
         </div>

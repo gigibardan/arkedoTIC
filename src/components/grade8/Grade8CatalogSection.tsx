@@ -257,8 +257,8 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
           </div>
         </div>
 
-        {/* Units Description Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        {/* Units Description Cards: 2x2 on mobile, 4 columns on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 text-xs">
           <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 mb-1">

@@ -34,7 +34,8 @@ import {
   Clock,
   User,
   MessageSquare,
-  Building2
+  Building2,
+  Rocket
 } from 'lucide-react';
 import {
   ALL_GAMES,
@@ -183,6 +184,8 @@ export const TeacherGameControls: React.FC = () => {
         return <Swords {...props} />;
       case 'Building2':
         return <Building2 {...props} />;
+      case 'Rocket':
+        return <Rocket {...props} />;
       case 'ShieldCheck':
       default:
         return <ShieldCheck {...props} />;

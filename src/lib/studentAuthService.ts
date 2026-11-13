@@ -72,6 +72,10 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   hacker_defense: 0,
   cyber_snake: 0,
   circuit_master: 0,
+  cyber_invaders: 0,
+  cyber_pacman: 0,
+  cyber_arkanoid: 0,
+  cyber_frogger: 0,
   totalArcade: 0
 };
 
@@ -200,6 +204,18 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
   // Circuit Master Retro Hardware & IoT Lab: capped at 2,000 XP
   const circuitMasterPoints = Math.min(2000, scores.circuit_master || 0);
 
+  // Cyber Invaders Galaxia Codului & Bug Buster: capped at 2,500 XP
+  const cyberInvadersPoints = Math.min(2500, scores.cyber_invaders || 0);
+
+  // Cyber Pac-Man Motherboard Maze: capped at 2,500 XP
+  const cyberPacmanPoints = Math.min(2500, scores.cyber_pacman || 0);
+
+  // Cyber Arkanoid Firewall Breaker: capped at 2,500 XP
+  const cyberArkanoidPoints = Math.min(2500, scores.cyber_arkanoid || 0);
+
+  // Cyber Frogger Network Hopper: capped at 2,500 XP
+  const cyberFroggerPoints = Math.min(2500, scores.cyber_frogger || 0);
+
   return (
     typingPoints +
     mousePoints +
@@ -222,7 +238,11 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     pageCraftPoints +
     hackerDefensePoints +
     cyberSnakePoints +
-    circuitMasterPoints
+    circuitMasterPoints +
+    cyberInvadersPoints +
+    cyberPacmanPoints +
+    cyberArkanoidPoints +
+    cyberFroggerPoints
   );
 }
 

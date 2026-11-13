@@ -92,6 +92,10 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     redstone_lab: student.arcadeScores?.redstone_lab || 0,
     voxel_architect: student.arcadeScores?.voxel_architect || 0,
     roblox_clicker: student.arcadeScores?.roblox_clicker || 0,
+    cyber_invaders: student.arcadeScores?.cyber_invaders || 0,
+    cyber_pacman: student.arcadeScores?.cyber_pacman || 0,
+    cyber_arkanoid: student.arcadeScores?.cyber_arkanoid || 0,
+    cyber_frogger: student.arcadeScores?.cyber_frogger || 0,
     totalArcade: student.arcadeScores?.totalArcade || 0
   });
 
@@ -245,6 +249,10 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   };
 
   const ARCADE_GAMES_METADATA = [
+    { key: 'cyber_frogger', name: isEn ? 'Cyber Frogger: Network Hopper' : 'Cyber Frogger: Traversarea Rețelei', icon: '🐸', badge: isEn ? 'NEW 🔥' : 'NOU 🔥' },
+    { key: 'cyber_arkanoid', name: isEn ? 'Cyber Arkanoid: Firewall Breaker' : 'Cyber Arkanoid: Spărgătorul de Firewall', icon: '🧱', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
+    { key: 'cyber_pacman', name: isEn ? 'Cyber Pac-Man: Motherboard Maze' : 'Cyber Pac-Man: Labirintul Biților', icon: '🟡', badge: isEn ? 'LEGEND 🔥' : 'NOU 🔥' },
+    { key: 'cyber_invaders', name: isEn ? 'Cyber Invaders: Space Arcade' : 'Cyber Invaders: Galaxia Codului', icon: '🚀', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
     { key: 'roblox_clicker', name: isEn ? 'Roblox Blox Clicker (1v1)' : 'Roblox Blox Clicker Duel (1v1)', icon: '🟥', badge: isEn ? 'Roblox' : 'Roblox' },
     { key: 'voxel_architect', name: isEn ? 'Voxel Architect (Minecraft CS)' : 'Voxel Architect: Calculatoare Minecraft', icon: '🧱', badge: isEn ? 'Ultimate' : 'Complex' },
     { key: 'redstone_lab', name: isEn ? 'Redstone Logic Lab' : 'Circuite Redstone (Minecraft TIC)', icon: '⛏️', badge: isEn ? 'Minecraft' : 'Minecraft' },

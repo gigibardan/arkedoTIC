@@ -247,7 +247,7 @@ export const Grade7CatalogSection: React.FC<Grade7CatalogSectionProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 text-xs">
           <div className="p-3.5 rounded-2xl bg-blue-950/40 border border-blue-500/40 flex flex-col justify-between">
             <div>
               <span className="text-xl mb-1 block">📝</span>

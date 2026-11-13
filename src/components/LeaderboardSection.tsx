@@ -170,13 +170,13 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
           {/* Action Tabs & Refresh */}
           <div className="flex items-center gap-2 self-start md:self-auto flex-wrap w-full md:w-auto">
-            <div className="bg-slate-950 p-1 rounded-2xl border border-slate-800 grid grid-cols-2 sm:flex sm:items-center gap-1 w-full sm:w-auto">
+            <div className="bg-slate-950 p-1.5 rounded-2xl border border-slate-800 grid grid-cols-2 sm:flex sm:items-center gap-1.5 w-full sm:w-auto">
               <button
                 onClick={() => {
                   setActiveTab('total');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
                   activeTab === 'total'
                     ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -191,7 +191,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('arcade');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
                   activeTab === 'arcade'
                     ? 'bg-indigo-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -206,7 +206,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('lessons');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
                   activeTab === 'lessons'
                     ? 'bg-teal-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -221,7 +221,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('duels');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
                   activeTab === 'duels'
                     ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
@@ -233,14 +233,14 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
             </div>
 
             {/* Grade Filter */}
-            <div className="relative">
+            <div className="relative flex-1 sm:flex-none">
               <select
                 value={selectedGradeFilter}
                 onChange={(e) => {
                   setSelectedGradeFilter(e.target.value);
                   sounds.playClick();
                 }}
-                className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer min-h-[42px] touch-manipulation"
                 title={lang === 'en' ? 'Filter by Grade' : 'Filtrează după Clasă'}
               >
                 <option value="all">🎒 {lang === 'en' ? 'All Grades' : 'Toate Clasele'}</option>

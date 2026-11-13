@@ -58,6 +58,10 @@ export interface ArcadeScores {
   hacker_defense?: number;
   cyber_snake?: number;
   circuit_master?: number;
+  cyber_invaders?: number;
+  cyber_pacman?: number;
+  cyber_arkanoid?: number;
+  cyber_frogger?: number;
   totalArcade: number;
 }
 

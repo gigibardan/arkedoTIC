@@ -23,7 +23,12 @@ import { PageCraftArcadeGame } from './PageCraftArcadeGame';
 import { HackerDefenderDuelGame } from './HackerDefenderDuelGame';
 import { CyberSnakeGame } from './CyberSnakeGame';
 import { CircuitMasterGame } from './CircuitMasterGame';
+import { CyberInvadersGame } from './CyberInvadersGame';
+import { CyberPacmanGame } from './CyberPacmanGame';
+import { CyberArkanoidGame } from './CyberArkanoidGame';
+import { CyberFroggerGame } from './CyberFroggerGame';
 import { GameLockedModal } from '../common/GameLockedModal';
+import { forceScrollToTop } from '../../utils/scrollHelper';
 import {
   subscribeGameSettings,
   isGameOpen,
@@ -61,6 +66,8 @@ import {
   Boxes,
   Lock,
   LayoutTemplate,
+  Rocket,
+  Ghost,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -69,7 +76,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master' | 'cyber_invaders' | 'cyber_pacman' | 'cyber_arkanoid' | 'cyber_frogger';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -91,6 +98,11 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     });
   }, []);
 
+  // Force scroll to top whenever entering or leaving an arcade game
+  useEffect(() => {
+    forceScrollToTop();
+  }, [activeGame]);
+
   const handleTryLaunchGame = (gameId: ActiveGame | 'duel', titleRo: string, titleEn: string) => {
     sounds.playClick();
     const open = isGameOpen(gameSettings, gameId);
@@ -102,6 +114,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       });
       return;
     }
+    forceScrollToTop();
     if (gameId === 'duel') {
       onOpenDuel?.();
     } else {
@@ -286,6 +299,38 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const cyberInvadersHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_invaders') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
+  const cyberPacmanHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_pacman') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
+  const cyberArkanoidHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_arkanoid') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
+  const cyberFroggerHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_frogger') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -350,6 +395,46 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           customMessage={gameSettings.customMessage}
         />
       </div>
+    );
+  }
+
+  if (activeGame === 'cyber_frogger') {
+    return (
+      <CyberFroggerGame
+        studentName={studentName || 'Bit Frog'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
+
+  if (activeGame === 'cyber_arkanoid') {
+    return (
+      <CyberArkanoidGame
+        studentName={studentName || 'Cyber Breaker'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
+
+  if (activeGame === 'cyber_pacman') {
+    return (
+      <CyberPacmanGame
+        studentName={studentName || 'Cyber Chomp'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
+
+  if (activeGame === 'cyber_invaders') {
+    return (
+      <CyberInvadersGame
+        studentName={studentName || 'Pilot Arky'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
     );
   }
 
@@ -652,6 +737,203 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Featured Game: Cyber Frogger (NEW 1981 Network Hopper) */}
+        <div className={`bg-gradient-to-br from-slate-900 via-emerald-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_frogger') ? 'border-emerald-400/80 hover:border-emerald-300 shadow-emerald-500/15' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 border border-emerald-300/50 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">🐸</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_frogger')}
+                {renderScoreBadges('cyber_frogger', cyberFroggerHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-emerald-400/20 text-emerald-300 text-[10px] font-mono font-black uppercase tracking-wider border border-emerald-400/30">
+                {lang === 'en' ? 'NEW 🔥 FROGGER 1981' : 'NOU 🔥 FROGGER 1981'}
+              </span>
+              <span className="text-[10px] font-mono text-cyan-300 font-bold">
+                {lang === 'en' ? '5 SERVER PORTS' : '5 PORTURI SERVER'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-emerald-300 transition-colors">
+              {lang === 'en' ? 'Cyber Frogger: Network Hopper 🐸⚡' : 'Cyber Frogger: Traversarea Rețelei 🐸⚡'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Dodge Trojan & Phishing traffic, hop across Data Logs and diving Sync Turtles, grab Cyber Shields, and connect all 5 Server Ports!'
+                : 'Evită traficul cu Troieni și Phishing, sari pe Pachetele de Date și Țestoasele Sync și conectează toate cele 5 Porturi de Server!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-emerald-300 font-mono font-bold">🕹️ 1981 Retro Arcade</span>
+            {renderGameActionButton(
+              'cyber_frogger',
+              'Cyber Frogger: Traversarea Rețelei',
+              'Cyber Frogger: Network Hopper',
+              'Joacă Frogger 🐸',
+              'Play Frogger 🐸',
+              'bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 shadow-emerald-500/25'
+            )}
+          </div>
+        </div>
+
+        {/* Featured Game: Cyber Arkanoid (NEW 1986 Brick Breaker) */}
+        <div className={`bg-gradient-to-br from-slate-900 via-sky-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_arkanoid') ? 'border-sky-400/80 hover:border-sky-300 shadow-sky-500/15' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 border border-sky-300/50 flex items-center justify-center text-white shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">🧱</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_arkanoid')}
+                {renderScoreBadges('cyber_arkanoid', cyberArkanoidHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-sky-400/20 text-sky-300 text-[10px] font-mono font-black uppercase tracking-wider border border-sky-400/30">
+                {lang === 'en' ? 'NEW 🔥 ARKANOID 1986' : 'NOU 🔥 ARKANOID 1986'}
+              </span>
+              <span className="text-[10px] font-mono text-emerald-300 font-bold">
+                {lang === 'en' ? '8 POWER-UPS & BOSS' : '8 PUTERI & BOSS AI'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-sky-300 transition-colors">
+              {lang === 'en' ? 'Cyber Arkanoid: Firewall Breaker 🧱⚡' : 'Cyber Arkanoid: Spărgătorul de Firewall 🧱⚡'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Shatter encrypted Firewall blocks across 6 cyber sectors, catch Laser, Multi-Ball, Plasma & Magnet capsules, and purge the Rogue AI Kernel!'
+                : 'Sparge blocurile Firewall criptate în 6 sectoare, prinde capsule cu Laser, Multi-Sferă, Plasmă și Magnet, și distruge Nucleul AI Corupt!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-sky-300 font-mono font-bold">🕹️ 1986 Retro Arcade</span>
+            {renderGameActionButton(
+              'cyber_arkanoid',
+              'Cyber Arkanoid: Spărgătorul de Firewall',
+              'Cyber Arkanoid: Firewall Breaker',
+              'Joacă Arkanoid 🧱',
+              'Play Arkanoid 🧱',
+              'bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 shadow-sky-500/25'
+            )}
+          </div>
+        </div>
+
+        {/* Featured Game 1: Cyber Pac-Man (NEW Authentic 1980s Retro Arcade) */}
+        <div className={`bg-gradient-to-br from-slate-900 via-amber-950/40 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_pacman') ? 'border-yellow-400/80 hover:border-yellow-300 shadow-yellow-500/15' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-600 border border-yellow-300/50 flex items-center justify-center text-slate-950 shadow-lg shadow-yellow-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">🟡</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_pacman')}
+                {renderScoreBadges('cyber_pacman', cyberPacmanHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-yellow-400/20 text-yellow-300 text-[10px] font-mono font-black uppercase tracking-wider border border-yellow-400/30">
+                {lang === 'en' ? 'NEW 🔥 RETRO PAC-MAN' : 'NOU 🔥 RETRO PAC-MAN'}
+              </span>
+              <span className="text-[10px] font-mono text-purple-300 font-bold flex items-center gap-1">
+                <Ghost className="w-3 h-3 text-pink-400" />
+                {lang === 'en' ? '4 AI GHOSTS' : '4 FANTOME CU AI'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-yellow-300 transition-colors">
+              {lang === 'en' ? 'Cyber Pac-Man: Bit Crusher 🟡👻' : 'Cyber Pac-Man: Curățătorul de Biți 🟡👻'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Devour data bits in the cyber maze, grab retro hardware loot (Floppy, NVMe, Qubit), trigger Firewall Overclock, and quarantine rogue virus ghosts!'
+                : 'Curăță toți biții de date din labirint, colectează componente hardware retro (Floppy, NVMe, Qubit), activează Firewall Overclock și pune virușii în carantină!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-yellow-300 font-mono font-bold">🕹️ 1980s Retro Arcade</span>
+            {renderGameActionButton(
+              'cyber_pacman',
+              'Cyber Pac-Man: Curățătorul de Biți',
+              'Cyber Pac-Man: Bit Crusher',
+              'Joacă Pac-Man 🟡',
+              'Play Pac-Man 🟡',
+              'bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-600 hover:from-yellow-400 hover:to-orange-500 shadow-yellow-500/25'
+            )}
+          </div>
+        </div>
+
+        {/* Featured Game: Cyber Invaders (NEW Space Arcade 1980s) */}
+        <div className={`bg-gradient-to-br from-slate-900 via-indigo-950/60 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_invaders') ? 'border-cyan-500/70 hover:border-cyan-400 shadow-cyan-500/10' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 border border-cyan-400/50 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <Rocket className="w-6 h-6 animate-pulse" />
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_invaders')}
+                {renderScoreBadges('cyber_invaders', cyberInvadersHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-black uppercase tracking-wider">
+                {lang === 'en' ? 'NEW 🔥 SPACE INVADERS' : 'NOU 🔥 SPACE INVADERS'}
+              </span>
+              <span className="text-[10px] font-mono text-amber-300 font-bold">
+                {lang === 'en' ? '9 WAVES & BOSSES' : '9 VALURI & BOȘI'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-cyan-300 transition-colors">
+              {lang === 'en' ? 'Cyber Invaders: Code Galaxy 🚀👾' : 'Cyber Invaders: Galaxia Codului 🚀👾'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Blast invading malware swarms, collect RAM capacitors, trigger EMP bombs, and answer trivia for 5.0 GHz Hyper Overclock!'
+                : 'Spulberă roiurile de viruși, colectează cipuri RAM, lansează bombe EMP și răspunde la trivia pentru viteză Hyper Overclock 5.0 GHz!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-cyan-300 font-mono font-bold">👾 1980s Retro Arcade</span>
+            {renderGameActionButton(
+              'cyber_invaders',
+              'Cyber Invaders: Galaxia Codului',
+              'Cyber Invaders: Code Galaxy',
+              'Lansează Misiunea 🚀',
+              'Launch Mission 🚀',
+              'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 shadow-cyan-500/25'
+            )}
+          </div>
+        </div>
+
         {/* Game 1: Speed Typing */}
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'typing') ? 'border-slate-700/80 hover:border-cyan-500/60' : 'border-rose-500/40 opacity-95'

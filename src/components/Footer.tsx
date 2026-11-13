@@ -500,11 +500,11 @@ export const Footer: React.FC<FooterProps> = ({
                   window.location.reload();
                 }, 300);
               }}
-              className="text-amber-400 hover:text-amber-300 font-mono text-[11px] bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded border border-amber-500/30 flex items-center gap-1 cursor-pointer transition-colors"
+              className="text-amber-300 hover:text-white font-mono text-xs bg-amber-500/20 hover:bg-amber-500/30 px-3 py-1.5 rounded-xl border border-amber-500/40 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 touch-manipulation shadow-sm"
               title={lang === 'en' ? 'Clear cache and reload latest version' : 'Curăță memoria cache și reîncarcă cea mai nouă versiune'}
             >
-              <span>🔄</span>
-              <span>{lang === 'en' ? 'Update App' : 'Actualizează App'}</span>
+              <span className="text-sm">🔄</span>
+              <span className="font-bold">{lang === 'en' ? 'Update App' : 'Actualizează App'}</span>
             </button>
           </div>
         </div>

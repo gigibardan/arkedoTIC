@@ -70,6 +70,7 @@ import { Grade7InteractiveSimulators } from './grade7/Grade7InteractiveSimulator
 import { Grade8CatalogSection } from './grade8/Grade8CatalogSection';
 import { Grade8InteractiveSimulators } from './grade8/Grade8InteractiveSimulators';
 import { AllMissionId } from '../types';
+import { forceScrollToTop } from '../utils/scrollHelper';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -566,6 +567,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
     // Safe to proceed
     sounds.playClick();
+    forceScrollToTop();
     onSelectMission(targetMission);
   };
 
@@ -1450,8 +1452,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               )}
             </div>
 
-            {/* Quick Hero Highlights / Feature Anchor Buttons */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+            {/* Quick Hero Highlights / Feature Anchor Buttons: 2x2 on mobile, 4 in a row on desktop */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 pt-1">
               {/* 1. Misiuni Practice */}
               <button
                 id="hero-badge-misiuni"
@@ -1463,14 +1465,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
-                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-teal-950/40 hover:bg-teal-900/60 border border-teal-500/40 hover:border-teal-300 text-xs text-teal-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-teal-500/20"
+                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-teal-950/50 hover:bg-teal-900/70 border border-teal-500/40 hover:border-teal-300 text-xs text-teal-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-teal-500/20 min-h-[46px]"
                 title={lang === 'en' ? 'Jump to Practical Missions' : 'Mergi la Misiuni Practice'}
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 group-hover:scale-110 transition-transform">
                     <BookOpen className="w-3.5 h-3.5" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Missions' : 'Misiuni'}</span>
+                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Missions' : 'Misiuni'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-teal-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1483,14 +1485,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   sounds.playClick();
                   onOpenArcade?.();
                 }}
-                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-indigo-950/50 hover:bg-indigo-900/70 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20"
+                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20 min-h-[46px]"
                 title={lang === 'en' ? 'Open Arcade Games (21 Mini-Games)' : 'Deschide Jocurile Arcade (21 Mini-Jocuri)'}
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Arcade (21)' : 'Arcade (21)'}</span>
+                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Arcade (21)' : 'Arcade (21)'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1503,14 +1505,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   sounds.playClick();
                   onOpenDuel?.();
                 }}
-                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-rose-950/50 hover:bg-rose-900/70 border border-rose-500/50 hover:border-rose-300 text-xs text-rose-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-rose-500/20"
+                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-rose-950/60 hover:bg-rose-900/80 border border-rose-500/50 hover:border-rose-300 text-xs text-rose-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-rose-500/20 min-h-[46px]"
                 title={lang === 'en' ? 'ArkyEdu Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-rose-500/25 border border-rose-400/40 flex items-center justify-center text-rose-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Swords className="w-3.5 h-3.5 animate-pulse" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
+                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-rose-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1526,14 +1528,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
-                className="group flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/40 hover:border-amber-300 text-xs text-amber-200 hover:text-white font-bold transition-all cursor-pointer active:scale-95 text-left shadow-sm hover:shadow-amber-500/20"
+                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-amber-950/50 hover:bg-amber-900/70 border border-amber-500/40 hover:border-amber-300 text-xs text-amber-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-amber-500/20 min-h-[46px]"
                 title={lang === 'en' ? 'Jump to Leaderboard' : 'Mergi la Clasamente Elevi'}
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 group-hover:scale-110 transition-transform">
                     <Trophy className="w-3.5 h-3.5" />
                   </div>
-                  <span className="truncate">{lang === 'en' ? 'Leaderboard' : 'Top Elevi'}</span>
+                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Leaderboard' : 'Top Elevi'}</span>
                 </div>
                 <ArrowRight className="w-3 h-3 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
               </button>
@@ -1541,9 +1543,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
 
           {/* Right Column: Mascota Arky Live Companion */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center relative">
+          <div className="lg:col-span-4 flex flex-col items-center justify-center relative mt-2 lg:mt-0">
             {/* Arky Speech Bubble */}
-            <div className="relative bg-slate-900/95 border-2 border-teal-400/60 rounded-2xl p-3.5 sm:p-4 text-center shadow-xl mb-3 backdrop-blur max-w-xs transition-all">
+            <div className="relative bg-slate-900/95 border-2 border-teal-400/60 rounded-2xl p-3 sm:p-4 text-center shadow-xl mb-3 backdrop-blur w-full max-w-xs transition-all">
               <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-teal-400 uppercase tracking-wider mb-1">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 <span>Arky TIC Assistant</span>
@@ -1563,7 +1565,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <button
               type="button"
               onClick={handleArkyHeroClick}
-              className="group relative cursor-pointer focus:outline-none transition-transform active:scale-95"
+              className="group relative cursor-pointer focus:outline-none transition-transform touch-manipulation active:scale-95 flex flex-col items-center"
               title={lang === 'en' ? 'Tap Arky for a secret tip!' : 'Apasă pe Arky pentru un sfat secret!'}
             >
               {/* Ambient Glow */}
@@ -1575,7 +1577,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 width={224}
                 height={315}
                 fetchPriority="high"
-                className="relative z-10 w-48 sm:w-56 h-auto object-contain drop-shadow-[0_15px_25px_rgba(20,184,166,0.35)] group-hover:scale-105 transition-all duration-300"
+                className="relative z-10 w-36 sm:w-48 md:w-56 h-auto object-contain drop-shadow-[0_15px_25px_rgba(20,184,166,0.35)] group-hover:scale-105 transition-all duration-300"
               />
 
               {/* Tap badge prompt */}
@@ -1611,49 +1613,49 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </div>
           </div>
 
-          {/* Large Tactile Switcher Buttons Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Large Tactile Switcher Buttons Grid: 2x2 on mobile, 4 columns on desktop */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
             {/* Tab 1: Clasa a V-a */}
             <button
               type="button"
               onClick={() => handleSelectGrade('grade5')}
-              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
                 selectedGrade === 'grade5'
-                  ? 'bg-gradient-to-br from-teal-950/80 via-slate-900 to-emerald-950/60 border-teal-400 shadow-xl shadow-teal-500/20 ring-2 ring-teal-400/30'
+                  ? 'bg-gradient-to-br from-teal-950/90 via-slate-900 to-emerald-950/70 border-teal-400 shadow-xl shadow-teal-500/20 ring-2 ring-teal-400/40'
                   : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
               }`}
             >
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2.5">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
                     selectedGrade === 'grade5'
                       ? 'bg-teal-500/25 border border-teal-400/50 text-teal-200'
                       : 'bg-slate-800 border border-slate-700 text-slate-400'
                   }`}>
                     🏫
                   </div>
-                  <div>
-                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                  <div className="min-w-0">
+                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
                       selectedGrade === 'grade5' ? 'text-white' : 'text-slate-300'
                     }`}>
-                      {lang === 'en' ? '5th Grade (Clasa a V-a)' : 'Clasa a V-a'}
+                      {lang === 'en' ? '5th Grade' : 'Clasa a V-a'}
                     </h3>
-                    <div className="text-[11px] font-mono font-bold text-teal-400">
-                      {lang === 'en' ? 'Complete Curriculum • 10 Missions' : 'Materia Completă • 10 Misiuni Active'}
+                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-teal-400 truncate">
+                      {lang === 'en' ? '10 Missions' : '10 Misiuni'}
                     </div>
                   </div>
                 </div>
 
-                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade5'
                     ? 'bg-teal-500/20 border-teal-400 text-teal-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
+                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
                 }`}>
-                  {selectedGrade === 'grade5' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                  {selectedGrade === 'grade5' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
                 </div>
               </div>
 
-              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade5' ? 'text-slate-200' : 'text-slate-400'}`}>
+              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade5' ? 'text-slate-200' : 'text-slate-400'}`}>
                 {lang === 'en'
                   ? 'Hardware PC, Secret File Tree, Internet 3A & 3B, Word Formatting 4A & 4B, Sequential Algo 5A, Decisions 5B, Scratch 6A & 6B.'
                   : 'Sisteme de calcul, Arborele de fișiere, Internet 3A & 3B, Tehnoredactare Word 4A & 4B, Algoritmi 5A & 5B, Scratch 6A & 6B.'}
@@ -1664,43 +1666,43 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <button
               type="button"
               onClick={() => handleSelectGrade('grade6')}
-              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
                 selectedGrade === 'grade6'
-                  ? 'bg-gradient-to-br from-orange-950/80 via-slate-900 to-indigo-950/60 border-orange-400 shadow-xl shadow-orange-500/20 ring-2 ring-orange-400/30'
+                  ? 'bg-gradient-to-br from-orange-950/90 via-slate-900 to-indigo-950/70 border-orange-400 shadow-xl shadow-orange-500/20 ring-2 ring-orange-400/40'
                   : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
               }`}
             >
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2.5">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
                     selectedGrade === 'grade6'
                       ? 'bg-orange-500/25 border border-orange-400/50 text-orange-200'
                       : 'bg-slate-800 border border-slate-700 text-slate-400'
                   }`}>
                     🚀
                   </div>
-                  <div>
-                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                  <div className="min-w-0">
+                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
                       selectedGrade === 'grade6' ? 'text-white' : 'text-slate-300'
                     }`}>
-                      {lang === 'en' ? '6th Grade (Clasa a VI-a)' : 'Clasa a VI-a'}
+                      {lang === 'en' ? '6th Grade' : 'Clasa a VI-a'}
                     </h3>
-                    <div className="text-[11px] font-mono font-bold text-orange-400">
-                      {lang === 'en' ? 'New Curriculum 2026 • 4 Units' : 'Curriculum Nou 2026 • 4 Mari Unități'}
+                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-orange-400 truncate">
+                      {lang === 'en' ? '8 Missions' : '8 Misiuni'}
                     </div>
                   </div>
                 </div>
 
-                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade6'
                     ? 'bg-orange-500/20 border-orange-400 text-orange-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
+                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
                 }`}>
-                  {selectedGrade === 'grade6' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                  {selectedGrade === 'grade6' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
                 </div>
               </div>
 
-              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade6' ? 'text-slate-200' : 'text-slate-400'}`}>
+              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade6' ? 'text-slate-200' : 'text-slate-400'}`}>
                 {lang === 'en'
                   ? 'PowerPoint 1A & 1B, Paint 3D Modeling 2A, Toontastic & VR 2B, Malware Security 3A, Email 3B, Advanced Scratch Loops 4A & 4B.'
                   : 'Prezentări PowerPoint 1A & 1B, Modelare Paint 3D 2A, Toontastic & VR 2B, Securitate Malware 3A, E-mail 3B, Bucle Scratch 4A & 4B.'}
@@ -1711,43 +1713,43 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <button
               type="button"
               onClick={() => handleSelectGrade('grade7')}
-              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
                 selectedGrade === 'grade7'
-                  ? 'bg-gradient-to-br from-cyan-950/80 via-slate-900 to-violet-950/60 border-cyan-400 shadow-xl shadow-cyan-500/20 ring-2 ring-cyan-400/30'
+                  ? 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-violet-950/70 border-cyan-400 shadow-xl shadow-cyan-500/20 ring-2 ring-cyan-400/40'
                   : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
               }`}
             >
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2.5">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
                     selectedGrade === 'grade7'
                       ? 'bg-cyan-500/25 border border-cyan-400/50 text-cyan-200'
                       : 'bg-slate-800 border border-slate-700 text-slate-400'
                   }`}>
                     🔬
                   </div>
-                  <div>
-                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                  <div className="min-w-0">
+                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
                       selectedGrade === 'grade7' ? 'text-white' : 'text-slate-300'
                     }`}>
-                      {lang === 'en' ? '7th Grade (Clasa a VII-a)' : 'Clasa a VII-a'}
+                      {lang === 'en' ? '7th Grade' : 'Clasa a VII-a'}
                     </h3>
-                    <div className="text-[11px] font-mono font-bold text-cyan-400">
-                      {lang === 'en' ? 'Official Curriculum • 12 Missions' : 'Programa Oficială • 12 Misiuni Complete'}
+                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-cyan-400 truncate">
+                      {lang === 'en' ? '12 Missions' : '12 Misiuni'}
                     </div>
                   </div>
                 </div>
 
-                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade7'
                     ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
+                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
                 }`}>
-                  {selectedGrade === 'grade7' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                  {selectedGrade === 'grade7' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
                 </div>
               </div>
 
-              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade7' ? 'text-slate-200' : 'text-slate-400'}`}>
+              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade7' ? 'text-slate-200' : 'text-slate-400'}`}>
                 {lang === 'en'
                   ? 'Word 1A & 1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, C++ Programming 4A-6A, Virtual Robots & Sensors 6B.'
                   : 'Tehnoredactare Word 1A/1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, Programare C++ 4A–6A & Roboți Senzoriali 6B.'}
@@ -1758,43 +1760,43 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             <button
               type="button"
               onClick={() => handleSelectGrade('grade8')}
-              className={`p-3.5 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden ${
+              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
                 selectedGrade === 'grade8'
-                  ? 'bg-gradient-to-br from-emerald-950/80 via-slate-900 to-teal-950/60 border-emerald-400 shadow-xl shadow-emerald-500/20 ring-2 ring-emerald-400/30'
+                  ? 'bg-gradient-to-br from-emerald-950/90 via-slate-900 to-teal-950/70 border-emerald-400 shadow-xl shadow-emerald-500/20 ring-2 ring-emerald-400/40'
                   : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
               }`}
             >
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2.5">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-inner ${
+              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
                     selectedGrade === 'grade8'
                       ? 'bg-emerald-500/25 border border-emerald-400/50 text-emerald-200'
                       : 'bg-slate-800 border border-slate-700 text-slate-400'
                   }`}>
                     🎓
                   </div>
-                  <div>
-                    <h3 className={`text-base sm:text-lg font-black font-heading ${
+                  <div className="min-w-0">
+                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
                       selectedGrade === 'grade8' ? 'text-white' : 'text-slate-300'
                     }`}>
-                      {lang === 'en' ? '8th Grade (Clasa a VIII-a)' : 'Clasa a VIII-a'}
+                      {lang === 'en' ? '8th Grade' : 'Clasa a VIII-a'}
                     </h3>
-                    <div className="text-[11px] font-mono font-bold text-emerald-400">
-                      {lang === 'en' ? 'Official Curriculum • 14 Missions' : 'Manual Art Klett 2025 • 14 Misiuni Complete'}
+                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-emerald-400 truncate">
+                      {lang === 'en' ? '14 Missions' : '14 Misiuni'}
                     </div>
                   </div>
                 </div>
 
-                <div className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shrink-0 ${
+                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
                   selectedGrade === 'grade8'
                     ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-200 font-bold'
+                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
                 }`}>
-                  {selectedGrade === 'grade8' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Selectează')}
+                  {selectedGrade === 'grade8' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
                 </div>
               </div>
 
-              <p className={`text-xs leading-relaxed ${selectedGrade === 'grade8' ? 'text-slate-200' : 'text-slate-400'}`}>
+              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade8' ? 'text-slate-200' : 'text-slate-400'}`}>
                 {lang === 'en'
                   ? 'Excel Spreadsheets 1A-1D, Google Sites 2A-2C, Advanced C++ 3A-3E, Arduino Robotics 4A & Smart Home IoT 4B.'
                   : 'Calcul Tabelar Excel 1A–1D, Pagini Web Google Sites 2A–2C, Algoritmi C++ 3A–3E, Robotică Arduino 4A & Smart Home IoT 4B.'}
