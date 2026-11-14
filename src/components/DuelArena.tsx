@@ -35,7 +35,9 @@ import {
   Puzzle,
   Boxes,
   Crosshair,
-  Filter
+  Filter,
+  Layers,
+  Anchor
 } from 'lucide-react';
 import {
   DuelGameMode,
@@ -67,6 +69,9 @@ import { CodeRacerCppDuelGame } from './minigames/CodeRacerCppDuelGame';
 import { PixelClashDuelGame } from './minigames/PixelClashDuelGame';
 import { NetworkPacketRacerDuelGame } from './minigames/NetworkPacketRacerDuelGame';
 import { CyberClashDuelGame } from './minigames/CyberClashDuelGame';
+import { SystemSabotageDuelGame } from './minigames/SystemSabotageDuelGame';
+import { FileDropAttackDuelGame } from './minigames/FileDropAttackDuelGame';
+import { CyberBattleshipDuelGame } from './minigames/CyberBattleshipDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -121,7 +126,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const handleBack = onBack || onClose;
   // Navigation / Lobby States
   const [viewState, setViewState] = useState<'lobby' | 'room' | 'playing' | 'results'>('lobby');
-  const [selectedMode, setSelectedMode] = useState<DuelGameMode>('cyber_clash');
+  const [selectedMode, setSelectedMode] = useState<DuelGameMode>('cyber_battleship');
   const [activeCategory, setActiveCategory] = useState<'all' | 'precision' | 'speed' | 'algo' | 'hardware'>('all');
   const [mobileLobbyTab, setMobileLobbyTab] = useState<'create' | 'join'>('create');
   const [inputRoomCode, setInputRoomCode] = useState('');
@@ -143,13 +148,13 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       return ['cyber_precision', 'mouse_duel', 'pixel_clash', 'roblox_clicker'].includes(modeKey);
     }
     if (cat === 'speed') {
-      return ['cyber_sprint', 'quiz_blitz', 'binary_clash'].includes(modeKey);
+      return ['file_drop_attack', 'system_sabotage', 'cyber_sprint', 'quiz_blitz', 'binary_clash'].includes(modeKey);
     }
     if (cat === 'algo') {
       return ['block_coding', 'algo_race_cpp', 'speed_crafting'].includes(modeKey);
     }
     if (cat === 'hardware') {
-      return ['cyber_clash', 'circuit_overdrive', 'pc_rush', 'cyber_shield', 'hacker_defense', 'circuit_duel', 'network_racer'].includes(modeKey);
+      return ['cyber_battleship', 'cyber_clash', 'circuit_overdrive', 'pc_rush', 'cyber_shield', 'hacker_defense', 'circuit_duel', 'network_racer'].includes(modeKey);
     }
     return true;
   };
@@ -169,6 +174,51 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     iconBg: string;
     selectedGradient: string;
   }[] = [
+    {
+      key: 'cyber_battleship',
+      titleRo: 'Cyber Battleship 1v1 ⚓🚢',
+      titleEn: 'Cyber Battleship 1v1 ⚓🚢',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'NEW 🔥',
+      badgeClass: 'bg-sky-500/20 text-sky-300',
+      subtitleRo: 'Bătălie Navală 10×10 · Sonar 3×3, Torpile, Mine EMP & Nano-Scut',
+      subtitleEn: '10×10 Naval Warfare · 3×3 Sonar, Torpedoes, EMP Mines & Nano-Shield',
+      descRo: 'Poziționează 5 nave cibernetice + 2 Mine EMP pe grila 10×10! Folosește Railgun, Scanare Sonar 3×3, Bombă Cluster +, Torpile H/V și Nano-Reparație cu Scut Radar.',
+      descEn: 'Deploy 5 cyber vessels + 2 EMP Mines on a 10×10 grid! Unleash Railgun strikes, 3×3 Sonar scans, Cluster + bombs, H/V Torpedo sweeps & Nano-Repair Radar Shields.',
+      icon: <Anchor className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-sky-500 to-cyan-600 shadow-sky-500/30',
+      selectedGradient: 'bg-gradient-to-br from-sky-950/90 via-slate-900 to-cyan-950/80 border-sky-400 ring-2 ring-sky-500/40 shadow-lg',
+    },
+    {
+      key: 'file_drop_attack',
+      titleRo: 'File-Drop Attack 1v1 🧱⚡',
+      titleEn: 'File-Drop Attack 1v1 🧱⚡',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'NEW 🔥',
+      badgeClass: 'bg-cyan-500/20 text-cyan-300',
+      subtitleRo: 'Tetris Pro 1v1 · T-Spin, Back-to-Back & Atacuri Cyber',
+      subtitleEn: 'Pro 1v1 Block Matrix · T-Spin, Back-to-Back & Cyber Attacks',
+      descRo: 'Rotește piesele cu SRS Wall-Kicks, combină Tetris (4 linii), T-Spin și Back-to-Back ca să trimiți linii corupte rivalului și lansează DDoS, Overclock x2.2, Scramble sau Defrag Purge!',
+      descEn: 'Master SRS Wall-Kicks, Tetris clears, T-Spins & Back-to-Back combos to send corrupted garbage rows and fire live DDoS, Overclock x2.2, Scramble & Defrag Purge!',
+      icon: <Layers className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-cyan-500 to-blue-600 shadow-cyan-500/30',
+      selectedGradient: 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-indigo-950/80 border-cyan-400 ring-2 ring-cyan-500/40 shadow-lg',
+    },
+    {
+      key: 'system_sabotage',
+      titleRo: 'System Sabotage 1v1 🛸🔧',
+      titleEn: 'System Sabotage 1v1 🛸🔧',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'NEW 🔥',
+      badgeClass: 'bg-rose-500/20 text-rose-300',
+      subtitleRo: 'Sarcini Tactice & Sabotaj Live (Stil Among Us)',
+      subtitleEn: 'Tactical Ship Tasks & Live Sabotage (Among Us Style)',
+      descRo: 'Repară 8 sisteme (Cabluri, Card de Acces, Reactor 1–8, Frecvențe, Viruși) înaintea rivalului și lansează Sabotaje live: Stinge Lumina, Adware, Criogenare sau Meltdown!',
+      descEn: 'Complete 8 repair tasks (Wires, Keycard Swipe, Manifolds 1–8, Comm Freq, Malware Purge) first and trigger live Sabotages: Lights Out, Pop-ups, Cryo-Freeze & Meltdown!',
+      icon: <Wrench className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-rose-500 to-orange-600 shadow-rose-500/30',
+      selectedGradient: 'bg-gradient-to-br from-rose-950/90 via-slate-900 to-amber-950/70 border-rose-400 ring-2 ring-rose-500/40 shadow-lg',
+    },
     {
       key: 'cyber_clash',
       titleRo: 'Cyber Clash Royale 1v1 ⚔️👑',
@@ -1016,6 +1066,12 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           return '🌐 Network Packet Racer (Packets & Switch 1v1)';
         case 'cyber_clash':
           return '⚔️ Cyber Clash Royale (2-Lane Tactical Battle 1v1)';
+        case 'system_sabotage':
+          return '🛸 System Sabotage (Ship Tasks & Impostor Sabotage 1v1)';
+        case 'file_drop_attack':
+          return '🧱 File-Drop Attack (Pro 1v1 Matrix & Cyber Attacks)';
+        case 'cyber_battleship':
+          return '⚓ Cyber Battleship (10×10 Tactical Naval Warfare 1v1)';
         default:
           return '⚔️ ICT 1v1 Duel';
       }
@@ -1055,6 +1111,12 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🌐 Network Packet Racer (Cursa Pachetelor & Switch 1v1)';
       case 'cyber_clash':
         return '⚔️ Cyber Clash Royale (Strategie 2 Benzi 1v1)';
+      case 'system_sabotage':
+        return '🛸 System Sabotage (Sarcini & Sabotaje Gen Among Us 1v1)';
+      case 'file_drop_attack':
+        return '🧱 File-Drop Attack (Matrice Pro & Atacuri Cyber 1v1)';
+      case 'cyber_battleship':
+        return '⚓ Cyber Battleship (Bătălie Navală 10×10 & Sonar 1v1)';
       default:
         return '⚔️ Duel 1v1 TIC';
     }
@@ -1121,7 +1183,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               }`}
             >
               <Swords className="w-4 h-4" />
-              <span>{lang === 'en' ? '1. Host a Duel (17 Modes)' : '1. Alege & Creează Meci'}</span>
+              <span>{lang === 'en' ? '1. Host a Duel (18 Modes)' : '1. Alege & Creează Meci'}</span>
             </button>
             <button
               type="button"
@@ -1196,11 +1258,11 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     {lang === 'en' ? 'Filter:' : 'Filtru:'}
                   </span>
                   {[
-                    { id: 'all', labelRo: 'Toate (17)', labelEn: 'All (17)' },
+                    { id: 'all', labelRo: 'Toate (20)', labelEn: 'All (20)' },
                     { id: 'precision', labelRo: '🎯 Precizie & Mouse (4)', labelEn: '🎯 Precision & Mouse (4)' },
-                    { id: 'speed', labelRo: '⚡ Viteză & Reacție (3)', labelEn: '⚡ Speed & Typing (3)' },
+                    { id: 'speed', labelRo: '⚡ Viteză, Sabotaj & Reacție (5)', labelEn: '⚡ Speed, Sabotage & Typing (5)' },
                     { id: 'algo', labelRo: '🧠 Algoritmi & Logică (3)', labelEn: '🧠 Algorithms & Logic (3)' },
-                    { id: 'hardware', labelRo: '⚔️ Strategie, Cyber & Hardware (7)', labelEn: '⚔️ Strategy, Cyber & Hardware (7)' },
+                    { id: 'hardware', labelRo: '⚔️ Strategie, Cyber & Hardware (8)', labelEn: '⚔️ Strategy, Cyber & Hardware (8)' },
                   ].map(cat => (
                     <button
                       key={cat.id}
@@ -1342,7 +1404,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       className="lg:hidden w-full mb-3 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>{lang === 'en' ? '← Back to Mode Selection (17 Modes)' : '← Înapoi la Lista de Dueluri (17 Moduri)'}</span>
+                      <span>{lang === 'en' ? '← Back to Mode Selection (20 Modes)' : '← Înapoi la Lista de Dueluri (20 Moduri)'}</span>
                     </button>
                   )}
 
@@ -2322,6 +2384,69 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               onFinish={(_finalScore, won) => {
                 if (won) {
                   onAwardXP?.(300, lang === 'en' ? 'Victory in Cyber Clash Royale 1v1!' : 'Victorie în Cyber Clash Royale 1v1!');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 13: SYSTEM SABOTAGE 1v1 */}
+          {currentRoom.mode === 'system_sabotage' && (
+            <SystemSabotageDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(_finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(300, lang === 'en' ? 'Victory in System Sabotage 1v1!' : 'Victorie în System Sabotage 1v1!');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 14: FILE-DROP ATTACK 1v1 */}
+          {currentRoom.mode === 'file_drop_attack' && (
+            <FileDropAttackDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(_finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(320, lang === 'en' ? 'Victory in File-Drop Attack 1v1!' : 'Victorie în File-Drop Attack 1v1!');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 15: CYBER BATTLESHIP 1v1 */}
+          {currentRoom.mode === 'cyber_battleship' && (
+            <CyberBattleshipDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(_finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(350, lang === 'en' ? 'Admiral Victory in Cyber Battleship 1v1!' : 'Victorie Navală în Cyber Battleship 1v1!');
                 }
               }}
               onBack={() => {

@@ -29,7 +29,56 @@ export type DuelGameMode =
   | 'algo_race_cpp'
   | 'pixel_clash'
   | 'network_racer'
-  | 'cyber_clash';
+  | 'cyber_clash'
+  | 'system_sabotage'
+  | 'file_drop_attack'
+  | 'cyber_battleship';
+
+export type BattleshipWeaponType = 'railgun' | 'sonar' | 'cluster' | 'torpedo_h' | 'torpedo_v';
+
+export interface BattleshipCellOutcome {
+  x: number;
+  y: number;
+  status: 'hit' | 'miss' | 'sunk' | 'mine';
+  sunkShipId?: string;
+  sunkShipNameRo?: string;
+  sunkShipNameEn?: string;
+  sunkCells?: Array<{ x: number; y: number }>;
+}
+
+export interface BattleshipSyncEvent {
+  id: string;
+  kind: 'ready' | 'fire' | 'sonar_req' | 'result' | 'sonar_res' | 'repair' | 'forfeit';
+  shotId?: string;
+  weapon?: BattleshipWeaponType;
+  cells?: Array<{ x: number; y: number }>;
+  outcomes?: BattleshipCellOutcome[];
+  sonarSignals?: number;
+  shipsRemaining?: number;
+  score?: number;
+  createdAt: number;
+}
+
+export type SabotageType = 'blackout' | 'popups' | 'meltdown' | 'cryofreeze';
+
+export interface SabotageSyncEvent {
+  id: string;
+  type: SabotageType;
+  createdAt: number;
+}
+
+export type FileDropAttackType = 'garbage' | 'overclock' | 'scramble' | 'topout' | 'snapshot';
+
+export interface FileDropSyncEvent {
+  id: string;
+  kind: FileDropAttackType;
+  amount?: number;
+  stackHeights?: number[];
+  linesCleared?: number;
+  score?: number;
+  label?: string;
+  createdAt: number;
+}
 
 export type ClashCardId =
   | 'drone_scout'
@@ -160,6 +209,12 @@ export interface DuelRoomData {
   fileQueue?: Array<{ name: string; ext: string; folder: string }>; // For File Battle
   hostClashEvents?: ClashSyncEvent[]; // Live spawns from Host in Cyber Clash 1v1
   guestClashEvents?: ClashSyncEvent[]; // Live spawns from Guest in Cyber Clash 1v1
+  hostSabotageEvents?: SabotageSyncEvent[]; // Live sabotages sent by Host in System Sabotage 1v1
+  guestSabotageEvents?: SabotageSyncEvent[]; // Live sabotages sent by Guest in System Sabotage 1v1
+  hostFileDropEvents?: FileDropSyncEvent[]; // Live attacks & snapshots from Host in File-Drop Attack 1v1
+  guestFileDropEvents?: FileDropSyncEvent[]; // Live attacks & snapshots from Guest in File-Drop Attack 1v1
+  hostBattleshipEvents?: BattleshipSyncEvent[]; // Live fleet deployment, shots & outcomes from Host
+  guestBattleshipEvents?: BattleshipSyncEvent[]; // Live fleet deployment, shots & outcomes from Guest
   winnerId?: string | 'tie';
   winnerName?: string;
   createdAt: number;
@@ -968,6 +1023,117 @@ export async function sendClashSpawnEvent(
   const cleanCode = roomCode.trim().toUpperCase();
   const fieldName = isHost ? 'hostClashEvents' : 'guestClashEvents';
   const trimmed = recentEvents.slice(-24);
+
+  if (db) {
+    try {
+      const roomRef = doc(db, 'duel_rooms', cleanCode);
+      await updateDoc(roomRef, {
+        [fieldName]: trimmed,
+        updatedAt: Date.now()
+      });
+    } catch (err: any) {
+      const errMsg = err?.message || String(err);
+      if (err?.code === 'resource-exhausted' || errMsg.includes('quota')) {
+        isFirestoreQuotaExhausted = true;
+      }
+    }
+  } else {
+    try {
+      const raw = localStorage.getItem('arkedo_local_duel_room_' + cleanCode);
+      if (raw) {
+        const parsed = JSON.parse(raw) as DuelRoomData;
+        (parsed as any)[fieldName] = trimmed;
+        parsed.updatedAt = Date.now();
+        localStorage.setItem('arkedo_local_duel_room_' + cleanCode, JSON.stringify(parsed));
+      }
+    } catch {}
+  }
+}
+
+// Broadcast real-time Sabotage Attack in System Sabotage 1v1
+export async function sendSabotageEvent(
+  roomCode: string,
+  isHost: boolean,
+  recentEvents: SabotageSyncEvent[]
+): Promise<void> {
+  if (isFirestoreQuotaExhausted || !roomCode) return;
+  const cleanCode = roomCode.trim().toUpperCase();
+  const fieldName = isHost ? 'hostSabotageEvents' : 'guestSabotageEvents';
+  const trimmed = recentEvents.slice(-20);
+
+  if (db) {
+    try {
+      const roomRef = doc(db, 'duel_rooms', cleanCode);
+      await updateDoc(roomRef, {
+        [fieldName]: trimmed,
+        updatedAt: Date.now()
+      });
+    } catch (err: any) {
+      const errMsg = err?.message || String(err);
+      if (err?.code === 'resource-exhausted' || errMsg.includes('quota')) {
+        isFirestoreQuotaExhausted = true;
+      }
+    }
+  } else {
+    try {
+      const raw = localStorage.getItem('arkedo_local_duel_room_' + cleanCode);
+      if (raw) {
+        const parsed = JSON.parse(raw) as DuelRoomData;
+        (parsed as any)[fieldName] = trimmed;
+        parsed.updatedAt = Date.now();
+        localStorage.setItem('arkedo_local_duel_room_' + cleanCode, JSON.stringify(parsed));
+      }
+    } catch {}
+  }
+}
+
+// Broadcast real-time File-Drop Attack 1v1 garbage, cyber attacks, or stack snapshot
+export async function sendFileDropEvent(
+  roomCode: string,
+  isHost: boolean,
+  recentEvents: FileDropSyncEvent[]
+): Promise<void> {
+  if (isFirestoreQuotaExhausted || !roomCode) return;
+  const cleanCode = roomCode.trim().toUpperCase();
+  const fieldName = isHost ? 'hostFileDropEvents' : 'guestFileDropEvents';
+  const trimmed = recentEvents.slice(-24);
+
+  if (db) {
+    try {
+      const roomRef = doc(db, 'duel_rooms', cleanCode);
+      await updateDoc(roomRef, {
+        [fieldName]: trimmed,
+        updatedAt: Date.now()
+      });
+    } catch (err: any) {
+      const errMsg = err?.message || String(err);
+      if (err?.code === 'resource-exhausted' || errMsg.includes('quota')) {
+        isFirestoreQuotaExhausted = true;
+      }
+    }
+  } else {
+    try {
+      const raw = localStorage.getItem('arkedo_local_duel_room_' + cleanCode);
+      if (raw) {
+        const parsed = JSON.parse(raw) as DuelRoomData;
+        (parsed as any)[fieldName] = trimmed;
+        parsed.updatedAt = Date.now();
+        localStorage.setItem('arkedo_local_duel_room_' + cleanCode, JSON.stringify(parsed));
+      }
+    } catch {}
+  }
+}
+
+// Broadcast real-time Cyber Battleship 1v1 deployment, shots, sonar scans & outcomes
+export async function sendBattleshipEvent(
+  roomCode: string,
+  isHost: boolean,
+  recentEvents: BattleshipSyncEvent[]
+): Promise<void> {
+  if (isFirestoreQuotaExhausted || !roomCode) return;
+  const cleanCode = roomCode.trim().toUpperCase();
+  const fieldName = isHost ? 'hostBattleshipEvents' : 'guestBattleshipEvents';
+  const trimmed = recentEvents.slice(-36);
 
   if (db) {
     try {

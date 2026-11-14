@@ -182,6 +182,9 @@ export interface DuelStats {
   mouseDuelWins?: number;
   hackerDefenseWins?: number;
   cyberClashWins?: number;
+  systemSabotageWins?: number;
+  fileDropAttackWins?: number;
+  cyberBattleshipWins?: number;
 }
 
 export type ShopCategory = 'arky_skin' | 'theme' | 'title' | 'avatar_frame';
