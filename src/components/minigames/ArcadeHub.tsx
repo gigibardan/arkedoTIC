@@ -27,6 +27,8 @@ import { CyberInvadersGame } from './CyberInvadersGame';
 import { CyberPacmanGame } from './CyberPacmanGame';
 import { CyberArkanoidGame } from './CyberArkanoidGame';
 import { CyberFroggerGame } from './CyberFroggerGame';
+import { CyberSokobanGame } from './CyberSokobanGame';
+import { CyberAsteroidsGame } from './CyberAsteroidsGame';
 import { GameLockedModal } from '../common/GameLockedModal';
 import { forceScrollToTop } from '../../utils/scrollHelper';
 import {
@@ -76,7 +78,7 @@ interface ArcadeHubProps {
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master' | 'cyber_invaders' | 'cyber_pacman' | 'cyber_arkanoid' | 'cyber_frogger';
+type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master' | 'cyber_invaders' | 'cyber_pacman' | 'cyber_arkanoid' | 'cyber_frogger' | 'cyber_sokoban' | 'cyber_asteroids';
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
@@ -331,6 +333,22 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     }
   })();
 
+  const cyberSokobanHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_sokoban') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
+  const cyberAsteroidsHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('arkedo_highscore_cyber_asteroids') || '0');
+    } catch {
+      return 0;
+    }
+  })();
+
   const avatar = (() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -395,6 +413,26 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           customMessage={gameSettings.customMessage}
         />
       </div>
+    );
+  }
+
+  if (activeGame === 'cyber_asteroids') {
+    return (
+      <CyberAsteroidsGame
+        studentName={studentName || 'Vector Pilot'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
+
+  if (activeGame === 'cyber_sokoban') {
+    return (
+      <CyberSokobanGame
+        studentName={studentName || 'Arky-Bot'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
     );
   }
 
@@ -737,6 +775,104 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Featured Game: Cyber Asteroids (NEW 1979 Vector Space Shooter) */}
+        <div className={`bg-gradient-to-br from-slate-900 via-sky-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_asteroids') ? 'border-sky-400/80 hover:border-sky-300 shadow-sky-500/15' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 via-cyan-500 to-indigo-600 border border-sky-300/50 flex items-center justify-center text-white shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">☄️</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_asteroids')}
+                {renderScoreBadges('cyber_asteroids', cyberAsteroidsHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-sky-400/20 text-sky-300 text-[10px] font-mono font-black uppercase tracking-wider border border-sky-400/30">
+                {lang === 'en' ? 'NEW 🔥 ASTEROIDS 1979' : 'NOU 🔥 ASTEROIDS 1979'}
+              </span>
+              <span className="text-[10px] font-mono text-cyan-300 font-bold">
+                {lang === 'en' ? '3 SHIPS · BOSS · 5 POWER-UPS' : '3 NAVE · BOSS · 5 POWER-UP-URI'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-sky-300 transition-colors">
+              {lang === 'en' ? 'Cyber Asteroids: Vector Command ☄️🚀' : 'Cyber Asteroids: Reactorul Vectorial ☄️🚀'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Pilot 3 vector starships in 360° toroidal space: shatter asteroids with Newtonian inertia, trigger Hyperspace, battle UFOs & Dreadnought Bosses!'
+                : 'Pilotează 3 nave vectoriale în spațiu toroidal 360°: sparge asteroizi cu inerție newtoniană, activează Hiper-Saltul și distruge OZN-uri & Boss Dreadnought!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-sky-300 font-mono font-bold">🚀 1979 Vector Classic</span>
+            {renderGameActionButton(
+              'cyber_asteroids',
+              'Cyber Asteroids: Reactorul Vectorial',
+              'Cyber Asteroids: Vector Command',
+              'Decolează 🚀',
+              'Launch Ship 🚀',
+              'bg-gradient-to-r from-sky-500 via-cyan-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 shadow-sky-500/25'
+            )}
+          </div>
+        </div>
+
+        {/* Featured Game: Cyber Sokoban (NEW 1982 Server Logistics Puzzle) */}
+        <div className={`bg-gradient-to-br from-slate-900 via-orange-950/40 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'cyber_sokoban') ? 'border-orange-400/80 hover:border-orange-300 shadow-orange-500/15' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-600 border border-amber-300/50 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">🤖</span>
+              </div>
+              <div className="flex items-center gap-2">
+                {renderCardLockBadge('cyber_sokoban')}
+                {renderScoreBadges('cyber_sokoban', cyberSokobanHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-orange-400/20 text-orange-300 text-[10px] font-mono font-black uppercase tracking-wider border border-orange-400/30">
+                {lang === 'en' ? 'NEW 🔥 SOKOBAN 1982' : 'NOU 🔥 SOKOBAN 1982'}
+              </span>
+              <span className="text-[10px] font-mono text-amber-300 font-bold">
+                {lang === 'en' ? '12 VAULTS · GATES & PORTALS' : '12 NIVELE · PORȚI & PORTALURI'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-orange-300 transition-colors">
+              {lang === 'en' ? 'Cyber Sokoban: Server Architect 🤖📦' : 'Cyber Sokoban: Inginerul de Servere 🤖📦'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Master 12 cyber vaults: push encrypted crates, open laser gates with pressure plates, warp via quantum portals, and prevent kernel deadlocks!'
+                : 'Rezolvă 12 seifuri logice: împinge lăzi criptate, deschide porți laser prin senzori P, folosește portaluri cuantice și evită deadlock-urile!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span className="text-[11px] text-orange-300 font-mono font-bold">🧩 1982 Logic Classic</span>
+            {renderGameActionButton(
+              'cyber_sokoban',
+              'Cyber Sokoban: Inginerul de Servere',
+              'Cyber Sokoban: Server Architect',
+              'Joacă Sokoban 📦',
+              'Play Sokoban 📦',
+              'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 shadow-orange-500/25'
+            )}
+          </div>
+        </div>
+
         {/* Featured Game: Cyber Frogger (NEW 1981 Network Hopper) */}
         <div className={`bg-gradient-to-br from-slate-900 via-emerald-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_frogger') ? 'border-emerald-400/80 hover:border-emerald-300 shadow-emerald-500/15' : 'border-rose-500/40 opacity-95'

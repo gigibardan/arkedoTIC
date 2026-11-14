@@ -62,6 +62,8 @@ export interface ArcadeScores {
   cyber_pacman?: number;
   cyber_arkanoid?: number;
   cyber_frogger?: number;
+  cyber_sokoban?: number;
+  cyber_asteroids?: number;
   totalArcade: number;
 }
 

@@ -96,6 +96,8 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     cyber_pacman: student.arcadeScores?.cyber_pacman || 0,
     cyber_arkanoid: student.arcadeScores?.cyber_arkanoid || 0,
     cyber_frogger: student.arcadeScores?.cyber_frogger || 0,
+    cyber_sokoban: student.arcadeScores?.cyber_sokoban || 0,
+    cyber_asteroids: student.arcadeScores?.cyber_asteroids || 0,
     totalArcade: student.arcadeScores?.totalArcade || 0
   });
 
@@ -249,7 +251,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   };
 
   const ARCADE_GAMES_METADATA = [
-    { key: 'cyber_frogger', name: isEn ? 'Cyber Frogger: Network Hopper' : 'Cyber Frogger: Traversarea Rețelei', icon: '🐸', badge: isEn ? 'NEW 🔥' : 'NOU 🔥' },
+    { key: 'cyber_asteroids', name: isEn ? 'Cyber Asteroids: Vector Command' : 'Cyber Asteroids: Reactorul Vectorial', icon: '☄️', badge: isEn ? 'NEW 🔥' : 'NOU 🔥' },
+    { key: 'cyber_sokoban', name: isEn ? 'Cyber Sokoban: Data Center Architect' : 'Cyber Sokoban: Inginerul de Servere', icon: '🤖', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
+    { key: 'cyber_frogger', name: isEn ? 'Cyber Frogger: Network Hopper' : 'Cyber Frogger: Traversarea Rețelei', icon: '🐸', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
     { key: 'cyber_arkanoid', name: isEn ? 'Cyber Arkanoid: Firewall Breaker' : 'Cyber Arkanoid: Spărgătorul de Firewall', icon: '🧱', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
     { key: 'cyber_pacman', name: isEn ? 'Cyber Pac-Man: Motherboard Maze' : 'Cyber Pac-Man: Labirintul Biților', icon: '🟡', badge: isEn ? 'LEGEND 🔥' : 'NOU 🔥' },
     { key: 'cyber_invaders', name: isEn ? 'Cyber Invaders: Space Arcade' : 'Cyber Invaders: Galaxia Codului', icon: '🚀', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },

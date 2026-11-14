@@ -76,6 +76,8 @@ export const DEFAULT_ARCADE_SCORES: ArcadeScores = {
   cyber_pacman: 0,
   cyber_arkanoid: 0,
   cyber_frogger: 0,
+  cyber_sokoban: 0,
+  cyber_asteroids: 0,
   totalArcade: 0
 };
 
@@ -216,6 +218,12 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
   // Cyber Frogger Network Hopper: capped at 2,500 XP
   const cyberFroggerPoints = Math.min(2500, scores.cyber_frogger || 0);
 
+  // Cyber Sokoban Data Center Architect: capped at 2,500 XP
+  const cyberSokobanPoints = Math.min(2500, scores.cyber_sokoban || 0);
+
+  // Cyber Asteroids Vector Command: capped at 2,500 XP
+  const cyberAsteroidsPoints = Math.min(2500, scores.cyber_asteroids || 0);
+
   return (
     typingPoints +
     mousePoints +
@@ -242,7 +250,9 @@ export function computeTotalArcade(scores: Partial<ArcadeScores>): number {
     cyberInvadersPoints +
     cyberPacmanPoints +
     cyberArkanoidPoints +
-    cyberFroggerPoints
+    cyberFroggerPoints +
+    cyberSokobanPoints +
+    cyberAsteroidsPoints
   );
 }
 
