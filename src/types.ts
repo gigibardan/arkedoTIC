@@ -181,6 +181,7 @@ export interface DuelStats {
   pcRushWins?: number;
   mouseDuelWins?: number;
   hackerDefenseWins?: number;
+  cyberClashWins?: number;
 }
 
 export type ShopCategory = 'arky_skin' | 'theme' | 'title' | 'avatar_frame';

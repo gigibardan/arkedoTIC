@@ -1567,7 +1567,8 @@ export async function recordStudentDuelResult(
     quizBlitzWins: (prevStats.quizBlitzWins || 0) + (isWinner && mode === 'quiz_blitz' ? 1 : 0),
     cyberShieldWins: (prevStats.cyberShieldWins || 0) + (isWinner && mode === 'cyber_shield' ? 1 : 0),
     pcRushWins: (prevStats.pcRushWins || 0) + (isWinner && mode === 'pc_rush' ? 1 : 0),
-    mouseDuelWins: (prevStats.mouseDuelWins || 0) + (isWinner && mode === 'mouse_duel' ? 1 : 0)
+    mouseDuelWins: (prevStats.mouseDuelWins || 0) + (isWinner && mode === 'mouse_duel' ? 1 : 0),
+    cyberClashWins: (prevStats.cyberClashWins || 0) + (isWinner && mode === 'cyber_clash' ? 1 : 0)
   };
 
   const totalXP = (current.totalXP || 0) + awardAmount;

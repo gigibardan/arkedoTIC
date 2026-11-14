@@ -28,7 +28,26 @@ export type DuelGameMode =
   | 'circuit_duel'
   | 'algo_race_cpp'
   | 'pixel_clash'
-  | 'network_racer';
+  | 'network_racer'
+  | 'cyber_clash';
+
+export type ClashCardId =
+  | 'drone_scout'
+  | 'cyber_tank'
+  | 'laser_sniper'
+  | 'ddos_swarm'
+  | 'hacker_ninja'
+  | 'tesla_node'
+  | 'emp_spell'
+  | 'overclock_spell';
+
+export interface ClashSyncEvent {
+  id: string;
+  cardId: ClashCardId;
+  nx: number;
+  ny: number;
+  createdAt: number;
+}
 
 export type CodeBlockType =
   | 'start'
@@ -139,6 +158,8 @@ export interface DuelRoomData {
   pcPartsOrder?: PCRushPart[]; // For Hardware PC Rush
   codingChallenges?: BlockCodingChallenge[]; // For Cursa Algoritmilor (Block Coding Duel)
   fileQueue?: Array<{ name: string; ext: string; folder: string }>; // For File Battle
+  hostClashEvents?: ClashSyncEvent[]; // Live spawns from Host in Cyber Clash 1v1
+  guestClashEvents?: ClashSyncEvent[]; // Live spawns from Guest in Cyber Clash 1v1
   winnerId?: string | 'tie';
   winnerName?: string;
   createdAt: number;
@@ -894,6 +915,83 @@ export async function startDuelMatch(roomCode: string): Promise<void> {
     } catch (err) {
       console.warn('Eroare start meci:', err);
     }
+  }
+}
+
+// Start solo training match against Cyber-Bot AI inside a waiting room
+export async function startBotPracticeMatch(roomCode: string): Promise<void> {
+  const cleanCode = roomCode.trim().toUpperCase();
+  const botGuest: DuelPlayer = {
+    id: 'practice_bot',
+    name: 'Cyber-Bot AI',
+    avatar: '🤖',
+    isReady: true,
+    score: 0,
+    progress: 0,
+    lastActive: Date.now()
+  };
+
+  if (db) {
+    try {
+      const roomRef = doc(db, 'duel_rooms', cleanCode);
+      await updateDoc(roomRef, {
+        guest: botGuest,
+        status: 'countdown',
+        countdownValue: 3,
+        updatedAt: Date.now()
+      });
+      return;
+    } catch (err) {
+      console.warn('Eroare start bot practice Firestore, fallback local:', err);
+    }
+  }
+
+  try {
+    const raw = localStorage.getItem('arkedo_local_duel_room_' + cleanCode);
+    if (raw) {
+      const parsed = JSON.parse(raw) as DuelRoomData;
+      parsed.guest = botGuest;
+      parsed.status = 'playing';
+      parsed.updatedAt = Date.now();
+      localStorage.setItem('arkedo_local_duel_room_' + cleanCode, JSON.stringify(parsed));
+    }
+  } catch {}
+}
+
+// Broadcast real-time unit/spell deployment in Cyber Clash 1v1
+export async function sendClashSpawnEvent(
+  roomCode: string,
+  isHost: boolean,
+  recentEvents: ClashSyncEvent[]
+): Promise<void> {
+  if (isFirestoreQuotaExhausted || !roomCode) return;
+  const cleanCode = roomCode.trim().toUpperCase();
+  const fieldName = isHost ? 'hostClashEvents' : 'guestClashEvents';
+  const trimmed = recentEvents.slice(-24);
+
+  if (db) {
+    try {
+      const roomRef = doc(db, 'duel_rooms', cleanCode);
+      await updateDoc(roomRef, {
+        [fieldName]: trimmed,
+        updatedAt: Date.now()
+      });
+    } catch (err: any) {
+      const errMsg = err?.message || String(err);
+      if (err?.code === 'resource-exhausted' || errMsg.includes('quota')) {
+        isFirestoreQuotaExhausted = true;
+      }
+    }
+  } else {
+    try {
+      const raw = localStorage.getItem('arkedo_local_duel_room_' + cleanCode);
+      if (raw) {
+        const parsed = JSON.parse(raw) as DuelRoomData;
+        (parsed as any)[fieldName] = trimmed;
+        parsed.updatedAt = Date.now();
+        localStorage.setItem('arkedo_local_duel_room_' + cleanCode, JSON.stringify(parsed));
+      }
+    } catch {}
   }
 }
 

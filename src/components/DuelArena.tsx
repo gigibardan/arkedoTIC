@@ -45,6 +45,7 @@ import {
   createDuelRoom,
   joinDuelRoom,
   startDuelMatch,
+  startBotPracticeMatch,
   updateDuelProgress,
   setRoomPlaying,
   subscribeToDuelRoom,
@@ -65,6 +66,7 @@ import { CircuitMasterDuelGame } from './minigames/CircuitMasterDuelGame';
 import { CodeRacerCppDuelGame } from './minigames/CodeRacerCppDuelGame';
 import { PixelClashDuelGame } from './minigames/PixelClashDuelGame';
 import { NetworkPacketRacerDuelGame } from './minigames/NetworkPacketRacerDuelGame';
+import { CyberClashDuelGame } from './minigames/CyberClashDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -119,7 +121,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const handleBack = onBack || onClose;
   // Navigation / Lobby States
   const [viewState, setViewState] = useState<'lobby' | 'room' | 'playing' | 'results'>('lobby');
-  const [selectedMode, setSelectedMode] = useState<DuelGameMode>('cyber_sprint');
+  const [selectedMode, setSelectedMode] = useState<DuelGameMode>('cyber_clash');
   const [activeCategory, setActiveCategory] = useState<'all' | 'precision' | 'speed' | 'algo' | 'hardware'>('all');
   const [mobileLobbyTab, setMobileLobbyTab] = useState<'create' | 'join'>('create');
   const [inputRoomCode, setInputRoomCode] = useState('');
@@ -147,7 +149,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       return ['block_coding', 'algo_race_cpp', 'speed_crafting'].includes(modeKey);
     }
     if (cat === 'hardware') {
-      return ['circuit_overdrive', 'pc_rush', 'cyber_shield', 'hacker_defense', 'circuit_duel', 'network_racer'].includes(modeKey);
+      return ['cyber_clash', 'circuit_overdrive', 'pc_rush', 'cyber_shield', 'hacker_defense', 'circuit_duel', 'network_racer'].includes(modeKey);
     }
     return true;
   };
@@ -167,6 +169,21 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     iconBg: string;
     selectedGradient: string;
   }[] = [
+    {
+      key: 'cyber_clash',
+      titleRo: 'Cyber Clash Royale 1v1 ⚔️👑',
+      titleEn: 'Cyber Clash Royale 1v1 ⚔️👑',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'NEW 🔥',
+      badgeClass: 'bg-sky-500/20 text-sky-300',
+      subtitleRo: 'Strategie 2 Benzi · Turnuri & Energie (Stil Clash Royale)',
+      subtitleEn: '2-Lane Strategy · Turrets & Energy (Clash Royale Style)',
+      descRo: 'Lansează Drone, Golemi Firewall, Roiuri DDoS, Sniperi, Turnuri Tesla și Impulsuri EMP pe 2 poduri cibernetice pentru a distruge Nucleul adversarului!',
+      descEn: 'Deploy Drones, Firewall Golems, DDoS Swarms, Snipers, Tesla Sentries & EMP Waves across 2 cyber bridges to crush your rival Core!',
+      icon: <Swords className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-sky-500 to-indigo-600 shadow-sky-500/30',
+      selectedGradient: 'bg-gradient-to-br from-sky-950/90 via-indigo-950/80 to-slate-900 border-sky-400 ring-2 ring-sky-500/40 shadow-lg',
+    },
     {
       key: 'cyber_sprint',
       titleRo: 'Cyber Sprint ⚡',
@@ -997,6 +1014,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           return '🎨 Pixel Art Sprite Clash (Digital Graphics 1v1)';
         case 'network_racer':
           return '🌐 Network Packet Racer (Packets & Switch 1v1)';
+        case 'cyber_clash':
+          return '⚔️ Cyber Clash Royale (2-Lane Tactical Battle 1v1)';
         default:
           return '⚔️ ICT 1v1 Duel';
       }
@@ -1034,6 +1053,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🎨 Pixel Art Sprite Clash (Duelul Graficii 1v1)';
       case 'network_racer':
         return '🌐 Network Packet Racer (Cursa Pachetelor & Switch 1v1)';
+      case 'cyber_clash':
+        return '⚔️ Cyber Clash Royale (Strategie 2 Benzi 1v1)';
       default:
         return '⚔️ Duel 1v1 TIC';
     }
@@ -1100,7 +1121,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               }`}
             >
               <Swords className="w-4 h-4" />
-              <span>{lang === 'en' ? '1. Host a Duel (16 Modes)' : '1. Alege & Creează Meci'}</span>
+              <span>{lang === 'en' ? '1. Host a Duel (17 Modes)' : '1. Alege & Creează Meci'}</span>
             </button>
             <button
               type="button"
@@ -1175,11 +1196,11 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     {lang === 'en' ? 'Filter:' : 'Filtru:'}
                   </span>
                   {[
-                    { id: 'all', labelRo: 'Toate (16)', labelEn: 'All (16)' },
+                    { id: 'all', labelRo: 'Toate (17)', labelEn: 'All (17)' },
                     { id: 'precision', labelRo: '🎯 Precizie & Mouse (4)', labelEn: '🎯 Precision & Mouse (4)' },
                     { id: 'speed', labelRo: '⚡ Viteză & Reacție (3)', labelEn: '⚡ Speed & Typing (3)' },
                     { id: 'algo', labelRo: '🧠 Algoritmi & Logică (3)', labelEn: '🧠 Algorithms & Logic (3)' },
-                    { id: 'hardware', labelRo: '🔧 Hardware & Securitate (6)', labelEn: '🔧 Hardware & Cyber (6)' },
+                    { id: 'hardware', labelRo: '⚔️ Strategie, Cyber & Hardware (7)', labelEn: '⚔️ Strategy, Cyber & Hardware (7)' },
                   ].map(cat => (
                     <button
                       key={cat.id}
@@ -1321,7 +1342,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       className="lg:hidden w-full mb-3 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>{lang === 'en' ? '← Back to Mode Selection (16 Modes)' : '← Înapoi la Lista de Dueluri (16 Moduri)'}</span>
+                      <span>{lang === 'en' ? '← Back to Mode Selection (17 Modes)' : '← Înapoi la Lista de Dueluri (17 Moduri)'}</span>
                     </button>
                   )}
 
@@ -1550,16 +1571,31 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             </button>
 
             {isHost ? (
-              <button
-                onClick={() => startDuelMatch(currentRoom.roomCode)}
-                disabled={!currentRoom.guest}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm tracking-wider shadow-xl shadow-emerald-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                {currentRoom.guest
-                  ? (lang === 'en' ? 'START DUEL NOW 🚀' : 'START DUEL ACUM 🚀')
-                  : (lang === 'en' ? 'Waiting for opponent...' : 'Se așteaptă oponentul...')}
-              </button>
+              <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+                {!currentRoom.guest && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      startBotPracticeMatch(currentRoom.roomCode);
+                    }}
+                    className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-indigo-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Swords className="w-4 h-4" />
+                    <span>{lang === 'en' ? 'Play vs Cyber-Bot 🤖' : 'Joacă vs Cyber-Bot 🤖'}</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => startDuelMatch(currentRoom.roomCode)}
+                  disabled={!currentRoom.guest}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm tracking-wider shadow-xl shadow-emerald-500/25 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  {currentRoom.guest
+                    ? (lang === 'en' ? 'START DUEL NOW 🚀' : 'START DUEL ACUM 🚀')
+                    : (lang === 'en' ? 'Waiting for opponent...' : 'Se așteaptă oponentul...')}
+                </button>
+              </div>
             ) : (
               <div className="text-xs text-indigo-300 font-semibold bg-indigo-950/60 px-4 py-2.5 rounded-xl border border-indigo-500/30 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
@@ -2265,6 +2301,27 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               onFinish={(finalScore, won) => {
                 if (won) {
                   onAwardXP?.(300, 'Victorie Network Packet Racer 1v1');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 12: CYBER CLASH ROYALE 1v1 */}
+          {currentRoom.mode === 'cyber_clash' && (
+            <CyberClashDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(_finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(300, lang === 'en' ? 'Victory in Cyber Clash Royale 1v1!' : 'Victorie în Cyber Clash Royale 1v1!');
                 }
               }}
               onBack={() => {
