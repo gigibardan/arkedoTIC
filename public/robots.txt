@@ -1,43 +1,64 @@
 # ==============================================================================
 # ArkyEdu TIC & Arcade - Robots.txt
-# Standard Search Engines, Web Crawlers & AI Agent Directives
+# Standard Search Engines, Web Crawlers & AI Answer Engine Directives
 # ==============================================================================
 
 # General Search Engines (Google, Bing, Yahoo, DuckDuckGo, Yandex, etc.)
 User-agent: *
 Allow: /
+Allow: /educatie-tehnologie-copii/
 Allow: /cursuri/
 Allow: /cursuri/*
-Allow: /clasa-5
-Allow: /clasa-6
-Allow: /clasa-7
-Allow: /clasa-8
-Allow: /comparatie-scoli-private
-Allow: /arcade
-Allow: /profesor
-Allow: /duel
-Allow: /oras
+Allow: /clasa-5/
+Allow: /clasa-6/
+Allow: /clasa-7/
+Allow: /clasa-8/
+Allow: /comparatie-scoli-private/
+Allow: /arcade/
+Allow: /profesor/
+Allow: /duel/
+Allow: /oras/
 Allow: /llms.txt
 Allow: /llms-full.txt
+Allow: /ai-catalog.json
+Allow: /.well-known/ai-catalog.json
 Disallow: /superadmin
 
-# AI Search Engines & LLM Indexers (ChatGPT, Perplexity, Claude, Gemini, Apple, Meta)
+# Google Search & Google AI Overviews / Gemini
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Google-Extended
+Allow: /
+
+# Microsoft Bing & Copilot
+User-agent: Bingbot
+Allow: /
+
+# OpenAI (ChatGPT Search & GPT Indexers)
+User-agent: OAI-SearchBot
 User-agent: GPTBot
 User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity AI Search
 User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+
+# Anthropic Claude
 User-agent: ClaudeBot
 User-agent: Claude-Web
-User-agent: Google-Extended
-User-agent: Applebot-Extended
-User-agent: Amazonbot
-User-agent: CCBot
-User-agent: cohere-ai
-User-agent: meta-externalagent
+User-agent: anthropic-ai
 Allow: /
-Allow: /cursuri/
-Allow: /cursuri/*
-Allow: /llms.txt
-Allow: /llms-full.txt
+
+# Apple Intelligence, DuckDuckGo AI, Meta, Amazon, Cohere, xAI
+User-agent: Applebot-Extended
+User-agent: DuckAssistBot
+User-agent: meta-externalagent
+User-agent: Amazonbot
+User-agent: cohere-ai
+User-agent: CCBot
+Allow: /
 
 # Canonical Sitemap
 Sitemap: https://www.arkyedu.com/sitemap.xml

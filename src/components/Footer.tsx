@@ -78,12 +78,21 @@ export const Footer: React.FC<FooterProps> = ({
   ];
 
   const coursesGrade7 = [
-    { titleRo: 'Word & Tehnoredactare', titleEn: 'Word & Typography', url: '/cursuri/word-tehnoredactare-interfata/', icon: '📝' },
-    { titleRo: 'Tipografie & Machetare', titleEn: 'Page Layout & Typography', url: '/cursuri/machetare-pagina-tipografie/', icon: '📐' },
-    { titleRo: 'Studio Audio WavePad', titleEn: 'WavePad Audio Studio', url: '/cursuri/wavepad-editare-audio-digitala/', icon: '🎙️' },
-    { titleRo: 'Montaj Video VideoPad', titleEn: 'VideoPad Video Editing', url: '/cursuri/videopad-montaj-video-multitrack/', icon: '🎬' },
-    { titleRo: 'Cloud Docs & GIS Satelitar', titleEn: 'Cloud Docs & GIS Maps', url: '/cursuri/sisteme-informationale-geografice-gis/', icon: '🗺️' },
-    { titleRo: 'Programare C++ & Roboți', titleEn: 'C++ Coding & Virtual Robots', url: '/cursuri/programare-cpp-codeblocks-variabile/', icon: '⚙️' },
+    { titleRo: 'Word & Tehnoredactare', titleEn: 'Word & Typography', url: '/cursuri/g7_word_a/', icon: '📝' },
+    { titleRo: 'Tipografie & Machetare', titleEn: 'Page Layout & Typography', url: '/cursuri/g7_word_b/', icon: '📐' },
+    { titleRo: 'Studio Audio WavePad', titleEn: 'WavePad Audio Studio', url: '/cursuri/g7_audio_a/', icon: '🎙️' },
+    { titleRo: 'Montaj Video VideoPad', titleEn: 'VideoPad Video Editing', url: '/cursuri/g7_video_b/', icon: '🎬' },
+    { titleRo: 'Cloud Docs & GIS Satelitar', titleEn: 'Cloud Docs & GIS Maps', url: '/cursuri/g7_gis_b/', icon: '🗺️' },
+    { titleRo: 'Programare C++ & Roboți', titleEn: 'C++ Coding & Virtual Robots', url: '/cursuri/g7_cpp_a/', icon: '⚙️' },
+  ];
+
+  const coursesGrade8 = [
+    { titleRo: 'Calcul Tabelar Excel & Funcții', titleEn: 'Excel Spreadsheets & Formulas', url: '/cursuri/g8_calc_c/', icon: '📊' },
+    { titleRo: 'Web Design & Google Sites', titleEn: 'Web Design & Google Sites', url: '/cursuri/g8_web_a/', icon: '🌐' },
+    { titleRo: 'Algoritmi C++ & Vectori', titleEn: 'C++ Algorithms & Arrays', url: '/cursuri/g8_algo_d/', icon: '💻' },
+    { titleRo: 'Robotică Arduino Uno & Senzori', titleEn: 'Arduino Uno & Sensors', url: '/cursuri/g8_robot_a/', icon: '🤖' },
+    { titleRo: 'Smart Home & IoT Integrator', titleEn: 'Smart Home & IoT Project', url: '/cursuri/g8_robot_b/', icon: '🏙️' },
+    { titleRo: 'Educație Tehnologie Copii', titleEn: 'Tech Education Hub (RO/EN)', url: '/educatie-tehnologie-copii/', icon: '🚀' },
   ];
 
   return (
@@ -167,9 +176,9 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-amber-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
                 >
                   <Gamepad2 className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
-                  <span>{lang === 'en' ? 'Arcade Hub (20 Games)' : 'Sala Arcade (20 Mini-jocuri)'}</span>
+                  <span>{lang === 'en' ? 'Arcade Hub (28 Games)' : 'Sala Arcade (28 Mini-jocuri)'}</span>
                   <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-500/30 font-bold ml-auto">
-                    Snake 🐍
+                    Pac-Man 🟡
                   </span>
                 </button>
               </li>
@@ -182,7 +191,7 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-cyan-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
                 >
                   <Swords className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
-                  <span>{lang === 'en' ? '1v1 Multiplayer Duel Arena' : 'Arena Duel 1v1 Multiplayer'}</span>
+                  <span>{lang === 'en' ? '1v1 Duel Arena (20+ Modes)' : 'Arena Duel 1v1 (20+ Moduri)'}</span>
                 </button>
               </li>
               {onNavigateToCity && (
@@ -272,26 +281,40 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Column 5: Ghiduri Curriculare Clasa a VII-a (C++, Audio, GIS, Roboți) */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
-              <span className="text-sm">🔬</span>
-              {lang === 'en' ? 'Grade 7 Curriculum' : 'Programa Clasa a VII-a'}
-            </h4>
-            <ul className="space-y-1.5 text-xs">
-              {coursesGrade7.map((c) => (
-                <li key={c.url}>
-                  <a
-                    href={c.url}
-                    className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5 py-0.5 group"
-                    title={lang === 'en' ? c.titleEn : c.titleRo}
-                  >
-                    <span className="text-xs opacity-80 group-hover:scale-110 transition-transform">{c.icon}</span>
-                    <span className="truncate">{lang === 'en' ? c.titleEn : c.titleRo}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+          {/* Column 5: Ghiduri Curriculare Clasa a VII-a & a VIII-a */}
+          <div className="space-y-4">
+            <div className="space-y-2.5">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+                <span className="text-sm">🔬</span>
+                {lang === 'en' ? 'Grade 7 & 8 Curriculum' : 'Programe Clasa VII & VIII'}
+              </h4>
+              <ul className="space-y-1.5 text-xs">
+                {coursesGrade7.slice(0, 3).map((c) => (
+                  <li key={c.url}>
+                    <a
+                      href={c.url}
+                      className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5 py-0.5 group"
+                      title={lang === 'en' ? c.titleEn : c.titleRo}
+                    >
+                      <span className="text-xs opacity-80 group-hover:scale-110 transition-transform">{c.icon}</span>
+                      <span className="truncate">{lang === 'en' ? c.titleEn : c.titleRo}</span>
+                    </a>
+                  </li>
+                ))}
+                {coursesGrade8.map((c) => (
+                  <li key={c.url}>
+                    <a
+                      href={c.url}
+                      className="text-slate-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-0.5 group"
+                      title={lang === 'en' ? c.titleEn : c.titleRo}
+                    >
+                      <span className="text-xs opacity-80 group-hover:scale-110 transition-transform">{c.icon}</span>
+                      <span className="truncate">{lang === 'en' ? c.titleEn : c.titleRo}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Column 6: Legal, Siguranță & Contact */}

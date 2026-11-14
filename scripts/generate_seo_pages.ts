@@ -465,6 +465,12 @@ function generateModulePages() {
       ]
     };
 
+    const gradeModules = CURRICULA_MODULES.filter((m) => m.grade === mod.grade);
+    const modIndex = gradeModules.findIndex((m) => m.id === mod.id);
+    const prevMod = modIndex > 0 ? gradeModules[modIndex - 1] : null;
+    const nextMod = modIndex >= 0 && modIndex < gradeModules.length - 1 ? gradeModules[modIndex + 1] : null;
+    const gradeSlug = mod.grade.includes('V-a') && !mod.grade.includes('VI') && !mod.grade.includes('VII') && !mod.grade.includes('VIII') ? '5' : mod.grade.includes('VI-a') ? '6' : mod.grade.includes('VII-a') ? '7' : '8';
+
     const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -473,7 +479,12 @@ function generateModulePages() {
   <title>${mod.title} — ${mod.grade} | ArkyEdu TIC</title>
   <meta name="description" content="${mod.metaDescription.replace(/"/g, '&quot;')}">
   <meta name="keywords" content="${Array.isArray(mod.keywords) ? mod.keywords.join(', ') : (mod.keywords || '')}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
+  <link rel="help" type="text/markdown" href="/llms.txt">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="article">
   <meta property="og:title" content="${mod.title} — ${mod.grade}">
@@ -481,9 +492,12 @@ function generateModulePages() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${mod.title} — ${mod.grade}">
   <meta name="twitter:description" content="${mod.metaDescription.replace(/"/g, '&quot;')}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -565,9 +579,9 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa a VI-a</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa a VII-a</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa a VIII-a</a>
-        <a href="https://www.arkyedu.com/arcade/">21 Jocuri Arcade</a>
-        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
-        <a href="https://www.arkyedu.com/comparatie-scoli-private/">100% Gratuit vs Privat</a>
+        <a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1 (20+)</a>
+        <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Educație Tehnologie</a>
       </nav>
       <a href="${appDeepLink}" class="nav-cta">
         <span>🎮 Deschide Misiunea</span>
@@ -643,8 +657,15 @@ ${commonStyles}
       `).join('')}
     </div>` : ''}
 
+    <!-- INTERNAL MODULE NAVIGATION (PREV / HUB / NEXT) -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin: 2rem 0;">
+      ${prevMod ? `<a href="https://www.arkyedu.com/cursuri/${prevMod.id}/" class="btn-secondary">← ${prevMod.shortTitle}</a>` : `<a href="https://www.arkyedu.com/clasa-${gradeSlug}/" class="btn-secondary">← Toate Lecțiile (${mod.grade})</a>`}
+      <a href="https://www.arkyedu.com/clasa-${gradeSlug}/" class="card-link">📚 Hub ${mod.grade}</a>
+      ${nextMod ? `<a href="https://www.arkyedu.com/cursuri/${nextMod.id}/" class="btn-secondary">${nextMod.shortTitle} →</a>` : `<a href="https://www.arkyedu.com/educatie-tehnologie-copii/" class="btn-secondary">Ghid Complet Copii →</a>`}
+    </div>
+
     <!-- FINAL CTA BANNER -->
-    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 3rem;">
+    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 2rem;">
       <h2 style="font-size: 1.75rem; margin-bottom: 0.75rem;">Gata de Provocare? Intră în Simulatorul Interactiv!</h2>
       <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 1.5rem;">Fiecare nivel îți testează cunoștințele prin practică reală, audio feedback, provocări retro arcade și diplomă de merit oficială.</p>
       <a href="${appDeepLink}" class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
@@ -658,8 +679,8 @@ ${commonStyles}
       <div class="footer-grid">
         <div class="footer-col">
           <h4>ArkyEdu TIC</h4>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Platforma educațională gratuită nr. 1 pentru TIC și informatică gimnaziu din România.</p>
-          <a href="https://www.arkyedu.com/comparatie-scoli-private/" style="color: var(--accent); font-weight: 700;">De ce 100% Gratuit? →</a>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Platforma educațională gratuită nr. 1 pentru educație TIC, coding și robotică gimnaziu din România.</p>
+          <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent); font-weight: 700;">Ghid Educație Tehnologie →</a>
         </div>
         <div class="footer-col">
           <h4>Clase Gimnaziu</h4>
@@ -673,8 +694,8 @@ ${commonStyles}
         <div class="footer-col">
           <h4>Arcade &amp; Competiții</h4>
           <ul>
-            <li><a href="https://www.arkyedu.com/arcade/">21 Jocuri Didactice Arcade</a></li>
-            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 Live</a></li>
+            <li><a href="https://www.arkyedu.com/arcade/">28 Jocuri Didactice Arcade</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (20+ Moduri)</a></li>
             <li><a href="https://www.arkyedu.com/profesor/">Portal Profesori &amp; Catalog</a></li>
             <li><a href="https://www.arkyedu.com/oras/">Arkedo Smart City IoT</a></li>
           </ul>
@@ -773,6 +794,16 @@ function generateGradeHubs() {
             { "@type": "ListItem", "position": 1, "name": "Acasă", "item": "https://www.arkyedu.com/" },
             { "@type": "ListItem", "position": 2, "name": `Clasa a ${g.roman}-a`, "item": canonicalUrl }
           ]
+        },
+        {
+          "@type": "ItemList",
+          "name": `Module TIC Clasa a ${g.roman}-a — ArkyEdu`,
+          "itemListElement": g.modules.map((m, idx) => ({
+            "@type": "ListItem",
+            "position": idx + 1,
+            "name": m.title,
+            "url": `https://www.arkyedu.com/cursuri/${m.id}/`
+          }))
         }
       ]
     };
@@ -785,13 +816,22 @@ function generateGradeHubs() {
   <title>${g.title} | ArkyEdu TIC</title>
   <meta name="description" content="${g.meta}">
   <meta name="keywords" content="${g.keywords}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website">
   <meta property="og:title" content="${g.title}">
   <meta property="og:description" content="${g.meta}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${g.title}">
+  <meta name="twitter:description" content="${g.meta}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -814,9 +854,9 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (21)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
-        <a href="https://www.arkyedu.com/comparatie-scoli-private/">vs Privat</a>
+        <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
       </nav>
       <a href="${appGradeLink}" class="nav-cta">
         <span>🎮 Deschide Catalogul Clasa a ${g.roman}-a</span>
@@ -863,10 +903,10 @@ ${commonStyles}
     <!-- VALUE PROPOSITION -->
     <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 3rem;">
       <h2 style="font-size: 1.85rem; margin-bottom: 1rem;">De Ce Învață Elevii Mai Bine cu ArkyEdu?</h2>
-      <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 21 de jocuri arcade, simulatoare interactive și diplome de merit oficiale, 100% gratuit!</p>
+      <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 28 de jocuri arcade, peste 20 de dueluri 1v1 și diplome de merit oficiale, 100% gratuit!</p>
       <div class="cta-group">
         <a href="${appGradeLink}" class="btn-primary">Exersează Acum Clasa a ${g.roman}-a</a>
-        <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">Vezi Cele 21 de Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">Vezi Cele 28 de Jocuri Arcade</a>
       </div>
     </div>
   </main>
@@ -890,9 +930,10 @@ ${commonStyles}
         <div class="footer-col">
           <h4>Arcade &amp; Duel</h4>
           <ul>
-            <li><a href="https://www.arkyedu.com/arcade/">21 Jocuri Arcade Didactice</a></li>
-            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 Live</a></li>
+            <li><a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade Didactice</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (20+ Moduri)</a></li>
             <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Școli Private</a></li>
+            <li><a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Educație Tehnologie Copii</a></li>
           </ul>
         </div>
       </div>
@@ -953,7 +994,7 @@ function generateComparisonPage() {
             "name": "Ce tehnologii și limbaje de programare sunt incluse?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Platforma include Scratch 3.0, limbajul C++ (mediul Code::Blocks, sintaxă nativă, bucle while/for, algoritmi de numere prime, Fibonacci și vectori), HTML5 semantic, calcul tabelar avansat în Microsoft Excel & Google Sheets, simulatoare de circuite Arduino Uno cu senzori (LDR, PIR, Ultrasonic HC-SR04, Gaz MQ-2, ecran LCD 1602 I2C, servomotoare SG90) și 21 de jocuri arcade didactice."
+              "text": "Platforma include Scratch 3.0, limbajul C++ (mediul Code::Blocks, sintaxă nativă, bucle while/for, algoritmi de numere prime, Fibonacci și vectori), HTML5 semantic, calcul tabelar avansat în Microsoft Excel & Google Sheets, simulatoare de circuite Arduino Uno cu senzori (LDR, PIR, Ultrasonic HC-SR04, Gaz MQ-2, ecran LCD 1602 I2C, servomotoare SG90), 28 de jocuri arcade didactice și 20+ dueluri 1v1."
             }
           },
           {
@@ -977,13 +1018,22 @@ function generateComparisonPage() {
   <title>ArkyEdu vs Școli Private de Programare (Logiscool, MindHub): Cursuri TIC &amp; Coding 100% Gratuite | ArkyEdu</title>
   <meta name="description" content="Comparație obiectivă: De ce să plătești 4.000 - 6.000 lei/an pe cursuri private de coding copii când ArkyEdu oferă TIC &amp; programare completă pentru gimnaziu 100% GRATUIT, aliniat la programa școlară oficială?">
   <meta name="keywords" content="cursuri programare copii preturi, alternative gratuite logiscool, cursuri mindhub pret, academia micilor developeri alternativa gratuita, cursuri it copii bucuresti gratuit, invatare programare copii gimnaziu, tic clasa 5 6 7 8 gratuit, robotica arduino copii gratis">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="article">
   <meta property="og:title" content="ArkyEdu vs Școli Private de Programare: 100% Gratuit vs 4.800 lei/an">
   <meta property="og:description" content="Comparație detaliată: Învață programare, robotică, Excel și web design conform programei școlare din România fără taxe și fără abonamente.">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ArkyEdu vs Școli Private de Programare: 100% Gratuit vs 4.800 lei/an">
+  <meta name="twitter:description" content="Comparație detaliată: Învață programare, robotică, Excel și web design conform programei școlare din România fără taxe.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -1014,7 +1064,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
-        <a href="https://www.arkyedu.com/arcade/">21 Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
       <a href="https://www.arkyedu.com/" class="nav-cta">
@@ -1040,7 +1090,7 @@ ${commonStyles}
           <span>🚀 Începe Acum Gratuit — Fără Card Bancar</span>
         </a>
         <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">
-          <span>🕹️ Descoperă Cele 21 Jocuri Arcade</span>
+          <span>🕹️ Descoperă Cele 28 Jocuri Arcade</span>
         </a>
       </div>
     </div>
@@ -1103,8 +1153,8 @@ ${commonStyles}
           <tr>
             <td><strong>Gamificare &amp; Imersiune</strong></td>
             <td>
-              <span class="check-icon">✓ 21 JOCURI RETRO ARCADE</span><br>
-              Circuit Master 80s, Cyber Snake, Redstone Logic, Minecraft Voxel, Hacker vs Defender, Byte Slider, tastare oarbă QWERTY, etc.
+              <span class="check-icon">✓ 28 JOCURI RETRO ARCADE</span><br>
+              Cyber Pac-Man, Cyber Arkanoid, Cyber Frogger, Cyber Sokoban, Cyber Asteroids, Circuit Master 80s, Cyber Snake, Redstone Logic, Minecraft Voxel, Hacker vs Defender, PC Builder etc.
             </td>
             <td>
               <span class="cross-icon">✗ EXERCIȚII REPETITIVE DE BAZĂ</span><br>
@@ -1114,8 +1164,8 @@ ${commonStyles}
           <tr>
             <td><strong>Competiții Tehnologice &amp; Dueluri</strong></td>
             <td>
-              <span class="check-icon">✓ ARENĂ DUELURI 1V1 ÎN TIMP REAL</span><br>
-              Confruntări live multiplayer între colegi de clasă sau elevi din alte școli, simulând olimpiadele și concursurile de programare.
+              <span class="check-icon">✓ ARENĂ DUELURI 1V1 (20+ MODURI LIVE)</span><br>
+              Cyber Battleship 1v1, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash, Circuit Clash — confruntări multiplayer între elevi sau cu AI Cyber-Bot.
             </td>
             <td>
               <span class="cross-icon">✗ CONCURSURI RARE CU TAXĂ</span><br>
@@ -1144,7 +1194,7 @@ ${commonStyles}
       <div class="faq-block">
         <div class="faq-question">1. Chiar este complet gratuit? Există vreo taxă ascunsă sau reclame?</div>
         <div class="faq-answer">
-          Absolut deloc! ArkyEdu este o inițiativă educațională deschisă non-profit. Nu există conturi premium plătite, nu există reclame și nu cerem niciodată date de card bancar. Toți elevii și profesorii au acces egal la toate cele 40 de module didactice, simulatoarele hardware și cele 21 de jocuri arcade.
+          Absolut deloc! ArkyEdu este o inițiativă educațională deschisă non-profit. Nu există conturi premium plătite, nu există reclame și nu cerem niciodată date de card bancar. Toți elevii și profesorii au acces egal la toate cele 40 de module didactice, simulatoarele hardware, cele 28 de jocuri arcade și 20+ dueluri 1v1.
         </div>
       </div>
 
@@ -1188,40 +1238,91 @@ ${commonStyles}
   console.log('Comparison Landing Page generated.');
 }
 
-// 4. GENERATE ARCADE, DUEL, PROFESOR, ORAS HUBS
+// 4. GENERATE ARCADE, DUEL, PROFESOR, ORAS HUBS (WITH RICH CARDS & SCHEMA.ORG)
 function generateFeatureHubs() {
   const hubs = [
     {
       dir: 'arcade',
-      title: 'Arcade TIC: 21 Jocuri Retro Didactice de Programare, Hardware & Securitate | ArkyEdu',
-      meta: 'Colecție completă de 21 mini-jocuri arcade retro pentru fixarea noțiunilor de TIC: Circuit Master 80s, Cyber Snake, Redstone Logic, Hacker vs Defender, PC Builder și tastare oarbă.',
-      keywords: 'jocuri arcade tic, jocuri educative programare copii, jocuri invatare informatica gimnaziu, circuit master 80s, cyber snake scratch, redstone logic simulator, hacker vs defender duel',
-      h1: 'Arcade Didactic TIC: 21 de Jocuri Retro de Programare & Tehnologie',
-      appLink: 'https://www.arkyedu.com/#arcade'
+      title: 'Arcade TIC: 28 Jocuri Retro Didactice de Programare, Hardware & Securitate | ArkyEdu',
+      meta: 'Colecție completă de 28 mini-jocuri arcade retro gratuite pentru educație TIC și coding copii: Cyber Pac-Man, Cyber Arkanoid, Cyber Frogger, Cyber Sokoban, Cyber Asteroids, Circuit Master 80s, Redstone Logic Lab, PC Builder și tastare oarbă.',
+      keywords: 'jocuri arcade tic, jocuri educative programare copii, jocuri invatare informatica gimnaziu, cyber pacman tic, cyber arkanoid firewall, cyber frogger retea, cyber sokoban servere, circuit master 80s, redstone logic simulator, pc builder simulator',
+      h1: 'Arcade Didactic TIC: 28 de Jocuri Retro de Programare & Tehnologie',
+      appLink: 'https://www.arkyedu.com/#arcade',
+      sectionTitle: 'Catalog Complet: Cele 28 de Mini-Jocuri Educative Arcade',
+      cards: [
+        { icon: '🟡', title: 'Cyber Pac-Man: Labirintul Biților', desc: 'Colectează pachete de date pe placa de bază și activează scutul antivirus răspunzând fulger la întrebări TIC.' },
+        { icon: '🧱', title: 'Cyber Arkanoid: Firewall Breaker', desc: 'Distruge blocuri criptate cu lasere, capsule multi-ball și fizică 60 FPS pentru consolidarea logicii.' },
+        { icon: '🐸', title: 'Cyber Frogger: Traversarea Rețelei', desc: 'Navighează pachetele IP prin benzi de trafic LAN/WAN și canale de fibră optică fără coliziuni malware.' },
+        { icon: '🤖', title: 'Cyber Sokoban: Inginerul de Servere', desc: 'Puzzle algoritmic de optimizare și împingere servere/baterii pe rack-uri în Data Center.' },
+        { icon: '☄️', title: 'Cyber Asteroids: Reactorul Vectorial', desc: 'Pilotaj vectorial cu inerție și distrugere de meteoriți binari și viruși în spațiul cibernetic.' },
+        { icon: '🚀', title: 'Cyber Invaders: Galaxia Codului', desc: 'Shooter arcade retro împotriva valurilor de bug-uri de compilare și amenințări de rețea.' },
+        { icon: '⚡', title: 'Circuit Master 80s (Arduino & Smart City)', desc: 'Cablare breadboard, Legea lui Ohm (V=I·R), multitasking millis() și grila Smart City IoT.' },
+        { icon: '⛏️', title: 'Redstone Logic Lab & Voxel Architect', desc: 'Porți logice AND, OR, NOT, XOR și construcție 3D creativă în stil Minecraft pentru gimnaziu.' },
+        { icon: '🔧', title: 'PC Builder, File-Drop & Virus Sweeper', desc: 'Asamblare PC pas cu pas (CPU, RAM, GPU, SSD), sortare extensii tip Tetris și detecție malware.' },
+        { icon: '⌨️', title: 'Tastare Rapidă (WPM), Mouse Pro & Binary', desc: 'Antrenament tastare oarbă QWERTY cu diacritice românești, dexteritate periferice și conversii binare.' }
+      ],
+      faqs: [
+        { q: 'Sunt cele 28 de jocuri arcade aliniate la materia școlară de TIC?', a: 'Da! Fiecare joc arcade consolidează noțiuni exacte din programa claselor V–VIII: biți și octeți, extensii de fișiere, porți logice, componente PC, securitate cibernetică, sintaxă C++ și robotică Arduino.' },
+        { q: 'Se pot juca gratuit pe telefon, tabletă sau calculator școlar?', a: 'Da, toate cele 28 de jocuri rulează direct în browser (desktop & touch mobil) fără instalare și fără reclame, fiind bilingve (Română și Engleză).' }
+      ]
     },
     {
       dir: 'duel',
-      title: 'Arena Dueluri TIC 1v1: Competiții Tehnologice Școlare, Coding Live & Circuite | ArkyEdu',
-      meta: 'Confruntări live multiplayer 1v1 între elevi: Binary Clash (cursa biților), Circuit Clash Arduino Smart City, C++ Code Racer, Pixel Art Sprite Clash, Network Packet Racer (rutare porturi), Hacker vs Defender și Cursa Algoritmilor Scratch.',
-      keywords: 'dueluri tic 1v1, competitii tehnologice scolare, binary clash 1v1, circuit clash arduino, c++ code racer, pixel art clash, network packet racer, jocuri multiplayer educative, olimpiada tic live',
-      h1: 'Arena Dueluri TIC 1v1: 11 Competiții Tehnologice în Timp Real',
-      appLink: 'https://www.arkyedu.com/#duel'
+      title: 'Arena Dueluri TIC 1v1: 20+ Competiții Tehnologice, Coding Live & Circuite | ArkyEdu',
+      meta: 'Confruntări live multiplayer 1v1 între elevi sau cu AI Cyber-Bot: Cyber Battleship 1v1, File-Drop Attack Tetris Pro, System Sabotage (Among Us), Cyber Clash Royale, C++ Code Racer, Binary Clash și Circuit Clash Arduino.',
+      keywords: 'dueluri tic 1v1, competitii tehnologice scolare, cyber battleship 1v1, file drop attack tetris, system sabotage 1v1, binary clash 1v1, circuit clash arduino, c++ code racer, network packet racer, olimpiada tic live',
+      h1: 'Arena Dueluri TIC 1v1: Peste 20 de Competiții Tehnologice Live',
+      appLink: 'https://www.arkyedu.com/#duel',
+      sectionTitle: 'Moduri Populare de Duel 1v1 (Live Cloud PvP & AI Cyber-Bot)',
+      cards: [
+        { icon: '⚓', title: 'Cyber Battleship 1v1 (Bătălie Navală 10×10)', desc: '5 nave cibernetice + 2 Mine EMP, Railgun, Scanare Sonar 3×3, Bombă Cluster +, Torpile H/V și Nano-Reparație cu Scut.' },
+        { icon: '🧱', title: 'File-Drop Attack 1v1 (Tetris Pro)', desc: 'SRS Wall-Kicks, T-Spin, Back-to-Back și atacuri live DDoS, Overclock x2.2, Scramble & Defrag Purge.' },
+        { icon: '🛸', title: 'System Sabotage 1v1 (Stil Among Us)', desc: 'Repară 8 sisteme ale navei înaintea rivalului și declanșează sabotaje live: Stinge Lumina, Adware, Criogenare, Meltdown.' },
+        { icon: '👑', title: 'Cyber Clash Royale 1v1', desc: 'Strategie în timp real pe 2 benzi cu turnuri defensive, energie tactică și unități de atac cibernetic.' },
+        { icon: '💻', title: 'C++ Code Racer & Binary Clash 1v1', desc: 'Depanare algoritmi C++17 contra cronometru și conversii zecimal-binar pe 8 biți cu bonus de streak.' },
+        { icon: '🔌', title: 'Circuit Clash & Network Packet Racer', desc: 'Cablare senzori Arduino Uno Smart City fără scurtcircuit și rutare pachete pe porturi HTTPS/DNS/SSH.' }
+      ],
+      faqs: [
+        { q: 'Cum se pot duela elevii 1v1 de pe calculatoare diferite sau pe același ecran?', a: 'Fiecare duel permite crearea unei camere private cu cod unic din 4 caractere (sincronizată în timp real prin cloud) sau antrenament solo contra AI Cyber-Bot.' },
+        { q: 'Contribuie duelurile 1v1 la punctajul elevului?', a: 'Da, victoriile sunt înregistrate în profilul elevului (puncte XP și trofee pe fiecare mod) și pot fi vizualizate în clasamentele școlare.' }
+      ]
     },
     {
       dir: 'profesor',
       title: 'Portal Profesor TIC: Catalog Digital, Bareme Oficiale & Notare Automată | ArkyEdu',
-      meta: 'Instrument didactic dedicat cadrelor didactice: evaluare automată pe bareme de 1-10, urmărire progres elevi, fișe curriculare conforme OMEN 3393/2017 & OM 5420/2024.',
-      keywords: 'catalog digital tic, portal profesor informatica, bareme didactice tic gimnaziu, fise de lucru tic clasa 5 6 7 8, omen 3393 2017 manual art klett',
+      meta: 'Instrument didactic gratuit pentru profesori de informatică și TIC: catalog digital, evaluare automată pe bareme 1–10, urmărire progres elevi, export PDF și conformitate OMEN 3393/2017 & OM 5420/2024.',
+      keywords: 'catalog digital tic, portal profesor informatica, bareme didactice tic gimnaziu, fise de lucru tic clasa 5 6 7 8, omen 3393 2017 manual art klett, platforma gratuita profesori tic',
       h1: 'Portalul Profesorului de TIC: Resurse Didactice & Catalog Digital',
-      appLink: 'https://www.arkyedu.com/#profesor'
+      appLink: 'https://www.arkyedu.com/#profesor',
+      sectionTitle: 'Funcționalități Dedicate Profesorilor de Informatică și TIC',
+      cards: [
+        { icon: '📊', title: 'Catalog Digital & Evaluare 1–10', desc: 'Calcul automat al mediilor și notelor de la 1 la 10 pe baza baremelor oficiale pentru toate cele 40 de module.' },
+        { icon: '🏫', title: 'Management Multi-Școală & GDPR', desc: 'Izolare sigură pe școli și clase, coduri rapide de acces pentru elevi și protecție totală a datelor minorilor.' },
+        { icon: '📄', title: 'Export Condică & Diplome Oficiale', desc: 'Export rapid în format imprimabil PDF / foaie de calcul și verificare diplome de merit cu cod unic.' },
+        { icon: '🎮', title: 'Control Laborator & Misiuni Arcade', desc: 'Posibilitate de activare sau blocare temporară a jocurilor arcade în timpul testelor și orelor de curs.' }
+      ],
+      faqs: [
+        { q: 'Este Portalul Profesorului gratuit pentru școlile de stat și private?', a: 'Da, 100% gratuit pentru orice cadru didactic de Informatică și TIC din România și din străinătate, fără limită de elevi sau clase.' },
+        { q: 'Cum se aliniează evaluările la programa Ministerului Educației?', a: 'Fiecare modul acoperă competențele specifice din OMEN 3393/2017 și OM 5420/2024, manualele Art Klett 2025, Litera și EDP.' }
+      ]
     },
     {
       dir: 'oras',
       title: 'Arkedo Smart City: Laborator Interactiv IoT, Robotică & Sisteme Inteligente | ArkyEdu',
-      meta: 'Simulator interactiv de oraș inteligent (Smart City): iluminat public LDR+PIR, barieră inteligentă cu servomotoare, alertă gaze MQ-2 și stație meteo Arduino IoT.',
-      keywords: 'smart city tic clasa 8, simulator iot arduino, laborator robotica orase inteligente, proiect integrator clasa 8 art klett pag 99 108',
+      meta: 'Simulator interactiv de oraș inteligent (Smart City) pentru clasa a VIII-a: iluminat public LDR+PIR PWM, barieră parcare cu servomotor SG90, alertă gaze MQ-2, ecran LCD 1602 I2C și stație meteo Arduino IoT.',
+      keywords: 'smart city tic clasa 8, simulator iot arduino, laborator robotica orase inteligente, proiect integrator clasa 8 art klett pag 99 108, arduino uno copii',
       h1: 'Arkedo Smart City: Laborator Interactiv IoT & Robotică Urbană',
-      appLink: 'https://www.arkyedu.com/#oras'
+      appLink: 'https://www.arkyedu.com/#oras',
+      sectionTitle: 'Subsisteme Smart City & Robotică Arduino Integrate',
+      cards: [
+        { icon: '💡', title: 'Iluminat Stradal Inteligent (LDR + PIR + PWM)', desc: 'Aprindere automată la lăsarea serii și modulare PWM la detectarea mișcării pietonilor pentru economie de energie.' },
+        { icon: '🚧', title: 'Barieră Parcare Automată (HC-SR04 + SG90)', desc: 'Măsurarea distanței cu senzor ultrasonic și acționarea precisă a servomotorului cu afișaj locuri libere.' },
+        { icon: '🚨', title: 'Senzor Gaz MQ-2 & Ecran LCD 1602 I2C', desc: 'Monitorizare continuă a calității aerului cu praguri de alertă, buzzer piezo și mesaje de stare pe I2C.' },
+        { icon: '🏙️', title: 'Orașul Digital al Elevului (ByteCoins & Upgrade)', desc: 'Elevii își construiesc propriul oraș tehnologic cu recompensele obținute din lecțiile de TIC.' }
+      ],
+      faqs: [
+        { q: 'Este nevoie de kit fizic Arduino pentru a folosi Arkedo Smart City?', a: 'Nu! Toți senzorii, conexiunile și logica de control (inclusiv multitasking cu millis()) sunt simulate interactiv direct în browser.' }
+      ]
     }
   ];
 
@@ -1231,6 +1332,46 @@ function generateFeatureHubs() {
 
     const canonicalUrl = `https://www.arkyedu.com/${h.dir}/`;
 
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": `${canonicalUrl}#webpage`,
+          "name": h.title,
+          "description": h.meta,
+          "url": canonicalUrl,
+          "inLanguage": ["ro", "en"],
+          "isPartOf": { "@id": "https://www.arkyedu.com/#website" }
+        },
+        {
+          "@type": "ItemList",
+          "name": h.sectionTitle,
+          "itemListElement": h.cards.map((c, idx) => ({
+            "@type": "ListItem",
+            "position": idx + 1,
+            "name": c.title,
+            "description": c.desc
+          }))
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Acasă", "item": "https://www.arkyedu.com/" },
+            { "@type": "ListItem", "position": 2, "name": h.h1, "item": canonicalUrl }
+          ]
+        },
+        ...(h.faqs.length > 0 ? [{
+          "@type": "FAQPage",
+          "mainEntity": h.faqs.map(f => ({
+            "@type": "Question",
+            "name": f.q,
+            "acceptedAnswer": { "@type": "Answer", "text": f.a }
+          }))
+        }] : [])
+      ]
+    };
+
     const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -1239,15 +1380,28 @@ function generateFeatureHubs() {
   <title>${h.title}</title>
   <meta name="description" content="${h.meta}">
   <meta name="keywords" content="${h.keywords}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website">
   <meta property="og:title" content="${h.title}">
   <meta property="og:description" content="${h.meta}">
   <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${h.title}">
+  <meta name="twitter:description" content="${h.meta}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
   <style>
 ${commonStyles}
   </style>
@@ -1264,9 +1418,9 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (21)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
-        <a href="https://www.arkyedu.com/comparatie-scoli-private/">vs Privat</a>
+        <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
       </nav>
       <a href="${h.appLink}" class="nav-cta">
         <span>🎮 Lansează ${h.dir.toUpperCase()}</span>
@@ -1279,6 +1433,7 @@ ${commonStyles}
       <div class="badge-bar">
         <span class="badge badge-green">100% Interactiv în Browser</span>
         <span class="badge badge-free">0 Lei — Fără Înregistrare Obligatorie</span>
+        <span class="badge">Bilingv RO / EN</span>
       </div>
       <h1>${h.h1}</h1>
       <p class="lead-text">${h.meta}</p>
@@ -1291,13 +1446,38 @@ ${commonStyles}
         </a>
       </div>
     </div>
+
+    <section aria-labelledby="hub-section-title">
+      <h2 id="hub-section-title" style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">${h.sectionTitle}</h2>
+      <div class="grid-2">
+        ${h.cards.map(c => `
+          <div class="card">
+            <div class="card-icon">${c.icon}</div>
+            <h3 class="card-title">${c.title}</h3>
+            <p class="card-desc">${c.desc}</p>
+            <a href="${h.appLink}" class="card-link">Lansează în Aplicație →</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    ${h.faqs.length > 0 ? `
+    <section style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">❓ Întrebări Frecvente</h2>
+      ${h.faqs.map(f => `
+        <div class="faq-block">
+          <div class="faq-question">${f.q}</div>
+          <div class="faq-answer">${f.a}</div>
+        </div>
+      `).join('')}
+    </section>` : ''}
   </main>
 
   <footer>
     <div class="container">
       <div class="footer-bottom" style="border: none;">
-        <div>© 2026 ArkyEdu TIC. Toate drepturile rezervate.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div>© 2026 ArkyEdu TIC. 100% Gratuit pentru educație digitală.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">Educație Tehnologie Copii</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -1307,26 +1487,217 @@ ${commonStyles}
     fs.writeFileSync(path.join(hubDir, 'index.html'), htmlContent, 'utf-8');
   });
 
-  console.log('Feature Hubs (arcade, duel, profesor, oras) generated.');
+  console.log('Feature Hubs (arcade, duel, profesor, oras) generated with rich cards & JSON-LD.');
 }
 
-// 5. GENERATE COMPLETE SITEMAP.XML
+// 5. GENERATE PILLAR LANDING PAGE (/educatie-tehnologie-copii/)
+function generateTechEducationPillar() {
+  const dirPath = path.join(publicDir, 'educatie-tehnologie-copii');
+  ensureDir(dirPath);
+
+  const canonicalUrl = 'https://www.arkyedu.com/educatie-tehnologie-copii/';
+  const title = 'Educație TIC, Programare & Tehnologie pentru Copii (10–15 Ani) | ArkyEdu';
+  const description = 'Ghid complet și gratuit de educație digitală, TIC, programare Scratch & C++, Excel, web design și robotică Arduino pentru copii (clasele V–VIII).';
+  const keywords = 'educatie copii tehnologie, educatie tic gimnaziu, educatie digitala copii romania, cursuri programare copii gratuit, invatare tehnologie copii, coding copii 10 15 ani, robotica copii online, alternativa gratuita logiscool';
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": `${canonicalUrl}#article`,
+        "headline": "Educație TIC, Programare și Tehnologie pentru Copii în România (Ghid Complet V–VIII)",
+        "description": description,
+        "author": { "@type": "Organization", "name": "ArkyEdu" },
+        "publisher": {
+          "@type": "EducationalOrganization",
+          "name": "ArkyEdu",
+          "logo": { "@type": "ImageObject", "url": "https://www.arkyedu.com/pwa-512x512.png" }
+        },
+        "inLanguage": ["ro", "en"],
+        "mainEntityOfPage": canonicalUrl
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Acasă", "item": "https://www.arkyedu.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Educație Tehnologie Copii", "item": canonicalUrl }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "La ce vârstă poate începe un copil educația TIC și programarea pe ArkyEdu?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Platforma este optimizată pentru copii între 10 și 15 ani (clasele V–VIII), începând de la noțiuni vizuale (hardware, fișiere, siguranță online, Scratch 3.0) și avansând progresiv spre C++, Excel, Web Design și robotică Arduino IoT." }
+          },
+          {
+            "@type": "Question",
+            "name": "Cum contribuie jocurile educative și duelurile 1v1 la educația tehnologică a copiilor?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Cele 28 de jocuri arcade (Cyber Pac-Man, Cyber Arkanoid, Sokoban, Circuit Master 80s, Redstone Logic) și peste 20 de dueluri 1v1 transformă algoritmica, rețelele, securitatea cibernetică și electronica în provocări interactive cu feedback imediat." }
+          }
+        ]
+      }
+    ]
+  };
+
+  const htmlContent = `<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <meta name="description" content="${description}">
+  <meta name="keywords" content="${keywords}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">EDUCAȚIE DIGITALĂ</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
+      </nav>
+      <a href="https://www.arkyedu.com/" class="nav-cta">
+        <span>🎮 Intră în Platformă</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge badge-green">Educație Digitală &amp; TIC (10–15 Ani)</span>
+        <span class="badge badge-free">100% Gratuit &amp; Fără Reclame</span>
+        <span class="badge">Bilingv Română / Engleză</span>
+      </div>
+      <h1>Educație TIC, Programare &amp; Tehnologie pentru Copii</h1>
+      <p class="lead-text">Traseu complet de alfabetizare digitală, gândire algoritmică, programare C++/Scratch, birotică modernă, securitate cibernetică și robotică Arduino — aliniat 100% programei școlare românești și manualelor aprobate.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/" class="btn-primary">🚀 Începe Gratuit în Browser</a>
+        <a href="https://www.arkyedu.com/comparatie-scoli-private/" class="btn-secondary">⚖️ ArkyEdu vs Școli Private</a>
+      </div>
+    </div>
+
+    <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">Traseul Tehnologic pe Etape de Vârstă (Clasele V – VIII)</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-icon">🖥️</div>
+        <h3 class="card-title">Clasa a V-a (10–11 ani): Fundamente &amp; Scratch 3.0</h3>
+        <p class="card-desc">Arhitectura calculatorului, sisteme de operare, siguranță online, Word și primele jocuri algoritmice în Scratch 3.0.</p>
+        <a href="https://www.arkyedu.com/clasa-5/" class="card-link">Vezi Cele 6 Module Clasa a V-a →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3 class="card-title">Clasa a VI-a (11–12 ani): Multimedia, 3D &amp; Cyber Security</h3>
+        <p class="card-desc">Prezentări PowerPoint, Paint 3D, animație VR, protecție împotriva malware și phishing, netichetă și bucle în Scratch.</p>
+        <a href="https://www.arkyedu.com/clasa-6/" class="card-link">Vezi Cele 8 Module Clasa a VI-a →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <h3 class="card-title">Clasa a VII-a (12–13 ani): Audio-Video, GIS &amp; C++</h3>
+        <p class="card-desc">Tehnoredactare avansată Word, WavePad, VideoPad, hărți digitale GIS, inițiere în C++ (Code::Blocks) și roboți virtuali.</p>
+        <a href="https://www.arkyedu.com/clasa-7/" class="card-link">Vezi Cele 12 Module Clasa a VII-a →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3 class="card-title">Clasa a VIII-a (13–15 ani): Excel, Web, C++ &amp; Arduino IoT</h3>
+        <p class="card-desc">Calcul tabelar Excel, Web Design HTML5 &amp; Google Sites, algoritmi avansați C++ și proiect Smart Home IoT pe Arduino Uno.</p>
+        <a href="https://www.arkyedu.com/clasa-8/" class="card-link">Vezi Cele 14 Module Clasa a VIII-a →</a>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🕹️</div>
+        <h3 class="card-title">28 Jocuri Arcade Retro</h3>
+        <p class="card-desc">Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Asteroids, Circuit Master 80s, Redstone Logic și PC Builder.</p>
+        <a href="https://www.arkyedu.com/arcade/" class="card-link">Explorează Arcade →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚔️</div>
+        <h3 class="card-title">Arena Dueluri 1v1 (20+ Moduri)</h3>
+        <p class="card-desc">Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer și Binary Clash live sau cu AI Bot.</p>
+        <a href="https://www.arkyedu.com/duel/" class="card-link">Intră în Arenă →</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎓</div>
+        <h3 class="card-title">Portal Profesori &amp; Diplome 1–10</h3>
+        <p class="card-desc">Catalog digital GDPR multi-școală, notare automată pe bareme oficiale și diplome imprimabile pentru elevi.</p>
+        <a href="https://www.arkyedu.com/profesor/" class="card-link">Vezi Portalul Profesorului →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Platforma #1 Gratuită de Educație TIC &amp; Coding pentru Copii.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/llms.txt" style="color: var(--accent);">llms.txt</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+  fs.writeFileSync(path.join(dirPath, 'index.html'), htmlContent, 'utf-8');
+  console.log('Pillar Landing Page (/educatie-tehnologie-copii/) generated.');
+}
+
+// 6. GENERATE COMPLETE SITEMAP.XML
 function generateSitemap() {
   const currentDate = new Date().toISOString().split('T')[0];
 
   const staticUrls = [
     { loc: 'https://www.arkyedu.com/', priority: '1.0', changefreq: 'daily' },
+    { loc: 'https://www.arkyedu.com/educatie-tehnologie-copii/', priority: '0.98', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-5/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-6/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-7/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-8/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/comparatie-scoli-private/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/arcade/', priority: '0.9', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/duel/', priority: '0.9', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/profesor/', priority: '0.85', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/oras/', priority: '0.85', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/llms.txt', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/llms-full.txt', priority: '0.7', changefreq: 'weekly' }
+    { loc: 'https://www.arkyedu.com/arcade/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/duel/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/profesor/', priority: '0.88', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/oras/', priority: '0.88', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/llms.txt', priority: '0.85', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/llms-full.txt', priority: '0.8', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/ai-catalog.json', priority: '0.75', changefreq: 'weekly' }
   ];
 
   const courseUrls = CURRICULA_MODULES.map(m => ({
@@ -1358,5 +1729,6 @@ generateModulePages();
 generateGradeHubs();
 generateComparisonPage();
 generateFeatureHubs();
+generateTechEducationPillar();
 generateSitemap();
 console.log('--- ALL SEO ASSETS GENERATED SUCCESSFULLY ---');

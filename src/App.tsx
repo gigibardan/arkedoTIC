@@ -140,9 +140,10 @@ import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
 import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthService';
 import { forceScrollToTop } from './utils/scrollHelper';
+import { updateDynamicSeo } from './utils/seoManager';
 
 function GameContent() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const arky = useArky();
   const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin'>(() => {
     if (typeof window !== 'undefined') {
@@ -1756,6 +1757,11 @@ function GameContent() {
       window.removeEventListener('hashchange', handleUrlChange);
     };
   }, []);
+
+  // Synchronize bilingual SEO titles, descriptions, OpenGraph & canonical tags per view
+  useEffect(() => {
+    updateDynamicSeo(view, lang, activeMission);
+  }, [view, lang, activeMission]);
 
   const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin') => {
     setView(newView);

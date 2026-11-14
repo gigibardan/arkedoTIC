@@ -1,25 +1,49 @@
 {
   "specVersion": "1.0",
   "host": {
-    "displayName": "ArkyEdu Platform",
+    "displayName": "ArkyEdu Platform — Educație TIC, Coding & Robotică Copii",
     "identifier": "arkyedu.com"
   },
   "entries": [
     {
       "identifier": "urn:air:arkyedu.com:llm:context",
-      "displayName": "ArkyEdu LLM Context",
+      "displayName": "ArkyEdu LLM Context (Summary)",
       "type": "text/markdown",
       "url": "https://www.arkyedu.com/llms.txt"
     },
     {
       "identifier": "urn:air:arkyedu.com:llm:full-documentation",
-      "displayName": "ArkyEdu Full LLM Documentation",
+      "displayName": "ArkyEdu Full LLM & Curriculum Documentation",
       "type": "text/markdown",
       "url": "https://www.arkyedu.com/llms-full.txt"
     },
     {
+      "identifier": "urn:air:arkyedu.com:pillar:tech-education-kids",
+      "displayName": "Ghid Complet Educație TIC & Tehnologie pentru Copii (10-15 ani)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/educatie-tehnologie-copii/"
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:pillar:arcade-28",
+      "displayName": "28 Jocuri Educative Arcade Retro TIC & Coding",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/arcade/"
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:pillar:duels-1v1",
+      "displayName": "Arena Dueluri Tehnologice 1v1 Live (20+ Moduri)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/duel/"
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:curriculum:sitemap",
+      "displayName": "National Middle School ICT Curriculum Sitemap (Grades 5-8)",
+      "type": "application/xml",
+      "url": "https://www.arkyedu.com/sitemap.xml"
+    },
+    {
       "identifier": "urn:air:arkyedu.com:curriculum:metadata",
-      "displayName": "National Middle School ICT Curriculum Catalog (Grades 5-8)",
+      "displayName": "ArkyEdu Application Metadata",
       "type": "application/json",
       "url": "https://www.arkyedu.com/metadata.json"
     }
