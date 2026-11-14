@@ -38,15 +38,31 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# HTML entry point - always revalidate for instant updates
+# HTML entry points - always revalidate and explicitly declare UTF-8 charset
 [[headers]]
-  for = "/index.html"
+  for = "/"
   [headers.values]
+    Content-Type = "text/html; charset=utf-8"
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
 
 # Structured data and sitemaps caching
 [[headers]]
