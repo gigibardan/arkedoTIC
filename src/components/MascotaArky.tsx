@@ -196,6 +196,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                     onClick={handleSpeech}
                     className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-cyan-300 transition cursor-pointer"
                     title={lang === 'en' ? 'Listen to Arky' : 'Ascultă mesajul lui Arky'}
+                    aria-label={lang === 'en' ? 'Listen to Arky' : 'Ascultă mesajul lui Arky'}
                   >
                     <Volume2 className="w-3.5 h-3.5" />
                   </button>
@@ -205,6 +206,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                     onClick={handleNextQuote}
                     className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-amber-300 transition cursor-pointer"
                     title={lang === 'en' ? 'Get another quote' : 'Altă replică / glumă'}
+                    aria-label={lang === 'en' ? 'Get another quote' : 'Altă replică / glumă'}
                   >
                     <Dices className="w-3.5 h-3.5" />
                   </button>
@@ -214,6 +216,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                     onClick={arkyContext.toggleBubble}
                     className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-rose-300 transition cursor-pointer"
                     title={lang === 'en' ? 'Hide bubble' : 'Ascunde bula'}
+                    aria-label={lang === 'en' ? 'Hide bubble' : 'Ascunde bula'}
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -232,7 +235,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                 <span className={`px-2 py-0.5 rounded-full border ${currentTheme.badgeBg} ${currentTheme.badgeText} font-bold`}>
                   {lang === 'en' ? currentTheme.labelEn : currentTheme.labelRo}
                 </span>
-                <span className="text-slate-500">ArkyEdu • TIC & Coding</span>
+                <span className="text-slate-400">ArkyEdu • TIC & Coding</span>
               </div>
 
               {/* Bubble Pointer Arrow towards Mascot */}
@@ -251,6 +254,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   onClick={arkyContext.toggleBubble}
                   className="p-2 rounded-full bg-slate-900/90 border border-teal-500/40 text-teal-300 hover:bg-teal-500 hover:text-slate-950 shadow-lg transition transform hover:scale-110 active:scale-95 cursor-pointer"
                   title={lang === 'en' ? 'Show speech bubble' : 'Afișează dialog'}
+                  aria-label={lang === 'en' ? 'Show speech bubble' : 'Afișează dialog'}
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
                 </button>
@@ -259,6 +263,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                 onClick={arkyContext.toggleMinimize}
                 className="p-2 rounded-full bg-slate-900/90 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 shadow-lg transition transform hover:scale-110 active:scale-95 cursor-pointer"
                 title={lang === 'en' ? 'Minimize Arky' : 'Minimizează Arky'}
+                aria-label={lang === 'en' ? 'Minimize Arky' : 'Minimizează Arky'}
               >
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>

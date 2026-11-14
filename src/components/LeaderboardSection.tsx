@@ -308,7 +308,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
                   <div className="mt-1 text-lg font-black text-slate-300 font-mono">
                     {getScoreValue(topThree[1]).toLocaleString()}
-                    <span className="text-[10px] text-slate-500 ml-1 font-sans">{getTabLabel()}</span>
+                    <span className="text-[10px] text-slate-400 ml-1 font-sans">{getTabLabel()}</span>
                   </div>
 
                   <span className="text-[10px] text-teal-400 mt-2 font-mono group-hover:underline flex items-center gap-1">
@@ -317,7 +317,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   </span>
                 </div>
               ) : (
-                <div className="order-2 md:order-1 h-36 border-2 border-dashed border-slate-800 rounded-3xl flex items-center justify-center text-slate-600 text-xs font-mono">
+                <div className="order-2 md:order-1 h-36 border-2 border-dashed border-slate-800 rounded-3xl flex items-center justify-center text-slate-400 text-xs font-mono">
                   #2 {lang === 'en' ? 'Awaiting' : 'În așteptare'}
                 </div>
               )}
@@ -352,7 +352,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   </span>
                 </div>
               ) : (
-                <div className="order-1 md:order-2 h-44 border-2 border-dashed border-amber-500/30 rounded-3xl flex items-center justify-center text-amber-500/40 text-xs font-mono">
+                <div className="order-1 md:order-2 h-44 border-2 border-dashed border-amber-500/30 rounded-3xl flex items-center justify-center text-amber-300/85 text-xs font-mono">
                   #1 {lang === 'en' ? 'Awaiting Champion' : 'Fii primul campion!'}
                 </div>
               )}
@@ -378,7 +378,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
                   <div className="mt-1 text-lg font-black text-amber-400 font-mono">
                     {getScoreValue(topThree[2]).toLocaleString()}
-                    <span className="text-[10px] text-slate-500 ml-1 font-sans">{getTabLabel()}</span>
+                    <span className="text-[10px] text-slate-400 ml-1 font-sans">{getTabLabel()}</span>
                   </div>
 
                   <span className="text-[10px] text-teal-400 mt-2 font-mono group-hover:underline flex items-center gap-1">
@@ -387,7 +387,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   </span>
                 </div>
               ) : (
-                <div className="order-3 md:order-3 h-36 border-2 border-dashed border-slate-800 rounded-3xl flex items-center justify-center text-slate-600 text-xs font-mono">
+                <div className="order-3 md:order-3 h-36 border-2 border-dashed border-slate-800 rounded-3xl flex items-center justify-center text-slate-400 text-xs font-mono">
                   #3 {lang === 'en' ? 'Awaiting' : 'În așteptare'}
                 </div>
               )}
@@ -415,13 +415,13 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
               {/* Quick Search */}
               <div className="relative w-48 sm:w-64">
-                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={lang === 'en' ? 'Search student...' : 'Caută elev...'}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
@@ -459,7 +459,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                             </span>
                           )}
                         </div>
-                        <div className="text-[10px] text-slate-500 font-mono">
+                        <div className="text-[10px] text-slate-400 font-mono">
                           {activeTab === 'duels'
                             ? `⚔️ ${student.duelStats?.matchesPlayed || 0} meciuri • 🏆 ${student.duelStats?.wins || 0} victorii • +${student.duelStats?.duelPoints || 0} XP`
                             : `${student.arcadeScores?.totalArcade ? `${student.arcadeScores.totalArcade} pts arcade` : '0 arcade'} • ${student.lessonsProgress?.totalLessonScore ? `${student.lessonsProgress.totalLessonScore} pts lecții` : '0 lecții'}`
@@ -472,7 +472,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                       <div className="text-sm font-black text-amber-400 font-mono">
                         {score.toLocaleString()}
                       </div>
-                      <div className="text-[10px] text-slate-500 font-mono">
+                      <div className="text-[10px] text-slate-400 font-mono">
                         {getTabLabel()}
                       </div>
                     </div>
@@ -702,7 +702,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">💻 Hardware</span>
                     {selectedStudentForDetails.lessonsProgress?.hardware?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.hardware.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -716,7 +716,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">📁 Arbore Fișiere</span>
                     {selectedStudentForDetails.lessonsProgress?.files?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.files.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -730,7 +730,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">🌐 Internet 1 (WWW)</span>
                     {selectedStudentForDetails.lessonsProgress?.internet1?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.internet1.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -744,7 +744,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">🛡️ Internet 2 (Siguranță)</span>
                     {selectedStudentForDetails.lessonsProgress?.internet2?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.internet2.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -758,7 +758,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">📝 Text 4A (Word & Formatare)</span>
                     {selectedStudentForDetails.lessonsProgress?.text1?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.text1.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -772,7 +772,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">📊 Text 4B (Tabele & Paginare)</span>
                     {selectedStudentForDetails.lessonsProgress?.text2?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.text2.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -786,7 +786,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">🖋️ VII: Word 1A (Tipografie)</span>
                     {selectedStudentForDetails.lessonsProgress?.g7_word_a?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.g7_word_a.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -800,7 +800,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">📐 VII: Word 1B (Machetare)</span>
                     {selectedStudentForDetails.lessonsProgress?.g7_word_b?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.g7_word_b.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -814,7 +814,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">🎙️ VII: Audio 2A (WavePad)</span>
                     {selectedStudentForDetails.lessonsProgress?.g7_audio_a?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.g7_audio_a.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -828,7 +828,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">🎬 VII: Video 2B (VideoPad)</span>
                     {selectedStudentForDetails.lessonsProgress?.g7_video_b?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.g7_video_b.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -842,7 +842,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">👥 VII: Cloud 3A (Docs/Slides)</span>
                     {selectedStudentForDetails.lessonsProgress?.g7_cloud_a?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.g7_cloud_a.elapsedSeconds}s
                       </span>
                     ) : null}
@@ -856,7 +856,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">🗺️ VII: GIS 3B (Cartografie)</span>
                     {selectedStudentForDetails.lessonsProgress?.g7_gis_b?.elapsedSeconds ? (
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[10px] text-slate-400 font-mono">
                         ⏱️ {selectedStudentForDetails.lessonsProgress.g7_gis_b.elapsedSeconds}s
                       </span>
                     ) : null}

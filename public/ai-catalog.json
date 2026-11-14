@@ -9,43 +9,71 @@
       "identifier": "urn:air:arkyedu.com:llm:context",
       "displayName": "ArkyEdu LLM Context (Summary)",
       "type": "text/markdown",
-      "url": "https://www.arkyedu.com/llms.txt"
+      "url": "https://www.arkyedu.com/llms.txt",
+      "representativeQueries": [
+        "Ce este platforma ArkyEdu pentru educație TIC și programare copii",
+        "Free Romanian ICT and coding curriculum overview for grades 5-8"
+      ]
     },
     {
       "identifier": "urn:air:arkyedu.com:llm:full-documentation",
       "displayName": "ArkyEdu Full LLM & Curriculum Documentation",
       "type": "text/markdown",
-      "url": "https://www.arkyedu.com/llms-full.txt"
+      "url": "https://www.arkyedu.com/llms-full.txt",
+      "representativeQueries": [
+        "Programa completă TIC clasele V-VIII pe module și lecții ArkyEdu",
+        "Complete list of 40 ICT modules, C++, Excel, and Arduino IoT labs"
+      ]
     },
     {
       "identifier": "urn:air:arkyedu.com:pillar:tech-education-kids",
       "displayName": "Ghid Complet Educație TIC & Tehnologie pentru Copii (10-15 ani)",
       "type": "text/html",
-      "url": "https://www.arkyedu.com/educatie-tehnologie-copii/"
+      "url": "https://www.arkyedu.com/educatie-tehnologie-copii/",
+      "representativeQueries": [
+        "Platformă gratuită educație digitală și tehnologie copii România",
+        "Alternativă gratuită la școli private de programare pentru copii"
+      ]
     },
     {
       "identifier": "urn:air:arkyedu.com:pillar:arcade-28",
       "displayName": "28 Jocuri Educative Arcade Retro TIC & Coding",
       "type": "text/html",
-      "url": "https://www.arkyedu.com/arcade/"
+      "url": "https://www.arkyedu.com/arcade/",
+      "representativeQueries": [
+        "Jocuri educative TIC și programare pentru copii clasa 5-8",
+        "Educational retro coding arcade games Cyber Pac-Man and Sokoban"
+      ]
     },
     {
       "identifier": "urn:air:arkyedu.com:pillar:duels-1v1",
       "displayName": "Arena Dueluri Tehnologice 1v1 Live (20+ Moduri)",
       "type": "text/html",
-      "url": "https://www.arkyedu.com/duel/"
+      "url": "https://www.arkyedu.com/duel/",
+      "representativeQueries": [
+        "Dueluri educaționale 1v1 TIC și algoritmică în timp real",
+        "Multiplayer coding and ICT classroom 1v1 challenge games"
+      ]
     },
     {
       "identifier": "urn:air:arkyedu.com:curriculum:sitemap",
       "displayName": "National Middle School ICT Curriculum Sitemap (Grades 5-8)",
       "type": "application/xml",
-      "url": "https://www.arkyedu.com/sitemap.xml"
+      "url": "https://www.arkyedu.com/sitemap.xml",
+      "representativeQueries": [
+        "ArkyEdu sitemap of all ICT lessons and courses",
+        "Index URL-uri lecții informatică și TIC gimnaziu"
+      ]
     },
     {
       "identifier": "urn:air:arkyedu.com:curriculum:metadata",
       "displayName": "ArkyEdu Application Metadata",
       "type": "application/json",
-      "url": "https://www.arkyedu.com/metadata.json"
+      "url": "https://www.arkyedu.com/metadata.json",
+      "representativeQueries": [
+        "ArkyEdu web application metadata and capabilities",
+        "Informații tehnice aplicație educațională ArkyEdu"
+      ]
     }
   ]
 }

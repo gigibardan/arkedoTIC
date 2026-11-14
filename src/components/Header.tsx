@@ -230,7 +230,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   currentView === 'teacher'
                     ? 'bg-amber-600 text-white shadow-sm'
-                    : 'text-amber-300/80 hover:text-amber-200 hover:bg-amber-500/10'
+                    : 'text-amber-300 hover:text-amber-200 hover:bg-amber-500/10'
                 }`}
               >
                 <School className="w-3.5 h-3.5" />
@@ -248,11 +248,11 @@ export const Header: React.FC<HeaderProps> = ({
                   <Clock className="w-3 h-3 text-cyan-400 animate-spin-slow" />
                   <span>{formatTime(elapsedSeconds)}</span>
                 </div>
-                <span className="text-slate-600 text-[10px]">|</span>
+                <span className="text-slate-400 text-[10px]" aria-hidden="true">|</span>
                 <div className="flex items-center gap-1 text-xs font-black font-heading text-amber-300">
                   <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                   <span>{score}</span>
-                  <span className="text-slate-500 text-[10px] hidden sm:inline">/{maxScore}</span>
+                  <span className="text-slate-400 text-[10px] hidden sm:inline">/{maxScore}</span>
                 </div>
               </div>
             )}
@@ -388,7 +388,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <School className="w-4 h-4 text-amber-400 shrink-0" />
                   <div className="min-w-0">
                     <div className="font-bold truncate">{lang === 'en' ? 'Teacher Portal' : 'Portal Profesor'}</div>
-                    <div className="text-[10px] text-amber-300/70 truncate">{lang === 'en' ? 'Gradebook & Codes' : 'Catalog & Setări'}</div>
+                    <div className="text-[10px] text-amber-200 truncate">{lang === 'en' ? 'Gradebook & Codes' : 'Catalog & Setări'}</div>
                   </div>
                 </button>
               )}
@@ -405,7 +405,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <ShoppingBag className="w-4 h-4 text-purple-400 shrink-0" />
                   <div className="min-w-0">
                     <div className="font-bold truncate">{lang === 'en' ? 'Cyber Shop' : 'Magazin Cyber'}</div>
-                    <div className="text-[10px] text-purple-300/70 truncate">{typeof byteCoins === 'number' ? `${byteCoins} 🪙 Coins` : 'Inventar'}</div>
+                    <div className="text-[10px] text-purple-200 truncate">{typeof byteCoins === 'number' ? `${byteCoins} 🪙 Coins` : 'Inventar'}</div>
                   </div>
                 </button>
               )}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { GameLevel } from './types';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { GameLevel, AllMissionId } from './types';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { ArkyProvider, useArky } from './context/ArkyContext';
 import { HintProvider } from './context/HintContext';
@@ -12,135 +12,80 @@ import { OfflineIndicator } from './components/pwa/OfflineIndicator';
 import { Footer } from './components/Footer';
 import { LegalModal, LegalTabType } from './components/LegalModal';
 import { CookieBanner } from './components/CookieBanner';
-
-// Files Mission (Unitatea 2 - Manual pag. 22-30)
-import { FLevel1_OSInterface } from './components/files/FLevel1_OSInterface';
-import { FLevel2_DataMemory } from './components/files/FLevel2_DataMemory';
-import { Level1_Structure } from './components/Level1_Structure';
-import { Level2_SelectionSearch } from './components/Level2_SelectionSearch';
-import { Level3_MoveShortcuts } from './components/Level3_MoveShortcuts';
-import { Level4_CopyRenameProps } from './components/Level4_CopyRenameProps';
-import { Level5_RecycleBin } from './components/Level5_RecycleBin';
-
-// Hardware Mission (Unitatea 1 - Manual pag. 10-20)
-import { HLevel1_ErgonomyRules } from './components/hardware/HLevel1_ErgonomyRules';
-import { HLevel2_HistoryTimeline } from './components/hardware/HLevel2_HistoryTimeline';
-import { HLevel3_CentralUnitAssembly } from './components/hardware/HLevel3_CentralUnitAssembly';
-import { HLevel4_PeripheralsSort } from './components/hardware/HLevel4_PeripheralsSort';
-import { HLevel5_BitsQuiz } from './components/hardware/HLevel5_BitsQuiz';
-
-// Internet Mission 3A (Unitatea 3 - Manual pag. 32-36)
-import { Module3AFlow } from './components/internet1/Module3AFlow';
-
-// Internet Mission 3B (Unitatea 3 - Manual pag. 38-48)
-import { Module3BFlow } from './components/internet2/Module3BFlow';
-
-// Text Mission 4A (Unitatea 4 - Manual pag. 50-67)
-import { Module4AFlow } from './components/text1/Module4AFlow';
-
-// Text Mission 4B (Unitatea 4 - Manual pag. 68-80)
-import { Module4BFlow } from './components/text2/Module4BFlow';
-
-// Algo Mission 5A (Unitatea 5 - Manual pag. 54-61)
-import { Module5AFlow } from './components/algo1/Module5AFlow';
-
-// Algo Mission 5B (Unitatea 5 - Manual pag. 62-71)
-import { Module5BFlow } from './components/algo2/Module5BFlow';
-
-// Scratch Mission 6A (Unitatea 6 - Manual pag. 72-83)
-import { Module6AFlow } from './components/scratch1/Module6AFlow';
-
-// Scratch Mission 6B (Unitatea 6 - Manual pag. 84-93)
-import { Module6BFlow } from './components/scratch2/Module6BFlow';
-
-// Grade 6 Presentation Mission 1A (Unitatea 1 - Manual pag. 10-15)
-import { ModuleG6P1Flow } from './components/grade6/presentation1/ModuleG6P1Flow';
-
-// Grade 6 Presentation Mission 1B (Unitatea 1 - Manual pag. 16-25)
-import { ModuleG6P2Flow } from './components/grade6/presentation2/ModuleG6P2Flow';
-
-// Grade 6 Paint 3D Mission 2A (Unitatea 2 - Manual pag. 26-33)
-import { ModuleG6Paint3DFlow } from './components/grade6/paint3d/ModuleG6Paint3DFlow';
-
-// Grade 6 Animation & VR Mission 2B (Unitatea 2 - Manual pag. 34-43)
-import { ModuleG6AnimVRFlow } from './components/grade6/animation_vr/ModuleG6AnimVRFlow';
-
-// Grade 6 Malware & Cyber Security Mission 3A (Unitatea 3 - Manual pag. 44-45)
-import { ModuleG6M1Flow } from './components/grade6/malware/ModuleG6M1Flow';
-
-// Grade 6 Email, Netiquette & Cloud Mission 3B (Unitatea 3 - Manual pag. 46-61)
-import { ModuleG6EmailFlow } from './components/grade6/email/ModuleG6EmailFlow';
-
-// Grade 6 Scratch Algo Mission 4A (Unitatea 4 - Manual pag. 62-75)
-import { ModuleG6ScratchAlgo1Flow } from './components/grade6/scratch_algo1/ModuleG6ScratchAlgo1Flow';
-
-// Grade 6 Scratch Algo Mission 4B (Unitatea 4 - Manual pag. 76-93)
-import { ModuleG6ScratchAlgo2Flow } from './components/grade6/scratch_algo2/ModuleG6ScratchAlgo2Flow';
-
-// Grade 7 Word Mission 1A (Unitatea 1 - Manual pag. 10-17)
-import { ModuleG7Word1Flow } from './components/grade7/word1/ModuleG7Word1Flow';
-
-// Grade 7 Word Mission 1B (Unitatea 1 - Manual pag. 18-27)
-import { ModuleG7Word2Flow } from './components/grade7/word2/ModuleG7Word2Flow';
-
-// Grade 7 Audio Mission 2A (Unitatea 2 - Manual pag. 28-35)
-import { ModuleG7Audio1Flow } from './components/grade7/audio1/ModuleG7Audio1Flow';
-
-// Grade 7 Video Mission 2B (Unitatea 2 - Manual pag. 36-47)
-import { ModuleG7Video1Flow } from './components/grade7/video1/ModuleG7Video1Flow';
-
-// Grade 7 Cloud Mission 3A (Unitatea 3 - Manual pag. 48-56)
-import { ModuleG7Cloud1Flow } from './components/grade7/cloud1/ModuleG7Cloud1Flow';
-
-// Grade 7 GIS Mission 3B (Unitatea 3 - Manual pag. 57-63)
-import { ModuleG7Gis1Flow } from './components/grade7/gis1/ModuleG7Gis1Flow';
-
-// Grade 7 C++ Mission 4A (Unitatea 4 - Manual pag. 64-73)
-import { ModuleG7Cpp1Flow } from './components/grade7/cpp1/ModuleG7Cpp1Flow';
-
-// Grade 7 C++ Mission 4B (Unitatea 4 - Manual pag. 74-76)
-import { ModuleG7Cpp2Flow } from './components/grade7/cpp2/ModuleG7Cpp2Flow';
-
-// Grade 7 Decision Mission 4C (Unitatea 4 - Manual pag. 77-80)
-import { ModuleG7DecisionFlow } from './components/grade7/decision/ModuleG7DecisionFlow';
-
-// Grade 7 While Loop Mission 4D (Unitatea 4 - Manual pag. 81-85)
-import { ModuleG7LoopFlow } from './components/grade7/loop/ModuleG7LoopFlow';
-
-// Grade 7 STEM Interdisciplinary Mission 4E (Unitatea 4 - Manual pag. 86-102)
-import { ModuleG7StemFlow } from './components/grade7/stem/ModuleG7StemFlow';
-
-// Grade 7 Robotics Mission 4F (Unitatea 4 - Manual pag. 103-108)
-import { ModuleG7RobotFlow } from './components/grade7/robot/ModuleG7RobotFlow';
-
-import { Grade8MissionFlow } from './components/grade8/Grade8MissionFlow';
-import { ModuleG8Calc1Flow } from './components/grade8/calc1/ModuleG8Calc1Flow';
-import { ModuleG8Calc2Flow } from './components/grade8/calc2/ModuleG8Calc2Flow';
-import { ModuleG8Calc3Flow } from './components/grade8/calc3/ModuleG8Calc3Flow';
-import { ModuleG8Calc4Flow } from './components/grade8/calc4/ModuleG8Calc4Flow';
-import { ModuleG8Web1Flow } from './components/grade8/web1/ModuleG8Web1Flow';
-import { ModuleG8Web2Flow } from './components/grade8/web2/ModuleG8Web2Flow';
-import { ModuleG8Web3Flow } from './components/grade8/web3/ModuleG8Web3Flow';
-import { ModuleG8Algo1Flow } from './components/grade8/algo1/ModuleG8Algo1Flow';
-import { ModuleG8Algo2Flow } from './components/grade8/algo2/ModuleG8Algo2Flow';
-import { ModuleG8Algo3Flow } from './components/grade8/algo3/ModuleG8Algo3Flow';
-import { ModuleG8Algo4Flow } from './components/grade8/algo4/ModuleG8Algo4Flow';
-import { ModuleG8Algo5Flow } from './components/grade8/algo5/ModuleG8Algo5Flow';
-import { ModuleG8Robot1Flow } from './components/grade8/robot1/ModuleG8Robot1Flow';
-import { ModuleG8Robot2Flow } from './components/grade8/robot2/ModuleG8Robot2Flow';
-import { AllMissionId } from './types';
-
 import { VictoryScreen } from './components/VictoryScreen';
-import { TeacherPortal } from './components/TeacherPortal';
-import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard';
-import { ArcadeHub } from './components/minigames/ArcadeHub';
-import { DuelArena } from './components/DuelArena';
-import { CyberCityView } from './components/cybercity/CyberCityView';
 import { sounds } from './utils/audio';
 import { Clock, Star, User } from 'lucide-react';
 import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthService';
 import { forceScrollToTop } from './utils/scrollHelper';
 import { updateDynamicSeo } from './utils/seoManager';
+
+// Lazy-loaded Mission Modules & Secondary Hubs (reduces initial JS bundle & speeds up mobile LCP/TBT)
+const FLevel1_OSInterface = lazy(() => import('./components/files/FLevel1_OSInterface').then((m) => ({ default: m.FLevel1_OSInterface })));
+const FLevel2_DataMemory = lazy(() => import('./components/files/FLevel2_DataMemory').then((m) => ({ default: m.FLevel2_DataMemory })));
+const Level1_Structure = lazy(() => import('./components/Level1_Structure').then((m) => ({ default: m.Level1_Structure })));
+const Level2_SelectionSearch = lazy(() => import('./components/Level2_SelectionSearch').then((m) => ({ default: m.Level2_SelectionSearch })));
+const Level3_MoveShortcuts = lazy(() => import('./components/Level3_MoveShortcuts').then((m) => ({ default: m.Level3_MoveShortcuts })));
+const Level4_CopyRenameProps = lazy(() => import('./components/Level4_CopyRenameProps').then((m) => ({ default: m.Level4_CopyRenameProps })));
+const Level5_RecycleBin = lazy(() => import('./components/Level5_RecycleBin').then((m) => ({ default: m.Level5_RecycleBin })));
+
+const HLevel1_ErgonomyRules = lazy(() => import('./components/hardware/HLevel1_ErgonomyRules').then((m) => ({ default: m.HLevel1_ErgonomyRules })));
+const HLevel2_HistoryTimeline = lazy(() => import('./components/hardware/HLevel2_HistoryTimeline').then((m) => ({ default: m.HLevel2_HistoryTimeline })));
+const HLevel3_CentralUnitAssembly = lazy(() => import('./components/hardware/HLevel3_CentralUnitAssembly').then((m) => ({ default: m.HLevel3_CentralUnitAssembly })));
+const HLevel4_PeripheralsSort = lazy(() => import('./components/hardware/HLevel4_PeripheralsSort').then((m) => ({ default: m.HLevel4_PeripheralsSort })));
+const HLevel5_BitsQuiz = lazy(() => import('./components/hardware/HLevel5_BitsQuiz').then((m) => ({ default: m.HLevel5_BitsQuiz })));
+
+const Module3AFlow = lazy(() => import('./components/internet1/Module3AFlow').then((m) => ({ default: m.Module3AFlow })));
+const Module3BFlow = lazy(() => import('./components/internet2/Module3BFlow').then((m) => ({ default: m.Module3BFlow })));
+const Module4AFlow = lazy(() => import('./components/text1/Module4AFlow').then((m) => ({ default: m.Module4AFlow })));
+const Module4BFlow = lazy(() => import('./components/text2/Module4BFlow').then((m) => ({ default: m.Module4BFlow })));
+const Module5AFlow = lazy(() => import('./components/algo1/Module5AFlow').then((m) => ({ default: m.Module5AFlow })));
+const Module5BFlow = lazy(() => import('./components/algo2/Module5BFlow').then((m) => ({ default: m.Module5BFlow })));
+const Module6AFlow = lazy(() => import('./components/scratch1/Module6AFlow').then((m) => ({ default: m.Module6AFlow })));
+const Module6BFlow = lazy(() => import('./components/scratch2/Module6BFlow').then((m) => ({ default: m.Module6BFlow })));
+
+const ModuleG6P1Flow = lazy(() => import('./components/grade6/presentation1/ModuleG6P1Flow').then((m) => ({ default: m.ModuleG6P1Flow })));
+const ModuleG6P2Flow = lazy(() => import('./components/grade6/presentation2/ModuleG6P2Flow').then((m) => ({ default: m.ModuleG6P2Flow })));
+const ModuleG6Paint3DFlow = lazy(() => import('./components/grade6/paint3d/ModuleG6Paint3DFlow').then((m) => ({ default: m.ModuleG6Paint3DFlow })));
+const ModuleG6AnimVRFlow = lazy(() => import('./components/grade6/animation_vr/ModuleG6AnimVRFlow').then((m) => ({ default: m.ModuleG6AnimVRFlow })));
+const ModuleG6M1Flow = lazy(() => import('./components/grade6/malware/ModuleG6M1Flow').then((m) => ({ default: m.ModuleG6M1Flow })));
+const ModuleG6EmailFlow = lazy(() => import('./components/grade6/email/ModuleG6EmailFlow').then((m) => ({ default: m.ModuleG6EmailFlow })));
+const ModuleG6ScratchAlgo1Flow = lazy(() => import('./components/grade6/scratch_algo1/ModuleG6ScratchAlgo1Flow').then((m) => ({ default: m.ModuleG6ScratchAlgo1Flow })));
+const ModuleG6ScratchAlgo2Flow = lazy(() => import('./components/grade6/scratch_algo2/ModuleG6ScratchAlgo2Flow').then((m) => ({ default: m.ModuleG6ScratchAlgo2Flow })));
+
+const ModuleG7Word1Flow = lazy(() => import('./components/grade7/word1/ModuleG7Word1Flow').then((m) => ({ default: m.ModuleG7Word1Flow })));
+const ModuleG7Word2Flow = lazy(() => import('./components/grade7/word2/ModuleG7Word2Flow').then((m) => ({ default: m.ModuleG7Word2Flow })));
+const ModuleG7Audio1Flow = lazy(() => import('./components/grade7/audio1/ModuleG7Audio1Flow').then((m) => ({ default: m.ModuleG7Audio1Flow })));
+const ModuleG7Video1Flow = lazy(() => import('./components/grade7/video1/ModuleG7Video1Flow').then((m) => ({ default: m.ModuleG7Video1Flow })));
+const ModuleG7Cloud1Flow = lazy(() => import('./components/grade7/cloud1/ModuleG7Cloud1Flow').then((m) => ({ default: m.ModuleG7Cloud1Flow })));
+const ModuleG7Gis1Flow = lazy(() => import('./components/grade7/gis1/ModuleG7Gis1Flow').then((m) => ({ default: m.ModuleG7Gis1Flow })));
+const ModuleG7Cpp1Flow = lazy(() => import('./components/grade7/cpp1/ModuleG7Cpp1Flow').then((m) => ({ default: m.ModuleG7Cpp1Flow })));
+const ModuleG7Cpp2Flow = lazy(() => import('./components/grade7/cpp2/ModuleG7Cpp2Flow').then((m) => ({ default: m.ModuleG7Cpp2Flow })));
+const ModuleG7DecisionFlow = lazy(() => import('./components/grade7/decision/ModuleG7DecisionFlow').then((m) => ({ default: m.ModuleG7DecisionFlow })));
+const ModuleG7LoopFlow = lazy(() => import('./components/grade7/loop/ModuleG7LoopFlow').then((m) => ({ default: m.ModuleG7LoopFlow })));
+const ModuleG7StemFlow = lazy(() => import('./components/grade7/stem/ModuleG7StemFlow').then((m) => ({ default: m.ModuleG7StemFlow })));
+const ModuleG7RobotFlow = lazy(() => import('./components/grade7/robot/ModuleG7RobotFlow').then((m) => ({ default: m.ModuleG7RobotFlow })));
+
+const Grade8MissionFlow = lazy(() => import('./components/grade8/Grade8MissionFlow').then((m) => ({ default: m.Grade8MissionFlow })));
+const ModuleG8Calc1Flow = lazy(() => import('./components/grade8/calc1/ModuleG8Calc1Flow').then((m) => ({ default: m.ModuleG8Calc1Flow })));
+const ModuleG8Calc2Flow = lazy(() => import('./components/grade8/calc2/ModuleG8Calc2Flow').then((m) => ({ default: m.ModuleG8Calc2Flow })));
+const ModuleG8Calc3Flow = lazy(() => import('./components/grade8/calc3/ModuleG8Calc3Flow').then((m) => ({ default: m.ModuleG8Calc3Flow })));
+const ModuleG8Calc4Flow = lazy(() => import('./components/grade8/calc4/ModuleG8Calc4Flow').then((m) => ({ default: m.ModuleG8Calc4Flow })));
+const ModuleG8Web1Flow = lazy(() => import('./components/grade8/web1/ModuleG8Web1Flow').then((m) => ({ default: m.ModuleG8Web1Flow })));
+const ModuleG8Web2Flow = lazy(() => import('./components/grade8/web2/ModuleG8Web2Flow').then((m) => ({ default: m.ModuleG8Web2Flow })));
+const ModuleG8Web3Flow = lazy(() => import('./components/grade8/web3/ModuleG8Web3Flow').then((m) => ({ default: m.ModuleG8Web3Flow })));
+const ModuleG8Algo1Flow = lazy(() => import('./components/grade8/algo1/ModuleG8Algo1Flow').then((m) => ({ default: m.ModuleG8Algo1Flow })));
+const ModuleG8Algo2Flow = lazy(() => import('./components/grade8/algo2/ModuleG8Algo2Flow').then((m) => ({ default: m.ModuleG8Algo2Flow })));
+const ModuleG8Algo3Flow = lazy(() => import('./components/grade8/algo3/ModuleG8Algo3Flow').then((m) => ({ default: m.ModuleG8Algo3Flow })));
+const ModuleG8Algo4Flow = lazy(() => import('./components/grade8/algo4/ModuleG8Algo4Flow').then((m) => ({ default: m.ModuleG8Algo4Flow })));
+const ModuleG8Algo5Flow = lazy(() => import('./components/grade8/algo5/ModuleG8Algo5Flow').then((m) => ({ default: m.ModuleG8Algo5Flow })));
+const ModuleG8Robot1Flow = lazy(() => import('./components/grade8/robot1/ModuleG8Robot1Flow').then((m) => ({ default: m.ModuleG8Robot1Flow })));
+const ModuleG8Robot2Flow = lazy(() => import('./components/grade8/robot2/ModuleG8Robot2Flow').then((m) => ({ default: m.ModuleG8Robot2Flow })));
+
+const TeacherPortal = lazy(() => import('./components/TeacherPortal').then((m) => ({ default: m.TeacherPortal })));
+const SuperAdminDashboard = lazy(() => import('./components/superadmin/SuperAdminDashboard').then((m) => ({ default: m.SuperAdminDashboard })));
+const ArcadeHub = lazy(() => import('./components/minigames/ArcadeHub').then((m) => ({ default: m.ArcadeHub })));
+const DuelArena = lazy(() => import('./components/DuelArena').then((m) => ({ default: m.DuelArena })));
+const CyberCityView = lazy(() => import('./components/cybercity/CyberCityView').then((m) => ({ default: m.CyberCityView })));
 
 function GameContent() {
   const { lang, t } = useLanguage();
@@ -3134,33 +3079,7 @@ function GameContent() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 flex flex-col gap-5 sm:gap-6">
-        {view === 'superadmin' ? (
-          <SuperAdminDashboard
-            onBackToHome={() => navigateToView('catalog')}
-            onOpenTeacherPortal={() => navigateToView('teacher')}
-          />
-        ) : view === 'teacher' ? (
-          <TeacherPortal 
-            onBackToHome={() => navigateToView('catalog')} 
-            onOpenSuperAdmin={() => navigateToView('superadmin')}
-          />
-        ) : view === 'arcade' ? (
-          <ArcadeHub
-            studentName={studentName}
-            onBackToCatalog={() => navigateToView('catalog')}
-            onOpenDuel={() => navigateToView('duel')}
-          />
-        ) : view === 'duel' ? (
-          <DuelArena
-            studentName={studentName}
-            onBack={() => navigateToView('catalog')}
-          />
-        ) : view === 'city' ? (
-          <CyberCityView
-            studentName={studentName}
-            onBackToCatalog={() => navigateToView('catalog')}
-          />
-        ) : view === 'catalog' ? (
+        {view === 'catalog' ? (
           <CoursesCatalog
             studentName={studentName}
             onSetStudentName={handleSetStudentName}
@@ -3178,12 +3097,51 @@ function GameContent() {
             onOpenCity={() => navigateToView('city')}
           />
         ) : (
-          <>
-            {/* Mission Evolution Progress */}
-            <ProgressBar
-              currentLevel={currentLevel}
-              courseId={activeMission || 'files'}
-            />
+          <Suspense
+            fallback={
+              <div className="py-20 flex flex-col items-center justify-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-xl animate-pulse">
+                  ⚡
+                </div>
+                <p className="text-xs font-mono text-teal-300">
+                  {lang === 'en' ? 'Loading interactive lab...' : 'Se încarcă laboratorul interactiv...'}
+                </p>
+              </div>
+            }
+          >
+            {view === 'superadmin' ? (
+              <SuperAdminDashboard
+                onBackToHome={() => navigateToView('catalog')}
+                onOpenTeacherPortal={() => navigateToView('teacher')}
+              />
+            ) : view === 'teacher' ? (
+              <TeacherPortal 
+                onBackToHome={() => navigateToView('catalog')} 
+                onOpenSuperAdmin={() => navigateToView('superadmin')}
+              />
+            ) : view === 'arcade' ? (
+              <ArcadeHub
+                studentName={studentName}
+                onBackToCatalog={() => navigateToView('catalog')}
+                onOpenDuel={() => navigateToView('duel')}
+              />
+            ) : view === 'duel' ? (
+              <DuelArena
+                studentName={studentName}
+                onBack={() => navigateToView('catalog')}
+              />
+            ) : view === 'city' ? (
+              <CyberCityView
+                studentName={studentName}
+                onBackToCatalog={() => navigateToView('catalog')}
+              />
+            ) : (
+              <>
+                {/* Mission Evolution Progress */}
+                <ProgressBar
+                  currentLevel={currentLevel}
+                  courseId={activeMission || 'files'}
+                />
 
             {/* Level Views for HARDWARE */}
             {activeMission === 'hardware' && (
@@ -4066,7 +4024,9 @@ function GameContent() {
                 )}
               </div>
             )}
-          </>
+              </>
+            )}
+          </Suspense>
         )}
       </main>
 

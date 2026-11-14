@@ -924,6 +924,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             }}
                             className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-800 border border-teal-400/60 text-xs flex items-center justify-center text-teal-300 hover:text-white cursor-pointer shadow"
                             title={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
+                            aria-label={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
                           >
                             ✏️
                           </button>
@@ -1213,7 +1214,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                               if (loginError) setLoginError('');
                             }}
                             placeholder={lang === 'en' ? 'Student username...' : 'Nume elev (ex: Andrei_Popa)...'}
-                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
+                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
                             autoFocus
                           />
                         </div>
@@ -1230,7 +1231,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                               if (loginError) setLoginError('');
                             }}
                             placeholder={lang === 'en' ? 'Password...' : 'Parola contului...'}
-                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-400"
+                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
                           />
                           <button
                             type="button"
@@ -1319,7 +1320,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                                 if (registerError) setRegisterError('');
                               }}
                               placeholder={lang === 'en' ? 'Choose unique name...' : 'Alege nume (ex: Maria_Popescu)...'}
-                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
                               autoFocus
                             />
                           </div>
@@ -1336,7 +1337,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                                 if (registerError) setRegisterError('');
                               }}
                               placeholder={lang === 'en' ? 'Choose password (min 3)...' : 'Alege o parolă (ex: 1234)...'}
-                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
                             />
                             <button
                               type="button"
@@ -1426,7 +1427,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                                 if (nameError) setNameError(false);
                               }}
                               placeholder={t.studentNamePlaceholder}
-                              className={`w-full bg-slate-900 border pl-9 pr-3.5 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none ${
+                              className={`w-full bg-slate-900 border pl-9 pr-3.5 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none ${
                                 nameError ? 'border-rose-500 focus:ring-1 focus:ring-rose-500' : 'border-slate-700 focus:border-teal-400'
                               }`}
                               autoFocus
@@ -4284,10 +4285,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 sounds.playClick();
                 onOpenTeacherPortal();
               }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800/40 text-[11px] font-medium transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 text-[11px] font-medium transition cursor-pointer"
               title={lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces securizat pentru cadre didactice (catalog & notare)'}
             >
-              <span className="text-slate-600 text-xs">🔒</span>
+              <span className="text-slate-400 text-xs" aria-hidden="true">🔒</span>
               <span>{lang === 'en' ? 'Instructor Portal' : 'Acces cadre didactice'}</span>
             </button>
           )}
@@ -4298,10 +4299,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 sounds.playClick();
                 onOpenSuperAdmin();
               }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-amber-500/70 hover:text-amber-300 hover:bg-amber-500/10 text-[11px] font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 text-[11px] font-semibold transition cursor-pointer"
               title="Consolă Superadmin (Control Global Școli, Profesori, Scoruri)"
             >
-              <span className="text-amber-500 text-xs">🛡️</span>
+              <span className="text-amber-400 text-xs" aria-hidden="true">🛡️</span>
               <span>SuperAdmin Control</span>
             </button>
           )}

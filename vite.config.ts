@@ -50,6 +50,22 @@ export default defineConfig(() => {
           cleanupOutdatedCaches: true,
           maximumFileSizeToCacheInBytes: 25 * 1024 * 1024, // 25 MiB to precache full game assets & modules
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,json}'],
+          navigateFallbackDenylist: [
+            /^\/\.well-known\//,
+            /^\/ai-catalog\.json$/,
+            /^\/llms(-full)?\.txt$/,
+            /^\/sitemap\.xml$/,
+            /^\/robots\.txt$/,
+            /^\/metadata\.json$/,
+            /^\/cursuri\//,
+            /^\/clasa-[5-8]\//,
+            /^\/educatie-tehnologie-copii\//,
+            /^\/comparatie-scoli-private\//,
+            /^\/arcade\//,
+            /^\/duel\//,
+            /^\/profesor\//,
+            /^\/oras\//,
+          ],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

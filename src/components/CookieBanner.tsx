@@ -86,7 +86,8 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({ onOpenCookiePolicy }
               handleOnlyEssential();
             }}
             className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
-            title="Închide și acceptă doar esențiale"
+            title={lang === 'en' ? 'Close and accept essential cookies only' : 'Închide și acceptă doar esențiale'}
+            aria-label={lang === 'en' ? 'Close and accept essential cookies only' : 'Închide și acceptă doar cookie-urile esențiale'}
           >
             <X className="w-4 h-4" />
           </button>

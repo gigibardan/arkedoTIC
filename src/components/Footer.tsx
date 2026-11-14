@@ -376,7 +376,8 @@ export const Footer: React.FC<FooterProps> = ({
                 <button
                   onClick={handleCopyEmail}
                   className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors shrink-0"
-                  title="Copiază adresa de email"
+                  title={lang === 'en' ? 'Copy email address' : 'Copiază adresa de email'}
+                  aria-label={lang === 'en' ? 'Copy email address' : 'Copiază adresa de email'}
                 >
                   {copiedEmail ? (
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
@@ -427,7 +428,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               {lang === 'en' ? 'About Story' : 'Povestea ArkyEdu'}
             </button>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
@@ -437,7 +438,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               GDPR & Confidențialitate
             </button>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
@@ -447,7 +448,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Cookie-uri
             </button>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
@@ -457,7 +458,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Termeni
             </button>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <button
               onClick={() => {
                 sounds.playClick();
@@ -467,7 +468,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Contact
             </button>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <a
               href="/llms.txt"
               target="_blank"
@@ -477,7 +478,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               llms.txt (AI)
             </a>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <a
               href="/llms-full.txt"
               target="_blank"
@@ -487,7 +488,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               llms-full.txt
             </a>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <a
               href="/sitemap.xml"
               target="_blank"
@@ -496,7 +497,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Sitemap
             </a>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <a
               href="/robots.txt"
               target="_blank"
@@ -505,7 +506,7 @@ export const Footer: React.FC<FooterProps> = ({
             >
               Robots.txt
             </a>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-400" aria-hidden="true">•</span>
             <button
               onClick={() => {
                 sounds.playSuccess();
