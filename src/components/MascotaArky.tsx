@@ -26,6 +26,23 @@ export interface MascotaArkyProps {
   className?: string;
 }
 
+function renderArkyMessage(text: string): React.ReactNode {
+  if (!text.includes('`')) return text;
+  return text.split(/(`[^`]+`)/g).map((part, idx) => {
+    if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
+      return (
+        <code
+          key={idx}
+          className="px-1 py-0.5 rounded bg-slate-800/90 border border-slate-700/80 text-cyan-300 font-mono text-[0.88em]"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return <React.Fragment key={idx}>{part}</React.Fragment>;
+  });
+}
+
 export const MascotaArky: React.FC<MascotaArkyProps> = ({
   state: propState,
   customMessage: propMessage,
@@ -71,8 +88,12 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
 
   const handleNextQuote = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsBouncing(true);
+    setPulseGlow(true);
     sounds.playClick();
     arkyContext.sayRandomQuote();
+    setTimeout(() => setIsBouncing(false), 600);
+    setTimeout(() => setPulseGlow(false), 900);
   };
 
   // State theme configurations
@@ -151,7 +172,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
             </span>
           </div>
           <p className="text-sm font-medium text-slate-100 leading-relaxed">
-            "{displayMessage}"
+            "{renderArkyMessage(displayMessage)}"
           </p>
         </div>
       </div>
@@ -188,13 +209,18 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   <span className="text-[10px] font-mono font-black uppercase tracking-wider text-teal-300">
                     {currentTheme.bubbleHeader}
                   </span>
+                  {arkyContext.successStreak >= 3 && (
+                    <span className="text-[10px] font-mono font-black text-amber-300 ml-1">
+                      🔥 x{arkyContext.successStreak}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-1">
                   {/* TTS Voice Readout */}
                   <button
                     onClick={handleSpeech}
-                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-cyan-300 transition cursor-pointer"
+                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-cyan-300 transition cursor-pointer"
                     title={lang === 'en' ? 'Listen to Arky' : 'Ascultă mesajul lui Arky'}
                     aria-label={lang === 'en' ? 'Listen to Arky' : 'Ascultă mesajul lui Arky'}
                   >
@@ -204,7 +230,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   {/* Random Quote Shuffle */}
                   <button
                     onClick={handleNextQuote}
-                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-amber-300 transition cursor-pointer"
+                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-amber-300 transition cursor-pointer"
                     title={lang === 'en' ? 'Get another quote' : 'Altă replică / glumă'}
                     aria-label={lang === 'en' ? 'Get another quote' : 'Altă replică / glumă'}
                   >
@@ -214,7 +240,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   {/* Close Bubble */}
                   <button
                     onClick={arkyContext.toggleBubble}
-                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-rose-300 transition cursor-pointer"
+                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-rose-300 transition cursor-pointer"
                     title={lang === 'en' ? 'Hide bubble' : 'Ascunde bula'}
                     aria-label={lang === 'en' ? 'Hide bubble' : 'Ascunde bula'}
                   >
@@ -226,16 +252,16 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
               {/* Message text with clean display and zero scrollbar */}
               <div className="max-h-[260px] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <p className="text-xs sm:text-sm font-medium text-slate-100 leading-relaxed select-none">
-                  "{displayMessage}"
+                  "{renderArkyMessage(displayMessage)}"
                 </p>
               </div>
 
               {/* Status Badge Tag */}
-              <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono text-slate-400">
+              <div className="mt-2.5 flex items-center justify-between text-[10px] font-mono text-slate-300">
                 <span className={`px-2 py-0.5 rounded-full border ${currentTheme.badgeBg} ${currentTheme.badgeText} font-bold`}>
                   {lang === 'en' ? currentTheme.labelEn : currentTheme.labelRo}
                 </span>
-                <span className="text-slate-400">ArkyEdu • TIC & Coding</span>
+                <span className="text-slate-300">ArkyEdu • TIC & Coding</span>
               </div>
 
               {/* Bubble Pointer Arrow towards Mascot */}
@@ -261,7 +287,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
               )}
               <button
                 onClick={arkyContext.toggleMinimize}
-                className="p-2 rounded-full bg-slate-900/90 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 shadow-lg transition transform hover:scale-110 active:scale-95 cursor-pointer"
+                className="p-2 rounded-full bg-slate-900/90 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 shadow-lg transition transform hover:scale-110 active:scale-95 cursor-pointer"
                 title={lang === 'en' ? 'Minimize Arky' : 'Minimizează Arky'}
                 aria-label={lang === 'en' ? 'Minimize Arky' : 'Minimizează Arky'}
               >
