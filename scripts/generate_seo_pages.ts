@@ -10,6 +10,7 @@ import {
   getRelatedGlossaryTerms,
   getGlossaryTermsForModule
 } from '../src/data/glossary/index';
+import { SANDBOX_CHALLENGES } from '../src/data/sandboxChallenges';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -922,6 +923,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
+        <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
@@ -1047,6 +1049,7 @@ ${commonStyles}
             <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (20+ Moduri)</a></li>
             <li><a href="https://www.arkyedu.com/blog/">Blog &amp; Ghiduri TIC (RO/EN)</a></li>
             <li><a href="https://www.arkyedu.com/glosar/">Glosar Bilingv TIC (44 Termeni A–Z)</a></li>
+            <li><a href="https://www.arkyedu.com/sandbox/">Sandbox Cod Live (C++ / Python 3 / HTML5)</a></li>
             <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Școli Private</a></li>
             <li><a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Educație Tehnologie Copii</a></li>
           </ul>
@@ -1558,6 +1561,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
+        <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
@@ -1755,6 +1759,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
+        <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
@@ -2197,6 +2202,7 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary (44)' : 'Glosar (44)'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/sandbox/en/' : 'https://www.arkyedu.com/sandbox/'}">Sandbox</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
@@ -3285,12 +3291,204 @@ ${blogBaseStyles}
   console.log(`Generated bilingual Glossary Index (RO + EN) and ${GLOSSARY_TERMS.length * 2} static term pages.`);
 }
 
+// 6B. GENERATE BILINGUAL SANDBOX LANDING PAGES (/sandbox/ & /sandbox/en/)
+function generateSandboxPages() {
+  const renderSandboxPage = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const dirPath = isEn ? path.join(publicDir, 'sandbox', 'en') : path.join(publicDir, 'sandbox');
+    ensureDir(dirPath);
+
+    const roUrl = 'https://www.arkyedu.com/sandbox/';
+    const enUrl = 'https://www.arkyedu.com/sandbox/en/';
+    const canonicalUrl = isEn ? enUrl : roUrl;
+    const altUrl = isEn ? roUrl : enUrl;
+
+    const title = isEn
+      ? 'Interactive C++, Python 3 & HTML5 Code Sandbox (Grades 7–8) | ArkyEdu'
+      : 'Sandbox Cod Live: Editor C++ Code::Blocks, Python 3 & HTML5 în Browser | ArkyEdu';
+    const description = isEn
+      ? 'Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.'
+      : 'Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.';
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "@id": `${canonicalUrl}#app`,
+          "name": isEn ? "ArkyEdu Browser Code Sandbox" : "ArkyEdu Sandbox Cod Live",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web Browser",
+          "isAccessibleForFree": true,
+          "inLanguage": isEn ? "en" : "ro",
+          "url": canonicalUrl,
+          "description": description,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": isEn ? "USD" : "RON" }
+        },
+        {
+          "@type": "ItemList",
+          "name": isEn ? "Curriculum Coding Challenges" : "Provocări Curriculare în Sandbox",
+          "itemListElement": SANDBOX_CHALLENGES.map((ch, idx) => ({
+            "@type": "ListItem",
+            "position": idx + 1,
+            "name": isEn ? ch.titleEn : ch.titleRo,
+            "description": isEn ? ch.summaryEn : ch.summaryRo
+          }))
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": "https://www.arkyedu.com/" },
+            { "@type": "ListItem", "position": 2, "name": isEn ? "Code Sandbox" : "Sandbox Cod Live", "item": canonicalUrl }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": isEn
+                ? "Do I need to install Code::Blocks or Python to run code in ArkyEdu Sandbox?"
+                : "Trebuie să instalez Code::Blocks sau Python pe calculator pentru a folosi Sandbox-ul?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": isEn
+                  ? "No. ArkyEdu Sandbox runs C++17 (Code::Blocks curriculum subset), Python 3, and HTML5/CSS directly in your browser on desktop, tablet, or phone with automated test verification."
+                  : "Nu. Sandbox-ul ArkyEdu rulează C++17 (subsetul de gimnaziu Code::Blocks), Python 3 și HTML5/CSS direct în browser pe PC, laptop, tabletă sau telefon, cu verificare automată pe teste."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": isEn
+                ? "Which middle-school ICT topics are covered in the Sandbox challenges?"
+                : "Ce lecții de TIC din programa de gimnaziu sunt acoperite în provocările Sandbox?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": isEn
+                  ? "Three-glasses swap, digit sum with while (% 10 and / 10), prime numbers, arrays max/min, Python lists and loops, and semantic HTML5/CSS layouts."
+                  : "Regula celor 3 pahare, suma cifrelor cu while (n % 10 și n / 10), verificarea numerelor prime, maximul în vectori, liste și bucle Python 3 și machete HTML5 + CSS."
+              }
+            }
+          ]
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${isEn ? 'en' : 'ro'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">SANDBOX</span></span>
+      </a>
+      <nav class="nav-links" aria-label="${isEn ? 'Primary Navigation' : 'Navigare Principală'}">
+        <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
+        <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}">${isEn ? 'Blog' : 'Blog TIC'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary' : 'Glosar'}</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/#sandbox" class="nav-cta">${isEn ? 'Launch Live Editor' : 'Deschide Editorul Live'}</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge badge-green">C++17 · Python 3 · HTML5 &amp; CSS</span>
+        <span class="badge badge-free">100% Gratuit în Browser</span>
+        <span class="badge">${SANDBOX_CHALLENGES.length} ${isEn ? 'Curriculum Challenges' : 'Provocări cu Teste Automate'}</span>
+      </div>
+      <h1>${isEn ? 'Interactive C++, Python 3 & HTML5 Code Sandbox' : 'Sandbox Cod Live: Editor C++, Python 3 & HTML5 în Browser'}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-primary">💻 ${isEn ? 'Open Interactive Code Sandbox' : 'Lansează Sandbox-ul Interactiv'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/blog/en/cpp-middle-school-top-10-errors-if-while-digits/' : 'https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/'}" class="btn-secondary">📘 ${isEn ? 'C++ Common Errors Guide' : 'Ghid Top 10 Erori C++ Gimnaziu'}</a>
+      </div>
+    </div>
+
+    <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; text-align: center;">${isEn ? '9 Built-In Curriculum Challenges + Free Playground' : '9 Provocări Curriculare cu Verificare Automată + Mod Liber'}</h2>
+    <div class="grid-3">
+      ${SANDBOX_CHALLENGES.map((ch) => `
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">${ch.language} · ${escapeHtmlText(isEn ? ch.gradeLabelEn : ch.gradeLabelRo)}</div>
+          <h3 class="card-title" style="font-size:1.08rem;">${escapeHtmlText(isEn ? ch.titleEn : ch.titleRo)}</h3>
+          <p class="card-desc" style="font-size:0.88rem;">${escapeHtmlText(isEn ? ch.summaryEn : ch.summaryRo)}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">${isEn ? 'Solve in Sandbox →' : 'Rezolvă în Sandbox →'}</a>
+            <a href="https://www.arkyedu.com/cursuri/${ch.relatedModuleId}/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">${isEn ? 'Theory' : 'Lecție'}</a>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — ${isEn ? 'Free Browser Coding Labs.' : 'Laborator Gratuit de Programare în Browser.'}</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}" style="color: var(--accent);">${isEn ? 'Blog' : 'Blog TIC'}</a> • <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}" style="color: var(--accent);">${isEn ? 'Glossary' : 'Glosar TIC'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(dirPath, 'index.html'), html, 'utf-8');
+  };
+
+  renderSandboxPage('ro');
+  renderSandboxPage('en');
+  console.log('Generated bilingual Sandbox landing pages (/sandbox/ and /sandbox/en/).');
+}
+
 // 7. GENERATE COMPLETE SITEMAP.XML
 function generateSitemap() {
   const currentDate = new Date().toISOString().split('T')[0];
 
   const staticUrls = [
     { loc: 'https://www.arkyedu.com/', priority: '1.0', changefreq: 'daily' },
+    { loc: 'https://www.arkyedu.com/sandbox/', priority: '0.95', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/sandbox/en/', priority: '0.90', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/blog/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.92', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/glosar/', priority: '0.95', changefreq: 'weekly' },
@@ -3413,6 +3611,7 @@ generateFeatureHubs();
 generateTechEducationPillar();
 generateBlogPages();
 generateGlossaryPages();
+generateSandboxPages();
 generateSitemap();
 generateRssFeed();
 console.log('--- ALL SEO ASSETS GENERATED SUCCESSFULLY ---');

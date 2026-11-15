@@ -3,7 +3,7 @@ import { CURRICULA_MODULES } from '../data/curriculaData';
 import { findBlogArticleBySlug } from '../data/blog';
 import { findGlossaryTermBySlug } from '../data/glossary';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary';
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -141,6 +141,14 @@ export function updateDynamicSeo(
         : '44 de termeni esențiali de Informatică și TIC explicați clar pentru gimnaziu: CPU, RAM, modulo %, Excel IF, Phishing 2FA, Arduino millis() și AI.';
       canonicalUrl = isEn ? `${BASE_URL}/glosar/en/` : `${BASE_URL}/glosar/`;
     }
+  } else if (view === 'sandbox') {
+    title = isEn
+      ? 'Interactive C++, Python & HTML5 Code Sandbox Lab | ArkyEdu'
+      : 'Sandbox Cod Live: Editor C++, Python & HTML5 în Browser | ArkyEdu';
+    description = isEn
+      ? 'Run C++ (Code::Blocks style), Python 3, and HTML5/CSS code directly in your browser with automated curriculum tests and instant Arky diagnostics.'
+      : 'Rulează cod C++ (Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare, cu verificare automată a testelor școlare și diagnostic Arky.';
+    canonicalUrl = isEn ? `${BASE_URL}/sandbox/en/` : `${BASE_URL}/sandbox/`;
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);

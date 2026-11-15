@@ -32,7 +32,7 @@ interface BlogHubProps {
   onSelectArticle: (slug: string | null) => void;
   onBackToHome: () => void;
   onSelectMission: (missionId: AllMissionId) => void;
-  onNavigateToView: (view: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher') => void;
+  onNavigateToView: (view: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher' | 'sandbox') => void;
 }
 
 export const BlogHub: React.FC<BlogHubProps> = ({

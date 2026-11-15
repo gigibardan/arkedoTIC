@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sandbox Cod Live: Editor C++ Code::Blocks, Python 3 &amp; HTML5 în Browser | ArkyEdu</title>
+  <meta name="description" content="Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/sandbox/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/sandbox/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/sandbox/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/sandbox/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sandbox Cod Live: Editor C++ Code::Blocks, Python 3 &amp; HTML5 în Browser | ArkyEdu">
+  <meta property="og:description" content="Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.">
+  <meta property="og:url" content="https://www.arkyedu.com/sandbox/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sandbox Cod Live: Editor C++ Code::Blocks, Python 3 &amp; HTML5 în Browser | ArkyEdu">
+  <meta name="twitter:description" content="Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.arkyedu.com/sandbox/#app",
+      "name": "ArkyEdu Sandbox Cod Live",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web Browser",
+      "isAccessibleForFree": true,
+      "inLanguage": "ro",
+      "url": "https://www.arkyedu.com/sandbox/",
+      "description": "Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Provocări Curriculare în Sandbox",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Interschimbarea a 2 numere (Regula celor 3 pahare)",
+          "description": "Citește două numere întregi a și b, interschimbă valorile lor folosind o variabilă auxiliară aux și afișează-le separate prin spațiu."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Suma cifrelor cu while (n % 10 și n / 10)",
+          "description": "Citește un număr natural n și calculează suma cifrelor sale folosind bucla while, operatorul modulo % 10 și împărțirea întreagă / 10."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Verificare Număr Prim (DA / NU)",
+          "description": "Citește un număr întreg n și afișează DA dacă n este prim, sau NU în caz contrar (atenție la cazurile n < 2!)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Numără elementele pare dintr-un vector",
+          "description": "Citește n și cele n numere ale unui vector v, apoi afișează câte dintre ele sunt pare (divizibile cu 2)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Python: Par sau Impar (% modulo)",
+          "description": "Citește un număr întreg n cu int(input()) și afișează PAR dacă este divizibil cu 2, sau IMPAR în caz contrar."
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Python: Suma primelor n numere (for + range)",
+          "description": "Citește n și calculează suma 1 + 2 + ... + n folosind o buclă for i in range(1, n + 1)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Python: Media notelor cu liste",
+          "description": "Primești numărul de note k și apoi cele k note (pe linii separate). Calculează și afișează media rotunjită la întreg cu round() sau suma lor."
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "HTML5 & CSS: Card de Prezentare Elev",
+          "description": "Construiește o pagină HTML5 cu un titlu principal <h1>, o listă cu 3 hobby-uri <ul><li> și un link <a> stilizat cu CSS (border-radius și culoare de fundal)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "name": "HTML5 & CSS: Tabel Orar Școlar",
+          "description": "Creează un tabel semantic <table> cu antet <thead> (<tr><th>) și cel puțin 3 rânduri de ore în <tbody> (<tr><td>), stilizat curat cu CSS."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Sandbox Cod Live",
+          "item": "https://www.arkyedu.com/sandbox/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Trebuie să instalez Code::Blocks sau Python pe calculator pentru a folosi Sandbox-ul?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nu. Sandbox-ul ArkyEdu rulează C++17 (subsetul de gimnaziu Code::Blocks), Python 3 și HTML5/CSS direct în browser pe PC, laptop, tabletă sau telefon, cu verificare automată pe teste."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce lecții de TIC din programa de gimnaziu sunt acoperite în provocările Sandbox?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Regula celor 3 pahare, suma cifrelor cu while (n % 10 și n / 10), verificarea numerelor prime, maximul în vectori, liste și bucle Python 3 și machete HTML5 + CSS."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">SANDBOX</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigare Principală">
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/sandbox/en/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">EN</a>
+        <a href="https://www.arkyedu.com/#sandbox" class="nav-cta">Deschide Editorul Live</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge badge-green">C++17 · Python 3 · HTML5 &amp; CSS</span>
+        <span class="badge badge-free">100% Gratuit în Browser</span>
+        <span class="badge">9 Provocări cu Teste Automate</span>
+      </div>
+      <h1>Sandbox Cod Live: Editor C++, Python 3 & HTML5 în Browser</h1>
+      <p class="lead-text">Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-primary">💻 Lansează Sandbox-ul Interactiv</a>
+        <a href="https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/" class="btn-secondary">📘 Ghid Top 10 Erori C++ Gimnaziu</a>
+      </div>
+    </div>
+
+    <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; text-align: center;">9 Provocări Curriculare cu Verificare Automată + Mod Liber</h2>
+    <div class="grid-3">
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Clasa a VII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Interschimbarea a 2 numere (Regula celor 3 pahare)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Citește două numere întregi a și b, interschimbă valorile lor folosind o variabilă auxiliară aux și afișează-le separate prin spațiu.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_cpp_b/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Clasa a VII-a / VIII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Suma cifrelor cu while (n % 10 și n / 10)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Citește un număr natural n și calculează suma cifrelor sale folosind bucla while, operatorul modulo % 10 și împărțirea întreagă / 10.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_loop_b/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Clasa a VIII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Verificare Număr Prim (DA / NU)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Citește un număr întreg n și afișează DA dacă n este prim, sau NU în caz contrar (atenție la cazurile n &lt; 2!).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_e/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Clasa a VIII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Numără elementele pare dintr-un vector</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Citește n și cele n numere ale unui vector v, apoi afișează câte dintre ele sunt pare (divizibile cu 2).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">python · Clasele VI–VII</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Python: Par sau Impar (% modulo)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Citește un număr întreg n cu int(input()) și afișează PAR dacă este divizibil cu 2, sau IMPAR în caz contrar.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_decision_a/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">python · Clasa a VII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Python: Suma primelor n numere (for + range)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Citește n și calculează suma 1 + 2 + ... + n folosind o buclă for i in range(1, n + 1).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_stem_a/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">python · Clasele VII–VIII</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Python: Media notelor cu liste</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Primești numărul de note k și apoi cele k note (pe linii separate). Calculează și afișează media rotunjită la întreg cu round() sau suma lor.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_c/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">html · Clasa a VIII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">HTML5 &amp; CSS: Card de Prezentare Elev</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Construiește o pagină HTML5 cu un titlu principal &lt;h1&gt;, o listă cu 3 hobby-uri &lt;ul&gt;&lt;li&gt; și un link &lt;a&gt; stilizat cu CSS (border-radius și culoare de fundal).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_web_a/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">html · Clasa a VIII-a</div>
+          <h3 class="card-title" style="font-size:1.08rem;">HTML5 &amp; CSS: Tabel Orar Școlar</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Creează un tabel semantic &lt;table&gt; cu antet &lt;thead&gt; (&lt;tr&gt;&lt;th&gt;) și cel puțin 3 rânduri de ore în &lt;tbody&gt; (&lt;tr&gt;&lt;td&gt;), stilizat curat cu CSS.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Rezolvă în Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_web_c/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Lecție</a>
+          </div>
+        </div>
+      
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Laborator Gratuit de Programare în Browser.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

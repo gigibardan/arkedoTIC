@@ -5,6 +5,7 @@
 Platforma oferă educație tehnologică de performanță **100% GRATUIT (0 Lei)**, fără abonamente, fără taxe și fără reclame, ca alternativă superioară pentru părinți, elevi și profesori față de școlile private de programare pentru copii (Logiscool, MindHub, Academia Micilor Developeri etc.) care percep 4.000 – 6.000 lei pe an școlar.
 
 - Website oficial: https://www.arkyedu.com/
+- Sandbox Cod Live (C++, Python 3 & HTML5): https://www.arkyedu.com/sandbox/
 - Ghid Părinți & Educație Tehnologie Copii: https://www.arkyedu.com/educatie-tehnologie-copii/
 - Comparație Cursuri Private vs ArkyEdu: https://www.arkyedu.com/comparatie-scoli-private/
 - Sitemap XML complet: https://www.arkyedu.com/sitemap.xml

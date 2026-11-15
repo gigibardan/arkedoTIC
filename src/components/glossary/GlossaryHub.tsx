@@ -40,7 +40,7 @@ interface GlossaryHubProps {
   onBackToHome: () => void;
   onSelectMission: (missionId: AllMissionId) => void;
   onOpenBlog: (slug?: string | null) => void;
-  onNavigateToView: (view: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher' | 'blog') => void;
+  onNavigateToView: (view: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher' | 'blog' | 'sandbox') => void;
 }
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

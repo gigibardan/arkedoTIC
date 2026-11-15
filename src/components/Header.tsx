@@ -16,7 +16,8 @@ import {
   X,
   ChevronRight,
   Globe,
-  FileText
+  FileText,
+  Code2
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
@@ -27,7 +28,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -41,6 +42,7 @@ interface HeaderProps {
   onNavigateToCity?: () => void;
   onNavigateToBlog?: () => void;
   onNavigateToGlossary?: () => void;
+  onNavigateToSandbox?: () => void;
   onOpenShop?: () => void;
 }
 
@@ -62,6 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateToCity,
   onNavigateToBlog,
   onNavigateToGlossary,
+  onNavigateToSandbox,
   onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
@@ -102,6 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'city') return lang === 'en' ? 'Cyber City' : 'Orașul Cyber';
     if (currentView === 'blog') return lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC';
     if (currentView === 'glossary') return lang === 'en' ? 'ICT & CS Glossary' : 'Glosar Informatică & TIC';
+    if (currentView === 'sandbox') return lang === 'en' ? 'Code Sandbox Lab' : 'Sandbox Cod Live';
     return lang === 'en' ? 'ICT' : 'TIC';
   };
 
@@ -263,6 +267,25 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <BookOpen className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'Glossary' : 'Glosar'}</span>
+              </a>
+            )}
+
+            {onNavigateToSandbox && (
+              <a
+                href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  sounds.playClick();
+                  currentView === 'sandbox' ? onNavigateToCatalog() : onNavigateToSandbox();
+                }}
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                  currentView === 'sandbox'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <Code2 className="w-3.5 h-3.5" />
+                <span>Sandbox</span>
               </a>
             )}
 
@@ -497,6 +520,29 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="min-w-0">
                     <div className="font-bold truncate">{lang === 'en' ? 'ICT Glossary' : 'Glosar TIC'}</div>
                     <div className="text-[10px] text-cyan-200 truncate">{lang === 'en' ? '44 Terms A–Z' : '44 Termeni A–Z'}</div>
+                  </div>
+                </a>
+              )}
+
+              {onNavigateToSandbox && (
+                <a
+                  href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToSandbox();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 ${
+                    currentView === 'sandbox'
+                      ? 'bg-emerald-600 text-white border-emerald-400'
+                      : 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 text-emerald-300'
+                  }`}
+                >
+                  <Code2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">{lang === 'en' ? 'Code Sandbox Lab' : 'Sandbox Cod Live'}</div>
+                    <div className="text-[10px] text-emerald-200 truncate">C++ • Python 3 • HTML5</div>
                   </div>
                 </a>
               )}

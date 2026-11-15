@@ -1,5 +1,66 @@
 import { registerSW } from 'virtual:pwa-register';
 
+export const APP_UPDATE_AVAILABLE_EVENT = 'arky_update_available';
+
+type UpdateListener = (version: string | null) => void;
+
+let isSessionBusy = false;
+let pendingUpdateVersion: string | null = null;
+let swUpdateRunner: ((reloadPage?: boolean) => Promise<void>) | null = null;
+const listeners = new Set<UpdateListener>();
+
+function notifyListeners(): void {
+  for (const listener of listeners) {
+    try {
+      listener(pendingUpdateVersion);
+    } catch {
+      // Ignore subscriber errors
+    }
+  }
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent(APP_UPDATE_AVAILABLE_EVENT, {
+        detail: { version: pendingUpdateVersion },
+      })
+    );
+  }
+}
+
+export function subscribeAppUpdate(listener: UpdateListener): () => void {
+  listeners.add(listener);
+  listener(pendingUpdateVersion);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+export function setAppSessionBusy(busy: boolean): void {
+  isSessionBusy = busy;
+}
+
+export function dismissPendingAppUpdateForNow(): void {
+  try {
+    if (pendingUpdateVersion) {
+      sessionStorage.setItem('arky_dismissed_ver', pendingUpdateVersion);
+    }
+  } catch {
+    // Ignore storage errors
+  }
+  pendingUpdateVersion = null;
+  notifyListeners();
+}
+
+export async function applyPendingAppUpdate(): Promise<void> {
+  if (swUpdateRunner) {
+    try {
+      await swUpdateRunner(false);
+    } catch {
+      // Fallback to hard cache clear below
+    }
+  }
+  await clearCachesAndReloadLatest();
+}
+
 export async function clearCachesAndReloadLatest(): Promise<void> {
   if (typeof window === 'undefined') return;
 
@@ -22,7 +83,6 @@ export async function clearCachesAndReloadLatest(): Promise<void> {
   }
 
   try {
-    // Force browser HTTP cache revalidation of current route HTML before navigating
     await fetch(window.location.pathname + window.location.search, {
       cache: 'reload',
       credentials: 'same-origin',
@@ -40,6 +100,37 @@ export async function clearCachesAndReloadLatest(): Promise<void> {
   }
 }
 
+function handleDetectedNewVersion(versionLabel: string): void {
+  try {
+    if (sessionStorage.getItem('arky_dismissed_ver') === versionLabel) {
+      return;
+    }
+  } catch {
+    // Ignore storage errors
+  }
+
+  if (isSessionBusy) {
+    // Never interrupt an active lesson, duel, arcade run, or coding sandbox
+    pendingUpdateVersion = versionLabel;
+    notifyListeners();
+    return;
+  }
+
+  try {
+    const guardKey = 'arky_force_reload_ver';
+    if (sessionStorage.getItem(guardKey) === versionLabel) {
+      pendingUpdateVersion = versionLabel;
+      notifyListeners();
+      return;
+    }
+    sessionStorage.setItem(guardKey, versionLabel);
+  } catch {
+    // Ignore storage errors
+  }
+
+  void clearCachesAndReloadLatest();
+}
+
 export function initAppAutoUpdater(): void {
   if (typeof window === 'undefined') return;
 
@@ -50,7 +141,12 @@ export function initAppAutoUpdater(): void {
       if (!alreadyReloaded) {
         event.preventDefault();
         sessionStorage.setItem('arky_chunk_reload', '1');
-        void clearCachesAndReloadLatest();
+        if (isSessionBusy) {
+          pendingUpdateVersion = 'new-chunk';
+          notifyListeners();
+        } else {
+          void clearCachesAndReloadLatest();
+        }
       }
     } catch {
       // Ignore storage errors
@@ -58,10 +154,15 @@ export function initAppAutoUpdater(): void {
   });
 
   // Register Service Worker with immediate activation and frequent checks
-  const updateSW = registerSW({
+  swUpdateRunner = registerSW({
     immediate: true,
     onNeedRefresh() {
-      void updateSW(true);
+      if (isSessionBusy) {
+        pendingUpdateVersion = 'sw-refresh';
+        notifyListeners();
+      } else if (swUpdateRunner) {
+        void swUpdateRunner(true);
+      }
     },
     onRegisteredSW(_swUrl, registration) {
       if (!registration) return;
@@ -78,10 +179,15 @@ export function initAppAutoUpdater(): void {
     },
   });
 
-  // Auto-reload once when a new service worker takes control
+  // Reload once when a new service worker takes control, unless user is in an active session
   let isRefreshing = false;
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (isSessionBusy) {
+        pendingUpdateVersion = 'sw-controller';
+        notifyListeners();
+        return;
+      }
       if (!isRefreshing) {
         isRefreshing = true;
         window.location.reload();
@@ -106,11 +212,7 @@ export function initAppAutoUpdater(): void {
         const data = (await res.json()) as { version?: string };
         if (!data?.version || data.version === __APP_VERSION__) return;
 
-        const guardKey = 'arky_force_reload_ver';
-        if (sessionStorage.getItem(guardKey) === data.version) return;
-        sessionStorage.setItem(guardKey, data.version);
-
-        await clearCachesAndReloadLatest();
+        handleDetectedNewVersion(data.version);
       } catch {
         // Ignore offline/network errors
       }

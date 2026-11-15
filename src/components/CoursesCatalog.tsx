@@ -43,6 +43,8 @@ import {
   Mail,
   Repeat,
   Layers,
+  Code2,
+  Terminal,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -103,6 +105,7 @@ interface CoursesCatalogProps {
   onOpenShop?: () => void;
   onOpenBlog?: (slug?: string | null) => void;
   onOpenGlossary?: (slug?: string | null) => void;
+  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html') => void;
   byteCoins?: number;
 }
 
@@ -124,6 +127,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenShop,
   onOpenBlog,
   onOpenGlossary,
+  onOpenSandbox,
   byteCoins,
 }) => {
   const isMissionDone = (mId: string): boolean => {
@@ -4228,6 +4232,100 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Interactive Code Sandbox Lab Section (C++, Python 3, HTML5) */}
+      <section
+        aria-labelledby="catalog-sandbox-heading"
+        className="bg-slate-900/80 border border-emerald-500/35 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+          <div className="space-y-1">
+            <h2 id="catalog-sandbox-heading" className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2 font-heading">
+              <Terminal className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? 'Live Browser Code Sandbox (C++, Python 3 & HTML5)'
+                  : 'Sandbox Cod Live în Browser (C++, Python 3 & HTML5)'}
+              </span>
+            </h2>
+            <p className="text-xs text-slate-300">
+              {lang === 'en'
+                ? 'Write, run, and verify curriculum coding challenges directly in your browser with automated test cases and ByteCoins rewards.'
+                : 'Scrie, rulează și verifică instantaneu cod C++ (Code::Blocks), Python 3 și HTML5/CSS cu teste automate și recompense ByteCoins.'}
+            </p>
+          </div>
+          <a
+            href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
+            onClick={(e) => {
+              if (onOpenSandbox) {
+                e.preventDefault();
+                sounds.playClick();
+                onOpenSandbox('cpp');
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 self-start sm:self-center shadow-sm"
+          >
+            <Code2 className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>{lang === 'en' ? 'Open Code Sandbox' : 'Deschide Sandbox Cod'}</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {[
+            {
+              langKey: 'cpp' as const,
+              titleRo: 'C++17 (Stil Code::Blocks)',
+              titleEn: 'C++17 (Code::Blocks Style)',
+              descRo: 'Regula celor 3 pahare, suma cifrelor cu %10 și /10, număr prim, maximul în vectori — cu cin/cout real.',
+              descEn: 'Three-glasses swap, digit sum with %10 and /10, prime check, and array max with real cin/cout.',
+              ctaRo: 'Rulează C++',
+              ctaEn: 'Run C++',
+            },
+            {
+              langKey: 'python' as const,
+              titleRo: 'Python 3 Educațional',
+              titleEn: 'Python 3 Curriculum Lab',
+              descRo: 'Liste, f-strings, bucle for/range și medie școlară cu input() și verificare automată pe 3 cazuri de test.',
+              descEn: 'Lists, f-strings, for/range loops, and GPA calculator with input() and 3 automated test cases.',
+              ctaRo: 'Rulează Python',
+              ctaEn: 'Run Python',
+            },
+            {
+              langKey: 'html' as const,
+              titleRo: 'HTML5 Semantic & CSS Live',
+              titleEn: 'Semantic HTML5 & CSS Preview',
+              descRo: 'Construiește carduri responsive cu Flexbox și verifică automat structura DOM (<main>, <h1>, stiluri CSS).',
+              descEn: 'Build responsive Flexbox cards and verify semantic DOM structure (<main>, <h1>, CSS styling) live.',
+              ctaRo: 'Deschide Preview HTML5',
+              ctaEn: 'Open HTML5 Preview',
+            },
+          ].map((item) => (
+            <button
+              key={item.langKey}
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenSandbox?.(item.langKey);
+              }}
+              className="group text-left rounded-xl p-4 bg-slate-800/45 hover:bg-slate-800/80 border border-slate-700/70 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5 cursor-pointer"
+            >
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors">
+                  {lang === 'en' ? item.titleEn : item.titleRo}
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {lang === 'en' ? item.descEn : item.descRo}
+                </p>
+              </div>
+              <span className="text-[11px] font-bold text-emerald-300 inline-flex items-center gap-1">
+                <span>{lang === 'en' ? item.ctaEn : item.ctaRo}</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
 
       {/* Featured Blog Study Guides Section — Deep Internal SEO & Quick Troubleshooting */}
       <section

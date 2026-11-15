@@ -91,6 +91,16 @@
       ]
     },
     {
+      "identifier": "urn:air:arkyedu.com:lab:code-sandbox",
+      "displayName": "ArkyEdu Browser Code Sandbox (C++, Python 3 & HTML5)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/sandbox/",
+      "representativeQueries": [
+        "Ruleaza cod C++ Code::Blocks online in browser gratuit pentru gimnaziu",
+        "Interactive browser Python 3 and HTML5 coding sandbox with automated tests for kids"
+      ]
+    },
+    {
       "identifier": "urn:air:arkyedu.com:curriculum:metadata",
       "displayName": "ArkyEdu Application Metadata",
       "type": "application/json",

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive C++, Python 3 &amp; HTML5 Code Sandbox (Grades 7–8) | ArkyEdu</title>
+  <meta name="description" content="Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/sandbox/en/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/sandbox/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/sandbox/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/sandbox/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Interactive C++, Python 3 &amp; HTML5 Code Sandbox (Grades 7–8) | ArkyEdu">
+  <meta property="og:description" content="Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.">
+  <meta property="og:url" content="https://www.arkyedu.com/sandbox/en/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Interactive C++, Python 3 &amp; HTML5 Code Sandbox (Grades 7–8) | ArkyEdu">
+  <meta name="twitter:description" content="Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.arkyedu.com/sandbox/en/#app",
+      "name": "ArkyEdu Browser Code Sandbox",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web Browser",
+      "isAccessibleForFree": true,
+      "inLanguage": "en",
+      "url": "https://www.arkyedu.com/sandbox/en/",
+      "description": "Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Curriculum Coding Challenges",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Swap Two Numbers (Three Glasses Rule)",
+          "description": "Read two integers a and b, swap their values using a helper variable aux, and print them separated by a space."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Sum of Digits with while (n % 10 and n / 10)",
+          "description": "Read a natural number n and compute the sum of its digits using a while loop, modulo % 10, and integer division / 10."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Prime Number Check (DA / NU)",
+          "description": "Read an integer n and output DA if n is prime, or NU otherwise (watch out for n < 2!)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Count Even Numbers in an Array",
+          "description": "Read n followed by n array elements into v, then print how many of them are even (divisible by 2)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Python: Even or Odd (% modulo)",
+          "description": "Read an integer n with int(input()) and print PAR if divisible by 2, or IMPAR otherwise."
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Python: Sum 1..n (for + range)",
+          "description": "Read n and compute 1 + 2 + ... + n using a for i in range(1, n + 1) loop."
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Python: Grade Average with Lists",
+          "description": "Read the count k followed by k grades on separate lines. Append them to a list and print the integer average using round(sum(note) / len(note))."
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "HTML5 & CSS: Student Profile Card",
+          "description": "Build an HTML5 card with a main <h1> heading, a <ul> list of 3 hobbies, and an <a> link styled with CSS (border-radius and background)."
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "name": "HTML5 & CSS: School Timetable Table",
+          "description": "Create a semantic <table> with <thead> (<tr><th>) and at least 3 class rows in <tbody> (<tr><td>), cleanly styled with CSS."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Code Sandbox",
+          "item": "https://www.arkyedu.com/sandbox/en/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do I need to install Code::Blocks or Python to run code in ArkyEdu Sandbox?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. ArkyEdu Sandbox runs C++17 (Code::Blocks curriculum subset), Python 3, and HTML5/CSS directly in your browser on desktop, tablet, or phone with automated test verification."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which middle-school ICT topics are covered in the Sandbox challenges?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Three-glasses swap, digit sum with while (% 10 and / 10), prime numbers, arrays max/min, Python lists and loops, and semantic HTML5/CSS layouts."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">SANDBOX</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="https://www.arkyedu.com/clasa-7/">Grade 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Grade 8</a>
+        <a href="https://www.arkyedu.com/blog/en/">Blog</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/sandbox/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">RO</a>
+        <a href="https://www.arkyedu.com/#sandbox" class="nav-cta">Launch Live Editor</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge badge-green">C++17 · Python 3 · HTML5 &amp; CSS</span>
+        <span class="badge badge-free">100% Gratuit în Browser</span>
+        <span class="badge">9 Curriculum Challenges</span>
+      </div>
+      <h1>Interactive C++, Python 3 & HTML5 Code Sandbox</h1>
+      <p class="lead-text">Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-primary">💻 Open Interactive Code Sandbox</a>
+        <a href="https://www.arkyedu.com/blog/en/cpp-middle-school-top-10-errors-if-while-digits/" class="btn-secondary">📘 C++ Common Errors Guide</a>
+      </div>
+    </div>
+
+    <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; text-align: center;">9 Built-In Curriculum Challenges + Free Playground</h2>
+    <div class="grid-3">
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Grade 7</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Swap Two Numbers (Three Glasses Rule)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read two integers a and b, swap their values using a helper variable aux, and print them separated by a space.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_cpp_b/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Grades 7–8</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Sum of Digits with while (n % 10 and n / 10)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read a natural number n and compute the sum of its digits using a while loop, modulo % 10, and integer division / 10.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_loop_b/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Grade 8</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Prime Number Check (DA / NU)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read an integer n and output DA if n is prime, or NU otherwise (watch out for n &lt; 2!).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_e/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">cpp · Grade 8</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Count Even Numbers in an Array</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read n followed by n array elements into v, then print how many of them are even (divisible by 2).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">python · Grades 6–7</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Python: Even or Odd (% modulo)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read an integer n with int(input()) and print PAR if divisible by 2, or IMPAR otherwise.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_decision_a/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">python · Grade 7</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Python: Sum 1..n (for + range)</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read n and compute 1 + 2 + ... + n using a for i in range(1, n + 1) loop.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g7_stem_a/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">python · Grades 7–8</div>
+          <h3 class="card-title" style="font-size:1.08rem;">Python: Grade Average with Lists</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Read the count k followed by k grades on separate lines. Append them to a list and print the integer average using round(sum(note) / len(note)).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_c/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">html · Grade 8</div>
+          <h3 class="card-title" style="font-size:1.08rem;">HTML5 &amp; CSS: Student Profile Card</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Build an HTML5 card with a main &lt;h1&gt; heading, a &lt;ul&gt; list of 3 hobbies, and an &lt;a&gt; link styled with CSS (border-radius and background).</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_web_a/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-cyan);margin-bottom:0.35rem;text-transform:uppercase;">html · Grade 8</div>
+          <h3 class="card-title" style="font-size:1.08rem;">HTML5 &amp; CSS: School Timetable Table</h3>
+          <p class="card-desc" style="font-size:0.88rem;">Create a semantic &lt;table&gt; with &lt;thead&gt; (&lt;tr&gt;&lt;th&gt;) and at least 3 class rows in &lt;tbody&gt; (&lt;tr&gt;&lt;td&gt;), cleanly styled with CSS.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <a href="https://www.arkyedu.com/#sandbox" class="card-link">Solve in Sandbox →</a>
+            <a href="https://www.arkyedu.com/cursuri/g8_web_c/" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">Theory</a>
+          </div>
+        </div>
+      
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Free Browser Coding Labs.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Home</a> • <a href="https://www.arkyedu.com/blog/en/" style="color: var(--accent);">Blog</a> • <a href="https://www.arkyedu.com/glosar/en/" style="color: var(--accent);">Glossary</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

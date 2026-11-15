@@ -18,6 +18,8 @@ import { Clock, Star, User } from 'lucide-react';
 import { updateActiveLessonProgress, getActiveStudent } from './lib/studentAuthService';
 import { forceScrollToTop } from './utils/scrollHelper';
 import { updateDynamicSeo } from './utils/seoManager';
+import { UpdateToast } from './components/pwa/UpdateToast';
+import { setAppSessionBusy } from './utils/appUpdater';
 
 // Lazy-loaded Mission Modules & Secondary Hubs (reduces initial JS bundle & speeds up mobile LCP/TBT)
 const FLevel1_OSInterface = lazy(() => import('./components/files/FLevel1_OSInterface').then((m) => ({ default: m.FLevel1_OSInterface })));
@@ -88,6 +90,7 @@ const DuelArena = lazy(() => import('./components/DuelArena').then((m) => ({ def
 const CyberCityView = lazy(() => import('./components/cybercity/CyberCityView').then((m) => ({ default: m.CyberCityView })));
 const BlogHub = lazy(() => import('./components/blog/BlogHub').then((m) => ({ default: m.BlogHub })));
 const GlossaryHub = lazy(() => import('./components/glossary/GlossaryHub').then((m) => ({ default: m.GlossaryHub })));
+const CodeSandboxHub = lazy(() => import('./components/sandbox/CodeSandboxHub').then((m) => ({ default: m.CodeSandboxHub })));
 
 function parseBlogSlugFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -122,7 +125,8 @@ function GameContent() {
   const arky = useArky();
   const [blogSlug, setBlogSlug] = useState<string | null>(() => parseBlogSlugFromUrl());
   const [glossarySlug, setGlossarySlug] = useState<string | null>(() => parseGlossarySlugFromUrl());
-  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary'>(() => {
+  const [sandboxLang, setSandboxLang] = useState<'cpp' | 'python' | 'html'>('cpp');
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox'>(() => {
     if (typeof window !== 'undefined') {
       if (window.location.pathname.includes('/superadmin') || window.location.hash.includes('superadmin')) {
         return 'superadmin';
@@ -144,6 +148,9 @@ function GameContent() {
       }
       if (window.location.pathname.startsWith('/glosar') || window.location.hash.startsWith('#glosar')) {
         return 'glossary';
+      }
+      if (window.location.pathname.startsWith('/sandbox') || window.location.hash.startsWith('#sandbox')) {
+        return 'sandbox';
       }
     }
     return 'catalog';
@@ -1737,6 +1744,8 @@ function GameContent() {
       } else if (window.location.pathname.startsWith('/glosar') || window.location.hash.startsWith('#glosar')) {
         setGlossarySlug(parseGlossarySlugFromUrl());
         setView('glossary');
+      } else if (window.location.pathname.startsWith('/sandbox') || window.location.hash.startsWith('#sandbox')) {
+        setView('sandbox');
       }
     };
     window.addEventListener('popstate', handleUrlChange);
@@ -1752,8 +1761,13 @@ function GameContent() {
     updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug);
   }, [view, lang, activeMission, blogSlug, glossarySlug]);
 
+  // Never auto-reload the page while a student is mid-lesson, mid-duel, mid-arcade, or coding
+  useEffect(() => {
+    setAppSessionBusy(view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox');
+  }, [view]);
+
   const navigateToView = (
-    newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary',
+    newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox',
     nextSlug: string | null = null
   ) => {
     setView(newView);
@@ -1779,6 +1793,9 @@ function GameContent() {
     } else if (newView === 'glossary') {
       const basePath = lang === 'en' ? '/glosar/en/' : '/glosar/';
       window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
+    } else if (newView === 'sandbox') {
+      const basePath = lang === 'en' ? '/sandbox/en/' : '/sandbox/';
+      window.history.pushState({}, '', basePath);
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
       // If the current active mission is completed, clear activeMission so it doesn't linger as in-progress!
@@ -3135,6 +3152,7 @@ function GameContent() {
         onNavigateToCity={() => navigateToView('city')}
         onNavigateToBlog={() => navigateToView('blog', null)}
         onNavigateToGlossary={() => navigateToView('glossary', null)}
+        onNavigateToSandbox={() => navigateToView('sandbox')}
       />
 
       {/* Main Container */}
@@ -3157,6 +3175,10 @@ function GameContent() {
             onOpenCity={() => navigateToView('city')}
             onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
             onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
+            onOpenSandbox={(targetLang) => {
+              if (targetLang) setSandboxLang(targetLang);
+              navigateToView('sandbox');
+            }}
           />
         ) : (
           <Suspense
@@ -3213,6 +3235,13 @@ function GameContent() {
                 onSelectMission={handleSelectMission}
                 onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
                 onNavigateToView={(target) => navigateToView(target)}
+              />
+            ) : view === 'sandbox' ? (
+              <CodeSandboxHub
+                initialLanguage={sandboxLang}
+                onBackToHome={() => navigateToView('catalog')}
+                onSelectMission={handleSelectMission}
+                onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
               />
             ) : (
               <>
@@ -4151,6 +4180,7 @@ function GameContent() {
         onNavigateToSuperAdmin={() => navigateToView('superadmin')}
         onNavigateToBlog={() => navigateToView('blog', null)}
         onNavigateToGlossary={() => navigateToView('glossary', null)}
+        onNavigateToSandbox={() => navigateToView('sandbox')}
       />
 
       {/* Legal & About Modal with Netlify Contact form */}
@@ -4190,6 +4220,7 @@ export default function App() {
             <GameContent />
             <MascotaArky />
             <OfflineIndicator />
+            <UpdateToast />
           </ArkyProvider>
         </HintProvider>
       </LanguageProvider>

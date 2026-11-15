@@ -22,6 +22,8 @@ Allow: /blog/
 Allow: /blog/*
 Allow: /glosar/
 Allow: /glosar/*
+Allow: /sandbox/
+Allow: /sandbox/*
 Allow: /rss.xml
 Allow: /a7f4e9c281b54d3e9f6a0c4b2e8d1a5c.txt
 Allow: /llms.txt
