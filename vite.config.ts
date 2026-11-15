@@ -16,11 +16,36 @@ function ensureCharsetFirstPlugin(): Plugin {
   };
 }
 
-export default defineConfig(() => {
+function autoBuildVersionPlugin(buildId: string): Plugin {
   return {
+    name: 'auto-build-version',
+    transformIndexHtml(html) {
+      return html.replace(/__ARKY_BUILD_VERSION__/g, buildId);
+    },
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'version.json',
+        source: JSON.stringify({ version: buildId, builtAt: new Date().toISOString() }, null, 2),
+      });
+    },
+  };
+}
+
+export default defineConfig(({ command }) => {
+  const isBuild = command === 'build';
+  const buildId = isBuild
+    ? new Date().toISOString().replace(/[-:T.Z]/g, '').slice(0, 14)
+    : 'dev';
+
+  return {
+    define: {
+      __APP_VERSION__: JSON.stringify(buildId),
+    },
     plugins: [
       react(),
       tailwindcss(),
+      autoBuildVersionPlugin(buildId),
       ensureCharsetFirstPlugin(),
       VitePWA({
         registerType: 'autoUpdate',
@@ -61,29 +86,30 @@ export default defineConfig(() => {
           skipWaiting: true,
           clientsClaim: true,
           cleanupOutdatedCaches: true,
-          maximumFileSizeToCacheInBytes: 25 * 1024 * 1024, // 25 MiB to precache full game assets & modules
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,json}'],
-          navigateFallbackDenylist: [
-            /^\/\.well-known\//,
-            /^\/ai-catalog\.json$/,
-            /^\/llms(-full)?\.txt$/,
-            /^\/sitemap\.xml$/,
-            /^\/rss\.xml$/,
-            /^\/[a-f0-9]{32}\.txt$/,
-            /^\/robots\.txt$/,
-            /^\/metadata\.json$/,
-            /^\/cursuri\//,
-            /^\/clasa-[5-8]\//,
-            /^\/educatie-tehnologie-copii\//,
-            /^\/comparatie-scoli-private\//,
-            /^\/arcade\//,
-            /^\/duel\//,
-            /^\/profesor\//,
-            /^\/oras\//,
-            /^\/blog\//,
-            /^\/glosar\//,
-          ],
+          navigateFallback: null,
+          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+          globPatterns: ['assets/**/*.{js,css}', 'icon.svg', 'favicon.ico', 'apple-touch-icon.png', 'pwa-*.png'],
+          globIgnores: ['**/assets/aistudio/**', '**/version.json'],
           runtimeCaching: [
+            {
+              urlPattern: /\/version\.json/,
+              handler: 'NetworkOnly',
+            },
+            {
+              urlPattern: ({ request }) => request.mode === 'navigate',
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'arky-pages-cache',
+                networkTimeoutSeconds: 3,
+                expiration: {
+                  maxEntries: 30,
+                  maxAgeSeconds: 60 * 60 * 24 * 7,
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
               handler: 'CacheFirst',

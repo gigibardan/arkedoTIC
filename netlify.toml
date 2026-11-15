@@ -60,79 +60,124 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 [[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Content-Type = "application/javascript; charset=utf-8"
+
+[[headers]]
+  for = "/registerSW.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Content-Type = "application/javascript; charset=utf-8"
+
+[[headers]]
+  for = "/workbox-*.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Content-Type = "application/javascript; charset=utf-8"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Content-Type = "application/manifest+json; charset=utf-8"
+
+[[headers]]
+  for = "/version.json"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Content-Type = "application/json; charset=utf-8"
+
+[[headers]]
   for = "/*.html"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/**/*.html"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/blog/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/glosar/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/cursuri/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/clasa-5/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/clasa-6/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/clasa-7/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/clasa-8/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/educatie-tehnologie-copii/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/comparatie-scoli-private/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/arcade/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/duel/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/profesor/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/oras/*"
   [headers.values]
     Content-Type = "text/html; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Structured data and sitemaps caching
 [[headers]]

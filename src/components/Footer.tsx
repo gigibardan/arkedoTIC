@@ -25,6 +25,7 @@ import {
 import { useLanguage } from '../context/LanguageContext';
 import { LegalTabType } from './LegalModal';
 import { sounds } from '../utils/audio';
+import { clearCachesAndReloadLatest } from '../utils/appUpdater';
 
 interface FooterProps {
   onOpenLegal: (tab: LegalTabType) => void;
@@ -574,19 +575,7 @@ export const Footer: React.FC<FooterProps> = ({
             <button
               onClick={() => {
                 sounds.playSuccess();
-                if ('caches' in window) {
-                  caches.keys().then((names) => {
-                    return Promise.all(names.map((name) => caches.delete(name)));
-                  }).catch(() => {});
-                }
-                if ('serviceWorker' in navigator) {
-                  navigator.serviceWorker.getRegistrations().then((regs) => {
-                    regs.forEach((r) => r.unregister());
-                  }).catch(() => {});
-                }
-                setTimeout(() => {
-                  window.location.reload();
-                }, 300);
+                void clearCachesAndReloadLatest();
               }}
               className="text-amber-300 hover:text-white font-mono text-xs bg-amber-500/20 hover:bg-amber-500/30 px-3 py-1.5 rounded-xl border border-amber-500/40 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 touch-manipulation shadow-sm"
               title={lang === 'en' ? 'Clear cache and reload latest version' : 'Curăță memoria cache și reîncarcă cea mai nouă versiune'}
