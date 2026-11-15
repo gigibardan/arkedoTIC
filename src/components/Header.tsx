@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   ChevronRight,
-  Globe
+  Globe,
+  FileText
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
@@ -26,7 +27,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -38,6 +39,7 @@ interface HeaderProps {
   onNavigateToArcade?: () => void;
   onNavigateToDuel?: () => void;
   onNavigateToCity?: () => void;
+  onNavigateToBlog?: () => void;
   onOpenShop?: () => void;
 }
 
@@ -57,6 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateToArcade,
   onNavigateToDuel,
   onNavigateToCity,
+  onNavigateToBlog,
   onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
@@ -95,6 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'arcade') return lang === 'en' ? 'Arcade Lab' : 'Laborator Arcade';
     if (currentView === 'duel') return lang === 'en' ? 'Duel Arena 1v1' : 'Arena Duel 1v1';
     if (currentView === 'city') return lang === 'en' ? 'Cyber City' : 'Orașul Cyber';
+    if (currentView === 'blog') return lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC';
     return lang === 'en' ? 'ICT' : 'TIC';
   };
 
@@ -221,13 +225,32 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
+            {onNavigateToBlog && (
+              <a
+                href={lang === 'en' ? '/blog/en/' : '/blog/'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  sounds.playClick();
+                  currentView === 'blog' ? onNavigateToCatalog() : onNavigateToBlog();
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                  currentView === 'blog'
+                    ? 'bg-teal-600 text-white shadow-sm'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? 'Blog' : 'Blog'}</span>
+              </a>
+            )}
+
             {onNavigateToTeacher && (
               <button
                 onClick={() => {
                   sounds.playClick();
                   currentView === 'teacher' ? onNavigateToCatalog() : onNavigateToTeacher();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                   currentView === 'teacher'
                     ? 'bg-amber-600 text-white shadow-sm'
                     : 'text-amber-300 hover:text-amber-200 hover:bg-amber-500/10'
@@ -408,6 +431,29 @@ export const Header: React.FC<HeaderProps> = ({
                     <div className="text-[10px] text-purple-200 truncate">{typeof byteCoins === 'number' ? `${byteCoins} 🪙 Coins` : 'Inventar'}</div>
                   </div>
                 </button>
+              )}
+
+              {onNavigateToBlog && (
+                <a
+                  href={lang === 'en' ? '/blog/en/' : '/blog/'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToBlog();
+                  }}
+                  className={`col-span-2 p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer ${
+                    currentView === 'blog'
+                      ? 'bg-teal-600 text-white border-teal-400'
+                      : 'bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/30 text-teal-300'
+                  }`}
+                >
+                  <FileText className="w-4 h-4 text-teal-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">{lang === 'en' ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</div>
+                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? 'C++, Excel, AI & Online Safety' : 'C++, Excel, AI & Siguranță Online'}</div>
+                  </div>
+                </a>
               )}
             </div>
 

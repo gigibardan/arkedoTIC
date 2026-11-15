@@ -34,6 +34,7 @@ interface FooterProps {
   onNavigateToCity?: () => void;
   onNavigateToTeacher?: () => void;
   onNavigateToSuperAdmin?: () => void;
+  onNavigateToBlog?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -44,6 +45,7 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToCity,
   onNavigateToTeacher,
   onNavigateToSuperAdmin,
+  onNavigateToBlog,
 }) => {
   const { lang, t } = useLanguage();
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -208,6 +210,22 @@ export const Footer: React.FC<FooterProps> = ({
                   </button>
                 </li>
               )}
+              <li>
+                <a
+                  href={lang === 'en' ? '/blog/en/' : '/blog/'}
+                  onClick={(e) => {
+                    if (onNavigateToBlog) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onNavigateToBlog();
+                    }
+                  }}
+                  className="hover:text-teal-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1.5 font-semibold"
+                >
+                  <FileText className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
+                  <span>{lang === 'en' ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</span>
+                </a>
+              </li>
               <li>
                 <button
                   onClick={() => {
@@ -487,6 +505,20 @@ export const Footer: React.FC<FooterProps> = ({
               title="Documentație completă pentru modele de limbaj"
             >
               llms-full.txt
+            </a>
+            <span className="text-slate-400" aria-hidden="true">•</span>
+            <a
+              href={lang === 'en' ? '/blog/en/' : '/blog/'}
+              onClick={(e) => {
+                if (onNavigateToBlog) {
+                  e.preventDefault();
+                  sounds.playClick();
+                  onNavigateToBlog();
+                }
+              }}
+              className="text-teal-300 hover:text-teal-200 transition-colors font-semibold text-xs py-1.5 px-2"
+            >
+              {lang === 'en' ? 'Blog & Guides' : 'Blog TIC'}
             </a>
             <span className="text-slate-400" aria-hidden="true">•</span>
             <a

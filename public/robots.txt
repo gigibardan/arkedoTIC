@@ -18,6 +18,8 @@ Allow: /arcade/
 Allow: /profesor/
 Allow: /duel/
 Allow: /oras/
+Allow: /blog/
+Allow: /blog/*
 Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /ai-catalog.json

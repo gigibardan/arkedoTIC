@@ -1,14 +1,27 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, Plugin} from 'vite';
 import {VitePWA} from 'vite-plugin-pwa';
+
+function ensureCharsetFirstPlugin(): Plugin {
+  return {
+    name: 'ensure-charset-first',
+    enforce: 'post',
+    transformIndexHtml(html) {
+      const cleaned = html.replace(/^\uFEFF/, '');
+      const withoutCharset = cleaned.replace(/<meta\s+charset=["']?[^"'>\s]+["']?\s*\/?>\s*/gi, '');
+      return withoutCharset.replace(/<head(\s[^>]*)?>\s*/i, '<head$1>\n    <meta charset="utf-8">\n    ');
+    },
+  };
+}
 
 export default defineConfig(() => {
   return {
     plugins: [
       react(),
       tailwindcss(),
+      ensureCharsetFirstPlugin(),
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icon.svg'],
@@ -65,6 +78,7 @@ export default defineConfig(() => {
             /^\/duel\//,
             /^\/profesor\//,
             /^\/oras\//,
+            /^\/blog\//,
           ],
           runtimeCaching: [
             {

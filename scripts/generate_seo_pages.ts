@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { CURRICULA_MODULES, CurriculaModule } from '../src/data/curriculaData';
+import { BLOG_ARTICLES, BLOG_CATEGORIES, BlogArticle, getRelatedBlogArticles } from '../src/data/blog/index';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -474,7 +475,7 @@ function generateModulePages() {
     const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${mod.title} — ${mod.grade} | ArkyEdu TIC</title>
   <meta name="description" content="${mod.metaDescription.replace(/"/g, '&quot;')}">
@@ -811,7 +812,7 @@ function generateGradeHubs() {
     const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${g.title} | ArkyEdu TIC</title>
   <meta name="description" content="${g.meta}">
@@ -1013,7 +1014,7 @@ function generateComparisonPage() {
   const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArkyEdu vs Școli Private de Programare (Logiscool, MindHub): Cursuri TIC &amp; Coding 100% Gratuite | ArkyEdu</title>
   <meta name="description" content="Comparație obiectivă: De ce să plătești 4.000 - 6.000 lei/an pe cursuri private de coding copii când ArkyEdu oferă TIC &amp; programare completă pentru gimnaziu 100% GRATUIT, aliniat la programa școlară oficială?">
@@ -1375,7 +1376,7 @@ function generateFeatureHubs() {
     const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${h.title}</title>
   <meta name="description" content="${h.meta}">
@@ -1545,7 +1546,7 @@ function generateTechEducationPillar() {
   const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
   <meta name="description" content="${description}">
@@ -1668,7 +1669,7 @@ ${commonStyles}
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — Platforma #1 Gratuită de Educație TIC &amp; Coding pentru Copii.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/llms.txt" style="color: var(--accent);">llms.txt</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog &amp; Ghiduri TIC</a> • <a href="https://www.arkyedu.com/llms.txt" style="color: var(--accent);">llms.txt</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -1679,12 +1680,670 @@ ${commonStyles}
   console.log('Pillar Landing Page (/educatie-tehnologie-copii/) generated.');
 }
 
-// 6. GENERATE COMPLETE SITEMAP.XML
+function escapeHtmlText(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// 6. GENERATE BILINGUAL BLOG INDEX (/blog/ & /blog/en/) AND ARTICLE PAGES
+function generateBlogPages() {
+  const blogBaseStyles = `
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+  `;
+
+  const renderBlogIndex = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const dirPath = isEn ? path.join(publicDir, 'blog', 'en') : path.join(publicDir, 'blog');
+    ensureDir(dirPath);
+
+    const canonicalUrl = isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/';
+    const roIndexUrl = 'https://www.arkyedu.com/blog/';
+    const enIndexUrl = 'https://www.arkyedu.com/blog/en/';
+
+    const title = isEn
+      ? 'ICT, Coding & Tech Study Guides Blog (Grades 5–8) | ArkyEdu'
+      : 'Blog & Ghiduri TIC Gimnaziu: C++, Excel, AI & Siguranță Online | ArkyEdu';
+    const description = isEn
+      ? 'Free bilingual ICT study guides solving real student & parent problems: C++ troubleshooting, Excel formulas, safe AI homework habits, and online safety on TikTok & Roblox.'
+      : 'Articole ample și ghiduri gratuite de TIC pentru clasele V–VIII: top erori C++, formule Excel, AI & ChatGPT la școală și siguranța copiilor pe TikTok, Roblox și Discord.';
+
+    const usedCategories = BLOG_CATEGORIES.filter(
+      (cat) => cat.id === 'all' || BLOG_ARTICLES.some((a) => a.category === cat.id)
+    );
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": `${canonicalUrl}#collection`,
+          "url": canonicalUrl,
+          "name": title,
+          "description": description,
+          "inLanguage": isEn ? "en" : "ro",
+          "isPartOf": { "@id": "https://www.arkyedu.com/#website" }
+        },
+        {
+          "@type": "Blog",
+          "@id": `${canonicalUrl}#blog`,
+          "url": canonicalUrl,
+          "name": isEn ? "ArkyEdu ICT & Coding Blog" : "Blogul de TIC & Programare ArkyEdu",
+          "description": description,
+          "inLanguage": isEn ? "en" : "ro",
+          "publisher": { "@id": "https://www.arkyedu.com/#organization" },
+          "blogPost": BLOG_ARTICLES.map((art) => {
+            const c = isEn ? art.en : art.ro;
+            const artUrl = isEn
+              ? `https://www.arkyedu.com/blog/en/${art.en.slug}/`
+              : `https://www.arkyedu.com/blog/${art.ro.slug}/`;
+            return {
+              "@type": "BlogPosting",
+              "headline": c.title,
+              "description": c.metaDescription,
+              "url": artUrl,
+              "datePublished": art.publishedAt,
+              "dateModified": art.updatedAt,
+              "inLanguage": isEn ? "en" : "ro"
+            };
+          })
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": "https://www.arkyedu.com/" },
+            { "@type": "ListItem", "position": 2, "name": isEn ? "ICT Blog & Guides" : "Blog & Ghiduri TIC", "item": canonicalUrl }
+          ]
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${isEn ? 'en' : 'ro'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roIndexUrl}">
+  <link rel="alternate" hreflang="en" href="${enIndexUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roIndexUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+${blogBaseStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="${isEn ? 'Primary Navigation' : 'Navigare Principală'}">
+        <a href="https://www.arkyedu.com/clasa-5/">${isEn ? 'Grade 5' : 'Clasa 5'}</a>
+        <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
+        <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
+        <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${isEn ? roIndexUrl : enIndexUrl}" class="lang-pill">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">${isEn ? 'Open App' : 'Intră în Platformă'}</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="https://www.arkyedu.com/">${isEn ? 'Home' : 'Acasă'}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">${isEn ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</span>
+    </nav>
+
+    <div class="hero-section" style="padding-top:1.5rem;">
+      <h1>${isEn ? 'ICT, Coding & Tech Study Guides (Grades 5–8)' : 'Blog & Ghiduri Practice TIC pentru Gimnaziu (V–VIII)'}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="${isEn ? 'Filter articles by topic' : 'Filtrează articolele după subiect'}">
+      ${usedCategories
+        .map(
+          (cat, idx) =>
+            `<button type="button" class="filter-btn${idx === 0 ? ' active' : ''}" data-cat="${cat.id}">${escapeHtmlText(isEn ? cat.labelEn : cat.labelRo)}</button>`
+        )
+        .join('\n      ')}
+    </div>
+
+    <section class="grid-2" id="blog-grid" aria-label="${isEn ? 'Blog Articles' : 'Articole Blog'}">
+      ${BLOG_ARTICLES.map((art) => {
+        const c = isEn ? art.en : art.ro;
+        const gradeTag = isEn ? art.gradeTagEn : art.gradeTagRo;
+        const artUrl = isEn ? `/blog/en/${art.en.slug}/` : `/blog/${art.ro.slug}/`;
+        return `
+        <article class="card blog-card" data-cat="${art.category}" style="display:flex;flex-direction:column;justify-content:space-between;gap:1rem;">
+          <div>
+            <div class="meta-line">
+              <span class="meta-accent">${escapeHtmlText(c.categoryLabel)}</span>
+              <span aria-hidden="true">·</span>
+              <span>${escapeHtmlText(gradeTag)}</span>
+              <span aria-hidden="true">·</span>
+              <span>${escapeHtmlText(c.readTime)}</span>
+            </div>
+            <h2 class="card-title" style="font-size:1.25rem;margin-bottom:0.6rem;">
+              <a href="${artUrl}" style="color:#ffffff;text-decoration:none;">${escapeHtmlText(c.title)}</a>
+            </h2>
+            <p class="card-desc" style="color:#cbd5e1;">${escapeHtmlText(c.tldr)}</p>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.75rem;border-top:1px solid #1e293b;">
+            <span style="font-size:0.8rem;color:#94a3b8;">${c.faqs.length} FAQ · ${c.internalLinks.length} ${isEn ? 'Labs' : 'Laboratoare'}</span>
+            <a href="${artUrl}" class="card-link">${isEn ? 'Read Full Guide →' : 'Citește ghidul complet →'}</a>
+          </div>
+        </article>`;
+      }).join('\n')}
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu (arkyedu.com) — ${isEn ? 'Free Bilingual ICT & Coding Platform.' : 'Platformă Gratuită de Educație TIC & Coding.'}</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">${isEn ? 'Tech Education Hub' : 'Educație Tehnologie Copii'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var btns = document.querySelectorAll('.filter-btn');
+      var cards = document.querySelectorAll('.blog-card');
+      btns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var cat = btn.getAttribute('data-cat');
+          btns.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          cards.forEach(function(card) {
+            card.style.display = (cat === 'all' || card.getAttribute('data-cat') === cat) ? 'flex' : 'none';
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(dirPath, 'index.html'), html, 'utf-8');
+  };
+
+  const renderArticlePage = (article: BlogArticle, lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const c = isEn ? article.en : article.ro;
+    const other = isEn ? article.ro : article.en;
+    const gradeTag = isEn ? article.gradeTagEn : article.gradeTagRo;
+
+    const roUrl = `https://www.arkyedu.com/blog/${article.ro.slug}/`;
+    const enUrl = `https://www.arkyedu.com/blog/en/${article.en.slug}/`;
+    const canonicalUrl = isEn ? enUrl : roUrl;
+    const alternateLangUrl = isEn ? roUrl : enUrl;
+    const indexUrl = isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/';
+    const indexLabel = isEn ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC';
+
+    const dirPath = isEn
+      ? path.join(publicDir, 'blog', 'en', article.en.slug)
+      : path.join(publicDir, 'blog', article.ro.slug);
+    ensureDir(dirPath);
+
+    const howToSteps = c.sections.flatMap((s) => s.numberedSteps || []);
+    const related = getRelatedBlogArticles(article.id, 3);
+
+    const jsonLd: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "@id": `${canonicalUrl}#article`,
+          "headline": c.title,
+          "description": c.metaDescription,
+          "keywords": c.keywords,
+          "articleSection": c.categoryLabel,
+          "inLanguage": isEn ? "en" : "ro",
+          "datePublished": article.publishedAt,
+          "dateModified": article.updatedAt,
+          "isAccessibleForFree": true,
+          "mainEntityOfPage": canonicalUrl,
+          "isPartOf": { "@id": `${indexUrl}#blog` },
+          "author": {
+            "@type": "Organization",
+            "name": "ArkyEdu — Educație TIC & Coding România",
+            "url": "https://www.arkyedu.com/"
+          },
+          "publisher": {
+            "@type": "EducationalOrganization",
+            "name": "ArkyEdu",
+            "logo": { "@type": "ImageObject", "url": "https://www.arkyedu.com/pwa-512x512.png" }
+          },
+          "image": "https://www.arkyedu.com/pwa-512x512.png"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": "https://www.arkyedu.com/" },
+            { "@type": "ListItem", "position": 2, "name": indexLabel, "item": indexUrl },
+            { "@type": "ListItem", "position": 3, "name": c.breadcrumbLabel, "item": canonicalUrl }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": c.faqs.map((f) => ({
+            "@type": "Question",
+            "name": f.question,
+            "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+          }))
+        },
+        ...(howToSteps.length > 0
+          ? [{
+              "@type": "HowTo",
+              "name": c.breadcrumbLabel,
+              "description": c.tldr,
+              "step": howToSteps.slice(0, 8).map((step, i) => ({
+                "@type": "HowToStep",
+                "position": i + 1,
+                "text": step
+              }))
+            }]
+          : [])
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${isEn ? 'en' : 'ro'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(c.metaTitle)}</title>
+  <meta name="description" content="${escapeHtmlText(c.metaDescription)}">
+  <meta name="keywords" content="${escapeHtmlText(c.keywords)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="${article.publishedAt}">
+  <meta property="article:modified_time" content="${article.updatedAt}">
+  <meta property="article:section" content="${escapeHtmlText(c.categoryLabel)}">
+  <meta property="og:title" content="${escapeHtmlText(c.metaTitle)}">
+  <meta property="og:description" content="${escapeHtmlText(c.metaDescription)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(c.metaTitle)}">
+  <meta name="twitter:description" content="${escapeHtmlText(c.metaDescription)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+${blogBaseStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="${isEn ? 'Primary Navigation' : 'Navigare Principală'}">
+        <a href="${indexUrl}">${indexLabel}</a>
+        <a href="https://www.arkyedu.com/clasa-5/">${isEn ? 'Grade 5' : 'Clasa 5'}</a>
+        <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
+        <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
+        <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${alternateLangUrl}" class="lang-pill" title="${escapeHtmlText(other.title)}">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">${isEn ? 'Open App' : 'Intră în Platformă'}</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">${isEn ? 'Home' : 'Acasă'}</a>
+        <span aria-hidden="true">/</span>
+        <a href="${indexUrl}">${indexLabel}</a>
+        <span aria-hidden="true">/</span>
+        <span>${escapeHtmlText(c.categoryLabel)}</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">${escapeHtmlText(c.breadcrumbLabel)}</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">${escapeHtmlText(c.categoryLabel)}</span>
+          <span aria-hidden="true">·</span>
+          <span>${escapeHtmlText(gradeTag)}</span>
+          <span aria-hidden="true">·</span>
+          <span>${escapeHtmlText(c.readTime)}</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="${article.updatedAt}">${isEn ? `Updated ${article.updatedAt}` : `Actualizat ${article.updatedAt}`}</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">${escapeHtmlText(c.title)}</h1>
+        <p class="article-intro" itemprop="description">${escapeHtmlText(c.intro)}</p>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">${escapeHtmlText(c.tldrTitle)}</div>
+          <p class="tldr-text">${escapeHtmlText(c.tldr)}</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">${isEn ? 'Table of Contents' : 'Cuprinsul articolului'}</div>
+          <ol class="toc-list">
+            ${c.sections.map((s) => `<li><a href="#${s.id}">${escapeHtmlText(s.heading)}</a></li>`).join('\n            ')}
+            <li><a href="#faq-h">${isEn ? 'Frequently Asked Questions (FAQ)' : 'Întrebări frecvente (FAQ)'}</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          ${c.sections
+            .map(
+              (sec) => `
+          <section class="art-section" id="${sec.id}">
+            <h2>${escapeHtmlText(sec.heading)}</h2>
+            ${sec.paragraphs.map((p) => `<p>${escapeHtmlText(p)}</p>`).join('\n            ')}
+            ${
+              sec.numberedSteps && sec.numberedSteps.length > 0
+                ? `<ol>${sec.numberedSteps.map((st) => `<li>${escapeHtmlText(st)}</li>`).join('')}</ol>`
+                : ''
+            }
+            ${
+              sec.bulletPoints && sec.bulletPoints.length > 0
+                ? `<ul>${sec.bulletPoints.map((bp) => `<li>${escapeHtmlText(bp)}</li>`).join('')}</ul>`
+                : ''
+            }
+            ${
+              sec.codeBlock
+                ? `<div class="code-box">
+                    <div class="code-head">${escapeHtmlText(sec.codeBlock.title)}</div>
+                    <pre><code>${escapeHtmlText(sec.codeBlock.code)}</code></pre>
+                    ${sec.codeBlock.caption ? `<div class="code-cap">${escapeHtmlText(sec.codeBlock.caption)}</div>` : ''}
+                  </div>`
+                : ''
+            }
+            ${
+              sec.table
+                ? `<div class="table-wrap">
+                    <table class="seo-tbl">
+                      ${sec.table.caption ? `<caption>${escapeHtmlText(sec.table.caption)}</caption>` : ''}
+                      <thead><tr>${sec.table.headers.map((h) => `<th>${escapeHtmlText(h)}</th>`).join('')}</tr></thead>
+                      <tbody>${sec.table.rows
+                        .map((r) => `<tr>${r.map((cell) => `<td>${escapeHtmlText(cell)}</td>`).join('')}</tr>`)
+                        .join('')}</tbody>
+                    </table>
+                  </div>`
+                : ''
+            }
+            ${
+              sec.callout
+                ? `<div class="${sec.callout.variant === 'warning' ? 'callout-warn' : 'callout-tip'}">
+                    <div class="callout-title">${escapeHtmlText(sec.callout.title)}</div>
+                    <p style="margin:0;">${escapeHtmlText(sec.callout.text)}</p>
+                  </div>`
+                : ''
+            }
+          </section>`
+            )
+            .join('\n')}
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ ${escapeHtmlText(c.checklistTitle)}</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            ${c.checklist.map((item) => `<li>${escapeHtmlText(item)}</li>`).join('\n            ')}
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box">
+          <h2 style="font-size:1.25rem;color:#fff;">${escapeHtmlText(c.internalLinksTitle)}</h2>
+          <div class="links-grid">
+            ${c.internalLinks
+              .map(
+                (l) => `<a href="https://www.arkyedu.com${l.url}" class="link-card">
+                <div class="link-card-title">${escapeHtmlText(l.label)} →</div>
+                <div class="link-card-desc">${escapeHtmlText(l.description)}</div>
+              </a>`
+              )
+              .join('\n            ')}
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ ${isEn ? 'Frequently Asked Questions' : 'Întrebări frecvente (FAQ)'}</h2>
+          ${c.faqs
+            .map(
+              (f) => `<div class="faq-block">
+              <div class="faq-question">${escapeHtmlText(f.question)}</div>
+              <div class="faq-answer">${escapeHtmlText(f.answer)}</div>
+            </div>`
+            )
+            .join('\n          ')}
+        </section>
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">${isEn ? 'More Study Guides' : 'Citește și alte ghiduri TIC'}</h2>
+            <a href="${indexUrl}" class="card-link">${isEn ? '← Back to Blog Index' : '← Înapoi la Indexul Blogului'}</a>
+          </div>
+          <div class="links-grid">
+            ${related
+              .map((r) => {
+                const rc = isEn ? r.en : r.ro;
+                const rUrl = isEn ? `/blog/en/${r.en.slug}/` : `/blog/${r.ro.slug}/`;
+                return `<a href="${rUrl}" class="link-card">
+                  <div class="link-card-title">${escapeHtmlText(rc.breadcrumbLabel)} →</div>
+                  <div class="link-card-desc">${escapeHtmlText(rc.metaDescription)}</div>
+                </a>`;
+              })
+              .join('\n            ')}
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — ${isEn ? 'Free ICT & Coding Education.' : 'Educație TIC & Coding 100% Gratuită.'}</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${indexUrl}" style="color: var(--accent);">${indexLabel}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(dirPath, 'index.html'), html, 'utf-8');
+  };
+
+  renderBlogIndex('ro');
+  renderBlogIndex('en');
+  BLOG_ARTICLES.forEach((article) => {
+    renderArticlePage(article, 'ro');
+    renderArticlePage(article, 'en');
+  });
+
+  console.log(`Generated bilingual Blog Index (RO + EN) and ${BLOG_ARTICLES.length * 2} static article pages.`);
+}
+
+// 7. GENERATE COMPLETE SITEMAP.XML
 function generateSitemap() {
   const currentDate = new Date().toISOString().split('T')[0];
 
   const staticUrls = [
     { loc: 'https://www.arkyedu.com/', priority: '1.0', changefreq: 'daily' },
+    { loc: 'https://www.arkyedu.com/blog/', priority: '0.95', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.92', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/educatie-tehnologie-copii/', priority: '0.98', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-5/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-6/', priority: '0.95', changefreq: 'weekly' },
@@ -1700,13 +2359,26 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/ai-catalog.json', priority: '0.75', changefreq: 'weekly' }
   ];
 
+  const blogUrls = BLOG_ARTICLES.flatMap((art) => [
+    {
+      loc: `https://www.arkyedu.com/blog/${art.ro.slug}/`,
+      priority: '0.90',
+      changefreq: 'weekly'
+    },
+    {
+      loc: `https://www.arkyedu.com/blog/en/${art.en.slug}/`,
+      priority: '0.88',
+      changefreq: 'weekly'
+    }
+  ]);
+
   const courseUrls = CURRICULA_MODULES.map(m => ({
     loc: `https://www.arkyedu.com/cursuri/${m.id}/`,
     priority: m.grade === 'Clasa a VIII-a' ? '0.9' : m.grade === 'Clasa a VII-a' ? '0.88' : '0.85',
     changefreq: 'weekly'
   }));
 
-  const allUrls = [...staticUrls, ...courseUrls];
+  const allUrls = [...staticUrls, ...blogUrls, ...courseUrls];
 
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -1730,5 +2402,6 @@ generateGradeHubs();
 generateComparisonPage();
 generateFeatureHubs();
 generateTechEducationPillar();
+generateBlogPages();
 generateSitemap();
 console.log('--- ALL SEO ASSETS GENERATED SUCCESSFULLY ---');

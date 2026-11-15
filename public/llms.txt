@@ -130,3 +130,23 @@ Hub dedicat: https://www.arkyedu.com/duel/
 - **Portal Profesor & Catalog Digital**: https://www.arkyedu.com/profesor/ — Evaluare automată 1–10, export PDF/foaie de calcul, izolare multi-școală GDPR.
 - **Arkedo Smart City IoT**: https://www.arkyedu.com/oras/ — Oraș digital și simulator Arduino Smart City.
 - **Comparație cu Cursuri Private**: https://www.arkyedu.com/comparatie-scoli-private/ — **0 LEI vs 4.000–6.000 LEI/an**, aliniat programei școlare, acces 24/7.
+
+---
+
+## 5. Blog & Ghiduri Practice TIC (Română & Engleză — Rezolvare Probleme Școlare)
+- **Index Blog Română**: https://www.arkyedu.com/blog/
+- **Index Blog Engleză**: https://www.arkyedu.com/blog/en/
+- [Inteligența Artificială & ChatGPT la școală (V–VIII): Ghid fără plagiat + metoda R.C.C.L.](https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/) ([EN](https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/))
+- [C++ pentru gimnaziu (Code::Blocks VII–VIII): Top 10 erori la if, while și algoritmi pe cifre](https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/) ([EN](https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/))
+- [Excel pe înțelesul elevilor (Clasa a VIII-a): SUM, AVERAGE, IF, COUNTIF, $A$1 & erori #VALUE!/#NAME?](https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/) ([EN](https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/))
+- [Siguranța copiilor pe TikTok, Roblox, Discord și WhatsApp: Scam-uri, phishing, 2FA & 119](https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/) ([EN](https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/))
+- [Referate corecte în Word & Google Docs (V–VII): Diacritice românești, margini A4, numerotare pagini & export PDF](https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/) ([EN](https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/))
+- [Scratch 3.0 pentru începători (V–VI): Coordonatele X/Y (-240..240), bucle, variabile, clonare & primul joc](https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/) ([EN](https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/))
+- [Primul site web în Clasa a VIII-a: Anatomia HTML5 semantică, HTTP vs. HTTPS & Google Sites](https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/) ([EN](https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/))
+- [Proiect Smart Home cu Arduino Uno (VII–VIII): Senzori PIR, HC-SR04, MQ-2, Legea lui Ohm & millis()](https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/) ([EN](https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/))
+- [Ce laptop sau PC alegi pentru școală în gimnaziu (V–VIII): CPU, 16 GB RAM, SSD NVMe & ergonomie](https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/) ([EN](https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/))
+- [Prezentări PowerPoint & Google Slides de nota 10 (V–VII): Regula 6×6, contrast, animații & modele Paint 3D](https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/) ([EN](https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/))
+- [Educație digitală și programare pentru copii (10–15 ani): Ghidul părinților 0 lei/an vs. școli private de 5.000 lei/an](https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/) ([EN](https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/))
+- [Playbook pentru Profesorul de Informatică și TIC (V–VIII): Laboratoare fără instalare, catalog digital 1–10 & pregătire Olimpiadă](https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/) ([EN](https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/))
+
+

@@ -1,7 +1,8 @@
 import { AllMissionId, Language } from '../types';
 import { CURRICULA_MODULES } from '../data/curriculaData';
+import { findBlogArticleBySlug } from '../data/blog';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin';
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -51,7 +52,8 @@ function upsertLink(rel: string, href: string) {
 export function updateDynamicSeo(
   view: AppSeoView,
   lang: Language,
-  activeMission: AllMissionId | null
+  activeMission: AllMissionId | null,
+  blogSlug: string | null = null
 ): void {
   if (typeof document === 'undefined') return;
 
@@ -105,6 +107,22 @@ export function updateDynamicSeo(
       ? 'Interactive Smart City & IoT robotics lab: PWM smart lighting, ultrasonic barriers, MQ-2 gas alerts, and Arduino Uno sensors in your browser.'
       : 'Simulator interactiv Smart City IoT pentru gimnaziu: iluminat PWM, senzori ultrasonici HC-SR04, alarmă gaz MQ-2 și microcontroller Arduino Uno.';
     canonicalUrl = `${BASE_URL}/oras/`;
+  } else if (view === 'blog') {
+    const article = findBlogArticleBySlug(blogSlug);
+    if (article) {
+      const content = isEn ? article.en : article.ro;
+      title = content.metaTitle;
+      description = content.metaDescription.slice(0, 158);
+      canonicalUrl = isEn ? `${BASE_URL}/blog/en/${article.en.slug}/` : `${BASE_URL}/blog/${article.ro.slug}/`;
+    } else {
+      title = isEn
+        ? 'ICT, Coding & Tech Guides Blog (Grades 5–8) | ArkyEdu'
+        : 'Blog & Ghiduri TIC Gimnaziu: C++, Excel, AI & Siguranță Online | ArkyEdu';
+      description = isEn
+        ? 'Practical bilingual guides for middle school students, parents, and ICT teachers: C++ troubleshooting, Excel formulas, AI study habits, and online safety.'
+        : 'Articole și ghiduri practice de TIC pentru clasele V–VIII: rezolvare erori C++, formule Excel, AI & ChatGPT la școală și siguranță online pe Roblox, TikTok și Discord.';
+      canonicalUrl = isEn ? `${BASE_URL}/blog/en/` : `${BASE_URL}/blog/`;
+    }
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);

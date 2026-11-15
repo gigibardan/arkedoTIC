@@ -86,11 +86,27 @@ const SuperAdminDashboard = lazy(() => import('./components/superadmin/SuperAdmi
 const ArcadeHub = lazy(() => import('./components/minigames/ArcadeHub').then((m) => ({ default: m.ArcadeHub })));
 const DuelArena = lazy(() => import('./components/DuelArena').then((m) => ({ default: m.DuelArena })));
 const CyberCityView = lazy(() => import('./components/cybercity/CyberCityView').then((m) => ({ default: m.CyberCityView })));
+const BlogHub = lazy(() => import('./components/blog/BlogHub').then((m) => ({ default: m.BlogHub })));
+
+function parseBlogSlugFromUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  const pathname = window.location.pathname;
+  const match = pathname.match(/^\/blog(?:\/en)?\/([^/]+)\/?$/i);
+  if (match && match[1]) {
+    return decodeURIComponent(match[1]);
+  }
+  const hashMatch = window.location.hash.match(/^#blog\/(.+)$/i);
+  if (hashMatch && hashMatch[1]) {
+    return decodeURIComponent(hashMatch[1]);
+  }
+  return null;
+}
 
 function GameContent() {
   const { lang, t } = useLanguage();
   const arky = useArky();
-  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin'>(() => {
+  const [blogSlug, setBlogSlug] = useState<string | null>(() => parseBlogSlugFromUrl());
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog'>(() => {
     if (typeof window !== 'undefined') {
       if (window.location.pathname.includes('/superadmin') || window.location.hash.includes('superadmin')) {
         return 'superadmin';
@@ -106,6 +122,9 @@ function GameContent() {
       }
       if (window.location.pathname.includes('/city') || window.location.pathname.includes('/oras') || window.location.hash.includes('city') || window.location.hash.includes('oras')) {
         return 'city';
+      }
+      if (window.location.pathname.startsWith('/blog') || window.location.hash.startsWith('#blog')) {
+        return 'blog';
       }
     }
     return 'catalog';
@@ -1693,6 +1712,9 @@ function GameContent() {
         setView('duel');
       } else if (window.location.pathname.includes('/city') || window.location.pathname.includes('/oras') || window.location.hash.includes('city') || window.location.hash.includes('oras')) {
         setView('city');
+      } else if (window.location.pathname.startsWith('/blog') || window.location.hash.startsWith('#blog')) {
+        setBlogSlug(parseBlogSlugFromUrl());
+        setView('blog');
       }
     };
     window.addEventListener('popstate', handleUrlChange);
@@ -1705,11 +1727,17 @@ function GameContent() {
 
   // Synchronize bilingual SEO titles, descriptions, OpenGraph & canonical tags per view
   useEffect(() => {
-    updateDynamicSeo(view, lang, activeMission);
-  }, [view, lang, activeMission]);
+    updateDynamicSeo(view, lang, activeMission, blogSlug);
+  }, [view, lang, activeMission, blogSlug]);
 
-  const navigateToView = (newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin') => {
+  const navigateToView = (
+    newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog',
+    nextBlogSlug: string | null = null
+  ) => {
     setView(newView);
+    if (newView === 'blog') {
+      setBlogSlug(nextBlogSlug);
+    }
     forceScrollToTop();
     if (newView === 'superadmin') {
       window.history.pushState({}, '', '/superadmin');
@@ -1721,6 +1749,9 @@ function GameContent() {
       window.history.pushState({}, '', '/duel');
     } else if (newView === 'city') {
       window.history.pushState({}, '', '/oras');
+    } else if (newView === 'blog') {
+      const basePath = lang === 'en' ? '/blog/en/' : '/blog/';
+      window.history.pushState({}, '', nextBlogSlug ? `${basePath}${nextBlogSlug}/` : basePath);
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
       // If the current active mission is completed, clear activeMission so it doesn't linger as in-progress!
@@ -3075,6 +3106,7 @@ function GameContent() {
         onNavigateToArcade={() => navigateToView('arcade')}
         onNavigateToDuel={() => navigateToView('duel')}
         onNavigateToCity={() => navigateToView('city')}
+        onNavigateToBlog={() => navigateToView('blog', null)}
       />
 
       {/* Main Container */}
@@ -3134,6 +3166,14 @@ function GameContent() {
               <CyberCityView
                 studentName={studentName}
                 onBackToCatalog={() => navigateToView('catalog')}
+              />
+            ) : view === 'blog' ? (
+              <BlogHub
+                activeSlug={blogSlug}
+                onSelectArticle={(slug) => navigateToView('blog', slug)}
+                onBackToHome={() => navigateToView('catalog')}
+                onSelectMission={handleSelectMission}
+                onNavigateToView={(target) => navigateToView(target)}
               />
             ) : (
               <>
@@ -4064,12 +4104,13 @@ function GameContent() {
 
       <Footer
         onOpenLegal={openLegalModal}
-        onNavigateToCatalog={() => setView('catalog')}
-        onNavigateToArcade={() => setView('arcade')}
-        onNavigateToDuel={() => setView('duel')}
-        onNavigateToCity={() => setView('city')}
-        onNavigateToTeacher={() => setView('teacher')}
-        onNavigateToSuperAdmin={() => setView('superadmin')}
+        onNavigateToCatalog={() => navigateToView('catalog')}
+        onNavigateToArcade={() => navigateToView('arcade')}
+        onNavigateToDuel={() => navigateToView('duel')}
+        onNavigateToCity={() => navigateToView('city')}
+        onNavigateToTeacher={() => navigateToView('teacher')}
+        onNavigateToSuperAdmin={() => navigateToView('superadmin')}
+        onNavigateToBlog={() => navigateToView('blog', null)}
       />
 
       {/* Legal & About Modal with Netlify Contact form */}
