@@ -27,7 +27,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -40,6 +40,7 @@ interface HeaderProps {
   onNavigateToDuel?: () => void;
   onNavigateToCity?: () => void;
   onNavigateToBlog?: () => void;
+  onNavigateToGlossary?: () => void;
   onOpenShop?: () => void;
 }
 
@@ -60,6 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateToDuel,
   onNavigateToCity,
   onNavigateToBlog,
+  onNavigateToGlossary,
   onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
@@ -99,6 +101,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'duel') return lang === 'en' ? 'Duel Arena 1v1' : 'Arena Duel 1v1';
     if (currentView === 'city') return lang === 'en' ? 'Cyber City' : 'Orașul Cyber';
     if (currentView === 'blog') return lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC';
+    if (currentView === 'glossary') return lang === 'en' ? 'ICT & CS Glossary' : 'Glosar Informatică & TIC';
     return lang === 'en' ? 'ICT' : 'TIC';
   };
 
@@ -233,14 +236,33 @@ export const Header: React.FC<HeaderProps> = ({
                   sounds.playClick();
                   currentView === 'blog' ? onNavigateToCatalog() : onNavigateToBlog();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                   currentView === 'blog'
                     ? 'bg-teal-600 text-white shadow-sm'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Blog' : 'Blog'}</span>
+                <span>Blog</span>
+              </a>
+            )}
+
+            {onNavigateToGlossary && (
+              <a
+                href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  sounds.playClick();
+                  currentView === 'glossary' ? onNavigateToCatalog() : onNavigateToGlossary();
+                }}
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                  currentView === 'glossary'
+                    ? 'bg-cyan-600 text-white shadow-sm'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>{lang === 'en' ? 'Glossary' : 'Glosar'}</span>
               </a>
             )}
 
@@ -442,7 +464,7 @@ export const Header: React.FC<HeaderProps> = ({
                     setIsMobileMenuOpen(false);
                     onNavigateToBlog();
                   }}
-                  className={`col-span-2 p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer ${
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer ${
                     currentView === 'blog'
                       ? 'bg-teal-600 text-white border-teal-400'
                       : 'bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/30 text-teal-300'
@@ -450,8 +472,31 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <FileText className="w-4 h-4 text-teal-400 shrink-0" />
                   <div className="min-w-0">
-                    <div className="font-bold truncate">{lang === 'en' ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</div>
-                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? 'C++, Excel, AI & Online Safety' : 'C++, Excel, AI & Siguranță Online'}</div>
+                    <div className="font-bold truncate">{lang === 'en' ? 'ICT Blog' : 'Blog TIC'}</div>
+                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? '12 Guides' : '12 Ghiduri'}</div>
+                  </div>
+                </a>
+              )}
+
+              {onNavigateToGlossary && (
+                <a
+                  href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToGlossary();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer ${
+                    currentView === 'glossary'
+                      ? 'bg-cyan-600 text-white border-cyan-400'
+                      : 'bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 text-cyan-300'
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">{lang === 'en' ? 'ICT Glossary' : 'Glosar TIC'}</div>
+                    <div className="text-[10px] text-cyan-200 truncate">{lang === 'en' ? '44 Terms A–Z' : '44 Termeni A–Z'}</div>
                   </div>
                 </a>
               )}

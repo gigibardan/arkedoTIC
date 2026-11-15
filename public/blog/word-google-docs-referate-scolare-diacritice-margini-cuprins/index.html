@@ -22,11 +22,14 @@
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Formatare referat Word &amp; Google Docs: Diacritice, pagini, cuprins | ArkyEdu">
   <meta name="twitter:description" content="Ghid complet de tehnoredactare pentru referate și proiecte școlare (V–VII): tastatura Română Standard (ș, ț cu virgulă), margini A4, numerotare fără pagina 1, ștergere pagină goală și export PDF.">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -62,7 +65,7 @@
           "url": "https://www.arkyedu.com/pwa-512x512.png"
         }
       },
-      "image": "https://www.arkyedu.com/pwa-512x512.png"
+      "image": "https://www.arkyedu.com/og-cover.png"
     },
     {
       "@type": "BreadcrumbList",
@@ -570,7 +573,7 @@
       overflow: hidden;
       margin: 1.15rem 0;
     }
-    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
     .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
     .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
     .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
@@ -631,7 +634,77 @@
       background: #0f172a;
     }
     .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
-  
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
   </style>
 </head>
 <body>
@@ -647,6 +720,7 @@
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -682,6 +756,13 @@
 
         <h1 class="article-h1" itemprop="headline">Cum scrii corect un referat în Word sau Google Docs (V–VII): Diacritice românești, margini, numerotare pagini și cuprins automat</h1>
         <p class="article-intro" itemprop="description">Indiferent dacă pregătești un referat la Istorie, Biologie, Limba Română sau proiectul practic de TIC din clasele V–VII, aspectul documentului contează enorm. De multe ori, elevii pierd puncte nu din lipsa informațiilor, ci din cauza diacriticelor greșite, a spațiilor duble apăsate din obișnuință, a unei pagini goale încăpățânate la final sau a fotografiilor care fug prin tot textul. Iată ghidul complet de rezolvare pas cu pas.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=Cum%20scrii%20corect%20un%20referat%20%C3%AEn%20Word%20sau%20Google%20Docs%20(V%E2%80%93VII)%3A%20Diacritice%20rom%C3%A2ne%C8%99ti%2C%20margini%2C%20numerotare%20pagini%20%C8%99i%20cuprins%20automat%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fword-google-docs-referate-scolare-diacritice-margini-cuprins%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copiază link ghid</button>
+          <a href="https://www.arkyedu.com/blog/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← Blog & Ghiduri TIC</a>
+        </div>
 
         <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
         <section class="tldr-box" aria-labelledby="tldr-h">
@@ -824,6 +905,41 @@ Ctrl + S   -&gt; Salvare rapida</code></pre>
             </div>
         </section>
 
+        <!-- Glossary Terms Explained in This Guide -->
+        
+        <section class="links-box">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <h2 style="font-size:1.2rem;color:#fff;">🔤 Termeni din Glosarul TIC explicați în acest ghid</h2>
+            <a href="https://www.arkyedu.com/glosar/" class="card-link">Toți cei 44 termeni A–Z →</a>
+          </div>
+          <div class="links-grid">
+            <a href="/glosar/sistem-de-operare/" class="link-card">
+                <div class="link-card-title">Sistem de Operare (SO / Operating System) →</div>
+                <div class="link-card-desc">Sistemul de operare (SO) este programul fundamental al calculatorului sau telefonului care coordonează componentele hardware (CPU, RAM, stocare) și oferă interfața grafică prin care utilizatorul poate rula aplicații și organiza fișiere.</div>
+              </a>
+            <a href="/glosar/arbore-fisiere-cale-acces/" class="link-card">
+                <div class="link-card-title">Structură Arborescentă &amp; Cale de Acces (File Path) →</div>
+                <div class="link-card-desc">Structura arborescentă este organizarea ierarhică a folderelor (directoarelor) și fișierelor pe un disc, pornind de la rădăcină (ex. C:\) spre subfoldere. Calea de acces (Path) descrie exact „adresa” completă până la un fișier.</div>
+              </a>
+            <a href="/glosar/extensie-fisier/" class="link-card">
+                <div class="link-card-title">Extensia de Fișier (.docx, .pdf, .cpp, .png, .exe) →</div>
+                <div class="link-card-desc">Extensia de fișier reprezintă sufixul format din 2–5 caractere aflat după ultimul punct din numele unui fișier (ex. referat.pdf). Ea îi spune sistemului de operare ce tip de date conține fișierul și cu ce program să îl deschidă.</div>
+              </a>
+            <a href="/glosar/formatare-document-word-diacritice-margini-stiluri/" class="link-card">
+                <div class="link-card-title">Formatare Text, Diacritice (RO) &amp; Margini de Pagină în Word / Docs →</div>
+                <div class="link-card-desc">Formatarea corectă a unui document combină tastatura românească (ă, â, î, ș, ț cu virgulă jos), marginile standard de pagină (2–2,5 cm), alinierea Justify și utilizarea stilurilor Heading 1 / Heading 2 pentru generarea automată a cuprinsului.</div>
+              </a>
+            <a href="/glosar/neticheta-email-to-cc-bcc/" class="link-card">
+                <div class="link-card-title">Netichetă &amp; Câmpurile E-mail (To, Cc, Bcc) →</div>
+                <div class="link-card-desc">Neticheta reprezintă ansamblul regulilor de politețe și comunicare corectă în mediul online. Într-un e-mail, câmpul To este pentru destinatarii principali, Cc (Carbon Copy) trimite o copie vizibilă tuturor, iar Bcc (Blind Carbon Copy) ascunde adresele de e-mail între ele.</div>
+              </a>
+            <a href="/glosar/cloud-computing-colaborare-online/" class="link-card">
+                <div class="link-card-title">Cloud Computing, Backup și Colaborare (Google Drive / OneDrive) →</div>
+                <div class="link-card-desc">Cloud Computing înseamnă salvarea fișierelor și rularea aplicațiilor pe servere securizate accesibile prin Internet, în locul stocării exclusive pe hard-diskul local. Permite colaborarea în timp real mai multor elevi pe același document și recuperarea istoricului versiunilor.</div>
+              </a>
+          </div>
+        </section>
+
         <!-- Related Articles + Back to Blog Index Link -->
         <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
           <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
@@ -853,9 +969,23 @@ Ctrl + S   -&gt; Salvare rapida</code></pre>
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — Educație TIC & Coding 100% Gratuită.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Link copiat!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
 </body>
 </html>

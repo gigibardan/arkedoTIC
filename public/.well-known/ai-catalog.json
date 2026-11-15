@@ -80,6 +80,17 @@
       ]
     },
     {
+      "identifier": "urn:air:arkyedu.com:glossary:terms",
+      "displayName": "ArkyEdu Bilingual ICT & CS Glossary (44 Essential Terms, Grades 5-8)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/glosar/",
+      "representativeQueries": [
+        "Ce este operatorul modulo % in C++, diferenta intre = si ==, si formula $A$1 in Excel",
+        "Definitie CPU RAM SSD, HTTP vs HTTPS, senzor HC-SR04 si millis() vs delay() Arduino gimnaziu",
+        "Bilingual middle school computer science glossary in Romanian and English for grades 5-8"
+      ]
+    },
+    {
       "identifier": "urn:air:arkyedu.com:curriculum:metadata",
       "displayName": "ArkyEdu Application Metadata",
       "type": "application/json",

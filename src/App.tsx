@@ -87,6 +87,7 @@ const ArcadeHub = lazy(() => import('./components/minigames/ArcadeHub').then((m)
 const DuelArena = lazy(() => import('./components/DuelArena').then((m) => ({ default: m.DuelArena })));
 const CyberCityView = lazy(() => import('./components/cybercity/CyberCityView').then((m) => ({ default: m.CyberCityView })));
 const BlogHub = lazy(() => import('./components/blog/BlogHub').then((m) => ({ default: m.BlogHub })));
+const GlossaryHub = lazy(() => import('./components/glossary/GlossaryHub').then((m) => ({ default: m.GlossaryHub })));
 
 function parseBlogSlugFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -102,11 +103,26 @@ function parseBlogSlugFromUrl(): string | null {
   return null;
 }
 
+function parseGlossarySlugFromUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  const pathname = window.location.pathname;
+  const match = pathname.match(/^\/glosar(?:\/en)?\/([^/]+)\/?$/i);
+  if (match && match[1]) {
+    return decodeURIComponent(match[1]);
+  }
+  const hashMatch = window.location.hash.match(/^#glosar\/(.+)$/i);
+  if (hashMatch && hashMatch[1]) {
+    return decodeURIComponent(hashMatch[1]);
+  }
+  return null;
+}
+
 function GameContent() {
   const { lang, t } = useLanguage();
   const arky = useArky();
   const [blogSlug, setBlogSlug] = useState<string | null>(() => parseBlogSlugFromUrl());
-  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog'>(() => {
+  const [glossarySlug, setGlossarySlug] = useState<string | null>(() => parseGlossarySlugFromUrl());
+  const [view, setView] = useState<'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary'>(() => {
     if (typeof window !== 'undefined') {
       if (window.location.pathname.includes('/superadmin') || window.location.hash.includes('superadmin')) {
         return 'superadmin';
@@ -125,6 +141,9 @@ function GameContent() {
       }
       if (window.location.pathname.startsWith('/blog') || window.location.hash.startsWith('#blog')) {
         return 'blog';
+      }
+      if (window.location.pathname.startsWith('/glosar') || window.location.hash.startsWith('#glosar')) {
+        return 'glossary';
       }
     }
     return 'catalog';
@@ -1715,6 +1734,9 @@ function GameContent() {
       } else if (window.location.pathname.startsWith('/blog') || window.location.hash.startsWith('#blog')) {
         setBlogSlug(parseBlogSlugFromUrl());
         setView('blog');
+      } else if (window.location.pathname.startsWith('/glosar') || window.location.hash.startsWith('#glosar')) {
+        setGlossarySlug(parseGlossarySlugFromUrl());
+        setView('glossary');
       }
     };
     window.addEventListener('popstate', handleUrlChange);
@@ -1727,16 +1749,18 @@ function GameContent() {
 
   // Synchronize bilingual SEO titles, descriptions, OpenGraph & canonical tags per view
   useEffect(() => {
-    updateDynamicSeo(view, lang, activeMission, blogSlug);
-  }, [view, lang, activeMission, blogSlug]);
+    updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug);
+  }, [view, lang, activeMission, blogSlug, glossarySlug]);
 
   const navigateToView = (
-    newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog',
-    nextBlogSlug: string | null = null
+    newView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary',
+    nextSlug: string | null = null
   ) => {
     setView(newView);
     if (newView === 'blog') {
-      setBlogSlug(nextBlogSlug);
+      setBlogSlug(nextSlug);
+    } else if (newView === 'glossary') {
+      setGlossarySlug(nextSlug);
     }
     forceScrollToTop();
     if (newView === 'superadmin') {
@@ -1751,7 +1775,10 @@ function GameContent() {
       window.history.pushState({}, '', '/oras');
     } else if (newView === 'blog') {
       const basePath = lang === 'en' ? '/blog/en/' : '/blog/';
-      window.history.pushState({}, '', nextBlogSlug ? `${basePath}${nextBlogSlug}/` : basePath);
+      window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
+    } else if (newView === 'glossary') {
+      const basePath = lang === 'en' ? '/glosar/en/' : '/glosar/';
+      window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
       // If the current active mission is completed, clear activeMission so it doesn't linger as in-progress!
@@ -3107,6 +3134,7 @@ function GameContent() {
         onNavigateToDuel={() => navigateToView('duel')}
         onNavigateToCity={() => navigateToView('city')}
         onNavigateToBlog={() => navigateToView('blog', null)}
+        onNavigateToGlossary={() => navigateToView('glossary', null)}
       />
 
       {/* Main Container */}
@@ -3127,6 +3155,8 @@ function GameContent() {
             onOpenArcade={() => navigateToView('arcade')}
             onOpenDuel={() => navigateToView('duel')}
             onOpenCity={() => navigateToView('city')}
+            onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
+            onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
           />
         ) : (
           <Suspense
@@ -3173,6 +3203,15 @@ function GameContent() {
                 onSelectArticle={(slug) => navigateToView('blog', slug)}
                 onBackToHome={() => navigateToView('catalog')}
                 onSelectMission={handleSelectMission}
+                onNavigateToView={(target) => navigateToView(target)}
+              />
+            ) : view === 'glossary' ? (
+              <GlossaryHub
+                activeSlug={glossarySlug}
+                onSelectTerm={(slug) => navigateToView('glossary', slug)}
+                onBackToHome={() => navigateToView('catalog')}
+                onSelectMission={handleSelectMission}
+                onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
                 onNavigateToView={(target) => navigateToView(target)}
               />
             ) : (
@@ -4111,6 +4150,7 @@ function GameContent() {
         onNavigateToTeacher={() => navigateToView('teacher')}
         onNavigateToSuperAdmin={() => navigateToView('superadmin')}
         onNavigateToBlog={() => navigateToView('blog', null)}
+        onNavigateToGlossary={() => navigateToView('glossary', null)}
       />
 
       {/* Legal & About Modal with Netlify Contact form */}

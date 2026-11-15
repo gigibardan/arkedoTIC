@@ -149,4 +149,18 @@ Hub dedicat: https://www.arkyedu.com/duel/
 - [Educație digitală și programare pentru copii (10–15 ani): Ghidul părinților 0 lei/an vs. școli private de 5.000 lei/an](https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/) ([EN](https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/))
 - [Playbook pentru Profesorul de Informatică și TIC (V–VIII): Laboratoare fără instalare, catalog digital 1–10 & pregătire Olimpiadă](https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/) ([EN](https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/))
 
+---
+
+## 6. Glosar Bilingv Informatică & TIC (44 Termeni Esențiali A–Z, Clasele V–VIII)
+- **Index Glosar Română**: https://www.arkyedu.com/glosar/
+- **Index Glosar Engleză**: https://www.arkyedu.com/glosar/en/
+- **Domenii acoperite**:
+  1. *Hardware & Sisteme* (`cpu-processor`, `ram-memory`, `ssd-vs-hdd`, `bit-and-byte`, `peripherals-io`, `operating-system`, `file-tree-path`, `file-extension`)
+  2. *Algoritmi & C++* (`algorithm-definition`, `variable-data-types`, `modulo-integer-division`, `assignment-vs-equality`, `if-else-switch`, `while-vs-dowhile`, `for-loop-counter`, `cpp-array-vector`, `scratch-coordinates-xy`, `three-cups-swap`)
+  3. *Birotică, Excel & Grafică* (`excel-cell-range-absolute`, `excel-sum-average`, `excel-if-countif`, `excel-errors-name-value-div0`, `powerpoint-6x6-contrast`, `typography-diacritics-margins`, `rgb-pixel-resolution`)
+  4. *Web & Securitate Online* (`html5-semantics`, `http-vs-https-ssl`, `ip-address-dns`, `phishing-social-engineering`, `malware-cybersecurity`, `two-factor-auth-2fa`, `netiquette-to-cc-bcc`, `cyberbullying-119`)
+  5. *Robotică & Arduino IoT* (`arduino-uno`, `digital-analog-pwm-pins`, `ohms-law-resistor`, `ultrasonic-hc-sr04`, `pir-and-mq2-sensors`, `arduino-millis`)
+  6. *AI, Cloud & Multimedia* (`llm-and-ai-hallucinations`, `prompt-engineering-rccl`, `cloud-computing-collaboration`, `gis-digital-maps`, `audio-video-multitrack-keyframe`)
+- Fiecare termen include răspuns direct („Poziția 0"), sintaxă/formulă copiabilă, exemplu practic de clasă, comparație „Nu confunda cu”, greșeală frecventă la test, FAQ `Schema.org DefinedTerm` și link direct către simulatorul interactiv ArkyEdu.
+
 

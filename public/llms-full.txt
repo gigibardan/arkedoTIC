@@ -97,4 +97,36 @@ Hub Dueluri: https://www.arkyedu.com/duel/
 - **Frontend:** React 19 SPA, TypeScript, Tailwind CSS v4, Web Audio API sintetizat, Canvas 2D / WebGL.
 - **Backend & Cloud:** Firebase Firestore + Auth, sincronizare dueluri 1v1 în timp real, catalog digital multi-școală conform GDPR.
 - **PWA & Offline:** Instalabilă gratuit ca aplicație nativă pe Android, iOS, Windows, macOS și Linux.
-- **SEO & AI Discovery:** Schema.org JSON-LD (`WebSite`, `WebApplication`, `EducationalOrganization`, `Course`, `LearningResource`, `FAQPage`, `BreadcrumbList`), `hreflang` bilingv `ro`/`en`, sitemap XML cu 53+ URL-uri curate, `robots.txt` deschis pentru crawlere AI (`OAI-SearchBot`, `GPTBot`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`).
+- **SEO & AI Discovery:** Schema.org JSON-LD (`WebSite` cu `SearchAction`, `WebApplication`, `EducationalOrganization`, `Course`, `LearningResource`, `BlogPosting`, `FAQPage`, `HowTo`, `BreadcrumbList`), `hreflang` bilingv `ro`/`en`, sitemap XML cu 80+ URL-uri curate, feed RSS (`/rss.xml`), protocol IndexNow (`/a7f4e9c281b54d3e9f6a0c4b2e8d1a5c.txt`), imagini OG `1200×630` (`/og-cover.png`), `robots.txt` deschis pentru crawlere AI (`OAI-SearchBot`, `GPTBot`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`).
+
+---
+
+## 6. Blog & Ghiduri Practice TIC (12 Subiecte Ample — 24 Pagini Bilingve RO & EN)
+Index Blog: https://www.arkyedu.com/blog/ (RO) · https://www.arkyedu.com/blog/en/ (EN) · Feed RSS: https://www.arkyedu.com/rss.xml
+
+1. **AI & ChatGPT la școală fără plagiat (Metoda R.C.C.L.)** — https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/ ([EN](https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/))
+2. **Top 10 erori C++ în Code::Blocks (`if`, `while`, algoritmi pe cifre)** — https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/ ([EN](https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/))
+3. **Excel pe înțelesul elevilor (`SUM`, `AVERAGE`, `IF`, `COUNTIF`, `$A$1`, `#VALUE!`/`#NAME?`)** — https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/ ([EN](https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/))
+4. **Siguranța copiilor pe TikTok, Roblox, Discord & WhatsApp (Phishing, 2FA, 119)** — https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/ ([EN](https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/))
+5. **Referate corecte în Word & Google Docs (Diacritice Standard, A4, Cuprins, PDF)** — https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/ ([EN](https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/))
+6. **Scratch 3.0 pentru începători (Coordonate X/Y `-240..240`, bucle, clonare)** — https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/ ([EN](https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/))
+7. **Primul site web în Clasa a VIII-a (HTML5 semantic, HTTPS & Google Sites)** — https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/ ([EN](https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/))
+8. **Proiect Smart Home cu Arduino Uno (PIR, HC-SR04, MQ-2, Legea lui Ohm & `millis()`)** — https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/ ([EN](https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/))
+9. **Alegere Laptop / PC pentru școală în gimnaziu (CPU, 16 GB RAM, SSD NVMe & ergonomie)** — https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/ ([EN](https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/))
+10. **Prezentări PowerPoint & Google Slides (Regula 6×6, contrast, tranziții & Paint 3D)** — https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/ ([EN](https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/))
+11. **Programare copii 0 lei/an vs. academii private de 5.000 lei/an (Ghid Părinți)** — https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/ ([EN](https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/))
+12. **Playbook Profesor TIC & Pregătire Olimpiadă (Catalog 1–10 GDPR, laborator 50 min)** — https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/ ([EN](https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/))
+
+---
+
+## 7. Glosar Bilingv Informatică & TIC (44 Termeni Esențiali — 88 Pagini Statice RO & EN)
+Index Glosar: https://www.arkyedu.com/glosar/ (RO) · https://www.arkyedu.com/glosar/en/ (EN)
+
+Acoperă **44 de concepte fundamentale din programa OMEN 3393/2017 & OM 5420/2024** (clasele V–VIII), structurate în format `DefinedTerm` + `FAQPage` cu definiție Answer-First, bloc de sintaxă/formulă, comparații anti-confuzie (`=` vs `==`, `while` vs `do-while`, `RAM` vs `SSD`, `delay()` vs `millis()`, `http://` vs `https://`), erori frecvente la teze/teste și link direct în simulatoare:
+- **Hardware & Sisteme (8)**: Procesor CPU, Memorie RAM vs ROM, SSD vs HDD, Bit și Byte, Periferice I/O, Sistem de Operare, Structură Arborescentă & Cale, Extensii de Fișiere.
+- **Algoritmi & C++ (10)**: Algoritm, Variabile & Tipuri de Date (`int`, `float`, `char`, `bool`), Operatorul Modulo `%` & Împărțire Întreagă `/`, Atribuire `=` vs Egalitate `==`, `if-else` & `switch`, `while` vs `do-while`, Bucla `for`, Vectori C++, Coordonate Scratch X/Y, Regula celor 3 Pahare (`aux`).
+- **Birotică, Excel & Grafică (7)**: Referințe Relative vs Absolute (`$A$1`), `SUM`/`AVERAGE`/`MIN`/`MAX`, `IF`/`COUNTIF`, Erori Excel (`#NAME?`, `#VALUE!`, `#DIV/0!`, `###`), Regula 6×6 & Contrast PowerPoint, Tipografie & Diacritice, Pixeli, Rezoluție & RGB.
+- **Web & Securitate Online (8)**: Anatomia HTML5 Semantică, HTTP vs HTTPS/SSL, Adresă IP & DNS, Phishing & Inginerie Socială, Malware & Backup 3-2-1, Autentificare 2FA, Netichetă (`To`/`CC`/`BCC`), Cyberbullying & Linia 119.
+- **Robotică & Arduino IoT (6)**: Arduino Uno, Pini Digitali/Analogici/PWM (`~`), Legea lui Ohm & Rezistoare LED (`220 Ω`), Senzor Ultrasonic HC-SR04 (`* 0.034 / 2`), Senzori Smart Home (`PIR`, `MQ-2`, `DHT11`), Multitasking `millis()` vs `delay()`.
+- **AI, Cloud & Multimedia (5)**: LLM & Halucinații AI, Inginerie Prompturi Metoda R.C.C.L., Cloud Computing & Permisiuni, Cartografie Digitală GIS, Audio-Video Multitrack & Keyframe.
+

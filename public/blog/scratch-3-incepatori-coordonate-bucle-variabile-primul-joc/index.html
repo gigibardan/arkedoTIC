@@ -22,11 +22,14 @@
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Scratch 3.0 pentru copii (Clasa 5–6): Coordonate, bucle &amp; joc | ArkyEdu">
   <meta name="twitter:description" content="Tutorial practic Scratch 3.0 pentru clasele V–VI: cum funcționează scena cu axe X (-240..240) și Y (-180..180), bucle La infinit, Dacă...Atunci, variabile Scor/Vieți și clonare.">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -62,7 +65,7 @@
           "url": "https://www.arkyedu.com/pwa-512x512.png"
         }
       },
-      "image": "https://www.arkyedu.com/pwa-512x512.png"
+      "image": "https://www.arkyedu.com/og-cover.png"
     },
     {
       "@type": "BreadcrumbList",
@@ -585,7 +588,7 @@
       overflow: hidden;
       margin: 1.15rem 0;
     }
-    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
     .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
     .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
     .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
@@ -646,7 +649,77 @@
       background: #0f172a;
     }
     .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
-  
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
   </style>
 </head>
 <body>
@@ -662,6 +735,7 @@
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -697,6 +771,13 @@
 
         <h1 class="article-h1" itemprop="headline">Scratch 3.0 pentru începători (Clasele V–VI): Coordonatele X/Y, bucle, variabile și primul tău joc în 15 minute</h1>
         <p class="article-intro" itemprop="description">Scratch 3.0 este limbajul vizual cu care elevii din clasele a V-a și a VI-a fac primii pași în programare. Chiar dacă pare o joacă cu blocuri colorate, Scratch predă concepte reale de informatică: sistemul de coordonate carteziene, structurile repetitive, deciziile logice și variabilele. În acest ghid construiești pas cu pas un joc complet de colectat obiecte și eviți greșelile care strică majoritatea proiectelor de la clasă.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=Scratch%203.0%20pentru%20%C3%AEncep%C4%83tori%20(Clasele%20V%E2%80%93VI)%3A%20Coordonatele%20X%2FY%2C%20bucle%2C%20variabile%20%C8%99i%20primul%20t%C4%83u%20joc%20%C3%AEn%2015%20minute%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fscratch-3-incepatori-coordonate-bucle-variabile-primul-joc%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copiază link ghid</button>
+          <a href="https://www.arkyedu.com/blog/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← Blog & Ghiduri TIC</a>
+        </div>
 
         <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
         <section class="tldr-box" aria-labelledby="tldr-h">
@@ -846,6 +927,29 @@ Când încep ca o clonă:
             </div>
         </section>
 
+        <!-- Glossary Terms Explained in This Guide -->
+        
+        <section class="links-box">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <h2 style="font-size:1.2rem;color:#fff;">🔤 Termeni din Glosarul TIC explicați în acest ghid</h2>
+            <a href="https://www.arkyedu.com/glosar/" class="card-link">Toți cei 44 termeni A–Z →</a>
+          </div>
+          <div class="links-grid">
+            <a href="/glosar/algoritm-proprietati/" class="link-card">
+                <div class="link-card-title">Algoritm și Proprietățile Algoritmilor →</div>
+                <div class="link-card-desc">Un algoritm este o succesiune finită, clară și ordonată de pași logici care pornește de la date de intrare și produce un rezultat corect (date de ieșire) într-un timp finit, pentru orice set valid de date.</div>
+              </a>
+            <a href="/glosar/variabila-tipuri-date-cpp/" class="link-card">
+                <div class="link-card-title">Variabilă &amp; Tipuri de Date în C++ (int, float, char, bool) →</div>
+                <div class="link-card-desc">O variabilă este o „cutie” numită din memoria RAM care păstrează o valoare ce se poate modifica pe parcursul programului. În C++, fiecare variabilă trebuie declarată cu tipul ei de date înainte de utilizare.</div>
+              </a>
+            <a href="/glosar/coordonate-xy-sprite-scratch/" class="link-card">
+                <div class="link-card-title">Coordonate X/Y (-240..240) și Personaje (Sprite) în Scratch 3.0 →</div>
+                <div class="link-card-desc">Scena din Scratch 3.0 este un plan cartezian cu dimensiunea de 480×360 pixeli și centrul exact la (X: 0, Y: 0). Axa X controlează deplasarea stânga-dreapta (de la -240 la +240), iar axa Y controlează sus-jos (de la -180 la +180).</div>
+              </a>
+          </div>
+        </section>
+
         <!-- Related Articles + Back to Blog Index Link -->
         <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
           <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
@@ -875,9 +979,23 @@ Când încep ca o clonă:
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — Educație TIC & Coding 100% Gratuită.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Link copiat!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -22,11 +22,14 @@
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="ro_RO">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AI &amp; ChatGPT for Middle School Students: Safe Study Guide | ArkyEdu">
   <meta name="twitter:description" content="Practical bilingual guide for Grades 5–8 students, parents, and ICT teachers: learn the R.C.R.L. prompting method, fact-checking AI hallucinations, and privacy rules.">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -62,7 +65,7 @@
           "url": "https://www.arkyedu.com/pwa-512x512.png"
         }
       },
-      "image": "https://www.arkyedu.com/pwa-512x512.png"
+      "image": "https://www.arkyedu.com/og-cover.png"
     },
     {
       "@type": "BreadcrumbList",
@@ -575,7 +578,7 @@
       overflow: hidden;
       margin: 1.15rem 0;
     }
-    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
     .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
     .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
     .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
@@ -636,7 +639,77 @@
       background: #0f172a;
     }
     .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
-  
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
   </style>
 </head>
 <body>
@@ -652,6 +725,7 @@
         <a href="https://www.arkyedu.com/clasa-6/">Grade 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Grade 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Grade 8</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary (44)</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -687,6 +761,13 @@
 
         <h1 class="article-h1" itemprop="headline">AI &amp; ChatGPT for Middle School (Grades 5–8): How to Learn Smarter Without Plagiarism</h1>
         <p class="article-intro" itemprop="description">Generative AI tools are already part of daily student life. The real challenge in Grades 5–8 is no longer whether students open ChatGPT or Gemini, but whether they use them to build real problem-solving skills or blindly paste unverified answers. This practical guide shows students, parents, and teachers how to turn AI into an ethical, effective study companion.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=AI%20%26%20ChatGPT%20for%20Middle%20School%20(Grades%205%E2%80%938)%3A%20How%20to%20Learn%20Smarter%20Without%20Plagiarism%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fen%2Fai-chatgpt-middle-school-homework-guide%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copy guide link</button>
+          <a href="https://www.arkyedu.com/blog/en/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← ICT Blog & Guides</a>
+        </div>
 
         <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
         <section class="tldr-box" aria-labelledby="tldr-h">
@@ -828,6 +909,29 @@ Limit: Keep it under 110 words and use beginner-friendly terms.</code></pre>
             </div>
         </section>
 
+        <!-- Glossary Terms Explained in This Guide -->
+        
+        <section class="links-box">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <h2 style="font-size:1.2rem;color:#fff;">🔤 ICT Glossary Terms Used in This Guide</h2>
+            <a href="https://www.arkyedu.com/glosar/en/" class="card-link">All 44 Terms A–Z →</a>
+          </div>
+          <div class="links-grid">
+            <a href="/glosar/en/llm-and-ai-hallucinations/" class="link-card">
+                <div class="link-card-title">Large Language Model (LLM) &amp; AI Hallucinations →</div>
+                <div class="link-card-desc">A Large Language Model (LLM) is an AI system trained on massive text datasets to predict the next likely token/word in context. An &quot;AI hallucination&quot; happens when the model confidently invents fake facts, quotes, or citations that sound convincing.</div>
+              </a>
+            <a href="/glosar/en/prompt-engineering-rccl/" class="link-card">
+                <div class="link-card-title">Prompt Engineering &amp; R.C.C.F. Study Framework →</div>
+                <div class="link-card-desc">A prompt is the instruction you give an AI system. Using a structured framework—Role, Context, Clear Task, and Format/Constraints (R.C.C.F.)—turns vague questions into tailored, age-appropriate study guides.</div>
+              </a>
+            <a href="/glosar/en/gis-digital-maps/" class="link-card">
+                <div class="link-card-title">GIS (Geographic Information Systems) &amp; GPS Coordinates →</div>
+                <div class="link-card-desc">A GIS (Geographic Information System) connects digital maps with location data organized in toggleable layers using GPS Latitude and Longitude coordinates to analyze routes, terrain, and landmarks.</div>
+              </a>
+          </div>
+        </section>
+
         <!-- Related Articles + Back to Blog Index Link -->
         <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
           <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
@@ -857,9 +961,23 @@ Limit: Keep it under 110 words and use beginner-friendly terms.</code></pre>
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — Free ICT & Coding Education.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Home</a> • <a href="https://www.arkyedu.com/blog/en/" style="color: var(--accent);">ICT Blog & Guides</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Home</a> • <a href="https://www.arkyedu.com/blog/en/" style="color: var(--accent);">ICT Blog & Guides</a> • <a href="https://www.arkyedu.com/glosar/en/" style="color: var(--accent);">Glossary (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
 </body>
 </html>

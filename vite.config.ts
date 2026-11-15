@@ -68,6 +68,8 @@ export default defineConfig(() => {
             /^\/ai-catalog\.json$/,
             /^\/llms(-full)?\.txt$/,
             /^\/sitemap\.xml$/,
+            /^\/rss\.xml$/,
+            /^\/[a-f0-9]{32}\.txt$/,
             /^\/robots\.txt$/,
             /^\/metadata\.json$/,
             /^\/cursuri\//,
@@ -79,6 +81,7 @@ export default defineConfig(() => {
             /^\/profesor\//,
             /^\/oras\//,
             /^\/blog\//,
+            /^\/glosar\//,
           ],
           runtimeCaching: [
             {

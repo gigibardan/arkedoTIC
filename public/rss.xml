@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>ArkyEdu — Blog &amp; Ghiduri TIC, Coding și Robotică (RO &amp; EN)</title>
+  <link>https://www.arkyedu.com/blog/</link>
+  <description>Ghiduri practice bilingve pentru elevi (clasele V–VIII), părinți și profesori de TIC: C++, Excel, Scratch 3.0, Word, HTML5, Arduino Smart Home IoT și siguranță online.</description>
+  <language>ro</language>
+  <lastBuildDate>Sun, 15 Nov 2026 19:21:53 GMT</lastBuildDate>
+  <atom:link href="https://www.arkyedu.com/rss.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Inteligența Artificială &amp; ChatGPT la școală (V–VIII): Cum folosești AI-ul corect la teme fără plagiat</title>
+    <link>https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/</guid>
+    <pubDate>Mon, 02 Nov 2026 09:00:00 GMT</pubDate>
+    <category>AI &amp; Competențe Digitale</category>
+    <description>Elevii de gimnaziu pot folosi ChatGPT sau Gemini ca pe un meditator digital, nu ca pe un automat de copiat teme. Formula câștigătoare este metoda în 4 pași (Rol + Context + Cerință + Limită): cere explicații pas cu pas și indicii, verifică mereu datele din manual și nu introduce niciodată date personale sau poze cu colegii.</description>
+  </item>
+  <item>
+    <title>AI &amp; ChatGPT for Middle School (Grades 5–8): How to Learn Smarter Without Plagiarism</title>
+    <link>https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/</guid>
+    <pubDate>Mon, 02 Nov 2026 09:00:00 GMT</pubDate>
+    <category>AI &amp; Digital Literacy</category>
+    <description>Middle school students should use ChatGPT or Gemini as an interactive tutor rather than a copy-paste homework machine. Use the 4-part prompt method (Role + Context + Request + Limit) to ask for hints and step-by-step explanations, verify every fact against school textbooks, and never enter personal data.</description>
+  </item>
+  <item>
+    <title>C++ pentru gimnaziu (Code::Blocks, clasele VII–VIII): Top 10 erori la if, while și algoritmi pe cifre</title>
+    <link>https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/</guid>
+    <pubDate>Thu, 05 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Programare C++ &amp; Algoritmică</category>
+    <description>Majoritatea problemelor C++ la gimnaziu provin din 5 capcane clasice: scrierea lui = (atribuire) în loc de == (egalitate) în if, punerea unui ; chiar după paranteza if(...) sau while(...), uitarea actualizării lui n = n / 10 în buclă (buclă infinită), neinițializarea sumei s = 0 și netratarea cazului special n = 0 la algoritmii pe cifre.</description>
+  </item>
+  <item>
+    <title>Middle School C++ Guide (Grades 7–8): Fixing Top 10 Errors in if, while &amp; Digit Algorithms</title>
+    <link>https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/</guid>
+    <pubDate>Thu, 05 Nov 2026 09:00:00 GMT</pubDate>
+    <category>C++ Coding &amp; Algorithms</category>
+    <description>Nine out of ten middle school C++ bugs come from five traps: writing = instead of == inside if(), placing a stray semicolon right after if(...) or while(...), forgetting n = n / 10 inside a digit loop (infinite loop), leaving sums uninitialized instead of int s = 0, and skipping the edge case n = 0.</description>
+  </item>
+  <item>
+    <title>Excel pe înțelesul elevilor (Clasa a VIII-a): Formulele SUM, AVERAGE, IF, COUNTIF, $A$1 și rezolvarea erorilor</title>
+    <link>https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/</guid>
+    <pubDate>Sun, 08 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Excel &amp; Calcul Tabelar</category>
+    <description>Orice formulă Excel începe obligatoriu cu semnul =. În România (setări regionale RO), argumentele din funcții precum =IF(B2&gt;=5; &quot;Admis&quot;; &quot;Respins&quot;) se separă prin punct și virgulă (;), nu prin virgulă. Pentru a bloca o celulă când tragi formula în jos (Autofill), apasă F4 pentru a obține referința absolută $A$1.</description>
+  </item>
+  <item>
+    <title>Excel Formulas for Middle School (Grade 8): Mastering SUM, AVERAGE, IF, COUNTIF, $A$1 &amp; Error Fixes</title>
+    <link>https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/</guid>
+    <pubDate>Sun, 08 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Spreadsheets &amp; Office Skills</category>
+    <description>Every spreadsheet formula must start with =. Depending on your computer’s regional settings, function arguments are separated by a comma (US/UK) or semicolon (many European locales). Press F4 to turn A1 into an absolute reference ($A$1) so Autofill keeps pointing to the exact same cell.</description>
+  </item>
+  <item>
+    <title>Siguranța copiilor pe TikTok, Roblox, Discord și WhatsApp: Cum oprești scam-urile, phishing-ul și cyberbullying-ul</title>
+    <link>https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/</guid>
+    <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Securitate Cibernetică</category>
+    <description>Cele mai multe conturi de Roblox, TikTok sau WhatsApp ale elevilor se pierd prin inginerie socială și phishing (site-uri de „Free Robux”, mesaje false de vot pe WhatsApp sau fișiere pe Discord), nu prin spargeri complexe. Activează autentificarea în 2 pași (2FA), verifică domeniul exact din bara de adresă și folosește fraze-parolă unice. În caz de hărțuire sau șantaj online, salvează capturi de ecran și sună gratuit la 119.</description>
+  </item>
+  <item>
+    <title>Kids Online Safety on TikTok, Roblox, Discord &amp; WhatsApp: Stopping Scams, Phishing &amp; Cyberbullying</title>
+    <link>https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/</guid>
+    <pubDate>Tue, 10 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Cyber Safety</category>
+    <description>Most student accounts on Roblox, Discord, or WhatsApp are hijacked through social engineering—fake &quot;Free Robux&quot; pages, compromised WhatsApp &quot;vote for my cousin&quot; links, or shady Discord game downloads—not complex hacking. Turn on 2-Factor Authentication (2FA), inspect the exact domain before signing in, use unique passphrases, and save screenshots if cyberbullying occurs.</description>
+  </item>
+  <item>
+    <title>Cum scrii corect un referat în Word sau Google Docs (V–VII): Diacritice românești, margini, numerotare pagini și cuprins automat</title>
+    <link>https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/</guid>
+    <pubDate>Wed, 11 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Word &amp; Tehnoredactare</category>
+    <description>Un referat școlar de nota 10 folosește tastatura „Română (Standard)” pentru ș și ț cu virgulă (nu cu sedilă), aliniere Justify (Stânga-Dreapta), font lizibil de 12 pt (Calibri, Arial sau Times New Roman), spațiu DUPĂ semnele de punctuație (niciodată înainte) și stiluri Heading 1/2 pentru cuprins automat și export curat în format PDF.</description>
+  </item>
+  <item>
+    <title>How to Format School Reports in Word &amp; Google Docs (Grades 5–7): Margins, Page Numbers, TOC &amp; PDF Export</title>
+    <link>https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/</guid>
+    <pubDate>Wed, 11 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Word Processing &amp; Layout</category>
+    <description>An A+ school paper uses A4 margins (2.5 cm / 1 inch), a consistent 12 pt font (Calibri, Arial, or Times New Roman), Justify paragraph alignment, Heading 1/2 styles for an automatic Table of Contents, &quot;Different First Page&quot; to hide the cover page number, and a final PDF export so layout never shifts.</description>
+  </item>
+  <item>
+    <title>Scratch 3.0 pentru începători (Clasele V–VI): Coordonatele X/Y, bucle, variabile și primul tău joc în 15 minute</title>
+    <link>https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/</guid>
+    <pubDate>Thu, 12 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Programare Vizuală Scratch</category>
+    <description>Scena din Scratch 3.0 are lățimea de 480 de pași (X de la -240 la +240) și înălțimea de 360 de pași (Y de la -180 la +180), cu centrul în (0, 0). Un joc complet are nevoie de 4 elemente: inițializare la „Când se dă click pe steag verde”, buclă „La infinit” pentru mișcare, condiție „Dacă atinge...” pentru coliziuni și o variabilă „Scor” care se resetează mereu la 0 la început.</description>
+  </item>
+  <item>
+    <title>Scratch 3.0 for Beginners (Grades 5–6): X/Y Coordinates, Loops, Variables &amp; Your First Game in 15 Minutes</title>
+    <link>https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/</guid>
+    <pubDate>Thu, 12 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Scratch Visual Coding</category>
+    <description>The Scratch 3.0 stage spans 480 steps wide (X from -240 to +240) and 360 steps tall (Y from -180 to +180), centered at (0, 0). Every working game follows four building blocks: reset variables and positions under &quot;When green flag clicked&quot;, wrap controls in a &quot;Forever&quot; loop, check collisions with &quot;If touching...&quot;, and delete clones when they leave the stage.</description>
+  </item>
+  <item>
+    <title>Primul tău site web în Clasa a VIII-a: Structura HTML5, HTTPS și publicare sigură în Google Sites</title>
+    <link>https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/</guid>
+    <pubDate>Fri, 13 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Web Design &amp; Tehnologii Web</category>
+    <description>Orice pagină web modernă se bazează pe HTML5 semantic (&lt;!DOCTYPE html&gt;, &lt;head&gt; pentru metadate și &lt;body&gt; pentru conținut vizibil cu &lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;footer&gt;). În clasa a VIII-a poți construi atât pagini scrise direct în HTML5 cu Notepad++/VS Code, cât și site-uri multipage publice pe HTTPS prin Google Sites, respectând ierarhia de titluri H1–H3 și descrieri alt pentru imagini.</description>
+  </item>
+  <item>
+    <title>Building Your First School Website (Grade 8): Semantic HTML5, HTTPS &amp; Safe Google Sites Publishing</title>
+    <link>https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/</guid>
+    <pubDate>Fri, 13 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Web Design &amp; HTML5</category>
+    <description>Every modern webpage starts with semantic HTML5 (&lt;!DOCTYPE html&gt;, &lt;head&gt; for metadata like UTF-8 charset and title, and &lt;body&gt; with &lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, and &lt;footer&gt;). Whether coding from scratch or launching a multipage project in Google Sites, verify HTTPS security, use one clear &lt;h1&gt; per page, add alt descriptions to images, and preview mobile responsiveness.</description>
+  </item>
+  <item>
+    <title>Proiect Smart Home cu Arduino Uno pentru gimnaziu (VII–VIII): Senzori PIR, Ultrasonic HC-SR04, MQ-2 și millis()</title>
+    <link>https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/</guid>
+    <pubDate>Sat, 14 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Robotică Arduino &amp; IoT</category>
+    <description>Un proiect Smart Home cu Arduino Uno (conform programei și manualului Art Klett clasa a VIII-a) combină citirea senzorilor pe pini digitali (PIR mișcare, HC-SR04 ultrasonic) sau analogici A0–A5 (fotorezistor LDR, senzor gaz MQ-2) cu actuatori (LED cu rezistor de 220 Ω, servomotor SG90 pe PWM ~). Folosește millis() în locul lui delay() ca alerta de gaz să răspundă instant chiar când bariera se mișcă.</description>
+  </item>
+  <item>
+    <title>Arduino Uno Smart Home School Project (Grades 7–8): PIR, HC-SR04 Ultrasonic, MQ-2 &amp; Non-Blocking millis()</title>
+    <link>https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/</guid>
+    <pubDate>Sat, 14 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Arduino Robotics &amp; IoT</category>
+    <description>A reliable middle school Arduino Uno Smart Home reads digital sensors (PIR motion, HC-SR04 ultrasonic) and analog A0–A5 inputs (LDR photoresistor, MQ-2 gas sensor) to drive actuators (220 Ω resistor-protected LEDs, PWM ~ SG90 servo gates). Replace blocking delay() calls with millis() timers so emergency alarms always trigger immediately.</description>
+  </item>
+  <item>
+    <title>Ce laptop sau PC alegi pentru școală în gimnaziu (V–VIII): Procesor, RAM, SSD NVMe, placă video &amp; ergonomie</title>
+    <link>https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Hardware &amp; Părinți</category>
+    <description>Pentru gimnaziu (Word, Excel, PowerPoint, browser cu 15 tab-uri, Scratch 3.0, C++ în Code::Blocks și Arduino IDE), specificația optimă în 2026 este: procesor Intel Core i3/i5 (gen. 12+) sau AMD Ryzen 3/5 (seria 5000/7000+), minimum 16 GB RAM (sau 8 GB cu posibilitate de upgrade), stocare SSD NVMe de 512 GB (fără HDD mecanic!), ecran IPS Full HD mat (1920×1080) și tastatură cu layout complet.</description>
+  </item>
+  <item>
+    <title>Choosing a Student Laptop or PC for Middle School (Grades 5–8): CPU, RAM, NVMe SSD &amp; Ergonomics</title>
+    <link>https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Hardware &amp; Parents</category>
+    <description>For middle school ICT and coding (Docs, Excel, browser research, Scratch 3.0, C++, and Arduino IDE), the sweet-spot spec is an Intel Core i3/i5 (12th gen+) or AMD Ryzen 3/5 (5000/7000+), 16 GB RAM (or upgradeable 8 GB), a 512 GB NVMe SSD (avoid mechanical HDDs), a matte 1080p IPS display, and standard USB/HDMI ports.</description>
+  </item>
+  <item>
+    <title>Prezentări PowerPoint &amp; Google Slides de nota 10 (Clasa a VI-a): Regula 6×6, contrast, animații și modele 3D</title>
+    <link>https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Prezentări &amp; Grafică 3D</category>
+    <description>O prezentare școlară reușită respectă Regula 6×6 (maximum 6 idei scurte pe diapozitiv, maximum 6 cuvinte pe rând), folosește un font mare (minim 24 pt pentru text, 36–44 pt pentru titlu), asigură contrast puternic între fundal și text, folosește o singură tranziție discretă (Fade/Push) și nu pune pe slide-uri tot discursul — slide-ul susține prezentatorul, nu îl citește în locul lui.</description>
+  </item>
+  <item>
+    <title>A+ PowerPoint &amp; Google Slides Presentations (Grades 5–7): The 6×6 Rule, Contrast, Animations &amp; 3D Models</title>
+    <link>https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Slides &amp; 3D Design</category>
+    <description>An A+ school deck follows the 6×6 Rule (no more than 6 bullets per slide, roughly 6 words per line), enforces large readable type (24 pt+ body, 36–44 pt titles), uses high text-to-background contrast, sticks to one subtle transition (Fade/Morph), and keeps spoken details inside Speaker Notes instead of crowding slides.</description>
+  </item>
+  <item>
+    <title>Educație digitală și programare pentru copii în România (10–15 ani): Ghidul părinților 0 lei/an vs. școli private de 5.000 lei/an</title>
+    <link>https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Ghid Părinți &amp; Economii</category>
+    <description>Un copil de 10–15 ani NU are nevoie de un abonament de 4.000–6.000 lei/an la o academie privată ca să devină pasionat de programare și tehnologie. Cu 2 sesiuni a câte 30 de minute pe săptămână pe ArkyEdu (100% gratuit, aliniat programei OMEN 3393/2017 &amp; OM 5420/2024), elevul parcurge progresiv Scratch 3.0, C++, Excel, HTML5, securitate cibernetică și robotică Arduino IoT — cu diplome 1–10 și 28 jocuri arcade.</description>
+  </item>
+  <item>
+    <title>Free Kids Coding &amp; Digital Literacy vs. $1,000/Year Private Academies: A Practical Parents’ Guide</title>
+    <link>https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Parents &amp; Education Guide</category>
+    <description>Parents do not need $1,000+/year private coding subscriptions to raise tech-fluent kids. With two focused 30-minute sessions per week on ArkyEdu (100% free, zero ads, bilingual EN/RO), students ages 10–15 progress systematically from Scratch 3.0 to real C++, Excel formulas, HTML5, cybersecurity, and Arduino IoT—reinforced by 28 retro arcade games and live 1v1 duels.</description>
+  </item>
+  <item>
+    <title>Playbook pentru Profesorul de Informatică și TIC (V–VIII): Laboratoare fără instalare, catalog digital 1–10 &amp; pregătire Olimpiadă</title>
+    <link>https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Profesori &amp; Olimpiadă</category>
+    <description>În laboratoarele școlare cu calculatoare eterogene și timp limitat la 50 de minute, ArkyEdu elimină blocajele de instalare (Code::Blocks, Excel, Arduino IDE rulează direct în browser), aliniază toate cele 40 de module la programa OMEN 3393/2017 &amp; OM 5420/2024, oferă Portal Profesor cu catalog digital pe bareme 1–10 (izolare multi-școală GDPR + export PDF/CSV) și transformă ultimele 10 minute ale orei în recapitulare prin dueluri 1v1.</description>
+  </item>
+  <item>
+    <title>ICT Teacher Playbook (Grades 5–8): Zero-Install Browser Labs, 1–10 Gradebook &amp; Olympiad Prep</title>
+    <link>https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/</guid>
+    <pubDate>Sun, 15 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Teachers &amp; Olympiad Prep</category>
+    <description>In school labs with mixed hardware and tight 50-minute periods, ArkyEdu removes installation bottlenecks (C++, Excel, Scratch, HTML5, and Arduino labs run directly in the browser), provides a free Teacher Portal with automated 1–10 rubric grading and multi-school GDPR isolation, and turns the final 10 minutes into high-energy review via 4-character-code 1v1 duels.</description>
+  </item>
+</channel>
+</rss>

@@ -51,6 +51,8 @@ import { KnowledgePills } from './hardware/KnowledgePills';
 import { MissionGuardModal } from './MissionGuardModal';
 import { CourseCurriculaModal } from './CourseCurriculaModal';
 import { CURRICULA_MODULES, CurriculaModule } from '../data/curriculaData';
+import { BLOG_ARTICLES } from '../data/blog';
+import { GLOSSARY_TERMS } from '../data/glossary';
 import { ARKY_IMAGES } from '../assets/arkyImages';
 import { LeaderboardSection } from './LeaderboardSection';
 import { AuthModal } from './AuthModal';
@@ -99,6 +101,8 @@ interface CoursesCatalogProps {
   onOpenDuel?: () => void;
   onOpenCity?: () => void;
   onOpenShop?: () => void;
+  onOpenBlog?: (slug?: string | null) => void;
+  onOpenGlossary?: (slug?: string | null) => void;
   byteCoins?: number;
 }
 
@@ -118,6 +122,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenDuel,
   onOpenCity,
   onOpenShop,
+  onOpenBlog,
+  onOpenGlossary,
   byteCoins,
 }) => {
   const isMissionDone = (mId: string): boolean => {
@@ -4222,6 +4228,174 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Featured Blog Study Guides Section — Deep Internal SEO & Quick Troubleshooting */}
+      <section
+        aria-labelledby="catalog-blog-guides-heading"
+        className="bg-slate-900/75 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+          <div className="space-y-1">
+            <h2 id="catalog-blog-guides-heading" className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2 font-heading">
+              <BookOpen className="w-5 h-5 text-teal-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? 'ICT Study Guides & Error Fixes (Grades 5–8)'
+                  : 'Ghiduri Practice & Rezolvări Erori TIC (Clasele V–VIII)'}
+              </span>
+            </h2>
+            <p className="text-xs text-slate-300">
+              {lang === 'en'
+                ? 'Step-by-step bilingual guides for C++, Excel, Scratch, Arduino IoT, Online Safety, Parents & Teachers.'
+                : 'Articole bilingve cu exemple gata de aplicat: C++, Excel, Scratch 3.0, Word, Arduino Smart Home, Părinți & Profesori.'}
+            </p>
+          </div>
+          <a
+            href={lang === 'en' ? '/blog/en/' : '/blog/'}
+            onClick={(e) => {
+              if (onOpenBlog) {
+                e.preventDefault();
+                sounds.playClick();
+                onOpenBlog(null);
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center"
+          >
+            <span>{lang === 'en' ? 'All 12 Guides' : 'Vezi toate cele 12 ghiduri'}</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {BLOG_ARTICLES.filter((a) => a.featured).slice(0, 6).map((article) => {
+            const c = lang === 'en' ? article.en : article.ro;
+            const gradeLabel = lang === 'en' ? article.gradeTagEn : article.gradeTagRo;
+            const href = lang === 'en' ? `/blog/en/${article.en.slug}/` : `/blog/${article.ro.slug}/`;
+            return (
+              <a
+                key={article.id}
+                href={href}
+                onClick={(e) => {
+                  if (onOpenBlog) {
+                    e.preventDefault();
+                    sounds.playClick();
+                    onOpenBlog(c.slug);
+                  }
+                }}
+                className="group rounded-xl p-4 bg-slate-800/45 hover:bg-slate-800/80 border border-slate-700/70 hover:border-teal-400/50 transition-colors flex flex-col justify-between gap-2.5"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                    <span className="font-semibold text-teal-300">{c.categoryLabel}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{gradeLabel}</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-white group-hover:text-teal-200 transition-colors line-clamp-2">
+                    {c.breadcrumbLabel}
+                  </h3>
+                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                    {c.metaDescription}
+                  </p>
+                </div>
+                <span className="text-[11px] font-bold text-teal-300 inline-flex items-center gap-1">
+                  <span>{lang === 'en' ? 'Read guide' : 'Citește ghidul'}</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Featured Bilingual ICT & CS Glossary (44 Essential Terms V–VIII) */}
+      <section
+        aria-label={lang === 'en' ? 'Bilingual ICT & Coding Glossary' : 'Glosar Bilingv Informatică & TIC'}
+        className="rounded-2xl border border-slate-700/80 bg-slate-900/75 p-5 sm:p-6 space-y-4"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <h2 className="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
+              <Binary className="w-5 h-5 text-cyan-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? `Bilingual ICT & CS Glossary (${GLOSSARY_TERMS.length} Essential Terms, Grades 5–8)`
+                  : `Glosar Bilingv Informatică & TIC (${GLOSSARY_TERMS.length} Termeni Esențiali, Clasele V–VIII)`}
+              </span>
+            </h2>
+            <p className="text-xs text-slate-300">
+              {lang === 'en'
+                ? 'Quick definitions, C++ & Excel formulas, Arduino wiring snippets, exam traps, and direct links to simulators.'
+                : 'Definiții clare, sintaxă C++ și Excel, formule Arduino IoT, greșeli frecvente la test și acces direct în laboratoare.'}
+            </p>
+          </div>
+          <a
+            href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
+            onClick={(e) => {
+              if (onOpenGlossary) {
+                e.preventDefault();
+                sounds.playClick();
+                onOpenGlossary(null);
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center"
+          >
+            <span>
+              {lang === 'en'
+                ? `Open Full Glossary (${GLOSSARY_TERMS.length} terms)`
+                : `Deschide Glosarul Complet (${GLOSSARY_TERMS.length} termeni)`}
+            </span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {[
+            'cpu-processor',
+            'modulo-integer-division',
+            'excel-if-countif',
+            'phishing-social-engineering',
+            'arduino-millis',
+            'prompt-engineering-rccl',
+          ]
+            .map((id) => GLOSSARY_TERMS.find((item) => item.id === id))
+            .filter((item): item is NonNullable<typeof item> => Boolean(item))
+            .map((termItem) => {
+              const loc = lang === 'en' ? termItem.en : termItem.ro;
+              const gradeLabel = lang === 'en' ? termItem.gradeTagEn : termItem.gradeTagRo;
+              const href = lang === 'en' ? `/glosar/en/${termItem.en.slug}/` : `/glosar/${termItem.ro.slug}/`;
+              return (
+                <a
+                  key={termItem.id}
+                  href={href}
+                  onClick={(e) => {
+                    if (onOpenGlossary) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onOpenGlossary(loc.slug);
+                    }
+                  }}
+                  className="group rounded-xl p-4 bg-slate-800/45 hover:bg-slate-800/80 border border-slate-700/70 hover:border-cyan-400/50 transition-colors flex flex-col justify-between gap-2"
+                >
+                  <div className="space-y-1">
+                    <div className="text-[11px] font-mono font-semibold text-cyan-300">
+                      {gradeLabel}
+                    </div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors line-clamp-1">
+                      {loc.term}
+                    </h3>
+                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                      {loc.shortAnswer}
+                    </p>
+                  </div>
+                  <span className="text-[11px] font-bold text-cyan-300 inline-flex items-center gap-1">
+                    <span>{lang === 'en' ? 'View definition & example' : 'Vezi definiția și exemplul'}</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                  </span>
+                </a>
+              );
+            })}
+        </div>
+      </section>
 
       {/* 100% Free vs Private Coding Academies Comparison Banner */}
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-emerald-950/60 to-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">

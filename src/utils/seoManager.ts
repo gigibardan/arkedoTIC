@@ -1,8 +1,9 @@
 import { AllMissionId, Language } from '../types';
 import { CURRICULA_MODULES } from '../data/curriculaData';
 import { findBlogArticleBySlug } from '../data/blog';
+import { findGlossaryTermBySlug } from '../data/glossary';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog';
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -53,7 +54,8 @@ export function updateDynamicSeo(
   view: AppSeoView,
   lang: Language,
   activeMission: AllMissionId | null,
-  blogSlug: string | null = null
+  blogSlug: string | null = null,
+  glossarySlug: string | null = null
 ): void {
   if (typeof document === 'undefined') return;
 
@@ -123,6 +125,22 @@ export function updateDynamicSeo(
         : 'Articole și ghiduri practice de TIC pentru clasele V–VIII: rezolvare erori C++, formule Excel, AI & ChatGPT la școală și siguranță online pe Roblox, TikTok și Discord.';
       canonicalUrl = isEn ? `${BASE_URL}/blog/en/` : `${BASE_URL}/blog/`;
     }
+  } else if (view === 'glossary') {
+    const found = findGlossaryTermBySlug(glossarySlug).term;
+    if (found) {
+      const c = isEn ? found.en : found.ro;
+      title = isEn ? `${c.term} – Definition & Examples | ArkyEdu Glossary` : `${c.term} – Definiție, Exemplu & Teste | Glosar ArkyEdu`;
+      description = c.shortAnswer.slice(0, 158);
+      canonicalUrl = isEn ? `${BASE_URL}/glosar/en/${found.en.slug}/` : `${BASE_URL}/glosar/${found.ro.slug}/`;
+    } else {
+      title = isEn
+        ? 'Bilingual ICT & Computer Science Glossary (Grades 5–8) | ArkyEdu'
+        : 'Glosar Bilingv Informatică & TIC (Clasele V–VIII) | ArkyEdu';
+      description = isEn
+        ? '44 essential middle-school CS & ICT terms explained clearly: CPU, RAM, C++ modulo %, Excel IF, Phishing 2FA, Arduino millis() & AI prompting.'
+        : '44 de termeni esențiali de Informatică și TIC explicați clar pentru gimnaziu: CPU, RAM, modulo %, Excel IF, Phishing 2FA, Arduino millis() și AI.';
+      canonicalUrl = isEn ? `${BASE_URL}/glosar/en/` : `${BASE_URL}/glosar/`;
+    }
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);
@@ -142,7 +160,9 @@ export function updateDynamicSeo(
   upsertMeta('property', 'og:description', description);
   upsertMeta('property', 'og:url', canonicalUrl);
   upsertMeta('property', 'og:locale', isEn ? 'en_US' : 'ro_RO');
+  upsertMeta('property', 'og:image', `${BASE_URL}/og-cover.png`);
   upsertMeta('name', 'twitter:title', title);
   upsertMeta('name', 'twitter:description', description);
+  upsertMeta('name', 'twitter:image', `${BASE_URL}/og-cover.png`);
   upsertLink('canonical', canonicalUrl);
 }

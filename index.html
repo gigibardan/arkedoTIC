@@ -121,20 +121,21 @@
     <meta property="og:site_name" content="ArkyEdu TIC &amp; Arcade" />
     <meta property="og:locale" content="ro_RO" />
     <meta property="og:locale:alternate" content="en_US" />
-    <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png" />
-    <meta property="og:image:secure_url" content="https://www.arkyedu.com/pwa-512x512.png" />
+    <meta property="og:image" content="https://www.arkyedu.com/og-cover.png" />
+    <meta property="og:image:secure_url" content="https://www.arkyedu.com/og-cover.png" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content="ArkyEdu — Platformă Gratuită de Educație TIC, Coding și Robotică pentru Copii" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ArkyEdu — Platformă Gratuită de Educație TIC, Coding și Robotică pentru Copii (V–VIII)" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ArkyEdu – Educație TIC, Coding &amp; Robotică Copii (V–VIII)" />
     <meta name="twitter:description" content="40 lecții interactive TIC (V–VIII), simulatoare C++ și Arduino IoT, Excel, HTML5, 28 jocuri arcade retro și 20+ dueluri 1v1 — 100% gratuit, fără reclame." />
-    <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png" />
+    <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png" />
 
-    <!-- AI, LLM & Sitemap Discovery Links -->
+    <!-- AI, LLM, RSS & Sitemap Discovery Links -->
     <link rel="sitemap" type="application/xml" title="ArkyEdu XML Sitemap" href="/sitemap.xml" />
+    <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="/rss.xml" />
     <link rel="help" type="text/markdown" href="/llms.txt" title="LLM Context for AI Search & Agents" />
     <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="Full LLM Educational Documentation" />
     <link rel="ai-catalog" type="application/json" href="/ai-catalog.json" title="Autonomous Agent AI Catalog" />
@@ -170,7 +171,15 @@
           "url": "https://www.arkyedu.com/",
           "inLanguage": ["ro", "en"],
           "publisher": { "@id": "https://www.arkyedu.com/#organization" },
-          "description": "Platforma educațională de referință în România pentru educația TIC, programare pentru copii, algoritmică C++, Scratch, Excel, Web Design și robotică Arduino Uno (clasele V–VIII), 100% gratuită și bilingvă."
+          "description": "Platforma educațională de referință în România pentru educația TIC, programare pentru copii, algoritmică C++, Scratch, Excel, Web Design și robotică Arduino Uno (clasele V–VIII), 100% gratuită și bilingvă.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.arkyedu.com/blog/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
         },
         {
           "@type": "EducationalOrganization",
@@ -388,6 +397,7 @@
           <li><a href="/profesor/">Portal Profesori &amp; Catalog Digital TIC (Evaluare 1–10)</a></li>
           <li><a href="/oras/">Arkedo Smart City — Laborator IoT &amp; Robotică Arduino</a></li>
           <li><a href="/blog/">Blog &amp; Ghiduri TIC (C++, Excel, AI, Siguranță Online — RO &amp; EN)</a></li>
+          <li><a href="/glosar/">Glosar Bilingv Informatică &amp; TIC (44 Termeni Esențiali V–VIII — RO &amp; EN)</a></li>
           <li><a href="/llms.txt">Documentație Structurată AI &amp; LLM (llms.txt)</a></li>
         </ul>
       </nav>

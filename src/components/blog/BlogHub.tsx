@@ -11,6 +11,8 @@ import {
   Search,
   CheckCircle2,
   ExternalLink,
+  Share2,
+  MessageCircle,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import {
@@ -43,8 +45,16 @@ export const BlogHub: React.FC<BlogHubProps> = ({
   const { lang } = useLanguage();
   const isEn = lang === 'en';
   const [selectedCategory, setSelectedCategory] = useState<BlogCategoryId | 'all'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    try {
+      return new URLSearchParams(window.location.search).get('q') || '';
+    } catch {
+      return '';
+    }
+  });
   const [copiedCodeKey, setCopiedCodeKey] = useState<string | null>(null);
+  const [copiedShareLink, setCopiedShareLink] = useState(false);
 
   const activeArticle: BlogArticle | undefined = useMemo(() => {
     if (!activeSlug) return undefined;
@@ -122,6 +132,35 @@ export const BlogHub: React.FC<BlogHubProps> = ({
     const gradeTag = isEn ? activeArticle.gradeTagEn : activeArticle.gradeTagRo;
     const related = getRelatedBlogArticles(activeArticle.id, 3);
     const staticArticleUrl = isEn ? `/blog/en/${activeArticle.en.slug}/` : `/blog/${activeArticle.ro.slug}/`;
+    const canonicalShareUrl = `https://www.arkyedu.com${staticArticleUrl}`;
+    const whatsappShareHref = `https://wa.me/?text=${encodeURIComponent(`${content.title} — ${canonicalShareUrl}`)}`;
+
+    const handleCopyShareUrl = () => {
+      sounds.playClick();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(canonicalShareUrl).then(() => {
+          setCopiedShareLink(true);
+          setTimeout(() => setCopiedShareLink(false), 2200);
+        }).catch(() => {});
+      }
+    };
+
+    const handleNativeShare = async () => {
+      sounds.playClick();
+      if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+        try {
+          await navigator.share({
+            title: content.title,
+            text: content.tldr,
+            url: canonicalShareUrl,
+          });
+          return;
+        } catch {
+          // User cancelled or share unsupported; fall back to copy
+        }
+      }
+      handleCopyShareUrl();
+    };
 
     return (
       <article className="max-w-4xl mx-auto w-full space-y-8 pb-12" itemScope itemType="https://schema.org/BlogPosting">
@@ -182,7 +221,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             {content.intro}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 pt-1">
+          <div className="flex flex-wrap items-center gap-2.5 pt-1">
             <button
               type="button"
               onClick={handleBackToIndex}
@@ -190,6 +229,41 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             >
               <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'All Blog Guides' : 'Toate articolele'}</span>
+            </button>
+            <a
+              href={whatsappShareHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sounds.playClick()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold border border-emerald-500/40 transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>WhatsApp</span>
+            </a>
+            <button
+              type="button"
+              onClick={handleCopyShareUrl}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+            >
+              {copiedShareLink ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
+                  <span className="text-emerald-300">{isEn ? 'Link copied!' : 'Link copiat!'}</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>{isEn ? 'Copy link' : 'Copiază link'}</span>
+                </>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={handleNativeShare}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors cursor-pointer"
+            >
+              <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>{isEn ? 'Share' : 'Distribuie'}</span>
             </button>
             <a
               href={staticArticleUrl}
@@ -433,6 +507,38 @@ export const BlogHub: React.FC<BlogHubProps> = ({
                 <p className="text-sm text-slate-300 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Share Bar for Class Groups & Parents */}
+        <section className="rounded-xl bg-slate-800/40 border border-slate-700/80 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <h2 className="text-sm sm:text-base font-bold text-white">
+              {isEn ? 'Helpful guide? Share it with classmates or parents' : 'Ți-a fost util ghidul? Trimite-l pe grupul clasei sau părinților'}
+            </h2>
+            <p className="text-xs text-slate-300">
+              {isEn ? '100% free educational resource, zero ads.' : 'Resursă educațională 100% gratuită, fără reclame.'}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <a
+              href={whatsappShareHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => sounds.playClick()}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>WhatsApp</span>
+            </a>
+            <button
+              type="button"
+              onClick={handleCopyShareUrl}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition-colors cursor-pointer"
+            >
+              {copiedShareLink ? <Check className="w-3.5 h-3.5 text-emerald-300" aria-hidden="true" /> : <Copy className="w-3.5 h-3.5" aria-hidden="true" />}
+              <span>{copiedShareLink ? (isEn ? 'Copied!' : 'Copiat!') : (isEn ? 'Copy link' : 'Copiază link')}</span>
+            </button>
           </div>
         </section>
 

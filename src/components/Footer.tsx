@@ -35,6 +35,7 @@ interface FooterProps {
   onNavigateToTeacher?: () => void;
   onNavigateToSuperAdmin?: () => void;
   onNavigateToBlog?: () => void;
+  onNavigateToGlossary?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -46,6 +47,7 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToTeacher,
   onNavigateToSuperAdmin,
   onNavigateToBlog,
+  onNavigateToGlossary,
 }) => {
   const { lang, t } = useLanguage();
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -224,6 +226,22 @@ export const Footer: React.FC<FooterProps> = ({
                 >
                   <FileText className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
                   <span>{lang === 'en' ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
+                  onClick={(e) => {
+                    if (onNavigateToGlossary) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onNavigateToGlossary();
+                    }
+                  }}
+                  className="hover:text-cyan-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1.5 font-semibold"
+                >
+                  <BookOpen className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <span>{lang === 'en' ? 'ICT & CS Glossary (A–Z)' : 'Glosar TIC & Coding (A–Z)'}</span>
                 </a>
               </li>
               <li>
@@ -519,6 +537,20 @@ export const Footer: React.FC<FooterProps> = ({
               className="text-teal-300 hover:text-teal-200 transition-colors font-semibold text-xs py-1.5 px-2"
             >
               {lang === 'en' ? 'Blog & Guides' : 'Blog TIC'}
+            </a>
+            <span className="text-slate-400" aria-hidden="true">•</span>
+            <a
+              href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
+              onClick={(e) => {
+                if (onNavigateToGlossary) {
+                  e.preventDefault();
+                  sounds.playClick();
+                  onNavigateToGlossary();
+                }
+              }}
+              className="text-cyan-300 hover:text-cyan-200 transition-colors font-semibold text-xs py-1.5 px-2"
+            >
+              {lang === 'en' ? 'ICT Glossary' : 'Glosar TIC'}
             </a>
             <span className="text-slate-400" aria-hidden="true">•</span>
             <a

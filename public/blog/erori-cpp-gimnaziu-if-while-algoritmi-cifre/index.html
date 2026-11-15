@@ -22,11 +22,14 @@
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Top 10 erori C++ gimnaziu: if, while &amp; cifrele unui număr | ArkyEdu">
   <meta name="twitter:description" content="Rezolvare rapidă pentru cele mai frecvente erori C++ din clasele VII–VIII în Code::Blocks: = vs ==, punct și virgulă după if/while, n%10, n/10, 5/2 și cazul n=0.">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -62,7 +65,7 @@
           "url": "https://www.arkyedu.com/pwa-512x512.png"
         }
       },
-      "image": "https://www.arkyedu.com/pwa-512x512.png"
+      "image": "https://www.arkyedu.com/og-cover.png"
     },
     {
       "@type": "BreadcrumbList",
@@ -570,7 +573,7 @@
       overflow: hidden;
       margin: 1.15rem 0;
     }
-    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
     .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
     .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
     .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
@@ -631,7 +634,77 @@
       background: #0f172a;
     }
     .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
-  
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
   </style>
 </head>
 <body>
@@ -647,6 +720,7 @@
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -682,6 +756,13 @@
 
         <h1 class="article-h1" itemprop="headline">C++ pentru gimnaziu (Code::Blocks, clasele VII–VIII): Top 10 erori la if, while și algoritmi pe cifre</h1>
         <p class="article-intro" itemprop="description">Trecerea de la blocurile vizuale din Scratch la tastarea codului C++ în Code::Blocks este unul dintre cele mai dificile momente din clasele a VII-a și a VIII-a. De multe ori, logica din mintea ta este corectă, dar un singur semn de punctuație sau o împărțire întreagă strică tot rezultatul. Am strâns cele mai întâlnite 10 erori de la lucrări, teme și concursuri — împreună cu soluția exactă pentru fiecare.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=C%2B%2B%20pentru%20gimnaziu%20(Code%3A%3ABlocks%2C%20clasele%20VII%E2%80%93VIII)%3A%20Top%2010%20erori%20la%20if%2C%20while%20%C8%99i%20algoritmi%20pe%20cifre%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Ferori-cpp-gimnaziu-if-while-algoritmi-cifre%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copiază link ghid</button>
+          <a href="https://www.arkyedu.com/blog/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← Blog & Ghiduri TIC</a>
+        </div>
 
         <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
         <section class="tldr-box" aria-labelledby="tldr-h">
@@ -875,6 +956,41 @@ int main() {
             </div>
         </section>
 
+        <!-- Glossary Terms Explained in This Guide -->
+        
+        <section class="links-box">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <h2 style="font-size:1.2rem;color:#fff;">🔤 Termeni din Glosarul TIC explicați în acest ghid</h2>
+            <a href="https://www.arkyedu.com/glosar/" class="card-link">Toți cei 44 termeni A–Z →</a>
+          </div>
+          <div class="links-grid">
+            <a href="/glosar/algoritm-proprietati/" class="link-card">
+                <div class="link-card-title">Algoritm și Proprietățile Algoritmilor →</div>
+                <div class="link-card-desc">Un algoritm este o succesiune finită, clară și ordonată de pași logici care pornește de la date de intrare și produce un rezultat corect (date de ieșire) într-un timp finit, pentru orice set valid de date.</div>
+              </a>
+            <a href="/glosar/variabila-tipuri-date-cpp/" class="link-card">
+                <div class="link-card-title">Variabilă &amp; Tipuri de Date în C++ (int, float, char, bool) →</div>
+                <div class="link-card-desc">O variabilă este o „cutie” numită din memoria RAM care păstrează o valoare ce se poate modifica pe parcursul programului. În C++, fiecare variabilă trebuie declarată cu tipul ei de date înainte de utilizare.</div>
+              </a>
+            <a href="/glosar/operatorul-modulo-si-impartirea-intreaga/" class="link-card">
+                <div class="link-card-title">Operatorul Modulo (%) și Împărțirea Întreagă (/) în C++ →</div>
+                <div class="link-card-desc">În C++, când împarți două numere întregi, operatorul / calculează câtul întreg (fără zecimale), iar operatorul modulo % calculează restul împărțirii. Împreună cu baza 10 (% 10 și / 10), stau la baza tuturor algoritmilor pe cifre.</div>
+              </a>
+            <a href="/glosar/atribuire-vs-egalitate-cpp/" class="link-card">
+                <div class="link-card-title">Atribuire (=) vs. Comparare Egalitate (==) în C++ →</div>
+                <div class="link-card-desc">Un singur egal (=) este operatorul de atribuire care pune o valoare într-o variabilă (x = 5). Egalul dublu (==) este operatorul relațional care verifică dacă două valori sunt egale (x == 5), returnând adevărat sau fals.</div>
+              </a>
+            <a href="/glosar/structura-alternativa-if-else-switch/" class="link-card">
+                <div class="link-card-title">Structura Alternativă (if / else și switch) în C++ →</div>
+                <div class="link-card-desc">Structura alternativă permite programului să ia decizii și să execute ramuri diferite de cod în funcție de o condiție logică (if / else) sau de valoarea exactă a unei variabile întregi/caracter (switch).</div>
+              </a>
+            <a href="/glosar/bucla-while-vs-do-while-cpp/" class="link-card">
+                <div class="link-card-title">Bucla while vs. do-while în C++ →</div>
+                <div class="link-card-desc">Atât while, cât și do-while repetă un bloc de instrucțiuni cât timp o condiție rămâne adevărată. Diferența majoră este că while verifică condiția la început (se poate executa de 0 ori), iar do-while o verifică la final (se execută cel puțin 1 dată).</div>
+              </a>
+          </div>
+        </section>
+
         <!-- Related Articles + Back to Blog Index Link -->
         <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
           <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
@@ -904,9 +1020,23 @@ int main() {
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — Educație TIC & Coding 100% Gratuită.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Link copiat!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
 </body>
 </html>

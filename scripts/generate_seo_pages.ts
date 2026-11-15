@@ -3,6 +3,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { CURRICULA_MODULES, CurriculaModule } from '../src/data/curriculaData';
 import { BLOG_ARTICLES, BLOG_CATEGORIES, BlogArticle, getRelatedBlogArticles } from '../src/data/blog/index';
+import {
+  GLOSSARY_TERMS,
+  GLOSSARY_CATEGORIES,
+  GlossaryTerm,
+  getRelatedGlossaryTerms,
+  getGlossaryTermsForModule
+} from '../src/data/glossary/index';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -471,6 +478,13 @@ function generateModulePages() {
     const prevMod = modIndex > 0 ? gradeModules[modIndex - 1] : null;
     const nextMod = modIndex >= 0 && modIndex < gradeModules.length - 1 ? gradeModules[modIndex + 1] : null;
     const gradeSlug = mod.grade.includes('V-a') && !mod.grade.includes('VI') && !mod.grade.includes('VII') && !mod.grade.includes('VIII') ? '5' : mod.grade.includes('VI-a') ? '6' : mod.grade.includes('VII-a') ? '7' : '8';
+    const directBlogMatches = BLOG_ARTICLES.filter((art) =>
+      art.ro.internalLinks.some((lnk) => lnk.url.includes(`/cursuri/${mod.id}/`))
+    );
+    const fallbackBlogMatches = BLOG_ARTICLES.filter(
+      (art) => !directBlogMatches.some((d) => d.id === art.id)
+    ).slice(0, Math.max(0, 3 - directBlogMatches.length));
+    const relatedBlogGuides = [...directBlogMatches, ...fallbackBlogMatches].slice(0, 3);
 
     const htmlContent = `<!DOCTYPE html>
 <html lang="ro">
@@ -486,6 +500,7 @@ function generateModulePages() {
   <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
   <link rel="help" type="text/markdown" href="/llms.txt">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="article">
   <meta property="og:title" content="${mod.title} — ${mod.grade}">
@@ -494,11 +509,13 @@ function generateModulePages() {
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${mod.title} — ${mod.grade}">
   <meta name="twitter:description" content="${mod.metaDescription.replace(/"/g, '&quot;')}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -580,6 +597,8 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa a VI-a</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa a VII-a</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa a VIII-a</a>
+        <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
         <a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1 (20+)</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Educație Tehnologie</a>
@@ -658,6 +677,46 @@ ${commonStyles}
       `).join('')}
     </div>` : ''}
 
+    <!-- GHIDURI PRACTICE DIN BLOG CONECTATE LA ACEST MODUL -->
+    <div class="content-box">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <h2 style="margin-bottom: 0;">📚 Ghiduri Practice &amp; Rezolvări Erori (Blog TIC)</h2>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Vezi toate cele 12 ghiduri →</a>
+      </div>
+      <div class="terms-grid">
+        ${relatedBlogGuides.map(art => `
+          <a href="https://www.arkyedu.com/blog/${art.ro.slug}/" class="term-card" style="display: block; text-decoration: none;">
+            <div class="term-title">${escapeHtmlText(art.ro.breadcrumbLabel)} →</div>
+            <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">${escapeHtmlText(art.ro.metaDescription)}</p>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- TERMENI DIN GLOSARUL INTERACTIV CONECTATI -->
+    ${(() => {
+      const moduleGlossary = getGlossaryTermsForModule(mod.id);
+      const fallbackGlossary = moduleGlossary.length > 0
+        ? moduleGlossary
+        : GLOSSARY_TERMS.filter(gt => gt.gradeTagRo === mod.grade).slice(0, 4);
+      if (fallbackGlossary.length === 0) return '';
+      return `
+    <div class="content-box">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <h2 style="margin-bottom: 0;">🔤 Termeni din Glosarul Bilingv TIC (Definiții &amp; Formule)</h2>
+        <a href="https://www.arkyedu.com/glosar/" class="card-link">Deschide Glosarul A–Z (44 termeni) →</a>
+      </div>
+      <div class="terms-grid">
+        ${fallbackGlossary.slice(0, 6).map(gt => `
+          <a href="https://www.arkyedu.com/glosar/${gt.ro.slug}/" class="term-card" style="display: block; text-decoration: none;">
+            <div class="term-title">${escapeHtmlText(gt.ro.term)} →</div>
+            <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">${escapeHtmlText(gt.ro.shortAnswer)}</p>
+          </a>
+        `).join('')}
+      </div>
+    </div>`;
+    })()}
+
     <!-- INTERNAL MODULE NAVIGATION (PREV / HUB / NEXT) -->
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin: 2rem 0;">
       ${prevMod ? `<a href="https://www.arkyedu.com/cursuri/${prevMod.id}/" class="btn-secondary">← ${prevMod.shortTitle}</a>` : `<a href="https://www.arkyedu.com/clasa-${gradeSlug}/" class="btn-secondary">← Toate Lecțiile (${mod.grade})</a>`}
@@ -705,7 +764,10 @@ ${commonStyles}
           <h4>Comparație &amp; Legal</h4>
           <ul>
             <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Cursuri Private</a></li>
+            <li><a href="https://www.arkyedu.com/blog/">Blog &amp; Ghiduri TIC (RO/EN)</a></li>
+            <li><a href="https://www.arkyedu.com/glosar/">Glosar Bilingv TIC (44 Termeni A–Z)</a></li>
             <li><a href="https://www.arkyedu.com/sitemap.xml">Harta Site-ului (Sitemap)</a></li>
+            <li><a href="https://www.arkyedu.com/rss.xml">Feed RSS Blog</a></li>
             <li><a href="https://www.arkyedu.com/llms.txt">Documentație AI (LLMs)</a></li>
             <li><a href="mailto:contact@arkyedu.com">contact@arkyedu.com</a></li>
           </ul>
@@ -828,11 +890,14 @@ function generateGradeHubs() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${g.title}">
   <meta name="twitter:description" content="${g.meta}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -855,6 +920,8 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
@@ -901,8 +968,53 @@ ${commonStyles}
       `).join('')}
     </div>
 
+    <!-- BLOG STUDY GUIDES CONNECTED TO THIS GRADE -->
+    <section aria-label="Ghiduri Practice din Blog pentru Clasa a ${g.roman}-a" style="margin-top: 2.5rem;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.45rem;">📚 Ghiduri Practice &amp; Rezolvări din Blog pentru Clasa a ${g.roman}-a</h2>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele 12 ghiduri →</a>
+      </div>
+      <div class="grid-2">
+        ${BLOG_ARTICLES.filter(art =>
+          art.ro.internalLinks.some(lnk => g.modules.some(m => lnk.url.includes(`/cursuri/${m.id}/`))) ||
+          art.gradeTagRo.includes(g.roman)
+        ).slice(0, 4).map(art => `
+          <div class="card">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--brand-cyan); margin-bottom: 0.35rem;">${escapeHtmlText(art.ro.categoryLabel)} · ${escapeHtmlText(art.gradeTagRo)}</div>
+            <h3 class="card-title" style="font-size: 1.1rem;">${escapeHtmlText(art.ro.breadcrumbLabel)}</h3>
+            <p class="card-desc">${escapeHtmlText(art.ro.metaDescription)}</p>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              <a href="https://www.arkyedu.com/blog/${art.ro.slug}/" class="card-link">Citește în Română →</a>
+              <a href="https://www.arkyedu.com/blog/en/${art.en.slug}/" style="font-size: 0.82rem; color: var(--text-secondary); text-decoration: none;">English Guide →</a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <!-- GLOSSARY TERMS CONNECTED TO THIS GRADE -->
+    <section aria-label="Termeni din Glosar pentru Clasa a ${g.roman}-a" style="margin-top: 2.5rem;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.45rem;">🔤 Termeni Esențiali din Glosarul TIC — Clasa a ${g.roman}-a</h2>
+        <a href="https://www.arkyedu.com/glosar/" class="card-link">Toți cei 44 de termeni A–Z →</a>
+      </div>
+      <div class="grid-3">
+        ${GLOSSARY_TERMS.filter(gt => gt.grades.includes(g.num as any)).slice(0, 6).map(gt => `
+          <div class="card">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-cyan); margin-bottom: 0.35rem;">${escapeHtmlText(gt.gradeTagRo)}</div>
+            <h3 class="card-title" style="font-size: 1.02rem;">${escapeHtmlText(gt.ro.term)}</h3>
+            <p class="card-desc" style="font-size: 0.86rem;">${escapeHtmlText(gt.ro.shortAnswer)}</p>
+            <div style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
+              <a href="https://www.arkyedu.com/glosar/${gt.ro.slug}/" class="card-link">Definiție &amp; Exemplu →</a>
+              <a href="https://www.arkyedu.com/glosar/en/${gt.en.slug}/" style="font-size: 0.78rem; color: var(--text-secondary); text-decoration: none;">EN →</a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
     <!-- VALUE PROPOSITION -->
-    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 3rem;">
+    <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 2rem;">
       <h2 style="font-size: 1.85rem; margin-bottom: 1rem;">De Ce Învață Elevii Mai Bine cu ArkyEdu?</h2>
       <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 28 de jocuri arcade, peste 20 de dueluri 1v1 și diplome de merit oficiale, 100% gratuit!</p>
       <div class="cta-group">
@@ -933,6 +1045,8 @@ ${commonStyles}
           <ul>
             <li><a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade Didactice</a></li>
             <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (20+ Moduri)</a></li>
+            <li><a href="https://www.arkyedu.com/blog/">Blog &amp; Ghiduri TIC (RO/EN)</a></li>
+            <li><a href="https://www.arkyedu.com/glosar/">Glosar Bilingv TIC (44 Termeni A–Z)</a></li>
             <li><a href="https://www.arkyedu.com/comparatie-scoli-private/">ArkyEdu vs Școli Private</a></li>
             <li><a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Educație Tehnologie Copii</a></li>
           </ul>
@@ -1030,11 +1144,14 @@ function generateComparisonPage() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ArkyEdu vs Școli Private de Programare: 100% Gratuit vs 4.800 lei/an">
   <meta name="twitter:description" content="Comparație detaliată: Învață programare, robotică, Excel și web design conform programei școlare din România fără taxe.">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -1065,6 +1182,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
@@ -1214,6 +1332,23 @@ ${commonStyles}
       </div>
     </div>
 
+    <!-- PARENTS & TEACHERS GUIDES FROM BLOG -->
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1.25rem; text-align: center;">📚 Ghiduri Utile pentru Părinți &amp; Profesori</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3 class="card-title">Coding gratuit vs. școli private (Ghid Părinți)</h3>
+          <p class="card-desc">Harta competențelor 10–15 ani și rutina de 2×30 min/săptămână acasă fără abonament de 5.000 lei/an.</p>
+          <a href="https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/" class="card-link">Citește ghidul complet →</a>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Alegerea laptopului / PC-ului pentru școală</h3>
+          <p class="card-desc">Specificații reale (CPU, 16 GB RAM, SSD NVMe, ergonomie) fără să plătești inutil pe marketing.</p>
+          <a href="https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/" class="card-link">Vezi recomandările →</a>
+        </div>
+      </div>
+    </section>
+
     <!-- FINAL CALL TO ACTION -->
     <div class="hero-section" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15)); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 1.5rem; padding: 3.5rem 1.5rem;">
       <h2 style="font-size: 2rem; margin-bottom: 1rem;">Începe Educația Digitală a Copilului Tău Fără Să Plătești Mii de Lei</h2>
@@ -1228,7 +1363,7 @@ ${commonStyles}
     <div class="container">
       <div class="footer-bottom" style="border: none; padding-top: 0;">
         <div>© 2026 ArkyEdu. Alternativa gratuită și de înaltă performanță pentru educația digitală din România.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog &amp; Ghiduri TIC</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -1392,11 +1527,14 @@ function generateFeatureHubs() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${h.title}">
   <meta name="twitter:description" content="${h.meta}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -1419,6 +1557,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
@@ -1462,6 +1601,27 @@ ${commonStyles}
       </div>
     </section>
 
+    <section style="margin-bottom: 2.5rem;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.4rem;">📚 Ghiduri Practice din Blog Conectate cu ${h.dir.toUpperCase()}</h2>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele 12 ghiduri →</a>
+      </div>
+      <div class="grid-2">
+        ${(h.dir === 'profesor'
+          ? BLOG_ARTICLES.filter(a => ['ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu', 'inteligenta-artificiala-chatgpt-scoala-gimnaziu'].includes(a.id))
+          : h.dir === 'oras'
+          ? BLOG_ARTICLES.filter(a => ['proiect-arduino-smart-home-gimnaziu-senzori-millis', 'primul-site-web-clasa-8-html5-https-google-sites'].includes(a.id))
+          : BLOG_ARTICLES.filter(a => ['erori-cpp-gimnaziu-if-while-algoritmi-cifre', 'siguranta-copii-tiktok-roblox-discord-phishing-2fa'].includes(a.id))
+        ).map(art => `
+          <div class="card">
+            <h3 class="card-title" style="font-size: 1.1rem;">${escapeHtmlText(art.ro.breadcrumbLabel)}</h3>
+            <p class="card-desc">${escapeHtmlText(art.ro.metaDescription)}</p>
+            <a href="https://www.arkyedu.com/blog/${art.ro.slug}/" class="card-link">Citește ghidul complet →</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
     ${h.faqs.length > 0 ? `
     <section style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
       <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">❓ Întrebări Frecvente</h2>
@@ -1478,7 +1638,7 @@ ${commonStyles}
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu TIC. 100% Gratuit pentru educație digitală.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">Educație Tehnologie Copii</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog &amp; Ghiduri TIC</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">Educație Tehnologie Copii</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -1564,11 +1724,14 @@ function generateTechEducationPillar() {
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -1591,6 +1754,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
@@ -1663,13 +1827,45 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/profesor/" class="card-link">Vezi Portalul Profesorului →</a>
       </div>
     </div>
+
+    <section style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.55rem;">📖 Ghiduri Esențiale din Blogul ArkyEdu (RO &amp; EN)</h2>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Deschide toate cele 12 ghiduri →</a>
+      </div>
+      <div class="grid-2">
+        ${BLOG_ARTICLES.filter(a => a.featured).slice(0, 4).map(art => `
+          <div class="card">
+            <h3 class="card-title" style="font-size: 1.1rem;">${escapeHtmlText(art.ro.breadcrumbLabel)}</h3>
+            <p class="card-desc">${escapeHtmlText(art.ro.metaDescription)}</p>
+            <a href="https://www.arkyedu.com/blog/${art.ro.slug}/" class="card-link">Citește ghidul complet →</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section style="margin-top: 2rem; margin-bottom: 2.5rem;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <h2 style="font-size: 1.45rem;">🔤 Glosar Bilingv Informatică &amp; TIC (44 Termeni Esențiali V–VIII)</h2>
+        <a href="https://www.arkyedu.com/glosar/" class="card-link">Deschide Glosarul A–Z →</a>
+      </div>
+      <div class="grid-3">
+        ${GLOSSARY_TERMS.slice(0, 3).map(gt => `
+          <div class="card">
+            <h3 class="card-title" style="font-size: 1.05rem;">${escapeHtmlText(gt.ro.term)}</h3>
+            <p class="card-desc">${escapeHtmlText(gt.ro.shortAnswer)}</p>
+            <a href="https://www.arkyedu.com/glosar/${gt.ro.slug}/" class="card-link">Vezi definiția →</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
   </main>
 
   <footer>
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — Platforma #1 Gratuită de Educație TIC &amp; Coding pentru Copii.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog &amp; Ghiduri TIC</a> • <a href="https://www.arkyedu.com/llms.txt" style="color: var(--accent);">llms.txt</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog &amp; Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/llms.txt" style="color: var(--accent);">llms.txt</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -1689,9 +1885,7 @@ function escapeHtmlText(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
-// 6. GENERATE BILINGUAL BLOG INDEX (/blog/ & /blog/en/) AND ARTICLE PAGES
-function generateBlogPages() {
-  const blogBaseStyles = `
+const blogBaseStyles = `
     .breadcrumb {
       display: flex;
       flex-wrap: wrap;
@@ -1750,7 +1944,7 @@ function generateBlogPages() {
       overflow: hidden;
       margin: 1.15rem 0;
     }
-    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
     .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
     .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
     .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
@@ -1811,7 +2005,80 @@ function generateBlogPages() {
       background: #0f172a;
     }
     .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
-  `;
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+`;
+
+// 6. GENERATE BILINGUAL BLOG INDEX (/blog/ & /blog/en/) AND ARTICLE PAGES
+function generateBlogPages() {
 
   const renderBlogIndex = (lang: 'ro' | 'en') => {
     const isEn = lang === 'en';
@@ -1898,11 +2165,14 @@ function generateBlogPages() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(title)}">
   <meta name="twitter:description" content="${escapeHtmlText(description)}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -1926,6 +2196,7 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
         <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary (44)' : 'Glosar (44)'}</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
@@ -1990,7 +2261,7 @@ ${blogBaseStyles}
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu (arkyedu.com) — ${isEn ? 'Free Bilingual ICT & Coding Platform.' : 'Platformă Gratuită de Educație TIC & Coding.'}</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">${isEn ? 'Tech Education Hub' : 'Educație Tehnologie Copii'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}" style="color: var(--accent);">${isEn ? 'ICT Glossary (44)' : 'Glosar TIC (44)'}</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">${isEn ? 'Tech Education Hub' : 'Educație Tehnologie Copii'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -2064,7 +2335,7 @@ ${blogBaseStyles}
             "name": "ArkyEdu",
             "logo": { "@type": "ImageObject", "url": "https://www.arkyedu.com/pwa-512x512.png" }
           },
-          "image": "https://www.arkyedu.com/pwa-512x512.png"
+          "image": "https://www.arkyedu.com/og-cover.png"
         },
         {
           "@type": "BreadcrumbList",
@@ -2121,11 +2392,14 @@ ${blogBaseStyles}
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
   <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
-  <meta property="og:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(c.metaTitle)}">
   <meta name="twitter:description" content="${escapeHtmlText(c.metaDescription)}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/pwa-512x512.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -2150,6 +2424,7 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
         <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary (44)' : 'Glosar (44)'}</a>
         <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -2185,6 +2460,13 @@ ${blogBaseStyles}
 
         <h1 class="article-h1" itemprop="headline">${escapeHtmlText(c.title)}</h1>
         <p class="article-intro" itemprop="description">${escapeHtmlText(c.intro)}</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=${encodeURIComponent(`${c.title} — ${canonicalUrl}`)}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="${canonicalUrl}" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 ${isEn ? 'Copy guide link' : 'Copiază link ghid'}</button>
+          <a href="${indexUrl}" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← ${indexLabel}</a>
+        </div>
 
         <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
         <section class="tldr-box" aria-labelledby="tldr-h">
@@ -2289,6 +2571,30 @@ ${blogBaseStyles}
             .join('\n          ')}
         </section>
 
+        <!-- Glossary Terms Explained in This Guide -->
+        ${(() => {
+          const matchedTerms = GLOSSARY_TERMS.filter(gt => gt.relatedBlogIds.includes(article.id)).slice(0, 6);
+          if (matchedTerms.length === 0) return '';
+          const glosIndex = isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/';
+          return `
+        <section class="links-box">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;">
+            <h2 style="font-size:1.2rem;color:#fff;">🔤 ${isEn ? 'ICT Glossary Terms Used in This Guide' : 'Termeni din Glosarul TIC explicați în acest ghid'}</h2>
+            <a href="${glosIndex}" class="card-link">${isEn ? 'All 44 Terms A–Z →' : 'Toți cei 44 termeni A–Z →'}</a>
+          </div>
+          <div class="links-grid">
+            ${matchedTerms.map(gt => {
+              const lc = isEn ? gt.en : gt.ro;
+              const gHref = isEn ? `/glosar/en/${gt.en.slug}/` : `/glosar/${gt.ro.slug}/`;
+              return `<a href="${gHref}" class="link-card">
+                <div class="link-card-title">${escapeHtmlText(lc.term)} →</div>
+                <div class="link-card-desc">${escapeHtmlText(lc.shortAnswer)}</div>
+              </a>`;
+            }).join('\n            ')}
+          </div>
+        </section>`;
+        })()}
+
         <!-- Related Articles + Back to Blog Index Link -->
         <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
           <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
@@ -2316,10 +2622,24 @@ ${blogBaseStyles}
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu — ${isEn ? 'Free ICT & Coding Education.' : 'Educație TIC & Coding 100% Gratuită.'}</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${indexUrl}" style="color: var(--accent);">${indexLabel}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${indexUrl}" style="color: var(--accent);">${indexLabel}</a> • <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}" style="color: var(--accent);">${isEn ? 'Glossary (44)' : 'Glosar TIC (44)'}</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '${isEn ? '✓ Copied!' : '✓ Link copiat!'}';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
 </body>
 </html>`;
 
@@ -2336,6 +2656,635 @@ ${blogBaseStyles}
   console.log(`Generated bilingual Blog Index (RO + EN) and ${BLOG_ARTICLES.length * 2} static article pages.`);
 }
 
+// 6B. GENERATE BILINGUAL ICT GLOSSARY INDEX (/glosar/ & /glosar/en/) + 88 TERM PAGES
+function generateGlossaryPages() {
+  const gradeMap: Record<'5' | '6' | '7' | '8', { roman: string; labelRo: string; labelEn: string }> = {
+    '5': { roman: 'V', labelRo: 'Clasa a V-a', labelEn: 'Grade 5' },
+    '6': { roman: 'VI', labelRo: 'Clasa a VI-a', labelEn: 'Grade 6' },
+    '7': { roman: 'VII', labelRo: 'Clasa a VII-a', labelEn: 'Grade 7' },
+    '8': { roman: 'VIII', labelRo: 'Clasa a VIII-a', labelEn: 'Grade 8' },
+  };
+
+  const renderGlossaryIndex = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const dirPath = isEn ? path.join(publicDir, 'glosar', 'en') : path.join(publicDir, 'glosar');
+    ensureDir(dirPath);
+
+    const canonicalUrl = isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/';
+    const roIndexUrl = 'https://www.arkyedu.com/glosar/';
+    const enIndexUrl = 'https://www.arkyedu.com/glosar/en/';
+    const blogUrl = isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/';
+
+    const title = isEn
+      ? `Bilingual ICT & Computer Science Glossary (${GLOSSARY_TERMS.length} Terms, Grades 5–8) | ArkyEdu`
+      : `Glosar Bilingv Informatică & TIC (${GLOSSARY_TERMS.length} Termeni Esențiali V–VIII) | ArkyEdu`;
+    const description = isEn
+      ? `Complete A–Z middle school ICT & Computer Science glossary: CPU, RAM, C++ modulo & loops, Excel IF/COUNTIF, HTML5, HTTPS, phishing, Arduino millis(), and AI prompt engineering.`
+      : `Dicționar complet A–Z de Informatică și TIC pentru gimnaziu (V–VIII): procesor CPU, RAM vs SSD, operatorul modulo %, bucle while/for C++, Excel IF/COUNTIF, HTML5, phishing, Arduino millis() și prompturi AI.`;
+
+    const sortedTerms = [...GLOSSARY_TERMS].sort((a, b) => {
+      const la = isEn ? a.en.term : a.ro.term;
+      const lb = isEn ? b.en.term : b.ro.term;
+      return la.localeCompare(lb, isEn ? 'en' : 'ro');
+    });
+
+    const letters = Array.from(
+      new Set(sortedTerms.map((t) => (isEn ? t.en.term : t.ro.term).trim().charAt(0).toUpperCase()))
+    ).sort();
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": `${canonicalUrl}#collection`,
+          "url": canonicalUrl,
+          "name": title,
+          "description": description,
+          "inLanguage": isEn ? "en" : "ro",
+          "isPartOf": { "@id": "https://www.arkyedu.com/#website" }
+        },
+        {
+          "@type": "DefinedTermSet",
+          "@id": `${canonicalUrl}#termset`,
+          "name": isEn ? "ArkyEdu Middle School ICT & Coding Glossary" : "Glosar Bilingv Informatică & TIC ArkyEdu",
+          "description": description,
+          "url": canonicalUrl,
+          "inLanguage": isEn ? "en" : "ro",
+          "hasDefinedTerm": sortedTerms.map((t) => {
+            const loc = isEn ? t.en : t.ro;
+            const tUrl = isEn ? `https://www.arkyedu.com/glosar/en/${t.en.slug}/` : `https://www.arkyedu.com/glosar/${t.ro.slug}/`;
+            return {
+              "@type": "DefinedTerm",
+              "name": loc.term,
+              "description": loc.shortAnswer,
+              "url": tUrl,
+              "inDefinedTermSet": `${canonicalUrl}#termset`
+            };
+          })
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": "https://www.arkyedu.com/" },
+            { "@type": "ListItem", "position": 2, "name": isEn ? "ICT & CS Glossary" : "Glosar Informatică & TIC", "item": canonicalUrl }
+          ]
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${isEn ? 'en' : 'ro'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roIndexUrl}">
+  <link rel="alternate" hreflang="en" href="${enIndexUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roIndexUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+${blogBaseStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">GLOSAR TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="${isEn ? 'Primary Navigation' : 'Navigare Principală'}">
+        <a href="https://www.arkyedu.com/clasa-5/">${isEn ? 'Grade 5' : 'Clasa 5'}</a>
+        <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
+        <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
+        <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="${blogUrl}">${isEn ? 'Blog' : 'Blog TIC'}</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${isEn ? roIndexUrl : enIndexUrl}" class="lang-pill">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">${isEn ? 'Open App' : 'Intră în Platformă'}</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="https://www.arkyedu.com/">${isEn ? 'Home' : 'Acasă'}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">${isEn ? 'ICT & CS Glossary (A–Z)' : 'Glosar Informatică & TIC (A–Z)'}</span>
+    </nav>
+
+    <div class="hero-section" style="padding-top:1.25rem;padding-bottom:1.5rem;">
+      <h1>${isEn ? `Bilingual ICT & Coding Glossary (${GLOSSARY_TERMS.length} Terms, Grades 5–8)` : `Glosar Bilingv Informatică & TIC (${GLOSSARY_TERMS.length} Termeni V–VIII)`}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+    </div>
+
+    <div class="glos-search-wrap">
+      <label for="glos-search" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">${isEn ? 'Search glossary terms' : 'Caută termeni în glosar'}</label>
+      <input id="glos-search" type="search" class="glos-search-input" placeholder="${isEn ? 'Search a term, C++ operator, Excel formula, sensor... (e.g. modulo, RAM, millis)' : 'Caută un termen, operator C++, formulă Excel, senzor... (ex: modulo, RAM, millis)'}" />
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="${isEn ? 'Filter by category' : 'Filtrează după domeniu'}" style="margin-bottom:0.85rem;">
+      <button type="button" class="filter-btn cat-btn active" data-cat="all">${isEn ? `All Domains (${GLOSSARY_TERMS.length})` : `Toate Domeniile (${GLOSSARY_TERMS.length})`}</button>
+      ${GLOSSARY_CATEGORIES.map(
+        (cat) =>
+          `<button type="button" class="filter-btn cat-btn" data-cat="${cat.id}">${escapeHtmlText(isEn ? cat.enName : cat.roName)}</button>`
+      ).join('\n      ')}
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="${isEn ? 'Filter by grade' : 'Filtrează după clasă'}" style="margin-bottom:1rem;">
+      <button type="button" class="filter-btn grade-btn active" data-grade="all">${isEn ? 'All Grades (V–VIII)' : 'Toate Clasele (V–VIII)'}</button>
+      <button type="button" class="filter-btn grade-btn" data-grade="5">${isEn ? 'Grade 5' : 'Clasa a V-a'}</button>
+      <button type="button" class="filter-btn grade-btn" data-grade="6">${isEn ? 'Grade 6' : 'Clasa a VI-a'}</button>
+      <button type="button" class="filter-btn grade-btn" data-grade="7">${isEn ? 'Grade 7' : 'Clasa a VII-a'}</button>
+      <button type="button" class="filter-btn grade-btn" data-grade="8">${isEn ? 'Grade 8' : 'Clasa a VIII-a'}</button>
+    </div>
+
+    <div class="alpha-bar" role="group" aria-label="${isEn ? 'Filter by first letter' : 'Filtrează după literă'}">
+      <button type="button" class="alpha-btn active" data-letter="ALL">${isEn ? 'All' : 'Toți'}</button>
+      ${letters.map((l) => `<button type="button" class="alpha-btn" data-letter="${l}">${l}</button>`).join('\n      ')}
+    </div>
+
+    <p id="glos-count" style="text-align:center;font-size:0.85rem;color:#94a3b8;margin-bottom:1.25rem;">
+      ${isEn ? `Showing ${sortedTerms.length} of ${sortedTerms.length} terms` : `Se afișează ${sortedTerms.length} din ${sortedTerms.length} termeni`}
+    </p>
+
+    <section class="grid-3" id="glossary-grid" aria-label="${isEn ? 'Glossary Terms List' : 'Lista Termeni Glosar'}">
+      ${sortedTerms.map((term) => {
+        const loc = isEn ? term.en : term.ro;
+        const other = isEn ? term.ro : term.en;
+        const gradeLabel = isEn ? term.gradeTagEn : term.gradeTagRo;
+        const termUrl = isEn ? `/glosar/en/${term.en.slug}/` : `/glosar/${term.ro.slug}/`;
+        const firstLetter = loc.term.trim().charAt(0).toUpperCase();
+        const searchBlob = `${loc.term} ${other.term} ${loc.shortAnswer} ${loc.keywords}`.toLowerCase();
+        return `
+      <article class="card glos-card" data-cat="${term.category}" data-grades="${term.grades.join(',')}" data-letter="${escapeHtmlText(firstLetter)}" data-search="${escapeHtmlText(searchBlob)}" style="display:flex;flex-direction:column;justify-content:space-between;gap:0.85rem;">
+        <div>
+          <div class="meta-line" style="font-size:0.78rem;margin-bottom:0.4rem;">
+            <span class="meta-accent">${escapeHtmlText(gradeLabel)}</span>
+            <span aria-hidden="true">·</span>
+            <span>${escapeHtmlText(other.term)}</span>
+          </div>
+          <h2 class="card-title" style="font-size:1.08rem;margin-bottom:0.45rem;">
+            <a href="${termUrl}" style="color:#ffffff;text-decoration:none;">${escapeHtmlText(loc.term)}</a>
+          </h2>
+          <p class="card-desc" style="font-size:0.88rem;color:#cbd5e1;margin:0;">${escapeHtmlText(loc.shortAnswer)}</p>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.65rem;border-top:1px solid #1e293b;">
+          <a href="https://www.arkyedu.com/cursuri/${term.relatedModuleId}/" style="font-size:0.78rem;color:#94a3b8;text-decoration:none;">${isEn ? 'Lab & Theory' : 'Modul TIC'}</a>
+          <a href="${termUrl}" class="card-link" style="font-size:0.84rem;">${isEn ? 'Open Term →' : 'Vezi definiția →'}</a>
+        </div>
+      </article>`;
+      }).join('\n')}
+    </section>
+
+    <div id="glos-empty" style="display:none;text-align:center;padding:3rem 1rem;color:#cbd5e1;">
+      <p style="margin-bottom:1rem;">${isEn ? 'No matching terms found for your current filters.' : 'Nu am găsit niciun termen pentru filtrele selectate.'}</p>
+      <button type="button" id="glos-reset-btn" class="filter-btn active">${isEn ? 'Reset Filters' : 'Resetează Filtrele'}</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu (arkyedu.com) — ${isEn ? 'Free Bilingual ICT & CS Glossary.' : 'Glosar Bilingv Gratuit de Informatică & TIC.'}</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${blogUrl}" style="color: var(--accent);">${isEn ? 'Blog & Guides' : 'Blog & Ghiduri'}</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">${isEn ? 'Tech Hub' : 'Educație Copii'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var activeCat = 'all';
+      var activeGrade = 'all';
+      var activeLetter = 'ALL';
+      var searchInput = document.getElementById('glos-search');
+      var cards = document.querySelectorAll('.glos-card');
+      var catBtns = document.querySelectorAll('.cat-btn');
+      var gradeBtns = document.querySelectorAll('.grade-btn');
+      var alphaBtns = document.querySelectorAll('.alpha-btn');
+      var countEl = document.getElementById('glos-count');
+      var emptyEl = document.getElementById('glos-empty');
+      var resetBtn = document.getElementById('glos-reset-btn');
+      var total = cards.length;
+
+      function applyFilters() {
+        var q = (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+        var visible = 0;
+        cards.forEach(function(c) {
+          var okCat = activeCat === 'all' || c.getAttribute('data-cat') === activeCat;
+          var grades = (c.getAttribute('data-grades') || '').split(',');
+          var okGrade = activeGrade === 'all' || grades.indexOf(activeGrade) !== -1;
+          var okLetter = activeLetter === 'ALL' || c.getAttribute('data-letter') === activeLetter;
+          var okSearch = !q || (c.getAttribute('data-search') || '').indexOf(q) !== -1;
+          var show = okCat && okGrade && okLetter && okSearch;
+          c.style.display = show ? 'flex' : 'none';
+          if (show) visible++;
+        });
+        if (countEl) {
+          countEl.textContent = ${isEn ? '`Showing ` + visible + ` of ` + total + ` terms`' : '`Se afișează ` + visible + ` din ` + total + ` termeni`'};
+        }
+        if (emptyEl) emptyEl.style.display = visible === 0 ? 'block' : 'none';
+      }
+
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var qParam = params.get('q');
+        if (qParam && searchInput) {
+          searchInput.value = qParam;
+        }
+      } catch (e) {}
+
+      if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+      }
+      catBtns.forEach(function(b) {
+        b.addEventListener('click', function() {
+          activeCat = b.getAttribute('data-cat') || 'all';
+          catBtns.forEach(function(x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          applyFilters();
+        });
+      });
+      gradeBtns.forEach(function(b) {
+        b.addEventListener('click', function() {
+          activeGrade = b.getAttribute('data-grade') || 'all';
+          gradeBtns.forEach(function(x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          applyFilters();
+        });
+      });
+      alphaBtns.forEach(function(b) {
+        b.addEventListener('click', function() {
+          activeLetter = b.getAttribute('data-letter') || 'ALL';
+          alphaBtns.forEach(function(x) { x.classList.remove('active'); });
+          b.classList.add('active');
+          applyFilters();
+        });
+      });
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          activeCat = 'all';
+          activeGrade = 'all';
+          activeLetter = 'ALL';
+          if (searchInput) searchInput.value = '';
+          catBtns.forEach(function(x, i) { x.classList.toggle('active', i === 0); });
+          gradeBtns.forEach(function(x, i) { x.classList.toggle('active', i === 0); });
+          alphaBtns.forEach(function(x, i) { x.classList.toggle('active', i === 0); });
+          applyFilters();
+        });
+      }
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(dirPath, 'index.html'), html, 'utf-8');
+  };
+
+  const renderTermPage = (term: GlossaryTerm, lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const c = isEn ? term.en : term.ro;
+    const other = isEn ? term.ro : term.en;
+    const gradeLabel = isEn ? term.gradeTagEn : term.gradeTagRo;
+    const catMeta = GLOSSARY_CATEGORIES.find((cat) => cat.id === term.category);
+    const categoryLabel = catMeta ? (isEn ? catMeta.enName : catMeta.roName) : term.category;
+
+    const roUrl = `https://www.arkyedu.com/glosar/${term.ro.slug}/`;
+    const enUrl = `https://www.arkyedu.com/glosar/en/${term.en.slug}/`;
+    const canonicalUrl = isEn ? enUrl : roUrl;
+    const alternateLangUrl = isEn ? roUrl : enUrl;
+    const indexUrl = isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/';
+    const indexLabel = isEn ? 'ICT Glossary' : 'Glosar TIC';
+
+    const dirPath = isEn
+      ? path.join(publicDir, 'glosar', 'en', term.en.slug)
+      : path.join(publicDir, 'glosar', term.ro.slug);
+    ensureDir(dirPath);
+
+    const metaTitle = isEn
+      ? `${c.term} — Definition, Syntax & School Example | ArkyEdu`
+      : `${c.term} — Definiție, Exemplu & Greșeli Frecvente | ArkyEdu`;
+    const metaDesc = c.shortAnswer.length > 158 ? `${c.shortAnswer.slice(0, 155)}...` : c.shortAnswer;
+
+    const linkedMod = CURRICULA_MODULES.find((m) => m.id === term.relatedModuleId);
+    const linkedBlogs = term.relatedBlogIds
+      .map((id) => BLOG_ARTICLES.find((a) => a.id === id))
+      .filter((a): a is NonNullable<typeof a> => Boolean(a));
+    const relatedTerms = getRelatedGlossaryTerms(term, 4);
+
+    const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(`${c.term} — ${canonicalUrl}`)}`;
+
+    const jsonLd: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "DefinedTerm",
+          "@id": `${canonicalUrl}#term`,
+          "name": c.term,
+          "description": c.shortAnswer,
+          "url": canonicalUrl,
+          "termCode": term.id,
+          "inLanguage": isEn ? "en" : "ro",
+          "inDefinedTermSet": {
+            "@type": "DefinedTermSet",
+            "@id": `${indexUrl}#termset`,
+            "name": isEn ? "ArkyEdu Middle School ICT & Coding Glossary" : "Glosar Bilingv Informatică & TIC ArkyEdu",
+            "url": indexUrl
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": "https://www.arkyedu.com/" },
+            { "@type": "ListItem", "position": 2, "name": indexLabel, "item": indexUrl },
+            { "@type": "ListItem", "position": 3, "name": c.term, "item": canonicalUrl }
+          ]
+        },
+        ...(c.faqs.length > 0
+          ? [{
+              "@type": "FAQPage",
+              "mainEntity": c.faqs.map((f) => ({
+                "@type": "Question",
+                "name": f.question,
+                "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+              }))
+            }]
+          : [])
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${isEn ? 'en' : 'ro'}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(metaTitle)}</title>
+  <meta name="description" content="${escapeHtmlText(metaDesc)}">
+  <meta name="keywords" content="${escapeHtmlText(c.keywords)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${escapeHtmlText(metaTitle)}">
+  <meta property="og:description" content="${escapeHtmlText(metaDesc)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(metaTitle)}">
+  <meta name="twitter:description" content="${escapeHtmlText(metaDesc)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+${blogBaseStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">GLOSAR TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="${isEn ? 'Primary Navigation' : 'Navigare Principală'}">
+        <a href="${indexUrl}">${indexLabel}</a>
+        <a href="https://www.arkyedu.com/clasa-5/">${isEn ? 'Grade 5' : 'Clasa 5'}</a>
+        <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
+        <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
+        <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}">${isEn ? 'Blog' : 'Blog TIC'}</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${alternateLangUrl}" class="lang-pill" title="${escapeHtmlText(other.term)}">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/?mission=${term.relatedMissionId}" class="nav-cta">${isEn ? 'Practice Lab' : 'Intră în Laborator'}</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">${isEn ? 'Home' : 'Acasă'}</a>
+        <span aria-hidden="true">/</span>
+        <a href="${indexUrl}">${indexLabel}</a>
+        <span aria-hidden="true">/</span>
+        <span>${escapeHtmlText(categoryLabel)}</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">${escapeHtmlText(c.term)}</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/DefinedTerm">
+        <meta itemprop="inLanguage" content="${isEn ? 'en' : 'ro'}" />
+        <div class="meta-line">
+          <span class="meta-accent">${escapeHtmlText(categoryLabel)}</span>
+          <span aria-hidden="true">·</span>
+          <span>${escapeHtmlText(gradeLabel)}</span>
+          <span aria-hidden="true">·</span>
+          <span>${isEn ? 'RO Term' : 'EN Term'}: <a href="${alternateLangUrl}" style="color:#5eead4;text-decoration:none;font-weight:700;">${escapeHtmlText(other.term)}</a></span>
+        </div>
+
+        <h1 class="article-h1" itemprop="name">${escapeHtmlText(c.term)}</h1>
+
+        <!-- Share bar -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.65rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="${whatsappShareUrl}" target="_blank" rel="noopener noreferrer" class="lang-pill">💬 ${isEn ? 'Share on WhatsApp' : 'Trimite pe WhatsApp'}</a>
+          <button type="button" id="copy-share-btn" data-url="${canonicalUrl}" class="lang-pill" style="cursor:pointer;">🔗 ${isEn ? 'Copy Link' : 'Copiază link-ul'}</button>
+        </div>
+
+        <!-- Answer-First Position-0 Definition Box -->
+        <div class="tldr-box">
+          <div class="tldr-title">📌 ${isEn ? 'Quick Definition (Answer-First)' : 'Definiție Scurtă (Răspuns Direct)'}</div>
+          <p class="tldr-text" itemprop="description">${escapeHtmlText(c.shortAnswer)}</p>
+        </div>
+
+        <!-- Detailed Explanation -->
+        <section class="art-section">
+          <h2>${isEn ? 'How It Works & Why It Matters' : 'Explicație Detaliată pentru Gimnaziu'}</h2>
+          ${c.explanation.map((p) => `<p>${escapeHtmlText(p)}</p>`).join('\n          ')}
+        </section>
+
+        ${c.syntaxOrFormula ? `
+        <!-- Copyable Code / Formula Block -->
+        <div class="code-box">
+          <div class="code-head">
+            <span>💻 ${escapeHtmlText(c.syntaxOrFormula.title)}</span>
+            <button type="button" class="copy-code-btn" id="copy-syntax-btn">${isEn ? 'Copy' : 'Copiază'}</button>
+          </div>
+          <pre id="syntax-pre">${escapeHtmlText(c.syntaxOrFormula.code)}</pre>
+        </div>` : ''}
+
+        <!-- Classroom Example vs Common Confusion -->
+        <div class="two-col-grid">
+          <div class="glos-panel">
+            <h2 style="font-size:1.05rem;font-weight:800;color:#5eead4;margin-bottom:0.55rem;">🏫 ${isEn ? 'Classroom Example' : 'Exemplu Practic de la Clasǎ'}</h2>
+            <p style="font-size:0.95rem;color:#e2e8f0;line-height:1.65;margin:0;">${escapeHtmlText(c.example)}</p>
+          </div>
+          ${c.vsComparison ? `
+          <div class="glos-panel">
+            <h2 style="font-size:1.05rem;font-weight:800;color:#38bdf8;margin-bottom:0.55rem;">⚖️ ${escapeHtmlText(c.vsComparison.title)}</h2>
+            <p style="font-size:0.95rem;color:#e2e8f0;line-height:1.65;margin:0;">${escapeHtmlText(c.vsComparison.summary)}</p>
+          </div>` : ''}
+        </div>
+
+        <!-- Common Exam Mistake Warning -->
+        <div class="callout-warn">
+          <div class="callout-title">⚠️ ${isEn ? 'Common Mistake in Exams & Homework' : 'Greșeală Frecventă la Test / Lucrare'}</div>
+          <p style="margin:0;color:#fef3c7;line-height:1.65;">${escapeHtmlText(c.commonMistake)}</p>
+        </div>
+
+        <!-- Connected Practice Labs, Curricula & Guides -->
+        <section class="links-box" style="margin-top:1.75rem;">
+          <h2 style="font-size:1.25rem;color:#fff;">🚀 ${isEn ? 'Practice in ArkyEdu Labs & Related Guides' : 'Exersează în Simulator & Lecții Conectate'}</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/?mission=${term.relatedMissionId}" class="link-card" style="border-color:rgba(16,185,129,0.5);">
+              <div class="link-card-title">🎮 ${isEn ? 'Launch Interactive Lab' : 'Lansează Simulatorul Interactiv'} →</div>
+              <div class="link-card-desc">${linkedMod ? escapeHtmlText(linkedMod.title) : (isEn ? 'Open hands-on ArkyEdu simulator' : 'Deschide laboratorul practic în browser')}</div>
+            </a>
+            ${linkedMod ? `
+            <a href="https://www.arkyedu.com/cursuri/${linkedMod.id}/" class="link-card">
+              <div class="link-card-title">📖 ${isEn ? 'Full Lesson & Curriculum' : 'Fișa Didactică & Teoria'} →</div>
+              <div class="link-card-desc">${escapeHtmlText(linkedMod.grade)} · ${escapeHtmlText(linkedMod.shortTitle)}</div>
+            </a>` : ''}
+            ${term.grades.map((gr) => {
+              const gm = gradeMap[gr];
+              return `<a href="https://www.arkyedu.com/clasa-${gr}/" class="link-card">
+                <div class="link-card-title">🏫 ${isEn ? `${gm.labelEn} Hub` : `Hub ${gm.labelRo}`} →</div>
+                <div class="link-card-desc">${isEn ? 'All modules & guides for this grade' : 'Toate modulele și ghidurile pentru această clasă'}</div>
+              </a>`;
+            }).join('\n            ')}
+            ${linkedBlogs.map((ba) => {
+              const bc = isEn ? ba.en : ba.ro;
+              const bUrl = isEn ? `/blog/en/${ba.en.slug}/` : `/blog/${ba.ro.slug}/`;
+              return `<a href="${bUrl}" class="link-card">
+                <div class="link-card-title">📚 ${escapeHtmlText(bc.breadcrumbLabel)} →</div>
+                <div class="link-card-desc">${escapeHtmlText(bc.metaDescription)}</div>
+              </a>`;
+            }).join('\n            ')}
+          </div>
+        </section>
+
+        ${c.faqs.length > 0 ? `
+        <!-- FAQ Section -->
+        <section class="faq-wrap">
+          <h2 style="font-size:1.3rem;margin-bottom:1rem;color:#fff;">❓ ${isEn ? 'Quick Questions & Answers' : 'Întrebări Frecvente'}</h2>
+          ${c.faqs.map((f) => `<div class="faq-block">
+            <div class="faq-question">${escapeHtmlText(f.question)}</div>
+            <div class="faq-answer">${escapeHtmlText(f.answer)}</div>
+          </div>`).join('\n          ')}
+        </section>` : ''}
+
+        <!-- Related Glossary Terms + Back Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">${isEn ? 'Related Glossary Terms' : 'Termeni Înrudiți din Glosar'}</h2>
+            <a href="${indexUrl}" class="card-link">${isEn ? '← Back to Full Glossary (A–Z)' : '← Înapoi la Glosarul Complet (A–Z)'}</a>
+          </div>
+          <div class="links-grid">
+            ${relatedTerms.map((rt) => {
+              const rc = isEn ? rt.en : rt.ro;
+              const rUrl = isEn ? `/glosar/en/${rt.en.slug}/` : `/glosar/${rt.ro.slug}/`;
+              return `<a href="${rUrl}" class="link-card">
+                <div class="link-card-title">${escapeHtmlText(rc.term)} →</div>
+                <div class="link-card-desc">${escapeHtmlText(rc.shortAnswer)}</div>
+              </a>`;
+            }).join('\n            ')}
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — ${isEn ? 'Free ICT & Coding Education.' : 'Educație TIC & Coding 100% Gratuită.'}</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${indexUrl}" style="color: var(--accent);">${indexLabel}</a> • <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}" style="color: var(--accent);">${isEn ? 'Blog' : 'Blog TIC'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var shareBtn = document.getElementById('copy-share-btn');
+      if (shareBtn && navigator.clipboard) {
+        shareBtn.addEventListener('click', function() {
+          var u = shareBtn.getAttribute('data-url') || window.location.href;
+          navigator.clipboard.writeText(u).then(function() {
+            var orig = shareBtn.textContent;
+            shareBtn.textContent = '${isEn ? '✓ Copied!' : '✓ Link copiat!'}';
+            setTimeout(function() { shareBtn.textContent = orig; }, 2000);
+          }).catch(function() {});
+        });
+      }
+      var syntaxBtn = document.getElementById('copy-syntax-btn');
+      var syntaxPre = document.getElementById('syntax-pre');
+      if (syntaxBtn && syntaxPre && navigator.clipboard) {
+        syntaxBtn.addEventListener('click', function() {
+          navigator.clipboard.writeText(syntaxPre.textContent || '').then(function() {
+            var orig = syntaxBtn.textContent;
+            syntaxBtn.textContent = '${isEn ? '✓ Copied!' : '✓ Copiat!'}';
+            setTimeout(function() { syntaxBtn.textContent = orig; }, 2000);
+          }).catch(function() {});
+        });
+      }
+    })();
+  </script>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(dirPath, 'index.html'), html, 'utf-8');
+  };
+
+  renderGlossaryIndex('ro');
+  renderGlossaryIndex('en');
+  GLOSSARY_TERMS.forEach((term) => {
+    renderTermPage(term, 'ro');
+    renderTermPage(term, 'en');
+  });
+
+  console.log(`Generated bilingual Glossary Index (RO + EN) and ${GLOSSARY_TERMS.length * 2} static term pages.`);
+}
+
 // 7. GENERATE COMPLETE SITEMAP.XML
 function generateSitemap() {
   const currentDate = new Date().toISOString().split('T')[0];
@@ -2344,6 +3293,8 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/', priority: '1.0', changefreq: 'daily' },
     { loc: 'https://www.arkyedu.com/blog/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/glosar/', priority: '0.95', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/glosar/en/', priority: '0.92', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/educatie-tehnologie-copii/', priority: '0.98', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-5/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/clasa-6/', priority: '0.95', changefreq: 'weekly' },
@@ -2372,13 +3323,26 @@ function generateSitemap() {
     }
   ]);
 
+  const glossaryUrls = GLOSSARY_TERMS.flatMap((gt) => [
+    {
+      loc: `https://www.arkyedu.com/glosar/${gt.ro.slug}/`,
+      priority: '0.88',
+      changefreq: 'weekly'
+    },
+    {
+      loc: `https://www.arkyedu.com/glosar/en/${gt.en.slug}/`,
+      priority: '0.86',
+      changefreq: 'weekly'
+    }
+  ]);
+
   const courseUrls = CURRICULA_MODULES.map(m => ({
     loc: `https://www.arkyedu.com/cursuri/${m.id}/`,
     priority: m.grade === 'Clasa a VIII-a' ? '0.9' : m.grade === 'Clasa a VII-a' ? '0.88' : '0.85',
     changefreq: 'weekly'
   }));
 
-  const allUrls = [...staticUrls, ...blogUrls, ...courseUrls];
+  const allUrls = [...staticUrls, ...blogUrls, ...glossaryUrls, ...courseUrls];
 
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -2395,6 +3359,51 @@ ${allUrls.map(u => `  <url>
   console.log(`Generated sitemap.xml with ${allUrls.length} clean indexable URLs.`);
 }
 
+// 8. GENERATE RSS 2.0 FEED (/rss.xml) FOR ALL BILINGUAL BLOG ARTICLES
+function generateRssFeed() {
+  const nowRfc = new Date().toUTCString();
+  const items = BLOG_ARTICLES.flatMap((art) => {
+    const pubDate = new Date(`${art.publishedAt}T09:00:00Z`).toUTCString();
+    const roUrl = `https://www.arkyedu.com/blog/${art.ro.slug}/`;
+    const enUrl = `https://www.arkyedu.com/blog/en/${art.en.slug}/`;
+    return [
+      `  <item>
+    <title>${escapeHtmlText(art.ro.title)}</title>
+    <link>${roUrl}</link>
+    <guid isPermaLink="true">${roUrl}</guid>
+    <pubDate>${pubDate}</pubDate>
+    <category>${escapeHtmlText(art.ro.categoryLabel)}</category>
+    <description>${escapeHtmlText(art.ro.tldr)}</description>
+  </item>`,
+      `  <item>
+    <title>${escapeHtmlText(art.en.title)}</title>
+    <link>${enUrl}</link>
+    <guid isPermaLink="true">${enUrl}</guid>
+    <pubDate>${pubDate}</pubDate>
+    <category>${escapeHtmlText(art.en.categoryLabel)}</category>
+    <description>${escapeHtmlText(art.en.tldr)}</description>
+  </item>`
+    ];
+  });
+
+  const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>ArkyEdu — Blog &amp; Ghiduri TIC, Coding și Robotică (RO &amp; EN)</title>
+  <link>https://www.arkyedu.com/blog/</link>
+  <description>Ghiduri practice bilingve pentru elevi (clasele V–VIII), părinți și profesori de TIC: C++, Excel, Scratch 3.0, Word, HTML5, Arduino Smart Home IoT și siguranță online.</description>
+  <language>ro</language>
+  <lastBuildDate>${nowRfc}</lastBuildDate>
+  <atom:link href="https://www.arkyedu.com/rss.xml" rel="self" type="application/rss+xml" />
+${items.join('\n')}
+</channel>
+</rss>
+`;
+
+  fs.writeFileSync(path.join(publicDir, 'rss.xml'), rssXml, 'utf-8');
+  console.log(`Generated rss.xml with ${BLOG_ARTICLES.length * 2} bilingual guide entries.`);
+}
+
 // EXECUTE ALL GENERATORS
 console.log('--- STARTING SEO PAGES GENERATION ---');
 generateModulePages();
@@ -2403,5 +3412,7 @@ generateComparisonPage();
 generateFeatureHubs();
 generateTechEducationPillar();
 generateBlogPages();
+generateGlossaryPages();
 generateSitemap();
+generateRssFeed();
 console.log('--- ALL SEO ASSETS GENERATED SUCCESSFULLY ---');
