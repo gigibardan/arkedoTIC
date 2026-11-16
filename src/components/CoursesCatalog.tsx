@@ -2,26 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {
   School,
   BookOpen,
-  Clock,
-  Star,
   Award,
   Sparkles,
   User,
   ArrowRight,
   CheckCircle2,
   Lock,
-  Cpu,
-  FolderTree,
-  Lightbulb,
-  ShieldCheck,
-  RotateCcw,
   BadgeCheck,
   Gamepad2,
-  Cloud,
-  FileText,
   Volume2,
-  Keyboard,
-  MousePointer,
   Binary,
   Trophy,
   LogIn,
@@ -34,15 +23,8 @@ import {
   Edit3,
   Info,
   Swords,
-  ShoppingBag,
-  Coins,
   Building2,
   Presentation,
-  Film,
-  Box,
-  Mail,
-  Repeat,
-  Layers,
   Code2,
   Terminal,
 } from 'lucide-react';
@@ -75,6 +57,8 @@ import { Grade8CatalogSection } from './grade8/Grade8CatalogSection';
 import { Grade8InteractiveSimulators } from './grade8/Grade8InteractiveSimulators';
 import { AllMissionId } from '../types';
 import { forceScrollToTop } from '../utils/scrollHelper';
+import { MissionCard } from './catalog/MissionCard';
+import { GRADE5_MISSIONS, GRADE6_MISSIONS } from './catalog/gradeMissionsData';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -124,12 +108,36 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenArcade,
   onOpenDuel,
   onOpenCity,
-  onOpenShop,
   onOpenBlog,
   onOpenGlossary,
   onOpenSandbox,
   byteCoins,
 }) => {
+  const getMaxPlayableLevels = (mId: string): number => {
+    if (mId === 'hardware') return 5;
+    if (
+      mId === 'g8_calc_a' ||
+      mId === 'g8_calc_b' ||
+      mId === 'g8_calc_c' ||
+      mId === 'g8_calc_d' ||
+      mId === 'g8_web_a' ||
+      mId === 'g8_web_b' ||
+      mId === 'g8_web_c' ||
+      mId === 'g8_algo_a' ||
+      mId === 'g8_algo_b' ||
+      mId === 'g8_algo_c' ||
+      mId === 'g8_algo_d' ||
+      mId === 'g8_algo_e' ||
+      mId === 'g8_robot_a' ||
+      mId === 'g8_robot_b'
+    ) {
+      return 7;
+    }
+    if (mId.startsWith('g8_')) return 5;
+    if (mId === 'internet1' || mId === 'internet2') return 6;
+    return 7;
+  };
+
   const isMissionDone = (mId: string): boolean => {
     try {
       if (localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
@@ -164,8 +172,26 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       if (mId === 'g7_stem_a' && (localStorage.getItem('arkedo_g7stem_level') === '8' || Number(localStorage.getItem('arkedo_g7stem_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_stem_a') === 'true')) return true;
       if (mId === 'g7_robot_b' && (localStorage.getItem('arkedo_g7robot_level') === '8' || Number(localStorage.getItem('arkedo_g7robot_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_robot_b') === 'true')) return true;
       if (mId.startsWith('g8_')) {
-        const targetMax = (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' || mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e' || mId === 'g8_robot_a' || mId === 'g8_robot_b') ? '8' : '6';
-        if (localStorage.getItem(`arkedo_${mId}_level`) === targetMax || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
+        const targetMax =
+          mId === 'g8_calc_a' ||
+          mId === 'g8_calc_b' ||
+          mId === 'g8_calc_c' ||
+          mId === 'g8_calc_d' ||
+          mId === 'g8_web_a' ||
+          mId === 'g8_web_b' ||
+          mId === 'g8_web_c' ||
+          mId === 'g8_algo_a' ||
+          mId === 'g8_algo_b' ||
+          mId === 'g8_algo_c' ||
+          mId === 'g8_algo_d' ||
+          mId === 'g8_algo_e' ||
+          mId === 'g8_robot_a' ||
+          mId === 'g8_robot_b'
+            ? '8'
+            : '6';
+        if (localStorage.getItem(`arkedo_${mId}_level`) === targetMax || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') {
+          return true;
+        }
       }
     } catch {}
     if (completedMissions && completedMissions[mId]) return true;
@@ -173,18 +199,32 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
       const lp = activeStudent.lessonsProgress;
-      const lessonKey = mId === 'g6_presentation1' ? 'presentation1' : mId === 'g6_presentation2' ? 'presentation2' : mId === 'g6_paint3d' ? 'model3d1' : mId === 'g6_anim3d' ? 'model3d2' : mId === 'g6_malware' ? 'cyber6a' : mId === 'g6_email' ? 'cyber6b' : mId === 'g6_scratch1' ? 'scratch6a' : mId === 'g6_scratch2' ? 'scratch6b' : mId;
-      if ((lp as any)[lessonKey]?.completed || ((lp as any)[lessonKey]?.score || 0) >= 100) return true;
+      const lessonKey =
+        mId === 'g6_presentation1'
+          ? 'presentation1'
+          : mId === 'g6_presentation2'
+          ? 'presentation2'
+          : mId === 'g6_paint3d'
+          ? 'model3d1'
+          : mId === 'g6_anim3d'
+          ? 'model3d2'
+          : mId === 'g6_malware'
+          ? 'cyber6a'
+          : mId === 'g6_email'
+          ? 'cyber6b'
+          : mId === 'g6_scratch1'
+          ? 'scratch6a'
+          : mId === 'g6_scratch2'
+          ? 'scratch6b'
+          : mId;
+      const lpRecord = lp as unknown as Record<string, { completed?: boolean; score?: number } | undefined>;
+      if (lpRecord[lessonKey]?.completed || (lpRecord[lessonKey]?.score || 0) >= 100) {
+        return true;
+      }
     }
     return false;
   };
-  const getMaxPlayableLevels = (mId: string): number => {
-    if (mId === 'hardware') return 5;
-    if (mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' || mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' || mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e' || mId === 'g8_robot_a' || mId === 'g8_robot_b') return 7;
-    if (mId.startsWith('g8_')) return 5;
-    if (mId === 'internet1' || mId === 'internet2') return 6;
-    return 7;
-  };
+
   const { t, lang } = useLanguage();
   const arky = useArky();
   const [activeAccount, setActiveAccount] = useState<StudentProfile | null>(() => {
@@ -201,33 +241,26 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   const [isEditingName, setIsEditingName] = useState<boolean>(!studentName && !activeAccount);
   const [nameError, setNameError] = useState<boolean>(false);
 
-  // In-card pass interaction modes: 'login' | 'register' | 'guest'
   const [passMode, setPassMode] = useState<'login' | 'register' | 'guest'>('login');
 
-  // In-card login state
   const [loginUsername, setLoginUsername] = useState<string>('');
   const [loginPassword, setLoginPassword] = useState<string>('');
   const [showLoginPassword, setShowLoginPassword] = useState<boolean>(false);
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string>('');
 
-  // In-card register state
   const [registerUsername, setRegisterUsername] = useState<string>('');
   const [registerPassword, setRegisterPassword] = useState<string>('');
   const [showRegisterPassword, setShowRegisterPassword] = useState<boolean>(false);
   const [registerLoading, setRegisterLoading] = useState<boolean>(false);
   const [registerError, setRegisterError] = useState<string>('');
 
-  // In-card rename state (for updating student name)
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [renameInput, setRenameInput] = useState<string>('');
   const [renameError, setRenameError] = useState<string>('');
   const [renameLoading, setRenameLoading] = useState<boolean>(false);
 
-  // Quick avatar selector toggle
   const [isSelectingAvatar, setIsSelectingAvatar] = useState<boolean>(false);
-
-  // Student Avatar State
   const [selectedAvatar, setSelectedAvatar] = useState<string>(() => {
     try {
       return localStorage.getItem('arkedo_student_avatar') || '🎓';
@@ -236,11 +269,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   });
 
-  // Guard modal state
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
   const [pendingTargetMission, setPendingTargetMission] = useState<AllMissionId | null>(null);
-
-  // Curricula Syllabus Modal state & SEO deep-linking
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
 
   useEffect(() => {
@@ -275,7 +305,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  // Grade Switcher state: default to 'grade5' ("default ramane deschis pe clasa a 5-a"), or honors deep link URLs
   const [selectedGrade, setSelectedGrade] = useState<'grade5' | 'grade6' | 'grade7' | 'grade8'>(() => {
     try {
       if (typeof window !== 'undefined') {
@@ -305,29 +334,30 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     }
   };
 
-  // Student Cloud Auth Modal State
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
 
-  // Arky Hero Speech Bubble & Click Tips
   const [arkyTipIndex, setArkyTipIndex] = useState<number>(0);
-  const arkyTips = lang === 'en' ? [
-    "Tap me anytime for a secret tech fact! 🤖✨",
-    "Win + E opens File Explorer in a single blink! ⚡",
-    "Ctrl + A selects everything at once. Super fast! 🎯",
-    "Remember: RAM is your desk, SSD is your permanent shelf! 💾",
-    "The 20-20-20 rule keeps your eyes fresh during long sessions! 👀",
-    "Never type ? or * in filenames—Windows reserves them for search! 🛑",
-    "Shift + Click selects adjacent items; Ctrl + Click selects scattered items! 🖱️",
-  ] : [
-    "Apasă pe mine oricând pentru un secret tehnologic! 🤖✨",
-    "Win + E deschide File Explorer într-o secundă! ⚡",
-    "Ctrl + A selectează toate fișierele dintr-o mișcare! 🎯",
-    "Reține: RAM este masa de lucru, SSD este dulapul permanent! 💾",
-    "Regula 20-20-20 îți relaxează ochii: 20 secunde la 6 metri distanță! 👀",
-    "Nu folosi niciodată ? sau * în nume de fișiere—sunt caractere rezervate! 🛑",
-    "Shift + Click selectează fișiere legate; Ctrl + Click pe cele răsfirate! 🖱️",
-  ];
+  const arkyTips =
+    lang === 'en'
+      ? [
+          'Tap me anytime for a secret tech fact! 🤖✨',
+          'Win + E opens File Explorer in a single blink! ⚡',
+          'Ctrl + A selects everything at once. Super fast! 🎯',
+          'Remember: RAM is your desk, SSD is your permanent shelf! 💾',
+          'The 20-20-20 rule keeps your eyes fresh during long sessions! 👀',
+          'Never type ? or * in filenames—Windows reserves them for search! 🛑',
+          'Shift + Click selects adjacent items; Ctrl + Click selects scattered items! 🖱️',
+        ]
+      : [
+          'Apasă pe mine oricând pentru un secret tehnologic! 🤖✨',
+          'Win + E deschide File Explorer într-o secundă! ⚡',
+          'Ctrl + A selectează toate fișierele dintr-o mișcare! 🎯',
+          'Reține: RAM este masa de lucru, SSD este dulapul permanent! 💾',
+          'Regula 20-20-20 îți relaxează ochii: 20 secunde la 6 metri distanță! 👀',
+          'Nu folosi niciodată ? sau * în nume de fișiere—sunt caractere rezervate! 🛑',
+          'Shift + Click selectează fișiere legate; Ctrl + Click pe cele răsfirate! 🖱️',
+        ];
 
   const handleSelectAvatar = async (emoji: string) => {
     setSelectedAvatar(emoji);
@@ -523,31 +553,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     );
   };
 
-  const handleSaveName = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const trimmed = nameInput.trim();
-    if (trimmed.length > 0) {
-      onSetStudentName(trimmed);
-      setIsEditingName(false);
-      setNameError(false);
-      sounds.playCorrect();
-      arky.triggerSuccess(
-        lang === 'en'
-          ? `Welcome aboard, ${trimmed}! Your digital pass is ready! 🚀`
-          : `Bun venit la bord, ${trimmed}! Legitimația ta digitală este activă! 🚀`
-      );
-    } else {
-      setNameError(true);
-      arky.triggerError(
-        lang === 'en'
-          ? "Oops! Please enter your name so Arky can put it on your diploma! ✍️"
-          : "Hopa! Scrie-ți numele pentru ca Arky să-l poată pune pe diplomă! ✍️"
-      );
-    }
-  };
-
   const handleAttemptStart = (targetMission: AllMissionId) => {
-    // If student has no name yet, assign a friendly default so they can start immediately on mobile/laptop without friction!
     if (!studentName && !nameInput.trim()) {
       const defaultName = lang === 'en' ? 'Student Explorer' : 'Elev Explorator';
       setNameInput(defaultName);
@@ -556,9 +562,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       onSetStudentName(nameInput.trim());
     }
 
-
-    // CHECK IN-PROGRESS GUARD:
-    // Only guard if user has an active mission in progress that is NOT completed, different from target, and mid-way
     const isCurrentActiveDone = activeMissionId ? isMissionDone(activeMissionId) : false;
     const maxLevels = activeMissionId ? getMaxPlayableLevels(activeMissionId) : 5;
     const hasMissionInProgress =
@@ -575,7 +578,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       return;
     }
 
-    // Safe to proceed
     sounds.playClick();
     forceScrollToTop();
     onSelectMission(targetMission);
@@ -603,251 +605,184 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         return lang === 'en' ? g8Titles[id].en : g8Titles[id].ro;
       }
     }
-    if (id === 'g7_robot_b') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 4F: Educational Robotics & Virtual Robots with Sensors (Textbook p. 103-108)'
-        : 'Clasa a VII-a • Modulul 4F: Robotică Educațională & Roboți Virtuali cu Senzori (Manual pag. 103-108)';
-    }
-    if (id === 'g7_stem_a') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 4E: For Loop, do-while & Interdisciplinary STEM in C++ (Textbook p. 86-102)'
-        : 'Clasa a VII-a • Modulul 4E: Bucle for, do-while & Aplicații Interdisciplinare STEM (Manual pag. 86-102)';
-    }
-    if (id === 'g7_loop_b') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 4D: While Loop & Number Digit Algorithms (Textbook p. 81-85)'
-        : 'Clasa a VII-a • Modulul 4D: Structura Repetitivă while & Algoritmi pe Cifrele unui Număr (Manual pag. 81-85)';
-    }
-    if (id === 'g7_decision_a') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 4C: Alternative Structure, if/else & Logical Operators (Textbook p. 77-80)'
-        : 'Clasa a VII-a • Modulul 4C: Structura Alternativă: if / else & Operatori Logici (Manual pag. 77-80)';
-    }
-    if (id === 'g7_cpp_b') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 4B: Linear Structure, cin/cout & The 3-Glasses Rule (Textbook p. 74-76)'
-        : 'Clasa a VII-a • Modulul 4B: Structura Liniară, cin/cout & Regula celor 3 Pahare (Manual pag. 74-76)';
-    }
-    if (id === 'g7_cpp_a') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 4A: Transition to C++, Code::Blocks & Data Types (Textbook p. 64-73)'
-        : 'Clasa a VII-a • Modulul 4A: Tranziția la C++: Mediul Code::Blocks, Compilare & Tipuri de Date (Manual pag. 64-73)';
-    }
-    if (id === 'g7_gis_b') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 3B: GIS & Digital Cartography (Textbook p. 57-63)'
-        : 'Clasa a VII-a • Modulul 3B: Sisteme Informaționale Geografice (GIS) & Cartografie Digitală (Manual pag. 57-63)';
-    }
-    if (id === 'g7_cloud_a') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 3A: Cloud Collaboration & Teams (Textbook p. 48-56)'
-        : 'Clasa a VII-a • Modulul 3A: Aplicații Colaborative în Cloud — Google Docs & Slides în Echipă (Manual pag. 48-56)';
-    }
-    if (id === 'g7_video_b') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 2B: Multitrack VideoPad Editing, Transitions & Titling (Textbook p. 36-47)'
-        : 'Clasa a VII-a • Modulul 2B: Montaj Video Multitrack, Tranziții & Titrare în VideoPad (Manual pag. 36-47)';
-    }
-    if (id === 'g7_audio_a') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 2A: Digital Acoustics & WavePad Audio Studio (Textbook p. 28-35)'
-        : 'Clasa a VII-a • Modulul 2A: Acustică Digitală & Studio de Editare WavePad (Manual pag. 28-35)';
-    }
-    if (id === 'g7_word_a') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 1A: Advanced Typography & Romanian Digital Standards (Textbook p. 10-14)'
-        : 'Clasa a VII-a • Modulul 1A: Tehnoredactare Avansată & Tipografie Digitală Românească (Manual pag. 10-14)';
-    }
-    if (id === 'g7_word_b') {
-      return lang === 'en'
-        ? 'Grade 7 • Module 1B: Page Layout, Headers & Structured Documents (Textbook p. 18-27)'
-        : 'Clasa a VII-a • Modulul 1B: Machetare de Pagină, Antet, Subsol & Documente Structurate (Manual pag. 18-27)';
-    }
-    if (id === 'hardware') {
-      return lang === 'en'
-        ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)'
-        : 'Modulul 1: Sisteme de calcul & Hardware (Manual pag. 10-20)';
-    }
-    if (id === 'files') {
-      return lang === 'en'
-        ? 'Module 2: The Secret File Tree (Textbook p. 27-30)'
-        : 'Modulul 2: Arborele Secret de Fișiere (Manual pag. 27-30)';
-    }
-    if (id === 'internet1') {
-      return lang === 'en'
-        ? 'Module 3A: Internet, Networks & World Wide Web (Textbook p. 32-36)'
-        : 'Modulul 3A: Internet, Rețele & World Wide Web (Manual pag. 32-36)';
-    }
-    if (id === 'internet2') {
-      return lang === 'en'
-        ? 'Module 3B: Advanced Search, Communication & Digital Identity (Textbook p. 38-48)'
-        : 'Modulul 3B: Căutare Avansată, Comunicare & Identitate Digitală (Manual pag. 38-48)';
-    }
-    if (id === 'text1') {
-      return lang === 'en'
-        ? 'Module 4A: Word Processor & Text Formatting (Textbook p. 50-67)'
-        : 'Modulul 4A: Inițierea și Formatarea Textului (Manual pag. 50-67)';
-    }
-    if (id === 'text2') {
-      return lang === 'en'
-        ? 'Module 4B: Visual Elements & Tables (Textbook p. 68-80)'
-        : 'Modulul 4B: Elemente Grafice, Tabele & Paginare (Manual pag. 68-80)';
-    }
-    if (id === 'algo1') {
-      return lang === 'en'
-        ? 'Module 5A: Algorithm Fundamentals & Sequential Logic (Textbook p. 54-61)'
-        : 'Modulul 5A: Noțiunea de Algoritm & Algoritmi Secvențiali (Manual pag. 54-61)';
-    }
-    if (id === 'algo2') {
-      return lang === 'en'
-        ? 'Module 5B: Decisions, Data Types & Flowcharts (Textbook p. 62-71)'
-        : 'Modulul 5B: Structuri Decizionale, Date & Scheme Logice (Manual pag. 62-71)';
-    }
-    if (id === 'scratch1') {
-      return lang === 'en'
-        ? 'Module 6A: Scratch 3.0 Environment, Linear Movement & Variables (Textbook p. 72-90)'
-        : 'Modulul 6A: Mediul Scratch, Mișcare Liniară & Variabile (Manual pag. 72-90)';
-    }
-    if (id === 'scratch2') {
-      return lang === 'en'
-        ? 'Module 6B: Scratch Decisions, Music, Contest Games & Grand Exam (Textbook p. 84-93)'
-        : 'Modulul 6B: Decizii, Muzică, Concurs de Jocuri & Marea Evaluare (Manual pag. 84-93)';
-    }
-    if (id === 'g6_presentation1') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 1A: Presentation & PowerPoint Interface (Textbook p. 10-15)'
-        : 'Clasa a VI-a • Modulul 1A: Prezentarea & Interfața PowerPoint (Manual pag. 10-15)';
-    }
-    if (id === 'g6_presentation2') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 1B: Slide Creation, Design, Animations & Public Speaking (Textbook p. 16-25)'
-        : 'Clasa a VI-a • Modulul 1B: Realizare, Design, Animații & Public Speaking (Manual pag. 16-25)';
-    }
-    if (id === 'g6_paint3d') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 2A: 3D Modeling in Paint 3D (Textbook p. 26-33)'
-        : 'Clasa a VI-a • Modulul 2A: Modelare 3D în Paint 3D (Manual pag. 26-33)';
-    }
-    if (id === 'g6_anim3d') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 2B: Toontastic Animation & Virtual Reality VR (Textbook p. 34-43)'
-        : 'Clasa a VI-a • Modulul 2B: Animație Toontastic & Realitate Virtuală VR (Manual pag. 34-43)';
-    }
-    if (id === 'g6_malware') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 3A: Malware Threats & Cyber Security (Textbook p. 44-45)'
-        : 'Clasa a VI-a • Modulul 3A: Amenințări Malware & Securitate Cibernetică (Manual pag. 44-45)';
-    }
-    if (id === 'g6_email') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 3B: Email Services, Netiquette & Cloud Collaboration (Textbook p. 46-61)'
-        : 'Clasa a VI-a • Modulul 3B: Servicii E-mail, Netichetă & Colaborare Cloud (Manual pag. 46-61)';
-    }
-    if (id === 'g6_scratch1') {
-      return lang === 'en'
-        ? 'Grade 6 • Module 4A: Scratch Conditional Loops & Algorithm Logic (Textbook p. 62-75)'
-        : 'Clasa a VI-a • Modulul 4A: Algoritmi & Bucle Condiționate în Scratch (Manual pag. 62-75)';
-    }
+    if (id === 'g7_robot_b') return lang === 'en' ? 'Grade 7 • Module 4F: Educational Robotics & Virtual Robots with Sensors (Textbook p. 103-108)' : 'Clasa a VII-a • Modulul 4F: Robotică Educațională & Roboți Virtuali cu Senzori (Manual pag. 103-108)';
+    if (id === 'g7_stem_a') return lang === 'en' ? 'Grade 7 • Module 4E: For Loop, do-while & Interdisciplinary STEM in C++ (Textbook p. 86-102)' : 'Clasa a VII-a • Modulul 4E: Bucle for, do-while & Aplicații Interdisciplinare STEM (Manual pag. 86-102)';
+    if (id === 'g7_loop_b') return lang === 'en' ? 'Grade 7 • Module 4D: While Loop & Number Digit Algorithms (Textbook p. 81-85)' : 'Clasa a VII-a • Modulul 4D: Structura Repetitivă while & Algoritmi pe Cifrele unui Număr (Manual pag. 81-85)';
+    if (id === 'g7_decision_a') return lang === 'en' ? 'Grade 7 • Module 4C: Alternative Structure, if/else & Logical Operators (Textbook p. 77-80)' : 'Clasa a VII-a • Modulul 4C: Structura Alternativă: if / else & Operatori Logici (Manual pag. 77-80)';
+    if (id === 'g7_cpp_b') return lang === 'en' ? 'Grade 7 • Module 4B: Linear Structure, cin/cout & The 3-Glasses Rule (Textbook p. 74-76)' : 'Clasa a VII-a • Modulul 4B: Structura Liniară, cin/cout & Regula celor 3 Pahare (Manual pag. 74-76)';
+    if (id === 'g7_cpp_a') return lang === 'en' ? 'Grade 7 • Module 4A: Transition to C++, Code::Blocks & Data Types (Textbook p. 64-73)' : 'Clasa a VII-a • Modulul 4A: Tranziția la C++: Mediul Code::Blocks, Compilare & Tipuri de Date (Manual pag. 64-73)';
+    if (id === 'g7_gis_b') return lang === 'en' ? 'Grade 7 • Module 3B: GIS & Digital Cartography (Textbook p. 57-63)' : 'Clasa a VII-a • Modulul 3B: Sisteme Informaționale Geografice (GIS) & Cartografie Digitală (Manual pag. 57-63)';
+    if (id === 'g7_cloud_a') return lang === 'en' ? 'Grade 7 • Module 3A: Cloud Collaboration & Teams (Textbook p. 48-56)' : 'Clasa a VII-a • Modulul 3A: Aplicații Colaborative în Cloud — Google Docs & Slides în Echipă (Manual pag. 48-56)';
+    if (id === 'g7_video_b') return lang === 'en' ? 'Grade 7 • Module 2B: Multitrack VideoPad Editing, Transitions & Titling (Textbook p. 36-47)' : 'Clasa a VII-a • Modulul 2B: Montaj Video Multitrack, Tranziții & Titrare în VideoPad (Manual pag. 36-47)';
+    if (id === 'g7_audio_a') return lang === 'en' ? 'Grade 7 • Module 2A: Digital Acoustics & WavePad Audio Studio (Textbook p. 28-35)' : 'Clasa a VII-a • Modulul 2A: Acustică Digitală & Studio de Editare WavePad (Manual pag. 28-35)';
+    if (id === 'g7_word_a') return lang === 'en' ? 'Grade 7 • Module 1A: Advanced Typography & Romanian Digital Standards (Textbook p. 10-14)' : 'Clasa a VII-a • Modulul 1A: Tehnoredactare Avansată & Tipografie Digitală Românească (Manual pag. 10-14)';
+    if (id === 'g7_word_b') return lang === 'en' ? 'Grade 7 • Module 1B: Page Layout, Headers & Structured Documents (Textbook p. 18-27)' : 'Clasa a VII-a • Modulul 1B: Machetare de Pagină, Antet, Subsol & Documente Structurate (Manual pag. 18-27)';
+    if (id === 'hardware') return lang === 'en' ? 'Module 1: Computer Systems & Hardware (Textbook p. 10-20)' : 'Modulul 1: Sisteme de calcul & Hardware (Manual pag. 10-20)';
+    if (id === 'files') return lang === 'en' ? 'Module 2: The Secret File Tree (Textbook p. 27-30)' : 'Modulul 2: Arborele Secret de Fișiere (Manual pag. 27-30)';
+    if (id === 'internet1') return lang === 'en' ? 'Module 3A: Internet, Networks & World Wide Web (Textbook p. 32-36)' : 'Modulul 3A: Internet, Rețele & World Wide Web (Manual pag. 32-36)';
+    if (id === 'internet2') return lang === 'en' ? 'Module 3B: Advanced Search, Communication & Digital Identity (Textbook p. 38-48)' : 'Modulul 3B: Căutare Avansată, Comunicare & Identitate Digitală (Manual pag. 38-48)';
+    if (id === 'text1') return lang === 'en' ? 'Module 4A: Word Processor & Text Formatting (Textbook p. 50-67)' : 'Modulul 4A: Inițierea și Formatarea Textului (Manual pag. 50-67)';
+    if (id === 'text2') return lang === 'en' ? 'Module 4B: Visual Elements & Tables (Textbook p. 68-80)' : 'Modulul 4B: Elemente Grafice, Tabele & Paginare (Manual pag. 68-80)';
+    if (id === 'algo1') return lang === 'en' ? 'Module 5A: Algorithm Fundamentals & Sequential Logic (Textbook p. 54-61)' : 'Modulul 5A: Noțiunea de Algoritm & Algoritmi Secvențiali (Manual pag. 54-61)';
+    if (id === 'algo2') return lang === 'en' ? 'Module 5B: Decisions, Data Types & Flowcharts (Textbook p. 62-71)' : 'Modulul 5B: Structuri Decizionale, Date & Scheme Logice (Manual pag. 62-71)';
+    if (id === 'scratch1') return lang === 'en' ? 'Module 6A: Scratch 3.0 Environment, Linear Movement & Variables (Textbook p. 72-90)' : 'Modulul 6A: Mediul Scratch, Mișcare Liniară & Variabile (Manual pag. 72-90)';
+    if (id === 'scratch2') return lang === 'en' ? 'Module 6B: Scratch Decisions, Music, Contest Games & Grand Exam (Textbook p. 84-93)' : 'Modulul 6B: Decizii, Muzică, Concurs de Jocuri & Marea Evaluare (Manual pag. 84-93)';
+    if (id === 'g6_presentation1') return lang === 'en' ? 'Grade 6 • Module 1A: Presentation & PowerPoint Interface (Textbook p. 10-15)' : 'Clasa a VI-a • Modulul 1A: Prezentarea & Interfața PowerPoint (Manual pag. 10-15)';
+    if (id === 'g6_presentation2') return lang === 'en' ? 'Grade 6 • Module 1B: Slide Creation, Design, Animations & Public Speaking (Textbook p. 16-25)' : 'Clasa a VI-a • Modulul 1B: Realizare, Design, Animații & Public Speaking (Manual pag. 16-25)';
+    if (id === 'g6_paint3d') return lang === 'en' ? 'Grade 6 • Module 2A: 3D Modeling in Paint 3D (Textbook p. 26-33)' : 'Clasa a VI-a • Modulul 2A: Modelare 3D în Paint 3D (Manual pag. 26-33)';
+    if (id === 'g6_anim3d') return lang === 'en' ? 'Grade 6 • Module 2B: Toontastic Animation & Virtual Reality VR (Textbook p. 34-43)' : 'Clasa a VI-a • Modulul 2B: Animație Toontastic & Realitate Virtuală VR (Manual pag. 34-43)';
+    if (id === 'g6_malware') return lang === 'en' ? 'Grade 6 • Module 3A: Malware Threats & Cyber Security (Textbook p. 44-45)' : 'Clasa a VI-a • Modulul 3A: Amenințări Malware & Securitate Cibernetică (Manual pag. 44-45)';
+    if (id === 'g6_email') return lang === 'en' ? 'Grade 6 • Module 3B: Email Services, Netiquette & Cloud Collaboration (Textbook p. 46-61)' : 'Clasa a VI-a • Modulul 3B: Servicii E-mail, Netichetă & Colaborare Cloud (Manual pag. 46-61)';
+    if (id === 'g6_scratch1') return lang === 'en' ? 'Grade 6 • Module 4A: Scratch Conditional Loops & Algorithm Logic (Textbook p. 62-75)' : 'Clasa a VI-a • Modulul 4A: Algoritmi & Bucle Condiționate în Scratch (Manual pag. 62-75)';
+    if (id === 'g6_scratch2') return lang === 'en' ? 'Grade 6 • Module 4B: Counter Loops, Minecraft 3D & Graduation (Textbook p. 76-93)' : 'Clasa a VI-a • Modulul 4B: Bucle cu Contor, Minecraft 3D & Marea Diplomă (Manual pag. 76-93)';
     return lang === 'en' ? 'No active mission' : 'Nicio misiune activă';
   };
 
-  return (
-    <div className="flex flex-col gap-8 pb-10">
-      {/* Hero Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-teal-950/60 border border-teal-500/30 rounded-2xl sm:rounded-3xl p-3.5 sm:p-10 shadow-2xl">
-        {/* Background ambient lighting */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
-        <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
+  const scrollToMissions = () => {
+    sounds.playClick();
+    const target =
+      document.getElementById('comutator-clasa') ||
+      document.getElementById('sectiune-misiuni-practice') ||
+      document.getElementById('sectiune-misiuni-clasa-6') ||
+      document.getElementById('sectiune-misiuni-clasa-7') ||
+      document.getElementById('sectiune-misiuni-clasa-8');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left Column: Branding, Title, and Student ID Card */}
-          <div className="lg:col-span-8 flex flex-col gap-5">
-            {/* School & Grade Badge */}
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-500/20 text-teal-300 text-xs sm:text-sm font-bold border border-teal-500/40 shadow-sm backdrop-blur">
-                <School className="w-4 h-4 text-teal-400" />
+  const grade5DoneCount = GRADE5_MISSIONS.filter((m) => isMissionDone(m.id)).length;
+  const grade6DoneCount = GRADE6_MISSIONS.filter((m) => isMissionDone(m.id)).length;
+
+  const hasResumableMission =
+    Boolean(activeMissionId) &&
+    !isMissionDone(activeMissionId as string) &&
+    activeMissionLevel > 1;
+
+  return (
+    <div className="flex flex-col gap-6 sm:gap-8 pb-10">
+      {/* 1. STREAMLINED HERO + STUDENT PASS + ARKY COMPANION */}
+      <section
+        aria-label={lang === 'en' ? 'ArkyEdu Hero & Student Station' : 'Secțiune Principală ArkyEdu'}
+        className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950/35 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-7 lg:p-8 shadow-2xl"
+      >
+        {/* Subtle ambient corner glow */}
+        <div className="absolute -top-24 right-1/4 w-96 h-96 bg-teal-500/8 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
+        <div className="absolute -bottom-24 -left-16 w-80 h-80 bg-emerald-500/8 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+          {/* Left Column: Clean Title + Primary CTA + Compact Student Access Pass */}
+          <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-5">
+            {/* Unboxed Clean Curriculum Eyebrow */}
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs font-mono text-teal-300 font-semibold">
+              <span className="inline-flex items-center gap-1.5">
+                <School className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>{t.catalogBadge}</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                <span>{lang === 'en' ? 'Curriculum 2026 Ready' : 'Conform Programei Școlare'}</span>
-              </div>
+              </span>
+              <span className="text-slate-600" aria-hidden="true">·</span>
+              <span className="text-emerald-300">
+                {lang === 'en' ? 'Curriculum 2026 Ready · 100% Free' : 'Conform Programei Școlare · 100% Gratuit'}
+              </span>
             </div>
 
-            {/* Main Title & Subtitle */}
+            {/* Hero Headline & Readable Lead */}
             <div>
-              <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white font-heading tracking-tight leading-snug sm:leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white font-heading tracking-tight leading-tight">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-emerald-300 to-cyan-200">
                   {lang === 'en' ? 'ICT' : 'TIC'}
                 </span>
-                <span className="text-slate-400 font-light mx-2">–</span>
-                {lang === 'en' ? (
-                  <span className="text-white">
-                    <span>Information & Communications</span>{' '}
-                    <span className="whitespace-nowrap sm:whitespace-normal">Technology</span>
-                  </span>
-                ) : (
-                  <span className="text-white">
-                    <span>Tehnologia Informației</span>{' '}
-                    <span className="whitespace-nowrap sm:whitespace-normal">și a Comunicațiilor</span>
-                  </span>
-                )}
+                <span className="text-slate-500 font-light mx-2">–</span>
+                <span>
+                  {lang === 'en'
+                    ? 'Information & Communications Technology'
+                    : 'Tehnologia Informației și a Comunicațiilor'}
+                </span>
               </h1>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed mt-2.5 max-w-2xl">
+              <p className="text-slate-300 text-sm sm:text-[15px] leading-relaxed mt-2 max-w-2xl">
                 {lang === 'en'
-                  ? 'Explore interactive modules with hands-on practice, teacher pro tips, sound effects, and official merit diplomas!'
-                  : 'Platformă educațională digitală cu provocări practice, sfaturi de la profesor, simulatoare de sistem de operare și diplome oficiale de merit!'}
+                  ? 'Explore interactive modules for Grades 5–8 with hands-on simulators, coding sandboxes, teacher pro tips, and official merit diplomas.'
+                  : 'Platformă educațională digitală pentru clasele V–VIII cu misiuni interactive, simulatoare de sistem de operare, C++ / Python, jocuri arcade și diplome oficiale de merit.'}
               </p>
             </div>
 
-            {/* Student Digital ID Pass / Registration Card */}
-            <div className="bg-slate-900/95 backdrop-blur border-2 border-teal-500/40 rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-xl max-w-2xl relative overflow-hidden">
-              {/* Subtle tech background glow */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
+            {/* Primary Focal CTAs */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              {hasResumableMission && activeMissionId ? (
+                <button
+                  type="button"
+                  onClick={() => handleAttemptStart(activeMissionId)}
+                  className="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer active:scale-[0.98] min-h-[46px]"
+                >
+                  <span>{lang === 'en' ? 'Resume Active Mission' : 'Continuă Misiunea Activă'}</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={scrollToMissions}
+                  className="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer active:scale-[0.98] min-h-[46px]"
+                >
+                  <BookOpen className="w-4 h-4 shrink-0" />
+                  <span>{lang === 'en' ? 'Choose Grade & Start Learning' : 'Alege Clasa și Începe'}</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </button>
+              )}
 
-              {/* Pass Top Bar: Single Row on mobile + desktop */}
-              <div className="relative z-10 flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5 sm:pb-3.5 mb-3 sm:mb-4">
-                {/* Title and Badge Icon */}
-                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 shadow-sm">
-                    <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" />
+              {onOpenSandbox && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    onOpenSandbox('cpp');
+                  }}
+                  className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 hover:border-teal-400/50 font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] min-h-[46px]"
+                >
+                  <Code2 className="w-4 h-4 text-teal-400 shrink-0" />
+                  <span>{lang === 'en' ? 'Code Sandbox (C++ / Python)' : 'Sandbox Cod (C++ / Python)'}</span>
+                </button>
+              )}
+            </div>
+
+            {/* Compact Student Access Pass Card */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-xl">
+              {/* Pass Top Bar */}
+              <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5 mb-3">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-xl bg-teal-500/15 border border-teal-400/35 flex items-center justify-center text-teal-300 shrink-0">
+                    <BadgeCheck className="w-4 h-4 text-teal-400" />
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs sm:text-sm font-black tracking-wider text-teal-300 uppercase font-heading leading-tight truncate">
+                  <div className="min-w-0">
+                    <div className="text-xs sm:text-sm font-black tracking-wide text-white font-heading leading-tight truncate">
                       {lang === 'en' ? 'Student Access Pass' : 'Legitimație Elev'}
-                    </span>
-                    <span className="text-[10px] sm:text-[11px] font-mono font-medium text-slate-400 truncate">
-                      {lang === 'en' ? 'Computer Lab Station' : 'Laborator TIC'}
-                    </span>
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-400 truncate">
+                      {lang === 'en' ? 'Computer Lab & Home Sync' : 'Laborator TIC & Sincronizare'}
+                    </div>
                   </div>
                 </div>
 
-                {/* Right side: Status Badge & Exit button */}
-                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 shrink-0">
                   {activeAccount ? (
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-emerald-300 bg-emerald-950/80 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-emerald-500/40 shadow-sm">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                      <span className="hidden xs:inline">{lang === 'en' ? 'CLOUD ACTIVE' : 'CONT CLOUD'}</span>
-                      <span className="xs:hidden">CLOUD</span>
-                    </div>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-emerald-300 bg-emerald-500/15 px-2.5 py-1 rounded-lg border border-emerald-500/35">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <span>{lang === 'en' ? 'CLOUD' : 'CONT CLOUD'}</span>
+                    </span>
                   ) : studentName ? (
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-amber-300 bg-amber-950/80 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-amber-500/40 shadow-sm">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400"></span>
-                      <span className="hidden xs:inline">{lang === 'en' ? 'GUEST (LOCAL)' : 'VIZITATOR'}</span>
-                      <span className="xs:hidden">LOCAL</span>
-                    </div>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-300 bg-amber-500/15 px-2.5 py-1 rounded-lg border border-amber-500/35">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      <span>{lang === 'en' ? 'GUEST' : 'VIZITATOR'}</span>
+                    </span>
                   ) : (
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-bold text-slate-400 bg-slate-950/90 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-slate-700/80 shadow-sm">
-                      <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-500"></span>
-                      <span>{lang === 'en' ? 'OFFLINE' : 'NECONECTAT'}</span>
-                    </div>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold text-slate-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">
+                      <span>{lang === 'en' ? 'GUEST / SIGN IN' : 'NECONECTAT'}</span>
+                    </span>
                   )}
 
                   {(activeAccount || studentName) && (
                     <button
                       onClick={handleLogout}
                       type="button"
-                      className="flex items-center gap-1 text-[10px] sm:text-[11px] font-mono font-bold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900/90 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-rose-500/40 transition cursor-pointer shadow-sm"
+                      className="flex items-center gap-1 text-[11px] font-mono font-bold text-rose-300 hover:text-white bg-rose-950/60 hover:bg-rose-900 px-2.5 py-1 rounded-lg border border-rose-500/35 transition cursor-pointer min-h-[30px]"
                       title={lang === 'en' ? 'Sign out' : 'Deconectează contul'}
                     >
                       <LogOut className="w-3 h-3" />
@@ -858,15 +793,13 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
 
               {/* CARD BODY */}
-              {(activeAccount || (studentName && !isEditingName)) ? (
-                /* Profile view when logged in or guest name confirmed */
-                <div className="relative z-10 flex flex-col gap-4">
-                  {/* Inline Renaming Panel */}
+              {activeAccount || (studentName && !isEditingName) ? (
+                <div className="flex flex-col gap-3.5">
                   {isRenaming ? (
-                    <form onSubmit={handleSaveRename} className="p-4 rounded-2xl bg-slate-950/90 border border-teal-500/40 flex flex-col gap-3">
+                    <form onSubmit={handleSaveRename} className="p-3.5 rounded-xl bg-slate-950/90 border border-teal-500/40 flex flex-col gap-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-teal-300 flex items-center gap-1.5">
-                          <Edit3 className="w-4 h-4" />
+                          <Edit3 className="w-3.5 h-3.5" />
                           {lang === 'en' ? 'Change your student name:' : 'Schimbă numele tău de elev:'}
                         </span>
                         <button
@@ -875,16 +808,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             setIsRenaming(false);
                             setRenameError('');
                           }}
-                          className="text-[11px] text-slate-400 hover:text-white"
+                          className="text-xs text-slate-400 hover:text-white cursor-pointer"
                         >
-                          ✕ {lang === 'en' ? 'Cancel' : 'Anulează'}
+                          {lang === 'en' ? 'Cancel' : 'Anulează'}
                         </button>
                       </div>
 
                       {activeAccount && (
                         <p className="text-[11px] text-slate-400">
                           {lang === 'en'
-                            ? 'We check in real-time that the new name is not already taken by another student.'
+                            ? 'We verify in real-time that the new name is available.'
                             : 'Verificăm în timp real ca noul nume să nu fie deja folosit de alt elev.'}
                         </p>
                       )}
@@ -898,41 +831,40 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             if (renameError) setRenameError('');
                           }}
                           placeholder={lang === 'en' ? 'Enter new name...' : 'Scrie noul nume...'}
-                          className="flex-1 bg-slate-900 border border-slate-700 focus:border-teal-400 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none"
+                          className="flex-1 bg-slate-900 border border-slate-700 focus:border-teal-400 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none min-h-[42px]"
                           autoFocus
                         />
                         <button
                           type="submit"
                           disabled={renameLoading}
-                          className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50"
+                          className="px-4 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs transition cursor-pointer flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50 min-h-[42px]"
                         >
                           <CheckCircle2 className="w-4 h-4" />
-                          <span>{renameLoading ? (lang === 'en' ? 'Saving...' : 'Se salvează...') : (lang === 'en' ? 'Save New Name' : 'Salvează Numele')}</span>
+                          <span>{renameLoading ? (lang === 'en' ? 'Saving...' : 'Se salvează...') : lang === 'en' ? 'Save Name' : 'Salvează Numele'}</span>
                         </button>
                       </div>
 
                       {renameError && (
-                        <div className="text-xs text-rose-400 font-bold flex items-center gap-1.5 bg-rose-950/60 p-2.5 rounded-xl border border-rose-500/40">
+                        <div className="text-xs text-rose-400 font-bold flex items-center gap-1.5 bg-rose-950/60 p-2 rounded-xl border border-rose-500/40">
                           <AlertCircle className="w-4 h-4 shrink-0" />
                           <span>{renameError}</span>
                         </div>
                       )}
                     </form>
                   ) : (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex items-center gap-3.5">
-                        {/* Avatar Display with quick change toggle */}
-                        <div className="relative group">
-                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500/30 via-slate-800 to-emerald-500/30 border-2 border-teal-400/50 flex items-center justify-center text-3xl shadow-lg shadow-teal-900/40">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="relative shrink-0">
+                          <div className="w-12 h-12 rounded-xl bg-slate-800 border border-teal-400/40 flex items-center justify-center text-2xl shadow-inner">
                             {selectedAvatar}
                           </div>
                           <button
                             type="button"
                             onClick={() => {
-                              setIsSelectingAvatar(!isSelectingAvatar);
+                              setIsSelectingAvatar((prev) => !prev);
                               sounds.playClick();
                             }}
-                            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-800 border border-teal-400/60 text-xs flex items-center justify-center text-teal-300 hover:text-white cursor-pointer shadow"
+                            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-slate-900 border border-teal-400/60 text-xs flex items-center justify-center text-teal-300 hover:text-white cursor-pointer shadow"
                             title={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
                             aria-label={lang === 'en' ? 'Change avatar' : 'Schimbă avatarul'}
                           >
@@ -940,123 +872,98 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                           </button>
                         </div>
 
-                        <div>
-                          <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5 flex-wrap">
+                        <div className="min-w-0">
+                          <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1.5 flex-wrap">
                             <span>{t.helloStudent},</span>
-                            <span className="text-[11px] font-mono text-teal-400/90 bg-teal-950/70 px-2 py-0.5 rounded-full border border-teal-500/30 font-bold">
-                              {lang === 'en' ? 'Rank: Digital Cadet' : 'Grad: Cadet TIC'}
+                            <span className="text-teal-300 font-semibold">
+                              {lang === 'en' ? 'Digital Cadet' : 'Cadet TIC'}
                             </span>
-                            {activeAccount ? (
-                              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                                ☁️ Cloud Synced
-                              </span>
-                            ) : (
-                              <span className="text-[10px] font-mono text-amber-400 bg-amber-950/50 px-1.5 py-0.5 rounded border border-amber-500/20">
-                                💻 Local PC Only
-                              </span>
-                            )}
+                            <span aria-hidden="true">·</span>
+                            <span className={activeAccount ? 'text-emerald-400' : 'text-amber-400'}>
+                              {activeAccount ? '☁️ Cloud Sync' : '💻 Local'}
+                            </span>
                           </div>
-                          <div className="text-lg sm:text-xl font-black text-white font-heading tracking-wide flex items-center gap-2">
-                            <span>{studentName || activeAccount?.username}</span>
-                          </div>
-                          <div className="text-xs text-slate-400 mt-0.5">
-                            {activeAccount
-                              ? (lang === 'en' ? 'All scores and diplomas automatically saved.' : 'Punctajele și diplomele sunt salvate în cloud.')
-                              : (lang === 'en' ? 'Guest session on this PC. Ready for challenges!' : 'Sesiune vizitator pe acest calculator.')}
+                          <div className="text-lg font-black text-white font-heading truncate">
+                            {studentName || activeAccount?.username}
                           </div>
                         </div>
                       </div>
 
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                      <div className="flex items-center gap-2 shrink-0">
                         <button
                           type="button"
                           onClick={handleStartRename}
-                          className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold transition border border-slate-700 cursor-pointer shadow-sm flex items-center gap-1.5"
+                          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold transition border border-slate-700 cursor-pointer flex items-center gap-1.5 min-h-[38px]"
                         >
                           <Edit3 className="w-3.5 h-3.5 text-slate-400" />
                           <span>{t.studentNameChangeBtn}</span>
                         </button>
-
-                        {activeMissionId && !isMissionDone(activeMissionId) && activeMissionLevel > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => handleAttemptStart(activeMissionId)}
-                            className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs sm:text-sm font-bold transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer active:scale-95 animate-pulse"
-                          >
-                            <span>{lang === 'en' ? 'Resume Mission' : 'Reia Misiunea'}</span>
-                            <ArrowRight className="w-4 h-4" />
-                          </button>
-                        )}
                       </div>
                     </div>
                   )}
 
-                  {/* Player Stats & Economy Pill Grid (Total Points & Cyber City Funds) */}
+                  {/* Player Stats Grid */}
                   {(() => {
                     const activeCity = activeAccount?.cyberCity || getCyberCityData();
                     const cityMetrics = calculateCityMetrics(activeCity);
-                    const totalPoints = activeAccount?.totalXP || (activeAccount ? (activeAccount.arcadeScores?.totalArcade || 0) + (activeAccount.lessonsProgress?.totalLessonScore || 0) : 0);
-                    const cityCoins = activeAccount?.byteCoins ?? 0;
+                    const totalPoints =
+                      activeAccount?.totalXP ||
+                      (activeAccount
+                        ? (activeAccount.arcadeScores?.totalArcade || 0) + (activeAccount.lessonsProgress?.totalLessonScore || 0)
+                        : 0);
+                    const cityCoins = typeof byteCoins === 'number' ? byteCoins : activeAccount?.byteCoins ?? 0;
 
                     return (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 pt-3.5 border-t border-slate-800/80">
-                        {/* Stat 1: Total Points (XP) */}
-                        <div className="p-3 rounded-2xl bg-gradient-to-b from-amber-950/40 to-slate-950/90 border border-amber-500/30 flex items-center gap-2.5 shadow-inner">
-                          <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold shrink-0 shadow-sm text-base">
-                            ⭐
-                          </div>
+                      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-slate-800 tabular-nums">
+                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
+                          <span className="text-base shrink-0" aria-hidden="true">⭐</span>
                           <div className="min-w-0">
-                            <div className="text-[10px] text-amber-300/90 font-mono uppercase font-bold tracking-wider">{lang === 'en' ? 'Total Points' : 'Puncte Elev'}</div>
-                            <div className="text-sm sm:text-base font-black text-amber-300 font-heading truncate">
+                            <div className="text-[10px] text-amber-300/90 font-mono uppercase font-bold truncate">
+                              {lang === 'en' ? 'XP' : 'Puncte'}
+                            </div>
+                            <div className="text-xs sm:text-sm font-black text-amber-300 font-heading truncate">
                               {totalPoints.toLocaleString()} XP
                             </div>
-                            <div className="text-[9px] text-slate-400 font-mono">{lang === 'en' ? 'Lessons & Arcade' : 'Lecții + Jocuri'}</div>
                           </div>
                         </div>
 
-                        {/* Stat 2: Cyber City Funds (Bani de Oraș) */}
-                        <div className="p-3 rounded-2xl bg-gradient-to-b from-purple-950/40 to-slate-950/90 border border-purple-500/30 flex items-center gap-2.5 shadow-inner">
-                          <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 font-bold shrink-0 shadow-sm text-base">
-                            🪙
-                          </div>
+                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
+                          <span className="text-base shrink-0" aria-hidden="true">🪙</span>
                           <div className="min-w-0">
-                            <div className="text-[10px] text-purple-300/90 font-mono uppercase font-bold tracking-wider">{lang === 'en' ? 'City Funds' : 'Bani de Oraș'}</div>
-                            <div className="text-sm sm:text-base font-black text-purple-200 font-heading truncate">
-                              {cityCoins.toLocaleString()} <span className="text-[10px] font-normal text-purple-300">Coins</span>
+                            <div className="text-[10px] text-purple-300/90 font-mono uppercase font-bold truncate">
+                              ByteCoins
                             </div>
-                            <div className="text-[9px] text-slate-400 font-mono">{lang === 'en' ? 'CyberCity Wallet' : 'Portofel CyberCity'}</div>
+                            <div className="text-xs sm:text-sm font-black text-purple-200 font-heading truncate">
+                              {cityCoins.toLocaleString()}
+                            </div>
                           </div>
                         </div>
 
-                        {/* Stat 3: Cyber City Status & Rank */}
-                        <div className="p-3 rounded-2xl bg-gradient-to-b from-cyan-950/40 to-slate-950/90 border border-cyan-500/30 flex items-center gap-2.5 col-span-2 sm:col-span-1 shadow-inner">
-                          <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 font-bold shrink-0 shadow-sm text-base">
-                            🏙️
-                          </div>
+                        <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
+                          <span className="text-base shrink-0" aria-hidden="true">🏙️</span>
                           <div className="min-w-0">
-                            <div className="text-[10px] text-cyan-300/90 font-mono uppercase font-bold tracking-wider">{lang === 'en' ? 'Cyber City' : 'Metropolă TIC'}</div>
-                            <div className="text-sm sm:text-base font-black text-cyan-200 font-heading truncate">
-                              {cityMetrics.cityScore.toLocaleString()} <span className="text-[10px] font-normal text-cyan-300">pts</span>
+                            <div className="text-[10px] text-cyan-300/90 font-mono uppercase font-bold truncate">
+                              {lang === 'en' ? 'City' : 'Oraș TIC'}
                             </div>
-                            <div className="text-[9px] text-cyan-400/80 font-mono truncate">⚡ {lang === 'en' ? (cityMetrics.cityRankTitleEn || cityMetrics.cityRankTitle) : (cityMetrics.cityRankTitleRo || cityMetrics.cityRankTitle)}</div>
+                            <div className="text-xs sm:text-sm font-black text-cyan-200 font-heading truncate">
+                              {cityMetrics.cityScore.toLocaleString()} pts
+                            </div>
                           </div>
                         </div>
                       </div>
                     );
                   })()}
 
-                  {/* Quick Avatar Selector Drawer if open */}
                   {isSelectingAvatar && (
-                    <div className="p-3 bg-slate-950/90 rounded-2xl border border-slate-800 flex flex-col gap-2">
+                    <div className="p-3 bg-slate-950/90 rounded-xl border border-slate-800 flex flex-col gap-2">
                       <div className="flex items-center justify-between text-xs font-medium text-slate-300">
                         <span>{lang === 'en' ? 'Choose an avatar:' : 'Alege un nou avatar:'}</span>
                         <button
                           type="button"
                           onClick={() => setIsSelectingAvatar(false)}
-                          className="text-slate-400 hover:text-white text-xs"
+                          className="text-slate-400 hover:text-white text-xs cursor-pointer"
                         >
-                          ✕ {lang === 'en' ? 'Done' : 'Închide'}
+                          {lang === 'en' ? 'Done' : 'Închide'}
                         </button>
                       </div>
                       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
@@ -1065,9 +972,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                             key={av.emoji}
                             type="button"
                             onClick={() => handleSelectAvatar(av.emoji)}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition cursor-pointer shrink-0 ${
+                            className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg transition cursor-pointer shrink-0 ${
                               selectedAvatar === av.emoji
-                                ? 'bg-teal-500 text-white ring-2 ring-teal-300 scale-110 shadow-md'
+                                ? 'bg-teal-500 text-white ring-2 ring-teal-300 scale-105'
                                 : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
                             }`}
                             title={lang === 'en' ? av.labelEn : av.labelRo}
@@ -1079,15 +986,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     </div>
                   )}
 
-                  {/* Encouragement for Guests to Create an Account */}
                   {!activeAccount && (
-                    <div className="mt-1 pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-amber-200/90 bg-amber-950/30 -mx-1 p-2.5 rounded-xl border border-amber-500/20">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-200 bg-amber-950/25 p-2.5 rounded-xl border border-amber-500/25">
                       <div className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
                         <span>
                           {lang === 'en'
-                            ? 'Scores are saved only if you sign in. Create an account to rank on the classroom board!'
-                            : 'Punctajul se salvează doar dacă ai cont. Creează cont pentru a intra în clasament!'}
+                            ? 'Scores sync to leaderboard only with an account.'
+                            : 'Punctajul se salvează în clasament doar dacă ai cont.'}
                         </span>
                       </div>
                       <button
@@ -1098,7 +1004,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                           setRegisterUsername(studentName);
                           sounds.playClick();
                         }}
-                        className="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg shadow transition cursor-pointer self-start sm:self-auto shrink-0"
+                        className="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-lg transition cursor-pointer self-start sm:self-auto shrink-0"
                       >
                         {lang === 'en' ? 'Create Account' : 'Creează Cont'}
                       </button>
@@ -1106,11 +1012,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   )}
                 </div>
               ) : (
-                /* Choice Form: Autentificare / Cont Nou / Fără Cont */
-                <div className="relative z-10 flex flex-col gap-2.5 sm:gap-3.5">
-                  {/* The Option Buttons: Mobile: 2 buttons on top, 1 below (2 cu 1); Desktop: 3 in a row */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-1.5 bg-slate-950/90 rounded-2xl border border-slate-800/90 shadow-inner">
-                    {/* 1. Autentificare */}
+                /* Signed Out: Compact 3-Mode Student Pass Form */
+                <div className="flex flex-col gap-2.5">
+                  <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-950 rounded-xl border border-slate-800">
                     <button
                       type="button"
                       onClick={() => {
@@ -1119,19 +1023,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         setRegisterError('');
                         sounds.playClick();
                       }}
-                      className={`py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer min-h-[44px] ${
+                      className={`py-2 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px] ${
                         passMode === 'login'
-                          ? 'bg-gradient-to-r sm:bg-gradient-to-b from-teal-500 to-teal-600 text-slate-950 font-black border border-teal-300 shadow-md shadow-teal-500/30'
-                          : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800/80'
+                          ? 'bg-teal-500 text-slate-950 font-black shadow-sm'
+                          : 'text-slate-300 hover:text-white hover:bg-slate-900'
                       }`}
                     >
-                      <LogIn className={`w-4 h-4 shrink-0 ${passMode === 'login' ? 'text-slate-950' : 'text-teal-400'}`} />
-                      <span className="text-xs sm:text-sm font-black uppercase tracking-wide whitespace-nowrap">
-                        {lang === 'en' ? 'Sign In' : 'Autentificare'}
-                      </span>
+                      <LogIn className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{lang === 'en' ? 'Sign In' : 'Autentificare'}</span>
                     </button>
 
-                    {/* 2. Cont Nou */}
                     <button
                       type="button"
                       onClick={() => {
@@ -1140,19 +1041,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         setRegisterError('');
                         sounds.playClick();
                       }}
-                      className={`py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer min-h-[44px] ${
+                      className={`py-2 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px] ${
                         passMode === 'register'
-                          ? 'bg-gradient-to-r sm:bg-gradient-to-b from-amber-500 to-amber-600 text-slate-950 font-black border border-amber-300 shadow-md shadow-amber-500/30'
-                          : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800/80'
+                          ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                          : 'text-slate-300 hover:text-white hover:bg-slate-900'
                       }`}
                     >
-                      <KeyRound className={`w-4 h-4 shrink-0 ${passMode === 'register' ? 'text-slate-950' : 'text-amber-400'}`} />
-                      <span className="text-xs sm:text-sm font-black uppercase tracking-wide whitespace-nowrap">
-                        {lang === 'en' ? 'New Pass' : 'Cont Nou'}
-                      </span>
+                      <KeyRound className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{lang === 'en' ? 'New Account' : 'Cont Nou'}</span>
                     </button>
 
-                    {/* 3. Fără Cont (Row 2 on mobile: col-span-2, 1 col on desktop: sm:col-span-1) */}
                     <button
                       type="button"
                       onClick={() => {
@@ -1161,57 +1059,54 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         setRegisterError('');
                         sounds.playClick();
                       }}
-                      className={`col-span-2 sm:col-span-1 py-1.5 sm:py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer min-h-[38px] sm:min-h-[44px] ${
+                      className={`py-2 px-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px] ${
                         passMode === 'guest'
-                          ? 'bg-slate-800 text-white font-bold border border-slate-500 shadow-sm'
-                          : 'bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800/70'
+                          ? 'bg-slate-800 text-white border border-slate-600'
+                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
                       }`}
                     >
-                      <User className={`w-3.5 h-3.5 shrink-0 ${passMode === 'guest' ? 'text-white' : 'text-slate-400'}`} />
-                      <span className="text-xs font-bold whitespace-nowrap">
-                        {lang === 'en' ? 'Guest Mode (No Account)' : 'Fără Cont (Mod Vizitator)'}
-                      </span>
+                      <User className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{lang === 'en' ? 'Guest' : 'Vizitator'}</span>
                     </button>
                   </div>
 
-                  {/* Contextual Single-Line Helper Banner */}
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/70 border border-slate-800/90 text-[11px] sm:text-xs text-slate-300">
+                  {/* Helper note */}
+                  <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-950/70 text-[11px] text-slate-300">
                     {passMode === 'login' && (
                       <>
                         <Info className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                        <span className="truncate">
+                        <span>
                           {lang === 'en'
-                            ? 'Sign in to sync your score and arcade games on any PC!'
-                            : 'Autentifică-te pentru a sincroniza punctajul pe orice calculator!'}
+                            ? 'Sign in to sync scores, ByteCoins, and diplomas across devices.'
+                            : 'Autentifică-te pentru a sincroniza punctajul și diplomele pe orice calculator.'}
                         </span>
                       </>
                     )}
                     {passMode === 'register' && (
                       <>
                         <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                        <span className="truncate">
+                        <span>
                           {lang === 'en'
-                            ? 'Free student pass: choose avatar, username & password!'
-                            : 'Cont gratuit: alege avatar, nume și o parolă simplă!'}
+                            ? 'Free student pass: pick an avatar, username & simple password.'
+                            : 'Cont gratuit: alege un avatar, numele tău și o parolă simplă.'}
                         </span>
                       </>
                     )}
                     {passMode === 'guest' && (
                       <>
                         <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                        <span className="truncate">
+                        <span>
                           {lang === 'en'
-                            ? 'Guest mode: scores are saved only temporarily on this PC.'
-                            : 'Vizitator: punctajul este salvat temporar doar pe acest calculator.'}
+                            ? 'Guest mode saves progress locally on this device only.'
+                            : 'Mod vizitator: progresul este salvat temporar doar pe acest calculator.'}
                         </span>
                       </>
                     )}
                   </div>
 
-                  {/* MODE 1: LOGIN FORM */}
                   {passMode === 'login' && (
-                    <form onSubmit={handleInCardLogin} className="flex flex-col gap-2.5 p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-teal-500/25">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+                    <form onSubmit={handleInCardLogin} className="flex flex-col gap-2.5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <User className="w-4 h-4" />
@@ -1224,8 +1119,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                               if (loginError) setLoginError('');
                             }}
                             placeholder={lang === 'en' ? 'Student username...' : 'Nume elev (ex: Andrei_Popa)...'}
-                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
-                            autoFocus
+                            className="w-full bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400 min-h-[42px]"
                           />
                         </div>
 
@@ -1241,27 +1135,27 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                               if (loginError) setLoginError('');
                             }}
                             placeholder={lang === 'en' ? 'Password...' : 'Parola contului...'}
-                            className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
+                            className="w-full bg-slate-950 border border-slate-700 pl-9 pr-9 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400 min-h-[42px]"
                           />
                           <button
                             type="button"
                             onClick={() => setShowLoginPassword(!showLoginPassword)}
                             aria-label={showLoginPassword ? (lang === 'en' ? 'Hide password' : 'Ascunde parola') : (lang === 'en' ? 'Show password' : 'Afișează parola')}
-                            className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white cursor-pointer"
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
                           >
-                            {showLoginPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
                       </div>
 
                       {loginError && (
-                        <div className="text-xs text-rose-400 font-bold flex items-center gap-1.5 bg-rose-950/60 p-2 rounded-xl border border-rose-500/40">
+                        <div className="text-xs text-rose-300 font-bold flex items-center gap-1.5 bg-rose-950/60 p-2 rounded-xl border border-rose-500/40">
                           <AlertCircle className="w-4 h-4 shrink-0" />
                           <span>{loginError}</span>
                         </div>
                       )}
 
-                      <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
+                      <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2">
                         <button
                           type="button"
                           onClick={() => {
@@ -1276,99 +1170,85 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         <button
                           type="submit"
                           disabled={loginLoading}
-                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-teal-500/30 cursor-pointer disabled:opacity-50"
+                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 min-h-[42px]"
                         >
                           <LogIn className="w-4 h-4" />
-                          <span>{loginLoading ? (lang === 'en' ? 'Connecting...' : 'Se conectează...') : (lang === 'en' ? 'Sign In' : 'Conectare la Calculator')}</span>
+                          <span>{loginLoading ? (lang === 'en' ? 'Connecting...' : 'Se conectează...') : lang === 'en' ? 'Sign In' : 'Conectare'}</span>
                         </button>
                       </div>
                     </form>
                   )}
 
-                  {/* MODE 2: REGISTER FORM WITH DUPLICATE USERNAME CHECK */}
                   {passMode === 'register' && (
-                    <form onSubmit={handleInCardRegister} className="flex flex-col gap-2.5 p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-amber-500/25">
-                      {/* 1. Choose Avatar */}
-                      <div>
-                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
-                          {lang === 'en' ? '1. Choose your explorer avatar:' : '1. Alege avatarul tău de explorator:'}
-                        </p>
-                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                          {AVATARS.map((av) => (
-                            <button
-                              key={av.emoji}
-                              type="button"
-                              onClick={() => handleSelectAvatar(av.emoji)}
-                              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-base sm:text-lg transition cursor-pointer shrink-0 ${
-                                selectedAvatar === av.emoji
-                                  ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 scale-110 shadow-md font-bold'
-                                  : 'bg-slate-850 hover:bg-slate-700 text-slate-300 border border-slate-700'
-                              }`}
-                              title={lang === 'en' ? av.labelEn : av.labelRo}
-                            >
-                              {av.emoji}
-                            </button>
-                          ))}
-                        </div>
+                    <form onSubmit={handleInCardRegister} className="flex flex-col gap-2.5">
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                        {AVATARS.map((av) => (
+                          <button
+                            key={av.emoji}
+                            type="button"
+                            onClick={() => handleSelectAvatar(av.emoji)}
+                            className={`w-9 h-9 rounded-xl flex items-center justify-center text-base transition cursor-pointer shrink-0 ${
+                              selectedAvatar === av.emoji
+                                ? 'bg-amber-500 text-slate-950 ring-2 ring-amber-300 font-bold'
+                                : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700'
+                            }`}
+                            title={lang === 'en' ? av.labelEn : av.labelRo}
+                          >
+                            {av.emoji}
+                          </button>
+                        ))}
                       </div>
 
-                      {/* 2. Choose Username & Password */}
-                      <div>
-                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
-                          {lang === 'en' ? '2. Username and simple password:' : '2. Nume de elev și parolă simplă:'}
-                        </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
-                          <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                              <User className="w-4 h-4" />
-                            </div>
-                            <input
-                              type="text"
-                              value={registerUsername}
-                              onChange={(e) => {
-                                setRegisterUsername(e.target.value);
-                                if (registerError) setRegisterError('');
-                              }}
-                              placeholder={lang === 'en' ? 'Choose unique name...' : 'Alege nume (ex: Maria_Popescu)...'}
-                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
-                              autoFocus
-                            />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <User className="w-4 h-4" />
                           </div>
+                          <input
+                            type="text"
+                            value={registerUsername}
+                            onChange={(e) => {
+                              setRegisterUsername(e.target.value);
+                              if (registerError) setRegisterError('');
+                            }}
+                            placeholder={lang === 'en' ? 'Choose unique name...' : 'Alege nume (ex: Maria_Popescu)...'}
+                            className="w-full bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 min-h-[42px]"
+                          />
+                        </div>
 
-                          <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                              <Lock className="w-4 h-4" />
-                            </div>
-                            <input
-                              type={showRegisterPassword ? 'text' : 'password'}
-                              value={registerPassword}
-                              onChange={(e) => {
-                                setRegisterPassword(e.target.value);
-                                if (registerError) setRegisterError('');
-                              }}
-                              placeholder={lang === 'en' ? 'Choose password (min 3)...' : 'Alege o parolă (ex: 1234)...'}
-                              className="w-full bg-slate-900 border border-slate-700 pl-9 pr-8 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                              aria-label={showRegisterPassword ? (lang === 'en' ? 'Hide password' : 'Ascunde parola') : (lang === 'en' ? 'Show password' : 'Afișează parola')}
-                              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-white cursor-pointer"
-                            >
-                              {showRegisterPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                            </button>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <Lock className="w-4 h-4" />
                           </div>
+                          <input
+                            type={showRegisterPassword ? 'text' : 'password'}
+                            value={registerPassword}
+                            onChange={(e) => {
+                              setRegisterPassword(e.target.value);
+                              if (registerError) setRegisterError('');
+                            }}
+                            placeholder={lang === 'en' ? 'Password (min 3)...' : 'Alege o parolă (min 3)...'}
+                            className="w-full bg-slate-950 border border-slate-700 pl-9 pr-9 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-400 min-h-[42px]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                            aria-label={showRegisterPassword ? (lang === 'en' ? 'Hide password' : 'Ascunde parola') : (lang === 'en' ? 'Show password' : 'Afișează parola')}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
+                          >
+                            {showRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
                         </div>
                       </div>
 
                       {registerError && (
-                        <div className="text-xs text-rose-300 font-bold flex items-start gap-2 bg-rose-950/70 p-2.5 rounded-xl border border-rose-500/50">
+                        <div className="text-xs text-rose-300 font-bold flex items-start gap-2 bg-rose-950/60 p-2 rounded-xl border border-rose-500/40">
                           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
                           <span>{registerError}</span>
                         </div>
                       )}
 
-                      <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
+                      <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-2">
                         <button
                           type="button"
                           onClick={() => {
@@ -1383,2675 +1263,587 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         <button
                           type="submit"
                           disabled={registerLoading}
-                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer disabled:opacity-50"
+                          className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 min-h-[42px]"
                         >
                           <KeyRound className="w-4 h-4" />
-                          <span>{registerLoading ? (lang === 'en' ? 'Creating...' : 'Se creează...') : (lang === 'en' ? 'Create Account' : 'Creează Contul')}</span>
+                          <span>{registerLoading ? (lang === 'en' ? 'Creating...' : 'Se creează...') : lang === 'en' ? 'Create Account' : 'Creează Contul'}</span>
                         </button>
                       </div>
                     </form>
                   )}
 
-                  {/* MODE 3: GUEST FORM (FĂRĂ CONT) */}
                   {passMode === 'guest' && (
-                    <form onSubmit={handleInCardGuestSubmit} className="flex flex-col gap-2.5 p-3 sm:p-4 bg-slate-950/80 rounded-2xl border border-slate-700/50">
-                      {/* 1. Choose Avatar */}
-                      <div>
-                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
-                          {lang === 'en' ? '1. Choose your explorer avatar:' : '1. Alege avatarul tău de explorator:'}
-                        </p>
-                        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                          {AVATARS.map((av) => (
-                            <button
-                              key={av.emoji}
-                              type="button"
-                              onClick={() => handleSelectAvatar(av.emoji)}
-                              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-base sm:text-lg transition cursor-pointer shrink-0 ${
-                                selectedAvatar === av.emoji
-                                  ? 'bg-teal-500 text-white ring-2 ring-teal-300 scale-110 shadow-md font-bold'
-                                  : 'bg-slate-850 hover:bg-slate-700 text-slate-300 border border-slate-700'
-                              }`}
-                              title={lang === 'en' ? av.labelEn : av.labelRo}
-                            >
-                              {av.emoji}
-                            </button>
-                          ))}
-                        </div>
+                    <form onSubmit={handleInCardGuestSubmit} className="flex flex-col gap-2.5">
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                        {AVATARS.map((av) => (
+                          <button
+                            key={av.emoji}
+                            type="button"
+                            onClick={() => handleSelectAvatar(av.emoji)}
+                            className={`w-9 h-9 rounded-xl flex items-center justify-center text-base transition cursor-pointer shrink-0 ${
+                              selectedAvatar === av.emoji
+                                ? 'bg-teal-500 text-slate-950 ring-2 ring-teal-300 font-bold'
+                                : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-700'
+                            }`}
+                            title={lang === 'en' ? av.labelEn : av.labelRo}
+                          >
+                            {av.emoji}
+                          </button>
+                        ))}
                       </div>
 
-                      {/* 2. Guest Name Input */}
-                      <div>
-                        <p className="text-[11px] sm:text-xs font-semibold text-slate-300 mb-1">
-                          {lang === 'en' ? '2. Enter your temporary student name:' : '2. Introdu numele tău temporar de elev:'}
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          <div className="relative flex-1">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                              <User className="w-4 h-4" />
-                            </div>
-                            <input
-                              type="text"
-                              value={nameInput}
-                              onChange={(e) => {
-                                setNameInput(e.target.value);
-                                if (nameError) setNameError(false);
-                              }}
-                              placeholder={t.studentNamePlaceholder}
-                              className={`w-full bg-slate-900 border pl-9 pr-3.5 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none ${
-                                nameError ? 'border-rose-500 focus:ring-1 focus:ring-rose-500' : 'border-slate-700 focus:border-teal-400'
-                              }`}
-                              autoFocus
-                            />
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="relative flex-1">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <User className="w-4 h-4" />
                           </div>
-                          <button
-                            type="submit"
-                            className="w-full sm:w-auto px-5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow shrink-0 cursor-pointer"
-                          >
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                            <span>{lang === 'en' ? 'Confirm (Guest)' : 'Confirmă Numele (Vizitator)'}</span>
-                          </button>
+                          <input
+                            type="text"
+                            value={nameInput}
+                            onChange={(e) => {
+                              setNameInput(e.target.value);
+                              if (nameError) setNameError(false);
+                            }}
+                            placeholder={t.studentNamePlaceholder}
+                            className={`w-full bg-slate-950 border pl-9 pr-3.5 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none min-h-[42px] ${
+                              nameError ? 'border-rose-500 focus:ring-1 focus:ring-rose-500' : 'border-slate-700 focus:border-teal-400'
+                            }`}
+                          />
                         </div>
-                        {nameError && (
-                          <p className="text-xs text-rose-400 font-semibold mt-1.5">
-                            {t.enterNameAlert}
-                          </p>
-                        )}
+                        <button
+                          type="submit"
+                          className="w-full sm:w-auto px-5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer min-h-[42px]"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <span>{lang === 'en' ? 'Continue as Guest' : 'Confirmă Vizitator'}</span>
+                        </button>
                       </div>
+                      {nameError && <p className="text-xs text-rose-400 font-semibold">{t.enterNameAlert}</p>}
                     </form>
                   )}
                 </div>
               )}
             </div>
-
-            {/* Quick Hero Highlights / Feature Anchor Buttons: 2x2 on mobile, 4 in a row on desktop */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 pt-1">
-              {/* 1. Misiuni Practice */}
-              <button
-                id="hero-badge-misiuni"
-                type="button"
-                onClick={() => {
-                  sounds.playClick();
-                  const target = document.getElementById('sectiune-misiuni-practice');
-                  if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                }}
-                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-teal-950/50 hover:bg-teal-900/70 border border-teal-500/40 hover:border-teal-300 text-xs text-teal-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-teal-500/20 min-h-[46px]"
-                title={lang === 'en' ? 'Jump to Practical Missions' : 'Mergi la Misiuni Practice'}
-              >
-                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 shrink-0 group-hover:scale-110 transition-transform">
-                    <BookOpen className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Missions' : 'Misiuni'}</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-teal-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </button>
-
-              {/* 2. Jocuri Arcade */}
-              <button
-                id="hero-badge-arcade"
-                type="button"
-                onClick={() => {
-                  sounds.playClick();
-                  onOpenArcade?.();
-                }}
-                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-500/50 hover:border-indigo-300 text-xs text-indigo-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-indigo-500/20 min-h-[46px]"
-                title={lang === 'en' ? 'Open Arcade Games (21 Mini-Games)' : 'Deschide Jocurile Arcade (21 Mini-Jocuri)'}
-              >
-                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-lg bg-indigo-500/25 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0 group-hover:scale-110 transition-transform">
-                    <Gamepad2 className="w-3.5 h-3.5 animate-pulse" />
-                  </div>
-                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Arcade (21)' : 'Arcade (21)'}</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-indigo-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </button>
-
-              {/* 3. Duel 1v1 Arena */}
-              <button
-                id="hero-badge-duel"
-                type="button"
-                onClick={() => {
-                  sounds.playClick();
-                  onOpenDuel?.();
-                }}
-                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-rose-950/60 hover:bg-rose-900/80 border border-rose-500/50 hover:border-rose-300 text-xs text-rose-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-rose-500/20 min-h-[46px]"
-                title={lang === 'en' ? 'ArkyEdu Duel Arena 1v1' : 'Arena Duelurilor 1v1'}
-              >
-                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-lg bg-rose-500/25 border border-rose-400/40 flex items-center justify-center text-rose-300 shrink-0 group-hover:scale-110 transition-transform">
-                    <Swords className="w-3.5 h-3.5 animate-pulse" />
-                  </div>
-                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Duel 1v1' : 'Duel 1v1'}</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-rose-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </button>
-
-              {/* 4. Clasamente */}
-              <button
-                id="hero-badge-clasament"
-                type="button"
-                onClick={() => {
-                  sounds.playClick();
-                  const target = document.getElementById('sectiune-clasamente');
-                  if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                }}
-                className="group flex items-center justify-between gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-2.5 rounded-2xl bg-amber-950/50 hover:bg-amber-900/70 border border-amber-500/40 hover:border-amber-300 text-xs text-amber-200 hover:text-white font-bold transition-all cursor-pointer touch-manipulation active:scale-95 text-left shadow-sm hover:shadow-amber-500/20 min-h-[46px]"
-                title={lang === 'en' ? 'Jump to Leaderboard' : 'Mergi la Clasamente Elevi'}
-              >
-                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0 group-hover:scale-110 transition-transform">
-                    <Trophy className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="truncate text-xs font-bold">{lang === 'en' ? 'Leaderboard' : 'Top Elevi'}</span>
-                </div>
-                <ArrowRight className="w-3 h-3 text-amber-400 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </button>
-            </div>
           </div>
 
-          {/* Right Column: Mascota Arky Live Companion */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center relative mt-2 lg:mt-0">
-            {/* Arky Speech Bubble */}
-            <div className="relative bg-slate-900/95 border-2 border-teal-400/60 rounded-2xl p-3 sm:p-4 text-center shadow-xl mb-3 backdrop-blur w-full max-w-xs transition-all">
+          {/* Right Column: Arky Live Companion */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center">
+            <div className="relative bg-slate-900/95 border border-teal-500/40 rounded-2xl p-3.5 sm:p-4 text-center shadow-xl mb-3 w-full max-w-sm">
               <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold text-teal-400 uppercase tracking-wider mb-1">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 <span>Arky TIC Assistant</span>
               </div>
               <p className="text-xs sm:text-sm font-medium text-slate-100 leading-snug">
                 {!studentName
-                  ? (lang === 'en'
-                      ? 'Hey! I am Arky! Choose an avatar and enter your name to unlock the lab! 🤖'
-                      : 'Salut! Sunt Arky! Alege-ți un avatar și scrie-ți numele pentru a debloca laboratorul! 🤖')
+                  ? lang === 'en'
+                    ? 'Hey! I am Arky! Sign in or pick an avatar to start earning diplomas! 🤖'
+                    : 'Salut! Sunt Arky! Conectează-te sau alege un avatar pentru a debloca diplomele! 🤖'
                   : arkyTips[arkyTipIndex]}
               </p>
-              {/* Speech bubble arrow pointer */}
-              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-teal-400/60"></div>
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-teal-500/40" aria-hidden="true" />
             </div>
 
-            {/* Arky Mascot with Glow & Tap Interactivity */}
             <button
               type="button"
               onClick={handleArkyHeroClick}
-              className="group relative cursor-pointer focus:outline-none transition-transform touch-manipulation active:scale-95 flex flex-col items-center"
+              className="group relative cursor-pointer transition-transform touch-manipulation active:scale-95 flex flex-col items-center pb-2"
               title={lang === 'en' ? 'Tap Arky for a secret tip!' : 'Apasă pe Arky pentru un sfat secret!'}
             >
-              {/* Ambient Glow */}
-              <div className="absolute inset-0 bg-gradient-to-t from-teal-500/25 to-emerald-500/20 rounded-full blur-2xl group-hover:from-teal-400/40 group-hover:to-emerald-400/30 transition-all"></div>
-
+              <div className="absolute inset-4 bg-gradient-to-t from-teal-500/20 to-emerald-500/15 rounded-full blur-2xl group-hover:from-teal-400/35 group-hover:to-emerald-400/25 transition-all" aria-hidden="true" />
               <img
                 src={studentName ? ARKY_IMAGES.success : ARKY_IMAGES.idle}
                 alt="Arky Mascota"
                 width={224}
                 height={315}
                 fetchPriority="high"
-                className="relative z-10 w-36 sm:w-48 md:w-56 h-auto object-contain drop-shadow-[0_15px_25px_rgba(20,184,166,0.35)] group-hover:scale-105 transition-all duration-300"
+                className="relative z-10 w-36 sm:w-44 md:w-52 h-auto object-contain drop-shadow-[0_12px_22px_rgba(20,184,166,0.3)] group-hover:scale-105 transition-transform duration-300"
               />
-
-              {/* Tap badge prompt */}
-              <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full bg-slate-900/90 border border-teal-500/50 text-[11px] font-bold text-teal-300 shadow-md whitespace-nowrap opacity-90 group-hover:opacity-100 group-hover:border-teal-300 flex items-center gap-1.5 transition-all">
-                <Volume2 className="w-3 h-3 text-teal-400 animate-pulse" />
-                <span>{lang === 'en' ? 'Tap Arky!' : 'Apasă pe Arky!'}</span>
+              <span className="mt-1 px-3 py-1 rounded-full bg-slate-900 border border-slate-700 group-hover:border-teal-400/60 text-[11px] font-bold text-teal-300 flex items-center gap-1.5 transition-colors">
+                <Volume2 className="w-3 h-3 text-teal-400" />
+                <span>{lang === 'en' ? 'Tap Arky for a tech tip' : 'Apasă pe Arky pentru un sfat'}</span>
               </span>
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Interactive Knowledge Pills Section */}
-      <KnowledgePills />
+      {/* 2. QUICK EXPLORER STRIP (4 High-Clarity Tiles) */}
+      <section aria-label={lang === 'en' ? 'Quick Platform Access' : 'Acces Rapid Platformă'}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          <button
+            id="hero-badge-misiuni"
+            type="button"
+            onClick={scrollToMissions}
+            className="group flex items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl bg-slate-950/75 hover:bg-slate-900 border border-slate-800 hover:border-teal-400/50 transition-all cursor-pointer touch-manipulation active:scale-[0.98] text-left min-h-[60px]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-300 shrink-0">
+                <BookOpen className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs sm:text-sm font-extrabold text-white truncate">
+                  {lang === 'en' ? '44 Missions' : 'Misiuni V–VIII'}
+                </div>
+                <div className="text-[11px] text-slate-400 truncate">
+                  {lang === 'en' ? 'Grades 5–8 ICT' : '44 lecții practice'}
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-teal-300 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </button>
 
-      {/* Grade Selector Switcher (Clasa a V-a vs Clasa a VI-a) - Under Knowledge Pills */}
-      <div id="comutator-clasa" className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border-2 border-slate-700/80 rounded-3xl p-3.5 sm:p-5 shadow-2xl backdrop-blur relative overflow-hidden">
-        {/* Ambient subtle glow */}
-        <div className="absolute top-0 right-1/4 w-72 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none -z-0"></div>
+          <button
+            id="hero-badge-arcade"
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenArcade?.();
+            }}
+            className="group flex items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl bg-slate-950/75 hover:bg-slate-900 border border-slate-800 hover:border-indigo-400/50 transition-all cursor-pointer touch-manipulation active:scale-[0.98] text-left min-h-[60px]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0">
+                <Gamepad2 className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs sm:text-sm font-extrabold text-white truncate">
+                  {lang === 'en' ? 'Arcade (28)' : 'Arcade (28)'}
+                </div>
+                <div className="text-[11px] text-slate-400 truncate">
+                  {lang === 'en' ? 'ICT mini-games' : 'Jocuri educative'}
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-300 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </button>
 
-        <div className="relative z-10 flex flex-col gap-3.5">
-          {/* Header Row */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
-                <School className="w-4 h-4 text-teal-400" />
-                {lang === 'en' ? 'Select Academic Grade Level (Official Art Klett Textbook)' : 'Comutator Nivel Gimnaziu • Programa Oficială Art Klett'}
+          <button
+            id="hero-badge-duel"
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenDuel?.();
+            }}
+            className="group flex items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl bg-slate-950/75 hover:bg-slate-900 border border-slate-800 hover:border-rose-400/50 transition-all cursor-pointer touch-manipulation active:scale-[0.98] text-left min-h-[60px]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-300 shrink-0">
+                <Swords className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs sm:text-sm font-extrabold text-white truncate">Duel 1v1 Live</div>
+                <div className="text-[11px] text-slate-400 truncate">
+                  {lang === 'en' ? 'Play with classmates' : 'Concurs cu colegii'}
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-rose-300 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </button>
+
+          <button
+            id="hero-badge-clasament"
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              const target = document.getElementById('sectiune-clasamente');
+              if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            className="group flex items-center justify-between gap-2 p-3 sm:p-3.5 rounded-2xl bg-slate-950/75 hover:bg-slate-900 border border-slate-800 hover:border-amber-400/50 transition-all cursor-pointer touch-manipulation active:scale-[0.98] text-left min-h-[60px]"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 shrink-0">
+                <Trophy className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs sm:text-sm font-extrabold text-white truncate">
+                  {lang === 'en' ? 'Leaderboard' : 'Top Elevi'}
+                </div>
+                <div className="text-[11px] text-slate-400 truncate">
+                  {lang === 'en' ? 'Class rankings' : 'Clasament & scoruri'}
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all shrink-0" />
+          </button>
+        </div>
+      </section>
+
+      {/* 3. GRADE LEVEL SELECTOR (Clasa V / VI / VII / VIII) */}
+      <section
+        id="comutator-clasa"
+        aria-label={lang === 'en' ? 'Select Grade Level' : 'Selector Clasă Gimnaziu'}
+        className="scroll-mt-20 bg-slate-950/75 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xl"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3.5 px-0.5">
+          <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+            <School className="w-4 h-4 text-teal-400 shrink-0" />
+            <span>
+              {lang === 'en'
+                ? 'Select Academic Grade Level (Official Art Klett Curriculum)'
+                : 'Alege Clasa • Programa Oficială Art Klett'}
+            </span>
+          </h2>
+          <span className="text-[11px] font-mono text-slate-400">
+            {lang === 'en' ? 'Curriculum 2026 Aligned' : 'Conform OME 5022/2023'}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          {/* Grade 5 Tab */}
+          <button
+            type="button"
+            onClick={() => handleSelectGrade('grade5')}
+            className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between touch-manipulation active:scale-[0.98] ${
+              selectedGrade === 'grade5'
+                ? 'bg-teal-950/45 border-teal-400 shadow-lg shadow-teal-950/50'
+                : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900 text-slate-300'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-lg shrink-0">
+                  🏫
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-sm sm:text-base font-black font-heading text-white truncate">
+                    {lang === 'en' ? '5th Grade' : 'Clasa a V-a'}
+                  </h3>
+                  <div className="text-[11px] font-mono font-bold text-teal-400 tabular-nums">
+                    {grade5DoneCount > 0 ? `${grade5DoneCount}/10 ${lang === 'en' ? 'done' : 'gata'}` : lang === 'en' ? '10 Missions' : '10 Misiuni'}
+                  </div>
+                </div>
+              </div>
+              {selectedGrade === 'grade5' && (
+                <span className="px-2 py-0.5 rounded-md bg-teal-500/20 border border-teal-400/50 text-[10px] font-mono font-bold text-teal-200 shrink-0">
+                  {lang === 'en' ? 'Active' : 'Activă'}
+                </span>
+              )}
+            </div>
+            <p className="hidden sm:block text-xs text-slate-400 leading-relaxed">
+              {lang === 'en'
+                ? 'Hardware, Secret File Tree, Internet, Word 4A–4B, Algorithms & Scratch 6A–6B.'
+                : 'Hardware PC, Fișiere, Internet 3A–3B, Word 4A–4B, Algoritmi & Scratch.'}
+            </p>
+          </button>
+
+          {/* Grade 6 Tab */}
+          <button
+            type="button"
+            onClick={() => handleSelectGrade('grade6')}
+            className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between touch-manipulation active:scale-[0.98] ${
+              selectedGrade === 'grade6'
+                ? 'bg-orange-950/40 border-orange-400 shadow-lg shadow-orange-950/50'
+                : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900 text-slate-300'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-lg shrink-0">
+                  🚀
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-sm sm:text-base font-black font-heading text-white truncate">
+                    {lang === 'en' ? '6th Grade' : 'Clasa a VI-a'}
+                  </h3>
+                  <div className="text-[11px] font-mono font-bold text-orange-400 tabular-nums">
+                    {grade6DoneCount > 0 ? `${grade6DoneCount}/8 ${lang === 'en' ? 'done' : 'gata'}` : lang === 'en' ? '8 Missions' : '8 Misiuni'}
+                  </div>
+                </div>
+              </div>
+              {selectedGrade === 'grade6' && (
+                <span className="px-2 py-0.5 rounded-md bg-orange-500/20 border border-orange-400/50 text-[10px] font-mono font-bold text-orange-200 shrink-0">
+                  {lang === 'en' ? 'Active' : 'Activă'}
+                </span>
+              )}
+            </div>
+            <p className="hidden sm:block text-xs text-slate-400 leading-relaxed">
+              {lang === 'en'
+                ? 'PowerPoint, Paint 3D, Toontastic & VR, Malware, Email & Scratch Loops.'
+                : 'PowerPoint, Paint 3D, Toontastic & VR, Malware, E-mail & Bucle Scratch.'}
+            </p>
+          </button>
+
+          {/* Grade 7 Tab */}
+          <button
+            type="button"
+            onClick={() => handleSelectGrade('grade7')}
+            className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between touch-manipulation active:scale-[0.98] ${
+              selectedGrade === 'grade7'
+                ? 'bg-cyan-950/40 border-cyan-400 shadow-lg shadow-cyan-950/50'
+                : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900 text-slate-300'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-lg shrink-0">
+                  🔬
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-sm sm:text-base font-black font-heading text-white truncate">
+                    {lang === 'en' ? '7th Grade' : 'Clasa a VII-a'}
+                  </h3>
+                  <div className="text-[11px] font-mono font-bold text-cyan-400 tabular-nums">
+                    {lang === 'en' ? '12 Missions' : '12 Misiuni'}
+                  </div>
+                </div>
+              </div>
+              {selectedGrade === 'grade7' && (
+                <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-400/50 text-[10px] font-mono font-bold text-cyan-200 shrink-0">
+                  {lang === 'en' ? 'Active' : 'Activă'}
+                </span>
+              )}
+            </div>
+            <p className="hidden sm:block text-xs text-slate-400 leading-relaxed">
+              {lang === 'en'
+                ? 'Word, Audio/Video, Cloud & GIS, C++ Programming & Virtual Robots.'
+                : 'Word Avansat, Audio/Video, Cloud & GIS, Programare C++ & Robotică.'}
+            </p>
+          </button>
+
+          {/* Grade 8 Tab */}
+          <button
+            type="button"
+            onClick={() => handleSelectGrade('grade8')}
+            className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col justify-between touch-manipulation active:scale-[0.98] ${
+              selectedGrade === 'grade8'
+                ? 'bg-emerald-950/40 border-emerald-400 shadow-lg shadow-emerald-950/50'
+                : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900 text-slate-300'
+            }`}
+          >
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-lg shrink-0">
+                  🎓
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-sm sm:text-base font-black font-heading text-white truncate">
+                    {lang === 'en' ? '8th Grade' : 'Clasa a VIII-a'}
+                  </h3>
+                  <div className="text-[11px] font-mono font-bold text-emerald-400 tabular-nums">
+                    {lang === 'en' ? '14 Missions' : '14 Misiuni'}
+                  </div>
+                </div>
+              </div>
+              {selectedGrade === 'grade8' && (
+                <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-400/50 text-[10px] font-mono font-bold text-emerald-200 shrink-0">
+                  {lang === 'en' ? 'Active' : 'Activă'}
+                </span>
+              )}
+            </div>
+            <p className="hidden sm:block text-xs text-slate-400 leading-relaxed">
+              {lang === 'en'
+                ? 'Excel Spreadsheets, Web HTML5/Sites, C++ Algorithms & Arduino IoT.'
+                : 'Calcul Tabelar Excel, Web HTML5, Algoritmi C++ & Arduino Smart Home.'}
+            </p>
+          </button>
+        </div>
+      </section>
+
+      {/* 4. GRADE MISSIONS CATALOG */}
+      {selectedGrade === 'grade5' && (
+        <section id="sectiune-misiuni-practice" className="scroll-mt-20 flex flex-col gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <BookOpen className="w-5 h-5 text-teal-400 shrink-0" />
+              <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
+                {lang === 'en' ? 'Practical ICT Missions · 5th Grade' : 'Misiuni Practice TIC · Clasa a V-a'}
               </h2>
             </div>
-            <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>{lang === 'en' ? 'Curriculum 2026 Aligned' : 'Conform OME 5022/2023'}</span>
+            <div className="flex items-center gap-3 self-start sm:self-auto tabular-nums">
+              <span className="text-xs font-mono text-slate-300 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+                {grade5DoneCount} / {GRADE5_MISSIONS.length}{' '}
+                {lang === 'en' ? 'completed' : 'finalizate'}
+              </span>
             </div>
           </div>
 
-          {/* Large Tactile Switcher Buttons Grid: 2x2 on mobile, 4 columns on desktop */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-            {/* Tab 1: Clasa a V-a */}
-            <button
-              type="button"
-              onClick={() => handleSelectGrade('grade5')}
-              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
-                selectedGrade === 'grade5'
-                  ? 'bg-gradient-to-br from-teal-950/90 via-slate-900 to-emerald-950/70 border-teal-400 shadow-xl shadow-teal-500/20 ring-2 ring-teal-400/40'
-                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
-              }`}
-            >
-              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
-                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
-                    selectedGrade === 'grade5'
-                      ? 'bg-teal-500/25 border border-teal-400/50 text-teal-200'
-                      : 'bg-slate-800 border border-slate-700 text-slate-400'
-                  }`}>
-                    🏫
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
-                      selectedGrade === 'grade5' ? 'text-white' : 'text-slate-300'
-                    }`}>
-                      {lang === 'en' ? '5th Grade' : 'Clasa a V-a'}
-                    </h3>
-                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-teal-400 truncate">
-                      {lang === 'en' ? '10 Missions' : '10 Misiuni'}
-                    </div>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            {GRADE5_MISSIONS.map((mission) => {
+              const loc = lang === 'en' ? mission.en : mission.ro;
+              const isDone = isMissionDone(mission.id);
+              const isActive = activeMissionId === mission.id;
 
-                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
-                  selectedGrade === 'grade5'
-                    ? 'bg-teal-500/20 border-teal-400 text-teal-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
-                }`}>
-                  {selectedGrade === 'grade5' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
-                </div>
-              </div>
-
-              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade5' ? 'text-slate-200' : 'text-slate-400'}`}>
-                {lang === 'en'
-                  ? 'Hardware PC, Secret File Tree, Internet 3A & 3B, Word Formatting 4A & 4B, Sequential Algo 5A, Decisions 5B, Scratch 6A & 6B.'
-                  : 'Sisteme de calcul, Arborele de fișiere, Internet 3A & 3B, Tehnoredactare Word 4A & 4B, Algoritmi 5A & 5B, Scratch 6A & 6B.'}
-              </p>
-            </button>
-
-            {/* Tab 2: Clasa a VI-a */}
-            <button
-              type="button"
-              onClick={() => handleSelectGrade('grade6')}
-              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
-                selectedGrade === 'grade6'
-                  ? 'bg-gradient-to-br from-orange-950/90 via-slate-900 to-indigo-950/70 border-orange-400 shadow-xl shadow-orange-500/20 ring-2 ring-orange-400/40'
-                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
-              }`}
-            >
-              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
-                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
-                    selectedGrade === 'grade6'
-                      ? 'bg-orange-500/25 border border-orange-400/50 text-orange-200'
-                      : 'bg-slate-800 border border-slate-700 text-slate-400'
-                  }`}>
-                    🚀
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
-                      selectedGrade === 'grade6' ? 'text-white' : 'text-slate-300'
-                    }`}>
-                      {lang === 'en' ? '6th Grade' : 'Clasa a VI-a'}
-                    </h3>
-                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-orange-400 truncate">
-                      {lang === 'en' ? '8 Missions' : '8 Misiuni'}
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
-                  selectedGrade === 'grade6'
-                    ? 'bg-orange-500/20 border-orange-400 text-orange-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
-                }`}>
-                  {selectedGrade === 'grade6' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
-                </div>
-              </div>
-
-              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade6' ? 'text-slate-200' : 'text-slate-400'}`}>
-                {lang === 'en'
-                  ? 'PowerPoint 1A & 1B, Paint 3D Modeling 2A, Toontastic & VR 2B, Malware Security 3A, Email 3B, Advanced Scratch Loops 4A & 4B.'
-                  : 'Prezentări PowerPoint 1A & 1B, Modelare Paint 3D 2A, Toontastic & VR 2B, Securitate Malware 3A, E-mail 3B, Bucle Scratch 4A & 4B.'}
-              </p>
-            </button>
-
-            {/* Tab 3: Clasa a VII-a */}
-            <button
-              type="button"
-              onClick={() => handleSelectGrade('grade7')}
-              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
-                selectedGrade === 'grade7'
-                  ? 'bg-gradient-to-br from-cyan-950/90 via-slate-900 to-violet-950/70 border-cyan-400 shadow-xl shadow-cyan-500/20 ring-2 ring-cyan-400/40'
-                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
-              }`}
-            >
-              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
-                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
-                    selectedGrade === 'grade7'
-                      ? 'bg-cyan-500/25 border border-cyan-400/50 text-cyan-200'
-                      : 'bg-slate-800 border border-slate-700 text-slate-400'
-                  }`}>
-                    🔬
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
-                      selectedGrade === 'grade7' ? 'text-white' : 'text-slate-300'
-                    }`}>
-                      {lang === 'en' ? '7th Grade' : 'Clasa a VII-a'}
-                    </h3>
-                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-cyan-400 truncate">
-                      {lang === 'en' ? '12 Missions' : '12 Misiuni'}
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
-                  selectedGrade === 'grade7'
-                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
-                }`}>
-                  {selectedGrade === 'grade7' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
-                </div>
-              </div>
-
-              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade7' ? 'text-slate-200' : 'text-slate-400'}`}>
-                {lang === 'en'
-                  ? 'Word 1A & 1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, C++ Programming 4A-6A, Virtual Robots & Sensors 6B.'
-                  : 'Tehnoredactare Word 1A/1B, WavePad Audio 2A, VideoPad 2B, Cloud 3A, GIS 3B, Programare C++ 4A–6A & Roboți Senzoriali 6B.'}
-              </p>
-            </button>
-
-            {/* Tab 4: Clasa a VIII-a */}
-            <button
-              type="button"
-              onClick={() => handleSelectGrade('grade8')}
-              className={`p-3 sm:p-4 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer flex flex-col justify-between relative overflow-hidden touch-manipulation active:scale-[0.98] ${
-                selectedGrade === 'grade8'
-                  ? 'bg-gradient-to-br from-emerald-950/90 via-slate-900 to-teal-950/70 border-emerald-400 shadow-xl shadow-emerald-500/20 ring-2 ring-emerald-400/40'
-                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 text-slate-400'
-              }`}
-            >
-              <div className="flex items-start justify-between gap-1.5 sm:gap-3 mb-1 sm:mb-2 w-full">
-                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-lg sm:text-xl shadow-inner shrink-0 ${
-                    selectedGrade === 'grade8'
-                      ? 'bg-emerald-500/25 border border-emerald-400/50 text-emerald-200'
-                      : 'bg-slate-800 border border-slate-700 text-slate-400'
-                  }`}>
-                    🎓
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className={`text-xs sm:text-base lg:text-lg font-black font-heading truncate leading-tight ${
-                      selectedGrade === 'grade8' ? 'text-white' : 'text-slate-300'
-                    }`}>
-                      {lang === 'en' ? '8th Grade' : 'Clasa a VIII-a'}
-                    </h3>
-                    <div className="text-[10px] sm:text-[11px] font-mono font-bold text-emerald-400 truncate">
-                      {lang === 'en' ? '14 Missions' : '14 Misiuni'}
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold border shrink-0 ${
-                  selectedGrade === 'grade8'
-                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 animate-pulse'
-                    : 'bg-slate-900 border-slate-700 text-slate-300 font-bold'
-                }`}>
-                  {selectedGrade === 'grade8' ? (lang === 'en' ? '✓ ACTIVE' : '✓ ACTIVĂ') : (lang === 'en' ? 'Select' : 'Alege')}
-                </div>
-              </div>
-
-              <p className={`hidden sm:block text-xs leading-relaxed mt-1 ${selectedGrade === 'grade8' ? 'text-slate-200' : 'text-slate-400'}`}>
-                {lang === 'en'
-                  ? 'Excel Spreadsheets 1A-1D, Google Sites 2A-2C, Advanced C++ 3A-3E, Arduino Robotics 4A & Smart Home IoT 4B.'
-                  : 'Calcul Tabelar Excel 1A–1D, Pagini Web Google Sites 2A–2C, Algoritmi C++ 3A–3E, Robotică Arduino 4A & Smart Home IoT 4B.'}
-              </p>
-            </button>
+              return (
+                <MissionCard
+                  key={mission.id}
+                  missionId={mission.id}
+                  emoji={mission.emoji}
+                  moduleLabel={loc.moduleLabel}
+                  textbookRef={loc.textbookRef}
+                  title={loc.title}
+                  topics={loc.topics}
+                  description={loc.description}
+                  duration={loc.duration}
+                  pointsLabel={loc.pointsLabel}
+                  diplomaLabel={loc.diplomaLabel}
+                  levelsCount={mission.levelsCount}
+                  defaultFooterLabel={loc.defaultFooterLabel}
+                  curriculaId={mission.curriculaId}
+                  accentColor={mission.accentColor}
+                  isCompleted={isDone}
+                  isActive={isActive}
+                  activeLevel={activeMissionLevel}
+                  activeScore={activeMissionScore}
+                  startLabel={loc.startLabel}
+                  resumeLabel={loc.resumeLabel}
+                  lang={lang}
+                  onStart={handleAttemptStart}
+                  onOpenCurricula={openCurriculaModal}
+                  extraAction={
+                    mission.id === 'text2' && onOpenArcade
+                      ? {
+                          label: 'Arcade 4B',
+                          title: lang === 'en' ? 'Play Module 4B Arcade: PageCraft' : 'Joacă Mini-Jocul Arcade 4B: PageCraft',
+                          onClick: () => {
+                            sounds.playClick();
+                            onOpenArcade();
+                          },
+                        }
+                      : undefined
+                  }
+                />
+              );
+            })}
           </div>
-        </div>
-      </div>
-
-      {/* Courses & Lessons Section - CLASA A V-A */}
-      {selectedGrade === 'grade5' && (
-      <div id="sectiune-misiuni-practice" className="scroll-mt-6">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-teal-400" />
-            <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
-              {lang === 'en' ? 'Practical ICT Missions • 5th Grade (Art Klett)' : 'Misiuni Practice TIC • Clasa a V-a (Manual Art Klett)'}
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-            {lang === 'en' ? '10 Complete Interactive Missions Available' : '10 Misiuni Interactive Disponibile (Unitățile 1–6)'}
-          </span>
-        </div>
-
-        {/* Lesson Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Card 1 (NEW & FIRST): Modulul 1 - Sisteme de Calcul și Comunicații */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('hardware')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'hardware'
-                ? 'border-teal-400 shadow-teal-500/20 ring-2 ring-teal-500/30'
-                : 'border-teal-500/60 hover:border-teal-400 hover:shadow-teal-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  💻
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('hardware') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/5)` : `În Curs (Nivel ${activeMissionLevel}/5)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 text-xs font-black uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 1' : 'MODULUL 1'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-teal-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 10–20 • Unit 1' : 'Manual pag. 10–20 • Unitatea 1'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-teal-300 transition-colors">
-                {lang === 'en' ? 'Computing & Communication Systems' : 'Sisteme de calcul și comunicații'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'PC Architecture, Ergonomics, History & Capacity Math' : 'Arhitectură PC, Ergonomie, Istorie & Calculul Capacității'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Learn safety and ergonomics in the computer lab, explore the timeline (1642 Pascaline → 1981 IBM PC), assemble central unit components (CPU, RAM, Motherboard), sort peripherals, and solve the binary capacity math from the textbook!'
-                  : 'Învață normele de protecția muncii și ergonomie în laborator, explorează axa timpului (1642 Pascalina → 1981 IBM PC), montează componentele unității centrale (CPU, RAM, Placă de bază), sortează perifericele și rezolvă problema stocării în biți din manual!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-teal-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-teal-400" /> {lang === 'en' ? 'Hardware Technician Certificate' : 'Diplomă Tehnician Hardware'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('hardware') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
-                  <span className="text-teal-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/5 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/5 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '5 Interactive Levels' : '5 Niveluri interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('hardware')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('hardware')}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                  isMissionDone('hardware')
-                    ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                    : 'bg-teal-700 hover:bg-teal-600 text-white font-black shadow-teal-700/30'
-                }`}
-              >
-                {isMissionDone('hardware') ? (
-                  <>
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                  </>
-                ) : activeMissionId === 'hardware' && activeMissionLevel > 1 ? (
-                  <>
-                    <span>{lang === 'en' ? 'Resume Hardware Mission' : 'Continuă Misiunea Hardware'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                ) : (
-                  <>
-                    <span>{lang === 'en' ? 'Start Mission 1' : 'Începe Misiunea 1'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Modulul 2 - Organizarea Datelor • Arborele Secret */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('files')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'files'
-                ? 'border-emerald-400 shadow-emerald-500/20 ring-2 ring-emerald-500/30'
-                : 'border-emerald-500/60 hover:border-emerald-400 hover:shadow-emerald-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🌳
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('files') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 2' : 'MODULUL 2'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 22–30 • Unit 2' : 'Manual pag. 22–30 • Unitatea 2'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors">
-                {lang === 'en' ? 'The Secret File Tree & OS Mission' : 'Misiunea Arborele Secret de Fișiere & SO'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Windows 10 Interface, Extensions, C:\\ Structure, Shortcuts & Recycle Bin' : 'Interfață Windows 10, Extensii, Structură C:\\, Comenzi Rapide & Recycle Bin'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Explore the operating system interface (p. 22–24), learn extension rules and file paths (p. 25–26), build hierarchical directory structures (p. 27–28), find secret files using patterns (*.docx), move files with shortcuts, inspect properties, and restore items from the Recycle Bin!'
-                  : 'Explorează interfața sistemului de operare (pag. 22–24), învață regula extensiilor și calea către fișiere (pag. 25–26), construiește structura ierarhică de directoare (pag. 27–28), găsește fișierele secrete cu masca (*.docx), mută documente cu taste rapide, gestionează proprietățile și restaurează datele din Recycle Bin!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-emerald-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-emerald-400" /> {lang === 'en' ? 'File Architect & OS Certificate' : 'Diplomă Arhitect Fișiere & SO'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('files') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
-                  <span className="text-emerald-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Practical Challenges' : '7 Provocări practice'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('fisiere-so')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('files')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('files')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-emerald-700 hover:bg-emerald-600 text-white font-black shadow-emerald-700/30'
-                  }`}
-                >
-                  {isMissionDone('files') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'files' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Files Mission' : 'Continuă Misiunea Fișiere'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 2' : 'Începe Misiunea 2'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 3: ACTIVE MISSION 3A - Internet, Rețele & World Wide Web */}
-          <div className={`relative group rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between ${
-            isMissionDone('internet1')
-              ? 'bg-slate-900/90 border-2 border-emerald-500/80 shadow-emerald-500/10'
-              : 'bg-slate-900/80 border border-slate-700/80 hover:border-teal-500/80 hover:shadow-2xl hover:shadow-teal-500/10'
-          }`}>
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-2xl border border-teal-500/30">
-                  🌐
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('internet1') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/6)` : `În Curs (Pagina ${activeMissionLevel}/6)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/30 text-xs font-bold uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? '6 Interactive Pages' : '6 Pagini Interactive'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-teal-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 32–36 • Mission 3A' : 'Manual pag. 32–36 • Misiunea 3A'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-teal-300 transition-colors">
-                {lang === 'en' ? 'Internet & World Wide Web Explorer' : 'Explorator Internet, Rețele & Web'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'ARPANET, TCP/IP, Services, Crossword, URL Anatomy, Browser Lab & Cyber Safety' : 'ARPANET, TCP/IP, Servicii, Rebus, Anatomie URL, Ghid Browser & Siguranță'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Discover computer networks & protocols (p. 32), match Internet services (WWW, Email, FTP, IRC, Telnet - p. 33), solve the secret crossword (p. 34), decode URL addresses (p. 34-35), master browser navigation buttons (p. 35-36), and assemble your cybersecurity shield against digital threats!'
-                  : 'Descoperă ce este o rețea și protocolul TCP/IP (pag. 32), asociază serviciile Internet (WWW, E-mail, FTP, IRC, Telnet - pag. 33), rezolvă rebusul tematic (pag. 34), descifrează adresele URL (pag. 34-35), stăpânește butoanele de navigare din browser (pag. 35-36) și activează scutul de securitate cibernetică!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 15-20 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-teal-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-teal-400" /> {lang === 'en' ? 'Web Explorer Certificate' : 'Diplomă Explorator Web'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('internet1') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
-                  <span className="text-teal-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/6 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/6 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? 'Theory + Interactive Tasks' : 'Teorie + Exerciții interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('internet-siguranta')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('internet1')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('internet1')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-teal-700 hover:bg-teal-600 text-white font-black shadow-teal-700/30'
-                  }`}
-                >
-                  {isMissionDone('internet1') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'internet1' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Internet 3A' : 'Continuă Misiunea 3A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 3A' : 'Începe Misiunea 3A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: ACTIVE MISSION 3B - Căutare Avansată, Comunicare & Identitate Digitală */}
-          <div className={`relative group rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between ${
-            isMissionDone('internet2')
-              ? 'bg-slate-900/90 border-2 border-emerald-500/80 shadow-emerald-500/10'
-              : 'bg-slate-900/80 border border-slate-700/80 hover:border-indigo-500/80 hover:shadow-2xl hover:shadow-indigo-500/10'
-          }`}>
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl border border-indigo-500/30">
-                  🔍
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('internet2') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/6)` : `În Curs (Nivel ${activeMissionLevel}/6)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? '6 Interactive Levels' : '6 Niveluri Interactive'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-indigo-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 38–48 • Mission 3B' : 'Manual pag. 38–48 • Misiunea 3B'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-indigo-300 transition-colors">
-                {lang === 'en' ? 'Advanced Search, Communication & Digital Identity' : 'Căutare Avansată, Comunicare & Identitate Digitală'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Search Operators, Source Evaluation, Email (Cc, Bcc), Netiquette, Copyright & Fortress Passwords' : 'Operatori Căutare, Evaluare Surse, E-mail (Cc, Bcc), Netichetă, Plagiat & Parole Blindate'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master Google search operators (AND, OR, NOT, ""), critically evaluate source credibility (CRAAP test & Fake News detection), construct professional emails (Cc, Bcc, attachments), practice netiquette ethics, respect copyright & cite sources without plagiarism, and fortress your digital identity with 2FA passwords!'
-                  : 'Stăpânește căutarea avansată cu operatori booleeni (" ", site:, filetype:), evaluează critic sursele de pe net și recunoaște știrile false, compune e-mailuri profesioniste (Cc, Bcc, @), respectă normele de netichetă și combaterea cyberbullying-ului, evită plagiatul prin citare și creează parole blindate cu 2FA!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-indigo-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-indigo-400" /> {lang === 'en' ? 'Digital Citizenship Certificate' : 'Diplomă Cetățean Digital'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('internet2') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
-                  <span className="text-indigo-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/6 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/6 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? 'Theory + Smart Simulator' : 'Teorie + Simulator Inteligent'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('internet-siguranta')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('internet2')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('internet2')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
-                  }`}
-                >
-                  {isMissionDone('internet2') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'internet2' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Internet 3B' : 'Continuă Misiunea 3B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 3B' : 'Începe Misiunea 3B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 5: ACTIVE MISSION 4A - Procesorul de Text & Tehnoredactare */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('text1')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'text1'
-                ? 'border-blue-400 shadow-blue-500/20 ring-2 ring-blue-500/30'
-                : 'border-blue-500/60 hover:border-blue-400 hover:shadow-blue-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  📝
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('text1') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-black uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 4A' : 'MODULUL 4A'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 50–67 • Mission 4A' : 'Manual pag. 50–67 • Misiunea 4A'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-blue-300 transition-colors">
-                {lang === 'en' ? 'Word Processor & Text Formatting Mission' : 'Misiunea Procesorul de Text & Tehnoredactare'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Ribbon & Ruler, Golden Typing Rules, Fonts, Subscript/Superscript, Alignment, Bullets & Find/Replace' : 'Ribbon & Riglă, Reguli Tehnoredactare, Fonturi, Indici, Alinieri, Liste & Find/Replace'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Explore the word processor window & ruler (p. 50–52), master golden typing rules & punctuation hygiene (p. 53–55), format fonts & scientific scripts (p. 56–58), align paragraphs with Justify & indents (p. 59–61), structure multi-level lists (p. 62–64), deploy automated Find & Replace, and construct the Digital Student Charter!'
-                  : 'Explorează interfața procesorului de text și rigla (pag. 50–52), învață regulile de aur ale tastării și punctuației (pag. 53–55), formatează caracterele cu stiluri și formule științifice (pag. 56–58), aliniază paragrafele cu Justify și alineate (pag. 59–61), structurează liste marcate și numerotate (pag. 62–64), automatizează căutările cu Find & Replace și redactează Carta Elevului Digital!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-blue-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-blue-400" /> {lang === 'en' ? 'Word Processor Certificate' : 'Diplomă Tehnician Text & Word'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('text1') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
-                  <span className="text-blue-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('editoare-text')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('text1')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('text1')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30'
-                  }`}
-                >
-                  {isMissionDone('text1') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'text1' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 4A' : 'Începe Misiunea 4A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 6: ACTIVE MISSION 4B - Elemente Grafice, Tabele & Paginare */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('text2')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'text2'
-                ? 'border-emerald-400 shadow-emerald-500/20 ring-2 ring-emerald-500/30'
-                : 'border-emerald-500/60 hover:border-emerald-400 hover:shadow-emerald-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  📊
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('text2') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'text2' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-black uppercase tracking-wider">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 4B' : 'MODULUL 4B'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 68–80 • Mission 4B' : 'Manual pag. 68–80 • Misiunea 4B'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors">
-                {lang === 'en' ? 'Visual Elements, Tables & Page Layout' : 'Elemente Grafice, Tabele & Paginare'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Tables & Merge, 1:1 Aspect Ratio, Text Wrapping, Shapes, Headers & Footers' : 'Tabele & Merge, Proporții 1:1, Text Wrapping, Forme, Antet & Subsol'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master table creation and cell merging (p. 68–72), preserve picture aspect ratio and crop margins (p. 73–75), configure Square & Behind text wrapping (p. 76–77), assemble text boxes and group shapes (p. 78–79), set A4 margins and dynamic page numbers (p. 80), and publish the Eco-Magazine!'
-                  : 'Stăpânește inserarea tabelelor și îmbinarea celulelor (pag. 68–72), păstrează proporțiile imaginilor și decupează marginile (pag. 73–75), configurează încadrarea textului (Square, Behind - pag. 76–77), construiește ecusoane cu casete de text și grupare (pag. 78–79), configurează pagina A4 cu antet și numerotare dinamică (pag. 80) și publică Eco-Revista!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-emerald-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-emerald-400" /> {lang === 'en' ? 'Document Designer Diploma' : 'Diplomă Designer Documente'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex flex-wrap items-center justify-between gap-3">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('text2') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'text2' && activeMissionLevel > 1 ? (
-                  <span className="text-emerald-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                {onOpenArcade && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      sounds.playClick();
-                      onOpenArcade();
-                    }}
-                    className="px-3 py-2.5 rounded-xl bg-indigo-950/90 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/50 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-950/40 active:scale-95"
-                    title={lang === 'en' ? 'Play Module 4B Arcade: PageCraft' : 'Joacă Mini-Jocul Arcade 4B: PageCraft'}
-                  >
-                    <Gamepad2 className="w-3.5 h-3.5 text-indigo-400" />
-                    <span>{lang === 'en' ? 'Arcade 4B' : 'Arcade 4B'}</span>
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('editoare-text')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('text2')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('text2')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-emerald-700 hover:bg-emerald-600 text-white font-black shadow-emerald-700/30'
-                  }`}
-                >
-                  {isMissionDone('text2') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'text2' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 4B' : 'Începe Misiunea 4B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 7: ACTIVE MISSION 5A - Noțiunea de Algoritm & Algoritmi Secvențiali */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('algo1')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'algo1'
-                ? 'border-amber-400 shadow-amber-500/20 ring-2 ring-amber-500/30'
-                : 'border-amber-500/60 hover:border-amber-400 hover:shadow-amber-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🧩
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('algo1') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 5A • NEW' : 'MODULUL 5A • NOU'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 54–61 • Mission 5A' : 'Manual pag. 54–61 • Misiunea 5A'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-amber-300 transition-colors">
-                {lang === 'en' ? 'Algorithm Concept & Sequential Logic' : 'Noțiunea de Algoritm & Algoritmi Secvențiali'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Algorithm Definition, 6 Properties, Ambiguities, Linear Steps, 3-Glass Swap & Ciphers' : 'Definiție, 6 Proprietăți, Ambiguități, Pași Liniari, Regula celor 3 Pahare & Criptare'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Discover what an algorithm is with real-world tea & recipe routines (p. 54–55), master the 6 fundamental properties (p. 56–57), defuse the ambiguity trap (p. 58), execute sequential steps (p. 59), master the 3-glass variable swap algorithm (aux - p. 60), decode numeric substitution ciphers (p. 60–61), and solve perimeter & area math challenges!'
-                  : 'Descoperă noțiunea de algoritm prin exemple din viața cotidiană (pag. 54–55), stăpânește cele 6 proprietăți fundamentale (pag. 56–57), evită capcana ambiguităților (pag. 58), ordonează pași secvențiali (pag. 59), experimentează interschimbarea valorilor prin regula celor 3 pahare (aux - pag. 60), decodează mesaje prin substituție numerică (pag. 60–61) și rezolvă algoritmii de arie și perimetru!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-amber-400" /> {lang === 'en' ? 'Junior Algorithmist Diploma' : 'Diplomă Junior Algoritmist'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('algo1') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
-                  <span className="text-amber-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('algoritmi')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('algo1')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('algo1')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-amber-600 hover:bg-amber-500 text-slate-950 font-black shadow-amber-600/30'
-                  }`}
-                >
-                  {isMissionDone('algo1') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'algo1' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 5A' : 'Continuă Misiunea 5A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 5A' : 'Începe Misiunea 5A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 8: ACTIVE MISSION 5B - Structuri Decizionale, Date, Operatori & Scheme Logice */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('algo2')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'algo2'
-                ? 'border-purple-400 shadow-purple-500/20 ring-2 ring-purple-500/30'
-                : 'border-purple-500/60 hover:border-purple-400 hover:shadow-purple-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🚦
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('algo2') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 5B • NEW' : 'MODULUL 5B • NOU'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-purple-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 62–71 • Mission 5B' : 'Manual pag. 62–71 • Misiunea 5B'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-purple-300 transition-colors">
-                {lang === 'en' ? 'Decisions, Data Types & Flowcharts' : 'Structuri Decizionale, Date & Scheme Logice'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'If-Then-Else, Constants vs Variables, Data Types, Operators, Truth Tables, Flowcharts & Trace' : 'Dacă-Atunci-Altfel, Constante vs Variabile, Tipuri de Date, Operatori, Tabele de Adevăr & Scheme'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master alternative decision structures with traffic lights and maze robots (p. 62–63), organize input/intermediate/output data and constants (p. 64–65), identify numeric, text & boolean data types (p. 66), solve arithmetic (+, -, *, /, mod, div) & relational expressions (p. 67), evaluate logic connectives (AND, OR, NOT) with truth tables (p. 68–69), build standard flowchart block diagrams (p. 70), and trace execution tables (p. 71)!'
-                  : 'Stăpânește structura alternativă Dacă-Atunci-Altfel prin semafor și ghidarea robotului (pag. 62–63), organizează datele de intrare, manevră și ieșire (pag. 64–65), explorează tipurile de date numeric, text și logic (pag. 66), evaluează expresii aritmetice (+, -, *, /, %, div) și de comparație (pag. 67), construiește tabele de adevăr pentru conectivele logice (ȘI, SAU, NU - pag. 68–69), asamblează scheme logice standardizate (pag. 70) și execută tabele de valori (trace table - pag. 71)!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-purple-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-purple-400" /> {lang === 'en' ? 'Flowchart Master Diploma' : 'Diplomă Maestru Scheme Logice'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('algo2') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
-                  <span className="text-purple-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('algoritmi')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('algo2')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('algo2')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-purple-600 hover:bg-purple-500 text-white font-black shadow-purple-600/30'
-                  }`}
-                >
-                  {isMissionDone('algo2') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'algo2' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 5B' : 'Continuă Misiunea 5B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 5B' : 'Începe Misiunea 5B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 9: ACTIVE MISSION 6A - Mediul Scratch 3.0, Mișcare Liniară, Variabile & Creion */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('scratch1')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'scratch1'
-                ? 'border-orange-400 shadow-orange-500/20 ring-2 ring-orange-500/30'
-                : 'border-orange-500/60 hover:border-orange-400 hover:shadow-orange-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🐱
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('scratch1') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 6A • SCRATCH' : 'MODULUL 6A • SCRATCH'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-orange-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 72–90 • Mission 6A' : 'Manual pag. 72–90 • Misiunea 6A'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-orange-300 transition-colors">
-                {lang === 'en' ? 'Scratch 3.0: Stage, Motion & Variables' : 'Mediul Scratch: Scena, Mișcare & Variabile'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Visual Blocks, 480x360 Stage, 9 Categories, "RoboTIC Se Prezintă", Variables, Math & Pen Extension' : 'Blocuri Vizuale, Scena 480x360, 9 Categorii, RoboTIC Se Prezintă, Variabile & Extensia Creion'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Explore the MIT Scratch 3.0 environment (p. 72–73), navigate the 480x360 coordinate stage with Green Flag & Red Stop (p. 74–75), categorize the 9 color palette blocks (p. 74–76), build project "RoboTIC Introduces Himself" with sequential gliding, speech & sound (p. 76–80), create and manipulate variables with stage watchers (p. 81–84), execute project "RoboOperations" with math operators & text join (p. 84–88), and draw geometric shapes with the Magic Pen extension (p. 88–90)!'
-                  : 'Descoperă mediul Scratch 3.0 de la MIT Media Lab (pag. 72–73), navighează pe scena de 480x360 px cu Steagul Verde și Stop (pag. 74–75), explorează cele 9 categorii de blocuri colorate (pag. 74–76), implementează proiectul „RoboTIC se prezintă” cu glisare, dialog și sunet (pag. 76–80), creează variabile și monitoare de scor (pag. 81–84), efectuează calcule cu operatori și alăturare de text în „RoboOperații” (pag. 84–88) și desenează figuri geometrice cu Extensia Creion (pag. 88–90)!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-orange-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-orange-400" /> {lang === 'en' ? 'Scratch Developer Diploma' : 'Diplomă Programator Scratch'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('scratch1') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
-                  <span className="text-orange-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('scratch')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('scratch1')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('scratch1')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-orange-700 hover:bg-orange-600 text-white font-black shadow-orange-700/30'
-                  }`}
-                >
-                  {isMissionDone('scratch1') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'scratch1' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 6A' : 'Continuă Misiunea 6A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 6A' : 'Începe Misiunea 6A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 10: ACTIVE MISSION 6B - Decizii Scratch, Labirint, Tabla Înmulțirii, Muzică & Marea Evaluare */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('scratch2')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'scratch2'
-                ? 'border-pink-400 shadow-pink-500/20 ring-2 ring-pink-500/30'
-                : 'border-pink-500/60 hover:border-pink-400 hover:shadow-pink-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🎮
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('scratch2') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Page ${activeMissionLevel}/7)` : `În Curs (Pagina ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'MODULE 6B • GRADUATION' : 'MODULUL 6B • ABSOLVIRE'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-pink-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 84–93 • Mission 6B' : 'Manual pag. 84–93 • Misiunea 6B'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-pink-300 transition-colors">
-                {lang === 'en' ? 'Decisions, Music & Contest Games' : 'Decizii, Muzică, Jocuri & Marea Evaluare'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'If/Else, Maze Game, Math Quiz, Music MIDI Synth, Scale Songs, Catch Fish Contest & Final Grade 5 Exam' : 'Dacă/Altfel, Labirint, Tabla Înmulțirii, Extensia Muzică, Gama Do, Prinde Peștele & Marea Evaluare Finală'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Implement decision structures in Scratch (p. 84–86), program the Smart Maze game with color sensing (p. 86–88), develop the Multiplication Quiz with user input and random numbers (p. 88–90), compose digital music with the MIDI Music extension (p. 90–92), play the C Major scale and "În pădurea cu alune" (p. 91–92), build multi-sprite contest game "Catch the Fish" with timers (p. 92–93), create the "Save the Planet" ecological story and graduate Grade 5 Informatics & ICT!'
-                  : 'Programează decizii dacă/altfel în Scratch (pag. 84–86), construiește jocul Labirint cu senzori optici de culoare (pag. 86–88), creează jocul Tabla Înmulțirii cu generare de factori aleatorii și citire răspuns (pag. 88–90), explorează extensia Muzică și sintetizatorul digital (pag. 90–92), programează gama Do major și cântecul „În pădurea cu alune” (pag. 91–92), creează jocul de concurs „Prinde Peștișorul” cu cronometru (pag. 92–93), animă proiectul ecologic „Salvăm Planeta” și obține Diploma de Absolvire a Clasei a V-a (pag. 93)!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 Points (Grade 10)' : '100 Puncte (Nota 10)'}
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-pink-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-pink-400" /> {lang === 'en' ? 'Grade 5 Grand Diploma' : 'Marea Diplomă de Onoare Clasa a V-a'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('scratch2') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
-                  <span className="text-pink-400 font-bold">
-                    {lang === 'en' ? `Progress: Page ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Pagina ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('scratch')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('scratch2')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('scratch2')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-pink-600 hover:bg-pink-500 text-white font-black shadow-pink-600/30'
-                  }`}
-                >
-                  {isMissionDone('scratch2') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'scratch2' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 6B' : 'Continuă Misiunea 6B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 6B' : 'Începe Misiunea 6B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </section>
       )}
 
-      {/* Courses & Lessons Section - CLASA A VI-A */}
       {selectedGrade === 'grade6' && (
-      <div id="sectiune-misiuni-clasa-6" className="scroll-mt-6 flex flex-col gap-6">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Presentation className="w-5 h-5 text-orange-400" />
-            <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
-              {lang === 'en' ? 'Practical ICT Missions • 6th Grade (Art Klett)' : 'Misiuni Practice TIC • Clasa a VI-a (Manual Art Klett)'}
-            </h2>
-          </div>
-          <span className="text-xs font-mono text-orange-300 bg-orange-950/80 px-3 py-1 rounded-full border border-orange-500/40 self-start sm:self-auto">
-            {lang === 'en' ? 'New Curriculum 2026 • 4 Major Units' : 'Curriculum Nou 2026 • 4 Mari Unități Curriculare'}
-          </span>
-        </div>
-
-        {/* 4 Major Units Roadmap Matrix Banner */}
-        <div className="bg-slate-900/90 border-2 border-orange-500/30 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
-          <div className="text-xs font-mono font-bold text-orange-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" />
-            {lang === 'en' ? '6th Grade Curriculum Overview (Textbook pp. 10–93)' : 'Harta Curriculară Clasa a VI-a (Manual pag. 10–93)'}
+        <section id="sectiune-misiuni-clasa-6" className="scroll-mt-20 flex flex-col gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <Presentation className="w-5 h-5 text-orange-400 shrink-0" />
+              <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
+                {lang === 'en' ? 'Practical ICT Missions · 6th Grade' : 'Misiuni Practice TIC · Clasa a VI-a'}
+              </h2>
+            </div>
+            <span className="text-xs font-mono text-orange-300 bg-slate-950 px-3 py-1.5 rounded-xl border border-orange-500/30 self-start sm:self-auto tabular-nums">
+              {grade6DoneCount} / {GRADE6_MISSIONS.length}{' '}
+              {lang === 'en' ? 'completed · 4 Major Units' : 'finalizate · 4 Unități'}
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-            <div className="p-3.5 rounded-2xl bg-orange-950/40 border border-orange-500/40 flex flex-col justify-between">
-              <div>
-                <span className="text-xl mb-1 block">📽️</span>
-                <div className="font-bold text-white mb-0.5">Unitatea 1: Prezentări</div>
-                <div className="text-[11px] text-slate-300 leading-snug">PowerPoint, design slide-uri, contrast, public speaking (pag. 10–25)</div>
-              </div>
-              <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● DISPONIBIL ACUM</span>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/40 flex flex-col justify-between">
-              <div>
-                <span className="text-xl mb-1 block">🧊</span>
-                <div className="font-bold text-white mb-0.5">Unitatea 2: Animații & 3D</div>
-                <div className="text-[11px] text-slate-300 leading-snug">Paint 3D, corpuri cu volum, stickere & export 3D (pag. 26–43)</div>
-              </div>
-              <span className="mt-2 text-[10px] font-mono font-bold text-cyan-400">● MODULUL 2A ACTIV</span>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-rose-950/40 border border-rose-500/40 flex flex-col justify-between">
-              <div>
-                <span className="text-xl mb-1 block">🛡️</span>
-                <div className="font-bold text-white mb-0.5">Unitatea 3: Internet, Malware & E-mail</div>
-                <div className="text-[11px] text-slate-300 leading-snug">Malware, firewall, e-mail, netichetă & cloud (pag. 44–61)</div>
-              </div>
-              <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● MODULUL 3A & 3B ACTIVE</span>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/40 flex flex-col justify-between">
-              <div>
-                <span className="text-xl mb-1 block">🔄</span>
-                <div className="font-bold text-white mb-0.5">Unitatea 4: Algoritmi & Scratch</div>
-                <div className="text-[11px] text-slate-300 leading-snug">Bucle condiționate, contor For, Minecraft & fractali (pag. 62–93)</div>
-              </div>
-              <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">● MODULUL 4A & 4B ACTIVE</span>
-            </div>
-          </div>
-        </div>
-
-        {/* 6th Grade Lesson Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Card 1: Modulul 1A - Prezentarea & Interfața PowerPoint (READY & ACTIVE) */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('g6_presentation1')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'g6_presentation1'
-                ? 'border-orange-400 shadow-orange-500/20 ring-2 ring-orange-500/30'
-                : 'border-orange-500/60 hover:border-orange-400 hover:shadow-orange-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  📽️
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('g6_presentation1') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1A' : 'NOU • MODULUL 1A'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-orange-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 10–15 • Unit 1 (Lessons 1-2)' : 'Manual pag. 10–15 • Unitatea 1 (Lecțiile 1-2)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-orange-300 transition-colors">
-                {lang === 'en' ? 'Presentation & PowerPoint Interface' : 'Prezentarea & Interfața PowerPoint'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Presentation Types, 3 Launch Modes, Ribbon Anatomy & Views' : 'Tipuri de Prezentări, 3 Moduri de Start, Anatomia Panglicii & Moduri de Vizualizare'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+          {/* 4 Major Units Curriculum Overview Matrix */}
+          <div className="bg-slate-950/75 border border-slate-800 rounded-2xl p-4 sm:p-5">
+            <div className="text-xs font-mono font-bold text-orange-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              <span>
                 {lang === 'en'
-                  ? 'Discover presentation types, compare PowerPoint vs Keynote vs Google Slides, test the 3 launch modes (blank, template, open), master the 7 interface zones, explore Ribbon tabs, practice views & zoom, and pass the Command Lab to earn your Junior PowerPoint Specialist Diploma!'
-                  : 'Descoperă ce este o prezentare electronică, testează cele 3 moduri de pornire, explorează cele 7 zone ale cabinei de comandă PowerPoint, învață diferența crucială dintre Tranziții și Animații, reglează modurile de vizualizare (F5) și deblochează Marea Diplomă!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-orange-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-orange-400" /> Diplomă Operator PowerPoint Junior
-                </span>
-              </div>
+                  ? '6th Grade Curriculum Map (Textbook p. 10–93)'
+                  : 'Harta Curriculară Clasa a VI-a (Manual pag. 10–93)'}
+              </span>
             </div>
 
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_presentation1') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
-                  <span className="text-orange-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs">
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-orange-500/30">
+                <div className="flex items-center gap-2 font-bold text-white mb-1">
+                  <span>📽️</span>
+                  <span>{lang === 'en' ? 'Unit 1: Presentations' : 'Unitatea 1: Prezentări'}</span>
+                </div>
+                <div className="text-[11px] text-slate-300 leading-snug">
+                  {lang === 'en'
+                    ? 'PowerPoint, slide design, contrast, public speaking (p. 10–25)'
+                    : 'PowerPoint, design slide-uri, contrast, public speaking (pag. 10–25)'}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('prezentari-slides')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_presentation1')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_presentation1')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-orange-600 hover:bg-orange-500 text-white font-black shadow-orange-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_presentation1') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_presentation1' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 1A' : 'Continuă Misiunea 1A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 1A (PowerPoint)' : 'Începe Misiunea 1A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-cyan-500/30">
+                <div className="flex items-center gap-2 font-bold text-white mb-1">
+                  <span>🧊</span>
+                  <span>{lang === 'en' ? 'Unit 2: 3D & Animation' : 'Unitatea 2: Animații & 3D'}</span>
+                </div>
+                <div className="text-[11px] text-slate-300 leading-snug">
+                  {lang === 'en'
+                    ? 'Paint 3D, Z-axis modeling, Toontastic & VR Worlds (p. 26–43)'
+                    : 'Paint 3D, corpuri cu volum, stickere, Toontastic & VR (pag. 26–43)'}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-rose-500/30">
+                <div className="flex items-center gap-2 font-bold text-white mb-1">
+                  <span>🛡️</span>
+                  <span>{lang === 'en' ? 'Unit 3: Security & Email' : 'Unitatea 3: Malware & E-mail'}</span>
+                </div>
+                <div className="text-[11px] text-slate-300 leading-snug">
+                  {lang === 'en'
+                    ? 'Malware, firewall, email etiquette & cloud permissions (p. 44–61)'
+                    : 'Malware, firewall, e-mail, netichetă & cloud (pag. 44–61)'}
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-amber-500/30">
+                <div className="flex items-center gap-2 font-bold text-white mb-1">
+                  <span>🔄</span>
+                  <span>{lang === 'en' ? 'Unit 4: Loops & Scratch' : 'Unitatea 4: Algoritmi & Scratch'}</span>
+                </div>
+                <div className="text-[11px] text-slate-300 leading-snug">
+                  {lang === 'en'
+                    ? 'Conditional loops, For counters, Minecraft & fractals (p. 62–93)'
+                    : 'Bucle condiționate, contor For, Minecraft & fractali (pag. 62–93)'}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Modulul 1B - Realizare, Design, Animații & Susținerea Prezentării (Active Mission) */}
-          <div
-            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-rose-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
-              isMissionDone('g6_presentation2')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : 'border-rose-500/50 hover:border-rose-400 hover:shadow-2xl hover:shadow-rose-500/20'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500/20 to-pink-500/20 border border-rose-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🎨
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {isMissionDone('g6_presentation2') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_presentation2' ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
-                      ● ACTIV
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 1B' : 'NOU • MODULUL 1B'}
-                  </span>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            {GRADE6_MISSIONS.map((mission) => {
+              const loc = lang === 'en' ? mission.en : mission.ro;
+              const isDone = isMissionDone(mission.id);
+              const isActive = activeMissionId === mission.id;
 
-              <div className="text-[11px] font-bold uppercase tracking-wider text-rose-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 16–25 • Unit 1 (Lessons 3-6)' : 'Manual pag. 16–25 • Unitatea 1 (Lecțiile 3-6)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-rose-300 transition-colors">
-                {lang === 'en' ? 'Slide Creation, Design & Public Speaking' : 'Realizare, Design & Public Speaking'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Slide Operations, Multimedia Objects, 40-Word Rule & Stage Delivery' : 'Operații Diapozitive, Inserare Obiecte, Regula 40 de Cuvinte & Arta Discursului'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master slide duplication & deletion, insert rich multimedia & tables, configure 16:9 widescreen themes, test slide transitions vs object animations, repair bad slides using the 40-word & high contrast rules, and deliver on the live classroom stage to complete project "Touristic Romania"!'
-                  : 'Stăpânește operațiile cu diapozitive (Ctrl+M), inserează imagini, tabele și clipuri multimedia, aplică formatul panoramic 16:9, exersează tranzițiile vs animațiile pe obiecte, aplică regula celor 40 de cuvinte și contrastul optim, iar apoi cucerește sala cu discursul tău în proiectul „România Turistică”!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-rose-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-rose-400" /> Diplomă Public Speaking & Prezentări Pro
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_presentation2') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
-                  <span className="text-rose-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('prezentari-slides')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_presentation2')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_presentation2')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-rose-600 hover:bg-rose-500 text-white font-black shadow-rose-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_presentation2') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_presentation2' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 1B' : 'Continuă Misiunea 1B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 1B (Design & Speech)' : 'Începe Misiunea 1B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
+              return (
+                <MissionCard
+                  key={mission.id}
+                  missionId={mission.id}
+                  emoji={mission.emoji}
+                  moduleLabel={loc.moduleLabel}
+                  textbookRef={loc.textbookRef}
+                  title={loc.title}
+                  topics={loc.topics}
+                  description={loc.description}
+                  duration={loc.duration}
+                  pointsLabel={loc.pointsLabel}
+                  diplomaLabel={loc.diplomaLabel}
+                  levelsCount={mission.levelsCount}
+                  defaultFooterLabel={loc.defaultFooterLabel}
+                  curriculaId={mission.curriculaId}
+                  accentColor={mission.accentColor}
+                  isCompleted={isDone}
+                  isActive={isActive}
+                  activeLevel={activeMissionLevel}
+                  activeScore={activeMissionScore}
+                  startLabel={loc.startLabel}
+                  resumeLabel={loc.resumeLabel}
+                  lang={lang}
+                  onStart={handleAttemptStart}
+                  onOpenCurricula={openCurriculaModal}
+                />
+              );
+            })}
           </div>
-
-          {/* Card 3: Modulul 2A - Modelare 3D în Paint 3D (Active Mission) */}
-          <div
-            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-cyan-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
-              isMissionDone('g6_paint3d')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : 'border-cyan-500/50 hover:border-cyan-400 hover:shadow-2xl hover:shadow-cyan-500/20'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🧊
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {isMissionDone('g6_paint3d') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_paint3d' ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
-                      ● ACTIV
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 2A' : 'NOU • MODULUL 2A'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 26–33 • Unit 2 (Lessons 1-2)' : 'Manual pag. 26–33 • Unitatea 2 (Lecțiile 1-2)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-cyan-300 transition-colors">
-                {lang === 'en' ? '3D Modeling in Paint 3D' : 'Modelare 3D în Paint 3D'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Tridimensional Space (X, Y, Z), 4 Control Anchors, Stickers & Primitives' : 'Spațiul Tridimensional (X, Y, Z), 4 Ancore de Manipulare, Stickere & Corpuri cu Volum'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Explore the depth Z axis, master the 4 spatial control anchors (Pitch X, Yaw Y, Roll Z, translation), transform flat 2D drawings into 3D volume with Make 3D, apply custom stickers and 4 material finishes (Matte, Gloss, Dull & Glossy Metal), animate models with 360° loops, and export .GLB assets in the Avatar Lab!'
-                  : 'Descoperă adâncimea axei Z, stăpânește cele 4 ancore de control spațial (rotiri X, Y, Z și translație față de pânză), transformă desenele 2D în corpuri 3D cu butonul magic „Creare 3D”, mulează stickere și aplică finisaje de materiale (mat, lucios, metal), generează bucle video de rotație și exportă asset-uri .GLB în laboratorul Avatar 3D!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-cyan-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-cyan-400" /> Diplomă Creator & Modelator 3D Junior
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_paint3d') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
-                  <span className="text-cyan-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('paint-3d')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_paint3d')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_paint3d')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-cyan-600 hover:bg-cyan-500 text-white font-black shadow-cyan-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_paint3d') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_paint3d' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 2A' : 'Continuă Misiunea 2A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 2A (Paint 3D)' : 'Începe Misiunea 2A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: Modulul 2B - Animație Toontastic & VR CoSpaces Edu (Active Mission) */}
-          <div
-            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-purple-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
-              isMissionDone('g6_anim3d')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'g6_anim3d'
-                ? 'border-pink-400 shadow-pink-500/20 ring-2 ring-pink-500/30'
-                : 'border-pink-500/50 hover:border-pink-400 hover:shadow-2xl hover:shadow-pink-500/20'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🎬
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {isMissionDone('g6_anim3d') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_anim3d' ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/40 text-[11px] font-bold font-mono animate-pulse">
-                      ● ACTIV
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 2B' : 'NOU • MODULUL 2B'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-pink-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 34–43 • Unit 2 (Lessons 3-4)' : 'Manual pag. 34–43 • Unitatea 2 (Lecțiile 3–4)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-pink-300 transition-colors">
-                {lang === 'en' ? 'Toontastic Animation & Virtual Reality VR' : 'Animație Toontastic & Realitate Virtuală VR'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? '24 FPS Cinema Gold, 3-Act Story Arc, Digital Puppeteering & CoSpaces 360°' : 'Cadre 24 FPS, Arc Narativ în 3 Acte, Păpușărie Digitală & Lumi CoSpaces 360°'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master the 24 FPS persistence of vision, direct stories with Setup-Conflict-Resolution, perform real-time digital puppeteering with voice capture, tune emotional soundtrack moods, distinguish VR from AR, and build 360° virtual worlds with CoBlocks!'
-                  : 'Stăpânește iluzia optică a celor 24 FPS, scrie scenarii cu arc narativ (Setup, Conflict, Rezolvare), mânuiește personajele în direct prin păpușărie digitală cu voce la microfon, regizează coloana sonoră (Mood), diferențiază VR de AR și explorează lumi 360° în CoSpaces Edu!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-pink-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-pink-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-pink-400" /> Diplomă Regizor Digital & Arhitect VR
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_anim3d') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_anim3d' && activeMissionLevel > 1 ? (
-                  <span className="text-pink-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('animatie-toontastic-realitate-virtuala-vr')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-pink-300 hover:text-white border border-pink-500/30 hover:border-pink-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-pink-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_anim3d')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_anim3d')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black shadow-pink-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_anim3d') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_anim3d' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 2B' : 'Continuă Misiunea 2B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 2B (Toontastic & VR)' : 'Începe Misiunea 2B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 5: Modulul 3A - Amenințări Malware & Securitate Cibernetică (Active Mission) */}
-          <div
-            className={`group relative bg-gradient-to-br from-slate-900 via-slate-850 to-rose-950/40 border-2 rounded-3xl p-6 shadow-xl transition-all duration-300 flex flex-col justify-between ${
-              isMissionDone('g6_malware')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'g6_malware'
-                ? 'border-rose-400 shadow-rose-500/20 ring-2 ring-rose-500/30'
-                : 'border-rose-500/60 hover:border-rose-400 hover:shadow-2xl hover:shadow-rose-500/20'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500/20 to-red-500/20 border border-rose-400/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  🛡️
-                </div>
-                <div className="flex items-center gap-1.5">
-                  {isMissionDone('g6_malware') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_malware' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : activeMissionId === 'g6_malware' ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold font-mono animate-pulse">
-                      ● ACTIV
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 3A' : 'NOU • MODULUL 3A'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-rose-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 44–45 • Unit 3 (Lesson 1)' : 'Manual pag. 44–45 • Unitatea 3 (Lecția 1)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-rose-300 transition-colors">
-                {lang === 'en' ? 'Malware Threats & Cyber Security' : 'Amenințări Malware & Securitate Cibernetică'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en' ? 'Viruses, Worms, Trojans, Phishing, Antivirus & Firewall' : 'Viruși, Viermi, Troieni, Phishing, Antivirus, Firewall & Parole'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Identify malware vs hardware issues, inspect the 5 major digital threats (Viruses, Worms, Trojans, Spyware, Ransomware), detect deceptive phishing links & fake urgency, scan and quarantine infected files, configure network firewall port filtering, construct high-entropy passwords with 2FA, and pass the Cyber Guardian Exam!'
-                  : 'Distinge problemele hardware de infecțiile malware, explorează cele 5 mari amenințări (Viruși, Viermi, Troieni, Spyware și Ransomware), deconspiră tentativele de phishing și inginerie socială, scanează și izolează fișiere infectate în carantină, filtrează pachete prin Firewall, generează parole blindate cu 2FA și promovează Examenul de Securitate!'}
-              </p>
-
-              {/* Badges / Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-rose-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-rose-400" /> Diplomă Expert Securitate Cibernetică
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_malware') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_malware' && activeMissionLevel > 1 ? (
-                  <span className="text-rose-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('malware-securitate')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_malware')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_malware')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-rose-600 hover:bg-rose-500 text-white font-black shadow-rose-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_malware') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_malware' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 3A' : 'Continuă Misiunea 3A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 3A (Malware & Security)' : 'Începe Misiunea 3A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 6: Modulul 3B - E-mail, Netichetă & Colaborare în Cloud (ACTIVE & READY) */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('g6_email')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'g6_email'
-                ? 'border-blue-400 shadow-blue-500/20 ring-2 ring-blue-500/30'
-                : 'border-blue-500/60 hover:border-blue-400 hover:shadow-blue-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  ✉️
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('g6_email') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_email' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 3B' : 'NOU • MODULUL 3B'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-blue-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 46–61 • Unit 3 (Lessons 2-4)' : 'Manual pag. 46–61 • Unitatea 3 (Lecțiile 2-4)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-blue-300 transition-colors">
-                {lang === 'en' ? 'Email Services, Netiquette & Cloud Collaboration' : 'Servicii E-mail, Netichetă & Colaborare în Cloud'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en'
-                  ? 'Message Anatomy (To, CC, BCC), Attachments, Anti-Cyberbullying & Cloud'
-                  : 'Anatomia Mesajului (To, CC, BCC), Atașamente <25MB, Netichetă, Scut Anti-Cyberbullying & Permisiuni Cloud'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master email syntax, uncover the privacy power of BCC over CC, handle file attachments under the 25 MB limit, follow golden Netiquette rules (never type in ALL-CAPS), respond to cyberbullying with the 4-step protocol (119/116111), and manage Viewer vs Editor cloud permissions!'
-                  : 'Învață structura unei adrese de e-mail, stăpânește diferența critică de confidențialitate dintre To, CC și BCC (copie ascunsă), respectă limita de 25 MB pentru atașamente, aplică normele de Netichetă (fără majuscule agresive), activează scutul Anti-Cyberbullying și configurează permisiunile în Cloud!'}
-              </p>
-
-              {/* Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-blue-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-blue-400" /> Diplomă Ambasador Netichetă
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_email') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_email' && activeMissionLevel > 1 ? (
-                  <span className="text-blue-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('email-neticheta')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_email')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_email')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-blue-600 hover:bg-blue-500 text-white font-black shadow-blue-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_email') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_email' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 3B' : 'Continuă Misiunea 3B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 3B (Email & Netiquette)' : 'Începe Misiunea 3B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 7: Modulul 4A - Bucle Condiționate Scratch */}
-          <div
-            className={`bg-slate-900/90 border-2 rounded-3xl p-6 shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group ${
-              isMissionDone('g6_scratch1')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'g6_scratch1'
-                ? 'border-amber-400 shadow-amber-500/20 ring-2 ring-amber-500/30'
-                : 'border-amber-500/60 hover:border-amber-400 hover:shadow-amber-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🔄
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('g6_scratch1') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_scratch1' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 4A' : 'NOU • MODULUL 4A'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 62–75 • Unit 4 (Lessons 1-3)' : 'Manual pag. 62–75 • Unitatea 4 (Lecțiile 1-3)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-amber-300 transition-colors">
-                {lang === 'en' ? 'Scratch Algorithms & Conditional Loops' : 'Algoritmi & Bucle Condiționate în Scratch'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en'
-                  ? 'While vs Repeat Until, Logic Inversion, Compound Booleans & Maze Sensors'
-                  : 'Structura „Cât timp” vs „Repetă până când”, Operatori Booleeni (ȘI, SAU, NU), Bucle Infinite & Senzori'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master the critical logic difference between textbook While loops and Scratch Repeat Until blocks! Evaluate compound Boolean operators, hunt down freeze bugs and infinite loops, calibrate color and proximity sensors, and guide Arky through an autonomous smart maze runner!'
-                  : 'Înțelege de ce bucla Scratch „repetă până când” funcționează invers față de „cât timp” din pseudocod! Testează operatorii relaționali și booleeni (ȘI, SAU, NU), rezolvă capcana buclelor infinite, pilotează autonom cu senzori de coliziune și parcurge labirintul inteligent!'}
-              </p>
-
-              {/* Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-purple-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-purple-400" /> Diplomă Programator Scratch 6A
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_scratch1') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_scratch1' && activeMissionLevel > 1 ? (
-                  <span className="text-amber-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('algoritmi-bucle-scratch-1')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_scratch1')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_scratch1')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-amber-600 hover:bg-amber-500 text-white font-black shadow-amber-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_scratch1') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_scratch1' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 4A' : 'Continuă Misiunea 4A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 4A (Scratch Loops)' : 'Începe Misiunea 4A'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 8: Modulul 4B - Contor For, Proiecte Minecraft 3D & Marea Diplomă (ACTIVE & READY) */}
-          <div
-            className={`group relative bg-gradient-to-b from-slate-800/90 to-slate-900/90 border-2 rounded-3xl p-6 shadow-xl transition-all flex flex-col justify-between ${
-              isMissionDone('g6_scratch2')
-                ? 'border-emerald-500/80 shadow-emerald-500/10'
-                : activeMissionId === 'g6_scratch2'
-                ? 'border-amber-400 shadow-amber-500/20 ring-2 ring-amber-500/30'
-                : 'border-amber-500/60 hover:border-amber-400 hover:shadow-amber-500/10'
-            }`}
-          >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
-                  🎮
-                </div>
-                <div className="flex items-center gap-2">
-                  {isMissionDone('g6_scratch2') ? (
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                    </span>
-                  ) : activeMissionId === 'g6_scratch2' && activeMissionLevel > 1 ? (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {lang === 'en' ? `In Progress (Level ${activeMissionLevel}/7)` : `În Curs (Nivel ${activeMissionLevel}/7)`}
-                    </span>
-                  ) : null}
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-black uppercase tracking-wider animate-pulse">
-                    <Sparkles className="w-3 h-3" /> {lang === 'en' ? 'NEW • MODULE 4B' : 'NOU • MODULUL 4B'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 mb-1 font-mono">
-                {lang === 'en' ? 'Textbook p. 76–93 • Unit 4 (Lessons 5–7)' : 'Manual pag. 76–93 • Unitatea 4 (Lecțiile 5–7)'}
-              </div>
-
-              <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-amber-300 transition-colors">
-                {lang === 'en' ? 'Counter Loops, Minecraft 3D & Graduation' : 'Bucle cu Contor, Minecraft 3D & Marea Diplomă'}
-              </h3>
-              <div className="text-xs font-semibold text-slate-300 mb-3">
-                {lang === 'en'
-                  ? 'Gauss Sum, Regular Polygons (360°/n), Depth Layering, Brâncuși & Fractals'
-                  : 'Suma lui Gauss, Poligoane Regulate (360°/n), Straturi Z-Index, Albumul Brâncuși & Fractali'}
-              </div>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
-                {lang === 'en'
-                  ? 'Master the repeat(n) counter loop, calculate Gauss’s sum, draw regular polygons with the 360°/n rule, build an interactive 2.5D Minecraft world with Z-depth layering and ghost effects, procedurally generate Brâncuși’s Endless Column, code recursive fractals, and claim your Official Middle School TIC Graduation Diploma!'
-                  : 'Stăpânește bucla „repetă (n)”, calculează suma lui Gauss, trasează poligoane cu regula 360°/n, construiește un joc Minecraft 3D cu straturi de adâncime și efect fantomă, generează procedural Coloana Infinitului, programează arbori fractali cu „Blocurile mele” și revendică Marea Diplomă Oficială de Absolvire!'}
-              </p>
-
-              {/* Highlights */}
-              <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-cyan-400" /> 20-25 min
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> 100 XP (Nota 10)
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                  <Award className="w-3 h-3 text-amber-400" /> Diplomă de Onoare Gimnazială TIC
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-slate-700/80 flex items-center justify-between">
-              <div className="text-xs text-slate-400 font-mono">
-                {isMissionDone('g6_scratch2') ? (
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>{lang === 'en' ? 'Diploma Earned (100 pts)' : 'Diplomă Obținută (100 pct)'}</span>
-                  </span>
-                ) : activeMissionId === 'g6_scratch2' && activeMissionLevel > 1 ? (
-                  <span className="text-amber-400 font-bold">
-                    {lang === 'en' ? `Progress: Level ${activeMissionLevel}/7 (${activeMissionScore} pts)` : `Progres: Nivel ${activeMissionLevel}/7 (${activeMissionScore} pct)`}
-                  </span>
-                ) : (
-                  <span>{lang === 'en' ? '7 Interactive Pages' : '7 Pagini Interactive'}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => openCurriculaModal('algoritmi-contor-minecraft-scratch')}
-                  className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-sky-300 hover:text-white border border-sky-500/30 hover:border-sky-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                  title="Vezi programa școlară, teoria și fișa didactică"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-sky-400" />
-                  <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus' : 'Programă & Teorie'}</span>
-                </button>
-                <button
-                  onClick={() => handleAttemptStart('g6_scratch2')}
-                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                    isMissionDone('g6_scratch2')
-                      ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                      : 'bg-amber-600 hover:bg-amber-500 text-white font-black shadow-amber-600/30'
-                  }`}
-                >
-                  {isMissionDone('g6_scratch2') ? (
-                    <>
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'View Diploma / Replay' : 'Vezi Diploma / Reia'}</span>
-                    </>
-                  ) : activeMissionId === 'g6_scratch2' && activeMissionLevel > 1 ? (
-                    <>
-                      <span>{lang === 'en' ? 'Resume Mission 4B' : 'Continuă Misiunea 4B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  ) : (
-                    <>
-                      <span>{lang === 'en' ? 'Start Mission 4B (Minecraft & Loops)' : 'Începe Misiunea 4B'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </section>
       )}
 
-      {/* Courses & Lessons Section - CLASA A VII-A */}
       {selectedGrade === 'grade7' && (
         <div className="flex flex-col gap-8">
           <Grade7CatalogSection
             onOpenCurriculaModal={openCurriculaModal}
             onLaunchInteractiveLab={(mId) => {
-              if (mId === 'g7_word_a') {
-                handleAttemptStart('g7_word_a');
-              } else if (mId === 'g7_word_b') {
-                handleAttemptStart('g7_word_b');
-              } else if (mId === 'g7_audio_a') {
-                handleAttemptStart('g7_audio_a');
-              } else if (mId === 'g7_video_b') {
-                handleAttemptStart('g7_video_b');
-              } else if (mId === 'g7_cloud_a') {
-                handleAttemptStart('g7_cloud_a');
-              } else if (mId === 'g7_gis_b') {
-                handleAttemptStart('g7_gis_b');
-              } else if (mId === 'g7_cpp_a') {
-                handleAttemptStart('g7_cpp_a');
-              } else if (mId === 'g7_cpp_b') {
-                handleAttemptStart('g7_cpp_b');
-              } else if (mId === 'g7_decision_a') {
-                handleAttemptStart('g7_decision_a');
-              } else if (mId === 'g7_loop_b') {
-                handleAttemptStart('g7_loop_b');
-              } else if (mId === 'g7_stem_a') {
-                handleAttemptStart('g7_stem_a');
-              } else if (mId === 'g7_robot_b') {
-                handleAttemptStart('g7_robot_b');
+              if (
+                mId === 'g7_word_a' ||
+                mId === 'g7_word_b' ||
+                mId === 'g7_audio_a' ||
+                mId === 'g7_video_b' ||
+                mId === 'g7_cloud_a' ||
+                mId === 'g7_gis_b' ||
+                mId === 'g7_cpp_a' ||
+                mId === 'g7_cpp_b' ||
+                mId === 'g7_decision_a' ||
+                mId === 'g7_loop_b' ||
+                mId === 'g7_stem_a' ||
+                mId === 'g7_robot_b'
+              ) {
+                handleAttemptStart(mId);
               } else {
                 openCurriculaModal(mId);
               }
@@ -4059,7 +1851,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             completedMissions={
               activeAccount?.lessonsProgress
                 ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
-                    const lState = (activeAccount.lessonsProgress as any)[k];
+                    const lState = (activeAccount.lessonsProgress as Record<string, { completed?: boolean }>)[k];
                     if (lState?.completed) acc[k] = true;
                     return acc;
                   }, {} as Record<string, boolean>)
@@ -4067,22 +1859,32 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             }
           />
 
-          <div id="simulatoare-interactive-clasa-7" className="scroll-mt-6">
+          <div id="simulatoare-interactive-clasa-7" className="scroll-mt-20">
             <Grade7InteractiveSimulators />
           </div>
         </div>
       )}
 
-      {/* Courses & Lessons Section - CLASA A VIII-A */}
       {selectedGrade === 'grade8' && (
         <div className="flex flex-col gap-8">
           <Grade8CatalogSection
             onOpenCurriculaModal={openCurriculaModal}
             onLaunchInteractiveLab={(mId) => {
               if (
-                mId === 'g8_calc_a' || mId === 'g8_calc_b' || mId === 'g8_calc_c' || mId === 'g8_calc_d' ||
-                mId === 'g8_web_a' || mId === 'g8_web_b' || mId === 'g8_web_c' ||
-                mId === 'g8_algo_a' || mId === 'g8_algo_b' || mId === 'g8_algo_c' || mId === 'g8_algo_d' || mId === 'g8_algo_e' || mId === 'g8_robot_a' || mId === 'g8_robot_b'
+                mId === 'g8_calc_a' ||
+                mId === 'g8_calc_b' ||
+                mId === 'g8_calc_c' ||
+                mId === 'g8_calc_d' ||
+                mId === 'g8_web_a' ||
+                mId === 'g8_web_b' ||
+                mId === 'g8_web_c' ||
+                mId === 'g8_algo_a' ||
+                mId === 'g8_algo_b' ||
+                mId === 'g8_algo_c' ||
+                mId === 'g8_algo_d' ||
+                mId === 'g8_algo_e' ||
+                mId === 'g8_robot_a' ||
+                mId === 'g8_robot_b'
               ) {
                 handleAttemptStart(mId as AllMissionId);
               } else {
@@ -4092,7 +1894,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             completedMissions={
               activeAccount?.lessonsProgress
                 ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
-                    const lState = (activeAccount.lessonsProgress as any)[k];
+                    const lState = (activeAccount.lessonsProgress as Record<string, { completed?: boolean }>)[k];
                     if (lState?.completed) acc[k] = true;
                     return acc;
                   }, {} as Record<string, boolean>)
@@ -4100,237 +1902,226 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             }
           />
 
-          <div id="simulatoare-interactive-clasa-8" className="scroll-mt-6">
+          <div id="simulatoare-interactive-clasa-8" className="scroll-mt-20">
             <Grade8InteractiveSimulators />
           </div>
         </div>
       )}
 
-      {/* Arcade Mini-Games Banner Section (Placed below missions) */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border-2 border-indigo-500/30 rounded-3xl p-5 sm:p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0">
-              <Gamepad2 className="w-6 h-6" />
-            </div>
+      {/* 5. INTERACTIVE LABS HUB: ARCADE (28), DUEL 1v1, CYBER CITY & CODE SANDBOX */}
+      <section aria-label={lang === 'en' ? 'Interactive Labs & Competitions' : 'Laboratoare Practice & Jocuri'} className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Card 1: Arcade Lab (28 Mini-Games) */}
+          <div className="rounded-2xl bg-slate-950/80 border border-indigo-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 font-mono">
-                  {lang === 'en' ? 'Digital Skills Arcade' : 'Laboratorul Arcade TIC'}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/30">
-                  {lang === 'en' ? '21 Mini-Games' : '21 Mini-Jocuri'}
-                </span>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-11 h-11 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 shrink-0">
+                  <Gamepad2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-400">
+                    {lang === 'en' ? 'Digital Skills Arcade · 28 Games' : 'Laborator Arcade · 28 Mini-Jocuri'}
+                  </div>
+                  <h3 className="text-base font-black text-white font-heading">
+                    {lang === 'en' ? 'PageCraft, Roblox & Minecraft Redstone' : 'PageCraft, Roblox & Minecraft Redstone'}
+                  </h3>
+                </div>
               </div>
-              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? '📑 PageCraft Studio, 🟥 Roblox Blox Clicker, ⛏️ Minecraft Redstone & Cyber Dino' : '📑 PageCraft: Machetare & Tabele, 🟥 Roblox Blox Clicker & ⛏️ Minecraft Redstone'}
-              </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Master document layout in PageCraft, compete in Roblox Blox Clicker, build Minecraft Redstone circuits & Voxel PCs, sprint in Cyber Dino, and sort files in Tetris drop!'
                   : 'Machetează ziare în PageCraft, concurează în Roblox Blox Clicker, construiește calculatoare Voxel 3D, circuite Redstone în stil Minecraft și aleargă în Cyber Dino!'}
               </p>
             </div>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenArcade?.();
+              }}
+              className="w-full px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] min-h-[42px]"
+            >
+              <Gamepad2 className="w-4 h-4 shrink-0" />
+              <span>{lang === 'en' ? 'Open Arcade (28 Games)' : 'Deschide Jocuri Arcade'}</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              onOpenArcade?.();
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer shrink-0 active:scale-95"
-          >
-            <Gamepad2 className="w-4 h-4" />
-            <span>{lang === 'en' ? 'Open Arcade' : 'Deschide Jocuri Arcade'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Duel 1v1 Arena Banner Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-rose-950/60 to-slate-900 border-2 border-rose-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-amber-400/30">
-              <Swords className="w-6 h-6 animate-pulse" />
-            </div>
+          {/* Card 2: Duel Arena 1v1 */}
+          <div className="rounded-2xl bg-slate-950/80 border border-rose-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-rose-400 font-mono">
-                  {lang === 'en' ? 'Live Multiplayer Duel' : 'Duel Multiplayer 1v1 în Direct'}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/30 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Cloud Realtime
-                </span>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-11 h-11 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
+                  <Swords className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-rose-400">
+                    {lang === 'en' ? 'Multiplayer 1v1 · Cloud Realtime' : 'Duel 1v1 în Direct · Cloud Realtime'}
+                  </div>
+                  <h3 className="text-base font-black text-white font-heading">
+                    {lang === 'en' ? 'ArkyEdu Duel Arena 1v1' : 'Arena Duelurilor între Colegi'}
+                  </h3>
+                </div>
               </div>
-              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'ArkyEdu Duel Arena — 1v1 Classmate Battles' : 'Arena Duelurilor TIC — Concurs 1v1 între Colegi pe Calculatoare Diferite'}
-              </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Create a game room with a 4-letter code or join your classmate’s challenge! Block Coding Scratch Duel, Cyber Sprint typing race, and Quiz Blitz live competition.'
                   : 'Creează o cameră cu cod de 4 litere sau intră în provocarea colegului tău! Cursa Algoritmilor Scratch, Cyber Sprint tastare rapidă și bătălia creierelor Quiz Blitz.'}
               </p>
             </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              onOpenDuel?.();
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer shrink-0 active:scale-95"
-          >
-            <Swords className="w-4 h-4" />
-            <span>{lang === 'en' ? 'Enter Duel Arena' : 'Intră în Arena Duel 1v1'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Cyber City Builder Banner Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 border-2 border-cyan-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-start sm:items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-cyan-400/30">
-              <Building2 className="w-6 h-6 animate-pulse" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono">
-                  {lang === 'en' ? 'Metropolis Simulator' : 'Simulator Urban TIC'}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold border border-cyan-500/30">
-                  {lang === 'en' ? 'Cyber City Builder' : 'Metropola Mea Tehnologică'}
-                </span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-white font-heading mt-0.5">
-                {lang === 'en' ? 'ArkyEdu Cyber City — Build & Expand Your Tech Metropolis' : 'ArkyEdu Cyber City — Construiește și Modernizează Metropola Ta Digitală'}
-              </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
-                {lang === 'en'
-                  ? 'Use ByteCoins earned in lessons to construct Cloud Data Centers, AI Labs, 5G Towers & Fusion Reactors. Boost your computing power and become a Supreme Galactic Architect!'
-                  : 'Folosește ByteCoins câștigate în lecții pentru a construi Centre de Date Cloud, AI Labs, Turnuri 5G și Reactoare de Fuziune Curată. Crește puterea de calcul a orașului și devino Arhitect Suprem!'}
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              onOpenCity?.();
-            }}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 cursor-pointer shrink-0 active:scale-95"
-          >
-            <Building2 className="w-4 h-4" />
-            <span>{lang === 'en' ? 'Open Cyber City' : 'Deschide Orașul Meu'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Interactive Code Sandbox Lab Section (C++, Python 3, HTML5) */}
-      <section
-        aria-labelledby="catalog-sandbox-heading"
-        className="bg-slate-900/80 border border-emerald-500/35 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
-          <div className="space-y-1">
-            <h2 id="catalog-sandbox-heading" className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2 font-heading">
-              <Terminal className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
-              <span>
-                {lang === 'en'
-                  ? 'Live Browser Code Sandbox (C++, Python 3 & HTML5)'
-                  : 'Sandbox Cod Live în Browser (C++, Python 3 & HTML5)'}
-              </span>
-            </h2>
-            <p className="text-xs text-slate-300">
-              {lang === 'en'
-                ? 'Write, run, and verify curriculum coding challenges directly in your browser with automated test cases and ByteCoins rewards.'
-                : 'Scrie, rulează și verifică instantaneu cod C++ (Code::Blocks), Python 3 și HTML5/CSS cu teste automate și recompense ByteCoins.'}
-            </p>
-          </div>
-          <a
-            href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
-            onClick={(e) => {
-              if (onOpenSandbox) {
-                e.preventDefault();
-                sounds.playClick();
-                onOpenSandbox('cpp');
-              }
-            }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 self-start sm:self-center shadow-sm"
-          >
-            <Code2 className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>{lang === 'en' ? 'Open Code Sandbox' : 'Deschide Sandbox Cod'}</span>
-            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-          </a>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {[
-            {
-              langKey: 'cpp' as const,
-              titleRo: 'C++17 (Stil Code::Blocks)',
-              titleEn: 'C++17 (Code::Blocks Style)',
-              descRo: 'Regula celor 3 pahare, suma cifrelor cu %10 și /10, număr prim, maximul în vectori — cu cin/cout real.',
-              descEn: 'Three-glasses swap, digit sum with %10 and /10, prime check, and array max with real cin/cout.',
-              ctaRo: 'Rulează C++',
-              ctaEn: 'Run C++',
-            },
-            {
-              langKey: 'python' as const,
-              titleRo: 'Python 3 Educațional',
-              titleEn: 'Python 3 Curriculum Lab',
-              descRo: 'Liste, f-strings, bucle for/range și medie școlară cu input() și verificare automată pe 3 cazuri de test.',
-              descEn: 'Lists, f-strings, for/range loops, and GPA calculator with input() and 3 automated test cases.',
-              ctaRo: 'Rulează Python',
-              ctaEn: 'Run Python',
-            },
-            {
-              langKey: 'html' as const,
-              titleRo: 'HTML5 Semantic & CSS Live',
-              titleEn: 'Semantic HTML5 & CSS Preview',
-              descRo: 'Construiește carduri responsive cu Flexbox și verifică automat structura DOM (<main>, <h1>, stiluri CSS).',
-              descEn: 'Build responsive Flexbox cards and verify semantic DOM structure (<main>, <h1>, CSS styling) live.',
-              ctaRo: 'Deschide Preview HTML5',
-              ctaEn: 'Open HTML5 Preview',
-            },
-          ].map((item) => (
             <button
-              key={item.langKey}
               type="button"
               onClick={() => {
                 sounds.playClick();
-                onOpenSandbox?.(item.langKey);
+                onOpenDuel?.();
               }}
-              className="group text-left rounded-xl p-4 bg-slate-800/45 hover:bg-slate-800/80 border border-slate-700/70 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5 cursor-pointer"
+              className="w-full px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] min-h-[42px]"
             >
-              <div className="space-y-1">
-                <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors">
-                  {lang === 'en' ? item.titleEn : item.titleRo}
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {lang === 'en' ? item.descEn : item.descRo}
-                </p>
-              </div>
-              <span className="text-[11px] font-bold text-emerald-300 inline-flex items-center gap-1">
-                <span>{lang === 'en' ? item.ctaEn : item.ctaRo}</span>
-                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
-              </span>
+              <Swords className="w-4 h-4 shrink-0" />
+              <span>{lang === 'en' ? 'Enter Duel Arena 1v1' : 'Intră în Arena Duel 1v1'}</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
-          ))}
+          </div>
+
+          {/* Card 3: Cyber City Builder */}
+          <div className="rounded-2xl bg-slate-950/80 border border-cyan-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shrink-0">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                    {lang === 'en' ? 'Metropolis Simulator · ByteCoins' : 'Simulator Urban TIC · ByteCoins'}
+                  </div>
+                  <h3 className="text-base font-black text-white font-heading">
+                    {lang === 'en' ? 'ArkyEdu Cyber City Builder' : 'ArkyEdu Cyber City — Orașul Meu'}
+                  </h3>
+                </div>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {lang === 'en'
+                  ? 'Use ByteCoins earned in lessons to construct Cloud Data Centers, AI Labs, 5G Towers & Fusion Reactors. Boost your computing power and become a Galactic Architect!'
+                  : 'Folosește ByteCoins câștigate în lecții pentru a construi Centre de Date Cloud, AI Labs, Turnuri 5G și Reactoare de Fuziune Curată. Crește puterea de calcul a orașului!'}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenCity?.();
+              }}
+              className="w-full px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] min-h-[42px]"
+            >
+              <Building2 className="w-4 h-4 shrink-0" />
+              <span>{lang === 'en' ? 'Open Cyber City' : 'Deschide Orașul Meu'}</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
+            </button>
+          </div>
+        </div>
+
+        {/* Live Browser Code Sandbox Lab Section (C++, Python 3, HTML5) */}
+        <div
+          aria-labelledby="catalog-sandbox-heading"
+          className="bg-slate-950/75 border border-emerald-500/35 rounded-2xl p-5 sm:p-6 space-y-4 shadow-lg"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+            <div className="space-y-1">
+              <h2 id="catalog-sandbox-heading" className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2 font-heading">
+                <Terminal className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
+                <span>
+                  {lang === 'en'
+                    ? 'Live Browser Code Sandbox (C++, Python 3 & HTML5)'
+                    : 'Sandbox Cod Live în Browser (C++, Python 3 & HTML5)'}
+                </span>
+              </h2>
+              <p className="text-xs text-slate-300">
+                {lang === 'en'
+                  ? 'Write, run, and verify curriculum coding challenges directly in your browser with automated test cases and ByteCoins rewards.'
+                  : 'Scrie, rulează și verifică instantaneu cod C++ (Code::Blocks), Python 3 și HTML5/CSS cu teste automate și recompense ByteCoins.'}
+              </p>
+            </div>
+            <a
+              href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
+              onClick={(e) => {
+                if (onOpenSandbox) {
+                  e.preventDefault();
+                  sounds.playClick();
+                  onOpenSandbox('cpp');
+                }
+              }}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 self-start sm:self-center shadow-sm min-h-[40px]"
+            >
+              <Code2 className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>{lang === 'en' ? 'Open Code Sandbox' : 'Deschide Sandbox Cod'}</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              {
+                langKey: 'cpp' as const,
+                titleRo: 'C++17 (Stil Code::Blocks)',
+                titleEn: 'C++17 (Code::Blocks Style)',
+                descRo: 'Regula celor 3 pahare, suma cifrelor cu %10 și /10, număr prim, maximul în vectori — cu cin/cout real.',
+                descEn: 'Three-glasses swap, digit sum with %10 and /10, prime check, and array max with real cin/cout.',
+                ctaRo: 'Rulează C++',
+                ctaEn: 'Run C++',
+              },
+              {
+                langKey: 'python' as const,
+                titleRo: 'Python 3 Educațional',
+                titleEn: 'Python 3 Curriculum Lab',
+                descRo: 'Liste, f-strings, bucle for/range și medie școlară cu input() și verificare automată pe 3 cazuri de test.',
+                descEn: 'Lists, f-strings, for/range loops, and GPA calculator with input() and 3 automated test cases.',
+                ctaRo: 'Rulează Python',
+                ctaEn: 'Run Python',
+              },
+              {
+                langKey: 'html' as const,
+                titleRo: 'HTML5 Semantic & CSS Live',
+                titleEn: 'Semantic HTML5 & CSS Preview',
+                descRo: 'Construiește carduri responsive cu Flexbox și verifică automat structura DOM (<main>, <h1>, stiluri CSS).',
+                descEn: 'Build responsive Flexbox cards and verify semantic DOM structure (<main>, <h1>, CSS styling) live.',
+                ctaRo: 'Deschide Preview HTML5',
+                ctaEn: 'Open HTML5 Preview',
+              },
+            ].map((item) => (
+              <button
+                key={item.langKey}
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  onOpenSandbox?.(item.langKey);
+                }}
+                className="group text-left rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5 cursor-pointer min-h-[120px]"
+              >
+                <div className="space-y-1">
+                  <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors">
+                    {lang === 'en' ? item.titleEn : item.titleRo}
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {lang === 'en' ? item.descEn : item.descRo}
+                  </p>
+                </div>
+                <span className="text-[11px] font-bold text-emerald-300 inline-flex items-center gap-1">
+                  <span>{lang === 'en' ? item.ctaEn : item.ctaRo}</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Featured Blog Study Guides Section — Deep Internal SEO & Quick Troubleshooting */}
+      {/* 6. INTERACTIVE KNOWLEDGE PILLS */}
+      <KnowledgePills />
+
+      {/* 7. STUDY GUIDES (BLOG) & BILINGUAL GLOSSARY */}
       <section
         aria-labelledby="catalog-blog-guides-heading"
-        className="bg-slate-900/75 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4"
+        className="bg-slate-950/75 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
           <div className="space-y-1">
@@ -4357,7 +2148,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 onOpenBlog(null);
               }
             }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/40 text-teal-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center min-h-[40px]"
           >
             <span>{lang === 'en' ? 'All 12 Guides' : 'Vezi toate cele 12 ghiduri'}</span>
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -4365,54 +2156,53 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {BLOG_ARTICLES.filter((a) => a.featured).slice(0, 6).map((article) => {
-            const c = lang === 'en' ? article.en : article.ro;
-            const gradeLabel = lang === 'en' ? article.gradeTagEn : article.gradeTagRo;
-            const href = lang === 'en' ? `/blog/en/${article.en.slug}/` : `/blog/${article.ro.slug}/`;
-            return (
-              <a
-                key={article.id}
-                href={href}
-                onClick={(e) => {
-                  if (onOpenBlog) {
-                    e.preventDefault();
-                    sounds.playClick();
-                    onOpenBlog(c.slug);
-                  }
-                }}
-                className="group rounded-xl p-4 bg-slate-800/45 hover:bg-slate-800/80 border border-slate-700/70 hover:border-teal-400/50 transition-colors flex flex-col justify-between gap-2.5"
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                    <span className="font-semibold text-teal-300">{c.categoryLabel}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{gradeLabel}</span>
+          {BLOG_ARTICLES.filter((a) => a.featured)
+            .slice(0, 6)
+            .map((article) => {
+              const c = lang === 'en' ? article.en : article.ro;
+              const gradeLabel = lang === 'en' ? article.gradeTagEn : article.gradeTagRo;
+              const href = lang === 'en' ? `/blog/en/${article.en.slug}/` : `/blog/${article.ro.slug}/`;
+              return (
+                <a
+                  key={article.id}
+                  href={href}
+                  onClick={(e) => {
+                    if (onOpenBlog) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onOpenBlog(c.slug);
+                    }
+                  }}
+                  className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-teal-400/50 transition-colors flex flex-col justify-between gap-2.5"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                      <span className="font-semibold text-teal-300">{c.categoryLabel}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{gradeLabel}</span>
+                    </div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-teal-200 transition-colors line-clamp-2">
+                      {c.breadcrumbLabel}
+                    </h3>
+                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{c.metaDescription}</p>
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-teal-200 transition-colors line-clamp-2">
-                    {c.breadcrumbLabel}
-                  </h3>
-                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                    {c.metaDescription}
-                  </p>
-                </div>
-                <span className="text-[11px] font-bold text-teal-300 inline-flex items-center gap-1">
-                  <span>{lang === 'en' ? 'Read guide' : 'Citește ghidul'}</span>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
-                </span>
-              </a>
-            );
-          })}
+                  <span className="text-[11px] font-bold text-teal-300 inline-flex items-center gap-1">
+                    <span>{lang === 'en' ? 'Read guide' : 'Citește ghidul'}</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                  </span>
+                </a>
+              );
+            })}
         </div>
       </section>
 
-      {/* Featured Bilingual ICT & CS Glossary (44 Essential Terms V–VIII) */}
       <section
         aria-label={lang === 'en' ? 'Bilingual ICT & Coding Glossary' : 'Glosar Bilingv Informatică & TIC'}
-        className="rounded-2xl border border-slate-700/80 bg-slate-900/75 p-5 sm:p-6 space-y-4"
+        className="rounded-2xl border border-slate-800 bg-slate-950/75 p-5 sm:p-6 space-y-4"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
           <div className="space-y-1">
-            <h2 className="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2 font-heading">
               <Binary className="w-5 h-5 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>
                 {lang === 'en'
@@ -4435,7 +2225,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 onOpenGlossary(null);
               }
             }}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center min-h-[40px]"
           >
             <span>
               {lang === 'en'
@@ -4472,18 +2262,14 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                       onOpenGlossary(loc.slug);
                     }
                   }}
-                  className="group rounded-xl p-4 bg-slate-800/45 hover:bg-slate-800/80 border border-slate-700/70 hover:border-cyan-400/50 transition-colors flex flex-col justify-between gap-2"
+                  className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-cyan-400/50 transition-colors flex flex-col justify-between gap-2"
                 >
                   <div className="space-y-1">
-                    <div className="text-[11px] font-mono font-semibold text-cyan-300">
-                      {gradeLabel}
-                    </div>
+                    <div className="text-[11px] font-mono font-semibold text-cyan-300">{gradeLabel}</div>
                     <h3 className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors line-clamp-1">
                       {loc.term}
                     </h3>
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                      {loc.shortAnswer}
-                    </p>
+                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{loc.shortAnswer}</p>
                   </div>
                   <span className="text-[11px] font-bold text-cyan-300 inline-flex items-center gap-1">
                     <span>{lang === 'en' ? 'View definition & example' : 'Vezi definiția și exemplul'}</span>
@@ -4495,19 +2281,20 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       </section>
 
-      {/* 100% Free vs Private Coding Academies Comparison Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-emerald-950/60 to-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
+      {/* 8. 100% FREE VS PRIVATE ACADEMIES COMPARISON */}
+      <div className="bg-gradient-to-r from-slate-950 via-emerald-950/35 to-slate-950 border border-emerald-500/35 rounded-2xl p-5 sm:p-6 shadow-lg">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-start sm:items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-lg shrink-0 mt-1 sm:mt-0 ring-2 ring-emerald-400/30">
-              <Sparkles className="w-6 h-6 animate-pulse" />
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300 shrink-0">
+              <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+                <span className="font-bold uppercase tracking-wider text-emerald-400">
                   {lang === 'en' ? 'Free Education vs Paid Academies' : '100% Gratuit vs Școli Private'}
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/30">
+                <span className="text-slate-600" aria-hidden="true">·</span>
+                <span className="text-emerald-300 font-semibold">
                   {lang === 'en' ? 'Save 4,500+ RON / year' : 'Economie 4.500+ Lei / an'}
                 </span>
               </div>
@@ -4516,28 +2303,27 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   ? 'ArkyEdu vs Private Coding Schools (Logiscool, MindHub): Why Pay Thousands?'
                   : 'ArkyEdu vs Școli Private de Programare (Logiscool, MindHub): De ce să plătești mii de lei?'}
               </h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-xl">
+              <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
                 {lang === 'en'
-                  ? 'Get complete curriculum-aligned ICT education for Grades 5-8 with C++, Arduino IoT, 21 Arcade Games, 1v1 Live Duels, and official diplomas — completely free, 24/7!'
-                  : 'Educație digitală de înaltă performanță pentru clasele 5-8 conform programei oficiale a Ministerului Educației (OMEN 3393/2017 & OM 5420/2024), C++, Arduino IoT, 21 jocuri arcade și diplome oficiale — 100% gratuit, non-profit!'}
+                  ? 'Get complete curriculum-aligned ICT education for Grades 5-8 with C++, Arduino IoT, 28 Arcade Games, 1v1 Live Duels, and official diplomas — completely free, 24/7!'
+                  : 'Educație digitală de înaltă performanță pentru clasele 5-8 conform programei oficiale a Ministerului Educației (OMEN 3393/2017 & OM 5420/2024), C++, Arduino IoT, 28 jocuri arcade și diplome oficiale — 100% gratuit, non-profit!'}
               </p>
             </div>
           </div>
 
           <a
             href="/comparatie-scoli-private/"
-            className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer shrink-0 active:scale-95 text-center"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shrink-0 active:scale-[0.98] min-h-[42px]"
             title="Vezi de ce ArkyEdu este 100% gratuit și cum se compară cu școlile private"
           >
-            <Sparkles className="w-4 h-4" />
             <span>{lang === 'en' ? 'See Full Comparison' : 'Vezi Comparația Detaliată'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 shrink-0" />
           </a>
         </div>
       </div>
 
-      {/* Public Classroom Leaderboard Section */}
-      <div id="sectiune-clasamente" className="scroll-mt-6">
+      {/* 9. PUBLIC CLASSROOM LEADERBOARD */}
+      <div id="sectiune-clasamente" className="scroll-mt-20">
         <LeaderboardSection
           currentStudentName={studentName}
           onOpenArcade={onOpenArcade}
@@ -4548,16 +2334,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         />
       </div>
 
-      {/* Discreet Teacher & Superadmin Portal Links */}
+      {/* 10. TEACHER & SUPERADMIN LINKS */}
       {(onOpenTeacherPortal || onOpenSuperAdmin) && (
-        <div className="pt-2 pb-1 border-t border-slate-800/60 flex items-center justify-center gap-3">
+        <div className="pt-2 pb-1 border-t border-slate-800/60 flex flex-wrap items-center justify-center gap-3">
           {onOpenTeacherPortal && (
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onOpenTeacherPortal();
               }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 text-[11px] font-medium transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 text-xs font-medium transition cursor-pointer"
               title={lang === 'en' ? 'Instructor Portal (Gradebook & Scoring)' : 'Acces securizat pentru cadre didactice (catalog & notare)'}
             >
               <span className="text-slate-400 text-xs" aria-hidden="true">🔒</span>
@@ -4567,11 +2354,12 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
           {onOpenSuperAdmin && (
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onOpenSuperAdmin();
               }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 text-[11px] font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 text-xs font-semibold transition cursor-pointer"
               title="Consolă Superadmin (Control Global Școli, Profesori, Scoruri)"
             >
               <span className="text-amber-400 text-xs" aria-hidden="true">🛡️</span>
@@ -4581,7 +2369,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       )}
 
-      {/* Student Cloud Auth Modal */}
+      {/* Modals */}
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
@@ -4589,7 +2377,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         initialMode={authModalMode}
       />
 
-      {/* Mission In-Progress Guard Modal */}
       <MissionGuardModal
         isOpen={guardModalOpen}
         activeMissionTitle={getMissionTitle(activeMissionId)}
@@ -4616,7 +2403,6 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         }}
       />
 
-      {/* Course Curricula & SEO Syllabus Modal */}
       {selectedCurriculaModule && (
         <CourseCurriculaModal
           module={selectedCurriculaModule}
@@ -4645,7 +2431,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 : mId === 'g6scratch1' || mId === 'g6_scratch1'
                 ? 'g6_scratch1'
                 : mId;
-            handleAttemptStart(mappedMission as any);
+            handleAttemptStart(mappedMission as AllMissionId);
           }}
         />
       )}

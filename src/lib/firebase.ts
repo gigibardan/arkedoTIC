@@ -1,7 +1,21 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { initializeFirestore, getFirestore, setLogLevel, type Firestore } from 'firebase/firestore';
 import { getAuth, type Auth } from 'firebase/auth';
-import rawConfig from '../../firebase-applet-config.json';
+interface FirebaseAppletConfig {
+  apiKey?: string;
+  projectId?: string;
+  appId?: string;
+  authDomain?: string;
+  storageBucket?: string;
+  messagingSenderId?: string;
+  firestoreDatabaseId?: string;
+}
+
+const configModules = import.meta.glob<{ default: FirebaseAppletConfig }>(
+  '../../firebase-applet-config.json',
+  { eager: true }
+);
+const rawConfig: FirebaseAppletConfig = Object.values(configModules)[0]?.default ?? {};
 
 // Read from environment variables (e.g. Netlify/Vercel/Vite .env.local) first, then fallback to config file
 const apiKey = import.meta.env.VITE_FIREBASE_API_KEY || rawConfig.apiKey || '';

@@ -11,4 +11,6 @@ coverage/
 public/assets/aistudio/
 .env*
 !.env.example
+firebase-applet-config.json
+firebase-applet-config.local.json
 

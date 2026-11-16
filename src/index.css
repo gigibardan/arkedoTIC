@@ -1,15 +1,47 @@
 @import "tailwindcss";
 
 @layer base {
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
   }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
   h1, h2, h3, .font-heading {
     font-family: 'Fredoka', 'Plus Jakarta Sans', cursive, sans-serif;
+    text-wrap: balance;
+  }
+
+  /* Accessible keyboard focus indicator across interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #2dd4bf;
+    outline-offset: 2px;
   }
 }
 
-/* Custom bounce and pulse keyframes if needed */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hide horizontal scrollbar in avatar strips cleanly */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom float keyframe for mascot accents */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-6px); }
@@ -17,4 +49,16 @@
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-float,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-ping {
+    animation: none !important;
+  }
 }
