@@ -883,9 +883,11 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
 
         <div className="relative z-10 flex items-start sm:items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <button
+            type="button"
             onClick={onBack}
-            className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white border border-stone-600 transition shadow-md cursor-pointer group shrink-0"
+            className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white border border-stone-600 transition shadow-md cursor-pointer group shrink-0 flex items-center justify-center"
             title={isEn ? 'Back to Arcade Hub' : 'Înapoi la Jocuri'}
+            aria-label={isEn ? 'Back to Arcade Hub' : 'Înapoi la Jocuri'}
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-0.5 transition-transform" />
           </button>
@@ -896,16 +898,16 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                 <span>{biomeTheme.icon}</span>
                 <span>{biomeTheme.name}</span>
               </span>
-              <span className="px-2 sm:px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[10px] sm:text-[11px] font-mono">
+              <span className="px-2 sm:px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[10px] sm:text-[11px] font-mono tabular-nums">
                 {gameMode === 'story'
                   ? (isEn ? `Chapter ${currentMissionIdx + 1} / ${VOXEL_MISSIONS.length}` : `Capitolul ${currentMissionIdx + 1} / ${VOXEL_MISSIONS.length}`)
                   : (isEn ? 'Creative Sandbox Lab' : 'Modul Sandbox Liber')}
               </span>
             </div>
 
-            <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-white font-heading tracking-tight break-words flex items-center gap-2">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-white font-heading tracking-tight text-balance flex items-center gap-2">
               <span>{gameMode === 'story' ? (isEn ? currentMission.titleEn : currentMission.titleRo) : (isEn ? 'Voxel Circuit Sandbox' : 'Laboratorul de Arhitectură Voxel')}</span>
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0" />
             </h2>
 
             <p className="text-[11px] sm:text-xs md:text-sm text-stone-300 mt-0.5 break-words">
@@ -917,15 +919,16 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
         </div>
 
         {/* Stats & Global Controls */}
-        <div className="relative z-10 flex items-center justify-between sm:justify-start gap-2 sm:gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-stone-800">
+        <div className="relative z-10 flex flex-wrap items-center justify-between sm:justify-start gap-2 sm:gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-stone-800">
           {/* Mode Switcher */}
           <div className="flex items-center rounded-xl sm:rounded-2xl bg-stone-950 p-1 border border-stone-800">
             <button
+              type="button"
               onClick={() => {
                 setGameMode('story');
                 if (!soundMuted) sounds.playClick();
               }}
-              className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono font-bold transition cursor-pointer ${
+              className={`min-h-[36px] px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono font-bold transition cursor-pointer ${
                 gameMode === 'story'
                   ? 'bg-rose-600 text-white shadow-md'
                   : 'text-stone-400 hover:text-white'
@@ -934,11 +937,12 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
               {isEn ? 'Story' : 'Misiuni'}
             </button>
             <button
+              type="button"
               onClick={() => {
                 setGameMode('sandbox');
                 if (!soundMuted) sounds.playClick();
               }}
-              className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono font-bold transition cursor-pointer ${
+              className={`min-h-[36px] px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono font-bold transition cursor-pointer ${
                 gameMode === 'sandbox'
                   ? 'bg-cyan-600 text-white shadow-md'
                   : 'text-stone-400 hover:text-white'
@@ -955,7 +959,7 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
               <div className="text-[9px] font-mono text-cyan-300 uppercase leading-none font-bold">
                 {isEn ? 'Diamonds' : 'Diamante'}
               </div>
-              <div className="text-xs sm:text-sm font-black text-cyan-100 font-mono">
+              <div className="text-xs sm:text-sm font-black text-cyan-100 font-mono tabular-nums">
                 {totalDiamonds}
               </div>
             </div>
@@ -968,7 +972,7 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
               <div className="text-[9px] font-mono text-amber-300 uppercase leading-none font-bold">
                 XP
               </div>
-              <div className="text-xs sm:text-sm font-black text-amber-100 font-mono">
+              <div className="text-xs sm:text-sm font-black text-amber-100 font-mono tabular-nums">
                 {totalXP}
               </div>
             </div>
@@ -976,9 +980,11 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
 
           {/* Sound Toggle */}
           <button
+            type="button"
             onClick={() => setSoundMuted(!soundMuted)}
-            className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-750 text-stone-300 border border-stone-700 transition cursor-pointer"
-            title={soundMuted ? 'Unmute' : 'Mute'}
+            className="min-h-[40px] min-w-[40px] p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-750 text-stone-300 border border-stone-700 transition cursor-pointer flex items-center justify-center"
+            title={soundMuted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
+            aria-label={soundMuted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
           >
             {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
@@ -994,11 +1000,12 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
             return (
               <button
                 key={ms.id}
+                type="button"
                 onClick={() => {
                   setCurrentMissionIdx(idx);
                   if (!soundMuted) sounds.playClick();
                 }}
-                className={`px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition flex items-center gap-1 sm:gap-1.5 shrink-0 cursor-pointer border ${
+                className={`min-h-[36px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition flex items-center gap-1 sm:gap-1.5 shrink-0 cursor-pointer border ${
                   isCurrent
                     ? 'bg-rose-600 text-white border-rose-400 shadow-md shadow-rose-600/30 ring-2 ring-rose-500/30'
                     : isDone
@@ -1070,12 +1077,12 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                       cellContent = <span className="text-stone-500 text-[10px] font-mono">🧱</span>;
                     } else if (isWire) {
                       cellBg = cell.powered
-                        ? 'bg-rose-950 border-rose-500 ring-2 ring-rose-500/40 shadow-lg shadow-rose-600/30 animate-pulse'
+                        ? 'bg-rose-950 border-rose-500 ring-2 ring-rose-500/40 shadow-lg shadow-rose-600/30'
                         : 'bg-stone-900 border-rose-950 text-rose-900';
                       cellContent = (
                         <div className="flex flex-col items-center">
                           <span className={`text-base sm:text-xl font-bold ${cell.powered ? 'text-rose-400' : 'text-stone-600'}`}>⚡</span>
-                          <span className={`text-[8px] font-mono font-bold ${cell.powered ? 'text-rose-300' : 'text-stone-700'}`}>
+                          <span className={`text-[8px] font-mono font-bold tabular-nums ${cell.powered ? 'text-rose-300' : 'text-stone-700'}`}>
                             {cell.powerLevel}
                           </span>
                         </div>
@@ -1094,7 +1101,7 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                       );
                     } else if (isLamp) {
                       cellBg = cell.powered
-                        ? 'bg-gradient-to-b from-amber-500 to-yellow-600 border-yellow-300 text-stone-950 shadow-lg shadow-yellow-500/50 scale-105 animate-pulse'
+                        ? 'bg-gradient-to-b from-amber-500 to-yellow-600 border-yellow-300 text-stone-950 shadow-lg shadow-yellow-500/50 scale-105'
                         : 'bg-stone-900 border-stone-700 text-stone-600';
                       cellContent = (
                         <div className="flex flex-col items-center">
@@ -1176,7 +1183,7 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                       );
                     } else if (cell.type === 'command_block') {
                       cellBg = cell.powered
-                        ? 'bg-indigo-950 border-indigo-400 shadow-lg shadow-indigo-500/40 animate-pulse'
+                        ? 'bg-indigo-950 border-indigo-400 shadow-lg shadow-indigo-500/40'
                         : 'bg-stone-900 border-indigo-900 text-indigo-400';
                       cellContent = (
                         <div className="flex flex-col items-center">
@@ -1188,14 +1195,16 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                       cellBg = 'bg-cyan-950/80 border-cyan-400 shadow-lg shadow-cyan-500/30';
                       cellContent = <span className="text-lg sm:text-2xl">💎</span>;
                     } else if (cell.type === 'lava') {
-                      cellBg = 'bg-orange-950 border-orange-500 animate-pulse';
+                      cellBg = 'bg-orange-950 border-orange-500';
                       cellContent = <span className="text-lg sm:text-2xl">🔥</span>;
                     }
 
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={`${x}-${y}`}
                         onClick={() => handleCellClick(x, y)}
+                        aria-label={`${cell.label || cell.type} (${x}, ${y})`}
                         className={`w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl border-2 flex flex-col items-center justify-center cursor-pointer transition-all duration-150 active:scale-95 relative ${cellBg} ${
                           cell.locked ? 'ring-1 ring-stone-700/50' : ''
                         }`}
@@ -1207,7 +1216,7 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                             {cell.label}
                           </div>
                         )}
-                      </div>
+                      </button>
                     );
                   })
                 )}
@@ -1235,9 +1244,10 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleNextMission}
                   disabled={currentMissionIdx >= VOXEL_MISSIONS.length - 1}
-                  className="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
+                  className="min-h-[42px] w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
                 >
                   <span>{isEn ? 'Next Chapter' : 'Capitolul Următor'}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1247,10 +1257,11 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
 
             {/* Bottom Actions Bar */}
             <div className="relative z-10 mt-3 sm:mt-4 flex items-center justify-between gap-2 text-xs font-mono text-stone-400 flex-wrap">
-              <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <button
+                  type="button"
                   onClick={() => setShowGuideModal(true)}
-                  className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
+                  className="min-h-[38px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
                 >
                   <Info className="w-3.5 h-3.5 text-cyan-400" />
                   <span>{isEn ? 'Logic Handbook' : 'Manualul Voxel'}</span>
@@ -1258,8 +1269,9 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
 
                 {gameMode === 'story' && (
                   <button
+                    type="button"
                     onClick={() => setShowHint(!showHint)}
-                    className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
+                    className="min-h-[38px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
                     <span>{isEn ? 'Hint' : 'Indiciu'}</span>
@@ -1268,8 +1280,9 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
               </div>
 
               <button
+                type="button"
                 onClick={handleResetMission}
-                className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
+                className="min-h-[38px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-1.5 cursor-pointer text-[11px] sm:text-xs"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>{isEn ? 'Reset Grid' : 'Resetează Grila'}</span>
@@ -1279,7 +1292,7 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
 
           {/* Minecraft Hotbar (Materials & Tools Selector) */}
           <div className="bg-stone-900 border border-stone-800 rounded-2xl p-3 shadow-xl w-full">
-            <div className="text-[11px] font-mono text-stone-400 uppercase font-bold mb-2 flex items-center justify-between">
+            <div className="text-[11px] font-mono text-stone-400 uppercase font-bold mb-2 flex flex-wrap items-center justify-between gap-2">
               <span className="flex items-center gap-1.5">
                 <Boxes className="w-3.5 h-3.5 text-amber-400" />
                 <span>{isEn ? 'Minecraft Tool Belt & Materials' : 'Bara de Unelte & Materiale'}</span>
@@ -1294,14 +1307,15 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                 const isSelected = selectedTool === item.type;
                 return (
                   <button
+                    type="button"
                     key={item.type}
                     onClick={() => {
                       setSelectedTool(item.type);
                       if (!soundMuted) sounds.playClick();
                     }}
-                    className={`px-2.5 sm:px-3 py-2 rounded-xl border-2 flex items-center gap-1.5 shrink-0 transition-all cursor-pointer ${
+                    className={`min-h-[40px] px-2.5 sm:px-3 py-2 rounded-xl border-2 flex items-center gap-1.5 shrink-0 transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-rose-950/90 border-rose-500 shadow-md shadow-rose-600/30 scale-102 ring-2 ring-rose-500/30'
+                        ? 'bg-rose-950/90 border-rose-500 shadow-md shadow-rose-600/30 ring-2 ring-rose-500/30'
                         : 'bg-stone-950/80 border-stone-800 hover:border-stone-600'
                     }`}
                   >
@@ -1360,43 +1374,53 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
                   </thead>
                   <tbody className="divide-y divide-stone-850 text-[11px]">
                     <tr>
-                      <td className="p-2 sm:p-2.5 text-rose-400 font-bold flex items-center gap-1">
-                        <span>⚡</span>
-                        <span>Redstone</span>
+                      <td className="p-2 sm:p-2.5 text-rose-400 font-bold">
+                        <div className="flex items-center gap-1">
+                          <span>⚡</span>
+                          <span>Redstone</span>
+                        </div>
                       </td>
-                      <td className="p-2 sm:p-2.5 text-center text-stone-300">0 - 15</td>
+                      <td className="p-2 sm:p-2.5 text-center text-stone-300 tabular-nums">0 - 15</td>
                       <td className="p-2 sm:p-2.5 text-right text-stone-400">{isEn ? 'Bus Wire' : 'Magistrală'}</td>
                     </tr>
                     <tr>
-                      <td className="p-2 sm:p-2.5 text-cyan-400 font-bold flex items-center gap-1">
-                        <span>🔘</span>
-                        <span>Lever</span>
+                      <td className="p-2 sm:p-2.5 text-cyan-400 font-bold">
+                        <div className="flex items-center gap-1">
+                          <span>🔘</span>
+                          <span>Lever</span>
+                        </div>
                       </td>
-                      <td className="p-2 sm:p-2.5 text-center text-stone-300">0 / 1</td>
+                      <td className="p-2 sm:p-2.5 text-center text-stone-300 tabular-nums">0 / 1</td>
                       <td className="p-2 sm:p-2.5 text-right text-stone-400">{isEn ? 'Input Switch' : 'Comutator'}</td>
                     </tr>
                     <tr>
-                      <td className="p-2 sm:p-2.5 text-amber-400 font-bold flex items-center gap-1">
-                        <span>⚙️</span>
-                        <span>AND Gate</span>
+                      <td className="p-2 sm:p-2.5 text-amber-400 font-bold">
+                        <div className="flex items-center gap-1">
+                          <span>⚙️</span>
+                          <span>AND Gate</span>
+                        </div>
                       </td>
-                      <td className="p-2 sm:p-2.5 text-center text-stone-300">1 & 1 = 1</td>
+                      <td className="p-2 sm:p-2.5 text-center text-stone-300 tabular-nums">1 & 1 = 1</td>
                       <td className="p-2 sm:p-2.5 text-right text-stone-400">{isEn ? 'Conjunction' : 'Și logic'}</td>
                     </tr>
                     <tr>
-                      <td className="p-2 sm:p-2.5 text-purple-400 font-bold flex items-center gap-1">
-                        <span>🎛️</span>
-                        <span>XOR Gate</span>
+                      <td className="p-2 sm:p-2.5 text-purple-400 font-bold">
+                        <div className="flex items-center gap-1">
+                          <span>🎛️</span>
+                          <span>XOR Gate</span>
+                        </div>
                       </td>
-                      <td className="p-2 sm:p-2.5 text-center text-stone-300">1 ^ 0 = 1</td>
+                      <td className="p-2 sm:p-2.5 text-center text-stone-300 tabular-nums">1 ^ 0 = 1</td>
                       <td className="p-2 sm:p-2.5 text-right text-stone-400">{isEn ? 'Half-Adder Sum' : 'Sumă Binară'}</td>
                     </tr>
                     <tr>
-                      <td className="p-2 sm:p-2.5 text-emerald-400 font-bold flex items-center gap-1">
-                        <span>🔁</span>
-                        <span>Repeater</span>
+                      <td className="p-2 sm:p-2.5 text-emerald-400 font-bold">
+                        <div className="flex items-center gap-1">
+                          <span>🔁</span>
+                          <span>Repeater</span>
+                        </div>
                       </td>
-                      <td className="p-2 sm:p-2.5 text-center text-stone-300">15 Boost</td>
+                      <td className="p-2 sm:p-2.5 text-center text-stone-300 tabular-nums">15 Boost</td>
                       <td className="p-2 sm:p-2.5 text-right text-stone-400">{isEn ? 'Amplifier' : 'Amplificator'}</td>
                     </tr>
                   </tbody>
@@ -1410,16 +1434,16 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <span className="text-2xl sm:text-3xl shrink-0">🏆</span>
               <div className="min-w-0">
-                <h4 className="text-xs font-bold text-white uppercase font-mono truncate">
+                <h4 className="text-xs font-bold text-white uppercase font-mono text-balance">
                   {isEn ? 'Master Voxel Architect' : 'Arhitect Maestru Voxel'}
                 </h4>
-                <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5">
+                <p className="text-[10px] sm:text-[11px] text-stone-400 mt-0.5 tabular-nums">
                   {completedMissions.length} / {VOXEL_MISSIONS.length} {isEn ? 'Chapters Mastered' : 'Capitole Finalizate'}
                 </p>
               </div>
             </div>
 
-            <div className="text-right font-mono text-emerald-300 font-bold text-xs sm:text-sm shrink-0">
+            <div className="text-right font-mono tabular-nums text-emerald-300 font-bold text-xs sm:text-sm shrink-0">
               {Math.round((completedMissions.length / VOXEL_MISSIONS.length) * 100)}%
             </div>
           </div>
@@ -1466,8 +1490,9 @@ export const MinecraftVoxelArchitect: React.FC<MinecraftVoxelArchitectProps> = (
 
             <div className="flex justify-end">
               <button
+                type="button"
                 onClick={() => setShowGuideModal(false)}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-white font-bold text-xs transition cursor-pointer active:scale-95"
+                className="min-h-[42px] w-full sm:w-auto px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-white font-bold text-xs transition cursor-pointer active:scale-95"
               >
                 {isEn ? 'Close Guide' : 'Închide Ghidul'}
               </button>

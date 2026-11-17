@@ -166,13 +166,14 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
       {/* Top Header */}
       <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
+          type="button"
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="order-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
+          className="order-1 px-3 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0"
         >
-          <ArrowLeft className="w-4 h-4 text-emerald-400" />
+          <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{lang === 'en' ? 'Arcade' : 'Înapoi'}</span>
         </button>
 
@@ -181,7 +182,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
             <Binary className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h1 className="text-xs sm:text-base font-black text-white font-heading">
+            <h1 className="text-xs sm:text-base font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Binary Bit Factory' : 'Decodorul Binar (Fabrica de Biți)'}
             </h1>
             <p className="text-[10px] sm:text-[11px] text-amber-400 font-mono">
@@ -191,7 +192,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
         </div>
 
         {/* High Score Badge */}
-        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold shrink-0">
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold tabular-nums shrink-0">
           <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
           <span>{highScore} pts</span>
         </div>
@@ -203,14 +204,15 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
           {/* Top Controls: Difficulty Tabs & Round/Score */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
             {/* Difficulty Toggle */}
-            <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+            <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
               <button
+                type="button"
                 onClick={() => {
                   sounds.playClick();
                   setDifficulty('easy');
                   setRound(1);
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition cursor-pointer ${
                   difficulty === 'easy'
                     ? 'bg-amber-500 text-slate-950 font-black shadow-md'
                     : 'text-slate-400 hover:text-white'
@@ -219,12 +221,13 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
                 {lang === 'en' ? '4 Bits (0 - 15)' : 'Mod Ușor: 4 Biți (0 - 15)'}
               </button>
               <button
+                type="button"
                 onClick={() => {
                   sounds.playClick();
                   setDifficulty('byte');
                   setRound(1);
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-bold transition cursor-pointer ${
                   difficulty === 'byte'
                     ? 'bg-amber-500 text-slate-950 font-black shadow-md'
                     : 'text-slate-400 hover:text-white'
@@ -235,17 +238,17 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
             </div>
 
             {/* Round, Combo & Score */}
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-slate-300">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-slate-300 tabular-nums">
                 {lang === 'en' ? 'Challenge' : 'Provocarea'} {round} / {totalRounds}
               </span>
               <div className="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-amber-400" />
-                <span className="text-xs font-bold text-amber-300 font-mono">{combo}x</span>
+                <Flame className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="text-xs font-bold text-amber-300 font-mono tabular-nums">{combo}x</span>
               </div>
               <div className="bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Trophy className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-black text-white font-mono">{score} pts</span>
+                <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="text-sm font-black text-white font-mono tabular-nums">{score} pts</span>
               </div>
             </div>
           </div>
@@ -255,10 +258,10 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
             {/* Target Number */}
             <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
               <span className="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1.5">
-                <Zap className="w-4 h-4" />
+                <Zap className="w-4 h-4 shrink-0" />
                 {lang === 'en' ? 'Target Decimal Number:' : 'Numărul Zecimal Țintă:'}
               </span>
-              <div className="text-4xl sm:text-6xl font-black text-white font-mono mt-1 tracking-tight flex items-baseline gap-2">
+              <div className="text-4xl sm:text-6xl font-black text-white font-mono tabular-nums mt-1 tracking-tight flex items-baseline gap-2">
                 <span>{targetNumber}</span>
                 <span className="text-xs sm:text-sm font-bold text-slate-500 font-mono">(baza 10)</span>
               </div>
@@ -270,7 +273,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
                 {lang === 'en' ? 'Current Sum (Your Switches):' : 'Suma Curentă a Becurilor:'}
               </span>
               <div
-                className={`text-3xl sm:text-5xl font-black font-mono mt-1 transition-colors ${
+                className={`text-3xl sm:text-5xl font-black font-mono tabular-nums mt-1 transition-colors ${
                   currentSum === targetNumber
                     ? 'text-emerald-400 scale-105'
                     : currentSum > targetNumber
@@ -288,14 +291,15 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
 
           {/* Binary Switches Grid (The Bulbs and Weights) */}
           <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400">
               <span className="font-bold text-slate-300 flex items-center gap-1.5">
-                <Lightbulb className="w-4 h-4 text-amber-400" />
+                <Lightbulb className="w-4 h-4 text-amber-400 shrink-0" />
                 {lang === 'en' ? 'Click switches to turn on/off powers of 2:' : 'Apasă pe comutatoare pentru a aprinde/stinge puterile lui 2:'}
               </span>
               <button
+                type="button"
                 onClick={() => setShowHelper((prev) => !prev)}
-                className="text-amber-400 hover:text-amber-300 underline font-bold cursor-pointer"
+                className="text-amber-400 hover:text-amber-300 underline font-bold cursor-pointer min-h-[32px] px-1"
               >
                 {showHelper ? (lang === 'en' ? 'Hide Help' : 'Ascunde Ajutorul') : (lang === 'en' ? 'How it works? 💡' : 'Cum funcționează? 💡')}
               </button>
@@ -320,8 +324,9 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
                 return (
                   <button
                     key={weight}
+                    type="button"
                     onClick={() => toggleBit(idx)}
-                    className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-between gap-1.5 sm:gap-3 transition-all transform active:scale-95 cursor-pointer shadow-md sm:shadow-lg ${
+                    className={`p-2 sm:p-4 min-h-[44px] rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-between gap-1.5 sm:gap-3 transition-all transform active:scale-95 cursor-pointer shadow-md sm:shadow-lg ${
                       isActive
                         ? 'bg-gradient-to-b from-amber-500/20 to-amber-600/30 border-amber-400 shadow-amber-500/20 ring-2 ring-amber-400/40'
                         : 'bg-slate-950/80 border-slate-800 hover:border-slate-700 text-slate-500'
@@ -329,7 +334,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
                   >
                     {/* Weight Label (Power of 2) */}
                     <div className="flex flex-col items-center">
-                      <span className={`text-sm sm:text-xl font-black font-mono ${isActive ? 'text-amber-300' : 'text-slate-400'}`}>
+                      <span className={`text-sm sm:text-xl font-black font-mono tabular-nums ${isActive ? 'text-amber-300' : 'text-slate-400'}`}>
                         +{weight}
                       </span>
                       <span className="text-[8px] sm:text-[10px] font-mono text-slate-500">2^{currentWeights.length - 1 - idx}</span>
@@ -339,7 +344,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
                     <div
                       className={`w-7 h-7 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all ${
                         isActive
-                          ? 'bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/50 scale-105 sm:scale-110 animate-pulse'
+                          ? 'bg-amber-400 text-slate-950 shadow-lg shadow-amber-400/50 scale-105 sm:scale-110'
                           : 'bg-slate-900 text-slate-600 border border-slate-800'
                       }`}
                     >
@@ -374,31 +379,34 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
           {/* Action Row: Reset & Validate */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
             <button
+              type="button"
               onClick={resetAllBits}
-              className="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white font-bold text-xs sm:text-sm transition border border-slate-700 cursor-pointer active:scale-95 flex items-center justify-center"
+              className="w-full sm:w-auto px-4 py-3 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white font-bold text-xs sm:text-sm transition border border-slate-700 cursor-pointer active:scale-95 flex items-center justify-center"
             >
               <RotateCcw className="w-4 h-4 mr-1.5 text-slate-400 shrink-0" />
               <span>{lang === 'en' ? 'Clear All Bits' : 'Resetează Biții (0000)'}</span>
             </button>
 
             <button
+              type="button"
               onClick={handleCheckAnswer}
               disabled={currentSum !== targetNumber}
-              className={`w-full sm:w-auto px-8 py-3.5 rounded-2xl font-black text-sm sm:text-base transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
+              className={`w-full sm:w-auto px-8 py-3.5 min-h-[48px] rounded-2xl font-black text-sm sm:text-base transition shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95 ${
                 currentSum === targetNumber
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/30 animate-bounce'
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-emerald-500/30 ring-2 ring-emerald-400/50'
                   : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
               }`}
             >
               <CheckCircle2 className="w-5 h-5 shrink-0" />
-              <span>{lang === 'en' ? 'Validate Binary ➔' : 'Validează Conversia ➔'}</span>
+              <span>{lang === 'en' ? 'Validate Binary' : 'Validează Conversia'}</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
           </div>
         </div>
       ) : (
         /* Results Screen */
         <div className="bg-slate-900/95 border-2 border-amber-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col items-center justify-center text-center gap-6">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/20 ring-4 ring-amber-500/20 animate-bounce">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/20 ring-4 ring-amber-500/20">
             ⚡
           </div>
 
@@ -406,7 +414,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
             <span className="px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30 uppercase tracking-wider">
               {lang === 'en' ? 'Course Complete!' : 'Laborator Binar Completat!'}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
               {studentName ? `${studentName}, ` : ''}
               {score >= 1500
                 ? (lang === 'en' ? 'Byte Architecture Genius! 🧠⚡' : 'Geniu al Arhitecturii Binare! 🧠⚡')
@@ -420,7 +428,7 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 max-w-xl w-full">
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Scor Total</span>
-              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono tabular-nums mt-1">
                 {score}
               </span>
               <span className="text-[11px] text-slate-500">puncte</span>
@@ -428,15 +436,15 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Provocări Binar</span>
-              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tabular-nums mt-1">
                 {totalRounds} / {totalRounds}
               </span>
               <span className="text-[11px] text-slate-500">rezolvate cu succes</span>
             </div>
 
-            <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
+            <div className="col-span-2 sm:col-span-1 bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Max Combo</span>
-              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono tabular-nums mt-1">
                 {maxCombo}x
               </span>
               <span className="text-[11px] text-slate-500">consecutive</span>
@@ -444,20 +452,22 @@ export const BinaryFactoryGame: React.FC<BinaryFactoryGameProps> = ({ onBack, st
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
+              type="button"
               onClick={handleRestart}
-              className="px-6 py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-amber-600/30 cursor-pointer active:scale-95"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 shrink-0" />
               <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
             >
               <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
             </button>

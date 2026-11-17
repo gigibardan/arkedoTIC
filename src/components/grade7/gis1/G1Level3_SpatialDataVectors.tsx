@@ -469,11 +469,13 @@ export const G1Level3_SpatialDataVectors: React.FC<G1Level3Props> = ({ onPass })
                       }`}
                     >
                       <td className="p-2.5 text-slate-500">{feat.id}</td>
-                      <td className="p-2.5 font-sans font-medium text-white flex items-center gap-1.5">
-                        {feat.type === 'point' && '📍'}
-                        {feat.type === 'polyline' && '〰️'}
-                        {feat.type === 'polygon' && '🟩'}
-                        {name}
+                      <td className="p-2.5 font-sans font-medium text-white">
+                        <div className="flex items-center gap-1.5">
+                          {feat.type === 'point' && '📍'}
+                          {feat.type === 'polyline' && '〰️'}
+                          {feat.type === 'polygon' && '🟩'}
+                          <span>{name}</span>
+                        </div>
                       </td>
                       <td className="p-2.5">
                         <span

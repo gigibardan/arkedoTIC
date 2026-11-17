@@ -427,9 +427,9 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
                 {lang === 'en' ? 'Data Units Slider' : 'Glisorul Unităților de Date'}
               </span>
             </div>
-            <h1 className="text-base sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2">
+            <h1 className="text-base sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2 text-balance">
               <span>Byte Slider 3×3</span>
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 animate-pulse" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0" />
             </h1>
           </div>
         </div>
@@ -472,43 +472,43 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
 
           {/* High Score Badge */}
           <div className="px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
-            <Trophy className="w-4 h-4 text-amber-400" />
+            <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
             <div className="flex flex-col text-right">
               <span className="text-[9px] sm:text-[10px] text-slate-400 font-mono leading-none">Record</span>
-              <span className="font-mono font-black text-amber-300">{highScore} pts</span>
+              <span className="font-mono font-black text-amber-300 tabular-nums">{highScore} pts</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Gamification Stats Bar */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         {/* Moves Counter */}
-        <div className="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-3 sm:p-4 text-center">
-          <div className="text-[11px] font-mono text-indigo-300 uppercase tracking-wider">
+        <div className="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-2.5 sm:p-4 text-center">
+          <div className="text-[10px] sm:text-[11px] font-mono text-indigo-300 uppercase tracking-wider">
             {lang === 'en' ? 'Moves' : 'Mutări'}
           </div>
-          <div className="text-2xl sm:text-3xl font-black font-mono text-white mt-0.5">
+          <div className="text-xl sm:text-3xl font-black font-mono tabular-nums text-white mt-0.5">
             {moves}
           </div>
         </div>
 
         {/* Timer */}
-        <div className="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-3 sm:p-4 text-center">
-          <div className="text-[11px] font-mono text-cyan-300 uppercase tracking-wider">
+        <div className="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-2.5 sm:p-4 text-center">
+          <div className="text-[10px] sm:text-[11px] font-mono text-cyan-300 uppercase tracking-wider">
             {lang === 'en' ? 'Time Elapsed' : 'Timp'}
           </div>
-          <div className="text-2xl sm:text-3xl font-black font-mono text-cyan-200 mt-0.5">
+          <div className="text-xl sm:text-3xl font-black font-mono tabular-nums text-cyan-200 mt-0.5">
             {formatTime(seconds)}
           </div>
         </div>
 
         {/* Correct Position Counter */}
-        <div className="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-3 sm:p-4 text-center">
-          <div className="text-[11px] font-mono text-emerald-300 uppercase tracking-wider">
-            {lang === 'en' ? 'Correct Placed' : 'Piese la Locul Lor'}
+        <div className="bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-2.5 sm:p-4 text-center">
+          <div className="text-[10px] sm:text-[11px] font-mono text-emerald-300 uppercase tracking-wider truncate">
+            {lang === 'en' ? 'Correct Placed' : 'Piese Corecte'}
           </div>
-          <div className="text-2xl sm:text-3xl font-black font-mono text-emerald-400 mt-0.5 flex items-center justify-center gap-1">
+          <div className="text-xl sm:text-3xl font-black font-mono tabular-nums text-emerald-400 mt-0.5 flex items-center justify-center gap-1">
             <span>{correctTilesCount}</span>
             <span className="text-xs text-slate-500 font-normal">/ 8</span>
           </div>
@@ -679,8 +679,8 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
 
           {/* Quick instructions below grid */}
           <div className="mt-3 flex items-center justify-between w-full max-w-[420px] px-2 text-xs text-slate-400">
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
               {lang === 'en' ? 'Green glow = Correct position' : 'Contur verde = Poziție corectă'}
             </span>
             <span className="text-[11px] font-mono text-slate-500">
@@ -710,8 +710,9 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
                 </div>
                 <button
                   type="button"
+                  aria-label={lang === 'en' ? 'Close unit details' : 'Închide detaliile unității'}
                   onClick={() => setSelectedUnitInfo(null)}
-                  className="text-xs text-slate-400 hover:text-white px-2 py-1 rounded-lg bg-slate-800"
+                  className="text-xs text-slate-400 hover:text-white min-w-[32px] min-h-[32px] flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 cursor-pointer shrink-0"
                 >
                   ✕
                 </button>
@@ -755,13 +756,14 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
 
             <div className="space-y-1.5 max-h-[300px] overflow-y-auto pr-1">
               {DATA_UNITS.map((unit, idx) => (
-                <div
+                <button
                   key={unit.id}
+                  type="button"
                   onClick={() => setSelectedUnitInfo(unit)}
-                  className="flex items-center justify-between p-2 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-xs transition cursor-pointer"
+                  className="w-full text-left flex items-center justify-between gap-2 p-2.5 min-h-[40px] rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-xs transition cursor-pointer"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-lg bg-indigo-950 border border-indigo-500/30 flex items-center justify-center font-mono font-bold text-[10px] text-indigo-300">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="w-5 h-5 rounded-lg bg-indigo-950 border border-indigo-500/30 flex items-center justify-center font-mono font-bold text-[10px] text-indigo-300 shrink-0">
                       {idx + 1}
                     </span>
                     <span className="font-bold text-slate-200">{unit.name}</span>
@@ -770,7 +772,7 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
                   <span className="text-[11px] text-slate-400 font-mono truncate max-w-[150px]">
                     {unit.sub}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -780,8 +782,8 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
       {/* Victory Celebration Modal */}
       {hasWon && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-lg bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-emerald-400/80 rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
-            <div className="w-20 h-20 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-4xl mx-auto mb-4 shadow-lg shadow-emerald-500/30 animate-bounce">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-emerald-400/80 rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
+            <div className="w-20 h-20 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-4xl mx-auto mb-4 shadow-lg shadow-emerald-500/30">
               🏆
             </div>
 
@@ -790,7 +792,7 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
               <span>{lang === 'en' ? 'PUZZLE SOLVED!' : 'PUZZLE REZOLVAT CU SUCCES!'}</span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Data Units Master!' : 'Maestru al Unităților de Date!'}
             </h2>
 
@@ -801,22 +803,22 @@ export const ByteSliderGame: React.FC<ByteSliderProps> = ({ onBack, studentName 
             </p>
 
             {/* Performance Stats */}
-            <div className="grid grid-cols-3 gap-3 my-6 bg-slate-950/80 border border-emerald-500/30 rounded-2xl p-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 my-6 bg-slate-950/80 border border-emerald-500/30 rounded-2xl p-3 sm:p-4">
               <div>
                 <div className="text-[10px] font-mono text-slate-400 uppercase">Mutări</div>
-                <div className="text-xl sm:text-2xl font-black font-mono text-indigo-300 mt-0.5">
+                <div className="text-lg sm:text-2xl font-black font-mono tabular-nums text-indigo-300 mt-0.5">
                   {moves}
                 </div>
               </div>
               <div>
                 <div className="text-[10px] font-mono text-slate-400 uppercase">Timp</div>
-                <div className="text-xl sm:text-2xl font-black font-mono text-cyan-300 mt-0.5">
+                <div className="text-lg sm:text-2xl font-black font-mono tabular-nums text-cyan-300 mt-0.5">
                   {formatTime(seconds)}
                 </div>
               </div>
               <div>
                 <div className="text-[10px] font-mono text-slate-400 uppercase">Punctaj</div>
-                <div className="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-0.5">
+                <div className="text-lg sm:text-2xl font-black font-mono tabular-nums text-emerald-400 mt-0.5">
                   {Math.max(300, 1500 - moves * 15 - seconds * 5) + (moves <= 25 ? 250 : 100)} pts
                 </div>
               </div>

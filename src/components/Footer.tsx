@@ -375,37 +375,40 @@ export const Footer: React.FC<FooterProps> = ({
             <ul className="space-y-2 text-xs">
               <li>
                 <button
+                  type="button"
                   onClick={() => {
                     sounds.playClick();
                     onOpenLegal('privacy');
                   }}
-                  className="hover:text-emerald-300 text-slate-400 transition-colors flex items-center gap-1.5 text-left"
+                  className="hover:text-emerald-300 text-slate-400 transition-colors flex items-center gap-1.5 text-left py-0.5 cursor-pointer"
                 >
-                  <Lock className="w-3 h-3 text-emerald-400" />
+                  <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
                   <span>{lang === 'en' ? 'Privacy Policy & GDPR' : 'Confidențialitate & GDPR'}</span>
                 </button>
               </li>
               <li>
                 <button
+                  type="button"
                   onClick={() => {
                     sounds.playClick();
                     onOpenLegal('cookies');
                   }}
-                  className="hover:text-emerald-300 text-slate-400 transition-colors flex items-center gap-1.5 text-left"
+                  className="hover:text-emerald-300 text-slate-400 transition-colors flex items-center gap-1.5 text-left py-0.5 cursor-pointer"
                 >
-                  <Cookie className="w-3 h-3 text-amber-400" />
+                  <Cookie className="w-3 h-3 text-amber-400 shrink-0" />
                   <span>{lang === 'en' ? 'Cookie Policy & Options' : 'Politica de Cookie-uri'}</span>
                 </button>
               </li>
               <li>
                 <button
+                  type="button"
                   onClick={() => {
                     sounds.playClick();
                     onOpenLegal('terms');
                   }}
-                  className="hover:text-emerald-300 text-slate-400 transition-colors flex items-center gap-1.5 text-left"
+                  className="hover:text-emerald-300 text-slate-400 transition-colors flex items-center gap-1.5 text-left py-0.5 cursor-pointer"
                 >
-                  <FileText className="w-3 h-3 text-cyan-400" />
+                  <FileText className="w-3 h-3 text-cyan-400 shrink-0" />
                   <span>{lang === 'en' ? 'Terms of Use' : 'Termeni și Condiții'}</span>
                 </button>
               </li>
@@ -422,8 +425,9 @@ export const Footer: React.FC<FooterProps> = ({
                   contact@arkyedu.com
                 </a>
                 <button
+                  type="button"
                   onClick={handleCopyEmail}
-                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors shrink-0"
+                  className="p-2 min-w-[36px] min-h-[36px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors shrink-0 flex items-center justify-center cursor-pointer"
                   title={lang === 'en' ? 'Copy email address' : 'Copiază adresa de email'}
                   aria-label={lang === 'en' ? 'Copy email address' : 'Copiază adresa de email'}
                 >
@@ -436,11 +440,12 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
 
               <button
+                type="button"
                 onClick={() => {
                   sounds.playClick();
                   onOpenLegal('contact');
                 }}
-                className="w-full py-1.5 px-3 rounded-lg bg-indigo-600/80 hover:bg-indigo-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm hover:shadow"
+                className="w-full py-2 min-h-[38px] px-3 rounded-lg bg-indigo-600/80 hover:bg-indigo-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm hover:shadow"
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'Send Form Message' : 'Deschide Formular Contact'}</span>

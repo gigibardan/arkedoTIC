@@ -11,6 +11,7 @@ import {
   FlipHorizontal,
   CheckCircle2,
   Zap,
+  ArrowLeft,
   ArrowRight
 } from 'lucide-react';
 import { DuelRoomData, updateDuelProgress } from '../../lib/duelService';
@@ -317,11 +318,11 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
             🎨
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-base font-black text-white font-heading tracking-tight">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-base font-black text-white font-heading tracking-tight text-balance">
                 Pixel Art Sprite Clash 1v1
               </h3>
-              <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold uppercase">
+              <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold uppercase tabular-nums">
                 {lang === 'en' ? 'Stage' : 'Etapa'} {currentStage + 1}/{SPRITE_CHALLENGES.length}
               </span>
             </div>
@@ -333,14 +334,14 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
 
         {/* Live Score & Streak */}
         <div className="flex items-center gap-4">
-          <div className="text-right">
+          <div className="text-right tabular-nums">
             <span className="text-[10px] text-slate-400 uppercase font-mono block">
               {lang === 'en' ? 'Player Score' : 'Scor Jucător'}
             </span>
             <span className="text-base font-black text-amber-300 font-mono">+{score} XP</span>
           </div>
           {streak > 0 && (
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold animate-pulse">
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold tabular-nums">
               <Flame className="w-3.5 h-3.5 text-amber-400" />
               <span>x{streak} Combo</span>
             </div>
@@ -351,12 +352,12 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
       {/* Duel Competitors Progress Meters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
         <div>
-          <div className="flex justify-between items-center text-xs mb-1">
-            <span className="font-bold text-white flex items-center gap-1.5">
-              <span>{studentAvatar}</span>
-              <span>{studentName} {lang === 'en' ? '(You)' : '(Tu)'}</span>
+          <div className="flex justify-between items-center text-xs mb-1 tabular-nums">
+            <span className="font-bold text-white flex items-center gap-1.5 min-w-0">
+              <span className="shrink-0">{studentAvatar}</span>
+              <span className="truncate">{studentName} {lang === 'en' ? '(You)' : '(Tu)'}</span>
             </span>
-            <span className="font-mono font-bold text-cyan-400">{accuracy}%</span>
+            <span className="font-mono font-bold text-cyan-400 shrink-0">{accuracy}%</span>
           </div>
           <div className="h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
             <div
@@ -367,12 +368,12 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
         </div>
 
         <div>
-          <div className="flex justify-between items-center text-xs mb-1">
-            <span className="font-bold text-slate-300 flex items-center gap-1.5">
-              <span>{opponent?.avatar || '🤖'}</span>
-              <span>{oppName}</span>
+          <div className="flex justify-between items-center text-xs mb-1 tabular-nums">
+            <span className="font-bold text-slate-300 flex items-center gap-1.5 min-w-0">
+              <span className="shrink-0">{opponent?.avatar || '🤖'}</span>
+              <span className="truncate">{oppName}</span>
             </span>
-            <span className="font-mono font-bold text-rose-400">{oppProgress}%</span>
+            <span className="font-mono font-bold text-rose-400 shrink-0">{oppProgress}%</span>
           </div>
           <div className="h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
             <div
@@ -388,9 +389,9 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
         {/* Left Column: Target Sprite (Rețeta Model) */}
         <div className="md:col-span-5 p-4 rounded-2xl bg-slate-900 border border-slate-800 shadow-lg space-y-3 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
               <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
                 {lang === 'en' ? 'Target Model (Sprite Recipe)' : 'Model Țintă (Sprite Rețetă)'}
               </span>
               <span className="text-[10px] font-mono text-slate-400">
@@ -432,14 +433,14 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
         <div className="md:col-span-7 p-4 rounded-2xl bg-slate-900 border-2 border-purple-500/30 shadow-lg space-y-4">
           {/* Tool Selector Bar */}
           <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => {
                   sounds.playClick();
                   setActiveTool('pen');
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
                   activeTool === 'pen'
                     ? 'bg-purple-600 text-white shadow-md'
                     : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
@@ -455,7 +456,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                   sounds.playClick();
                   setActiveTool('bucket');
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
                   activeTool === 'bucket'
                     ? 'bg-purple-600 text-white shadow-md'
                     : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
@@ -471,7 +472,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                   sounds.playClick();
                   setActiveTool('eraser');
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
                   activeTool === 'eraser'
                     ? 'bg-rose-600 text-white shadow-md'
                     : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
@@ -490,7 +491,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                   sounds.playPowerup();
                   setMirrorX(!mirrorX);
                 }}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition cursor-pointer ${
+                className={`min-h-[36px] px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition cursor-pointer ${
                   mirrorX
                     ? 'bg-emerald-600 text-white ring-2 ring-emerald-400/40 shadow-md'
                     : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
@@ -504,7 +505,8 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
               <button
                 type="button"
                 onClick={handleResetCanvas}
-                className="p-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-rose-300 border border-slate-800 transition cursor-pointer"
+                aria-label={lang === 'en' ? 'Clear Canvas' : 'Curăță Pânza'}
+                className="min-w-[36px] min-h-[36px] p-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-rose-300 border border-slate-800 transition cursor-pointer flex items-center justify-center"
                 title={lang === 'en' ? 'Clear Canvas' : 'Curăță Pânza'}
               >
                 <RotateCcw className="w-4 h-4" />
@@ -528,13 +530,14 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                     setSelectedColor(col.hex);
                     if (activeTool === 'eraser') setActiveTool('pen');
                   }}
-                  className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg border-2 transition-transform cursor-pointer ${
+                  className={`w-8 h-8 rounded-lg border-2 transition-transform cursor-pointer touch-manipulation ${
                     isSelected
-                      ? 'scale-125 border-white shadow-lg ring-2 ring-purple-500/50'
+                      ? 'scale-115 border-white shadow-lg ring-2 ring-purple-500/50'
                       : 'border-slate-800 hover:scale-110'
                   }`}
                   style={{ backgroundColor: col.hex }}
                   title={lang === 'en' ? (col.nameEn || col.name) : col.name}
+                  aria-label={lang === 'en' ? (col.nameEn || col.name) : col.name}
                 />
               );
             })}
@@ -542,10 +545,25 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
 
           {/* Interactive Player 8x8 Canvas */}
           <div
-            className="grid grid-cols-8 gap-1.5 p-3 rounded-2xl bg-slate-950 border-2 border-purple-500/40 w-fit mx-auto shadow-2xl touch-none select-none"
+            className="grid grid-cols-8 gap-1 sm:gap-1.5 p-2 sm:p-3 rounded-2xl bg-slate-950 border-2 border-purple-500/40 w-fit max-w-full mx-auto shadow-2xl touch-none select-none"
             onMouseDown={() => setIsMouseDown(true)}
             onMouseUp={() => setIsMouseDown(false)}
             onMouseLeave={() => setIsMouseDown(false)}
+            onTouchMove={(e) => {
+              if (activeTool !== 'pen') return;
+              const touch = e.touches[0];
+              if (!touch) return;
+              const targetEl = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null;
+              const cellData = targetEl?.getAttribute('data-cell');
+              if (cellData) {
+                const [rStr, cStr] = cellData.split('-');
+                const r = Number(rStr);
+                const c = Number(cStr);
+                if (!Number.isNaN(r) && !Number.isNaN(c)) {
+                  colorCell(r, c);
+                }
+              }
+            }}
           >
             {grid.map((row, rIdx) =>
               row.map((cellHex, cIdx) => {
@@ -556,13 +574,15 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                   <button
                     key={`player-${rIdx}-${cIdx}`}
                     type="button"
+                    data-cell={`${rIdx}-${cIdx}`}
+                    aria-label={`${rIdx + 1},${cIdx + 1}`}
                     onClick={() => colorCell(rIdx, cIdx)}
                     onMouseEnter={() => {
                       if (isMouseDown && activeTool === 'pen') {
                         colorCell(rIdx, cIdx);
                       }
                     }}
-                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-md border transition-all cursor-pointer relative overflow-hidden active:scale-95 ${
+                    className={`w-7 h-7 sm:w-9 sm:h-9 rounded-md border transition-all cursor-pointer relative overflow-hidden active:scale-95 ${
                       isCellCorrect
                         ? 'border-emerald-500/40'
                         : 'border-slate-800 hover:border-purple-400'
@@ -570,7 +590,7 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
                     style={{ backgroundColor: cellHex }}
                   >
                     {isCellCorrect && cellHex !== EMPTY_COLOR && (
-                      <span className="absolute bottom-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <span className="absolute bottom-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 pointer-events-none" />
                     )}
                   </button>
                 );
@@ -579,16 +599,17 @@ export const PixelClashDuelGame: React.FC<PixelClashDuelGameProps> = ({
           </div>
 
           {/* Bottom Controls */}
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
             <button
               type="button"
               onClick={onBack}
-              className="text-xs text-slate-400 hover:text-white transition cursor-pointer"
+              className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer inline-flex items-center gap-1.5"
             >
-              ← {lang === 'en' ? 'Leave Duel' : 'Părăsește Duelul'}
+              <ArrowLeft className="w-4 h-4 shrink-0" />
+              <span>{lang === 'en' ? 'Leave Duel' : 'Părăsește Duelul'}</span>
             </button>
 
-            <div className="text-right">
+            <div className="text-right tabular-nums">
               <span className="text-xs font-black text-emerald-400">
                 {lang === 'en' ? (accuracy >= 100 ? '✅ Perfect Stage!' : `Pixel Accuracy: ${accuracy}%`) : (accuracy >= 100 ? '✅ Etapă Perfectă!' : `Potrivire Pixeli: ${accuracy}%`)}
               </span>

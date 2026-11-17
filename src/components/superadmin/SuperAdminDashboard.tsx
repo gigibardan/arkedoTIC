@@ -144,6 +144,18 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   const [newSubmissionScore, setNewSubmissionScore] = useState<number>(0);
   const [newSubmissionPercentage, setNewSubmissionPercentage] = useState<number>(0);
 
+  // In-DOM Confirmation & Arcade Score Edit Modals (replaces window.confirm / window.prompt)
+  const [confirmModal, setConfirmModal] = useState<{
+    title: string;
+    message: string;
+    confirmLabel: string;
+    onConfirm: () => Promise<void>;
+  } | null>(null);
+  const [scoreEditModal, setScoreEditModal] = useState<{
+    gameKey: string;
+    value: string;
+  } | null>(null);
+
   const showNotification = (msg: string) => {
     setActionSuccessMsg(msg);
     setTimeout(() => setActionSuccessMsg(null), 3500);
@@ -254,13 +266,18 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     }
   };
 
-  const handleDeleteSchool = async (schoolId: string, name: string) => {
-    if (window.confirm(`Sigur doriți să ștergeți școala "${name}"? Profesorii și elevii asociați își vor păstra conturile.`)) {
-      await deleteSchool(schoolId);
-      sounds.playClick();
-      showNotification(`Școala "${name}" a fost eliminată.`);
-      await loadAllDashboardData();
-    }
+  const handleDeleteSchool = (schoolId: string, name: string) => {
+    setConfirmModal({
+      title: 'Ștergere Școală',
+      message: `Sigur doriți să ștergeți școala "${name}"? Profesorii și elevii asociați își vor păstra conturile.`,
+      confirmLabel: 'Șterge Școala',
+      onConfirm: async () => {
+        await deleteSchool(schoolId);
+        sounds.playClick();
+        showNotification(`Școala "${name}" a fost eliminată.`);
+        await loadAllDashboardData();
+      },
+    });
   };
 
   /* ==========================================================
@@ -298,13 +315,18 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     await loadAllDashboardData();
   };
 
-  const handleDeleteTeacher = async (teacherId: string, name: string) => {
-    if (window.confirm(`Sigur doriți să ștergeți profesorul "${name}"?`)) {
-      await deleteTeacher(teacherId);
-      sounds.playClick();
-      showNotification(`Profesorul "${name}" a fost șters.`);
-      await loadAllDashboardData();
-    }
+  const handleDeleteTeacher = (teacherId: string, name: string) => {
+    setConfirmModal({
+      title: 'Ștergere Profesor',
+      message: `Sigur doriți să ștergeți profesorul "${name}"?`,
+      confirmLabel: 'Șterge Profesor',
+      onConfirm: async () => {
+        await deleteTeacher(teacherId);
+        sounds.playClick();
+        showNotification(`Profesorul "${name}" a fost șters.`);
+        await loadAllDashboardData();
+      },
+    });
   };
 
   /* ==========================================================
@@ -320,14 +342,19 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     }
   };
 
-  const handleDeleteStudentGlobal = async (student: StudentProfile) => {
-    if (window.confirm(`ATENȚIE SUPERADMIN: Sigur doriți să ștergeți DEFINITIV contul elevului "${student.username}" și TOATE submisiile sale din catalog?`)) {
-      await deleteStudentAccount(student.id, student.username);
-      await deleteAllResultsByStudentName(student.username);
-      sounds.playCorrect();
-      showNotification(`Contul "${student.username}" și submisiile sale au fost șterse.`);
-      await loadAllDashboardData();
-    }
+  const handleDeleteStudentGlobal = (student: StudentProfile) => {
+    setConfirmModal({
+      title: 'Ștergere Definitivă Elev',
+      message: `ATENȚIE SUPERADMIN: Sigur doriți să ștergeți DEFINITIV contul elevului "${student.username}" și TOATE submisiile sale din catalog?`,
+      confirmLabel: 'Șterge Definitiv',
+      onConfirm: async () => {
+        await deleteStudentAccount(student.id, student.username);
+        await deleteAllResultsByStudentName(student.username);
+        sounds.playCorrect();
+        showNotification(`Contul "${student.username}" și submisiile sale au fost șterse.`);
+        await loadAllDashboardData();
+      },
+    });
   };
 
   const handleTransferStudentSchool = async (studentId: string, newSchoolId: string) => {
@@ -411,22 +438,32 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     }
   };
 
-  const handleDeleteSubmission = async (id: string) => {
-    if (window.confirm('Ștergeți această submisie din catalog?')) {
-      await deleteStudentResult(id);
-      sounds.playClick();
-      showNotification('Submisia a fost ștearsă.');
-      await loadAllDashboardData();
-    }
+  const handleDeleteSubmission = (id: string) => {
+    setConfirmModal({
+      title: 'Ștergere Submisie',
+      message: 'Ștergeți această submisie din catalog?',
+      confirmLabel: 'Șterge Submisia',
+      onConfirm: async () => {
+        await deleteStudentResult(id);
+        sounds.playClick();
+        showNotification('Submisia a fost ștearsă.');
+        await loadAllDashboardData();
+      },
+    });
   };
 
-  const handlePurgeGhosts = async () => {
-    if (window.confirm('Goliți TOATE testele fantomă de 0 secunde sau fără punctaj valid?')) {
-      await purgeZeroSecondGhostResults();
-      sounds.playCorrect();
-      showNotification('Testele fantomă au fost curățate!');
-      await loadAllDashboardData();
-    }
+  const handlePurgeGhosts = () => {
+    setConfirmModal({
+      title: 'Curățare Teste Fantomă',
+      message: 'Goliți TOATE testele fantomă de 0 secunde sau fără punctaj valid?',
+      confirmLabel: 'Curăță Fantomele',
+      onConfirm: async () => {
+        await purgeZeroSecondGhostResults();
+        sounds.playCorrect();
+        showNotification('Testele fantomă au fost curățate!');
+        await loadAllDashboardData();
+      },
+    });
   };
 
   /* ==========================================================
@@ -599,36 +636,44 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     }
   };
 
-  const handleDeleteMessage = async (msgId: string) => {
-    if (!window.confirm('Ești sigur că vrei să ștergi acest mesaj?')) return;
-    try {
-      await deleteContactMessage(msgId);
-      setContactMessages(prev => prev.filter(m => m.id !== msgId));
-      showNotification('Mesajul a fost șters.');
-      sounds.playClick();
-    } catch (e) {
-      console.warn('Error deleting message:', e);
-    }
+  const handleDeleteMessage = (msgId: string) => {
+    setConfirmModal({
+      title: 'Ștergere Mesaj',
+      message: 'Ești sigur că vrei să ștergi acest mesaj?',
+      confirmLabel: 'Șterge Mesajul',
+      onConfirm: async () => {
+        try {
+          await deleteContactMessage(msgId);
+          setContactMessages(prev => prev.filter(m => m.id !== msgId));
+          showNotification('Mesajul a fost șters.');
+          sounds.playClick();
+        } catch (e) {
+          console.warn('Error deleting message:', e);
+        }
+      },
+    });
   };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* TOP HEADER */}
-      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 min-w-0">
           <button
+            type="button"
             onClick={onBackToHome}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+            className="min-w-[38px] min-h-[38px] p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors flex items-center justify-center shrink-0 cursor-pointer"
             title="Înapoi în aplicație"
+            aria-label="Înapoi în aplicație"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-sm sm:text-base tracking-wide bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">
+              <span className="font-extrabold text-sm sm:text-base tracking-wide bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent truncate">
                 ARKEDO SUPERADMIN
               </span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+              <span className="hidden xs:inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 whitespace-nowrap">
                 MASTER CONTROL
               </span>
             </div>
@@ -638,7 +683,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Quick Cross-School Switcher */}
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs">
             <Building2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -659,23 +704,26 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
 
           {onOpenTeacherPortal && (
             <button
+              type="button"
               onClick={onOpenTeacherPortal}
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-colors"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-colors cursor-pointer whitespace-nowrap"
             >
-              <SchoolIcon className="w-3.5 h-3.5 text-cyan-400" />
-              Panou Profesor
+              <SchoolIcon className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span>Panou Profesor</span>
             </button>
           )}
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="truncate max-w-[120px] sm:max-w-none">{session.email}</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <span className="truncate max-w-[110px] sm:max-w-none">{session.email}</span>
           </div>
 
           <button
+            type="button"
             onClick={handleLogout}
-            className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors"
+            className="min-w-[38px] min-h-[38px] p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors flex items-center justify-center shrink-0 cursor-pointer"
             title="Deconectare Superadmin"
+            aria-label="Deconectare Superadmin"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -693,7 +741,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
       {/* MAIN CONTAINER */}
       <div className="flex-1 flex flex-col md:flex-row">
         {/* SIDEBAR TABS */}
-        <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate-800 bg-slate-900/40 p-2 sm:p-3 flex md:flex-col gap-1 overflow-x-auto md:overflow-x-visible">
+        <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate-800 bg-slate-900/40 p-2 sm:p-3 flex md:flex-col gap-1 overflow-x-auto scrollbar-none md:overflow-x-visible">
           <button
             onClick={() => setActiveTab('overview')}
             className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
@@ -832,11 +880,11 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
               </div>
 
               {/* STATS CARDS */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 tabular-nums">
                 <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                   <div className="flex items-center justify-between text-slate-400 text-xs mb-2">
                     <span>Școli Înregistrate</span>
-                    <Building2 className="w-4 h-4 text-amber-400" />
+                    <Building2 className="w-4 h-4 text-amber-400 shrink-0" />
                   </div>
                   <div className="text-2xl font-bold text-white">{schools.length}</div>
                   <p className="text-[10px] text-slate-500 mt-1">Instituții partenere</p>
@@ -845,7 +893,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                   <div className="flex items-center justify-between text-slate-400 text-xs mb-2">
                     <span>Profesori Activi</span>
-                    <Users className="w-4 h-4 text-cyan-400" />
+                    <Users className="w-4 h-4 text-cyan-400 shrink-0" />
                   </div>
                   <div className="text-2xl font-bold text-white">{teachers.length}</div>
                   <p className="text-[10px] text-slate-500 mt-1">Cadre didactice aprobate</p>
@@ -854,7 +902,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                   <div className="flex items-center justify-between text-slate-400 text-xs mb-2">
                     <span>Elevi Înregistrați</span>
-                    <UserCheck className="w-4 h-4 text-emerald-400" />
+                    <UserCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                   </div>
                   <div className="text-2xl font-bold text-white">{students.length}</div>
                   <p className="text-[10px] text-slate-500 mt-1">Profiluri cu XP & inventar</p>
@@ -863,7 +911,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
                   <div className="flex items-center justify-between text-slate-400 text-xs mb-2">
                     <span>Teste Submise</span>
-                    <FileText className="w-4 h-4 text-violet-400" />
+                    <FileText className="w-4 h-4 text-violet-400 shrink-0" />
                   </div>
                   <div className="text-2xl font-bold text-white">{submissions.length}</div>
                   <p className="text-[10px] text-slate-500 mt-1">Note salvate în catalog</p>
@@ -950,15 +998,17 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                         const teacherCount = teachers.filter(t => t.schoolId === school.id).length;
                         return (
                           <tr key={school.id} className="hover:bg-slate-800/30 transition-colors">
-                            <td className="p-3.5 font-semibold text-white flex items-center gap-2">
-                              <Building2 className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                              <span>{school.name}</span>
+                            <td className="p-3.5 font-semibold text-white">
+                              <div className="flex items-center gap-2">
+                                <Building2 className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                                <span>{school.name}</span>
+                              </div>
                             </td>
                             <td className="p-3.5 font-mono text-amber-300 font-bold">
                               {school.code}
                             </td>
                             <td className="p-3.5 text-slate-300">{school.city}</td>
-                            <td className="p-3.5">{teacherCount} profesori</td>
+                            <td className="p-3.5 tabular-nums">{teacherCount} profesori</td>
                             <td className="p-3.5">
                               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                                 school.active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
@@ -968,9 +1018,11 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                             </td>
                             <td className="p-3.5 text-right">
                               <button
+                                type="button"
                                 onClick={() => handleDeleteSchool(school.id, school.name)}
-                                className="p-1.5 text-slate-400 hover:text-rose-400 rounded hover:bg-rose-500/10 transition-colors"
+                                className="p-2 min-w-[36px] min-h-[36px] text-slate-400 hover:text-rose-400 rounded-lg hover:bg-rose-500/10 transition-colors inline-flex items-center justify-center cursor-pointer"
                                 title="Șterge școală"
+                                aria-label={`Șterge școala ${school.name}`}
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
@@ -1029,16 +1081,19 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                     <tbody className="divide-y divide-slate-800 text-slate-200">
                       {teachers.map(teacher => (
                         <tr key={teacher.id} className="hover:bg-slate-800/30 transition-colors">
-                          <td className="p-3.5 font-semibold text-white flex items-center gap-2">
-                            <UserCheck className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                            <span>{teacher.name}</span>
+                          <td className="p-3.5 font-semibold text-white">
+                            <div className="flex items-center gap-2">
+                              <UserCheck className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                              <span>{teacher.name}</span>
+                            </div>
                           </td>
                           <td className="p-3.5 font-mono text-slate-300">{teacher.email}</td>
                           <td className="p-3.5 text-slate-300">{teacher.schoolName || 'Nespecificată'}</td>
                           <td className="p-3.5">
                             <button
+                              type="button"
                               onClick={() => handleToggleTeacherApproved(teacher)}
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold cursor-pointer transition-colors ${
+                              className={`px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer transition-colors ${
                                 teacher.approved 
                                   ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' 
                                   : 'bg-rose-500/20 text-rose-400 hover:bg-rose-500/30'
@@ -1049,9 +1104,11 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                           </td>
                           <td className="p-3.5 text-right">
                             <button
+                              type="button"
                               onClick={() => handleDeleteTeacher(teacher.id, teacher.name)}
-                              className="p-1.5 text-slate-400 hover:text-rose-400 rounded hover:bg-rose-500/10 transition-colors"
+                              className="p-2 min-w-[36px] min-h-[36px] text-slate-400 hover:text-rose-400 rounded-lg hover:bg-rose-500/10 transition-colors inline-flex items-center justify-center cursor-pointer"
                               title="Șterge profesor"
+                              aria-label={`Șterge profesorul ${teacher.name}`}
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -1110,18 +1167,20 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                     <tbody className="divide-y divide-slate-800 text-slate-200">
                       {filteredStudents.map(student => (
                         <tr key={student.id} className="hover:bg-slate-800/30 transition-colors">
-                          <td className="p-3.5 flex items-center gap-2.5">
-                            <span className="text-lg">{student.avatar || '🎓'}</span>
-                            <div>
-                              <span className="font-bold text-white block">{student.username}</span>
-                              <span className="text-[10px] text-slate-500 font-mono">ID: {student.id.slice(0, 10)}...</span>
+                          <td className="p-3.5">
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-lg shrink-0">{student.avatar || '🎓'}</span>
+                              <div className="min-w-0">
+                                <span className="font-bold text-white block truncate">{student.username}</span>
+                                <span className="text-[10px] text-slate-500 font-mono">ID: {student.id.slice(0, 10)}...</span>
+                              </div>
                             </div>
                           </td>
                           <td className="p-3.5">
                             <select
                               value={student.schoolId || 'scoala_pilot_01'}
                               onChange={(e) => handleTransferStudentSchool(student.id, e.target.value)}
-                              className="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-[11px] text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer max-w-[160px] truncate"
+                              className="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer max-w-[160px] truncate"
                               title="Transferă elevul la altă școală"
                             >
                               {schools.map(s => (
@@ -1131,48 +1190,55 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                               ))}
                             </select>
                           </td>
-                          <td className="p-3.5 font-bold text-amber-300">
+                          <td className="p-3.5 font-bold text-amber-300 tabular-nums whitespace-nowrap">
                             {student.totalXP || 0} XP
                           </td>
-                          <td className="p-3.5 font-semibold text-cyan-300">
+                          <td className="p-3.5 font-semibold text-cyan-300 tabular-nums whitespace-nowrap">
                             {student.byteCoins || 0} 🪙
                           </td>
                           <td className="p-3.5">
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap ${
                               student.isSuspended ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'
                             }`}>
                               {student.isSuspended ? 'Suspendat' : 'Activ'}
                             </span>
                           </td>
-                          <td className="p-3.5 text-right space-x-1">
-                            <button
-                              onClick={() => {
-                                setSelectedStudentForScores(student);
-                                setActiveTab('scores');
-                              }}
-                              className="px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold text-[11px] transition-colors"
-                              title="Editare scoruri și jocuri"
-                            >
-                              Scoruri
-                            </button>
-                            <button
-                              onClick={() => handleToggleStudentSuspension(student)}
-                              className={`p-1 rounded text-xs transition-colors ${
-                                student.isSuspended 
-                                  ? 'text-emerald-400 hover:bg-emerald-500/10' 
-                                  : 'text-amber-400 hover:bg-amber-500/10'
-                              }`}
-                              title={student.isSuspended ? 'Reactivează cont' : 'Blochează cont'}
-                            >
-                              {student.isSuspended ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
-                            </button>
-                            <button
-                              onClick={() => handleDeleteStudentGlobal(student)}
-                              className="p-1 text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
-                              title="Șterge definitiv elevul"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                          <td className="p-3.5 text-right">
+                            <div className="inline-flex items-center justify-end gap-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedStudentForScores(student);
+                                  setActiveTab('scores');
+                                }}
+                                className="px-2.5 py-1.5 min-h-[34px] rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-semibold text-[11px] transition-colors cursor-pointer whitespace-nowrap"
+                                title="Editare scoruri și jocuri"
+                              >
+                                Scoruri
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleToggleStudentSuspension(student)}
+                                className={`p-2 min-w-[34px] min-h-[34px] rounded-lg text-xs transition-colors inline-flex items-center justify-center cursor-pointer ${
+                                  student.isSuspended 
+                                    ? 'text-emerald-400 hover:bg-emerald-500/10' 
+                                    : 'text-amber-400 hover:bg-amber-500/10'
+                                }`}
+                                title={student.isSuspended ? 'Reactivează cont' : 'Blochează cont'}
+                                aria-label={student.isSuspended ? 'Reactivează cont' : 'Blochează cont'}
+                              >
+                                {student.isSuspended ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteStudentGlobal(student)}
+                                className="p-2 min-w-[34px] min-h-[34px] text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors inline-flex items-center justify-center cursor-pointer"
+                                title="Șterge definitiv elevul"
+                                aria-label={`Șterge definitiv elevul ${student.username}`}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1277,28 +1343,18 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                               {gameKey.replace('_', ' ')}
                             </span>
                             <div className="flex items-center justify-between mt-2">
-                              <span className="text-base font-bold text-amber-300">{currentVal}</span>
+                              <span className="text-base font-bold text-amber-300 tabular-nums">{currentVal}</span>
                               <button
+                                type="button"
                                 onClick={() => {
-                                  const prompted = window.prompt(`Introdu noul scor pentru jocul "${gameKey}":`, currentVal.toString());
-                                  if (prompted !== null) {
-                                    const num = parseInt(prompted, 10);
-                                    if (!isNaN(num)) {
-                                      updateArcadeScoreSuperAdmin(selectedStudentForScores.id, gameKey as keyof ArcadeScores, num)
-                                        .then(() => {
-                                          sounds.playCorrect();
-                                          showNotification(`Scor salvat pentru ${gameKey}!`);
-                                          getAllStudents().then(list => {
-                                            setStudents(list);
-                                            const updated = list.find(s => s.id === selectedStudentForScores.id);
-                                            if (updated) setSelectedStudentForScores(updated);
-                                          });
-                                        });
-                                    }
-                                  }
+                                  setScoreEditModal({
+                                    gameKey,
+                                    value: currentVal.toString(),
+                                  });
                                 }}
-                                className="p-1 rounded bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-400 transition-colors"
+                                className="p-2 min-w-[34px] min-h-[34px] rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-400 transition-colors flex items-center justify-center cursor-pointer"
                                 title="Editează scor"
+                                aria-label={`Editează scor ${gameKey}`}
                               >
                                 <Edit3 className="w-3.5 h-3.5" />
                               </button>
@@ -1370,31 +1426,37 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                         <tr key={sub.id} className="hover:bg-slate-800/30 transition-colors">
                           <td className="p-3.5 font-bold text-white">{sub.studentName}</td>
                           <td className="p-3.5 text-slate-300 font-medium">{sub.courseTitle}</td>
-                          <td className="p-3.5 font-bold text-amber-300">{sub.score} / {sub.maxScore || 100}</td>
-                          <td className="p-3.5 font-semibold text-emerald-400">
+                          <td className="p-3.5 font-bold text-amber-300 tabular-nums whitespace-nowrap">{sub.score} / {sub.maxScore || 100}</td>
+                          <td className="p-3.5 font-semibold text-emerald-400 tabular-nums whitespace-nowrap">
                             {sub.maxScore > 0 ? Math.round((sub.score / sub.maxScore) * 100) : 100}%
                           </td>
-                          <td className="p-3.5 text-slate-400 font-mono text-[11px]">{sub.dateFormatted || 'N/A'}</td>
-                          <td className="p-3.5 text-right space-x-1">
-                            <button
-                              onClick={() => {
-                                setEditingSubmission(sub);
-                                setNewSubmissionScore(sub.score);
-                                const pct = sub.maxScore > 0 ? Math.round((sub.score / sub.maxScore) * 100) : 100;
-                                setNewSubmissionPercentage(pct);
-                              }}
-                              className="p-1 text-slate-400 hover:text-amber-300 rounded hover:bg-slate-800 transition-colors"
-                              title="Modifică nota"
-                            >
-                              <Edit3 className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteSubmission(sub.id!)}
-                              className="p-1 text-slate-400 hover:text-rose-400 rounded hover:bg-slate-800 transition-colors"
-                              title="Șterge submisie"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                          <td className="p-3.5 text-slate-400 font-mono text-[11px] whitespace-nowrap">{sub.dateFormatted || 'N/A'}</td>
+                          <td className="p-3.5 text-right">
+                            <div className="inline-flex items-center justify-end gap-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingSubmission(sub);
+                                  setNewSubmissionScore(sub.score);
+                                  const pct = sub.maxScore > 0 ? Math.round((sub.score / sub.maxScore) * 100) : 100;
+                                  setNewSubmissionPercentage(pct);
+                                }}
+                                className="p-2 min-w-[34px] min-h-[34px] text-slate-400 hover:text-amber-300 rounded-lg hover:bg-slate-800 transition-colors inline-flex items-center justify-center cursor-pointer"
+                                title="Modifică nota"
+                                aria-label="Modifică nota"
+                              >
+                                <Edit3 className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteSubmission(sub.id!)}
+                                className="p-2 min-w-[34px] min-h-[34px] text-slate-400 hover:text-rose-400 rounded-lg hover:bg-slate-800 transition-colors inline-flex items-center justify-center cursor-pointer"
+                                title="Șterge submisie"
+                                aria-label="Șterge submisie"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1465,21 +1527,23 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <div className="relative flex-1 sm:flex-none">
+                    <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                       type="text"
-                      placeholder="Caută după nume, email, text..."
+                      placeholder="Căutare după nume, email, text..."
                       value={searchMessageQuery}
                       onChange={(e) => setSearchMessageQuery(e.target.value)}
-                      className="pl-9 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-60"
+                      className="pl-9 pr-3 py-2 min-h-[38px] rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-full sm:w-64"
                     />
                   </div>
                   <button
+                    type="button"
                     onClick={loadAllDashboardData}
-                    className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer"
+                    className="p-2 min-w-[38px] min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors cursor-pointer flex items-center justify-center shrink-0"
                     title="Reîncarcă mesajele"
+                    aria-label="Reîncarcă mesajele"
                   >
                     <RefreshCw className={`w-4 h-4 ${loadingData ? 'animate-spin' : ''}`} />
                   </button>
@@ -1794,6 +1858,118 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   Salvează Nota
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: IN-DOM ARCADE SCORE EDITOR */}
+      {scoreEditModal && selectedStudentForScores && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setScoreEditModal(null)}
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4"
+          >
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <Edit3 className="w-5 h-5 text-amber-400 shrink-0" />
+              <span>Actualizare Scor Arcade</span>
+            </h3>
+            <p className="text-xs text-slate-400">
+              Elev: <strong className="text-white">{selectedStudentForScores.username}</strong> · Joc:{' '}
+              <span className="font-mono text-amber-300 uppercase">{scoreEditModal.gameKey.replace('_', ' ')}</span>
+            </p>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const num = parseInt(scoreEditModal.value, 10);
+                if (isNaN(num)) return;
+                await updateArcadeScoreSuperAdmin(
+                  selectedStudentForScores.id,
+                  scoreEditModal.gameKey as keyof ArcadeScores,
+                  num
+                );
+                sounds.playCorrect();
+                showNotification(`Scor salvat pentru ${scoreEditModal.gameKey}!`);
+                setScoreEditModal(null);
+                const list = await getAllStudents();
+                setStudents(list);
+                const updated = list.find((s) => s.id === selectedStudentForScores.id);
+                if (updated) setSelectedStudentForScores(updated);
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Noul Scor / Record</label>
+                <input
+                  type="number"
+                  required
+                  value={scoreEditModal.value}
+                  onChange={(e) => setScoreEditModal({ ...scoreEditModal, value: e.target.value })}
+                  className="w-full px-3 py-2 min-h-[40px] rounded-xl bg-slate-950 border border-slate-700 text-sm text-white font-mono focus:outline-none focus:border-amber-500"
+                  autoFocus
+                />
+              </div>
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setScoreEditModal(null)}
+                  className="px-3.5 py-2 min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 cursor-pointer"
+                >
+                  Anulează
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 min-h-[38px] rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs cursor-pointer"
+                >
+                  Salvează Scor
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: IN-DOM CONFIRMATION DIALOG */}
+      {confirmModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setConfirmModal(null)}
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-slate-900 border border-rose-500/40 rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4"
+          >
+            <div className="flex items-center gap-2.5 text-rose-400">
+              <AlertTriangle className="w-5 h-5 shrink-0" />
+              <h3 className="text-base font-bold text-white">{confirmModal.title}</h3>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">{confirmModal.message}</p>
+            <div className="flex items-center justify-end gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setConfirmModal(null)}
+                className="px-3.5 py-2 min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-semibold cursor-pointer"
+              >
+                Anulează
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  const fn = confirmModal.onConfirm;
+                  setConfirmModal(null);
+                  await fn();
+                }}
+                className="px-4 py-2 min-h-[38px] rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs cursor-pointer"
+              >
+                {confirmModal.confirmLabel}
+              </button>
             </div>
           </div>
         </div>

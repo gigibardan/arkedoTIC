@@ -502,8 +502,9 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
             {filteredStudents.length > 10 && (
               <button
+                type="button"
                 onClick={() => setShowAllRows(!showAllRows)}
-                className="self-center mt-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer"
+                className="self-center mt-2 px-4 py-2 min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer"
               >
                 {showAllRows ? (
                   <>

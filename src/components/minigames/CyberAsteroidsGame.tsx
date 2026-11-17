@@ -1414,17 +1414,18 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
             }}
             className="min-h-[44px] min-w-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center gap-1.5 text-xs font-bold transition cursor-pointer shrink-0"
             title={isEn ? 'Back to Arcade Hub' : 'Înapoi la Arcade'}
+            aria-label={isEn ? 'Back to Arcade Hub' : 'Înapoi la Arcade'}
           >
             <ArrowLeft className="w-4 h-4 text-purple-400" />
             <span className="hidden sm:inline">{isEn ? 'Back' : 'Înapoi'}</span>
           </button>
 
           <div className="min-w-0">
-            <h1 className="text-base sm:text-xl font-black text-white font-heading truncate flex items-center gap-2">
+            <h1 className="text-base sm:text-xl font-black text-white font-heading text-balance flex items-center gap-2">
               <Rocket className="w-5 h-5 text-purple-400 shrink-0" />
               <span>{isEn ? 'Cyber Asteroids: Vector Command' : 'Cyber Asteroids: Reactorul Vectorial'}</span>
             </h1>
-            <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-400 mt-0.5">
               <span>{studentAvatar || '🎓'} {studentName || (isEn ? 'Pilot' : 'Pilot')}</span>
               <span aria-hidden="true">·</span>
               <span className="text-purple-300 font-semibold">{isEn ? SHIP_SPECS[shipClass].nameEn : SHIP_SPECS[shipClass].nameRo}</span>
@@ -1432,7 +1433,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => setAutoFire((a) => !a)}
@@ -1451,6 +1452,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
             onClick={() => setMuted((m) => !m)}
             className="min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition cursor-pointer flex items-center justify-center"
             title={muted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
+            aria-label={muted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
           >
             {muted ? <VolumeX className="w-5 h-5 text-rose-400" /> : <Volume2 className="w-5 h-5 text-emerald-400" />}
           </button>
@@ -1473,7 +1475,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
         {/* Game Canvas + Controls */}
         <div className="lg:col-span-8 flex flex-col items-center gap-3">
           {/* HUD Strip */}
-          <div className="w-full max-w-[520px] grid grid-cols-4 gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-2.5 text-center shadow-lg">
+          <div className="w-full max-w-[520px] grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-2.5 text-center shadow-lg">
             <div>
               <div className="text-[10px] font-semibold text-slate-400 uppercase">{isEn ? 'Score' : 'Scor'}</div>
               <div className="text-base sm:text-lg font-black text-purple-300 font-mono tabular-nums">{score.toLocaleString()}</div>
@@ -1499,7 +1501,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
 
           {/* Active Power-Up Strip */}
           {(hasShield || timersHud.triple > 0 || timersHud.overclock > 0 || timersHud.homing > 0 || timersHud.freeze > 0) && (
-            <div className="w-full max-w-[520px] flex flex-wrap items-center justify-center gap-3 text-xs font-mono font-bold bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5">
+            <div className="w-full max-w-[520px] flex flex-wrap items-center justify-center gap-3 text-xs font-mono font-bold tabular-nums bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5">
               {hasShield && <span className="text-emerald-400 flex items-center gap-1"><Shield className="w-3.5 h-3.5" /> SHIELD</span>}
               {timersHud.triple > 0 && <span className="text-sky-400">T·{timersHud.triple}s</span>}
               {timersHud.overclock > 0 && <span className="text-orange-400">O·{timersHud.overclock}s</span>}
@@ -1526,7 +1528,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
             {gameState === 'menu' && (
               <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-5 text-center gap-4 overflow-y-auto">
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+                  <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
                     Cyber Asteroids 1979
                   </h2>
                   <p className="text-slate-300 text-xs sm:text-sm mt-1.5 max-w-sm">
@@ -1537,7 +1539,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
                 </div>
 
                 {/* Ship Selector */}
-                <div className="w-full max-w-md grid grid-cols-3 gap-2">
+                <div className="w-full max-w-md grid grid-cols-1 sm:grid-cols-3 gap-2">
                   {(['viper', 'phantom', 'titan'] as ShipClass[]).map((sc) => {
                     const info = SHIP_SPECS[sc];
                     const selected = shipClass === sc;
@@ -1574,7 +1576,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStartNewGame(shipClass)}
-                  className="min-h-[48px] px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-black text-sm shadow-lg shadow-purple-500/30 transition active:scale-95 cursor-pointer flex items-center gap-2"
+                  className="min-h-[48px] px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-black text-sm shadow-lg shadow-purple-500/30 transition active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
                 >
                   <Play className="w-5 h-5 fill-white" />
                   <span>{isEn ? 'Launch Spacecraft' : 'Lansează Nava'}</span>
@@ -1584,10 +1586,10 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
 
             {/* PAUSED OVERLAY */}
             {gameState === 'paused' && (
-              <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4">
-                <Pause className="w-12 h-12 text-amber-400" />
-                <h2 className="text-2xl font-black text-white">{isEn ? 'Game Paused' : 'Joc în Pauză'}</h2>
-                <div className="flex items-center gap-3">
+              <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 overflow-y-auto">
+                <Pause className="w-12 h-12 text-amber-400 shrink-0" />
+                <h2 className="text-2xl font-black text-white text-balance">{isEn ? 'Game Paused' : 'Joc în Pauză'}</h2>
+                <div className="flex flex-wrap items-center justify-center gap-3">
                   <button
                     type="button"
                     onClick={() => setGameState('playing')}
@@ -1610,10 +1612,10 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
 
             {/* GAME OVER OVERLAY */}
             {gameState === 'gameover' && (
-              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4">
-                <Trophy className="w-12 h-12 text-amber-400" />
+              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 overflow-y-auto">
+                <Trophy className="w-12 h-12 text-amber-400 shrink-0" />
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white">
+                  <h2 className="text-2xl sm:text-3xl font-black text-white text-balance">
                     {isEn ? 'Hull Destroyed!' : 'Navă Distrusă!'}
                   </h2>
                   <p className="text-slate-300 text-xs sm:text-sm mt-1">
@@ -1654,7 +1656,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
           </div>
 
           {/* Mobile & Touch Ergonomic Cockpit Controls */}
-          <div className="w-full max-w-[520px] grid grid-cols-5 gap-2 pt-1">
+          <div className="w-full max-w-[520px] grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
             <button
               type="button"
               onPointerDown={() => {
@@ -1712,6 +1714,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
               onPointerCancel={() => {
                 inputRef.current.thrust = false;
               }}
+              aria-label={isEn ? 'Thrust' : 'Propulsie'}
               className="min-h-[54px] rounded-2xl bg-cyan-900/60 hover:bg-cyan-800 active:bg-cyan-500 border border-cyan-500/40 text-cyan-200 font-black flex flex-col items-center justify-center touch-manipulation cursor-pointer shadow"
             >
               <ChevronUp className="w-5 h-5" />
@@ -1733,6 +1736,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
               onPointerCancel={() => {
                 inputRef.current.fire = false;
               }}
+              aria-label={isEn ? 'Fire Laser' : 'Trage'}
               className="min-h-[54px] rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 active:scale-95 text-white font-black flex flex-col items-center justify-center touch-manipulation cursor-pointer shadow-lg"
             >
               <Flame className="w-4 h-4" />
@@ -1743,6 +1747,7 @@ export const CyberAsteroidsGame: React.FC<CyberAsteroidsGameProps> = ({
               type="button"
               onClick={triggerHyperspace}
               disabled={warpCooldownSec > 0 || gameState !== 'playing'}
+              aria-label={isEn ? 'Hyperspace Warp' : 'Salt Hiper-Spațial'}
               className="min-h-[54px] rounded-2xl bg-amber-900/50 hover:bg-amber-800/70 disabled:opacity-45 border border-amber-500/40 text-amber-200 font-black flex flex-col items-center justify-center touch-manipulation cursor-pointer shadow"
             >
               <Zap className="w-4 h-4" />

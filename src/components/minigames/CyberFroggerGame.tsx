@@ -1083,17 +1083,18 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
             }}
             className="min-h-[44px] min-w-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center gap-1.5 text-xs font-bold transition cursor-pointer shrink-0"
             title={isEn ? 'Back to Arcade Hub' : 'Înapoi la Arcade'}
+            aria-label={isEn ? 'Back to Arcade Hub' : 'Înapoi la Arcade'}
           >
             <ArrowLeft className="w-4 h-4 text-emerald-400" />
             <span className="hidden sm:inline">{isEn ? 'Back' : 'Înapoi'}</span>
           </button>
 
           <div className="min-w-0">
-            <h1 className="text-base sm:text-xl font-black text-white font-heading truncate flex items-center gap-2">
+            <h1 className="text-base sm:text-xl font-black text-white font-heading text-balance flex items-center gap-2">
               <span aria-hidden="true">🐸</span>
               <span>{isEn ? 'Cyber Frogger: Network Hopper' : 'Cyber Frogger: Traversarea Rețelei'}</span>
             </h1>
-            <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-400 mt-0.5">
               <span>{studentAvatar || '🎓'} {studentName || (isEn ? 'Cadet' : 'Elev')}</span>
               <span aria-hidden="true">·</span>
               <span className="text-emerald-400 font-semibold">{isEn ? stageMeta.nameEn : stageMeta.nameRo}</span>
@@ -1107,6 +1108,7 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
             onClick={() => setMuted((m) => !m)}
             className="min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition cursor-pointer flex items-center justify-center"
             title={muted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
+            aria-label={muted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
           >
             {muted ? <VolumeX className="w-5 h-5 text-rose-400" /> : <Volume2 className="w-5 h-5 text-emerald-400" />}
           </button>
@@ -1129,7 +1131,7 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
         {/* Game Screen & Mobile D-Pad */}
         <div className="lg:col-span-8 flex flex-col items-center gap-3">
           {/* HUD Bar */}
-          <div className="w-full max-w-[440px] grid grid-cols-5 gap-1.5 bg-slate-900 border border-slate-800 rounded-2xl p-2.5 text-center shadow-lg">
+          <div className="w-full max-w-[440px] grid grid-cols-3 sm:grid-cols-5 gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-2.5 text-center shadow-lg">
             <div>
               <div className="text-[10px] font-semibold text-slate-400 uppercase">{isEn ? 'Score' : 'Scor'}</div>
               <div className="text-sm sm:text-base font-black text-emerald-300 font-mono tabular-nums">{score.toLocaleString()}</div>
@@ -1144,7 +1146,7 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
             </div>
             <div>
               <div className="text-[10px] font-semibold text-slate-400 uppercase">{isEn ? 'Time' : 'Timp'}</div>
-              <div className={`text-sm sm:text-base font-black font-mono tabular-nums ${timeLeft <= 10 ? 'text-rose-400 animate-pulse' : 'text-slate-100'}`}>
+              <div className={`text-sm sm:text-base font-black font-mono tabular-nums ${timeLeft <= 10 ? 'text-rose-400' : 'text-slate-100'}`}>
                 {timeLeft}s
               </div>
             </div>
@@ -1179,12 +1181,12 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
 
             {/* MENU OVERLAY */}
             {gameState === 'menu' && (
-              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 text-3xl">
+              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 overflow-y-auto">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 text-3xl shrink-0">
                   🐸
                 </div>
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+                  <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
                     Cyber Frogger 1981
                   </h2>
                   <p className="text-slate-300 text-xs sm:text-sm mt-2 max-w-sm leading-relaxed">
@@ -1203,7 +1205,7 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
                 <button
                   type="button"
                   onClick={handleStartNewGame}
-                  className="min-h-[48px] px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-sm shadow-lg shadow-emerald-500/30 transition active:scale-95 cursor-pointer flex items-center gap-2"
+                  className="min-h-[48px] px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-sm shadow-lg shadow-emerald-500/30 transition active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
                 >
                   <Play className="w-5 h-5 fill-white" />
                   <span>{isEn ? 'Start Game' : 'Începe Jocul'}</span>
@@ -1213,10 +1215,10 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
 
             {/* PAUSED OVERLAY */}
             {gameState === 'paused' && (
-              <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4">
-                <Pause className="w-12 h-12 text-amber-400" />
-                <h2 className="text-2xl font-black text-white">{isEn ? 'Game Paused' : 'Joc în Pauză'}</h2>
-                <div className="flex items-center gap-3">
+              <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 overflow-y-auto">
+                <Pause className="w-12 h-12 text-amber-400 shrink-0" />
+                <h2 className="text-2xl font-black text-white text-balance">{isEn ? 'Game Paused' : 'Joc în Pauză'}</h2>
+                <div className="flex flex-wrap items-center justify-center gap-3">
                   <button
                     type="button"
                     onClick={() => setGameState('playing')}
@@ -1239,16 +1241,16 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
 
             {/* STAGE CLEAR OVERLAY */}
             {gameState === 'stage_clear' && (
-              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4">
-                <Sparkles className="w-12 h-12 text-emerald-400 animate-pulse" />
+              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 overflow-y-auto">
+                <Sparkles className="w-12 h-12 text-emerald-400 shrink-0" />
                 <div>
                   <div className="text-xs font-mono text-emerald-400 font-bold uppercase">
                     {isEn ? 'All 5 Ports Connected!' : 'Toate cele 5 Porturi Conectate!'}
                   </div>
-                  <h2 className="text-2xl font-black text-white mt-1">
+                  <h2 className="text-2xl font-black text-white mt-1 text-balance">
                     {isEn ? `Stage ${stage} Complete!` : `Nivelul ${stage} Complet!`}
                   </h2>
-                  <p className="text-amber-300 font-mono font-bold text-sm mt-1">
+                  <p className="text-amber-300 font-mono font-bold tabular-nums text-sm mt-1">
                     +{500 + stage * 200} {isEn ? 'Network Bonus' : 'Bonus Rețea'}
                   </p>
                 </div>
@@ -1264,7 +1266,7 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
                 <button
                   type="button"
                   onClick={handleNextStage}
-                  className="min-h-[46px] px-7 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-sm shadow-lg transition active:scale-95 cursor-pointer flex items-center gap-2"
+                  className="min-h-[46px] px-7 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-sm shadow-lg transition active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
                 >
                   <Play className="w-4 h-4 fill-white" />
                   <span>{isEn ? `Next Network (Stage ${stage + 1})` : `Rețeaua Următoare (Nivel ${stage + 1})`}</span>
@@ -1274,10 +1276,10 @@ export const CyberFroggerGame: React.FC<CyberFroggerGameProps> = ({
 
             {/* GAME OVER OVERLAY */}
             {gameState === 'gameover' && (
-              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4">
-                <RotateCcw className="w-12 h-12 text-rose-400" />
+              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 overflow-y-auto">
+                <RotateCcw className="w-12 h-12 text-rose-400 shrink-0" />
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white">
+                  <h2 className="text-2xl sm:text-3xl font-black text-white text-balance">
                     {isEn ? 'Connection Lost!' : 'Conexiune Pierdută!'}
                   </h2>
                   <p className="text-slate-300 text-xs sm:text-sm mt-1">

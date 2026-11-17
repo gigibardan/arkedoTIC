@@ -210,22 +210,23 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
+          type="button"
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="px-3 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
         >
-          <ArrowLeft className="w-4 h-4 text-emerald-400" />
+          <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-center">
+        <div className="flex items-center gap-2 text-left sm:text-center order-3 sm:order-2 w-full sm:w-auto justify-start sm:justify-center">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
             <Folder className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-sm sm:text-base font-black text-white font-heading text-balance">
               {lang === 'en' ? 'File Organizer Express' : 'Sortatorul de Extensii & Fișiere'}
             </h1>
             <p className="text-[10px] sm:text-[11px] text-blue-400 font-mono hidden sm:block">
@@ -235,8 +236,8 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-mono font-bold">
-          <Trophy className="w-4 h-4 text-amber-400" />
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-mono font-bold tabular-nums shrink-0">
+          <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
           <span>Record: {highScore} pts</span>
         </div>
       </div>
@@ -253,7 +254,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
             <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-500/30 uppercase tracking-wider">
               {lang === 'en' ? 'Agility & Knowledge Challenge' : 'Antrenament de Reflexe & Extensii'}
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading mt-2 text-balance">
               {lang === 'en' ? 'Organize the Computer Laboratory Files!' : 'Organizează Fișierele din Laboratorul TIC!'}
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm max-w-lg mt-2 leading-relaxed">
@@ -292,10 +293,11 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
           </div>
 
           <button
+            type="button"
             onClick={startGame}
-            className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-blue-600/30 flex items-center gap-2 cursor-pointer active:scale-95"
+            className="px-8 py-3.5 min-h-[48px] rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-blue-600/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <Play className="w-5 h-5 fill-current" />
+            <Play className="w-5 h-5 fill-current shrink-0" />
             <span>{lang === 'en' ? 'Start 45s Sorting Sprint!' : 'Începe Sesiunea de 45s!'}</span>
           </button>
         </div>
@@ -303,11 +305,11 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
         /* Active Game Arena */
         <div className="bg-slate-900/95 border-2 border-blue-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl flex flex-col gap-6 relative">
           {/* Top Game Bar: Timer & Live Stats */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
             {/* Countdown Clock */}
             <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800">
-              <Clock className={`w-5 h-5 ${timeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-blue-400'}`} />
-              <span className={`text-base font-black font-mono ${timeLeft <= 10 ? 'text-rose-400 font-bold' : 'text-white'}`}>
+              <Clock className={`w-5 h-5 shrink-0 ${timeLeft <= 10 ? 'text-rose-400' : 'text-blue-400'}`} />
+              <span className={`text-base font-black font-mono tabular-nums ${timeLeft <= 10 ? 'text-rose-400 font-bold' : 'text-white'}`}>
                 {timeLeft}s
               </span>
             </div>
@@ -315,14 +317,14 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
             {/* Streak & Score */}
             <div className="flex items-center gap-2.5">
               <div className="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-amber-400" />
-                <span className="text-xs font-bold text-amber-300 font-mono">
+                <Flame className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="text-xs font-bold text-amber-300 font-mono tabular-nums">
                   {combo} <span className="text-[10px] text-slate-400">combo</span>
                 </span>
               </div>
               <div className="bg-slate-950 px-4 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Trophy className="w-4 h-4 text-blue-400" />
-                <span className="text-base font-black text-white font-mono">{score} pts</span>
+                <Trophy className="w-4 h-4 text-blue-400 shrink-0" />
+                <span className="text-base font-black text-white font-mono tabular-nums">{score} pts</span>
               </div>
             </div>
           </div>
@@ -370,8 +372,9 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
               {FOLDERS.map((folder) => (
                 <button
                   key={folder.id}
+                  type="button"
                   onClick={() => handleSelectFolder(folder.id)}
-                  className={`p-3.5 sm:p-4 rounded-2xl bg-slate-950/90 border-2 border-slate-800 ${folder.borderHover} hover:bg-slate-850 flex items-center gap-3 transition-all transform active:scale-95 cursor-pointer text-left group shadow-md`}
+                  className={`p-3.5 sm:p-4 min-h-[56px] rounded-2xl bg-slate-950/90 border-2 border-slate-800 ${folder.borderHover} hover:bg-slate-850 flex items-center gap-3 transition-all transform active:scale-95 cursor-pointer text-left group shadow-md`}
                 >
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${folder.color} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform shrink-0`}>
                     {folder.icon}
@@ -397,7 +400,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
       ) : (
         /* Results Card */
         <div className="bg-slate-900/95 border-2 border-blue-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col items-center justify-center text-center gap-6">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl shadow-blue-500/20 ring-4 ring-blue-500/20 animate-bounce">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl shadow-blue-500/20 ring-4 ring-blue-500/20">
             📁
           </div>
 
@@ -405,7 +408,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
             <span className="px-3.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-500/30 uppercase tracking-wider">
               {lang === 'en' ? 'Session Complete!' : 'Sesiune de Sortare Finalizată!'}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
               {studentName ? `${studentName}, ` : ''}
               {sortedCount >= 25
                 ? (lang === 'en' ? 'Grand System Administrator! 💻⭐' : 'Administrator de Sistem Maestru! 💻⭐')
@@ -419,7 +422,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-2xl w-full">
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Scor Total</span>
-              <span className="text-3xl sm:text-4xl font-black text-blue-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-blue-400 font-mono tabular-nums mt-1">
                 {score}
               </span>
               <span className="text-[11px] text-slate-500">puncte</span>
@@ -427,7 +430,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Fișiere Sortate</span>
-              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tabular-nums mt-1">
                 {sortedCount}
               </span>
               <span className="text-[11px] text-slate-500">corecte</span>
@@ -435,7 +438,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Viteză Medie</span>
-              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono tabular-nums mt-1">
                 {Math.round((sortedCount / 45) * 60)}
               </span>
               <span className="text-[11px] text-slate-500">fișiere / min</span>
@@ -443,7 +446,7 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Max Combo</span>
-              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono tabular-nums mt-1">
                 {maxCombo}
               </span>
               <span className="text-[11px] text-slate-500">consecutive</span>
@@ -451,20 +454,22 @@ export const FileOrganizerGame: React.FC<FileOrganizerGameProps> = ({ onBack, st
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
+              type="button"
               onClick={startGame}
-              className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 shrink-0" />
               <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
             >
               <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
             </button>

@@ -72,6 +72,14 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
   // Edit Submission Modal
   const [selectedSubmission, setSelectedSubmission] = useState<StudentResult | null>(null);
 
+  // In-DOM Confirmation Modal (no window.confirm)
+  const [confirmDialog, setConfirmDialog] = useState<{
+    title: string;
+    message: string;
+    confirmLabel: string;
+    onConfirm: () => Promise<void> | void;
+  } | null>(null);
+
   const fetchResults = async () => {
     setLoading(true);
     const [data, schoolsData] = await Promise.all([
@@ -109,60 +117,79 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
     sounds.playClick();
   };
 
-  const handleDelete = async (id?: string) => {
+  const handleDelete = (id?: string) => {
     if (!id) return;
-    if (window.confirm(t.teacherDeleteConfirm)) {
-      setDeletingId(id);
-      const success = await deleteStudentResult(id);
-      if (success) {
-        setResults((prev) => prev.filter((r) => r.id !== id));
-        sounds.playClick();
+    setConfirmDialog({
+      title: lang === 'en' ? 'Delete Submission' : 'Ștergere Notă',
+      message: t.teacherDeleteConfirm,
+      confirmLabel: lang === 'en' ? 'Delete' : 'Șterge',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        setDeletingId(id);
+        const success = await deleteStudentResult(id);
+        if (success) {
+          setResults((prev) => prev.filter((r) => r.id !== id));
+          sounds.playClick();
+        }
+        setDeletingId(null);
       }
-      setDeletingId(null);
-    }
+    });
   };
 
-  const handleDeleteAllForStudent = async (studentName: string) => {
+  const handleDeleteAllForStudent = (studentName: string) => {
     if (!studentName) return;
+    const count = results.filter((r) => r.studentName.toLowerCase() === studentName.toLowerCase()).length;
     const confirmMsg = lang === 'en'
-      ? `Permanently delete ALL (${results.filter(r => r.studentName.toLowerCase() === studentName.toLowerCase()).length}) mission records for student "${studentName}"?`
-      : `Sigur doriți să ștergeți TOATE (${results.filter(r => r.studentName.toLowerCase() === studentName.toLowerCase()).length}) înregistrările și notele pentru elevul "${studentName}" din baza de date și cache?`;
-    
-    if (window.confirm(confirmMsg)) {
-      setLoading(true);
-      const res = await deleteAllResultsByStudentName(studentName);
-      if (res.success) {
-        setResults((prev) => prev.filter((r) => (r.studentName || '').trim().toLowerCase() !== studentName.trim().toLowerCase()));
-        sounds.playCorrect();
+      ? `Permanently delete ALL (${count}) mission records for student "${studentName}"?`
+      : `Sigur doriți să ștergeți TOATE (${count}) înregistrările și notele pentru elevul "${studentName}" din baza de date și cache?`;
+
+    setConfirmDialog({
+      title: lang === 'en' ? 'Delete All Student Records' : 'Ștergere Toate Notele Elevului',
+      message: confirmMsg,
+      confirmLabel: lang === 'en' ? 'Delete All' : 'Șterge Toate',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        setLoading(true);
+        const res = await deleteAllResultsByStudentName(studentName);
+        if (res.success) {
+          setResults((prev) => prev.filter((r) => (r.studentName || '').trim().toLowerCase() !== studentName.trim().toLowerCase()));
+          sounds.playCorrect();
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    }
+    });
   };
 
-  const handlePurgeLocalCache = async () => {
+  const handlePurgeLocalCache = () => {
     sounds.playClick();
     const confirmMsg = lang === 'en'
       ? 'Clean local cache and delete ALL 0-second ghost submissions (including student PRO) from Firestore and browser? This permanently cleans the registry.'
       : 'Goliți memoria cache și ștergeți definitiv TOATE înregistrările fantomă de 0s (inclusiv elevul PRO) din baza de date Firestore și din browser?';
-    if (window.confirm(confirmMsg)) {
-      setLoading(true);
-      clearLocalResultsCache();
-      const purgeRes = await purgeZeroSecondGhostResults();
-      try {
-        // If active profile has test or ghost name, reset it
-        const savedName = localStorage.getItem('arkedo_student_name');
-        if (savedName && savedName.toUpperCase() === 'PRO') {
-          localStorage.removeItem('arkedo_student_name');
-        }
-        const activeProfileRaw = localStorage.getItem('arkedo_active_student_profile');
-        if (activeProfileRaw && activeProfileRaw.toLowerCase().includes('"pro"')) {
-          localStorage.removeItem('arkedo_active_student_profile');
-        }
-      } catch {}
-      await fetchResults();
-      setLoading(false);
-      sounds.playCorrect();
-    }
+
+    setConfirmDialog({
+      title: lang === 'en' ? 'Purge Cache & Ghost Entries' : 'Curățare Cache & Date Fantomă',
+      message: confirmMsg,
+      confirmLabel: lang === 'en' ? 'Purge Now' : 'Curăță Acum',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        setLoading(true);
+        clearLocalResultsCache();
+        await purgeZeroSecondGhostResults();
+        try {
+          const savedName = localStorage.getItem('arkedo_student_name');
+          if (savedName && savedName.toUpperCase() === 'PRO') {
+            localStorage.removeItem('arkedo_student_name');
+          }
+          const activeProfileRaw = localStorage.getItem('arkedo_active_student_profile');
+          if (activeProfileRaw && activeProfileRaw.toLowerCase().includes('"pro"')) {
+            localStorage.removeItem('arkedo_active_student_profile');
+          }
+        } catch {}
+        await fetchResults();
+        setLoading(false);
+        sounds.playCorrect();
+      }
+    });
   };
 
   const formatSeconds = (sec: number) => {
@@ -280,9 +307,10 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           <button
             type="button"
             onClick={onBackToHome}
-            className="text-xs text-slate-400 hover:text-slate-200 transition py-2 text-center cursor-pointer"
+            className="min-h-[38px] text-xs text-slate-400 hover:text-slate-200 transition py-2 flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            ← {t.backToCourses}
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>{t.backToCourses}</span>
           </button>
         </form>
       </div>
@@ -318,6 +346,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
         <div className="flex flex-wrap items-center gap-2.5">
           <button
+            type="button"
             onClick={fetchResults}
             disabled={loading}
             className="px-3.5 py-2 min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
@@ -328,6 +357,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           </button>
 
           <button
+            type="button"
             onClick={handlePurgeLocalCache}
             className="px-3.5 py-2 min-h-[38px] rounded-xl bg-amber-950/50 hover:bg-amber-900/70 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
             title={lang === 'en' ? 'Purge local browser cache and force clean refresh' : 'Golește cache-ul local și reîncarcă direct din cloud (elimină duplicatele/datele fantomă)'}
@@ -338,6 +368,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
           {onOpenSuperAdmin && (
             <button
+              type="button"
               onClick={onOpenSuperAdmin}
               className="px-3.5 py-2 min-h-[38px] rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
               title="Comută la Consola de Superadmin"
@@ -348,6 +379,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           )}
 
           <button
+            type="button"
             onClick={handleLogout}
             className="px-3.5 py-2 min-h-[38px] rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
           >
@@ -356,6 +388,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           </button>
 
           <button
+            type="button"
             onClick={onBackToHome}
             className="px-3.5 py-2 min-h-[38px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer whitespace-nowrap shrink-0"
           >
@@ -719,6 +752,41 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           }}
           lang={lang}
         />
+      )}
+
+      {/* Confirmation Modal */}
+      {confirmDialog && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border-2 border-rose-500/40 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-black text-white font-heading">
+                {confirmDialog.title}
+              </h4>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {confirmDialog.message}
+            </p>
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setConfirmDialog(null)}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer"
+              >
+                {lang === 'en' ? 'Cancel' : 'Anulează'}
+              </button>
+              <button
+                type="button"
+                onClick={() => confirmDialog.onConfirm()}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold cursor-pointer"
+              >
+                {confirmDialog.confirmLabel}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

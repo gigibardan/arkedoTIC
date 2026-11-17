@@ -299,7 +299,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
         {/* Feedback notification banner */}
         {feedbackMsg && (
           <div
-            className={`mx-5 mt-4 p-3.5 rounded-2xl border text-xs sm:text-sm font-bold flex items-center gap-2.5 animate-slideDown ${
+            className={`mx-4 sm:mx-6 mt-4 p-3.5 rounded-2xl border text-xs sm:text-sm font-bold flex items-center gap-2.5 animate-slideDown ${
               feedbackMsg.type === 'success'
                 ? 'bg-emerald-950/90 border-emerald-500 text-emerald-200'
                 : 'bg-rose-950/90 border-rose-500 text-rose-200'
@@ -399,7 +399,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
 
                     {/* Bottom Action Row */}
                     <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                      <div className="font-mono text-xs font-black text-amber-300 flex items-center gap-1">
+                      <div className="font-mono text-xs font-black text-amber-300 flex items-center gap-1 tabular-nums">
                         {item.price === 0 ? (
                           <span className="text-emerald-400">GRATUIT</span>
                         ) : (
@@ -411,22 +411,24 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
                       </div>
 
                       {isEquipped ? (
-                        <span className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono flex items-center gap-1">
+                        <span className="px-3 py-1.5 min-h-[36px] rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono flex items-center gap-1 whitespace-nowrap">
                           <Check className="w-3.5 h-3.5" />
                           <span>Echipat</span>
                         </span>
                       ) : owned ? (
                         <button
+                          type="button"
                           onClick={() => handleEquip(item)}
-                          className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition cursor-pointer active:scale-95"
+                          className="px-3.5 py-1.5 min-h-[36px] rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition cursor-pointer active:scale-95 whitespace-nowrap"
                         >
                           Echipează
                         </button>
                       ) : (
                         <button
+                          type="button"
                           onClick={() => handleBuy(item)}
                           disabled={!canAfford}
-                          className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer active:scale-95 ${
+                          className={`px-3.5 py-1.5 min-h-[36px] rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer active:scale-95 whitespace-nowrap ${
                             canAfford
                               ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-md shadow-orange-500/20'
                               : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed opacity-60'
@@ -506,7 +508,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
               </div>
 
               {/* Collector Stats */}
-              <div className="w-full text-xs font-mono text-slate-400">
+              <div className="w-full text-xs font-mono text-slate-400 tabular-nums">
                 Colecție: <strong className="text-white">{ownedItemsList.length} / {SHOP_ITEMS.length}</strong> obiecte
               </div>
             </div>
@@ -542,13 +544,14 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
                       </div>
 
                       {isEquipped ? (
-                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono shrink-0">
+                        <span className="px-2.5 py-1 min-h-[36px] flex items-center rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono shrink-0 whitespace-nowrap">
                           ✓ Echipat
                         </span>
                       ) : (
                         <button
+                          type="button"
                           onClick={() => handleEquip(item)}
-                          className="px-3 py-1.5 min-h-[34px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition cursor-pointer shrink-0"
+                          className="px-3 py-1.5 min-h-[36px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition cursor-pointer shrink-0 whitespace-nowrap"
                         >
                           Echipează
                         </button>
@@ -565,14 +568,16 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
         {activeTab === 'chests' && (
           <div className="flex-1 overflow-y-auto p-6 sm:p-10 flex flex-col items-center justify-center text-center gap-6">
             <div className="relative">
-              <div
+              <button
+                type="button"
+                aria-label={lang === 'en' ? 'Open Mystery Chest' : 'Deschide Cufărul Misterios'}
                 className={`w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-tr from-amber-500 via-orange-500 to-pink-500 border-4 border-amber-300 flex items-center justify-center text-6xl sm:text-7xl shadow-2xl shadow-orange-500/40 cursor-pointer transition transform active:scale-95 ${
                   isOpeningChest ? 'animate-bounce scale-110' : 'hover:scale-105'
                 }`}
                 onClick={handleOpenChest}
               >
                 🎁
-              </div>
+              </button>
             </div>
 
             <div className="max-w-md">
@@ -605,7 +610,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="text-lg font-black text-amber-300 font-mono mt-1">
+                  <div className="text-lg font-black text-amber-300 font-mono mt-1 tabular-nums">
                     +{chestReward.bonusCoins} 🪙 Byte-Coins!
                   </div>
                 )}
@@ -613,9 +618,10 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
             )}
 
             <button
+              type="button"
               onClick={handleOpenChest}
               disabled={isOpeningChest}
-              className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500 hover:from-amber-400 hover:to-pink-400 text-white font-black text-base transition flex items-center gap-2.5 shadow-xl shadow-orange-500/30 cursor-pointer active:scale-95 disabled:opacity-60"
+              className="min-h-[46px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500 hover:from-amber-400 hover:to-pink-400 text-white font-black text-base transition flex items-center gap-2.5 shadow-xl shadow-orange-500/30 cursor-pointer active:scale-95 disabled:opacity-60"
             >
               <Sparkles className="w-5 h-5" />
               <span>{isOpeningChest ? 'Se deschide...' : 'Deschide Cufăr Gratuit!'}</span>

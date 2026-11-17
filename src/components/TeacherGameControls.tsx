@@ -65,6 +65,7 @@ export const TeacherGameControls: React.FC = () => {
   const [isSavingMsg, setIsSavingMsg] = useState<boolean>(false);
   const [msgSavedToast, setMsgSavedToast] = useState<boolean>(false);
   const [previewModalGame, setPreviewModalGame] = useState<GameDefinition | null>(null);
+  const [showClearConfirm, setShowClearConfirm] = useState<boolean>(false);
 
   // Ascultă setările și cererile elevilor în timp real
   useEffect(() => {
@@ -119,11 +120,15 @@ export const TeacherGameControls: React.FC = () => {
     await deleteUnlockRequest(id);
   };
 
-  const handleClearAllRequests = async () => {
-    if (window.confirm(lang === 'en' ? 'Clear all student requests?' : 'Sigur dorești să ștergi toate solicitările elevilor?')) {
-      sounds.playClick();
-      await clearAllUnlockRequests();
-    }
+  const handleClearAllRequests = () => {
+    sounds.playClick();
+    setShowClearConfirm(true);
+  };
+
+  const executeClearAllRequests = async () => {
+    setShowClearConfirm(false);
+    sounds.playClick();
+    await clearAllUnlockRequests();
   };
 
   // Statistici
@@ -214,7 +219,7 @@ export const TeacherGameControls: React.FC = () => {
             <span className="text-[11px] font-mono text-slate-400 uppercase font-bold tracking-wider">
               {lang === 'en' ? 'Total Mini-Games' : 'Total Mini-Jocuri'}
             </span>
-            <div className="text-2xl font-black text-white font-heading">
+            <div className="text-2xl font-black text-white font-heading tabular-nums">
               {ALL_GAMES.length}
             </div>
             <span className="text-[10px] text-slate-500 font-mono">
@@ -232,10 +237,10 @@ export const TeacherGameControls: React.FC = () => {
             <span className="text-[11px] font-mono text-slate-400 uppercase font-bold tracking-wider">
               {lang === 'en' ? 'Unlocked & Active' : 'Deschise pentru Elevi'}
             </span>
-            <div className="text-2xl font-black text-emerald-400 font-heading">
+            <div className="text-2xl font-black text-emerald-400 font-heading tabular-nums">
               {openCount} / {ALL_GAMES.length}
             </div>
-            <span className="text-[10px] text-emerald-500/80 font-mono font-medium">
+            <span className="text-[10px] text-emerald-500/80 font-mono font-medium tabular-nums">
               {openCount === ALL_GAMES.length ? (lang === 'en' ? 'All accessible' : 'Toate accesibile') : `${closedCount} blocate`}
             </span>
           </div>
@@ -250,7 +255,7 @@ export const TeacherGameControls: React.FC = () => {
             <span className="text-[11px] font-mono text-slate-400 uppercase font-bold tracking-wider">
               {lang === 'en' ? 'Locked by Teacher' : 'Închise de Profesor'}
             </span>
-            <div className="text-2xl font-black text-rose-400 font-heading">
+            <div className="text-2xl font-black text-rose-400 font-heading tabular-nums">
               {closedCount}
             </div>
             <span className="text-[10px] text-rose-400/80 font-mono font-medium">
@@ -263,7 +268,7 @@ export const TeacherGameControls: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3.5 shadow-md">
           <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
             requests.length > 0 
-              ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400 animate-pulse'
+              ? 'bg-amber-500/20 border border-amber-500/40 text-amber-400'
               : 'bg-slate-800 border border-slate-700 text-slate-400'
           }`}>
             <Bell className="w-6 h-6" />
@@ -272,7 +277,7 @@ export const TeacherGameControls: React.FC = () => {
             <span className="text-[11px] font-mono text-slate-400 uppercase font-bold tracking-wider">
               {lang === 'en' ? 'Student Requests' : 'Solicitări Elevi'}
             </span>
-            <div className="text-2xl font-black text-amber-400 font-heading">
+            <div className="text-2xl font-black text-amber-400 font-heading tabular-nums">
               {requests.length}
             </div>
             <span className="text-[10px] text-amber-300/80 font-mono font-medium">
@@ -333,12 +338,12 @@ export const TeacherGameControls: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5 mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0">
-                <Bell className="w-5 h-5 animate-bounce" />
+                <Bell className="w-5 h-5" />
               </div>
               <div>
                 <h4 className="text-base font-black text-white font-heading flex items-center gap-2">
                   <span>{lang === 'en' ? 'Student Unlock Requests in Real-Time' : 'Solicitări Deschidere Jocuri de la Elevi'}</span>
-                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono font-bold">
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono font-bold tabular-nums">
                     {requests.length}
                   </span>
                 </h4>
@@ -351,13 +356,38 @@ export const TeacherGameControls: React.FC = () => {
             </div>
 
             <button
+              type="button"
               onClick={handleClearAllRequests}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+              className="min-h-[36px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer whitespace-nowrap"
             >
               <Trash2 className="w-3.5 h-3.5 text-rose-400" />
               <span>{lang === 'en' ? 'Clear All' : 'Golește Toate'}</span>
             </button>
           </div>
+
+          {showClearConfirm && (
+            <div className="mb-4 p-3.5 rounded-2xl bg-rose-950/60 border border-rose-500/50 text-rose-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <span>
+                {lang === 'en' ? 'Clear all pending student unlock requests?' : 'Sigur dorești să ștergi toate solicitările elevilor?'}
+              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={executeClearAllRequests}
+                  className="min-h-[34px] px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold cursor-pointer"
+                >
+                  {lang === 'en' ? 'Yes, Clear' : 'Da, Șterge'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowClearConfirm(false)}
+                  className="min-h-[34px] px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer"
+                >
+                  {lang === 'en' ? 'Cancel' : 'Anulează'}
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-80 overflow-y-auto pr-1">
             {requests.map((req) => (
@@ -470,21 +500,22 @@ export const TeacherGameControls: React.FC = () => {
         </div>
 
         {/* Categories selector */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 max-w-full">
           {categories.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => {
                 setSelectedCategory(cat);
                 sounds.playClick();
               }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+              className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer ${
                 selectedCategory === cat
                   ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20'
                   : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
               }`}
             >
-              {cat === 'all' ? (lang === 'en' ? 'All (18)' : 'Toate (18)') : cat}
+              {cat === 'all' ? (lang === 'en' ? `All (${ALL_GAMES.length})` : `Toate (${ALL_GAMES.length})`) : cat}
             </button>
           ))}
         </div>
@@ -559,8 +590,8 @@ export const TeacherGameControls: React.FC = () => {
               <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5">
                   <span
-                    className={`w-2 h-2 rounded-full ${
-                      isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                    className={`w-2 h-2 rounded-full shrink-0 ${
+                      isOpen ? 'bg-emerald-400' : 'bg-rose-400'
                     }`}
                   />
                   <span
@@ -577,7 +608,7 @@ export const TeacherGameControls: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setPreviewModalGame(game)}
-                  className="px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-white border border-slate-700 text-[11px] font-mono transition cursor-pointer"
+                  className="min-h-[34px] px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-white border border-slate-700 text-[11px] font-mono transition cursor-pointer whitespace-nowrap"
                   title={lang === 'en' ? 'Preview what students see' : 'Previzualizează dialogul elevului'}
                 >
                   {lang === 'en' ? 'Preview Lock' : 'Previzualizează'}
@@ -591,7 +622,7 @@ export const TeacherGameControls: React.FC = () => {
       {/* Preview Modal for Teacher */}
       {previewModalGame && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-md bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 shadow-2xl overflow-hidden">
+          <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 shadow-2xl">
             <div className="absolute top-0 right-0 w-48 h-48 bg-rose-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
             <div className="flex items-center justify-between mb-4">
@@ -601,8 +632,10 @@ export const TeacherGameControls: React.FC = () => {
               </span>
 
               <button
+                type="button"
                 onClick={() => setPreviewModalGame(null)}
-                className="p-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
+                aria-label={lang === 'en' ? 'Close preview' : 'Închide previzualizarea'}
+                className="min-w-[36px] min-h-[36px] p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

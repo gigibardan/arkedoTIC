@@ -290,7 +290,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-1">
                 <span className="font-black text-white text-sm truncate">{studentName} (Tu)</span>
-                <span className="font-mono text-xs font-bold text-amber-300">{score} XP</span>
+                <span className="font-mono text-xs font-bold text-amber-300 tabular-nums">{score} XP</span>
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mt-1">
                 <div
@@ -298,7 +298,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block tabular-nums">
                 {lang === 'en' ? `Circuit ${currentStageIdx + 1} of ${CIRCUIT_STAGES.length}` : `Circuit ${currentStageIdx + 1} din ${CIRCUIT_STAGES.length}`}
               </span>
             </div>
@@ -310,7 +310,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
               ⚡ VS ⚡
             </div>
             {streak > 1 && (
-              <span className="text-[11px] font-black text-amber-400 flex items-center gap-1 mt-1 font-mono animate-bounce">
+              <span className="text-[11px] font-black text-amber-400 flex items-center gap-1 mt-1 font-mono tabular-nums">
                 <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> {streak}x Wire Combo
               </span>
             )}
@@ -320,7 +320,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
           <div className="sm:col-span-5 flex items-center gap-3">
             <div className="min-w-0 flex-1 text-right">
               <div className="flex items-center justify-between gap-1">
-                <span className="font-mono text-xs font-bold text-rose-300">{opponentScore} XP</span>
+                <span className="font-mono text-xs font-bold text-rose-300 tabular-nums">{opponentScore} XP</span>
                 <span className="font-black text-white text-sm truncate">{opponentName}</span>
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mt-1">
@@ -329,7 +329,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
                   style={{ width: `${opponentProgress}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block tabular-nums">
                 {opponentProgress}% finalizat
               </span>
             </div>
@@ -341,7 +341,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
       </div>
 
       {/* Main Electronic Breadboard & Terminal Simulator */}
-      <div className={`bg-slate-900/90 border-2 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-300 ${
+      <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-300 ${
         sparkError ? 'border-rose-500 ring-4 ring-rose-500/30 shake' : 'border-slate-800'
       }`}>
         {/* Background glow */}
@@ -349,15 +349,15 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
         <div className="absolute -bottom-10 -left-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
         {/* Multimeter readout widget */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6 relative z-10">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-4 mb-6 relative z-10">
           <div className="flex items-center gap-2">
-            <Gauge className="w-5 h-5 text-amber-400" />
+            <Gauge className="w-5 h-5 text-amber-400 shrink-0" />
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
               {lang === 'en' ? 'Digital Multimeter & Circuit Probe' : 'Multimetru Digital & Banc de Probe'}
             </span>
           </div>
-          <div className="px-3.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800 font-mono font-black text-sm flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+          <div className="px-3.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800 font-mono font-black text-sm flex items-center gap-2 tabular-nums">
+            <span className={`w-2 h-2 rounded-full ${sparkError ? 'bg-rose-400' : 'bg-emerald-400'}`} />
             <span className={sparkError ? 'text-rose-400' : 'text-emerald-300'}>{multimeterVolts}</span>
           </div>
         </div>
@@ -367,7 +367,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
           <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block mb-1">
             {lang === 'en' ? stage.titleEn : stage.titleRo}
           </span>
-          <h3 className="text-lg sm:text-xl font-black text-white font-heading">
+          <h3 className="text-lg sm:text-xl font-black text-white font-heading text-balance">
             {lang === 'en' ? stage.scenarioEn : stage.scenarioRo}
           </h3>
         </div>
@@ -380,14 +380,14 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
                 key={opt.pin}
                 type="button"
                 onClick={() => handleSelectPin(opt.pin, opt.voltage)}
-                className="p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-800/90 border-2 border-slate-800 hover:border-amber-400/80 transition-all text-left flex items-center justify-between group cursor-pointer shadow-lg active:scale-95"
+                className="min-h-[56px] p-3.5 sm:p-4 rounded-2xl bg-slate-950/80 hover:bg-slate-800/90 border-2 border-slate-800 hover:border-amber-400/80 transition-all text-left flex flex-wrap items-center justify-between gap-2 group cursor-pointer shadow-lg active:scale-95"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform shrink-0">
                     <Zap className="w-4 h-4" />
                   </div>
-                  <div>
-                    <span className="font-bold text-white text-sm block">
+                  <div className="min-w-0">
+                    <span className="font-bold text-white text-sm block leading-snug">
                       {lang === 'en' ? opt.labelEn : opt.labelRo}
                     </span>
                     <span className="font-mono text-[11px] text-slate-400">
@@ -395,7 +395,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
                     </span>
                   </div>
                 </div>
-                <span className="font-mono text-xs font-bold text-emerald-400 px-2.5 py-1 rounded-lg bg-emerald-950/50 border border-emerald-500/30">
+                <span className="font-mono text-xs font-bold text-emerald-400 px-2.5 py-1 rounded-lg bg-emerald-950/50 border border-emerald-500/30 shrink-0 tabular-nums">
                   {opt.voltage}
                 </span>
               </button>
@@ -421,7 +421,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
                   key={opt}
                   type="button"
                   onClick={() => handleOhmAnswer(opt)}
-                  className="p-3.5 rounded-xl bg-slate-900 hover:bg-amber-600 hover:text-slate-950 border border-slate-700 hover:border-amber-400 font-mono font-black text-sm text-white transition-all cursor-pointer active:scale-95 text-center shadow-sm"
+                  className="min-h-[44px] p-3.5 rounded-xl bg-slate-900 hover:bg-amber-600 hover:text-slate-950 border border-slate-700 hover:border-amber-400 font-mono font-black text-sm text-white transition-all cursor-pointer active:scale-95 text-center shadow-sm tabular-nums"
                 >
                   {opt === 1 && stage.id === 2 ? (lang === 'en' ? 'Rises' : 'Crește') :
                    opt === 0 && stage.id === 2 ? (lang === 'en' ? 'Falls' : 'Scade') :
@@ -437,11 +437,11 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
       {/* Finished Banner */}
       {hasFinishedLocal && (
         <div className="bg-gradient-to-r from-amber-950/90 via-slate-900 to-emerald-950/90 border-2 border-amber-500/60 rounded-3xl p-6 text-center shadow-2xl">
-          <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-2 animate-bounce" />
-          <h3 className="text-xl font-black text-white font-heading">
+          <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-2" />
+          <h3 className="text-xl font-black text-white font-heading text-balance">
             {lang === 'en' ? 'Circuit Duel Conquered!' : 'Duelul Circuitelor a Fost Câștigat! ⚡'}
           </h3>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-300 mt-1 tabular-nums">
             {lang === 'en'
               ? `You wired all Smart City systems with a score of ${score} XP!`
               : `Ai conectat perfect toate circuitele Smart City și ai obținut ${score} XP!`}
@@ -450,7 +450,7 @@ export const CircuitMasterDuelGame: React.FC<CircuitMasterDuelGameProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="mt-4 px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer shadow-lg shadow-amber-500/30"
+              className="mt-4 min-h-[44px] px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer shadow-lg shadow-amber-500/30"
             >
               {lang === 'en' ? 'Return to Lobby' : 'Înapoi în Arenă'}
             </button>

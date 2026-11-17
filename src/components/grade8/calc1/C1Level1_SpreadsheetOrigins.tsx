@@ -184,13 +184,15 @@ export const C1Level1_SpreadsheetOrigins: React.FC<C1Level1Props> = ({ onComplet
                   <td className="p-3 border-r border-slate-800 text-center font-mono text-slate-400 bg-slate-900/50">
                     {idx + 1}
                   </td>
-                  <td className="p-3 border-r border-slate-800 font-medium text-white flex items-center justify-between">
-                    <span>{getSubjectName(row.subject)}</span>
-                    {row.subject === 'Geografie' && (
-                      <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30">
-                        {lang === 'en' ? 'Edit below!' : 'Modifică mai jos!'}
-                      </span>
-                    )}
+                  <td className="p-3 border-r border-slate-800 font-medium text-white">
+                    <div className="flex items-center justify-between gap-2">
+                      <span>{getSubjectName(row.subject)}</span>
+                      {row.subject === 'Geografie' && (
+                        <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30 whitespace-nowrap shrink-0">
+                          {lang === 'en' ? 'Edit below!' : 'Modifică mai jos!'}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="p-3 border-r border-slate-800 text-center font-bold text-white">
                     <span className="inline-block px-3 py-1 rounded-lg bg-slate-800 text-emerald-300 font-mono text-base shadow-inner">

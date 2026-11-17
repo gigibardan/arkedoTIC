@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { C1Level1_CloudFundamentals } from './C1Level1_CloudFundamentals';
 import { C1Level2_PermissionMatrix } from './C1Level2_PermissionMatrix';
 import { C1Level3_SynchronousEditing } from './C1Level3_SynchronousEditing';
@@ -6,7 +6,7 @@ import { C1Level4_CommentsAndMentions } from './C1Level4_CommentsAndMentions';
 import { C1Level5_VersionHistoryTimeMachine } from './C1Level5_VersionHistoryTimeMachine';
 import { C1Level6_TeamPresentationStudio } from './C1Level6_TeamPresentationStudio';
 import { C1Level7_CloudNetiquetteExam } from './C1Level7_CloudNetiquetteExam';
-import { ArrowLeft, RotateCcw, Cloud, Users } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Cloud, Users, AlertTriangle } from 'lucide-react';
 import { sounds } from '../../../utils/audio';
 import { useLanguage } from '../../../context/LanguageContext';
 
@@ -26,9 +26,18 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
   onReturnToCatalog,
 }) => {
   const { lang } = useLanguage();
+  const [showRestartConfirm, setShowRestartConfirm] = useState(false);
 
   const handlePassCurrentLevel = (score: number) => {
     onCompletePage(score);
+  };
+
+  const confirmRestart = () => {
+    sounds.playClick();
+    setShowRestartConfirm(false);
+    if (onRestartMission) {
+      onRestartMission();
+    }
   };
 
   return (
@@ -74,17 +83,10 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
             <button
               type="button"
               onClick={() => {
-                const confirmed = window.confirm(
-                  lang === 'ro'
-                    ? 'Ești sigur că vrei să reiei Misiunea 3A de la nivelul 1? Punctajul va fi resetat.'
-                    : 'Are you sure you want to restart Mission 3A from Level 1? Progress will be reset.'
-                );
-                if (confirmed) {
-                  sounds.playClick();
-                  onRestartMission();
-                }
+                sounds.playClick();
+                setShowRestartConfirm(true);
               }}
-              className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-rose-300 border border-slate-700 text-xs font-medium transition flex items-center gap-1 cursor-pointer"
+              className="min-h-[36px] px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 hover:text-rose-300 border border-slate-700 text-xs font-medium transition flex items-center gap-1 cursor-pointer"
               title={lang === 'ro' ? 'Resetează misiunea de la Nivelul 1' : 'Restart mission from Level 1'}
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -95,6 +97,36 @@ export const ModuleG7Cloud1Flow: React.FC<ModuleG7Cloud1FlowProps> = ({
           )}
         </div>
       </div>
+
+      {/* Confirmation Banner (In-DOM, no window.confirm) */}
+      {showRestartConfirm && (
+        <div className="p-4 rounded-2xl bg-amber-950/70 border border-amber-500 text-amber-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>
+              {lang === 'ro'
+                ? 'Ești sigur că vrei să reiei Misiunea 3A de la nivelul 1? Punctajul va fi resetat.'
+                : 'Are you sure you want to restart Mission 3A from Level 1? Progress will be reset.'}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={confirmRestart}
+              className="min-h-[34px] px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition cursor-pointer"
+            >
+              {lang === 'ro' ? 'Da, Reia' : 'Yes, Restart'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowRestartConfirm(false)}
+              className="min-h-[34px] px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition cursor-pointer"
+            >
+              {lang === 'ro' ? 'Anulează' : 'Cancel'}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Dynamic Level Component Loading */}
       {currentLevel === 1 && <C1Level1_CloudFundamentals onPass={handlePassCurrentLevel} />}

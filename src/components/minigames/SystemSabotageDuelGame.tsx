@@ -669,7 +669,8 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
           <button
             type="button"
             onClick={() => setSoundEnabled((v) => !v)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer"
+            aria-label={soundEnabled ? 'Mute' : 'Unmute'}
+            className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer flex items-center justify-center"
           >
             {soundEnabled ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
           </button>
@@ -678,7 +679,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1 transition cursor-pointer"
+              className="min-h-[36px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1 transition cursor-pointer whitespace-nowrap"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{isEn ? 'Exit' : 'Ieși'}</span>
@@ -751,7 +752,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
           {/* TASK 1: CONNECT WIRES */}
           {currentTask === 'wires' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <h4 className="text-base font-black text-white">
                     🔌 {isEn ? 'Task: Reconnect Power & Data Wires' : 'Sarcină: Reconectează Cablurile de Date'}
@@ -760,12 +761,12 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                     {isEn ? 'Tap a color on the left, then tap the matching port on the right!' : 'Apasă o mufă din stânga, apoi perechea ei colorată din dreapta!'}
                   </p>
                 </div>
-                <span className="font-mono text-xs font-black text-emerald-400">
+                <span className="font-mono text-xs font-black text-emerald-400 tabular-nums shrink-0">
                   {connectedWires.length} / 4
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-8 sm:gap-14 py-2">
+              <div className="grid grid-cols-2 gap-3 sm:gap-12 py-2">
                 <div className="space-y-3">
                   {wiresLeft.map((w) => {
                     const isDone = connectedWires.includes(w.id);
@@ -824,7 +825,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
           {/* TASK 2: UNLOCK MANIFOLDS (1 to 8) */}
           {currentTask === 'manifolds' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <h4 className="text-base font-black text-white">
                     🔢 {isEn ? 'Task: Unlock Cooling Manifolds (1 → 8)' : 'Sarcină: Deblochează Reactorul (1 → 8)'}
@@ -833,12 +834,12 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                     {isEn ? 'Tap the numbers strictly in ascending order from 1 to 8!' : 'Apasă numerele în ordine crescătoare de la 1 la 8!'}
                   </p>
                 </div>
-                <span className="font-mono text-xs font-black text-cyan-300">
+                <span className="font-mono text-xs font-black text-cyan-300 tabular-nums shrink-0">
                   {isEn ? 'Next:' : 'Urmează:'} #{nextManifoldNum}
                 </span>
               </div>
 
-              <div className="grid grid-cols-4 gap-3 pt-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 pt-2">
                 {manifoldNums.map((num) => {
                   const isDone = num < nextManifoldNum;
                   return (
@@ -860,7 +861,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                           setNextManifoldNum(1);
                         }
                       }}
-                      className={`min-h-[68px] rounded-2xl border-2 font-mono text-2xl font-black transition active:scale-95 cursor-pointer touch-manipulation ${
+                      className={`min-h-[56px] sm:min-h-[68px] rounded-2xl border-2 font-mono text-xl sm:text-2xl font-black transition active:scale-95 cursor-pointer touch-manipulation tabular-nums ${
                         isDone
                           ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300'
                           : 'bg-slate-900 hover:bg-slate-800 border-cyan-500/50 text-white shadow-lg'
@@ -889,15 +890,16 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-900 border-2 border-indigo-500/40 space-y-4">
-                <div className="flex items-center justify-between text-xs font-mono">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
                   <span className="text-slate-400">READER STATUS:</span>
-                  <span className="font-black text-amber-300">
-                    {swipeFeedback || (isEn ? 'SLIDE CARD TO 100% ➔' : 'GLISEAZĂ CARDUL LA 100% ➔')}
+                  <span className="font-black text-amber-300 tabular-nums">
+                    {swipeFeedback || (isEn ? 'SLIDE CARD TO 100%' : 'GLISEAZĂ CARDUL LA 100%')}
                   </span>
                 </div>
 
                 <input
                   type="range"
+                  aria-label={isEn ? 'Slide admin keycard from 0 to 100%' : 'Glisează cardul de acces de la 0 la 100%'}
                   min={0}
                   max={100}
                   value={swipeProgress}
@@ -941,7 +943,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
           {/* TASK 4: CALIBRATE DISTRIBUTORS */}
           {currentTask === 'calibrate' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <h4 className="text-base font-black text-white">
                     🎚️ {isEn ? 'Task: Calibrate Energy Distributors' : 'Sarcină: Calibrare Distribuitoare'}
@@ -950,7 +952,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                     {isEn ? 'Press LOCK ENERGY when the white marker hits the green target zone!' : 'Apasă BLOCHEAZĂ când indicatorul alb intră în zona verde!'}
                   </p>
                 </div>
-                <span className="font-mono text-xs font-black text-emerald-400">
+                <span className="font-mono text-xs font-black text-emerald-400 tabular-nums shrink-0">
                   {calibrateStage + 1} / 3
                 </span>
               </div>
@@ -983,7 +985,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
           {/* TASK 5: PURGE MALWARE BUGS */}
           {currentTask === 'purge_bugs' && (
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <h4 className="text-base font-black text-white">
                     🧹 {isEn ? 'Task: Purge Malware Bugs from Chute' : 'Sarcină: Curăță Virușii din Sistem'}
@@ -992,7 +994,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                     {isEn ? 'Tap every drifting cyber-bug to eject them!' : 'Apasă pe fiecare virus plutitor pentru a-l elimina!'}
                   </p>
                 </div>
-                <span className="font-mono text-xs font-black text-rose-400">
+                <span className="font-mono text-xs font-black text-rose-400 tabular-nums shrink-0">
                   {bugs.filter((b) => !b.purged).length} {isEn ? 'left' : 'rămași'}
                 </span>
               </div>
@@ -1003,6 +1005,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                     <button
                       key={b.id}
                       type="button"
+                      aria-label={isEn ? 'Purge malware bug' : 'Elimină virus'}
                       onClick={() => {
                         playTone(540, 0.08, 'triangle', 0.08, 220);
                         setBugs((prev) => {
@@ -1038,7 +1041,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
 
               <div className="p-4 rounded-2xl bg-slate-900 border border-slate-700 space-y-4">
                 <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-mono font-bold">
+                  <div className="flex flex-wrap justify-between gap-1 text-xs font-mono font-bold tabular-nums">
                     <span className="text-cyan-300">
                       {isEn ? 'Frequency:' : 'Frecvență:'} {playerFreq} GHz
                     </span>
@@ -1048,6 +1051,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                   </div>
                   <input
                     type="range"
+                    aria-label={isEn ? 'Frequency GHz' : 'Frecvență GHz'}
                     min={1}
                     max={7}
                     value={playerFreq}
@@ -1057,7 +1061,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                 </div>
 
                 <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-mono font-bold">
+                  <div className="flex flex-wrap justify-between gap-1 text-xs font-mono font-bold tabular-nums">
                     <span className="text-cyan-300">
                       {isEn ? 'Signal Power:' : 'Putere Semnal:'} {playerAmp}%
                     </span>
@@ -1067,6 +1071,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                   </div>
                   <input
                     type="range"
+                    aria-label={isEn ? 'Signal Power percentage' : 'Putere Semnal procent'}
                     min={15}
                     max={90}
                     value={playerAmp}
@@ -1098,8 +1103,11 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
               {activePopups.map((pop) => (
                 <div
                   key={pop.id}
-                  className={`pointer-events-auto absolute w-52 sm:w-60 p-3 rounded-xl border-2 ${pop.color} shadow-2xl text-white`}
-                  style={{ left: `${pop.xPct}%`, top: `${pop.yPct}%` }}
+                  className={`pointer-events-auto absolute w-52 sm:w-60 max-w-[calc(100%-0.5rem)] p-3 rounded-xl border-2 ${pop.color} shadow-2xl text-white`}
+                  style={{
+                    left: `clamp(4px, ${pop.xPct}%, calc(100% - 13.5rem))`,
+                    top: `clamp(4px, ${pop.yPct}%, calc(100% - 4.5rem))`,
+                  }}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-[11px] font-mono font-black leading-tight">
@@ -1107,6 +1115,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                     </span>
                     <button
                       type="button"
+                      aria-label={isEn ? 'Close popup' : 'Închide fereastra'}
                       onClick={() => {
                         playTone(720, 0.06, 'sine', 0.07);
                         setActivePopups((prev) => prev.filter((p) => p.id !== pop.id));
@@ -1131,7 +1140,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
               }}
               className="absolute inset-0 z-40 bg-cyan-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center cursor-pointer touch-manipulation"
             >
-              <Snowflake className="w-14 h-14 text-cyan-300 animate-spin mb-2" />
+              <Snowflake className="w-14 h-14 text-cyan-300 mb-2" />
               <div className="text-xl font-black text-white font-heading">
                 {isEn ? 'CONSOLE FROZEN!' : 'CONSOLĂ ÎNGHEȚATĂ!'}
               </div>
@@ -1143,15 +1152,15 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
 
           {/* 4. REACTOR MELTDOWN ALARM */}
           {meltdownActive && !matchResult && (
-            <div className="absolute inset-0 z-40 bg-rose-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-5 text-center space-y-4">
-              <div className="flex items-center gap-2 text-rose-300 font-black text-lg animate-pulse">
-                <ShieldAlert className="w-6 h-6" />
-                <span>{isEn ? 'REACTOR MELTDOWN SABOTAGE!' : 'SABOTAJ: SUPRAÎNCĂLZIRE REACTOR!'}</span>
+            <div className="absolute inset-0 z-40 bg-rose-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-5 text-center space-y-4 overflow-y-auto">
+              <div className="flex flex-wrap items-center justify-center gap-2 text-rose-300 font-black text-lg">
+                <ShieldAlert className="w-6 h-6 shrink-0" />
+                <span className="text-balance">{isEn ? 'REACTOR MELTDOWN SABOTAGE!' : 'SABOTAJ: SUPRAÎNCĂLZIRE REACTOR!'}</span>
               </div>
               <p className="text-xs text-rose-200">
                 {isEn ? 'Press all 3 Emergency Stabilizer Valves to resume tasks!' : 'Apasă toate cele 3 Valve de Stabilizare ca să continui!'}
               </p>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 {meltdownValves.map((pressed, idx) => (
                   <button
                     key={idx}
@@ -1182,21 +1191,21 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
 
           {/* MATCH RESULT OVERLAY */}
           {matchResult && (
-            <div className="absolute inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div className="absolute inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4 overflow-y-auto">
               <div
-                className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl ${
+                className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl shrink-0 ${
                   matchResult.won ? 'bg-gradient-to-br from-amber-400 to-emerald-600 text-white' : 'bg-rose-900 text-rose-200'
                 }`}
               >
                 <Trophy className="w-9 h-9" />
               </div>
               <div>
-                <h4 className="text-2xl font-black text-white font-heading">
+                <h4 className="text-2xl font-black text-white font-heading text-balance">
                   {matchResult.won ? (isEn ? 'CREWMATE VICTORY! 🚀' : 'VICTORIE DE ECHIPAJ! 🚀') : isEn ? 'SABOTAGED!' : 'DEPĂȘIT DE RIVAL!'}
                 </h4>
                 <p className="text-xs text-slate-300 mt-1">{isEn ? matchResult.reasonEn : matchResult.reasonRo}</p>
               </div>
-              <div className="flex items-center gap-4 px-5 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-sm font-black">
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-5 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-sm font-black tabular-nums">
                 <span className="text-cyan-300">
                   {matchResult.myTasks}/{TOTAL_TASKS_GOAL}
                 </span>
@@ -1212,7 +1221,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                   <button
                     type="button"
                     onClick={handleRestartSolo}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black text-xs flex items-center gap-2 cursor-pointer"
+                    className="min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black text-xs flex items-center gap-2 cursor-pointer"
                   >
                     <RotateCcw className="w-4 h-4" />
                     <span>{isEn ? 'Play Again' : 'Joacă Din Nou'}</span>
@@ -1222,7 +1231,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                   <button
                     type="button"
                     onClick={onBack}
-                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
+                    className="min-h-[44px] px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>{isEn ? 'Back to Arena' : 'Înapoi la Arenă'}</span>
@@ -1235,7 +1244,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
 
         {/* SABOTAGE ATTACK DOCK */}
         <div className="lg:col-span-4 p-4 rounded-3xl bg-slate-950 border border-rose-500/40 space-y-3 shadow-xl">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-xs font-black text-rose-300 uppercase tracking-wider">
               <Flame className="w-4 h-4 text-rose-400" />
               <span>{isEn ? 'Sabotage Arsenal' : 'Arsenal Sabotaje'}</span>
@@ -1267,11 +1276,11 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
                       {sab.icon}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs font-black truncate">{isEn ? sab.nameEn : sab.nameRo}</div>
-                      <div className="text-[10px] text-white/80 truncate">{isEn ? sab.descEn : sab.descRo}</div>
+                      <div className="text-xs font-black leading-snug">{isEn ? sab.nameEn : sab.nameRo}</div>
+                      <div className="text-[10px] text-white/80 leading-snug">{isEn ? sab.descEn : sab.descRo}</div>
                     </div>
                   </div>
-                  <span className="px-2 py-1 rounded-lg bg-black/30 font-mono text-xs font-black shrink-0">
+                  <span className="px-2 py-1 rounded-lg bg-black/30 font-mono text-xs font-black shrink-0 tabular-nums">
                     {sab.cost}⚡
                   </span>
                 </button>
@@ -1279,7 +1288,7 @@ export const SystemSabotageDuelGame: React.FC<SystemSabotageDuelGameProps> = ({
             })}
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 tabular-nums">
             <span className="flex items-center gap-1">
               <Radio className="w-3.5 h-3.5 text-emerald-400" />
               {isEn ? 'Score:' : 'Scor:'} <strong className="text-white">{score} XP</strong>

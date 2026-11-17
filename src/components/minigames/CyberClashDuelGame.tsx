@@ -1571,7 +1571,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
         </div>
 
         {/* Scoreboard: Crowns + Clock */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold tabular-nums">
             <span className="text-sky-300 flex items-center gap-1">
               <span>{studentAvatar}</span>
@@ -1589,7 +1589,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
           <div
             className={`px-3 py-1.5 rounded-xl font-mono text-xs font-black tabular-nums flex items-center gap-1.5 border ${
               isOvertime
-                ? 'bg-rose-950/90 border-rose-500 text-rose-300 animate-pulse'
+                ? 'bg-rose-950/90 border-rose-500 text-rose-300'
                 : isDoubleEnergy
                 ? 'bg-amber-950/80 border-amber-400 text-amber-300'
                 : 'bg-slate-950 border-slate-700 text-cyan-300'
@@ -1605,7 +1605,8 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
           <button
             type="button"
             onClick={() => setSoundEnabled((v) => !v)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer"
+            aria-label={isEn ? 'Toggle Sound' : 'Sunet On/Off'}
+            className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition cursor-pointer flex items-center justify-center"
             title={isEn ? 'Toggle Sound' : 'Sunet On/Off'}
           >
             {soundEnabled ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
@@ -1615,7 +1616,8 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1 transition cursor-pointer"
+              aria-label={isEn ? 'Exit Match' : 'Ieși din Meci'}
+              className="min-h-[36px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-white text-xs font-bold flex items-center gap-1 transition cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{isEn ? 'Exit' : 'Ieși'}</span>
@@ -1643,14 +1645,14 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
 
             {/* Floating Non-Blocking Alert Banner */}
             {matchBanner && !matchResult && (
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3.5 py-1.5 rounded-xl bg-slate-950/90 border border-amber-400/60 text-amber-300 font-black text-xs shadow-lg pointer-events-none whitespace-nowrap">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 max-w-[92%] text-center px-3.5 py-1.5 rounded-xl bg-slate-950/90 border border-amber-400/60 text-amber-300 font-black text-xs shadow-lg pointer-events-none leading-snug">
                 {matchBanner}
               </div>
             )}
 
             {/* End of Match Summary Overlay */}
             {matchResult && (
-              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-5 sm:p-6 text-center space-y-4 overflow-y-auto">
                 <div
                   className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl ${
                     matchResult.won
@@ -1661,7 +1663,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
                   <Trophy className="w-9 h-9" />
                 </div>
                 <div>
-                  <h4 className="text-2xl font-black text-white font-heading">
+                  <h4 className="text-2xl font-black text-white font-heading text-balance">
                     {matchResult.draw
                       ? isEn
                         ? 'DRAW MATCH!'
@@ -1679,7 +1681,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center gap-5 px-5 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-sm font-black">
+                <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 px-4 sm:px-5 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-sm font-black tabular-nums">
                   <span className="text-sky-300">👑 {matchResult.playerCrowns}</span>
                   <span className="text-slate-500">-</span>
                   <span className="text-rose-300">{matchResult.enemyCrowns} 👑</span>
@@ -1692,7 +1694,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
                     <button
                       type="button"
                       onClick={handleRestartSolo}
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-xs flex items-center gap-2 shadow-lg cursor-pointer"
+                      className="min-h-[42px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-xs flex items-center gap-2 shadow-lg cursor-pointer"
                     >
                       <RotateCcw className="w-4 h-4" />
                       <span>{isEn ? 'Play Again' : 'Joacă Din Nou'}</span>
@@ -1702,7 +1704,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
                     <button
                       type="button"
                       onClick={onBack}
-                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
+                      className="min-h-[42px] px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
                     >
                       <ArrowLeft className="w-4 h-4" />
                       <span>{isEn ? 'Back to Arena' : 'Înapoi la Arenă'}</span>
@@ -1718,7 +1720,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
         <div className="lg:col-span-5 space-y-3.5">
           {/* Energy / Bandwidth Meter */}
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-xs font-bold">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs font-bold">
               <span className="text-cyan-300 flex items-center gap-1.5">
                 <Zap className="w-4 h-4 text-amber-400" />
                 {isEn ? 'Bandwidth Energy' : 'Energie Lățime Bandă'}
@@ -1755,7 +1757,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
 
           {/* 4-Card Active Hand */}
           <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs">
               <span className="font-bold text-slate-300">
                 {isEn ? 'Tactical Hand (Keys 1-4 · Tap Arena)' : 'Pachet Activ (Taste 1-4 · Atinge Arena)'}
               </span>
@@ -1796,10 +1798,10 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
                       </span>
                     </div>
                     <div className="mt-1">
-                      <div className="text-xs font-black text-white truncate">
+                      <div className="text-xs font-black text-white leading-tight break-words">
                         [{idx + 1}] {isEn ? card.nameEn : card.nameRo}
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate">
+                      <div className="text-[10px] text-slate-400 leading-tight break-words mt-0.5">
                         {isEn ? card.roleEn : card.roleRo}
                       </div>
                     </div>
@@ -1810,7 +1812,7 @@ export const CyberClashDuelGame: React.FC<CyberClashDuelGameProps> = ({
 
             {/* Quick 1-Tap Lane Deploy Buttons (Awesome for Mobile Thumb Play) */}
             <div className="pt-2 border-t border-slate-800 space-y-2">
-              <div className="text-[11px] font-bold text-slate-400 flex items-center justify-between">
+              <div className="text-[11px] font-bold text-slate-400 flex flex-wrap items-center justify-between gap-1.5">
                 <span>
                   {isEn ? 'Quick Deploy:' : 'Lansare Rapidă:'}{' '}
                   <span className="text-cyan-300">{selectedCardDef.icon} {isEn ? selectedCardDef.nameEn : selectedCardDef.nameRo}</span>

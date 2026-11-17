@@ -294,44 +294,52 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             </div>
 
             {/* Editable City Name */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 max-w-full">
               {isRenamingCity ? (
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex flex-wrap items-center gap-2 mt-1 w-full">
                   <input
                     type="text"
                     value={cityNameInput}
                     onChange={(e) => setCityNameInput(e.target.value)}
-                    className="px-3 py-1 rounded-xl bg-slate-950 border-2 border-cyan-400 text-white font-black text-lg sm:text-xl font-heading outline-none"
+                    className="min-w-0 flex-1 max-w-xs px-3 py-1.5 min-h-[38px] rounded-xl bg-slate-950 border-2 border-cyan-400 text-white font-black text-base sm:text-xl font-heading outline-none"
                     autoFocus
                   />
-                  <button
-                    onClick={handleSaveCityName}
-                    className="p-1.5 rounded-lg bg-emerald-500 text-slate-950 hover:bg-emerald-400 cursor-pointer"
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setIsRenamingCity(false)}
-                    className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleSaveCityName}
+                      aria-label={lang === 'en' ? 'Save city name' : 'Salvează numele orașului'}
+                      className="min-w-[38px] min-h-[38px] p-2 rounded-xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 cursor-pointer flex items-center justify-center"
+                    >
+                      <Check className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsRenamingCity(false)}
+                      aria-label={lang === 'en' ? 'Cancel rename' : 'Anulează redenumirea'}
+                      className="min-w-[38px] min-h-[38px] p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white cursor-pointer flex items-center justify-center"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 mt-1">
-                  <h1 className="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">
+                <div className="flex items-center gap-2 mt-1 min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-black text-white font-heading tracking-tight truncate">
                     {currentCityToDisplay.cityName}
                   </h1>
                   {!viewingClassmateCity && (
                     <button
+                      type="button"
                       onClick={() => {
                         setCityNameInput(cityData.cityName);
                         setIsRenamingCity(true);
                       }}
-                      className="p-1 rounded-lg text-slate-400 hover:text-cyan-300 transition cursor-pointer"
+                      className="min-w-[36px] min-h-[36px] p-1.5 rounded-lg text-slate-400 hover:text-cyan-300 hover:bg-slate-800/60 transition cursor-pointer flex items-center justify-center shrink-0"
                       title={lang === 'en' ? 'Rename city' : 'Redenumește orașul'}
+                      aria-label={lang === 'en' ? 'Rename city' : 'Redenumește orașul'}
                     >
-                      <Edit2 className="w-3.5 h-3.5" />
+                      <Edit2 className="w-4 h-4" />
                     </button>
                   )}
                 </div>
@@ -546,7 +554,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                 >
                   <Plus className="w-4 h-4 sm:w-6 sm:h-6 text-slate-700 group-hover:text-cyan-400 transition transform group-hover:rotate-90 duration-300" />
                   <span className="text-[8px] sm:text-[9px] font-mono mt-0.5 sm:mt-1 opacity-70 group-hover:opacity-100 tabular-nums">
-                    {lang === 'en' ? `#${tileIndex + 1}` : `#${tileIndex + 1}`}
+                    #{tileIndex + 1}
                   </span>
                 </button>
               );
@@ -648,7 +656,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                           </div>
                         </div>
 
-                        <div className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black font-mono border border-amber-500/40 shrink-0">
+                        <div className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black font-mono border border-amber-500/40 shrink-0 tabular-nums">
                           🪙 {def.baseCost}
                         </div>
                       </div>
@@ -660,9 +668,10 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
                     {/* Build Button */}
                     <button
+                      type="button"
                       onClick={() => handleConstruct(def.id)}
                       disabled={!canAfford}
-                      className={`w-full py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md cursor-pointer ${
+                      className={`w-full py-2.5 min-h-[40px] rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md cursor-pointer whitespace-nowrap ${
                         canAfford
                           ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black'
                           : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
@@ -768,17 +777,19 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               {/* Action Buttons */}
               <div className="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <button
+                  type="button"
                   onClick={handleDemolish}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-rose-950 hover:text-rose-200 text-slate-400 border border-slate-700 hover:border-rose-500 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 min-h-[40px] rounded-xl bg-slate-800 hover:bg-rose-950 hover:text-rose-200 text-slate-300 border border-slate-700 hover:border-rose-500 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4 shrink-0" />
                   <span>{lang === 'en' ? 'Demolish & Recycle' : 'Demolează & Reciclează'}</span>
                 </button>
 
                 {selectedBuildingData.level < 5 ? (
                   <button
+                    type="button"
                     onClick={handleUpgrade}
-                    className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                    className="w-full sm:w-auto px-6 py-3 min-h-[42px] rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95 tabular-nums whitespace-nowrap"
                   >
                     <ArrowUpCircle className="w-4 h-4" />
                     <span>
@@ -902,17 +913,17 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                           <h4 className="text-sm font-bold text-white truncate">
                             {clsCity.cityName}
                           </h4>
-                          <span className="text-xs text-amber-300 font-mono font-black shrink-0">
+                          <span className="text-xs text-amber-300 font-mono font-black shrink-0 tabular-nums">
                             ⭐ {clsMetrics.cityScore}
                           </span>
                         </div>
 
-                        <div className="text-xs text-cyan-300 font-bold mb-2">
+                        <div className="text-xs text-cyan-300 font-bold mb-2 truncate">
                           {lang === 'en' ? 'Mayor' : 'Primar'}: {clsCity.studentName} {isMe && (lang === 'en' ? '(You)' : '(Tu)')}
                         </div>
 
                         {/* Mini stats preview */}
-                        <div className="grid grid-cols-3 gap-1.5 text-[10px] text-center font-mono py-2 bg-slate-900/80 rounded-xl border border-slate-800">
+                        <div className="grid grid-cols-3 gap-1.5 text-[10px] text-center font-mono py-2 bg-slate-900/80 rounded-xl border border-slate-800 tabular-nums">
                           <div>
                             <span className="text-slate-400 block">{lang === 'en' ? 'Compute' : 'Calcul'}</span>
                             <span className="text-cyan-300 font-bold">{clsMetrics.computingPowerTFlops}T</span>
@@ -931,11 +942,12 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                       {/* Visit & Like Actions */}
                       <div className="flex items-center gap-2 pt-2 border-t border-slate-800">
                         <button
+                          type="button"
                           onClick={() => {
                             setViewingClassmateCity(clsCity);
                             setActiveModal('none');
                           }}
-                          className="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                          className="flex-1 py-2 min-h-[38px] rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer whitespace-nowrap"
                         >
                           <Eye className="w-3.5 h-3.5" />
                           <span>{lang === 'en' ? 'Visit City' : 'Vizitează Orașul'}</span>

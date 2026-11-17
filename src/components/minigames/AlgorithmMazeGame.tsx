@@ -7,6 +7,7 @@ import {
   Play,
   RotateCcw,
   ArrowLeft,
+  ArrowRight,
   ArrowUp,
   RotateCw,
   Trophy,
@@ -515,24 +516,25 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
   return (
     <div className="flex flex-col gap-5 max-w-5xl mx-auto w-full pb-10 select-none">
       {/* Top Header */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
+          type="button"
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="px-3.5 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
         >
-          <ArrowLeft className="w-4 h-4 text-emerald-400" />
+          <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
         </button>
 
-        <div className="flex items-center gap-2.5 text-center">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+        <div className="order-3 sm:order-2 w-full sm:w-auto flex items-center gap-2.5 text-left sm:text-center justify-start sm:justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 shrink-0">
             <Bot className="w-5 h-5" />
           </div>
           <div className="text-left sm:text-center">
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-sm sm:text-base font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Algorithm Maze Robot' : 'Labirintul Algoritmic (Robotul TIC)'}
             </h1>
             <p className="text-[11px] text-emerald-400 font-mono">
@@ -542,7 +544,7 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold">
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold tabular-nums shrink-0">
           <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
           <span>Record: {highScore} pts</span>
         </div>
@@ -554,11 +556,11 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
           {/* Top Bar: Level info, Concept badge, Hint button, Score */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-mono font-bold text-emerald-300">
+              <span className="px-3 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-xs font-mono font-bold text-emerald-300 tabular-nums">
                 {lang === 'en' ? `Level ${currentLevel.id} / ${MAZE_LEVELS.length}` : `Nivelul ${currentLevel.id} / ${MAZE_LEVELS.length}`}
               </span>
               <div>
-                <h2 className="text-sm sm:text-base font-bold text-white">
+                <h2 className="text-sm sm:text-base font-bold text-white text-balance">
                   {lang === 'en' ? currentLevel.nameEn : currentLevel.nameRo}
                 </h2>
                 <div className="text-[11px] text-emerald-400/80 font-mono">
@@ -567,35 +569,37 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
               {/* Reset Robot Position Button */}
               <button
+                type="button"
                 onClick={resetRobotPositionOnly}
                 disabled={isRunning}
                 title={lang === 'en' ? 'Reset Robot Position to Start' : 'Resetează Robotul la Start'}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+                className="px-2.5 py-1.5 min-h-[36px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
+                <RotateCcw className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                 <span className="hidden sm:inline">{lang === 'en' ? 'Reset Pos' : 'Reset Poziție'}</span>
               </button>
 
               {/* Toggle Hint */}
               <button
+                type="button"
                 onClick={() => setShowHint((prev) => !prev)}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                   showHint
                     ? 'bg-amber-500/20 text-amber-200 border-amber-500/50'
                     : 'bg-slate-800 hover:bg-slate-750 text-amber-300 border-slate-700'
                 }`}
               >
-                <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+                <Lightbulb className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span>{showHint ? (lang === 'en' ? 'Hide Hint' : 'Ascunde') : (lang === 'en' ? 'Hint & Strategy 💡' : 'Indiciu & Strategie 💡')}</span>
               </button>
 
               {/* Score Display */}
               <div className="bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Trophy className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-black text-white font-mono">{score} pts</span>
+                <Trophy className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="text-sm font-black text-white font-mono tabular-nums">{score} pts</span>
               </div>
             </div>
           </div>
@@ -676,14 +680,14 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
 
                         {/* Target flag / server */}
                         {isTarget && !isRobotHere && (
-                          <div className="flex flex-col items-center justify-center text-emerald-400 animate-pulse">
+                          <div className="flex flex-col items-center justify-center text-emerald-400">
                             <Flag className="w-5 h-5 sm:w-6 sm:h-6 fill-current" />
                           </div>
                         )}
 
                         {/* Star collectible */}
                         {isStar && !isCollected && !isRobotHere && (
-                          <span className="text-sm sm:text-base animate-bounce drop-shadow">⭐</span>
+                          <span className="text-sm sm:text-base drop-shadow">⭐</span>
                         )}
 
                         {/* Star collected icon trace */}
@@ -753,9 +757,10 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
                 <div className="grid grid-cols-2 gap-2.5">
                   {/* FORWARD */}
                   <button
+                    type="button"
                     onClick={() => addCommand('FORWARD')}
                     disabled={isRunning || commands.length >= currentLevel.maxCommands}
-                    className="p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-emerald-600/20 border border-emerald-400/30"
+                    className="p-3 min-h-[44px] rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-emerald-600/20 border border-emerald-400/30"
                   >
                     <ArrowUp className="w-4 h-4 shrink-0 stroke-[2.5]" />
                     <span>Înainte (1 pas)</span>
@@ -763,9 +768,10 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
 
                   {/* TURN LEFT */}
                   <button
+                    type="button"
                     onClick={() => addCommand('TURN_LEFT')}
                     disabled={isRunning || commands.length >= currentLevel.maxCommands}
-                    className="p-3 rounded-2xl bg-cyan-600 hover:bg-cyan-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-600/20 border border-cyan-400/30"
+                    className="p-3 min-h-[44px] rounded-2xl bg-cyan-600 hover:bg-cyan-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-600/20 border border-cyan-400/30"
                   >
                     <RotateCcw className="w-4 h-4 shrink-0 stroke-[2.5]" />
                     <span>Viraj Stânga 90°</span>
@@ -773,9 +779,10 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
 
                   {/* TURN RIGHT */}
                   <button
+                    type="button"
                     onClick={() => addCommand('TURN_RIGHT')}
                     disabled={isRunning || commands.length >= currentLevel.maxCommands}
-                    className="p-3 rounded-2xl bg-cyan-600 hover:bg-cyan-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-600/20 border border-cyan-400/30"
+                    className="p-3 min-h-[44px] rounded-2xl bg-cyan-600 hover:bg-cyan-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-600/20 border border-cyan-400/30"
                   >
                     <RotateCw className="w-4 h-4 shrink-0 stroke-[2.5]" />
                     <span>Viraj Dreapta 90°</span>
@@ -783,9 +790,10 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
 
                   {/* REPEAT 2 */}
                   <button
+                    type="button"
                     onClick={() => addCommand('REPEAT_2')}
                     disabled={isRunning || commands.length >= currentLevel.maxCommands}
-                    className="p-3 rounded-2xl bg-purple-600 hover:bg-purple-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-purple-600/20 border border-purple-400/30"
+                    className="p-3 min-h-[44px] rounded-2xl bg-purple-600 hover:bg-purple-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-purple-600/20 border border-purple-400/30"
                   >
                     <Repeat className="w-4 h-4 shrink-0 stroke-[2.5]" />
                     <span>Repetă x2</span>
@@ -793,9 +801,10 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
 
                   {/* REPEAT 3 (NEW!) */}
                   <button
+                    type="button"
                     onClick={() => addCommand('REPEAT_3')}
                     disabled={isRunning || commands.length >= currentLevel.maxCommands}
-                    className="col-span-2 p-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/20 border border-indigo-400/30"
+                    className="col-span-2 p-3 min-h-[44px] rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 disabled:opacity-35 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/20 border border-indigo-400/30"
                   >
                     <Layers className="w-4 h-4 shrink-0 stroke-[2.5]" />
                     <span>Repetă x3 (Super-Buclă 🚀)</span>
@@ -810,24 +819,26 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
               <div className="p-4 rounded-3xl bg-slate-950 border-2 border-slate-800 flex flex-col gap-3 min-h-[220px] shadow-md">
                 <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-400">
                   <span className="text-white flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     {lang === 'en' ? 'Program Sequence:' : 'Secvența de Comenzi:'}
                   </span>
                   <div className="flex items-center gap-3">
                     <button
+                      type="button"
                       onClick={removeLastCommand}
                       disabled={isRunning || commands.length === 0}
-                      className="text-slate-400 hover:text-white text-xs font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer"
+                      className="text-slate-400 hover:text-white text-xs font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer min-h-[32px] px-1"
                     >
-                      <Undo2 className="w-3.5 h-3.5" />
+                      <Undo2 className="w-3.5 h-3.5 shrink-0" />
                       <span>{lang === 'en' ? 'Undo' : 'Anulează'}</span>
                     </button>
                     <button
+                      type="button"
                       onClick={clearAllCommands}
                       disabled={isRunning || commands.length === 0}
-                      className="text-rose-400 hover:text-rose-300 text-xs font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer"
+                      className="text-rose-400 hover:text-rose-300 text-xs font-bold flex items-center gap-1 disabled:opacity-30 cursor-pointer min-h-[32px] px-1"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-3.5 h-3.5 shrink-0" />
                       <span>{lang === 'en' ? 'Clear' : 'Golește'}</span>
                     </button>
                   </div>
@@ -853,7 +864,7 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
                           title={lang === 'en' ? 'Click to remove block' : 'Apasă pentru a șterge acest bloc'}
                           className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer hover:opacity-80 active:scale-95 ${
                             isStepRunning
-                              ? 'ring-4 ring-emerald-400 scale-105 bg-emerald-400 text-slate-950 animate-pulse'
+                              ? 'ring-4 ring-emerald-400 scale-105 bg-emerald-400 text-slate-950'
                               : cmd === 'FORWARD'
                               ? 'bg-emerald-950 border border-emerald-500/50 text-emerald-300'
                               : cmd === 'REPEAT_2'
@@ -877,12 +888,13 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
                 </div>
 
                 {/* Execution Speed Selector */}
-                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1 pt-1">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 px-1 pt-1">
                   <span>{lang === 'en' ? 'Execution Speed:' : 'Viteză simulare:'}</span>
                   <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
                     <button
+                      type="button"
                       onClick={() => setExecSpeed('normal')}
-                      className={`px-2.5 py-0.5 rounded-lg text-[10px] font-bold transition cursor-pointer ${
+                      className={`px-2.5 py-1 min-h-[28px] rounded-lg text-[10px] font-bold transition cursor-pointer ${
                         execSpeed === 'normal'
                           ? 'bg-emerald-500 text-slate-950'
                           : 'text-slate-400 hover:text-white'
@@ -891,8 +903,9 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
                       Normal (1x)
                     </button>
                     <button
+                      type="button"
                       onClick={() => setExecSpeed('fast')}
-                      className={`px-2.5 py-0.5 rounded-lg text-[10px] font-bold transition cursor-pointer ${
+                      className={`px-2.5 py-1 min-h-[28px] rounded-lg text-[10px] font-bold transition cursor-pointer ${
                         execSpeed === 'fast'
                           ? 'bg-emerald-500 text-slate-950'
                           : 'text-slate-400 hover:text-white'
@@ -960,22 +973,25 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
                 )}
 
                 {/* Run & Next Level Controls */}
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex flex-wrap items-center gap-2 mt-1">
                   <button
+                    type="button"
                     onClick={executeAlgorithm}
                     disabled={isRunning || commands.length === 0}
-                    className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 disabled:opacity-40 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25 active:scale-95"
+                    className="flex-1 min-h-[44px] py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 disabled:opacity-40 text-slate-950 font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25 active:scale-95"
                   >
-                    <Play className="w-4 h-4 fill-current" />
-                    <span>{isRunning ? (lang === 'en' ? 'Executing Algorithm...' : 'Robotul Execută...') : (lang === 'en' ? 'Run Algorithm ▶' : 'Rulează Algoritmul ▶')}</span>
+                    <Play className="w-4 h-4 fill-current shrink-0" />
+                    <span>{isRunning ? (lang === 'en' ? 'Executing Algorithm...' : 'Robotul Execută...') : (lang === 'en' ? 'Run Algorithm' : 'Rulează Algoritmul')}</span>
                   </button>
 
                   {executionResult === 'success' && currentLevelIdx + 1 < MAZE_LEVELS.length && (
                     <button
+                      type="button"
                       onClick={handleNextLevel}
-                      className="px-5 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30 cursor-pointer animate-bounce active:scale-95"
+                      className="px-5 py-3.5 min-h-[44px] rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm transition flex items-center gap-1.5 shadow-lg shadow-blue-600/30 ring-2 ring-blue-400/50 cursor-pointer active:scale-95"
                     >
-                      <span>{lang === 'en' ? 'Next Level ➔' : 'Nivelul Următor ➔'}</span>
+                      <span>{lang === 'en' ? 'Next Level' : 'Nivelul Următor'}</span>
+                      <ArrowRight className="w-4 h-4 shrink-0" />
                     </button>
                   )}
                 </div>
@@ -986,7 +1002,7 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
       ) : (
         /* Final Victory Screen */
         <div className="bg-slate-900/95 border-2 border-emerald-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col items-center justify-center text-center gap-6">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-4xl shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-500/20 animate-bounce">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-4xl shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-500/20">
             🤖
           </div>
 
@@ -994,7 +1010,7 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
             <span className="px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30 uppercase tracking-wider">
               {lang === 'en' ? 'Algorithm Course Complete!' : 'Labirint Algoritmic Absolvit!'}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
               {studentName ? `${studentName}, ` : ''}
               {lang === 'en' ? 'Grand Algorithm Architect! 💻⭐' : 'Arhitect Maestru de Algoritmi! 💻⭐'}
             </h2>
@@ -1009,7 +1025,7 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 max-w-lg w-full">
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Scor Total</span>
-              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tabular-nums mt-1">
                 {score}
               </span>
               <span className="text-[11px] text-slate-500">puncte</span>
@@ -1017,13 +1033,13 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Niveluri Finalizate</span>
-              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono tabular-nums mt-1">
                 {MAZE_LEVELS.length} / {MAZE_LEVELS.length}
               </span>
               <span className="text-[11px] text-slate-500">fără blocaje</span>
             </div>
 
-            <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
+            <div className="col-span-2 sm:col-span-1 bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Concepte TIC</span>
               <span className="text-sm font-black text-amber-400 font-mono mt-1 text-center">
                 Bucle x2, x3 & Viraje 90°
@@ -1033,20 +1049,22 @@ export const AlgorithmMazeGame: React.FC<AlgorithmMazeGameProps> = ({ onBack, st
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
+              type="button"
               onClick={handleRestartGame}
-              className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 shrink-0" />
               <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
             >
               <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
             </button>

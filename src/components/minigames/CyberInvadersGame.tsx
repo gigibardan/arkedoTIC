@@ -1323,22 +1323,23 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col items-center select-none font-sans">
       {/* Top Header Bar */}
-      <div className="w-full flex items-center justify-between gap-3 mb-4 p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur">
-        <div className="flex items-center gap-2.5">
+      <div className="w-full flex flex-wrap items-center justify-between gap-3 mb-4 p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl backdrop-blur">
+        <div className="flex items-center gap-2.5 min-w-0">
           <button
             type="button"
             onClick={() => {
               sounds.playClick();
               onBack();
             }}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+            aria-label={lang === 'en' ? 'Back to Arcade Catalog' : 'Înapoi la Catalog'}
+            className="min-w-[40px] min-h-[40px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer flex items-center justify-center shrink-0"
             title={lang === 'en' ? 'Back to Arcade Catalog' : 'Înapoi la Catalog'}
           >
             <ArrowLeft className="w-5 h-5 text-cyan-400" />
           </button>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-black text-white flex items-center gap-1.5">
+              <h1 className="text-base sm:text-lg font-black text-white flex flex-wrap items-center gap-1.5 text-balance">
                 <span>Cyber Invaders: Galaxia Codului</span>
                 <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-bold uppercase">
                   {lang === 'en' ? 'SPACE RETRO 👾' : 'ARCADE RETRO 👾'}
@@ -1354,11 +1355,12 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
         </div>
 
         {/* Action Controls & Sound */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => setSoundEnabled((s) => !s)}
-            className={`p-2 rounded-xl border text-xs font-bold transition cursor-pointer ${
+            aria-label={soundEnabled ? (lang === 'en' ? 'Mute Audio SFX' : 'Oprește Sunetul') : (lang === 'en' ? 'Unmute Audio SFX' : 'Pornește Sunetul')}
+            className={`min-w-[40px] min-h-[40px] p-2 rounded-xl border text-xs font-bold transition cursor-pointer flex items-center justify-center ${
               soundEnabled
                 ? 'bg-slate-800 border-slate-700 text-cyan-300'
                 : 'bg-slate-900 border-slate-800 text-slate-500'
@@ -1370,14 +1372,14 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
           <button
             type="button"
             onClick={() => setScanlines((s) => !s)}
-            className={`px-2.5 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer hidden sm:flex items-center gap-1 ${
+            className={`min-h-[40px] px-2.5 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer hidden sm:flex items-center gap-1 ${
               scanlines
                 ? 'bg-purple-950/70 border-purple-500/50 text-purple-300'
                 : 'bg-slate-800 border-slate-700 text-slate-400'
             }`}
             title={lang === 'en' ? 'Toggle CRT Retro Scanlines' : 'Comută Linii CRT Retro'}
           >
-            <Tv className="w-3.5 h-3.5" />
+            <Tv className="w-3.5 h-3.5 shrink-0" />
             <span>CRT</span>
           </button>
         </div>
@@ -1398,7 +1400,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
 
         {/* In-Game Live HUD (Visible while playing) */}
         {gameState === 'playing' && (
-          <div className="absolute top-0 left-0 right-0 z-10 p-3 sm:p-4 bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent flex items-center justify-between pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 z-10 p-3 sm:p-4 bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent flex flex-wrap items-center justify-between gap-2 pointer-events-none tabular-nums">
             {/* Score & Wave */}
             <div className="flex items-center gap-4">
               <div>
@@ -1438,7 +1440,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             <div className="flex items-center gap-3">
               {/* Overclock active */}
               {overclockLeft > 0 && (
-                <div className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-400 text-amber-300 text-[10px] font-mono font-bold animate-pulse">
+                <div className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-400 text-amber-300 text-[10px] font-mono font-bold">
                   ⚡ 5.0 GHz ({Math.ceil(overclockLeft)}s)
                 </div>
               )}
@@ -1481,12 +1483,12 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
 
         {/* OVERLAY: START MENU */}
         {gameState === 'menu' && (
-          <div className="absolute inset-0 z-30 bg-slate-950/90 backdrop-blur-md p-6 flex flex-col items-center justify-between text-center animate-fadeIn">
+          <div className="absolute inset-0 z-30 bg-slate-950/90 backdrop-blur-md p-4 sm:p-6 flex flex-col items-center justify-between gap-4 text-center animate-fadeIn overflow-y-auto">
             <div>
               <span className="px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-xs uppercase font-black tracking-widest inline-block mb-2">
                 ArkyEdu Space Arcade 1980s
               </span>
-              <h2 className="text-3xl sm:text-5xl font-black text-white font-heading tracking-tight drop-shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+              <h2 className="text-2xl sm:text-5xl font-black text-white font-heading tracking-tight drop-shadow-[0_0_20px_rgba(6,182,212,0.5)] text-balance">
                 CYBER INVADERS 🚀👾
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 max-w-lg mt-2 leading-relaxed">
@@ -1497,11 +1499,11 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             </div>
 
             {/* Ship Chassis Selection */}
-            <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl p-4">
+            <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl p-3 sm:p-4">
               <span className="text-[11px] font-mono text-slate-400 font-bold uppercase block mb-3">
                 {lang === 'en' ? 'Select Your Ship Chassis:' : 'Alege Șasiul Navei:'}
               </span>
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
                 {[
                   { id: 'quantum', name: 'Quantum Core ⚡', descRo: '+1 Bombă EMP', descEn: '+1 EMP Bomb', color: 'border-blue-500 bg-blue-950/40' },
                   { id: 'firewall', name: 'Firewall 🛡️', descRo: '+1 Viață & Scut', descEn: '+1 Life & Shield', color: 'border-emerald-500 bg-emerald-950/40' },
@@ -1514,7 +1516,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
                       sounds.playClick();
                       setSelectedChassis(ship.id as ShipChassis);
                     }}
-                    className={`p-3 rounded-xl border text-center transition cursor-pointer ${
+                    className={`min-h-[48px] p-2.5 sm:p-3 rounded-xl border text-center transition cursor-pointer ${
                       selectedChassis === ship.id
                         ? `${ship.color} ring-2 ring-cyan-400 font-black shadow-lg`
                         : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
@@ -1528,11 +1530,11 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             </div>
 
             {/* Launch Game Button */}
-            <div className="flex flex-col items-center gap-2 w-full max-w-xs">
+            <div className="flex flex-col items-center gap-2 w-full max-w-xs shrink-0">
               <button
                 type="button"
                 onClick={handleStartGame}
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-sm tracking-wider uppercase shadow-xl shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full min-h-[48px] py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-sm tracking-wider uppercase shadow-xl shadow-cyan-500/30 transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center gap-2"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>{lang === 'en' ? 'Launch Mission 🚀' : 'Pornește Misiunea 🚀'}</span>
@@ -1547,15 +1549,15 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
 
         {/* OVERLAY: MICRO-QUIZ TERMINAL (Educational Lightning Boost) */}
         {gameState === 'quiz' && activeQuiz && (
-          <div className="absolute inset-0 z-40 bg-slate-950/95 backdrop-blur-md p-6 flex flex-col items-center justify-center text-center animate-fadeIn">
-            <div className="max-w-md w-full bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 z-40 bg-slate-950/95 backdrop-blur-md p-4 sm:p-6 flex flex-col items-center justify-center text-center animate-fadeIn overflow-y-auto">
+            <div className="max-w-md w-full bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl" />
 
               <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-black uppercase tracking-wider inline-block mb-3 border border-amber-500/40">
                 ⚡ {lang === 'en' ? 'OVERCLOCK TERMINAL TRIVIA (+500 PTS)' : 'TERMINAL OVERCLOCK TRIVIA (+500 PTS)'}
               </span>
 
-              <h3 className="text-base sm:text-lg font-black text-white leading-snug mb-5">
+              <h3 className="text-base sm:text-lg font-black text-white leading-snug mb-5 text-balance">
                 {lang === 'en' ? activeQuiz.questionEn : activeQuiz.questionRo}
               </h3>
 
@@ -1566,7 +1568,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
                     type="button"
                     onClick={() => handleAnswerQuiz(opt.isCorrect)}
                     disabled={quizResult !== null}
-                    className={`w-full py-3 px-4 rounded-xl border text-sm font-bold text-left transition flex items-center justify-between cursor-pointer ${
+                    className={`w-full min-h-[44px] py-3 px-4 rounded-xl border text-sm font-bold text-left transition flex items-center justify-between gap-2 cursor-pointer ${
                       quizResult === null
                         ? 'bg-slate-950 border-slate-800 text-white hover:border-amber-400 hover:bg-slate-800'
                         : opt.isCorrect
@@ -1575,13 +1577,13 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
                     }`}
                   >
                     <span>{lang === 'en' ? opt.labelEn : opt.labelRo}</span>
-                    {quizResult !== null && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                    {quizResult !== null && opt.isCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
                   </button>
                 ))}
               </div>
 
               {quizResult === 'correct' && (
-                <div className="p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-300 text-xs font-bold animate-bounce">
+                <div className="p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-300 text-xs font-bold">
                   ✨ {lang === 'en' ? 'CORRECT! SUPER OVERCLOCK 5.0 GHz ACTIVATED!' : 'CORECT! SUPER OVERCLOCK 5.0 GHz ACTIVAT!'}
                 </div>
               )}
@@ -1591,10 +1593,10 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
 
         {/* OVERLAY: GAME OVER */}
         {gameState === 'gameover' && (
-          <div className="absolute inset-0 z-30 bg-slate-950/90 backdrop-blur-md p-6 flex flex-col items-center justify-center text-center animate-fadeIn">
-            <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 shadow-2xl">
+          <div className="absolute inset-0 z-30 bg-slate-950/90 backdrop-blur-md p-4 sm:p-6 flex flex-col items-center justify-center text-center animate-fadeIn overflow-y-auto">
+            <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl">
               <span className="text-4xl block mb-2">💥</span>
-              <h2 className="text-2xl sm:text-3xl font-black text-rose-400 font-heading">
+              <h2 className="text-2xl sm:text-3xl font-black text-rose-400 font-heading text-balance">
                 {lang === 'en' ? 'SYSTEM OVERHEAT - GAME OVER' : 'SISTEM COMPROMIS - GAME OVER'}
               </h2>
               <p className="text-xs text-slate-300 mt-1 mb-5">
@@ -1604,7 +1606,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
               </p>
 
               {/* Stats Box */}
-              <div className="grid grid-cols-2 gap-3 mb-6 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-left font-mono">
+              <div className="grid grid-cols-2 gap-3 mb-6 bg-slate-950 p-4 rounded-2xl border border-slate-800 text-left font-mono tabular-nums">
                 <div>
                   <span className="text-[10px] text-slate-400 uppercase">{lang === 'en' ? 'Final Score:' : 'Scor Final:'}</span>
                   <span className="text-lg font-black text-white block">{score.toLocaleString()}</span>
@@ -1623,19 +1625,19 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={handleStartGame}
-                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-xs uppercase tracking-wider transition active:scale-95 cursor-pointer shadow-lg shadow-cyan-600/30 flex items-center justify-center gap-1.5"
+                  className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-xs uppercase tracking-wider transition active:scale-95 cursor-pointer shadow-lg shadow-cyan-600/30 flex items-center justify-center gap-1.5"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-4 h-4 shrink-0" />
                   <span>{lang === 'en' ? 'Play Again' : 'Reîncearcă'}</span>
                 </button>
                 <button
                   type="button"
                   onClick={onBack}
-                  className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs transition cursor-pointer"
+                  className="min-h-[44px] py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs transition cursor-pointer"
                 >
                   {lang === 'en' ? 'Arcade Hub' : 'Catalog Arcade'}
                 </button>
@@ -1646,10 +1648,10 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
 
         {/* OVERLAY: VICTORY (Beat All 9 Waves) */}
         {gameState === 'victory' && (
-          <div className="absolute inset-0 z-30 bg-slate-950/90 backdrop-blur-md p-6 flex flex-col items-center justify-center text-center animate-fadeIn">
-            <div className="max-w-md w-full bg-slate-900 border-2 border-emerald-500/60 rounded-3xl p-6 shadow-2xl">
-              <span className="text-5xl block mb-2 animate-bounce">🏆</span>
-              <h2 className="text-2xl sm:text-3xl font-black text-emerald-400 font-heading">
+          <div className="absolute inset-0 z-30 bg-slate-950/90 backdrop-blur-md p-4 sm:p-6 flex flex-col items-center justify-center text-center animate-fadeIn overflow-y-auto">
+            <div className="max-w-md w-full bg-slate-900 border-2 border-emerald-500/60 rounded-3xl p-5 sm:p-6 shadow-2xl">
+              <span className="text-5xl block mb-2">🏆</span>
+              <h2 className="text-2xl sm:text-3xl font-black text-emerald-400 font-heading text-balance">
                 {lang === 'en' ? 'MOTHERBOARD SAVED! VICTORY!' : 'PLACA DE BAZĂ CURĂȚATĂ! VICTORIE!'}
               </h2>
               <p className="text-xs text-slate-300 mt-1 mb-5">
@@ -1658,23 +1660,23 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
                   : 'Toate cele 9 valuri și Overlordul Kernel au fost neutralizate. Rangul de Arhitect Defensiv atins!'}
               </p>
 
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 text-center font-mono mb-6">
+              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 text-center font-mono mb-6 tabular-nums">
                 <span className="text-[10px] text-slate-400 uppercase">{lang === 'en' ? 'Final Score:' : 'Scor de Campion:'}</span>
                 <span className="text-3xl font-black text-amber-300 block">{score.toLocaleString()}</span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={handleStartGame}
-                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs uppercase tracking-wider transition active:scale-95 cursor-pointer shadow-lg"
+                  className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs uppercase tracking-wider transition active:scale-95 cursor-pointer shadow-lg"
                 >
                   {lang === 'en' ? 'Play Again 🚀' : 'Joacă din Nou 🚀'}
                 </button>
                 <button
                   type="button"
                   onClick={onBack}
-                  className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold"
+                  className="min-h-[44px] py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer"
                 >
                   {lang === 'en' ? 'Exit' : 'Ieșire'}
                 </button>
@@ -1685,7 +1687,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
       </div>
 
       {/* Touch Arcade Controls for Mobile / Tablets */}
-      <div className="w-full max-w-[800px] mt-4 flex items-center justify-between gap-3 p-3 bg-slate-900/90 border border-slate-800 rounded-2xl">
+      <div className="w-full max-w-[800px] mt-4 flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-900/90 border border-slate-800 rounded-2xl">
         {/* Virtual Directional Pad */}
         <div className="flex items-center gap-2">
           <button
@@ -1693,7 +1695,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             onPointerDown={() => { touchLeftRef.current = true; }}
             onPointerUp={() => { touchLeftRef.current = false; }}
             onPointerLeave={() => { touchLeftRef.current = false; }}
-            className="w-14 h-14 rounded-2xl bg-slate-800 active:bg-cyan-600 border border-slate-700 active:border-cyan-400 text-white flex items-center justify-center text-xl font-bold shadow-lg touch-none"
+            className="w-14 h-14 rounded-2xl bg-slate-800 active:bg-cyan-600 border border-slate-700 active:border-cyan-400 text-white flex items-center justify-center text-xl font-bold shadow-lg touch-none cursor-pointer"
             aria-label="Left"
           >
             <ChevronLeft className="w-7 h-7" />
@@ -1703,7 +1705,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             onPointerDown={() => { touchRightRef.current = true; }}
             onPointerUp={() => { touchRightRef.current = false; }}
             onPointerLeave={() => { touchRightRef.current = false; }}
-            className="w-14 h-14 rounded-2xl bg-slate-800 active:bg-cyan-600 border border-slate-700 active:border-cyan-400 text-white flex items-center justify-center text-xl font-bold shadow-lg touch-none"
+            className="w-14 h-14 rounded-2xl bg-slate-800 active:bg-cyan-600 border border-slate-700 active:border-cyan-400 text-white flex items-center justify-center text-xl font-bold shadow-lg touch-none cursor-pointer"
             aria-label="Right"
           >
             <ChevronRight className="w-7 h-7" />
@@ -1715,25 +1717,25 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
           <button
             type="button"
             onClick={() => setAutoFire((a) => !a)}
-            className={`px-3 py-2 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+            className={`min-h-[44px] px-3 py-2 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
               autoFire
                 ? 'bg-amber-500/20 border-amber-400 text-amber-300'
                 : 'bg-slate-800 border-slate-700 text-slate-400'
             }`}
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Zap className="w-3.5 h-3.5 shrink-0" />
             <span className="hidden sm:inline">{lang === 'en' ? 'Auto-Fire' : 'Foc Automat'}</span>
           </button>
           <button
             type="button"
             onClick={() => setMouseFollow((m) => !m)}
-            className={`px-3 py-2 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer hidden sm:flex ${
+            className={`min-h-[44px] px-3 py-2 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer hidden sm:flex ${
               mouseFollow
                 ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
                 : 'bg-slate-800 border-slate-700 text-slate-400'
             }`}
           >
-            <Crosshair className="w-3.5 h-3.5" />
+            <Crosshair className="w-3.5 h-3.5 shrink-0" />
             <span>Mouse</span>
           </button>
         </div>
@@ -1748,7 +1750,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             title="Launch EMP Bomb (Space / B)"
           >
             <Bomb className="w-5 h-5 mb-0.5" />
-            <span className="text-[9px] font-mono">EMP ({bombs})</span>
+            <span className="text-[9px] font-mono tabular-nums">EMP ({bombs})</span>
           </button>
           <button
             type="button"
@@ -1758,7 +1760,7 @@ export const CyberInvadersGame: React.FC<CyberInvadersGameProps> = ({
             }}
             onPointerUp={() => { touchFireRef.current = false; }}
             onPointerLeave={() => { touchFireRef.current = false; }}
-            className="w-16 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 active:from-cyan-400 active:to-blue-500 text-white flex flex-col items-center justify-center text-xs font-black shadow-lg shadow-cyan-500/30 touch-none active:scale-95"
+            className="w-16 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 active:from-cyan-400 active:to-blue-500 text-white flex flex-col items-center justify-center text-xs font-black shadow-lg shadow-cyan-500/30 touch-none active:scale-95 cursor-pointer"
           >
             <Flame className="w-5 h-5 mb-0.5" />
             <span className="text-[10px] uppercase tracking-wider">{lang === 'en' ? 'FIRE' : 'TRAGE'}</span>

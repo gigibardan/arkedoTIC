@@ -984,22 +984,23 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-900/95 border-2 border-amber-500/40 rounded-3xl shadow-xl backdrop-blur">
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={() => {
               forceScrollToTop();
               onBack();
             }}
-            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center gap-1.5 cursor-pointer touch-manipulation active:scale-95"
+            className="min-h-[38px] p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center gap-1.5 cursor-pointer touch-manipulation active:scale-95"
           >
-            <ArrowLeft className="w-4 h-4 text-amber-400" />
+            <ArrowLeft className="w-4 h-4 text-amber-400 shrink-0" />
             <span className="text-xs font-bold">{lang === 'en' ? 'Back' : 'Înapoi la Jocuri'}</span>
           </button>
 
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl shadow-inner">
+            <div className="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl shadow-inner shrink-0">
               🟡
             </div>
             <div>
-              <h2 className="text-sm sm:text-base font-black text-white font-heading leading-tight flex items-center gap-1.5">
+              <h2 className="text-sm sm:text-base font-black text-white font-heading leading-tight flex flex-wrap items-center gap-1.5 text-balance">
                 <span>Cyber Pac-Man</span>
                 <span className="px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-black border border-amber-500/30">
                   {lang === 'en' ? 'NEON PCB' : 'RETRO 1980'}
@@ -1013,7 +1014,7 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
         </div>
 
         {/* HUD: Score, HighScore, Lives, Audio */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap tabular-nums">
           {/* Current Score */}
           <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-1.5 shadow-inner">
             <span className="text-[10px] font-mono text-slate-400 font-bold uppercase">{lang === 'en' ? 'Score' : 'Scor'}:</span>
@@ -1022,21 +1023,23 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
 
           {/* Personal Best Record */}
           <div className="px-3 py-1.5 rounded-xl bg-amber-950/40 border border-amber-500/30 flex items-center gap-1.5 shadow-inner">
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span className="text-[10px] font-mono text-amber-300 font-bold">{highScore.toLocaleString()}</span>
           </div>
 
           {/* Lives Counter (Pac-Man icons) */}
-          <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800">
+          <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800" aria-label={`${lives} ${lang === 'en' ? 'lives remaining' : 'vieți rămase'}`}>
             {Array.from({ length: Math.max(0, lives) }).map((_, i) => (
-              <span key={i} className="text-sm animate-pulse">🟡</span>
+              <span key={i} className="text-sm">🟡</span>
             ))}
           </div>
 
           {/* Sound Toggle */}
           <button
+            type="button"
             onClick={() => setSoundOn((s) => !s)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer touch-manipulation active:scale-95"
+            aria-label={soundOn ? (lang === 'en' ? 'Mute Sound' : 'Oprește Sunetul') : (lang === 'en' ? 'Unmute Sound' : 'Pornește Sunetul')}
+            className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer touch-manipulation active:scale-95 flex items-center justify-center"
             title={soundOn ? 'Sunet Activat' : 'Sunet Oprit'}
           >
             {soundOn ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-rose-400" />}
@@ -1051,7 +1054,7 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
         <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Level & Overclock Status Banner */}
-        <div className="w-full flex items-center justify-between text-xs font-mono mb-2 px-2 text-slate-400">
+        <div className="w-full flex flex-wrap items-center justify-between gap-2 text-xs font-mono mb-2 px-2 text-slate-400 tabular-nums">
           <div className="flex items-center gap-1.5">
             <span className="text-emerald-400 font-bold">{lang === 'en' ? 'STAGE' : 'NIVEL'}: {level}</span>
             <span>•</span>
@@ -1061,8 +1064,8 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
           </div>
 
           {frightenedTime > 0 && (
-            <div className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-bold text-[11px] animate-pulse flex items-center gap-1">
-              <Zap className="w-3 h-3 text-cyan-300" />
+            <div className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-bold text-[11px] flex items-center gap-1">
+              <Zap className="w-3 h-3 text-cyan-300 shrink-0" />
               <span>{lang === 'en' ? 'FIREWALL OVERCLOCK' : 'CARANTINĂ VIRUȘI'} ({Math.ceil(frightenedTime / 60)}s)</span>
             </div>
           )}
@@ -1083,12 +1086,12 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
 
           {/* Overlay: Game Start / Menu */}
           {!isPlaying && !gameOver && !victory && (
-            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-300">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/30 mb-3 animate-bounce">
+            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-in fade-in duration-300 overflow-y-auto">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/30 mb-3 shrink-0">
                 🟡
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
+              <h3 className="text-xl sm:text-2xl font-black text-white font-heading text-balance">
                 Cyber Pac-Man 1980
               </h3>
               <p className="text-xs text-slate-300 max-w-xs mt-1 mb-4 leading-relaxed">
@@ -1111,8 +1114,9 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
               </div>
 
               <button
+                type="button"
                 onClick={handleStartGame}
-                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-sm transition shadow-lg shadow-amber-500/30 flex items-center gap-2 cursor-pointer touch-manipulation active:scale-95"
+                className="min-h-[44px] px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-sm transition shadow-lg shadow-amber-500/30 flex items-center gap-2 cursor-pointer touch-manipulation active:scale-95"
               >
                 <Play className="w-4 h-4 fill-current" />
                 <span>{lang === 'en' ? 'Start Cyber Mission' : 'Pornește Misiunea Arcade'}</span>
@@ -1122,19 +1126,19 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
 
           {/* Overlay: Game Over Screen */}
           {gameOver && (
-            <div className="absolute inset-0 bg-rose-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-3xl shadow-xl shadow-rose-950/60 mb-2">
+            <div className="absolute inset-0 bg-rose-950/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-in zoom-in-95 duration-200 overflow-y-auto">
+              <div className="w-16 h-16 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-3xl shadow-xl shadow-rose-950/60 mb-2 shrink-0">
                 💀
               </div>
 
-              <h3 className="text-2xl font-black text-white font-heading">
+              <h3 className="text-2xl font-black text-white font-heading text-balance">
                 {lang === 'en' ? 'SYSTEM COMPROMISED!' : 'SISTEM INFECTAT!'}
               </h3>
               <p className="text-xs text-rose-200 mt-1 mb-3">
                 {lang === 'en' ? 'Trojan viruses caught your data packet!' : 'Virușii au capturat pachetul de date!'}
               </p>
 
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 w-full max-w-xs mb-4">
+              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 w-full max-w-xs mb-4 tabular-nums">
                 <div className="text-[10px] font-mono text-slate-400 uppercase font-bold">{lang === 'en' ? 'Final Score' : 'Scor Obținut'}</div>
                 <div className="text-2xl font-black text-amber-300 font-mono">{score.toLocaleString()}</div>
                 <div className="text-[10px] text-emerald-400 font-mono mt-0.5">
@@ -1142,17 +1146,19 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-center gap-2">
                 <button
+                  type="button"
                   onClick={handleStartGame}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-lg shadow-amber-500/30 flex items-center gap-1.5 cursor-pointer touch-manipulation active:scale-95"
+                  className="min-h-[42px] px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-lg shadow-amber-500/30 flex items-center gap-1.5 cursor-pointer touch-manipulation active:scale-95"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-4 h-4 shrink-0" />
                   <span>{lang === 'en' ? 'Play Again' : 'Reîncearcă'}</span>
                 </button>
                 <button
+                  type="button"
                   onClick={onBack}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition border border-slate-700 cursor-pointer"
+                  className="min-h-[42px] px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition border border-slate-700 cursor-pointer"
                 >
                   {lang === 'en' ? 'Exit Hub' : 'Ieșire'}
                 </button>
@@ -1162,19 +1168,19 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
 
           {/* Overlay: Victory Screen (Level Complete) */}
           {victory && (
-            <div className="absolute inset-0 bg-emerald-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400/50 flex items-center justify-center text-3xl shadow-xl shadow-emerald-950/60 mb-2 animate-bounce">
+            <div className="absolute inset-0 bg-emerald-950/90 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center animate-in zoom-in-95 duration-200 overflow-y-auto">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400/50 flex items-center justify-center text-3xl shadow-xl shadow-emerald-950/60 mb-2 shrink-0">
                 🏆
               </div>
 
-              <h3 className="text-2xl font-black text-white font-heading">
+              <h3 className="text-2xl font-black text-white font-heading text-balance">
                 {lang === 'en' ? 'STAGE CLEARED!' : 'CIRCUIT CURĂȚAT!'}
               </h3>
               <p className="text-xs text-emerald-200 mt-1 mb-3">
                 {lang === 'en' ? 'All data bits harvested successfully!' : 'Toți biții de date au fost colectați cu succes!'}
               </p>
 
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 w-full max-w-xs mb-4">
+              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 w-full max-w-xs mb-4 tabular-nums">
                 <div className="text-[10px] font-mono text-slate-400 uppercase font-bold">{lang === 'en' ? 'Current Score' : 'Punctaj Nivel'}</div>
                 <div className="text-2xl font-black text-amber-300 font-mono">{score.toLocaleString()}</div>
                 <div className="text-[10px] text-cyan-300 font-mono mt-0.5">
@@ -1183,8 +1189,9 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
               </div>
 
               <button
+                type="button"
                 onClick={handleNextLevel}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs sm:text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer touch-manipulation active:scale-95"
+                className="min-h-[44px] px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs sm:text-sm transition shadow-lg shadow-emerald-500/30 flex items-center gap-2 cursor-pointer touch-manipulation active:scale-95"
               >
                 <span>{lang === 'en' ? `Next Stage (Level ${level + 1}) ⚡` : `Următorul Nivel (Nivel ${level + 1}) ⚡`}</span>
               </button>
@@ -1195,30 +1202,34 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
         {/* Mobile Tactile Virtual D-Pad Controls */}
         <div className="sm:hidden mt-4 w-full flex flex-col items-center gap-1">
           <button
+            type="button"
             onClick={() => setNextDirection('UP')}
-            className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90"
+            className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90 cursor-pointer"
             aria-label="Sus"
           >
             <ChevronUp className="w-7 h-7" />
           </button>
           <div className="flex items-center gap-6">
             <button
+              type="button"
               onClick={() => setNextDirection('LEFT')}
-              className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90"
+              className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90 cursor-pointer"
               aria-label="Stânga"
             >
               <ChevronLeft className="w-7 h-7" />
             </button>
             <button
+              type="button"
               onClick={() => setNextDirection('DOWN')}
-              className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90"
+              className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90 cursor-pointer"
               aria-label="Jos"
             >
               <ChevronDown className="w-7 h-7" />
             </button>
             <button
+              type="button"
               onClick={() => setNextDirection('RIGHT')}
-              className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90"
+              className="w-14 h-12 rounded-xl bg-slate-800 active:bg-amber-500 active:text-slate-950 border border-slate-700 text-white flex items-center justify-center shadow-lg touch-manipulation active:scale-90 cursor-pointer"
               aria-label="Dreapta"
             >
               <ChevronRight className="w-7 h-7" />
@@ -1227,7 +1238,7 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
         </div>
 
         {/* Bottom Instruction & Controls Hint */}
-        <div className="mt-4 flex items-center justify-between w-full max-w-md text-slate-400 text-[11px] font-mono px-2">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 w-full max-w-md text-slate-400 text-[11px] font-mono px-2">
           <div className="flex items-center gap-1.5">
             <span className="hidden sm:inline">⌨️ {lang === 'en' ? 'Arrows or WASD to Move' : 'Taste Săgeți sau WASD'}</span>
             <span className="sm:hidden">📱 {lang === 'en' ? 'D-Pad or Swipe on Canvas' : 'Folosește butoanele sau Swipe'}</span>
@@ -1235,8 +1246,9 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
 
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setShowHowToPlay((v) => !v)}
-              className="text-cyan-400 hover:text-cyan-300 underline cursor-pointer"
+              className="min-h-[32px] px-2 text-cyan-400 hover:text-cyan-300 underline cursor-pointer"
             >
               {lang === 'en' ? 'How to Play' : 'Cum se Joacă'}
             </button>
@@ -1247,14 +1259,16 @@ export const CyberPacmanGame: React.FC<CyberPacmanGameProps> = ({
       {/* Pedagogical Tech Guide / How to Play Drawer */}
       {showHowToPlay && (
         <div className="p-4 sm:p-5 rounded-3xl bg-slate-900/90 border border-cyan-500/30 text-xs text-slate-300 space-y-3 animate-in fade-in">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <h4 className="font-bold text-white text-sm flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+            <h4 className="font-bold text-white text-sm flex items-center gap-2 text-balance">
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
               <span>{lang === 'en' ? 'Cyber Pac-Man: Mission Architecture' : 'Ghid Didactic: Arhitectura Cyber Pac-Man'}</span>
             </h4>
             <button
+              type="button"
               onClick={() => setShowHowToPlay(false)}
-              className="text-slate-400 hover:text-white"
+              aria-label={lang === 'en' ? 'Close Guide' : 'Închide Ghidul'}
+              className="min-h-[32px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white cursor-pointer"
             >
               ✕ {lang === 'en' ? 'Close' : 'Închide'}
             </button>

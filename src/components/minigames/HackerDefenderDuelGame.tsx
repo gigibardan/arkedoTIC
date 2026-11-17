@@ -22,7 +22,8 @@ import {
   CheckCircle2,
   XCircle,
   Bug,
-  HardDrive
+  HardDrive,
+  ArrowLeft
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
@@ -505,9 +506,9 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
     <div className="w-full max-w-4xl mx-auto space-y-5 animate-fadeIn">
       {/* Top Match HUD: Round Timer, Scores, and Role Indicator */}
       <div className="bg-slate-900/95 border-2 border-indigo-500/40 rounded-3xl p-4 sm:p-5 shadow-2xl relative overflow-hidden backdrop-blur-md">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           {/* Player 1 (Me) Info & Score */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
               onClick={() => {
@@ -515,22 +516,23 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
                 if (onBackToLobby) onBackToLobby();
                 else if (onBack) onBack();
               }}
+              aria-label={isEn ? 'Exit match' : 'Părăsește meciul'}
               title={isEn ? 'Exit match' : 'Părăsește meciul'}
-              className="px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer border border-slate-700/60"
+              className="min-w-[38px] min-h-[38px] p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center justify-center cursor-pointer border border-slate-700/60 shrink-0"
             >
-              ←
+              <ArrowLeft className="w-4 h-4" />
             </button>
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border-2 border-indigo-400 flex items-center justify-center text-2xl shadow-inner">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-indigo-500/20 border-2 border-indigo-400 flex items-center justify-center text-2xl shadow-inner shrink-0">
               {effectivePlayer.avatar || '⚡'}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-white">{effectivePlayer.name}</span>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+                <span className="text-sm font-black text-white truncate">{effectivePlayer.name}</span>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shrink-0">
                   {isEn ? 'YOU' : 'TU'}
                 </span>
               </div>
-              <div className="text-lg font-black font-mono text-cyan-300">
+              <div className="text-lg font-black font-mono text-cyan-300 tabular-nums">
                 {myTotalScore} <span className="text-xs font-normal text-slate-400">XP</span>
               </div>
             </div>
@@ -538,8 +540,8 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
 
           {/* Central Timer & Phase Badge */}
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-950 border border-slate-700 text-xs font-mono">
-              <Clock className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-950 border border-slate-700 text-xs font-mono tabular-nums">
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
               <span className="font-bold text-white">
                 {gameStage === 'halftime'
                   ? `SCHIMB DE ROLURI: ${halftimeRemaining}s`
@@ -550,12 +552,12 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
             {/* Current Active Role Badge */}
             <div className="mt-1.5 flex items-center gap-1.5 text-xs font-black uppercase tracking-wider">
               {isCurrentlyHacker ? (
-                <span className="text-rose-400 flex items-center gap-1 bg-rose-950/70 px-2.5 py-0.5 rounded-lg border border-rose-500/40 animate-pulse">
+                <span className="text-rose-400 flex items-center gap-1 bg-rose-950/70 px-2.5 py-0.5 rounded-lg border border-rose-500/40">
                   <Terminal className="w-3.5 h-3.5" />
                   {isEn ? 'ROLE: HACKER (ATTACK)' : 'ROL CURENT: ATACATOR 🦹‍♂️'}
                 </span>
               ) : (
-                <span className="text-emerald-400 flex items-center gap-1 bg-emerald-950/70 px-2.5 py-0.5 rounded-lg border border-emerald-500/40 animate-pulse">
+                <span className="text-emerald-400 flex items-center gap-1 bg-emerald-950/70 px-2.5 py-0.5 rounded-lg border border-emerald-500/40">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   {isEn ? 'ROLE: SYSADMIN (DEFEND)' : 'ROL CURENT: APĂRĂTOR 🛡️'}
                 </span>
@@ -564,19 +566,19 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
           </div>
 
           {/* Player 2 (Opponent / Bot) Info & Score */}
-          <div className="flex items-center gap-3 self-end sm:self-auto">
-            <div className="text-right">
+          <div className="flex items-center justify-end gap-3 min-w-0">
+            <div className="text-right min-w-0">
               <div className="flex items-center justify-end gap-2">
-                <span className="text-sm font-black text-white">{effectiveOpponent.name}</span>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                <span className="text-sm font-black text-white truncate">{effectiveOpponent.name}</span>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 shrink-0">
                   {opponent ? 'RIVAL' : 'AI'}
                 </span>
               </div>
-              <div className="text-lg font-black font-mono text-purple-300">
+              <div className="text-lg font-black font-mono text-purple-300 tabular-nums">
                 {oppTotalScore} <span className="text-xs font-normal text-slate-400">XP</span>
               </div>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border-2 border-purple-400 flex items-center justify-center text-2xl shadow-inner">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-purple-500/20 border-2 border-purple-400 flex items-center justify-center text-2xl shadow-inner shrink-0">
               {effectiveOpponent.avatar || '🤖'}
             </div>
           </div>
@@ -585,11 +587,11 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
 
       {/* HALFTIME ROLE SWAP MODAL OVERLAY */}
       {gameStage === 'halftime' && (
-        <div className="p-8 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border-2 border-amber-400 shadow-2xl text-center space-y-4 animate-in zoom-in-95">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-4xl shadow-lg animate-bounce">
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 border-2 border-amber-400 shadow-2xl text-center space-y-4 animate-in zoom-in-95">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-4xl shadow-lg">
             ⚡
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
             {isEn ? 'HALFTIME: ROLES ARE REVERSING!' : 'PAUZĂ TACTICĂ: SE INVERSEAZĂ ROLURILE!'}
           </h2>
           <p className="text-sm text-slate-300 max-w-lg mx-auto">
@@ -597,7 +599,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
               ? (isEn ? 'You attacked in Round 1. Now prepare to defend your server with Firewall and Antivirus!' : 'Ai atacat în Runda 1. Acum pregătește-te să aperi serverul cu Firewall și Antivirus!')
               : (isEn ? 'You defended in Round 1. Now prepare to launch tactical cyber exploits!' : 'Ai apărat serverul în Runda 1. Acum preiei consola de atac!')}
           </p>
-          <div className="inline-block px-4 py-2 rounded-2xl bg-slate-950 border border-amber-400 font-mono text-xl font-black text-amber-300">
+          <div className="inline-block px-4 py-2 rounded-2xl bg-slate-950 border border-amber-400 font-mono text-xl font-black text-amber-300 tabular-nums">
             {isEn ? `Round 2 starts in ${halftimeRemaining}s` : `Runda 2 începe în ${halftimeRemaining} secunde`}
           </div>
         </div>
@@ -605,30 +607,30 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
 
       {/* MATCH FINISHED SUMMARY OVERLAY */}
       {gameStage === 'finished' && (
-        <div className="p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 border-2 border-emerald-400 shadow-2xl text-center space-y-6 animate-in zoom-in-95">
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 border-2 border-emerald-400 shadow-2xl text-center space-y-6 animate-in zoom-in-95">
           <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-4xl shadow-lg">
             🏆
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
             {myTotalScore >= oppTotalScore
               ? (isEn ? 'VICTORY! Cybersecurity Champion' : 'VICTORIE! Marele Maestru al Securității')
               : (isEn ? 'DEFEAT! Good Match' : 'MECI ÎNCHEIAT! Felicitări pentru efort')}
           </h2>
 
-          <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-            <div className="p-4 rounded-2xl bg-slate-950 border border-cyan-500/40 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-md mx-auto">
+            <div className="p-4 rounded-2xl bg-slate-950 border border-cyan-500/40 text-center tabular-nums">
               <span className="text-xs font-mono text-slate-400 uppercase block">Scorul Tău Final</span>
               <span className="text-3xl font-black text-cyan-300 font-mono">{myTotalScore}</span>
               <span className="text-[11px] text-slate-500 block mt-1">Atac: {myHackerScore} • Apărare: {myDefenderScore}</span>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-950 border border-purple-500/40 text-center">
+            <div className="p-4 rounded-2xl bg-slate-950 border border-purple-500/40 text-center tabular-nums">
               <span className="text-xs font-mono text-slate-400 uppercase block">Scor Oponent</span>
               <span className="text-3xl font-black text-purple-300 font-mono">{oppTotalScore}</span>
               <span className="text-[11px] text-slate-500 block mt-1">Atac: {oppHackerScore} • Apărare: {oppDefenderScore}</span>
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <button
               type="button"
               onClick={() => {
@@ -636,7 +638,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
                 if (onBackToLobby) onBackToLobby();
                 else if (onBack) onBack();
               }}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm shadow-xl cursor-pointer transition transform active:scale-95 flex items-center gap-2"
+              className="min-h-[44px] px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm shadow-xl cursor-pointer transition transform active:scale-95 flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4" />
               <span>{isEn ? 'Back to Duel / Arcade' : 'Înapoi la Duel / Mini-Jocuri'}</span>
@@ -675,7 +677,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
                       style={{ width: `${energy}%` }}
                     />
                   </div>
-                  <span className="text-xs font-mono font-bold text-amber-300">{energy}%</span>
+                  <span className="text-xs font-mono font-bold text-amber-300 tabular-nums shrink-0">{energy}%</span>
                 </div>
               </div>
 
@@ -712,7 +714,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
                       </p>
 
                       {cooldowns[attack.type] > 0 && (
-                        <div className="absolute inset-0 bg-black/75 flex items-center justify-center font-mono text-xs font-bold text-amber-400">
+                        <div className="absolute inset-0 bg-black/75 flex items-center justify-center font-mono text-xs font-bold text-amber-400 tabular-nums">
                           Cooldown: {cooldowns[attack.type].toFixed(1)}s
                         </div>
                       )}
@@ -749,20 +751,20 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
                           ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
                           : serverHealth > 25
                           ? 'bg-amber-500'
-                          : 'bg-rose-600 animate-pulse'
+                          : 'bg-rose-600'
                       }`}
                       style={{ width: `${serverHealth}%` }}
                     />
                   </div>
-                  <span className="text-xs font-mono font-bold text-emerald-300">{serverHealth}% HP</span>
+                  <span className="text-xs font-mono font-bold text-emerald-300 tabular-nums shrink-0">{serverHealth}% HP</span>
                 </div>
               </div>
 
               {/* Cyber Radar: Incoming Packets moving towards Server */}
               <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2.5">
-                <div className="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800/80 pb-1.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400 border-b border-slate-800/80 pb-1.5">
                   <span className="flex items-center gap-1.5 text-cyan-400">
-                    <Radio className="w-3.5 h-3.5 animate-pulse" />
+                    <Radio className="w-3.5 h-3.5" />
                     Radar Pachete de Rețea (În Tranzit)
                   </span>
                   <span>Timp de Reacție: ~4 secunde</span>
@@ -770,7 +772,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
 
                 {threatPackets.length === 0 ? (
                   <div className="py-8 text-center text-xs font-mono text-slate-500 flex flex-col items-center gap-2">
-                    <Wifi className="w-6 h-6 text-emerald-500/40 animate-pulse" />
+                    <Wifi className="w-6 h-6 text-emerald-500/60" />
                     <span>Rețea curată în acest moment. Nicio amenințare activă...</span>
                   </div>
                 ) : (
@@ -804,7 +806,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
                             </div>
                           </div>
 
-                          <div className="relative z-10 shrink-0 self-end sm:self-auto text-[10px] font-mono text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-500/30">
+                          <div className="relative z-10 shrink-0 self-end sm:self-auto text-[10px] font-mono text-rose-300 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-500/30 tabular-nums">
                             {100 - progressPct}% distanță
                           </div>
                         </div>
@@ -816,7 +818,7 @@ export const HackerDefenderDuelGame: React.FC<HackerDefenderDuelGameProps> = ({
 
               {/* 4 Defensive Tool Action Buttons */}
               <div>
-                <p className="text-xs font-bold text-slate-300 mb-2 flex items-center justify-between">
+                <p className="text-xs font-bold text-slate-300 mb-2 flex flex-wrap items-center justify-between gap-2">
                   <span>Apasă instrumentul corespunzător (sau tastele 1, 2, 3, 4):</span>
                 </p>
 

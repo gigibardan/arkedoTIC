@@ -1289,7 +1289,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <h2 className="text-base sm:text-xl font-black text-white tracking-tight font-heading">
+              <h2 className="text-base sm:text-xl font-black text-white tracking-tight font-heading text-balance">
                 CYBER DINO: MATRIX RUSH
               </h2>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[9px] sm:text-[10px] font-black border border-emerald-500/40 uppercase tracking-wider flex items-center gap-1">
@@ -1306,9 +1306,9 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
         </div>
 
         {/* Action controls right */}
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-300">
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono font-bold text-amber-300 tabular-nums">
+            <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>Record: {highScore}</span>
           </div>
 
@@ -1320,7 +1320,8 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
                 setSoundMuted(nextMuted);
                 sounds.setEnabled(!nextMuted);
               }}
-              className="p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer"
+              aria-label={soundMuted ? (lang === 'en' ? 'Unmute Sound' : 'Activează Sunetul') : (lang === 'en' ? 'Mute Sound' : 'Dezactivează Sunetul')}
+              className="min-w-[36px] min-h-[36px] p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer flex items-center justify-center"
               title={soundMuted ? (lang === 'en' ? 'Unmute Sound' : 'Activează Sunetul (MUTE)') : (lang === 'en' ? 'Mute Sound' : 'Dezactivează Sunetul (ON)')}
             >
               {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
@@ -1332,9 +1333,9 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
                 sounds.playClick();
                 onBack();
               }}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-slate-200 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+              className="min-h-[36px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-slate-200 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
             >
-              <ArrowLeft className="w-4 h-4 text-rose-400" />
+              <ArrowLeft className="w-4 h-4 text-rose-400 shrink-0" />
               <span>{lang === 'en' ? 'Arcade Hub' : 'Înapoi la Jocuri'}</span>
             </button>
           </div>
@@ -1346,33 +1347,33 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
         {/* HUD Live Stats Bar */}
         <div className="absolute top-2 left-2 right-2 sm:top-3 sm:left-4 sm:right-4 z-10 flex flex-wrap items-center justify-between gap-1.5 pointer-events-none">
           {/* Left HUD: Score & HighScore & Dynamic Speed */}
-          <div className="flex items-center gap-2 sm:gap-3 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg">
+          <div className="flex items-center gap-2 sm:gap-3 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg tabular-nums">
             <div className="flex items-center gap-1 font-mono">
               <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400">Scor:</span>
               <span className="text-sm sm:text-lg font-black text-emerald-400">{score.toString().padStart(5, '0')}</span>
             </div>
             <div className="h-3 sm:h-4 w-px bg-slate-700" />
             <div className="flex items-center gap-1 font-mono text-[11px] sm:text-xs">
-              <Trophy className="w-3 h-3 text-amber-400" />
+              <Trophy className="w-3 h-3 text-amber-400 shrink-0" />
               <span className="text-amber-300 font-bold">{highScore.toString().padStart(5, '0')}</span>
             </div>
             <div className="h-3 sm:h-4 w-px bg-slate-700" />
             <div className="flex items-center gap-1 font-mono text-[10px] sm:text-xs text-cyan-300 font-bold" title="Viteză dinamică progresivă">
-              <Zap className="w-3 h-3 text-cyan-400 animate-pulse" />
+              <Zap className="w-3 h-3 text-cyan-400 shrink-0" />
               <span>{currentDisplaySpeed}x</span>
             </div>
           </div>
 
           {/* Center HUD: Biome & Boss Warning */}
           {bossWarning && (
-            <div className="px-3 py-1 rounded-xl bg-rose-950/90 border border-rose-500 text-rose-200 text-[10px] sm:text-xs font-black animate-pulse flex items-center gap-1 shadow-lg">
-              <Flame className="w-3.5 h-3.5 text-amber-400" />
+            <div className="px-3 py-1 rounded-xl bg-rose-950/90 border border-rose-500 text-rose-200 text-[10px] sm:text-xs font-black flex items-center gap-1 shadow-lg shadow-rose-500/20">
+              <Flame className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>ATAC TITAN GLITCH!</span>
             </div>
           )}
 
           {/* Right HUD: Bits & Ammo & Powerups */}
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 rounded-xl border border-slate-800 shadow-lg tabular-nums">
             {/* Bits */}
             <div className="flex items-center gap-1 font-mono text-[11px] sm:text-xs text-emerald-300 font-bold">
               <span>🪙</span>
@@ -1433,7 +1434,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               🦖
             </div>
 
-            <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight font-heading mb-1">
+            <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight font-heading mb-1 text-balance">
               CYBER DINO: MATRIX RUSH
             </h3>
             <p className="text-[11px] sm:text-xs text-slate-300 max-w-md mb-3 sm:mb-4 leading-relaxed">
@@ -1445,7 +1446,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setGameMode('endless')}
-                className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                className={`flex-1 min-w-[105px] min-h-[40px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   gameMode === 'endless'
                     ? 'bg-emerald-600 border-emerald-400 text-white shadow-lg ring-2 ring-emerald-400/40'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
@@ -1457,7 +1458,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setGameMode('campaign')}
-                className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                className={`flex-1 min-w-[105px] min-h-[40px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   gameMode === 'campaign'
                     ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg ring-2 ring-indigo-400/40'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
@@ -1469,7 +1470,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setGameMode('hardcore')}
-                className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                className={`flex-1 min-w-[105px] min-h-[40px] py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   gameMode === 'hardcore'
                     ? 'bg-rose-600 border-rose-400 text-white shadow-lg ring-2 ring-rose-400/40'
                     : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
@@ -1485,8 +1486,8 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedSkin('classic')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
-                  selectedSkin === 'classic' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400' : 'text-slate-400'
+                className={`min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
+                  selectedSkin === 'classic' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 🦖 Clasic
@@ -1494,8 +1495,8 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedSkin('mecha')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
-                  selectedSkin === 'mecha' ? 'bg-slate-500/20 text-slate-300 border border-slate-400' : 'text-slate-400'
+                className={`min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
+                  selectedSkin === 'mecha' ? 'bg-slate-500/20 text-slate-300 border border-slate-400' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 🤖 Mecha
@@ -1503,8 +1504,8 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedSkin('hacker')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
-                  selectedSkin === 'hacker' ? 'bg-green-500/20 text-green-300 border border-green-400' : 'text-slate-400'
+                className={`min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
+                  selectedSkin === 'hacker' ? 'bg-green-500/20 text-green-300 border border-green-400' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 👾 Hacker
@@ -1512,8 +1513,8 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedSkin('neon')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
-                  selectedSkin === 'neon' ? 'bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400' : 'text-slate-400'
+                className={`min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer ${
+                  selectedSkin === 'neon' ? 'bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
                 🦄 Neon
@@ -1554,13 +1555,13 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-rose-950/80 border-2 border-rose-500 flex items-center justify-center text-2xl sm:text-3xl mb-2 text-rose-400 shadow-xl shrink-0">
               💥
             </div>
-            <h3 className="text-lg sm:text-2xl font-black text-rose-400 font-heading mb-1">
+            <h3 className="text-lg sm:text-2xl font-black text-rose-400 font-heading mb-1 text-balance">
               404: IMPACT DETECTAT!
             </h3>
             <p className="text-xs text-slate-400 mb-3 sm:mb-4">Dinozaurul Arky a lovit un obstacol în Matrix!</p>
 
             {/* Results Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-lg w-full mb-4 text-xs font-mono">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-lg w-full mb-4 text-xs font-mono tabular-nums">
               <div className="p-2 sm:p-3 rounded-xl bg-slate-900 border border-slate-800">
                 <span className="text-slate-400 block text-[10px]">Scor Final:</span>
                 <span className="text-sm sm:text-base font-black text-emerald-400">{score} pts</span>
@@ -1583,16 +1584,16 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
               <button
                 type="button"
                 onClick={() => startNewGame(gameMode, campaignLevel)}
-                className="flex-1 min-w-[140px] px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95"
+                className="flex-1 min-w-[130px] min-h-[44px] px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-4 h-4 shrink-0" />
                 <span>Reîncearcă [SPACE]</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setGameState('menu')}
-                className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer active:scale-95"
+                className="min-h-[44px] px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer active:scale-95"
               >
                 Meniu Principal
               </button>
@@ -1606,7 +1607,7 @@ export const CyberDinoRunner: React.FC<CyberDinoRunnerProps> = ({
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-3xl sm:text-4xl mb-2 text-amber-400 shadow-xl shrink-0">
               🏆
             </div>
-            <h3 className="text-lg sm:text-2xl font-black text-amber-300 font-heading mb-1">
+            <h3 className="text-lg sm:text-2xl font-black text-amber-300 font-heading mb-1 text-balance">
               VICTORIE! TITANUL GLITCH A FOST ANIHILAT!
             </h3>
             <p className="text-xs text-slate-300 mb-4 max-w-md">

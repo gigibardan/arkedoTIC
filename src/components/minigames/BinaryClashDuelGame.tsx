@@ -201,7 +201,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-1">
                 <span className="font-black text-white text-sm truncate">{studentName} (Tu)</span>
-                <span className="font-mono text-xs font-bold text-cyan-300">{score} XP</span>
+                <span className="font-mono text-xs font-bold text-cyan-300 tabular-nums">{score} XP</span>
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mt-1">
                 <div
@@ -209,7 +209,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block tabular-nums">
                 {lang === 'en' ? `Byte ${challengeIndex + 1} of ${TARGET_CHALLENGES.length}` : `Octet ${challengeIndex + 1} din ${TARGET_CHALLENGES.length}`}
               </span>
             </div>
@@ -221,7 +221,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
               VS
             </div>
             {streak > 1 && (
-              <span className="text-[11px] font-black text-amber-400 flex items-center gap-1 mt-1 animate-bounce font-mono">
+              <span className="text-[11px] font-black text-amber-400 flex items-center gap-1 mt-1 font-mono tabular-nums">
                 <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> {streak}x Combo!
               </span>
             )}
@@ -231,7 +231,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
           <div className="sm:col-span-5 flex items-center gap-3">
             <div className="min-w-0 flex-1 text-right">
               <div className="flex items-center justify-between gap-1">
-                <span className="font-mono text-xs font-bold text-rose-300">{opponentScore} XP</span>
+                <span className="font-mono text-xs font-bold text-rose-300 tabular-nums">{opponentScore} XP</span>
                 <span className="font-black text-white text-sm truncate">{opponentName}</span>
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mt-1">
@@ -240,7 +240,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
                   style={{ width: `${opponentProgress}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block tabular-nums">
                 {opponentProgress}% finalizat
               </span>
             </div>
@@ -265,7 +265,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
             {lang === 'en' ? 'Target Decimal Value' : 'Număr Țintă de Format în Binar'}
           </span>
           <div className="flex items-center justify-center gap-3 my-2">
-            <span className="text-5xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-amber-200 font-mono tracking-tight">
+            <span className="text-5xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-amber-200 font-mono tracking-tight tabular-nums">
               {currentChallenge.targetDec}
             </span>
             <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-mono border border-slate-700">
@@ -278,7 +278,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
         </div>
 
         {/* 8-Bit Interactive Switch Board */}
-        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2.5 sm:gap-3 mb-6 relative z-10">
+        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 sm:gap-3 mb-6 relative z-10">
           {BIT_VALUES.map((val, idx) => {
             const isActive = bits[idx];
             return (
@@ -286,20 +286,20 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
                 key={val}
                 type="button"
                 onClick={() => toggleBit(idx)}
-                className={`flex flex-col items-center justify-between p-3 sm:p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer active:scale-95 shadow-lg ${
+                className={`flex flex-col items-center justify-between p-3 sm:p-4 min-h-[84px] rounded-2xl border-2 transition-all duration-200 cursor-pointer active:scale-95 shadow-lg ${
                   isActive
                     ? 'bg-gradient-to-b from-emerald-500/30 to-emerald-950/80 border-emerald-400 text-emerald-200 shadow-emerald-500/20 ring-2 ring-emerald-400/20'
                     : 'bg-slate-950/80 border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200'
                 }`}
               >
                 {/* Weight value (2^n) */}
-                <span className="text-[11px] sm:text-xs font-mono font-bold opacity-75">
+                <span className="text-[11px] sm:text-xs font-mono font-bold opacity-75 tabular-nums">
                   +{val}
                 </span>
 
                 {/* State: 1 or 0 */}
-                <span className={`text-2xl sm:text-3xl font-black my-1 font-mono ${
-                  isActive ? 'text-emerald-300 scale-110 animate-pulse' : 'text-slate-600'
+                <span className={`text-2xl sm:text-3xl font-black my-1 font-mono tabular-nums ${
+                  isActive ? 'text-emerald-300 scale-105' : 'text-slate-600'
                 }`}>
                   {isActive ? '1' : '0'}
                 </span>
@@ -326,7 +326,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
                 {lang === 'en' ? 'Current Sum:' : 'Suma Biților Activi:'}
               </div>
               <div className="flex items-baseline gap-2">
-                <span className={`text-2xl font-black font-mono ${
+                <span className={`text-2xl font-black font-mono tabular-nums ${
                   currentSum === currentChallenge.targetDec
                     ? 'text-emerald-400'
                     : currentSum > currentChallenge.targetDec
@@ -335,7 +335,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
                 }`}>
                   {currentSum}
                 </span>
-                <span className="text-xs text-slate-500 font-mono">
+                <span className="text-xs text-slate-500 font-mono tabular-nums">
                   / {currentChallenge.targetDec}
                 </span>
                 {currentSum > currentChallenge.targetDec && (
@@ -348,12 +348,12 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
           </div>
 
           {/* Special Tactical Quick Boosters */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
               onClick={handleInvertAll}
               disabled={Boolean(powerUpCooldown.invert && Date.now() < powerUpCooldown.invert)}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="min-h-[40px] px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-indigo-500/40 text-indigo-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
               title="Poarta NOT: Inversează toți biții (0 devine 1, 1 devine 0)"
             >
               <Zap className="w-3.5 h-3.5 text-indigo-400" />
@@ -363,7 +363,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
             <button
               type="button"
               onClick={handleClearAll}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+              className="min-h-[40px] px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
               title="Resetează toți biții la 0"
             >
               <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
@@ -376,11 +376,11 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
       {/* Win Banner / Completion Overlay */}
       {hasFinishedLocal && (
         <div className="bg-gradient-to-r from-emerald-950/90 via-slate-900 to-teal-950/90 border-2 border-emerald-500/60 rounded-3xl p-6 text-center shadow-2xl">
-          <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-2 animate-bounce" />
-          <h3 className="text-xl font-black text-white font-heading">
+          <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-2" />
+          <h3 className="text-xl font-black text-white font-heading text-balance">
             {lang === 'en' ? 'Binary Duel Completed!' : 'Cursa Biților a Fost Câștigată! 🚀'}
           </h3>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-300 mt-1 tabular-nums">
             {lang === 'en'
               ? `You mastered binary conversions with a final score of ${score} XP!`
               : `Ai convertit toți octeții cu succes și ai obținut ${score} XP!`}
@@ -389,7 +389,7 @@ export const BinaryClashDuelGame: React.FC<BinaryClashDuelGameProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="mt-4 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition cursor-pointer shadow-lg shadow-emerald-600/30"
+              className="mt-4 min-h-[44px] px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition cursor-pointer shadow-lg shadow-emerald-600/30"
             >
               {lang === 'en' ? 'Return to Lobby' : 'Înapoi în Arenă'}
             </button>

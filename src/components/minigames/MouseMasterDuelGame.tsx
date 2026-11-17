@@ -581,14 +581,14 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
       {/* Top Duel Match Header Bar */}
       <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/90 to-slate-900 border border-indigo-500/40 shadow-xl flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/30 ring-2 ring-cyan-400/40">
-            <MousePointer className="w-6 h-6 animate-pulse" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/30 ring-2 ring-cyan-400/40 shrink-0">
+            <MousePointer className="w-6 h-6" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg sm:text-xl font-black text-white font-heading tracking-tight flex items-center gap-1.5">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-lg sm:text-xl font-black text-white font-heading tracking-tight flex flex-wrap items-center gap-1.5">
                 <span>CYBER CURSOR CLASH</span>
-                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-400/40">
+                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-400/40 whitespace-nowrap">
                   DUEL 1v1
                 </span>
               </h2>
@@ -602,7 +602,7 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
         </div>
 
         {/* Stats Pills */}
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap tabular-nums">
           <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
             <div className="text-[9px] font-bold text-slate-400 uppercase">Combo</div>
             <div className="text-sm sm:text-base font-black text-amber-400 font-mono">
@@ -628,11 +628,11 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
       <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-3">
         {/* Track 1: Player (Me) */}
         <div className="space-y-1">
-          <div className="flex justify-between items-center text-xs font-bold">
-            <span className="text-cyan-300 flex items-center gap-1.5">
-              <span>{studentAvatar}</span> {studentName} <span className="text-slate-400 font-normal">(Tu)</span>
+          <div className="flex justify-between items-center text-xs font-bold tabular-nums">
+            <span className="text-cyan-300 flex items-center gap-1.5 min-w-0">
+              <span className="shrink-0">{studentAvatar}</span> <span className="truncate">{studentName}</span> <span className="text-slate-400 font-normal shrink-0">(Tu)</span>
             </span>
-            <span className="font-mono text-cyan-200">{progress}%</span>
+            <span className="font-mono text-cyan-200 shrink-0">{progress}%</span>
           </div>
           <div className="h-5 w-full rounded-full bg-slate-950 p-1 border border-cyan-500/40 relative overflow-hidden">
             <div
@@ -646,11 +646,11 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
 
         {/* Track 2: Opponent */}
         <div className="space-y-1">
-          <div className="flex justify-between items-center text-xs font-bold">
-            <span className="text-rose-300 flex items-center gap-1.5">
-              <span>{opponentAvatar}</span> {opponentName} <span className="text-slate-400 font-normal">(Rival)</span>
+          <div className="flex justify-between items-center text-xs font-bold tabular-nums">
+            <span className="text-rose-300 flex items-center gap-1.5 min-w-0">
+              <span className="shrink-0">{opponentAvatar}</span> <span className="truncate">{opponentName}</span> <span className="text-slate-400 font-normal shrink-0">(Rival)</span>
             </span>
-            <span className="font-mono text-rose-200">{opponentProgress}%</span>
+            <span className="font-mono text-rose-200 shrink-0">{opponentProgress}%</span>
           </div>
           <div className="h-5 w-full rounded-full bg-slate-950 p-1 border border-rose-500/40 relative overflow-hidden">
             <div
@@ -663,7 +663,7 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
         </div>
 
         {/* Milestone Indicator Badges */}
-        <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-500">
+        <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-500 tabular-nums">
           <span>START</span>
           {MILESTONES.map((m) => (
             <span
@@ -691,8 +691,8 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-25 pointer-events-none" />
 
         {/* Current Stage Instruction Header Banner */}
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 px-4 py-1.5 rounded-full bg-slate-900/90 border border-cyan-400/50 backdrop-blur-md text-xs font-bold text-slate-200 flex items-center gap-2 shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 w-[calc(100%-1.5rem)] sm:w-auto max-w-lg px-3.5 py-1.5 rounded-2xl sm:rounded-full bg-slate-900/90 border border-cyan-400/50 backdrop-blur-md text-[11px] sm:text-xs font-bold text-slate-200 flex items-center justify-center gap-2 shadow-lg text-center pointer-events-none">
+          <Target className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
           <span>
             {stage === 1 && (lang === 'en' ? 'Phase 1 (15%): Click Glowing Precision Targets!' : 'Faza 1 (15%): Lovește Țintele de Precizie!')}
             {stage === 2 && (lang === 'en' ? 'Phase 2 (30%): Double-Click Rapid Energy Cores!' : 'Faza 2 (30%): Dublu-Click Rapid pe Nodurile de Energie!')}
@@ -710,26 +710,26 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
             {targets.map((t) => (
               <button
                 key={t.id}
+                type="button"
                 onClick={(e) => handleTargetClick(t, e)}
-                onTouchStart={(e) => handleTargetClick(t, e)}
                 style={{
                   left: `${t.x}%`,
                   top: `${t.y}%`,
-                  width: `${t.size}px`,
-                  height: `${t.size}px`,
+                  width: `${Math.max(44, t.size)}px`,
+                  height: `${Math.max(44, t.size)}px`,
                 }}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 flex items-center justify-center transition-transform transform active:scale-90 animate-scale-up cursor-pointer shadow-xl ${
+                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 flex items-center justify-center transition-transform transform active:scale-90 animate-scale-up cursor-pointer shadow-xl touch-manipulation ${
                   t.type === 'bonus_gold'
-                    ? 'bg-amber-500/30 border-amber-400 text-amber-300 ring-4 ring-amber-500/40 shadow-amber-500/50 animate-pulse'
+                    ? 'bg-amber-500/30 border-amber-400 text-amber-300 ring-4 ring-amber-500/40 shadow-amber-500/50'
                     : t.type === 'micro_snipe'
                     ? 'bg-rose-500/30 border-rose-400 text-rose-300 ring-2 ring-rose-500/50 shadow-rose-500/40'
                     : 'bg-cyan-500/30 border-cyan-400 text-cyan-200 ring-2 ring-cyan-500/40 shadow-cyan-500/40'
                 }`}
               >
-                <Crosshair className="w-5 h-5 animate-spin" />
+                <Crosshair className="w-5 h-5" />
               </button>
             ))}
-            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400">
+            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400 tabular-nums">
               Ținte atinse: {stage1Hits} / 5
             </div>
           </div>
@@ -741,15 +741,16 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
             {targets.map((t) => (
               <button
                 key={t.id}
+                type="button"
                 onDoubleClick={(e) => handleDoubleTargetClick(t, e)}
                 onClick={(e) => handleDoubleTargetClick(t, e)} // Also supports rapid click for touch
                 style={{
                   left: `${t.x}%`,
                   top: `${t.y}%`,
-                  width: `${t.size}px`,
-                  height: `${t.size}px`,
+                  width: `${Math.max(48, t.size)}px`,
+                  height: `${Math.max(48, t.size)}px`,
                 }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-indigo-600/40 border-2 border-indigo-400 text-white flex flex-col items-center justify-center p-1 shadow-2xl ring-4 ring-indigo-500/40 animate-pulse active:scale-95 cursor-pointer"
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-indigo-600/40 border-2 border-indigo-400 text-white flex flex-col items-center justify-center p-1 shadow-2xl ring-4 ring-indigo-500/40 active:scale-95 cursor-pointer touch-manipulation"
               >
                 <Zap className="w-5 h-5 text-amber-300" />
                 <span className="text-[10px] font-black font-mono">
@@ -757,7 +758,7 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
                 </span>
               </button>
             ))}
-            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400">
+            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400 tabular-nums">
               Noduri dublu-click absorbite: {stage2Hits} / 5
             </div>
           </div>
@@ -765,11 +766,23 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
 
         {/* ================= STAGE 3: CIRCUIT LASER TRACE ================= */}
         {stage === 3 && (
-          <div className="relative w-full h-full flex flex-col items-center justify-center p-6">
-            <div className="relative w-full max-w-xl h-36 bg-slate-900/90 rounded-2xl border-2 border-cyan-500/40 p-4 flex items-center justify-between overflow-hidden">
+          <div className="relative w-full h-full flex flex-col items-center justify-center p-4 sm:p-6">
+            <div
+              onTouchMove={(e) => {
+                const touch = e.touches[0];
+                if (!touch) return;
+                const el = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null;
+                const pctStr = el?.getAttribute('data-node-pct');
+                if (pctStr) {
+                  const pct = Number(pctStr);
+                  if (!Number.isNaN(pct)) handleCircuitHover(pct);
+                }
+              }}
+              className="relative w-full max-w-xl h-36 bg-slate-900/90 rounded-2xl border-2 border-cyan-500/40 p-3 sm:p-4 flex items-center justify-between overflow-hidden touch-none"
+            >
               {/* Glowing Trace Guide Line */}
               <div
-                className="absolute left-8 right-8 h-4 rounded-full bg-slate-950 border border-cyan-500/50 overflow-hidden"
+                className="absolute left-6 right-6 sm:left-8 sm:right-8 h-4 rounded-full bg-slate-950 border border-cyan-500/50 overflow-hidden"
               >
                 <div
                   className="h-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-400 transition-all duration-100"
@@ -779,26 +792,29 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
 
               {/* Interactive Hover Nodes along the Wire */}
               {[10, 30, 50, 70, 90, 100].map((nodePct, i) => (
-                <div
+                <button
                   key={i}
+                  type="button"
+                  data-node-pct={nodePct}
                   onMouseEnter={() => handleCircuitHover(nodePct)}
                   onTouchStart={() => handleCircuitHover(nodePct)}
-                  className={`relative z-10 w-10 h-10 rounded-xl border-2 flex items-center justify-center font-mono text-xs font-black transition-all cursor-pointer ${
+                  onClick={() => handleCircuitHover(nodePct)}
+                  className={`relative z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-xl border-2 flex items-center justify-center font-mono text-xs font-black transition-all cursor-pointer tabular-nums ${
                     circuitProgress >= nodePct
                       ? 'bg-emerald-500 border-emerald-300 text-slate-950 shadow-lg shadow-emerald-500/50 scale-110'
                       : 'bg-slate-800 border-cyan-400 text-cyan-300 hover:bg-cyan-500/30'
                   }`}
                 >
                   {i + 1}
-                </div>
+                </button>
               ))}
             </div>
 
             <div className="mt-4 text-center">
               <p className="text-xs text-cyan-300 font-mono">
                 {lang === 'en'
-                  ? 'Move cursor or finger smoothly over nodes 1 ➔ 6 without stopping!'
-                  : 'Treci cu mouse-ul sau degetul succesiv peste nodurile 1 ➔ 6!'}
+                  ? 'Move cursor or slide finger smoothly over nodes 1 – 6!'
+                  : 'Treci cu mouse-ul sau glisează degetul succesiv peste nodurile 1 – 6!'}
               </p>
             </div>
           </div>
@@ -806,18 +822,19 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
 
         {/* ================= STAGE 4: DRAG & DROP HARDWARE ================= */}
         {stage === 4 && (
-          <div className="relative w-full h-full p-4 sm:p-6 flex flex-col justify-between">
+          <div className="relative w-full h-full p-4 sm:p-6 pt-14 flex flex-col justify-between overflow-y-auto">
             {/* Target Motherboard Sockets */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
               {HARDWARE_PARTS.map((part) => {
                 const isPlaced = placedSlots.has(part.slot);
                 return (
-                  <div
+                  <button
                     key={part.slot}
+                    type="button"
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={() => handleDropSlot(part.slot)}
                     onClick={() => draggedItem && handleDropSlot(part.slot)}
-                    className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col items-center justify-center min-h-[95px] ${
+                    className={`p-3 rounded-2xl border-2 text-center transition-all flex flex-col items-center justify-center min-h-[88px] sm:min-h-[95px] cursor-pointer touch-manipulation ${
                       isPlaced
                         ? 'bg-emerald-950/80 border-emerald-400 text-emerald-300'
                         : 'bg-slate-900/80 border-dashed border-slate-700 text-slate-400 hover:border-cyan-400'
@@ -828,30 +845,31 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
                     <span className="text-[10px] opacity-70">
                       {isPlaced ? 'Montat cu succes' : 'Plasează componenta'}
                     </span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
 
             {/* Draggable Component Inventory */}
-            <div className="pt-4 border-t border-slate-800">
+            <div className="pt-3 border-t border-slate-800">
               <div className="text-[11px] font-bold text-slate-400 mb-2 uppercase font-mono">
                 Componente de montat (Trage sau apasă pe componentă, apoi pe soclu):
               </div>
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 {HARDWARE_PARTS.filter((p) => !placedSlots.has(p.slot)).map((part) => (
-                  <div
+                  <button
                     key={part.id}
+                    type="button"
                     draggable
                     onDragStart={() => setDraggedItem(part)}
                     onClick={() => setDraggedItem(part)}
-                    className={`px-3 py-2 rounded-xl bg-slate-900 border-2 ${part.color} shadow-lg flex items-center gap-2 cursor-grab active:cursor-grabbing hover:scale-105 transition ${
+                    className={`min-h-[42px] px-3 py-2 rounded-xl bg-slate-900 border-2 ${part.color} shadow-lg flex items-center gap-2 cursor-grab active:cursor-grabbing hover:scale-105 transition touch-manipulation ${
                       draggedItem?.id === part.id ? 'ring-2 ring-amber-400 scale-105 bg-slate-800' : ''
                     }`}
                   >
                     <span className="text-xl">{part.icon}</span>
                     <span className="text-xs font-bold text-slate-200">{part.name}</span>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -864,6 +882,7 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
             {projectiles.map((p) => (
               <button
                 key={p.id}
+                type="button"
                 onContextMenu={(e) => handleDeflect(p.id, e)}
                 onClick={(e) => {
                   if (mobileShieldActive) {
@@ -874,12 +893,14 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
                   left: `${p.x}%`,
                   top: `${p.y}%`,
                 }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 px-3 py-2 rounded-2xl bg-rose-950 border-2 border-rose-400 text-rose-200 flex items-center gap-2 shadow-2xl shadow-rose-500/50 animate-bounce active:scale-95 cursor-pointer"
+                className="absolute -translate-x-1/2 -translate-y-1/2 px-3 py-2 rounded-2xl bg-rose-950 border-2 border-rose-400 text-rose-200 flex items-center gap-2 shadow-2xl shadow-rose-500/50 active:scale-95 cursor-pointer touch-manipulation"
               >
                 <span className="text-xl">{p.icon}</span>
                 <div className="text-left">
                   <div className="text-xs font-black">{p.threatName}</div>
-                  <div className="text-[9px] text-amber-300 font-mono">CLICK DREAPTA 🛡️</div>
+                  <div className="text-[9px] text-amber-300 font-mono">
+                    {mobileShieldActive ? 'ATINGE PENTRU A DISTRUGE 🛡️' : 'CLICK DREAPTA 🛡️'}
+                  </div>
                 </div>
               </button>
             ))}
@@ -887,19 +908,20 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
             {/* Mobile Shield Toggle Assistance */}
             <div className="absolute bottom-3 right-4 sm:hidden">
               <button
+                type="button"
                 onClick={() => setMobileShieldActive((prev) => !prev)}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-lg ${
+                className={`min-h-[40px] px-3 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 shadow-lg cursor-pointer touch-manipulation ${
                   mobileShieldActive
                     ? 'bg-rose-500 text-white border-rose-400 ring-2 ring-rose-300'
                     : 'bg-slate-900 text-slate-300 border-slate-700'
                 }`}
               >
-                <ShieldCheck className="w-4 h-4" />
+                <ShieldCheck className="w-4 h-4 shrink-0" />
                 <span>{mobileShieldActive ? 'Scut Activ (Atinge Ținte)' : 'Activează Scut Touch'}</span>
               </button>
             </div>
 
-            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400">
+            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400 tabular-nums">
               Amenințări distruse: {deflectedCount} / 5
             </div>
           </div>
@@ -911,20 +933,20 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
             {movingBugs.map((bug) => (
               <button
                 key={bug.id}
+                type="button"
                 onClick={(e) => handleBugHit(bug.id, e)}
-                onTouchStart={(e) => handleBugHit(bug.id, e)}
                 style={{
                   left: `${bug.x}%`,
                   top: `${bug.y}%`,
-                  width: `${bug.size}px`,
-                  height: `${bug.size}px`,
+                  width: `${Math.max(48, bug.size)}px`,
+                  height: `${Math.max(48, bug.size)}px`,
                 }}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 flex items-center justify-center transition-all shadow-xl active:scale-90 cursor-crosshair ${bug.color}`}
+                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 flex items-center justify-center transition-all shadow-xl active:scale-90 cursor-crosshair touch-manipulation ${bug.color}`}
               >
-                <span className="text-2xl animate-spin">👾</span>
+                <span className="text-2xl">👾</span>
               </button>
             ))}
-            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400">
+            <div className="absolute bottom-3 left-4 text-xs font-mono text-slate-400 tabular-nums">
               Bug-uri eliminate: {bugsEliminated} / 4
             </div>
           </div>
@@ -934,17 +956,17 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
         {stage === 7 && (
           <div className="relative w-full h-full flex flex-col items-center justify-center p-4">
             <button
+              type="button"
               onClick={handleOverclockClick}
-              onTouchStart={handleOverclockClick}
-              className="group relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-rose-600 via-amber-500 to-cyan-400 border-4 border-white p-2 shadow-[0_0_50px_rgba(239,68,68,0.6)] animate-pulse flex flex-col items-center justify-center text-white active:scale-95 cursor-pointer"
+              className="group relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-rose-600 via-amber-500 to-cyan-400 border-4 border-white p-2 shadow-[0_0_50px_rgba(239,68,68,0.6)] flex flex-col items-center justify-center text-white active:scale-95 cursor-pointer touch-manipulation"
             >
-              <Gauge className="w-12 h-12 text-white animate-spin" />
+              <Gauge className="w-12 h-12 text-white" />
               <span className="text-sm font-black tracking-wider uppercase mt-1">OVERCLOCK!</span>
-              <span className="text-xs font-mono font-bold bg-slate-950/60 px-2 py-0.5 rounded-full mt-1">
+              <span className="text-xs font-mono font-bold bg-slate-950/60 px-2 py-0.5 rounded-full mt-1 tabular-nums">
                 {overclockClicks} / 12 Clicks
               </span>
             </button>
-            <p className="mt-4 text-xs font-mono text-amber-300 font-bold animate-bounce">
+            <p className="mt-4 text-xs font-mono text-amber-300 font-bold text-center">
               ⚡ DĂ CLICK CÂT MAI REPEDE PENTRU A CÂȘTIGA DUELUL! ⚡
             </p>
           </div>
@@ -959,7 +981,7 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
           </div>
 
           <div>
-            <h3 className="text-2xl font-black text-white font-heading">
+            <h3 className="text-2xl font-black text-white font-heading text-balance">
               {isWinner
                 ? lang === 'en'
                   ? 'VICTORY! CYBER MOUSE CHAMPION! 🏆'
@@ -975,7 +997,7 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
           </div>
 
           {/* Match Recap Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-xl mx-auto text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-xl mx-auto text-center tabular-nums">
             <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
               <div className="text-[10px] font-bold text-slate-400 uppercase">Scor Final</div>
               <div className="text-lg font-black text-amber-400 font-mono">{score} pts</div>
@@ -996,11 +1018,12 @@ export const MouseMasterDuelGame: React.FC<MouseMasterDuelGameProps> = ({
             </div>
           </div>
 
-          <div className="pt-2 flex justify-center gap-3">
+          <div className="pt-2 flex flex-wrap justify-center gap-3">
             {onBack && (
               <button
+                type="button"
                 onClick={onBack}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-xs shadow-lg transition active:scale-95 cursor-pointer"
+                className="min-h-[44px] px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-xs shadow-lg transition active:scale-95 cursor-pointer"
               >
                 {lang === 'en' ? 'Back to Duel Lobby' : 'Înapoi la Arena de Duel'}
               </button>

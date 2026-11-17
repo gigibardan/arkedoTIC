@@ -1461,7 +1461,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
             {/* Float feedback popup (Green on hit, Red on miss) */}
             {feedbackEffect && (
-              <div className={`absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-xl font-mono text-xs font-bold shadow-2xl animate-bounce pointer-events-none border ${
+              <div className={`absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4 py-1.5 rounded-xl font-mono text-xs font-bold shadow-2xl pointer-events-none border whitespace-nowrap tabular-nums ${
                 feedbackEffect.isMiss
                   ? 'bg-rose-950/95 border-rose-500 text-rose-300'
                   : 'bg-slate-900/90 border-amber-500/40 text-amber-300'
@@ -1472,11 +1472,11 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
             {/* IDLE SCREEN OVERLAY */}
             {gameState === 'idle' && (
-              <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-16 h-16 rounded-3xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl">
+              <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-center overflow-y-auto">
+                <div className="w-16 h-16 rounded-3xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl shrink-0">
                   🖱️
                 </div>
-                <h3 className="text-xl font-black text-white font-heading">
+                <h3 className="text-xl font-black text-white font-heading text-balance">
                   {lang === 'en' ? 'Mouse Master Lab Ready' : 'Laboratorul de Mouse Este Pregătit'}
                 </h3>
                 <p className="text-xs text-slate-400 max-w-md mt-1 leading-relaxed">
@@ -1485,6 +1485,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                     : 'Antrenează reflexele și precizia. Atenție la tipurile de noduri: click stânga, dublu-click, click dreapta, rotiță scroll și bătălii cu boși.'}
                 </p>
                 <button
+                  type="button"
                   onClick={() => {
                     if (activeMode === 'campaign') {
                       startCampaignStage(currentStage);
@@ -1492,7 +1493,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       startSurvivalFrenzy();
                     }
                   }}
-                  className="mt-5 px-7 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-xl shadow-cyan-500/20 cursor-pointer"
+                  className="mt-5 min-h-[44px] px-7 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm transition flex items-center gap-2 shadow-xl shadow-cyan-500/20 cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-slate-950" />
                   <span>{lang === 'en' ? 'Start Round' : 'Pornește Runda'}</span>
@@ -1502,23 +1503,24 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
             {/* STAGE CLEARED OVERLAY */}
             {gameState === 'stage_cleared' && (
-              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
-                <div className="w-16 h-16 rounded-3xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl">
+              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center animate-fade-in overflow-y-auto">
+                <div className="w-16 h-16 rounded-3xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl shrink-0">
                   🏆
                 </div>
-                <h3 className="text-2xl font-black text-amber-300 font-heading">
+                <h3 className="text-2xl font-black text-amber-300 font-heading text-balance">
                   {lang === 'en' ? `Stage ${currentStage} Complete!` : `Etapa ${currentStage} Finalizată!`}
                 </h3>
-                <p className="text-xs text-slate-300 max-w-sm mt-1">
+                <p className="text-xs text-slate-300 max-w-sm mt-1 tabular-nums">
                   {lang === 'en'
                     ? `Flawless reflexes! You scored ${score} points and collected Mouse Bits for hardware upgrades.`
                     : `Reflexe extraordinare! Ai obținut ${score} puncte și ai colectat Mouse Bits pentru atelierul hardware.`}
                 </p>
 
-                <div className="flex items-center gap-3 mt-6">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
                   <button
+                    type="button"
                     onClick={() => startCampaignStage(currentStage)}
-                    className="px-5 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-2 cursor-pointer border border-slate-700"
+                    className="min-h-[40px] px-5 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-2 cursor-pointer border border-slate-700"
                   >
                     <RotateCcw className="w-4 h-4" />
                     <span>{lang === 'en' ? 'Replay Stage' : 'Rejoacă Etapa'}</span>
@@ -1526,8 +1528,9 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
                   {currentStage < 10 && (
                     <button
+                      type="button"
                       onClick={() => startCampaignStage(currentStage + 1)}
-                      className="px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/30"
+                      className="min-h-[40px] px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/30"
                     >
                       <span>{lang === 'en' ? 'Next Stage' : 'Etapa Următoare'}</span>
                       <ChevronRight className="w-4 h-4" />
@@ -1539,32 +1542,33 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
             {/* GAME OVER OVERLAY */}
             {gameState === 'game_over' && (
-              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
-                <div className="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl">
+              <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md z-30 flex flex-col items-center justify-center p-6 text-center animate-fade-in overflow-y-auto">
+                <div className="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl mb-3 shadow-xl shrink-0">
                   ⭐
                 </div>
-                <h3 className="text-2xl font-black text-white font-heading">
+                <h3 className="text-2xl font-black text-white font-heading text-balance">
                   {lang === 'en' ? 'Session Complete!' : 'Sesiune Încheiată!'}
                 </h3>
-                <div className="mt-3 flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                <div className="mt-3 flex flex-wrap items-center justify-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-2xl tabular-nums">
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-mono block">Scor Final</span>
                     <span className="text-2xl font-black text-amber-300 font-mono">{score} pts</span>
                   </div>
-                  <div className="w-px h-8 bg-slate-800" />
+                  <div className="hidden sm:block w-px h-8 bg-slate-800" />
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-mono block">Max Combo</span>
                     <span className="text-2xl font-black text-emerald-400 font-mono">x{maxCombo}</span>
                   </div>
-                  <div className="w-px h-8 bg-slate-800" />
+                  <div className="hidden sm:block w-px h-8 bg-slate-800" />
                   <div>
                     <span className="text-[10px] text-slate-400 uppercase font-mono block">Ținte Nimerite</span>
                     <span className="text-2xl font-black text-cyan-300 font-mono">{hitsCount}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 mt-6">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
                   <button
+                    type="button"
                     onClick={() => {
                       if (activeMode === 'campaign') {
                         startCampaignStage(currentStage);
@@ -1572,7 +1576,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                         startSurvivalFrenzy();
                       }
                     }}
-                    className="px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/30"
+                    className="min-h-[42px] px-6 py-2.5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/30"
                   >
                     <RotateCcw className="w-4 h-4" />
                     <span>{lang === 'en' ? 'Play Again' : 'Joacă Din Nou'}</span>
@@ -1595,11 +1599,11 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                     onContextMenu={handleTargetRightClick}
                     className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex flex-col items-center justify-center font-bold transition-transform cursor-pointer shadow-2xl active:scale-95 group ${
                       currentTarget.type === 'decoy'
-                        ? 'bg-rose-950/90 border-2 border-rose-500 text-rose-300 animate-pulse shadow-rose-950/60'
+                        ? 'bg-rose-950/90 border-2 border-rose-500 text-rose-300 shadow-rose-950/60'
                         : currentTarget.type === 'right_click'
                         ? 'bg-blue-600/90 border-2 border-cyan-300 shadow-cyan-500/30'
                         : currentTarget.type === 'triple_click'
-                        ? 'bg-purple-600/90 border-2 border-purple-300 shadow-purple-500/30 animate-pulse'
+                        ? 'bg-purple-600/90 border-2 border-purple-300 shadow-purple-500/30'
                         : currentTarget.type === 'double_click'
                         ? 'bg-amber-600/90 border-2 border-amber-300 shadow-amber-500/30'
                         : 'bg-emerald-600/90 border-2 border-emerald-300 shadow-emerald-500/30'
@@ -1616,7 +1620,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       {lang === 'en' ? currentTarget.labelEn : currentTarget.labelRo}
                     </span>
                     {currentTarget.clicksNeeded > 1 && (
-                      <span className="text-[9px] font-mono text-amber-200 mt-0.5">
+                      <span className="text-[9px] font-mono text-amber-200 mt-0.5 tabular-nums">
                         {currentTarget.currentClicks} / {currentTarget.clicksNeeded}
                       </span>
                     )}
@@ -1630,8 +1634,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                     className="absolute -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full flex items-center justify-center cursor-pointer z-10"
                     style={{ left: `${currentTarget.x}%`, top: `${currentTarget.y}%` }}
                   >
-                    {/* Concentric shrinking animated ring */}
-                    <div className="absolute inset-0 rounded-full border-2 border-cyan-400 animate-ping opacity-75" />
+                    <div className="absolute inset-0 rounded-full border-2 border-cyan-400/70" />
                     <div className="w-14 h-14 rounded-full bg-emerald-500/80 border-2 border-emerald-300 flex items-center justify-center text-xl shadow-xl shadow-emerald-500/40">
                       🎯
                     </div>
@@ -1642,13 +1645,13 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                 {currentTarget.type === 'boss' && (
                   <div
                     onClick={handleTargetLeftClick}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-full bg-gradient-to-br from-rose-600 via-purple-700 to-slate-900 border-4 border-rose-400 flex flex-col items-center justify-center cursor-pointer shadow-2xl shadow-rose-600/50 animate-pulse active:scale-95 z-10"
+                    className="absolute -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-full bg-gradient-to-br from-rose-600 via-purple-700 to-slate-900 border-4 border-rose-400 flex flex-col items-center justify-center cursor-pointer shadow-2xl shadow-rose-600/50 active:scale-95 z-10"
                     style={{
                       left: `${currentTarget.x}%`,
                       top: `${currentTarget.y}%`,
                     }}
                   >
-                    <span className="text-4xl drop-shadow animate-bounce">👾</span>
+                    <span className="text-4xl drop-shadow">👾</span>
                     <span className="text-xs font-black text-white uppercase font-mono mt-1">
                       {lang === 'en' ? 'CLICK SPAM BOSS!' : 'CLICK RAPID BOSS!'}
                     </span>
@@ -1660,7 +1663,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                         }}
                       />
                     </div>
-                    <span className="text-[10px] font-mono text-rose-200 font-bold mt-1">
+                    <span className="text-[10px] font-mono text-rose-200 font-bold mt-1 tabular-nums">
                       HP: {currentTarget.currentHealth} / {currentTarget.maxHealth}
                     </span>
                   </div>
@@ -1675,7 +1678,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       top: `${currentTarget.y}%`,
                     }}
                   >
-                    <span className="text-3xl animate-bounce">🎚️</span>
+                    <span className="text-3xl">🎚️</span>
                     <span className="text-xs font-black text-cyan-300 uppercase font-mono mt-1">
                       {lang === 'en' ? 'SPIN WHEEL RAPIDLY!' : 'ROTEȘTE ROTIȚA MOUSE!'}
                     </span>
@@ -1685,7 +1688,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                         style={{ width: `${scrollCharge}%` }}
                       />
                     </div>
-                    <span className="text-[11px] font-mono text-cyan-200 mt-2 font-bold">
+                    <span className="text-[11px] font-mono text-cyan-200 mt-2 font-bold tabular-nums">
                       {Math.round(scrollCharge)}% / 100%
                     </span>
                   </div>
@@ -1840,14 +1843,14 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                     </div>
 
                     {/* 3 Drop Targets */}
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3">
                       <div
                         onDragOver={handleDragOver}
                         onDrop={(e) => handleDropOnZone(e, 'cpu')}
-                        className="h-24 rounded-2xl border-2 border-dashed border-emerald-400 bg-emerald-950/20 flex flex-col items-center justify-center p-2 text-center transition hover:bg-emerald-950/40"
+                        className="h-24 rounded-2xl border-2 border-dashed border-emerald-400 bg-emerald-950/20 flex flex-col items-center justify-center p-1.5 sm:p-2 text-center transition hover:bg-emerald-950/40 min-w-0"
                       >
-                        <Cpu className="w-6 h-6 text-emerald-400 mb-1" />
-                        <span className="text-[11px] font-bold text-emerald-300 font-mono">
+                        <Cpu className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 mb-1 shrink-0" />
+                        <span className="text-[10px] sm:text-[11px] font-bold text-emerald-300 font-mono leading-tight">
                           {lang === 'en' ? 'Motherboard CPU' : 'Placă de Bază CPU'}
                         </span>
                       </div>
@@ -1855,10 +1858,10 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       <div
                         onDragOver={handleDragOver}
                         onDrop={(e) => handleDropOnZone(e, 'quarantine')}
-                        className="h-24 rounded-2xl border-2 border-dashed border-rose-400 bg-rose-950/20 flex flex-col items-center justify-center p-2 text-center transition hover:bg-rose-950/40"
+                        className="h-24 rounded-2xl border-2 border-dashed border-rose-400 bg-rose-950/20 flex flex-col items-center justify-center p-1.5 sm:p-2 text-center transition hover:bg-rose-950/40 min-w-0"
                       >
-                        <Trash2 className="w-6 h-6 text-rose-400 mb-1" />
-                        <span className="text-[11px] font-bold text-rose-300 font-mono">
+                        <Trash2 className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400 mb-1 shrink-0" />
+                        <span className="text-[10px] sm:text-[11px] font-bold text-rose-300 font-mono leading-tight">
                           {lang === 'en' ? 'Firewall Quarantine' : 'Carantină Firewall'}
                         </span>
                       </div>
@@ -1866,10 +1869,10 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                       <div
                         onDragOver={handleDragOver}
                         onDrop={(e) => handleDropOnZone(e, 'storage')}
-                        className="h-24 rounded-2xl border-2 border-dashed border-cyan-400 bg-cyan-950/20 flex flex-col items-center justify-center p-2 text-center transition hover:bg-cyan-950/40"
+                        className="h-24 rounded-2xl border-2 border-dashed border-cyan-400 bg-cyan-950/20 flex flex-col items-center justify-center p-1.5 sm:p-2 text-center transition hover:bg-cyan-950/40 min-w-0"
                       >
-                        <HardDrive className="w-6 h-6 text-cyan-400 mb-1" />
-                        <span className="text-[11px] font-bold text-cyan-300 font-mono">
+                        <HardDrive className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 mb-1 shrink-0" />
+                        <span className="text-[10px] sm:text-[11px] font-bold text-cyan-300 font-mono leading-tight">
                           {lang === 'en' ? 'NVMe Storage' : 'Unitate NVMe SSD'}
                         </span>
                       </div>
@@ -1886,7 +1889,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                         className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all ${
                           dot.caught
                             ? 'bg-emerald-500 text-slate-950 scale-75'
-                            : 'bg-rose-500/80 text-white border border-rose-300 animate-pulse'
+                            : 'bg-rose-500/80 text-white border border-rose-300'
                         }`}
                         style={{ left: `${dot.x}%`, top: `${dot.y}%` }}
                       >
@@ -1920,25 +1923,27 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col gap-4 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-cyan-400" />
+                <Activity className="w-5 h-5 text-cyan-400 shrink-0" />
                 <h3 className="text-base font-bold text-white">
                   {lang === 'en' ? 'Click Speed Test (CPS)' : 'Test Viteză de Clic (CPS)'}
                 </h3>
               </div>
               <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
                 <button
+                  type="button"
                   disabled={benchmarkState === 'clicking'}
                   onClick={() => setBenchmarkTime(5)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition ${
+                  className={`min-h-[30px] px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition cursor-pointer ${
                     benchmarkTime === 5 ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   5s
                 </button>
                 <button
+                  type="button"
                   disabled={benchmarkState === 'clicking'}
                   onClick={() => setBenchmarkTime(10)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition ${
+                  className={`min-h-[30px] px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition cursor-pointer ${
                     benchmarkTime === 10 ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -1954,6 +1959,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             </p>
 
             <button
+              type="button"
               onClick={benchmarkState === 'ready' ? startBenchmark : handleBenchmarkClick}
               className={`w-full h-44 rounded-3xl font-black text-xl flex flex-col items-center justify-center transition active:scale-95 cursor-pointer shadow-inner border-2 ${
                 benchmarkState === 'clicking'
@@ -1963,9 +1969,9 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             >
               {benchmarkState === 'ready' && (
                 <>
-                  <MousePointer className="w-8 h-8 text-cyan-400 mb-2 animate-bounce" />
+                  <MousePointer className="w-8 h-8 text-cyan-400 mb-2" />
                   <span>{lang === 'en' ? 'CLICK TO START' : 'APASĂ PENTRU A ÎNCEPE'}</span>
-                  <span className="text-xs font-normal text-slate-500 mt-1 font-mono">
+                  <span className="text-xs font-normal text-slate-500 mt-1 font-mono tabular-nums">
                     {benchmarkTime}s sprint
                   </span>
                 </>
@@ -1973,8 +1979,8 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
               {benchmarkState === 'clicking' && (
                 <>
-                  <span className="text-4xl font-mono">{benchmarkClicks}</span>
-                  <span className="text-xs font-mono uppercase tracking-wider text-cyan-200 mt-1">
+                  <span className="text-4xl font-mono tabular-nums">{benchmarkClicks}</span>
+                  <span className="text-xs font-mono uppercase tracking-wider text-cyan-200 mt-1 tabular-nums">
                     {lang === 'en' ? 'CLICKS' : 'CLICURI'} • {benchmarkTimeLeft}s rămase
                   </span>
                 </>
@@ -1982,8 +1988,8 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
               {benchmarkState === 'finished' && (
                 <>
-                  <span className="text-3xl font-mono text-cyan-300 font-bold">{benchmarkCPS} CPS</span>
-                  <span className="text-xs text-slate-300 mt-1">
+                  <span className="text-3xl font-mono text-cyan-300 font-bold tabular-nums">{benchmarkCPS} CPS</span>
+                  <span className="text-xs text-slate-300 mt-1 tabular-nums">
                     {benchmarkClicks} clicuri în {benchmarkTime}s
                   </span>
                   <span className="text-xs font-mono text-emerald-400 font-bold mt-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40">
@@ -2001,8 +2007,9 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
             {benchmarkState === 'finished' && (
               <button
+                type="button"
                 onClick={() => setBenchmarkState('ready')}
-                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer border border-slate-700"
+                className="min-h-[40px] w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer border border-slate-700"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>{lang === 'en' ? 'Test Again' : 'Repetă Testul CPS'}</span>
@@ -2013,7 +2020,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
           {/* Reaction Time Reflex Test */}
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col gap-4 shadow-xl">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <Zap className="w-5 h-5 text-amber-400" />
+              <Zap className="w-5 h-5 text-amber-400 shrink-0" />
               <h3 className="text-base font-bold text-white">
                 {lang === 'en' ? 'Twitch Reaction Time' : 'Timp de Reacție la Stimul (ms)'}
               </h3>
@@ -2025,13 +2032,14 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                 : 'Așteaptă ca panoul să devină verde aprins, apoi apasă cât de repede poți!'}
             </p>
 
-            <div
+            <button
+              type="button"
               onClick={handleReactionClick}
               className={`w-full h-44 rounded-3xl font-black text-lg flex flex-col items-center justify-center transition cursor-pointer select-none border-2 text-center p-4 ${
                 reactionStage === 'wait'
                   ? 'bg-slate-950 text-slate-400 border-slate-800'
                   : reactionStage === 'ready'
-                  ? 'bg-rose-950 text-rose-300 border-rose-600 animate-pulse'
+                  ? 'bg-rose-950 text-rose-300 border-rose-600'
                   : reactionStage === 'green'
                   ? 'bg-emerald-500 text-slate-950 border-emerald-300 shadow-2xl shadow-emerald-500/50 scale-105'
                   : reactionStage === 'too_soon'
@@ -2055,7 +2063,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
               {reactionStage === 'green' && (
                 <>
-                  <span className="text-4xl animate-bounce">⚡</span>
+                  <span className="text-4xl">⚡</span>
                   <span className="text-2xl font-black uppercase">{lang === 'en' ? 'CLICK NOW!' : 'APASĂ ACUM!'}</span>
                 </>
               )}
@@ -2069,7 +2077,7 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
 
               {reactionStage === 'clicked' && reactionResultMs && (
                 <>
-                  <span className="text-4xl font-mono font-bold text-cyan-300">{reactionResultMs} ms</span>
+                  <span className="text-4xl font-mono font-bold text-cyan-300 tabular-nums">{reactionResultMs} ms</span>
                   <span className="text-xs text-slate-300 mt-1">
                     {reactionResultMs < 200
                       ? '⚡ Reflex Divin (Sub 200ms)'
@@ -2081,11 +2089,12 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                   </span>
                 </>
               )}
-            </div>
+            </button>
 
             <button
+              type="button"
               onClick={startReactionTest}
-              className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              className="min-h-[40px] w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md"
             >
               <Play className="w-4 h-4 fill-slate-950" />
               <span>{lang === 'en' ? 'Start Reaction Attempt' : 'Lansează Încercare de Reacție'}</span>
@@ -2103,16 +2112,16 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
                 <Sliders className="w-4 h-4" />
                 <span>{lang === 'en' ? 'Custom Hardware Overclocking' : 'Laborator Personalizare Hardware'}</span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black text-white font-heading mt-0.5">
+              <h3 className="text-xl sm:text-2xl font-black text-white font-heading mt-0.5 text-balance">
                 {lang === 'en' ? 'Mouse Components Atelier' : 'Atelier Componente Mouse'}
               </h3>
             </div>
 
             <div className="px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-400" />
+              <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
               <div>
                 <span className="text-[10px] text-slate-400 font-mono uppercase block">Sold Disponibil</span>
-                <span className="font-bold text-amber-300 font-mono text-base">{mouseBits} Mouse Bits 🪙</span>
+                <span className="font-bold text-amber-300 font-mono text-base tabular-nums">{mouseBits} Mouse Bits 🪙</span>
               </div>
             </div>
           </div>
@@ -2121,12 +2130,12 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
             {/* 1. DPI SENSOR */}
             <div className="bg-slate-950 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between gap-4">
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <h4 className="font-bold text-white text-sm flex items-center gap-2">
-                    <Crosshair className="w-4 h-4 text-cyan-400" />
+                    <Crosshair className="w-4 h-4 text-cyan-400 shrink-0" />
                     <span>Senzor Optic PixArt 26.000 DPI</span>
                   </h4>
-                  <span className="text-xs font-mono text-cyan-300 font-bold">Nivel {upgrades.dpiSensor} / 3</span>
+                  <span className="text-xs font-mono text-cyan-300 font-bold tabular-nums shrink-0">Nivel {upgrades.dpiSensor} / 3</span>
                 </div>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                   {lang === 'en'
@@ -2136,24 +2145,25 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               </div>
 
               <button
+                type="button"
                 disabled={upgrades.dpiSensor >= 3 || mouseBits < 40}
                 onClick={() => buyUpgrade('dpiSensor', 40)}
-                className="w-full py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                className="min-h-[38px] w-full py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <span>{upgrades.dpiSensor >= 3 ? 'MAXIM' : 'Upgradează (+15% Hitbox)'}</span>
-                {upgrades.dpiSensor < 3 && <span className="font-mono text-cyan-200">• 40 Bits</span>}
+                {upgrades.dpiSensor < 3 && <span className="font-mono text-cyan-200 tabular-nums">• 40 Bits</span>}
               </button>
             </div>
 
             {/* 2. OMRON SWITCHES */}
             <div className="bg-slate-950 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between gap-4">
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <h4 className="font-bold text-white text-sm flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-amber-400" />
+                    <Zap className="w-4 h-4 text-amber-400 shrink-0" />
                     <span>Micro-switch-uri Optice Omron 50M</span>
                   </h4>
-                  <span className="text-xs font-mono text-amber-300 font-bold">Nivel {upgrades.opticalSwitches} / 3</span>
+                  <span className="text-xs font-mono text-amber-300 font-bold tabular-nums shrink-0">Nivel {upgrades.opticalSwitches} / 3</span>
                 </div>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                   {lang === 'en'
@@ -2163,24 +2173,25 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               </div>
 
               <button
+                type="button"
                 disabled={upgrades.opticalSwitches >= 3 || mouseBits < 45}
                 onClick={() => buyUpgrade('opticalSwitches', 45)}
-                className="w-full py-2 rounded-xl bg-amber-600 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                className="min-h-[38px] w-full py-2 rounded-xl bg-amber-600 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <span>{upgrades.opticalSwitches >= 3 ? 'MAXIM' : 'Upgradează (Critical Clicks)'}</span>
-                {upgrades.opticalSwitches < 3 && <span className="font-mono text-amber-200">• 45 Bits</span>}
+                {upgrades.opticalSwitches < 3 && <span className="font-mono text-amber-200 tabular-nums">• 45 Bits</span>}
               </button>
             </div>
 
             {/* 3. PTFE SKATES */}
             <div className="bg-slate-950 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between gap-4">
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <h4 className="font-bold text-white text-sm flex items-center gap-2">
-                    <Disc className="w-4 h-4 text-emerald-400" />
+                    <Disc className="w-4 h-4 text-emerald-400 shrink-0" />
                     <span>Patine PTFE Glider Pro</span>
                   </h4>
-                  <span className="text-xs font-mono text-emerald-300 font-bold">Nivel {upgrades.ptfeSkates} / 3</span>
+                  <span className="text-xs font-mono text-emerald-300 font-bold tabular-nums shrink-0">Nivel {upgrades.ptfeSkates} / 3</span>
                 </div>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
                   {lang === 'en'
@@ -2190,24 +2201,25 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               </div>
 
               <button
+                type="button"
                 disabled={upgrades.ptfeSkates >= 3 || mouseBits < 35}
                 onClick={() => buyUpgrade('ptfeSkates', 35)}
-                className="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                className="min-h-[38px] w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <span>{upgrades.ptfeSkates >= 3 ? 'MAXIM' : 'Upgradează (+0.4s Ținte)'}</span>
-                {upgrades.ptfeSkates < 3 && <span className="font-mono text-emerald-200">• 35 Bits</span>}
+                {upgrades.ptfeSkates < 3 && <span className="font-mono text-emerald-200 tabular-nums">• 35 Bits</span>}
               </button>
             </div>
 
             {/* 4. EMP NANOCLICKER PULSE */}
             <div className="bg-slate-950 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between gap-4">
               <div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <h4 className="font-bold text-white text-sm flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-purple-400" />
+                    <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
                     <span>Puls EMP Nanoclicker (Tasta Space)</span>
                   </h4>
-                  <span className="text-xs font-mono text-purple-300 font-bold">
+                  <span className="text-xs font-mono text-purple-300 font-bold shrink-0">
                     {upgrades.empNanoclicker > 0 ? 'Deblocat' : 'Blocat'}
                   </span>
                 </div>
@@ -2219,12 +2231,13 @@ export const MouseAgilityV2Game: React.FC<MouseAgilityV2GameProps> = ({ onBack, 
               </div>
 
               <button
+                type="button"
                 disabled={upgrades.empNanoclicker >= 1 || mouseBits < 60}
                 onClick={() => buyUpgrade('empNanoclicker', 60)}
-                className="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                className="min-h-[38px] w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <span>{upgrades.empNanoclicker >= 1 ? 'DEBLOCAT' : 'Deblochează Nanoclicker'}</span>
-                {upgrades.empNanoclicker < 1 && <span className="font-mono text-purple-200">• 60 Bits</span>}
+                {upgrades.empNanoclicker < 1 && <span className="font-mono text-purple-200 tabular-nums">• 60 Bits</span>}
               </button>
             </div>
           </div>

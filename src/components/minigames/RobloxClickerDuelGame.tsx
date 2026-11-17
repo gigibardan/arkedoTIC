@@ -756,7 +756,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
         <div
           key={ft.id}
           style={{ left: ft.x, top: ft.y }}
-          className={`fixed pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 animate-bounce font-black text-sm sm:text-base drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] ${
+          className={`fixed pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 font-black text-sm sm:text-base drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] tabular-nums ${
             ft.isCrit ? 'text-amber-300 scale-125 font-mono' : 'text-cyan-300'
           }`}
         >
@@ -766,16 +766,16 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-purple-900/60 via-slate-900 to-indigo-900/60 border border-purple-500/30 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-600 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/30 ring-2 ring-amber-400/40 animate-pulse">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 via-rose-500 to-indigo-600 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/30 ring-2 ring-amber-400/40 shrink-0">
             🟥
           </div>
-          <div>
-            <div className="flex items-center gap-2">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-base sm:text-lg font-black tracking-tight text-white font-heading">
                 ROBLOX CYBER BLOX DUEL 1v1
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-black border border-rose-500/40 uppercase">
+              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-black border border-rose-500/40 uppercase whitespace-nowrap">
                 Roblox Simulator
               </span>
             </div>
@@ -789,7 +789,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Mode Selector (Default: Primul la 5.000 Blox) */}
-          <div className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-[11px] font-bold">
+          <div className="flex flex-wrap items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-[11px] font-bold">
             <button
               type="button"
               onClick={() => {
@@ -797,7 +797,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 setMatchMode('target_5k');
                 setElapsedSeconds(0);
               }}
-              className={`px-2 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+              className={`min-h-[34px] px-2.5 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
                 matchMode === 'target_5k'
                   ? 'bg-amber-500 text-slate-950 font-black shadow'
                   : 'text-slate-400 hover:text-white'
@@ -814,7 +814,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 setMatchMode('time_60');
                 setMatchTimeLeft(60);
               }}
-              className={`px-2 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+              className={`min-h-[34px] px-2.5 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
                 matchMode === 'time_60'
                   ? 'bg-amber-500 text-slate-950 font-black shadow'
                   : 'text-slate-400 hover:text-white'
@@ -831,7 +831,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 setMatchMode('time_120');
                 setMatchTimeLeft(120);
               }}
-              className={`px-2 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
+              className={`min-h-[34px] px-2.5 py-1 rounded-lg transition cursor-pointer flex items-center gap-1 ${
                 matchMode === 'time_120'
                   ? 'bg-amber-500 text-slate-950 font-black shadow'
                   : 'text-slate-400 hover:text-white'
@@ -847,7 +847,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
           {matchMode === 'target_5k' ? (
             <div
               title={lang === 'en' ? 'Playing until 5,000 Blox' : 'Joc până la 5.000 Blox'}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm bg-gradient-to-r from-amber-950/80 to-slate-900 border-amber-500/50 text-amber-300"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm bg-gradient-to-r from-amber-950/80 to-slate-900 border-amber-500/50 text-amber-300 tabular-nums"
             >
               <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
               <span>{Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, '0')}</span>
@@ -855,30 +855,33 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
           ) : (
             <div
               title={lang === 'en' ? 'Match Time Remaining' : 'Timp Rămas Meci'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border backdrop-blur-md shadow-inner font-mono font-black text-xs sm:text-sm tabular-nums ${
                 matchTimeLeft <= 10
-                  ? 'bg-rose-950/80 border-rose-500/60 text-rose-300 animate-pulse'
+                  ? 'bg-rose-950/80 border-rose-500/60 text-rose-300'
                   : 'bg-slate-900/80 border-amber-500/40 text-amber-300'
               }`}
             >
-              <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${matchTimeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-amber-400'}`} />
+              <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${matchTimeLeft <= 10 ? 'text-rose-400' : 'text-amber-400'}`} />
               <span>{matchTimeLeft}s</span>
             </div>
           )}
 
           <button
+            type="button"
+            aria-label={soundMuted ? 'Unmute' : 'Mute'}
             onClick={() => sounds.toggle()}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
+            className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer flex items-center justify-center"
           >
             {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
           {onBack && (
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-xs font-bold border border-slate-700 hover:border-rose-500 transition cursor-pointer"
+              className="min-h-[36px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 text-xs font-bold border border-slate-700 hover:border-rose-500 transition cursor-pointer whitespace-nowrap"
             >
               {lang === 'en' ? 'Exit Duel' : 'Ieși din Duel'}
             </button>
@@ -888,21 +891,26 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 
       {/* Real-time 1v1 Race Obby Track */}
       <div className="mb-4 p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl">
-        <div className="flex items-center justify-between text-xs font-mono mb-2">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">{studentAvatar}</span>
-            <span className="font-bold text-amber-300">{studentName} (Tu)</span>
-            <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-xs font-mono mb-2.5 tabular-nums">
+          <div className="flex items-center justify-between sm:justify-start gap-2 min-w-0">
+            <span className="flex items-center gap-1.5 min-w-0">
+              <span className="text-lg shrink-0">{studentAvatar}</span>
+              <span className="font-bold text-amber-300 truncate">{studentName} (Tu)</span>
+            </span>
+            <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold shrink-0">
               {blox.toLocaleString()} / {TARGET_GOAL.toLocaleString()} Blox
             </span>
           </div>
 
-          <div className="flex items-center gap-2 text-rose-300">
-            <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold">
+          <div className="flex items-center justify-between sm:justify-end gap-2 text-rose-300 min-w-0">
+            <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold shrink-0 order-2 sm:order-1">
               {opponentBlox.toLocaleString()} / {TARGET_GOAL.toLocaleString()} Blox
             </span>
-            <span className="font-bold">{opponentName}</span>
-            <span className="text-lg">{opponentAvatar}</span>
+            <span className="flex items-center gap-1.5 min-w-0 order-1 sm:order-2">
+              <span className="text-lg shrink-0 sm:hidden">{opponentAvatar}</span>
+              <span className="font-bold truncate">{opponentName}</span>
+              <span className="text-lg shrink-0 hidden sm:inline">{opponentAvatar}</span>
+            </span>
           </div>
         </div>
 
@@ -952,21 +960,21 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               <span className="text-[10px] text-amber-300 font-mono">Max 3 Echipate</span>
             </h3>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {/* Starter Egg */}
               <button
                 type="button"
                 onClick={() => handleHatchEgg('starter_egg', 100)}
                 disabled={blox < 100}
-                className={`p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition text-center cursor-pointer ${
+                className={`min-h-[44px] p-2.5 rounded-xl border flex sm:flex-col items-center justify-between gap-2 sm:gap-1 transition text-center cursor-pointer ${
                   blox >= 100
                     ? 'bg-amber-950/40 border-amber-500/50 hover:border-amber-400 hover:scale-105 shadow-md shadow-amber-500/10'
                     : 'bg-slate-900/60 border-slate-800 opacity-50 cursor-not-allowed'
                 }`}
               >
-                <span className="text-2xl animate-bounce">🥚</span>
-                <span className="text-[10px] font-bold text-amber-200">Starter Egg</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">100 Blox</span>
+                <span className="text-2xl">🥚</span>
+                <span className="text-[11px] sm:text-[10px] font-bold text-amber-200">Starter Egg</span>
+                <span className="text-[10px] sm:text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 tabular-nums">100 Blox</span>
               </button>
 
               {/* Cyber Egg */}
@@ -974,15 +982,15 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 type="button"
                 onClick={() => handleHatchEgg('cyber_egg', 600)}
                 disabled={blox < 600}
-                className={`p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition text-center cursor-pointer ${
+                className={`min-h-[44px] p-2.5 rounded-xl border flex sm:flex-col items-center justify-between gap-2 sm:gap-1 transition text-center cursor-pointer ${
                   blox >= 600
                     ? 'bg-emerald-950/40 border-emerald-500/50 hover:border-emerald-400 hover:scale-105 shadow-md shadow-emerald-500/10'
                     : 'bg-slate-900/60 border-slate-800 opacity-50 cursor-not-allowed'
                 }`}
               >
-                <span className="text-2xl animate-pulse">🧪</span>
-                <span className="text-[10px] font-bold text-emerald-200">Cyber Egg</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">600 Blox</span>
+                <span className="text-2xl">🧪</span>
+                <span className="text-[11px] sm:text-[10px] font-bold text-emerald-200">Cyber Egg</span>
+                <span className="text-[10px] sm:text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 tabular-nums">600 Blox</span>
               </button>
 
               {/* Godly Dominus Egg */}
@@ -990,15 +998,15 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 type="button"
                 onClick={() => handleHatchEgg('godly_egg', 1800)}
                 disabled={blox < 1800}
-                className={`p-2.5 rounded-xl border flex flex-col items-center justify-between gap-1 transition text-center cursor-pointer ${
+                className={`min-h-[44px] p-2.5 rounded-xl border flex sm:flex-col items-center justify-between gap-2 sm:gap-1 transition text-center cursor-pointer ${
                   blox >= 1800
                     ? 'bg-purple-950/40 border-purple-500/50 hover:border-purple-400 hover:scale-105 shadow-md shadow-purple-500/10'
                     : 'bg-slate-900/60 border-slate-800 opacity-50 cursor-not-allowed'
                 }`}
               >
-                <span className="text-2xl animate-spin">👑</span>
-                <span className="text-[10px] font-bold text-purple-200">Dominus Egg</span>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">1.800 Blox</span>
+                <span className="text-2xl">👑</span>
+                <span className="text-[11px] sm:text-[10px] font-bold text-purple-200">Dominus Egg</span>
+                <span className="text-[10px] sm:text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 tabular-nums">1.800 Blox</span>
               </button>
             </div>
 
@@ -1007,11 +1015,11 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
                 {lang === 'en' ? 'Equipped Pets:' : 'Animăluțe Active:'}
               </span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-1.5 tabular-nums">
                 {equippedPets.map((pet, idx) => (
                   <div
                     key={idx}
-                    className="flex-1 p-1.5 rounded-lg bg-slate-950 border border-indigo-500/30 flex items-center gap-1 text-center justify-center text-[10px] font-mono text-indigo-200"
+                    className="flex-1 min-w-[90px] p-1.5 rounded-lg bg-slate-950 border border-indigo-500/30 flex items-center gap-1 text-center justify-center text-[10px] font-mono text-indigo-200"
                   >
                     <span>{pet.icon}</span>
                     <span className="font-bold truncate">{pet.name.split(' ')[0]}</span>
@@ -1037,18 +1045,18 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 return (
                   <div
                     key={u.id}
-                    className={`p-2.5 rounded-xl border flex items-center justify-between gap-2 transition ${
+                    className={`p-2.5 rounded-xl border flex flex-wrap items-center justify-between gap-2 transition ${
                       canAfford ? 'bg-slate-950/80 border-slate-700' : 'bg-slate-950/40 border-slate-800/60 opacity-70'
                     }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
                       <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-lg shrink-0">
                         {u.icon}
                       </div>
-                      <div>
-                        <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-white flex flex-wrap items-center gap-1.5">
                           <span>{lang === 'en' ? u.nameEn : u.nameRo}</span>
-                          <span className="text-[10px] font-mono text-amber-400">Nv.{u.level}</span>
+                          <span className="text-[10px] font-mono text-amber-400 tabular-nums">Nv.{u.level}</span>
                         </div>
                         <div className="text-[10px] text-slate-400">
                           {lang === 'en' ? u.descEn : u.descRo}
@@ -1060,7 +1068,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                       type="button"
                       onClick={() => handleBuyUpgrade(u.id)}
                       disabled={!canAfford}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition shrink-0 cursor-pointer ${
+                      className={`min-h-[36px] px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition shrink-0 cursor-pointer tabular-nums ${
                         canAfford
                           ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/30 active:scale-95'
                           : 'bg-slate-800 text-slate-500 cursor-not-allowed'
@@ -1079,15 +1087,15 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
         <div className="lg:col-span-5 flex flex-col items-center justify-between gap-4 p-4 rounded-3xl bg-gradient-to-b from-slate-900 via-indigo-950/20 to-slate-900 border-2 border-indigo-500/40 shadow-2xl relative overflow-hidden">
           {/* Frenzy Banner */}
           {isFrenzy && (
-            <div className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 text-slate-950 text-center font-black text-xs uppercase tracking-wider animate-pulse flex items-center justify-center gap-2 shadow-lg shadow-rose-500/30">
-              <Flame className="w-4 h-4 text-slate-950 animate-bounce" />
+            <div className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 text-slate-950 text-center font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-rose-500/30 tabular-nums">
+              <Flame className="w-4 h-4 text-slate-950" />
               <span>MEGA FRENZY 2X BOOST ACTIVE! ({frenzyTimer}s)</span>
-              <Flame className="w-4 h-4 text-slate-950 animate-bounce" />
+              <Flame className="w-4 h-4 text-slate-950" />
             </div>
           )}
 
           {/* Stats Bar */}
-          <div className="w-full grid grid-cols-3 gap-2">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2 tabular-nums">
             <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center">
               <div className="text-[10px] text-slate-400 font-bold uppercase">Blox Points</div>
               <div className="text-base sm:text-lg font-black font-mono text-amber-400">
@@ -1112,14 +1120,14 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
 
           {/* MAIN GIANT CLICK BUTTON */}
           <div className="relative my-auto flex flex-col items-center justify-center">
-            {/* Pulsing Aura */}
-            <div className="absolute w-52 h-52 bg-gradient-to-tr from-amber-500/20 via-rose-500/20 to-indigo-500/20 rounded-full blur-2xl pointer-events-none animate-pulse" />
+            {/* Soft Aura */}
+            <div className="absolute w-52 h-52 bg-gradient-to-tr from-amber-500/20 via-rose-500/20 to-indigo-500/20 rounded-full blur-2xl pointer-events-none" />
 
             <button
               id="roblox-main-clicker-button"
               type="button"
               onClick={handleMainClick}
-              className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-tr from-rose-600 via-amber-500 to-yellow-400 border-4 border-yellow-200 shadow-[0_0_40px_rgba(245,158,11,0.5)] flex flex-col items-center justify-center text-center cursor-pointer transition-transform duration-75 active:scale-90 hover:scale-105 group select-none"
+              className="relative w-40 h-40 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-tr from-rose-600 via-amber-500 to-yellow-400 border-4 border-yellow-200 shadow-[0_0_40px_rgba(245,158,11,0.5)] flex flex-col items-center justify-center text-center cursor-pointer transition-transform duration-75 active:scale-90 hover:scale-105 group select-none touch-manipulation"
             >
               <div className="text-5xl sm:text-6xl group-hover:rotate-12 transition-transform drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)]">
                 🧱
@@ -1127,17 +1135,17 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               <span className="text-sm sm:text-base font-black text-slate-950 font-heading tracking-wider mt-1 drop-shadow">
                 CLICK BLOX!
               </span>
-              <span className="text-[11px] font-mono font-bold text-rose-950 bg-yellow-300/80 px-2 py-0.5 rounded-full mt-0.5">
+              <span className="text-[11px] font-mono font-bold text-rose-950 bg-yellow-300/80 px-2 py-0.5 rounded-full mt-0.5 tabular-nums">
                 +{totalClickValue.toLocaleString()} / click
               </span>
             </button>
           </div>
 
           {/* Rebirth Button */}
-          <div className="w-full flex items-center justify-between gap-3 pt-2 border-t border-slate-800">
+          <div className="w-full flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
             <div>
               <span className="text-[10px] font-mono text-slate-400 block">Prestige Rebirth:</span>
-              <span className="text-xs font-bold text-pink-300">
+              <span className="text-xs font-bold text-pink-300 tabular-nums">
                 Cost: {rebirthCost.toLocaleString()} Blox (+25% Boost)
               </span>
             </div>
@@ -1146,9 +1154,9 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               type="button"
               onClick={handleRebirth}
               disabled={blox < rebirthCost}
-              className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider font-mono transition flex items-center gap-1.5 cursor-pointer ${
+              className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider font-mono transition flex items-center gap-1.5 cursor-pointer ${
                 blox >= rebirthCost
-                  ? 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white shadow-lg shadow-pink-600/30 active:scale-95 animate-bounce'
+                  ? 'bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white shadow-lg shadow-pink-600/30 active:scale-95'
                   : 'bg-slate-800 text-slate-500 cursor-not-allowed'
               }`}
             >
@@ -1167,7 +1175,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                 <Swords className="w-4 h-4 text-rose-400" />
                 {lang === 'en' ? 'PvP Sabotage Spells' : 'Vrăji & Sabotaj Duel'}
               </span>
-              <span className="text-[10px] text-cyan-300 font-mono">💎 {diamonds} Diamante</span>
+              <span className="text-[10px] text-cyan-300 font-mono tabular-nums">💎 {diamonds} Diamante</span>
             </h3>
 
             <div className="grid grid-cols-2 gap-2">
@@ -1243,7 +1251,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               </div>
             </div>
 
-            <div className="space-y-2 text-xs font-mono">
+            <div className="space-y-2 text-xs font-mono tabular-nums">
               <div className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800">
                 <span className="text-slate-400">Blox Rival:</span>
                 <span className="font-bold text-rose-400">{opponentBlox.toLocaleString()}</span>
@@ -1260,14 +1268,14 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       {/* MODAL 1: Egg Hatching Gacha Animation Overlay */}
       {hatchingEgg && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-slate-900 border-2 border-indigo-500/60 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
+          <div className="bg-slate-900 border-2 border-indigo-500/60 rounded-3xl p-6 max-w-sm w-full max-h-[90vh] overflow-y-auto text-center shadow-2xl space-y-4">
             <h3 className="text-lg font-black text-amber-300 font-heading uppercase tracking-wider">
               {hatchingEgg.hatchedPet ? 'PET UNBOXED!' : 'HATCHING EGG...'}
             </h3>
 
             <div className="py-6 flex flex-col items-center justify-center">
               {hatchingEgg.isWobbling && (
-                <div className="text-7xl animate-bounce drop-shadow-[0_10px_20px_rgba(245,158,11,0.4)]">
+                <div className="text-7xl drop-shadow-[0_10px_20px_rgba(245,158,11,0.4)]">
                   🥚
                 </div>
               )}
@@ -1285,7 +1293,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                       {hatchingEgg.hatchedPet.rarity}
                     </span>
                   </div>
-                  <div className="flex items-center justify-center gap-3 text-xs font-mono">
+                  <div className="flex items-center justify-center gap-3 text-xs font-mono tabular-nums">
                     <span className="text-amber-400 font-bold">+{hatchingEgg.hatchedPet.multiplier}x Click</span>
                     <span className="text-emerald-400 font-bold">+{hatchingEgg.hatchedPet.cps} CPS</span>
                   </div>
@@ -1297,7 +1305,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               <button
                 type="button"
                 onClick={() => setHatchingEgg(null)}
-                className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-indigo-600/30 cursor-pointer"
+                className="w-full min-h-[42px] py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-indigo-600/30 cursor-pointer"
               >
                 {lang === 'en' ? 'Equip & Continue' : 'Echipează & Continuă'}
               </button>
@@ -1309,20 +1317,20 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       {/* MODAL 2: Mini-Boss TIC Invasion QTE */}
       {activeBoss && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-slate-900 border-2 border-rose-500/60 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-3xl">{activeBoss.icon}</span>
-                <div>
-                  <h3 className="text-base font-black text-rose-400 uppercase tracking-wider">
+          <div className="bg-slate-900 border-2 border-rose-500/60 rounded-3xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-3xl shrink-0">{activeBoss.icon}</span>
+                <div className="min-w-0">
+                  <h3 className="text-base font-black text-rose-400 uppercase tracking-wider text-balance">
                     {activeBoss.name}
                   </h3>
                   <span className="text-[10px] text-slate-400">Raid TIC Fulger</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-xs font-mono font-bold text-rose-300">
-                <Clock className="w-3.5 h-3.5 animate-spin" />
+              <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-xs font-mono font-bold text-rose-300 tabular-nums shrink-0">
+                <Clock className="w-3.5 h-3.5" />
                 <span>{activeBoss.timeLeft}s</span>
               </div>
             </div>
@@ -1331,7 +1339,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               {lang === 'en' ? activeBoss.question.questionEn : activeBoss.question.questionRo}
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {activeBoss.question.options.map((opt, idx) => {
                 let btnStyle = 'bg-slate-800 hover:bg-rose-900/60 border-slate-700 hover:border-rose-500 text-white cursor-pointer active:scale-95';
                 if (bossFeedback !== null) {
@@ -1350,7 +1358,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                     type="button"
                     disabled={bossFeedback !== null || bossAnswerLockRef.current}
                     onClick={() => handleBossAnswer(idx)}
-                    className={`p-3 rounded-xl border text-xs font-bold text-left transition ${btnStyle}`}
+                    className={`min-h-[44px] p-3 rounded-xl border text-xs font-bold text-left transition ${btnStyle}`}
                   >
                     {opt}
                   </button>
@@ -1362,7 +1370,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               <div className={`p-3 rounded-xl border flex flex-col gap-2 animate-fadeIn text-xs ${
                 bossFeedback.isCorrect ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200' : 'bg-rose-950/90 border-rose-500/50 text-rose-200'
               }`}>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="font-black">
                     {bossFeedback.isCorrect
                       ? (lang === 'en' ? '✓ CORRECT! RAID SUCCESSFUL!' : '✓ RĂSPUNS CORECT! RAID VICTORIOS!')
@@ -1371,9 +1379,10 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                   <button
                     type="button"
                     onClick={closeBossModal}
-                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] cursor-pointer"
+                    className="min-h-[36px] px-3 py-1 rounded bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] cursor-pointer shrink-0 flex items-center gap-1"
                   >
-                    {lang === 'en' ? 'Continue ➔' : 'Continuă ➔'}
+                    <span>{lang === 'en' ? 'Continue' : 'Continuă'}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
                 <p className="text-[11px] opacity-90 leading-relaxed bg-black/40 p-2 rounded-lg">
@@ -1397,7 +1406,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
       {/* MODAL 3: Match Results & Victory Screen */}
       {isGameOver && (
         <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in zoom-in-95">
-          <div className="bg-slate-900 border-2 border-amber-500/60 rounded-3xl p-6 max-w-md w-full text-center shadow-2xl space-y-4">
+          <div className="bg-slate-900 border-2 border-amber-500/60 rounded-3xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto text-center shadow-2xl space-y-4">
             <div className="w-16 h-16 rounded-3xl bg-amber-500/20 border-2 border-amber-500/40 flex items-center justify-center text-3xl mx-auto shadow-lg shadow-amber-500/30">
               {winner === 'me' ? '👑' : '💀'}
             </div>
@@ -1418,7 +1427,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                     : `${opponentName} a atins primul obiectivul. Antrenează-ți animăluțele și încearcă din nou!`)}
             </p>
 
-            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 grid grid-cols-2 gap-2 text-xs font-mono">
+            <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 grid grid-cols-2 gap-2 text-xs font-mono tabular-nums">
               <div>
                 <span className="text-slate-400 block">Blox-ul Tău:</span>
                 <span className="font-bold text-amber-400 text-sm">{blox.toLocaleString()}</span>
@@ -1429,7 +1438,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => {
@@ -1445,7 +1454,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                   setIsGameOver(false);
                   setWinner(null);
                 }}
-                className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                className="flex-1 min-h-[42px] py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'Rematch' : 'Revanșă'}</span>
@@ -1458,7 +1467,7 @@ export const RobloxClickerDuelGame: React.FC<RobloxClickerDuelGameProps> = ({
                     sounds.playClick();
                     onBack();
                   }}
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-slate-950 font-black text-xs uppercase tracking-wider transition cursor-pointer"
+                  className="flex-1 min-h-[42px] py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-slate-950 font-black text-xs uppercase tracking-wider transition cursor-pointer"
                 >
                   {lang === 'en' ? 'Exit to Lobby' : 'Înapoi în Lobby'}
                 </button>

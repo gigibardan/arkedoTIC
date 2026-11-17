@@ -433,15 +433,18 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
           <div className="flex flex-col gap-2.5">
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 setActiveGame('hub');
               }}
-              className="w-full min-h-[40px] py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer"
+              className="w-full min-h-[40px] py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer flex items-center justify-center gap-2"
             >
-              ← {lang === 'en' ? 'Back to Mini-Games Catalog' : 'Înapoi la Mini-Jocuri'}
+              <ArrowLeft className="w-4 h-4 shrink-0" />
+              <span>{lang === 'en' ? 'Back to Mini-Games Catalog' : 'Înapoi la Mini-Jocuri'}</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 setLockedModalInfo({
                   id: activeGame,
@@ -699,8 +702,8 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     const isOpen = isGameOpen(gameSettings, gameId);
     if (isOpen) return null;
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
-        <Lock className="w-3 h-3 text-rose-400" />
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40 whitespace-nowrap shrink-0">
+        <Lock className="w-3 h-3 text-rose-400 shrink-0" />
         <span>{lang === 'en' ? 'Locked' : 'Închis de Profesor'}</span>
       </span>
     );
@@ -764,30 +767,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <button
+                type="button"
                 onClick={() => {
                   sounds.playClick();
                   onBackToCatalog();
                 }}
-                className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+                className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 whitespace-nowrap"
               >
-                <ArrowLeft className="w-4 h-4 text-emerald-400" />
+                <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{lang === 'en' ? 'Back to Missions' : 'Înapoi la Cursuri'}</span>
               </button>
 
-              <div className="inline-flex items-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
-                <Gamepad2 className="w-4 h-4 text-indigo-400" />
+              <div className="inline-flex items-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30 whitespace-nowrap">
+                <Gamepad2 className="w-4 h-4 text-indigo-400 shrink-0" />
                 <span>{lang === 'en' ? 'ArkyLab Arcade' : 'Laboratorul Arcade ArkyLab'}</span>
               </div>
 
               {onOpenDuel && (
                 <button
+                  type="button"
                   onClick={() => {
                     sounds.playClick();
                     onOpenDuel();
                   }}
-                  className="min-h-[38px] px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white border border-rose-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-lg shadow-rose-600/30"
+                  className="min-h-[38px] px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white border border-rose-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-lg shadow-rose-600/30 whitespace-nowrap"
                 >
-                  <Swords className="w-4 h-4 text-amber-300" />
+                  <Swords className="w-4 h-4 text-amber-300 shrink-0" />
                   <span>{lang === 'en' ? 'Duel Arena 1v1' : 'Arena Duel 1v1'}</span>
                 </button>
               )}
@@ -888,7 +893,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 via-cyan-500 to-indigo-600 border border-sky-300/50 flex items-center justify-center text-white shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform shrink-0">
                 <span className="text-2xl select-none">☄️</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_asteroids')}
                 {renderScoreBadges('cyber_asteroids', cyberAsteroidsHighScore, 'pts')}
               </div>
@@ -939,7 +944,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-600 border border-amber-300/50 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform shrink-0">
                 <span className="text-2xl select-none">🤖</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_sokoban')}
                 {renderScoreBadges('cyber_sokoban', cyberSokobanHighScore, 'pts')}
               </div>
@@ -990,7 +995,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 border border-emerald-300/50 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform shrink-0">
                 <span className="text-2xl select-none">🐸</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_frogger')}
                 {renderScoreBadges('cyber_frogger', cyberFroggerHighScore, 'pts')}
               </div>
@@ -1041,7 +1046,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 border border-sky-300/50 flex items-center justify-center text-white shadow-lg shadow-sky-500/30 group-hover:scale-110 transition-transform shrink-0">
                 <span className="text-2xl select-none">🧱</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_arkanoid')}
                 {renderScoreBadges('cyber_arkanoid', cyberArkanoidHighScore, 'pts')}
               </div>
@@ -1092,7 +1097,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-600 border border-yellow-300/50 flex items-center justify-center text-slate-950 shadow-lg shadow-yellow-500/30 group-hover:scale-110 transition-transform shrink-0">
                 <span className="text-2xl select-none">🟡</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_pacman')}
                 {renderScoreBadges('cyber_pacman', cyberPacmanHighScore, 'pts')}
               </div>
@@ -1144,13 +1149,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 border border-cyan-400/50 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 group-hover:scale-110 transition-transform shrink-0">
                 <Rocket className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_invaders')}
                 {renderScoreBadges('cyber_invaders', cyberInvadersHighScore, 'pts')}
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="px-2.5 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-mono font-black uppercase tracking-wider">
                 {lang === 'en' ? 'NEW 🔥 SPACE INVADERS' : 'NOU 🔥 SPACE INVADERS'}
               </span>
@@ -1194,7 +1199,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shrink-0">
                 <Keyboard className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('typing')}
                 {renderScoreBadges('typing', typingHighScore, 'WPM')}
               </div>
@@ -1239,7 +1244,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shrink-0">
                 <MousePointer className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('mouse')}
                 {renderScoreBadges('mouse', mouseHighScore, 'pts')}
               </div>
@@ -1288,7 +1293,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-cyan-500/15 border-2 border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/10 shrink-0">
                 <Zap className="w-6 h-6 text-cyan-400" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('mouse_v2')}
                 {renderScoreBadges('mouse_v2', mouseV2HighScore, 'pts')}
               </div>
@@ -1334,7 +1339,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform shrink-0">
                 <Binary className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('2048')}
                 {renderScoreBadges('game2048', game2048HighScore, 'pts')}
               </div>
@@ -1384,7 +1389,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform shrink-0">
                 <Cpu className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('pcbuilder')}
                 {renderScoreBadges('pcbuilder', pcBuilderHighScore, 'pts')}
               </div>
@@ -1429,13 +1434,13 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
                 🦖
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_dino')}
                 {renderScoreBadges('cyber_dino', cyberDinoHighScore, 'pts')}
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <div className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
                 {lang === 'en' ? 'Arcade Runner' : 'Chrome Edition'}
               </div>
@@ -1479,7 +1484,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shrink-0">
                 <ShieldAlert className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('detective')}
                 {renderScoreBadges('detective', cyberHighScore, 'pts')}
               </div>
@@ -1524,7 +1529,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border-2 border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform shrink-0">
                 <Folder className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('files')}
                 {renderScoreBadges('files', filesHighScore, 'pts')}
               </div>
@@ -1569,7 +1574,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-600/20 shrink-0">
                 ⛏️
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('redstone_lab')}
                 {renderScoreBadges('redstone_lab', redstoneLabHighScore, 'XP')}
               </div>
@@ -1621,7 +1626,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border-2 border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform shrink-0">
                 <Zap className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('binary_factory')}
                 {renderScoreBadges('binary_factory', binaryFactoryHighScore, 'pts')}
               </div>
@@ -1666,7 +1671,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shrink-0">
                 <Bot className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('maze')}
                 {renderScoreBadges('maze', mazeHighScore, 'pts')}
               </div>
@@ -1711,7 +1716,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-red-500/15 border-2 border-red-500/30 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform shrink-0">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('firewall')}
                 {renderScoreBadges('firewall', firewallHighScore, 'pts')}
               </div>
@@ -1756,7 +1761,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-purple-500/15 border-2 border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform shrink-0">
                 <Palette className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('rgb_pixel')}
                 {renderScoreBadges('rgb_pixel', rgbHighScore, 'pts')}
               </div>
@@ -1801,7 +1806,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shrink-0">
                 <Layers className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('byte_slider')}
                 {renderScoreBadges('byte_slider', byteSliderHighScore, 'pts')}
               </div>
@@ -1848,7 +1853,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-sky-500/15 border-2 border-sky-500/30 flex items-center justify-center text-sky-400 group-hover:scale-110 transition-transform shrink-0">
                 <FileDown className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('file_drop')}
                 {renderScoreBadges('file_drop', fileDropHighScore, 'pts')}
               </div>
@@ -1896,7 +1901,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shrink-0">
                 <Biohazard className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('virus_sweeper')}
                 {renderScoreBadges('virus_sweeper', virusSweeperHighScore, 'pts')}
               </div>
@@ -1944,7 +1949,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20 shrink-0">
                 🟥
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('roblox_clicker')}
                 {renderScoreBadges('roblox_clicker', robloxClickerHighScore, 'Blox')}
               </div>
@@ -1997,7 +2002,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20 shrink-0">
                 🧱
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('voxel_architect')}
                 {renderScoreBadges('voxel_architect', voxelArchitectHighScore, 'XP')}
               </div>
@@ -2049,7 +2054,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 border-2 border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform shrink-0">
                 <LayoutTemplate className="w-6 h-6" />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('page_craft')}
                 {renderScoreBadges('page_craft', pageCraftHighScore, 'XP')}
               </div>
@@ -2102,7 +2107,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-rose-500/20 shrink-0">
                 🛡️
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('hacker_defense')}
                 {renderScoreBadges('hacker_defense', hackerDefenseHighScore, 'XP')}
               </div>
@@ -2155,7 +2160,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-emerald-500/20 shrink-0">
                 🐍
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('cyber_snake')}
                 {renderScoreBadges('cyber_snake', cyberSnakeHighScore, 'XP')}
               </div>
@@ -2208,7 +2213,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
               <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border-2 border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-md shadow-amber-500/20 shrink-0">
                 ⚡
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-end gap-1 min-w-0">
                 {renderCardLockBadge('circuit_master')}
                 {renderScoreBadges('circuit_master', circuitMasterHighScore, 'pts')}
               </div>
@@ -2302,7 +2307,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                   </span>
                   {isGameOpen(gameSettings, 'duel') ? (
                     <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <Zap className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
                     </span>
                   ) : (
@@ -2324,8 +2329,9 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </div>
 
             <button
+              type="button"
               onClick={() => handleTryLaunchGame('duel', 'Arena Duel 1v1', 'Duel Arena 1v1')}
-              className={`w-full sm:w-auto min-h-[42px] px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 ${
+              className={`w-full sm:w-auto min-h-[42px] px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 whitespace-nowrap ${
                 isGameOpen(gameSettings, 'duel')
                   ? 'bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white shadow-rose-600/30'
                   : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 shadow-rose-950/40'

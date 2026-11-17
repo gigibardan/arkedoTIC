@@ -1131,19 +1131,19 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                 sounds.playClick();
                 onBack();
               }}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition font-bold text-sm shadow-md"
+              className="min-h-[38px] flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition font-bold text-sm shadow-md cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4 text-emerald-400" />
+              <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>Arcade TIC</span>
             </button>
 
             <div className="flex items-center gap-2.5">
-              <span className="text-3xl p-1.5 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl">🐍</span>
+              <span className="text-3xl p-1.5 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl shrink-0">🐍</span>
               <div>
-                <h1 className="text-lg sm:text-xl font-black text-white tracking-wide flex items-center gap-2">
+                <h1 className="text-lg sm:text-xl font-black text-white tracking-wide flex flex-wrap items-center gap-2 text-balance">
                   Cyber Snake: <span className="text-emerald-400">Șarpele Algoritmic</span>
                 </h1>
-                <div className="flex items-center gap-2 text-xs text-slate-400">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
                   <span>Gândire Algoritmică</span>
                   <span aria-hidden="true">·</span>
                   <span>Blocuri Scratch</span>
@@ -1155,15 +1155,16 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950/70 border border-amber-500/40 rounded-xl text-amber-300 font-mono text-sm font-bold shadow-inner">
-              <Trophy className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-950/70 border border-amber-500/40 rounded-xl text-amber-300 font-mono text-sm font-bold shadow-inner tabular-nums">
+              <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
               <span>Record: {highScore}</span>
             </div>
 
             <button
               type="button"
               onClick={() => setSoundEnabled(s => !s)}
-              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition"
+              aria-label={soundEnabled ? 'Oprește sunetul' : 'Pornește sunetul'}
+              className="min-w-[38px] min-h-[38px] p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition flex items-center justify-center cursor-pointer"
               title={soundEnabled ? 'Sunet activat' : 'Sunet oprit'}
             >
               {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
@@ -1173,20 +1174,20 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
 
         {/* Mode Selector & Quick Stats Bar */}
         <div className="mt-4 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 p-1 bg-slate-950/80 rounded-xl border border-slate-800">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1 bg-slate-950/80 rounded-xl border border-slate-800">
             <button
               type="button"
               onClick={() => {
                 sounds.playClick();
                 startGame('arcade');
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+              className={`min-h-[36px] px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 gameMode === 'arcade'
                   ? 'bg-emerald-500 text-slate-950 shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <Cpu className="w-3.5 h-3.5" />
+              <Cpu className="w-3.5 h-3.5 shrink-0" />
               <span>Arcade Infinit</span>
             </button>
 
@@ -1196,13 +1197,13 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                 sounds.playClick();
                 startGame('missions');
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+              className={`min-h-[36px] px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 gameMode === 'missions'
                   ? 'bg-cyan-500 text-slate-950 shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <Target className="w-3.5 h-3.5" />
+              <Target className="w-3.5 h-3.5 shrink-0" />
               <span>Misiuni Scratch</span>
             </button>
 
@@ -1212,34 +1213,34 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                 sounds.playClick();
                 startGame('speedrun');
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+              className={`min-h-[36px] px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 cursor-pointer ${
                 gameMode === 'speedrun'
                   ? 'bg-amber-500 text-slate-950 shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <Flame className="w-3.5 h-3.5" />
+              <Flame className="w-3.5 h-3.5 shrink-0" />
               <span>Overclock 60s</span>
             </button>
           </div>
 
           {/* Active Buff Badges */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 tabular-nums">
             {shieldActive && (
-              <div className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded-lg text-emerald-300 font-bold animate-pulse">
-                <Shield className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded-lg text-emerald-300 font-bold">
+                <Shield className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>SCUT ACTIV ({shieldTimeLeft}s)</span>
               </div>
             )}
             {wallDodgeCharges > 0 && (
               <div className="flex items-center gap-1 px-2.5 py-1 bg-orange-500/20 border border-orange-500/50 rounded-lg text-orange-300 font-bold">
-                <Zap className="w-3.5 h-3.5 text-orange-400" />
+                <Zap className="w-3.5 h-3.5 text-orange-400 shrink-0" />
                 <span>OCOLEȘTE ZID x{wallDodgeCharges}</span>
               </div>
             )}
             {multiplier > 1 && (
-              <div className="flex items-center gap-1 px-2.5 py-1 bg-purple-500/20 border border-purple-500/50 rounded-lg text-purple-300 font-bold animate-bounce">
-                <Flame className="w-3.5 h-3.5 text-purple-400" />
+              <div className="flex items-center gap-1 px-2.5 py-1 bg-purple-500/20 border border-purple-500/50 rounded-lg text-purple-300 font-bold">
+                <Flame className="w-3.5 h-3.5 text-purple-400 shrink-0" />
                 <span>REPETĂ {multiplier}x!</span>
               </div>
             )}
@@ -1320,7 +1321,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
 
             {/* Compilation Flash Banner */}
             {compilationFlash && (
-              <div className="mt-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 text-xs font-black text-center animate-pulse shadow-lg">
+              <div className="mt-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 text-xs font-black text-center shadow-lg">
                 {compilationFlash}
               </div>
             )}
@@ -1334,19 +1335,19 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
             </h4>
             <div className="space-y-1.5 text-[11px]">
               <div className="flex items-center gap-2 text-blue-300">
-                <span className="w-2.5 h-2.5 rounded-sm bg-blue-500" />
+                <span className="w-2.5 h-2.5 rounded-sm bg-blue-500 shrink-0" />
                 <span><strong>Mișcare:</strong> Alungește șarpele & XP</span>
               </div>
               <div className="flex items-center gap-2 text-orange-300">
-                <span className="w-2.5 h-2.5 rounded-sm bg-orange-500" />
+                <span className="w-2.5 h-2.5 rounded-sm bg-orange-500 shrink-0" />
                 <span><strong>Dacă perete:</strong> Ocolește impactul</span>
               </div>
               <div className="flex items-center gap-2 text-emerald-300">
-                <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" />
+                <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 shrink-0" />
                 <span><strong>Scut = true:</strong> Zdrobiți virușii roșii!</span>
               </div>
               <div className="flex items-center gap-2 text-rose-300">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
                 <span><strong>Virus Roșu:</strong> Evită fără Scut!</span>
               </div>
             </div>
@@ -1356,24 +1357,24 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
         {/* Center: Canvas Screen & Live Stats */}
         <div className="lg:col-span-2 flex flex-col items-center">
           {/* Live Top Stats */}
-          <div className="w-full flex items-center justify-between px-3 py-2 bg-slate-950/80 rounded-2xl border border-slate-800 mb-2">
+          <div className="w-full flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-slate-950/80 rounded-2xl border border-slate-800 mb-2 tabular-nums">
             <div className="flex items-center gap-2">
               <span className="text-xs text-slate-400">Scor:</span>
               <span className="text-xl font-black text-emerald-400 font-mono">{score}</span>
             </div>
 
-            <div className="flex items-center gap-4 text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-mono">
               <div className="flex items-center gap-1 text-slate-300">
-                <Code2 className="w-3.5 h-3.5 text-blue-400" />
+                <Code2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <span>{blocksCollected} blocuri</span>
               </div>
               <div className="flex items-center gap-1 text-slate-300">
-                <Bug className="w-3.5 h-3.5 text-rose-400" />
+                <Bug className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                 <span>{bugsDestroyed} dezinfectați</span>
               </div>
               {gameMode === 'speedrun' && (
                 <div className="flex items-center gap-1 text-amber-400 font-bold">
-                  <Flame className="w-3.5 h-3.5" />
+                  <Flame className="w-3.5 h-3.5 shrink-0" />
                   <span>{speedrunTimer}s</span>
                 </div>
               )}
@@ -1385,7 +1386,8 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                 if (gameState === 'playing') setGameState('paused');
                 else if (gameState === 'paused') setGameState('playing');
               }}
-              className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold border border-slate-700"
+              aria-label={gameState === 'playing' ? 'Pune jocul în pauză' : 'Reia jocul'}
+              className="min-w-[36px] min-h-[36px] px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold border border-slate-700 flex items-center justify-center cursor-pointer"
             >
               {gameState === 'playing' ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
             </button>
@@ -1404,7 +1406,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
             {popups.map(popup => (
               <div
                 key={popup.id}
-                className="absolute pointer-events-none text-xs font-black drop-shadow-md animate-bounce"
+                className="absolute pointer-events-none text-xs font-black drop-shadow-md"
                 style={{
                   left: `${(popup.x / GRID_SIZE) * 100}%`,
                   top: `${(popup.y / GRID_SIZE) * 100}%`,
@@ -1418,24 +1420,24 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
 
             {/* Overlay: Lobby or GameOver */}
             {gameState !== 'playing' && (
-              <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 text-center z-20">
+              <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-4 sm:p-6 text-center z-20 overflow-y-auto">
                 {gameState === 'lobby' ? (
                   <div className="space-y-4 max-w-sm">
-                    <div className="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/20 animate-pulse">
+                    <div className="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center text-4xl shadow-lg shadow-emerald-500/20">
                       🐍
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-white">Cyber Snake</h2>
+                      <h2 className="text-2xl font-black text-white text-balance">Cyber Snake</h2>
                       <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                         Șarpele Algoritmic colectează instrucțiuni Scratch, obține scuturi și elimină virușii roșii ce patrulează pe matrice!
                       </p>
                     </div>
 
-                    <div className="flex justify-center gap-2">
+                    <div className="flex flex-wrap justify-center gap-2">
                       <button
                         type="button"
                         onClick={() => setSelectedSkin('matrix')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                        className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
                           selectedSkin === 'matrix' ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300' : 'bg-slate-900 border-slate-700 text-slate-400'
                         }`}
                       >
@@ -1444,7 +1446,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                       <button
                         type="button"
                         onClick={() => setSelectedSkin('cyan')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                        className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
                           selectedSkin === 'cyan' ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300' : 'bg-slate-900 border-slate-700 text-slate-400'
                         }`}
                       >
@@ -1453,7 +1455,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                       <button
                         type="button"
                         onClick={() => setSelectedSkin('fire')}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                        className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
                           selectedSkin === 'fire' ? 'bg-orange-500/20 border-orange-400 text-orange-300' : 'bg-slate-900 border-slate-700 text-slate-400'
                         }`}
                       >
@@ -1464,7 +1466,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                     <button
                       type="button"
                       onClick={() => startGame()}
-                      className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-emerald-500/30 transition transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                      className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-emerald-500/30 transition transform hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Play className="w-5 h-5 fill-slate-950" />
                       <span>START ALGORITM (SPACE / ENTER)</span>
@@ -1472,12 +1474,12 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                   </div>
                 ) : gameState === 'paused' ? (
                   <div className="space-y-4">
-                    <h3 className="text-xl font-black text-white">Joc Întrerupt</h3>
+                    <h3 className="text-xl font-black text-white text-balance">Joc Întrerupt</h3>
                     <p className="text-xs text-slate-400">Apasă tasta P sau butonul de mai jos pentru a relua.</p>
                     <button
                       type="button"
                       onClick={() => setGameState('playing')}
-                      className="py-2.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-md"
+                      className="min-h-[44px] py-2.5 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-md cursor-pointer"
                     >
                       Reia Execuția
                     </button>
@@ -1489,32 +1491,32 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
                       💥
                     </div>
                     <div>
-                      <h2 className="text-xl font-black text-white">Execuție Oprită!</h2>
-                      <p className="text-xs text-slate-300 mt-1">
+                      <h2 className="text-xl font-black text-white text-balance">Execuție Oprită!</h2>
+                      <p className="text-xs text-slate-300 mt-1 tabular-nums">
                         Ai adunat <span className="text-emerald-400 font-bold">{score} XP</span> în această sesiune!
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-xs bg-slate-900/90 p-3 rounded-2xl border border-slate-800 font-mono">
+                    <div className="grid grid-cols-2 gap-2 text-xs bg-slate-900/90 p-3 rounded-2xl border border-slate-800 font-mono tabular-nums">
                       <div className="text-slate-400">Blocuri: <span className="text-white font-bold">{blocksCollected}</span></div>
                       <div className="text-slate-400">Algoritmi: <span className="text-white font-bold">{algorithmsCompiled}</span></div>
                       <div className="text-slate-400">Viruși eliminați: <span className="text-white font-bold">{bugsDestroyed}</span></div>
                       <div className="text-slate-400">Record: <span className="text-amber-400 font-bold">{highScore}</span></div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() => startGame()}
-                        className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs transition flex items-center justify-center gap-2 shadow-lg"
+                        className="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs transition flex items-center justify-center gap-2 shadow-lg cursor-pointer"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <RotateCcw className="w-4 h-4 shrink-0" />
                         <span>REÎNCEARCĂ</span>
                       </button>
                       <button
                         type="button"
                         onClick={onBack}
-                        className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition"
+                        className="min-h-[44px] py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition cursor-pointer"
                       >
                         Înapoi la Hub
                       </button>
@@ -1529,38 +1531,42 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
           <div className="mt-4 flex flex-col items-center gap-1.5 sm:hidden">
             <button
               type="button"
+              aria-label="Sus"
               onClick={() => {
                 if (direction !== 'DOWN') nextDirectionRef.current = 'UP';
               }}
-              className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg"
+              className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg touch-manipulation cursor-pointer"
             >
               <ChevronUp className="w-6 h-6" />
             </button>
             <div className="flex items-center gap-3">
               <button
                 type="button"
+                aria-label="Stânga"
                 onClick={() => {
                   if (direction !== 'RIGHT') nextDirectionRef.current = 'LEFT';
                 }}
-                className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg"
+                className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg touch-manipulation cursor-pointer"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 type="button"
+                aria-label="Jos"
                 onClick={() => {
                   if (direction !== 'UP') nextDirectionRef.current = 'DOWN';
                 }}
-                className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg"
+                className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg touch-manipulation cursor-pointer"
               >
                 <ChevronDown className="w-6 h-6" />
               </button>
               <button
                 type="button"
+                aria-label="Dreapta"
                 onClick={() => {
                   if (direction !== 'LEFT') nextDirectionRef.current = 'RIGHT';
                 }}
-                className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg"
+                className="w-14 h-12 bg-slate-800 active:bg-emerald-600 rounded-xl border border-slate-700 flex items-center justify-center text-white shadow-lg touch-manipulation cursor-pointer"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -1573,7 +1579,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
           {/* Controls instructions */}
           <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl text-xs space-y-3">
             <h4 className="font-bold text-white flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-emerald-400" />
+              <Terminal className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>Taste de Control</span>
             </h4>
             <div className="space-y-2 text-[11px] text-slate-300">
@@ -1606,7 +1612,7 @@ export const CyberSnakeGame: React.FC<CyberSnakeGameProps> = ({
               </div>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-slate-800/80 space-y-1.5 text-[11px]">
+            <div className="mt-3 pt-3 border-t border-slate-800/80 space-y-1.5 text-[11px] tabular-nums">
               <div className="flex justify-between text-slate-400">
                 <span>Algoritmi Compilați:</span>
                 <span className="font-bold text-white">{algorithmsCompiled}</span>

@@ -72,6 +72,11 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   const [activeSubTab, setActiveSubTab] = useState<'arcade' | 'lessons' | 'duels' | 'anticheat'>('arcade');
   const [saving, setSaving] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => Promise<void> | void;
+  } | null>(null);
 
   // Form states for Arcade
   const [arcadeScores, setArcadeScores] = useState<ArcadeScores>({
@@ -216,22 +221,27 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     }
   };
 
-  const handleApplyPenalty = async (amount: number, reason: string) => {
+  const handleApplyPenalty = (amount: number, reason: string) => {
     if (!student.id) return;
-    if (!window.confirm(isEn ? `Apply penalty of -${amount} XP for "${reason}"?` : `Aplicați penalizarea de -${amount} XP pentru "${reason}"?`)) return;
-    
-    setSaving(true);
-    const res = await applyCheatingPenalty(student.id, amount, reason);
-    setSaving(false);
-    if (res.success) {
-      setCustomXP(res.newTotalXP);
-      sounds.playClick();
-      setFeedbackMsg({
-        text: isEn ? `Penalty of -${amount} XP applied!` : `Penalizarea de -${amount} XP a fost aplicată cu succes!`,
-        type: 'success'
-      });
-      setTimeout(() => onSuccess(), 1000);
-    }
+    setConfirmDialog({
+      title: isEn ? 'Confirm XP Penalty' : 'Confirmare Penalizare XP',
+      message: isEn ? `Apply penalty of -${amount} XP for "${reason}"?` : `Aplicați penalizarea de -${amount} XP pentru "${reason}"?`,
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        setSaving(true);
+        const res = await applyCheatingPenalty(student.id!, amount, reason);
+        setSaving(false);
+        if (res.success) {
+          setCustomXP(res.newTotalXP);
+          sounds.playClick();
+          setFeedbackMsg({
+            text: isEn ? `Penalty of -${amount} XP applied!` : `Penalizarea de -${amount} XP a fost aplicată cu succes!`,
+            type: 'success'
+          });
+          setTimeout(() => onSuccess(), 1000);
+        }
+      }
+    });
   };
 
   const handleAwardBonus = async (amount: number, reason: string) => {
@@ -282,13 +292,13 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
       <div className="bg-slate-900 border-2 border-teal-500/40 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto">
         
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
+        <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5 min-w-0">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-2xl shadow-lg shadow-teal-500/20 shrink-0">
               {student.avatar || '🎓'}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-mono font-bold text-teal-400 uppercase tracking-wider">
                   {isEn ? 'Student Score Inspector & Admin Control' : 'Panou Modificare & Verificare Scoruri Elev'}
                 </span>
@@ -299,20 +309,22 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                   🏫 {student.schoolId || 'scoala_pilot_01'}
                 </span>
               </div>
-              <h3 className="text-xl font-black text-white font-heading mt-0.5">
+              <h3 className="text-xl font-black text-white font-heading mt-0.5 truncate">
                 {student.username}
               </h3>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-amber-300 font-bold">
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-amber-300 font-bold tabular-nums">
               <Trophy className="w-4 h-4 text-amber-400" />
               <span>{customXP} XP</span>
             </div>
             <button
+              type="button"
               onClick={onClose}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+              aria-label={isEn ? 'Close modal' : 'Închide fereastra'}
+              className="min-w-[38px] min-h-[38px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center justify-center cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -320,20 +332,21 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
         </div>
 
         {/* Modal Navigation Sub-Tabs */}
-        <div className="px-5 pt-3 border-b border-slate-800 bg-slate-950/30 flex items-center gap-2 overflow-x-auto">
+        <div className="px-4 sm:px-5 pt-3 border-b border-slate-800 bg-slate-950/30 flex items-center gap-2 overflow-x-auto scrollbar-none">
           <button
+            type="button"
             onClick={() => {
               setActiveSubTab('arcade');
               sounds.playClick();
             }}
-            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 ${
+            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 whitespace-nowrap shrink-0 ${
               activeSubTab === 'arcade'
                 ? 'border-indigo-400 text-indigo-300 bg-indigo-500/10'
                 : 'border-transparent text-slate-400 hover:text-white hover:bg-slate-800/40'
             }`}
           >
             <Gamepad2 className="w-4 h-4 text-indigo-400" />
-            <span>{isEn ? '16 Arcade Games' : 'Mini-Jocuri Arcade (16)'}</span>
+            <span>{isEn ? `Arcade Games (${ARCADE_GAMES_METADATA.length})` : `Mini-Jocuri Arcade (${ARCADE_GAMES_METADATA.length})`}</span>
           </button>
 
           <button
@@ -399,7 +412,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
           {/* SUB-TAB 1: ARCADE GAMES SCORES */}
           {activeSubTab === 'arcade' && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h4 className="text-sm font-bold text-white flex items-center gap-2">
                     <Gamepad2 className="w-4 h-4 text-indigo-400" />
@@ -409,53 +422,37 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     {isEn ? 'Modify any game score or reset suspicious/cheated results to 0.' : 'Modificați scorul oricărui joc sau resetați la 0 dacă a trișat.'}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
                   <button
                     type="button"
                     onClick={() => {
-                      if (window.confirm(isEn 
-                        ? `Reset ALL points (Arcade: 0, Lessons: 0, Duels: 0, XP: 0) for "${student.username}"?` 
-                        : `Resetează COMPLET toate punctele (Arcade: 0, Lecții: 0, Duel: 0, XP: 0) pentru "${student.username}"?`)) {
-                        setArcadeScores({
-                          typing: 0,
-                          mouse: 0,
-                          game2048: 0,
-                          pcbuilder: 0,
-                          detective: 0,
-                          files: 0,
-                          binary_factory: 0,
-                          maze: 0,
-                          firewall: 0,
-                          rgb_pixel: 0,
-                          byte_slider: 0,
-                          file_drop: 0,
-                          virus_sweeper: 0,
-                          cyber_dino: 0,
-                          redstone_lab: 0,
-                          voxel_architect: 0,
-                          roblox_clicker: 0,
-                          totalArcade: 0
-                        });
-                        setLessonsProgress({
-                          ...DEFAULT_LESSONS_PROGRESS
-                        });
-                        setDuelStats({
-                          wins: 0,
-                          losses: 0,
-                          matchesPlayed: 0,
-                          duelPoints: 0,
-                          cyberSprintWins: 0,
-                          speedCraftingWins: 0,
-                          blockCodingWins: 0,
-                          quizBlitzWins: 0,
-                          cyberShieldWins: 0,
-                          pcRushWins: 0
-                        });
-                        setCustomXP(0);
-                        sounds.playClick();
-                      }
+                      setConfirmDialog({
+                        title: isEn ? 'Reset ALL Student Points' : 'Resetează Tot la 0',
+                        message: isEn
+                          ? `Reset ALL points (Arcade: 0, Lessons: 0, Duels: 0, XP: 0) for "${student.username}"?`
+                          : `Resetează COMPLET toate punctele (Arcade: 0, Lecții: 0, Duel: 0, XP: 0) pentru "${student.username}"?`,
+                        onConfirm: () => {
+                          setConfirmDialog(null);
+                          setArcadeScores({
+                            typing: 0, mouse: 0, game2048: 0, pcbuilder: 0, detective: 0, files: 0,
+                            binary_factory: 0, maze: 0, firewall: 0, rgb_pixel: 0, byte_slider: 0,
+                            file_drop: 0, virus_sweeper: 0, cyber_dino: 0, redstone_lab: 0,
+                            voxel_architect: 0, roblox_clicker: 0, cyber_invaders: 0, cyber_pacman: 0,
+                            cyber_arkanoid: 0, cyber_frogger: 0, cyber_sokoban: 0, cyber_asteroids: 0,
+                            totalArcade: 0
+                          });
+                          setLessonsProgress({ ...DEFAULT_LESSONS_PROGRESS });
+                          setDuelStats({
+                            wins: 0, losses: 0, matchesPlayed: 0, duelPoints: 0,
+                            cyberSprintWins: 0, speedCraftingWins: 0, blockCodingWins: 0,
+                            quizBlitzWins: 0, cyberShieldWins: 0, pcRushWins: 0
+                          });
+                          setCustomXP(0);
+                          sounds.playClick();
+                        }
+                      });
                     }}
-                    className="px-3 py-1.5 rounded-xl bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-600 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md"
+                    className="min-h-[36px] px-3 py-1.5 rounded-xl bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-600 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md whitespace-nowrap"
                     title={isEn ? 'Reset EVERYTHING to 0' : 'Setează absolut totul la 0'}
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -465,34 +462,29 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      if (window.confirm(isEn ? 'Reset all 17 arcade games for this student to 0?' : 'Resetați toate cele 17 mini-jocuri ale acestui elev la 0?')) {
-                        setArcadeScores({
-                          typing: 0,
-                          mouse: 0,
-                          game2048: 0,
-                          pcbuilder: 0,
-                          detective: 0,
-                          files: 0,
-                          binary_factory: 0,
-                          maze: 0,
-                          firewall: 0,
-                          rgb_pixel: 0,
-                          byte_slider: 0,
-                          file_drop: 0,
-                          virus_sweeper: 0,
-                          cyber_dino: 0,
-                          redstone_lab: 0,
-                          voxel_architect: 0,
-                          roblox_clicker: 0,
-                          totalArcade: 0
-                        });
-                        const lessonPts = lessonsProgress.totalLessonScore || 0;
-                        const duelPts = duelStats.duelPoints || 0;
-                        setCustomXP(lessonPts + duelPts);
-                        sounds.playClick();
-                      }
+                      setConfirmDialog({
+                        title: isEn ? 'Reset Arcade Games' : 'Resetează Jocurile la 0',
+                        message: isEn
+                          ? `Reset all ${ARCADE_GAMES_METADATA.length} arcade games for this student to 0?`
+                          : `Resetați toate cele ${ARCADE_GAMES_METADATA.length} mini-jocuri ale acestui elev la 0?`,
+                        onConfirm: () => {
+                          setConfirmDialog(null);
+                          setArcadeScores({
+                            typing: 0, mouse: 0, game2048: 0, pcbuilder: 0, detective: 0, files: 0,
+                            binary_factory: 0, maze: 0, firewall: 0, rgb_pixel: 0, byte_slider: 0,
+                            file_drop: 0, virus_sweeper: 0, cyber_dino: 0, redstone_lab: 0,
+                            voxel_architect: 0, roblox_clicker: 0, cyber_invaders: 0, cyber_pacman: 0,
+                            cyber_arkanoid: 0, cyber_frogger: 0, cyber_sokoban: 0, cyber_asteroids: 0,
+                            totalArcade: 0
+                          });
+                          const lessonPts = lessonsProgress.totalLessonScore || 0;
+                          const duelPts = duelStats.duelPoints || 0;
+                          setCustomXP(lessonPts + duelPts);
+                          sounds.playClick();
+                        }
+                      });
                     }}
-                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                    className="min-h-[36px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>{isEn ? 'Reset Games Only' : 'Doar Jocurile (0)'}</span>
@@ -2842,6 +2834,41 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
         </div>
 
       </div>
+
+      {/* In-DOM Confirmation Modal */}
+      {confirmDialog && (
+        <div className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border-2 border-rose-500/40 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-black text-white font-heading">
+                {confirmDialog.title}
+              </h4>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {confirmDialog.message}
+            </p>
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setConfirmDialog(null)}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer"
+              >
+                {isEn ? 'Cancel' : 'Anulează'}
+              </button>
+              <button
+                type="button"
+                onClick={() => confirmDialog.onConfirm()}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold cursor-pointer"
+              >
+                {isEn ? 'Confirm' : 'Confirmă'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

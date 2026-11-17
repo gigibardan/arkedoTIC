@@ -1233,14 +1233,15 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
             <button
               type="button"
               onClick={onBack}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+              aria-label={isEn ? 'Back to Arena' : 'Înapoi la Arenă'}
+              className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer flex items-center justify-center shrink-0"
               title={isEn ? 'Back to Arena' : 'Înapoi la Arenă'}
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
           )}
           <div className="min-w-0">
-            <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-1.5 font-heading truncate">
+            <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-1.5 font-heading text-balance">
               <Anchor className="w-4 h-4 text-cyan-400 shrink-0" />
               <span>Cyber Battleship 1v1</span>
             </h3>
@@ -1262,7 +1263,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
               className={`px-3 py-1.5 rounded-xl border font-mono text-xs font-black flex items-center gap-1 tabular-nums ${
                 isMyTurn
                   ? turnClock <= 6
-                    ? 'bg-rose-950/90 border-rose-500 text-rose-300 animate-pulse'
+                    ? 'bg-rose-950/90 border-rose-500 text-rose-300'
                     : 'bg-emerald-950/90 border-emerald-500 text-emerald-300'
                   : 'bg-slate-950 border-slate-700 text-slate-400'
               }`}
@@ -1274,7 +1275,8 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
           <button
             type="button"
             onClick={() => setSoundEnabled((s) => !s)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+            aria-label={soundEnabled ? 'Mute' : 'Unmute'}
+            className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer flex items-center justify-center"
             title={soundEnabled ? 'Mute' : 'Unmute'}
           >
             {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-rose-400" />}
@@ -1329,9 +1331,9 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             {/* 10x10 Deployment Grid */}
-            <div className="lg:col-span-7 flex justify-center">
-              <div className="p-2 sm:p-3 rounded-2xl bg-slate-900 border border-cyan-500/40 shadow-inner">
-                <div className="grid grid-cols-11 gap-1 text-[10px] font-mono text-slate-500 text-center mb-1">
+            <div className="lg:col-span-7 flex justify-center overflow-x-auto">
+              <div className="p-1.5 sm:p-3 rounded-2xl bg-slate-900 border border-cyan-500/40 shadow-inner">
+                <div className="grid grid-cols-11 gap-0.5 sm:gap-1 text-[10px] font-mono text-slate-500 text-center mb-1">
                   <div />
                   {COL_LABELS.map((lbl) => (
                     <div key={lbl} className="font-bold">
@@ -1340,8 +1342,8 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                   ))}
                 </div>
                 {myBoard.map((row, y) => (
-                  <div key={y} className="grid grid-cols-11 gap-1 mb-1 items-center">
-                    <div className="text-[10px] font-mono font-bold text-slate-500 text-right pr-1">{y + 1}</div>
+                  <div key={y} className="grid grid-cols-11 gap-0.5 sm:gap-1 mb-0.5 sm:mb-1 items-center">
+                    <div className="text-[10px] font-mono font-bold text-slate-500 text-right pr-1 tabular-nums">{y + 1}</div>
                     {row.map((cell, x) => {
                       const inPreview = deployPreviewSet.has(`${x}_${y}`);
                       const shipMeta = cell.shipId ? SHIP_BLUEPRINTS.find((s) => s.id === cell.shipId) : null;
@@ -1349,10 +1351,11 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                         <button
                           key={`${x}_${y}`}
                           type="button"
+                          aria-label={`${COL_LABELS[x]}${y + 1}`}
                           onMouseEnter={() => setHoverDeployCell({ x, y })}
                           onMouseLeave={() => setHoverDeployCell(null)}
                           onClick={() => handleDeployCellClick(x, y)}
-                          className={`w-7 h-7 sm:w-9 sm:h-9 rounded-md border flex items-center justify-center text-xs font-bold transition cursor-pointer touch-manipulation ${
+                          className={`w-6 h-6 sm:w-9 sm:h-9 rounded-md border flex items-center justify-center text-xs font-bold transition cursor-pointer touch-manipulation ${
                             shipMeta
                               ? `${shipMeta.color} border-white/50 text-white shadow`
                               : cell.hasMine
@@ -1429,7 +1432,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                     </div>
                   </div>
                 </div>
-                <span className="font-mono text-xs font-black">{minesPlaced.length}/2</span>
+                <span className="font-mono text-xs font-black tabular-nums">{minesPlaced.length}/2</span>
               </button>
 
               <button
@@ -1472,7 +1475,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                 ? `⏳ ${opponentName} is aiming...`
                 : `⏳ ${opponentName} ochește...`}
             </span>
-            <div className="flex items-center gap-3 font-mono text-[11px]">
+            <div className="flex items-center gap-3 font-mono tabular-nums text-[11px]">
               {streak >= 2 && (
                 <span className="text-amber-300 flex items-center gap-1 font-black">
                   <Flame className="w-3.5 h-3.5" /> STREAK x{streak}
@@ -1492,7 +1495,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
             <button
               type="button"
               onClick={() => setMobileBoardTab('radar')}
-              className={`flex-1 py-2.5 rounded-lg text-xs font-black cursor-pointer ${
+              className={`flex-1 min-h-[42px] py-2.5 px-2 rounded-lg text-xs font-black cursor-pointer tabular-nums ${
                 mobileBoardTab === 'radar' ? 'bg-cyan-600 text-white' : 'text-slate-400'
               }`}
             >
@@ -1501,7 +1504,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
             <button
               type="button"
               onClick={() => setMobileBoardTab('fleet')}
-              className={`flex-1 py-2.5 rounded-lg text-xs font-black cursor-pointer ${
+              className={`flex-1 min-h-[42px] py-2.5 px-2 rounded-lg text-xs font-black cursor-pointer tabular-nums ${
                 mobileBoardTab === 'fleet' ? 'bg-indigo-600 text-white' : 'text-slate-400'
               }`}
             >
@@ -1524,9 +1527,9 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                 <span className="font-mono text-[11px] text-slate-400 uppercase">{selectedWeapon}</span>
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex justify-center overflow-x-auto">
                 <div>
-                  <div className="grid grid-cols-11 gap-1 text-[10px] font-mono text-slate-500 text-center mb-1">
+                  <div className="grid grid-cols-11 gap-0.5 sm:gap-1 text-[10px] font-mono text-slate-500 text-center mb-1">
                     <div />
                     {COL_LABELS.map((lbl) => (
                       <div key={lbl} className="font-bold">
@@ -1535,23 +1538,24 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                     ))}
                   </div>
                   {radarBoard.map((row, y) => (
-                    <div key={y} className="grid grid-cols-11 gap-1 mb-1 items-center">
-                      <div className="text-[10px] font-mono font-bold text-slate-500 text-right pr-1">{y + 1}</div>
+                    <div key={y} className="grid grid-cols-11 gap-0.5 sm:gap-1 mb-0.5 sm:mb-1 items-center">
+                      <div className="text-[10px] font-mono font-bold text-slate-500 text-right pr-1 tabular-nums">{y + 1}</div>
                       {row.map((cell, x) => {
                         const inTarget = radarPreviewSet.has(`${x}_${y}`);
                         return (
                           <button
                             key={`${x}_${y}`}
                             type="button"
+                            aria-label={`${COL_LABELS[x]}${y + 1}`}
                             disabled={!isMyTurn || awaitingAck || Boolean(matchResult)}
                             onMouseEnter={() => setHoverRadarCell({ x, y })}
                             onMouseLeave={() => setHoverRadarCell(null)}
                             onClick={() => handleFireRadar(x, y)}
-                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md border flex items-center justify-center text-xs font-black transition cursor-pointer touch-manipulation relative ${
+                            className={`w-6 h-6 sm:w-8 sm:h-8 rounded-md border flex items-center justify-center text-xs font-black transition cursor-pointer touch-manipulation relative ${
                               cell.status === 'sunk'
                                 ? 'bg-rose-700 border-rose-300 text-white shadow'
                                 : cell.status === 'hit'
-                                ? 'bg-orange-600 border-amber-300 text-white animate-pulse'
+                                ? 'bg-orange-600 border-amber-300 text-white'
                                 : cell.status === 'mine'
                                 ? 'bg-amber-900 border-amber-400 text-amber-200'
                                 : cell.status === 'miss'
@@ -1584,7 +1588,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
               </div>
 
               {/* Enemy Vessel Silhouette Tracker */}
-              <div className="grid grid-cols-5 gap-1.5 pt-1 border-t border-slate-800/80">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 pt-1 border-t border-slate-800/80">
                 {SHIP_BLUEPRINTS.map((bp) => {
                   const isSunk = enemySunkShips.some((s) => s.id === bp.id);
                   return (
@@ -1596,7 +1600,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                           : 'bg-slate-900 border-slate-800 text-slate-300'
                       }`}
                     >
-                      <div className="font-black truncate">{bp.length}x</div>
+                      <div className="font-black truncate tabular-nums">{bp.length}x</div>
                       <div className="text-[9px] truncate">{isSunk ? '☠' : bp.id.slice(0, 4).toUpperCase()}</div>
                     </div>
                   );
@@ -1617,7 +1621,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                     <Zap className="w-4 h-4" />
                     <span>{isEn ? 'Weapons & Cyber Warfare' : 'Arme & Război Cibernetic'}</span>
                   </span>
-                  <span className="font-mono">{energy} / 100 ⚡</span>
+                  <span className="font-mono tabular-nums">{energy} / 100 ⚡</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1727,17 +1731,17 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                   </span>
                 </div>
 
-                <div className="flex justify-center">
+                <div className="flex justify-center overflow-x-auto">
                   <div>
-                    <div className="grid grid-cols-11 gap-1 text-[9px] font-mono text-slate-500 text-center mb-0.5">
+                    <div className="grid grid-cols-11 gap-0.5 sm:gap-1 text-[9px] font-mono text-slate-500 text-center mb-0.5">
                       <div />
                       {COL_LABELS.map((lbl) => (
                         <div key={lbl}>{lbl}</div>
                       ))}
                     </div>
                     {myBoard.map((row, y) => (
-                      <div key={y} className="grid grid-cols-11 gap-1 mb-1 items-center">
-                        <div className="text-[9px] font-mono text-slate-500 text-right pr-1">{y + 1}</div>
+                      <div key={y} className="grid grid-cols-11 gap-0.5 sm:gap-1 mb-0.5 sm:mb-1 items-center">
+                        <div className="text-[9px] font-mono text-slate-500 text-right pr-1 tabular-nums">{y + 1}</div>
                         {row.map((cell, x) => {
                           const shipMeta = cell.shipId ? SHIP_BLUEPRINTS.find((s) => s.id === cell.shipId) : null;
                           return (
@@ -1789,9 +1793,9 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
 
             {/* VICTORY / DEFEAT OVERLAY */}
             {matchResult && (
-              <div className="lg:col-span-12 absolute inset-0 z-40 rounded-3xl bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+              <div className="lg:col-span-12 absolute inset-0 z-40 rounded-3xl bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4 overflow-y-auto">
                 <div
-                  className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl ${
+                  className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl shrink-0 ${
                     matchResult.won
                       ? 'bg-gradient-to-br from-amber-400 to-emerald-600 text-white'
                       : 'bg-rose-900 text-rose-200'
@@ -1800,7 +1804,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                   <Trophy className="w-9 h-9" />
                 </div>
                 <div>
-                  <h4 className="text-2xl font-black text-white font-heading">
+                  <h4 className="text-2xl font-black text-white font-heading text-balance">
                     {matchResult.won
                       ? isEn
                         ? 'ADMIRAL VICTORY! ⚓'
@@ -1811,7 +1815,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                   </h4>
                   <p className="text-xs text-slate-300 mt-1">{isEn ? matchResult.reasonEn : matchResult.reasonRo}</p>
                 </div>
-                <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs font-black">
+                <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs font-black tabular-nums">
                   <span className="text-cyan-300">
                     {isEn ? 'Enemy Sunk' : 'Inamic Scufundat'}: {matchResult.enemySunk}/5
                   </span>
@@ -1827,7 +1831,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                     <button
                       type="button"
                       onClick={handleRestartSolo}
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black text-xs flex items-center gap-2 cursor-pointer"
+                      className="min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black text-xs flex items-center gap-2 cursor-pointer"
                     >
                       <RotateCcw className="w-4 h-4" />
                       <span>{isEn ? 'Play Again' : 'Joacă Din Nou'}</span>
@@ -1837,7 +1841,7 @@ export const CyberBattleshipDuelGame: React.FC<CyberBattleshipDuelGameProps> = (
                     <button
                       type="button"
                       onClick={onBack}
-                      className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
+                      className="min-h-[44px] px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
                     >
                       <ArrowLeft className="w-4 h-4" />
                       <span>{isEn ? 'Back to Arena' : 'Înapoi la Arenă'}</span>

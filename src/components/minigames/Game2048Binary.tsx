@@ -506,8 +506,9 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
             </div>
 
             <button
+              type="button"
               onClick={resetGame}
-              className="p-2 sm:p-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition cursor-pointer active:scale-95 flex items-center gap-1.5 text-xs font-bold"
+              className="min-h-[38px] p-2 sm:p-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition cursor-pointer active:scale-95 flex items-center gap-1.5 text-xs font-bold"
               title="Resetează jocul"
             >
               <RotateCcw className="w-4 h-4 text-amber-400" />
@@ -516,8 +517,8 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
           </div>
 
           {/* Dedicated Mobile Assistant & Scroll-Lock Bar */}
-          <div className="w-full max-w-[380px] mb-3 p-2 rounded-2xl bg-slate-950/90 border border-slate-800/90 flex flex-col gap-2 shadow-inner">
-            <div className="flex items-center justify-between gap-2">
+          <div className="w-full max-w-[380px] mb-3 p-2.5 rounded-2xl bg-slate-950/90 border border-slate-800/90 flex flex-col gap-2 shadow-inner">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
                 <Smartphone className="w-3.5 h-3.5 text-teal-400" />
                 <span className="text-[11px] font-bold text-slate-300">
@@ -527,8 +528,9 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
 
               {/* Scroll Lock Toggle Button */}
               <button
+                type="button"
                 onClick={toggleScrollLock}
-                className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono transition flex items-center gap-1.5 cursor-pointer active:scale-95 border ${
+                className={`min-h-[32px] px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono transition flex items-center gap-1.5 cursor-pointer active:scale-95 border ${
                   lockScrollOnMobile
                     ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm shadow-emerald-500/30'
                     : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
@@ -554,23 +556,25 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
             </div>
 
             {/* Quick Mobile Controls Selector */}
-            <div className="flex items-center justify-between gap-1 pt-1.5 border-t border-slate-800/80 text-[10px]">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 pt-1.5 border-t border-slate-800/80 text-[10px]">
               <span className="text-slate-400 flex items-center gap-1">
                 <Sliders className="w-3 h-3 text-cyan-400" />
                 {lang === 'en' ? 'Input:' : 'Comandă:'}
               </span>
               <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800">
                 <button
+                  type="button"
                   onClick={() => changeControlMode('both')}
-                  className={`px-2 py-0.5 rounded-md font-bold transition ${
+                  className={`min-h-[30px] px-2.5 py-1 rounded-md font-bold transition cursor-pointer ${
                     controlMode === 'both' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   {lang === 'en' ? 'Both' : 'Ambele'}
                 </button>
                 <button
+                  type="button"
                   onClick={() => changeControlMode('swipe')}
-                  className={`px-2 py-0.5 rounded-md font-bold transition flex items-center gap-1 ${
+                  className={`min-h-[30px] px-2.5 py-1 rounded-md font-bold transition flex items-center gap-1 cursor-pointer ${
                     controlMode === 'swipe' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -578,8 +582,9 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
                   {lang === 'en' ? 'Swipe' : 'Glisare'}
                 </button>
                 <button
+                  type="button"
                   onClick={() => changeControlMode('dpad')}
-                  className={`px-2 py-0.5 rounded-md font-bold transition ${
+                  className={`min-h-[30px] px-2.5 py-1 rounded-md font-bold transition cursor-pointer ${
                     controlMode === 'dpad' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -589,9 +594,9 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
             </div>
           </div>
 
-          {/* Animated Bonus Toast Announcement */}
+          {/* Bonus Toast Announcement */}
           {bonusToast && (
-            <div className="w-full max-w-[380px] mb-3 py-2 px-3.5 rounded-2xl bg-gradient-to-r from-amber-500/25 via-emerald-500/25 to-amber-500/25 border-2 border-amber-400 text-center animate-bounce shadow-xl flex items-center justify-center gap-2">
+            <div className="w-full max-w-[380px] mb-3 py-2 px-3.5 rounded-2xl bg-gradient-to-r from-amber-500/25 via-emerald-500/25 to-amber-500/25 border-2 border-amber-400 text-center shadow-xl flex items-center justify-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
               <div className="flex flex-col">
                 <span className="text-xs font-black text-amber-200 font-heading">{bonusToast.text}</span>
@@ -649,16 +654,16 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
 
             {/* Victory / 2048 Bonus Modal */}
             {showVictoryModal && (
-              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center p-5 text-center gap-3 animate-fadeIn z-20 border-4 border-amber-400 shadow-2xl">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 via-orange-500 to-rose-500 flex items-center justify-center text-white shadow-xl animate-bounce">
-                  <Trophy className="w-7 h-7 text-amber-100" />
+              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-md rounded-3xl flex flex-col items-center justify-center p-4 sm:p-5 text-center gap-2.5 sm:gap-3 animate-fadeIn z-20 border-4 border-amber-400 shadow-2xl overflow-y-auto">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-amber-400 via-orange-500 to-rose-500 flex items-center justify-center text-white shadow-xl shrink-0">
+                  <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-amber-100" />
                 </div>
 
                 <div>
                   <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                     ⭐ BONUS DEBLOCAT: +3.000 PUNCTE
                   </span>
-                  <h3 className="text-lg sm:text-xl font-black text-white font-heading mt-1.5">
+                  <h3 className="text-lg sm:text-xl font-black text-white font-heading mt-1.5 text-balance">
                     {lang === 'en' ? '2048 B (2 KB) SYNTHESIZED!' : '2048 B (2 KB) ATINS!'}
                   </h3>
                   <p className="text-xs text-amber-200 mt-1 max-w-xs mx-auto">
@@ -670,24 +675,26 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
 
                 <div className="bg-slate-900 border border-amber-500/40 rounded-2xl px-5 py-2 text-center">
                   <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">Scor Total cu Bonus</div>
-                  <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono">{score} pts</div>
+                  <div className="text-xl sm:text-2xl font-black text-amber-400 font-mono tabular-nums">{score} pts</div>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
                   <button
+                    type="button"
                     onClick={() => {
                       sounds.playClick();
                       setShowVictoryModal(false);
                     }}
-                    className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    className="min-h-[38px] px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 cursor-pointer active:scale-95"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
                     <span>{lang === 'en' ? 'Keep Playing (to 4096)' : 'Continuă Jocul (Spre 4096)'}</span>
                   </button>
 
                   <button
+                    type="button"
                     onClick={resetGame}
-                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition border border-slate-700 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    className="min-h-[38px] px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs transition border border-slate-700 flex items-center gap-1.5 cursor-pointer active:scale-95"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>{lang === 'en' ? 'New Game' : 'Joc Nou'}</span>
@@ -700,15 +707,16 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
             {isGameOver && (
               <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm rounded-3xl flex flex-col items-center justify-center p-6 text-center gap-3 animate-fadeIn">
                 <span className="text-4xl">🛑</span>
-                <h3 className="text-xl font-black text-white font-heading">
+                <h3 className="text-xl font-black text-white font-heading text-balance">
                   {lang === 'en' ? 'No More Moves!' : 'Nu mai sunt mutări posibile!'}
                 </h3>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-slate-300 tabular-nums">
                   {lang === 'en' ? `Final memory reached: ${highestTile} B` : `Memorie maximă atinsă: ${highestTile} B`}
                 </p>
                 <button
+                  type="button"
                   onClick={resetGame}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg cursor-pointer"
+                  className="min-h-[40px] px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg cursor-pointer"
                 >
                   {lang === 'en' ? 'Try Again' : 'Încearcă din Nou'}
                 </button>
@@ -723,6 +731,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
               className="mt-4 flex flex-col items-center gap-2 select-none"
             >
               <button
+                type="button"
                 onClick={() => moveBoard('up')}
                 className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
                 aria-label="Up"
@@ -731,6 +740,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
               </button>
               <div className="flex items-center gap-4">
                 <button
+                  type="button"
                   onClick={() => moveBoard('left')}
                   className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
                   aria-label="Left"
@@ -738,6 +748,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
                   <ArrowLeftIcon className="w-6 h-6" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => moveBoard('down')}
                   className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
                   aria-label="Down"
@@ -745,6 +756,7 @@ export const Game2048Binary: React.FC<Game2048Props> = ({ onBack, studentName })
                   <ArrowDown className="w-6 h-6" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => moveBoard('right')}
                   className="w-12 h-12 rounded-2xl bg-slate-800 hover:bg-slate-750 active:bg-amber-500 text-slate-200 active:text-slate-950 flex items-center justify-center shadow-lg border border-slate-700 cursor-pointer active:scale-90 transition font-bold"
                   aria-label="Right"

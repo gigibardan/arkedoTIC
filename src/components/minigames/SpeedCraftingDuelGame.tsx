@@ -316,7 +316,7 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
               <span className="text-[11px] sm:text-xs font-mono font-bold text-cyan-400 uppercase truncate">
                 {isEn ? 'You (Crafter)' : 'Tu (Inginer TIC)'}
               </span>
-              <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[9px] sm:text-[10px] shrink-0">
+              <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[9px] sm:text-[10px] shrink-0 tabular-nums">
                 {craftedCount} / {TARGET_CRAFTS_TO_WIN} 💎
               </span>
             </div>
@@ -348,7 +348,7 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
         <div className="flex items-center gap-2.5 sm:gap-3 w-full md:w-auto justify-end">
           <div className="text-right flex-1 md:flex-initial min-w-0">
             <div className="flex items-center justify-end gap-1.5 sm:gap-2">
-              <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono text-[9px] sm:text-[10px] shrink-0">
+              <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono text-[9px] sm:text-[10px] shrink-0 tabular-nums">
                 {opponentCrafts} / {TARGET_CRAFTS_TO_WIN} 💎
               </span>
               <span className="text-[11px] sm:text-xs font-mono font-bold text-rose-400 uppercase truncate">
@@ -383,11 +383,11 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[9px] sm:text-[10px] font-bold uppercase border border-amber-500/30">
                 {isEn ? activeRecipe.categoryEn : activeRecipe.categoryRo}
               </span>
-              <span className="text-[11px] sm:text-xs font-mono text-stone-400">
+              <span className="text-[11px] sm:text-xs font-mono text-stone-400 tabular-nums">
                 {isEn ? `Recipe ${currentRecipeIndex + 1}` : `Rețeta ${currentRecipeIndex + 1}`}
               </span>
             </div>
-            <h3 className="text-base sm:text-xl font-black text-white font-heading mt-0.5 truncate">
+            <h3 className="text-base sm:text-xl font-black text-white font-heading mt-0.5 text-balance">
               {isEn ? activeRecipe.nameEn : activeRecipe.nameRo}
             </h3>
             <p className="text-[11px] sm:text-xs text-stone-300 mt-0.5 line-clamp-2 sm:line-clamp-none">
@@ -397,8 +397,9 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
         </div>
 
         <button
+          type="button"
           onClick={() => setShowRecipeBlueprint(!showRecipeBlueprint)}
-          className="w-full sm:w-auto px-3.5 sm:px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-200 border border-stone-700 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shrink-0 active:scale-95"
+          className="w-full sm:w-auto min-h-[40px] px-3.5 sm:px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-200 border border-stone-700 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shrink-0 active:scale-95"
         >
           <Info className="w-4 h-4 text-cyan-400" />
           <span>{showRecipeBlueprint ? (isEn ? 'Hide Blueprint' : 'Ascunde Schema') : (isEn ? 'Show Blueprint' : 'Arată Schema')}</span>
@@ -416,8 +417,9 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
             </span>
 
             <button
+              type="button"
               onClick={handleClearGrid}
-              className="px-2.5 sm:px-3 py-1 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 text-[11px] sm:text-xs font-mono transition flex items-center gap-1 cursor-pointer"
+              className="min-h-[34px] px-2.5 sm:px-3 py-1 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 text-[11px] sm:text-xs font-mono transition flex items-center gap-1 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>{isEn ? 'Clear Grid' : 'Golește Grila'}</span>
@@ -432,10 +434,12 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
                 const ingredient = INGREDIENTS.find((ing) => ing.id === cellIngredientId);
 
                 return (
-                  <div
+                  <button
                     key={idx}
+                    type="button"
                     onClick={() => handleCellClick(idx)}
-                    className={`w-14 h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-center cursor-pointer transition-all duration-150 active:scale-95 shadow-md ${
+                    aria-label={ingredient ? (isEn ? ingredient.nameEn : ingredient.nameRo) : `${isEn ? 'Slot' : 'Slot'} ${idx + 1}`}
+                    className={`w-14 h-14 sm:w-[72px] sm:h-[72px] md:w-20 md:h-20 rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-center cursor-pointer transition-all duration-150 active:scale-95 shadow-md touch-manipulation ${
                       cellIngredientId && ingredient
                         ? `${ingredient.color} border-stone-400 scale-102`
                         : 'bg-stone-900/90 border-stone-800 hover:border-stone-600'
@@ -444,16 +448,16 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
                     {ingredient ? (
                       <span className="text-xl sm:text-2xl md:text-3xl animate-fadeIn">{ingredient.icon}</span>
                     ) : (
-                      <span className="text-stone-700 font-mono text-[10px] sm:text-xs font-bold">{idx + 1}</span>
+                      <span className="text-stone-700 font-mono text-[10px] sm:text-xs font-bold tabular-nums">{idx + 1}</span>
                     )}
-                  </div>
+                  </button>
                 );
               })}
             </div>
 
             {/* Arrow */}
             <div className="text-stone-500 flex flex-col items-center">
-              <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-amber-400 animate-pulse hidden sm:block" />
+              <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-amber-400 hidden sm:block" />
             </div>
 
             {/* Output Slot & CRAFT Button */}
@@ -467,8 +471,9 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
               </div>
 
               <button
+                type="button"
                 onClick={handleCraftSubmit}
-                className="flex-1 sm:flex-initial sm:w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-black font-heading text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-600/30 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-95"
+                className="flex-1 sm:flex-initial sm:w-full min-h-[44px] px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-black font-heading text-xs sm:text-sm uppercase tracking-wider transition shadow-lg shadow-amber-600/30 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer active:scale-95"
               >
                 <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-stone-950" />
                 <span>{isEn ? 'Craft Item!' : 'CRAFTEAZĂ!'}</span>
@@ -522,12 +527,12 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
           {/* Minecraft Inventory Palette */}
           <div className="bg-stone-900 border border-stone-800 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-xl flex-1 flex flex-col justify-between w-full">
             <div>
-              <div className="flex items-center justify-between mb-2.5 sm:mb-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5 sm:mb-3">
                 <span className="text-[11px] sm:text-xs font-mono font-bold uppercase text-stone-400">
                   {isEn ? 'Minecraft Materials Inventory' : 'Inventar Resurse TIC'}
                 </span>
                 {selectedIngredient && (
-                  <span className="text-[9px] sm:text-[10px] font-mono text-amber-400 truncate max-w-[140px]">
+                  <span className="text-[9px] sm:text-[10px] font-mono text-amber-400 truncate max-w-[160px]">
                     {isEn ? 'Selected' : 'Selectat'}: {INGREDIENTS.find((i) => i.id === selectedIngredient)?.nameRo}
                   </span>
                 )}
@@ -540,11 +545,12 @@ export const SpeedCraftingDuelGame: React.FC<SpeedCraftingDuelGameProps> = ({
                   return (
                     <button
                       key={ing.id}
+                      type="button"
                       onClick={() => {
                         setSelectedIngredient(ing.id);
                         sounds.playClick();
                       }}
-                      className={`p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-center gap-0.5 sm:gap-1 transition-all cursor-pointer ${
+                      className={`min-h-[56px] p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border-2 flex flex-col items-center justify-center gap-0.5 sm:gap-1 transition-all cursor-pointer touch-manipulation ${
                         isSel
                           ? `${ing.color} border-amber-400 ring-2 ring-amber-400/30 scale-102 sm:scale-105 shadow-lg`
                           : 'bg-stone-950/90 border-stone-800 hover:border-stone-600'

@@ -946,19 +946,20 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
               sounds.playClick();
               onBack();
             }}
+            aria-label={isEn ? 'Back to Arcade Hub' : 'Înapoi la Arcade'}
             className="min-h-[44px] min-w-[44px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center gap-1.5 text-xs font-bold transition cursor-pointer shrink-0"
             title={isEn ? 'Back to Arcade Hub' : 'Înapoi la Arcade'}
           >
-            <ArrowLeft className="w-4 h-4 text-amber-400" />
+            <ArrowLeft className="w-4 h-4 text-amber-400 shrink-0" />
             <span className="hidden sm:inline">{isEn ? 'Back' : 'Înapoi'}</span>
           </button>
 
           <div className="min-w-0">
-            <h1 className="text-base sm:text-xl font-black text-white font-heading truncate flex items-center gap-2">
+            <h1 className="text-base sm:text-xl font-black text-white font-heading flex items-center gap-2 text-balance">
               <span aria-hidden="true">🤖</span>
               <span>{isEn ? 'Cyber Sokoban: Data Center Architect' : 'Cyber Sokoban: Inginerul de Servere'}</span>
             </h1>
-            <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 mt-0.5">
               <span>{studentAvatar || '🎓'} {studentName || (isEn ? 'Cadet' : 'Elev')}</span>
               <span aria-hidden="true">·</span>
               <span className="text-amber-300 font-semibold">{isEn ? currentLevel.tierEn : currentLevel.tierRo}</span>
@@ -970,6 +971,7 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
           <button
             type="button"
             onClick={() => setMuted((m) => !m)}
+            aria-label={muted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
             className="min-h-[44px] min-w-[44px] p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition cursor-pointer flex items-center justify-center"
             title={muted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
           >
@@ -983,7 +985,7 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
         {/* Left/Center: Warehouse Board & Controls */}
         <div className="lg:col-span-8 flex flex-col items-center gap-3">
           {/* HUD Bar */}
-          <div className="w-full grid grid-cols-4 gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-2.5 text-center shadow-lg">
+          <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-900 border border-slate-800 rounded-2xl p-2.5 text-center shadow-lg">
             <div>
               <div className="text-[10px] font-semibold text-slate-400 uppercase">{isEn ? 'Campaign' : 'Scor Total'}</div>
               <div className="text-base sm:text-lg font-black text-amber-300 font-mono tabular-nums">
@@ -1035,7 +1037,7 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
           )}
 
           {deadlockWarning && !levelCleared && (
-            <div className="w-full bg-rose-950/70 border border-rose-500/50 rounded-xl px-4 py-2 text-xs text-rose-200 font-bold flex items-center justify-between gap-2">
+            <div className="w-full bg-rose-950/70 border border-rose-500/50 rounded-xl px-4 py-2 text-xs text-rose-200 font-bold flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
                 <span>
@@ -1047,7 +1049,7 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
               <button
                 type="button"
                 onClick={handleUndo}
-                className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-black cursor-pointer shrink-0"
+                className="min-h-[36px] px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-black cursor-pointer shrink-0"
               >
                 {isEn ? 'Undo' : 'Înapoi'}
               </button>
@@ -1113,7 +1115,7 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
                       >
                         {/* Floor Feature Icon (when no crate/player covering or behind) */}
                         {isTarget && !isCrate && (
-                          <div className="w-3.5 h-3.5 rounded-full bg-emerald-400/30 border-2 border-emerald-400 animate-pulse" />
+                          <div className="w-3.5 h-3.5 rounded-full bg-emerald-400/30 border-2 border-emerald-400" />
                         )}
                         {isPlate && !isCrate && !isPlayer && (
                           <div className="w-5 h-5 rounded-md bg-amber-500/30 border-2 border-amber-400 flex items-center justify-center text-[10px] font-mono font-black text-amber-300">
@@ -1127,7 +1129,7 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
                           <div className="text-[9px] font-mono font-bold text-emerald-400/80">OPEN</div>
                         )}
                         {isPortal && !isCrate && !isPlayer && (
-                          <div className="w-6 h-6 rounded-full border-2 border-purple-400 bg-purple-500/30 animate-spin flex items-center justify-center text-[10px] font-bold text-purple-200">
+                          <div className="w-6 h-6 rounded-full border-2 border-purple-400 bg-purple-500/30 shadow-sm shadow-purple-400/40 flex items-center justify-center text-[10px] font-bold text-purple-200">
                             🌀
                           </div>
                         )}
@@ -1165,13 +1167,13 @@ export const CyberSokobanGame: React.FC<CyberSokobanGameProps> = ({
 
             {/* LEVEL CLEARED OVERLAY */}
             {levelCleared && (
-              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center gap-4 z-20">
-                <Sparkles className="w-12 h-12 text-amber-400 animate-pulse" />
+              <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center gap-4 z-20 overflow-y-auto">
+                <Sparkles className="w-12 h-12 text-amber-400 shrink-0" />
                 <div>
                   <div className="text-xs font-mono font-bold text-emerald-400 uppercase">
                     {isEn ? 'Server Vault Synchronized!' : 'Servere Sincronizate!'}
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                  <h2 className="text-2xl sm:text-3xl font-black text-white mt-1 text-balance">
                     {isEn ? currentLevel.titleEn : currentLevel.titleRo}
                   </h2>
                 </div>

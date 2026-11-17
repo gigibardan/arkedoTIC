@@ -5,6 +5,7 @@ import { sounds } from '../../utils/audio';
 import { updateActiveArcadeScore } from '../../lib/studentAuthService';
 import {
   ArrowLeft,
+  ArrowRight,
   LayoutTemplate,
   Table,
   Image as ImageIcon,
@@ -1819,7 +1820,7 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
                 </div>
 
                 {/* User Current Render */}
-                <div className="p-4 rounded-2xl bg-white text-slate-900 shadow-inner">
+                <div className="p-4 rounded-2xl bg-white text-slate-900 shadow-inner overflow-x-auto">
                   <table className="w-full border-collapse text-xs">
                     <thead>
                       <tr style={{ backgroundColor: userGridColor }} className="text-white">
@@ -1840,7 +1841,7 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
                       {Array.from({ length: userGridRows - 1 }).map((_, r) => (
                         <tr key={r}>
                           {Array.from({ length: userGridCols }).map((_, c) => (
-                            <td key={c} className="p-2 border border-slate-300 text-center text-slate-600">
+                            <td key={c} className="p-2 border border-slate-300 text-center text-slate-600 tabular-nums">
                               {r + 1}:{c + 1}
                             </td>
                           ))}
@@ -1859,8 +1860,9 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
                   </div>
                 )}
                 <button
+                  type="button"
                   onClick={handleValidateTabel}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+                  className="min-h-[44px] w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Publică & Validează Tabelul!</span>
@@ -1875,11 +1877,11 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
       {mode === 'inspector' && (
         <div className="flex flex-col gap-6">
           <div className="bg-slate-900/90 border-2 border-pink-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <div className="flex items-center justify-between gap-4 mb-4">
-              <span className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-mono font-bold border border-pink-500/30">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <span className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-mono font-bold border border-pink-500/30 tabular-nums">
                 DETECTIVUL DE GREȘELI TIC • CAZUL {inspectorIdx + 1} DIN {INSPECTOR_CASES.length}
               </span>
-              <span className="text-xs font-mono text-amber-400 font-bold">
+              <span className="text-xs font-mono text-amber-400 font-bold tabular-nums">
                 Scor Detectiv: {inspectorScore} XP
               </span>
             </div>
@@ -1890,7 +1892,7 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
                 {INSPECTOR_CASES[inspectorIdx].imageSrc}
               </div>
               <div>
-                <h3 className="text-lg font-black text-white font-heading">
+                <h3 className="text-lg font-black text-white font-heading text-balance">
                   {lang === 'en' ? INSPECTOR_CASES[inspectorIdx].titleEn : INSPECTOR_CASES[inspectorIdx].titleRo}
                 </h3>
                 <p className="text-xs sm:text-sm text-rose-300 mt-1 font-mono">
@@ -1908,11 +1910,12 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
               {INSPECTOR_CASES[inspectorIdx].options.map((opt, i) => (
                 <button
                   key={opt.id}
+                  type="button"
                   onClick={() => handleSolveInspectorCase(opt.correct)}
-                  className="p-4 rounded-2xl bg-slate-800/80 hover:bg-pink-950/40 border-2 border-slate-700 hover:border-pink-500 text-left transition flex items-center justify-between gap-3 group cursor-pointer active:scale-[0.99]"
+                  className="min-h-[48px] p-4 rounded-2xl bg-slate-800/80 hover:bg-pink-950/40 border-2 border-slate-700 hover:border-pink-500 text-left transition flex items-center justify-between gap-3 group cursor-pointer active:scale-[0.99]"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 group-hover:border-pink-400 group-hover:text-pink-300 shrink-0">
+                    <div className="w-7 h-7 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-300 group-hover:border-pink-400 group-hover:text-pink-300 shrink-0 tabular-nums">
                       {i + 1}
                     </div>
                     <span className="text-sm font-bold text-white group-hover:text-pink-200">
@@ -1927,26 +1930,30 @@ export const PageCraftArcadeGame: React.FC<PageCraftArcadeGameProps> = ({ onBack
             </div>
 
             {/* Case Navigation */}
-            <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-800">
+            <div className="flex flex-wrap items-center justify-between gap-2 mt-6 pt-4 border-t border-slate-800">
               <button
+                type="button"
                 onClick={() => {
                   playSound('click');
                   setInspectorIdx((prev) => Math.max(0, prev - 1));
                 }}
                 disabled={inspectorIdx === 0}
-                className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 disabled:opacity-40 cursor-pointer"
+                className="min-h-[40px] px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-700 disabled:opacity-40 cursor-pointer flex items-center gap-1.5"
               >
-                ← Cazul Anterior
+                <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
+                <span>Cazul Anterior</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => {
                   playSound('click');
                   setInspectorIdx((prev) => (prev + 1) % INSPECTOR_CASES.length);
                 }}
-                className="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold transition cursor-pointer active:scale-95"
+                className="min-h-[40px] px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold transition cursor-pointer active:scale-95 flex items-center gap-1.5"
               >
-                Următorul Caz →
+                <span>Următorul Caz</span>
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
               </button>
             </div>
           </div>

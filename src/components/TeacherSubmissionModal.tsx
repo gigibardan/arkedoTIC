@@ -27,6 +27,7 @@ export const TeacherSubmissionModal: React.FC<TeacherSubmissionModalProps> = ({
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(result?.elapsedSeconds || 0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   // Sync state if result changes
   React.useEffect(() => {
@@ -37,6 +38,7 @@ export const TeacherSubmissionModal: React.FC<TeacherSubmissionModalProps> = ({
       setMaxScore(result.maxScore || 100);
       setElapsedSeconds(result.elapsedSeconds);
       setError(null);
+      setConfirmDelete(false);
     }
   }, [result]);
 
@@ -69,15 +71,18 @@ export const TeacherSubmissionModal: React.FC<TeacherSubmissionModalProps> = ({
 
   const handleDelete = async () => {
     if (!result.id) return;
-    if (window.confirm(isEn ? 'Are you sure you want to delete this submission?' : 'Sigur doriți să ștergeți această notare?')) {
-      setSaving(true);
-      const ok = await deleteStudentResult(result.id);
-      setSaving(false);
-      if (ok) {
-        sounds.playClick();
-        onSuccess();
-        onClose();
-      }
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      sounds.playClick();
+      return;
+    }
+    setSaving(true);
+    const ok = await deleteStudentResult(result.id);
+    setSaving(false);
+    if (ok) {
+      sounds.playClick();
+      onSuccess();
+      onClose();
     }
   };
 
@@ -85,10 +90,12 @@ export const TeacherSubmissionModal: React.FC<TeacherSubmissionModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border-2 border-emerald-500/40 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <div className="bg-slate-900 border-2 border-emerald-500/40 rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl relative">
         <button
+          type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white p-1"
+          aria-label={isEn ? 'Close modal' : 'Închide fereastra'}
+          className="absolute top-4 right-4 min-w-[36px] min-h-[36px] rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -185,28 +192,45 @@ export const TeacherSubmissionModal: React.FC<TeacherSubmissionModalProps> = ({
             <p className="text-xs text-rose-400 font-bold">{error}</p>
           )}
 
-          <div className="flex items-center justify-between pt-2">
-            <button
-              type="button"
-              onClick={handleDelete}
-              disabled={saving}
-              className="px-3.5 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800 text-xs font-bold transition cursor-pointer"
-            >
-              {isEn ? 'Delete Record' : 'Șterge Notarea'}
-            </button>
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={saving}
+                className={`min-h-[38px] px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer whitespace-nowrap ${
+                  confirmDelete
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white border border-rose-400'
+                    : 'bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800'
+                }`}
+              >
+                {confirmDelete
+                  ? (isEn ? 'Confirm Delete?' : 'Confirmi Ștergerea?')
+                  : (isEn ? 'Delete Record' : 'Șterge Notarea')}
+              </button>
+              {confirmDelete && (
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(false)}
+                  className="min-h-[38px] px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer"
+                >
+                  {isEn ? 'No' : 'Nu'}
+                </button>
+              )}
+            </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer"
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer"
               >
                 {isEn ? 'Cancel' : 'Anulează'}
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer disabled:opacity-50"
+                className="min-h-[38px] px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer disabled:opacity-50 whitespace-nowrap"
               >
                 <Save className="w-4 h-4" />
                 <span>{saving ? (isEn ? 'Saving...' : 'Se salvează...') : (isEn ? 'Save Grade' : 'Salvează Nota')}</span>

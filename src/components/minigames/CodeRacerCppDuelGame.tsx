@@ -297,7 +297,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-1">
                 <span className="font-black text-white text-sm truncate">{studentName} (Tu)</span>
-                <span className="font-mono text-xs font-bold text-emerald-300">{score} XP</span>
+                <span className="font-mono text-xs font-bold text-emerald-300 tabular-nums">{score} XP</span>
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mt-1">
                 <div
@@ -305,7 +305,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block tabular-nums">
                 {lang === 'en' ? `Algorithm ${currentIdx + 1} of ${CPP_CHALLENGES.length}` : `Algoritm ${currentIdx + 1} din ${CPP_CHALLENGES.length}`}
               </span>
             </div>
@@ -317,7 +317,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
               C++ VS
             </div>
             {streak > 1 && (
-              <span className="text-[11px] font-black text-emerald-400 flex items-center gap-1 mt-1 font-mono animate-bounce">
+              <span className="text-[11px] font-black text-emerald-400 flex items-center gap-1 mt-1 font-mono tabular-nums">
                 <Flame className="w-3.5 h-3.5 fill-emerald-400 text-emerald-400" /> {streak}x Code Streak
               </span>
             )}
@@ -327,7 +327,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
           <div className="sm:col-span-5 flex items-center gap-3">
             <div className="min-w-0 flex-1 text-right">
               <div className="flex items-center justify-between gap-1">
-                <span className="font-mono text-xs font-bold text-rose-300">{opponentScore} XP</span>
+                <span className="font-mono text-xs font-bold text-rose-300 tabular-nums">{opponentScore} XP</span>
                 <span className="font-black text-white text-sm truncate">{opponentName}</span>
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 mt-1">
@@ -336,7 +336,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
                   style={{ width: `${opponentProgress}%` }}
                 />
               </div>
-              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+              <span className="text-[10px] text-slate-400 font-mono mt-0.5 block tabular-nums">
                 {opponentProgress}% compilat
               </span>
             </div>
@@ -350,19 +350,19 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
       {/* Code Editor Deck */}
       <div className="bg-slate-950 border-2 border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
         {/* Editor Title Bar */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <div className="flex gap-1.5 mr-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-4">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex gap-1.5 mr-1 shrink-0">
               <div className="w-3 h-3 rounded-full bg-rose-500/80" />
               <div className="w-3 h-3 rounded-full bg-amber-500/80" />
               <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
             </div>
-            <Code2 className="w-4 h-4 text-emerald-400" />
-            <span className="text-xs font-mono font-bold text-slate-300">
+            <Code2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="text-xs font-mono font-bold text-slate-300 break-words">
               main.cpp — {lang === 'en' ? challenge.titleEn : challenge.titleRo}
             </span>
           </div>
-          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-emerald-400">
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-emerald-400 shrink-0">
             GCC C++17
           </span>
         </div>
@@ -376,15 +376,15 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
           {challenge.codeSnippet.map((line, idx) => {
             const isBlankLine = idx === challenge.blankLineIndex;
             return (
-              <div key={idx} className={`flex items-center gap-3 ${isBlankLine ? 'bg-emerald-500/10 -mx-2 px-2 py-1 rounded border-l-4 border-emerald-400' : ''}`}>
-                <span className="text-slate-600 select-none w-5 text-right text-[11px] font-bold">
+              <div key={idx} className={`flex items-center gap-3 ${isBlankLine ? 'bg-emerald-500/10 -mx-2 px-2 py-1 rounded-lg ring-1 ring-emerald-500/40' : ''}`}>
+                <span className="text-slate-600 select-none w-5 text-right text-[11px] font-bold tabular-nums">
                   {idx + 1}
                 </span>
                 <span className="text-slate-300 font-mono">
                   {isBlankLine ? (
                     <span>
                       {line.split('___')[0]}
-                      <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-950 border border-emerald-400/80 text-emerald-300 font-black animate-pulse shadow-sm">
+                      <span className="inline-block px-2.5 py-0.5 rounded bg-emerald-950 border border-emerald-400/80 text-emerald-300 font-black shadow-sm">
                         [ ? ]
                       </span>
                       {line.split('___')[1] || ''}
@@ -410,7 +410,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
                 type="button"
                 onClick={() => handleSelectToken(opt)}
                 disabled={Boolean(compilerStatus)}
-                className="p-4 rounded-2xl bg-slate-900 hover:bg-emerald-600 hover:text-slate-950 border-2 border-slate-800 hover:border-emerald-400 font-mono font-black text-base text-emerald-300 transition-all cursor-pointer active:scale-95 text-center shadow-lg hover:shadow-emerald-500/20 disabled:opacity-50"
+                className="min-h-[48px] p-4 rounded-2xl bg-slate-900 hover:bg-emerald-600 hover:text-slate-950 border-2 border-slate-800 hover:border-emerald-400 font-mono font-black text-base text-emerald-300 transition-all cursor-pointer active:scale-95 text-center shadow-lg hover:shadow-emerald-500/20 disabled:opacity-50"
               >
                 {opt}
               </button>
@@ -425,8 +425,8 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
               ? 'bg-emerald-950/80 border-emerald-400/80 text-emerald-200'
               : 'bg-rose-950/80 border-rose-500/80 text-rose-200'
           }`}>
-            <div className="flex items-center gap-2 mb-1 font-bold">
-              <Terminal className="w-4 h-4" />
+            <div className="flex flex-wrap items-center gap-2 mb-1 font-bold">
+              <Terminal className="w-4 h-4 shrink-0" />
               <span>{compilerStatus.isSuccess ? 'COMPILARE REUȘITĂ ✓' : 'EROARE LA COMPILARE ✗'}</span>
             </div>
             <pre className="whitespace-pre-wrap leading-relaxed">{compilerStatus.msg}</pre>
@@ -437,11 +437,11 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
       {/* Finished Banner */}
       {hasFinishedLocal && (
         <div className="bg-gradient-to-r from-emerald-950/90 via-slate-900 to-cyan-950/90 border-2 border-emerald-500/60 rounded-3xl p-6 text-center shadow-2xl">
-          <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-2 animate-bounce" />
-          <h3 className="text-xl font-black text-white font-heading">
+          <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-2" />
+          <h3 className="text-xl font-black text-white font-heading text-balance">
             {lang === 'en' ? 'C++ Code Racer Duel Conquered!' : 'Cursa Compilatorului C++ Câștigată! 🚀'}
           </h3>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-300 mt-1 tabular-nums">
             {lang === 'en'
               ? `All algorithmic challenges compiled with a score of ${score} XP!`
               : `Ai compilat toți algoritmii C++ cu brio și ai obținut ${score} XP!`}
@@ -450,7 +450,7 @@ export const CodeRacerCppDuelGame: React.FC<CodeRacerCppDuelGameProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="mt-4 px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition cursor-pointer shadow-lg shadow-emerald-500/30"
+              className="mt-4 min-h-[44px] px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition cursor-pointer shadow-lg shadow-emerald-500/30"
             >
               {lang === 'en' ? 'Return to Lobby' : 'Înapoi în Arenă'}
             </button>

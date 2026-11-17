@@ -758,14 +758,14 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               sounds.playClick();
               onBack();
             }}
-            className="px-3.5 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+            className="min-h-[38px] px-3.5 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <ArrowLeft className="w-4 h-4 text-sky-400" />
+            <ArrowLeft className="w-4 h-4 text-sky-400 shrink-0" />
             <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
           </button>
 
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30">
                 Tetris TIC Arcade
               </span>
@@ -773,15 +773,15 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                 {lang === 'en' ? 'File Extension Sorter' : 'Sortator de Extensii & Fișiere'}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-0.5 flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black text-white font-heading mt-0.5 flex flex-wrap items-center gap-2 text-balance">
               <span>File-Drop (Tetris Fișiere)</span>
-              <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
+              <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
             </h1>
           </div>
         </div>
 
         {/* Action Controls & Highscore */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             id="file-drop-btn-guide"
             type="button"
@@ -789,9 +789,10 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               sounds.playClick();
               setShowGuideModal(true);
             }}
-            className="px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+            aria-label={lang === 'en' ? 'Extensions Guide' : 'Ghid Extensii'}
+            className="min-h-[38px] px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
           >
-            <HelpCircle className="w-4 h-4 text-amber-400" />
+            <HelpCircle className="w-4 h-4 text-amber-400 shrink-0" />
             <span className="hidden sm:inline">{lang === 'en' ? 'Extensions Guide' : 'Ghid Extensii'}</span>
           </button>
 
@@ -803,16 +804,16 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                 sounds.playClick();
                 setIsPaused((prev) => !prev);
               }}
-              className="px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+              className="min-h-[38px] px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
             >
-              {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
+              {isPaused ? <Play className="w-4 h-4 text-emerald-400 shrink-0" /> : <Pause className="w-4 h-4 text-amber-400 shrink-0" />}
               <span>{isPaused ? 'Continuă' : 'Pauză'}</span>
             </button>
           )}
 
           {/* High Score Badge */}
-          <div className="px-3 py-1.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs">
-            <Trophy className="w-4 h-4 text-amber-400" />
+          <div className="px-3 py-1.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-2 text-xs tabular-nums">
+            <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
             <div className="flex flex-col text-right">
               <span className="text-[10px] text-slate-400 font-mono leading-none">Record</span>
               <span className="font-mono font-black text-amber-300">{highScore} pts</span>
@@ -822,7 +823,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
       </div>
 
       {/* Gamification Dashboard Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 tabular-nums">
         {/* Score */}
         <div className="bg-slate-900/80 border border-sky-500/20 rounded-2xl p-3 text-center">
           <div className="text-[11px] font-mono text-sky-300 uppercase tracking-wider">
@@ -840,14 +841,14 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
           </div>
           <div className="text-2xl sm:text-3xl font-black font-mono text-indigo-200 mt-0.5 flex items-center justify-center gap-1">
             <span>Niv. {level}</span>
-            {isSlowMoActive && <span className="text-xs text-teal-300 font-normal animate-pulse">⏳ Slow</span>}
+            {isSlowMoActive && <span className="text-xs text-teal-300 font-normal">⏳ Slow</span>}
           </div>
         </div>
 
         {/* Combo / Streak */}
         <div className="bg-slate-900/80 border border-amber-500/20 rounded-2xl p-3 text-center">
           <div className="text-[11px] font-mono text-amber-300 uppercase tracking-wider flex items-center justify-center gap-1">
-            <Flame className="w-3.5 h-3.5 text-amber-400" />
+            <Flame className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>Combo</span>
           </div>
           <div className="text-2xl sm:text-3xl font-black font-mono text-amber-300 mt-0.5">
@@ -882,7 +883,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               <span className="font-mono text-xs font-bold text-white truncate max-w-[110px]">
                 {nextFile.extension}
               </span>
-              {nextFile.isThreat && <Biohazard className="w-3.5 h-3.5 text-rose-400 animate-pulse" />}
+              {nextFile.isThreat && <Biohazard className="w-3.5 h-3.5 text-rose-400 shrink-0" />}
             </div>
           ) : (
             <span className="text-xs text-slate-500">---</span>
@@ -923,7 +924,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               <div
                 className={`relative mx-auto max-w-[170px] rounded-2xl p-2.5 sm:p-3 border-2 shadow-2xl transition-all ${
                   currentFile.isThreat
-                    ? 'bg-gradient-to-b from-rose-950 to-slate-950 border-rose-500 text-rose-100 shadow-rose-600/50 ring-2 ring-rose-500/40 animate-pulse'
+                    ? 'bg-gradient-to-b from-rose-950 to-slate-950 border-rose-500 text-rose-100 shadow-rose-600/50 ring-2 ring-rose-500/70'
                     : currentFile.isSpecial
                     ? 'bg-gradient-to-b from-teal-950 to-slate-950 border-teal-400 text-teal-100 shadow-teal-500/40 ring-2 ring-teal-400/40'
                     : 'bg-slate-900/95 border-sky-400 text-white shadow-indigo-600/30'
@@ -966,7 +967,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                   >
                     {currentFile.extension}
                   </span>
-                  <ArrowDown className="w-3.5 h-3.5 text-slate-400 animate-bounce" />
+                  <ArrowDown className="w-3.5 h-3.5 text-slate-400" />
                 </div>
               </div>
             </div>
@@ -974,11 +975,11 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
 
           {/* Start Game / Paused / Game Over Overlay */}
           {!isPlaying && !isGameOver && (
-            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-30 animate-fadeIn">
-              <div className="w-16 h-16 rounded-3xl bg-sky-500/20 border-2 border-sky-400 flex items-center justify-center text-sky-400 mb-3 shadow-lg shadow-sky-500/20">
+            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center z-30 animate-fadeIn overflow-y-auto">
+              <div className="w-16 h-16 rounded-3xl bg-sky-500/20 border-2 border-sky-400 flex items-center justify-center text-sky-400 mb-3 shadow-lg shadow-sky-500/20 shrink-0">
                 <Layers className="w-8 h-8" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+              <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
                 File-Drop (Tetris cu Fișiere)
               </h2>
               <p className="text-slate-300 text-xs sm:text-sm max-w-md mt-2 leading-relaxed">
@@ -1009,7 +1010,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                 id="file-drop-btn-start"
                 type="button"
                 onClick={startGame}
-                className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-black text-sm transition flex items-center gap-2 shadow-xl shadow-indigo-600/30 cursor-pointer active:scale-95"
+                className="min-h-[48px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-black text-sm transition flex items-center gap-2 shadow-xl shadow-indigo-600/30 cursor-pointer active:scale-95"
               >
                 <Play className="w-5 h-5 fill-white" />
                 <span>Începe Jocul (Start)</span>
@@ -1022,12 +1023,12 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-400 mb-2">
                 <Pause className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold text-white font-heading">Joc în Pauză</h3>
+              <h3 className="text-xl font-bold text-white font-heading text-balance">Joc în Pauză</h3>
               <p className="text-xs text-slate-300 mt-1">Apasă tasta P sau butonul de mai jos pentru a relua.</p>
               <button
                 type="button"
                 onClick={() => setIsPaused(false)}
-                className="mt-4 px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer"
+                className="mt-4 min-h-[40px] px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer"
               >
                 <Play className="w-4 h-4" />
                 <span>Reia Jocul</span>
@@ -1040,7 +1041,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
             {LANES.map((_, idx) => (
               <div key={`lane-pointer-${idx}`} className="flex justify-center">
                 {currentLane === idx && isPlaying && (
-                  <div className="w-3 h-3 rounded-full bg-sky-400 shadow-md shadow-sky-400/50 animate-bounce" />
+                  <div className="w-3 h-3 rounded-full bg-sky-400 shadow-md shadow-sky-400/50" />
                 )}
               </div>
             ))}
@@ -1060,7 +1061,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                   onClick={() => setLaneDirect(idx)}
                   className={`group relative rounded-2xl p-1.5 sm:p-2.5 text-left border-2 transition-all flex flex-col justify-between cursor-pointer active:scale-95 select-none ${
                     isCleared
-                      ? 'bg-emerald-500/30 border-emerald-400 shadow-lg shadow-emerald-500/50 ring-2 ring-emerald-400 animate-pulse'
+                      ? 'bg-emerald-500/30 border-emerald-400 shadow-lg shadow-emerald-500/50 ring-2 ring-emerald-400'
                       : isTargeted
                       ? `${lane.bgColor} ${lane.borderColor} shadow-lg ring-2 ring-sky-400/50`
                       : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
@@ -1086,7 +1087,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
 
                   {/* Tetris Stack Meter (Blocks stacked in this folder) */}
                   <div className="mt-2 pt-1.5 border-t border-slate-800/80">
-                    <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mb-1">
+                    <div className="flex items-center justify-between text-[9px] font-mono text-slate-400 mb-1 tabular-nums">
                       <span>Stack</span>
                       <span className={stackCount >= 3 ? 'text-amber-400 font-bold' : ''}>
                         {stackCount}/{FOLDER_CAPACITY}
@@ -1119,36 +1120,36 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
           <button
             type="button"
             onClick={moveLeft}
-            className="py-3 rounded-2xl bg-slate-800 active:bg-slate-700 border border-slate-700 text-white font-bold flex items-center justify-center gap-1 active:scale-95"
+            className="min-h-[48px] py-3 rounded-2xl bg-slate-800 active:bg-slate-700 border border-slate-700 text-white font-bold flex items-center justify-center gap-1 active:scale-95"
           >
-            <ArrowLeftIcon className="w-5 h-5 text-sky-400" />
+            <ArrowLeftIcon className="w-5 h-5 text-sky-400 shrink-0" />
             <span className="text-xs">Stânga</span>
           </button>
 
           <button
             type="button"
             onClick={moveRight}
-            className="py-3 rounded-2xl bg-slate-800 active:bg-slate-700 border border-slate-700 text-white font-bold flex items-center justify-center gap-1 active:scale-95"
+            className="min-h-[48px] py-3 rounded-2xl bg-slate-800 active:bg-slate-700 border border-slate-700 text-white font-bold flex items-center justify-center gap-1 active:scale-95"
           >
             <span className="text-xs">Dreapta</span>
-            <ArrowRightIcon className="w-5 h-5 text-sky-400" />
+            <ArrowRightIcon className="w-5 h-5 text-sky-400 shrink-0" />
           </button>
 
           <button
             type="button"
             onClick={softDrop}
-            className="py-3 rounded-2xl bg-indigo-900/60 active:bg-indigo-800 border border-indigo-700/60 text-indigo-200 font-bold flex items-center justify-center gap-1 active:scale-95"
+            className="min-h-[48px] py-3 rounded-2xl bg-indigo-900/60 active:bg-indigo-800 border border-indigo-700/60 text-indigo-200 font-bold flex items-center justify-center gap-1 active:scale-95"
           >
-            <ArrowDown className="w-5 h-5 text-indigo-300" />
+            <ArrowDown className="w-5 h-5 text-indigo-300 shrink-0" />
             <span className="text-xs">Rapid</span>
           </button>
 
           <button
             type="button"
             onClick={hardDrop}
-            className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black flex items-center justify-center gap-1 active:scale-95 shadow-md shadow-emerald-600/30"
+            className="min-h-[48px] py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black flex items-center justify-center gap-1 active:scale-95 shadow-md shadow-emerald-600/30"
           >
-            <Zap className="w-5 h-5 text-amber-300" />
+            <Zap className="w-5 h-5 text-amber-300 shrink-0" />
             <span className="text-xs">Drop!</span>
           </button>
         </div>
@@ -1192,9 +1193,9 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Left: Feedback or Inspector */}
         <div className="lg:col-span-8 bg-slate-900/80 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-lg">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             <h4 className="text-xs font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-sky-400" />
+              <Info className="w-4 h-4 text-sky-400 shrink-0" />
               <span>Inspector Extensii TIC (Învățare în Timp Real)</span>
             </h4>
             {feedbackMessage && (
@@ -1251,7 +1252,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               ? '🔥 Super combo! Câștigi puncte duble la fiecare fișier sortat corect!'
               : 'Fișierele .docx, .xlsx și .pdf sunt Documente. Nu lăsa fișierele .exe malițioase să atingă folderele obișnuite!'}
           </p>
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400 tabular-nums">
             <span>Folder curățat (Tetris):</span>
             <span className="font-bold text-emerald-400">{clearedFoldersCount} ori</span>
           </div>
@@ -1261,12 +1262,12 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
       {/* Game Over Modal */}
       {isGameOver && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-lg bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-indigo-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-indigo-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
             <div className="w-20 h-20 rounded-full bg-rose-500/20 border-2 border-rose-400 flex items-center justify-center text-4xl mx-auto mb-4 shadow-lg shadow-rose-500/30">
               💾
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Game Over!' : 'Joc Încheiat!'}
             </h2>
 
@@ -1275,7 +1276,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
             </p>
 
             {/* Performance Summary Grid */}
-            <div className="grid grid-cols-3 gap-3 my-6 bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 my-6 bg-slate-950/80 border border-slate-800 rounded-2xl p-4 tabular-nums">
               <div>
                 <div className="text-[10px] font-mono text-slate-400 uppercase">Punctaj</div>
                 <div className="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-0.5">
@@ -1301,9 +1302,9 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               <button
                 type="button"
                 onClick={startGame}
-                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer active:scale-95"
+                className="w-full sm:w-auto min-h-[44px] px-6 py-3 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer active:scale-95"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-4 h-4 shrink-0" />
                 <span>{lang === 'en' ? 'Play Again' : 'Joacă din nou (Altă sesiune)'}</span>
               </button>
 
@@ -1313,9 +1314,9 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                   sounds.playClick();
                   onBack();
                 }}
-                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                className="w-full sm:w-auto min-h-[44px] px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
-                <ArrowLeft className="w-4 h-4 text-slate-400" />
+                <ArrowLeft className="w-4 h-4 text-slate-400 shrink-0" />
                 <span>{lang === 'en' ? 'Arcade Hub' : 'Înapoi la Jocuri'}</span>
               </button>
             </div>
@@ -1327,17 +1328,18 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
       {showGuideModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-2xl bg-slate-900 border-2 border-indigo-500/50 rounded-3xl p-6 shadow-2xl max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
-                <HelpCircle className="w-5 h-5 text-amber-400" />
-                <h3 className="text-base font-black text-white font-heading">
+                <HelpCircle className="w-5 h-5 text-amber-400 shrink-0" />
+                <h3 className="text-base font-black text-white font-heading text-balance">
                   Ghidul Extensiilor de Fișiere (Programă TIC)
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowGuideModal(false)}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs"
+                aria-label={lang === 'en' ? 'Close Guide' : 'Închide Ghidul'}
+                className="min-w-[36px] min-h-[36px] p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs flex items-center justify-center cursor-pointer"
               >
                 ✕
               </button>
@@ -1350,7 +1352,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
                   className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col gap-1.5"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {lane.icon}
                       <span className="font-bold text-white text-sm">{lane.title}</span>
                       <span className="text-[11px] text-slate-400">({lane.sub})</span>
@@ -1375,7 +1377,7 @@ export const FileDropGame: React.FC<FileDropGameProps> = ({ onBack, studentName 
               <button
                 type="button"
                 onClick={() => setShowGuideModal(false)}
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs"
+                className="min-h-[40px] px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs cursor-pointer"
               >
                 Am înțeles, închide
               </button>

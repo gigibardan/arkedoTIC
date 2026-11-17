@@ -308,22 +308,23 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
+          type="button"
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="px-3 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
         >
-          <ArrowLeft className="w-4 h-4 text-emerald-400" />
+          <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-center">
+        <div className="flex items-center gap-2 text-left sm:text-center">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-500 to-red-600 flex items-center justify-center text-white shadow-md shrink-0">
             <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-sm sm:text-base font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Firewall Defender (Cyber Shield)' : 'Scutul Antivirus & Firewall Defender'}
             </h1>
             <p className="text-[10px] sm:text-[11px] text-rose-400 font-mono hidden sm:block">
@@ -333,8 +334,8 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono font-bold">
-          <Trophy className="w-4 h-4 text-amber-400" />
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono font-bold tabular-nums">
+          <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
           <span>Record: {highScore} pts</span>
         </div>
       </div>
@@ -351,7 +352,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
             <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30 uppercase tracking-wider">
               {lang === 'en' ? 'Network Security Simulator' : 'Simulator de Securitate a Rețelelor'}
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-3xl font-black text-white font-heading mt-2 text-balance">
               {lang === 'en' ? 'Protect the School Server from Inbound Viruses!' : 'Apără Serverul Școlii de Pachetele Răuvoitoare!'}
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm max-w-lg mt-2 leading-relaxed">
@@ -381,10 +382,11 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           </div>
 
           <button
+            type="button"
             onClick={startGame}
-            className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer active:scale-95"
+            className="px-8 py-3.5 min-h-[48px] rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-rose-600/30 flex items-center gap-2 cursor-pointer active:scale-95"
           >
-            <Play className="w-5 h-5 fill-current" />
+            <Play className="w-5 h-5 fill-current shrink-0" />
             <span>{lang === 'en' ? 'Start 45s Firewall Defense!' : 'Activează Scutul Firewall (45s)!'}</span>
           </button>
         </div>
@@ -395,19 +397,19 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
             {/* Timer */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800">
-              <Clock className={`w-4 h-4 ${timeLeft <= 10 ? 'text-rose-400 animate-spin' : 'text-blue-400'}`} />
-              <span className={`text-sm font-black font-mono ${timeLeft <= 10 ? 'text-rose-400' : 'text-white'}`}>
+              <Clock className={`w-4 h-4 shrink-0 ${timeLeft <= 10 ? 'text-rose-400' : 'text-blue-400'}`} />
+              <span className={`text-sm font-black font-mono tabular-nums ${timeLeft <= 10 ? 'text-rose-400' : 'text-white'}`}>
                 {timeLeft}s
               </span>
             </div>
 
             {/* Server Integrity Health Bar */}
-            <div className="flex items-center gap-3 flex-1 max-w-xs">
-              <Server className={`w-5 h-5 ${serverHealth <= 30 ? 'text-rose-500 animate-pulse' : 'text-emerald-400'}`} />
-              <div className="flex-1">
+            <div className="flex items-center gap-3 flex-1 min-w-[160px] max-w-xs">
+              <Server className={`w-5 h-5 shrink-0 ${serverHealth <= 30 ? 'text-rose-500' : 'text-emerald-400'}`} />
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-1">
                   <span className="text-slate-400">{lang === 'en' ? 'Server Integrity:' : 'Integritate Server:'}</span>
-                  <span className={serverHealth <= 30 ? 'text-rose-400' : 'text-emerald-400'}>
+                  <span className={`tabular-nums ${serverHealth <= 30 ? 'text-rose-400' : 'text-emerald-400'}`}>
                     {serverHealth}%
                   </span>
                 </div>
@@ -425,26 +427,26 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
             {/* Score & Combo */}
             <div className="flex items-center gap-2">
               <div className="bg-slate-950 px-3 py-1 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-amber-400" />
-                <span className="text-xs font-bold text-amber-300 font-mono">{combo}x</span>
+                <Flame className="w-4 h-4 text-amber-400 shrink-0" />
+                <span className="text-xs font-bold text-amber-300 font-mono tabular-nums">{combo}x</span>
               </div>
               <div className="bg-slate-950 px-3.5 py-1 rounded-xl border border-slate-800 flex items-center gap-1.5">
-                <Trophy className="w-4 h-4 text-rose-400" />
-                <span className="text-sm font-black text-white font-mono">{score} pts</span>
+                <Trophy className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="text-sm font-black text-white font-mono tabular-nums">{score} pts</span>
               </div>
             </div>
           </div>
 
           {/* Incoming Packet Card under Inspection */}
           <div className="bg-slate-950 border-2 border-slate-800 rounded-2xl p-5 sm:p-6 shadow-inner flex flex-col gap-4 relative overflow-hidden">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shrink-0"></div>
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-400">
                   {lang === 'en' ? 'Incoming Network Packet' : 'Pachet Sosit în Inspecție'}
                 </span>
               </div>
-              <span className="font-mono text-xs text-slate-500">ID: #{currentPacket.id}</span>
+              <span className="font-mono text-xs text-slate-500 tabular-nums">ID: #{currentPacket.id}</span>
             </div>
 
             {/* Packet Metadata Grid */}
@@ -513,18 +515,20 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           {/* Big Firewall Decision Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <button
+              type="button"
               onClick={() => handleDecision(true)}
-              className="py-3.5 sm:py-4 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="py-3.5 sm:py-4 px-4 min-h-[48px] rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
-              <CheckCircle2 className="w-5 h-5" />
+              <CheckCircle2 className="w-5 h-5 shrink-0" />
               <span>{lang === 'en' ? 'ALLOW (Safe Traffic)' : 'PERMITE (Trafic Curat)'}</span>
             </button>
 
             <button
+              type="button"
               onClick={() => handleDecision(false)}
-              className="py-3.5 sm:py-4 px-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="py-3.5 sm:py-4 px-4 min-h-[48px] rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm sm:text-base transition shadow-xl shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
-              <ShieldAlert className="w-5 h-5" />
+              <ShieldAlert className="w-5 h-5 shrink-0" />
               <span>{lang === 'en' ? 'BLOCK (Malware / Attack)' : 'BLOCHEAZĂ (Virus / Atac)'}</span>
             </button>
           </div>
@@ -535,7 +539,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           <div
             className={`w-20 h-20 rounded-3xl flex items-center justify-center text-4xl shadow-xl ring-4 ${
               serverHealth > 0
-                ? 'bg-gradient-to-tr from-emerald-500 to-teal-600 text-white shadow-emerald-500/20 ring-emerald-500/20 animate-bounce'
+                ? 'bg-gradient-to-tr from-emerald-500 to-teal-600 text-white shadow-emerald-500/20 ring-emerald-500/20'
                 : 'bg-gradient-to-tr from-rose-600 to-red-700 text-white shadow-rose-500/20 ring-rose-500/20'
             }`}
           >
@@ -554,7 +558,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
                 ? (lang === 'en' ? 'Server Protected!' : 'Server Protejat cu Succes!')
                 : (lang === 'en' ? 'Server Overwhelmed!' : 'Serverul a fost Compromis!')}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
               {studentName ? `${studentName}, ` : ''}
               {serverHealth >= 70
                 ? (lang === 'en' ? 'Chief Network Defense Officer! 🛡️⭐' : 'Comandant al Securității de Rețea! 🛡️⭐')
@@ -568,7 +572,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-2xl w-full">
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Scor Total</span>
-              <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono tabular-nums mt-1">
                 {score}
               </span>
               <span className="text-[11px] text-slate-500">puncte</span>
@@ -576,7 +580,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Integritate Server</span>
-              <span className={`text-3xl sm:text-4xl font-black font-mono mt-1 ${serverHealth > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <span className={`text-3xl sm:text-4xl font-black font-mono tabular-nums mt-1 ${serverHealth > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                 {serverHealth}%
               </span>
               <span className="text-[11px] text-slate-500">HP rămas</span>
@@ -584,7 +588,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Pachete Procesate</span>
-              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono tabular-nums mt-1">
                 {processedCount}
               </span>
               <span className="text-[11px] text-slate-500">corecte</span>
@@ -592,7 +596,7 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Max Combo</span>
-              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono tabular-nums mt-1">
                 {maxCombo}x
               </span>
               <span className="text-[11px] text-slate-500">consecutive</span>
@@ -600,20 +604,22 @@ export const FirewallDefenderGame: React.FC<FirewallDefenderGameProps> = ({ onBa
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
+              type="button"
               onClick={startGame}
-              className="px-6 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-rose-600/30 cursor-pointer active:scale-95"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 shrink-0" />
               <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+              className="px-6 py-3 min-h-[44px] rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
             >
               <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
             </button>

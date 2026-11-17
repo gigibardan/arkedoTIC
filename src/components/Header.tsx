@@ -595,12 +595,13 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="md:hidden fixed inset-x-0 top-14 z-30 bg-slate-900/98 backdrop-blur-2xl border-b border-slate-800 shadow-2xl p-4 max-h-[calc(100dvh-116px)] overflow-y-auto animate-in slide-in-from-top-4 duration-200">
           <div className="space-y-3 max-w-md mx-auto">
             {/* Student Profile Quick Card */}
-            <div
+            <button
+              type="button"
               onClick={() => {
                 if (onEditStudentName) onEditStudentName();
                 setIsMobileMenuOpen(false);
               }}
-              className="p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition touch-manipulation active:scale-[0.98]"
+              className="w-full text-left p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800 flex items-center justify-between cursor-pointer hover:border-emerald-500/40 transition touch-manipulation active:scale-[0.98]"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xl shrink-0">
@@ -616,7 +617,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-xs text-emerald-400 font-bold flex items-center gap-1 shrink-0">
                 {lang === 'en' ? 'Profile' : 'Profil'} <ChevronRight className="w-3.5 h-3.5" />
               </span>
-            </div>
+            </button>
 
             {/* Quick Navigation Items Grid */}
             <div className="grid grid-cols-2 gap-2 pt-1">
@@ -832,7 +833,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Swords className={`w-4 h-4 ${currentView === 'duel' ? 'text-rose-400' : ''}`} />
               <span className="text-[10px] mt-1 tracking-tight font-bold whitespace-nowrap">Duel 1v1</span>
-              <span className="absolute top-1.5 right-2.5 w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
             </button>
           )}
 

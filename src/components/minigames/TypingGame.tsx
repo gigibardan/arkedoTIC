@@ -206,24 +206,25 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
   return (
     <div className="flex flex-col gap-6 max-w-4xl mx-auto w-full pb-10">
       {/* Top Header / Back Navigation */}
-      <div className="flex items-center justify-between gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-4 shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-3 sm:p-4 shadow-xl">
         <button
+          type="button"
           onClick={() => {
             sounds.playClick();
             onBack();
           }}
-          className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95"
+          className="px-3 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
         >
-          <ArrowLeft className="w-4 h-4 text-emerald-400" />
+          <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-center">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md">
+        <div className="flex items-center gap-2 text-left sm:text-center order-3 sm:order-2 w-full sm:w-auto justify-start sm:justify-center">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
             <Keyboard className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-black text-white font-heading">
+            <h1 className="text-sm sm:text-base font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Speed Typing TIC' : 'Vitezomanul Tastaturii TIC'}
             </h1>
             <p className="text-[11px] text-cyan-400 font-mono">
@@ -233,8 +234,8 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
         </div>
 
         {/* High Score Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
-          <Trophy className="w-4 h-4 text-amber-400" />
+        <div className="order-2 sm:order-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold tabular-nums shrink-0">
+          <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
           <span>Record: {highScore} WPM</span>
         </div>
       </div>
@@ -247,44 +248,44 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
         {/* Live Metrics Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10">
           <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
               <Zap className="w-5 h-5" />
             </div>
-            <div>
-              <div className="text-[11px] text-slate-400 uppercase font-bold">WPM (Viteză)</div>
-              <div className="text-xl sm:text-2xl font-black text-white font-mono">{currentWpm}</div>
+            <div className="min-w-0">
+              <div className="text-[11px] text-slate-400 uppercase font-bold truncate">WPM (Viteză)</div>
+              <div className="text-xl sm:text-2xl font-black text-white font-mono tabular-nums">{currentWpm}</div>
             </div>
           </div>
 
           <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
               <CheckCircle2 className="w-5 h-5" />
             </div>
-            <div>
-              <div className="text-[11px] text-slate-400 uppercase font-bold">Acuratețe</div>
-              <div className="text-xl sm:text-2xl font-black text-white font-mono">{accuracy}%</div>
+            <div className="min-w-0">
+              <div className="text-[11px] text-slate-400 uppercase font-bold truncate">Acuratețe</div>
+              <div className="text-xl sm:text-2xl font-black text-white font-mono tabular-nums">{accuracy}%</div>
             </div>
           </div>
 
           <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
               <Flame className="w-5 h-5" />
             </div>
-            <div>
-              <div className="text-[11px] text-slate-400 uppercase font-bold">Combo Streak</div>
-              <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
+            <div className="min-w-0">
+              <div className="text-[11px] text-slate-400 uppercase font-bold truncate">Combo Streak</div>
+              <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono tabular-nums">
                 {currentStreak} <span className="text-xs text-amber-500">🔥</span>
               </div>
             </div>
           </div>
 
           <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
               <Timer className="w-5 h-5" />
             </div>
-            <div>
-              <div className="text-[11px] text-slate-400 uppercase font-bold">Timp Rămas</div>
-              <div className={`text-xl sm:text-2xl font-black font-mono ${timeLeft <= 5 ? 'text-rose-400 animate-pulse' : 'text-white'}`}>
+            <div className="min-w-0">
+              <div className="text-[11px] text-slate-400 uppercase font-bold truncate">Timp Rămas</div>
+              <div className={`text-xl sm:text-2xl font-black font-mono tabular-nums ${timeLeft <= 5 ? 'text-rose-400' : 'text-white'}`}>
                 {timeLeft}s
               </div>
             </div>
@@ -294,11 +295,11 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
         {/* Ready State */}
         {gameState === 'ready' && (
           <div className="flex flex-col items-center justify-center py-10 text-center gap-5 relative z-10">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-cyan-600 via-teal-500 to-emerald-400 flex items-center justify-center text-4xl shadow-xl shadow-cyan-500/20 ring-4 ring-cyan-500/20 animate-bounce">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-cyan-600 via-teal-500 to-emerald-400 flex items-center justify-center text-4xl shadow-xl shadow-cyan-500/20 ring-4 ring-cyan-500/20">
               ⌨️
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+              <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
                 {lang === 'en' ? 'Ready to Test Your Speed?' : 'Pregătit să-ți testezi viteza?'}
               </h2>
               <p className="text-slate-300 text-sm max-w-md mt-2">
@@ -309,10 +310,11 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
             </div>
 
             {/* Sprint Duration Selector */}
-            <div className="flex items-center gap-3 bg-slate-950/90 p-1.5 rounded-2xl border border-slate-800">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 bg-slate-950/90 p-1.5 rounded-2xl border border-slate-800">
               <button
+                type="button"
                 onClick={() => setDuration(30)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                className={`px-4 py-2 min-h-[40px] rounded-xl text-xs font-bold transition cursor-pointer ${
                   duration === 30
                     ? 'bg-cyan-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
@@ -321,8 +323,9 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
                 ⏱️ Sprint 30s
               </button>
               <button
+                type="button"
                 onClick={() => setDuration(60)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                className={`px-4 py-2 min-h-[40px] rounded-xl text-xs font-bold transition cursor-pointer ${
                   duration === 60
                     ? 'bg-cyan-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
@@ -333,10 +336,11 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
             </div>
 
             <button
+              type="button"
               onClick={startGame}
-              className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-600 via-teal-500 to-emerald-500 hover:from-cyan-500 hover:to-emerald-400 text-white font-black text-base shadow-xl shadow-cyan-600/30 transition transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
+              className="px-8 py-3.5 min-h-[48px] rounded-2xl bg-gradient-to-r from-cyan-600 via-teal-500 to-emerald-500 hover:from-cyan-500 hover:to-emerald-400 text-white font-black text-base shadow-xl shadow-cyan-600/30 transition transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
             >
-              <Sparkles className="w-5 h-5 text-amber-300" />
+              <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
               <span>{lang === 'en' ? 'START TYPING!' : 'START TASTARE!'}</span>
             </button>
           </div>
@@ -419,7 +423,7 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
               <span className="px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30 uppercase tracking-wider">
                 {lang === 'en' ? 'Session Complete!' : 'Sesiune Finalizată!'}
               </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+              <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
                 {studentName ? `${studentName}, ` : ''}
                 {currentWpm >= 40
                   ? (lang === 'en' ? 'Legendary Typist! ⚡' : 'Tastator de Legendă! ⚡')
@@ -433,7 +437,7 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-2xl w-full">
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Viteză Finală</span>
-                <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono tabular-nums mt-1">
                   {currentWpm}
                 </span>
                 <span className="text-[11px] text-slate-500">WPM</span>
@@ -441,15 +445,15 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
 
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Acuratețe</span>
-                <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tabular-nums mt-1">
                   {accuracy}%
                 </span>
-                <span className="text-[11px] text-slate-500">{correctKeystrokes}/{totalKeystrokes} taste</span>
+                <span className="text-[11px] text-slate-500 tabular-nums">{correctKeystrokes}/{totalKeystrokes} taste</span>
               </div>
 
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Cuvinte TIC</span>
-                <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono tabular-nums mt-1">
                   {wordsCompleted}
                 </span>
                 <span className="text-[11px] text-slate-500">termeni nimeriți</span>
@@ -457,27 +461,29 @@ export const TypingGame: React.FC<TypingGameProps> = ({ onBack, studentName }) =
 
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Max Streak</span>
-                <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono tabular-nums mt-1">
                   {maxStreak}
                 </span>
                 <span className="text-[11px] text-slate-500">la rând fără eroare</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <button
+                type="button"
                 onClick={startGame}
-                className="px-6 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
+                className="px-6 py-3 min-h-[44px] rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-4 h-4 shrink-0" />
                 <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
               </button>
               <button
+                type="button"
                 onClick={() => {
                   sounds.playClick();
                   onBack();
                 }}
-                className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+                className="px-6 py-3 min-h-[44px] rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
               >
                 <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
               </button>

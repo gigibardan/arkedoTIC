@@ -3,6 +3,7 @@ import {
   Zap,
   Cpu,
   ArrowLeft,
+  ArrowRight,
   RotateCcw,
   Trophy,
   Sparkles,
@@ -524,22 +525,24 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
       {/* 80s Cyberpunk Neon Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950/90 border-2 border-amber-500/50 rounded-2xl p-4 sm:p-6 shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <button
+              type="button"
+              aria-label={lang === 'en' ? 'Back to Arcade Hub' : 'Înapoi la Hub Arcade'}
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="p-2 sm:p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 transition cursor-pointer"
+              className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 transition cursor-pointer shrink-0"
               title={lang === 'en' ? 'Back to Arcade Hub' : 'Înapoi la Hub Arcade'}
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <div className="w-12 h-12 rounded-xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 text-2xl shadow-lg shadow-amber-500/20">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 text-2xl shadow-lg shadow-amber-500/20 shrink-0">
               ⚡
             </div>
-            <div>
-              <div className="flex items-center gap-2">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold uppercase tracking-wider border border-amber-500/40">
                   RETRO 80s HARDWARE LAB
                 </span>
@@ -547,32 +550,34 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                   Arduino Uno ATmega328P
                 </span>
               </div>
-              <h1 className="text-lg sm:text-2xl font-black text-white font-heading tracking-tight flex items-center gap-2">
+              <h1 className="text-lg sm:text-2xl font-black text-white font-heading tracking-tight flex items-center gap-2 text-balance">
                 <span>Circuit Master 80s: Arduino & Smart City</span>
-                <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
               </h1>
             </div>
           </div>
 
           {/* Player stats & retro dials */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2 font-mono text-xs">
-              <Trophy className="w-4 h-4 text-amber-400" />
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2 font-mono text-xs tabular-nums">
+              <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
               <span className="text-slate-400">{lang === 'en' ? 'Score:' : 'Scor:'}</span>
               <span className="font-bold text-amber-300 text-sm">{score}</span>
             </div>
 
-            <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2 font-mono text-xs">
-              <Gauge className="w-4 h-4 text-emerald-400" />
+            <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2 font-mono text-xs tabular-nums">
+              <Gauge className="w-4 h-4 text-emerald-400 shrink-0" />
               <span className="text-slate-400">{lang === 'en' ? 'Health:' : 'Integritate:'}</span>
-              <span className={`font-bold text-sm ${health > 30 ? 'text-emerald-400' : 'text-rose-400 animate-pulse'}`}>
+              <span className={`font-bold text-sm ${health > 30 ? 'text-emerald-400' : 'text-rose-400'}`}>
                 {health}%
               </span>
             </div>
 
             <button
+              type="button"
+              aria-label={soundMuted ? 'Activează Sunet' : 'Dezactivează Sunet'}
               onClick={() => setSoundMuted(!soundMuted)}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
+              className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer shrink-0"
               title={soundMuted ? 'Activează Sunet' : 'Dezactivează Sunet'}
             >
               {soundMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
@@ -581,15 +586,15 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
         </div>
 
         {/* Retro CRT Scanline Overlay Effect */}
-        <div className="mt-3 flex items-center gap-3 font-mono text-xs text-slate-400 border-t border-slate-800 pt-2.5">
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-slate-400 border-t border-slate-800 pt-2.5">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
             <span className="text-emerald-300 font-bold">5.0V STABIL</span>
           </div>
           <span>•</span>
           <span>Oscilator: 16.0 MHz Cuarț</span>
           <span>•</span>
-          <span>Record Personal: <strong className="text-amber-300">{highScore} pts</strong></span>
+          <span className="tabular-nums">Record Personal: <strong className="text-amber-300">{highScore} pts</strong></span>
         </div>
       </div>
 
@@ -599,7 +604,7 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           <div className="w-20 h-20 rounded-3xl bg-amber-500/10 border-2 border-amber-500/40 flex items-center justify-center text-4xl mb-4 shadow-xl shadow-amber-500/10">
             🔌
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
             {lang === 'en' ? 'Hardware Engineering Simulator' : 'Simulatorul de Inginerie Hardware'}
           </h2>
           <p className="text-slate-300 text-sm mt-2 leading-relaxed">
@@ -647,14 +652,15 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={() => {
               sounds.playClick();
               setStage('wiring');
               addLog('INCEPE ETAPA 1: Conecteaza senzorii pe pinii corecti ai placii Arduino!');
             }}
-            className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/25 transition cursor-pointer flex items-center gap-2 active:scale-95"
+            className="px-8 py-3.5 min-h-[48px] rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/25 transition cursor-pointer flex items-center gap-2 active:scale-95"
           >
-            <Play className="w-5 h-5 fill-current" />
+            <Play className="w-5 h-5 fill-current shrink-0" />
             <span>{lang === 'en' ? 'Start Circuit Lab' : 'Pornește Laboratorul de Circuite'}</span>
           </button>
         </div>
@@ -666,27 +672,29 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           {/* Left: Components Palette */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             <div className="bg-slate-900 border-2 border-slate-800 rounded-2xl p-4 shadow-xl">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <h3 className="text-sm font-black text-white font-heading uppercase tracking-wider flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-amber-400" />
+                  <Layers className="w-4 h-4 text-amber-400 shrink-0" />
                   {lang === 'en' ? 'IoT Components to Wire' : 'Componente de Conectat'}
                 </h3>
-                <span className="text-xs font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
+                <span className="text-xs font-mono font-bold tabular-nums text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
                   ⏱️ {stageTimer}s
                 </span>
               </div>
 
               {/* Wire Color Selector */}
-              <div className="flex items-center gap-2 mb-3 p-2 bg-slate-950 rounded-xl border border-slate-800 text-xs">
+              <div className="flex flex-wrap items-center gap-2 mb-3 p-2 bg-slate-950 rounded-xl border border-slate-800 text-xs">
                 <span className="text-slate-400 font-mono text-[11px]">Fir Culoare:</span>
                 {(['red', 'black', 'yellow', 'green', 'blue'] as WireColor[]).map((col) => (
                   <button
                     key={col}
+                    type="button"
+                    aria-label={`Select ${col} wire color`}
                     onClick={() => {
                       sounds.playClick();
                       setActiveWireColor(col);
                     }}
-                    className={`w-6 h-6 rounded-lg transition border cursor-pointer ${
+                    className={`w-7 h-7 rounded-lg transition border cursor-pointer ${
                       col === 'red' ? 'bg-rose-500 border-rose-300' :
                       col === 'black' ? 'bg-slate-900 border-slate-500' :
                       col === 'yellow' ? 'bg-amber-400 border-amber-200' :
@@ -745,13 +753,14 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                           return (
                             <button
                               key={pin.id}
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 sounds.playClick();
                                 setSelectedCompPin({ compId: comp.id, pinId: pin.id });
                                 addLog(`SELECTAT: Pin componenta [${pin.label}]. Alege acum pinul corespondent pe placa Arduino!`);
                               }}
-                              className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition flex items-center gap-1 cursor-pointer ${
+                              className={`px-2 py-1.5 min-h-[30px] rounded-lg text-[10px] font-mono font-bold transition flex items-center gap-1 cursor-pointer ${
                                 isWired
                                   ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/40'
                                   : isPinSelected
@@ -776,14 +785,14 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           {/* Right: Arduino Uno Virtual Pinout */}
           <div className="lg:col-span-7 flex flex-col gap-4">
             <div className="bg-gradient-to-b from-slate-900 to-indigo-950/60 border-2 border-slate-700/80 rounded-2xl p-5 shadow-2xl relative">
-              <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3 border-b border-slate-800 pb-2.5">
                 <div className="flex items-center gap-2">
-                  <Cpu className="w-5 h-5 text-teal-400" />
+                  <Cpu className="w-5 h-5 text-teal-400 shrink-0" />
                   <span className="font-mono font-bold text-sm text-white">ARDUINO UNO PIN HEADER</span>
                 </div>
                 <div className="text-xs font-mono text-slate-400">
                   {selectedCompPin ? (
-                    <span className="text-amber-300 animate-pulse font-bold">
+                    <span className="text-amber-300 font-bold">
                       Alege pinul pentru: {selectedCompPin.pinId}
                     </span>
                   ) : (
@@ -810,8 +819,9 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                         return (
                           <button
                             key={p.id}
+                            type="button"
                             onClick={() => handleConnectPin(p.id)}
-                            className={`p-2 rounded-xl border text-xs font-mono font-bold transition flex flex-col items-center justify-center cursor-pointer ${
+                            className={`p-2 min-h-[44px] rounded-xl border text-xs font-mono font-bold transition flex flex-col items-center justify-center cursor-pointer ${
                               isConnected
                                 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/60 shadow-md'
                                 : isPWM
@@ -831,7 +841,7 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
 
                 {/* Power & Analog Header (Bottom Row) */}
                 <div>
-                  <div className="text-[10px] font-mono text-amber-300 font-bold uppercase mb-1.5 flex items-center justify-between">
+                  <div className="text-[10px] font-mono text-amber-300 font-bold uppercase mb-1.5 flex flex-wrap items-center justify-between gap-1">
                     <span>Alimentare (5V, GND) & Pini Analogici ADC / I2C (A0 - A5)</span>
                     <span className="text-slate-400">POWER & ANALOG IN</span>
                   </div>
@@ -845,8 +855,9 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                         return (
                           <button
                             key={p.id}
+                            type="button"
                             onClick={() => handleConnectPin(p.id)}
-                            className={`p-2 rounded-xl border text-xs font-mono font-bold transition flex flex-col items-center justify-center cursor-pointer ${
+                            className={`p-2 min-h-[44px] rounded-xl border text-xs font-mono font-bold transition flex flex-col items-center justify-center cursor-pointer ${
                               isConnected
                                 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-500/60 shadow-md'
                                 : isPower
@@ -881,19 +892,20 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
               </div>
 
               {/* Fast Forward Stage Button */}
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs text-slate-400 font-mono">
                   Toate componentele conectate?
                 </span>
                 <button
+                  type="button"
                   onClick={() => {
                     sounds.playLevelUp();
                     setStage('oscilloscope');
                   }}
-                  className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs cursor-pointer shadow flex items-center gap-1.5"
+                  className="px-4 py-2.5 min-h-[40px] rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs cursor-pointer shadow flex items-center gap-1.5"
                 >
                   <span>Etapa 2: Osciloscop & Ohm</span>
-                  <span>→</span>
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                 </button>
               </div>
             </div>
@@ -907,9 +919,9 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           {/* Oscilloscope Screen */}
           <div className="lg:col-span-7 bg-slate-950 border-2 border-cyan-500/60 rounded-2xl p-5 shadow-2xl relative overflow-hidden flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-4">
                 <div className="flex items-center gap-2 text-cyan-400 font-mono font-bold text-sm">
-                  <Activity className="w-5 h-5 animate-pulse" />
+                  <Activity className="w-5 h-5 shrink-0" />
                   <span>OSCILOSCOP DUAL-CHANNEL RETRO (500 kHz)</span>
                 </div>
                 <span className="text-xs font-mono text-slate-400">CH1: PWM LED | CH2: ECHO HC-SR04</span>
@@ -1007,8 +1019,9 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                 {targetOhmChallenge.options.map((ohmVal) => (
                   <button
                     key={ohmVal}
+                    type="button"
                     onClick={() => handleSelectOhm(ohmVal)}
-                    className="p-3 rounded-xl bg-slate-800 hover:bg-amber-600/30 text-white font-mono font-bold text-xs border border-slate-700 hover:border-amber-400 transition cursor-pointer flex items-center justify-center gap-1 active:scale-95"
+                    className="p-3 min-h-[44px] rounded-xl bg-slate-800 hover:bg-amber-600/30 text-white font-mono font-bold text-xs border border-slate-700 hover:border-amber-400 transition cursor-pointer flex items-center justify-center gap-1 active:scale-95"
                   >
                     <span>{ohmVal} Ω</span>
                   </button>
@@ -1017,15 +1030,16 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
             </div>
 
             <button
+              type="button"
               onClick={() => {
                 sounds.playLevelUp();
                 setStage('multitask');
                 addLog('INCEPE ETAPA 3: Multitasking cooperativ! Evita delay() si rezolva evenimentele.');
               }}
-              className="mt-6 w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center gap-2"
+              className="mt-6 w-full py-3 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center gap-2"
             >
               <span>Etapa 3: Multitasking millis()</span>
-              <span>→</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
         </div>
@@ -1037,12 +1051,12 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           {/* Active Incoming Events Queue */}
           <div className="lg:col-span-7 bg-slate-900 border-2 border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-3">
                 <div className="flex items-center gap-2 font-mono font-bold text-sm text-amber-400">
-                  <Clock className="w-5 h-5 animate-spin" />
+                  <Clock className="w-5 h-5 shrink-0" />
                   <span>COADA DE EVENIMENTE IOT (NON-BLOCKING SCHEDULER)</span>
                 </div>
-                <span className="text-xs font-mono text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                <span className="text-xs font-mono tabular-nums text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
                   ⏱️ Timp Etapă: {taskTimer}s
                 </span>
               </div>
@@ -1057,7 +1071,7 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                         : 'bg-slate-950/60 border-slate-800 opacity-70'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-cyan-300">
                           PRIO #{idx + 1}
@@ -1066,7 +1080,7 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                           {lang === 'en' ? ev.titleEn : ev.titleRo}
                         </h4>
                       </div>
-                      <span className="text-xs font-mono text-emerald-400 font-bold">
+                      <span className="text-xs font-mono tabular-nums text-emerald-400 font-bold">
                         +{ev.reward * multiplier} XP
                       </span>
                     </div>
@@ -1089,34 +1103,38 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
               <div className="text-[11px] font-mono text-slate-400 mb-2 uppercase font-bold">
                 Alege Rutina Non-Blocantă Corectă:
               </div>
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <button
+                  type="button"
                   onClick={() => handleResolveTask('millis_dispatch')}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-emerald-600/40 border border-slate-700 hover:border-emerald-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
+                  className="p-3 min-h-[52px] rounded-xl bg-slate-800 hover:bg-emerald-600/40 border border-slate-700 hover:border-emerald-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
                 >
                   <span className="text-emerald-300">millis() Planificator</span>
                   <span className="text-[10px] text-slate-400 font-normal">Timp Asincron non-blocant</span>
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => handleResolveTask('isr_interrupt')}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-cyan-600/40 border border-slate-700 hover:border-cyan-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
+                  className="p-3 min-h-[52px] rounded-xl bg-slate-800 hover:bg-cyan-600/40 border border-slate-700 hover:border-cyan-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
                 >
                   <span className="text-cyan-300">Întrerupere Hardware (ISR)</span>
                   <span className="text-[10px] text-slate-400 font-normal">attachInterrupt(digitalPinToInterrupt)</span>
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => handleResolveTask('analog_smooth')}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-amber-600/40 border border-slate-700 hover:border-amber-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
+                  className="p-3 min-h-[52px] rounded-xl bg-slate-800 hover:bg-amber-600/40 border border-slate-700 hover:border-amber-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
                 >
                   <span className="text-amber-300">Filtru Medie Mobilă</span>
                   <span className="text-[10px] text-slate-400 font-normal">Netezire citiri ADC analogice</span>
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => handleResolveTask('i2c_buffer')}
-                  className="p-3 rounded-xl bg-slate-800 hover:bg-purple-600/40 border border-slate-700 hover:border-purple-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
+                  className="p-3 min-h-[52px] rounded-xl bg-slate-800 hover:bg-purple-600/40 border border-slate-700 hover:border-purple-400 text-white font-mono text-xs font-bold transition cursor-pointer flex flex-col items-center justify-center gap-0.5 active:scale-95"
                 >
                   <span className="text-purple-300">Buffer Ecran I2C (0x27)</span>
                   <span className="text-[10px] text-slate-400 font-normal">LiquidCrystal_I2C non-blocant</span>
@@ -1129,7 +1147,7 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
           <div className="lg:col-span-5 bg-slate-900 border-2 border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 text-rose-400 font-mono font-bold text-sm mb-3 pb-2 border-b border-slate-800">
-                <AlertTriangle className="w-5 h-5" />
+                <AlertTriangle className="w-5 h-5 shrink-0" />
                 <span>CAPCANA delay() vs REZOLVAREA millis()</span>
               </div>
 
@@ -1137,7 +1155,7 @@ export const CircuitMasterGame: React.FC<CircuitMasterGameProps> = ({
                 <div className="text-rose-400 font-bold">
                   ❌ GREȘIT (Blocant):
                 </div>
-                <pre className="p-2 bg-slate-900 rounded text-[10px] text-rose-300">
+                <pre className="p-2 bg-slate-900 rounded text-[10px] text-rose-300 overflow-x-auto">
                   {`digitalWrite(LED, HIGH);
 delay(5000); // PROCESOR ORB 5 SECUNDE!
 // Nu poate citi senzorul de gaz!`}
@@ -1146,7 +1164,7 @@ delay(5000); // PROCESOR ORB 5 SECUNDE!
                 <div className="text-emerald-400 font-bold mt-2">
                   ✅ CORECT (Non-blocant):
                 </div>
-                <pre className="p-2 bg-slate-900 rounded text-[10px] text-emerald-300">
+                <pre className="p-2 bg-slate-900 rounded text-[10px] text-emerald-300 overflow-x-auto">
                   {`unsigned long acum = millis();
 if (acum - anterior >= interval) {
   anterior = acum;
@@ -1158,15 +1176,16 @@ if (acum - anterior >= interval) {
             </div>
 
             <button
+              type="button"
               onClick={() => {
                 sounds.playLevelUp();
                 setStage('boss_grid');
                 addLog('INCEPE CRIZA SMART CITY: Furtuna energetica! Salveaza grila electrica.');
               }}
-              className="mt-4 w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs cursor-pointer shadow flex items-center justify-center gap-2"
+              className="mt-4 w-full py-3 min-h-[44px] rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs cursor-pointer shadow flex items-center justify-center gap-2"
             >
               <span>Etapa 4: Bătălia Grilei Smart City</span>
-              <span>→</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </div>
         </div>
@@ -1208,8 +1227,8 @@ if (acum - anterior >= interval) {
           {/* Subsystems Control Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* 1. Iluminat Public */}
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-              <div>
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <div className="min-w-0">
                 <div className="font-bold text-sm text-white flex items-center gap-2">
                   <span>💡 Iluminat Public LDR & PIR</span>
                 </div>
@@ -1218,8 +1237,9 @@ if (acum - anterior >= interval) {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => toggleSubsystem('streetlight')}
-                className={`px-3.5 py-2 rounded-xl font-mono text-xs font-bold transition cursor-pointer ${
+                className={`px-3.5 py-2 min-h-[40px] rounded-xl font-mono text-xs font-bold transition cursor-pointer shrink-0 ${
                   subsystems.streetlight
                     ? 'bg-emerald-600 text-white shadow-emerald-600/30 shadow'
                     : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -1230,8 +1250,8 @@ if (acum - anterior >= interval) {
             </div>
 
             {/* 2. Bariera Parcării */}
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-              <div>
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <div className="min-w-0">
                 <div className="font-bold text-sm text-white flex items-center gap-2">
                   <span>🚧 Barieră Ultrasonică SG90</span>
                 </div>
@@ -1240,8 +1260,9 @@ if (acum - anterior >= interval) {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => toggleSubsystem('parking')}
-                className={`px-3.5 py-2 rounded-xl font-mono text-xs font-bold transition cursor-pointer ${
+                className={`px-3.5 py-2 min-h-[40px] rounded-xl font-mono text-xs font-bold transition cursor-pointer shrink-0 ${
                   subsystems.parking
                     ? 'bg-cyan-600 text-white shadow-cyan-600/30 shadow'
                     : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -1252,8 +1273,8 @@ if (acum - anterior >= interval) {
             </div>
 
             {/* 3. Ventilator Evacuare Gaze */}
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-              <div>
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <div className="min-w-0">
                 <div className="font-bold text-sm text-white flex items-center gap-2">
                   <span>🔥 Alertă Gaze MQ-2 Releu</span>
                 </div>
@@ -1262,8 +1283,9 @@ if (acum - anterior >= interval) {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => toggleSubsystem('gasVent')}
-                className={`px-3.5 py-2 rounded-xl font-mono text-xs font-bold transition cursor-pointer ${
+                className={`px-3.5 py-2 min-h-[40px] rounded-xl font-mono text-xs font-bold transition cursor-pointer shrink-0 ${
                   subsystems.gasVent
                     ? 'bg-rose-600 text-white shadow-rose-600/30 shadow'
                     : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -1274,8 +1296,8 @@ if (acum - anterior >= interval) {
             </div>
 
             {/* 4. Ecran LCD 1602 Informare */}
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-              <div>
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <div className="min-w-0">
                 <div className="font-bold text-sm text-white flex items-center gap-2">
                   <span>📟 Panou Informare I2C LCD</span>
                 </div>
@@ -1284,8 +1306,9 @@ if (acum - anterior >= interval) {
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => toggleSubsystem('weatherLcd')}
-                className={`px-3.5 py-2 rounded-xl font-mono text-xs font-bold transition cursor-pointer ${
+                className={`px-3.5 py-2 min-h-[40px] rounded-xl font-mono text-xs font-bold transition cursor-pointer shrink-0 ${
                   subsystems.weatherLcd
                     ? 'bg-purple-600 text-white shadow-purple-600/30 shadow'
                     : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -1296,16 +1319,17 @@ if (acum - anterior >= interval) {
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
             <span className="text-xs font-mono text-slate-400">
               Echilibrul ideal crește stabilitatea orașului.
             </span>
             <button
+              type="button"
               onClick={() => {
                 setScore((s) => s + 250);
                 finalizeGame();
               }}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg shadow-amber-500/20"
+              className="px-6 py-2.5 min-h-[44px] rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg shadow-amber-500/20"
             >
               Finalizează Misiunea Smart City 🏁
             </button>
@@ -1324,7 +1348,7 @@ if (acum - anterior >= interval) {
             Misiune Hardware Încheiată
           </span>
 
-          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
             {lang === 'en' ? 'Hardware Architect Diploma' : 'Rezultate Simulator Circuit Master'}
           </h2>
 
@@ -1338,40 +1362,42 @@ if (acum - anterior >= interval) {
           <div className="grid grid-cols-2 gap-3 w-full my-6 font-mono text-left">
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
               <span className="text-xs text-slate-400 block mb-1">Scor Obținut:</span>
-              <span className="text-2xl font-black text-amber-300">{score}</span>
+              <span className="text-2xl font-black text-amber-300 tabular-nums">{score}</span>
               <span className="text-[10px] text-slate-500 block mt-0.5">Punctaj arcade echilibrat</span>
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
               <span className="text-xs text-slate-400 block mb-1">Record Personal:</span>
-              <span className="text-2xl font-black text-cyan-300">{highScore}</span>
+              <span className="text-2xl font-black text-cyan-300 tabular-nums">{highScore}</span>
               <span className="text-[10px] text-slate-500 block mt-0.5">Salvat în profilul tău</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full">
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 setScore(0);
                 setHealth(100);
                 setStage('menu');
               }}
-              className="flex-1 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer transition flex items-center justify-center gap-2 border border-slate-700"
+              className="flex-1 py-3 min-h-[44px] rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer transition flex items-center justify-center gap-2 border border-slate-700"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 shrink-0" />
               <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2"
+              className="flex-1 py-3 min-h-[44px] rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs cursor-pointer shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2"
             >
               <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Arcade'}</span>
-              <span>→</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
           </div>
         </div>

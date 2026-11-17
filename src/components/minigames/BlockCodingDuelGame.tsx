@@ -466,16 +466,16 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
       {/* Top Duel Challenge Header */}
       <div className="p-5 rounded-2xl bg-slate-900 border-2 border-indigo-500/40 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-black tracking-wider uppercase border border-indigo-500/40 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-black tracking-wider uppercase border border-indigo-500/40 flex items-center gap-1.5 tabular-nums">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               {lang === 'en' ? `Level ${currentLevelIndex + 1} of ${totalLevels}` : `Nivelul ${currentLevelIndex + 1} din ${totalLevels}`}
             </span>
             <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
               {(lang === 'en' ? activeChallenge.conceptEn : activeChallenge.concept) || activeChallenge.concept}
             </span>
           </div>
-          <h3 className="text-lg font-black text-white flex items-center gap-2 font-heading">
+          <h3 className="text-lg font-black text-white flex items-center gap-2 font-heading text-balance">
             🧩 {(lang === 'en' ? activeChallenge.titleEn : activeChallenge.title) || activeChallenge.title}
           </h3>
           <p className="text-xs text-slate-300 max-w-xl">
@@ -485,13 +485,13 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
 
         {/* Rival Progress Mini-HUD */}
         <div className="w-full md:w-auto p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-rose-950/80 border border-rose-500/40 flex items-center justify-center text-xl shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-rose-950/80 border border-rose-500/40 flex items-center justify-center text-xl shadow-md shrink-0">
             {opponentAvatar}
           </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300 tabular-nums">
               <span className="truncate">{opponentName}</span>
-              <span className="text-[10px] text-rose-400">({opponentProgress}%)</span>
+              <span className="text-[10px] text-rose-400 shrink-0">({opponentProgress}%)</span>
             </div>
             <div className="w-32 h-2 rounded-full bg-slate-800 overflow-hidden mt-1 border border-slate-700">
               <div
@@ -511,16 +511,16 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
         {/* Left Column: Visual Game Grid & Character */}
         <div className="lg:col-span-6 space-y-4">
           <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                   {lang === 'en' ? 'Visual Matrix Grid' : 'Matricea Cibernetică TIC'}
                 </span>
-                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800 tabular-nums">
                   {activeChallenge.gridSize.width} x {activeChallenge.gridSize.height}
                 </span>
               </div>
-              <div className="text-xs font-mono text-amber-300 flex items-center gap-1">
+              <div className="text-xs font-mono text-amber-300 flex items-center gap-1 tabular-nums">
                 <span>⭐ Colectate: {collectedItems.length}/{activeChallenge.collectibles.length}</span>
               </div>
             </div>
@@ -551,7 +551,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                           isObstacle
                             ? 'bg-rose-950/70 border-rose-600/70 shadow-inner'
                             : isTarget
-                            ? 'bg-cyan-950/80 border-cyan-400 shadow-lg shadow-cyan-500/20 animate-pulse'
+                            ? 'bg-cyan-950/80 border-cyan-400 shadow-lg shadow-cyan-500/20'
                             : isStart
                             ? 'bg-emerald-950/60 border-emerald-500/60'
                             : isTrail
@@ -562,7 +562,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                         {/* Target Landmark */}
                         {isTarget && !isArkyHere && (
                           <div className="flex flex-col items-center justify-center text-center scale-95 sm:scale-100">
-                            <span className="text-2xl sm:text-3xl animate-bounce">🔮</span>
+                            <span className="text-2xl sm:text-3xl">🔮</span>
                             <span className="text-[8px] sm:text-[9px] font-black text-cyan-300 uppercase tracking-tighter truncate max-w-[45px]">
                               {lang === 'en' ? 'TARGET' : 'ȚINTĂ'}
                             </span>
@@ -591,7 +591,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
 
                         {/* Collectible Star / RAM */}
                         {isCollectible && !isCollected && !isArkyHere && !isTarget && (
-                          <div className="animate-spin text-xl sm:text-2xl" style={{ animationDuration: '6s' }}>
+                          <div className="text-xl sm:text-2xl">
                             ⭐
                           </div>
                         )}
@@ -642,13 +642,13 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
         <div className="lg:col-span-6 space-y-4">
           <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-4">
             {/* Script Header & Controls */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-bold uppercase text-slate-300 tracking-wider flex items-center gap-1.5">
-                  <Zap className="w-4 h-4 text-amber-400" />
+                  <Zap className="w-4 h-4 text-amber-400 shrink-0" />
                   {lang === 'en' ? 'Workspace Script' : 'Zona de Programare Scratch'}
                 </span>
-                <span className="text-[10px] font-mono text-purple-300 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-800">
+                <span className="text-[10px] font-mono text-purple-300 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-800 tabular-nums">
                   {workspace.length} {lang === 'en' ? 'blocks' : 'blocuri'}
                 </span>
               </div>
@@ -658,7 +658,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                   type="button"
                   onClick={handleClearWorkspace}
                   disabled={isRunning || workspace.length === 0}
-                  className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-rose-900/40 border border-slate-700 text-slate-400 hover:text-rose-300 text-xs font-bold transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1"
+                  className="min-h-[36px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-rose-900/40 border border-slate-700 text-slate-400 hover:text-rose-300 text-xs font-bold transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>{lang === 'en' ? 'Clear' : 'Șterge'}</span>
@@ -710,28 +710,31 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                           type="button"
                           disabled={isRunning || idx === 0}
                           onClick={() => handleMoveUp(idx)}
-                          className="p-1 rounded bg-black/20 hover:bg-black/40 text-white disabled:opacity-20 cursor-pointer"
-                          title="Mută mai sus"
+                          aria-label={lang === 'en' ? 'Move block up' : 'Mută blocul mai sus'}
+                          className="min-w-[34px] min-h-[34px] p-1.5 rounded-lg bg-black/25 hover:bg-black/45 text-white disabled:opacity-20 cursor-pointer flex items-center justify-center"
+                          title={lang === 'en' ? 'Move up' : 'Mută mai sus'}
                         >
-                          <ChevronUp className="w-3.5 h-3.5" />
+                          <ChevronUp className="w-4 h-4" />
                         </button>
                         <button
                           type="button"
                           disabled={isRunning || idx === workspace.length - 1}
                           onClick={() => handleMoveDown(idx)}
-                          className="p-1 rounded bg-black/20 hover:bg-black/40 text-white disabled:opacity-20 cursor-pointer"
-                          title="Mută mai jos"
+                          aria-label={lang === 'en' ? 'Move block down' : 'Mută blocul mai jos'}
+                          className="min-w-[34px] min-h-[34px] p-1.5 rounded-lg bg-black/25 hover:bg-black/45 text-white disabled:opacity-20 cursor-pointer flex items-center justify-center"
+                          title={lang === 'en' ? 'Move down' : 'Mută mai jos'}
                         >
-                          <ChevronDown className="w-3.5 h-3.5" />
+                          <ChevronDown className="w-4 h-4" />
                         </button>
                         <button
                           type="button"
                           disabled={isRunning}
                           onClick={() => handleRemoveBlock(block.uid)}
-                          className="p-1 rounded bg-rose-950/60 hover:bg-rose-800 text-rose-200 cursor-pointer ml-1"
-                          title="Șterge blocul"
+                          aria-label={lang === 'en' ? 'Delete block' : 'Șterge blocul'}
+                          className="min-w-[34px] min-h-[34px] p-1.5 rounded-lg bg-rose-950/70 hover:bg-rose-800 text-rose-200 cursor-pointer ml-0.5 flex items-center justify-center"
+                          title={lang === 'en' ? 'Delete block' : 'Șterge blocul'}
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
@@ -768,7 +771,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                 type="button"
                 disabled={isRunning || workspace.length === 0 || levelSuccess}
                 onClick={handleRunCode}
-                className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm tracking-wider shadow-xl shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
+                className="w-full min-h-[48px] py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black text-sm tracking-wider shadow-xl shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>
@@ -785,7 +788,7 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                 {lang === 'en' ? 'Block Toolbox (Click to add to script):' : 'Paleta de Blocuri Scratch (Apasă pentru a adăuga în script):'}
               </label>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 {activeChallenge.allowedBlocks.map((bType) => {
                   const cfg = getBlockConfig(bType);
 
@@ -795,10 +798,10 @@ export const BlockCodingDuelGame: React.FC<BlockCodingDuelGameProps> = ({
                       type="button"
                       disabled={isRunning || levelSuccess}
                       onClick={() => handleAddBlock(bType)}
-                      className={`p-2.5 rounded-xl border text-left text-xs font-bold transition-all active:scale-95 cursor-pointer flex items-center gap-2 ${cfg.color} disabled:opacity-40`}
+                      className={`min-h-[44px] p-2.5 rounded-xl border text-left text-xs font-bold transition-all active:scale-95 cursor-pointer flex items-center gap-2 ${cfg.color} disabled:opacity-40`}
                     >
                       <span className="text-base shrink-0">{cfg.icon}</span>
-                      <span className="truncate">{cfg.label}</span>
+                      <span className="leading-snug">{cfg.label}</span>
                     </button>
                   );
                 })}

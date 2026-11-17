@@ -319,7 +319,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             </div>
             <div>
               <div className="text-[11px] text-slate-400 uppercase font-bold">Scor</div>
-              <div className="text-xl sm:text-2xl font-black text-white font-mono">{score}</div>
+              <div className="text-xl sm:text-2xl font-black text-white font-mono tabular-nums">{score}</div>
             </div>
           </div>
 
@@ -329,7 +329,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             </div>
             <div>
               <div className="text-[11px] text-slate-400 uppercase font-bold">Combo</div>
-              <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
+              <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono tabular-nums">
                 {combo} <span className="text-xs text-amber-500">🔥</span>
               </div>
             </div>
@@ -341,7 +341,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             </div>
             <div>
               <div className="text-[11px] text-slate-400 uppercase font-bold">Precizie</div>
-              <div className="text-xl sm:text-2xl font-black text-white font-mono">{accuracy}%</div>
+              <div className="text-xl sm:text-2xl font-black text-white font-mono tabular-nums">{accuracy}%</div>
             </div>
           </div>
 
@@ -351,7 +351,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             </div>
             <div>
               <div className="text-[11px] text-slate-400 uppercase font-bold">Timp Rămas</div>
-              <div className={`text-xl sm:text-2xl font-black font-mono ${timeLeft <= 5 ? 'text-rose-400 animate-pulse' : 'text-white'}`}>
+              <div className={`text-xl sm:text-2xl font-black font-mono tabular-nums ${timeLeft <= 5 ? 'text-rose-400' : 'text-white'}`}>
                 {timeLeft}s
               </div>
             </div>
@@ -361,11 +361,11 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
         {/* Ready State */}
         {gameState === 'ready' && (
           <div className="flex flex-col items-center justify-center py-10 text-center gap-5 relative z-10">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 flex items-center justify-center text-4xl shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-500/20 animate-bounce">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 flex items-center justify-center text-4xl shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-500/20">
               🖱️
             </div>
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+              <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
                 {lang === 'en' ? 'Train Your Mouse Reflexes' : 'Antrenează-ți Reflexele cu Mouse-ul'}
               </h2>
               <p className="text-slate-300 text-sm max-w-md mt-2 leading-relaxed">
@@ -400,8 +400,9 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             </div>
 
             <button
+              type="button"
               onClick={startGame}
-              className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 hover:from-emerald-500 hover:to-cyan-400 text-white font-black text-base shadow-xl shadow-emerald-600/30 transition transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
+              className="min-h-[48px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 hover:from-emerald-500 hover:to-cyan-400 text-white font-black text-base shadow-xl shadow-emerald-600/30 transition transform hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2"
             >
               <Sparkles className="w-5 h-5 text-amber-300" />
               <span>{lang === 'en' ? 'START CHALLENGE (45s)' : 'START PROVOCARE (45s)'}</span>
@@ -427,7 +428,8 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                   /* Drag and Drop special interaction with touch tap-to-select fallback */
                   <>
                     {/* Draggable File Source */}
-                    <div
+                    <button
+                      type="button"
                       draggable
                       onDragStart={handleDragStart}
                       onClick={(e) => {
@@ -437,8 +439,8 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                       }}
                       className={`absolute z-20 cursor-grab active:cursor-grabbing p-2.5 sm:p-3 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-700 border-2 shadow-xl flex flex-col items-center justify-center text-center text-white transition-all hover:scale-110 active:scale-95 ${
                         isFileSelected
-                          ? 'border-amber-400 ring-4 ring-amber-400/50 scale-105 animate-pulse shadow-amber-500/40'
-                          : 'border-cyan-300 animate-pulse'
+                          ? 'border-amber-400 ring-4 ring-amber-400/50 scale-105 shadow-amber-500/40'
+                          : 'border-cyan-300'
                       }`}
                       style={{
                         left: `${currentTarget.x}%`,
@@ -455,10 +457,11 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                           ? (lang === 'en' ? 'Tap folder ➔' : 'Atinge folderul ➔')
                           : (lang === 'en' ? 'Drag / Tap' : 'Trage / Atinge')}
                       </span>
-                    </div>
+                    </button>
 
                     {/* Target Folder Drop Zone */}
-                    <div
+                    <button
+                      type="button"
                       onDragOver={handleDragOver}
                       onDrop={handleDropOnFolder}
                       onClick={(e) => {
@@ -471,8 +474,8 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                       }}
                       className={`absolute z-10 p-3 sm:p-4 rounded-3xl bg-amber-500/20 border-2 border-dashed shadow-2xl flex flex-col items-center justify-center text-amber-300 text-center cursor-pointer transition-all ${
                         isFileSelected
-                          ? 'border-amber-300 bg-amber-500/30 scale-110 animate-bounce ring-4 ring-amber-400/40'
-                          : 'border-amber-400 animate-bounce'
+                          ? 'border-amber-300 bg-amber-500/30 scale-110 ring-4 ring-amber-400/40'
+                          : 'border-amber-400'
                       }`}
                       style={{
                         right: '10%',
@@ -486,7 +489,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                           ? (lang === 'en' ? 'Tap to Drop!' : 'Atinge pt plasare!')
                           : (lang === 'en' ? 'Drop here!' : 'Plasează aici!')}
                       </span>
-                    </div>
+                    </button>
                   </>
                 ) : (
                   /* Click / Double-Click / Right-Click Target */
@@ -524,7 +527,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
                           sounds.playCorrect();
                           registerSuccess(150);
                         }}
-                        className="mt-1 px-2 py-0.5 rounded-lg bg-purple-900/90 hover:bg-purple-800 text-[9px] font-mono font-bold text-white border border-purple-300 shadow-md active:scale-90"
+                        className="mt-1 min-h-[28px] px-2.5 py-0.5 rounded-lg bg-purple-900/90 hover:bg-purple-800 text-[9px] font-mono font-bold text-white border border-purple-300 shadow-md active:scale-90 cursor-pointer"
                       >
                         {lang === 'en' ? 'Right-Click 🖱️' : 'Click Dreapta 🖱️'}
                       </button>
@@ -535,7 +538,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             )}
 
             {/* In-arena Helper Tip */}
-            <div className="absolute bottom-2 left-3 text-[11px] font-mono text-slate-500 pointer-events-none">
+            <div className="absolute bottom-2 left-3 right-3 text-[11px] font-mono text-slate-500 pointer-events-none truncate">
               💡 {lang === 'en' ? 'Do not click on empty space to avoid misses!' : 'Nu apăsa pe spațiul gol ca să nu pierzi acuratețea!'}
             </div>
           </div>
@@ -552,7 +555,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
               <span className="px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30 uppercase tracking-wider">
                 {lang === 'en' ? 'Challenge Complete!' : 'Provocare Finalizată!'}
               </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+              <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
                 {studentName ? `${studentName}, ` : ''}
                 {score >= 1200
                   ? (lang === 'en' ? 'Master of the Mouse! 🖱️⚡' : 'Maestru al Mouse-ului! 🖱️⚡')
@@ -566,7 +569,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 max-w-2xl w-full">
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Scor Final</span>
-                <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1 tabular-nums">
                   {score}
                 </span>
                 <span className="text-[11px] text-slate-500">puncte</span>
@@ -574,7 +577,7 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
 
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Ținte Atinse</span>
-                <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono mt-1 tabular-nums">
                   {hitsCount}
                 </span>
                 <span className="text-[11px] text-slate-500">comenzi reușite</span>
@@ -582,35 +585,37 @@ export const MouseAgilityGame: React.FC<MouseAgilityGameProps> = ({ onBack, stud
 
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Acuratețe</span>
-                <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono mt-1 tabular-nums">
                   {accuracy}%
                 </span>
-                <span className="text-[11px] text-slate-500">{missesCount} ratări</span>
+                <span className="text-[11px] text-slate-500 tabular-nums">{missesCount} ratări</span>
               </div>
 
               <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
                 <span className="text-xs text-slate-400 uppercase font-bold">Max Combo</span>
-                <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono mt-1">
+                <span className="text-3xl sm:text-4xl font-black text-rose-400 font-mono mt-1 tabular-nums">
                   {maxCombo}
                 </span>
                 <span className="text-[11px] text-slate-500">la rând fără greșeală</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               <button
+                type="button"
                 onClick={startGame}
-                className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
+                className="min-h-[44px] px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>{lang === 'en' ? 'Play Again' : 'Joacă din Nou'}</span>
               </button>
               <button
+                type="button"
                 onClick={() => {
                   sounds.playClick();
                   onBack();
                 }}
-                className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+                className="min-h-[44px] px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
               >
                 <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
               </button>

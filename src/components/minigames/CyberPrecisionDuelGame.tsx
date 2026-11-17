@@ -638,7 +638,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
             <Crosshair className="w-5 h-5 text-white" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-black text-cyan-400 font-mono tracking-wider uppercase">
                 {lang === 'en' ? `STAGE ${stage}/6` : `ETAPA ${stage}/6`}
               </span>
@@ -658,35 +658,35 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         </div>
 
         {/* Live Score & Combo Multiplier */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <div className="flex flex-col items-end">
             <span className="text-[10px] font-mono uppercase text-slate-400">
               {lang === 'en' ? 'Combo Multiplier' : 'Multiplicator Combo'}
             </span>
-            <div className="flex items-center gap-1 font-mono text-amber-400 font-black text-base">
-              <Flame className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
+            <div className="flex items-center gap-1 font-mono text-amber-400 font-black text-base tabular-nums">
+              <Flame className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span>x{combo >= 10 ? '1.5' : combo >= 5 ? '1.25' : '1.0'}</span>
               <span className="text-xs text-slate-400">({combo} streak)</span>
             </div>
           </div>
 
-          <div className="bg-slate-950 px-4 py-2 rounded-2xl border border-indigo-500/40 text-center">
+          <div className="bg-slate-950 px-3.5 sm:px-4 py-2 rounded-2xl border border-indigo-500/40 text-center">
             <span className="text-[10px] font-mono uppercase text-slate-400 block">
               {lang === 'en' ? 'Your Score' : 'Scorul Tău'}
             </span>
-            <span className="text-xl sm:text-2xl font-black font-mono text-cyan-300">
+            <span className="text-xl sm:text-2xl font-black font-mono text-cyan-300 tabular-nums">
               {score} <span className="text-xs text-slate-400 font-normal">pts</span>
             </span>
           </div>
 
           {/* Opponent Progress Indicator */}
           {opponent && (
-            <div className="hidden sm:flex flex-col items-end bg-slate-950/80 px-3.5 py-1.5 rounded-2xl border border-rose-500/30">
+            <div className="flex flex-col items-end bg-slate-950/80 px-3 sm:px-3.5 py-1.5 rounded-2xl border border-rose-500/30">
               <span className="text-[10px] text-rose-300 font-bold flex items-center gap-1">
                 <Swords className="w-3 h-3 text-rose-400" />
                 {opponent.name}
               </span>
-              <div className="flex items-center gap-2 mt-0.5">
+              <div className="flex items-center gap-2 mt-0.5 tabular-nums">
                 <span className="text-xs font-mono font-black text-rose-400">
                   {opponent.score || 0} pts
                 </span>
@@ -713,7 +713,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
 
         {/* Floating Feedback Badge */}
         {feedbackText && (
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 shadow-xl font-mono font-black text-sm animate-bounce pointer-events-none">
+          <div className="absolute top-14 sm:top-6 left-1/2 -translate-x-1/2 z-40 max-w-[92%] text-center px-4 py-1.5 rounded-full bg-slate-900/95 border border-slate-700 shadow-xl font-mono font-black text-sm pointer-events-none tabular-nums">
             <span className={feedbackText.color}>{feedbackText.text}</span>
           </div>
         )}
@@ -723,7 +723,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         {/* ================================================================= */}
         {stage === 1 && (
           <div className="absolute inset-0">
-            <div className="absolute top-3 left-4 text-xs font-mono text-cyan-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-cyan-500/30">
+            <div className="absolute top-3 left-4 right-4 text-[11px] sm:text-xs font-mono text-cyan-300 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-cyan-500/30 z-10">
               {lang === 'en'
                 ? 'Strike numbered nodes in sequence! Hold circular nodes to charge data.'
                 : 'Loviți nodurile în ordinea numerelor! Țineți apăsat pe nodurile circulare pentru încărcare.'}
@@ -734,13 +734,15 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
               const isActive = idx === activeNodeIdx;
 
               return (
-                <div
+                <button
                   key={node.id}
+                  type="button"
+                  aria-label={node.type === 'hold' ? `Hold node ${node.order}` : `Node ${node.order}`}
                   style={{
                     left: `${node.x}%`,
                     top: `${node.y}%`,
-                    width: `${node.radius * 2}px`,
-                    height: `${node.radius * 2}px`
+                    width: `${Math.max(48, node.radius * 2)}px`,
+                    height: `${Math.max(48, node.radius * 2)}px`
                   }}
                   onPointerDown={(e) => {
                     e.preventDefault();
@@ -754,29 +756,28 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
                     e.preventDefault();
                     if (node.type === 'hold') handleHoldEnd(node, idx);
                   }}
-                  onPointerLeave={(e) => {
+                  onPointerLeave={() => {
                     if (node.type === 'hold') handleHoldEnd(node, idx);
                   }}
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center font-mono font-black transition-transform cursor-pointer shadow-xl ${
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center font-mono font-black transition-transform cursor-pointer shadow-xl touch-manipulation ${
                     isActive
                       ? node.type === 'hold'
                         ? 'bg-gradient-to-tr from-amber-500 to-rose-600 text-white ring-4 ring-amber-400/60 scale-105'
-                        : 'bg-gradient-to-tr from-cyan-500 to-blue-600 text-white ring-4 ring-cyan-400/60 scale-105 animate-pulse'
+                        : 'bg-gradient-to-tr from-cyan-500 to-blue-600 text-white ring-4 ring-cyan-400/60 scale-105'
                       : 'bg-slate-900/80 border-2 border-slate-700 text-slate-500 opacity-60'
                   }`}
                 >
-                  {/* Shrinking Ring for Active Nodes */}
+                  {/* Approach Halo for Active Nodes */}
                   {isActive && (
                     <div
-                      className="absolute inset-[-14px] rounded-full border-2 border-cyan-400/80 animate-ping pointer-events-none"
-                      style={{ animationDuration: '1.2s' }}
+                      className="absolute -inset-3 rounded-full border-2 border-cyan-400/70 pointer-events-none"
                     />
                   )}
 
                   {/* Circular progress fill for hold nodes */}
                   {node.type === 'hold' && (
                     <div
-                      className="absolute inset-0 rounded-full border-4 border-amber-300"
+                      className="absolute inset-0 rounded-full border-4 border-amber-300 pointer-events-none"
                       style={{
                         clipPath: `polygon(50% 50%, 50% 0%, ${
                           (node.holdProgress || 0) * 360 > 180 ? '100%' : '50%'
@@ -785,10 +786,10 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
                     />
                   )}
 
-                  <span className="text-base sm:text-lg">
+                  <span className="text-base sm:text-lg tabular-nums">
                     {node.type === 'hold' ? '⚡' : node.order}
                   </span>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -799,8 +800,8 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         {/* ================================================================= */}
         {stage === 2 && (
           <div className="absolute inset-0">
-            <div className="absolute top-3 left-4 text-xs font-mono text-cyan-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-cyan-500/30 flex items-center gap-2">
-              <span className={`w-2.5 h-2.5 rounded-full ${isLaserLocked ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'}`} />
+            <div className="absolute top-3 left-4 right-4 text-[11px] sm:text-xs font-mono text-cyan-300 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-cyan-500/30 flex flex-wrap items-center gap-2 z-10 tabular-nums">
+              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${isLaserLocked ? 'bg-emerald-400' : 'bg-rose-500'}`} />
               <span>
                 {lang === 'en'
                   ? `Keep cursor locked on the fiber optic packet! Synced: ${Math.round(traceProgress)}%`
@@ -809,7 +810,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
             </div>
 
             {/* SVG Fiber Track Wave */}
-            <svg className="w-full h-full pointer-events-none">
+            <svg viewBox="0 0 900 480" preserveAspectRatio="none" className="w-full h-full pointer-events-none">
               <path
                 d="M 150 270 Q 300 120 450 270 T 750 270"
                 fill="none"
@@ -849,7 +850,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
             })()}
 
             {/* Progress Meter Bar */}
-            <div className="absolute bottom-5 left-8 right-8 h-3.5 bg-slate-900 rounded-full overflow-hidden border border-slate-700">
+            <div className="absolute bottom-5 left-4 right-4 sm:left-8 sm:right-8 h-3.5 bg-slate-900 rounded-full overflow-hidden border border-slate-700">
               <div
                 className="h-full bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 transition-all duration-100"
                 style={{ width: `${traceProgress}%` }}
@@ -863,32 +864,35 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         {/* ================================================================= */}
         {stage === 3 && (
           <div className="absolute inset-0">
-            <div className="absolute top-3 left-4 text-xs font-mono text-cyan-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-cyan-500/30 flex flex-wrap items-center gap-3">
-              <span className="text-emerald-300">🟢 {lang === 'en' ? 'Left-Click: Data' : 'Click-Stânga: Date'}</span>
-              <span className="text-rose-400">🔴 {lang === 'en' ? 'Right-Click: Trojan Firewall' : 'Click-Dreapta: Blocare Troian'}</span>
-              <span className="text-indigo-300">🔵 {lang === 'en' ? '2x-Click: Zip' : 'Dublu-Click: Arhivă'}</span>
+            <div className="absolute top-3 left-4 right-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 z-20 pointer-events-none">
+              <div className="text-[11px] sm:text-xs font-mono text-cyan-300 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-cyan-500/30 flex flex-wrap items-center gap-x-3 gap-y-1 pointer-events-auto">
+                <span className="text-emerald-300">🟢 {lang === 'en' ? 'Left-Click: Data' : 'Click-Stânga: Date'}</span>
+                <span className="text-rose-400">🔴 {lang === 'en' ? 'Right-Click: Trojan Firewall' : 'Click-Dreapta: Blocare Troian'}</span>
+                <span className="text-indigo-300">🔵 {lang === 'en' ? '2x-Click: Zip' : 'Dublu-Click: Arhivă'}</span>
+              </div>
+
+              {/* Mobile Firewall Shield Toggle Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setShieldActiveMobile(prev => !prev);
+                  sounds.playClick();
+                }}
+                className={`min-h-[38px] px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 sm:hidden transition shrink-0 pointer-events-auto cursor-pointer ${
+                  shieldActiveMobile
+                    ? 'bg-rose-600 text-white shadow-lg ring-2 ring-rose-400'
+                    : 'bg-slate-900 border border-rose-500/50 text-rose-300'
+                }`}
+              >
+                <ShieldAlert className="w-3.5 h-3.5" />
+                <span>{shieldActiveMobile ? (lang === 'en' ? 'FIREWALL ARMED' : 'FIREWALL ACTIV') : (lang === 'en' ? 'ARM FIREWALL' : 'ARMEAZĂ FIREWALL')}</span>
+              </button>
             </div>
 
-            {/* Mobile Firewall Shield Toggle Button */}
-            <button
-              type="button"
-              onClick={() => {
-                setShieldActiveMobile(prev => !prev);
-                sounds.playClick();
-              }}
-              className={`absolute top-3 right-4 px-3 py-1 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 sm:hidden transition ${
-                shieldActiveMobile
-                  ? 'bg-rose-600 text-white shadow-lg ring-2 ring-rose-400'
-                  : 'bg-slate-900 border border-rose-500/50 text-rose-300'
-              }`}
-            >
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>{shieldActiveMobile ? (lang === 'en' ? 'FIREWALL ARMED' : 'FIREWALL ACTIV') : (lang === 'en' ? 'ARM FIREWALL' : 'ARMEAZĂ FIREWALL')}</span>
-            </button>
-
             {triageItems.map(item => (
-              <div
+              <button
                 key={item.id}
+                type="button"
                 style={{ left: `${item.x}%`, top: `${item.y}%` }}
                 onClick={(e) => {
                   e.preventDefault();
@@ -902,28 +906,28 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
                   e.preventDefault();
                   handleTriageItemInteraction(item, 'double');
                 }}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 p-3 sm:p-4 rounded-2xl border-2 flex items-center gap-2.5 cursor-pointer shadow-xl transition-transform hover:scale-110 active:scale-95 ${
+                className={`absolute -translate-x-1/2 -translate-y-1/2 min-h-[48px] p-2.5 sm:p-4 rounded-2xl border-2 flex items-center gap-2 sm:gap-2.5 cursor-pointer shadow-xl transition-transform hover:scale-105 active:scale-95 text-left touch-manipulation max-w-[44vw] sm:max-w-none ${
                   item.type === 'data'
                     ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200'
                     : item.type === 'trojan'
-                    ? 'bg-rose-950/90 border-rose-500 text-rose-200 ring-2 ring-rose-500/40 animate-pulse'
+                    ? 'bg-rose-950/90 border-rose-500 text-rose-200 ring-2 ring-rose-500/40'
                     : 'bg-indigo-950/90 border-indigo-400 text-indigo-200'
                 }`}
               >
-                <span className="text-xl">
+                <span className="text-lg sm:text-xl shrink-0">
                   {item.type === 'data' ? '📁' : item.type === 'trojan' ? '👾' : '📦'}
                 </span>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold font-mono">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[11px] sm:text-xs font-bold font-mono leading-snug break-words">
                     {lang === 'en' ? item.labelEn : item.labelRo}
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">
+                  <span className="text-[10px] text-slate-400 font-mono leading-snug break-words">
                     {item.type === 'data' && (lang === 'en' ? '[Click]' : '[Click]')}
                     {item.type === 'trojan' && (lang === 'en' ? '[Right-Click/Shield]' : '[Click-Dreapta/Scut]')}
                     {item.type === 'archive' && (lang === 'en' ? '[Double-Click]' : '[Dublu-Click]')}
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -933,26 +937,26 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         {/* ================================================================= */}
         {stage === 4 && (
           <div className="absolute inset-0">
-            <div className="absolute top-3 left-4 text-xs font-mono text-cyan-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-cyan-500/30">
+            <div className="absolute top-14 left-4 right-4 text-[11px] sm:text-xs font-mono text-cyan-300 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-cyan-500/30 z-10 tabular-nums">
               {lang === 'en'
                 ? `Repel orbs with your cursor into Port Alpha or Port Beta! (${capturedOrbsCount}/4)`
                 : `Ricoșează bilele energetice cu cursorul spre Port Alpha sau Beta! (${capturedOrbsCount}/4)`}
             </div>
 
             {/* Top Receptor Port Alpha */}
-            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-48 h-10 rounded-b-2xl bg-gradient-to-b from-indigo-900 to-indigo-950 border-2 border-indigo-400/60 flex items-center justify-center font-mono text-xs font-black text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+            <div className="absolute top-1 left-1/2 -translate-x-1/2 w-40 sm:w-48 h-10 rounded-b-2xl bg-gradient-to-b from-indigo-900 to-indigo-950 border-2 border-indigo-400/60 flex items-center justify-center font-mono text-[10px] sm:text-xs font-black text-indigo-300 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
               PORT ALPHA ▲
             </div>
 
             {/* Bottom Receptor Port Beta */}
-            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-48 h-10 rounded-t-2xl bg-gradient-to-t from-teal-900 to-teal-950 border-2 border-teal-400/60 flex items-center justify-center font-mono text-xs font-black text-teal-300 shadow-[0_0_15px_rgba(20,184,166,0.5)]">
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-40 sm:w-48 h-10 rounded-t-2xl bg-gradient-to-t from-teal-900 to-teal-950 border-2 border-teal-400/60 flex items-center justify-center font-mono text-[10px] sm:text-xs font-black text-teal-300 shadow-[0_0_15px_rgba(20,184,166,0.5)]">
               PORT BETA ▼
             </div>
 
             {/* Cursor Deflector Ring Shield */}
             <div
-              style={{ left: `${cursorPos.x}%`, top: `${cursorPos.y}%`, animationDuration: '8s' }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-2 border-dashed border-cyan-400/60 pointer-events-none animate-spin"
+              style={{ left: `${cursorPos.x}%`, top: `${cursorPos.y}%` }}
+              className="absolute -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-2 border-dashed border-cyan-400/60 pointer-events-none"
             />
 
             {/* Bouncing Orbs */}
@@ -976,7 +980,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         {/* ================================================================= */}
         {stage === 5 && (
           <div className="absolute inset-0">
-            <div className="absolute top-3 left-4 text-xs font-mono text-cyan-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-cyan-500/30">
+            <div className="absolute top-3 left-4 right-4 text-[11px] sm:text-xs font-mono text-cyan-300 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-cyan-500/30 z-10 tabular-nums">
               {lang === 'en'
                 ? `Flick-Shot Arena: Eliminate appearing memory addresses instantly! (${flickHitsCount}/7)`
                 : `Arena Flick-Shot: Elimină adresele de memorie instant! (${flickHitsCount}/7)`}
@@ -988,7 +992,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
                 type="button"
                 style={{ left: `${target.x}%`, top: `${target.y}%` }}
                 onClick={() => handleFlickTargetClick(target)}
-                className="absolute -translate-x-1/2 -translate-y-1/2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black font-mono text-xs border-2 border-white shadow-2xl hover:scale-110 active:scale-95 cursor-pointer ring-4 ring-cyan-400/40 animate-pulse"
+                className="absolute -translate-x-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-black font-mono text-xs border-2 border-white shadow-2xl hover:scale-105 active:scale-95 cursor-pointer ring-4 ring-cyan-400/40 touch-manipulation"
               >
                 {target.label}
               </button>
@@ -1000,8 +1004,8 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
         {/* STAGE 6: OVERCLOCK CORE SURGE (FINAL CLIMAX)                      */}
         {/* ================================================================= */}
         {stage === 6 && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="absolute top-3 left-4 text-xs font-mono text-amber-300 bg-slate-900/80 px-3 py-1 rounded-xl border border-amber-500/30">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+            <div className="absolute top-3 left-4 right-4 text-[11px] sm:text-xs font-mono text-amber-300 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-amber-500/30 z-10 tabular-nums">
               {lang === 'en'
                 ? `CLIMAX SURGE: Strike when collapsing pulse ring aligns with central CPU! (${surgeBeatsRemaining} beats left)`
                 : `APOGEU OVERCLOCK: Loviți când inelul se aliniază cu nucleul CPU! (${surgeBeatsRemaining} bătăi rămase)`}
@@ -1011,9 +1015,9 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
             <button
               type="button"
               onClick={handleOverclockBeatStrike}
-              className="relative w-36 h-36 rounded-full bg-gradient-to-br from-amber-500 via-rose-600 to-purple-700 border-4 border-amber-300 flex flex-col items-center justify-center text-white shadow-[0_0_50px_rgba(245,158,11,0.6)] cursor-pointer hover:scale-105 active:scale-95 transition-transform z-10"
+              className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-amber-500 via-rose-600 to-purple-700 border-4 border-amber-300 flex flex-col items-center justify-center text-white shadow-[0_0_50px_rgba(245,158,11,0.6)] cursor-pointer hover:scale-105 active:scale-95 transition-transform z-10 touch-manipulation"
             >
-              <Cpu className="w-10 h-10 text-white mb-1 animate-pulse" />
+              <Cpu className="w-9 h-9 sm:w-10 sm:h-10 text-white mb-1" />
               <span className="font-mono font-black text-xs uppercase tracking-wider">
                 {lang === 'en' ? 'CORE STRIKE' : 'STRIKE NUCLEU'}
               </span>
@@ -1034,7 +1038,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
       {/* Bottom Mission / Helper Bar */}
       <div className="p-3 sm:p-4 bg-slate-900 border-t border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-400 font-mono gap-2">
         <div className="flex items-center gap-2">
-          <MousePointer2 className="w-4 h-4 text-cyan-400" />
+          <MousePointer2 className="w-4 h-4 text-cyan-400 shrink-0" />
           <span>
             {lang === 'en'
               ? 'Screen scroll is locked during gameplay for precision.'
@@ -1046,7 +1050,7 @@ export const CyberPrecisionDuelGame: React.FC<CyberPrecisionDuelGameProps> = ({
           <button
             type="button"
             onClick={onBack}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+            className="min-h-[38px] px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
           >
             {lang === 'en' ? 'Abandon Match' : 'Abandonează Meciul'}
           </button>

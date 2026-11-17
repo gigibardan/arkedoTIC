@@ -8,6 +8,7 @@ import {
   Globe,
   Mail,
   Lock,
+  ArrowLeft,
   ArrowRight,
   RotateCcw,
   AlertTriangle,
@@ -318,11 +319,11 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
             🌐
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-base font-black text-white font-heading tracking-tight">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-base font-black text-white font-heading tracking-tight text-balance">
                 Network Packet Racer 1v1
               </h3>
-              <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold uppercase">
+              <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold uppercase tabular-nums">
                 {lang === 'en' ? 'Packet' : 'Pachet'} {packetIndex + 1}/{PACKET_STREAM.length}
               </span>
             </div>
@@ -335,15 +336,15 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
         </div>
 
         {/* Latency & Score Meter */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800">
-            <Activity className={`w-3.5 h-3.5 ${latencyMs < 50 ? 'text-emerald-400 animate-pulse' : 'text-rose-400'}`} />
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 tabular-nums">
+            <Activity className={`w-3.5 h-3.5 ${latencyMs < 50 ? 'text-emerald-400' : 'text-rose-400'}`} />
             <span className="text-[11px] font-mono font-bold text-slate-300">
               Ping: <span className={latencyMs < 50 ? 'text-emerald-400' : 'text-rose-400'}>{latencyMs}ms</span>
             </span>
           </div>
 
-          <div className="text-right">
+          <div className="text-right tabular-nums">
             <span className="text-[10px] text-slate-400 uppercase font-mono block">
               {lang === 'en' ? 'Routing Score' : 'Scor Rutare'}
             </span>
@@ -351,7 +352,7 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
           </div>
 
           {streak > 1 && (
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold animate-pulse">
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold tabular-nums">
               <Flame className="w-3.5 h-3.5 text-amber-400" />
               <span>x{streak} Overclock</span>
             </div>
@@ -362,12 +363,12 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
       {/* Duel Competitors Progress Meters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
         <div>
-          <div className="flex justify-between items-center text-xs mb-1">
-            <span className="font-bold text-white flex items-center gap-1.5">
-              <span>{studentAvatar}</span>
-              <span>{studentName} {lang === 'en' ? '(You)' : '(Tu)'}</span>
+          <div className="flex justify-between items-center text-xs mb-1 tabular-nums">
+            <span className="font-bold text-white flex items-center gap-1.5 min-w-0">
+              <span className="shrink-0">{studentAvatar}</span>
+              <span className="truncate">{studentName} {lang === 'en' ? '(You)' : '(Tu)'}</span>
             </span>
-            <span className="font-mono font-bold text-cyan-400">{myProgress}%</span>
+            <span className="font-mono font-bold text-cyan-400 shrink-0">{myProgress}%</span>
           </div>
           <div className="h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
             <div
@@ -378,12 +379,12 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
         </div>
 
         <div>
-          <div className="flex justify-between items-center text-xs mb-1">
-            <span className="font-bold text-slate-300 flex items-center gap-1.5">
-              <span>{opponent?.avatar || '🤖'}</span>
-              <span>{oppName}</span>
+          <div className="flex justify-between items-center text-xs mb-1 tabular-nums">
+            <span className="font-bold text-slate-300 flex items-center gap-1.5 min-w-0">
+              <span className="shrink-0">{opponent?.avatar || '🤖'}</span>
+              <span className="truncate">{oppName}</span>
             </span>
-            <span className="font-mono font-bold text-rose-400">{oppProgress}%</span>
+            <span className="font-mono font-bold text-rose-400 shrink-0">{oppProgress}%</span>
           </div>
           <div className="h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
             <div
@@ -395,10 +396,10 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
       </div>
 
       {/* Central Packet Conveyor Belt / Terminal */}
-      <div className="p-6 rounded-3xl bg-slate-900 border-2 border-indigo-500/30 shadow-2xl space-y-5">
-        <div className="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
+      <div className="p-4 sm:p-6 rounded-3xl bg-slate-900 border-2 border-indigo-500/30 shadow-2xl space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400 border-b border-slate-800 pb-2">
           <span className="flex items-center gap-1.5 text-indigo-400 font-bold">
-            <Server className="w-4 h-4" />
+            <Server className="w-4 h-4 shrink-0" />
             GATEWAY SWITCH ROUTER [RX BUFFER]
           </span>
           <span className="text-[11px] text-amber-300">
@@ -409,7 +410,7 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
         {/* Incoming Packet Card */}
         <div className={`p-5 rounded-2xl border-2 transition-all relative overflow-hidden ${
           currentPacket.isThreat
-            ? 'bg-rose-950/40 border-rose-500/60 shadow-lg shadow-rose-950/30 animate-pulse'
+            ? 'bg-rose-950/40 border-rose-500/60 shadow-lg shadow-rose-950/30'
             : 'bg-slate-950 border-indigo-500/50 shadow-inner'
         }`}>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -460,9 +461,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
             onClick={() => handleRoute('port_443')}
             className="p-4 rounded-2xl bg-gradient-to-r from-cyan-950 to-slate-900 hover:from-cyan-900 hover:to-slate-800 border-2 border-cyan-500/40 hover:border-cyan-400 text-left transition-all active:scale-98 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group shadow-lg"
           >
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
               <span className="text-xs font-mono font-black text-cyan-400 flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5" />
+                <Lock className="w-3.5 h-3.5 shrink-0" />
                 PORT 443 (HTTPS)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold">
@@ -484,9 +485,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
             onClick={() => handleRoute('port_53')}
             className="p-4 rounded-2xl bg-gradient-to-r from-purple-950 to-slate-900 hover:from-purple-900 hover:to-slate-800 border-2 border-purple-500/40 hover:border-purple-400 text-left transition-all active:scale-98 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group shadow-lg"
           >
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
               <span className="text-xs font-mono font-black text-purple-400 flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5" />
+                <Globe className="w-3.5 h-3.5 shrink-0" />
                 PORT 53 (DNS Resolver)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">
@@ -508,9 +509,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
             onClick={() => handleRoute('port_25')}
             className="p-4 rounded-2xl bg-gradient-to-r from-amber-950 to-slate-900 hover:from-amber-900 hover:to-slate-800 border-2 border-amber-500/40 hover:border-amber-400 text-left transition-all active:scale-98 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group shadow-lg"
           >
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
               <span className="text-xs font-mono font-black text-amber-400 flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5" />
+                <Mail className="w-3.5 h-3.5 shrink-0" />
                 PORT 25 / 587 (SMTP Mail)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold">
@@ -532,9 +533,9 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
             onClick={() => handleRoute('firewall_drop')}
             className="p-4 rounded-2xl bg-gradient-to-r from-rose-950 to-slate-900 hover:from-rose-900 hover:to-slate-800 border-2 border-rose-500/60 hover:border-rose-400 text-left transition-all active:scale-98 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group shadow-lg ring-1 ring-rose-500/30"
           >
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
               <span className="text-xs font-mono font-black text-rose-400 flex items-center gap-1.5">
-                <ShieldAlert className="w-3.5 h-3.5" />
+                <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
                 🚨 FIREWALL DROP (BLOCK)
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/30 text-rose-300 font-bold">
@@ -552,16 +553,17 @@ export const NetworkPacketRacerDuelGame: React.FC<NetworkPacketRacerDuelGameProp
       </div>
 
       {/* Footer Exit */}
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
         <button
           type="button"
           onClick={onBack}
-          className="text-xs text-slate-400 hover:text-white transition cursor-pointer"
+          className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer inline-flex items-center gap-1.5"
         >
-          ← {lang === 'en' ? 'Leave Duel' : 'Părăsește Duelul'}
+          <ArrowLeft className="w-4 h-4 shrink-0" />
+          <span>{lang === 'en' ? 'Leave Duel' : 'Părăsește Duelul'}</span>
         </button>
 
-        <span className="text-xs text-slate-500 font-mono">
+        <span className="text-xs text-slate-400 font-mono tabular-nums">
           {lang === 'en' ? 'Progress:' : 'Progres:'} {packetIndex}/{PACKET_STREAM.length} {lang === 'en' ? 'Packets Routed' : 'Pachete Direcționate'}
         </span>
       </div>

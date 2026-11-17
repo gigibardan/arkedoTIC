@@ -671,9 +671,11 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
         <div className="relative z-10 flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <button
+            type="button"
             onClick={onBack}
-            className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white border border-stone-600 transition shadow-md cursor-pointer group shrink-0"
+            className="min-h-[44px] min-w-[44px] p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white border border-stone-600 transition shadow-md cursor-pointer group shrink-0 flex items-center justify-center"
             title={isEn ? 'Back to Arcade' : 'Înapoi la Jocuri'}
+            aria-label={isEn ? 'Back to Arcade Hub' : 'Înapoi la Jocuri'}
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-0.5 transition-transform" />
           </button>
@@ -681,16 +683,16 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider">
-                <Zap className="w-3 h-3 text-rose-400 animate-pulse" />
+                <Zap className="w-3 h-3 text-rose-400" />
                 <span>Minecraft Redstone Lab</span>
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[10px] sm:text-[11px] font-mono">
+              <span className="px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-stone-700 text-[10px] sm:text-[11px] font-mono tabular-nums">
                 {isSandboxMode
                   ? (isEn ? 'Free Sandbox Mode' : 'Laborator Liber')
                   : `${isEn ? 'Mission' : 'Misiunea'} ${currentLevelIndex + 1} / ${REDSTONE_LEVELS.length}`}
               </span>
             </div>
-            <h2 className="text-base sm:text-xl md:text-2xl font-black text-white font-heading tracking-tight truncate">
+            <h2 className="text-base sm:text-xl md:text-2xl font-black text-white font-heading tracking-tight text-balance">
               {isSandboxMode
                 ? (isEn ? 'Redstone Circuit Simulator Sandbox' : 'Simulator Liber de Circuite Redstone')
                 : (isEn ? level.titleEn : level.titleRo)}
@@ -699,13 +701,14 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
         </div>
 
         {/* Action Controls & Badges */}
-        <div className="relative z-10 flex items-center justify-between sm:justify-start gap-2 shrink-0">
+        <div className="relative z-10 flex flex-wrap items-center justify-between sm:justify-start gap-2 shrink-0">
           <button
+            type="button"
             onClick={() => {
               setIsSandboxMode(!isSandboxMode);
               if (!soundMuted) sounds.playClick();
             }}
-            className={`px-3 py-2 rounded-xl text-xs font-mono font-bold border transition flex items-center gap-1.5 cursor-pointer ${
+            className={`min-h-[40px] px-3 py-2 rounded-xl text-xs font-mono font-bold border transition flex items-center gap-1.5 cursor-pointer ${
               isSandboxMode
                 ? 'bg-amber-600 text-white border-amber-400 shadow-md shadow-amber-600/30 ring-2 ring-amber-500/20'
                 : 'bg-stone-800 text-stone-300 border-stone-700 hover:text-white hover:bg-stone-750'
@@ -722,7 +725,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               <div className="text-[9px] font-mono text-cyan-300 uppercase leading-none font-bold">
                 {isEn ? 'Diamonds' : 'Diamante'}
               </div>
-              <div className="text-xs sm:text-sm font-black text-cyan-100 font-mono">
+              <div className="text-xs sm:text-sm font-black text-cyan-100 font-mono tabular-nums">
                 {totalDiamonds}
               </div>
             </div>
@@ -735,16 +738,18 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               <div className="text-[9px] font-mono text-amber-300 uppercase leading-none font-bold">
                 XP
               </div>
-              <div className="text-xs sm:text-sm font-black text-amber-100 font-mono">
+              <div className="text-xs sm:text-sm font-black text-amber-100 font-mono tabular-nums">
                 {totalScore}
               </div>
             </div>
           </div>
 
           <button
+            type="button"
             onClick={() => setSoundMuted(!soundMuted)}
-            className="p-2 sm:p-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 border border-stone-700 transition cursor-pointer"
-            title={soundMuted ? 'Unmute' : 'Mute'}
+            className="min-h-[40px] min-w-[40px] p-2 sm:p-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 border border-stone-700 transition cursor-pointer flex items-center justify-center"
+            title={soundMuted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
+            aria-label={soundMuted ? (isEn ? 'Unmute Audio' : 'Pornește Sunetul') : (isEn ? 'Mute Audio' : 'Oprește Sunetul')}
           >
             {soundMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
@@ -760,12 +765,13 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
             return (
               <button
+                type="button"
                 key={lvl.id}
                 onClick={() => {
                   setCurrentLevelIndex(idx);
                   if (!soundMuted) sounds.playClick();
                 }}
-                className={`px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer border ${
+                className={`min-h-[36px] px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-mono font-bold transition flex items-center gap-1.5 shrink-0 cursor-pointer border ${
                   isCurrent
                     ? 'bg-rose-600 text-white border-rose-400 shadow-md shadow-rose-600/30 ring-2 ring-rose-500/30'
                     : isDone
@@ -832,9 +838,10 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {(['AND', 'OR', 'NOT', 'XOR', 'NAND', 'NOR'] as const).map((gate) => (
                   <button
+                    type="button"
                     key={gate}
                     onClick={() => setSandboxGate(gate)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition ${
+                    className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition ${
                       sandboxGate === gate
                         ? 'bg-amber-500 text-stone-950 font-black shadow-md'
                         : 'bg-stone-800 text-stone-300 hover:bg-stone-700'
@@ -856,7 +863,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                   <Sliders className="w-4 h-4" />
                   <span>{isEn ? 'Inputs & Levers' : 'Pârghii de Intrare'}</span>
                 </span>
-                <span className="text-[11px] text-stone-400 font-mono bg-stone-950 px-2 py-0.5 rounded border border-stone-800">
+                <span className="text-[11px] text-stone-400 font-mono tabular-nums bg-stone-950 px-2 py-0.5 rounded border border-stone-800">
                   {!isSandboxMode ? `${levelInputs.filter(Boolean).length} / ${level.inputs.length} ACTIVE` : `${sandboxInputs.filter(Boolean).length} / 2 ACTIVE`}
                 </span>
               </div>
@@ -866,10 +873,11 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                   level.inputs.map((inp, idx) => {
                     const isActive = levelInputs[idx];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={inp.id}
                         onClick={() => toggleInput(idx)}
-                        className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 sm:gap-4 shadow-lg active:scale-[0.99] w-full ${
+                        className={`text-left p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 sm:gap-4 shadow-lg active:scale-[0.99] w-full ${
                           isActive
                             ? 'bg-gradient-to-r from-rose-950/90 via-stone-900 to-rose-950/70 border-rose-500 shadow-rose-600/25 ring-1 ring-rose-500/30'
                             : 'bg-stone-950/90 border-stone-800 hover:border-stone-700'
@@ -891,7 +899,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                               {isEn ? inp.labelEn : inp.labelRo}
                             </div>
                             <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                              <span className={`w-2 h-2 rounded-full shrink-0 ${isActive ? 'bg-rose-400 animate-pulse' : 'bg-stone-600'}`} />
+                              <span className={`w-2 h-2 rounded-full shrink-0 ${isActive ? 'bg-rose-400' : 'bg-stone-600'}`} />
                               <span className={`text-[11px] font-mono font-bold ${
                                 isActive ? 'text-rose-300' : 'text-stone-500'
                               }`}>
@@ -909,14 +917,15 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                             isActive ? 'translate-x-6' : 'translate-x-0'
                           }`} />
                         </div>
-                      </div>
+                      </button>
                     );
                   })
                 ) : (
                   [0, 1].map((idx) => {
                     const isActive = sandboxInputs[idx];
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={idx}
                         onClick={() => {
                           const updated = [...sandboxInputs];
@@ -924,7 +933,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                           setSandboxInputs(updated);
                           if (!soundMuted) sounds.playClick();
                         }}
-                        className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 shadow-lg active:scale-[0.99] ${
+                        className={`text-left w-full p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between gap-3 shadow-lg active:scale-[0.99] ${
                           isActive
                             ? 'bg-rose-950/80 border-rose-500 shadow-rose-600/20'
                             : 'bg-stone-950 border-stone-800'
@@ -944,7 +953,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                         <div className={`w-12 h-6 rounded-full p-0.5 ${isActive ? 'bg-rose-600' : 'bg-stone-800'}`}>
                           <div className={`w-5 h-5 rounded-full bg-white transition-transform ${isActive ? 'translate-x-6' : 'translate-x-0'}`} />
                         </div>
-                      </div>
+                      </button>
                     );
                   })
                 )}
@@ -952,16 +961,17 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
               {/* Optional Redstone Repeater Block */}
               {!isSandboxMode && level.hasRepeater && (
-                <div 
+                <button
+                  type="button"
                   onClick={cycleRepeaterTicks}
-                  className="p-3.5 rounded-2xl bg-stone-950 border-2 border-amber-500/50 hover:border-amber-400 cursor-pointer shadow-md transition group mt-1"
+                  className="text-left w-full p-3.5 rounded-2xl bg-stone-950 border-2 border-amber-500/50 hover:border-amber-400 cursor-pointer shadow-md transition group mt-1"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-mono text-amber-300 font-bold uppercase flex items-center gap-1.5">
                       <span>⏱️</span>
                       <span>{isEn ? 'Redstone Repeater' : 'Repetitor Redstone'}</span>
                     </span>
-                    <span className="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold">
+                    <span className="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-xs font-bold tabular-nums">
                       {repeaterTicks} Ticks ({repeaterTicks * 0.1}s)
                     </span>
                   </div>
@@ -983,7 +993,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                   <div className="text-[10px] text-stone-400 mt-1.5 font-mono text-center group-hover:text-amber-300 transition-colors">
                     {isEn ? 'Click to cycle delay ticks (1t - 4t)' : 'Apasă pentru a schimba întârzierea (1t - 4t)'}
                   </div>
-                </div>
+                </button>
               )}
             </div>
 
@@ -993,7 +1003,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               <div className="w-full flex items-center justify-center gap-1 mb-2">
                 <div className={`h-1.5 flex-1 max-w-[60px] rounded-full transition-all ${
                   signalPower > 0
-                    ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
+                    ? 'bg-rose-500 shadow-lg shadow-rose-500'
                     : 'bg-stone-800'
                 }`} />
                 <span className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
@@ -1005,7 +1015,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 </span>
                 <div className={`h-1.5 flex-1 max-w-[60px] rounded-full transition-all ${
                   signalPower > 0
-                    ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
+                    ? 'bg-rose-500 shadow-lg shadow-rose-500'
                     : 'bg-stone-800'
                 }`} />
               </div>
@@ -1024,7 +1034,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 {/* Minecraft Block Icon */}
                 <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-4xl border-2 transition-all shadow-inner ${
                   signalPower > 0 
-                    ? 'bg-rose-600/25 border-rose-400 text-rose-300 shadow-rose-600/60 scale-105 animate-pulse' 
+                    ? 'bg-rose-600/25 border-rose-400 text-rose-300 shadow-rose-600/60 scale-105' 
                     : 'bg-stone-850 border-stone-700 text-stone-500'
                 }`}>
                   {isSandboxMode ? (
@@ -1054,7 +1064,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                     <Gauge className="w-3.5 h-3.5 text-rose-400" />
                     <span className="text-[10px] font-mono text-stone-400 font-bold uppercase">Semnal:</span>
                   </div>
-                  <span className={`text-xs font-mono font-black ${
+                  <span className={`text-xs font-mono font-black tabular-nums ${
                     signalPower > 0 
                       ? 'text-rose-300 font-bold'
                       : 'text-stone-500'
@@ -1067,7 +1077,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               {/* Glowing Redstone Dust Line Outflow */}
               <div className={`w-20 h-1.5 rounded-full mt-2 transition-all ${
                 signalPower > 0
-                  ? 'bg-rose-500 shadow-lg shadow-rose-500 animate-pulse'
+                  ? 'bg-rose-500 shadow-lg shadow-rose-500'
                   : 'bg-stone-800'
               }`} />
             </div>
@@ -1115,7 +1125,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                           ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                           : 'bg-stone-900 text-stone-400 border border-stone-800'
                       }`}>
-                        <span className={`w-2 h-2 rounded-full shrink-0 ${out1 ? 'bg-emerald-400 animate-pulse' : 'bg-stone-600'}`} />
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${out1 ? 'bg-emerald-400' : 'bg-stone-600'}`} />
                         <span>{out1 ? (isEn ? 'ACTIVE (1)' : 'DEBLOCAT (1)') : (isEn ? 'LOCKED (0)' : 'BLOCAT / STINS (0)')}</span>
                       </div>
 
@@ -1158,7 +1168,7 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                             ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
                             : 'bg-stone-900 text-stone-400 border border-stone-800'
                         }`}>
-                          <span className={`w-2 h-2 rounded-full shrink-0 ${out2 ? 'bg-cyan-400 animate-pulse' : 'bg-stone-600'}`} />
+                          <span className={`w-2 h-2 rounded-full shrink-0 ${out2 ? 'bg-cyan-400' : 'bg-stone-600'}`} />
                           <span>{out2 ? (isEn ? 'ACTIVE (1)' : 'SEMNAL ACTIV (1)') : (isEn ? 'INACTIVE (0)' : 'INACTIV (0)')}</span>
                         </div>
 
@@ -1201,9 +1211,10 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleNextLevel}
                   disabled={currentLevelIndex >= REDSTONE_LEVELS.length - 1}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs sm:text-sm font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
+                  className="min-h-[44px] w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs sm:text-sm font-mono transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer disabled:opacity-50 shrink-0 active:scale-95"
                 >
                   <span>{isEn ? 'Next Mission' : 'Misiunea Următoare'}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -1211,18 +1222,20 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               </div>
             ) : (
               <div className="relative z-10 mt-6 pt-4 border-t border-stone-800 flex items-center justify-between gap-3 text-xs font-mono text-stone-400 flex-wrap">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <button
+                    type="button"
                     onClick={() => setShowTruthTableModal(true)}
-                    className="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-2 cursor-pointer text-xs"
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-2 cursor-pointer text-xs"
                   >
                     <Info className="w-4 h-4 text-cyan-400" />
                     <span>{isEn ? 'Truth Table Guide' : 'Ghid Tabel Adevăr'}</span>
                   </button>
 
                   <button
+                    type="button"
                     onClick={() => setShowHint(!showHint)}
-                    className="px-3.5 py-2 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-2 cursor-pointer text-xs"
+                    className="min-h-[40px] px-3.5 py-2 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 transition flex items-center gap-2 cursor-pointer text-xs"
                   >
                     <HelpCircle className="w-4 h-4 text-amber-400" />
                     <span>{isEn ? 'Hint' : 'Indiciu'}</span>
@@ -1230,8 +1243,9 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleResetCurrentLevel}
-                  className="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-2 cursor-pointer text-xs"
+                  className="min-h-[40px] px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-300 hover:text-white border border-stone-700 transition flex items-center gap-2 cursor-pointer text-xs"
                 >
                   <RotateCcw className="w-4 h-4" />
                   <span>{isEn ? 'Reset Levers' : 'Resetează Pârghiile'}</span>
@@ -1281,16 +1295,16 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
               <div className="flex items-center gap-3 min-w-0">
                 <span className="text-3xl shrink-0">⛏️</span>
                 <div className="min-w-0">
-                  <h4 className="text-xs sm:text-sm font-bold text-white uppercase font-mono truncate">
+                  <h4 className="text-xs sm:text-sm font-bold text-white uppercase font-mono text-balance">
                     {isEn ? 'Master Redstone Architect' : 'Inginer Certificat Redstone'}
                   </h4>
-                  <p className="text-[11px] sm:text-xs text-stone-400 mt-0.5">
+                  <p className="text-[11px] sm:text-xs text-stone-400 mt-0.5 tabular-nums">
                     {completedLevels.length} / {REDSTONE_LEVELS.length} {isEn ? 'Missions Completed' : 'Misiuni Finalizate'}
                   </p>
                 </div>
               </div>
 
-              <div className="text-right font-mono text-cyan-300 font-black text-sm sm:text-base shrink-0">
+              <div className="text-right font-mono tabular-nums text-cyan-300 font-black text-sm sm:text-base shrink-0">
                 {Math.round((completedLevels.length / REDSTONE_LEVELS.length) * 100)}%
               </div>
             </div>
@@ -1411,8 +1425,9 @@ export const RedstoneLogicLab: React.FC<RedstoneLogicLabProps> = ({ onBack, onGa
 
             <div className="flex justify-end">
               <button
+                type="button"
                 onClick={() => setShowTruthTableModal(false)}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-white font-bold text-xs transition cursor-pointer active:scale-95"
+                className="min-h-[42px] w-full sm:w-auto px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-white font-bold text-xs transition cursor-pointer active:scale-95"
               >
                 {isEn ? 'Close Guide' : 'Închide Ghidul'}
               </button>

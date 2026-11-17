@@ -61,6 +61,7 @@ export const TeacherStudentManagement: React.FC = () => {
 
   // Deleting student
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDeleteStudent, setConfirmDeleteStudent] = useState<{ id: string; username?: string } | null>(null);
 
   const fetchStudents = async () => {
     setLoading(true);
@@ -134,20 +135,22 @@ export const TeacherStudentManagement: React.FC = () => {
     }
   };
 
-  const handleDelete = async (studentId?: string, username?: string) => {
+  const handleDelete = (studentId?: string, username?: string) => {
     if (!studentId) return;
-    const confirmMsg = isEn 
-      ? `Are you sure you want to permanently delete account "${username}"?`
-      : `Sigur doriți să ștergeți definitiv contul elevului "${username}"?`;
-    if (window.confirm(confirmMsg)) {
-      setDeletingId(studentId);
-      const ok = await deleteStudentAccount(studentId, username);
-      if (ok) {
-        setStudents((prev) => prev.filter((s) => s.id !== studentId));
-        sounds.playClick();
-      }
-      setDeletingId(null);
+    setConfirmDeleteStudent({ id: studentId, username });
+  };
+
+  const executeDeleteStudent = async () => {
+    if (!confirmDeleteStudent) return;
+    const { id, username } = confirmDeleteStudent;
+    setConfirmDeleteStudent(null);
+    setDeletingId(id);
+    const ok = await deleteStudentAccount(id, username);
+    if (ok) {
+      setStudents((prev) => prev.filter((s) => s.id !== id));
+      sounds.playClick();
     }
+    setDeletingId(null);
   };
 
   // Flag suspicious scores (Anti-Cheat)
@@ -189,13 +192,13 @@ export const TeacherStudentManagement: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <Building2 className="w-4 h-4 text-emerald-400 absolute left-3 top-3 pointer-events-none" />
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <div className="relative w-full sm:w-auto">
+            <Building2 className="w-4 h-4 text-emerald-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <select
               value={selectedSchoolFilter}
               onChange={(e) => setSelectedSchoolFilter(e.target.value)}
-              className="bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white focus:outline-none focus:border-teal-500 cursor-pointer"
+              className="w-full sm:w-auto min-h-[38px] bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white focus:outline-none focus:border-teal-500 cursor-pointer"
               title={isEn ? 'Filter by School' : 'Filtrează după Școală'}
             >
               <option value="all">🏫 {isEn ? 'All Schools' : 'Toate Școlile'}</option>
@@ -207,21 +210,22 @@ export const TeacherStudentManagement: React.FC = () => {
             </select>
           </div>
 
-          <div className="relative flex-1 sm:w-60">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+          <div className="relative flex-1 min-w-[180px] sm:w-60">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={isEn ? 'Search student name...' : 'Caută elev după nume...'}
-              className="w-full bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/40"
+              className="w-full min-h-[38px] bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/40"
             />
           </div>
 
           <button
+            type="button"
             onClick={fetchStudents}
             disabled={loading}
-            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
+            className="min-h-[38px] px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shrink-0 shadow-sm whitespace-nowrap"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-teal-400 ${loading ? 'animate-spin' : ''}`} />
             <span>{isEn ? 'Refresh' : 'Actualizează'}</span>
@@ -234,7 +238,7 @@ export const TeacherStudentManagement: React.FC = () => {
         <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-rose-950/80 via-slate-900 to-rose-950/80 border-2 border-rose-500/50 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
-              <AlertTriangle className="w-5 h-5 animate-pulse" />
+              <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
               <h4 className="text-sm font-bold text-white flex items-center gap-2">
@@ -393,15 +397,15 @@ export const TeacherStudentManagement: React.FC = () => {
                       </td>
 
                       {/* Total XP */}
-                      <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-teal-500/20 text-teal-300 font-bold border border-teal-500/30 text-xs font-mono">
+                      <td className="py-3.5 px-4 tabular-nums">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-teal-500/20 text-teal-300 font-bold border border-teal-500/30 text-xs font-mono whitespace-nowrap">
                           <Trophy className="w-3 h-3 text-amber-400" />
                           <span>{s.totalXP || 0} XP</span>
                         </span>
                       </td>
 
                       {/* Arcade */}
-                      <td className="py-3.5 px-4 font-mono text-xs text-indigo-300">
+                      <td className="py-3.5 px-4 font-mono text-xs text-indigo-300 tabular-nums whitespace-nowrap">
                         <div className="flex items-center gap-1">
                           <Gamepad2 className="w-3.5 h-3.5 text-indigo-400" />
                           <span>{s.arcadeScores?.totalArcade || 0} pct</span>
@@ -409,7 +413,7 @@ export const TeacherStudentManagement: React.FC = () => {
                       </td>
 
                       {/* Lessons */}
-                      <td className="py-3.5 px-4 font-mono text-xs text-emerald-300">
+                      <td className="py-3.5 px-4 font-mono text-xs text-emerald-300 tabular-nums whitespace-nowrap">
                         <div className="flex items-center gap-1">
                           <Check className="w-3.5 h-3.5 text-emerald-400" />
                           <span>{lessonsCount} {isEn ? 'Finished' : 'Finalizate'}</span>
@@ -417,7 +421,7 @@ export const TeacherStudentManagement: React.FC = () => {
                       </td>
 
                       {/* Duels */}
-                      <td className="py-3.5 px-4 font-mono text-xs text-rose-300">
+                      <td className="py-3.5 px-4 font-mono text-xs text-rose-300 tabular-nums whitespace-nowrap">
                         <div className="flex items-center gap-1">
                           <Swords className="w-3.5 h-3.5 text-rose-400" />
                           <span>{s.duelStats?.wins || 0}V / {s.duelStats?.losses || 0}Î</span>
@@ -429,11 +433,12 @@ export const TeacherStudentManagement: React.FC = () => {
                         <div className="flex items-center justify-end gap-1.5">
                           {/* Score Inspector / Editor Modal trigger */}
                           <button
+                            type="button"
                             onClick={() => {
                               setSelectedStudentForScores(s);
                               sounds.playClick();
                             }}
-                            className="px-2.5 py-1 rounded-lg bg-teal-950/60 hover:bg-teal-900/80 text-teal-300 border border-teal-500/40 text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-sm active:scale-95"
+                            className="min-h-[34px] px-2.5 py-1 rounded-lg bg-teal-950/60 hover:bg-teal-900/80 text-teal-300 border border-teal-500/40 text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-sm active:scale-95 whitespace-nowrap"
                             title={isEn ? 'Inspect & Edit All Scores (Anti-Cheat)' : 'Inspectează & Modifică Toate Scorurile (Anti-Cheat)'}
                           >
                             <Sliders className="w-3 h-3 text-teal-400" />
@@ -441,8 +446,9 @@ export const TeacherStudentManagement: React.FC = () => {
                           </button>
 
                           <button
+                            type="button"
                             onClick={() => handleStartResetPassword(s)}
-                            className="px-2 py-1 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                            className="min-h-[34px] px-2.5 py-1 rounded-lg bg-amber-950/50 hover:bg-amber-900/60 text-amber-300 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer whitespace-nowrap"
                             title={isEn ? 'Reset password for this student' : 'Resetează parola pentru acest elev'}
                           >
                             <KeyRound className="w-3 h-3 text-amber-400" />
@@ -450,9 +456,11 @@ export const TeacherStudentManagement: React.FC = () => {
                           </button>
 
                           <button
+                            type="button"
                             onClick={() => handleDelete(s.id, s.username)}
                             disabled={deletingId === s.id}
-                            className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
+                            aria-label={isEn ? `Delete student ${s.username}` : `Șterge contul ${s.username}`}
+                            className="min-w-[34px] min-h-[34px] p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition flex items-center justify-center cursor-pointer disabled:opacity-50 shrink-0"
                             title={isEn ? 'Delete student' : 'Șterge cont elev'}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -471,10 +479,12 @@ export const TeacherStudentManagement: React.FC = () => {
       {/* Password Reset Modal */}
       {resettingStudent && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-7 shadow-2xl max-w-md w-full relative">
+          <div className="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 sm:p-7 shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto relative">
             <button
+              type="button"
               onClick={() => setResettingStudent(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1"
+              aria-label={isEn ? 'Close modal' : 'Închide fereastra'}
+              className="absolute top-4 right-4 min-w-[36px] min-h-[36px] rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -553,6 +563,43 @@ export const TeacherStudentManagement: React.FC = () => {
           }}
           lang={lang}
         />
+      )}
+
+      {/* Delete Student Confirmation Modal */}
+      {confirmDeleteStudent && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border-2 border-rose-500/40 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-black text-white font-heading">
+                {isEn ? 'Delete Student Account' : 'Ștergere Cont Elev'}
+              </h4>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {isEn
+                ? `Are you sure you want to permanently delete account "${confirmDeleteStudent.username}"?`
+                : `Sigur doriți să ștergeți definitiv contul elevului "${confirmDeleteStudent.username}"?`}
+            </p>
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setConfirmDeleteStudent(null)}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer"
+              >
+                {isEn ? 'Cancel' : 'Anulează'}
+              </button>
+              <button
+                type="button"
+                onClick={executeDeleteStudent}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold cursor-pointer"
+              >
+                {isEn ? 'Delete Account' : 'Șterge Contul'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

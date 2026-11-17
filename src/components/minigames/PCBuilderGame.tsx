@@ -517,9 +517,9 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
             <div className="flex items-center gap-3">
               {/* Timer */}
               <div
-                className={`px-3.5 py-1.5 rounded-xl border flex items-center gap-2 font-mono text-sm font-bold transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl border flex items-center gap-2 font-mono text-sm font-bold transition-all tabular-nums ${
                   timeLeft <= 10
-                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 animate-pulse'
+                    ? 'bg-rose-500/20 text-rose-300 border-rose-500/50'
                     : 'bg-slate-950 text-blue-300 border-slate-800'
                 }`}
               >
@@ -528,7 +528,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
               </div>
 
               {/* Score */}
-              <div className="bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5">
+              <div className="bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 flex items-center gap-1.5 tabular-nums">
                 <Trophy className="w-4 h-4 text-emerald-400" />
                 <span className="text-sm font-black text-white font-mono">{score} pts</span>
               </div>
@@ -538,9 +538,9 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                 type="button"
                 onClick={handleToggleHint}
                 title={lang === 'en' ? 'Show where to install component' : 'Arată unde se montează piesa (Indiciu)'}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer border active:scale-95 ${
+                className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer border active:scale-95 ${
                   showHint
-                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/30 animate-pulse'
+                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/30'
                     : 'bg-slate-800 hover:bg-slate-750 text-amber-300 border-amber-500/40 hover:border-amber-400'
                 }`}
               >
@@ -550,9 +550,11 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
 
               {/* Reset Level Button */}
               <button
+                type="button"
                 onClick={initLevel}
+                aria-label={lang === 'en' ? 'Restart Current Level' : 'Reia Nivelul Curent'}
                 title={lang === 'en' ? 'Restart Current Level' : 'Reia Nivelul Curent'}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer"
+                className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer flex items-center justify-center"
               >
                 <RotateCcw className="w-4 h-4 text-cyan-400" />
               </button>
@@ -561,8 +563,8 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
 
           {/* Short Circuit Warning Alert */}
           {shortCircuitMsg && (
-            <div className="p-3.5 rounded-2xl bg-rose-500/20 border-2 border-rose-500/60 text-rose-200 text-xs font-bold font-mono animate-bounce flex items-center gap-3 shadow-lg shadow-rose-500/20">
-              <Zap className="w-5 h-5 text-amber-400 shrink-0 animate-pulse" />
+            <div className="p-3.5 rounded-2xl bg-rose-500/20 border-2 border-rose-500/60 text-rose-200 text-xs font-bold font-mono flex items-center gap-3 shadow-lg shadow-rose-500/20">
+              <Zap className="w-5 h-5 text-amber-400 shrink-0" />
               <div className="flex-1">{shortCircuitMsg}</div>
             </div>
           )}
@@ -571,13 +573,13 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Mobile Fast Component Selector Strip (Visible on mobile/tablet < lg) */}
             <div className="lg:hidden col-span-1 flex flex-col gap-2 p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-300">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono font-bold text-slate-300">
                 <span className="flex items-center gap-1.5">
                   <Wrench className="w-3.5 h-3.5 text-blue-400" />
                   {lang === 'en' ? 'Parts to Install:' : 'Piese de montat:'} ({conveyorItems.length})
                 </span>
                 {selectedConveyorItem && (
-                  <span className="text-[10px] text-amber-400 font-bold animate-pulse">
+                  <span className="text-[10px] text-amber-400 font-bold">
                     {ALL_COMPONENTS[selectedConveyorItem].nameRo} ➔ {lang === 'en' ? 'Tap slot!' : 'Atinge slotul!'}
                   </span>
                 )}
@@ -595,7 +597,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                         setSelectedConveyorItem(slotKey);
                         setHoveredComponent(info);
                       }}
-                      className={`shrink-0 px-3 py-2 rounded-xl border flex items-center gap-2 transition-all cursor-pointer active:scale-95 ${
+                      className={`shrink-0 min-h-[44px] px-3 py-2 rounded-xl border flex items-center gap-2 transition-all cursor-pointer active:scale-95 ${
                         isSelected
                           ? 'bg-blue-600/30 border-blue-400 text-white ring-2 ring-blue-400/50 shadow-lg shadow-blue-500/20'
                           : 'bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800'
@@ -622,39 +624,39 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                     Placă de Bază ATX • Arkedo-Z790
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/30">
+                <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/30 tabular-nums">
                   Montate: {Object.keys(placedSlots).length} / {currentLevel.requiredComponents.length} piese
                 </span>
               </div>
 
               {/* Visual Motherboard Layout */}
               <div className="overflow-x-auto pb-1 -mx-1 px-1 sm:mx-0 sm:px-0">
-                <div className="relative w-full min-w-[310px] min-h-[440px] sm:min-h-0 sm:aspect-[4/3] max-w-[620px] mx-auto bg-emerald-950/20 border-2 border-emerald-500/30 rounded-2xl p-3 sm:p-4 flex flex-col justify-between shadow-inner">
+                <div className="relative w-full min-w-[290px] min-h-[430px] sm:min-h-0 sm:aspect-[4/3] max-w-[620px] mx-auto bg-emerald-950/20 border-2 border-emerald-500/30 rounded-2xl p-2.5 sm:p-4 flex flex-col justify-between shadow-inner">
                   {/* Motherboard Trace Lines Background Decoration */}
                   <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
                 {/* Top Section: CPU Socket & Cooler Mount + RAM Slots */}
-                <div className="flex items-start justify-between gap-3 relative z-10">
+                <div className="flex items-start justify-between gap-2 sm:gap-3 relative z-10">
                   {/* CPU + Cooler Stack Area */}
                   <div className="flex flex-col gap-2">
                     {/* CPU Socket */}
                     <button
                       type="button"
                       onClick={() => handleSlotAttempt('cpu')}
-                      className={`w-32 sm:w-36 h-28 rounded-2xl border-2 flex flex-col items-center justify-center p-2 transition-all duration-300 cursor-pointer relative ${
+                      className={`w-28 sm:w-36 h-28 rounded-2xl border-2 flex flex-col items-center justify-center p-2 transition-all duration-300 cursor-pointer relative ${
                         placedSlots.cpu
                           ? 'bg-blue-950/80 border-blue-400 shadow-md shadow-blue-500/20'
                           : shortCircuitSlot === 'cpu'
                           ? 'bg-rose-900/60 border-rose-500 scale-105 animate-wiggle'
                           : showHint && selectedConveyorItem === 'cpu'
-                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                           : selectedConveyorItem
                           ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                           : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                       }`}
                     >
                       {showHint && selectedConveyorItem === 'cpu' && (
-                        <span className="absolute -top-2.5 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                        <span className="absolute -top-2.5 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
                           💡 Aici!
                         </span>
                       )}
@@ -674,20 +676,20 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                       <button
                         type="button"
                         onClick={() => handleSlotAttempt('cooler')}
-                        className={`w-32 sm:w-36 h-20 rounded-2xl border-2 flex flex-col items-center justify-center p-1.5 transition-all duration-300 cursor-pointer relative ${
+                        className={`w-28 sm:w-36 h-20 rounded-2xl border-2 flex flex-col items-center justify-center p-1.5 transition-all duration-300 cursor-pointer relative ${
                           placedSlots.cooler
                             ? 'bg-cyan-950/80 border-cyan-400 shadow-md shadow-cyan-500/20'
                             : shortCircuitSlot === 'cooler'
                             ? 'bg-rose-900/60 border-rose-500 scale-105 animate-wiggle'
                             : showHint && selectedConveyorItem === 'cooler'
-                            ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                            ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                             : selectedConveyorItem
                             ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                             : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                         }`}
                       >
                         {showHint && selectedConveyorItem === 'cooler' && (
-                          <span className="absolute -top-2 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                          <span className="absolute -top-2 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
                             💡 Aici!
                           </span>
                         )}
@@ -707,25 +709,25 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                   </div>
 
                   {/* Dual RAM DIMM Slots */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5 sm:gap-2">
                     {/* RAM Slot 1 */}
                     <button
                       type="button"
                       onClick={() => handleSlotAttempt('ram1')}
-                      className={`w-14 sm:w-16 h-52 rounded-2xl border-2 flex flex-col items-center justify-between p-2 transition-all duration-300 cursor-pointer relative ${
+                      className={`w-13 sm:w-16 h-52 rounded-2xl border-2 flex flex-col items-center justify-between p-1.5 sm:p-2 transition-all duration-300 cursor-pointer relative ${
                         placedSlots.ram1
                           ? 'bg-amber-950/80 border-amber-400 shadow-md shadow-amber-500/20'
                           : shortCircuitSlot === 'ram1'
                           ? 'bg-rose-900/60 border-rose-500 scale-105 animate-wiggle'
                           : showHint && selectedConveyorItem === 'ram1'
-                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                           : selectedConveyorItem
                           ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                           : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                       }`}
                     >
                       {showHint && selectedConveyorItem === 'ram1' && (
-                        <span className="absolute -top-2.5 px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[8px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                        <span className="absolute -top-2.5 px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[8px] font-black uppercase tracking-wider shadow-md">
                           💡 Aici!
                         </span>
                       )}
@@ -746,20 +748,20 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                       <button
                         type="button"
                         onClick={() => handleSlotAttempt('ram2')}
-                        className={`w-14 sm:w-16 h-52 rounded-2xl border-2 flex flex-col items-center justify-between p-2 transition-all duration-300 cursor-pointer relative ${
+                        className={`w-13 sm:w-16 h-52 rounded-2xl border-2 flex flex-col items-center justify-between p-1.5 sm:p-2 transition-all duration-300 cursor-pointer relative ${
                           placedSlots.ram2
                             ? 'bg-amber-950/80 border-amber-400 shadow-md shadow-amber-500/20'
                             : shortCircuitSlot === 'ram2'
                             ? 'bg-rose-900/60 border-rose-500 scale-105 animate-wiggle'
                             : showHint && selectedConveyorItem === 'ram2'
-                            ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                            ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                             : selectedConveyorItem
                             ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                             : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                         }`}
                       >
                         {showHint && selectedConveyorItem === 'ram2' && (
-                          <span className="absolute -top-2.5 px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[8px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                          <span className="absolute -top-2.5 px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[8px] font-black uppercase tracking-wider shadow-md">
                             💡 Aici!
                           </span>
                         )}
@@ -785,20 +787,20 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                     <button
                       type="button"
                       onClick={() => handleSlotAttempt('gpu')}
-                      className={`w-full h-16 rounded-2xl border-2 flex items-center justify-between px-4 transition-all duration-300 cursor-pointer relative ${
+                      className={`w-full h-16 rounded-2xl border-2 flex items-center justify-between px-3 sm:px-4 transition-all duration-300 cursor-pointer relative ${
                         placedSlots.gpu
                           ? 'bg-emerald-950/80 border-emerald-400 shadow-md shadow-emerald-500/20'
                           : shortCircuitSlot === 'gpu'
                           ? 'bg-rose-900/60 border-rose-500 scale-102 animate-wiggle'
                           : showHint && selectedConveyorItem === 'gpu'
-                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                           : selectedConveyorItem
                           ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                           : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                       }`}
                     >
                       {showHint && selectedConveyorItem === 'gpu' && (
-                        <span className="absolute -top-2.5 right-4 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                        <span className="absolute -top-2.5 right-4 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
                           💡 Aici se montează!
                         </span>
                       )}
@@ -811,32 +813,32 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                           </div>
                         </div>
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-slate-400">
+                      <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0">
                         {placedSlots.gpu ? 'PCIe x16 OK' : 'Slot Liber'}
                       </span>
                     </button>
                   )}
 
                   {/* Bottom Row: SSD M.2 Slot & Power Supply (PSU) */}
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center justify-between gap-2 sm:gap-3">
                     {/* SSD M.2 NVMe Slot */}
                     <button
                       type="button"
                       onClick={() => handleSlotAttempt('ssd')}
-                      className={`flex-1 h-16 rounded-2xl border-2 flex items-center justify-between px-3 transition-all duration-300 cursor-pointer relative ${
+                      className={`flex-1 h-16 rounded-2xl border-2 flex items-center justify-between px-2.5 sm:px-3 transition-all duration-300 cursor-pointer relative ${
                         placedSlots.ssd
                           ? 'bg-purple-950/80 border-purple-400 shadow-md shadow-purple-500/20'
                           : shortCircuitSlot === 'ssd'
                           ? 'bg-rose-900/60 border-rose-500 scale-102 animate-wiggle'
                           : showHint && selectedConveyorItem === 'ssd'
-                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                           : selectedConveyorItem
                           ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                           : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                       }`}
                     >
                       {showHint && selectedConveyorItem === 'ssd' && (
-                        <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                        <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
                           💡 Aici!
                         </span>
                       )}
@@ -856,20 +858,20 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                     <button
                       type="button"
                       onClick={() => handleSlotAttempt('psu')}
-                      className={`flex-1 h-16 rounded-2xl border-2 flex items-center justify-between px-3 transition-all duration-300 cursor-pointer relative ${
+                      className={`flex-1 h-16 rounded-2xl border-2 flex items-center justify-between px-2.5 sm:px-3 transition-all duration-300 cursor-pointer relative ${
                         placedSlots.psu
                           ? 'bg-rose-950/80 border-rose-400 shadow-md shadow-rose-500/20'
                           : shortCircuitSlot === 'psu'
                           ? 'bg-rose-900/60 border-rose-500 scale-102 animate-wiggle'
                           : showHint && selectedConveyorItem === 'psu'
-                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 animate-pulse shadow-lg shadow-amber-500/30'
+                          ? 'border-dashed border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/60 shadow-lg shadow-amber-500/30'
                           : selectedConveyorItem
                           ? 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500 hover:bg-slate-850'
                           : 'border-dashed border-slate-700 bg-slate-900/80 hover:border-slate-500'
                       }`}
                     >
                       {showHint && selectedConveyorItem === 'psu' && (
-                        <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider animate-bounce shadow-md">
+                        <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[9px] font-black uppercase tracking-wider shadow-md">
                           💡 Aici!
                         </span>
                       )}
@@ -903,11 +905,12 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                 </div>
 
                 <button
+                  type="button"
                   onClick={startBootSequence}
                   disabled={!isAllPlaced || isBooting || isBootSuccess}
-                  className={`w-full sm:w-auto px-6 py-3 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 ${
+                  className={`w-full sm:w-auto min-h-[44px] px-6 py-3 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 ${
                     isAllPlaced && !isBootSuccess
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-emerald-500/30 animate-pulse'
+                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 shadow-emerald-500/30 ring-2 ring-emerald-300'
                       : isBootSuccess
                       ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 cursor-default'
                       : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
@@ -923,7 +926,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                 <div className="mt-4 p-4 rounded-2xl bg-black/90 border border-emerald-500/40 text-xs font-mono text-emerald-300 flex flex-col gap-1.5 animate-fadeIn">
                   <div className="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-1 mb-1 text-[10px]">
                     <span>BIOS / UEFI POST System Diagnostics Log</span>
-                    <span className="animate-pulse text-emerald-400">ONLINE</span>
+                    <span className="text-emerald-400">ONLINE</span>
                   </div>
                   {bootLog.map((line, idx) => (
                     <div key={idx} className="leading-relaxed">
@@ -948,16 +951,16 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
                       type="button"
                       onClick={handleToggleHint}
                       title={lang === 'en' ? 'Show where component fits' : 'Arată unde se montează piesa selectată'}
-                      className={`px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono transition flex items-center gap-1 cursor-pointer border active:scale-95 ${
+                      className={`min-h-[34px] px-2.5 py-1 rounded-xl text-[11px] font-bold font-mono transition flex items-center gap-1 cursor-pointer border active:scale-95 ${
                         showHint
-                          ? 'bg-amber-500 text-slate-950 border-amber-400 animate-pulse shadow-md shadow-amber-500/20'
+                          ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
                           : 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border-amber-500/40'
                       }`}
                     >
                       <Lightbulb className={`w-3.5 h-3.5 ${showHint ? 'text-slate-950' : 'text-amber-400'}`} />
                       <span>{showHint ? (lang === 'en' ? 'Hide Hint' : 'Ascunde') : (lang === 'en' ? 'Hint' : '💡 Indiciu')}</span>
                     </button>
-                    <span className="text-blue-400 text-[11px]">
+                    <span className="text-blue-400 text-[11px] tabular-nums">
                       {conveyorItems.length} rămase
                     </span>
                   </div>
@@ -965,7 +968,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
 
                 {conveyorItems.length === 0 ? (
                   <div className="p-6 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 text-center flex flex-col items-center justify-center gap-2">
-                    <CheckCircle2 className="w-8 h-8 text-emerald-400 animate-bounce" />
+                    <CheckCircle2 className="w-8 h-8 text-emerald-400" />
                     <span className="text-xs font-bold text-emerald-300">
                       Bancul de lucru este gol! Toate piesele au fost montate!
                     </span>
@@ -1052,8 +1055,9 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
               {/* Next Level Button (shown after successful boot) */}
               {isBootSuccess && currentLevelIdx + 1 < PC_BUILD_LEVELS.length && (
                 <button
+                  type="button"
                   onClick={handleNextLevel}
-                  className="p-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer animate-bounce active:scale-95"
+                  className="min-h-[48px] p-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
                 >
                   <span>Nivelul Următor ➔</span>
                 </button>
@@ -1067,15 +1071,16 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
               <div className="w-16 h-16 rounded-2xl bg-rose-500/20 border border-rose-500/40 text-3xl flex items-center justify-center">
                 ⏱️
               </div>
-              <h3 className="text-xl sm:text-2xl font-black text-white font-heading">
+              <h3 className="text-xl sm:text-2xl font-black text-white font-heading text-balance">
                 Timpul a Expirat!
               </h3>
               <p className="text-slate-300 text-xs sm:text-sm max-w-md">
                 Banda rulantă s-a oprit înainte de a putea monta toate componentele pe placa de bază. Fii mai rapid la următoarea încercare!
               </p>
               <button
+                type="button"
                 onClick={initLevel}
-                className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg cursor-pointer active:scale-95"
+                className="min-h-[44px] px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg cursor-pointer active:scale-95"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Reîncearcă Nivelul</span>
@@ -1086,7 +1091,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
       ) : (
         /* Final Victory Screen */
         <div className="bg-slate-900/95 border-2 border-blue-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col items-center justify-center text-center gap-6">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl shadow-blue-500/20 ring-4 ring-blue-500/20 animate-bounce">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl shadow-blue-500/20 ring-4 ring-blue-500/20">
             🖥️
           </div>
 
@@ -1094,7 +1099,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
             <span className="px-3.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-500/30 uppercase tracking-wider">
               {lang === 'en' ? 'Hardware Architect Diploma' : 'Certificat Inginer Hardware TIC'}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2">
+            <h2 className="text-2xl sm:text-4xl font-black text-white font-heading mt-2 text-balance">
               {studentName ? `${studentName}, ` : ''}
               {lang === 'en' ? 'Master PC Builder! 💻⚡' : 'Maestru în Arhitectura PC! 💻⚡'}
             </h2>
@@ -1109,7 +1114,7 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 max-w-lg w-full">
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Scor Total</span>
-              <span className="text-3xl sm:text-4xl font-black text-blue-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-blue-400 font-mono mt-1 tabular-nums">
                 {score}
               </span>
               <span className="text-[11px] text-slate-500">puncte</span>
@@ -1117,13 +1122,13 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
 
             <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">PC-uri Bootate</span>
-              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">
+              <span className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1 tabular-nums">
                 {PC_BUILD_LEVELS.length} / {PC_BUILD_LEVELS.length}
               </span>
               <span className="text-[11px] text-slate-500">fără scurtcircuit</span>
             </div>
 
-            <div className="bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
+            <div className="col-span-2 sm:col-span-1 bg-slate-950/90 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center">
               <span className="text-xs text-slate-400 uppercase font-bold">Competență TIC</span>
               <span className="text-sm font-black text-amber-400 font-mono mt-1 text-center">
                 Hardware & POST
@@ -1133,20 +1138,22 @@ export const PCBuilderGame: React.FC<PCBuilderGameProps> = ({ onBack, studentNam
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <button
+              type="button"
               onClick={handleRestartWholeGame}
-              className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
+              className="min-h-[44px] px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer active:scale-95"
             >
               <RotateCcw className="w-4 h-4" />
               <span>{lang === 'en' ? 'Play Again' : 'Asamblează din Nou'}</span>
             </button>
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onBack();
               }}
-              className="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
+              className="min-h-[44px] px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-750 text-slate-200 font-bold text-sm transition border border-slate-700 cursor-pointer"
             >
               <span>{lang === 'en' ? 'Back to Arcade' : 'Înapoi la Jocuri'}</span>
             </button>

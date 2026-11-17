@@ -708,7 +708,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
               <Palette className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-sm font-black text-white font-heading flex items-center gap-2">
+              <div className="text-sm font-black text-white font-heading flex flex-wrap items-center gap-2 text-balance">
                 <span>{lang === 'en' ? 'RGB Pixel Master' : 'Maestrul Pixelilor RGB'}</span>
                 <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px] font-mono border border-purple-500/30">
                   {lang === 'en' ? '2D Graphics & Color' : 'Grafică Digitală & Pixeli'}
@@ -722,26 +722,26 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
         </div>
 
         {/* Global Controls & Score */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Dedicated Hint Button */}
           <button
             id="rgb-hint-toggle-btn"
             type="button"
             onClick={handleToggleHint}
             title={lang === 'en' ? 'Show didactic hint' : 'Afișează indiciu didactic'}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer border active:scale-95 ${
+            className={`min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer border active:scale-95 ${
               showHint
-                ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/30 animate-pulse'
+                ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/30 ring-2 ring-amber-400/50'
                 : 'bg-slate-800 hover:bg-slate-750 text-amber-300 border-amber-500/40 hover:border-amber-400'
             }`}
           >
-            <Lightbulb className={`w-4 h-4 ${showHint ? 'text-slate-950' : 'text-amber-400'}`} />
+            <Lightbulb className={`w-4 h-4 shrink-0 ${showHint ? 'text-slate-950' : 'text-amber-400'}`} />
             <span>{showHint ? (lang === 'en' ? 'Hint Active' : 'Indiciu Activ') : (lang === 'en' ? 'Hint' : '💡 Indiciu')}</span>
           </button>
 
           {/* High Score Badge */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-amber-300">
-            <Trophy className="w-4 h-4 text-amber-400" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-amber-300 tabular-nums">
+            <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
             <span className="font-black text-white">{score}</span>
             <span className="text-[10px] text-slate-400">pts</span>
           </div>
@@ -757,13 +757,13 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
             setActiveTab('rgb_mixer');
             setShowHint(false);
           }}
-          className={`flex-1 min-w-[140px] py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
+          className={`flex-1 min-w-[120px] min-h-[40px] py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
             activeTab === 'rgb_mixer'
               ? 'bg-gradient-to-r from-red-500/20 via-green-500/20 to-blue-500/20 text-white border border-cyan-400/40 shadow-lg'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
           }`}
         >
-          <Sliders className="w-4 h-4 text-cyan-400" />
+          <Sliders className="w-4 h-4 text-cyan-400 shrink-0" />
           <span>{lang === 'en' ? '1. RGB Light Synthesis' : '1. Sinteza Luminii RGB'}</span>
         </button>
 
@@ -774,13 +774,13 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
             setActiveTab('pixel_art');
             setShowHint(false);
           }}
-          className={`flex-1 min-w-[140px] py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
+          className={`flex-1 min-w-[120px] min-h-[40px] py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
             activeTab === 'pixel_art'
               ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-purple-400/40 shadow-lg'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
           }`}
         >
-          <Grid className="w-4 h-4 text-purple-400" />
+          <Grid className="w-4 h-4 text-purple-400 shrink-0" />
           <span>{lang === 'en' ? '2. Pixel Art Mosaic' : '2. Reconstruiește Pixel Art'}</span>
         </button>
 
@@ -791,13 +791,13 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
             setActiveTab('quiz');
             setShowHint(false);
           }}
-          className={`flex-1 min-w-[140px] py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
+          className={`flex-1 min-w-[120px] min-h-[40px] py-2.5 px-4 rounded-xl text-xs font-bold font-mono transition flex items-center justify-center gap-2 cursor-pointer ${
             activeTab === 'quiz'
               ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-white border border-emerald-400/40 shadow-lg'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
           }`}
         >
-          <HelpCircle className="w-4 h-4 text-emerald-400" />
+          <HelpCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{lang === 'en' ? '3. TIC Graphic Quiz' : '3. Ghicitorul de Formate & Pixeli'}</span>
         </button>
       </div>
@@ -834,7 +834,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                 </span>
               </div>
 
-              <h3 className="text-xl font-black text-white font-heading">
+              <h3 className="text-xl font-black text-white font-heading text-balance">
                 {lang === 'en' ? currentTarget.nameEn : currentTarget.nameRo}
               </h3>
               <p className="text-xs text-slate-300 mt-1">
@@ -861,7 +861,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     {toHex(currentTarget.r, currentTarget.g, currentTarget.b)}
                   </div>
                 </div>
-                <span className="text-[11px] text-slate-400 font-mono">
+                <span className="text-[11px] text-slate-400 font-mono tabular-nums">
                   RGB({currentTarget.r}, {currentTarget.g}, {currentTarget.b})
                 </span>
               </div>
@@ -881,7 +881,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     {toHex(redVal, greenVal, blueVal)}
                   </div>
                 </div>
-                <span className="text-[11px] text-slate-400 font-mono">
+                <span className="text-[11px] text-slate-400 font-mono tabular-nums">
                   RGB({redVal}, {greenVal}, {blueVal})
                 </span>
               </div>
@@ -894,7 +894,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                   {lang === 'en' ? 'Chromatic Precision:' : 'Precizie Cromatică:'}
                 </span>
                 <span
-                  className={`font-black text-sm ${
+                  className={`font-black text-sm tabular-nums ${
                     matchPercentage >= 90
                       ? 'text-emerald-400'
                       : matchPercentage >= 70
@@ -928,23 +928,23 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={handleMixerCheck}
-                className="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
+                className="flex-1 min-h-[44px] py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-purple-600/30 cursor-pointer active:scale-95 flex items-center justify-center gap-2"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-4 h-4 shrink-0" />
                 <span>{lang === 'en' ? 'Verify Color' : 'Verifică Nuanța'}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleNextTargetColor}
-                className="py-3 px-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs font-mono transition border border-slate-700 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
+                className="min-h-[44px] py-3 px-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs font-mono transition border border-slate-700 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
               >
                 <span>{lang === 'en' ? 'Next' : 'Următoarea'}</span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4 shrink-0" />
               </button>
             </div>
           </div>
@@ -952,9 +952,9 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
           {/* Right Column: Sub-Pixels Microscope & RGB Sliders */}
           <div className="lg:col-span-7 bg-slate-900/90 border-2 border-slate-700/80 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-6">
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <h4 className="text-sm font-black text-white font-heading flex items-center gap-2">
-                  <Eye className="w-4 h-4 text-cyan-400" />
+                  <Eye className="w-4 h-4 text-cyan-400 shrink-0" />
                   <span>
                     {lang === 'en'
                       ? 'Microscope View: The 3 Sub-Pixels (R, G, B)'
@@ -981,7 +981,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     boxShadow: redVal > 0 ? `0 0 ${redVal / 10}px rgba(239, 68, 68, 0.7)` : 'none',
                   }}
                 >
-                  <span className="text-[10px] font-mono font-bold text-white bg-black/60 px-1 rounded">
+                  <span className="text-[10px] font-mono font-bold text-white bg-black/60 px-1 rounded tabular-nums">
                     R: {redVal}
                   </span>
                 </div>
@@ -994,7 +994,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     boxShadow: greenVal > 0 ? `0 0 ${greenVal / 10}px rgba(34, 197, 94, 0.7)` : 'none',
                   }}
                 >
-                  <span className="text-[10px] font-mono font-bold text-white bg-black/60 px-1 rounded">
+                  <span className="text-[10px] font-mono font-bold text-white bg-black/60 px-1 rounded tabular-nums">
                     G: {greenVal}
                   </span>
                 </div>
@@ -1007,12 +1007,12 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     boxShadow: blueVal > 0 ? `0 0 ${blueVal / 10}px rgba(59, 130, 246, 0.7)` : 'none',
                   }}
                 >
-                  <span className="text-[10px] font-mono font-bold text-white bg-black/60 px-1 rounded">
+                  <span className="text-[10px] font-mono font-bold text-white bg-black/60 px-1 rounded tabular-nums">
                     B: {blueVal}
                   </span>
                 </div>
               </div>
-              <div className="text-[11px] text-slate-400 font-mono flex items-center gap-2">
+              <div className="text-[11px] text-slate-400 font-mono flex flex-wrap items-center justify-center gap-1.5 tabular-nums">
                 <span>Micro-Pixel Zoom:</span>
                 <span className="text-red-400 font-bold">R ({redVal})</span> +{' '}
                 <span className="text-green-400 font-bold">G ({greenVal})</span> +{' '}
@@ -1030,7 +1030,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
                     Canalul Roșu (Red)
                   </span>
-                  <span className="font-bold text-white bg-red-950/60 px-2 py-0.5 rounded border border-red-500/40">
+                  <span className="font-bold text-white bg-red-950/60 px-2 py-0.5 rounded border border-red-500/40 tabular-nums">
                     {redVal} / 255
                   </span>
                 </div>
@@ -1040,6 +1040,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                   max="255"
                   value={redVal}
                   onChange={(e) => setRedVal(Number(e.target.value))}
+                  aria-label="Canalul Roșu (Red)"
                   className="w-full accent-red-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex items-center gap-2 pt-1">
@@ -1051,7 +1052,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                         sounds.playClick();
                         setRedVal(val);
                       }}
-                      className="flex-1 py-1 text-[10px] font-mono rounded-lg bg-slate-800 hover:bg-red-950 text-slate-300 hover:text-red-300 border border-slate-700 hover:border-red-500/50 transition cursor-pointer"
+                      className="flex-1 min-h-[32px] py-1 text-[10px] font-mono rounded-lg bg-slate-800 hover:bg-red-950 text-slate-300 hover:text-red-300 border border-slate-700 hover:border-red-500/50 transition cursor-pointer tabular-nums"
                     >
                       {val}
                     </button>
@@ -1066,7 +1067,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     <span className="w-2.5 h-2.5 rounded-full bg-green-500 inline-block" />
                     Canalul Verde (Green)
                   </span>
-                  <span className="font-bold text-white bg-green-950/60 px-2 py-0.5 rounded border border-green-500/40">
+                  <span className="font-bold text-white bg-green-950/60 px-2 py-0.5 rounded border border-green-500/40 tabular-nums">
                     {greenVal} / 255
                   </span>
                 </div>
@@ -1076,6 +1077,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                   max="255"
                   value={greenVal}
                   onChange={(e) => setGreenVal(Number(e.target.value))}
+                  aria-label="Canalul Verde (Green)"
                   className="w-full accent-green-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex items-center gap-2 pt-1">
@@ -1087,7 +1089,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                         sounds.playClick();
                         setGreenVal(val);
                       }}
-                      className="flex-1 py-1 text-[10px] font-mono rounded-lg bg-slate-800 hover:bg-green-950 text-slate-300 hover:text-green-300 border border-slate-700 hover:border-green-500/50 transition cursor-pointer"
+                      className="flex-1 min-h-[32px] py-1 text-[10px] font-mono rounded-lg bg-slate-800 hover:bg-green-950 text-slate-300 hover:text-green-300 border border-slate-700 hover:border-green-500/50 transition cursor-pointer tabular-nums"
                     >
                       {val}
                     </button>
@@ -1102,7 +1104,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block" />
                     Canalul Albastru (Blue)
                   </span>
-                  <span className="font-bold text-white bg-blue-950/60 px-2 py-0.5 rounded border border-blue-500/40">
+                  <span className="font-bold text-white bg-blue-950/60 px-2 py-0.5 rounded border border-blue-500/40 tabular-nums">
                     {blueVal} / 255
                   </span>
                 </div>
@@ -1112,6 +1114,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                   max="255"
                   value={blueVal}
                   onChange={(e) => setBlueVal(Number(e.target.value))}
+                  aria-label="Canalul Albastru (Blue)"
                   className="w-full accent-blue-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
                 <div className="flex items-center gap-2 pt-1">
@@ -1123,7 +1126,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                         sounds.playClick();
                         setBlueVal(val);
                       }}
-                      className="flex-1 py-1 text-[10px] font-mono rounded-lg bg-slate-800 hover:bg-blue-950 text-slate-300 hover:text-blue-300 border border-slate-700 hover:border-blue-500/50 transition cursor-pointer"
+                      className="flex-1 min-h-[32px] py-1 text-[10px] font-mono rounded-lg bg-slate-800 hover:bg-blue-950 text-slate-300 hover:text-blue-300 border border-slate-700 hover:border-blue-500/50 transition cursor-pointer tabular-nums"
                     >
                       {val}
                     </button>
@@ -1147,12 +1150,12 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                 <span className="text-[11px] font-mono font-bold text-purple-300 uppercase tracking-wider">
                   Modelul {modelIdx + 1} / {PIXEL_ART_MODELS.length}
                 </span>
-                <span className="text-[11px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/40">
+                <span className="text-[11px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/40 tabular-nums">
                   {currentModel.size} × {currentModel.size} Pixeli
                 </span>
               </div>
 
-              <h3 className="text-xl font-black text-white font-heading">
+              <h3 className="text-xl font-black text-white font-heading text-balance">
                 {lang === 'en' ? currentModel.nameEn : currentModel.nameRo}
               </h3>
               <p className="text-xs text-slate-300 mt-1">
@@ -1171,8 +1174,8 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                 className="p-2.5 rounded-2xl bg-slate-950 border-2 border-slate-800 shadow-inner grid gap-0.5"
                 style={{
                   gridTemplateColumns: `repeat(${currentModel.size}, minmax(0, 1fr))`,
-                  width: '240px',
-                  height: '240px',
+                  width: 'min(240px, 72vw)',
+                  height: 'min(240px, 72vw)',
                 }}
               >
                 {currentModel.grid.map((colorIdx, idx) => (
@@ -1202,7 +1205,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                       sounds.playClick();
                       setModelIdx(idx);
                     }}
-                    className={`py-2 px-3 rounded-xl text-xs font-mono font-bold transition text-left cursor-pointer border ${
+                    className={`min-h-[40px] py-2 px-3 rounded-xl text-xs font-mono font-bold transition text-left cursor-pointer border ${
                       modelIdx === idx
                         ? 'bg-purple-600/30 text-purple-200 border-purple-400'
                         : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700'
@@ -1227,14 +1230,15 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     sounds.playClick();
                     setActiveTool('pencil');
                   }}
-                  className={`p-2 rounded-lg text-xs font-mono font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`min-h-[36px] min-w-[36px] p-2 rounded-lg text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     activeTool === 'pencil'
                       ? 'bg-purple-600 text-white shadow'
                       : 'text-slate-400 hover:text-white'
                   }`}
+                  aria-label={lang === 'en' ? 'Pencil Tool' : 'Creion Pixel'}
                   title={lang === 'en' ? 'Pencil Tool' : 'Creion Pixel'}
                 >
-                  <Paintbrush className="w-4 h-4" />
+                  <Paintbrush className="w-4 h-4 shrink-0" />
                   <span className="hidden sm:inline">{lang === 'en' ? 'Pencil' : 'Creion'}</span>
                 </button>
 
@@ -1244,14 +1248,15 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     sounds.playClick();
                     setActiveTool('eraser');
                   }}
-                  className={`p-2 rounded-lg text-xs font-mono font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`min-h-[36px] min-w-[36px] p-2 rounded-lg text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     activeTool === 'eraser'
                       ? 'bg-purple-600 text-white shadow'
                       : 'text-slate-400 hover:text-white'
                   }`}
+                  aria-label={lang === 'en' ? 'Eraser Tool' : 'Radieră'}
                   title={lang === 'en' ? 'Eraser Tool' : 'Radieră'}
                 >
-                  <Eraser className="w-4 h-4" />
+                  <Eraser className="w-4 h-4 shrink-0" />
                   <span className="hidden sm:inline">{lang === 'en' ? 'Eraser' : 'Radieră'}</span>
                 </button>
 
@@ -1261,14 +1266,15 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     sounds.playClick();
                     setActiveTool('fill');
                   }}
-                  className={`p-2 rounded-lg text-xs font-mono font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`min-h-[36px] min-w-[36px] p-2 rounded-lg text-xs font-mono font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     activeTool === 'fill'
                       ? 'bg-purple-600 text-white shadow'
                       : 'text-slate-400 hover:text-white'
                   }`}
+                  aria-label={lang === 'en' ? 'Bucket Fill' : 'Găleată de vopsea'}
                   title={lang === 'en' ? 'Bucket Fill' : 'Găleată de vopsea'}
                 >
-                  <PaintBucket className="w-4 h-4" />
+                  <PaintBucket className="w-4 h-4 shrink-0" />
                   <span className="hidden sm:inline">{lang === 'en' ? 'Fill' : 'Umplere'}</span>
                 </button>
               </div>
@@ -1281,13 +1287,14 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     sounds.playClick();
                     setShowGridLines((prev) => !prev);
                   }}
-                  className={`p-2 rounded-xl border text-xs font-mono transition cursor-pointer flex items-center gap-1 ${
+                  aria-label={lang === 'en' ? 'Toggle Grid' : 'Comută Grilă'}
+                  className={`min-h-[36px] min-w-[36px] p-2 rounded-xl border text-xs font-mono transition cursor-pointer flex items-center justify-center gap-1 ${
                     showGridLines
                       ? 'bg-slate-800 text-cyan-300 border-cyan-500/40'
                       : 'bg-slate-900 text-slate-400 border-slate-700'
                   }`}
                 >
-                  <Grid className="w-4 h-4" />
+                  <Grid className="w-4 h-4 shrink-0" />
                   <span className="hidden sm:inline">{lang === 'en' ? 'Grid' : 'Grilă'}</span>
                 </button>
 
@@ -1297,9 +1304,10 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     sounds.playClick();
                     setUserGrid(new Array(currentModel.size * currentModel.size).fill(0));
                   }}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition border border-slate-700 cursor-pointer active:scale-95 flex items-center gap-1"
+                  aria-label={lang === 'en' ? 'Reset Canvas' : 'Golește Pânza'}
+                  className="min-h-[36px] min-w-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition border border-slate-700 cursor-pointer active:scale-95 flex items-center justify-center gap-1"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-4 h-4 shrink-0" />
                   <span className="hidden sm:inline">{lang === 'en' ? 'Reset' : 'Golește'}</span>
                 </button>
               </div>
@@ -1307,7 +1315,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
 
             {/* Color Palette Selector */}
             <div className="flex items-center gap-2.5 p-2 rounded-2xl bg-slate-950 border border-slate-800 overflow-x-auto">
-              <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider pl-1">
+              <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider pl-1 shrink-0">
                 {lang === 'en' ? 'Palette:' : 'Culori:'}
               </span>
               {currentModel.palette.map((hex, idx) => {
@@ -1317,12 +1325,13 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                   <button
                     key={`palette-${idx}`}
                     type="button"
+                    aria-label={`${lang === 'en' ? 'Color' : 'Culoare'} ${idx}: ${hex}`}
                     onClick={() => {
                       sounds.playClick();
                       setSelectedColorIdx(idx);
                       if (activeTool === 'eraser') setActiveTool('pencil');
                     }}
-                    className={`w-8 h-8 rounded-xl border-2 transition-all cursor-pointer relative ${
+                    className={`w-9 h-9 shrink-0 rounded-xl border-2 transition-all cursor-pointer relative ${
                       isSelected
                         ? 'border-white scale-110 shadow-lg shadow-purple-500/30 ring-2 ring-purple-400'
                         : 'border-white/20 hover:scale-105'
@@ -1367,7 +1376,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                       }}
                       className={`w-full h-full rounded-sm transition-colors duration-75 relative ${
                         isWrong
-                          ? 'ring-2 ring-amber-400 bg-amber-500/30 animate-pulse'
+                          ? 'ring-2 ring-amber-400 bg-amber-500/30'
                           : showGridLines
                           ? 'border border-slate-800/40 hover:border-cyan-400/80'
                           : ''
@@ -1400,7 +1409,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                 <div className="text-xs font-mono text-slate-400">
                   {lang === 'en' ? 'Accuracy vs Reference:' : 'Acuratețe față de model:'}
                 </div>
-                <div className="text-lg font-black text-white font-mono flex items-center gap-2">
+                <div className="text-lg font-black text-white font-mono flex items-center gap-2 tabular-nums">
                   <span
                     className={
                       artAccuracy === 100
@@ -1421,9 +1430,9 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
               <button
                 type="button"
                 onClick={checkPixelArtVictory}
-                className="py-3 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95 flex items-center gap-2"
+                className="min-h-[44px] py-3 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95 flex items-center gap-2"
               >
-                <Award className="w-4 h-4" />
+                <Award className="w-4 h-4 shrink-0" />
                 <span>{lang === 'en' ? 'Check & Finish Sprite' : 'Validează Mozaicul'}</span>
               </button>
             </div>
@@ -1435,18 +1444,18 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
       {/* MODE 3: TIC GRAPHIC QUIZ & RESOLUTION DECODER */}
       {/* ========================================================================= */}
       {activeTab === 'quiz' && (
-        <div className="max-w-3xl mx-auto bg-slate-900/90 border-2 border-slate-700/80 rounded-3xl p-6 shadow-xl space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="max-w-3xl mx-auto bg-slate-900/90 border-2 border-slate-700/80 rounded-3xl p-5 sm:p-6 shadow-xl space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
             <div>
-              <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">
+              <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider tabular-nums">
                 Întrebarea {quizIdx + 1} / {GRAPHIC_QUIZ.length}
               </span>
-              <h3 className="text-lg font-black text-white font-heading mt-1">
+              <h3 className="text-lg font-black text-white font-heading mt-1 text-balance">
                 {lang === 'en' ? currentQuestion.questionEn : currentQuestion.questionRo}
               </h3>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-300">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-300 tabular-nums">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{quizScore} Corecte</span>
             </div>
           </div>
@@ -1474,7 +1483,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     key={`opt-${optIdx}`}
                     type="button"
                     onClick={() => handleOptionSelect(optIdx)}
-                    className={`w-full p-4 rounded-2xl border-2 text-left font-sans text-sm font-semibold transition-all flex items-center justify-between gap-3 cursor-pointer ${btnStyles}`}
+                    className={`w-full min-h-[52px] p-4 rounded-2xl border-2 text-left font-sans text-sm font-semibold transition-all flex items-center justify-between gap-3 cursor-pointer ${btnStyles}`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="w-7 h-7 rounded-xl bg-slate-950 flex items-center justify-center font-mono text-xs font-bold text-slate-300 border border-slate-700 shrink-0">
@@ -1498,7 +1507,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
           {isAnswerSubmitted && (
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 animate-fadeIn space-y-2">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
-                <Info className="w-4 h-4" />
+                <Info className="w-4 h-4 shrink-0" />
                 <span>{lang === 'en' ? 'Didactic Curriculum Explanation:' : 'Explicație din Manualul de TIC:'}</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -1508,22 +1517,22 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
           )}
 
           {/* Submit / Next Question Actions */}
-          <div className="flex items-center justify-end gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
             {!isAnswerSubmitted ? (
               <button
                 type="button"
                 onClick={handleQuizSubmit}
                 disabled={selectedOption === null}
-                className="py-3 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:hover:bg-emerald-600 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95 flex items-center gap-2"
+                className="min-h-[44px] py-3 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:hover:bg-emerald-600 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-emerald-600/30 cursor-pointer active:scale-95 flex items-center gap-2"
               >
                 <span>{lang === 'en' ? 'Submit Answer' : 'Trimite Răspunsul'}</span>
-                <CheckCircle2 className="w-4 h-4" />
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
               </button>
             ) : (
               <button
                 type="button"
                 onClick={handleNextQuestion}
-                className="py-3 px-6 rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95 flex items-center gap-2"
+                className="min-h-[44px] py-3 px-6 rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white font-black text-xs font-mono uppercase tracking-wider transition shadow-lg shadow-cyan-600/30 cursor-pointer active:scale-95 flex items-center gap-2"
               >
                 <span>
                   {quizIdx < GRAPHIC_QUIZ.length - 1
@@ -1534,7 +1543,7 @@ export const RGBPixelMasterGame: React.FC<RGBPixelMasterGameProps> = ({
                     ? 'Restart Quiz'
                     : 'Reia Chestionarul'}
                 </span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4 shrink-0" />
               </button>
             )}
           </div>

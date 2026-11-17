@@ -1747,14 +1747,15 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
             <button
               type="button"
               onClick={onBack}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+              aria-label={isEn ? 'Back to Arena' : 'Înapoi la Arenă'}
+              className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer flex items-center justify-center"
               title={isEn ? 'Back to Arena' : 'Înapoi la Arenă'}
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
           )}
           <div className="min-w-0">
-            <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-1.5 font-heading truncate">
+            <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-1.5 font-heading text-balance">
               <Layers className="w-4 h-4 text-cyan-400 shrink-0" />
               <span>File-Drop Attack 1v1</span>
             </h3>
@@ -1771,7 +1772,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
           <div
             className={`px-3 py-1.5 rounded-xl border font-mono text-xs font-black flex items-center gap-1 tabular-nums ${
               timeRemaining <= 15
-                ? 'bg-rose-950/90 border-rose-500 text-rose-300 animate-pulse'
+                ? 'bg-rose-950/90 border-rose-500 text-rose-300'
                 : 'bg-slate-950 border-slate-800 text-amber-300'
             }`}
           >
@@ -1781,7 +1782,8 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
           <button
             type="button"
             onClick={() => setSoundEnabled((s) => !s)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+            aria-label={soundEnabled ? (isEn ? 'Mute sound' : 'Dezactivează sunetul') : (isEn ? 'Unmute sound' : 'Activează sunetul')}
+            className="min-w-[36px] min-h-[36px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer flex items-center justify-center"
             title={soundEnabled ? 'Mute' : 'Unmute'}
           >
             {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-rose-400" />}
@@ -1791,7 +1793,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
 
       {/* STATUS ALERT BANNER */}
       {statusBanner && (
-        <div className="p-2.5 rounded-xl bg-rose-950/90 border border-rose-400 text-rose-200 text-xs font-black text-center animate-pulse">
+        <div className="p-2.5 rounded-xl bg-rose-950/90 border border-rose-400 text-rose-200 text-xs font-black text-center">
           {statusBanner}
         </div>
       )}
@@ -1825,21 +1827,21 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
       {/* MAIN DUEL WORKSPACE */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* LEFT + CENTER: MY HOLD, PENDING GARBAGE, TETRIS MATRIX & NEXT 3 */}
-        <div className="lg:col-span-7 p-3 sm:p-4 rounded-3xl bg-slate-950 border-2 border-slate-800 relative overflow-hidden shadow-2xl">
-          <div className="flex items-start justify-center gap-2 sm:gap-3">
+        <div className="lg:col-span-7 p-2.5 sm:p-4 rounded-3xl bg-slate-950 border-2 border-slate-800 relative overflow-hidden shadow-2xl">
+          <div className="flex items-start justify-center gap-1.5 sm:gap-3">
             {/* LEFT SIDEBAR: HOLD VAULT & PENDING GARBAGE GAUGE */}
-            <div className="flex flex-col items-center gap-2.5 w-16 sm:w-20 shrink-0">
+            <div className="flex flex-col items-center gap-2 sm:gap-2.5 w-[54px] sm:w-20 shrink-0">
               <button
                 type="button"
                 onClick={performHold}
                 disabled={holdLocked || Boolean(matchResult)}
-                className={`w-full p-2 rounded-2xl border text-center transition cursor-pointer touch-manipulation ${
+                className={`w-full p-1.5 sm:p-2 rounded-2xl border text-center transition cursor-pointer touch-manipulation ${
                   holdLocked
                     ? 'bg-slate-900/50 border-slate-800 opacity-50'
                     : 'bg-slate-900 hover:bg-slate-800 border-indigo-500/50'
                 }`}
               >
-                <span className="text-[10px] font-mono font-black text-indigo-300 block mb-1">
+                <span className="text-[9px] sm:text-[10px] font-mono font-black text-indigo-300 block mb-1">
                   HOLD [C]
                 </span>
                 <div className="flex justify-center">
@@ -1848,7 +1850,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
               </button>
 
               {/* Stats Pill Stack */}
-              <div className="w-full p-2 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-1.5 font-mono">
+              <div className="w-full p-1.5 sm:p-2 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-1.5 font-mono">
                 <div>
                   <span className="text-[9px] text-slate-400 block">{isEn ? 'LINES' : 'LINII'}</span>
                   <span className="text-sm font-black text-emerald-400 tabular-nums">{linesCleared}</span>
@@ -1864,11 +1866,11 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
               </div>
 
               {/* Pending Garbage Bar */}
-              <div className="w-full p-2 rounded-2xl bg-slate-900 border border-rose-500/40 flex flex-col items-center gap-1">
+              <div className="w-full p-1.5 sm:p-2 rounded-2xl bg-slate-900 border border-rose-500/40 flex flex-col items-center gap-1">
                 <span className="text-[9px] font-mono font-black text-rose-300">
                   {isEn ? 'INCOMING' : 'PRIMITE'}
                 </span>
-                <div className="w-4 h-28 rounded-full bg-slate-950 border border-slate-800 p-0.5 flex flex-col justify-end overflow-hidden">
+                <div className="w-4 h-24 sm:h-28 rounded-full bg-slate-950 border border-slate-800 p-0.5 flex flex-col justify-end overflow-hidden">
                   <div
                     className="w-full rounded-full bg-gradient-to-t from-rose-600 to-amber-400 transition-all duration-150"
                     style={{ height: `${Math.min(100, (pendingGarbage / 12) * 100)}%` }}
@@ -1886,20 +1888,20 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
                 ref={canvasRef}
                 width={COLS * CELL_PX}
                 height={ROWS * CELL_PX}
-                className="block rounded-xl w-[210px] h-[420px] sm:w-[240px] sm:h-[480px]"
+                className="block rounded-xl w-[166px] h-[332px] sm:w-[240px] sm:h-[480px]"
               />
             </div>
 
             {/* RIGHT SIDEBAR: NEXT-3 QUEUE */}
-            <div className="flex flex-col items-center gap-2 w-16 sm:w-20 shrink-0">
-              <div className="w-full p-2 rounded-2xl bg-slate-900 border border-cyan-500/40 text-center space-y-2.5">
-                <span className="text-[10px] font-mono font-black text-cyan-300 block">
+            <div className="flex flex-col items-center gap-2 w-[54px] sm:w-20 shrink-0">
+              <div className="w-full p-1.5 sm:p-2 rounded-2xl bg-slate-900 border border-cyan-500/40 text-center space-y-2">
+                <span className="text-[9px] sm:text-[10px] font-mono font-black text-cyan-300 block">
                   {isEn ? 'NEXT 3' : 'URM. 3'}
                 </span>
                 {nextQueue.map((pType, i) => (
                   <div
                     key={`${pType}_${i}`}
-                    className={`p-1.5 rounded-xl flex justify-center ${
+                    className={`p-1 sm:p-1.5 rounded-xl flex justify-center ${
                       i === 0 ? 'bg-slate-800/80 ring-1 ring-cyan-500/40' : 'bg-slate-950/60 opacity-80'
                     }`}
                   >
@@ -1912,9 +1914,9 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
 
           {/* MATCH RESULT OVERLAY */}
           {matchResult && (
-            <div className="absolute inset-0 z-40 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div className="absolute inset-0 z-40 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4 overflow-y-auto">
               <div
-                className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl ${
+                className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl shrink-0 ${
                   matchResult.won
                     ? 'bg-gradient-to-br from-amber-400 to-emerald-600 text-white'
                     : 'bg-rose-900 text-rose-200'
@@ -1923,12 +1925,12 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
                 <Trophy className="w-9 h-9" />
               </div>
               <div>
-                <h4 className="text-2xl font-black text-white font-heading">
+                <h4 className="text-2xl font-black text-white font-heading text-balance">
                   {matchResult.won ? (isEn ? 'MATRIX VICTORY! 🧱' : 'VICTORIE DE ARHITECT! 🧱') : isEn ? 'STACK OVERFLOW!' : 'DEPĂȘIT DE RIVAL!'}
                 </h4>
                 <p className="text-xs text-slate-300 mt-1">{isEn ? matchResult.reasonEn : matchResult.reasonRo}</p>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs font-black">
+              <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs font-black tabular-nums">
                 <span className="text-cyan-300">
                   {isEn ? 'Lines' : 'Linii'}: {matchResult.myLines} vs {matchResult.oppLines}
                 </span>
@@ -1944,7 +1946,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
                   <button
                     type="button"
                     onClick={handleRestartSolo}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black text-xs flex items-center gap-2 cursor-pointer"
+                    className="min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black text-xs flex items-center gap-2 cursor-pointer"
                   >
                     <RotateCcw className="w-4 h-4" />
                     <span>{isEn ? 'Play Again' : 'Joacă Din Nou'}</span>
@@ -1954,7 +1956,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
                   <button
                     type="button"
                     onClick={onBack}
-                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
+                    className="min-h-[44px] px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center gap-2 cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     <span>{isEn ? 'Back to Arena' : 'Înapoi la Arenă'}</span>
@@ -2088,10 +2090,11 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
 
           {/* TACTILE ARCADE CONTROL PAD (Mobile + Mouse + Keyboard legend) */}
           <div className="p-3.5 rounded-3xl bg-slate-950 border border-slate-800 space-y-2.5 shadow-xl">
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
               <button
                 type="button"
                 onClick={() => rotatePiece(-1)}
+                aria-label={isEn ? 'Rotate Left (Z)' : 'Rotește Stânga (Z)'}
                 className="min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white flex items-center justify-center active:scale-90 cursor-pointer touch-manipulation"
                 title={isEn ? 'Rotate Left (Z)' : 'Rotește Stânga (Z)'}
               >
@@ -2100,6 +2103,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
               <button
                 type="button"
                 onClick={() => moveHorizontal(-1)}
+                aria-label={isEn ? 'Move Left' : 'Mută Stânga'}
                 className="min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white flex items-center justify-center active:scale-90 cursor-pointer touch-manipulation"
                 title={isEn ? 'Move Left (←)' : 'Stânga (←)'}
               >
@@ -2108,6 +2112,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
               <button
                 type="button"
                 onClick={softDrop}
+                aria-label={isEn ? 'Soft Drop' : 'Coborâre Rapidă'}
                 className="min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white flex items-center justify-center active:scale-90 cursor-pointer touch-manipulation"
                 title={isEn ? 'Soft Drop (↓)' : 'Coborâre Rapidă (↓)'}
               >
@@ -2116,6 +2121,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
               <button
                 type="button"
                 onClick={() => moveHorizontal(1)}
+                aria-label={isEn ? 'Move Right' : 'Mută Dreapta'}
                 className="min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white flex items-center justify-center active:scale-90 cursor-pointer touch-manipulation"
                 title={isEn ? 'Move Right (→)' : 'Dreapta (→)'}
               >
@@ -2124,6 +2130,7 @@ export const FileDropAttackDuelGame: React.FC<FileDropAttackDuelGameProps> = ({
               <button
                 type="button"
                 onClick={() => rotatePiece(1)}
+                aria-label={isEn ? 'Rotate Right' : 'Rotește Dreapta'}
                 className="min-h-[48px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white flex items-center justify-center active:scale-90 cursor-pointer touch-manipulation"
                 title={isEn ? 'Rotate Right (↑)' : 'Rotește Dreapta (↑)'}
               >
