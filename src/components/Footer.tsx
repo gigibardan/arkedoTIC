@@ -106,22 +106,19 @@ export const Footer: React.FC<FooterProps> = ({
     <footer className="border-t border-slate-800/80 bg-slate-950/95 text-slate-300 pt-12 pb-24 md:pb-10 px-4 sm:px-6 lg:px-8 mt-auto relative z-10">
       <div className="max-w-7xl mx-auto space-y-10">
         
-        {/* Main Grid: 6 columns on desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 lg:gap-6 pb-10 border-b border-slate-800/70">
+        {/* Main Grid: balanced 1 -> 2 -> 3 -> 6 columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8 pb-10 border-b border-slate-800/70">
           
           {/* Column 1: Brand, Misiune & Powered by */}
-          <div className="space-y-4 lg:col-span-1">
+          <div className="space-y-4">
             <div className="flex items-center gap-2.5">
-              <span className="text-2xl animate-bounce">🚀</span>
+              <span className="text-2xl shrink-0" aria-hidden="true">🚀</span>
               <div>
-                <span className="text-xl font-black text-white tracking-tight flex items-center gap-1.5 font-['Fredoka']">
-                  ArkyEdu
-                  <span className="text-teal-400 font-sans text-[11px] px-2 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/30 font-bold">
-                    TIC V-VIII
-                  </span>
-                </span>
-                <p className="text-[11px] text-slate-400 -mt-0.5 font-mono">
-                  arkyedu.com • Laborator Digital
+                <div className="text-xl font-black text-white tracking-tight flex items-center gap-2 font-['Fredoka']">
+                  <span>ArkyEdu</span>
+                </div>
+                <p className="text-[11px] text-slate-400 font-mono">
+                  arkyedu.com · TIC V–VIII
                 </p>
               </div>
             </div>
@@ -133,12 +130,8 @@ export const Footer: React.FC<FooterProps> = ({
             </p>
 
             <div className="space-y-2 pt-1">
-              {/* Powered by Gigi badge */}
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-teal-500/30 text-teal-300 font-mono font-bold text-xs shadow-sm hover:border-teal-400 transition-colors cursor-default">
-                  <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                  {t.poweredBy || 'Powered by Gigi'}
-                </span>
+              <div className="text-xs font-mono font-bold text-teal-300">
+                {t.poweredBy || 'Powered by Gigi'}
               </div>
 
               {/* Story link */}
@@ -147,9 +140,9 @@ export const Footer: React.FC<FooterProps> = ({
                   sounds.playClick();
                   onOpenLegal('about');
                 }}
-                className="text-xs text-slate-400 hover:text-teal-300 transition-colors flex items-center gap-1 text-left"
+                className="text-xs text-slate-300 hover:text-teal-300 transition-colors flex items-center gap-1.5 text-left py-1 cursor-pointer"
               >
-                <Heart className="w-3 h-3 text-rose-400" />
+                <Heart className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                 <span>{lang === 'en' ? 'Read our Story & Mission →' : 'Povestea & Misiunea ArkyEdu →'}</span>
               </button>
             </div>
@@ -158,19 +151,19 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Column 2: Hub & Activități Interactive (In-App) */}
           <div className="space-y-3">
             <h4 className="text-xs font-black uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
-              <Gamepad2 className="w-3.5 h-3.5" />
-              {lang === 'en' ? 'Platform & Activities' : 'Platformă & Activități'}
+              <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
+              <span>{lang === 'en' ? 'Platform & Activities' : 'Platformă & Activități'}</span>
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-1 text-xs">
               <li>
                 <button
                   onClick={() => {
                     sounds.playClick();
                     if (onNavigateToCatalog) onNavigateToCatalog();
                   }}
-                  className="hover:text-teal-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
+                  className="hover:text-teal-300 text-slate-300 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                 >
-                  <BookOpen className="w-3.5 h-3.5 text-teal-400 group-hover:scale-110 transition-transform" />
+                  <BookOpen className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                   <span>{lang === 'en' ? 'Course Catalog & Lessons' : 'Catalog Module & Lecții'}</span>
                 </button>
               </li>
@@ -180,12 +173,12 @@ export const Footer: React.FC<FooterProps> = ({
                     sounds.playClick();
                     if (onNavigateToArcade) onNavigateToArcade();
                   }}
-                  className="hover:text-amber-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
+                  className="hover:text-amber-300 text-slate-300 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                 >
-                  <Gamepad2 className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+                  <Gamepad2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span>{lang === 'en' ? 'Arcade Hub (28 Games)' : 'Sala Arcade (28 Mini-jocuri)'}</span>
-                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.2 rounded border border-emerald-500/30 font-bold ml-auto">
-                    Pac-Man 🟡
+                  <span className="text-[10px] text-emerald-300 font-semibold ml-auto whitespace-nowrap">
+                    Pac-Man
                   </span>
                 </button>
               </li>
@@ -195,9 +188,9 @@ export const Footer: React.FC<FooterProps> = ({
                     sounds.playClick();
                     if (onNavigateToDuel) onNavigateToDuel();
                   }}
-                  className="hover:text-cyan-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
+                  className="hover:text-cyan-300 text-slate-300 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                 >
-                  <Swords className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <Swords className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                   <span>{lang === 'en' ? '1v1 Duel Arena (20+ Modes)' : 'Arena Duel 1v1 (20+ Moduri)'}</span>
                 </button>
               </li>
@@ -208,9 +201,9 @@ export const Footer: React.FC<FooterProps> = ({
                       sounds.playClick();
                       onNavigateToCity();
                     }}
-                    className="hover:text-emerald-300 text-slate-300 transition-colors flex items-center gap-1.5 text-left w-full group"
+                    className="hover:text-emerald-300 text-slate-300 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                   >
-                    <Building2 className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
+                    <Building2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                     <span>{lang === 'en' ? 'Cyber City (Digital Town)' : 'Orașul Digital TIC'}</span>
                   </button>
                 </li>
@@ -225,9 +218,9 @@ export const Footer: React.FC<FooterProps> = ({
                       onNavigateToBlog();
                     }
                   }}
-                  className="hover:text-teal-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1.5 font-semibold"
+                  className="hover:text-teal-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
                 >
-                  <FileText className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
+                  <FileText className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                   <span>{lang === 'en' ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</span>
                 </a>
               </li>
@@ -241,9 +234,9 @@ export const Footer: React.FC<FooterProps> = ({
                       onNavigateToGlossary();
                     }
                   }}
-                  className="hover:text-cyan-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1.5 font-semibold"
+                  className="hover:text-cyan-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
                 >
-                  <BookOpen className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                  <BookOpen className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                   <span>{lang === 'en' ? 'ICT & CS Glossary (A–Z)' : 'Glosar TIC & Coding (A–Z)'}</span>
                 </a>
               </li>
@@ -257,9 +250,9 @@ export const Footer: React.FC<FooterProps> = ({
                       onNavigateToSandbox();
                     }
                   }}
-                  className="hover:text-emerald-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1.5 font-semibold"
+                  className="hover:text-emerald-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
                 >
-                  <FileCode className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                  <FileCode className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span>{lang === 'en' ? 'Code Sandbox (C++ / Python / HTML)' : 'Sandbox Cod C++ / Python / HTML5'}</span>
                 </a>
               </li>
@@ -269,9 +262,9 @@ export const Footer: React.FC<FooterProps> = ({
                     sounds.playClick();
                     if (onNavigateToTeacher) onNavigateToTeacher();
                   }}
-                  className="hover:text-indigo-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-2"
+                  className="hover:text-indigo-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                 >
-                  <GraduationCap className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                  <GraduationCap className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
                   <span>{lang === 'en' ? 'Teacher Portal & Gradebook' : 'Portal Profesor & Catalog'}</span>
                 </button>
               </li>
@@ -282,9 +275,9 @@ export const Footer: React.FC<FooterProps> = ({
                       sounds.playClick();
                       onNavigateToSuperAdmin();
                     }}
-                    className="hover:text-purple-300 text-slate-200 hover:text-white transition-colors flex items-center gap-2 text-left w-full group text-xs py-2"
+                    className="hover:text-purple-300 text-slate-200 hover:text-white transition-colors flex items-center gap-2 text-left w-full group text-xs py-1 cursor-pointer"
                   >
-                    <UserCheck className="w-4 h-4 text-purple-400" />
+                    <UserCheck className="w-3.5 h-3.5 text-purple-400 shrink-0" />
                     <span>{lang === 'en' ? 'School Admin Panel' : 'Administrare Școli & Clase'}</span>
                   </button>
                 </li>
@@ -463,156 +456,113 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Bar: Copyright, Curricular note & Technical / AI links */}
-        <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-300">
-          <div className="text-center md:text-left space-y-0.5">
+        <div className="pt-2 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs text-slate-300">
+          <div className="text-center lg:text-left space-y-1">
             <p className="text-slate-200">
               © 2024 - 2026 <strong className="text-white">ArkyEdu</strong> (arkyedu.com). {lang === 'en' ? 'All rights reserved.' : 'Toate drepturile rezervate.'}
             </p>
-            <p className="text-[11px] text-slate-300">
+            <p className="text-[11px] text-slate-400">
               {t.footerSchoolCurriculum || 'Conform Programei Naționale de TIC pentru clasele V - VIII (OMEN 3393/2017) și Cadrului DigComp.'}
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 text-xs">
+          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-x-3 gap-y-2 text-xs">
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('about');
               }}
-              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 cursor-pointer whitespace-nowrap"
             >
               {lang === 'en' ? 'About Story' : 'Povestea ArkyEdu'}
             </button>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('privacy');
               }}
-              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 cursor-pointer whitespace-nowrap"
             >
-              GDPR & Confidențialitate
+              GDPR
             </button>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('cookies');
               }}
-              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 cursor-pointer whitespace-nowrap"
             >
               Cookie-uri
             </button>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('terms');
               }}
-              className="text-slate-300 hover:text-white transition-colors py-1.5 px-2"
+              className="text-slate-300 hover:text-white transition-colors py-1.5 cursor-pointer whitespace-nowrap"
             >
               Termeni
             </button>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <button
               onClick={() => {
                 sounds.playClick();
                 onOpenLegal('contact');
               }}
-              className="text-teal-300 hover:text-teal-200 transition-colors font-medium py-1.5 px-2"
+              className="text-teal-300 hover:text-teal-200 transition-colors font-medium py-1.5 cursor-pointer whitespace-nowrap"
             >
               Contact
             </button>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <a
               href="/llms.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-emerald-300 hover:text-emerald-200 transition-colors font-mono text-[11px] bg-slate-900 px-2 py-1 rounded border border-slate-700"
+              className="text-emerald-300 hover:text-emerald-200 transition-colors font-mono text-[11px] py-1.5 whitespace-nowrap"
               title="Context structurat pentru LLM & Agenți AI (llmstxt.org)"
             >
-              llms.txt (AI)
+              llms.txt
             </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <a
               href="/llms-full.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cyan-300 hover:text-cyan-200 transition-colors font-mono text-[11px] bg-slate-900 px-2 py-1 rounded border border-slate-700"
+              className="text-cyan-300 hover:text-cyan-200 transition-colors font-mono text-[11px] py-1.5 whitespace-nowrap"
               title="Documentație completă pentru modele de limbaj"
             >
               llms-full.txt
             </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
-            <a
-              href={lang === 'en' ? '/blog/en/' : '/blog/'}
-              onClick={(e) => {
-                if (onNavigateToBlog) {
-                  e.preventDefault();
-                  sounds.playClick();
-                  onNavigateToBlog();
-                }
-              }}
-              className="text-teal-300 hover:text-teal-200 transition-colors font-semibold text-xs py-1.5 px-2"
-            >
-              {lang === 'en' ? 'Blog & Guides' : 'Blog TIC'}
-            </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
-            <a
-              href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
-              onClick={(e) => {
-                if (onNavigateToGlossary) {
-                  e.preventDefault();
-                  sounds.playClick();
-                  onNavigateToGlossary();
-                }
-              }}
-              className="text-cyan-300 hover:text-cyan-200 transition-colors font-semibold text-xs py-1.5 px-2"
-            >
-              {lang === 'en' ? 'ICT Glossary' : 'Glosar TIC'}
-            </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
-            <a
-              href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
-              onClick={(e) => {
-                if (onNavigateToSandbox) {
-                  e.preventDefault();
-                  sounds.playClick();
-                  onNavigateToSandbox();
-                }
-              }}
-              className="text-emerald-300 hover:text-emerald-200 transition-colors font-semibold text-xs py-1.5 px-2"
-            >
-              {lang === 'en' ? 'Code Sandbox' : 'Sandbox Cod'}
-            </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <a
               href="/sitemap.xml"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-300 hover:text-white transition-colors text-xs py-1.5 px-2"
+              className="text-slate-400 hover:text-white transition-colors text-xs py-1.5 whitespace-nowrap"
             >
               Sitemap
             </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
+            <span className="text-slate-600" aria-hidden="true">·</span>
             <a
               href="/robots.txt"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-300 hover:text-white transition-colors text-xs py-1.5 px-2"
+              className="text-slate-400 hover:text-white transition-colors text-xs py-1.5 whitespace-nowrap"
             >
               Robots.txt
             </a>
-            <span className="text-slate-400" aria-hidden="true">•</span>
             <button
               onClick={() => {
                 sounds.playSuccess();
                 void clearCachesAndReloadLatest();
               }}
-              className="text-amber-300 hover:text-white font-mono text-xs bg-amber-500/20 hover:bg-amber-500/30 px-3 py-1.5 rounded-xl border border-amber-500/40 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 touch-manipulation shadow-sm"
+              className="text-amber-300 hover:text-white font-mono text-xs bg-amber-500/15 hover:bg-amber-500/30 px-3 py-1.5 min-h-[38px] rounded-xl border border-amber-500/40 flex items-center gap-1.5 cursor-pointer transition-colors active:scale-95 touch-manipulation whitespace-nowrap"
               title={lang === 'en' ? 'Clear cache and reload latest version' : 'Curăță memoria cache și reîncarcă cea mai nouă versiune'}
             >
-              <span className="text-sm">🔄</span>
+              <span aria-hidden="true">🔄</span>
               <span className="font-bold">{lang === 'en' ? 'Update App' : 'Actualizează App'}</span>
             </button>
           </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { Award, Printer, RotateCcw, Star, Clock, CheckCircle2, Lightbulb, Sparkles } from 'lucide-react';
+import { Award, Printer, RotateCcw, Star, Clock, CheckCircle2, Lightbulb, Sparkles, RefreshCw } from 'lucide-react';
 import { sounds } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -231,18 +231,18 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   return (
     <div className="bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-10 shadow-2xl text-center relative overflow-hidden">
-      {/* Decorative Icon & Glow */}
-      <div className="text-6xl sm:text-7xl mb-3 animate-float drop-shadow-xl inline-block">
+      {/* Decorative Icon */}
+      <div className="text-6xl sm:text-7xl mb-3 drop-shadow-xl inline-block">
         {isHardware ? '💻⚡' : isInternet1 ? '🌐🚀' : isInternet2 ? '🔍🔐' : isText1 ? '📝✨' : isText2 ? '📊🎨' : isAlgo1 ? '🧩⚡' : isAlgo2 ? '🚦📊' : isScratch1 ? '🐱🎨' : isScratch2 ? '🎮🎵' : isG6P1 ? '📽️✨' : isG6P2 ? '🎨🎤' : isG6P3 ? '🧊✨' : isG6M1 ? '🛡️⚡' : isG7W1 ? '📰🖋️' : isG7W2 ? '📐📑' : isG7A1 ? '🎙️📻' : isG7V2 ? '🎬📽️' : isG7C1 ? '👥☁️' : isG7GIS ? '🗺️🧭' : isG8CalcA ? '📊💻' : isG8CalcB ? '🧮✨' : isG8CalcC ? '🚦📈' : isG8CalcD ? '📊🥧' : isG8WebA ? '🌐📐' : isG8WebB ? '🧩☁️' : isG8WebC ? '🚀🛡️' : isG8AlgoA ? '🔢💻' : isG8AlgoB ? '🌀⚡' : isG8AlgoC ? '🏆🎯' : isG8AlgoD ? '🤖📡' : isG8AlgoE ? '🎓🌟' : '🌳✨'}
       </div>
 
       <div className="flex justify-center mb-2">
         <span className="px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs sm:text-sm uppercase font-black tracking-widest border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
-          <Award className="w-4 h-4 text-emerald-400" /> {t.vBadgeMission}
+          <Award className="w-4 h-4 text-emerald-400 shrink-0" /> {t.vBadgeMission}
         </span>
       </div>
 
-      <h2 className="text-3xl sm:text-5xl font-black text-white mt-2 font-heading tracking-tight">
+      <h2 className="text-3xl sm:text-5xl font-black text-white mt-2 font-heading tracking-tight text-balance">
         {isHardware
           ? (lang === 'en' ? 'Congratulations, Hardware & ICT Technician!' : 'Felicitări, Tehnician Hardware & TIC!')
           : isInternet1
@@ -447,21 +447,21 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       </p>
 
       {/* Score & Statistics Summary Box */}
-      <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-slate-900/90 border border-amber-500/40 px-6 py-3.5 rounded-2xl mb-6 shadow-inner">
+      <div className="w-full max-w-2xl inline-flex flex-col sm:flex-row items-center justify-center gap-4 bg-slate-900/90 border border-amber-500/40 px-5 sm:px-6 py-4 rounded-2xl mb-6 shadow-inner">
         {/* Score */}
-        <div className="flex items-center gap-4">
-          <div className="flex text-amber-400 text-2xl gap-1">
-            <Star className="w-6 h-6 fill-amber-400" />
-            <Star className="w-6 h-6 fill-amber-400" />
-            <Star className="w-6 h-6 fill-amber-400" />
-            <Star className="w-6 h-6 fill-amber-400" />
-            <Star className="w-6 h-6 fill-amber-400" />
+        <div className="flex flex-wrap justify-center sm:flex-nowrap items-center gap-3 sm:gap-4">
+          <div className="flex text-amber-400 text-2xl gap-1 shrink-0">
+            <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-amber-400" />
+            <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-amber-400" />
+            <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-amber-400" />
+            <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-amber-400" />
+            <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-amber-400" />
           </div>
-          <div className="text-left border-l border-slate-700 pl-4">
+          <div className="text-center sm:text-left sm:border-l border-slate-700 sm:pl-4">
             <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
               {t.vScoreLabel}
             </div>
-            <div className="text-2xl font-black text-amber-300 font-heading">
+            <div className="text-xl sm:text-2xl font-black text-amber-300 font-heading tabular-nums">
               {score} / {maxScore} ({lang === 'en' ? gradeDetails.calificativEn : gradeDetails.calificativRo})
             </div>
           </div>
@@ -469,27 +469,27 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
         {/* Duration */}
         {elapsedSeconds > 0 && (
-          <div className="text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
-            <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="text-center sm:text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
+            <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center justify-center sm:justify-start gap-1">
+              <Clock className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
               <span>{t.vDurationLabel}</span>
             </div>
-            <div className="text-lg font-black text-cyan-300 font-mono">
+            <div className="text-lg font-black text-cyan-300 font-mono tabular-nums">
               {formatCompletionTime(elapsedSeconds)}
             </div>
           </div>
         )}
 
         {/* Hints Used Metric */}
-        <div className="text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
-          <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
-            <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
+        <div className="text-center sm:text-left sm:border-l border-slate-700 sm:pl-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800 w-full sm:w-auto">
+          <div className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center justify-center sm:justify-start gap-1">
+            <Lightbulb className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>{lang === 'en' ? 'Hints Used' : 'Indicii folosite'}</span>
           </div>
-          <div className="text-lg font-black font-mono">
+          <div className="text-lg font-black font-mono tabular-nums">
             {hintsCount === 0 ? (
-              <span className="text-emerald-300 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> 0 ({lang === 'en' ? 'Autonomous' : 'Autonom'})
+              <span className="text-emerald-300 flex items-center justify-center sm:justify-start gap-1">
+                <Sparkles className="w-3.5 h-3.5 shrink-0" /> 0 ({lang === 'en' ? 'Autonomous' : 'Autonom'})
               </span>
             ) : (
               <span className="text-amber-300">
@@ -504,40 +504,44 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       {/* Cloud Sync Status */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-slate-900/80 border border-emerald-500/40 text-xs font-mono text-emerald-300 shadow-sm">
-          <CheckCircle2 className={`w-4 h-4 text-emerald-400 ${isLoggedToFirebase ? '' : 'animate-spin'}`} />
+          {isLoggedToFirebase ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          ) : (
+            <RefreshCw className="w-4 h-4 text-emerald-400 animate-spin shrink-0" />
+          )}
           <span>{isLoggedToFirebase ? t.vCloudSaved : t.vCloudSaving}</span>
         </div>
       </div>
 
       {/* Autoevaluation from manual page 30 */}
       <div className="max-w-xl mx-auto bg-slate-900/90 border border-slate-700 rounded-2xl p-5 mb-8 text-left">
-        <div className="flex justify-between items-center mb-2.5 border-b border-slate-800 pb-2">
+        <div className="flex flex-wrap justify-between items-center gap-2 mb-2.5 border-b border-slate-800 pb-2">
           <span className="text-xs font-bold text-amber-400 uppercase tracking-wider font-mono">
             {t.vAutoevalTitle}
           </span>
-          <span className="text-xs text-emerald-400 font-bold font-mono">
+          <span className="text-xs text-emerald-400 font-bold font-mono tabular-nums">
             {t.vAutoevalTime}
           </span>
         </div>
         <p className="text-xs sm:text-sm text-slate-300 mb-3">
           {t.vAutoevalQuestion}
         </p>
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <button
             onClick={() => sounds.playCorrect()}
-            className="p-3 rounded-xl bg-emerald-950/60 hover:bg-emerald-950 border border-emerald-500/80 text-emerald-200 text-xs font-bold text-center transition flex flex-col items-center gap-1 cursor-pointer"
+            className="p-3 min-h-[44px] rounded-xl bg-emerald-950/60 hover:bg-emerald-950 border border-emerald-500/80 text-emerald-200 text-xs font-bold text-center transition flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
             <span>{t.vFeelExcited}</span>
           </button>
           <button
             onClick={() => sounds.playClick()}
-            className="p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold text-center transition flex flex-col items-center gap-1 cursor-pointer"
+            className="p-3 min-h-[44px] rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold text-center transition flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
             <span>{t.vFeelPleased}</span>
           </button>
           <button
             onClick={() => sounds.playClick()}
-            className="p-3 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold text-center transition flex flex-col items-center gap-1 cursor-pointer"
+            className="p-3 min-h-[44px] rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold text-center transition flex flex-col items-center justify-center gap-1 cursor-pointer"
           >
             <span>{t.vFeelSad}</span>
           </button>
@@ -545,7 +549,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       </div>
 
       {/* Badges Earned Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 max-w-3xl mx-auto mb-8 text-left">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 max-w-3xl mx-auto mb-8 text-left">
         {isHardware ? (
           <>
             <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2">
@@ -576,7 +580,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-purple-400">{lang === 'en' ? 'Input / Output' : 'Intrare / Ieșire'}</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🎯</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Bits Master' : 'Maestru Biți'}</div>
@@ -614,7 +618,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-emerald-400">URL & Browser</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🛡️</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cyber Shield' : 'Scut Cibernetic'}</div>
@@ -652,7 +656,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-emerald-400">No Caps & Empathy</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🔐</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? '2FA Shield' : 'Scut 2FA'}</div>
@@ -690,7 +694,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-cyan-400">Alineate & Liste</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🔍</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Find & Replace' : 'Găsire & Înlocuire'}</div>
@@ -728,7 +732,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-cyan-400">Pătrat, Strâns & Watermark</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📄</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Page Master' : 'Paginare & Revista'}</div>
@@ -766,7 +770,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-emerald-400">Substituție Numerică</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📐</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Math Coder' : 'Calcule Matematice'}</div>
@@ -804,7 +808,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-emerald-400">ȘI, SAU, NU</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📊</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Flowchart Pro' : 'Scheme & Traseu'}</div>
@@ -842,7 +846,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-orange-400">Setează & Modifică cu</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">✒️</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Magic Pen Artist' : 'Extensia Creion'}</div>
@@ -880,7 +884,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-pink-400">Gama Do & Pădurea cu alune</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🎓</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Grade 5 Laureate' : 'Laureat Clasa a V-a'}</div>
@@ -918,7 +922,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-purple-400">{lang === 'en' ? 'Bulletproof Auth' : 'Parole & OTP'}</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🏆</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Cyber Defender' : 'Cyber Defender'}</div>
@@ -956,7 +960,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-purple-400">Heading 1, 2 & Cuprins</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📰</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Chief Editor' : 'Editor Certificat'}</div>
@@ -994,7 +998,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-emerald-400">Aliniere la Dreapta</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📜</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Academic Notes' : 'Note de Subsol'}</div>
@@ -1032,7 +1036,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-rose-400">Trim vs Silence 0 dB</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📻</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Paste Mix Studio' : 'Producător Jingle'}</div>
@@ -1070,7 +1074,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-cyan-400">Ctrl + B & Bandă Contrast</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🎬</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Video Director' : 'Regizor MP4 HD'}</div>
@@ -1108,7 +1112,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-amber-400">Task-uri & Aprobare ✓</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">⏳</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Time Machine' : 'Mașina Timpului'}</div>
@@ -1146,7 +1150,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-sky-400">Tilt, Busolă (R) & Riglă</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🚨</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Spatial Analysis' : 'Analiză Spațială'}</div>
@@ -1184,7 +1188,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-purple-400">Coloane, Linii & Plăcintă</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🔍</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'AutoFilter Pro' : 'Sortare & Filtrare'}</div>
@@ -1222,7 +1226,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-cyan-400">Iframe & Carusel Foto</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🚀</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Web Publisher' : 'Publicare & GDPR'}</div>
@@ -1260,7 +1264,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-teal-400">Viraje & Ocolire</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">⚙️</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'State Machine' : 'Mașină de Stări'}</div>
@@ -1298,7 +1302,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-indigo-400">Sondaj & Șanse Admitere</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">📜</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Grand Graduation' : 'Diploma de Merit'}</div>
@@ -1336,7 +1340,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-purple-400">Descompunere n &gt; 0</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🆔</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'CNP Parser' : 'Parser CNP 13 Cifre'}</div>
@@ -1374,7 +1378,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-cyan-400">DHT11 • LCD 1602 (0x27)</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">👑</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Grand IoT Master' : 'Mare Maestru IoT'}</div>
@@ -1412,7 +1416,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-emerald-400">Unghiuri 0°..180°</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🏆</span>
               <div>
                 <div className="text-xs font-bold text-white">{lang === 'en' ? 'Robotics Engineer' : 'Robotician Certificat'}</div>
@@ -1450,7 +1454,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
                 <div className="text-[10px] text-purple-400">{t.vBadge4Sub}</div>
               </div>
             </div>
-            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 sm:col-span-1">
+            <div className="bg-slate-900/70 border border-slate-700/80 p-3 rounded-2xl flex items-center gap-2 col-span-2 lg:col-span-1">
               <span className="text-2xl">🛡️</span>
               <div>
                 <div className="text-xs font-bold text-white">{t.vBadge5Title}</div>
@@ -1481,19 +1485,19 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       >
         <div className="border-2 border-dashed border-amber-600/40 p-6 sm:p-8 rounded-2xl relative">
           {/* Header Diploma */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
+              <span className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shrink-0">
                 {isHardware ? '💻' : isInternet1 ? '🌐' : isInternet2 ? '🔍' : isText1 ? '📝' : isText2 ? '📊' : isAlgo1 ? '🧩' : isAlgo2 ? '🚦' : isScratch1 ? '🐱' : isScratch2 ? '🎮' : isG6P1 ? '📽️' : isG6P2 ? '🎨' : isG6P3 ? '🧊' : isG6M1 ? '🛡️' : isG6A1 ? '🎬' : isG6E1 ? '📧' : isG6S1 ? '🐱' : isG7W1 ? '📰' : isG7W2 ? '📐' : isG7A1 ? '🎙️' : isG7V2 ? '🎬' : isG7C1 ? '👥' : isG7GIS ? '🗺️' : isG8CalcA ? '📊' : isG8CalcB ? '🧮' : isG8CalcC ? '🚦' : isG8CalcD ? '📈' : isG8WebA ? '🌐' : isG8WebB ? '🧩' : isG8WebC ? '🚀' : isG8AlgoA ? '🔢' : isG8AlgoB ? '🌀' : isG8AlgoC ? '🏆' : isG8AlgoD ? '🤖' : isG8AlgoE ? '🎓' : '🌳'}
               </span>
-              <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest">
+              <span className="text-xs sm:text-sm font-black text-emerald-900 uppercase tracking-widest text-left">
                 {t.schoolName}
               </span>
             </div>
             <div className="text-3xl">🏅</div>
           </div>
 
-          <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading">
+          <h3 className="text-2xl sm:text-3xl font-black tracking-wide text-slate-900 uppercase font-heading text-balance">
             {isHardware 
               ? t.hwDiplomaTitle 
               : isInternet1 
@@ -1589,7 +1593,7 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           {/* Official Grade & Score Badge */}
           <div className="my-3 inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-2xl bg-amber-200/70 border-2 border-amber-600/40 shadow-sm">
             <span className="text-base">⭐</span>
-            <span className="text-xs sm:text-sm font-black text-amber-950 font-mono">
+            <span className="text-xs sm:text-sm font-black text-amber-950 font-mono tabular-nums">
               {score} / {maxScore} Puncte • {lang === 'en' ? gradeDetails.calificativEn : gradeDetails.calificativRo}
             </span>
             <span className="text-base">⭐</span>
@@ -1734,12 +1738,12 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
           </p>
 
           {/* Signatures & Date */}
-          <div className="mt-8 pt-5 border-t border-amber-300 flex items-center justify-between text-xs text-slate-700">
+          <div className="mt-8 pt-5 border-t border-amber-300 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-700">
             <div className="text-left">
               <div className="font-extrabold text-slate-900">{t.vDiplomaTeacher}</div>
               <div className="text-[11px] text-slate-600">{t.schoolName}</div>
             </div>
-            <div className="text-right">
+            <div className="text-right ml-auto">
               <div className="font-extrabold text-slate-900">{t.vDiplomaDate}</div>
               <div className="text-[11px] text-slate-600">ArkyEdu TIC</div>
             </div>
@@ -1748,19 +1752,19 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap items-center justify-center gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
         <button
           onClick={handlePrint}
-          className="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-6 py-3 rounded-2xl transition shadow-lg flex items-center gap-2 font-heading cursor-pointer active:scale-95"
+          className="min-h-[44px] bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-6 py-3 rounded-2xl transition shadow-lg flex items-center gap-2 font-heading cursor-pointer active:scale-95 whitespace-nowrap"
         >
-          <Printer className="w-4 h-4" />
+          <Printer className="w-4 h-4 shrink-0" />
           <span>{t.vBtnPrint}</span>
         </button>
 
         {onBackToCatalog && (
           <button
             onClick={onBackToCatalog}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95 shadow-md shadow-emerald-600/30"
+            className="min-h-[44px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95 shadow-md shadow-emerald-600/30 whitespace-nowrap"
           >
             <span>{t.backToCourses}</span>
           </button>
@@ -1768,9 +1772,9 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
         <button
           onClick={onReset}
-          className="bg-slate-700 hover:bg-slate-600 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95"
+          className="min-h-[44px] bg-slate-700 hover:bg-slate-600 text-white font-bold px-6 py-3 rounded-2xl transition flex items-center gap-2 font-heading cursor-pointer active:scale-95 whitespace-nowrap"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-4 h-4 shrink-0" />
           <span>{t.vBtnReset}</span>
         </button>
       </div>

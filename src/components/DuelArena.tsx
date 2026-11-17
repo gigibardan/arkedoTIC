@@ -1123,24 +1123,24 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6 select-none font-sans">
+    <div className={`w-full max-w-5xl mx-auto p-3 sm:p-6 select-none font-sans ${viewState === 'lobby' && mobileLobbyTab === 'create' ? 'pb-32 lg:pb-6' : ''}`}>
       {/* Top Header Bar */}
-      <div className="flex items-center justify-between gap-4 mb-6 p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-slate-900 to-indigo-950/80 border border-purple-500/30 shadow-xl backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-rose-600 flex items-center justify-center text-white shadow-lg shadow-rose-500/20 ring-2 ring-amber-400/30">
-            <Swords className="w-6 h-6 animate-pulse" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-6 p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-slate-900 to-indigo-950/80 border border-purple-500/30 shadow-xl backdrop-blur-sm">
+        <div className="flex items-start sm:items-center gap-3">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-amber-500 to-rose-600 flex items-center justify-center text-white shadow-lg shadow-rose-500/20 ring-2 ring-amber-400/30 shrink-0">
+            <Swords className="w-6 h-6" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-black text-white tracking-tight font-heading">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-lg sm:text-xl font-black text-white tracking-tight font-heading text-balance">
                 {lang === 'en' ? 'ARKYEDU DUEL ARENA 1v1' : 'ARENA DUELURILOR TIC 1v1'}
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-black border border-rose-500/40 uppercase tracking-wider flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-black border border-rose-500/40 uppercase tracking-wider inline-flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 Live Cloud Sync
               </span>
             </div>
-            <p className="text-xs text-slate-300">
+            <p className="text-xs text-slate-300 mt-0.5">
               {lang === 'en'
                 ? 'Challenge your classmate in real-time from different computers!'
                 : 'Provoacă-ți colegul de bancă sau din laborator la duel de pe calculatoare diferite!'}
@@ -1150,6 +1150,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
         {handleBack && (
           <button
+            type="button"
             onClick={() => {
               sounds.playClick();
               if (currentRoom?.roomCode) {
@@ -1157,9 +1158,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               }
               handleBack();
             }}
-            className="p-2.5 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-slate-300 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
+            className="self-start sm:self-auto min-h-[40px] px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/60 border border-slate-700 hover:border-rose-500 text-slate-200 hover:text-white transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 shrink-0"
           >
             <ArrowLeft className="w-4 h-4 text-rose-400" />
+            <span className="sm:hidden">{lang === 'en' ? 'Back' : 'Înapoi'}</span>
             <span className="hidden sm:inline">{lang === 'en' ? 'Back to Courses' : 'Înapoi la Cursuri'}</span>
           </button>
         )}
@@ -1169,21 +1171,21 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       {viewState === 'lobby' && (
         <>
           {/* Mobile Tab Switcher (Create vs Join with Code) */}
-          <div className="lg:hidden flex items-center bg-slate-950 p-1.5 rounded-2xl border border-slate-800 mb-4 shadow-lg">
+          <div className="lg:hidden flex items-center bg-slate-950 p-1.5 rounded-2xl border border-slate-800 mb-4 shadow-lg gap-1">
             <button
               type="button"
               onClick={() => {
                 sounds.playClick();
                 setMobileLobbyTab('create');
               }}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer ${
+              className={`flex-1 min-h-[40px] py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer ${
                 mobileLobbyTab === 'create'
                   ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md font-black'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Swords className="w-4 h-4" />
-              <span>{lang === 'en' ? '1. Host a Duel (18 Modes)' : '1. Alege & Creează Meci'}</span>
+              <Swords className="w-4 h-4 shrink-0" />
+              <span>{lang === 'en' ? '1. Host a Duel (20 Modes)' : '1. Alege & Creează Meci'}</span>
             </button>
             <button
               type="button"
@@ -1191,13 +1193,13 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 sounds.playClick();
                 setMobileLobbyTab('join');
               }}
-              className={`flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer ${
+              className={`flex-1 min-h-[40px] py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer ${
                 mobileLobbyTab === 'join'
                   ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md font-black'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <Users className="w-4 h-4" />
+              <Users className="w-4 h-4 shrink-0" />
               <span>{lang === 'en' ? '2. Join with Code' : '2. Intră cu Cod'}</span>
             </button>
           </div>
@@ -1227,9 +1229,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       type="button"
                       onClick={handleCreateRoom}
                       disabled={isCreating}
-                      className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 hover:from-purple-400 hover:to-blue-400 text-white font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50"
+                      className="flex-1 sm:flex-none min-h-[40px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 hover:from-purple-400 hover:to-blue-400 text-white font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-indigo-500/30 flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 whitespace-nowrap"
                     >
-                      <Sparkles className="w-4 h-4" />
+                      <Sparkles className="w-4 h-4 shrink-0" />
                       <span>{isCreating ? (lang === 'en' ? 'Creating...' : 'Se creează...') : (lang === 'en' ? 'Create Duel Room 🚀' : 'Creează Cameră Acum 🚀')}</span>
                     </button>
 
@@ -1242,7 +1244,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                           joinBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }, 50);
                       }}
-                      className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+                      className="min-h-[40px] px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer shrink-0"
                       title={lang === 'en' ? 'Jump to Join Room with code' : 'Sari direct la conectare cu cod'}
                     >
                       <Users className="w-4 h-4" />
@@ -1252,7 +1254,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 </div>
 
                 {/* Category Filter Pills (Avoid infinite scrolling) */}
-                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 mb-4">
+                <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-2 mb-4">
                   <span className="text-[11px] font-mono font-bold text-slate-400 flex items-center gap-1 shrink-0 mr-1">
                     <Filter className="w-3.5 h-3.5 text-cyan-400" />
                     {lang === 'en' ? 'Filter:' : 'Filtru:'}
@@ -1268,10 +1270,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       key={cat.id}
                       type="button"
                       onClick={() => {
-                        setActiveCategory(cat.id as any);
+                        setActiveCategory(cat.id as 'all' | 'precision' | 'speed' | 'algo' | 'hardware');
                         sounds.playClick();
                       }}
-                      className={`px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold whitespace-nowrap transition cursor-pointer ${
+                      className={`min-h-[36px] px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold whitespace-nowrap shrink-0 transition cursor-pointer ${
                         activeCategory === cat.id
                           ? 'bg-cyan-500 text-slate-950 font-black shadow-sm'
                           : 'bg-slate-950/80 text-slate-400 hover:text-white border border-slate-800'
@@ -1291,14 +1293,22 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   {MODES_CONFIG.filter((m) => isModeInCategory(m.key, activeCategory)).map((mode) => {
                     const isSelected = selectedMode === mode.key;
                     return (
-                      <button
+                      <div
                         key={mode.key}
-                        type="button"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => {
                           sounds.playClick();
                           setSelectedMode(mode.key);
                         }}
-                        className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between ${
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setSelectedMode(mode.key);
+                          }
+                        }}
+                        className={`p-4 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between focus:outline-none focus:ring-2 focus:ring-purple-400 ${
                           isSelected
                             ? mode.selectedGradient
                             : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
@@ -1313,7 +1323,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                               <h4 className="text-sm font-black text-white flex items-center gap-1.5 flex-wrap">
                                 <span>{lang === 'en' ? mode.titleEn : mode.titleRo}</span>
                                 {mode.badgeRo && (
-                                  <span className={`px-1.5 py-0.2 rounded ${mode.badgeClass || 'bg-purple-500/20 text-purple-300'} text-[9px] font-mono uppercase font-black`}>
+                                  <span className={`px-1.5 py-0.5 rounded ${mode.badgeClass || 'bg-purple-500/20 text-purple-300'} text-[9px] font-mono uppercase font-black`}>
                                     {lang === 'en' ? mode.badgeEn : mode.badgeRo}
                                   </span>
                                 )}
@@ -1335,19 +1345,20 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               {lang === 'en' ? 'Selected' : 'Selectat'}
                             </span>
-                            <span
+                            <button
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleCreateRoom();
                               }}
-                              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white font-black text-xs shadow-md flex items-center gap-1.5 active:scale-95 transition cursor-pointer"
+                              className="min-h-[36px] px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white font-black text-xs shadow-md flex items-center gap-1.5 active:scale-95 transition cursor-pointer"
                             >
                               <Sparkles className="w-3 h-3" />
                               <span>{lang === 'en' ? 'Create Room 🚀' : 'Creează Cameră 🚀'}</span>
-                            </span>
+                            </button>
                           </div>
                         )}
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
@@ -1452,9 +1463,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             </div>
           </div>
 
-          {/* Floating Mobile Bottom Action Bar (Pinned for instant 1-tap room creation) */}
+          {/* Floating Mobile Bottom Action Bar (Pinned cleanly above global mobile nav dock) */}
           {mobileLobbyTab === 'create' && (
-            <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-purple-500/50 p-3 backdrop-blur-md shadow-[0_-5px_25px_rgba(0,0,0,0.6)] flex items-center justify-between gap-2.5 animate-fadeIn">
+            <div className="lg:hidden fixed bottom-[60px] left-0 right-0 z-30 bg-slate-900/95 border-t border-purple-500/50 px-3 py-2.5 backdrop-blur-md shadow-[0_-5px_25px_rgba(0,0,0,0.6)] flex items-center justify-between gap-2 animate-fadeIn">
               <div className="min-w-0 flex-1">
                 <span className="text-[9px] font-mono text-purple-300 font-bold uppercase block truncate">
                   {lang === 'en' ? 'Ready to duel:' : 'Gata de meci:'}
@@ -1467,10 +1478,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 type="button"
                 onClick={handleCreateRoom}
                 disabled={isCreating}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white font-black text-xs shadow-lg shadow-indigo-500/30 flex items-center gap-1.5 active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
+                className="min-h-[40px] px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white font-black text-xs shadow-lg shadow-indigo-500/30 flex items-center gap-1.5 active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>{isCreating ? '...' : (lang === 'en' ? 'Create (Host) 🚀' : 'Creează Cameră 🚀')}</span>
+                <span>{isCreating ? '...' : (lang === 'en' ? 'Create (Host) 🚀' : 'Creează 🚀')}</span>
               </button>
               <button
                 type="button"
@@ -1481,7 +1492,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     joinBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                   }, 50);
                 }}
-                className="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white font-bold text-xs flex items-center gap-1 border border-slate-700 shrink-0 cursor-pointer"
+                className="min-h-[40px] px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 hover:text-white font-bold text-xs flex items-center gap-1 border border-slate-700 shrink-0 cursor-pointer"
                 title={lang === 'en' ? 'Join with code' : 'Intră cu cod'}
               >
                 <Users className="w-3.5 h-3.5" />
@@ -1494,7 +1505,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
       {/* VIEW 2: ROOM LOBBY (Waiting for 2nd Player / Countdown) */}
       {viewState === 'room' && currentRoom && (
-        <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/95 border border-purple-500/40 shadow-2xl relative overflow-hidden">
+        <div className="p-5 sm:p-8 rounded-3xl bg-slate-900/95 border border-purple-500/40 shadow-2xl relative overflow-hidden">
           {/* Animated Background Glow */}
           <div className="absolute top-0 right-1/4 w-72 h-72 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -1505,7 +1516,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               <span className="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-2">
                 {lang === 'en' ? 'Duel starts in:' : 'Meciul începe în:'}
               </span>
-              <div className="text-7xl font-black text-amber-400 font-mono animate-bounce drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
+              <div className="text-7xl font-black text-amber-400 font-mono tabular-nums drop-shadow-[0_0_25px_rgba(251,191,36,0.6)]">
                 {countdown === 0 ? 'START! 🚀' : countdown}
               </div>
               <p className="text-xs text-slate-400 mt-4">
@@ -1561,7 +1572,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 </div>
                 <h4 className="text-lg font-black text-white truncate">{currentRoom.host.name}</h4>
                 <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mt-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   {lang === 'en' ? 'Ready for Battle' : 'Pregătit de Luptă'}
                 </div>
               </div>
@@ -1596,14 +1607,14 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     </div>
                     <h4 className="text-lg font-black text-white truncate">{currentRoom.guest.name}</h4>
                     <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mt-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
                       {lang === 'en' ? 'Connected' : 'Conectat'}
                     </div>
                   </div>
                 </>
               ) : (
                 <div className="py-4 text-center w-full">
-                  <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 mx-auto flex items-center justify-center mb-2 animate-bounce">
+                  <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 mx-auto flex items-center justify-center mb-2">
                     <Wifi className="w-4 h-4 text-slate-400" />
                   </div>
                   <p className="text-xs font-semibold text-slate-400">
@@ -1627,7 +1638,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 setCurrentRoom(null);
                 setViewState('lobby');
               }}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer"
+              className="w-full sm:w-auto min-h-[40px] px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer"
             >
               {lang === 'en' ? 'Cancel / Leave Room' : 'Anulează / Ieși din Cameră'}
             </button>
@@ -1660,7 +1671,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               </div>
             ) : (
               <div className="text-xs text-indigo-300 font-semibold bg-indigo-950/60 px-4 py-2.5 rounded-xl border border-indigo-500/30 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
                 {lang === 'en'
                   ? 'The room host will start the match in a few moments...'
                   : 'Gazda camerei va porni meciul în câteva momente...'}
@@ -1675,22 +1686,22 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         <div className="space-y-6">
           <UnloggedNoticeBadge studentName={resolvedStudentName} onNavigateToAuth={onBack} />
           {/* Live Progress Bar (Race Track) */}
-          <div className="p-5 rounded-2xl bg-slate-900/95 border border-purple-500/40 shadow-xl space-y-4">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-400">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/95 border border-purple-500/40 shadow-xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-slate-400">
               <span className="flex items-center gap-1.5 text-amber-400">
                 <Flame className="w-4 h-4" />
                 {lang === 'en' ? 'Live Match Track (Real-time Cloud Sync)' : 'Pistă Live de Concurs (Sincronizare în Timp Real)'}
               </span>
-              <span>{currentRoom.mode === 'cyber_sprint' ? (lang === 'en' ? `${wpm} WPM (Speed)` : `${wpm} WPM (Viteză)`) : (lang === 'en' ? `Score: ${me?.score || 0} pts` : `Scor: ${me?.score || 0} pts`)}</span>
+              <span className="tabular-nums font-mono">{currentRoom.mode === 'cyber_sprint' ? (lang === 'en' ? `${wpm} WPM (Speed)` : `${wpm} WPM (Viteză)`) : (lang === 'en' ? `Score: ${me?.score || 0} pts` : `Scor: ${me?.score || 0} pts`)}</span>
             </div>
 
             {/* Track 1: Me */}
             <div className="space-y-1">
               <div className="flex justify-between text-xs font-bold">
-                <span className="text-indigo-300 flex items-center gap-1">
-                  <span>{me?.avatar}</span> {me?.name} {lang === 'en' ? '(You)' : '(Tu)'}
+                <span className="text-indigo-300 flex items-center gap-1 truncate mr-2">
+                  <span>{me?.avatar}</span> <span className="truncate">{me?.name}</span> {lang === 'en' ? '(You)' : '(Tu)'}
                 </span>
-                <span className="font-mono text-indigo-200">{me?.progress || 0}%</span>
+                <span className="font-mono text-indigo-200 tabular-nums shrink-0">{me?.progress || 0}%</span>
               </div>
               <div className="h-6 w-full rounded-full bg-slate-950 p-1 border border-indigo-500/40 relative overflow-hidden">
                 <div
@@ -1705,10 +1716,10 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             {/* Track 2: Opponent */}
             <div className="space-y-1">
               <div className="flex justify-between text-xs font-bold">
-                <span className="text-rose-300 flex items-center gap-1">
-                  <span>{opponent?.avatar || '👤'}</span> {opponent?.name || (lang === 'en' ? 'Opponent' : 'Oponent')}
+                <span className="text-rose-300 flex items-center gap-1 truncate mr-2">
+                  <span>{opponent?.avatar || '👤'}</span> <span className="truncate">{opponent?.name || (lang === 'en' ? 'Opponent' : 'Oponent')}</span>
                 </span>
-                <span className="font-mono text-rose-200">{opponent?.progress || 0}%</span>
+                <span className="font-mono text-rose-200 tabular-nums shrink-0">{opponent?.progress || 0}%</span>
               </div>
               <div className="h-6 w-full rounded-full bg-slate-950 p-1 border border-rose-500/40 relative overflow-hidden">
                 <div
@@ -1899,15 +1910,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
           {/* MODE 3: QUIZ BLITZ GAMEPLAY */}
           {currentRoom.mode === 'quiz_blitz' && currentQ && (
-            <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
-              <div className="flex justify-between items-center text-xs font-bold text-slate-400">
-                <span className="flex items-center gap-1.5 font-mono">
+            <div className="p-5 sm:p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
+              <div className="flex flex-wrap justify-between items-center gap-2 text-xs font-bold text-slate-400">
+                <span className="flex items-center gap-1.5 font-mono tabular-nums">
                   <HelpCircle className="w-4 h-4 text-purple-400" />
                   {lang === 'en'
                     ? `Question ${currentQIndex + 1} of ${currentQuestions.length}`
                     : `Întrebarea ${currentQIndex + 1} din ${currentQuestions.length}`}
                 </span>
-                <span className="text-amber-400 flex items-center gap-1 font-mono font-bold">
+                <span className="text-amber-400 flex items-center gap-1 font-mono font-bold tabular-nums">
                   <Flame className="w-4 h-4" /> Combo Streak: x{streak}
                   <span className="text-slate-600 mx-1.5">|</span>
                   <span className="text-emerald-400 font-bold">{quizScore} XP</span>
@@ -2035,9 +2046,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                   </div>
 
                   {/* Automatic Countdown Bar */}
-                  <div className="flex items-center justify-between text-[11px] text-slate-300 font-mono pt-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-300 font-mono pt-1 tabular-nums">
                     <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                      <Clock className="w-3.5 h-3.5 text-cyan-400" />
                       {lang === 'en'
                         ? `Auto-advancing to next question in ${quizCountdown}s...`
                         : `Trecem automat la următoarea întrebare în ${quizCountdown}s...`}
@@ -2053,15 +2064,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
           {/* MODE 3: CYBER SHIELD GAMEPLAY (Phishing / Threats) */}
           {currentRoom.mode === 'cyber_shield' && currentShieldItem && (
-            <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 border-2 border-rose-500/40 shadow-2xl space-y-6">
-              <div className="flex justify-between items-center text-xs font-bold text-slate-400">
-                <span className="text-rose-300 font-mono flex items-center gap-1.5">
+            <div className="p-5 sm:p-8 rounded-3xl bg-slate-900 border-2 border-rose-500/40 shadow-2xl space-y-6">
+              <div className="flex flex-wrap justify-between items-center gap-2 text-xs font-bold text-slate-400">
+                <span className="text-rose-300 font-mono flex items-center gap-1.5 tabular-nums">
                   <ShieldCheck className="w-4 h-4 text-rose-400" />
                   {lang === 'en'
                     ? `Security Scenario ${shieldIndex + 1} of ${shieldItems.length}`
                     : `Scenariul de Securitate ${shieldIndex + 1} din ${shieldItems.length}`}
                 </span>
-                <span className="text-amber-400 flex items-center gap-1 font-mono">
+                <span className="text-amber-400 flex items-center gap-1 font-mono tabular-nums">
                   <Flame className="w-4 h-4" /> Streak: x{shieldStreak} (+{shieldScore} XP)
                 </span>
               </div>
@@ -2157,15 +2168,15 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
           {/* MODE 4: HARDWARE PC RUSH GAMEPLAY */}
           {currentRoom.mode === 'pc_rush' && (
-            <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 border-2 border-cyan-500/40 shadow-2xl space-y-6">
-              <div className="flex justify-between items-center text-xs font-bold text-slate-400">
-                <span className="text-cyan-300 font-mono flex items-center gap-1.5">
+            <div className="p-5 sm:p-8 rounded-3xl bg-slate-900 border-2 border-cyan-500/40 shadow-2xl space-y-6">
+              <div className="flex flex-wrap justify-between items-center gap-2 text-xs font-bold text-slate-400">
+                <span className="text-cyan-300 font-mono flex items-center gap-1.5 tabular-nums">
                   <Cpu className="w-4 h-4 text-cyan-400" />
                   {lang === 'en'
                     ? `Speed PC Assembly (Step ${expectedStep} of ${pcParts.length})`
                     : `Asamblare PC în Viteză (Pasul ${expectedStep} din ${pcParts.length})`}
                 </span>
-                <span className="text-emerald-400 font-mono">
+                <span className="text-emerald-400 font-mono tabular-nums">
                   {lang === 'en'
                     ? `Mounted Components: ${assembledParts.length}/${pcParts.length} (+${pcScore} XP)`
                     : `Componente Montate: ${assembledParts.length}/${pcParts.length} (+${pcScore} XP)`}
@@ -2173,8 +2184,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               </div>
 
               {/* Motherboard / Case Target Diagram */}
-              <div className="p-5 rounded-2xl bg-slate-950 border-2 border-cyan-500/30 shadow-inner space-y-3">
-                <div className="flex items-center justify-between">
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 border-2 border-cyan-500/30 shadow-inner space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <h4 className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-bold">
                     {lang === 'en' ? '🖥️ Motherboard & Case (Active Sockets)' : '🖥️ Placă de Bază & Carcasă (Socketuri Active)'}
                   </h4>
@@ -2185,7 +2196,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                 </div>
 
                 {/* Slots Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2.5">
                   {pcParts.map((p) => {
                     const isMounted = assembledParts.includes(p.id);
                     const isNextTarget = p.stepOrder === expectedStep;
@@ -2199,7 +2210,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                           isMounted
                             ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200'
                             : isNextTarget
-                            ? 'bg-cyan-950/60 border-cyan-400 text-cyan-200 ring-2 ring-cyan-400/40 animate-pulse'
+                            ? 'bg-cyan-950/60 border-cyan-400 text-cyan-200 ring-2 ring-cyan-400/40'
                             : 'bg-slate-900/60 border-slate-800 text-slate-500 opacity-60'
                         }`}
                       >
@@ -2462,8 +2473,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
 
       {/* VIEW 4: RESULTS PODIUM */}
       {viewState === 'results' && currentRoom && (
-        <div className="p-8 rounded-3xl bg-slate-900/95 border-2 border-amber-500/40 shadow-2xl text-center space-y-6">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 to-rose-600 mx-auto flex items-center justify-center text-4xl shadow-xl shadow-amber-500/30 ring-4 ring-amber-300/30 animate-bounce">
+        <div className="p-5 sm:p-8 rounded-3xl bg-slate-900/95 border-2 border-amber-500/40 shadow-2xl text-center space-y-6">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 to-rose-600 mx-auto flex items-center justify-center text-4xl shadow-xl shadow-amber-500/30 ring-4 ring-amber-300/30">
             <Trophy className="w-10 h-10 text-white" />
           </div>
 
@@ -2471,7 +2482,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
             <span className="text-xs font-black text-amber-400 uppercase tracking-widest block">
               {lang === 'en' ? 'Match Finished!' : 'Meci Încheiat!'}
             </span>
-            <h3 className="text-3xl sm:text-4xl font-black text-white font-heading mt-1">
+            <h3 className="text-2xl sm:text-4xl font-black text-white font-heading mt-1 text-balance">
               {isMeWinner
                 ? (lang === 'en' ? '🎉 CONGRATULATIONS! YOU WON THE DUEL! 🎉' : '🎉 FELICITĂRI! AI CÂȘTIGAT DUELUL! 🎉')
                 : (lang === 'en' ? `🏆 Winner: ${currentRoom.winnerName || 'Opponent'}` : `🏆 Câștigător: ${currentRoom.winnerName || 'Oponentul'}`)}
@@ -2488,17 +2499,17 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           </div>
 
           {/* Scores Comparison */}
-          <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto p-4 rounded-2xl bg-slate-950 border border-slate-800">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto p-4 rounded-2xl bg-slate-950 border border-slate-800">
             <div className={`p-4 rounded-xl border ${isMeWinner ? 'bg-indigo-950/60 border-indigo-500' : 'bg-slate-900 border-slate-800'}`}>
               <span className="text-2xl block mb-1">{me?.avatar}</span>
               <span className="text-xs font-bold text-slate-400">{me?.name} {lang === 'en' ? '(You)' : '(Tu)'}</span>
-              <div className="font-mono text-xl font-black text-indigo-300 mt-1">{me?.score || 0} pts</div>
+              <div className="font-mono text-xl font-black text-indigo-300 mt-1 tabular-nums">{me?.score || 0} pts</div>
             </div>
 
             <div className={`p-4 rounded-xl border ${isOpponentWinner ? 'bg-rose-950/60 border-rose-500' : 'bg-slate-900 border-slate-800'}`}>
               <span className="text-2xl block mb-1">{opponent?.avatar || '👤'}</span>
               <span className="text-xs font-bold text-slate-400">{opponent?.name || (lang === 'en' ? 'Opponent' : 'Oponent')}</span>
-              <div className="font-mono text-xl font-black text-rose-300 mt-1">{opponent?.score || 0} pts</div>
+              <div className="font-mono text-xl font-black text-rose-300 mt-1 tabular-nums">{opponent?.score || 0} pts</div>
             </div>
           </div>
 

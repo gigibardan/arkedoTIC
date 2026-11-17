@@ -249,7 +249,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
                 }`}
                 autoFocus
               />
-              <Lock className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
+              <Lock className="w-4 h-4 text-slate-500 absolute right-3.5 top-1/2 -translate-y-1/2" aria-hidden="true" />
             </div>
             {authError && (
               <p className="text-xs text-rose-400 mt-2 font-medium">
@@ -308,7 +308,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
               </div>
             )}
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading">
+          <h2 className="text-2xl sm:text-3xl font-black text-white font-heading text-balance">
             {t.teacherPortalTitle}
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
@@ -320,7 +320,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           <button
             onClick={fetchResults}
             disabled={loading}
-            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
+            className="px-3.5 py-2 min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
             title={t.teacherRefresh}
           >
             <RefreshCw className={`w-3.5 h-3.5 text-cyan-400 ${loading ? 'animate-spin' : ''}`} />
@@ -329,7 +329,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
           <button
             onClick={handlePurgeLocalCache}
-            className="px-3.5 py-2 rounded-xl bg-amber-950/50 hover:bg-amber-900/70 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            className="px-3.5 py-2 min-h-[38px] rounded-xl bg-amber-950/50 hover:bg-amber-900/70 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
             title={lang === 'en' ? 'Purge local browser cache and force clean refresh' : 'Golește cache-ul local și reîncarcă direct din cloud (elimină duplicatele/datele fantomă)'}
           >
             <Trash2 className="w-3.5 h-3.5 text-amber-400" />
@@ -339,7 +339,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
           {onOpenSuperAdmin && (
             <button
               onClick={onOpenSuperAdmin}
-              className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+              className="px-3.5 py-2 min-h-[38px] rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
               title="Comută la Consola de Superadmin"
             >
               <KeyRound className="w-3.5 h-3.5 text-amber-400" />
@@ -349,7 +349,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
           <button
             onClick={handleLogout}
-            className="px-3.5 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            className="px-3.5 py-2 min-h-[38px] rounded-xl bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800 text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap shrink-0"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>{t.teacherLogout}</span>
@@ -357,7 +357,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
           <button
             onClick={onBackToHome}
-            className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
+            className="px-3.5 py-2 min-h-[38px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer whitespace-nowrap shrink-0"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{t.backToCourses}</span>
@@ -366,13 +366,13 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
       </div>
 
       {/* Teacher Navigation Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start overflow-x-auto max-w-full">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start overflow-x-auto scrollbar-none max-w-full">
         <button
           onClick={() => {
             setActiveTab('gradebook');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'gradebook'
               ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -387,7 +387,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
             setActiveTab('students');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'students'
               ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -402,7 +402,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
             setActiveTab('cybercity');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'cybercity'
               ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -417,7 +417,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
             setActiveTab('games');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'games'
               ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -432,7 +432,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
             setActiveTab('guide');
             sounds.playClick();
           }}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shrink-0 ${
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'guide'
               ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -447,58 +447,58 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
       {activeTab === 'gradebook' && (
         <>
           {/* Metrics Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
                 <Users className="w-6 h-6" />
               </div>
-              <div>
-                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+              <div className="min-w-0">
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider truncate">
                   {t.teacherTotalStudents}
                 </div>
-                <div className="text-2xl font-black text-white font-heading mt-0.5">
+                <div className="text-2xl font-black text-white font-heading mt-0.5 tabular-nums">
                   {totalCount}
                 </div>
               </div>
             </div>
 
             <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
                 <Trophy className="w-6 h-6" />
               </div>
-              <div>
-                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+              <div className="min-w-0">
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider truncate">
                   {t.teacherAvgScore}
                 </div>
-                <div className="text-2xl font-black text-amber-300 font-heading mt-0.5">
+                <div className="text-2xl font-black text-amber-300 font-heading mt-0.5 tabular-nums">
                   {avgScore} / 100
                 </div>
               </div>
             </div>
 
             <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
                 <Clock className="w-6 h-6" />
               </div>
-              <div>
-                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+              <div className="min-w-0">
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider truncate">
                   {t.teacherAvgTime}
                 </div>
-                <div className="text-2xl font-black text-cyan-300 font-heading mt-0.5 font-mono">
+                <div className="text-2xl font-black text-cyan-300 font-heading mt-0.5 font-mono tabular-nums">
                   {formatSeconds(avgSeconds)}
                 </div>
               </div>
             </div>
 
             <div className="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400">
+              <div className="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
                 <AlertTriangle className="w-6 h-6" />
               </div>
-              <div>
-                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider">
+              <div className="min-w-0">
+                <div className="text-xs text-slate-400 font-mono font-bold uppercase tracking-wider truncate">
                   {lang === 'en' ? 'Cheating Flags' : 'Suspiciuni Trișare'}
                 </div>
-                <div className="text-2xl font-black text-rose-300 font-heading mt-0.5 font-mono">
+                <div className="text-2xl font-black text-rose-300 font-heading mt-0.5 font-mono tabular-nums">
                   {suspiciousGradeCount}
                 </div>
               </div>
@@ -507,15 +507,15 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
           {/* Search, Filter & CSV Export Bar */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto flex-wrap">
               <div className="relative w-full sm:w-64">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
                 <input
                   type="text"
                   value={searchGradeQuery}
                   onChange={(e) => setSearchGradeQuery(e.target.value)}
                   placeholder={lang === 'en' ? 'Search student or course...' : 'Caută elev sau misiune...'}
-                  className="w-full bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                  className="w-full min-h-[38px] bg-slate-950 border border-slate-700 pl-9 pr-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
                 />
               </div>
 
@@ -525,7 +525,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
                 <select
                   value={selectedSchoolFilter}
                   onChange={(e) => setSelectedSchoolFilter(e.target.value)}
-                  className="bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-auto"
+                  className="min-h-[38px] bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-auto"
                 >
                   <option value="all">🏫 {lang === 'en' ? 'All Schools' : 'Toate Școlile'}</option>
                   {schools.map((sc) => (
@@ -542,7 +542,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
                   <select
                     value={selectedCourseFilter}
                     onChange={(e) => setSelectedCourseFilter(e.target.value)}
-                    className="bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-auto"
+                    className="min-h-[38px] bg-slate-950 border border-slate-700 px-3 py-2 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-emerald-500 w-full sm:w-auto"
                   >
                     <option value="all">{lang === 'en' ? 'All Lessons / Courses' : 'Toate Misiunile'}</option>
                     {uniqueCourses.map((c) => (
@@ -556,7 +556,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
             <button
               onClick={handleExportCSV}
               disabled={results.length === 0}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shrink-0 shadow-sm"
+              className="w-full md:w-auto justify-center min-h-[38px] px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 shrink-0 shadow-sm whitespace-nowrap"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
               <span>{lang === 'en' ? 'Export CSV Report' : 'Exportă Catalog Excel/CSV'}</span>
@@ -565,9 +565,9 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
           {/* Results Table */}
           <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-            <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Award className="w-4 h-4 text-emerald-400" />
+            <div className="p-5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-base font-bold text-white flex items-center gap-2 tabular-nums">
+                <Award className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{lang === 'en' ? `Grades & Submissions Registry (${filteredResults.length})` : `Evidență Note & Realizări (${filteredResults.length})`}</span>
               </h3>
               <span className="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
@@ -605,51 +605,53 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
                       const isSuspicious = (r.elapsedSeconds < 15 && r.score >= 90) || r.score > (r.maxScore || 100);
 
                       return (
-                        <tr key={r.id || idx} className={`hover:bg-slate-850/50 transition ${isSuspicious ? 'bg-rose-950/20' : ''}`}>
-                          <td className="py-3.5 px-4 font-bold text-white flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs font-mono shrink-0">
-                              {idx + 1}
-                            </span>
-                            <div>
-                              <div className="flex items-center">
-                                <span className="font-bold text-white">{r.studentName}</span>
-                                {r.elapsedSeconds === 0 ? (
-                                  <span className="ml-2 px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30" title="Trimitere cu 0s (Reîncărcare de pagină sau cache local)">
-                                    ⚠️ 0s (Cache)
-                                  </span>
-                                ) : isSuspicious ? (
-                                  <span className="ml-2 px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
-                                    ⚠️ Suspiciune Viteză
-                                  </span>
-                                ) : null}
-                              </div>
-                              <span className="text-[10px] text-teal-400 font-mono block">
-                                🏫 {schools.find(s => s.id === (r.schoolId || 'scoala_pilot_01'))?.name || 'Liceul „Spiru Haret”'}
+                        <tr key={r.id || idx} className={`hover:bg-slate-800/50 transition ${isSuspicious ? 'bg-rose-950/20' : ''}`}>
+                          <td className="py-3.5 px-4 font-bold text-white align-middle">
+                            <div className="flex items-center gap-2.5">
+                              <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xs font-mono shrink-0 tabular-nums">
+                                {idx + 1}
                               </span>
+                              <div>
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  <span className="font-bold text-white">{r.studentName}</span>
+                                  {r.elapsedSeconds === 0 ? (
+                                    <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30" title="Trimitere cu 0s (Reîncărcare de pagină sau cache local)">
+                                      ⚠️ 0s (Cache)
+                                    </span>
+                                  ) : isSuspicious ? (
+                                    <span className="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono border border-rose-500/30" title="Timp de rezolvare neverosimil">
+                                      ⚠️ Suspiciune Viteză
+                                    </span>
+                                  ) : null}
+                                </div>
+                                <span className="text-[10px] text-teal-400 font-mono block">
+                                  🏫 {schools.find(s => s.id === (r.schoolId || 'scoala_pilot_01'))?.name || 'Liceul „Spiru Haret”'}
+                                </span>
+                              </div>
                             </div>
                           </td>
-                          <td className="py-3.5 px-4 text-slate-300 font-medium">
+                          <td className="py-3.5 px-4 text-slate-300 font-medium align-middle">
                             {r.courseTitle}
                           </td>
-                          <td className="py-3.5 px-4">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 text-xs font-mono">
+                          <td className="py-3.5 px-4 align-middle">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 text-xs font-mono tabular-nums whitespace-nowrap">
                               ⭐ {r.score} / {r.maxScore || 100}
                             </span>
                           </td>
-                          <td className="py-3.5 px-4 font-mono text-cyan-300 text-xs">
+                          <td className="py-3.5 px-4 font-mono text-cyan-300 text-xs tabular-nums align-middle whitespace-nowrap">
                             ⏱️ {formatSeconds(r.elapsedSeconds)}
                           </td>
-                          <td className="py-3.5 px-4 font-mono text-slate-400 text-xs">
+                          <td className="py-3.5 px-4 font-mono text-slate-400 text-xs tabular-nums align-middle whitespace-nowrap">
                             {r.dateFormatted || (lang === 'en' ? 'Recent' : 'Recent')}
                           </td>
-                          <td className="py-3.5 px-4 text-right">
+                          <td className="py-3.5 px-4 text-right align-middle">
                             <div className="flex items-center justify-end gap-1.5">
                               <button
                                 onClick={() => {
                                   setSelectedSubmission(r);
                                   sounds.playClick();
                                 }}
-                                className="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-900/70 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                                className="px-2.5 py-1.5 min-h-[34px] rounded-lg bg-emerald-950/50 hover:bg-emerald-900/70 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
                                 title={lang === 'en' ? 'Edit score / time' : 'Modifică notă sau timp'}
                               >
                                 <Edit3 className="w-3.5 h-3.5" />
@@ -658,7 +660,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
 
                               <button
                                 onClick={() => handleDeleteAllForStudent(r.studentName)}
-                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/80 text-slate-400 hover:text-rose-300 border border-slate-700 hover:border-rose-700/50 transition cursor-pointer"
+                                className="min-w-[34px] min-h-[34px] p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/80 text-slate-400 hover:text-rose-300 border border-slate-700 hover:border-rose-700/50 transition flex items-center justify-center cursor-pointer shrink-0"
                                 title={lang === 'en' ? `Delete ALL submissions for ${r.studentName}` : `Șterge TOATE notele elevului "${r.studentName}"`}
                               >
                                 <Trash className="w-3.5 h-3.5 text-amber-400 hover:text-rose-400" />
@@ -667,7 +669,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
                               <button
                                 onClick={() => handleDelete(r.id)}
                                 disabled={deletingId === r.id}
-                                className="p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition cursor-pointer disabled:opacity-50"
+                                className="min-w-[34px] min-h-[34px] p-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 hover:text-rose-200 transition flex items-center justify-center cursor-pointer disabled:opacity-50 shrink-0"
                                 title={lang === 'en' ? 'Delete this entry' : 'Șterge această notă'}
                               >
                                 <Trash2 className="w-3.5 h-3.5" />

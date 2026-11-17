@@ -84,6 +84,16 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
     }
   }, [isOpen]);
 
+  // Escape key dismissal
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleBuy = async (item: ShopItem) => {
@@ -183,43 +193,53 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-slate-900 border-2 border-indigo-500/40 rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden relative">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fadeIn"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-slate-900 border-2 border-indigo-500/40 rounded-3xl w-full max-w-4xl max-h-[92vh] shadow-2xl flex flex-col overflow-hidden relative"
+      >
         {/* Top Header Bar */}
-        <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-indigo-950/70 to-slate-900 border-b border-indigo-500/30 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-pink-500 flex items-center justify-center text-white shadow-lg text-2xl">
+        <div className="p-4 sm:p-6 bg-gradient-to-r from-slate-900 via-indigo-950/70 to-slate-900 border-b border-indigo-500/30 flex flex-wrap items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-pink-500 flex items-center justify-center text-white shadow-lg text-2xl shrink-0">
               🛍️
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-mono font-bold border border-indigo-500/40">
-                  ARKYEDU CYBER LAB
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono">
+                <span className="font-bold text-indigo-300 uppercase tracking-wider">
+                  ArkyEdu Cyber Lab
                 </span>
-                <span className={`text-xs font-mono font-bold ${collectorRank.color}`}>
+                <span className="text-slate-500" aria-hidden="true">·</span>
+                <span className={`font-bold ${collectorRank.color}`}>
                   {collectorRank.icon} {lang === 'en' ? collectorRank.nameEn : collectorRank.nameRo}
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
+              <h2 className="text-lg sm:text-2xl font-black text-white font-heading truncate">
                 {lang === 'en' ? 'Cyber Shop & Inventory' : 'Magazin Cyber & Inventar Elev'}
               </h2>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 ml-auto">
             {/* Live Byte-Coins Badge */}
-            <div className="flex items-center gap-2 bg-slate-950/90 border-2 border-amber-500/50 px-4 py-2 rounded-2xl shadow-inner font-mono">
-              <Coins className="w-5 h-5 text-amber-400 animate-pulse" />
+            <div className="flex items-center gap-2 bg-slate-950/90 border border-amber-500/50 px-3.5 py-1.5 sm:py-2 rounded-2xl shadow-inner font-mono tabular-nums">
+              <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 shrink-0" />
               <div>
                 <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">B-Coins</div>
-                <div className="text-base font-black text-amber-300">{coins} 🪙</div>
+                <div className="text-sm sm:text-base font-black text-amber-300 leading-none">{coins.toLocaleString()} 🪙</div>
               </div>
             </div>
 
             <button
               onClick={onClose}
-              className="p-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition cursor-pointer"
+              className="p-2.5 min-w-[40px] min-h-[40px] rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer flex items-center justify-center shrink-0"
               title="Închide Magazinul"
+              aria-label="Închide Magazinul"
             >
               <X className="w-5 h-5" />
             </button>
@@ -227,20 +247,20 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
         </div>
 
         {/* Tab Navigation */}
-        <div className="grid grid-cols-3 gap-2 p-3 bg-slate-950/70 border-b border-slate-800">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-2.5 sm:p-3 bg-slate-950/70 border-b border-slate-800">
           <button
             onClick={() => {
               setActiveTab('shop');
               setFeedbackMsg(null);
             }}
-            className={`py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer ${
+            className={`py-2 px-2 sm:px-4 min-h-[42px] rounded-xl font-black text-[11px] sm:text-sm transition flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === 'shop'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            <ShoppingBag className="w-4 h-4" />
-            <span>{lang === 'en' ? 'Cyber Shop' : 'Magazin Cyber'}</span>
+            <ShoppingBag className="w-4 h-4 shrink-0" />
+            <span>{lang === 'en' ? 'Cyber Shop' : 'Magazin'}</span>
           </button>
 
           <button
@@ -248,15 +268,15 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
               setActiveTab('inventory');
               setFeedbackMsg(null);
             }}
-            className={`py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer ${
+            className={`py-2 px-2 sm:px-4 min-h-[42px] rounded-xl font-black text-[11px] sm:text-sm transition flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap tabular-nums ${
               activeTab === 'inventory'
                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            <Package className="w-4 h-4" />
+            <Package className="w-4 h-4 shrink-0" />
             <span>
-              {lang === 'en' ? `Backpack (${ownedItemsList.length})` : `Inventar & Echipare (${ownedItemsList.length})`}
+              {lang === 'en' ? `Backpack (${ownedItemsList.length})` : `Inventar (${ownedItemsList.length})`}
             </span>
           </button>
 
@@ -265,14 +285,14 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
               setActiveTab('chests');
               setFeedbackMsg(null);
             }}
-            className={`py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer ${
+            className={`py-2 px-2 sm:px-4 min-h-[42px] rounded-xl font-black text-[11px] sm:text-sm transition flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === 'chests'
                 ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            <Gift className="w-4 h-4" />
-            <span>{lang === 'en' ? 'Mystery Chests' : 'Cufere Misterioase'}</span>
+            <Gift className="w-4 h-4 shrink-0" />
+            <span>{lang === 'en' ? 'Chests' : 'Cufere'}</span>
           </button>
         </div>
 
@@ -298,7 +318,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
         {activeTab === 'shop' && (
           <div className="flex-1 overflow-y-auto p-5 sm:p-6 flex flex-col gap-5">
             {/* Category Filter Pills */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
               {[
                 { id: 'all', labelRo: 'Toate Obiectele', labelEn: 'All Items', icon: '✨' },
                 { id: 'arky_skin', labelRo: 'Garderoba Arky', labelEn: 'Arky Skins', icon: '🤖' },
@@ -309,7 +329,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id as any)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3.5 py-2 min-h-[36px] rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap ${
                     selectedCategory === cat.id
                       ? 'bg-indigo-600 text-white shadow-md'
                       : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
@@ -503,16 +523,16 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
                   return (
                     <div
                       key={item.id}
-                      className={`p-3.5 rounded-2xl border-2 bg-slate-950/70 flex items-center justify-between gap-3 ${
+                      className={`p-3.5 rounded-2xl border-2 bg-slate-950/70 flex flex-wrap items-center justify-between gap-2.5 ${
                         isEquipped ? 'border-emerald-500' : 'border-slate-800'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xl">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xl shrink-0">
                           {item.icon}
                         </div>
-                        <div>
-                          <div className="text-xs font-bold text-white">
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white truncate">
                             {lang === 'en' ? item.nameEn : item.nameRo}
                           </div>
                           <div className="text-[10px] text-slate-400 font-mono">
@@ -522,13 +542,13 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
                       </div>
 
                       {isEquipped ? (
-                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono">
+                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold font-mono shrink-0">
                           ✓ Echipat
                         </span>
                       ) : (
                         <button
                           onClick={() => handleEquip(item)}
-                          className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition cursor-pointer"
+                          className="px-3 py-1.5 min-h-[34px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition cursor-pointer shrink-0"
                         >
                           Echipează
                         </button>
@@ -547,7 +567,7 @@ export const CyberShopModal: React.FC<CyberShopModalProps> = ({
             <div className="relative">
               <div
                 className={`w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-tr from-amber-500 via-orange-500 to-pink-500 border-4 border-amber-300 flex items-center justify-center text-6xl sm:text-7xl shadow-2xl shadow-orange-500/40 cursor-pointer transition transform active:scale-95 ${
-                  isOpeningChest ? 'animate-bounce scale-110' : 'hover:scale-105 animate-float'
+                  isOpeningChest ? 'animate-bounce scale-110' : 'hover:scale-105'
                 }`}
                 onClick={handleOpenChest}
               >

@@ -157,99 +157,103 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
     <div id="sectiune-misiuni-clasa-8" className="scroll-mt-6 flex flex-col gap-6">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
-            <GraduationCap className="w-4 h-4 text-white" />
+        <div className="flex items-start sm:items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0 mt-0.5 sm:mt-0">
+            <GraduationCap className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide">
+            <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-wide text-balance">
               {lang === 'en' ? 'Practical ICT, C++ & Robotics Missions • 8th Grade (Art Klett)' : 'Misiuni Practice TIC, C++ & Robotică • Clasa a VIII-a (Manual Art Klett)'}
             </h2>
-            <div className="text-xs text-emerald-400 font-mono font-medium">
+            <div className="text-xs text-emerald-400 font-mono font-medium mt-0.5">
               {lang === 'en' ? 'Official National Curriculum OMEN 3393/2017 & OM 5420/2024 • 14 Culminating Missions' : 'Programa Națională Oficială OMEN 3393/2017 & OM 5420/2024 • 14 Misiuni Finale Gimnaziu'}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-emerald-300 bg-emerald-950/80 px-3 py-1.5 rounded-full border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>{lang === 'en' ? 'Gymnasium Graduation Level' : 'Nivel Absolvire Gimnaziu'}</span>
+        <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+          <span className="text-xs font-mono font-semibold text-emerald-300 bg-emerald-950/70 px-3 py-1.5 rounded-xl border border-emerald-500/35 whitespace-nowrap">
+            {lang === 'en' ? 'Gymnasium Graduation Level' : 'Nivel Absolvire Gimnaziu'}
           </span>
         </div>
       </div>
 
       {/* 4 Major Units Roadmap Matrix Banner */}
-      <div className="bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-emerald-950/40 border-2 border-emerald-500/30 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <div className="bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-emerald-950/40 border border-emerald-500/30 rounded-3xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
           <div className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-emerald-400" />
-            {lang === 'en' ? '8th Grade Curriculum Roadmap (Manual Art Klett 2025, 108 pages)' : 'Harta Curriculară Clasa a VIII-a (Manual Oficial Art Klett 2025, 108 pagini)'}
+            <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{lang === 'en' ? '8th Grade Curriculum Roadmap (Manual Art Klett 2025, 108 pages)' : 'Harta Curriculară Clasa a VIII-a (Manual Oficial Art Klett 2025, 108 pagini)'}</span>
           </div>
 
           {/* Unit Filter Tabs */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1.5 bg-slate-950/85 p-1.5 rounded-xl border border-slate-800 overflow-x-auto scrollbar-none max-w-full">
             <button
+              type="button"
               onClick={() => {
                 setActiveTabUnit('all');
                 sounds.playClick();
               }}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[34px] rounded-lg text-[11px] font-bold font-mono whitespace-nowrap shrink-0 transition cursor-pointer ${
                 activeTabUnit === 'all'
                   ? 'bg-emerald-500 text-slate-950 shadow-sm font-black'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
               }`}
             >
               {lang === 'en' ? 'All (14)' : 'Toate (14)'}
             </button>
             <button
+              type="button"
               onClick={() => {
                 setActiveTabUnit('u1');
                 sounds.playClick();
               }}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[34px] rounded-lg text-[11px] font-bold font-mono whitespace-nowrap shrink-0 transition cursor-pointer ${
                 activeTabUnit === 'u1'
                   ? 'bg-emerald-600 text-white shadow-sm font-black'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
               }`}
             >
-              {lang === 'en' ? 'U1: Excel (4)' : 'U1: Excel (4)'}
+              U1: Excel (4)
             </button>
             <button
+              type="button"
               onClick={() => {
                 setActiveTabUnit('u2');
                 sounds.playClick();
               }}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[34px] rounded-lg text-[11px] font-bold font-mono whitespace-nowrap shrink-0 transition cursor-pointer ${
                 activeTabUnit === 'u2'
                   ? 'bg-sky-600 text-white shadow-sm font-black'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
               }`}
             >
-              {lang === 'en' ? 'U2: Web (3)' : 'U2: Web (3)'}
+              U2: Web (3)
             </button>
             <button
+              type="button"
               onClick={() => {
                 setActiveTabUnit('u3');
                 sounds.playClick();
               }}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[34px] rounded-lg text-[11px] font-bold font-mono whitespace-nowrap shrink-0 transition cursor-pointer ${
                 activeTabUnit === 'u3'
                   ? 'bg-indigo-600 text-white shadow-sm font-black'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
               }`}
             >
-              {lang === 'en' ? 'U3: C++ (5)' : 'U3: C++ (5)'}
+              U3: C++ (5)
             </button>
             <button
+              type="button"
               onClick={() => {
                 setActiveTabUnit('u4');
                 sounds.playClick();
               }}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold font-mono transition cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[34px] rounded-lg text-[11px] font-bold font-mono whitespace-nowrap shrink-0 transition cursor-pointer ${
                 activeTabUnit === 'u4'
                   ? 'bg-amber-600 text-white shadow-sm font-black'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
               }`}
             >
               {lang === 'en' ? 'U4: Robotics & IoT (2)' : 'U4: Robotică & IoT (2)'}
@@ -257,9 +261,9 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
           </div>
         </div>
 
-        {/* Units Description Cards: 2x2 on mobile, 4 columns on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 text-xs">
-          <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex flex-col justify-between">
+        {/* Units Description Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div className="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/35 flex flex-col justify-between gap-2">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <FileSpreadsheet className="w-5 h-5 text-emerald-400 shrink-0" />
@@ -267,18 +271,18 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   {lang === 'en' ? 'Unit 1: Spreadsheets' : 'Unitatea 1: Calcul Tabelar'}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-300 leading-snug">
+              <div className="text-[11px] text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Excel/Calc, relative/absolute cell references ($A$1), SUM, AVERAGE, IF, 2D/3D charts, sort & autofilter (p. 12–35)'
                   : 'Excel/Calc, adrese celule relative/absolute ($A$1), formule SUM, AVERAGE, IF, diagrame 2D/3D, sortare & autofiltrare (pag. 12–35)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-emerald-400">
-              {lang === 'en' ? '● 4 MISSIONS (1A–1D)' : '● 4 MISIUNI (1A–1D)'}
+            <span className="text-[10px] font-mono font-bold text-emerald-400 tabular-nums">
+              {lang === 'en' ? '4 MISSIONS (1A–1D)' : '4 MISIUNI (1A–1D)'}
             </span>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-sky-950/40 border border-sky-500/40 flex flex-col justify-between">
+          <div className="p-3.5 rounded-2xl bg-sky-950/40 border border-sky-500/35 flex flex-col justify-between gap-2">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Globe className="w-5 h-5 text-sky-400 shrink-0" />
@@ -286,18 +290,18 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   {lang === 'en' ? 'Unit 2: Web Pages' : 'Unitatea 2: Pagini Web'}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-300 leading-snug">
+              <div className="text-[11px] text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Semantic HTML5, Google Sites WYSIWYG, image carousel, maps, responsive layout, HTTPS security & SEO (p. 36–58)'
                   : 'HTML5 semantic, Google Sites WYSIWYG, carusel imagini, hărți, layout responsive, securitate HTTPS & SEO (pag. 36–58)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-sky-400">
-              {lang === 'en' ? '● 3 MISSIONS (2A–2C)' : '● 3 MISIUNI (2A–2C)'}
+            <span className="text-[10px] font-mono font-bold text-sky-400 tabular-nums">
+              {lang === 'en' ? '3 MISSIONS (2A–2C)' : '3 MISIUNI (2A–2C)'}
             </span>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-500/40 flex flex-col justify-between">
+          <div className="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-500/35 flex flex-col justify-between gap-2">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Code2 className="w-5 h-5 text-indigo-400 shrink-0" />
@@ -305,18 +309,18 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   {lang === 'en' ? 'Unit 3: C++ Algorithms' : 'Unitatea 3: Algoritmi C++'}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-300 leading-snug">
+              <div className="text-[11px] text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Operators, if/switch decisions, while/for loops, digits, divisors, arrays & modular subprograms (p. 59–88)'
                   : 'Operatori, decizii if/switch, bucle while/for, cifre, divizori, vectori & subprograme modulare (pag. 59–88)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-indigo-400">
-              {lang === 'en' ? '● 5 MISSIONS (3A–3E)' : '● 5 MISIUNI (3A–3E)'}
+            <span className="text-[10px] font-mono font-bold text-indigo-400 tabular-nums">
+              {lang === 'en' ? '5 MISSIONS (3A–3E)' : '5 MISIUNI (3A–3E)'}
             </span>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/40 flex flex-col justify-between">
+          <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/35 flex flex-col justify-between gap-2">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Bot className="w-5 h-5 text-amber-400 shrink-0" />
@@ -324,21 +328,21 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   {lang === 'en' ? 'Unit 4: Robotics & IoT' : 'Unitatea 4: Robotică & IoT'}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-300 leading-snug">
+              <div className="text-[11px] text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Arduino Uno, HC-SR04, SG90 servos, Smart Streetlight LDR+PIR, MQ-2 gas alert, I2C LCD & multitasking millis() (p. 89–108)'
                   : 'Arduino Uno, HC-SR04, servomotoare SG90, Smart Streetlight LDR+PIR, alertă gaz MQ-2, LCD I2C & multitasking millis() (pag. 89–108)'}
               </div>
             </div>
-            <span className="mt-2 text-[10px] font-mono font-bold text-amber-400">
-              {lang === 'en' ? '● 2 MISSIONS (4A–4B)' : '● 2 MISIUNI (4A–4B)'}
+            <span className="text-[10px] font-mono font-bold text-amber-400 tabular-nums">
+              {lang === 'en' ? '2 MISSIONS (4A–4B)' : '2 MISIUNI (4A–4B)'}
             </span>
           </div>
         </div>
       </div>
 
       {/* Grid of 14 Interactive Mission Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
         {filteredModules.map((module) => {
           const effectiveMissionId = module.missionId || module.id;
           const isDone = Boolean(completedMissions[effectiveMissionId] || completedMissions[module.id]);
@@ -352,30 +356,29 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
           return (
             <div
               key={module.id}
-              className={`bg-slate-900/90 border-2 rounded-3xl p-6 shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden ${
+              className={`bg-slate-900/90 border-2 rounded-3xl p-5 sm:p-6 shadow-xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 group relative overflow-hidden ${
                 isDone
-                  ? 'border-emerald-500/80 shadow-emerald-500/10'
+                  ? 'border-emerald-500/75 shadow-emerald-500/10'
                   : 'border-slate-800 hover:border-emerald-500/60 hover:shadow-emerald-500/10'
               }`}
             >
               <div>
-                {/* Top Badge & Header */}
+                {/* Top Header */}
                 <div className="flex items-start justify-between gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform shrink-0">
                     {module.icon}
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {isDone ? (
-                      <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>{lang === 'en' ? 'Completed • Grade 10' : 'Finalizat • Nota 10'}</span>
-                      </span>
-                    ) : null}
-
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-800/80 text-emerald-300 border border-emerald-500/30 text-[11px] font-black uppercase tracking-wider font-mono">
+                  <div className="flex items-center gap-2.5 shrink-0">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
                       {module.id.toUpperCase().replace('G8_', 'G8 • ')}
                     </span>
+                    {isDone && (
+                      <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-[11px] font-black uppercase tracking-wider font-mono flex items-center gap-1 tabular-nums">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>{lang === 'en' ? 'Completed • 10' : 'Finalizat • Nota 10'}</span>
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -383,19 +386,19 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                   {displayUnit}
                 </div>
 
-                <h3 className="text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors">
+                <h3 className="text-lg sm:text-xl font-black text-white font-heading mb-1 group-hover:text-emerald-300 transition-colors text-balance">
                   {displayTitle}
                 </h3>
-                <div className="text-xs font-semibold text-slate-300 mb-3">
+                <div className="text-xs font-semibold text-slate-300 mb-2.5">
                   {displayShortTitle}
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4">
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-3.5">
                   {displayMeta}
                 </p>
 
                 {/* Key Skills Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
+                <div className="flex flex-wrap gap-1.5 mb-3.5">
                   {lang === 'en' && enInfo?.skills ? (
                     enInfo.skills.map((skill, idx) => (
                       <span
@@ -411,75 +414,71 @@ export const Grade8CatalogSection: React.FC<Grade8CatalogSectionProps> = ({
                         key={idx}
                         className="px-2 py-0.5 rounded-md bg-slate-950/70 border border-slate-800 text-[11px] text-slate-300 font-mono"
                       >
-                        {comp.code}: {comp.description.slice(0, 50)}...
+                        {comp.code}: {comp.description.slice(0, 48)}…
                       </span>
                     ))
                   )}
                 </div>
 
-                {/* Badges / Highlights */}
-                <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-mono">
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-slate-300 flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-emerald-400" /> 20-25 min
+                {/* Crisp Unboxed Metadata Row */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4 text-[11px] font-mono text-slate-400 tabular-nums">
+                  <span className="inline-flex items-center gap-1 text-slate-300">
+                    <Clock className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> 20–25 min
                   </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-amber-300 flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {lang === 'en' ? '100 pts' : '100 pct'}
+                  <span aria-hidden="true" className="text-slate-600">·</span>
+                  <span className="inline-flex items-center gap-1 text-amber-300 font-semibold">
+                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" /> {lang === 'en' ? '100 pts' : '100 pct'}
                   </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-950/60 border border-slate-800 text-teal-300 flex items-center gap-1">
-                    <Award className="w-3 h-3 text-teal-400" /> {displayShortTitle}
+                  <span aria-hidden="true" className="text-slate-600">·</span>
+                  <span className="inline-flex items-center gap-1 text-teal-300">
+                    {isDone ? (
+                      <>
+                        <Award className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>{lang === 'en' ? 'Diploma Earned' : 'Diplomă Obținută'}</span>
+                      </>
+                    ) : (
+                      <span>{lang === 'en' ? '5 Pedagogical Levels' : '5 Niveluri Pedagogice'}</span>
+                    )}
                   </span>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                <div className="text-xs text-slate-400 font-mono">
+              {/* Action Buttons Footer */}
+              <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => onOpenCurriculaModal(module.id)}
+                  className="px-3.5 py-2.5 min-h-[42px] rounded-xl bg-slate-800/90 hover:bg-slate-700 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm whitespace-nowrap"
+                  title={lang === 'en' ? 'View curriculum, textbook theory and questions' : 'Vezi programa școlară, teoria și fișa didactică'}
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{lang === 'en' ? 'Syllabus & Theory' : 'Programă & Teorie'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    onLaunchInteractiveLab?.(effectiveMissionId);
+                  }}
+                  className={`flex-1 sm:flex-none justify-center px-4 sm:px-5 py-2.5 min-h-[42px] rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg whitespace-nowrap ${
+                    isDone
+                      ? 'bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
+                      : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 font-black'
+                  }`}
+                >
                   {isDone ? (
-                    <span className="text-emerald-400 font-bold flex items-center gap-1.5 font-mono">
-                      <Award className="w-4 h-4 text-amber-400" />
-                      <span>{lang === 'en' ? 'Diploma Earned' : 'Diplomă Obținută (100 pct)'}</span>
-                    </span>
+                    <>
+                      <Award className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span>{lang === 'en' ? 'Replay Mission' : 'Reia Misiunea'}</span>
+                    </>
                   ) : (
-                    <span>{lang === 'en' ? '5 Pedagogical Levels' : '5 Niveluri Pedagogice'}</span>
+                    <>
+                      <span>{lang === 'en' ? 'Start Mission' : 'Începe Misiunea'}</span>
+                      <ArrowRight className="w-4 h-4 shrink-0" />
+                    </>
                   )}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onOpenCurriculaModal(module.id)}
-                    className="px-3 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-emerald-300 hover:text-white border border-emerald-500/30 hover:border-emerald-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-                    title={lang === 'en' ? 'View curriculum, textbook theory and questions' : 'Vezi programa școlară, teoria și fișa didactică'}
-                  >
-                    <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="hidden sm:inline">{lang === 'en' ? 'Syllabus & Theory' : 'Programă & Teorie'}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      sounds.playClick();
-                      onLaunchInteractiveLab?.(effectiveMissionId);
-                    }}
-                    className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer active:scale-95 shadow-lg ${
-                      isDone
-                        ? 'bg-slate-800 hover:bg-slate-750 text-emerald-300 border border-emerald-500/50 hover:border-emerald-400 shadow-emerald-500/10'
-                        : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30 font-black'
-                    }`}
-                  >
-                    {isDone ? (
-                      <>
-                        <Award className="w-4 h-4 text-amber-400" />
-                        <span>{lang === 'en' ? 'Replay Mission' : 'Reia Misiunea'}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>{lang === 'en' ? 'Start Mission' : 'Începe Misiunea'}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-                </div>
+                </button>
               </div>
             </div>
           );

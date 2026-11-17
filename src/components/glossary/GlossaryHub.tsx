@@ -225,7 +225,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
             <button
               type="button"
               onClick={handleBackToIndex}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'All 44 Terms' : 'Toți cei 44 termeni'}</span>
@@ -235,7 +235,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sounds.playClick()}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold border border-emerald-500/40 transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold border border-emerald-500/40 transition-colors whitespace-nowrap shrink-0"
             >
               <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
               <span>WhatsApp</span>
@@ -243,7 +243,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
             <button
               type="button"
               onClick={handleCopyShareUrl}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               {copiedShareLink ? (
                 <>
@@ -260,7 +260,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
             <button
               type="button"
               onClick={handleNativeShare}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'Share' : 'Distribuie'}</span>
@@ -269,7 +269,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
               href={staticUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors whitespace-nowrap shrink-0"
             >
               <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'SEO Print View' : 'Link SEO Static'}</span>
@@ -308,7 +308,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
         {/* Optional Syntax / Formula Block */}
         {c.syntaxOrFormula && (
           <section className="rounded-xl bg-slate-950 border border-slate-800 overflow-hidden">
-            <div className="flex items-center justify-between gap-4 px-4 py-2.5 border-b border-slate-800 bg-slate-900/70">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 border-b border-slate-800 bg-slate-900/70">
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-200">
                 <Code2 className="w-4 h-4 text-teal-400 shrink-0" aria-hidden="true" />
                 <span>{c.syntaxOrFormula.title}</span>
@@ -316,7 +316,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
               <button
                 type="button"
                 onClick={() => handleCopyCode(c.syntaxOrFormula!.code)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 min-h-[34px] rounded-md bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 {copiedCode ? (
                   <>
@@ -540,7 +540,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
       <section className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 space-y-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2 max-w-3xl">
-            <p className="text-xs font-semibold text-teal-300">
+            <p className="text-xs font-semibold text-teal-300 tabular-nums">
               {isEn
                 ? `ArkyEdu Reference · ${GLOSSARY_TERMS.length} Curriculum Terms · Grades 5–8 · Bilingual RO / EN`
                 : `Dicționar Școlar TIC & Coding · ${GLOSSARY_TERMS.length} Termeni Esențiali V–VIII · Bilingv RO / EN`}
@@ -560,7 +560,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
             href={isEn ? '/glosar/en/' : '/glosar/'}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors shrink-0 whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors shrink-0 whitespace-nowrap"
           >
             <BookOpen className="w-4 h-4 text-teal-300" aria-hidden="true" />
             <span>{isEn ? 'Static HTML Version' : 'Versiune HTML Statică'}</span>
@@ -569,14 +569,14 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
 
         {/* Category Filter Tabs + Search Input */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-950/70 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none sm:flex-wrap bg-slate-950/70 p-1 rounded-xl border border-slate-800 max-w-full">
             <button
               type="button"
               onClick={() => {
                 sounds.playClick();
                 setSelectedCategory('all');
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer tabular-nums ${
                 selectedCategory === 'all'
                   ? 'bg-teal-500 text-slate-950 font-bold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -594,7 +594,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
                     sounds.playClick();
                     setSelectedCategory(cat.id);
                   }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                     active
                       ? 'bg-teal-500 text-slate-950 font-bold'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -614,7 +614,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={isEn ? 'Search CPU, modulo, IF, millis...' : 'Caută CPU, modulo %, IF, millis...'}
               aria-label={isEn ? 'Search glossary terms' : 'Caută termeni în glosar'}
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
+              className="w-full min-h-[40px] pl-9 pr-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
             />
           </div>
         </div>
@@ -633,7 +633,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
                   sounds.playClick();
                   setSelectedGrade(gr);
                 }}
-                className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-md text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                   selectedGrade === gr
                     ? 'bg-slate-100 text-slate-950 font-bold'
                     : 'bg-slate-800/70 text-slate-300 hover:text-white hover:bg-slate-800'
@@ -657,14 +657,14 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
           </div>
 
           {/* A-Z Letter Jump */}
-          <div className="flex flex-wrap items-center gap-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 sm:flex-wrap max-w-full">
             <button
               type="button"
               onClick={() => {
                 sounds.playClick();
                 setSelectedLetter('ALL');
               }}
-              className={`px-2 py-1 rounded text-[11px] font-bold transition-colors cursor-pointer ${
+              className={`px-2.5 py-1 min-h-[34px] rounded text-xs font-bold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 selectedLetter === 'ALL'
                   ? 'bg-teal-500 text-slate-950'
                   : 'bg-slate-800/70 text-slate-300 hover:text-white'
@@ -680,7 +680,7 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
                   sounds.playClick();
                   setSelectedLetter((prev) => (prev === letter ? 'ALL' : letter));
                 }}
-                className={`w-6 h-6 rounded text-[11px] font-mono font-bold transition-colors cursor-pointer flex items-center justify-center ${
+                className={`min-w-[34px] min-h-[34px] px-2 rounded text-xs font-mono font-bold transition-colors cursor-pointer flex items-center justify-center shrink-0 ${
                   selectedLetter === letter
                     ? 'bg-teal-500 text-slate-950'
                     : 'bg-slate-800/60 text-slate-300 hover:text-white hover:bg-slate-800'
@@ -751,14 +751,14 @@ export const GlossaryHub: React.FC<GlossaryHubProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/60">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-700/60">
                   <span className="text-xs text-slate-400 truncate max-w-[200px]">
                     {c.vsComparison.title}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleOpenTerm(item)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
                   >
                     <span>{isEn ? 'Read Definition' : 'Vezi Definiția'}</span>
                     <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />

@@ -94,6 +94,16 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
     setCoins(getByteCoins());
   }, []);
 
+  // Close active modal on Escape
+  useEffect(() => {
+    if (activeModal === 'none') return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveModal('none');
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [activeModal]);
+
   // Show auto-dismissing toast feedback
   const showToast = (text: string, type: 'success' | 'error' = 'success') => {
     setFeedbackToast({ text, type });
@@ -236,10 +246,10 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
       {/* Toast Notification Banner */}
       {feedbackToast && (
         <div
-          className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl shadow-2xl backdrop-blur-md border text-xs sm:text-sm font-bold flex items-center gap-2.5 animate-bounce ${
+          className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl shadow-2xl backdrop-blur-md border text-xs sm:text-sm font-bold flex items-center gap-2.5 max-w-[90vw] ${
             feedbackToast.type === 'success'
-              ? 'bg-emerald-950/90 border-emerald-400 text-emerald-200'
-              : 'bg-rose-950/90 border-rose-400 text-rose-200'
+              ? 'bg-emerald-950/95 border-emerald-400 text-emerald-200'
+              : 'bg-rose-950/95 border-rose-400 text-rose-200'
           }`}
         >
           <span>{feedbackToast.type === 'success' ? '🚀' : '⚠️'}</span>
@@ -259,16 +269,15 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               {onBackToCatalog && (
                 <button
                   onClick={onBackToCatalog}
-                  className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  className="px-3 py-2 min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 whitespace-nowrap"
                 >
                   <ArrowLeft className="w-3.5 h-3.5 text-cyan-400" />
                   <span>{lang === 'en' ? 'Missions' : 'Misiuni'}</span>
                 </button>
               )}
 
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[11px] font-mono font-bold border border-cyan-400/40 flex items-center gap-1">
-                <span>🏙️</span>
-                <span>ARKYEDU CYBER CITY BUILDER</span>
+              <span className="text-[11px] font-mono font-bold text-cyan-300 uppercase tracking-wider">
+                ArkyEdu Cyber City Builder
               </span>
 
               {viewingClassmateCity && (
@@ -342,7 +351,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                   : (metrics.cityRankTitleRo || metrics.cityRankTitle)}
               </span>
               <span className="text-slate-500">•</span>
-              <span className="text-purple-300 font-mono font-bold">
+              <span className="text-purple-300 font-mono font-bold tabular-nums">
                 ⭐ {metrics.cityScore.toLocaleString()} {lang === 'en' ? 'Metropolis Pts' : 'Pts Metropolă'}
               </span>
             </div>
@@ -350,14 +359,14 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           {/* Action Buttons & Coin Balance */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            {/* ByteCoins pill */}
-            <div className="px-3.5 py-2 rounded-2xl bg-slate-950 border border-amber-500/40 text-center shadow-inner flex items-center gap-2">
+            {/* ByteCoins box */}
+            <div className="px-3.5 py-2 min-h-[42px] rounded-2xl bg-slate-950 border border-amber-500/40 text-center shadow-inner flex items-center gap-2">
               <span className="text-lg">🪙</span>
               <div className="text-left">
                 <div className="text-[9px] text-amber-300 uppercase font-bold">
                   {lang === 'en' ? 'ByteCoins Balance' : 'Sold ByteCoins'}
                 </div>
-                <div className="text-sm sm:text-base font-black text-white font-mono leading-none">
+                <div className="text-sm sm:text-base font-black text-white font-mono leading-none tabular-nums">
                   {coins.toLocaleString()}
                 </div>
               </div>
@@ -366,18 +375,18 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             {/* Guide Handbook Button */}
             <button
               onClick={() => setIsGuideOpen(true)}
-              className="px-3.5 py-2.5 rounded-2xl bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md"
+              className="px-3.5 py-2 min-h-[42px] rounded-2xl bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md whitespace-nowrap"
             >
-              <BookOpen className="w-4 h-4 text-indigo-300" />
+              <BookOpen className="w-4 h-4 text-indigo-300 shrink-0" />
               <span>{lang === 'en' ? 'Mayor Handbook' : 'Ghid Primar'}</span>
             </button>
 
             {/* Classmates Showcase Button */}
             <button
               onClick={handleOpenClassmates}
-              className="px-3.5 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md"
+              className="px-3.5 py-2 min-h-[42px] rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-md whitespace-nowrap"
             >
-              <Users className="w-4 h-4 text-cyan-400" />
+              <Users className="w-4 h-4 text-cyan-400 shrink-0" />
               <span>{lang === 'en' ? 'Classmate Cities' : 'Orașele Clasei'}</span>
             </button>
 
@@ -385,7 +394,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
             {viewingClassmateCity && (
               <button
                 onClick={() => setViewingClassmateCity(null)}
-                className="px-3.5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg transition active:scale-95 cursor-pointer"
+                className="px-3.5 py-2 min-h-[42px] rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg transition active:scale-95 cursor-pointer whitespace-nowrap"
               >
                 {lang === 'en' ? 'Back to My City' : 'Înapoi la Orașul Meu'}
               </button>
@@ -394,10 +403,10 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
         </div>
 
         {/* 6 Core City Metrics HUD Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-5 pt-4 border-t border-slate-800/80">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-5 pt-4 border-t border-slate-800/80 tabular-nums">
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-cyan-500/30 text-center">
             <div className="text-[10px] text-cyan-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Zap className="w-3 h-3" /> {lang === 'en' ? 'Compute' : 'Calcul'}
+              <Zap className="w-3 h-3 shrink-0" /> {lang === 'en' ? 'Compute' : 'Calcul'}
             </div>
             <div className="text-sm sm:text-base font-black text-white font-mono mt-0.5">
               {metrics.computingPowerTFlops} TFlops
@@ -406,7 +415,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-teal-500/30 text-center">
             <div className="text-[10px] text-teal-300 font-bold uppercase flex items-center justify-center gap-1">
-              <HardDrive className="w-3 h-3" /> {lang === 'en' ? 'Storage' : 'Stocare'}
+              <HardDrive className="w-3 h-3 shrink-0" /> {lang === 'en' ? 'Storage' : 'Stocare'}
             </div>
             <div className="text-sm sm:text-base font-black text-white font-mono mt-0.5">
               {metrics.cloudStoragePB} PB
@@ -415,7 +424,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-sky-500/30 text-center">
             <div className="text-[10px] text-sky-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Globe className="w-3 h-3" /> {lang === 'en' ? 'Network' : 'Viteză Rețea'}
+              <Globe className="w-3 h-3 shrink-0" /> {lang === 'en' ? 'Network' : 'Viteză Rețea'}
             </div>
             <div className="text-sm sm:text-base font-black text-white font-mono mt-0.5">
               {metrics.bandwidthTbps} Tbps
@@ -424,7 +433,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-emerald-500/30 text-center">
             <div className="text-[10px] text-emerald-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Leaf className="w-3 h-3" /> {lang === 'en' ? 'Green Energy' : 'Eco-Energie'}
+              <Leaf className="w-3 h-3 shrink-0" /> {lang === 'en' ? 'Green Energy' : 'Eco-Energie'}
             </div>
             <div className="text-sm sm:text-base font-black text-emerald-300 font-mono mt-0.5">
               {metrics.ecoScore}%
@@ -433,7 +442,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-rose-500/30 text-center">
             <div className="text-[10px] text-rose-300 font-bold uppercase flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3 h-3" /> {lang === 'en' ? 'Security' : 'Securitate'}
+              <ShieldCheck className="w-3 h-3 shrink-0" /> {lang === 'en' ? 'Security' : 'Securitate'}
             </div>
             <div className="text-sm sm:text-base font-black text-rose-300 font-mono mt-0.5">
               {metrics.securityRating}%
@@ -442,7 +451,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
           <div className="p-2.5 rounded-2xl bg-slate-950/80 border border-indigo-500/30 text-center">
             <div className="text-[10px] text-indigo-300 font-bold uppercase flex items-center justify-center gap-1">
-              <Users className="w-3 h-3" /> {lang === 'en' ? 'Population' : 'Populație'}
+              <Users className="w-3 h-3 shrink-0" /> {lang === 'en' ? 'Population' : 'Populație'}
             </div>
             <div className="text-sm sm:text-base font-black text-indigo-200 font-mono mt-0.5">
               {metrics.totalPopulation.toLocaleString()}
@@ -459,9 +468,9 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
         <div className="relative z-10 max-w-4xl mx-auto">
           {/* Active Incidents Banner Indicator */}
           {cityData.activeIncidents && cityData.activeIncidents.length > 0 && (
-            <div className="mb-5 p-3 rounded-2xl bg-amber-950/70 border-2 border-amber-400 text-amber-200 text-xs sm:text-sm font-bold flex items-center justify-between gap-3 shadow-xl animate-pulse">
+            <div className="mb-5 p-3 rounded-2xl bg-amber-950/75 border-2 border-amber-400 text-amber-200 text-xs sm:text-sm font-bold flex items-center justify-between gap-3 shadow-xl">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-amber-400 animate-bounce" />
+                <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
                 <span>
                   {lang === 'en'
                     ? `${cityData.activeIncidents.length} active cyber incident in the city! Tap marked plot to resolve!`
@@ -472,7 +481,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
           )}
 
           {/* 5x5 Grid Cells */}
-          <div className="grid grid-cols-5 gap-3 sm:gap-4 aspect-square max-w-[560px] mx-auto">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-3.5 aspect-square max-w-[560px] mx-auto">
             {Array.from({ length: 25 }).map((_, tileIndex) => {
               const building = currentCityToDisplay.buildings[tileIndex];
               const def = building ? BUILDING_CATALOG.find((d) => d.id === building.typeId) : null;
@@ -488,38 +497,39 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                   <button
                     key={tileIndex}
                     onClick={() => handleTileClick(tileIndex)}
-                    className={`group relative rounded-2xl sm:rounded-3xl p-1.5 sm:p-2.5 border-2 transition-all duration-300 flex flex-col items-center justify-between shadow-xl cursor-pointer hover:scale-105 active:scale-95 overflow-hidden ${
+                    className={`group relative rounded-xl sm:rounded-3xl p-1 sm:p-2.5 border-2 transition-all duration-300 flex flex-col items-center justify-between shadow-xl cursor-pointer hover:scale-[1.03] active:scale-95 overflow-hidden ${
                       def.accentColor
                     } bg-gradient-to-b ${def.bgGradient} ${
-                      incident ? 'ring-4 ring-amber-400 animate-pulse' : ''
+                      incident ? 'ring-2 sm:ring-4 ring-amber-400' : ''
                     }`}
                   >
                     {/* Level Stars on Top */}
-                    <div className="w-full flex items-center justify-between text-[9px] font-mono font-black text-amber-300 px-1">
+                    <div className="w-full flex items-center justify-between text-[8px] sm:text-[10px] font-mono font-black text-amber-300 px-0.5 sm:px-1 tabular-nums">
                       <span>Lv.{building.level}</span>
-                      <div className="flex">
+                      <div className="hidden sm:flex">
                         {Array.from({ length: building.level }).map((_, i) => (
                           <span key={i}>⭐</span>
                         ))}
                       </div>
+                      <span className="sm:hidden">⭐{building.level}</span>
                     </div>
 
                     {/* 3D Animated Icon */}
-                    <div className="text-2xl sm:text-4xl my-auto transform group-hover:scale-115 transition-transform duration-300 drop-shadow-lg">
+                    <div className="text-xl sm:text-4xl my-auto transform group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
                       {currentLvlData.icon || def.icon}
                     </div>
 
                     {/* Building Name Tag */}
                     <div className="w-full text-center">
-                      <span className="text-[9px] sm:text-[10px] font-bold text-slate-200 block truncate leading-tight">
+                      <span className="text-[8px] sm:text-[10px] font-bold text-slate-200 block truncate leading-tight">
                         {lang === 'en' ? (currentLvlData.titleEn || def.nameEn) : (currentLvlData.titleRo || def.nameRo)}
                       </span>
                     </div>
 
                     {/* Incident Alert Icon */}
                     {incident && (
-                      <div className="absolute top-1 right-1 p-1 rounded-full bg-amber-500 text-slate-950 animate-ping">
-                        <AlertTriangle className="w-3 h-3" />
+                      <div className="absolute top-1 right-1 p-0.5 sm:p-1 rounded-full bg-amber-500 text-slate-950 shadow">
+                        <AlertTriangle className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       </div>
                     )}
                   </button>
@@ -532,11 +542,11 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                   key={tileIndex}
                   disabled={!!viewingClassmateCity}
                   onClick={() => handleTileClick(tileIndex)}
-                  className="group relative rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-800 hover:border-cyan-400/80 bg-slate-900/40 hover:bg-slate-900/90 transition-all duration-200 flex flex-col items-center justify-center p-2 text-slate-600 hover:text-cyan-300 cursor-pointer disabled:cursor-default active:scale-95 shadow-inner"
+                  className="group relative rounded-xl sm:rounded-3xl border-2 border-dashed border-slate-800 hover:border-cyan-400/80 bg-slate-900/40 hover:bg-slate-900/90 transition-all duration-200 flex flex-col items-center justify-center p-1 sm:p-2 text-slate-600 hover:text-cyan-300 cursor-pointer disabled:cursor-default active:scale-95 shadow-inner"
                 >
-                  <Plus className="w-5 h-5 sm:w-6 sm:h-6 text-slate-700 group-hover:text-cyan-400 transition transform group-hover:rotate-90 duration-300" />
-                  <span className="text-[9px] font-mono mt-1 opacity-60 group-hover:opacity-100">
-                    {lang === 'en' ? `Plot ${tileIndex + 1}` : `Teren ${tileIndex + 1}`}
+                  <Plus className="w-4 h-4 sm:w-6 sm:h-6 text-slate-700 group-hover:text-cyan-400 transition transform group-hover:rotate-90 duration-300" />
+                  <span className="text-[8px] sm:text-[9px] font-mono mt-0.5 sm:mt-1 opacity-70 group-hover:opacity-100 tabular-nums">
+                    {lang === 'en' ? `#${tileIndex + 1}` : `#${tileIndex + 1}`}
                   </span>
                 </button>
               );
@@ -555,15 +565,23 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
       {/* ================= MODAL 1: CONSTRUCTION BLUEPRINT STORE ================= */}
       {activeModal === 'construct' && selectedTileIndex !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in select-none">
-          <div className="relative w-full max-w-3xl max-h-[85vh] bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setActiveModal('none')}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in select-none"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-3xl max-h-[85vh] bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+          >
             {/* Header */}
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border-b border-slate-800 flex items-center justify-between">
+            <div className="p-4 sm:p-5 bg-gradient-to-r from-cyan-950 via-slate-900 to-indigo-950 border-b border-slate-800 flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-lg font-black text-white font-heading">
+                <h3 className="text-base sm:text-lg font-black text-white font-heading">
                   {lang === 'en'
-                    ? `🏗️ Blueprint Construction Store • Plot #${selectedTileIndex + 1}`
-                    : `🏗️ Magazinul de Construcții • Terenul #${selectedTileIndex + 1}`}
+                    ? `🏗️ Blueprint Construction Store · Plot #${selectedTileIndex + 1}`
+                    : `🏗️ Magazinul de Construcții · Terenul #${selectedTileIndex + 1}`}
                 </h3>
                 <p className="text-xs text-slate-300">
                   {lang === 'en'
@@ -573,14 +591,15 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               </div>
               <button
                 onClick={() => setActiveModal('none')}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+                aria-label={lang === 'en' ? 'Close' : 'Închide'}
+                className="p-2 min-w-[36px] min-h-[36px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center shrink-0 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Category Filter Buttons */}
-            <div className="flex items-center gap-1.5 p-2 bg-slate-950 border-b border-slate-800 overflow-x-auto text-xs font-bold">
+            <div className="flex items-center gap-1.5 p-2.5 bg-slate-950 border-b border-slate-800 overflow-x-auto scrollbar-none text-xs font-bold">
               {[
                 { id: 'all', label: lang === 'en' ? 'All Buildings' : 'Toate Clădirile' },
                 { id: 'computing', label: lang === 'en' ? 'Computing & AI 🏢' : 'Calcul & AI 🏢' },
@@ -592,7 +611,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id as any)}
-                  className={`px-3 py-1.5 rounded-xl transition shrink-0 cursor-pointer ${
+                  className={`px-3 py-1.5 min-h-[36px] rounded-xl transition shrink-0 whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat.id
                       ? 'bg-cyan-500 text-slate-950 font-black'
                       : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -665,23 +684,31 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
       {/* ================= MODAL 2: BUILDING INSPECT & UPGRADE ================= */}
       {activeModal === 'inspect' && selectedBuildingData && selectedBuildingDef && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in select-none">
-          <div className="relative w-full max-w-xl bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setActiveModal('none')}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in select-none"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-xl bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+          >
             {/* Header */}
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">{selectedBuildingDef.icon}</span>
-                <div>
-                  <h3 className="text-lg font-black text-white font-heading">
+            <div className="p-4 sm:p-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-slate-800 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-3xl shrink-0">{selectedBuildingDef.icon}</span>
+                <div className="min-w-0">
+                  <h3 className="text-base sm:text-lg font-black text-white font-heading truncate">
                     {lang === 'en' ? selectedBuildingDef.nameEn : selectedBuildingDef.nameRo}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-amber-300 font-mono font-bold">
+                  <div className="flex items-center gap-2 text-xs text-amber-300 font-mono font-bold tabular-nums">
                     <span>
                       {lang === 'en'
                         ? `Level ${selectedBuildingData.level} / 5`
                         : `Nivel ${selectedBuildingData.level} / 5`}
                     </span>
-                    <span>•</span>
+                    <span aria-hidden="true">·</span>
                     <div className="flex">
                       {Array.from({ length: selectedBuildingData.level }).map((_, i) => (
                         <span key={i}>⭐</span>
@@ -693,7 +720,8 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
               <button
                 onClick={() => setActiveModal('none')}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+                aria-label={lang === 'en' ? 'Close' : 'Închide'}
+                className="p-2 min-w-[36px] min-h-[36px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center shrink-0 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -772,11 +800,19 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
 
       {/* ================= MODAL 3: CLASSMATES CITIES SHOWCASE ================= */}
       {activeModal === 'classmates' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in select-none">
-          <div className="relative w-full max-w-4xl max-h-[85vh] bg-slate-900 border-2 border-indigo-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 border-b border-slate-800 flex items-center justify-between">
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setActiveModal('none')}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-md animate-fade-in select-none"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-4xl max-h-[85vh] bg-slate-900 border-2 border-indigo-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+          >
+            <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 border-b border-slate-800 flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-lg font-black text-white font-heading">
+                <h3 className="text-base sm:text-lg font-black text-white font-heading">
                   {lang === 'en' ? '🏙️ Classmates Metropolis Gallery' : '🏙️ Galeria Metropolelor Clasei'}
                 </h3>
                 <p className="text-xs text-slate-300">
@@ -787,17 +823,18 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               </div>
               <button
                 onClick={() => setActiveModal('none')}
-                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+                aria-label={lang === 'en' ? 'Close' : 'Închide'}
+                className="p-2 min-w-[36px] min-h-[36px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center shrink-0 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Gallery Filter Tabs */}
-            <div className="flex items-center gap-1.5 p-2 bg-slate-950 border-b border-slate-800 overflow-x-auto text-xs font-bold">
+            <div className="flex items-center gap-1.5 p-2.5 bg-slate-950 border-b border-slate-800 overflow-x-auto scrollbar-none text-xs font-bold">
               <button
                 onClick={() => setGalleryFilter('all')}
-                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap ${
                   galleryFilter === 'all'
                     ? 'bg-cyan-500 text-slate-950 font-black'
                     : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -807,7 +844,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               </button>
               <button
                 onClick={() => setGalleryFilter('real')}
-                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap ${
                   galleryFilter === 'real'
                     ? 'bg-teal-500 text-slate-950 font-black'
                     : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -819,7 +856,7 @@ export const CyberCityView: React.FC<CyberCityViewProps> = ({
               </button>
               <button
                 onClick={() => setGalleryFilter('demo')}
-                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                className={`px-3 py-1.5 min-h-[36px] rounded-xl transition cursor-pointer shrink-0 whitespace-nowrap ${
                   galleryFilter === 'demo'
                     ? 'bg-amber-500 text-slate-950 font-black'
                     : 'text-slate-400 hover:text-white hover:bg-slate-900'

@@ -934,13 +934,14 @@ export const KnowledgePills: React.FC = () => {
         </div>
 
         {/* Grade switch pills */}
-        <div className="flex items-center gap-1.5 self-start lg:self-auto bg-slate-950/80 p-1 rounded-2xl border border-slate-800">
+        <div className="flex items-center gap-1 self-start lg:self-auto bg-slate-950/85 p-1 rounded-2xl border border-slate-800">
           <button
+            type="button"
             onClick={() => {
               sounds.playClick();
               setActiveGradeFilter('all');
             }}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-xl text-[11px] font-bold transition cursor-pointer whitespace-nowrap ${
               activeGradeFilter === 'all'
                 ? 'bg-cyan-500 text-slate-950 font-black shadow'
                 : 'text-slate-400 hover:text-white'
@@ -949,11 +950,12 @@ export const KnowledgePills: React.FC = () => {
             {lang === 'en' ? 'All Classes' : 'Toate Clasele'}
           </button>
           <button
+            type="button"
             onClick={() => {
               sounds.playClick();
               setActiveGradeFilter('g5');
             }}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-xl text-[11px] font-bold transition cursor-pointer whitespace-nowrap ${
               activeGradeFilter === 'g5'
                 ? 'bg-emerald-500 text-slate-950 font-black shadow'
                 : 'text-slate-400 hover:text-white'
@@ -962,11 +964,12 @@ export const KnowledgePills: React.FC = () => {
             {lang === 'en' ? 'Grade 5 (V)' : 'Clasa a V-a'}
           </button>
           <button
+            type="button"
             onClick={() => {
               sounds.playClick();
               setActiveGradeFilter('g6');
             }}
-            className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[34px] rounded-xl text-[11px] font-bold transition cursor-pointer whitespace-nowrap ${
               activeGradeFilter === 'g6'
                 ? 'bg-purple-500 text-white font-black shadow'
                 : 'text-slate-400 hover:text-white'
@@ -978,15 +981,16 @@ export const KnowledgePills: React.FC = () => {
       </div>
 
       {/* Category Horizontal Filter Bar */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3 scrollbar-thin">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3 scrollbar-none">
         {categories.map((cat) => (
           <button
             key={cat.id}
+            type="button"
             onClick={() => {
               sounds.playClick();
               setActiveCategory(cat.id);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 border cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 border cursor-pointer ${
               activeCategory === cat.id
                 ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-slate-950 border-cyan-400 shadow-md font-black'
                 : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 border-slate-700/80'
@@ -998,15 +1002,16 @@ export const KnowledgePills: React.FC = () => {
       </div>
 
       {/* Pill Buttons Responsive Scrolling Flow */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2.5 scrollbar-thin">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
         {filteredPills.map((pill) => {
           const isActive = selectedPill?.id === pill.id;
           const isG6 = pill.grade === 'g6';
           return (
             <button
               key={pill.id}
+              type="button"
               onClick={() => handleOpenPill(pill.id)}
-              className={`px-3 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2.5 shrink-0 border cursor-pointer ${
+              className={`px-3 py-2 min-h-[48px] rounded-2xl text-xs font-bold transition flex items-center gap-2.5 shrink-0 border cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-r from-cyan-500/30 to-teal-500/30 text-cyan-200 border-cyan-400 shadow-lg ring-1 ring-cyan-400'
                   : 'bg-slate-950/80 hover:bg-slate-800 text-slate-300 hover:text-white border-slate-700/80 hover:border-slate-600'
@@ -1017,15 +1022,15 @@ export const KnowledgePills: React.FC = () => {
                 <div className="font-bold leading-tight flex items-center gap-1.5">
                   <span className="whitespace-nowrap">{pill.shortTitle}</span>
                   {isG6 && (
-                    <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-black shrink-0">
+                    <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-mono font-black shrink-0">
                       VI
                     </span>
                   )}
                 </div>
                 <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1 mt-0.5">
                   <span className="truncate max-w-[130px]">{pill.tag}</span>
-                  <span className="shrink-0">•</span>
-                  <span className="shrink-0">p. {pill.bookPage}</span>
+                  <span aria-hidden="true" className="shrink-0">·</span>
+                  <span className="shrink-0 tabular-nums">p. {pill.bookPage}</span>
                 </div>
               </div>
               <ChevronRight className="w-3.5 h-3.5 text-slate-500 shrink-0 ml-0.5" />
@@ -1039,32 +1044,34 @@ export const KnowledgePills: React.FC = () => {
         <div className="mt-4 pt-4 border-t border-slate-700/80 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="bg-slate-950/95 border-2 border-cyan-500/50 rounded-2xl p-4 sm:p-6 relative shadow-2xl">
             <button
+              type="button"
               onClick={handleClose}
-              className="absolute top-3.5 right-3.5 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+              className="absolute top-3.5 right-3.5 p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
               title={t.pillClose}
+              aria-label={t.pillClose}
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-start sm:items-center gap-3 mb-2.5 pr-8">
+            <div className="flex items-start sm:items-center gap-3 mb-2.5 pr-10">
               <span className="text-3xl sm:text-4xl shrink-0">{selectedPill.emoji}</span>
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300 bg-cyan-500/20 px-2 py-0.5 rounded-full border border-cyan-500/40 font-mono">
+                <div className="flex items-center gap-x-2 gap-y-1 mb-1 flex-wrap text-[11px] font-mono">
+                  <span className="font-bold uppercase tracking-wider text-cyan-300">
                     {selectedPill.tag}
                   </span>
-                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border font-mono ${
-                    selectedPill.grade === 'g6'
-                      ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                      : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                  <span aria-hidden="true" className="text-slate-600">·</span>
+                  <span className={`font-bold uppercase ${
+                    selectedPill.grade === 'g6' ? 'text-purple-300' : 'text-emerald-300'
                   }`}>
                     {selectedPill.grade === 'g6' ? (lang === 'en' ? 'Grade 6 (VI)' : 'Clasa a VI-a') : (lang === 'en' ? 'Grade 5 (V)' : 'Clasa a V-a')}
                   </span>
-                  <span className="text-xs font-semibold text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md border border-slate-800 font-mono">
+                  <span aria-hidden="true" className="text-slate-600">·</span>
+                  <span className="font-semibold text-slate-400 tabular-nums">
                     {t.bookPagePrefix} {selectedPill.bookPage}
                   </span>
                 </div>
-                <h4 className="text-base sm:text-xl font-black text-white font-heading break-words">
+                <h4 className="text-base sm:text-xl font-black text-white font-heading break-words text-balance">
                   {selectedPill.title}
                 </h4>
               </div>

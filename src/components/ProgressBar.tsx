@@ -993,7 +993,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
     <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 shadow-xl backdrop-blur">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
-          <div className="text-3xl sm:text-4xl animate-float p-1 bg-slate-900/60 rounded-xl border border-slate-700/60">
+          <div className="text-3xl sm:text-4xl p-1.5 bg-slate-900/60 rounded-xl border border-slate-700/60 shrink-0">
             {currentStage.emoji}
           </div>
           <div>
@@ -1065,10 +1065,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-center">
+        <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
           <div className="text-right">
             <span className="text-xs text-slate-400 font-medium">{t.levelLabel}</span>
-            <span className="ml-1 text-sm font-extrabold text-white font-mono">
+            <span className="ml-1 text-sm font-extrabold text-white font-mono tabular-nums">
               {currentLevel <= maxLevels ? `${currentLevel} / ${maxLevels}` : t.victoryLabel}
             </span>
           </div>
@@ -1120,8 +1120,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentLevel, courseId
       </div>
 
       {/* Level Milestones below */}
-      <div className={`grid gap-1 sm:gap-1.5 mt-3 pt-2 text-center text-[10px] sm:text-xs font-semibold text-slate-400 ${
-        isHardware ? 'grid-cols-5' : (isInternet1 || isInternet2) ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-4 sm:grid-cols-7'
+      <div className={`grid gap-1.5 mt-3 pt-2 text-center text-[11px] sm:text-xs font-semibold text-slate-400 ${
+        isHardware
+          ? 'grid-cols-2 sm:grid-cols-5'
+          : (isInternet1 || isInternet2)
+          ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'
+          : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-7'
       }`}>
         {milestones.map((m, idx) => {
           const lvl = idx + 1;

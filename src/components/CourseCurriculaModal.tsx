@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   BookOpen,
@@ -35,6 +35,17 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
   const { lang } = useLanguage();
   const [activeTab, setActiveTab] = useState<'theory' | 'competencies' | 'vocab' | 'faq'>('theory');
   const [copiedLink, setCopiedLink] = useState(false);
+
+  useEffect(() => {
+    if (!module) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [module, onClose]);
 
   if (!module) return null;
 
@@ -74,40 +85,52 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-5 animate-in fade-in duration-200 overflow-y-auto">
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          sounds.playClick();
+          onClose();
+        }
+      }}
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-5 animate-in fade-in duration-200 overflow-y-auto"
+    >
       <div className="w-full max-w-4xl max-h-[92vh] flex flex-col bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden text-slate-100 my-auto">
-        {/* Header with gradient badge and badges */}
-        <div className="relative p-5 sm:p-6 pb-4 border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shrink-0">
+        {/* Header */}
+        <div className="relative p-4 sm:p-6 pb-4 border-b border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shrink-0">
           <button
+            type="button"
             onClick={() => {
               sounds.playClick();
               onClose();
             }}
-            className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+            className="absolute top-3.5 right-3.5 p-2 min-w-[38px] min-h-[38px] flex items-center justify-center rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
             aria-label={lang === 'en' ? 'Close' : 'Închide'}
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="flex flex-wrap items-center gap-2 mb-2.5">
-            <span className="px-2.5 py-1 rounded-lg text-xs font-bold font-mono bg-sky-500/20 text-sky-300 border border-sky-500/30">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mb-2.5 pr-10 text-xs font-mono">
+            <span className="px-2 py-0.5 rounded-md font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30">
               {gradeLabel}
             </span>
-            <span className="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 bg-slate-800 border border-slate-700">
+            <span className="text-slate-300 font-semibold">
               {resolvedUnit}
             </span>
-            <span className="px-2.5 py-1 rounded-lg text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1">
-              <GraduationCap className="w-3.5 h-3.5" />
+            <span aria-hidden="true" className="text-slate-600 hidden sm:inline">·</span>
+            <span className="text-[11px] text-emerald-400 inline-flex items-center gap-1">
+              <GraduationCap className="w-3.5 h-3.5 shrink-0" />
               {module.manualRef}
             </span>
           </div>
 
-          <div className="flex items-start gap-4">
-            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${module.color} flex items-center justify-center text-3xl shadow-lg shrink-0`}>
+          <div className="flex items-start gap-3.5">
+            <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br ${module.color} flex items-center justify-center text-2xl sm:text-3xl shadow-lg shrink-0`}>
               {module.icon}
             </div>
             <div className="min-w-0 pr-8">
-              <h2 className="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">
+              <h2 className="text-lg sm:text-2xl font-black text-white font-heading tracking-tight text-balance">
                 {resolvedTitle}
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 line-clamp-2">
@@ -117,13 +140,14 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-1.5 sm:gap-2 mt-5 overflow-x-auto no-scrollbar border-b border-slate-800/60 pb-1 -mb-1">
+          <div className="flex items-center gap-1.5 sm:gap-2 mt-4 overflow-x-auto scrollbar-none border-b border-slate-800/60 pb-1 -mb-1">
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 setActiveTab('theory');
               }}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer shrink-0 ${
+              className={`flex items-center gap-2 px-3.5 py-2 min-h-[38px] rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer shrink-0 whitespace-nowrap ${
                 activeTab === 'theory'
                   ? 'bg-sky-600 text-white shadow-md shadow-sky-900/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -329,43 +353,47 @@ export const CourseCurriculaModal: React.FC<CourseCurriculaModalProps> = ({
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-950 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={handlePrint}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3.5 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               title={lang === 'en' ? 'Print worksheet for classroom' : 'Tipărește fișa didactică pentru clasă'}
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{lang === 'en' ? 'Print Worksheet' : 'Tipărește Fișa'}</span>
+              <Printer className="w-3.5 h-3.5 shrink-0" />
+              <span>{lang === 'en' ? 'Print Worksheet' : 'Tipărește Fișa'}</span>
             </button>
 
             <button
+              type="button"
               onClick={handleCopyLink}
-              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              className="px-3.5 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap"
               title={lang === 'en' ? 'Copy direct link for students/teachers' : 'Copiază link-ul direct pentru elevi/profesori'}
             >
-              {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> : <Copy className="w-3.5 h-3.5 shrink-0" />}
               <span>{copiedLink ? (lang === 'en' ? 'Link Copied!' : 'Link Copiat!') : (lang === 'en' ? 'Copy Link' : 'Copiază Link')}</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
+              type="button"
               onClick={() => {
                 sounds.playClick();
                 onClose();
               }}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white text-xs font-bold transition cursor-pointer"
+              className="px-4 py-2 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold transition cursor-pointer whitespace-nowrap"
             >
               {lang === 'en' ? 'Close' : 'Închide'}
             </button>
 
             <button
+              type="button"
               onClick={handleStartMission}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-emerald-950/50 transition cursor-pointer hover:scale-105 active:scale-95"
+              className="flex-1 sm:flex-none justify-center px-5 py-2.5 min-h-[42px] rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold flex items-center gap-2 shadow-lg shadow-emerald-950/50 transition cursor-pointer active:scale-95 whitespace-nowrap"
             >
-              <Play className="w-4 h-4 fill-white" />
+              <Play className="w-4 h-4 fill-white shrink-0" />
               <span>{lang === 'en' ? 'Launch Interactive Mission' : 'Lansează Misiunea Interactivă'}</span>
             </button>
           </div>

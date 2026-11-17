@@ -354,7 +354,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
             sounds.playClick();
             onBackToHome();
           }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0 self-start md:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0 self-start md:self-auto"
         >
           <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
           <span>{isEn ? 'Back to Courses' : 'Înapoi la Cursuri'}</span>
@@ -367,7 +367,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
         <div
           role="tablist"
           aria-label={isEn ? 'Programming language' : 'Limbaj de programare'}
-          className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-800 self-start"
+          className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-800 self-start overflow-x-auto scrollbar-none max-w-full"
         >
           {(
             [
@@ -388,7 +388,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                   const firstId = SANDBOX_CHALLENGES.find((c) => c.language === item.id)?.id || 'free';
                   loadWorkspace(item.id, firstId);
                 }}
-                className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-3.5 py-2 min-h-[38px] rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   active
                     ? 'bg-emerald-600 text-white shadow-sm'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
@@ -401,7 +401,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
         </div>
 
         {/* Challenge Selector Buttons */}
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 lg:flex-wrap max-w-full">
           {langChallenges.map((ch, idx) => {
             const isActive = selectedChallengeId === ch.id;
             const isSolved = solvedIds.includes(ch.id);
@@ -413,7 +413,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                   sounds.playClick();
                   loadWorkspace(selectedLang, ch.id);
                 }}
-                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
                     ? 'bg-slate-800 border-emerald-400/70 text-white'
                     : 'bg-slate-900/70 border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
@@ -432,7 +432,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
               sounds.playClick();
               loadWorkspace(selectedLang, 'free');
             }}
-            className={`px-3 py-2 rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+            className={`px-3 py-2 min-h-[38px] rounded-lg border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
               selectedChallengeId === 'free'
                 ? 'bg-slate-800 border-sky-400/70 text-white'
                 : 'bg-slate-900/70 border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
@@ -482,7 +482,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
               <button
                 type="button"
                 onClick={() => setShowHint((prev) => !prev)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 <HelpCircle className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
                 <span>{showHint ? (isEn ? 'Hide Hint' : 'Ascunde Indiciu') : (isEn ? 'Show Hint' : 'Indiciu')}</span>
@@ -490,7 +490,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectMission(activeChallenge.relatedModuleId as AllMissionId)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-teal-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-teal-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{isEn ? 'Related Lesson' : 'Lecția Conectată'}</span>
@@ -501,7 +501,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                   onClick={() =>
                     onOpenBlog(isEn ? activeChallenge.relatedBlogSlugEn : activeChallenge.relatedBlogSlugRo)
                   }
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-sky-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-sky-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
                 >
                   <span>{isEn ? 'Study Guide' : 'Ghid Blog'}</span>
                 </button>
@@ -534,7 +534,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                   <button
                     type="button"
                     onClick={() => setHtmlTab('html')}
-                    className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold cursor-pointer whitespace-nowrap ${
+                    className={`px-2.5 py-1 min-h-[32px] rounded-md text-xs font-mono font-semibold cursor-pointer whitespace-nowrap ${
                       htmlTab === 'html' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -543,7 +543,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                   <button
                     type="button"
                     onClick={() => setHtmlTab('css')}
-                    className={`px-2.5 py-1 rounded-md text-xs font-mono font-semibold cursor-pointer whitespace-nowrap ${
+                    className={`px-2.5 py-1 min-h-[32px] rounded-md text-xs font-mono font-semibold cursor-pointer whitespace-nowrap ${
                       htmlTab === 'css' ? 'bg-slate-800 text-white' : 'text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -560,11 +560,11 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{isEn ? 'Reset' : 'Resetează'}</span>
@@ -573,7 +573,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
               <button
                 type="button"
                 onClick={handleRunOnly}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Play className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                 <span>{isEn ? 'Run' : 'Rulează'}</span>
@@ -585,7 +585,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                   onClick={() => {
                     void handleVerifyChallenge();
                   }}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>{isEn ? 'Verify Solution' : 'Verifică Soluția'}</span>
@@ -595,7 +595,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
           </div>
 
           {/* Code Textarea + Line Numbers */}
-          <div className="flex flex-1 min-h-[320px] sm:min-h-[380px] bg-slate-950 font-mono text-xs sm:text-sm">
+          <div className="flex flex-1 min-h-[260px] sm:min-h-[380px] bg-slate-950 font-mono text-xs sm:text-sm">
             <div
               aria-hidden="true"
               className="select-none py-3.5 px-3 text-right text-slate-500 bg-slate-900/60 border-r border-slate-800/80 tabular-nums leading-6 min-w-[2.75rem]"

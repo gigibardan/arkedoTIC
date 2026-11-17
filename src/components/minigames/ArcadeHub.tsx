@@ -70,6 +70,8 @@ import {
   LayoutTemplate,
   Rocket,
   Ghost,
+  Search,
+  X,
 } from 'lucide-react';
 
 interface ArcadeHubProps {
@@ -79,13 +81,61 @@ interface ArcadeHubProps {
 }
 
 type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master' | 'cyber_invaders' | 'cyber_pacman' | 'cyber_arkanoid' | 'cyber_frogger' | 'cyber_sokoban' | 'cyber_asteroids';
+type ArcadeCategory = 'all' | 'retro' | 'logic' | 'cyber' | 'agility';
+
+const ARCADE_CARD_META: Record<Exclude<ActiveGame, 'hub'>, { cat: Exclude<ArcadeCategory, 'all'>; search: string }> = {
+  cyber_asteroids: { cat: 'retro', search: 'asteroids 1979 vector space ship boss ozn' },
+  cyber_sokoban: { cat: 'retro', search: 'sokoban 1982 server crates portals logic' },
+  cyber_frogger: { cat: 'retro', search: 'frogger 1981 network hopper trojan server' },
+  cyber_arkanoid: { cat: 'retro', search: 'arkanoid 1986 brick breaker firewall laser' },
+  cyber_pacman: { cat: 'retro', search: 'pacman retro bit crusher ghosts maze' },
+  cyber_invaders: { cat: 'retro', search: 'invaders space galaxy malware overclock' },
+  cyber_dino: { cat: 'retro', search: 'dino matrix rush chrome runner laser' },
+  '2048': { cat: 'logic', search: '2048 binar binary bytes puzzle puteri 2' },
+  redstone_lab: { cat: 'logic', search: 'redstone minecraft circuite logic gates ram alu' },
+  binary_factory: { cat: 'logic', search: 'decodor binar bit factory 0 1 switches' },
+  maze: { cat: 'logic', search: 'labirint algoritmic maze robot loops' },
+  byte_slider: { cat: 'logic', search: 'byte slider jocul 15 puzzle bit kb mb gb' },
+  cyber_snake: { cat: 'logic', search: 'snake sarpele algoritmic scratch code' },
+  detective: { cat: 'cyber', search: 'detectiv cyber-safe phishing sms email lupa' },
+  firewall: { cat: 'cyber', search: 'firewall defender scut antivirus network port' },
+  virus_sweeper: { cat: 'cyber', search: 'minesweeper virus sweeper cautatorul de virusi' },
+  hacker_defense: { cat: 'cyber', search: 'hacker vs defender atac peticire 1v1' },
+  pcbuilder: { cat: 'cyber', search: 'pc builder constructor cpu ram ssd gpu' },
+  circuit_master: { cat: 'cyber', search: 'circuit master arduino smart city sensors' },
+  voxel_architect: { cat: 'cyber', search: 'minecraft voxel architect ram alu gates' },
+  typing: { cat: 'agility', search: 'typing vitezomanul tastaturii wpm cuvinte' },
+  mouse: { cat: 'agility', search: 'mouse master maestrul click drag drop' },
+  mouse_v2: { cat: 'agility', search: 'mouse master 2.0 pro cps laser dpi' },
+  files: { cat: 'agility', search: 'sortatorul de fisiere file organizer docx jpg zip' },
+  file_drop: { cat: 'agility', search: 'file drop tetris fisiere extensii' },
+  rgb_pixel: { cat: 'agility', search: 'rgb pixel master grafica culori bitmap' },
+  roblox_clicker: { cat: 'agility', search: 'roblox blox clicker pet gacha boss' },
+  page_craft: { cat: 'agility', search: 'pagecraft word layout tabele revista a4' },
+};
 
 export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
   const [activeGame, setActiveGame] = useState<ActiveGame>('hub');
+  const [arcadeCategory, setArcadeCategory] = useState<ArcadeCategory>('all');
+  const [arcadeSearch, setArcadeSearch] = useState('');
   const [gameSettings, setGameSettings] = useState<GameSettings>(DEFAULT_GAME_SETTINGS);
   const [lockedModalInfo, setLockedModalInfo] = useState<{ id: string; title: string } | null>(null);
   const [allTimeRecords, setAllTimeRecords] = useState<Record<string, GameRecord>>({});
+
+  const isArcadeCardVisible = (gameId: Exclude<ActiveGame, 'hub'>) => {
+    const meta = ARCADE_CARD_META[gameId];
+    if (!meta) return true;
+    const catMatch = arcadeCategory === 'all' || meta.cat === arcadeCategory;
+    if (!catMatch) return false;
+    const q = arcadeSearch.trim().toLowerCase();
+    if (!q) return true;
+    const def = ALL_GAMES.find((g) => g.id === gameId);
+    const haystack = `${meta.search} ${def?.titleRo || ''} ${def?.titleEn || ''}`.toLowerCase();
+    return haystack.includes(q);
+  };
+
+  const visibleGamesCount = (Object.keys(ARCADE_CARD_META) as Exclude<ActiveGame, 'hub'>[]).filter(isArcadeCardVisible).length;
 
   useEffect(() => {
     const unsub = subscribeGameSettings((settings) => {
@@ -365,7 +415,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
       <div className="flex flex-col items-center justify-center p-6 min-h-[50vh] text-center">
         <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl">
           <div className="w-16 h-16 rounded-2xl bg-rose-500/20 border-2 border-rose-500/40 flex items-center justify-center text-rose-400 mx-auto mb-3 shadow-lg">
-            <Lock className="w-8 h-8 animate-pulse" />
+            <Lock className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-black text-white font-heading">
             {title}
@@ -387,7 +437,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                 sounds.playClick();
                 setActiveGame('hub');
               }}
-              className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer"
+              className="w-full min-h-[40px] py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer"
             >
               ← {lang === 'en' ? 'Back to Mini-Games Catalog' : 'Înapoi la Mini-Jocuri'}
             </button>
@@ -398,7 +448,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                   title,
                 });
               }}
-              className="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs cursor-pointer"
+              className="w-full min-h-[40px] py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs cursor-pointer"
             >
               {lang === 'en' ? 'Request Unlock 🙋‍♂️' : 'Solicită Deschiderea Jocului 🙋‍♂️'}
             </button>
@@ -624,7 +674,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           id={buttonId}
           type="button"
           onClick={() => handleTryLaunchGame(gameId, titleRo, titleEn)}
-          className="px-3.5 py-2 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-rose-900/30 cursor-pointer active:scale-95"
+          className="min-h-[38px] px-3.5 py-2 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-rose-900/30 cursor-pointer active:scale-95 shrink-0"
           title={lang === 'en' ? 'Game locked by teacher' : 'Joc închis de profesor'}
         >
           <Lock className="w-3.5 h-3.5 text-rose-400" />
@@ -637,7 +687,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         id={buttonId}
         type="button"
         onClick={() => handleTryLaunchGame(gameId, titleRo, titleEn)}
-        className={`px-3.5 py-2 rounded-xl ${bgClass} text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg cursor-pointer active:scale-95`}
+        className={`min-h-[38px] px-3.5 py-2 rounded-xl ${bgClass} text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg cursor-pointer active:scale-95 shrink-0`}
       >
         <span>{lang === 'en' ? actionLabelEn : actionLabelRo}</span>
         <ArrowRight className="w-3.5 h-3.5" />
@@ -673,7 +723,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
     const effectivePB = Math.max(localScore, studentCloudScore);
 
     return (
-      <div className="flex flex-col items-end gap-1 shrink-0">
+      <div className="flex flex-col items-end gap-1 shrink-0 tabular-nums">
         {/* Personal Best */}
         <div
           className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-[11px] font-mono text-cyan-300 shadow-sm"
@@ -681,7 +731,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         >
           <Trophy className="w-3.5 h-3.5 text-amber-400 shrink-0" />
           <span className="text-[10px] text-slate-400 font-bold uppercase">{lang === 'en' ? 'PB:' : 'Tu:'}</span>
-          <span className="font-bold text-white">{effectivePB.toLocaleString()} {unit}</span>
+          <span className="font-bold text-white tabular-nums">{effectivePB.toLocaleString()} {unit}</span>
         </div>
 
         {/* System High Score Record & Record Holder */}
@@ -689,10 +739,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-950/50 border border-amber-500/40 text-[10px] font-mono text-amber-300 shadow-sm max-w-[155px] sm:max-w-[200px]"
           title={lang === 'en' ? 'All-Time System High Score Record' : 'Recordul absolut din sistem pe acest joc'}
         >
-          <Crown className="w-3 h-3 text-amber-400 shrink-0 animate-pulse" />
+          <Crown className="w-3 h-3 text-amber-400 shrink-0" />
           {record && record.bestScore > 0 ? (
             <span className="truncate">
-              <span className="font-bold text-amber-200">{record.bestScore.toLocaleString()}</span>
+              <span className="font-bold text-amber-200 tabular-nums">{record.bestScore.toLocaleString()}</span>
               <span className="text-amber-400/70 mx-1">•</span>
               <span className="text-amber-100 font-medium">{record.holderAvatar || '👤'} {record.holderName}</span>
             </span>
@@ -712,19 +762,19 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
               <button
                 onClick={() => {
                   sounds.playClick();
                   onBackToCatalog();
                 }}
-                className="px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+                className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95"
               >
                 <ArrowLeft className="w-4 h-4 text-emerald-400" />
                 <span>{lang === 'en' ? 'Back to Missions' : 'Înapoi la Cursuri'}</span>
               </button>
 
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
+              <div className="inline-flex items-center gap-1.5 min-h-[38px] px-3 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
                 <Gamepad2 className="w-4 h-4 text-indigo-400" />
                 <span>{lang === 'en' ? 'ArkyLab Arcade' : 'Laboratorul Arcade ArkyLab'}</span>
               </div>
@@ -735,15 +785,15 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                     sounds.playClick();
                     onOpenDuel();
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white border border-rose-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-lg shadow-rose-600/30"
+                  className="min-h-[38px] px-3 py-1.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white border border-rose-400 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer active:scale-95 shadow-lg shadow-rose-600/30"
                 >
-                  <Swords className="w-4 h-4 text-amber-300 animate-pulse" />
+                  <Swords className="w-4 h-4 text-amber-300" />
                   <span>{lang === 'en' ? 'Duel Arena 1v1' : 'Arena Duel 1v1'}</span>
                 </button>
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-white font-heading tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-white font-heading tracking-tight text-balance">
               {lang === 'en' ? 'Digital Agility & Logic Mini-Games' : 'Mini-Jocuri Educative & Antrenament TIC'}
             </h1>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed mt-2.5">
@@ -754,18 +804,18 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           </div>
 
           {/* Student Status Card */}
-          <div className="bg-slate-900/90 border border-indigo-500/30 rounded-2xl p-4 flex items-center gap-3.5 shadow-xl shrink-0 backdrop-blur">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl shadow">
+          <div className="w-full md:w-auto bg-slate-900/90 border border-indigo-500/30 rounded-2xl p-4 flex items-center gap-3.5 shadow-xl shrink-0 backdrop-blur">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl shadow shrink-0">
               {avatar}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="text-[11px] font-mono text-indigo-300">
                 {lang === 'en' ? 'Player Profile' : 'Profil Jucător'}
               </div>
-              <div className="text-sm font-black text-white font-heading">
+              <div className="text-sm font-black text-white font-heading truncate">
                 {studentName || (lang === 'en' ? 'Guest Cadet' : 'Elev Neînregistrat')}
               </div>
-              <div className="text-[11px] text-emerald-400 font-mono mt-0.5">
+              <div className="text-[11px] text-emerald-400 font-mono mt-0.5 tabular-nums">
                 {ALL_GAMES.filter((g) => g.id !== 'duel' && isGameOpen(gameSettings, g.id)).length} / {ALL_GAMES.filter((g) => g.id !== 'duel').length} {lang === 'en' ? 'Games Open' : 'Jocuri Deschise'}
               </div>
             </div>
@@ -773,9 +823,62 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         </div>
       </div>
 
+      {/* Category Filter Tabs + Search Strip */}
+      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 sm:p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 lg:pb-0">
+          {(
+            [
+              { id: 'all', ro: '🎮 Toate (28)', en: '🎮 All (28)' },
+              { id: 'retro', ro: '🕹️ Retro Arcade (7)', en: '🕹️ Retro Arcade (7)' },
+              { id: 'logic', ro: '🧠 Logică & Cod (6)', en: '🧠 Logic & Code (6)' },
+              { id: 'cyber', ro: '🛡️ Cyber & Hardware (7)', en: '🛡️ Cyber & Hardware (7)' },
+              { id: 'agility', ro: '⚡ Viteză & Creativ (8)', en: '⚡ Agility & Creative (8)' },
+            ] as const
+          ).map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                setArcadeCategory(cat.id);
+              }}
+              className={`min-h-[38px] px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 transition cursor-pointer ${
+                arcadeCategory === cat.id
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/25'
+                  : 'bg-slate-950/80 text-slate-300 hover:text-white border border-slate-800'
+              }`}
+            >
+              {lang === 'en' ? cat.en : cat.ro}
+            </button>
+          ))}
+        </div>
+
+        <div className="relative w-full lg:w-72 shrink-0">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            value={arcadeSearch}
+            onChange={(e) => setArcadeSearch(e.target.value)}
+            placeholder={lang === 'en' ? 'Search mini-game (e.g. Pac-Man, Mouse)...' : 'Caută un mini-joc (ex: Pac-Man, Binar)...'}
+            className="w-full min-h-[40px] pl-9 pr-9 py-2 rounded-xl bg-slate-950 border border-slate-700 focus:border-indigo-500 text-xs text-white placeholder-slate-500 outline-none transition"
+          />
+          {arcadeSearch && (
+            <button
+              type="button"
+              onClick={() => setArcadeSearch('')}
+              aria-label={lang === 'en' ? 'Clear search' : 'Șterge căutarea'}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {/* Featured Game: Cyber Asteroids (NEW 1979 Vector Space Shooter) */}
+        {isArcadeCardVisible('cyber_asteroids') && (
         <div className={`bg-gradient-to-br from-slate-900 via-sky-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_asteroids') ? 'border-sky-400/80 hover:border-sky-300 shadow-sky-500/15' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -811,7 +914,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-sky-300 font-mono font-bold">🚀 1979 Vector Classic</span>
             {renderGameActionButton(
               'cyber_asteroids',
@@ -823,8 +926,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Featured Game: Cyber Sokoban (NEW 1982 Server Logistics Puzzle) */}
+        {isArcadeCardVisible('cyber_sokoban') && (
         <div className={`bg-gradient-to-br from-slate-900 via-orange-950/40 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_sokoban') ? 'border-orange-400/80 hover:border-orange-300 shadow-orange-500/15' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -860,7 +965,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-orange-300 font-mono font-bold">🧩 1982 Logic Classic</span>
             {renderGameActionButton(
               'cyber_sokoban',
@@ -872,8 +977,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Featured Game: Cyber Frogger (NEW 1981 Network Hopper) */}
+        {isArcadeCardVisible('cyber_frogger') && (
         <div className={`bg-gradient-to-br from-slate-900 via-emerald-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_frogger') ? 'border-emerald-400/80 hover:border-emerald-300 shadow-emerald-500/15' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -909,7 +1016,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-emerald-300 font-mono font-bold">🕹️ 1981 Retro Arcade</span>
             {renderGameActionButton(
               'cyber_frogger',
@@ -921,8 +1028,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Featured Game: Cyber Arkanoid (NEW 1986 Brick Breaker) */}
+        {isArcadeCardVisible('cyber_arkanoid') && (
         <div className={`bg-gradient-to-br from-slate-900 via-sky-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_arkanoid') ? 'border-sky-400/80 hover:border-sky-300 shadow-sky-500/15' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -958,7 +1067,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-sky-300 font-mono font-bold">🕹️ 1986 Retro Arcade</span>
             {renderGameActionButton(
               'cyber_arkanoid',
@@ -970,8 +1079,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Featured Game 1: Cyber Pac-Man (NEW Authentic 1980s Retro Arcade) */}
+        {isArcadeCardVisible('cyber_pacman') && (
         <div className={`bg-gradient-to-br from-slate-900 via-amber-950/40 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_pacman') ? 'border-yellow-400/80 hover:border-yellow-300 shadow-yellow-500/15' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1008,7 +1119,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-yellow-300 font-mono font-bold">🕹️ 1980s Retro Arcade</span>
             {renderGameActionButton(
               'cyber_pacman',
@@ -1020,8 +1131,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Featured Game: Cyber Invaders (NEW Space Arcade 1980s) */}
+        {isArcadeCardVisible('cyber_invaders') && (
         <div className={`bg-gradient-to-br from-slate-900 via-indigo-950/60 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_invaders') ? 'border-cyan-500/70 hover:border-cyan-400 shadow-cyan-500/10' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1029,7 +1142,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           <div>
             <div className="flex items-start justify-between gap-2 mb-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 border border-cyan-400/50 flex items-center justify-center text-white shadow-lg shadow-cyan-500/30 group-hover:scale-110 transition-transform shrink-0">
-                <Rocket className="w-6 h-6 animate-pulse" />
+                <Rocket className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('cyber_invaders')}
@@ -1057,7 +1170,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-cyan-300 font-mono font-bold">👾 1980s Retro Arcade</span>
             {renderGameActionButton(
               'cyber_invaders',
@@ -1069,8 +1182,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 1: Speed Typing */}
+        {isArcadeCardVisible('typing') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'typing') ? 'border-slate-700/80 hover:border-cyan-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1100,7 +1215,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">⏱️ 30s / 60s</span>
             {renderGameActionButton(
               'typing',
@@ -1112,8 +1227,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 2: Mouse Agility */}
+        {isArcadeCardVisible('mouse') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'mouse') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1143,7 +1260,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">⏱️ 45s</span>
             {renderGameActionButton(
               'mouse',
@@ -1155,8 +1272,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 2B: Mouse Agility V2 (PRO COMPLEX) */}
+        {isArcadeCardVisible('mouse_v2') && (
         <div className={`bg-gradient-to-b from-slate-900 to-slate-950 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'mouse_v2') ? 'border-cyan-500/40 hover:border-cyan-400 shadow-cyan-950/30' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1191,7 +1310,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-cyan-300 font-mono font-bold">10 Etape • CPS Lab</span>
             {renderGameActionButton(
               'mouse_v2',
@@ -1203,8 +1322,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 3: 2048 Binary */}
+        {isArcadeCardVisible('2048') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, '2048') ? 'border-slate-700/80 hover:border-amber-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1239,7 +1360,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🧠 Puzzle</span>
             {renderGameActionButton(
               '2048',
@@ -1251,8 +1372,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 4: PC Builder (Constructorul de PC-uri - Misiunea Hardware) */}
+        {isArcadeCardVisible('pcbuilder') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'pcbuilder') ? 'border-slate-700/80 hover:border-blue-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1282,7 +1405,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🖥️ 3 Niveluri & POST</span>
             {renderGameActionButton(
               'pcbuilder',
@@ -1294,8 +1417,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 5: Cyber Dino: Matrix Rush (Dinozaurul Chrome TIC) */}
+        {isArcadeCardVisible('cyber_dino') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-emerald-950/30 to-slate-900 ${
           isGameOpen(gameSettings, 'cyber_dino') ? 'border-emerald-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1329,7 +1454,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri & Lasere</span>
             {renderGameActionButton(
               'cyber_dino',
@@ -1342,8 +1467,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 6: Cyber-Safe Detective */}
+        {isArcadeCardVisible('detective') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'detective') ? 'border-slate-700/80 hover:border-rose-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1373,7 +1500,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🔍 8 Cazuri & Lupă</span>
             {renderGameActionButton(
               'detective',
@@ -1385,8 +1512,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 7: File Organizer Express */}
+        {isArcadeCardVisible('files') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'files') ? 'border-slate-700/80 hover:border-blue-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1416,7 +1545,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">⏱️ 45s Sprint</span>
             {renderGameActionButton(
               'files',
@@ -1428,8 +1557,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 8: Redstone Logic Lab (Minecraft TIC Edition) - Position 8 */}
+        {isArcadeCardVisible('redstone_lab') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden bg-gradient-to-b from-rose-950/25 to-slate-900 ${
           isGameOpen(gameSettings, 'redstone_lab') ? 'border-rose-500/60 hover:border-rose-400' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1455,7 +1586,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
             <h3 className="text-lg font-black text-white font-heading group-hover:text-rose-300 transition-colors flex items-center gap-1.5">
               <span>{lang === 'en' ? 'Redstone Logic Lab' : 'Circuite Redstone'}</span>
-              <Zap className="w-4 h-4 text-rose-400 animate-pulse" />
+              <Zap className="w-4 h-4 text-rose-400" />
             </h3>
 
             <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
@@ -1465,7 +1596,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-rose-400 font-mono">💎 Diamante & XP</span>
             {renderGameActionButton(
               'redstone_lab',
@@ -1478,8 +1609,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 9: Binary Bit Factory */}
+        {isArcadeCardVisible('binary_factory') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'binary_factory') ? 'border-slate-700/80 hover:border-amber-400/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1509,7 +1642,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">💡 4 sau 8 Biți</span>
             {renderGameActionButton(
               'binary_factory',
@@ -1521,8 +1654,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 10: Algorithm Maze Robot */}
+        {isArcadeCardVisible('maze') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'maze') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1552,7 +1687,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🤖 5 Niveluri TIC</span>
             {renderGameActionButton(
               'maze',
@@ -1564,8 +1699,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 11: Firewall Defender */}
+        {isArcadeCardVisible('firewall') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'firewall') ? 'border-slate-700/80 hover:border-red-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1595,7 +1732,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🛡️ 45s Defensă</span>
             {renderGameActionButton(
               'firewall',
@@ -1607,8 +1744,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 12: RGB Pixel Master (Grafică Digitală 2D & Pixeli) */}
+        {isArcadeCardVisible('rgb_pixel') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'rgb_pixel') ? 'border-slate-700/80 hover:border-purple-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1638,7 +1777,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🎨 3 Moduri TIC</span>
             {renderGameActionButton(
               'rgb_pixel',
@@ -1650,8 +1789,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 13: Byte Slider 3x3 (Puzzle-ul Unităților de Date & Jocul 15) */}
+        {isArcadeCardVisible('byte_slider') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'byte_slider') ? 'border-slate-700/80 hover:border-emerald-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1681,7 +1822,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🧩 8 Unități + Liber</span>
             {renderGameActionButton(
               'byte_slider',
@@ -1694,8 +1835,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 14: File-Drop (Tetris cu Fișiere & Extensii) */}
+        {isArcadeCardVisible('file_drop') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'file_drop') ? 'border-slate-700/80 hover:border-sky-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1727,7 +1870,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">⚡ 5 Foldere + Stack</span>
             {renderGameActionButton(
               'file_drop',
@@ -1740,8 +1883,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 15: Cyber-Safe Minesweeper (Căutătorul de Viruși) */}
+        {isArcadeCardVisible('virus_sweeper') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'virus_sweeper') ? 'border-slate-700/80 hover:border-rose-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1749,7 +1894,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           <div>
             <div className="flex items-start justify-between gap-2 mb-3">
               <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border-2 border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shrink-0">
-                <Biohazard className="w-6 h-6 animate-pulse" />
+                <Biohazard className="w-6 h-6" />
               </div>
               <div className="flex items-center gap-2">
                 {renderCardLockBadge('virus_sweeper')}
@@ -1773,7 +1918,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 font-mono">🛡️ Scut + Sonar + Buffer</span>
             {renderGameActionButton(
               'virus_sweeper',
@@ -1786,8 +1931,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 16: Roblox Blox Clicker Champion (Hardware Clicker, Pet Gacha & Boss Raids) */}
+        {isArcadeCardVisible('roblox_clicker') && (
         <div className={`bg-gradient-to-b from-slate-900 via-rose-950/30 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'roblox_clicker') ? 'border-rose-500/60 hover:border-rose-400' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1824,7 +1971,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-rose-400 font-mono">⚡ Clicker + Gacha + PvP</span>
             {renderGameActionButton(
               'roblox_clicker',
@@ -1837,8 +1984,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 17: Minecraft Voxel Logic Architect (Arhitectul de Calculatoare Voxel) */}
+        {isArcadeCardVisible('voxel_architect') && (
         <div className={`bg-gradient-to-b from-stone-900 via-emerald-950/20 to-stone-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'voxel_architect') ? 'border-emerald-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1875,7 +2024,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-stone-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-stone-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-emerald-400 font-mono">⚡ 15 PWR + Porți Logice</span>
             {renderGameActionButton(
               'voxel_architect',
@@ -1888,8 +2037,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 18: PageCraft: Table & Layout Architect (Module 4B) */}
+        {isArcadeCardVisible('page_craft') && (
         <div className={`bg-slate-900/90 border-2 rounded-3xl p-5 shadow-xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 ${
           isGameOpen(gameSettings, 'page_craft') ? 'border-slate-700/80 hover:border-indigo-500/60' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1925,7 +2076,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-indigo-400 font-mono">⚡ Blitz 60s + Studio Live</span>
             {renderGameActionButton(
               'page_craft',
@@ -1938,8 +2089,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 19: Hacker vs. Defender (Atac & Peticire 1v1) */}
+        {isArcadeCardVisible('hacker_defense') && (
         <div className={`bg-gradient-to-b from-slate-900 via-rose-950/25 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'hacker_defense') ? 'border-rose-500/60 hover:border-emerald-400' : 'border-rose-500/40 opacity-95'
         }`}>
@@ -1976,7 +2129,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-emerald-400 font-mono">🛡️ 2 Runde x 45s + Salvare DB sigură</span>
             {renderGameActionButton(
               'hacker_defense',
@@ -1989,8 +2142,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 20: Cyber Snake / Șarpele Algoritmic 🐍 (Gândire Algoritmică & Scratch) */}
+        {isArcadeCardVisible('cyber_snake') && (
         <div className={`bg-gradient-to-b from-slate-900 via-emerald-950/25 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'cyber_snake') ? 'border-emerald-500/60 hover:border-cyan-400' : 'border-emerald-500/40 opacity-95'
         }`}>
@@ -2027,7 +2182,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-emerald-400 font-mono">⚡ 3 Moduri + Coadă Script</span>
             {renderGameActionButton(
               'cyber_snake',
@@ -2040,8 +2195,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
 
         {/* Game 21: Circuit Master Retro 80s: Arduino & Smart City ⚡ */}
+        {isArcadeCardVisible('circuit_master') && (
         <div className={`bg-gradient-to-b from-slate-900 via-amber-950/20 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
           isGameOpen(gameSettings, 'circuit_master') ? 'border-amber-500/60 hover:border-amber-400' : 'border-amber-500/40 opacity-95'
         }`}>
@@ -2078,7 +2235,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             </p>
           </div>
 
-          <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] text-amber-400 font-mono">⚡ 4 Etape Hardware + Boss Grid</span>
             {renderGameActionButton(
               'circuit_master',
@@ -2091,7 +2248,32 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             )}
           </div>
         </div>
+        )}
       </div>
+
+      {/* Empty Search / Category State */}
+      {visibleGamesCount === 0 && (
+        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-8 text-center">
+          <div className="text-4xl mb-3">🎮</div>
+          <h3 className="text-lg font-black text-white font-heading">
+            {lang === 'en' ? 'No mini-games match your filter' : 'Niciun mini-joc nu se potrivește filtrului'}
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 mb-4">
+            {lang === 'en' ? 'Reset filters to see all 28 educational mini-games.' : 'Resetează filtrele pentru a vedea toate cele 28 de mini-jocuri educative.'}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              setArcadeCategory('all');
+              setArcadeSearch('');
+            }}
+            className="min-h-[40px] px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold cursor-pointer"
+          >
+            {lang === 'en' ? 'Show All Mini-Games' : 'Arată Toate Jocurile'}
+          </button>
+        </div>
+      )}
 
       {/* Featured 1v1 Realtime Duel Arena Card (Placed after games grid) */}
       {onOpenDuel && (
@@ -2108,19 +2290,19 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
                   : 'bg-rose-950 border border-rose-500/50 text-rose-400 ring-rose-500/20'
               }`}>
                 {isGameOpen(gameSettings, 'duel') ? (
-                  <Swords className="w-6 h-6 animate-pulse" />
+                  <Swords className="w-6 h-6" />
                 ) : (
                   <Lock className="w-6 h-6 text-rose-400" />
                 )}
               </div>
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
                     MULTIPLAYER 1V1
                   </span>
                   {isGameOpen(gameSettings, 'duel') ? (
-                    <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="text-xs text-amber-300 font-mono font-bold flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
                       {lang === 'en' ? 'Live Room System' : 'Camere în Timp Real'}
                     </span>
                   ) : (
@@ -2143,7 +2325,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
             <button
               onClick={() => handleTryLaunchGame('duel', 'Arena Duel 1v1', 'Duel Arena 1v1')}
-              className={`w-full sm:w-auto px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 ${
+              className={`w-full sm:w-auto min-h-[42px] px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg cursor-pointer shrink-0 active:scale-95 ${
                 isGameOpen(gameSettings, 'duel')
                   ? 'bg-gradient-to-r from-rose-600 via-amber-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white shadow-rose-600/30'
                   : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-500/40 shadow-rose-950/40'

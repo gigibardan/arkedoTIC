@@ -53,13 +53,13 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none sm:flex-wrap bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto max-w-full">
           <button
             onClick={() => {
               setActiveTab('cpp');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'cpp'
                 ? 'bg-violet-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -74,7 +74,7 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
               setActiveTab('word');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'word'
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -89,7 +89,7 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
               setActiveTab('audio');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'audio'
                 ? 'bg-amber-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -104,7 +104,7 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
               setActiveTab('gis');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'gis'
                 ? 'bg-teal-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -119,7 +119,7 @@ export const Grade7InteractiveSimulators: React.FC<Grade7InteractiveSimulatorsPr
               setActiveTab('robot');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'robot'
                 ? 'bg-emerald-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white'
@@ -314,22 +314,22 @@ int main() {
             </span>
           </div>
 
-          <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px] font-mono">
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px] font-mono max-w-full">
             <button
               onClick={() => setSelectedPreset('while_digits')}
-              className={`px-2 py-0.5 rounded-lg ${selectedPreset === 'while_digits' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400'}`}
+              className={`px-2.5 py-1 min-h-[34px] rounded-lg whitespace-nowrap shrink-0 cursor-pointer ${selectedPreset === 'while_digits' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
             >
               {lang === 'en' ? 'while (digits)' : 'while (cifre)'}
             </button>
             <button
               onClick={() => setSelectedPreset('decision')}
-              className={`px-2 py-0.5 rounded-lg ${selectedPreset === 'decision' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400'}`}
+              className={`px-2.5 py-1 min-h-[34px] rounded-lg whitespace-nowrap shrink-0 cursor-pointer ${selectedPreset === 'decision' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
             >
               if/else
             </button>
             <button
               onClick={() => setSelectedPreset('linear')}
-              className={`px-2 py-0.5 rounded-lg ${selectedPreset === 'linear' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400'}`}
+              className={`px-2.5 py-1 min-h-[34px] rounded-lg whitespace-nowrap shrink-0 cursor-pointer ${selectedPreset === 'linear' ? 'bg-violet-600 text-white font-bold' : 'text-slate-400 hover:text-white'}`}
             >
               {lang === 'en' ? 'linear (3 glasses)' : 'liniar (3 pahare)'}
             </button>
@@ -353,7 +353,7 @@ int main() {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="w-24 px-2 py-1 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-white text-center focus:outline-none focus:border-violet-500"
+              className="w-24 min-h-[36px] px-2 py-1 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-white text-center focus:outline-none focus:border-violet-500 tabular-nums"
               placeholder="ex: 3482"
             />
           </div>
@@ -361,7 +361,7 @@ int main() {
           <button
             onClick={handleRunCode}
             disabled={isRunning}
-            className="px-5 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-violet-600/30 active:scale-95 transition"
+            className="min-h-[38px] px-5 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-violet-600/30 active:scale-95 transition whitespace-nowrap"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>{lang === 'en' ? 'Build & Run (F9)' : 'Compilare & Executare (F9)'}</span>
@@ -380,7 +380,7 @@ int main() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono">
             {Object.entries(memoryVariables).map(([varName, val]) => (
-              <div key={varName} className="p-2 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center">
+              <div key={varName} className="p-2 rounded-xl bg-slate-900 border border-slate-800 flex flex-col items-center tabular-nums">
                 <span className="text-[10px] text-slate-400 font-bold">{varName}</span>
                 <span className="text-sm font-black text-cyan-300 mt-0.5">{String(val)}</span>
               </div>
@@ -391,7 +391,7 @@ int main() {
         {/* Live Console Output */}
         <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between h-64 shadow-inner">
           <div className="text-[11px] font-mono font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
             {lang === 'en' ? 'C++ Console (Terminal I/O)' : 'Consolă C++ (Terminal I/O)'}
           </div>
 
@@ -503,8 +503,8 @@ const WordTypographySimulator: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2 font-mono text-xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="px-3 py-1.5 min-h-[36px] rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-2 font-mono text-xs tabular-nums">
             <span className="text-slate-400">{lang === 'en' ? 'Typography Score:' : 'Scor Tipografic:'}</span>
             <span className={`font-black ${report.score >= 80 ? 'text-emerald-400' : report.score >= 50 ? 'text-amber-400' : 'text-rose-400'}`}>
               {report.score} / 100
@@ -513,7 +513,7 @@ const WordTypographySimulator: React.FC = () => {
 
           <button
             onClick={handleFixAutomatically}
-            className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
+            className="min-h-[36px] px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md whitespace-nowrap"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{lang === 'en' ? 'Auto-Correct' : 'Corectare Automată'}</span>
@@ -645,7 +645,7 @@ const AudioWaveSimulator: React.FC = () => {
 
         <button
           onClick={isPlaying ? stopTone : startTone}
-          className={`px-5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-lg ${
+          className={`min-h-[38px] px-5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-lg whitespace-nowrap shrink-0 self-start sm:self-auto ${
             isPlaying
               ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/30'
               : 'bg-amber-600 hover:bg-amber-500 text-white shadow-amber-600/30'
@@ -653,7 +653,7 @@ const AudioWaveSimulator: React.FC = () => {
         >
           {isPlaying ? (
             <>
-              <span className="w-2.5 h-2.5 rounded-full bg-white animate-ping"></span>
+              <span className="w-2.5 h-2.5 rounded-sm bg-white shrink-0"></span>
               <span>{lang === 'en' ? 'Stop Sound' : 'Oprește Sunetul'}</span>
             </>
           ) : (
@@ -669,7 +669,7 @@ const AudioWaveSimulator: React.FC = () => {
         {/* Controls */}
         <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col gap-4">
           <div>
-            <div className="flex justify-between text-xs font-mono mb-1.5">
+            <div className="flex flex-wrap justify-between gap-2 text-xs font-mono mb-1.5 tabular-nums">
               <span className="text-slate-400">{lang === 'en' ? 'Frequency (Hz):' : 'Frecvență (Hz):'}</span>
               <span className="text-amber-400 font-bold">
                 {frequency} Hz ({frequency === 440 ? (lang === 'en' ? 'Concert Pitch A 440 Hz' : 'Nota LA 440 Hz') : frequency < 250 ? (lang === 'en' ? 'Bass / Low' : 'Bas / Grav') : (lang === 'en' ? 'Treble / High' : 'Acut')})
@@ -701,7 +701,7 @@ const AudioWaveSimulator: React.FC = () => {
                       setTimeout(startTone, 50);
                     }
                   }}
-                  className={`p-2 rounded-xl border text-center capitalize cursor-pointer transition ${
+                  className={`p-2 min-h-[38px] rounded-xl border text-center capitalize cursor-pointer transition ${
                     waveformType === type
                       ? 'bg-amber-600/20 border-amber-500 text-amber-300 font-bold'
                       : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
@@ -720,7 +720,7 @@ const AudioWaveSimulator: React.FC = () => {
 
         {/* Waveform Graphic Display */}
         <div className="lg:col-span-2 bg-slate-950 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-inner">
-          <div className="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400 mb-2 tabular-nums">
             <span>
               {lang === 'en'
                 ? 'Digital Oscilloscope • 44,100 Hz Sampling'
@@ -742,7 +742,6 @@ const AudioWaveSimulator: React.FC = () => {
                 fill="none"
                 stroke={isPlaying ? '#f59e0b' : '#64748b'}
                 strokeWidth="2.5"
-                className={isPlaying ? 'animate-pulse' : ''}
               />
             </svg>
           </div>
@@ -814,25 +813,25 @@ const GisMapSimulator: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
           <button
             onClick={() => setLayers(prev => ({ ...prev, relief: !prev.relief }))}
-            className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.relief ? 'bg-amber-950/60 border-amber-500 text-amber-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg border transition cursor-pointer whitespace-nowrap ${layers.relief ? 'bg-amber-950/60 border-amber-500 text-amber-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
             ⛰️ {lang === 'en' ? 'Relief' : 'Relief'}
           </button>
           <button
             onClick={() => setLayers(prev => ({ ...prev, hydro: !prev.hydro }))}
-            className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.hydro ? 'bg-blue-950/60 border-blue-500 text-blue-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg border transition cursor-pointer whitespace-nowrap ${layers.hydro ? 'bg-blue-950/60 border-blue-500 text-blue-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
             🌊 {lang === 'en' ? 'Rivers' : 'Râuri'}
           </button>
           <button
             onClick={() => setLayers(prev => ({ ...prev, roads: !prev.roads }))}
-            className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.roads ? 'bg-orange-950/60 border-orange-500 text-orange-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg border transition cursor-pointer whitespace-nowrap ${layers.roads ? 'bg-orange-950/60 border-orange-500 text-orange-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
             🛣️ {lang === 'en' ? 'Roads' : 'Drumuri'}
           </button>
           <button
             onClick={() => setLayers(prev => ({ ...prev, cities: !prev.cities }))}
-            className={`px-2.5 py-1 rounded-lg border transition cursor-pointer ${layers.cities ? 'bg-teal-950/60 border-teal-500 text-teal-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+            className={`px-3 py-1.5 min-h-[34px] rounded-lg border transition cursor-pointer whitespace-nowrap ${layers.cities ? 'bg-teal-950/60 border-teal-500 text-teal-300 font-bold' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
           >
             🏙️ {lang === 'en' ? 'Cities' : 'Orașe'}
           </button>
@@ -914,7 +913,7 @@ const GisMapSimulator: React.FC = () => {
               {lang === 'en' ? pointsData[selectedPoint]?.infoEn : pointsData[selectedPoint]?.infoRo}
             </p>
 
-            <div className="space-y-2 text-xs font-mono">
+            <div className="space-y-2 text-xs font-mono tabular-nums">
               <div className="flex justify-between p-2 rounded-lg bg-slate-900 border border-slate-800">
                 <span className="text-slate-400">{lang === 'en' ? 'Latitude:' : 'Latitudine:'}</span>
                 <span className="text-cyan-300 font-bold">{pointsData[selectedPoint]?.lat}</span>
@@ -999,10 +998,10 @@ const RoboCanvasSimulator: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={runHexagonTrajectory}
-            className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md"
+            className="min-h-[36px] px-3.5 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md whitespace-nowrap"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{lang === 'en' ? 'Hexagon Trajectory (p. 104)' : 'Traiectorie Hexagon (pag. 104)'}</span>
@@ -1013,7 +1012,7 @@ const RoboCanvasSimulator: React.FC = () => {
               setSensorDistance(28);
               sounds.playClick();
             }}
-            className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 cursor-pointer"
+            className="min-w-[36px] min-h-[36px] p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center cursor-pointer"
             title="Reset Robot"
           >
             <RotateCcw className="w-4 h-4" />
@@ -1066,14 +1065,14 @@ const RoboCanvasSimulator: React.FC = () => {
 
         {/* Telemetry & Manual Controls */}
         <div className="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-md">
-          <div className="space-y-3 font-mono text-xs">
+          <div className="space-y-3 font-mono text-xs tabular-nums">
             <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
               {lang === 'en' ? 'Robot Sensor Telemetry' : 'Telemetrie Senzori Robot'}
             </div>
 
             <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center">
               <span className="text-slate-400">{lang === 'en' ? 'Distance Sensor:' : 'Senzor Distanță:'}</span>
-              <span className={`font-bold ${sensorDistance <= 15 ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
+              <span className={`font-bold ${sensorDistance <= 15 ? 'text-rose-400' : 'text-emerald-400'}`}>
                 {sensorDistance} cm
               </span>
             </div>
@@ -1088,13 +1087,13 @@ const RoboCanvasSimulator: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 mt-4">
             <button
               onClick={moveForward}
-              className="p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition shadow-md"
+              className="min-h-[40px] p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition shadow-md"
             >
               {lang === 'en' ? 'Forward (20 px)' : 'Înainte (20 px)'}
             </button>
             <button
               onClick={turnRight}
-              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition"
+              className="min-h-[40px] p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition"
             >
               {lang === 'en' ? 'Turn 60°' : 'Virează 60°'}
             </button>

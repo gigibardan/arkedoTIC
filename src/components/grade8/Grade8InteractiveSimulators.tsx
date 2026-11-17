@@ -12,6 +12,7 @@ import {
   Trash2,
   Play,
   RotateCcw,
+  RefreshCw,
   CheckCircle2,
   AlertCircle,
   Copy,
@@ -300,12 +301,12 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-6">
       {/* Header bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg shrink-0">
             <Table className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-base font-black text-white flex items-center gap-2">
+          <div className="min-w-0">
+            <h3 className="text-base font-black text-white flex flex-wrap items-center gap-2">
               <span>ExcelLab Studio 365</span>
               <span className="px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold uppercase">
                 Modul Interactiv Clasa VIII
@@ -318,10 +319,10 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
         </div>
 
         {/* Chart type switcher */}
-        <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+        <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 max-w-full">
           <button
             onClick={() => { setChartType('column'); sounds.playClick(); }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               chartType === 'column' ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -330,7 +331,7 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
           </button>
           <button
             onClick={() => { setChartType('line'); sounds.playClick(); }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               chartType === 'line' ? 'bg-cyan-600 text-white shadow' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -339,7 +340,7 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
           </button>
           <button
             onClick={() => { setChartType('pie'); sounds.playClick(); }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               chartType === 'pie' ? 'bg-purple-600 text-white shadow' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -350,19 +351,21 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
       </div>
 
       {/* Formula bar & Name box */}
-      <div className="flex items-center gap-3 bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
-        <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 font-mono text-xs font-black text-emerald-400 w-16 text-center shadow-inner">
-          {selectedCell}
-        </div>
-        <div className="text-slate-500 font-serif italic text-sm font-bold select-none">
-          fx
+      <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 bg-slate-950 p-2.5 rounded-2xl border border-slate-800">
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="px-3 py-1.5 min-h-[38px] flex items-center justify-center rounded-xl bg-slate-900 border border-slate-700 font-mono text-xs font-black text-emerald-400 w-16 text-center shadow-inner tabular-nums">
+            {selectedCell}
+          </div>
+          <div className="text-slate-500 font-serif italic text-sm font-bold select-none">
+            fx
+          </div>
         </div>
         <input
           type="text"
           value={formulaInput}
           onChange={(e) => handleFormulaChange(e.target.value)}
           placeholder="Introdu o valoare sau o formulă (ex: =AVERAGE(B2:D2) sau =IF(E2>=8.5, 'BURSA', 'PROMOVAT'))"
-          className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500"
+          className="flex-1 min-w-[200px] min-h-[38px] bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500"
         />
         <button
           onClick={() => {
@@ -371,7 +374,7 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
             setFormulaInput('10');
             sounds.playClick();
           }}
-          className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1"
+          className="min-w-[38px] min-h-[38px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-1 shrink-0 cursor-pointer"
           title="Resetează datele tabelului"
         >
           <RotateCcw className="w-3.5 h-3.5" />
@@ -407,11 +410,13 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
                     <td
                       key={key}
                       onClick={() => handleCellClick(key)}
-                      className={`p-2.5 border-r border-slate-800 cursor-pointer font-sans transition relative ${
+                      className={`p-2.5 border-r border-slate-800 cursor-pointer font-sans transition relative tabular-nums ${
                         cell.bgColor || 'bg-slate-900/50'
                       } ${isSelected ? 'ring-2 ring-emerald-400 z-10 bg-emerald-950/40' : 'hover:bg-slate-800/60'} ${
                         cell.bold ? 'font-black' : 'font-normal'
-                      } ${cell.color || 'text-slate-200'} text-${cell.align || 'left'}`}
+                      } ${cell.color || 'text-slate-200'} ${
+                        cell.align === 'center' ? 'text-center' : cell.align === 'right' ? 'text-right' : 'text-left'
+                      }`}
                     >
                       <div className="truncate min-w-[70px] max-w-[150px]">
                         {displayValue === '' ? '\u00A0' : String(displayValue)}
@@ -430,14 +435,14 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
 
       {/* Live Synchronized Charts Area */}
       <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-black text-white">
               {chartType === 'column' && 'Diagramă Coloană 2D — Compararea Mediilor pe Materii'}
               {chartType === 'line' && 'Diagramă cu Linii — Curba Fluctuației Notelor'}
               {chartType === 'pie' && 'Diagramă Radială Plăcintă (Pie Chart) — Ponderi Procentuale'}
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono">
+            <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono shrink-0">
               Auto-Sync Live
             </span>
           </div>
@@ -448,19 +453,19 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
 
         {/* 1. Column Chart */}
         {chartType === 'column' && (
-          <div className="h-48 flex items-end justify-around gap-4 pt-6 px-4 pb-2 border-b border-slate-800">
+          <div className="h-48 flex items-end justify-around gap-2 sm:gap-4 pt-6 px-2 sm:px-4 pb-2 border-b border-slate-800">
             {chartData.map((d, i) => {
               const heightPercent = Math.max(10, Math.min(100, (d.value / 10) * 100));
               return (
-                <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
-                  <span className="text-[11px] font-mono font-black text-emerald-300 opacity-90 group-hover:scale-110 transition">
+                <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group min-w-0">
+                  <span className="text-[11px] font-mono font-black text-emerald-300 opacity-90 group-hover:scale-110 transition tabular-nums">
                     {d.value}
                   </span>
                   <div
                     style={{ height: `${heightPercent}%`, backgroundColor: d.color }}
                     className="w-full max-w-[42px] rounded-t-xl transition-all duration-500 shadow-lg group-hover:brightness-125"
                   />
-                  <span className="text-[11px] font-bold text-slate-300 truncate max-w-[70px]">
+                  <span className="text-[11px] font-bold text-slate-300 truncate max-w-full">
                     {d.label}
                   </span>
                 </div>
@@ -524,8 +529,8 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
 
         {/* 3. Pie Chart */}
         {chartType === 'pie' && (
-          <div className="h-52 flex items-center justify-around gap-6">
-            <div className="relative w-40 h-40">
+          <div className="min-h-[13rem] flex flex-col sm:flex-row items-center justify-around gap-6 py-2">
+            <div className="relative w-40 h-40 shrink-0">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                 {(() => {
                   let accumulatedPercent = 0;
@@ -554,19 +559,19 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="text-[10px] uppercase font-mono text-slate-400 font-bold">Total</span>
-                <span className="text-sm font-black text-white">{totalPoints.toFixed(1)}</span>
+                <span className="text-sm font-black text-white tabular-nums">{totalPoints.toFixed(1)}</span>
               </div>
             </div>
 
             {/* Legend */}
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
               {chartData.map((d, i) => {
                 const percent = totalPoints > 0 ? Math.round((d.value / totalPoints) * 100) : 20;
                 return (
                   <div key={i} className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: d.color }} />
-                    <span className="text-slate-300 font-bold truncate max-w-[80px]">{d.label}</span>
-                    <span className="font-mono text-slate-400 text-[11px] font-bold">{percent}%</span>
+                    <span className="text-slate-300 font-bold truncate max-w-[90px]">{d.label}</span>
+                    <span className="font-mono text-slate-400 text-[11px] font-bold tabular-nums">{percent}%</span>
                   </div>
                 );
               })}
@@ -576,7 +581,7 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
       </div>
 
       {/* Sheets footer bar */}
-      <div className="flex items-center justify-between pt-2 text-xs text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 text-xs text-slate-400">
         <div className="flex items-center gap-2">
           <div className="px-3 py-1 rounded-xl bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 font-bold flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -584,13 +589,13 @@ export const ExcelLabSim: React.FC<ExcelLabSimProps> = ({
           </div>
           <button
             onClick={() => sounds.playClick()}
-            className="p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
+            className="min-w-[32px] min-h-[32px] p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center cursor-pointer"
             title="Adaugă foaie nouă (+)"
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
         </div>
-        <div className="flex items-center gap-3 font-mono text-[11px]">
+        <div className="flex items-center gap-3 font-mono text-[11px] tabular-nums">
           <span>Gata</span>
           <span>100%</span>
         </div>
@@ -621,6 +626,9 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
   const [carouselIndex, setCarouselIndex] = useState<number>(0);
   const [isPublished, setIsPublished] = useState<boolean>(false);
   const [showSourceCode, setShowSourceCode] = useState<boolean>(false);
+  const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
+  const [isAddingPage, setIsAddingPage] = useState<boolean>(false);
+  const [newPageName, setNewPageName] = useState<string>('');
 
   // Pages structure
   const [pages, setPages] = useState<Array<{ id: string; title: string; isHome?: boolean; subpages?: string[] }>>([
@@ -636,16 +644,26 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
     { url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80', caption: 'Concursul Național de TIC' }
   ];
 
+  const handleAddPage = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = newPageName.trim();
+    if (!trimmed) return;
+    setPages((prev) => [...prev, { id: `p_${Date.now()}`, title: trimmed }]);
+    setNewPageName('');
+    setIsAddingPage(false);
+    sounds.playCorrect();
+  };
+
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-6">
       {/* Top Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
             <Globe className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-base font-black text-white flex items-center gap-2">
+          <div className="min-w-0">
+            <h3 className="text-base font-black text-white flex flex-wrap items-center gap-2">
               <span>WebStudio Google Sites</span>
               <span className="px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold uppercase">
                 Editor Vizual Clasa VIII
@@ -658,26 +676,26 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
         </div>
 
         {/* Actions & Device switch */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Responsive switchers */}
           <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
             <button
               onClick={() => { setDeviceMode('desktop'); sounds.playClick(); }}
-              className={`p-1.5 rounded-lg transition ${deviceMode === 'desktop' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              className={`min-w-[34px] min-h-[34px] p-1.5 rounded-lg transition flex items-center justify-center cursor-pointer ${deviceMode === 'desktop' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
               title="Previzualizare Ecran Mare (Desktop)"
             >
               <Monitor className="w-4 h-4" />
             </button>
             <button
               onClick={() => { setDeviceMode('tablet'); sounds.playClick(); }}
-              className={`p-1.5 rounded-lg transition ${deviceMode === 'tablet' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              className={`min-w-[34px] min-h-[34px] p-1.5 rounded-lg transition flex items-center justify-center cursor-pointer ${deviceMode === 'tablet' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
               title="Previzualizare Tabletă"
             >
               <Tablet className="w-4 h-4" />
             </button>
             <button
               onClick={() => { setDeviceMode('mobile'); sounds.playClick(); }}
-              className={`p-1.5 rounded-lg transition ${deviceMode === 'mobile' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              className={`min-w-[34px] min-h-[34px] p-1.5 rounded-lg transition flex items-center justify-center cursor-pointer ${deviceMode === 'mobile' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
               title="Previzualizare Telefon Mobil"
             >
               <Smartphone className="w-4 h-4" />
@@ -686,7 +704,7 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
 
           <button
             onClick={() => { setShowSourceCode(!showSourceCode); sounds.playClick(); }}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5"
+            className="px-3 py-1.5 min-h-[36px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Code className="w-3.5 h-3.5 text-cyan-400" />
             <span>{showSourceCode ? 'Editor' : 'Cod HTML'}</span>
@@ -697,7 +715,7 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
               setIsPublished(true);
               sounds.playCorrect();
             }}
-            className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-black transition shadow-lg flex items-center gap-1.5"
+            className="px-4 py-1.5 min-h-[36px] rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-black transition shadow-lg flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>Publicare</span>
@@ -707,10 +725,10 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
 
       {/* Published banner notification */}
       {isPublished && (
-        <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex items-center justify-between text-xs text-emerald-300">
-          <div className="flex items-center gap-2">
+        <div className="p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 flex flex-wrap items-center justify-between gap-2 text-xs text-emerald-300">
+          <div className="flex items-center gap-2 min-w-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>
+            <span className="break-words">
               Site publicat cu succes la adresa:{' '}
               <strong className="font-mono text-white">sites.google.com/view/oracolul-clasei-8</strong>
             </span>
@@ -718,12 +736,14 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
           <button
             onClick={() => {
               navigator.clipboard?.writeText('https://sites.google.com/view/oracolul-clasei-8');
+              setCopiedUrl(true);
+              setTimeout(() => setCopiedUrl(false), 2000);
               sounds.playClick();
             }}
-            className="px-2.5 py-1 rounded-lg bg-emerald-800/60 hover:bg-emerald-700 text-white font-bold flex items-center gap-1"
+            className="px-2.5 py-1 min-h-[34px] rounded-lg bg-emerald-800/60 hover:bg-emerald-700 text-white font-bold flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Copy className="w-3 h-3" />
-            <span>Copiază</span>
+            <span>{copiedUrl ? 'Copiat!' : 'Copiază'}</span>
           </button>
         </div>
       )}
@@ -731,7 +751,7 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
       {/* Main split: Workspace & Right Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left/Center: Visual Preview Screen */}
-        <div className="lg:col-span-3 flex justify-center bg-slate-950/80 p-4 rounded-2xl border border-slate-800 min-h-[460px]">
+        <div className="lg:col-span-3 flex justify-center bg-slate-950/80 p-3 sm:p-4 rounded-2xl border border-slate-800 min-h-[460px] min-w-0">
           {showSourceCode ? (
             <div className="w-full bg-slate-900 p-4 rounded-xl font-mono text-xs text-slate-300 overflow-y-auto max-h-[440px] space-y-2 border border-slate-800">
               <span className="text-slate-500">&lt;!-- Codul Sursă HTML5 Generat Automat --&gt;</span>
@@ -781,7 +801,7 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
             </div>
           ) : (
             <div
-              className={`bg-slate-900 border border-slate-700/80 rounded-2xl overflow-hidden transition-all duration-300 shadow-2xl flex flex-col ${
+              className={`bg-slate-900 border border-slate-700/80 rounded-2xl overflow-hidden transition-all duration-300 shadow-2xl flex flex-col max-w-full ${
                 deviceMode === 'desktop' ? 'w-full' : deviceMode === 'tablet' ? 'w-[480px]' : 'w-[320px]'
               }`}
             >
@@ -850,13 +870,15 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
                   <div className="absolute inset-0 flex items-center justify-between p-2">
                     <button
                       onClick={() => setCarouselIndex((p) => (p > 0 ? p - 1 : carouselImages.length - 1))}
-                      className="w-6 h-6 rounded-full bg-slate-950/70 text-white flex items-center justify-center hover:bg-slate-900 text-xs"
+                      className="min-w-[32px] min-h-[32px] w-8 h-8 rounded-full bg-slate-950/75 text-white flex items-center justify-center hover:bg-slate-900 text-sm cursor-pointer"
+                      aria-label="Imaginea anterioară"
                     >
                       ‹
                     </button>
                     <button
                       onClick={() => setCarouselIndex((p) => (p < carouselImages.length - 1 ? p + 1 : 0))}
-                      className="w-6 h-6 rounded-full bg-slate-950/70 text-white flex items-center justify-center hover:bg-slate-900 text-xs"
+                      className="min-w-[32px] min-h-[32px] w-8 h-8 rounded-full bg-slate-950/75 text-white flex items-center justify-center hover:bg-slate-900 text-sm cursor-pointer"
+                      aria-label="Imaginea următoare"
                     >
                       ›
                     </button>
@@ -873,15 +895,15 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
                 </div>
 
                 {/* Embedded Sheet Mockup */}
-                <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Table className="w-4 h-4 text-emerald-400" />
-                    <div>
+                <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Table className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <div className="min-w-0">
                       <div className="font-bold text-white text-[11px]">Tabel Note & Medii (Încorporat)</div>
                       <div className="text-[10px] text-slate-400">Foi de calcul sincronizate automat</div>
                     </div>
                   </div>
-                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono shrink-0">
                     Foi de calcul
                   </span>
                 </div>
@@ -901,19 +923,19 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
           <div className="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs font-bold text-center">
             <button
               onClick={() => { setActiveTab('insert'); sounds.playClick(); }}
-              className={`py-1.5 rounded-lg transition ${activeTab === 'insert' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+              className={`py-1.5 min-h-[36px] rounded-lg transition cursor-pointer ${activeTab === 'insert' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
             >
               Inserează
             </button>
             <button
               onClick={() => { setActiveTab('pages'); sounds.playClick(); }}
-              className={`py-1.5 rounded-lg transition ${activeTab === 'pages' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+              className={`py-1.5 min-h-[36px] rounded-lg transition cursor-pointer ${activeTab === 'pages' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
             >
               Pagini
             </button>
             <button
               onClick={() => { setActiveTab('themes'); sounds.playClick(); }}
-              className={`py-1.5 rounded-lg transition ${activeTab === 'themes' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+              className={`py-1.5 min-h-[36px] rounded-lg transition cursor-pointer ${activeTab === 'themes' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
             >
               Teme
             </button>
@@ -926,28 +948,28 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => sounds.playClick()}
-                  className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2"
+                  className="p-2.5 min-h-[40px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <span className="text-base">📝</span>
                   <span>Casetă text</span>
                 </button>
                 <button
                   onClick={() => sounds.playClick()}
-                  className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2"
+                  className="p-2.5 min-h-[40px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <span className="text-base">🖼️</span>
                   <span>Imagini</span>
                 </button>
                 <button
                   onClick={() => sounds.playClick()}
-                  className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2"
+                  className="p-2.5 min-h-[40px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <span className="text-base">🎠</span>
                   <span>Carusel</span>
                 </button>
                 <button
                   onClick={() => sounds.playClick()}
-                  className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2"
+                  className="p-2.5 min-h-[40px] rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold flex items-center gap-2 cursor-pointer"
                 >
                   <span className="text-base">📍</span>
                   <span>Hartă Maps</span>
@@ -960,12 +982,12 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
                   <button
                     key={t}
                     onClick={() => { setBannerType(t); sounds.playClick(); }}
-                    className={`px-3 py-1.5 rounded-xl text-left font-bold transition flex items-center justify-between ${
+                    className={`px-3 py-1.5 min-h-[38px] rounded-xl text-left font-bold transition flex items-center justify-between cursor-pointer ${
                       bannerType === t ? 'bg-indigo-950/80 border border-indigo-500/50 text-indigo-300' : 'bg-slate-900 text-slate-400 hover:text-white'
                     }`}
                   >
                     <span>{t === 'cover' ? 'Copertă Mare' : t === 'banner' ? 'Banner Standard' : 'Numai Titlu'}</span>
-                    {bannerType === t && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />}
+                    {bannerType === t && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -979,26 +1001,54 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
                 <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Arbore Pagini</span>
                 <button
                   onClick={() => {
-                    const name = prompt('Introdu numele noii pagini:');
-                    if (name) {
-                      setPages((prev) => [...prev, { id: `p_${Date.now()}`, title: name }]);
-                      sounds.playCorrect();
-                    }
+                    setIsAddingPage((prev) => !prev);
+                    sounds.playClick();
                   }}
-                  className="p-1 rounded-lg bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition"
+                  className="min-w-[32px] min-h-[32px] p-1 rounded-lg bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600 hover:text-white transition flex items-center justify-center cursor-pointer"
                   title="Pagină nouă"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
 
+              {isAddingPage && (
+                <form onSubmit={handleAddPage} className="p-2.5 rounded-xl bg-slate-900 border border-indigo-500/40 space-y-2">
+                  <input
+                    type="text"
+                    value={newPageName}
+                    onChange={(e) => setNewPageName(e.target.value)}
+                    placeholder="Numele noii pagini..."
+                    className="w-full min-h-[36px] px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-indigo-500"
+                    autoFocus
+                  />
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="submit"
+                      className="flex-1 min-h-[34px] px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs cursor-pointer"
+                    >
+                      Adaugă
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAddingPage(false);
+                        setNewPageName('');
+                      }}
+                      className="min-h-[34px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer"
+                    >
+                      Anulează
+                    </button>
+                  </div>
+                </form>
+              )}
+
               <div className="space-y-1.5">
                 {pages.map((p) => (
                   <div key={p.id} className="p-2 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                    <div className="flex items-center justify-between font-bold text-slate-200">
+                    <div className="flex items-center justify-between gap-2 font-bold text-slate-200">
                       <span className="truncate">{p.title}</span>
                       {p.isHome && (
-                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono">
+                        <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[9px] font-mono shrink-0">
                           Principală
                         </span>
                       )}
@@ -1033,15 +1083,15 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
                       setThemeColor(th.color);
                       sounds.playClick();
                     }}
-                    className={`w-full p-2.5 rounded-xl text-left font-bold transition flex items-center justify-between ${
+                    className={`w-full p-2.5 min-h-[40px] rounded-xl text-left font-bold transition flex items-center justify-between cursor-pointer ${
                       siteTheme === th.id ? 'bg-indigo-950/80 border border-indigo-500/50 text-indigo-300' : 'bg-slate-900 text-slate-400 hover:text-white'
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: th.color }} />
+                      <span className="w-3.5 h-3.5 rounded-full shrink-0" style={{ backgroundColor: th.color }} />
                       <span>{th.name}</span>
                     </div>
-                    {siteTheme === th.id && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />}
+                    {siteTheme === th.id && <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -1052,13 +1102,13 @@ export const WebStudioSim: React.FC<WebStudioSimProps> = ({
                   type="color"
                   value={themeColor}
                   onChange={(e) => setThemeColor(e.target.value)}
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-9 h-9 rounded-lg cursor-pointer bg-transparent border-0 shrink-0"
                 />
                 <input
                   type="text"
                   value={themeColor}
                   onChange={(e) => setThemeColor(e.target.value)}
-                  className="flex-1 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-white font-mono text-xs font-bold"
+                  className="flex-1 min-h-[36px] px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-white font-mono text-xs font-bold"
                 />
               </div>
             </div>
@@ -1217,12 +1267,12 @@ int main() {
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5">
       {/* Header bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-lg">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-lg shrink-0">
             <Terminal className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-base font-black text-white flex items-center gap-2">
+          <div className="min-w-0">
+            <h3 className="text-base font-black text-white flex flex-wrap items-center gap-2">
               <span>CppSequences In-Browser Runner</span>
               <span className="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold uppercase">
                 Compilator C++ Clasa VIII
@@ -1238,16 +1288,16 @@ int main() {
         <button
           onClick={runCode}
           disabled={isRunning}
-          className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-xs transition shadow-lg flex items-center gap-2 cursor-pointer disabled:opacity-50"
+          className="px-5 py-2 min-h-[38px] rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-xs transition shadow-lg flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-50"
         >
-          <Play className={`w-4 h-4 ${isRunning ? 'animate-spin' : ''}`} />
+          {isRunning ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
           <span>{isRunning ? 'Se compilează...' : 'Rulează Codul (F9)'}</span>
         </button>
       </div>
 
       {/* Preset pills */}
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-slate-400 font-bold mr-1">Exemple Manual:</span>
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1 sm:flex-wrap max-w-full">
+        <span className="text-xs text-slate-400 font-bold mr-1 shrink-0">Exemple Manual:</span>
         {presets.map((p) => (
           <button
             key={p.id}
@@ -1256,7 +1306,7 @@ int main() {
               setConsoleOutput('');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
+            className={`px-3 py-1.5 min-h-[36px] rounded-xl text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer ${
               activePreset.id === p.id
                 ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                 : 'bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800'
@@ -1270,7 +1320,7 @@ int main() {
       {/* Code Editor & Console Output */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Code Editor */}
-        <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col">
+        <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col min-w-0">
           <div className="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-slate-800/80 mb-2 font-mono">
             <span>main.cpp</span>
             <span className="text-[10px] text-emerald-400 font-bold">C++17</span>
@@ -1281,15 +1331,15 @@ int main() {
         </div>
 
         {/* Terminal output */}
-        <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col font-mono text-xs">
+        <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col font-mono text-xs min-w-0">
           <div className="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-slate-800/80 mb-2">
             <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
               Consolă Ieșire
             </span>
             <button
               onClick={() => setConsoleOutput('')}
-              className="text-[10px] text-slate-500 hover:text-slate-300"
+              className="text-[11px] px-2 py-1 rounded text-slate-400 hover:text-slate-200 cursor-pointer"
             >
               Curăță
             </button>
@@ -1382,12 +1432,12 @@ export const NxtRobotSim: React.FC = () => {
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5">
       {/* Header bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg shrink-0">
             <Bot className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-base font-black text-white flex items-center gap-2">
+          <div className="min-w-0">
+            <h3 className="text-base font-black text-white flex flex-wrap items-center gap-2">
               <span>NXT RoboLab 2D Simulator</span>
               <span className="px-2 py-0.5 rounded-lg bg-green-500/20 text-green-300 text-[10px] font-mono font-bold uppercase">
                 Open Roberta NEPO
@@ -1400,13 +1450,13 @@ export const NxtRobotSim: React.FC = () => {
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => {
               setIsRunning(!isRunning);
               sounds.playClick();
             }}
-            className={`px-4 py-2 rounded-xl text-xs font-black transition shadow-lg flex items-center gap-2 ${
+            className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-black transition shadow-lg flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer ${
               isRunning ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-emerald-600 hover:bg-emerald-500 text-white'
             }`}
           >
@@ -1414,7 +1464,7 @@ export const NxtRobotSim: React.FC = () => {
           </button>
           <button
             onClick={resetRobot}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+            className="min-w-[38px] min-h-[38px] p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
             title="Resetare"
           >
             <RotateCcw className="w-4 h-4" />
@@ -1423,55 +1473,57 @@ export const NxtRobotSim: React.FC = () => {
       </div>
 
       {/* 2D Canvas Scene */}
-      <div className="relative w-full h-64 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden select-none">
-        {/* Background grid */}
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]" />
+      <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950">
+        <div className="relative min-w-[500px] w-full h-64 overflow-hidden select-none">
+          {/* Background grid */}
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]" />
 
-        {/* Obstacle 1 (Blue block) */}
-        <div className="absolute left-[260px] top-[100px] w-12 h-24 bg-blue-600/90 border border-blue-400 rounded-xl shadow-lg flex items-center justify-center text-[10px] text-white font-bold text-center">
-          Obstacol
-        </div>
-
-        {/* Finish Zone (Red line) */}
-        <div className="absolute right-6 top-8 bottom-8 w-10 bg-red-600/80 border border-red-400 rounded-xl flex items-center justify-center text-[10px] text-white font-black [writing-mode:vertical-lr] tracking-widest">
-          STOP ROȘU
-        </div>
-
-        {/* Autonomous Robot LEGO NXT */}
-        <div
-          style={{
-            transform: `translate(${robotPos.x}px, ${robotPos.y}px) rotate(${robotPos.angle}deg)`,
-            transition: 'transform 0.1s linear'
-          }}
-          className="absolute w-14 h-12 bg-slate-800 border-2 border-emerald-400 rounded-xl flex flex-col items-center justify-center shadow-xl"
-        >
-          {/* Ultrasonic Eyes */}
-          <div className="flex items-center gap-2 mb-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+          {/* Obstacle 1 (Blue block) */}
+          <div className="absolute left-[260px] top-[100px] w-12 h-24 bg-blue-600/90 border border-blue-400 rounded-xl shadow-lg flex items-center justify-center text-[10px] text-white font-bold text-center">
+            Obstacol
           </div>
-          <span className="text-[9px] font-mono font-black text-white">NXT</span>
-          {/* Wheels */}
-          <span className="absolute -top-1 -left-1 w-3 h-2 bg-slate-950 rounded" />
-          <span className="absolute -bottom-1 -left-1 w-3 h-2 bg-slate-950 rounded" />
-          <span className="absolute -top-1 -right-1 w-3 h-2 bg-slate-950 rounded" />
-          <span className="absolute -bottom-1 -right-1 w-3 h-2 bg-slate-950 rounded" />
 
-          {/* Simulated Ultrasound Beam */}
-          {isRunning && (
-            <div
-              style={{ width: `${sensorDistance * 3}px` }}
-              className="absolute left-14 h-6 border-y border-r border-cyan-400/40 bg-cyan-400/10 pointer-events-none rounded-r-full"
-            />
-          )}
+          {/* Finish Zone (Red line) */}
+          <div className="absolute right-6 top-8 bottom-8 w-10 bg-red-600/80 border border-red-400 rounded-xl flex items-center justify-center text-[10px] text-white font-black [writing-mode:vertical-lr] tracking-widest">
+            STOP ROȘU
+          </div>
+
+          {/* Autonomous Robot LEGO NXT */}
+          <div
+            style={{
+              transform: `translate(${robotPos.x}px, ${robotPos.y}px) rotate(${robotPos.angle}deg)`,
+              transition: 'transform 0.1s linear'
+            }}
+            className="absolute w-14 h-12 bg-slate-800 border-2 border-emerald-400 rounded-xl flex flex-col items-center justify-center shadow-xl"
+          >
+            {/* Ultrasonic Eyes */}
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+            </div>
+            <span className="text-[9px] font-mono font-black text-white">NXT</span>
+            {/* Wheels */}
+            <span className="absolute -top-1 -left-1 w-3 h-2 bg-slate-950 rounded" />
+            <span className="absolute -bottom-1 -left-1 w-3 h-2 bg-slate-950 rounded" />
+            <span className="absolute -top-1 -right-1 w-3 h-2 bg-slate-950 rounded" />
+            <span className="absolute -bottom-1 -right-1 w-3 h-2 bg-slate-950 rounded" />
+
+            {/* Simulated Ultrasound Beam */}
+            {isRunning && (
+              <div
+                style={{ width: `${sensorDistance * 3}px` }}
+                className="absolute left-14 h-6 border-y border-r border-cyan-400/40 bg-cyan-400/10 pointer-events-none rounded-r-full"
+              />
+            )}
+          </div>
         </div>
       </div>
 
       {/* Sensor Dashboard telemetry */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
         <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-800">
           <span className="text-[10px] uppercase font-mono text-slate-400 block font-bold">Port 4: Senzor Ultrasonic</span>
-          <span className="text-base font-mono font-black text-cyan-300">{sensorDistance} cm</span>
+          <span className="text-base font-mono font-black text-cyan-300 tabular-nums">{sensorDistance} cm</span>
           <span className="text-[10px] text-slate-500 block">Prag evitare: 20 cm</span>
         </div>
 
@@ -1516,12 +1568,12 @@ export const Grade8InteractiveSimulators: React.FC<Grade8InteractiveSimulatorsPr
     <div className="bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shrink-0">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <h3 className="text-xl font-black text-white font-heading">
+          <div className="min-w-0">
+            <h3 className="text-xl font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Interactive Labs & Simulators • 8th Grade' : 'Laboratoare Interactive & Simulatoare • Clasa a VIII-a'}
             </h3>
             <p className="text-xs text-emerald-400 font-mono">
@@ -1533,13 +1585,13 @@ export const Grade8InteractiveSimulators: React.FC<Grade8InteractiveSimulatorsPr
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none sm:flex-wrap bg-slate-950 p-1.5 rounded-2xl border border-slate-800 self-start sm:self-auto max-w-full">
           <button
             onClick={() => {
               setActiveTab('excel');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               activeTab === 'excel'
                 ? 'bg-emerald-600 text-white shadow-md font-black'
                 : 'text-slate-400 hover:text-white'
@@ -1554,7 +1606,7 @@ export const Grade8InteractiveSimulators: React.FC<Grade8InteractiveSimulatorsPr
               setActiveTab('web');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               activeTab === 'web'
                 ? 'bg-sky-600 text-white shadow-md font-black'
                 : 'text-slate-400 hover:text-white'
@@ -1569,7 +1621,7 @@ export const Grade8InteractiveSimulators: React.FC<Grade8InteractiveSimulatorsPr
               setActiveTab('cpp');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               activeTab === 'cpp'
                 ? 'bg-indigo-600 text-white shadow-md font-black'
                 : 'text-slate-400 hover:text-white'
@@ -1584,7 +1636,7 @@ export const Grade8InteractiveSimulators: React.FC<Grade8InteractiveSimulatorsPr
               setActiveTab('robot');
               sounds.playClick();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 min-h-[38px] rounded-xl text-xs font-bold font-mono transition flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer ${
               activeTab === 'robot'
                 ? 'bg-teal-600 text-white shadow-md font-black'
                 : 'text-slate-400 hover:text-white'

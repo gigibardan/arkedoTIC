@@ -70,6 +70,15 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
     fetchLeaderboard();
   }, []);
 
+  useEffect(() => {
+    if (!selectedStudentForDetails) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedStudentForDetails(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedStudentForDetails]);
+
   // Sort according to tab
   const sortedStudents = [...students].sort((a, b) => {
     if (activeTab === 'total') {
@@ -99,13 +108,16 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
     
     // Smart Grade Matching
     const lp = s.lessonsProgress as any;
+    const hasG8 = lp && Object.keys(lp).some(k => k.startsWith('g8_') && lp[k]?.score > 0);
     const hasG7 = lp && Object.keys(lp).some(k => k.startsWith('g7_') && lp[k]?.score > 0);
     const hasG6 = lp && Object.keys(lp).some(k => (k.startsWith('g6') || k.includes('cyber6') || k.includes('model3d') || k.includes('presentation')) && lp[k]?.score > 0);
     const hasG5 = lp && Object.keys(lp).some(k => ['hardware', 'files', 'internet1', 'internet2', 'text1', 'text2', 'algo1', 'algo2', 'scratch1', 'scratch2'].includes(k) && lp[k]?.score > 0);
 
     let matchesGrade = true;
-    if (selectedGradeFilter === '7') {
-      matchesGrade = (s.classGrade?.includes('7')) || hasG7 || (!hasG5 && !hasG6 && !s.classGrade);
+    if (selectedGradeFilter === '8') {
+      matchesGrade = (s.classGrade?.includes('8')) || hasG8;
+    } else if (selectedGradeFilter === '7') {
+      matchesGrade = (s.classGrade?.includes('7')) || hasG7 || (!hasG5 && !hasG6 && !hasG8 && !s.classGrade);
     } else if (selectedGradeFilter === '6') {
       matchesGrade = (s.classGrade?.includes('6')) || hasG6;
     } else if (selectedGradeFilter === '5') {
@@ -147,42 +159,42 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
       <div className="absolute bottom-0 right-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-0"></div>
 
       <div className="relative z-10 flex flex-col gap-6">
-        {/* Header Section with Title, Tabs and Refresh */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        {/* Header Section with Title, Tabs and Filters */}
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-800 pb-5">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 shadow-md">
-                <Trophy className="w-5 h-5 fill-slate-950" />
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 shadow-md shrink-0">
+                <Trophy className="w-4 h-4 fill-slate-950" />
               </div>
               <span className="text-xs font-mono font-bold tracking-wider uppercase text-amber-400">
                 {lang === 'en' ? 'Classroom Hall of Fame' : 'Clasamentul Campionilor TIC'}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white font-heading">
+            <h2 className="text-xl sm:text-2xl font-black text-white font-heading text-balance">
               {lang === 'en' ? 'Live Student Leaderboard' : 'Topul Elevilor & Recorduri'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               {lang === 'en' 
-                ? 'Scores update dynamically across lab sessions. Compete in 10 Arcade Mini-Games & Mastery Lessons!'
-                : 'Salvat în Cloud între ore. Competiție la cele 10 Jocuri Arcade și Misiunile din Manual!'}
+                ? 'Scores update dynamically across lab sessions. Compete in 28 Arcade Mini-Games & Mastery Lessons!'
+                : 'Salvat în Cloud între ore. Competiție la cele 28 de Jocuri Arcade și Misiunile din Manual!'}
             </p>
           </div>
 
-          {/* Action Tabs & Refresh */}
-          <div className="flex items-center gap-2 self-start md:self-auto flex-wrap w-full md:w-auto">
-            <div className="bg-slate-950 p-1.5 rounded-2xl border border-slate-800 grid grid-cols-2 sm:flex sm:items-center gap-1.5 w-full sm:w-auto">
+          {/* Action Tabs & Filters */}
+          <div className="flex flex-col sm:flex-row sm:flex-wrap xl:flex-col xl:items-end gap-2.5 w-full xl:w-auto">
+            <div className="bg-slate-950 p-1 rounded-2xl border border-slate-800 grid grid-cols-2 sm:flex sm:items-center gap-1 w-full sm:w-auto">
               <button
                 onClick={() => {
                   setActiveTab('total');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[38px] whitespace-nowrap ${
                   activeTab === 'total'
                     ? 'bg-amber-500 text-slate-950 shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <Flame className="w-3.5 h-3.5" />
+                <Flame className="w-3.5 h-3.5 shrink-0" />
                 <span>{lang === 'en' ? 'Total XP' : 'Total General'}</span>
               </button>
 
@@ -191,14 +203,14 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('arcade');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[38px] whitespace-nowrap ${
                   activeTab === 'arcade'
                     ? 'bg-indigo-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <Gamepad2 className="w-3.5 h-3.5" />
-                <span>{lang === 'en' ? 'Arcade (10)' : 'Jocuri (10)'}</span>
+                <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
+                <span>{lang === 'en' ? 'Arcade' : 'Jocuri Arcade'}</span>
               </button>
 
               <button
@@ -206,13 +218,13 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('lessons');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[38px] whitespace-nowrap ${
                   activeTab === 'lessons'
                     ? 'bg-teal-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <BookOpen className="w-3.5 h-3.5" />
+                <BookOpen className="w-3.5 h-3.5 shrink-0" />
                 <span>{lang === 'en' ? 'Lessons' : 'Lecții'}</span>
               </button>
 
@@ -221,65 +233,68 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                   setActiveTab('duels');
                   sounds.playClick();
                 }}
-                className={`px-3 py-2 sm:py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[40px] ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-95 min-h-[38px] whitespace-nowrap ${
                   activeTab === 'duels'
                     ? 'bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <Swords className="w-3.5 h-3.5 text-amber-300" />
+                <Swords className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                 <span>{lang === 'en' ? 'Duels 1v1' : 'Dueluri 1v1'}</span>
               </button>
             </div>
 
-            {/* Grade Filter */}
-            <div className="relative flex-1 sm:flex-none">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              {/* Grade Filter */}
               <select
                 value={selectedGradeFilter}
                 onChange={(e) => {
                   setSelectedGradeFilter(e.target.value);
                   sounds.playClick();
                 }}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer min-h-[42px] touch-manipulation"
-                title={lang === 'en' ? 'Filter by Grade' : 'Filtrează după Clasă'}
+                aria-label={lang === 'en' ? 'Filter by Grade' : 'Filtrează după Clasă'}
+                className="flex-1 sm:flex-none bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer min-h-[40px] touch-manipulation"
               >
-                <option value="all">🎒 {lang === 'en' ? 'All Grades' : 'Toate Clasele'}</option>
-                <option value="5">🏫 {lang === 'en' ? 'Grade 5' : 'Clasa a V-a'}</option>
-                <option value="6">🚀 {lang === 'en' ? 'Grade 6' : 'Clasa a VI-a'}</option>
-                <option value="7">🔬 {lang === 'en' ? 'Grade 7' : 'Clasa a VII-a'}</option>
+                <option value="all">{lang === 'en' ? 'All Grades' : 'Toate Clasele'}</option>
+                <option value="5">{lang === 'en' ? 'Grade 5' : 'Clasa a V-a'}</option>
+                <option value="6">{lang === 'en' ? 'Grade 6' : 'Clasa a VI-a'}</option>
+                <option value="7">{lang === 'en' ? 'Grade 7' : 'Clasa a VII-a'}</option>
+                <option value="8">{lang === 'en' ? 'Grade 8' : 'Clasa a VIII-a'}</option>
               </select>
-            </div>
 
-            <div className="relative">
-              <Building2 className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-              <select
-                value={selectedSchoolFilter}
-                onChange={(e) => {
-                  setSelectedSchoolFilter(e.target.value);
+              {/* School Filter */}
+              <div className="relative flex-1 sm:flex-none min-w-[170px] max-w-full sm:max-w-[230px]">
+                <Building2 className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
+                <select
+                  value={selectedSchoolFilter}
+                  onChange={(e) => {
+                    setSelectedSchoolFilter(e.target.value);
+                    sounds.playClick();
+                  }}
+                  aria-label={lang === 'en' ? 'Filter by School' : 'Filtrează după Școală'}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs font-semibold text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer min-h-[40px] truncate touch-manipulation"
+                >
+                  <option value="all">{lang === 'en' ? 'All Schools' : 'Toate Școlile'}</option>
+                  {schools.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} ({s.city})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                onClick={() => {
                   sounds.playClick();
+                  fetchLeaderboard();
                 }}
-                className="bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
-                title={lang === 'en' ? 'Filter by School' : 'Filtrează după Școală'}
+                className="p-2 min-w-[40px] min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer flex items-center justify-center shrink-0"
+                title={lang === 'en' ? 'Refresh Leaderboard' : 'Actualizează Clasamentul'}
+                aria-label={lang === 'en' ? 'Refresh Leaderboard' : 'Actualizează Clasamentul'}
               >
-                <option value="all">🏫 {lang === 'en' ? 'All Schools (National)' : 'Toate Școlile (Clasament Național)'}</option>
-                {schools.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} ({s.city})
-                  </option>
-                ))}
-              </select>
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-teal-400' : ''}`} />
+              </button>
             </div>
-
-            <button
-              onClick={() => {
-                sounds.playClick();
-                fetchLeaderboard();
-              }}
-              className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition cursor-pointer self-center"
-              title={lang === 'en' ? 'Refresh Leaderboard' : 'Actualizează Clasamentul'}
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-teal-400' : ''}`} />
-            </button>
           </div>
         </div>
 
@@ -289,9 +304,10 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end max-w-3xl mx-auto">
               {/* Silver - 2nd Place */}
               {topThree[1] ? (
-                <div 
+                <button
+                  type="button"
                   onClick={() => setSelectedStudentForDetails(topThree[1])}
-                  className="order-2 md:order-1 bg-slate-950/70 border-2 border-slate-700 hover:border-slate-500 rounded-3xl p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer transition-all hover:scale-102 relative group shadow-xl"
+                  className="order-2 md:order-1 bg-slate-950/75 border-2 border-slate-700 hover:border-slate-500 rounded-3xl p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer transition-colors relative group shadow-xl"
                 >
                   <div className="absolute -top-3 px-3 py-0.5 rounded-full bg-slate-700 border border-slate-500 text-slate-200 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
                     <Medal className="w-3 h-3 text-slate-300" />
@@ -306,16 +322,16 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {topThree[1].username}
                   </h3>
 
-                  <div className="mt-1 text-lg font-black text-slate-300 font-mono">
+                  <div className="mt-1 text-lg font-black text-slate-200 font-mono tabular-nums">
                     {getScoreValue(topThree[1]).toLocaleString()}
                     <span className="text-[10px] text-slate-400 ml-1 font-sans">{getTabLabel()}</span>
                   </div>
 
-                  <span className="text-[10px] text-teal-400 mt-2 font-mono group-hover:underline flex items-center gap-1">
+                  <span className="text-[11px] text-teal-400 mt-2 font-mono group-hover:underline flex items-center gap-1">
                     <Info className="w-3 h-3" />
-                    {lang === 'en' ? 'View 10 games' : 'Vezi detalii'}
+                    {lang === 'en' ? 'View breakdown' : 'Vezi detalii'}
                   </span>
-                </div>
+                </button>
               ) : (
                 <div className="order-2 md:order-1 h-36 border-2 border-dashed border-slate-800 rounded-3xl flex items-center justify-center text-slate-400 text-xs font-mono">
                   #2 {lang === 'en' ? 'Awaiting' : 'În așteptare'}
@@ -324,16 +340,17 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
               {/* Gold - 1st Place */}
               {topThree[0] ? (
-                <div 
+                <button
+                  type="button"
                   onClick={() => setSelectedStudentForDetails(topThree[0])}
-                  className="order-1 md:order-2 bg-gradient-to-b from-amber-500/15 via-slate-950/90 to-slate-950 border-2 border-amber-400 shadow-2xl shadow-amber-500/20 rounded-3xl p-5 sm:p-6 flex flex-col items-center text-center cursor-pointer transition-all hover:scale-105 relative group md:-translate-y-2 ring-2 ring-amber-400/30"
+                  className="order-1 md:order-2 bg-gradient-to-b from-amber-500/15 via-slate-950/90 to-slate-950 border-2 border-amber-400 hover:border-amber-300 shadow-2xl shadow-amber-500/20 rounded-3xl p-5 sm:p-6 flex flex-col items-center text-center cursor-pointer transition-colors relative group md:-translate-y-2 ring-2 ring-amber-400/30"
                 >
                   <div className="absolute -top-3.5 px-3.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[11px] font-black uppercase tracking-wider flex items-center gap-1 shadow-md">
                     <Crown className="w-3.5 h-3.5 fill-current" />
                     <span>#1 {lang === 'en' ? 'Champion' : 'Campion'}</span>
                   </div>
 
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/30 mt-2 mb-2 animate-bounce-slow">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/30 mt-2 mb-2">
                     {topThree[0].avatar || '👑'}
                   </div>
 
@@ -341,16 +358,16 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {topThree[0].username}
                   </h3>
 
-                  <div className="mt-1 text-2xl font-black text-amber-400 font-mono tracking-tight">
+                  <div className="mt-1 text-2xl font-black text-amber-400 font-mono tracking-tight tabular-nums">
                     {getScoreValue(topThree[0]).toLocaleString()}
                     <span className="text-xs text-amber-300/80 ml-1.5 font-sans font-bold">{getTabLabel()}</span>
                   </div>
 
-                  <span className="text-[10px] text-amber-300 mt-2 font-mono group-hover:underline flex items-center gap-1">
+                  <span className="text-[11px] text-amber-300 mt-2 font-mono group-hover:underline flex items-center gap-1">
                     <Info className="w-3 h-3" />
-                    {lang === 'en' ? 'View 10 games' : 'Vezi detalii scoruri'}
+                    {lang === 'en' ? 'View breakdown' : 'Vezi detalii scoruri'}
                   </span>
-                </div>
+                </button>
               ) : (
                 <div className="order-1 md:order-2 h-44 border-2 border-dashed border-amber-500/30 rounded-3xl flex items-center justify-center text-amber-300/85 text-xs font-mono">
                   #1 {lang === 'en' ? 'Awaiting Champion' : 'Fii primul campion!'}
@@ -359,9 +376,10 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
               {/* Bronze - 3rd Place */}
               {topThree[2] ? (
-                <div 
+                <button
+                  type="button"
                   onClick={() => setSelectedStudentForDetails(topThree[2])}
-                  className="order-3 md:order-3 bg-slate-950/70 border-2 border-amber-800/80 hover:border-amber-700 rounded-3xl p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer transition-all hover:scale-102 relative group shadow-xl"
+                  className="order-3 md:order-3 bg-slate-950/75 border-2 border-amber-800/80 hover:border-amber-600 rounded-3xl p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer transition-colors relative group shadow-xl"
                 >
                   <div className="absolute -top-3 px-3 py-0.5 rounded-full bg-amber-900 border border-amber-700 text-amber-200 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
                     <Medal className="w-3 h-3 text-amber-500" />
@@ -376,16 +394,16 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                     {topThree[2].username}
                   </h3>
 
-                  <div className="mt-1 text-lg font-black text-amber-400 font-mono">
+                  <div className="mt-1 text-lg font-black text-amber-400 font-mono tabular-nums">
                     {getScoreValue(topThree[2]).toLocaleString()}
                     <span className="text-[10px] text-slate-400 ml-1 font-sans">{getTabLabel()}</span>
                   </div>
 
-                  <span className="text-[10px] text-teal-400 mt-2 font-mono group-hover:underline flex items-center gap-1">
+                  <span className="text-[11px] text-teal-400 mt-2 font-mono group-hover:underline flex items-center gap-1">
                     <Info className="w-3 h-3" />
-                    {lang === 'en' ? 'View 10 games' : 'Vezi detalii'}
+                    {lang === 'en' ? 'View breakdown' : 'Vezi detalii'}
                   </span>
-                </div>
+                </button>
               ) : (
                 <div className="order-3 md:order-3 h-36 border-2 border-dashed border-slate-800 rounded-3xl flex items-center justify-center text-slate-400 text-xs font-mono">
                   #3 {lang === 'en' ? 'Awaiting' : 'În așteptare'}
@@ -407,21 +425,21 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
         {/* Search and Table of All Students */}
         {filteredStudents.length > 3 && (
           <div className="flex flex-col gap-3 pt-2">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="text-xs font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Layers className="w-4 h-4 text-indigo-400" />
+                <Layers className="w-4 h-4 text-indigo-400 shrink-0" />
                 <span>{lang === 'en' ? 'All Cadet Rankings (4+)' : 'Toate Pozițiile Elevilor'}</span>
               </div>
 
               {/* Quick Search */}
-              <div className="relative w-48 sm:w-64">
+              <div className="relative w-full sm:w-64">
                 <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={lang === 'en' ? 'Search student...' : 'Caută elev...'}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500 min-h-[40px]"
                 />
               </div>
             </div>
@@ -434,49 +452,50 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 const score = getScoreValue(student);
 
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={student.id}
                     onClick={() => setSelectedStudentForDetails(student)}
-                    className={`p-3 rounded-2xl border transition flex items-center justify-between gap-3 cursor-pointer ${
+                    className={`w-full text-left p-3 rounded-2xl border transition flex items-center justify-between gap-3 cursor-pointer ${
                       isCurrent
                         ? 'bg-indigo-950/40 border-indigo-500/80 ring-2 ring-indigo-500/30'
                         : 'bg-slate-950/80 border-slate-800/80 hover:border-slate-700'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-7 h-7 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-400 flex items-center justify-center">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-7 h-7 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-400 flex items-center justify-center shrink-0 tabular-nums">
                         #{rank}
                       </div>
-                      <div className="text-xl">{student.avatar || '🎓'}</div>
-                      <div>
+                      <div className="text-xl shrink-0">{student.avatar || '🎓'}</div>
+                      <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs sm:text-sm font-bold text-white">
+                          <span className="text-xs sm:text-sm font-bold text-white truncate">
                             {student.username}
                           </span>
                           {isCurrent && (
-                            <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-[10px] font-bold text-indigo-300 font-mono">
+                            <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-[10px] font-bold text-indigo-300 font-mono shrink-0">
                               {lang === 'en' ? 'YOU' : 'TU'}
                             </span>
                           )}
                         </div>
-                        <div className="text-[10px] text-slate-400 font-mono">
+                        <div className="text-[11px] text-slate-400 font-mono tabular-nums truncate">
                           {activeTab === 'duels'
-                            ? `⚔️ ${student.duelStats?.matchesPlayed || 0} meciuri • 🏆 ${student.duelStats?.wins || 0} victorii • +${student.duelStats?.duelPoints || 0} XP`
-                            : `${student.arcadeScores?.totalArcade ? `${student.arcadeScores.totalArcade} pts arcade` : '0 arcade'} • ${student.lessonsProgress?.totalLessonScore ? `${student.lessonsProgress.totalLessonScore} pts lecții` : '0 lecții'}`
+                            ? `${student.duelStats?.matchesPlayed || 0} meciuri · ${student.duelStats?.wins || 0} victorii · +${student.duelStats?.duelPoints || 0} XP`
+                            : `${student.arcadeScores?.totalArcade ? `${student.arcadeScores.totalArcade} pts arcade` : '0 arcade'} · ${student.lessonsProgress?.totalLessonScore ? `${student.lessonsProgress.totalLessonScore} pts lecții` : '0 lecții'}`
                           }
                         </div>
                       </div>
                     </div>
 
-                    <div className="text-right">
-                      <div className="text-sm font-black text-amber-400 font-mono">
+                    <div className="text-right shrink-0">
+                      <div className="text-sm font-black text-amber-400 font-mono tabular-nums">
                         {score.toLocaleString()}
                       </div>
                       <div className="text-[10px] text-slate-400 font-mono">
                         {getTabLabel()}
                       </div>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -503,21 +522,29 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
         )}
       </div>
 
-      {/* POPUP MODAL: 10 ARCADE GAMES BREAKDOWN FOR A STUDENT */}
+      {/* POPUP MODAL: STUDENT SCORE BREAKDOWN */}
       {selectedStudentForDetails && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border-2 border-indigo-500/40 rounded-3xl max-w-lg w-full p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setSelectedStudentForDetails(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-slate-900 border-2 border-indigo-500/40 rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto"
+          >
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-2xl shadow">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-2xl shadow shrink-0">
                   {selectedStudentForDetails.avatar || '🎓'}
                 </div>
-                <div>
-                  <h3 className="text-base font-black text-white font-heading">
+                <div className="min-w-0">
+                  <h3 className="text-base font-black text-white font-heading truncate">
                     {selectedStudentForDetails.username}
                   </h3>
-                  <div className="text-xs text-amber-400 font-mono font-bold">
+                  <div className="text-xs text-amber-400 font-mono font-bold tabular-nums">
                     Total XP: {selectedStudentForDetails.totalXP?.toLocaleString() || 0} pts
                   </div>
                 </div>
@@ -525,20 +552,21 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
 
               <button
                 onClick={() => setSelectedStudentForDetails(null)}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-xs font-bold cursor-pointer"
+                aria-label={lang === 'en' ? 'Close' : 'Închide'}
+                className="w-9 h-9 min-w-[36px] min-h-[36px] rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center text-xs font-bold cursor-pointer shrink-0"
               >
                 ✕
               </button>
             </div>
 
-            {/* Breakdown of 10 Arcade Games */}
+            {/* Breakdown of Arcade Games */}
             <div>
               <h4 className="text-xs font-mono uppercase tracking-wider text-indigo-400 mb-3 flex items-center gap-1.5">
-                <Gamepad2 className="w-4 h-4" />
-                <span>{lang === 'en' ? 'All 10 Arcade Games Performance' : 'Defalcare Recorduri - Cele 10 Jocuri Arcade'}</span>
+                <Gamepad2 className="w-4 h-4 shrink-0" />
+                <span>{lang === 'en' ? 'Top Arcade Games Performance' : 'Defalcare Recorduri - Jocuri Arcade'}</span>
               </h4>
 
-              <div className="grid grid-cols-2 gap-2.5 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs tabular-nums">
                 {/* 1. Typing */}
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
                   <span className="text-slate-400">⌨️ Typing Sprint</span>
@@ -680,9 +708,9 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 </div>
               </div>
 
-              <div className="mt-3 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex justify-between items-center text-xs">
+              <div className="mt-3 p-3 rounded-xl bg-indigo-950/40 border border-indigo-500/30 flex justify-between items-center text-xs tabular-nums">
                 <span className="font-bold text-indigo-300">
-                  {lang === 'en' ? 'Total Arcade Games Score (17):' : 'Punctaj Total Mini-Jocuri (17):'}
+                  {lang === 'en' ? 'Total Arcade Games Score:' : 'Punctaj Total Mini-Jocuri:'}
                 </span>
                 <span className="font-mono font-black text-sm text-indigo-200">
                   {selectedStudentForDetails.arcadeScores?.totalArcade || 0} pts
@@ -693,11 +721,11 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
             {/* Breakdown of Practical Lessons */}
             <div className="border-t border-slate-800 pt-4">
               <h4 className="text-xs font-mono uppercase tracking-wider text-teal-400 mb-3 flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4" />
+                <BookOpen className="w-4 h-4 shrink-0" />
                 <span>{lang === 'en' ? 'Textbook Interactive Missions' : 'Misiuni Interactive din Manual'}</span>
               </h4>
 
-              <div className="grid grid-cols-2 gap-2.5 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs tabular-nums">
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
                   <div className="flex flex-col">
                     <span className="text-slate-300 font-medium">💻 Hardware</span>
@@ -875,7 +903,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
                 <span>{lang === 'en' ? 'Arena Duels 1v1 Record' : 'Palmares Arena Dueluri 1v1'}</span>
               </h4>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs tabular-nums">
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
                   <span className="text-slate-400 text-[10px] block font-semibold">Total Victorii</span>
                   <span className="font-mono font-black text-amber-400 text-base">
@@ -925,7 +953,7 @@ export const LeaderboardSection: React.FC<LeaderboardSectionProps> = ({
             <div className="pt-2">
               <button
                 onClick={() => setSelectedStudentForDetails(null)}
-                className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition cursor-pointer"
+                className="w-full py-2.5 min-h-[40px] rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition cursor-pointer"
               >
                 {lang === 'en' ? 'Close Window' : 'Închide'}
               </button>

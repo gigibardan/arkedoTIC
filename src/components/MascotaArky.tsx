@@ -191,7 +191,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
           className="pointer-events-auto flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/95 border-2 border-teal-500/50 shadow-2xl text-teal-300 hover:bg-slate-800 hover:text-white transition transform hover:scale-105 active:scale-95 cursor-pointer"
           title={lang === 'en' ? 'Expand Arky the Mascot' : 'Afișează Mascota Arky'}
         >
-          <Bot className="w-5 h-5 text-teal-400 animate-pulse" />
+          <Bot className="w-5 h-5 text-teal-400" />
           <span className="text-xs font-bold font-mono">Arky</span>
           <ChevronUp className="w-4 h-4 text-slate-400" />
         </button>
@@ -205,12 +205,11 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
               {/* Header Bar in Bubble */}
               <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-800/80">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
                   <span className="text-[10px] font-mono font-black uppercase tracking-wider text-teal-300">
                     {currentTheme.bubbleHeader}
                   </span>
                   {arkyContext.successStreak >= 3 && (
-                    <span className="text-[10px] font-mono font-black text-amber-300 ml-1">
+                    <span className="text-[10px] font-mono font-black text-amber-300 ml-1 tabular-nums">
                       🔥 x{arkyContext.successStreak}
                     </span>
                   )}
@@ -220,7 +219,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   {/* TTS Voice Readout */}
                   <button
                     onClick={handleSpeech}
-                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-cyan-300 transition cursor-pointer"
+                    className="p-1.5 min-w-[30px] min-h-[30px] rounded-lg hover:bg-slate-800 text-slate-300 hover:text-cyan-300 transition cursor-pointer flex items-center justify-center"
                     title={lang === 'en' ? 'Listen to Arky' : 'Ascultă mesajul lui Arky'}
                     aria-label={lang === 'en' ? 'Listen to Arky' : 'Ascultă mesajul lui Arky'}
                   >
@@ -230,7 +229,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   {/* Random Quote Shuffle */}
                   <button
                     onClick={handleNextQuote}
-                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-amber-300 transition cursor-pointer"
+                    className="p-1.5 min-w-[30px] min-h-[30px] rounded-lg hover:bg-slate-800 text-slate-300 hover:text-amber-300 transition cursor-pointer flex items-center justify-center"
                     title={lang === 'en' ? 'Get another quote' : 'Altă replică / glumă'}
                     aria-label={lang === 'en' ? 'Get another quote' : 'Altă replică / glumă'}
                   >
@@ -240,7 +239,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                   {/* Close Bubble */}
                   <button
                     onClick={arkyContext.toggleBubble}
-                    className="p-1 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-rose-300 transition cursor-pointer"
+                    className="p-1.5 min-w-[30px] min-h-[30px] rounded-lg hover:bg-slate-800 text-slate-300 hover:text-rose-300 transition cursor-pointer flex items-center justify-center"
                     title={lang === 'en' ? 'Hide bubble' : 'Ascunde bula'}
                     aria-label={lang === 'en' ? 'Hide bubble' : 'Ascunde bula'}
                   >
@@ -305,14 +304,14 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
             >
               {/* Particle Sparkle on Success or Finished */}
               {(activeState === 'success' || activeState === 'finished') && (
-                <div className="absolute -top-3 -left-3 pointer-events-none text-amber-300 animate-spin">
+                <div className="absolute -top-3 -left-3 pointer-events-none text-amber-300">
                   <Sparkles className="w-6 h-6" />
                 </div>
               )}
 
               {/* Question mark halo on Error */}
               {activeState === 'error' && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 pointer-events-none text-amber-400 font-black text-xl animate-bounce">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 pointer-events-none text-amber-400 font-black text-xl">
                   ❓
                 </div>
               )}
@@ -343,13 +342,13 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
 
               {/* Equipped Skin Accessory Overlays */}
               {equipped.arkySkin === 'cyber' && (
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none px-2 py-0.5 rounded-full bg-cyan-500/30 border border-cyan-400 text-[10px] font-black text-cyan-200 shadow-lg shadow-cyan-500/50 flex items-center gap-1 animate-pulse">
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none px-2 py-0.5 rounded-full bg-cyan-500/30 border border-cyan-400 text-[10px] font-black text-cyan-200 shadow-lg shadow-cyan-500/50 flex items-center gap-1">
                   <span>🕶️</span>
                   <span>CYBER</span>
                 </div>
               )}
               {equipped.arkySkin === 'scholar' && (
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-2xl drop-shadow-lg animate-float">
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-2xl drop-shadow-lg">
                   🎓
                 </div>
               )}
@@ -369,7 +368,7 @@ export const MascotaArky: React.FC<MascotaArkyProps> = ({
                 </div>
               )}
               {equipped.arkySkin === 'wizard' && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-3xl drop-shadow-lg animate-bounce">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-3xl drop-shadow-lg">
                   🧙‍♂️
                 </div>
               )}

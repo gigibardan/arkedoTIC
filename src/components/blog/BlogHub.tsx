@@ -225,7 +225,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             <button
               type="button"
               onClick={handleBackToIndex}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'All Blog Guides' : 'Toate articolele'}</span>
@@ -235,7 +235,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sounds.playClick()}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold border border-emerald-500/40 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-semibold border border-emerald-500/40 transition-colors whitespace-nowrap shrink-0"
             >
               <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
               <span>WhatsApp</span>
@@ -243,7 +243,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             <button
               type="button"
               onClick={handleCopyShareUrl}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               {copiedShareLink ? (
                 <>
@@ -260,7 +260,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             <button
               type="button"
               onClick={handleNativeShare}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'Share' : 'Distribuie'}</span>
@@ -269,7 +269,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
               href={staticArticleUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs font-medium text-slate-300 hover:text-teal-300 transition-colors whitespace-nowrap shrink-0"
             >
               <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{isEn ? 'Permalink / Print View' : 'Link direct SEO'}</span>
@@ -358,12 +358,12 @@ export const BlogHub: React.FC<BlogHubProps> = ({
 
               {section.codeBlock && (
                 <div className="rounded-xl bg-slate-950 border border-slate-800 overflow-hidden">
-                  <div className="flex items-center justify-between gap-4 px-4 py-2.5 border-b border-slate-800 bg-slate-900/70">
+                  <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 border-b border-slate-800 bg-slate-900/70">
                     <span className="text-xs font-semibold text-slate-200">{section.codeBlock.title}</span>
                     <button
                       type="button"
                       onClick={() => handleCopyCode(section.id, section.codeBlock!.code)}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 min-h-[34px] rounded-md bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
                     >
                       {copiedCodeKey === section.id ? (
                         <>
@@ -526,7 +526,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => sounds.playClick()}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors whitespace-nowrap shrink-0"
             >
               <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
               <span>WhatsApp</span>
@@ -534,7 +534,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             <button
               type="button"
               onClick={handleCopyShareUrl}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               {copiedShareLink ? <Check className="w-3.5 h-3.5 text-emerald-300" aria-hidden="true" /> : <Copy className="w-3.5 h-3.5" aria-hidden="true" />}
               <span>{copiedShareLink ? (isEn ? 'Copied!' : 'Copiat!') : (isEn ? 'Copy link' : 'Copiază link')}</span>
@@ -636,7 +636,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             href={isEn ? '/blog/en/' : '/blog/'}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors shrink-0 whitespace-nowrap"
           >
             <BookOpen className="w-4 h-4 text-teal-300" aria-hidden="true" />
             <span>{isEn ? 'Static SEO Index' : 'Versiune HTML Statică'}</span>
@@ -645,7 +645,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
 
         {/* Search + Interactive Category Filter Tabs */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2">
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-950/70 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none sm:flex-wrap bg-slate-950/70 p-1 rounded-xl border border-slate-800 max-w-full">
             {activeCategoriesWithCount.map((cat) => {
               const active = selectedCategory === cat.id;
               return (
@@ -656,7 +656,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
                     sounds.playClick();
                     setSelectedCategory(cat.id);
                   }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`px-3 py-1.5 min-h-[36px] rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                     active
                       ? 'bg-teal-500 text-slate-950 font-bold'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
@@ -676,7 +676,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={isEn ? 'Search C++, Excel, AI, Roblox...' : 'Caută C++, Excel, AI, Roblox...'}
               aria-label={isEn ? 'Search blog articles' : 'Caută articole în blog'}
-              className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
+              className="w-full min-h-[40px] pl-9 pr-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
             />
           </div>
         </div>
@@ -736,14 +736,14 @@ export const BlogHub: React.FC<BlogHubProps> = ({
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-700/60">
-                  <span className="text-xs text-slate-400">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-700/60">
+                  <span className="text-xs text-slate-400 tabular-nums">
                     {isEn ? `${content.faqs.length} FAQs · ${content.internalLinks.length} Labs` : `${content.faqs.length} FAQ · ${content.internalLinks.length} Laboratoare`}
                   </span>
                   <button
                     type="button"
                     onClick={() => handleOpenArticle(article)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0"
                   >
                     <span>{isEn ? 'Read Full Guide' : 'Citește ghidul complet'}</span>
                     <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
