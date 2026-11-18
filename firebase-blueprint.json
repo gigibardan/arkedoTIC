@@ -15,15 +15,27 @@
     },
     "Elev": {
       "title": "Elev",
-      "description": "Profilul elevului cu scoruri arcade si progres lectii",
+      "description": "Profilul elevului cu scoruri arcade, progres lectii, carnet digital si diplome",
       "type": "object",
       "properties": {
         "studentName": { "type": "string" },
         "avatar": { "type": "string" },
+        "classGrade": { "type": "string" },
+        "schoolId": { "type": "string" },
         "totalScore": { "type": "number" },
+        "totalXP": { "type": "number" },
+        "byteCoins": { "type": "number" },
         "arcadeScores": { "type": "object" },
+        "lessonsProgress": { "type": "object" },
+        "duelStats": { "type": "object" },
         "completedLessons": { "type": "array" },
-        "diplomas": { "type": "object" }
+        "diplomas": { "type": "object" },
+        "dailyStreak": { "type": "object" },
+        "dailyQuests": { "type": "object" },
+        "unlockedBadgeIds": { "type": "array" },
+        "sandboxProgress": { "type": "object" },
+        "quickEvalHistory": { "type": "array" },
+        "carnetUpdatedAt": { "type": "string" }
       }
     },
     "DuelRoom": {

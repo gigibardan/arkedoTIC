@@ -18,6 +18,8 @@ import {
   Globe,
   FileText,
   Code2,
+  Award,
+  ClipboardCheck,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
@@ -28,13 +30,15 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
   missionId?: string | null;
   byteCoins?: number;
   onEditStudentName?: () => void;
+  onNavigateToCarnet?: () => void;
+  onNavigateToEvaluare?: () => void;
   onNavigateToTeacher?: () => void;
   onNavigateToSuperAdmin?: () => void;
   onNavigateToArcade?: () => void;
@@ -58,6 +62,8 @@ export const Header: React.FC<HeaderProps> = ({
   missionId = null,
   byteCoins,
   onEditStudentName,
+  onNavigateToCarnet,
+  onNavigateToEvaluare,
   onNavigateToTeacher,
   onNavigateToArcade,
   onNavigateToDuel,
@@ -143,6 +149,8 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'blog') return lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC';
     if (currentView === 'glossary') return lang === 'en' ? 'ICT & CS Glossary' : 'Glosar Informatică & TIC';
     if (currentView === 'sandbox') return lang === 'en' ? 'Code Sandbox Lab' : 'Sandbox Cod Live';
+    if (currentView === 'carnet') return lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital';
+    if (currentView === 'evaluare') return lang === 'en' ? 'Quick Eval Simulator' : 'Simulare Evaluare TIC';
     return 'ArkyEdu';
   };
 
@@ -155,6 +163,8 @@ export const Header: React.FC<HeaderProps> = ({
   })();
 
   const isResourceViewActive =
+    currentView === 'carnet' ||
+    currentView === 'evaluare' ||
     currentView === 'sandbox' ||
     currentView === 'blog' ||
     currentView === 'glossary' ||
@@ -297,8 +307,8 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Resources & Tools Dropdown (Sandbox, Blog, Glossary, Shop, Teacher) */}
-            {(onNavigateToSandbox || onNavigateToBlog || onNavigateToGlossary || onNavigateToTeacher || onOpenShop) && (
+            {/* Resources & Tools Dropdown (Carnet, Evaluare, Sandbox, Blog, Glossary, Shop, Teacher) */}
+            {(onNavigateToCarnet || onNavigateToEvaluare || onNavigateToSandbox || onNavigateToBlog || onNavigateToGlossary || onNavigateToTeacher || onOpenShop) && (
               <div className="relative" ref={resourcesDropdownRef}>
                 <button
                   type="button"
@@ -328,6 +338,64 @@ export const Header: React.FC<HeaderProps> = ({
                     role="menu"
                     className="absolute right-0 mt-2 w-72 rounded-2xl bg-slate-900/98 backdrop-blur-xl border border-slate-700/90 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   >
+                    {onNavigateToCarnet && (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          sounds.playClick();
+                          setIsResourcesOpen(false);
+                          onNavigateToCarnet();
+                        }}
+                        className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
+                          currentView === 'carnet'
+                            ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30'
+                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                          <Award className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white">
+                            {lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital'}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {lang === 'en' ? 'Grades, Diplomas & Streak' : 'Note 1–10, Diplome & Trofee'}
+                          </div>
+                        </div>
+                      </button>
+                    )}
+
+                    {onNavigateToEvaluare && (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          sounds.playClick();
+                          setIsResourcesOpen(false);
+                          onNavigateToEvaluare();
+                        }}
+                        className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
+                          currentView === 'evaluare'
+                            ? 'bg-cyan-500/15 text-cyan-200 border border-cyan-500/30'
+                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                          <ClipboardCheck className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white">
+                            {lang === 'en' ? 'Quick Eval Simulator' : 'Simulare Evaluare (Test)'}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {lang === 'en' ? 'Timed Quizzes · Grades 5–8' : 'Test Cronometrat · Nota 1–10'}
+                          </div>
+                        </div>
+                      </button>
+                    )}
+
                     {onNavigateToSandbox && (
                       <a
                         href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
@@ -499,13 +567,19 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
 
-            {/* Student Greeting Chip (Desktop >= lg, hidden in tight lesson header to prevent collisions) */}
+            {/* Student Greeting Chip (Desktop >= lg, opens Carnet if available) */}
             {studentName && currentView !== 'lesson' && (
               <button
                 type="button"
-                onClick={onEditStudentName}
+                onClick={onNavigateToCarnet || onEditStudentName}
                 className="hidden lg:flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 px-2.5 py-1.5 rounded-xl border border-slate-700/80 text-xs font-semibold text-slate-200 cursor-pointer transition shrink-0"
-                title={t.changeName}
+                title={
+                  onNavigateToCarnet
+                    ? lang === 'en'
+                      ? 'Open My Digital Portfolio'
+                      : 'Deschide Carnetul meu Digital'
+                    : t.changeName
+                }
               >
                 <span className="text-sm">{currentAvatar}</span>
                 <span className="font-bold text-emerald-300 max-w-[90px] truncate">
@@ -621,6 +695,58 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Quick Navigation Items Grid */}
             <div className="grid grid-cols-2 gap-2 pt-1">
+              {onNavigateToCarnet && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToCarnet();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 min-h-[48px] ${
+                    currentView === 'carnet'
+                      ? 'bg-amber-600 text-white border-amber-400'
+                      : 'bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 text-amber-200'
+                  }`}
+                >
+                  <Award className="w-4 h-4 text-amber-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">
+                      {lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital'}
+                    </div>
+                    <div className="text-[10px] text-amber-200/90 truncate">
+                      {lang === 'en' ? 'Grades, Diplomas & Badges' : 'Note 1–10, Diplome PDF & Insigne'}
+                    </div>
+                  </div>
+                </button>
+              )}
+
+              {onNavigateToEvaluare && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToEvaluare();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 min-h-[48px] ${
+                    currentView === 'evaluare'
+                      ? 'bg-cyan-600 text-white border-cyan-400'
+                      : 'bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 text-cyan-200'
+                  }`}
+                >
+                  <ClipboardCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">
+                      {lang === 'en' ? 'Quick Eval Simulator' : 'Test Rapid & Simulare Evaluare'}
+                    </div>
+                    <div className="text-[10px] text-cyan-200/90 truncate">
+                      {lang === 'en' ? 'Timed Quizzes V–VIII · Auto Grade 1–10' : 'Antrenament Cronometrat · Nota 1–10'}
+                    </div>
+                  </div>
+                </button>
+              )}
+
               {onNavigateToSandbox && (
                 <a
                   href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}

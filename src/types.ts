@@ -165,6 +165,8 @@ export interface LessonsProgress {
   g8_algo_c?: LessonMissionState;
   g8_algo_d?: LessonMissionState;
   g8_algo_e?: LessonMissionState;
+  g8_robot_a?: LessonMissionState;
+  g8_robot_b?: LessonMissionState;
   totalLessonScore: number;
 }
 
@@ -288,7 +290,7 @@ export interface StudentDiploma {
   courseId: string;
   titleRo: string;
   titleEn: string;
-  grade: 'Clasa a V-a' | 'Clasa a VI-a' | 'Clasa a VII-a';
+  grade: 'Clasa a V-a' | 'Clasa a VI-a' | 'Clasa a VII-a' | 'Clasa a VIII-a';
   studentName: string;
   userEmail?: string;
   awardedAt: string; // ISO format
@@ -299,6 +301,47 @@ export interface StudentDiploma {
   officialRef?: string;
 }
 
+export interface DailyStreakInfo {
+  current: number;
+  best: number;
+  lastActiveDate: string; // YYYY-MM-DD
+  activeDays: string[];   // recent YYYY-MM-DD dates (last 30 days)
+}
+
+export interface DailyQuestState {
+  date: string;           // YYYY-MM-DD
+  claimedIds: string[];
+  completedLessonToday?: boolean;
+  playedArcadeToday?: boolean;
+  visitedCarnetToday?: boolean;
+}
+
+export interface SandboxSnippet {
+  code: string;
+  css?: string;
+  stdin?: string;
+  updatedAt: string;
+}
+
+export interface SandboxProgress {
+  solvedIds: string[];
+  snippets: Record<string, SandboxSnippet>;
+  updatedAt?: string;
+}
+
+export interface QuickEvalAttempt {
+  id: string;
+  gradeFilter: 'all' | 5 | 6 | 7 | 8;
+  difficulty: 'all' | 'easy' | 'medium' | 'hard';
+  score: number;
+  maxScore: number;
+  nota: number;
+  correctCount: number;
+  totalQuestions: number;
+  elapsedSeconds: number;
+  completedAt: string;
+}
+
 export interface StudentProfile {
   id: string;
   username: string;
@@ -306,7 +349,7 @@ export interface StudentProfile {
   passwordHash: string;
   avatar: string;
   schoolId?: string;
-  classGrade?: string; // e.g. '5', '6', '7' or '7A'
+  classGrade?: string; // e.g. '5', '6', '7', '8' or '7A'
   isSuspended?: boolean;
   arcadeScores: ArcadeScores;
   lessonsProgress: LessonsProgress;
@@ -316,6 +359,12 @@ export interface StudentProfile {
   equipped?: EquippedItems;
   cyberCity?: CyberCityData;
   diplomas?: Record<string, StudentDiploma>;
+  dailyStreak?: DailyStreakInfo;
+  dailyQuests?: DailyQuestState;
+  unlockedBadgeIds?: string[];
+  sandboxProgress?: SandboxProgress;
+  quickEvalHistory?: QuickEvalAttempt[];
+  carnetUpdatedAt?: string;
   totalXP: number;
   createdAt: string;
   lastActiveAt: string;

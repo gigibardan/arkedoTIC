@@ -20,7 +20,9 @@ import {
   FileCode,
   Sparkles,
   PhoneCall,
-  UserCheck
+  UserCheck,
+  Award,
+  ClipboardCheck,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { LegalTabType } from './LegalModal';
@@ -38,6 +40,8 @@ interface FooterProps {
   onNavigateToBlog?: () => void;
   onNavigateToGlossary?: () => void;
   onNavigateToSandbox?: () => void;
+  onNavigateToCarnet?: () => void;
+  onNavigateToEvaluare?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -51,6 +55,8 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToBlog,
   onNavigateToGlossary,
   onNavigateToSandbox,
+  onNavigateToCarnet,
+  onNavigateToEvaluare,
 }) => {
   const { lang, t } = useLanguage();
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -240,6 +246,36 @@ export const Footer: React.FC<FooterProps> = ({
                   <span>{lang === 'en' ? 'ICT & CS Glossary (A–Z)' : 'Glosar TIC & Coding (A–Z)'}</span>
                 </a>
               </li>
+              {onNavigateToCarnet && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      onNavigateToCarnet();
+                    }}
+                    className="hover:text-amber-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold cursor-pointer"
+                  >
+                    <Award className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span>{lang === 'en' ? 'My Digital Portfolio (Grades & Diplomas)' : 'Carnetul meu Digital (Note & Diplome)'}</span>
+                  </button>
+                </li>
+              )}
+              {onNavigateToEvaluare && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      onNavigateToEvaluare();
+                    }}
+                    className="hover:text-cyan-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold cursor-pointer"
+                  >
+                    <ClipboardCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    <span>{lang === 'en' ? 'Quick Eval Simulator (Grades 5–8)' : 'Test Rapid & Simulare Evaluare (V–VIII)'}</span>
+                  </button>
+                </li>
+              )}
               <li>
                 <a
                   href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}

@@ -27,6 +27,7 @@ import {
   Presentation,
   Code2,
   Terminal,
+  ClipboardCheck,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -90,6 +91,8 @@ interface CoursesCatalogProps {
   onOpenBlog?: (slug?: string | null) => void;
   onOpenGlossary?: (slug?: string | null) => void;
   onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html') => void;
+  onOpenCarnet?: () => void;
+  onOpenEvaluare?: () => void;
   byteCoins?: number;
 }
 
@@ -111,6 +114,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenBlog,
   onOpenGlossary,
   onOpenSandbox,
+  onOpenCarnet,
+  onOpenEvaluare,
   byteCoins,
 }) => {
   const getMaxPlayableLevels = (mId: string): number => {
@@ -889,7 +894,33 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                        {onOpenCarnet && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              sounds.playClick();
+                              onOpenCarnet();
+                            }}
+                            className="px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 hover:text-white text-xs font-bold transition border border-amber-500/40 cursor-pointer flex items-center gap-1.5 min-h-[38px]"
+                          >
+                            <Award className="w-3.5 h-3.5 text-amber-400" />
+                            <span>{lang === 'en' ? 'Digital Portfolio' : 'Carnet Digital'}</span>
+                          </button>
+                        )}
+                        {onOpenEvaluare && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              sounds.playClick();
+                              onOpenEvaluare();
+                            }}
+                            className="px-3 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 hover:text-white text-xs font-bold transition border border-cyan-500/40 cursor-pointer flex items-center gap-1.5 min-h-[38px]"
+                          >
+                            <ClipboardCheck className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>{lang === 'en' ? 'Quick Quiz' : 'Test Rapid'}</span>
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={handleStartRename}

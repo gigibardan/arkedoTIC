@@ -3,7 +3,7 @@ import { CURRICULA_MODULES } from '../data/curriculaData';
 import { findBlogArticleBySlug } from '../data/blog';
 import { findGlossaryTermBySlug } from '../data/glossary';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox';
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -149,6 +149,23 @@ export function updateDynamicSeo(
       ? 'Run C++ (Code::Blocks style), Python 3, and HTML5/CSS code directly in your browser with automated curriculum tests and instant Arky diagnostics.'
       : 'Rulează cod C++ (Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare, cu verificare automată a testelor școlare și diagnostic Arky.';
     canonicalUrl = isEn ? `${BASE_URL}/sandbox/en/` : `${BASE_URL}/sandbox/`;
+  } else if (view === 'carnet') {
+    title = isEn
+      ? 'My Digital Portfolio: Grades, Diplomas & Streaks | ArkyEdu'
+      : 'Carnetul Meu Digital: Note, Diplome & Progres TIC | ArkyEdu';
+    description = isEn
+      ? 'Personal ArkyEdu student portfolio with real curriculum grades, printable certificates, daily streaks, badges, and Arcade highscores.'
+      : 'Carnetul digital personal ArkyEdu cu note pe clase, diplome imprimabile, serie zilnică, insigne și recorduri Arcade.';
+    robotsContent = 'noindex, nofollow';
+    canonicalUrl = `${BASE_URL}/carnet`;
+  } else if (view === 'evaluare') {
+    title = isEn
+      ? 'ICT & CS Timed Evaluation Simulator (Grades 5–8) | ArkyEdu'
+      : 'Test Rapid & Simulare Evaluare TIC (Clasele V–VIII) | ArkyEdu';
+    description = isEn
+      ? 'Generate randomized timed ICT & coding tests across Grades 5–8 with automated 1–10 grading, detailed answer explanations, and Cloud progress tracking.'
+      : 'Generează teste rapide cronometrate din programa TIC și Informatică V–VIII, cu notare automată 1–10 și explicații pas cu pas.';
+    canonicalUrl = `${BASE_URL}/evaluare`;
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);

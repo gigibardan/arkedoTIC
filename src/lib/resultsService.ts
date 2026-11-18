@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, addDoc, serverTimestamp, getDocs, query, orderBy, limit, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, query, orderBy, limit, deleteDoc, doc, where } from 'firebase/firestore';
 
 export interface StudentResult {
   id?: string;
@@ -182,6 +182,68 @@ export async function getStudentResults(): Promise<StudentResult[]> {
       return localList.filter((r) => (r.studentName || '').trim().length > 0);
     }
   }
+}
+
+/**
+ * Fetch evaluation submissions for a specific student (Cloud + Local cache merged & deduplicated)
+ */
+export async function getResultsByStudentName(studentName: string): Promise<StudentResult[]> {
+  const cleanName = (studentName || '').trim();
+  if (!cleanName) return [];
+  const lower = cleanName.toLowerCase();
+
+  const localMatches = getLocalResults().filter(
+    (r) => (r.studentName || '').trim().toLowerCase() === lower
+  );
+
+  if (!db) {
+    return localMatches;
+  }
+
+  let cloudMatches: StudentResult[] = [];
+  try {
+    const q = query(
+      collection(db, COLLECTION_NAME),
+      where('studentName', '==', cleanName)
+    );
+    const snapshot = await getDocs(q);
+    cloudMatches = snapshot.docs.map((d) => ({
+      ...(d.data() as Omit<StudentResult, 'id'>),
+      id: d.id,
+    }));
+  } catch (err) {
+    console.warn('Interogarea rezultatelor elevului a eșuat, se folosește fallback:', err);
+    try {
+      const snapshot = await getDocs(collection(db, COLLECTION_NAME));
+      cloudMatches = snapshot.docs
+        .map((d) => ({
+          ...(d.data() as Omit<StudentResult, 'id'>),
+          id: d.id,
+        }))
+        .filter((r) => (r.studentName || '').trim().toLowerCase() === lower);
+    } catch {
+      return localMatches;
+    }
+  }
+
+  // Merge cloud + local, avoiding duplicates
+  const mergedMap = new Map<string, StudentResult>();
+  for (const item of cloudMatches) {
+    const sig = `${(item.courseTitle || '').trim()}_${item.score}_${item.dateFormatted || item.id}`;
+    mergedMap.set(sig, item);
+  }
+  for (const item of localMatches) {
+    const sig = `${(item.courseTitle || '').trim()}_${item.score}_${item.dateFormatted || item.id}`;
+    if (!mergedMap.has(sig)) {
+      mergedMap.set(sig, item);
+    }
+  }
+
+  return Array.from(mergedMap.values()).sort((a, b) => {
+    const timeA = a.completedAt?.toMillis?.() || 0;
+    const timeB = b.completedAt?.toMillis?.() || 0;
+    return timeB - timeA;
+  });
 }
 
 /**

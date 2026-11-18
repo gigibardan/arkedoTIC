@@ -8,8 +8,9 @@ import { useHints } from '../context/HintContext';
 import { MascotaArky } from './MascotaArky';
 import { logStudentResult } from '../lib/resultsService';
 import { saveStudentDiploma } from '../lib/studentAuthService';
+import { MISSION_META_BY_ID } from '../lib/carnetService';
 import { computeGradeDetails } from '../utils/pedagogicalGrading';
-import { AllMissionId } from '../types';
+import { AllMissionId, StudentDiploma } from '../types';
 
 interface VictoryScreenProps {
   score: number;
@@ -168,7 +169,28 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
     try {
       localStorage.setItem(`arkedo_completed_${courseId}`, 'true');
     } catch {}
-    
+
+    // Persist official diploma into Student Profile (localStorage + Cloud Firestore)
+    const diplomaMeta = MISSION_META_BY_ID[String(courseId)];
+    const resolvedName = initialStudentName.trim() || studentName.trim() || t.vDiplomaDefaultName;
+    const diplomaPayload: StudentDiploma = {
+      id: String(courseId),
+      courseId: String(courseId),
+      titleRo: diplomaMeta?.diplomaTitleRo || courseDbTitle,
+      titleEn: diplomaMeta?.diplomaTitleEn || courseDbTitle,
+      grade: diplomaMeta?.gradeLabelRo || 'Clasa a V-a',
+      studentName: resolvedName,
+      awardedAt: new Date().toISOString(),
+      score,
+      maxScore,
+      calificativ: lang === 'en' ? gradeDetails.calificativEn : gradeDetails.calificativRo,
+      timeSpentSeconds: elapsedSeconds,
+      officialRef: diplomaMeta
+        ? `ARKY-${diplomaMeta.gradeNum}-${diplomaMeta.moduleCode}-${score}`
+        : `ARKY-${String(courseId).toUpperCase()}-${score}`
+    };
+    saveStudentDiploma(diplomaPayload);
+
     // Automatically log results to Firebase Firestore only once per active mission run
     const finalName = initialStudentName.trim() || studentName.trim() || (lang === 'en' ? 'Anonymous Student' : 'Elev Anonim');
     const sessionLogKey = `arkedo_victory_logged_${courseId}_${finalName}_${score}`;
@@ -226,6 +248,24 @@ export const VictoryScreen: React.FC<VictoryScreenProps> = ({
 
   const handlePrint = () => {
     sounds.playClick();
+    const diplomaMeta = MISSION_META_BY_ID[String(courseId)];
+    const cleanName = studentName.trim() || t.vDiplomaDefaultName;
+    saveStudentDiploma({
+      id: String(courseId),
+      courseId: String(courseId),
+      titleRo: diplomaMeta?.diplomaTitleRo || courseDbTitle,
+      titleEn: diplomaMeta?.diplomaTitleEn || courseDbTitle,
+      grade: diplomaMeta?.gradeLabelRo || 'Clasa a V-a',
+      studentName: cleanName,
+      awardedAt: new Date().toISOString(),
+      score,
+      maxScore,
+      calificativ: lang === 'en' ? gradeDetails.calificativEn : gradeDetails.calificativRo,
+      timeSpentSeconds: elapsedSeconds,
+      officialRef: diplomaMeta
+        ? `ARKY-${diplomaMeta.gradeNum}-${diplomaMeta.moduleCode}-${score}`
+        : `ARKY-${String(courseId).toUpperCase()}-${score}`
+    });
     window.print();
   };
 

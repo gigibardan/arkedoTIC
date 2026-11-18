@@ -11,15 +11,50 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db, isCloudConnected } from './firebase';
-import { StudentProfile, StudentDiploma, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems } from '../types';
+import {
+  StudentProfile,
+  StudentDiploma,
+  ArcadeScores,
+  LessonsProgress,
+  ShopCategory,
+  ShopItem,
+  StudentInventory,
+  EquippedItems,
+  DailyStreakInfo,
+  DailyQuestState,
+  SandboxProgress,
+  SandboxSnippet,
+  QuickEvalAttempt
+} from '../types';
 import { DEFAULT_EQUIPPED, DEFAULT_INVENTORY, SHOP_ITEMS } from './shopCatalog';
-export type { StudentProfile, StudentDiploma, ArcadeScores, LessonsProgress, ShopCategory, ShopItem, StudentInventory, EquippedItems };
+export type {
+  StudentProfile,
+  StudentDiploma,
+  ArcadeScores,
+  LessonsProgress,
+  ShopCategory,
+  ShopItem,
+  StudentInventory,
+  EquippedItems,
+  DailyStreakInfo,
+  DailyQuestState,
+  SandboxProgress,
+  SandboxSnippet,
+  QuickEvalAttempt
+};
 
 const STUDENTS_COLLECTION = 'elevi';
 const RECORDS_COLLECTION = 'recorduri_jocuri';
 const GLOBAL_RECORDS_DOC = 'arcade_records';
 const LOCAL_PROFILE_KEY = 'arkedo_active_student_profile';
 const LOCAL_RECORDS_CACHE_KEY = 'arkedo_cached_game_records';
+const LOCAL_CLASS_GRADE_KEY = 'arkedo_student_class_grade';
+const LOCAL_DAILY_STREAK_KEY = 'arkedo_daily_streak';
+const LOCAL_DAILY_QUESTS_KEY = 'arkedo_daily_quests';
+const LOCAL_BADGES_KEY = 'arkedo_unlocked_badges';
+const LOCAL_SANDBOX_SOLVED_KEY = 'arkedo_sandbox_solved_ids';
+const LOCAL_SANDBOX_SNIPPETS_KEY = 'arkedo_sandbox_snippets';
+const LOCAL_QUICK_EVAL_HISTORY_KEY = 'arkedo_quick_eval_history';
 
 // In-memory cache for game records to minimize Firestore reads
 let inMemoryRecordsCache: Record<string, GameRecord> | null = null;
@@ -126,6 +161,8 @@ export const DEFAULT_LESSONS_PROGRESS: LessonsProgress = {
   g8_algo_c: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   g8_algo_d: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   g8_algo_e: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_robot_a: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
+  g8_robot_b: { completed: false, level: 1, score: 0, elapsedSeconds: 0 },
   totalLessonScore: 0
 };
 
@@ -323,7 +360,9 @@ export function computeTotalLessons(lessons: Partial<LessonsProgress>): number {
   const g8ac = computeLessonXP(lessons.g8_algo_c || {});
   const g8ad = computeLessonXP(lessons.g8_algo_d || {});
   const g8ae = computeLessonXP(lessons.g8_algo_e || {});
-  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b + g7w1 + g7w2 + g7a1 + g7v2 + g7c1 + g7g2 + g7cp1 + g7cp2 + g7d1 + g7l2 + g7st1 + g7r2 + g8ca + g8cb + g8cc + g8cd + g8wa + g8wb + g8wc + g8aa + g8ab + g8ac + g8ad + g8ae;
+  const g8ra = computeLessonXP(lessons.g8_robot_a || {});
+  const g8rb = computeLessonXP(lessons.g8_robot_b || {});
+  return hw + fl + i1 + i2 + t1 + t2 + g1 + g2 + a1 + a2 + s1 + s2 + p1 + p2 + m3d1 + m3d2 + cy6a + cy6b + sc6a + sc6b + g7w1 + g7w2 + g7a1 + g7v2 + g7c1 + g7g2 + g7cp1 + g7cp2 + g7d1 + g7l2 + g7st1 + g7r2 + g8ca + g8cb + g8cc + g8cd + g8wa + g8wb + g8wc + g8aa + g8ab + g8ac + g8ad + g8ae + g8ra + g8rb;
 }
 
 export function computeTotalXP(arcadeTotal: number, lessonsTotal: number): number {
@@ -1205,6 +1244,7 @@ export async function updateStudentArcadeScore(
 
   // Instant local persistence
   saveActiveStudentLocally(updatedProfile);
+  markDailyQuestFlag('playedArcadeToday');
 
   // Debounced cloud persistence (at most 1 write every 3.5s per student)
   if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
@@ -1320,6 +1360,9 @@ export async function updateStudentLessonProgress(
   };
 
   saveActiveStudentLocally(updatedProfile);
+  if (progressData.completed) {
+    markDailyQuestFlag('completedLessonToday');
+  }
 
   if (isCloudConnected && db && current.id) {
     try {
@@ -2099,3 +2142,727 @@ export async function recalculateStudentXP(
     return { success: false, newTotalXP: 0, error: err?.message || 'Eroare la recalcularea XP-ului' };
   }
 }
+
+// ==========================================
+// DIGITAL CARNET SYNC, STREAK, QUESTS & CLASS GRADE
+// ==========================================
+
+function getTodayDateString(): string {
+  try {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Bucharest',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).formatToParts(new Date());
+    const y = parts.find((p) => p.type === 'year')?.value;
+    const m = parts.find((p) => p.type === 'month')?.value;
+    const d = parts.find((p) => p.type === 'day')?.value;
+    if (y && m && d) return `${y}-${m}-${d}`;
+  } catch {}
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getPreviousDateString(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, (m || 1) - 1, d || 1));
+  dt.setUTCDate(dt.getUTCDate() - 1);
+  return dt.toISOString().slice(0, 10);
+}
+
+export function getLocalClassGrade(): string {
+  const active = getActiveStudent();
+  if (active?.classGrade) return active.classGrade;
+  try {
+    return localStorage.getItem(LOCAL_CLASS_GRADE_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+export async function updateStudentClassGrade(classGrade: string): Promise<boolean> {
+  const clean = classGrade.trim();
+  try {
+    if (clean) {
+      localStorage.setItem(LOCAL_CLASS_GRADE_KEY, clean);
+    } else {
+      localStorage.removeItem(LOCAL_CLASS_GRADE_KEY);
+    }
+  } catch {}
+
+  const current = getActiveStudent();
+  if (current) {
+    const updated: StudentProfile = {
+      ...current,
+      classGrade: clean,
+      carnetUpdatedAt: new Date().toISOString(),
+      lastActiveAt: new Date().toISOString()
+    };
+    saveActiveStudentLocally(updated);
+
+    if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+      try {
+        await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+          classGrade: clean,
+          carnetUpdatedAt: new Date().toISOString(),
+          lastActiveAt: new Date().toISOString()
+        });
+        return true;
+      } catch (err) {
+        console.warn('Eroare actualizare clasa in Firestore:', err);
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+export function getStoredDailyStreak(): DailyStreakInfo {
+  const current = getActiveStudent();
+  if (current?.dailyStreak) {
+    return current.dailyStreak;
+  }
+  try {
+    const raw = localStorage.getItem(LOCAL_DAILY_STREAK_KEY);
+    if (raw) return JSON.parse(raw) as DailyStreakInfo;
+  } catch {}
+  return { current: 0, best: 0, lastActiveDate: '', activeDays: [] };
+}
+
+export function getStoredDailyQuests(): DailyQuestState {
+  const today = getTodayDateString();
+  const current = getActiveStudent();
+  if (current?.dailyQuests && current.dailyQuests.date === today) {
+    return current.dailyQuests;
+  }
+  try {
+    const raw = localStorage.getItem(LOCAL_DAILY_QUESTS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as DailyQuestState;
+      if (parsed.date === today) return parsed;
+    }
+  } catch {}
+  return { date: today, claimedIds: [], completedLessonToday: false, playedArcadeToday: false, visitedCarnetToday: false };
+}
+
+export function markDailyQuestFlag(
+  flag: 'completedLessonToday' | 'playedArcadeToday' | 'visitedCarnetToday'
+): DailyQuestState {
+  const today = getTodayDateString();
+  const existing = getStoredDailyQuests();
+  const next: DailyQuestState =
+    existing.date === today
+      ? { ...existing, [flag]: true }
+      : {
+          date: today,
+          claimedIds: [],
+          completedLessonToday: flag === 'completedLessonToday',
+          playedArcadeToday: flag === 'playedArcadeToday',
+          visitedCarnetToday: flag === 'visitedCarnetToday'
+        };
+
+  try {
+    localStorage.setItem(LOCAL_DAILY_QUESTS_KEY, JSON.stringify(next));
+  } catch {}
+
+  const current = getActiveStudent();
+  if (current) {
+    saveActiveStudentLocally({
+      ...current,
+      dailyQuests: next
+    });
+  }
+  return next;
+}
+
+let lastStreakSyncDate = '';
+
+export async function recordDailyActivityAndStreak(options?: {
+  markCarnetVisited?: boolean;
+}): Promise<{ streak: DailyStreakInfo; quests: DailyQuestState; isNewDay: boolean }> {
+  const today = getTodayDateString();
+  const yesterday = getPreviousDateString(today);
+
+  const prevStreak = getStoredDailyStreak();
+  const isNewDay = prevStreak.lastActiveDate !== today;
+
+  let nextStreak: DailyStreakInfo = prevStreak;
+  if (isNewDay) {
+    const nextCurrent = prevStreak.lastActiveDate === yesterday ? prevStreak.current + 1 : 1;
+    const nextBest = Math.max(prevStreak.best || 0, nextCurrent);
+    const activeDaysSet = new Set([...(prevStreak.activeDays || []), today]);
+    const activeDays = Array.from(activeDaysSet).sort().slice(-30);
+    nextStreak = {
+      current: nextCurrent,
+      best: nextBest,
+      lastActiveDate: today,
+      activeDays
+    };
+    try {
+      localStorage.setItem(LOCAL_DAILY_STREAK_KEY, JSON.stringify(nextStreak));
+    } catch {}
+  }
+
+  let nextQuests = getStoredDailyQuests();
+  if (options?.markCarnetVisited && !nextQuests.visitedCarnetToday) {
+    nextQuests = markDailyQuestFlag('visitedCarnetToday');
+  } else {
+    try {
+      localStorage.setItem(LOCAL_DAILY_QUESTS_KEY, JSON.stringify(nextQuests));
+    } catch {}
+  }
+
+  const current = getActiveStudent();
+  if (current) {
+    const updated: StudentProfile = {
+      ...current,
+      dailyStreak: nextStreak,
+      dailyQuests: nextQuests,
+      lastActiveAt: new Date().toISOString()
+    };
+    saveActiveStudentLocally(updated);
+
+    if ((isNewDay || lastStreakSyncDate !== today) && isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+      lastStreakSyncDate = today;
+      try {
+        await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+          dailyStreak: nextStreak,
+          dailyQuests: nextQuests,
+          lastActiveAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn('Eroare sincronizare streak Firestore:', err);
+      }
+    }
+  }
+
+  return { streak: nextStreak, quests: nextQuests, isNewDay };
+}
+
+export async function claimDailyQuestReward(
+  questId: string,
+  rewardCoins: number
+): Promise<{ success: boolean; newCoins: number; quests: DailyQuestState }> {
+  const today = getTodayDateString();
+  const currentQuests = getStoredDailyQuests();
+  const normalizedQuests: DailyQuestState =
+    currentQuests.date === today
+      ? currentQuests
+      : { date: today, claimedIds: [] };
+
+  if (normalizedQuests.claimedIds.includes(questId)) {
+    return {
+      success: false,
+      newCoins: Number(localStorage.getItem('arkedo_byte_coins') || getActiveStudent()?.byteCoins || 0),
+      quests: normalizedQuests
+    };
+  }
+
+  const updatedQuests: DailyQuestState = {
+    ...normalizedQuests,
+    claimedIds: [...normalizedQuests.claimedIds, questId]
+  };
+
+  try {
+    localStorage.setItem(LOCAL_DAILY_QUESTS_KEY, JSON.stringify(updatedQuests));
+  } catch {}
+
+  const current = getActiveStudent();
+  const prevCoins = current?.byteCoins ?? Number(localStorage.getItem('arkedo_byte_coins') || 0);
+  const newCoins = prevCoins + rewardCoins;
+
+  try {
+    localStorage.setItem('arkedo_byte_coins', String(newCoins));
+  } catch {}
+
+  if (current) {
+    const updatedProfile: StudentProfile = {
+      ...current,
+      byteCoins: newCoins,
+      dailyQuests: updatedQuests,
+      carnetUpdatedAt: new Date().toISOString(),
+      lastActiveAt: new Date().toISOString()
+    };
+    saveActiveStudentLocally(updatedProfile);
+
+    if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+      try {
+        await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+          byteCoins: newCoins,
+          dailyQuests: updatedQuests,
+          carnetUpdatedAt: new Date().toISOString(),
+          lastActiveAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn('Eroare salvare daily quest in Firestore:', err);
+      }
+    }
+  }
+
+  return { success: true, newCoins, quests: updatedQuests };
+}
+
+export async function syncStudentBadges(badgeIds: string[]): Promise<void> {
+  const uniqueIds = Array.from(new Set(badgeIds));
+  try {
+    localStorage.setItem(LOCAL_BADGES_KEY, JSON.stringify(uniqueIds));
+  } catch {}
+
+  const current = getActiveStudent();
+  if (!current) return;
+
+  const prevSet = new Set(current.unlockedBadgeIds || []);
+  const hasNew = uniqueIds.some((id) => !prevSet.has(id));
+  if (!hasNew && (current.unlockedBadgeIds?.length || 0) === uniqueIds.length) return;
+
+  const merged = Array.from(new Set([...(current.unlockedBadgeIds || []), ...uniqueIds]));
+  saveActiveStudentLocally({
+    ...current,
+    unlockedBadgeIds: merged,
+    carnetUpdatedAt: new Date().toISOString()
+  });
+
+  if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+    try {
+      await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+        unlockedBadgeIds: merged,
+        carnetUpdatedAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn('Eroare sincronizare insigne Firestore:', err);
+    }
+  }
+}
+
+export async function refreshActiveStudentFromCloud(): Promise<{
+  profile: StudentProfile | null;
+  source: 'cloud' | 'local';
+  error?: string;
+}> {
+  const localProfile = getActiveStudent();
+  if (!localProfile || !localProfile.id) {
+    return { profile: localProfile, source: 'local' };
+  }
+
+  if (!isCloudConnected || !db || isStudentAuthQuotaExhausted) {
+    return { profile: localProfile, source: 'local' };
+  }
+
+  try {
+    const snap = await getDoc(doc(db, STUDENTS_COLLECTION, localProfile.id));
+    if (!snap.exists()) {
+      return { profile: localProfile, source: 'local' };
+    }
+
+    const cloudData = snap.data() as Partial<StudentProfile>;
+
+    // Merge lessonsProgress keeping highest completion, score, level & elapsed time
+    const mergedLessons: LessonsProgress = {
+      ...DEFAULT_LESSONS_PROGRESS,
+      ...(localProfile.lessonsProgress || {})
+    };
+    const cloudLessons = cloudData.lessonsProgress || {};
+    const allLessonKeys = new Set([
+      ...Object.keys(DEFAULT_LESSONS_PROGRESS),
+      ...Object.keys(localProfile.lessonsProgress || {}),
+      ...Object.keys(cloudLessons)
+    ]);
+    for (const k of allLessonKeys) {
+      if (k === 'totalLessonScore') continue;
+      const locVal = (mergedLessons as any)[k];
+      const cldVal = (cloudLessons as any)[k];
+      if (locVal || cldVal) {
+        (mergedLessons as any)[k] = {
+          completed: Boolean(locVal?.completed || cldVal?.completed),
+          level: Math.max(locVal?.level || 1, cldVal?.level || 1),
+          score: Math.max(locVal?.score || 0, cldVal?.score || 0),
+          elapsedSeconds: Math.max(locVal?.elapsedSeconds || 0, cldVal?.elapsedSeconds || 0)
+        };
+      }
+    }
+    mergedLessons.totalLessonScore = computeTotalLessons(mergedLessons);
+
+    // Merge arcadeScores keeping max per game
+    const mergedArcade: ArcadeScores = {
+      ...DEFAULT_ARCADE_SCORES,
+      ...(localProfile.arcadeScores || {})
+    };
+    const cloudArcade = cloudData.arcadeScores || {};
+    for (const k of Object.keys(DEFAULT_ARCADE_SCORES)) {
+      if (k === 'totalArcade') continue;
+      (mergedArcade as any)[k] = Math.max(
+        Number((localProfile.arcadeScores as any)?.[k] || 0),
+        Number((cloudArcade as any)?.[k] || 0)
+      );
+    }
+    mergedArcade.totalArcade = computeTotalArcade(mergedArcade);
+
+    // Merge diplomas (union; prefer cloud entry if present, keep local-only diplomas too)
+    let localCacheDiplomas: Record<string, StudentDiploma> = {};
+    try {
+      const raw = localStorage.getItem('arkedo_student_diplomas');
+      if (raw) localCacheDiplomas = JSON.parse(raw);
+    } catch {}
+    const mergedDiplomas: Record<string, StudentDiploma> = {
+      ...localCacheDiplomas,
+      ...(localProfile.diplomas || {}),
+      ...(cloudData.diplomas || {})
+    };
+    try {
+      localStorage.setItem('arkedo_student_diplomas', JSON.stringify(mergedDiplomas));
+    } catch {}
+
+    // Merge inventory & equipped
+    const mergedOwned = Array.from(
+      new Set([
+        ...(localProfile.inventory?.ownedItemIds || DEFAULT_INVENTORY.ownedItemIds),
+        ...(cloudData.inventory?.ownedItemIds || [])
+      ])
+    );
+
+    const cloudDuel = cloudData.duelStats;
+    const localDuel = localProfile.duelStats;
+    const mergedDuel =
+      cloudDuel || localDuel
+        ? {
+            ...(localDuel || {}),
+            ...(cloudDuel || {}),
+            wins: Math.max(localDuel?.wins || 0, cloudDuel?.wins || 0),
+            losses: Math.max(localDuel?.losses || 0, cloudDuel?.losses || 0),
+            matchesPlayed: Math.max(localDuel?.matchesPlayed || 0, cloudDuel?.matchesPlayed || 0),
+            duelPoints: Math.max(localDuel?.duelPoints || 0, cloudDuel?.duelPoints || 0)
+          }
+        : undefined;
+
+    const mergedBadges = Array.from(
+      new Set([
+        ...(localProfile.unlockedBadgeIds || []),
+        ...(cloudData.unlockedBadgeIds || [])
+      ])
+    );
+
+    const cloudStreak = cloudData.dailyStreak;
+    const localStreak = localProfile.dailyStreak;
+    const mergedStreak: DailyStreakInfo | undefined =
+      cloudStreak || localStreak
+        ? {
+            current:
+              (cloudStreak?.lastActiveDate || '') >= (localStreak?.lastActiveDate || '')
+                ? cloudStreak?.current || localStreak?.current || 0
+                : localStreak?.current || 0,
+            best: Math.max(cloudStreak?.best || 0, localStreak?.best || 0),
+            lastActiveDate:
+              (cloudStreak?.lastActiveDate || '') >= (localStreak?.lastActiveDate || '')
+                ? cloudStreak?.lastActiveDate || ''
+                : localStreak?.lastActiveDate || '',
+            activeDays: Array.from(
+              new Set([...(localStreak?.activeDays || []), ...(cloudStreak?.activeDays || [])])
+            )
+              .sort()
+              .slice(-30)
+          }
+        : undefined;
+
+    const today = getTodayDateString();
+    const cQuests = cloudData.dailyQuests?.date === today ? cloudData.dailyQuests : undefined;
+    const lQuests = localProfile.dailyQuests?.date === today ? localProfile.dailyQuests : undefined;
+    const mergedQuests: DailyQuestState | undefined =
+      cQuests || lQuests
+        ? {
+            date: today,
+            claimedIds: Array.from(
+              new Set([...(lQuests?.claimedIds || []), ...(cQuests?.claimedIds || [])])
+            ),
+            completedLessonToday: Boolean(lQuests?.completedLessonToday || cQuests?.completedLessonToday),
+            playedArcadeToday: Boolean(lQuests?.playedArcadeToday || cQuests?.playedArcadeToday),
+            visitedCarnetToday: Boolean(lQuests?.visitedCarnetToday || cQuests?.visitedCarnetToday)
+          }
+        : undefined;
+
+    // Merge Sandbox progress (union solvedIds + newest snippets per key)
+    let localSolvedIds: string[] = [];
+    let localSnippets: Record<string, SandboxSnippet> = {};
+    try {
+      const rawIds = localStorage.getItem(LOCAL_SANDBOX_SOLVED_KEY);
+      if (rawIds) localSolvedIds = JSON.parse(rawIds);
+      const rawSnip = localStorage.getItem(LOCAL_SANDBOX_SNIPPETS_KEY);
+      if (rawSnip) localSnippets = JSON.parse(rawSnip);
+    } catch {}
+
+    const mergedSolvedIds = Array.from(
+      new Set([
+        ...(Array.isArray(localSolvedIds) ? localSolvedIds : []),
+        ...(localProfile.sandboxProgress?.solvedIds || []),
+        ...(cloudData.sandboxProgress?.solvedIds || [])
+      ])
+    );
+
+    const mergedSnippets: Record<string, SandboxSnippet> = {
+      ...(localSnippets || {}),
+      ...(localProfile.sandboxProgress?.snippets || {})
+    };
+    for (const [key, cldSnip] of Object.entries(cloudData.sandboxProgress?.snippets || {})) {
+      const existingSnip = mergedSnippets[key];
+      if (!existingSnip || (cldSnip.updatedAt || '') > (existingSnip.updatedAt || '')) {
+        mergedSnippets[key] = cldSnip;
+      }
+    }
+
+    try {
+      localStorage.setItem(LOCAL_SANDBOX_SOLVED_KEY, JSON.stringify(mergedSolvedIds));
+      localStorage.setItem(LOCAL_SANDBOX_SNIPPETS_KEY, JSON.stringify(mergedSnippets));
+    } catch {}
+
+    // Merge Quick Eval history (union by id, newest first, max 40)
+    let localEvalHistory: QuickEvalAttempt[] = [];
+    try {
+      const rawEval = localStorage.getItem(LOCAL_QUICK_EVAL_HISTORY_KEY);
+      if (rawEval) localEvalHistory = JSON.parse(rawEval);
+    } catch {}
+    const evalMap = new Map<string, QuickEvalAttempt>();
+    for (const item of [
+      ...(Array.isArray(localEvalHistory) ? localEvalHistory : []),
+      ...(localProfile.quickEvalHistory || []),
+      ...(cloudData.quickEvalHistory || [])
+    ]) {
+      if (item && item.id) evalMap.set(item.id, item);
+    }
+    const mergedEvalHistory = Array.from(evalMap.values())
+      .sort((a, b) => (b.completedAt || '').localeCompare(a.completedAt || ''))
+      .slice(0, 40);
+    try {
+      localStorage.setItem(LOCAL_QUICK_EVAL_HISTORY_KEY, JSON.stringify(mergedEvalHistory));
+    } catch {}
+
+    const computedXP = computeTotalXP(mergedArcade.totalArcade, mergedLessons.totalLessonScore) + (mergedDuel?.duelPoints || 0);
+    const mergedTotalXP = Math.max(Number(cloudData.totalXP || 0), Number(localProfile.totalXP || 0), computedXP);
+
+    const mergedProfile: StudentProfile = {
+      ...localProfile,
+      ...cloudData,
+      id: snap.id,
+      arcadeScores: mergedArcade,
+      lessonsProgress: mergedLessons,
+      diplomas: mergedDiplomas,
+      duelStats: mergedDuel,
+      inventory: {
+        ...(localProfile.inventory || DEFAULT_INVENTORY),
+        ...(cloudData.inventory || {}),
+        ownedItemIds: mergedOwned
+      },
+      equipped: cloudData.equipped || localProfile.equipped || DEFAULT_EQUIPPED,
+      classGrade: cloudData.classGrade || localProfile.classGrade || getLocalClassGrade() || '',
+      dailyStreak: mergedStreak,
+      dailyQuests: mergedQuests,
+      unlockedBadgeIds: mergedBadges,
+      sandboxProgress: {
+        solvedIds: mergedSolvedIds,
+        snippets: mergedSnippets,
+        updatedAt: new Date().toISOString()
+      },
+      quickEvalHistory: mergedEvalHistory,
+      totalXP: mergedTotalXP
+    };
+
+    if (mergedProfile.classGrade) {
+      try {
+        localStorage.setItem(LOCAL_CLASS_GRADE_KEY, mergedProfile.classGrade);
+      } catch {}
+    }
+    if (typeof mergedProfile.byteCoins === 'number') {
+      try {
+        localStorage.setItem('arkedo_byte_coins', String(mergedProfile.byteCoins));
+      } catch {}
+    }
+
+    saveActiveStudentLocally(mergedProfile);
+    return { profile: mergedProfile, source: 'cloud' };
+  } catch (err: any) {
+    console.warn('Eroare refreshActiveStudentFromCloud:', err);
+    return {
+      profile: localProfile,
+      source: 'local',
+      error: err?.message || 'Eroare la sincronizarea cu Cloud'
+    };
+  }
+}
+
+export function getStoredSandboxProgress(): SandboxProgress {
+  let localSolved: string[] = [];
+  let localSnippets: Record<string, SandboxSnippet> = {};
+  try {
+    const rawIds = localStorage.getItem(LOCAL_SANDBOX_SOLVED_KEY);
+    if (rawIds) {
+      const parsed = JSON.parse(rawIds);
+      if (Array.isArray(parsed)) localSolved = parsed.filter((x): x is string => typeof x === 'string');
+    }
+    const rawSnip = localStorage.getItem(LOCAL_SANDBOX_SNIPPETS_KEY);
+    if (rawSnip) {
+      const parsed = JSON.parse(rawSnip);
+      if (parsed && typeof parsed === 'object') localSnippets = parsed;
+    }
+  } catch {}
+
+  const current = getActiveStudent();
+  const solvedIds = Array.from(
+    new Set([...localSolved, ...(current?.sandboxProgress?.solvedIds || [])])
+  );
+  const snippets: Record<string, SandboxSnippet> = {
+    ...localSnippets,
+    ...(current?.sandboxProgress?.snippets || {})
+  };
+  return {
+    solvedIds,
+    snippets,
+    updatedAt: current?.sandboxProgress?.updatedAt
+  };
+}
+
+export async function saveSandboxChallengeSolved(challengeId: string): Promise<string[]> {
+  const prev = getStoredSandboxProgress();
+  const nextSolved = Array.from(new Set([...prev.solvedIds, challengeId]));
+
+  try {
+    localStorage.setItem(LOCAL_SANDBOX_SOLVED_KEY, JSON.stringify(nextSolved));
+  } catch {}
+
+  const nextProgress: SandboxProgress = {
+    solvedIds: nextSolved,
+    snippets: prev.snippets,
+    updatedAt: new Date().toISOString()
+  };
+
+  const current = getActiveStudent();
+  if (current) {
+    saveActiveStudentLocally({
+      ...current,
+      sandboxProgress: nextProgress,
+      lastActiveAt: new Date().toISOString()
+    });
+
+    if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+      try {
+        await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+          sandboxProgress: nextProgress,
+          lastActiveAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn('Eroare salvare Sandbox solved in Firestore:', err);
+      }
+    }
+  }
+
+  return nextSolved;
+}
+
+export async function saveSandboxSnippet(
+  workspaceKey: string,
+  code: string,
+  css?: string,
+  stdin?: string,
+  syncCloud: boolean = true
+): Promise<SandboxProgress> {
+  const prev = getStoredSandboxProgress();
+  const nextSnippet: SandboxSnippet = {
+    code,
+    ...(css !== undefined ? { css } : {}),
+    ...(stdin !== undefined ? { stdin } : {}),
+    updatedAt: new Date().toISOString()
+  };
+
+  const nextSnippets: Record<string, SandboxSnippet> = {
+    ...prev.snippets,
+    [workspaceKey]: nextSnippet
+  };
+
+  try {
+    localStorage.setItem(LOCAL_SANDBOX_SNIPPETS_KEY, JSON.stringify(nextSnippets));
+  } catch {}
+
+  const nextProgress: SandboxProgress = {
+    solvedIds: prev.solvedIds,
+    snippets: nextSnippets,
+    updatedAt: new Date().toISOString()
+  };
+
+  const current = getActiveStudent();
+  if (current) {
+    saveActiveStudentLocally({
+      ...current,
+      sandboxProgress: nextProgress,
+      lastActiveAt: new Date().toISOString()
+    });
+
+    if (syncCloud && isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+      try {
+        await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+          sandboxProgress: nextProgress,
+          lastActiveAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn('Eroare salvare snippet Sandbox in Firestore:', err);
+      }
+    }
+  }
+
+  return nextProgress;
+}
+
+export function getStoredQuickEvalHistory(): QuickEvalAttempt[] {
+  let localList: QuickEvalAttempt[] = [];
+  try {
+    const raw = localStorage.getItem(LOCAL_QUICK_EVAL_HISTORY_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) localList = parsed;
+    }
+  } catch {}
+
+  const current = getActiveStudent();
+  const map = new Map<string, QuickEvalAttempt>();
+  for (const item of [...localList, ...(current?.quickEvalHistory || [])]) {
+    if (item && item.id) map.set(item.id, item);
+  }
+  return Array.from(map.values())
+    .sort((a, b) => (b.completedAt || '').localeCompare(a.completedAt || ''))
+    .slice(0, 40);
+}
+
+export async function saveQuickEvalAttempt(attempt: QuickEvalAttempt): Promise<QuickEvalAttempt[]> {
+  const existing = getStoredQuickEvalHistory();
+  const nextHistory = [attempt, ...existing.filter((x) => x.id !== attempt.id)].slice(0, 40);
+
+  try {
+    localStorage.setItem(LOCAL_QUICK_EVAL_HISTORY_KEY, JSON.stringify(nextHistory));
+  } catch {}
+
+  markDailyQuestFlag('completedLessonToday');
+
+  const current = getActiveStudent();
+  if (current) {
+    const earnedXP = Math.round(attempt.score * 0.5);
+    const nextXP = (current.totalXP || 0) + earnedXP;
+    saveActiveStudentLocally({
+      ...current,
+      quickEvalHistory: nextHistory,
+      totalXP: nextXP,
+      lastActiveAt: new Date().toISOString()
+    });
+
+    if (isCloudConnected && db && current.id && !isStudentAuthQuotaExhausted) {
+      try {
+        await updateDoc(doc(db, STUDENTS_COLLECTION, current.id), {
+          quickEvalHistory: nextHistory,
+          totalXP: nextXP,
+          lastActiveAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.warn('Eroare salvare QuickEval in Firestore:', err);
+      }
+    }
+  }
+
+  return nextHistory;
+}
+
+

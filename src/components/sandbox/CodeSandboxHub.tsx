@@ -5,19 +5,28 @@ import {
   BookOpen,
   CheckCircle2,
   ChevronRight,
+  Cloud,
   Code2,
   Coins,
   HelpCircle,
   Home,
   Play,
   RotateCcw,
+  Save,
   Terminal,
   XCircle,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
 import { SANDBOX_CHALLENGES, SandboxChallenge } from '../../data/sandboxChallenges';
-import { addByteCoins } from '../../lib/studentAuthService';
+import {
+  addByteCoins,
+  getActiveStudent,
+  getStoredSandboxProgress,
+  refreshActiveStudentFromCloud,
+  saveSandboxChallengeSolved,
+  saveSandboxSnippet,
+} from '../../lib/studentAuthService';
 import { AllMissionId } from '../../types';
 import { sounds } from '../../utils/audio';
 import {
@@ -51,25 +60,11 @@ interface HtmlRuleResult {
   passed: boolean;
 }
 
-const SOLVED_STORAGE_KEY = 'arkedo_sandbox_solved_ids';
+const getWorkspaceKey = (targetLang: SandboxLanguage, challengeId: string): string =>
+  challengeId === 'free' ? `free_${targetLang}` : challengeId;
 
 function loadSolvedIds(): string[] {
-  try {
-    const raw = localStorage.getItem(SOLVED_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === 'string') : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveSolvedIds(ids: string[]): void {
-  try {
-    localStorage.setItem(SOLVED_STORAGE_KEY, JSON.stringify(ids));
-  } catch {
-    // Ignore storage errors
-  }
+  return getStoredSandboxProgress().solvedIds;
 }
 
 const FREE_STARTERS: Record<SandboxLanguage, { code: string; css?: string; stdin: string }> = {
@@ -118,14 +113,15 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   const isEn = lang === 'en';
   const arky = useArky();
 
-  const [selectedLang, setSelectedLang] = useState<SandboxLanguage>(initialLanguage);
+  const resolvedInitialLang: SandboxLanguage = (initialLanguage as SandboxLanguage) || 'cpp';
+  const [selectedLang, setSelectedLang] = useState<SandboxLanguage>(resolvedInitialLang);
   const langChallenges = useMemo(
     () => SANDBOX_CHALLENGES.filter((c) => c.language === selectedLang),
     [selectedLang]
   );
 
   const [selectedChallengeId, setSelectedChallengeId] = useState<string>(
-    () => SANDBOX_CHALLENGES.find((c) => c.language === initialLanguage)?.id || 'free'
+    () => SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang)?.id || 'free'
   );
   const activeChallenge: SandboxChallenge | null = useMemo(
     () => langChallenges.find((c) => c.id === selectedChallengeId) || null,
@@ -133,16 +129,25 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   );
 
   const [code, setCode] = useState<string>(() => {
-    const first = SANDBOX_CHALLENGES.find((c) => c.language === initialLanguage);
-    return first ? first.starterCode : FREE_STARTERS[initialLanguage].code;
+    const first = SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang);
+    const wsKey = getWorkspaceKey(resolvedInitialLang, first ? first.id : 'free');
+    const saved = getStoredSandboxProgress().snippets[wsKey];
+    if (saved?.code) return saved.code;
+    return first ? first.starterCode : FREE_STARTERS[resolvedInitialLang].code;
   });
   const [cssCode, setCssCode] = useState<string>(() => {
-    const first = SANDBOX_CHALLENGES.find((c) => c.language === initialLanguage);
+    const first = SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang);
+    const wsKey = getWorkspaceKey(resolvedInitialLang, first ? first.id : 'free');
+    const saved = getStoredSandboxProgress().snippets[wsKey];
+    if (saved?.css !== undefined) return saved.css;
     return first?.starterCss || FREE_STARTERS.html.css || '';
   });
   const [stdinValue, setStdinValue] = useState<string>(() => {
-    const first = SANDBOX_CHALLENGES.find((c) => c.language === initialLanguage);
-    return first ? first.defaultStdin : FREE_STARTERS[initialLanguage].stdin;
+    const first = SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang);
+    const wsKey = getWorkspaceKey(resolvedInitialLang, first ? first.id : 'free');
+    const saved = getStoredSandboxProgress().snippets[wsKey];
+    if (saved?.stdin !== undefined) return saved.stdin;
+    return first ? first.defaultStdin : FREE_STARTERS[resolvedInitialLang].stdin;
   });
   const [htmlTab, setHtmlTab] = useState<'html' | 'css'>('html');
   const [showHint, setShowHint] = useState(false);
@@ -152,32 +157,44 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   const [htmlResults, setHtmlResults] = useState<HtmlRuleResult[] | null>(null);
   const [solvedIds, setSolvedIds] = useState<string[]>(() => loadSolvedIds());
   const [rewardBanner, setRewardBanner] = useState<string | null>(null);
+  const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
 
-  const loadWorkspace = (targetLang: SandboxLanguage, challengeId: string) => {
+  const loadWorkspace = (targetLang: SandboxLanguage, challengeId: string, forceStarter = false) => {
     const found = SANDBOX_CHALLENGES.find((c) => c.id === challengeId && c.language === targetLang);
+    const resolvedId = found ? found.id : 'free';
+    const wsKey = getWorkspaceKey(targetLang, resolvedId);
+    const saved = forceStarter ? undefined : getStoredSandboxProgress().snippets[wsKey];
+
     setSelectedLang(targetLang);
-    setSelectedChallengeId(found ? found.id : 'free');
+    setSelectedChallengeId(resolvedId);
     setShowHint(false);
     setRewardBanner(null);
+    setSaveFeedback(null);
     setTestResults(null);
     setHtmlResults(null);
 
     if (found) {
-      setCode(found.starterCode);
-      setCssCode(found.starterCss || '');
-      setStdinValue(found.defaultStdin);
+      const nextCode = saved?.code ?? found.starterCode;
+      const nextCss = saved?.css ?? (found.starterCss || '');
+      const nextStdin = saved?.stdin ?? found.defaultStdin;
+      setCode(nextCode);
+      setCssCode(nextCss);
+      setStdinValue(nextStdin);
       if (targetLang === 'html') {
-        setExecResult(buildHtmlSandboxDoc(found.starterCode, found.starterCss || ''));
+        setExecResult(buildHtmlSandboxDoc(nextCode, nextCss));
       } else {
         setExecResult(null);
       }
     } else {
       const free = FREE_STARTERS[targetLang];
-      setCode(free.code);
-      setCssCode(free.css || '');
-      setStdinValue(free.stdin);
+      const nextCode = saved?.code ?? free.code;
+      const nextCss = saved?.css ?? (free.css || '');
+      const nextStdin = saved?.stdin ?? free.stdin;
+      setCode(nextCode);
+      setCssCode(nextCss);
+      setStdinValue(nextStdin);
       if (targetLang === 'html') {
-        setExecResult(buildHtmlSandboxDoc(free.code, free.css || ''));
+        setExecResult(buildHtmlSandboxDoc(nextCode, nextCss));
       } else {
         setExecResult(null);
       }
@@ -185,11 +202,66 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
     setHtmlTab('html');
   };
 
+  // Initial Cloud sync on mount if student is logged in
+  useEffect(() => {
+    if (!getActiveStudent()) return;
+    refreshActiveStudentFromCloud().then(() => {
+      const synced = getStoredSandboxProgress();
+      setSolvedIds(synced.solvedIds);
+      const wsKey = getWorkspaceKey(selectedLang, selectedChallengeId);
+      const cloudSnip = synced.snippets[wsKey];
+      if (cloudSnip?.code) {
+        setCode(cloudSnip.code);
+        if (cloudSnip.css !== undefined) setCssCode(cloudSnip.css);
+        if (cloudSnip.stdin !== undefined) setStdinValue(cloudSnip.stdin);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Save draft locally on edit (debounced local storage only, no excessive Cloud writes)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const wsKey = getWorkspaceKey(selectedLang, selectedChallengeId);
+      void saveSandboxSnippet(
+        wsKey,
+        code,
+        selectedLang === 'html' ? cssCode : undefined,
+        selectedLang !== 'html' ? stdinValue : undefined,
+        false
+      );
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [code, cssCode, stdinValue, selectedLang, selectedChallengeId]);
+
   useEffect(() => {
     if (selectedLang === 'html' && !execResult) {
       setExecResult(buildHtmlSandboxDoc(code, cssCode));
     }
   }, [selectedLang, execResult, code, cssCode]);
+
+  const persistWorkspaceToCloud = async (showNotice = false) => {
+    const wsKey = getWorkspaceKey(selectedLang, selectedChallengeId);
+    await saveSandboxSnippet(
+      wsKey,
+      code,
+      selectedLang === 'html' ? cssCode : undefined,
+      selectedLang !== 'html' ? stdinValue : undefined,
+      true
+    );
+    if (showNotice) {
+      setSaveFeedback(
+        getActiveStudent()
+          ? isEn
+            ? 'Saved to Cloud!'
+            : 'Cod salvat în Cloud!'
+          : isEn
+          ? 'Saved locally!'
+          : 'Salvat local!'
+      );
+      setTimeout(() => setSaveFeedback(null), 2200);
+    }
+  };
 
   const executeSingleRun = (): SandboxExecutionResult => {
     if (selectedLang === 'cpp') return runCppCode(code, stdinValue);
@@ -202,6 +274,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
     setRewardBanner(null);
     const res = executeSingleRun();
     setExecResult(res);
+    void persistWorkspaceToCloud(false);
     if (res.error) {
       arky.triggerError();
     }
@@ -210,6 +283,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   const handleVerifyChallenge = async () => {
     sounds.playClick();
     setRewardBanner(null);
+    void persistWorkspaceToCloud(false);
 
     const single = executeSingleRun();
     setExecResult(single);
@@ -255,14 +329,13 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
       sounds.playSuccess();
       arky.triggerSuccess();
       if (!solvedIds.includes(challenge.id)) {
-        const nextSolved = [...solvedIds, challenge.id];
+        const nextSolved = await saveSandboxChallengeSolved(challenge.id);
         setSolvedIds(nextSolved);
-        saveSolvedIds(nextSolved);
         await addByteCoins(challenge.rewardCoins, `Sandbox: ${challenge.id}`);
         setRewardBanner(
           isEn
-            ? `All tests passed! +${challenge.rewardCoins} ByteCoins earned.`
-            : `Toate testele au trecut! Ai câștigat +${challenge.rewardCoins} ByteCoins.`
+            ? `All tests passed! +${challenge.rewardCoins} ByteCoins earned & synced.`
+            : `Toate testele au trecut! Ai câștigat +${challenge.rewardCoins} ByteCoins și s-a sincronizat progresul.`
         );
       } else {
         setRewardBanner(
@@ -277,7 +350,7 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
 
   const handleReset = () => {
     sounds.playClick();
-    loadWorkspace(selectedLang, selectedChallengeId);
+    loadWorkspace(selectedLang, selectedChallengeId, true);
   };
 
   const activeEditorText = selectedLang === 'html' && htmlTab === 'css' ? cssCode : code;
@@ -344,7 +417,10 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
             <span aria-hidden="true">·</span>
             <span>{isEn ? `${solvedCount}/${totalChallenges} Challenges Solved` : `${solvedCount}/${totalChallenges} Provocări Rezolvate`}</span>
             <span aria-hidden="true">·</span>
-            <span>{isEn ? 'Instant In-Browser Execution' : 'Execuție Instant în Browser'}</span>
+            <span className="inline-flex items-center gap-1 text-emerald-300">
+              <Cloud className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>{getActiveStudent() ? (isEn ? 'Cloud Sync Active' : 'Sincronizare Cloud Activă') : (isEn ? 'Local Drafts Saved' : 'Salvare Locală Automată')}</span>
+            </span>
           </div>
         </div>
 
@@ -561,6 +637,23 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
+              {saveFeedback && (
+                <span className="text-[11px] font-mono text-emerald-300 px-2 py-1 rounded bg-emerald-500/10 border border-emerald-500/30">
+                  {saveFeedback}
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  void persistWorkspaceToCloud(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-cyan-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              >
+                <Save className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                <span>{isEn ? 'Save' : 'Salvează'}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={handleReset}
