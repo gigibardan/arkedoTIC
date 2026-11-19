@@ -60,7 +60,7 @@ Orice hook sau serviciu modular **TREBUIE** să păstreze exact aceste chei pent
 
 ## 4. Registrul Complet al celor 44 de Misiuni (`AllMissionId`)
 
-Fiecare misiune este definită unitar în `CARNET_MISSIONS` (`src/lib/carnetService.ts`) și orchestrată de `useMissionProgress` (`src/hooks/useMissionProgress.ts`) + `MissionStage` (`src/components/MissionStage.tsx`).
+Fiecare misiune este definită unitar în `CARNET_MISSIONS` (`src/data/missionsRegistry.ts`, re-exportat de `src/lib/carnetService.ts`), diplomele în `VICTORY_MISSION_DATA` (`src/data/victoryMissionData.ts`) și orchestrată de `useMissionProgress` (`src/hooks/useMissionProgress.ts`) + `MissionStage` (`src/components/MissionStage.tsx`).
 
 ### 4.1 Clasa a V-a (10 Misiuni)
 | ID (`AllMissionId`) | `localPrefix` | `lessonsKey` | `maxLevels` | `victoryLevel` | Tip Componentă / Flux |
@@ -105,7 +105,7 @@ Fiecare misiune este definită unitar în `CARNET_MISSIONS` (`src/lib/carnetServ
 | `g7_robot_b` | `g7robot` | `g7_robot_b` | `7` | `8` | `ModuleG7RobotFlow` (`onCompletePage`) |
 
 ### 4.4 Clasa a VIII-a (14 Misiuni)
-Toate au `localPrefix === id`, `lessonsKey === id`, `maxLevels: 7`, `victoryLevel: 8`, interfață `onCompletePage`:
+Toate au `localPrefix === id` (cu `legacyLocalPrefix` păstrat în `missionsRegistry.ts`), `lessonsKey === id`, `maxLevels: 7`, `victoryLevel: 8`, interfață `onCompletePage`:
 - `g8_calc_a` → `ModuleG8Calc1Flow`
 - `g8_calc_b` → `ModuleG8Calc2Flow`
 - `g8_calc_c` → `ModuleG8Calc3Flow`
@@ -126,6 +126,9 @@ Toate au `localPrefix === id`, `lessonsKey === id`, `maxLevels: 7`, `victoryLeve
 ## 5. Ghid Rapid: Cum Adaugi o Misiune Nouă
 
 1. Adaugă ID-ul în `AllMissionId` și câmpul corespunzător în `LessonsProgress` (`src/types.ts`).
-2. Adaugă intrarea completă în `CARNET_MISSIONS` (`src/lib/carnetService.ts`) și în `studentAuthService.ts` (`computeTotalLessons` + `syncProfileToLocalStorage` + `DEFAULT`).
+2. Adaugă intrarea completă în `CARNET_MISSIONS` (`src/data/missionsRegistry.ts`) și datele de diplomă în `VICTORY_MISSION_DATA` (`src/data/victoryMissionData.ts`).
 3. Adaugă importul `lazy(...)` și maparea în `FLOW_PAGE_COMPONENTS` din `src/components/MissionStage.tsx`.
-4. `useMissionProgress`, cronometrul, `localStorage`, `DigitalCarnetHub`, `VictoryScreen` și `App.tsx` preiau automat noua misiune fără alte modificări!
+4. `useMissionProgress`, `studentCore`, `TeacherScoreModal`, `CoursesCatalog`, `DigitalCarnetHub` și `VictoryScreen` preiau automat noua misiune fără alte modificări!
+
+👉 Pentru ghidul complet de extindere (Arcade, Code Sandbox, Evaluare Rapidă, Blog, Glosar, Cyber Shop, Duel 1v1) și raportul detaliat al refactorizării, vezi **`docs/REFACTORING_SI_GHID_EXTINDERE.md`**.
+

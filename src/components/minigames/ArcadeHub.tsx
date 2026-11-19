@@ -175,229 +175,45 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   };
 
   // Load High Scores
-  const typingHighScore = (() => {
+  const readHighScore = (key: string, fallbackKey?: string): number => {
     try {
-      return Number(localStorage.getItem('arkedo_highscore_typing') || '0');
+      const main = Number(localStorage.getItem(key) || '0') || 0;
+      if (!fallbackKey) return main;
+      const fb = Number(localStorage.getItem(fallbackKey) || '0') || 0;
+      return Math.max(main, fb);
     } catch {
       return 0;
     }
-  })();
+  };
 
-  const mouseHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_mouse') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const mouseV2HighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_mouse_v2') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const game2048HighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_2048') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const filesHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_files') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const binaryFactoryHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_binary_factory') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const mazeHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_maze') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const firewallHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_firewall') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const pcBuilderHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_pcbuilder') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const rgbHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_rgb_pixels') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const byteSliderHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_byte_slider') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const fileDropHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_file_drop') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const virusSweeperHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_virus_sweeper') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberDinoHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_dino') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const redstoneLabHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_redstone_lab') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const voxelArchitectHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_voxel_architect') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const robloxClickerHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_roblox_clicker') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const pageCraftHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_page_craft') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const hackerDefenseHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_duel_hacker_defense') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberSnakeHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_snake') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const circuitMasterHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_circuit_master') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberInvadersHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_invaders') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberPacmanHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_pacman') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberArkanoidHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_arkanoid') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberFroggerHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_frogger') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberSokobanHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_sokoban') || '0');
-    } catch {
-      return 0;
-    }
-  })();
-
-  const cyberAsteroidsHighScore = (() => {
-    try {
-      return Number(localStorage.getItem('arkedo_highscore_cyber_asteroids') || '0');
-    } catch {
-      return 0;
-    }
-  })();
+  const typingHighScore = readHighScore('arkedo_highscore_typing');
+  const mouseHighScore = readHighScore('arkedo_highscore_mouse');
+  const mouseV2HighScore = readHighScore('arkedo_highscore_mouse_v2');
+  const game2048HighScore = readHighScore('arkedo_highscore_2048');
+  const cyberHighScore = readHighScore('arkedo_highscore_cyber');
+  const filesHighScore = readHighScore('arkedo_highscore_files');
+  const binaryFactoryHighScore = readHighScore('arkedo_highscore_binary_factory');
+  const mazeHighScore = readHighScore('arkedo_highscore_maze');
+  const firewallHighScore = readHighScore('arkedo_highscore_firewall');
+  const pcBuilderHighScore = readHighScore('arkedo_highscore_pcbuilder');
+  const rgbHighScore = readHighScore('arkedo_highscore_rgb_pixels');
+  const byteSliderHighScore = readHighScore('arkedo_highscore_byte_slider');
+  const fileDropHighScore = readHighScore('arkedo_highscore_file_drop');
+  const virusSweeperHighScore = readHighScore('arkedo_highscore_virus_sweeper');
+  const cyberDinoHighScore = readHighScore('arkedo_highscore_cyber_dino');
+  const redstoneLabHighScore = readHighScore('arkedo_highscore_redstone_lab');
+  const voxelArchitectHighScore = readHighScore('arkedo_highscore_voxel_architect');
+  const robloxClickerHighScore = readHighScore('arkedo_highscore_roblox_clicker');
+  const pageCraftHighScore = readHighScore('arkedo_highscore_page_craft');
+  const hackerDefenseHighScore = readHighScore('arkedo_highscore_duel_hacker_defense', 'arkedo_highscore_hacker_defense');
+  const cyberSnakeHighScore = readHighScore('arkedo_highscore_cyber_snake');
+  const circuitMasterHighScore = readHighScore('arkedo_highscore_circuit_master');
+  const cyberInvadersHighScore = readHighScore('arkedo_highscore_cyber_invaders');
+  const cyberPacmanHighScore = readHighScore('arkedo_highscore_cyber_pacman');
+  const cyberArkanoidHighScore = readHighScore('arkedo_highscore_cyber_arkanoid');
+  const cyberFroggerHighScore = readHighScore('arkedo_highscore_cyber_frogger');
+  const cyberSokobanHighScore = readHighScore('arkedo_highscore_cyber_sokoban');
+  const cyberAsteroidsHighScore = readHighScore('arkedo_highscore_cyber_asteroids');
 
   const avatar = (() => {
     try {

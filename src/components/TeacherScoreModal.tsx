@@ -1,55 +1,32 @@
-import React, { useState } from 'react';
-import { 
-  X, 
-  Save, 
-  Trophy, 
-  RotateCcw, 
-  AlertTriangle, 
-  Sparkles, 
-  Gamepad2, 
-  BookOpen, 
-  Swords, 
-  ShieldAlert, 
-  Check, 
-  Clock, 
-  Cpu, 
-  FolderTree, 
-  Globe, 
-  ShieldCheck, 
+import React, { useMemo, useState } from 'react';
+import {
+  X,
+  Save,
+  Trophy,
+  RotateCcw,
+  AlertTriangle,
+  Gamepad2,
+  BookOpen,
+  Swords,
+  ShieldAlert,
+  Check,
   Calculator,
-  Sliders,
   Award,
-  FileText,
-  FileCode,
-  Presentation,
-  Box,
-  Mail,
-  Repeat,
-  Clapperboard,
-  Music,
-  Video,
-  Cloud,
-  MapPin,
-  Code2,
-  Binary,
-  GitFork,
-  RefreshCw,
-  Activity,
-  Bot,
   GraduationCap
 } from 'lucide-react';
 import { StudentProfile, ArcadeScores, LessonsProgress, DuelStats } from '../types';
-import { 
-  updateStudentScoresByTeacher, 
-  recalculateStudentXP, 
-  applyCheatingPenalty, 
+import {
+  updateStudentScoresByTeacher,
+  recalculateStudentXP,
+  applyCheatingPenalty,
   awardTeacherBonusXP,
-  resetStudentArcadeScores,
-  resetStudentLessonProgress,
   computeTotalArcade,
   computeTotalLessons,
+  DEFAULT_ARCADE_SCORES,
   DEFAULT_LESSONS_PROGRESS
 } from '../lib/studentAuthService';
+import { ARCADE_REGISTRY } from '../data/arcadeRegistry';
+import { CARNET_MISSIONS, CarnetMissionMeta } from '../data/missionsRegistry';
 import { sounds } from '../utils/audio';
 
 interface TeacherScoreModalProps {
@@ -58,6 +35,46 @@ interface TeacherScoreModalProps {
   onClose: () => void;
   onSuccess: () => void;
   lang: 'ro' | 'en';
+}
+
+const DUEL_ARENA_FIELDS: Array<{
+  key: keyof Omit<DuelStats, 'wins' | 'losses' | 'matchesPlayed' | 'duelPoints'>;
+  label: string;
+  highlight?: boolean;
+}> = [
+  { key: 'cyberSprintWins', label: '⚡ Cyber Sprint' },
+  { key: 'speedCraftingWins', label: '⛏️ Speed Crafting', highlight: true },
+  { key: 'blockCodingWins', label: '🧩 Cursa Algoritmilor' },
+  { key: 'quizBlitzWins', label: '🧠 Quiz Blitz' },
+  { key: 'cyberShieldWins', label: '🛡️ Cyber Shield' },
+  { key: 'pcRushWins', label: '🔧 PC Rush' },
+  { key: 'mouseDuelWins', label: '🖱️ Mouse Duel' },
+  { key: 'hackerDefenseWins', label: '⚔️ Hacker vs Defender' },
+  { key: 'cyberClashWins', label: '💥 Cyber Clash' },
+  { key: 'systemSabotageWins', label: '🛠️ System Sabotage' },
+  { key: 'fileDropAttackWins', label: '📥 File-Drop Attack' },
+  { key: 'cyberBattleshipWins', label: '🚢 Cyber Battleship' },
+];
+
+function createEmptyDuelStats(): DuelStats {
+  return {
+    wins: 0,
+    losses: 0,
+    matchesPlayed: 0,
+    duelPoints: 0,
+    cyberSprintWins: 0,
+    speedCraftingWins: 0,
+    blockCodingWins: 0,
+    quizBlitzWins: 0,
+    cyberShieldWins: 0,
+    pcRushWins: 0,
+    mouseDuelWins: 0,
+    hackerDefenseWins: 0,
+    cyberClashWins: 0,
+    systemSabotageWins: 0,
+    fileDropAttackWins: 0,
+    cyberBattleshipWins: 0,
+  };
 }
 
 export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
@@ -70,6 +87,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
   const isEn = lang === 'en';
 
   const [activeSubTab, setActiveSubTab] = useState<'arcade' | 'lessons' | 'duels' | 'anticheat'>('arcade');
+  const [gradeFilter, setGradeFilter] = useState<'all' | 5 | 6 | 7 | 8>('all');
   const [saving, setSaving] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -78,87 +96,68 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     onConfirm: () => Promise<void> | void;
   } | null>(null);
 
-  // Form states for Arcade
-  const [arcadeScores, setArcadeScores] = useState<ArcadeScores>({
-    typing: student.arcadeScores?.typing || 0,
-    mouse: student.arcadeScores?.mouse || 0,
-    game2048: student.arcadeScores?.game2048 || 0,
-    pcbuilder: student.arcadeScores?.pcbuilder || 0,
-    detective: student.arcadeScores?.detective || 0,
-    files: student.arcadeScores?.files || 0,
-    binary_factory: student.arcadeScores?.binary_factory || 0,
-    maze: student.arcadeScores?.maze || 0,
-    firewall: student.arcadeScores?.firewall || 0,
-    rgb_pixel: student.arcadeScores?.rgb_pixel || 0,
-    byte_slider: student.arcadeScores?.byte_slider || 0,
-    file_drop: student.arcadeScores?.file_drop || 0,
-    virus_sweeper: student.arcadeScores?.virus_sweeper || 0,
-    cyber_dino: student.arcadeScores?.cyber_dino || 0,
-    redstone_lab: student.arcadeScores?.redstone_lab || 0,
-    voxel_architect: student.arcadeScores?.voxel_architect || 0,
-    roblox_clicker: student.arcadeScores?.roblox_clicker || 0,
-    cyber_invaders: student.arcadeScores?.cyber_invaders || 0,
-    cyber_pacman: student.arcadeScores?.cyber_pacman || 0,
-    cyber_arkanoid: student.arcadeScores?.cyber_arkanoid || 0,
-    cyber_frogger: student.arcadeScores?.cyber_frogger || 0,
-    cyber_sokoban: student.arcadeScores?.cyber_sokoban || 0,
-    cyber_asteroids: student.arcadeScores?.cyber_asteroids || 0,
-    totalArcade: student.arcadeScores?.totalArcade || 0
-  });
-
-  // Form states for Lessons
-  const [lessonsProgress, setLessonsProgress] = useState<LessonsProgress>(() => ({
-    ...DEFAULT_LESSONS_PROGRESS,
-    ...(student.lessonsProgress || {})
+  const [arcadeScores, setArcadeScores] = useState<ArcadeScores>(() => ({
+    ...DEFAULT_ARCADE_SCORES,
+    ...(student.arcadeScores || {}),
   }));
 
-  // Form states for Duels
-  const [duelStats, setDuelStats] = useState<DuelStats>({
-    wins: student.duelStats?.wins || 0,
-    losses: student.duelStats?.losses || 0,
-    matchesPlayed: student.duelStats?.matchesPlayed || 0,
-    duelPoints: student.duelStats?.duelPoints || 0,
-    cyberSprintWins: student.duelStats?.cyberSprintWins || 0,
-    speedCraftingWins: student.duelStats?.speedCraftingWins || 0,
-    blockCodingWins: student.duelStats?.blockCodingWins || 0,
-    quizBlitzWins: student.duelStats?.quizBlitzWins || 0,
-    cyberShieldWins: student.duelStats?.cyberShieldWins || 0,
-    pcRushWins: student.duelStats?.pcRushWins || 0
-  });
+  const [lessonsProgress, setLessonsProgress] = useState<LessonsProgress>(() => ({
+    ...DEFAULT_LESSONS_PROGRESS,
+    ...(student.lessonsProgress || {}),
+  }));
 
-  // Custom Total XP
+  const [duelStats, setDuelStats] = useState<DuelStats>(() => ({
+    ...createEmptyDuelStats(),
+    ...(student.duelStats || {}),
+  }));
+
   const [customXP, setCustomXP] = useState<number>(student.totalXP || 0);
 
-  if (!isOpen) return null;
+  const groupedMissions = useMemo(() => {
+    const grades: Array<5 | 6 | 7 | 8> = gradeFilter === 'all' ? [5, 6, 7, 8] : [gradeFilter];
+    return grades.map((g) => ({
+      grade: g,
+      items: CARNET_MISSIONS.filter((m) => m.gradeNum === g),
+    }));
+  }, [gradeFilter]);
 
-  const calculateArcadeTotal = (scores: Partial<ArcadeScores>) => {
-    return computeTotalArcade(scores);
-  };
+  if (!isOpen) return null;
 
   const handleArcadeChange = (key: keyof ArcadeScores, val: string) => {
     const num = Math.max(0, parseInt(val, 10) || 0);
     setArcadeScores((prev) => {
-      const updated = {
-        ...prev,
-        [key]: num
-      };
-      updated.totalArcade = calculateArcadeTotal(updated);
+      const updated: ArcadeScores = { ...prev, [key]: num };
+      updated.totalArcade = computeTotalArcade(updated);
       return updated;
     });
+  };
+
+  const handleResetSingleGame = (key: keyof Omit<ArcadeScores, 'totalArcade'>) => {
+    setArcadeScores((prev) => {
+      const updated: ArcadeScores = { ...prev, [key]: 0 };
+      updated.totalArcade = computeTotalArcade(updated);
+      return updated;
+    });
+    sounds.playClick();
   };
 
   const handleLessonChange = (
     mission: keyof Omit<LessonsProgress, 'totalLessonScore'>,
     field: 'completed' | 'score' | 'elapsedSeconds' | 'level',
-    val: any
+    val: boolean | number
   ) => {
-    setLessonsProgress((prev) => ({
-      ...prev,
-      [mission]: {
-        ...prev[mission],
-        [field]: val
-      }
-    }));
+    setLessonsProgress((prev) => {
+      const currentEntry = prev[mission] || { completed: false, level: 1, score: 0, elapsedSeconds: 0 };
+      const updated = {
+        ...prev,
+        [mission]: {
+          ...currentEntry,
+          [field]: val
+        }
+      };
+      updated.totalLessonScore = computeTotalLessons(updated);
+      return updated;
+    });
   };
 
   const handleSaveAll = async () => {
@@ -168,13 +167,12 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
 
     const safeArcade: ArcadeScores = {
       ...arcadeScores,
-      totalArcade: calculateArcadeTotal(arcadeScores)
+      totalArcade: computeTotalArcade(arcadeScores)
     };
 
-    const calculatedLessonTotal = computeTotalLessons(lessonsProgress);
     const safeLessons: LessonsProgress = {
       ...lessonsProgress,
-      totalLessonScore: calculatedLessonTotal
+      totalLessonScore: computeTotalLessons(lessonsProgress)
     };
 
     const res = await updateStudentScoresByTeacher(student.id, {
@@ -212,8 +210,8 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
       setCustomXP(res.newTotalXP);
       sounds.playCorrect();
       setFeedbackMsg({
-        text: isEn 
-          ? `XP recalculated from verified tasks: ${res.newTotalXP} XP` 
+        text: isEn
+          ? `XP recalculated from verified tasks: ${res.newTotalXP} XP`
           : `XP recalculat automat pe baza probelor reale: ${res.newTotalXP} XP`,
         type: 'success'
       });
@@ -225,7 +223,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     if (!student.id) return;
     setConfirmDialog({
       title: isEn ? 'Confirm XP Penalty' : 'Confirmare Penalizare XP',
-      message: isEn ? `Apply penalty of -${amount} XP for "${reason}"?` : `Aplicați penalizarea de -${amount} XP pentru "${reason}"?`,
+      message: isEn
+        ? `Apply penalty of -${amount} XP for "${reason}"?`
+        : `Aplicați penalizarea de -${amount} XP pentru "${reason}"?`,
       onConfirm: async () => {
         setConfirmDialog(null);
         setSaving(true);
@@ -260,37 +260,36 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
     }
   };
 
-  const ARCADE_GAMES_METADATA = [
-    { key: 'cyber_asteroids', name: isEn ? 'Cyber Asteroids: Vector Command' : 'Cyber Asteroids: Reactorul Vectorial', icon: '☄️', badge: isEn ? 'NEW 🔥' : 'NOU 🔥' },
-    { key: 'cyber_sokoban', name: isEn ? 'Cyber Sokoban: Data Center Architect' : 'Cyber Sokoban: Inginerul de Servere', icon: '🤖', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
-    { key: 'cyber_frogger', name: isEn ? 'Cyber Frogger: Network Hopper' : 'Cyber Frogger: Traversarea Rețelei', icon: '🐸', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
-    { key: 'cyber_arkanoid', name: isEn ? 'Cyber Arkanoid: Firewall Breaker' : 'Cyber Arkanoid: Spărgătorul de Firewall', icon: '🧱', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
-    { key: 'cyber_pacman', name: isEn ? 'Cyber Pac-Man: Motherboard Maze' : 'Cyber Pac-Man: Labirintul Biților', icon: '🟡', badge: isEn ? 'LEGEND 🔥' : 'NOU 🔥' },
-    { key: 'cyber_invaders', name: isEn ? 'Cyber Invaders: Space Arcade' : 'Cyber Invaders: Galaxia Codului', icon: '🚀', badge: isEn ? 'HOT 🔥' : 'HOT 🔥' },
-    { key: 'roblox_clicker', name: isEn ? 'Roblox Blox Clicker (1v1)' : 'Roblox Blox Clicker Duel (1v1)', icon: '🟥', badge: isEn ? 'Roblox' : 'Roblox' },
-    { key: 'voxel_architect', name: isEn ? 'Voxel Architect (Minecraft CS)' : 'Voxel Architect: Calculatoare Minecraft', icon: '🧱', badge: isEn ? 'Ultimate' : 'Complex' },
-    { key: 'redstone_lab', name: isEn ? 'Redstone Logic Lab' : 'Circuite Redstone (Minecraft TIC)', icon: '⛏️', badge: isEn ? 'Minecraft' : 'Minecraft' },
-    { key: 'cyber_dino', name: isEn ? 'Cyber Dino Rush' : 'Cyber Dino: Matrix Rush', icon: '🦖', badge: isEn ? 'New' : 'Nou' },
-    { key: 'typing', name: isEn ? 'Typing Speed (WPM)' : 'Cursa de Tastare Rapidă (WPM)', icon: '⌨️' },
-    { key: 'mouse', name: isEn ? 'Mouse Reflex Master v1' : 'Maestrul Mouse-ului v1', icon: '🖱️' },
-    { key: 'mouse_v2', name: isEn ? 'Mouse Master Pro 2.0 (Clicker)' : 'Maestrul Mouse-ului 2.0 (Clicker)', icon: '⚡', badge: isEn ? 'PRO' : 'PRO' },
-    { key: 'game2048', name: isEn ? '2048 Bitwise Edition' : '2048 Bitwise Edition', icon: '🔢' },
-    { key: 'virus_sweeper', name: isEn ? 'Virus Sweeper (Mines)' : 'Căutătorul de Viruși', icon: '💣' },
-    { key: 'file_drop', name: isEn ? 'File-Drop (Tetris)' : 'File-Drop (Tetris Extensii)', icon: '🧱' },
-    { key: 'byte_slider', name: isEn ? 'Byte Slider (1024 KB)' : 'Byte Slider (Conversii)', icon: '📊' },
-    { key: 'rgb_pixel', name: isEn ? 'RGB Pixel Synthesis' : 'Pixeli RGB & Culori Ecran', icon: '🎨' },
-    { key: 'pcbuilder', name: isEn ? 'PC Builder Pro' : 'Asamblare PC Componente', icon: '🔧' },
-    { key: 'detective', name: isEn ? 'Cyber Detective' : 'Detectivul de Amenințări', icon: '🕵️' },
-    { key: 'files', name: isEn ? 'Folder Tree Architect' : 'Arbore de Foldere & Căi', icon: '📁' },
-    { key: 'binary_factory', name: isEn ? 'Binary Factory (0/1)' : 'Fabrica Binară (0 & 1)', icon: '⚙️' },
-    { key: 'maze', name: isEn ? 'Cyber Algorithm Maze' : 'Labirint Algoritmic', icon: '🌀' },
-    { key: 'firewall', name: isEn ? 'Firewall Defense' : 'Apărare Firewall', icon: '🛡️' }
-  ];
+  const gradeSectionMeta: Record<5 | 6 | 7 | 8, { ro: string; en: string; border: string; accent: string }> = {
+    5: {
+      ro: 'Curriculum Clasa a V-a (10 Misiuni)',
+      en: '5th Grade Curriculum (10 Missions)',
+      border: 'border-slate-800',
+      accent: 'text-emerald-400',
+    },
+    6: {
+      ro: 'Curriculum Clasa a VI-a (8 Misiuni)',
+      en: '6th Grade Curriculum (8 Missions)',
+      border: 'border-cyan-500/30',
+      accent: 'text-cyan-400',
+    },
+    7: {
+      ro: 'Curriculum Clasa a VII-a (12 Misiuni)',
+      en: '7th Grade Curriculum (12 Missions)',
+      border: 'border-indigo-500/30',
+      accent: 'text-indigo-400',
+    },
+    8: {
+      ro: 'Curriculum Clasa a VIII-a • Manual Oficial (14 Misiuni)',
+      en: '8th Grade Curriculum • Official Textbook (14 Missions)',
+      border: 'border-emerald-500/30',
+      accent: 'text-emerald-400',
+    },
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
       <div className="bg-slate-900 border-2 border-teal-500/40 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto">
-        
         {/* Modal Header */}
         <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">
@@ -346,30 +345,32 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
             }`}
           >
             <Gamepad2 className="w-4 h-4 text-indigo-400" />
-            <span>{isEn ? `Arcade Games (${ARCADE_GAMES_METADATA.length})` : `Mini-Jocuri Arcade (${ARCADE_GAMES_METADATA.length})`}</span>
+            <span>{isEn ? `Arcade Games (${ARCADE_REGISTRY.length})` : `Mini-Jocuri Arcade (${ARCADE_REGISTRY.length})`}</span>
           </button>
 
           <button
+            type="button"
             onClick={() => {
               setActiveSubTab('lessons');
               sounds.playClick();
             }}
-            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 ${
+            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 whitespace-nowrap shrink-0 ${
               activeSubTab === 'lessons'
                 ? 'border-emerald-400 text-emerald-300 bg-emerald-500/10'
                 : 'border-transparent text-slate-400 hover:text-white hover:bg-slate-800/40'
             }`}
           >
             <BookOpen className="w-4 h-4 text-emerald-400" />
-            <span>{isEn ? 'Core Lessons (4)' : 'Lecții & Misiuni TIC'}</span>
+            <span>{isEn ? `Lessons & Missions (${CARNET_MISSIONS.length})` : `Lecții & Misiuni TIC (${CARNET_MISSIONS.length})`}</span>
           </button>
 
           <button
+            type="button"
             onClick={() => {
               setActiveSubTab('duels');
               sounds.playClick();
             }}
-            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 ${
+            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 whitespace-nowrap shrink-0 ${
               activeSubTab === 'duels'
                 ? 'border-rose-400 text-rose-300 bg-rose-500/10'
                 : 'border-transparent text-slate-400 hover:text-white hover:bg-slate-800/40'
@@ -380,11 +381,12 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
           </button>
 
           <button
+            type="button"
             onClick={() => {
               setActiveSubTab('anticheat');
               sounds.playClick();
             }}
-            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 ${
+            className={`px-4 py-2.5 rounded-t-xl text-xs font-bold font-mono transition flex items-center gap-2 cursor-pointer border-b-2 whitespace-nowrap shrink-0 ${
               activeSubTab === 'anticheat'
                 ? 'border-amber-400 text-amber-300 bg-amber-500/10'
                 : 'border-transparent text-slate-400 hover:text-white hover:bg-slate-800/40'
@@ -395,15 +397,16 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
           </button>
         </div>
 
-        {/* Modal Body / Scrollable Content */}
+        {/* Modal Body */}
         <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-6">
-          
           {feedbackMsg && (
-            <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center gap-2.5 ${
-              feedbackMsg.type === 'success'
-                ? 'bg-emerald-950/70 border-emerald-500/50 text-emerald-300'
-                : 'bg-rose-950/70 border-rose-500/50 text-rose-300'
-            }`}>
+            <div
+              className={`p-4 rounded-2xl border text-xs font-bold flex items-center gap-2.5 ${
+                feedbackMsg.type === 'success'
+                  ? 'bg-emerald-950/70 border-emerald-500/50 text-emerald-300'
+                  : 'bg-rose-950/70 border-rose-500/50 text-rose-300'
+              }`}
+            >
               {feedbackMsg.type === 'success' ? <Check className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
               <span>{feedbackMsg.text}</span>
             </div>
@@ -419,7 +422,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     <span>{isEn ? 'Individual Arcade Highscores' : 'Scoruri Individuale Mini-Jocuri Arcade'}</span>
                   </h4>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    {isEn ? 'Modify any game score or reset suspicious/cheated results to 0.' : 'Modificați scorul oricărui joc sau resetați la 0 dacă a trișat.'}
+                    {isEn
+                      ? 'Modify any game score or reset suspicious/cheated results to 0.'
+                      : 'Modificați scorul oricărui joc sau resetați la 0 dacă a trișat.'}
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 shrink-0">
@@ -433,20 +438,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                           : `Resetează COMPLET toate punctele (Arcade: 0, Lecții: 0, Duel: 0, XP: 0) pentru "${student.username}"?`,
                         onConfirm: () => {
                           setConfirmDialog(null);
-                          setArcadeScores({
-                            typing: 0, mouse: 0, game2048: 0, pcbuilder: 0, detective: 0, files: 0,
-                            binary_factory: 0, maze: 0, firewall: 0, rgb_pixel: 0, byte_slider: 0,
-                            file_drop: 0, virus_sweeper: 0, cyber_dino: 0, redstone_lab: 0,
-                            voxel_architect: 0, roblox_clicker: 0, cyber_invaders: 0, cyber_pacman: 0,
-                            cyber_arkanoid: 0, cyber_frogger: 0, cyber_sokoban: 0, cyber_asteroids: 0,
-                            totalArcade: 0
-                          });
+                          setArcadeScores({ ...DEFAULT_ARCADE_SCORES });
                           setLessonsProgress({ ...DEFAULT_LESSONS_PROGRESS });
-                          setDuelStats({
-                            wins: 0, losses: 0, matchesPlayed: 0, duelPoints: 0,
-                            cyberSprintWins: 0, speedCraftingWins: 0, blockCodingWins: 0,
-                            quizBlitzWins: 0, cyberShieldWins: 0, pcRushWins: 0
-                          });
+                          setDuelStats(createEmptyDuelStats());
                           setCustomXP(0);
                           sounds.playClick();
                         }
@@ -465,18 +459,11 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                       setConfirmDialog({
                         title: isEn ? 'Reset Arcade Games' : 'Resetează Jocurile la 0',
                         message: isEn
-                          ? `Reset all ${ARCADE_GAMES_METADATA.length} arcade games for this student to 0?`
-                          : `Resetați toate cele ${ARCADE_GAMES_METADATA.length} mini-jocuri ale acestui elev la 0?`,
+                          ? `Reset all ${ARCADE_REGISTRY.length} arcade games for this student to 0?`
+                          : `Resetați toate cele ${ARCADE_REGISTRY.length} mini-jocuri ale acestui elev la 0?`,
                         onConfirm: () => {
                           setConfirmDialog(null);
-                          setArcadeScores({
-                            typing: 0, mouse: 0, game2048: 0, pcbuilder: 0, detective: 0, files: 0,
-                            binary_factory: 0, maze: 0, firewall: 0, rgb_pixel: 0, byte_slider: 0,
-                            file_drop: 0, virus_sweeper: 0, cyber_dino: 0, redstone_lab: 0,
-                            voxel_architect: 0, roblox_clicker: 0, cyber_invaders: 0, cyber_pacman: 0,
-                            cyber_arkanoid: 0, cyber_frogger: 0, cyber_sokoban: 0, cyber_asteroids: 0,
-                            totalArcade: 0
-                          });
+                          setArcadeScores({ ...DEFAULT_ARCADE_SCORES });
                           const lessonPts = lessonsProgress.totalLessonScore || 0;
                           const duelPts = duelStats.duelPoints || 0;
                           setCustomXP(lessonPts + duelPts);
@@ -493,14 +480,16 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {ARCADE_GAMES_METADATA.map((game) => {
-                  const key = game.key as keyof ArcadeScores;
+                {ARCADE_REGISTRY.map((game) => {
+                  const key = game.scoreKey;
                   const currentVal = arcadeScores[key] || 0;
-                  const isSuspicious = (key === 'typing' && currentVal > 250) || (key === 'cyber_dino' && currentVal > 50000) || (key === 'game2048' && currentVal > 200000);
+                  const isSuspicious =
+                    game.suspiciousThreshold !== undefined && currentVal > game.suspiciousThreshold;
+                  const badge = isEn ? game.badgeEn : game.badgeRo;
 
                   return (
-                    <div 
-                      key={game.key}
+                    <div
+                      key={game.scoreKey}
                       className={`p-3 rounded-2xl border transition flex items-center justify-between gap-3 ${
                         isSuspicious
                           ? 'bg-rose-950/30 border-rose-500/50'
@@ -511,10 +500,10 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                         <span className="text-xl shrink-0">{game.icon}</span>
                         <div className="min-w-0">
                           <div className="text-xs font-bold text-slate-200 truncate flex items-center gap-1.5">
-                            <span>{game.name}</span>
-                            {game.badge && (
+                            <span>{isEn ? game.teacherNameEn : game.teacherNameRo}</span>
+                            {badge && (
                               <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 rounded text-[9px] font-mono">
-                                {game.badge}
+                                {badge}
                               </span>
                             )}
                           </div>
@@ -531,14 +520,11 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                           type="number"
                           value={currentVal}
                           onChange={(e) => handleArcadeChange(key, e.target.value)}
-                          className="w-24 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs font-bold text-right focus:outline-none focus:border-indigo-500"
+                          className="w-24 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs font-bold text-right tabular-nums focus:outline-none focus:border-indigo-500"
                         />
                         <button
                           type="button"
-                          onClick={() => {
-                            setArcadeScores((prev) => ({ ...prev, [key]: 0 }));
-                            sounds.playClick();
-                          }}
+                          onClick={() => handleResetSingleGame(key)}
                           className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 transition cursor-pointer"
                           title={isEn ? 'Reset to 0' : 'Setează la 0'}
                         >
@@ -552,2015 +538,149 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
             </div>
           )}
 
-          {/* SUB-TAB 2: CORE LESSONS MISSIONS */}
+          {/* SUB-TAB 2: CORE LESSONS MISSIONS (ALL 44 DRIVEN BY CARNET_MISSIONS) */}
           {activeSubTab === 'lessons' && (
             <div className="space-y-4">
-              <div>
-                <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-emerald-400" />
-                  <span>{isEn ? 'Core Curriculum Lessons (Modules 1 - 3)' : 'Misiuni Teorie & Manual TIC (Modulele 1 - 3)'}</span>
-                </h4>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  {isEn ? 'Adjust completion status, score points, and recorded reading duration.' : 'Modificați starea de finalizare, punctajul și timpul petrecut pe lecție.'}
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                {/* Hardware */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Cpu className="w-5 h-5 text-emerald-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Unit 1: Hardware & System Architecture' : 'Unitatea 1: Arhitectura Sistemelor de Calcul'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 10-20 (Ergonomics, History, CPU, Peripherals, Bits)' : 'Manual pag. 10-20 (Ergonomie, Istorie, UC, Periferice, Biți)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.hardware.completed}
-                        onChange={(e) => handleLessonChange('hardware', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.hardware.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score Points' : 'Puncte Scor'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.hardware.score}
-                        onChange={(e) => handleLessonChange('hardware', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.hardware.elapsedSeconds}
-                        onChange={(e) => handleLessonChange('hardware', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-6)' : 'Nivel Max (1-6)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="6"
-                        value={lessonsProgress.hardware.level}
-                        onChange={(e) => handleLessonChange('hardware', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Files */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <FolderTree className="w-5 h-5 text-amber-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Unit 2: Operating Systems & Files Tree' : 'Unitatea 2: Sistemul de Operare & Fișiere'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 22-30 (OS Interface, Memory, File Tree, Search, Trash)' : 'Manual pag. 22-30 (Interfață SO, RAM/ROM, Arbore foldere, Căutare, Coș)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.files.completed}
-                        onChange={(e) => handleLessonChange('files', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.files.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score Points' : 'Puncte Scor'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.files.score}
-                        onChange={(e) => handleLessonChange('files', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.files.elapsedSeconds}
-                        onChange={(e) => handleLessonChange('files', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-8)' : 'Nivel Max (1-8)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="8"
-                        value={lessonsProgress.files.level}
-                        onChange={(e) => handleLessonChange('files', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Internet 3A */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Globe className="w-5 h-5 text-cyan-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Unit 3A: Internet, World Wide Web & Browsers' : 'Unitatea 3A: Rețeaua Internet & Navigarea Web'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 32-36 (LAN/WAN, URL, DNS, HTTP/HTTPS, Router)' : 'Manual pag. 32-36 (LAN/WAN, Structură URL, DNS, HTTPS, Router)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.internet1.completed}
-                        onChange={(e) => handleLessonChange('internet1', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.internet1.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score Points' : 'Puncte Scor'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.internet1.score}
-                        onChange={(e) => handleLessonChange('internet1', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.internet1.elapsedSeconds}
-                        onChange={(e) => handleLessonChange('internet1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-6)' : 'Nivel Max (1-6)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="6"
-                        value={lessonsProgress.internet1.level}
-                        onChange={(e) => handleLessonChange('internet1', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Internet 3B */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <ShieldCheck className="w-5 h-5 text-indigo-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Unit 3B: Search, Netiquette, Email & Safety' : 'Unitatea 3B: Căutare, E-mail, Netichetă & Securitate'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 38-48 (Boolean search, CRAAP, Cc/Bcc, Passwords)' : 'Manual pag. 38-48 (Operatori booleeni, CRAAP, E-mail Cc/Bcc, Parole)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.internet2.completed}
-                        onChange={(e) => handleLessonChange('internet2', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.internet2.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score Points' : 'Puncte Scor'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.internet2.score}
-                        onChange={(e) => handleLessonChange('internet2', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.internet2.elapsedSeconds}
-                        onChange={(e) => handleLessonChange('internet2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-6)' : 'Nivel Max (1-6)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="6"
-                        value={lessonsProgress.internet2.level}
-                        onChange={(e) => handleLessonChange('internet2', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Text 4A */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <FileText className="w-5 h-5 text-blue-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Unit 4A: Word Processor & Formatting' : 'Unitatea 4A: Procesorul de Text & Tehnoredactare'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 50-67 (Ribbon, Typing rules, Fonts, Align, Lists, Replace)' : 'Manual pag. 50-67 (Ribbon, Reguli aur, Fonturi, Aliniere, Liste, Replace)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.text1?.completed || false}
-                        onChange={(e) => handleLessonChange('text1', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.text1?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.text1?.score || 0}
-                        onChange={(e) => handleLessonChange('text1', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.text1?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('text1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.text1?.level || 1}
-                        onChange={(e) => handleLessonChange('text1', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Text 4B */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <FileText className="w-5 h-5 text-emerald-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Unit 4B: Visual Elements, Tables & Layout' : 'Unitatea 4B: Elemente Grafice, Tabele & Paginare'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 68-80 (Tables, Images, Wrap Text, Shapes, Page Setup)' : 'Manual pag. 68-80 (Tabele, Imagini, Wrap Text, Forme, Paginare)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.text2?.completed || false}
-                        onChange={(e) => handleLessonChange('text2', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.text2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.text2?.score || 0}
-                        onChange={(e) => handleLessonChange('text2', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.text2?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('text2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.text2?.level || 1}
-                        onChange={(e) => handleLessonChange('text2', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* MODULUL 5A - ALGORITMI SECVENȚIALI */}
-                <div className="p-4 rounded-2xl bg-slate-950/70 border border-amber-500/30 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">🧩</span>
-                      <div>
-                        <div className="text-xs font-black text-amber-300">
-                          {isEn ? 'Unit 5A: Algorithm Fundamentals & Sequential Logic' : 'Unitatea 5A: Noțiunea de Algoritm & Algoritmi Secvențiali'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 54-61 (Properties, Ambiguities, 3 Glasses, Encryption, Math)' : 'Manual pag. 54-61 (Proprietăți, Ambiguități, 3 Pahare, Criptare, Matematică)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.algo1?.completed || false}
-                        onChange={(e) => handleLessonChange('algo1', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.algo1?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.algo1?.score || 0}
-                        onChange={(e) => handleLessonChange('algo1', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.algo1?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('algo1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.algo1?.level || 1}
-                        onChange={(e) => handleLessonChange('algo1', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* MODULUL 5B - STRUCTURI DECIZIONALE & SCHEME LOGICE */}
-                <div className="p-4 rounded-2xl bg-slate-950/70 border border-purple-500/30 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">🚦</span>
-                      <div>
-                        <div className="text-xs font-black text-purple-300">
-                          {isEn ? 'Unit 5B: Decisions, Data Types & Flowcharts' : 'Unitatea 5B: Structuri Decizionale, Date & Scheme Logice'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 62-71 (If-Then-Else, Data Types, Operators, Truth Tables, Flowcharts, Trace)' : 'Manual pag. 62-71 (Dacă-Atunci-Altfel, Tipuri, Operatori, Tabele Adevăr, Scheme, Traseu)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.algo2?.completed || false}
-                        onChange={(e) => handleLessonChange('algo2', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.algo2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.algo2?.score || 0}
-                        onChange={(e) => handleLessonChange('algo2', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.algo2?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('algo2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.algo2?.level || 1}
-                        onChange={(e) => handleLessonChange('algo2', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* MODULUL 6A - SCRATCH 3.0, MIȘCARE & VARIABILE */}
-                <div className="p-4 rounded-2xl bg-slate-950/70 border border-orange-500/30 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">🐱</span>
-                      <div>
-                        <div className="text-xs font-black text-orange-300">
-                          {isEn ? 'Unit 6A: Scratch 3.0 Environment, Linear Movement & Variables' : 'Unitatea 6A: Mediul Scratch, Mișcare Liniară & Variabile'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 72-90 (Visual Blocks, 480x360, 9 Categories, RoboTIC, Variables, Pen)' : 'Manual pag. 72-90 (Blocuri Vizuale, 480x360, 9 Categorii, RoboTIC, Variabile, Creion)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.scratch1?.completed || false}
-                        onChange={(e) => handleLessonChange('scratch1', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.scratch1?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.scratch1?.score || 0}
-                        onChange={(e) => handleLessonChange('scratch1', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.scratch1?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('scratch1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.scratch1?.level || 1}
-                        onChange={(e) => handleLessonChange('scratch1', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* MODULUL 6B - DECIZII, MUZICĂ & CONCURS SCRATCH */}
-                <div className="p-4 rounded-2xl bg-slate-950/70 border border-pink-500/30 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">🎮</span>
-                      <div>
-                        <div className="text-xs font-black text-pink-300">
-                          {isEn ? 'Unit 6B: Decisions, Music, Contest Games & Grand Exam' : 'Unitatea 6B: Decizii, Muzică, Concurs de Jocuri & Marea Evaluare'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 84-93 (If/Else, Maze, Math Quiz, Music MIDI, Catch Fish, Final Exam)' : 'Manual pag. 84-93 (Dacă/Altfel, Labirint, Tabla Înmulțirii, Muzică MIDI, Prinde Pește, Evaluare)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.scratch2?.completed || false}
-                        onChange={(e) => handleLessonChange('scratch2', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.scratch2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.scratch2?.score || 0}
-                        onChange={(e) => handleLessonChange('scratch2', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.scratch2?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('scratch2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.scratch2?.level || 1}
-                        onChange={(e) => handleLessonChange('scratch2', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* --- SEPARATOR: MATERIE CLASA A VI-A --- */}
-                <div className="pt-4 pb-2 border-t border-slate-700/80">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[11px] font-black uppercase tracking-wider font-mono">
-                      {isEn ? 'Grade 6 Curriculum (OMEN 3393/2017)' : 'Programa Clasa a VI-a (OMEN 3393/2017)'}
-                    </span>
-                    <span className="text-xs font-bold text-slate-300">
-                      {isEn ? 'Presentations, 3D Graphics & Cybersecurity' : 'Prezentări, Grafică 3D & Securitate Cibernetică'}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-400">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                    <BookOpen className="w-4 h-4 text-emerald-400" />
+                    <span>{isEn ? 'Official Curriculum Missions Progress (Grades 5–8)' : 'Progres Lecții & Misiuni Curriculum (Clasele V–VIII)'}</span>
+                  </h4>
+                  <p className="text-xs text-slate-400 mt-0.5">
                     {isEn
-                      ? 'Detailed tracking for PowerPoint modules, Paint 3D spatial modeling, and malware defense lab.'
-                      : 'Evidență detaliată pentru modulele PowerPoint, modelare spațială Paint 3D și laboratorul de apărare cibernetică.'}
+                      ? 'Adjust completion status, scores, and recorded reading time for any mission.'
+                      : 'Ajustați starea de finalizare, punctajele și timpul înregistrat la orice misiune.'}
                   </p>
                 </div>
 
-                {/* Grade 6 - Presentation 1 */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Presentation className="w-5 h-5 text-orange-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 1A: PowerPoint Interface & Slides' : 'Clasa a VI-a • Unitatea 1A: Prezentarea & Interfața PowerPoint'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 10-17 (Ribbon, Slide Layouts, Bullets, Formatting, Shapes)' : 'Manual pag. 10-17 (Panglică, Machete Diapozitive, Marcatori, Formatare, Forme)'}
-                        </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {(['all', 5, 6, 7, 8] as const).map((g) => (
+                    <button
+                      key={g}
+                      type="button"
+                      onClick={() => {
+                        setGradeFilter(g);
+                        sounds.playClick();
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                        gradeFilter === g
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                          : 'bg-slate-800/80 text-slate-400 hover:text-white border border-slate-700'
+                      }`}
+                    >
+                      {g === 'all' ? (isEn ? 'All (44)' : 'Toate (44)') : `Cls. ${g === 5 ? 'V' : g === 6 ? 'VI' : g === 7 ? 'VII' : 'VIII'}`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {groupedMissions.map(({ grade, items }) => {
+                  const cfg = gradeSectionMeta[grade];
+                  return (
+                    <div key={grade} className="space-y-3">
+                      <div className="pt-3 border-t border-slate-700/80 flex items-center gap-2 text-xs font-black uppercase tracking-wider font-mono">
+                        <GraduationCap className={`w-4 h-4 ${cfg.accent}`} />
+                        <span className={cfg.accent}>{isEn ? cfg.en : cfg.ro}</span>
                       </div>
-                    </div>
 
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.presentation1?.completed || false}
-                        onChange={(e) => handleLessonChange('presentation1', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.presentation1?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
+                      {items.map((mission: CarnetMissionMeta) => {
+                        const entry = lessonsProgress[mission.lessonsKey] || {
+                          completed: false,
+                          level: 1,
+                          score: 0,
+                          elapsedSeconds: 0,
+                        };
+                        return (
+                          <div
+                            key={mission.id}
+                            className={`p-4 rounded-2xl bg-slate-950/60 border ${cfg.border} space-y-3`}
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="text-xl shrink-0">{mission.emoji}</span>
+                                <div className="min-w-0">
+                                  <div className="text-xs font-bold text-white">
+                                    {mission.gradeLabelRo} • {mission.moduleCode}: {isEn ? mission.titleEn : mission.titleRo}
+                                  </div>
+                                  <div className="text-[10px] text-slate-400">
+                                    {isEn ? mission.unitEn : mission.unitRo}
+                                  </div>
+                                </div>
+                              </div>
 
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.presentation1?.score || 0}
-                        onChange={(e) => handleLessonChange('presentation1', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.presentation1?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('presentation1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.presentation1?.level || 1}
-                        onChange={(e) => handleLessonChange('presentation1', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
+                              <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                                <input
+                                  type="checkbox"
+                                  checked={Boolean(entry.completed)}
+                                  onChange={(e) => handleLessonChange(mission.lessonsKey, 'completed', e.target.checked)}
+                                  className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
+                                />
+                                <span className="text-xs font-bold text-slate-300">
+                                  {entry.completed
+                                    ? isEn ? 'Completed ✅' : 'Finalizat ✅'
+                                    : isEn ? 'In progress ⏳' : 'În lucru ⏳'}
+                                </span>
+                              </label>
+                            </div>
 
-                {/* Grade 6 - Presentation 2 */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Presentation className="w-5 h-5 text-rose-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 1B: Slide Design, Transitions & Speech' : 'Clasa a VI-a • Unitatea 1B: Design, Animații & Public Speaking'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 18-25 (Transitions, Animations, Media, SmartArt, Touristic Project)' : 'Manual pag. 18-25 (Tranziții, Animații, Sunete/Video, SmartArt, Proiect Turistic)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.presentation2?.completed || false}
-                        onChange={(e) => handleLessonChange('presentation2', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-rose-600 focus:ring-rose-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.presentation2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.presentation2?.score || 0}
-                        onChange={(e) => handleLessonChange('presentation2', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.presentation2?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('presentation2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.presentation2?.level || 1}
-                        onChange={(e) => handleLessonChange('presentation2', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grade 6 - Paint 3D */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Box className="w-5 h-5 text-cyan-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 2A: Paint 3D Modeling & VR Graphics' : 'Clasa a VI-a • Unitatea 2A: Modelare Paint 3D, Forme & Grafică VR'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 26-33 (3D Primitives, Anchors, Rotation, Textures, GLB Export)' : 'Manual pag. 26-33 (Primitive 3D, Ancore, Rotație pe Axe, Autocolante, Export GLB)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.model3d1?.completed || false}
-                        onChange={(e) => handleLessonChange('model3d1', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-cyan-600 focus:ring-cyan-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.model3d1?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.model3d1?.score || 0}
-                        onChange={(e) => handleLessonChange('model3d1', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.model3d1?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('model3d1', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.model3d1?.level || 1}
-                        onChange={(e) => handleLessonChange('model3d1', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grade 6 - Animation Toontastic & VR (model3d2) */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Clapperboard className="w-5 h-5 text-pink-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 2B: Toontastic Animation & Virtual Reality VR' : 'Clasa a VI-a • Unitatea 2B: Animație Toontastic & Realitate Virtuală VR'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 34-43 (24 FPS, Story Arc, Digital Puppeteering, Audio Mood, CoSpaces 360° VR)' : 'Manual pag. 34-43 (24 FPS, Arc Narativ, Păpușărie Digitală, Regie Audio, CoSpaces 360° VR)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.model3d2?.completed || false}
-                        onChange={(e) => handleLessonChange('model3d2', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-pink-600 focus:ring-pink-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.model3d2?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.model3d2?.score || 0}
-                        onChange={(e) => handleLessonChange('model3d2', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.model3d2?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('model3d2', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.model3d2?.level || 1}
-                        onChange={(e) => handleLessonChange('model3d2', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grade 6 - Malware & Securitate */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <ShieldAlert className="w-5 h-5 text-red-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 3A: Malware Threats & Cyber Security' : 'Clasa a VI-a • Unitatea 3A: Amenințări Malware & Securitate Cibernetică'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 44-45 (Viruses, Worms, Trojans, Phishing, Antivirus, Firewall & 2FA)' : 'Manual pag. 44-45 (Viruși, Viermi, Troieni, Phishing, Antivirus, Firewall & 2FA)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.cyber6a?.completed || false}
-                        onChange={(e) => handleLessonChange('cyber6a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-red-600 focus:ring-red-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.cyber6a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.cyber6a?.score || 0}
-                        onChange={(e) => handleLessonChange('cyber6a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.cyber6a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('cyber6a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.cyber6a?.level || 1}
-                        onChange={(e) => handleLessonChange('cyber6a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grade 6 - Email & Netiquette (cyber6b) */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Mail className="w-5 h-5 text-blue-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 3B: Email, Netiquette & Cloud Collaboration' : 'Clasa a VI-a • Unitatea 3B: E-mail, Netichetă & Colaborare Cloud'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 46-61 (To, CC, BCC, Attachments <25MB, Anti-Cyberbullying, Cloud)' : 'Manual pag. 46-61 (To, CC, BCC, Atașamente <25MB, Scut Cyberbullying, Cloud)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.cyber6b?.completed || false}
-                        onChange={(e) => handleLessonChange('cyber6b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.cyber6b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.cyber6b?.score || 0}
-                        onChange={(e) => handleLessonChange('cyber6b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.cyber6b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('cyber6b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.cyber6b?.level || 1}
-                        onChange={(e) => handleLessonChange('cyber6b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grade 6 - Scratch Algorithms & Conditional Loops (scratch6a) */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Repeat className="w-5 h-5 text-amber-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 4A: Scratch Conditional Loops & Algorithm Logic' : 'Clasa a VI-a • Unitatea 4A: Algoritmi & Bucle Condiționate în Scratch'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 62-75 (While vs Repeat Until, Logic Booleans, Infinite Loops & Maze)' : 'Manual pag. 62-75 (Cât timp vs Repetă până când, Operatori Booleeni, Bucle Infinite & Labirint)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.scratch6a?.completed || false}
-                        onChange={(e) => handleLessonChange('scratch6a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.scratch6a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.scratch6a?.score || 0}
-                        onChange={(e) => handleLessonChange('scratch6a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.scratch6a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('scratch6a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.scratch6a?.level || 1}
-                        onChange={(e) => handleLessonChange('scratch6a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grade 6 - Scratch Variables & Complete Games (scratch6b) */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Gamepad2 className="w-5 h-5 text-lime-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 6 • Unit 4B: Scratch Variables, Lists & Complete Games' : 'Clasa a VI-a • Unitatea 4B: Scratch Variabile, Liste & Jocuri Complete'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 76-88 (Global vs Local Variables, Lists, Clones, Broadcast Messages, Scoring & Win Conditions)' : 'Manual pag. 76-88 (Variabile Globale/Locale, Liste, Clone, Mesaje Difuzate, Punctaj & Condiții de Victorie)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.scratch6b?.completed || false}
-                        onChange={(e) => handleLessonChange('scratch6b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-lime-600 focus:ring-lime-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.scratch6b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.scratch6b?.score || 0}
-                        onChange={(e) => handleLessonChange('scratch6b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.scratch6b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('scratch6b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.scratch6b?.level || 1}
-                        onChange={(e) => handleLessonChange('scratch6b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* GRADE 7 SECTION HEADER */}
-                <div className="pt-4 pb-2 border-t border-cyan-500/20">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-black uppercase tracking-wider">
-                      {isEn ? 'Grade 7 Curriculum' : 'Clasa a VII-a'}
-                    </span>
-                    <span className="text-xs font-bold text-slate-300">
-                      {isEn ? 'Manual Art Klett (Pages 10–108 • 12 Modules)' : 'Manual Art Klett (Pag. 10–108 • 12 Module Active)'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* G7 - Word 1A */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <FileText className="w-5 h-5 text-blue-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 1A: Word Formatting, Tables & Styles' : 'Clasa a VII-a • Unitatea 1A: Tehnoredactare & Interfață Word'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 10-19 (Heading Styles, Tables, Split/Merge, Header/Footer, Footnotes)' : 'Manual pag. 10-19 (Stiluri Titlu, Tabele avansate, Îmbinare/Divizare, Antet/Subsol, Note subsol)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_word_a?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_word_a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_word_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_word_a?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_word_a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_word_a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_word_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_word_a?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_word_a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Word 1B */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <FileCode className="w-5 h-5 text-indigo-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 1B: Advanced Layout, Columns & TOC' : 'Clasa a VII-a • Unitatea 1B: Machetare & Tipografie Avansată'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 20-27 (Multi-columns, Section Breaks, Drop Cap, Math Formulas, Automatic TOC)' : 'Manual pag. 20-27 (Coloane ziar, Întreruperi secțiune, Drop Cap, Formule matematice, Cuprins automat)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_word_b?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_word_b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_word_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_word_b?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_word_b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_word_b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_word_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_word_b?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_word_b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Audio 2A */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Music className="w-5 h-5 text-purple-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 2A: Sound Acoustics & WavePad Studio' : 'Clasa a VII-a • Unitatea 2A: Acustică & Studio WavePad'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 28-37 (Sample Rate, Hz, Amplitude, Waveform, Trimming, Fade In/Out, Equalizer)' : 'Manual pag. 28-37 (Eșantionare, Hz, Amplitudine, Formă de undă, Trimming, Fade In/Out, Egalizator)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_audio_a?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_audio_a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_audio_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_audio_a?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_audio_a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_audio_a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_audio_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_audio_a?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_audio_a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Video 2B */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Video className="w-5 h-5 text-rose-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 2B: VideoPad & Multitrack Video Editing' : 'Clasa a VII-a • Unitatea 2B: VideoPad & Montaj Video Multitrack'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 38-47 (Timeline, Video/Audio Tracks, Split, Transitions, Chroma Key, MP4 Export)' : 'Manual pag. 38-47 (Timeline, Piste Video/Audio, Split, Tranziții, Chroma Key, Export MP4)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_video_b?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_video_b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-rose-600 focus:ring-rose-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_video_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_video_b?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_video_b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_video_b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_video_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_video_b?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_video_b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Cloud 3A */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Cloud className="w-5 h-5 text-sky-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 3A: Cloud Collaborative Apps (Docs/Slides)' : 'Clasa a VII-a • Unitatea 3A: Aplicații Colaborative Cloud Google Docs/Slides'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 48-55 (Real-time Sharing, View/Comment/Edit, Suggestions, Version History)' : 'Manual pag. 48-55 (Partajare în timp real, Vizualizator/Comentator/Editor, Sugestii, Istoric versiuni)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_cloud_a?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_cloud_a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_cloud_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_cloud_a?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_cloud_a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_cloud_a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_cloud_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_cloud_a?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_cloud_a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - GIS 3B */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <MapPin className="w-5 h-5 text-emerald-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 3B: Digital Cartography & GIS (My Maps)' : 'Clasa a VII-a • Unitatea 3B: Cartografie Digitală & GIS'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 56-63 (GPS Coordinates, Vector/Raster Layers, Google My Maps, Pin Clustering, Spatial Analysis)' : 'Manual pag. 56-63 (Coordonate GPS, Straturi vectoriale/raster, Google My Maps, Pinuri & KML, Analiză spațială)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_gis_b?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_gis_b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_gis_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_gis_b?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_gis_b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_gis_b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_gis_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_gis_b?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_gis_b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - C++ 4A */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Code2 className="w-5 h-5 text-cyan-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 4A: Code::Blocks IDE & C++ Data Types' : 'Clasa a VII-a • Unitatea 4A: Code::Blocks & Tipuri C++'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 64-73 (IDE, Preprocessor #include, int/float/char/bool, Memory size, Comments)' : 'Manual pag. 64-73 (IDE, Preprocesor #include <iostream>, int/float/char/bool, Dimensiune memorie, Comentarii)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_cpp_a?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_cpp_a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-cyan-600 focus:ring-cyan-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_cpp_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_cpp_a?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_cpp_a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_cpp_a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_cpp_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_cpp_a?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_cpp_a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - C++ 4B */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Binary className="w-5 h-5 text-teal-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 4B: Linear Structure & I/O Streams in C++' : 'Clasa a VII-a • Unitatea 4B: Structura Liniară & I/O C++'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 74-81 (cin >>, cout <<, Arithmetic Operators, Modulo %, Sequential Algorithms)' : 'Manual pag. 74-81 (cin >>, cout <<, Operatori +, -, *, /, %, Algoritmi liniari de calcul)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_cpp_b?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_cpp_b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-teal-600 focus:ring-teal-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_cpp_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_cpp_b?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_cpp_b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_cpp_b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_cpp_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_cpp_b?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_cpp_b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Decision 4C */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <GitFork className="w-5 h-5 text-amber-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 4C: Alternative Structure (if / else)' : 'Clasa a VII-a • Unitatea 4C: Structura Alternativă if/else'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 82-89 (Conditionals, Relational Operators == !=, Logic && || !, Min/Max 3 numbers, Leap year)' : 'Manual pag. 82-89 (Ramificații decizionale, Operatori relaționali și logici, Min/Max 3 numere, An bisect)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_decision_a?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_decision_a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_decision_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_decision_a?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_decision_a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_decision_a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_decision_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_decision_a?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_decision_a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Loop 4D */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <RefreshCw className="w-5 h-5 text-orange-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 4D: Repetitive Structure (while loop)' : 'Clasa a VII-a • Unitatea 4D: Structura Repetitivă while'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 90-97 (Preconditioned Loops, Digit processing, Number reversal, Palindrome, GCD Euclid)' : 'Manual pag. 90-97 (Bucle cu test inițial, Prelucrare cifre, Oglindit, Palindrom, CMMDC Euclid)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_loop_b?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_loop_b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_loop_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_loop_b?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_loop_b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_loop_b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_loop_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_loop_b?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_loop_b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - STEM 4E */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Activity className="w-5 h-5 text-violet-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 4E: For / Do-While Loops & STEM Applications' : 'Clasa a VII-a • Unitatea 4E: Bucle for/do & Fizică/Geografie STEM'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 98-103 (Counter Loops for, Postconditioned Loops do-while, Velocity/Altitude STEM)' : 'Manual pag. 98-103 (Bucle contor for, Bucle cu test final do-while, Aplicații STEM traiectorie, viteză, altitudine)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_stem_a?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_stem_a', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-violet-600 focus:ring-violet-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_stem_a?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_stem_a?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_stem_a', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_stem_a?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_stem_a', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_stem_a?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_stem_a', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* G7 - Robot 4F */}
-                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Bot className="w-5 h-5 text-green-400" />
-                      <div>
-                        <div className="text-xs font-bold text-white">
-                          {isEn ? 'Grade 7 • Unit 4F: Virtual Robotics & Sensors' : 'Clasa a VII-a • Unitatea 4F: Roboți Virtuali & Senzori'}
-                        </div>
-                        <div className="text-[10px] text-slate-400">
-                          {isEn ? 'Manual pages 104-108 (Microcontroller, Ultrasonic/Line Sensors, Actuators, Obstacle Avoidance)' : 'Manual pag. 104-108 (Microcontroler, Senzori ultrasunete/linie, Actuatori/Motoare, Algoritmi evitare obstacole)'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={lessonsProgress.g7_robot_b?.completed || false}
-                        onChange={(e) => handleLessonChange('g7_robot_b', 'completed', e.target.checked)}
-                        className="w-4 h-4 rounded text-green-600 focus:ring-green-500 bg-slate-900 border-slate-700 cursor-pointer"
-                      />
-                      <span className="text-xs font-bold text-slate-300">
-                        {lessonsProgress.g7_robot_b?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={lessonsProgress.g7_robot_b?.score || 0}
-                        onChange={(e) => handleLessonChange('g7_robot_b', 'score', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                      <input
-                        type="number"
-                        value={lessonsProgress.g7_robot_b?.elapsedSeconds || 0}
-                        onChange={(e) => handleLessonChange('g7_robot_b', 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-7)' : 'Nivel Max (1-7)'}</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="7"
-                        value={lessonsProgress.g7_robot_b?.level || 1}
-                        onChange={(e) => handleLessonChange('g7_robot_b', 'level', parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* SECTION DIVIDER: CLASA A VIII-A */}
-                <div className="pt-4 border-t border-slate-700/80">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-400 font-mono">
-                    <GraduationCap className="w-4 h-4 text-emerald-400" />
-                    <span>{isEn ? '8th Grade Curriculum • Manual Art Klett 2025 (12 Missions)' : 'Curriculum Clasa a VIII-a • Manual Oficial Art Klett 2025 (12 Misiuni)'}</span>
-                  </div>
-                </div>
-
-                {[
-                  { key: 'g8_calc_a' as const, titleRo: 'Clasa a VIII-a • Modulul 1A: Structura registrului de calcul tabelar, celule & tipuri de date', titleEn: 'Grade 8 • Unit 1A: Spreadsheet Workbook Structure, Cells & Data Types', pages: '12-16', icon: '📊' },
-                  { key: 'g8_calc_b' as const, titleRo: 'Clasa a VIII-a • Modulul 1B: Formule & funcții matematice/statistice (SUM, AVERAGE, MIN, MAX)', titleEn: 'Grade 8 • Unit 1B: Formulas & Statistical Functions (SUM, AVERAGE, MIN, MAX)', pages: '17-21', icon: '🧮' },
-                  { key: 'g8_calc_c' as const, titleRo: 'Clasa a VIII-a • Modulul 1C: Reprezentări grafice & diagrame 2D/3D', titleEn: 'Grade 8 • Unit 1C: Data Visualization & 2D/3D Charts', pages: '22-29', icon: '📈' },
-                  { key: 'g8_calc_d' as const, titleRo: 'Clasa a VIII-a • Modulul 1D: Baze de date tabelare, sortare & filtrare', titleEn: 'Grade 8 • Unit 1D: Tabular Databases, Multi-key Sorting & Filtering', pages: '30-35', icon: '🗄️' },
-                  { key: 'g8_web_a' as const, titleRo: 'Clasa a VIII-a • Modulul 2A: Structura web & HTML5 semantic', titleEn: 'Grade 8 • Unit 2A: Web Structure & Semantic HTML5', pages: '36-41', icon: '🌐' },
-                  { key: 'g8_web_b' as const, titleRo: 'Clasa a VIII-a • Modulul 2B: Google Sites & creare vizuală WYSIWYG', titleEn: 'Grade 8 • Unit 2B: Google Sites & Visual WYSIWYG Web Design', pages: '42-49', icon: '🖥️' },
-                  { key: 'g8_web_c' as const, titleRo: 'Clasa a VIII-a • Modulul 2C: Publicare web, domenii, securitate HTTPS & SEO', titleEn: 'Grade 8 • Unit 2C: Web Publishing, Domains, HTTPS Security & SEO', pages: '50-57', icon: '🔒' },
-                  { key: 'g8_algo_a' as const, titleRo: 'Clasa a VIII-a • Modulul 3A: Recapitulare C++, variabile & expresii', titleEn: 'Grade 8 • Unit 3A: C++ Recap, Variables & Complex Expressions', pages: '58-65', icon: '⚡' },
-                  { key: 'g8_algo_b' as const, titleRo: 'Clasa a VIII-a • Modulul 3B: Structuri alternative: if/else, switch & cifre', titleEn: 'Grade 8 • Unit 3B: Decisions: if/else, switch & Digit Extraction', pages: '66-73', icon: '🔀' },
-                  { key: 'g8_algo_c' as const, titleRo: 'Clasa a VIII-a • Modulul 3C: Structuri repetitive: while, do-while, for & șiruri', titleEn: 'Grade 8 • Unit 3C: Loops: while, do-while, for & Number Sequences', pages: '74-81', icon: '🔄' },
-                  { key: 'g8_algo_d' as const, titleRo: 'Clasa a VIII-a • Modulul 3D: Algoritmi fundamentali: primalitate, CMMDC, Fibonacci', titleEn: 'Grade 8 • Unit 3D: Fundamental Algorithms: Primes, GCD & Fibonacci', pages: '82-89', icon: '🔢' },
-                  { key: 'g8_algo_e' as const, titleRo: 'Clasa a VIII-a • Modulul 3E: Proiect integrator final „Liceul Preferat” & robotică', titleEn: 'Grade 8 • Unit 3E: Culminating Project "Preferred High School" & Robotics', pages: '90-96', icon: '🤖' },
-                ].map((item) => (
-                  <div key={item.key} className="p-4 rounded-2xl bg-slate-950/60 border border-emerald-500/30 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-xl">{item.icon}</span>
-                        <div>
-                          <div className="text-xs font-bold text-white">
-                            {isEn ? item.titleEn : item.titleRo}
+                            <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+                              <div>
+                                <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">
+                                  {isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={entry.score || 0}
+                                  onChange={(e) =>
+                                    handleLessonChange(mission.lessonsKey, 'score', parseInt(e.target.value, 10) || 0)
+                                  }
+                                  className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold tabular-nums"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">
+                                  {isEn ? 'Time (sec)' : 'Timp (secunde)'}
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={entry.elapsedSeconds || 0}
+                                  onChange={(e) =>
+                                    handleLessonChange(
+                                      mission.lessonsKey,
+                                      'elapsedSeconds',
+                                      parseInt(e.target.value, 10) || 0
+                                    )
+                                  }
+                                  className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold tabular-nums"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">
+                                  {isEn ? `Level (1-${mission.maxLevels})` : `Nivel (1-${mission.maxLevels})`}
+                                </label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  max={mission.maxLevels + 1}
+                                  value={entry.level || 1}
+                                  onChange={(e) =>
+                                    handleLessonChange(mission.lessonsKey, 'level', parseInt(e.target.value, 10) || 1)
+                                  }
+                                  className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold tabular-nums"
+                                />
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-[10px] text-slate-400">
-                            {isEn ? `Manual pages ${item.pages}` : `Manual pag. ${item.pages}`}
-                          </div>
-                        </div>
-                      </div>
-
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={lessonsProgress[item.key]?.completed || false}
-                          onChange={(e) => handleLessonChange(item.key, 'completed', e.target.checked)}
-                          className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 bg-slate-900 border-slate-700 cursor-pointer"
-                        />
-                        <span className="text-xs font-bold text-slate-300">
-                          {lessonsProgress[item.key]?.completed ? (isEn ? 'Completed ✅' : 'Finalizat ✅') : (isEn ? 'In progress ⏳' : 'În lucru ⏳')}
-                        </span>
-                      </label>
+                        );
+                      })}
                     </div>
-
-                    <div className="grid grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
-                      <div>
-                        <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Score (0-100)' : 'Punctaj (0-100)'}</label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={lessonsProgress[item.key]?.score || 0}
-                          onChange={(e) => handleLessonChange(item.key, 'score', parseInt(e.target.value, 10) || 0)}
-                          className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Time (sec)' : 'Timp (secunde)'}</label>
-                        <input
-                          type="number"
-                          value={lessonsProgress[item.key]?.elapsedSeconds || 0}
-                          onChange={(e) => handleLessonChange(item.key, 'elapsedSeconds', parseInt(e.target.value, 10) || 0)}
-                          className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1">{isEn ? 'Max Level (1-5)' : 'Nivel Max (1-5)'}</label>
-                        <input
-                          type="number"
-                          min="1"
-                          max="6"
-                          value={lessonsProgress[item.key]?.level || 1}
-                          onChange={(e) => handleLessonChange(item.key, 'level', parseInt(e.target.value, 10) || 1)}
-                          className="w-full bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-white font-mono font-bold"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -2574,7 +694,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                   <span>{isEn ? '1v1 Multiplayer Duel Statistics' : 'Statistici și Punctaje Duel 1v1'}</span>
                 </h4>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  {isEn ? 'Inspect and modify matches, victories, losses and duel ladder points.' : 'Verificați și editați meciurile, victoriile, înfrângerile și punctele de clasament duel.'}
+                  {isEn
+                    ? 'Inspect and modify matches, victories, losses and duel ladder points.'
+                    : 'Verificați și editați meciurile, victoriile, înfrângerile și punctele de clasament duel.'}
                 </p>
               </div>
 
@@ -2587,7 +709,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     type="number"
                     value={duelStats.wins}
                     onChange={(e) => setDuelStats((p) => ({ ...p, wins: parseInt(e.target.value, 10) || 0 }))}
-                    className="w-full bg-slate-900 border border-emerald-500/40 px-3 py-2 rounded-xl text-emerald-300 font-mono font-bold text-base"
+                    className="w-full bg-slate-900 border border-emerald-500/40 px-3 py-2 rounded-xl text-emerald-300 font-mono font-bold text-base tabular-nums"
                   />
                 </div>
 
@@ -2599,7 +721,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     type="number"
                     value={duelStats.losses}
                     onChange={(e) => setDuelStats((p) => ({ ...p, losses: parseInt(e.target.value, 10) || 0 }))}
-                    className="w-full bg-slate-900 border border-rose-500/40 px-3 py-2 rounded-xl text-rose-300 font-mono font-bold text-base"
+                    className="w-full bg-slate-900 border border-rose-500/40 px-3 py-2 rounded-xl text-rose-300 font-mono font-bold text-base tabular-nums"
                   />
                 </div>
 
@@ -2611,7 +733,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     type="number"
                     value={duelStats.matchesPlayed}
                     onChange={(e) => setDuelStats((p) => ({ ...p, matchesPlayed: parseInt(e.target.value, 10) || 0 }))}
-                    className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-slate-200 font-mono font-bold text-base"
+                    className="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-xl text-slate-200 font-mono font-bold text-base tabular-nums"
                   />
                 </div>
 
@@ -2623,71 +745,33 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                     type="number"
                     value={duelStats.duelPoints}
                     onChange={(e) => setDuelStats((p) => ({ ...p, duelPoints: parseInt(e.target.value, 10) || 0 }))}
-                    className="w-full bg-slate-900 border border-amber-500/40 px-3 py-2 rounded-xl text-amber-300 font-mono font-bold text-base"
+                    className="w-full bg-slate-900 border border-amber-500/40 px-3 py-2 rounded-xl text-amber-300 font-mono font-bold text-base tabular-nums"
                   />
                 </div>
               </div>
 
-              {/* Per mode breakdown */}
               <div className="p-4 rounded-2xl bg-slate-950/40 border border-slate-800 space-y-3">
                 <div className="text-xs font-bold text-slate-300 uppercase font-mono">
                   {isEn ? 'Victories per Game Arena' : 'Victorii pe Tipuri de Duel'}
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
-                  <div>
-                    <span className="text-[10px] text-slate-400 block mb-1">⚡ Cyber Sprint</span>
-                    <input
-                      type="number"
-                      value={duelStats.cyberSprintWins || 0}
-                      onChange={(e) => setDuelStats((p) => ({ ...p, cyberSprintWins: parseInt(e.target.value, 10) || 0 }))}
-                      className="w-full bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg text-white font-mono text-center"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 block mb-1">⛏️ Speed Crafting</span>
-                    <input
-                      type="number"
-                      value={duelStats.speedCraftingWins || 0}
-                      onChange={(e) => setDuelStats((p) => ({ ...p, speedCraftingWins: parseInt(e.target.value, 10) || 0 }))}
-                      className="w-full bg-slate-900 border border-amber-500/40 px-2 py-1 rounded-lg text-amber-300 font-mono text-center font-bold"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 block mb-1">🧩 Cursa Algoritmilor</span>
-                    <input
-                      type="number"
-                      value={duelStats.blockCodingWins || 0}
-                      onChange={(e) => setDuelStats((p) => ({ ...p, blockCodingWins: parseInt(e.target.value, 10) || 0 }))}
-                      className="w-full bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg text-white font-mono text-center"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 block mb-1">🧠 Quiz Blitz</span>
-                    <input
-                      type="number"
-                      value={duelStats.quizBlitzWins || 0}
-                      onChange={(e) => setDuelStats((p) => ({ ...p, quizBlitzWins: parseInt(e.target.value, 10) || 0 }))}
-                      className="w-full bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg text-white font-mono text-center"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 block mb-1">🛡️ Cyber Shield</span>
-                    <input
-                      type="number"
-                      value={duelStats.cyberShieldWins || 0}
-                      onChange={(e) => setDuelStats((p) => ({ ...p, cyberShieldWins: parseInt(e.target.value, 10) || 0 }))}
-                      className="w-full bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg text-white font-mono text-center"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-400 block mb-1">🔧 PC Rush</span>
-                    <input
-                      type="number"
-                      value={duelStats.pcRushWins || 0}
-                      onChange={(e) => setDuelStats((p) => ({ ...p, pcRushWins: parseInt(e.target.value, 10) || 0 }))}
-                      className="w-full bg-slate-900 border border-slate-700 px-2 py-1 rounded-lg text-white font-mono text-center"
-                    />
-                  </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-xs">
+                  {DUEL_ARENA_FIELDS.map((arena) => (
+                    <div key={arena.key}>
+                      <span className="text-[10px] text-slate-400 block mb-1 truncate">{arena.label}</span>
+                      <input
+                        type="number"
+                        value={duelStats[arena.key] || 0}
+                        onChange={(e) =>
+                          setDuelStats((p) => ({ ...p, [arena.key]: parseInt(e.target.value, 10) || 0 }))
+                        }
+                        className={`w-full bg-slate-900 border px-2 py-1 rounded-lg font-mono text-center tabular-nums ${
+                          arena.highlight
+                            ? 'border-amber-500/40 text-amber-300 font-bold'
+                            : 'border-slate-700 text-white'
+                        }`}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -2699,16 +783,17 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 text-amber-400" />
-                  <span>{isEn ? 'Anti-Cheating Tools & Teacher Actions' : 'Instrumente Corectare Trișare & Bonusuri Profesor'}</span>
+                  <span>
+                    {isEn ? 'Anti-Cheating Tools & Teacher Actions' : 'Instrumente Corectare Trișare & Bonusuri Profesor'}
+                  </span>
                 </h4>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  {isEn 
-                    ? 'Penalize unfair play, award contest bonuses, or perform automated mathematical XP sync.' 
+                  {isEn
+                    ? 'Penalize unfair play, award contest bonuses, or perform automated mathematical XP sync.'
                     : 'Aplicați penalizări pentru trișat, acordați bonusuri pentru activitate sau recalculați XP-ul matematic.'}
                 </p>
               </div>
 
-              {/* Cheating Penalties */}
               <div className="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30 space-y-3">
                 <div className="text-xs font-bold text-rose-300 flex items-center gap-1.5 uppercase font-mono">
                   <AlertTriangle className="w-4 h-4 text-rose-400" />
@@ -2739,7 +824,6 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                 </div>
               </div>
 
-              {/* Teacher Awards */}
               <div className="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/30 space-y-3">
                 <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5 uppercase font-mono">
                   <Award className="w-4 h-4 text-emerald-400" />
@@ -2770,13 +854,14 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                 </div>
               </div>
 
-              {/* Recalculate and Direct Custom XP */}
               <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-3">
                 <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5 uppercase font-mono">
                   <Calculator className="w-4 h-4 text-amber-400" />
-                  <span>{isEn ? 'Direct XP Control & Auto-Recalculate' : 'Control Direct XP & Sincronizare Matematică'}</span>
+                  <span>
+                    {isEn ? 'Direct XP Control & Auto-Recalculate' : 'Control Direct XP & Sincronizare Matematică'}
+                  </span>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <label className="block text-slate-400 text-[10px] uppercase font-mono mb-1 font-bold">
@@ -2786,7 +871,7 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
                       type="number"
                       value={customXP}
                       onChange={(e) => setCustomXP(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                      className="bg-slate-900 border border-amber-500/50 px-3.5 py-2 rounded-xl text-amber-300 font-mono font-black text-lg w-40"
+                      className="bg-slate-900 border border-amber-500/50 px-3.5 py-2 rounded-xl text-amber-300 font-mono font-black text-lg w-40 tabular-nums"
                     />
                   </div>
 
@@ -2803,13 +888,14 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
               </div>
             </div>
           )}
-
         </div>
 
         {/* Modal Footer */}
         <div className="p-4 sm:p-5 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3">
           <div className="text-xs text-slate-400 font-mono hidden sm:block">
-            {isEn ? 'Changes will immediately update Firestore and classroom leaderboards.' : 'Modificările se sincronizează instant în baza Firestore.'}
+            {isEn
+              ? 'Changes will immediately update Firestore and classroom leaderboards.'
+              : 'Modificările se sincronizează instant în baza Firestore.'}
           </div>
 
           <div className="flex items-center gap-2.5 ml-auto">
@@ -2828,11 +914,14 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
               className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs sm:text-sm font-black transition flex items-center gap-2 shadow-lg shadow-teal-600/30 cursor-pointer disabled:opacity-50 active:scale-95"
             >
               <Save className="w-4 h-4" />
-              <span>{saving ? (isEn ? 'Saving...' : 'Se salvează...') : (isEn ? 'Save All Changes' : 'Salvează Toate Modificările')}</span>
+              <span>
+                {saving
+                  ? isEn ? 'Saving...' : 'Se salvează...'
+                  : isEn ? 'Save All Changes' : 'Salvează Toate Modificările'}
+              </span>
             </button>
           </div>
         </div>
-
       </div>
 
       {/* In-DOM Confirmation Modal */}
@@ -2843,13 +932,9 @@ export const TeacherScoreModal: React.FC<TeacherScoreModalProps> = ({
               <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 shrink-0">
                 <AlertTriangle className="w-5 h-5" />
               </div>
-              <h4 className="text-base font-black text-white font-heading">
-                {confirmDialog.title}
-              </h4>
+              <h4 className="text-base font-black text-white font-heading">{confirmDialog.title}</h4>
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              {confirmDialog.message}
-            </p>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{confirmDialog.message}</p>
             <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"

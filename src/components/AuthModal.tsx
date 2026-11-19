@@ -13,8 +13,9 @@ import {
   Building2
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { registerStudent, loginStudent, StudentProfile } from '../lib/studentAuthService';
+import { registerStudent, loginStudent, StudentProfile, getActiveStudent } from '../lib/studentAuthService';
 import { getActiveSchools, DEFAULT_SCHOOL } from '../lib/schoolService';
+import { joinClassroomByCode } from '../lib/classroomService';
 import { School } from '../types';
 import { sounds } from '../utils/audio';
 
@@ -39,6 +40,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [password, setPassword] = useState<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<string>('🎓');
   const [selectedSchoolId, setSelectedSchoolId] = useState<string>(DEFAULT_SCHOOL.id);
+  const [classCodeInput, setClassCodeInput] = useState<string>('');
   const [schools, setSchools] = useState<School[]>([DEFAULT_SCHOOL]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -72,10 +74,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           setErrorMessage(res.error || (lang === 'en' ? 'Registration failed' : 'Înregistrarea a eșuat'));
           sounds.playWrong();
         } else {
-          setSuccessMessage(lang === 'en' ? 'Welcome to Arkedo TIC!' : 'Cont creat cu succes! Bun venit la TIC!');
+          let finalProfile = res.profile;
+          if (classCodeInput.trim()) {
+            const joinRes = await joinClassroomByCode(classCodeInput.trim(), res.profile);
+            if (joinRes.success && joinRes.classroom) {
+              finalProfile = getActiveStudent() || {
+                ...res.profile,
+                classId: joinRes.classroom.id,
+                classCode: joinRes.classroom.code,
+                className: joinRes.classroom.name,
+                schoolId: joinRes.classroom.schoolId,
+              };
+            }
+          }
+          setSuccessMessage(
+            finalProfile.className
+              ? lang === 'en'
+                ? `Welcome! Joined ${finalProfile.className}`
+                : `Cont creat & înscris în ${finalProfile.className}!`
+              : lang === 'en'
+              ? 'Welcome to Arkedo TIC!'
+              : 'Cont creat cu succes! Bun venit la TIC!'
+          );
           sounds.playCorrect();
           setTimeout(() => {
-            onAuthSuccess(res.profile!);
+            onAuthSuccess(finalProfile);
             onClose();
           }, 600);
         }
@@ -197,27 +220,50 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           )}
 
-          {/* School selector on register */}
+          {/* School & Optional Classroom Code on register */}
           {mode === 'register' && (
-            <div>
-              <label className="text-xs font-medium text-slate-300 block mb-1">
-                {lang === 'en' ? 'School / Educational Institution:' : 'Școala / Unitatea de învățământ:'}
-              </label>
-              <div className="relative">
-                <Building2 className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none" />
-                <select
-                  value={selectedSchoolId}
-                  onChange={(e) => setSelectedSchoolId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 focus:border-teal-500 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
-                >
-                  {schools.map((school) => (
-                    <option key={school.id} value={school.id} className="bg-slate-900 text-white">
-                      {school.name} ({school.city})
-                    </option>
-                  ))}
-                </select>
+            <>
+              <div>
+                <label className="text-xs font-medium text-slate-300 block mb-1">
+                  {lang === 'en' ? 'School / Educational Institution:' : 'Școala / Unitatea de învățământ:'}
+                </label>
+                <div className="relative">
+                  <Building2 className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-teal-400 pointer-events-none" />
+                  <select
+                    value={selectedSchoolId}
+                    onChange={(e) => setSelectedSchoolId(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-700 focus:border-teal-500 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+                  >
+                    {schools.map((school) => (
+                      <option key={school.id} value={school.id} className="bg-slate-900 text-white">
+                        {school.name} ({school.city})
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-medium text-slate-300">
+                    {lang === 'en' ? 'Teacher Class Code:' : 'Cod Clasă (de la profesor):'}
+                  </label>
+                  <span className="text-[10px] text-slate-500 font-mono">
+                    {lang === 'en' ? 'optional' : 'opțional'}
+                  </span>
+                </div>
+                <div className="relative">
+                  <KeyRound className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={classCodeInput}
+                    onChange={(e) => setClassCodeInput(e.target.value.toUpperCase())}
+                    placeholder={lang === 'en' ? 'e.g. TIC-7B-482' : 'ex: TIC-7B-482'}
+                    className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 rounded-xl pl-10 pr-3.5 py-2 text-xs font-mono uppercase tracking-wider text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                  />
+                </div>
+              </div>
+            </>
           )}
 
           {/* Username Input */}

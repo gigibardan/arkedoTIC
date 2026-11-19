@@ -78,5 +78,78 @@ service cloud.firestore {
       allow create: if true;
       allow read, update, delete: if isTeacher() || isSuperAdmin();
     }
+
+    // Helper validare ID sigur
+    function isSafeDocId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidClassroomData(data) {
+      return data.keys().hasAll(['code', 'name', 'gradeNum', 'schoolId', 'teacherName'])
+        && data.code is string && data.code.size() >= 3 && data.code.size() <= 32
+        && data.name is string && data.name.size() >= 2 && data.name.size() <= 100
+        && data.gradeNum is int && data.gradeNum >= 5 && data.gradeNum <= 8
+        && data.schoolId is string && data.schoolId.size() >= 1 && data.schoolId.size() <= 80
+        && data.teacherName is string && data.teacherName.size() >= 1 && data.teacherName.size() <= 100
+        && (!('memberIds' in data) || (data.memberIds is list && data.memberIds.size() <= 300))
+        && (!('memberUsernames' in data) || (data.memberUsernames is list && data.memberUsernames.size() <= 300));
+    }
+
+    function isValidAssignmentData(data) {
+      return data.keys().hasAll(['title', 'classId', 'dueDate', 'status', 'tasks'])
+        && data.title is string && data.title.size() >= 2 && data.title.size() <= 140
+        && data.classId is string && data.classId.size() >= 1 && data.classId.size() <= 80
+        && data.dueDate is string && data.dueDate.size() >= 4 && data.dueDate.size() <= 40
+        && data.status in ['active', 'closed']
+        && data.tasks is list && data.tasks.size() >= 1 && data.tasks.size() <= 30;
+    }
+
+    function isValidLiveQuizSessionData(data) {
+      return data.keys().hasAll(['pin', 'title', 'phase', 'currentQuestionIndex', 'secondsPerQuestion', 'questions'])
+        && data.pin is string && data.pin.size() >= 4 && data.pin.size() <= 12
+        && data.title is string && data.title.size() >= 2 && data.title.size() <= 140
+        && data.phase in ['lobby', 'question', 'reveal', 'leaderboard', 'finished']
+        && data.currentQuestionIndex is int && data.currentQuestionIndex >= 0 && data.currentQuestionIndex <= 50
+        && data.secondsPerQuestion is int && data.secondsPerQuestion >= 5 && data.secondsPerQuestion <= 120
+        && data.questions is list && data.questions.size() >= 1 && data.questions.size() <= 50;
+    }
+
+    function isValidLiveQuizParticipantData(data) {
+      return data.keys().hasAll(['name', 'score', 'correctCount'])
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 80
+        && data.score is number && data.score >= 0 && data.score <= 200000
+        && data.correctCount is int && data.correctCount >= 0 && data.correctCount <= 50;
+    }
+
+    // Clase / Grupe de elevi cu cod unic de alaturare
+    match /clase_grupe/{classId} {
+      allow list: if true;
+      allow get: if isSafeDocId(classId);
+      allow create, update: if isSafeDocId(classId) && isValidClassroomData(request.resource.data);
+      allow delete: if isSafeDocId(classId);
+    }
+
+    // Teme si evaluari cu termen limita atribuite claselor
+    match /teme_assignments/{assignmentId} {
+      allow list: if true;
+      allow get: if isSafeDocId(assignmentId);
+      allow create, update: if isSafeDocId(assignmentId) && isValidAssignmentData(request.resource.data);
+      allow delete: if isSafeDocId(assignmentId);
+    }
+
+    // Sesiuni Quiz Live in clasa (stil Kahoot real-time)
+    match /quiz_live_sessions/{sessionId} {
+      allow list: if true;
+      allow get: if isSafeDocId(sessionId);
+      allow create, update: if isSafeDocId(sessionId) && isValidLiveQuizSessionData(request.resource.data);
+      allow delete: if isSafeDocId(sessionId);
+
+      match /participants/{playerId} {
+        allow list: if isSafeDocId(sessionId);
+        allow get: if isSafeDocId(sessionId) && isSafeDocId(playerId);
+        allow create, update: if isSafeDocId(sessionId) && isSafeDocId(playerId) && isValidLiveQuizParticipantData(request.resource.data);
+        allow delete: if isSafeDocId(sessionId) && isSafeDocId(playerId);
+      }
+    }
   }
 }

@@ -28,11 +28,17 @@ import {
   Clock,
   Play,
   RotateCcw,
+  CalendarClock,
+  KeyRound,
+  Radio,
+  ArrowRight,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import {
   AllMissionId,
   ArcadeScores,
+  AssignmentTaskItem,
+  ClassAssignment,
   DailyQuestState,
   DailyStreakInfo,
   School,
@@ -70,6 +76,14 @@ import {
   MissionProgressSnapshot,
 } from '../../lib/carnetService';
 import { computeGradeDetails } from '../../utils/pedagogicalGrading';
+import {
+  evaluateAssignmentForStudent,
+  EvaluatedAssignmentStatus,
+  getAssignmentsForStudent,
+  getStoredStudentClassMeta,
+  joinClassroomByCode,
+} from '../../lib/classroomService';
+import { SANDBOX_CHALLENGES } from '../../data/sandboxChallenges';
 import { DiplomaPreviewModal } from './DiplomaPreviewModal';
 import { CyberShopModal } from '../shop/CyberShopModal';
 import { AuthModal } from '../AuthModal';
@@ -83,8 +97,9 @@ interface DigitalCarnetHubProps {
   onOpenArcade?: () => void;
   onOpenDuel?: () => void;
   onOpenCity?: () => void;
-  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html') => void;
+  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html', challengeId?: string) => void;
   onOpenEvaluare?: () => void;
+  onOpenLiveQuiz?: () => void;
 }
 
 type CarnetTab = 'overview' | 'grades' | 'diplomas' | 'achievements';
@@ -103,6 +118,7 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
   onOpenCity,
   onOpenSandbox,
   onOpenEvaluare,
+  onOpenLiveQuiz,
 }) => {
   const { lang } = useLanguage();
   const isEn = lang === 'en';
@@ -122,6 +138,11 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
   const [quests, setQuests] = useState<DailyQuestState>(() => getStoredDailyQuests());
   const [byteCoins, setByteCoins] = useState<number>(() => getByteCoins());
   const [sandboxSolvedCount, setSandboxSolvedCount] = useState<number>(() => getSandboxSolvedCount());
+  const [classAssignments, setClassAssignments] = useState<ClassAssignment[]>([]);
+  const [classCodeInput, setClassCodeInput] = useState<string>('');
+  const [classJoinLoading, setClassJoinLoading] = useState<boolean>(false);
+  const [classJoinFeedback, setClassJoinFeedback] = useState<{ type: 'ok' | 'err'; msg: string } | null>(null);
+  const [editingClassCode, setEditingClassCode] = useState<boolean>(false);
 
   const [syncSource, setSyncSource] = useState<'cloud' | 'local'>(() =>
     getActiveStudent() ? 'cloud' : 'local'
@@ -193,15 +214,17 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
 
         const effectiveName = (activeProf?.username || studentName || '').trim();
 
-        const [schoolInfo, fetchedResults, recordsMap] = await Promise.all([
+        const [schoolInfo, fetchedResults, recordsMap, fetchedAssignments] = await Promise.all([
           activeProf?.schoolId ? getSchoolById(activeProf.schoolId) : Promise.resolve(null),
           effectiveName ? getResultsByStudentName(effectiveName) : Promise.resolve([]),
           getGameAllTimeRecords(),
+          getAssignmentsForStudent(activeProf),
         ]);
 
         setSchool(schoolInfo);
         setResults(fetchedResults);
         setArcadeRecords(recordsMap);
+        setClassAssignments(fetchedAssignments);
 
         const updatedDiplomas = await backfillMissingDiplomas(
           activeProf,
@@ -496,6 +519,72 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
       onStudentNameChange(loggedProfile.username);
     }
     loadCarnetData(true);
+  };
+
+  const studentClassMeta = useMemo(() => {
+    if (profile?.classId && profile.classCode && profile.className) {
+      return {
+        classId: profile.classId,
+        classCode: profile.classCode,
+        className: profile.className,
+      };
+    }
+    return getStoredStudentClassMeta();
+  }, [profile]);
+
+  const evaluatedAssignments = useMemo<EvaluatedAssignmentStatus[]>(() => {
+    return classAssignments
+      .filter((a) => a.status === 'active')
+      .map((a) => evaluateAssignmentForStudent(a, profile, true));
+  }, [classAssignments, profile]);
+
+  const handleJoinClassSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setClassJoinLoading(true);
+    setClassJoinFeedback(null);
+    try {
+      const res = await joinClassroomByCode(classCodeInput, profile);
+      if (!res.success || !res.classroom) {
+        setClassJoinFeedback({
+          type: 'err',
+          msg: res.error || (isEn ? 'Invalid class code.' : 'Cod clasă invalid.'),
+        });
+        sounds.playWrong();
+        return;
+      }
+      setClassJoinFeedback({
+        type: 'ok',
+        msg: isEn
+          ? `Joined ${res.classroom.name} (${res.classroom.code})!`
+          : `Te-ai alăturat clasei ${res.classroom.name} (${res.classroom.code})!`,
+      });
+      setClassCodeInput('');
+      setEditingClassCode(false);
+      sounds.playCorrect();
+      await loadCarnetData(true);
+    } finally {
+      setClassJoinLoading(false);
+    }
+  };
+
+  const handleSolveAssignmentTask = (task: AssignmentTaskItem) => {
+    sounds.playClick();
+    if (task.type === 'mission' && task.missionId) {
+      onSelectMission(task.missionId);
+      return;
+    }
+    if (task.type === 'sandbox' && task.challengeId && onOpenSandbox) {
+      const ch = SANDBOX_CHALLENGES.find((c) => c.id === task.challengeId);
+      onOpenSandbox(ch?.language || 'cpp', task.challengeId);
+      return;
+    }
+    if (task.type === 'eval' && onOpenEvaluare) {
+      onOpenEvaluare();
+      return;
+    }
+    if (task.type === 'arcade' && onOpenArcade) {
+      onOpenArcade();
+    }
   };
 
   const formatDuration = (sec: number) => {
@@ -831,6 +920,184 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
       {/* ================= TAB 1: OVERVIEW & DAILY QUESTS ================= */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
+          {/* Classroom & Active Assignments Engine */}
+          <section className="rounded-2xl bg-slate-900/90 border border-slate-800 p-5 space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div>
+                <div className="text-[11px] font-mono uppercase tracking-wider text-teal-300 font-bold flex items-center gap-1.5">
+                  <KeyRound className="w-3.5 h-3.5" />
+                  <span>{isEn ? 'My Classroom & Active Homework' : 'Clasa Mea & Teme Active'}</span>
+                </div>
+                {studentClassMeta ? (
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-white font-bold">
+                    <span>{studentClassMeta.className}</span>
+                    <span className="text-xs font-mono text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-lg">
+                      {studentClassMeta.classCode}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setEditingClassCode((prev) => !prev)}
+                      className="text-xs text-slate-400 hover:text-white underline cursor-pointer font-normal"
+                    >
+                      {editingClassCode ? (isEn ? 'Cancel' : 'Anulează') : isEn ? 'Change class' : 'Schimbă clasa'}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-400 mt-1">
+                    {isEn
+                      ? 'Enter the classroom code from your ICT teacher to unlock assigned homework.'
+                      : 'Introdu codul clasei primit de la profesor pentru a primi temele și fișele de lucru.'}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                {onOpenLiveQuiz && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      onOpenLiveQuiz();
+                    }}
+                    className="px-3.5 py-2 min-h-[40px] rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border border-rose-500/40 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Radio className="w-4 h-4 text-rose-400" />
+                    <span>{isEn ? 'Join Live Quiz (PIN)' : 'Intră la Quiz Live (PIN)'}</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {(!studentClassMeta || editingClassCode) && (
+              <form onSubmit={handleJoinClassSubmit} className="flex flex-col sm:flex-row gap-2 pt-1">
+                <input
+                  type="text"
+                  value={classCodeInput}
+                  onChange={(e) => setClassCodeInput(e.target.value.toUpperCase())}
+                  placeholder={isEn ? 'Class code (e.g. TIC-7B-482)' : 'Cod clasă (ex: TIC-7B-482)'}
+                  className="flex-1 min-h-[42px] bg-slate-950 border border-slate-700 focus:border-emerald-400 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-mono uppercase text-white placeholder-slate-500 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={classJoinLoading || classCodeInput.trim().length < 3}
+                  className="px-4 py-2 min-h-[42px] rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black transition cursor-pointer disabled:opacity-40 shrink-0"
+                >
+                  {classJoinLoading
+                    ? isEn
+                      ? 'Joining...'
+                      : 'Se verifică...'
+                    : isEn
+                    ? 'Join Classroom'
+                    : 'Alătură-te Clasei'}
+                </button>
+              </form>
+            )}
+
+            {classJoinFeedback && (
+              <div
+                className={`text-xs font-bold px-3 py-2 rounded-xl border ${
+                  classJoinFeedback.type === 'ok'
+                    ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
+                    : 'bg-rose-950/60 border-rose-500/40 text-rose-300'
+                }`}
+              >
+                {classJoinFeedback.msg}
+              </div>
+            )}
+
+            {evaluatedAssignments.length > 0 && (
+              <div className="space-y-3 pt-2 border-t border-slate-800">
+                {evaluatedAssignments.map((ev) => {
+                  const dueLabel = (() => {
+                    try {
+                      return new Date(ev.assignment.dueDate).toLocaleDateString(isEn ? 'en-GB' : 'ro-RO', {
+                        day: '2-digit',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      });
+                    } catch {
+                      return ev.assignment.dueDate;
+                    }
+                  })();
+                  return (
+                    <div
+                      key={ev.assignment.id}
+                      className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-black text-white">{ev.assignment.title}</span>
+                            {ev.isAllCompleted ? (
+                              <span className="text-[11px] font-mono font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-lg">
+                                Finalizată ✓
+                              </span>
+                            ) : ev.isOverdue ? (
+                              <span className="text-[11px] font-mono font-bold text-rose-300 bg-rose-500/15 border border-rose-500/30 px-2 py-0.5 rounded-lg">
+                                Termen depășit
+                              </span>
+                            ) : (
+                              <span className="text-[11px] font-mono text-cyan-300 inline-flex items-center gap-1">
+                                <CalendarClock className="w-3.5 h-3.5" />
+                                <span>Termen: {dueLabel}</span>
+                              </span>
+                            )}
+                          </div>
+                          {ev.assignment.description && (
+                            <p className="text-xs text-slate-400 mt-0.5">{ev.assignment.description}</p>
+                          )}
+                        </div>
+                        <div className="text-xs font-mono font-bold text-emerald-300 tabular-nums shrink-0">
+                          {ev.completedCount}/{ev.totalCount} ({ev.percentage}%)
+                        </div>
+                      </div>
+
+                      <div className="h-2 rounded-full bg-slate-900 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-teal-500 to-emerald-400 transition-all duration-500"
+                          style={{ width: `${Math.max(ev.percentage, ev.completedCount > 0 ? 6 : 0)}%` }}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        {ev.taskStatuses.map((ts) => (
+                          <div
+                            key={ts.task.id}
+                            className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800/80 text-xs"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span
+                                className={`w-2 h-2 rounded-full shrink-0 ${
+                                  ts.completed ? 'bg-emerald-400' : ts.inProgress ? 'bg-amber-400' : 'bg-slate-600'
+                                }`}
+                              />
+                              <span className="font-bold text-slate-100 truncate">{ts.task.label}</span>
+                              <span className="text-[11px] font-mono text-slate-400 shrink-0 tabular-nums">
+                                ({ts.currentValueLabel})
+                              </span>
+                            </div>
+
+                            {!ts.completed && (
+                              <button
+                                type="button"
+                                onClick={() => handleSolveAssignmentTask(ts.task)}
+                                className="px-3 py-1.5 min-h-[34px] rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black inline-flex items-center justify-center gap-1 cursor-pointer shrink-0"
+                              >
+                                <span>{isEn ? 'Solve Now' : 'Rezolvă acum'}</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+
           {/* Progress per Grade (V - VIII) */}
           <section className="space-y-3">
             <div className="flex items-center justify-between gap-2">

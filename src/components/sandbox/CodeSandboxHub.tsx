@@ -39,6 +39,7 @@ import {
 
 interface CodeSandboxHubProps {
   initialLanguage?: SandboxLanguage;
+  initialChallengeId?: string | null;
   onBackToHome: () => void;
   onSelectMission: (missionId: AllMissionId) => void;
   onOpenBlog?: (slug?: string | null) => void;
@@ -105,6 +106,7 @@ h1 { margin: 0 0 8px; color: #0f172a; font-size: 1.4rem; }`,
 
 export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   initialLanguage = 'cpp',
+  initialChallengeId = null,
   onBackToHome,
   onSelectMission,
   onOpenBlog,
@@ -113,15 +115,22 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   const isEn = lang === 'en';
   const arky = useArky();
 
-  const resolvedInitialLang: SandboxLanguage = (initialLanguage as SandboxLanguage) || 'cpp';
+  const initialMatchedChallenge = initialChallengeId
+    ? SANDBOX_CHALLENGES.find((c) => c.id === initialChallengeId) || null
+    : null;
+  const resolvedInitialLang: SandboxLanguage =
+    initialMatchedChallenge?.language || (initialLanguage as SandboxLanguage) || 'cpp';
   const [selectedLang, setSelectedLang] = useState<SandboxLanguage>(resolvedInitialLang);
   const langChallenges = useMemo(
     () => SANDBOX_CHALLENGES.filter((c) => c.language === selectedLang),
     [selectedLang]
   );
 
+  const initialResolvedChallenge =
+    initialMatchedChallenge || SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang) || null;
+
   const [selectedChallengeId, setSelectedChallengeId] = useState<string>(
-    () => SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang)?.id || 'free'
+    () => initialResolvedChallenge?.id || 'free'
   );
   const activeChallenge: SandboxChallenge | null = useMemo(
     () => langChallenges.find((c) => c.id === selectedChallengeId) || null,
@@ -129,21 +138,21 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   );
 
   const [code, setCode] = useState<string>(() => {
-    const first = SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang);
+    const first = initialResolvedChallenge;
     const wsKey = getWorkspaceKey(resolvedInitialLang, first ? first.id : 'free');
     const saved = getStoredSandboxProgress().snippets[wsKey];
     if (saved?.code) return saved.code;
     return first ? first.starterCode : FREE_STARTERS[resolvedInitialLang].code;
   });
   const [cssCode, setCssCode] = useState<string>(() => {
-    const first = SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang);
+    const first = initialResolvedChallenge;
     const wsKey = getWorkspaceKey(resolvedInitialLang, first ? first.id : 'free');
     const saved = getStoredSandboxProgress().snippets[wsKey];
     if (saved?.css !== undefined) return saved.css;
     return first?.starterCss || FREE_STARTERS.html.css || '';
   });
   const [stdinValue, setStdinValue] = useState<string>(() => {
-    const first = SANDBOX_CHALLENGES.find((c) => c.language === resolvedInitialLang);
+    const first = initialResolvedChallenge;
     const wsKey = getWorkspaceKey(resolvedInitialLang, first ? first.id : 'free');
     const saved = getStoredSandboxProgress().snippets[wsKey];
     if (saved?.stdin !== undefined) return saved.stdin;

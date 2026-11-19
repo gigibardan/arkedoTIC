@@ -25,6 +25,10 @@ import {
   Trash,
   Building2,
   Activity,
+  GraduationCap,
+  ClipboardList,
+  Radio,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -45,6 +49,10 @@ import { TeacherSubmissionModal } from './TeacherSubmissionModal';
 import { TeacherGameControls } from './TeacherGameControls';
 import { TeacherCyberCityManagement } from './cybercity/TeacherCyberCityManagement';
 import { TeacherDiagnosticsPanel } from './TeacherDiagnosticsPanel';
+import { TeacherClassroomsTab } from './teacher/TeacherClassroomsTab';
+import { TeacherAssignmentsTab } from './teacher/TeacherAssignmentsTab';
+import { TeacherLiveQuizHost } from './teacher/TeacherLiveQuizHost';
+import { TeacherExportCenter } from './teacher/TeacherExportCenter';
 
 interface TeacherPortalProps {
   onBackToHome: () => void;
@@ -58,7 +66,19 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem('arkedo_teacher_auth') === 'true';
   });
-  const [activeTab, setActiveTab] = useState<'gradebook' | 'students' | 'cybercity' | 'games' | 'diagnostics' | 'guide'>('gradebook');
+  const [activeTab, setActiveTab] = useState<
+    | 'gradebook'
+    | 'classrooms'
+    | 'assignments'
+    | 'livequiz'
+    | 'export'
+    | 'students'
+    | 'cybercity'
+    | 'games'
+    | 'diagnostics'
+    | 'guide'
+  >('gradebook');
+  const [selectedClassForSubtab, setSelectedClassForSubtab] = useState<string | null>(null);
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [authError, setAuthError] = useState<boolean>(false);
   const [results, setResults] = useState<StudentResult[]>([]);
@@ -320,9 +340,9 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-12">
+    <div className="flex flex-col gap-6 pb-12 print:pb-0">
       {/* Top Banner with Navigation */}
-      <div className="bg-slate-900 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="print:hidden bg-slate-900 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold font-mono">
@@ -401,8 +421,9 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
       </div>
 
       {/* Teacher Navigation Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start overflow-x-auto scrollbar-none max-w-full">
+      <div className="print:hidden flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 self-start overflow-x-auto scrollbar-none max-w-full">
         <button
+          type="button"
           onClick={() => {
             setActiveTab('gradebook');
             sounds.playClick();
@@ -415,6 +436,70 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
         >
           <Award className="w-4 h-4" />
           <span>{lang === 'en' ? 'Catalog / Gradebook' : 'Catalog Note & Misiuni'}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('classrooms');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
+            activeTab === 'classrooms'
+              ? 'bg-teal-600 text-white shadow-md shadow-teal-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <GraduationCap className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Classrooms & Codes' : 'Clase & Coduri Alăturare'}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('assignments');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
+            activeTab === 'assignments'
+              ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <ClipboardList className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Assignments' : 'Teme & Evaluări'}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('livequiz');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
+            activeTab === 'livequiz'
+              ? 'bg-rose-600 text-white shadow-md shadow-rose-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <Radio className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Live Quiz (PIN)' : 'Quiz Live în Clasă'}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('export');
+            sounds.playClick();
+          }}
+          className={`px-4 py-2 min-h-[38px] rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
+            activeTab === 'export'
+              ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <FileSpreadsheet className="w-4 h-4" />
+          <span>{lang === 'en' ? 'Export & Reports' : 'Export & Rapoarte A4'}</span>
         </button>
 
         <button
@@ -737,6 +822,48 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
             )}
           </div>
         </>
+      )}
+
+      {/* Tab Classrooms & Join Codes */}
+      {activeTab === 'classrooms' && (
+        <TeacherClassroomsTab
+          schools={schools}
+          results={results}
+          onOpenAssignmentsForClass={(classId) => {
+            setSelectedClassForSubtab(classId);
+            setActiveTab('assignments');
+          }}
+          onOpenExportForClass={(classId) => {
+            setSelectedClassForSubtab(classId);
+            setActiveTab('export');
+          }}
+        />
+      )}
+
+      {/* Tab Assignments Engine */}
+      {activeTab === 'assignments' && (
+        <TeacherAssignmentsTab
+          schools={schools}
+          initialClassId={selectedClassForSubtab}
+        />
+      )}
+
+      {/* Tab Live Quiz Host */}
+      {activeTab === 'livequiz' && (
+        <TeacherLiveQuizHost
+          schools={schools}
+          initialClassId={selectedClassForSubtab}
+          onGradesLogged={fetchResults}
+        />
+      )}
+
+      {/* Tab Export Center & Printable Reports */}
+      {activeTab === 'export' && (
+        <TeacherExportCenter
+          schools={schools}
+          results={results}
+          initialClassId={selectedClassForSubtab}
+        />
       )}
 
       {/* Tab 2: Students Accounts Management */}

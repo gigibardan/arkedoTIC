@@ -109,7 +109,7 @@ export const Footer: React.FC<FooterProps> = ({
   ];
 
   return (
-    <footer className="border-t border-slate-800/80 bg-slate-950/95 text-slate-300 pt-12 pb-24 md:pb-10 px-4 sm:px-6 lg:px-8 mt-auto relative z-10">
+    <footer className="print:hidden border-t border-slate-800/80 bg-slate-950/95 text-slate-300 pt-12 pb-24 md:pb-10 px-4 sm:px-6 lg:px-8 mt-auto relative z-10">
       <div className="max-w-7xl mx-auto space-y-10">
         
         {/* Main Grid: balanced 1 -> 2 -> 3 -> 6 columns */}

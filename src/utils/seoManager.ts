@@ -3,7 +3,7 @@ import { CURRICULA_MODULES } from '../data/curriculaData';
 import { findBlogArticleBySlug } from '../data/blog';
 import { findGlossaryTermBySlug } from '../data/glossary';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare';
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -166,6 +166,15 @@ export function updateDynamicSeo(
       ? 'Generate randomized timed ICT & coding tests across Grades 5–8 with automated 1–10 grading, detailed answer explanations, and Cloud progress tracking.'
       : 'Generează teste rapide cronometrate din programa TIC și Informatică V–VIII, cu notare automată 1–10 și explicații pas cu pas.';
     canonicalUrl = `${BASE_URL}/evaluare`;
+  } else if (view === 'livequiz') {
+    title = isEn
+      ? 'Live Classroom Quiz Arena (PIN Join) | ArkyEdu'
+      : 'Quiz Live în Clasă (Intrare cu Cod PIN) | ArkyEdu';
+    description = isEn
+      ? 'Join your teacher live ICT classroom quiz using a 6-digit PIN from phone, tablet, or lab PC.'
+      : 'Participă în timp real la concursul Quiz Live din ora de TIC introducând codul PIN de pe tablă.';
+    robotsContent = 'noindex, nofollow';
+    canonicalUrl = `${BASE_URL}/quiz-live`;
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);

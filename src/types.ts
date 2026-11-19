@@ -350,6 +350,9 @@ export interface StudentProfile {
   avatar: string;
   schoolId?: string;
   classGrade?: string; // e.g. '5', '6', '7', '8' or '7A'
+  classId?: string;
+  classCode?: string;
+  className?: string;
   isSuspended?: boolean;
   arcadeScores: ArcadeScores;
   lessonsProgress: LessonsProgress;
@@ -380,6 +383,107 @@ export interface School {
   notes?: string;
 }
 
+export interface ClassroomGroup {
+  id: string;
+  code: string; // e.g. 'TIC-7B-482'
+  name: string; // e.g. 'Clasa a VII-a B'
+  gradeNum: 5 | 6 | 7 | 8;
+  schoolId: string;
+  teacherName: string;
+  academicYear: string;
+  memberUsernames: string[];
+  memberIds: string[];
+  archived?: boolean;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export type AssignmentTaskType = 'mission' | 'sandbox' | 'eval' | 'arcade';
+
+export interface AssignmentTaskItem {
+  id: string;
+  type: AssignmentTaskType;
+  labelRo: string;
+  labelEn: string;
+  missionId?: AllMissionId;
+  minScore?: number;
+  challengeId?: string;
+  sandboxLang?: 'cpp' | 'python' | 'html';
+  evalGrade?: 'all' | 5 | 6 | 7 | 8;
+  minNota?: number;
+  gameKey?: keyof Omit<ArcadeScores, 'totalArcade'>;
+  minArcadeScore?: number;
+}
+
+export interface ClassAssignment {
+  id: string;
+  title: string;
+  description?: string;
+  classId: string; // ClassroomGroup.id or 'ALL'
+  className: string;
+  schoolId: string;
+  teacherName: string;
+  dueDate: string; // ISO datetime-local string e.g. '2026-11-28T20:00'
+  status: 'active' | 'closed';
+  tasks: AssignmentTaskItem[];
+  createdAt: number;
+  updatedAt: number;
+}
+
+export type LiveQuizPhase = 'lobby' | 'question' | 'reveal' | 'leaderboard' | 'finished';
+
+export interface LiveQuizQuestionItem {
+  id: string;
+  promptRo: string;
+  promptEn: string;
+  optionsRo: [string, string, string, string];
+  optionsEn: [string, string, string, string];
+  correctIndex: 0 | 1 | 2 | 3;
+  explanationRo: string;
+  explanationEn: string;
+  topicRo: string;
+  topicEn: string;
+  grade: 5 | 6 | 7 | 8;
+}
+
+export interface LiveQuizAnswerRecord {
+  optionIndex: number;
+  isCorrect: boolean;
+  pointsEarned: number;
+  answeredAt: number;
+}
+
+export interface LiveQuizParticipant {
+  id: string;
+  studentId?: string;
+  name: string;
+  avatar: string;
+  score: number;
+  correctCount: number;
+  streak: number;
+  answers: Record<string, LiveQuizAnswerRecord>;
+  joinedAt: number;
+  lastSeenAt: number;
+}
+
+export interface LiveQuizSession {
+  id: string;
+  pin: string; // 6 digits
+  title: string;
+  classId?: string;
+  className?: string;
+  schoolId: string;
+  teacherName: string;
+  phase: LiveQuizPhase;
+  currentQuestionIndex: number;
+  questionStartedAt: number;
+  secondsPerQuestion: number;
+  questions: LiveQuizQuestionItem[];
+  gradesLogged?: boolean;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface Teacher {
   id: string;
   email: string;
@@ -400,5 +504,6 @@ export interface SuperAdminUser {
   createdAt: number;
   lastLogin: number;
 }
+
 
 

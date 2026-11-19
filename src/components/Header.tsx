@@ -20,6 +20,7 @@ import {
   Code2,
   Award,
   ClipboardCheck,
+  Radio,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
@@ -30,7 +31,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -39,6 +40,7 @@ interface HeaderProps {
   onEditStudentName?: () => void;
   onNavigateToCarnet?: () => void;
   onNavigateToEvaluare?: () => void;
+  onNavigateToLiveQuiz?: () => void;
   onNavigateToTeacher?: () => void;
   onNavigateToSuperAdmin?: () => void;
   onNavigateToArcade?: () => void;
@@ -64,6 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
   onEditStudentName,
   onNavigateToCarnet,
   onNavigateToEvaluare,
+  onNavigateToLiveQuiz,
   onNavigateToTeacher,
   onNavigateToArcade,
   onNavigateToDuel,
@@ -151,6 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'sandbox') return lang === 'en' ? 'Code Sandbox Lab' : 'Sandbox Cod Live';
     if (currentView === 'carnet') return lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital';
     if (currentView === 'evaluare') return lang === 'en' ? 'Quick Eval Simulator' : 'Simulare Evaluare TIC';
+    if (currentView === 'livequiz') return lang === 'en' ? 'Live Class Quiz (PIN)' : 'Quiz Live în Clasă';
     return 'ArkyEdu';
   };
 
@@ -165,6 +169,7 @@ export const Header: React.FC<HeaderProps> = ({
   const isResourceViewActive =
     currentView === 'carnet' ||
     currentView === 'evaluare' ||
+    currentView === 'livequiz' ||
     currentView === 'sandbox' ||
     currentView === 'blog' ||
     currentView === 'glossary' ||
@@ -178,7 +183,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       {/* Sticky Single-Row Header */}
-      <header className="bg-slate-950/92 backdrop-blur-xl border-b border-slate-800/90 sticky top-0 z-40 px-3 sm:px-5 lg:px-6 h-14 sm:h-16 flex items-center shadow-lg">
+      <header className="print:hidden bg-slate-950/92 backdrop-blur-xl border-b border-slate-800/90 sticky top-0 z-40 px-3 sm:px-5 lg:px-6 h-14 sm:h-16 flex items-center shadow-lg">
         <div className="max-w-7xl w-full mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Left Zone: Single-line Brand Wordmark or Back + Active View Title */}
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
@@ -391,6 +396,35 @@ export const Header: React.FC<HeaderProps> = ({
                           </div>
                           <div className="text-[11px] text-slate-400 truncate">
                             {lang === 'en' ? 'Timed Quizzes · Grades 5–8' : 'Test Cronometrat · Nota 1–10'}
+                          </div>
+                        </div>
+                      </button>
+                    )}
+
+                    {onNavigateToLiveQuiz && (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          sounds.playClick();
+                          setIsResourcesOpen(false);
+                          onNavigateToLiveQuiz();
+                        }}
+                        className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
+                          currentView === 'livequiz'
+                            ? 'bg-rose-500/15 text-rose-200 border border-rose-500/30'
+                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
+                          <Radio className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white">
+                            {lang === 'en' ? 'Live Class Quiz (PIN)' : 'Quiz Live în Clasă (PIN)'}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {lang === 'en' ? 'Join teacher session live' : 'Intră cu codul PIN de pe tablă'}
                           </div>
                         </div>
                       </button>
@@ -747,6 +781,32 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               )}
 
+              {onNavigateToLiveQuiz && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToLiveQuiz();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 min-h-[48px] ${
+                    currentView === 'livequiz'
+                      ? 'bg-rose-600 text-white border-rose-400'
+                      : 'bg-rose-500/10 hover:bg-rose-500/20 border-rose-500/30 text-rose-200'
+                  }`}
+                >
+                  <Radio className="w-4 h-4 text-rose-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">
+                      {lang === 'en' ? 'Live Class Quiz (PIN)' : 'Quiz Live în Clasă (PIN)'}
+                    </div>
+                    <div className="text-[10px] text-rose-200/90 truncate">
+                      {lang === 'en' ? 'Join classroom arena live' : 'Intră cu codul PIN afișat pe tablă'}
+                    </div>
+                  </div>
+                </button>
+              )}
+
               {onNavigateToSandbox && (
                 <a
                   href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
@@ -904,7 +964,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Bottom Navigation Dock (Phones < md) */}
       <nav
         aria-label={lang === 'en' ? 'Mobile Bottom Navigation' : 'Navigație rapidă mobil'}
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/90 shadow-[0_-8px_25px_rgba(0,0,0,0.7)] px-2 py-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+        className="print:hidden md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-2xl border-t border-slate-800/90 shadow-[0_-8px_25px_rgba(0,0,0,0.7)] px-2 py-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
       >
         <div className="max-w-md mx-auto grid grid-cols-5 gap-1">
           <button

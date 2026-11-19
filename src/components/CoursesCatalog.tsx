@@ -28,6 +28,8 @@ import {
   Code2,
   Terminal,
   ClipboardCheck,
+  Radio,
+  CalendarClock,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -56,10 +58,17 @@ import { Grade7CatalogSection } from './grade7/Grade7CatalogSection';
 import { Grade7InteractiveSimulators } from './grade7/Grade7InteractiveSimulators';
 import { Grade8CatalogSection } from './grade8/Grade8CatalogSection';
 import { Grade8InteractiveSimulators } from './grade8/Grade8InteractiveSimulators';
-import { AllMissionId } from '../types';
+import { AllMissionId, ClassAssignment } from '../types';
 import { forceScrollToTop } from '../utils/scrollHelper';
 import { MissionCard } from './catalog/MissionCard';
 import { GRADE5_MISSIONS, GRADE6_MISSIONS } from './catalog/gradeMissionsData';
+import { MISSION_META_BY_ID } from '../data/missionsRegistry';
+import {
+  evaluateAssignmentForStudent,
+  getAssignmentsForStudent,
+  getStoredStudentClassMeta,
+} from '../lib/classroomService';
+import { SANDBOX_CHALLENGES } from '../data/sandboxChallenges';
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -90,9 +99,10 @@ interface CoursesCatalogProps {
   onOpenShop?: () => void;
   onOpenBlog?: (slug?: string | null) => void;
   onOpenGlossary?: (slug?: string | null) => void;
-  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html') => void;
+  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html', challengeId?: string) => void;
   onOpenCarnet?: () => void;
   onOpenEvaluare?: () => void;
+  onOpenLiveQuiz?: () => void;
   byteCoins?: number;
 }
 
@@ -116,85 +126,31 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenSandbox,
   onOpenCarnet,
   onOpenEvaluare,
+  onOpenLiveQuiz,
   byteCoins,
 }) => {
   const getMaxPlayableLevels = (mId: string): number => {
-    if (mId === 'hardware') return 5;
-    if (
-      mId === 'g8_calc_a' ||
-      mId === 'g8_calc_b' ||
-      mId === 'g8_calc_c' ||
-      mId === 'g8_calc_d' ||
-      mId === 'g8_web_a' ||
-      mId === 'g8_web_b' ||
-      mId === 'g8_web_c' ||
-      mId === 'g8_algo_a' ||
-      mId === 'g8_algo_b' ||
-      mId === 'g8_algo_c' ||
-      mId === 'g8_algo_d' ||
-      mId === 'g8_algo_e' ||
-      mId === 'g8_robot_a' ||
-      mId === 'g8_robot_b'
-    ) {
-      return 7;
-    }
+    const meta = MISSION_META_BY_ID[mId];
+    if (meta) return meta.maxLevels;
     if (mId.startsWith('g8_')) return 5;
-    if (mId === 'internet1' || mId === 'internet2') return 6;
     return 7;
   };
 
   const isMissionDone = (mId: string): boolean => {
+    const meta = MISSION_META_BY_ID[mId];
+    const victoryLevelStr = String((meta?.maxLevels ?? getMaxPlayableLevels(mId)) + 1);
     try {
       if (localStorage.getItem(`arkedo_completed_${mId}`) === 'true') return true;
-      if (mId === 'hardware' && (localStorage.getItem('arkedo_hw_level') === '6' || Number(localStorage.getItem('arkedo_hw_score') || '0') >= 100)) return true;
-      if (mId === 'files' && (localStorage.getItem('arkedo_files_level') === '8' || Number(localStorage.getItem('arkedo_files_score') || '0') >= 100)) return true;
-      if (mId === 'internet1' && (localStorage.getItem('arkedo_internet1_level') === '7' || Number(localStorage.getItem('arkedo_internet1_score') || '0') >= 100)) return true;
-      if (mId === 'internet2' && (localStorage.getItem('arkedo_internet2_level') === '7' || Number(localStorage.getItem('arkedo_internet2_score') || '0') >= 100)) return true;
-      if (mId === 'text1' && (localStorage.getItem('arkedo_text1_level') === '8' || Number(localStorage.getItem('arkedo_text1_score') || '0') >= 100)) return true;
-      if (mId === 'text2' && (localStorage.getItem('arkedo_text2_level') === '8' || Number(localStorage.getItem('arkedo_text2_score') || '0') >= 100)) return true;
-      if (mId === 'algo1' && (localStorage.getItem('arkedo_algo1_level') === '8' || Number(localStorage.getItem('arkedo_algo1_score') || '0') >= 100)) return true;
-      if (mId === 'algo2' && (localStorage.getItem('arkedo_algo2_level') === '8' || Number(localStorage.getItem('arkedo_algo2_score') || '0') >= 100)) return true;
-      if (mId === 'scratch1' && (localStorage.getItem('arkedo_scratch1_level') === '8' || Number(localStorage.getItem('arkedo_scratch1_score') || '0') >= 100)) return true;
-      if (mId === 'scratch2' && (localStorage.getItem('arkedo_scratch2_level') === '8' || Number(localStorage.getItem('arkedo_scratch2_score') || '0') >= 100)) return true;
-      if (mId === 'g6_presentation1' && (localStorage.getItem('arkedo_g6p1_level') === '8' || Number(localStorage.getItem('arkedo_g6p1_score') || '0') >= 100)) return true;
-      if (mId === 'g6_presentation2' && (localStorage.getItem('arkedo_g6p2_level') === '8' || Number(localStorage.getItem('arkedo_g6p2_score') || '0') >= 100)) return true;
-      if (mId === 'g6_paint3d' && (localStorage.getItem('arkedo_g6p3_level') === '8' || Number(localStorage.getItem('arkedo_g6p3_score') || '0') >= 100)) return true;
-      if (mId === 'g6_anim3d' && (localStorage.getItem('arkedo_g6a1_level') === '8' || Number(localStorage.getItem('arkedo_g6a1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_anim3d') === 'true')) return true;
-      if (mId === 'g6_malware' && (localStorage.getItem('arkedo_g6m1_level') === '8' || Number(localStorage.getItem('arkedo_g6m1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_malware') === 'true')) return true;
-      if (mId === 'g6_email' && (localStorage.getItem('arkedo_g6e1_level') === '8' || Number(localStorage.getItem('arkedo_g6e1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_email') === 'true')) return true;
-      if (mId === 'g6_scratch1' && (localStorage.getItem('arkedo_g6s1_level') === '8' || Number(localStorage.getItem('arkedo_g6s1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch1') === 'true')) return true;
-      if (mId === 'g6_scratch2' && (localStorage.getItem('arkedo_g6s2_level') === '8' || Number(localStorage.getItem('arkedo_g6s2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g6_scratch2') === 'true')) return true;
-      if (mId === 'g7_word_a' && (localStorage.getItem('arkedo_g7w1_level') === '8' || Number(localStorage.getItem('arkedo_g7w1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_word_a') === 'true')) return true;
-      if (mId === 'g7_word_b' && (localStorage.getItem('arkedo_g7w2_level') === '8' || Number(localStorage.getItem('arkedo_g7w2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_word_b') === 'true')) return true;
-      if (mId === 'g7_audio_a' && (localStorage.getItem('arkedo_g7a1_level') === '8' || Number(localStorage.getItem('arkedo_g7a1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_audio_a') === 'true')) return true;
-      if (mId === 'g7_video_b' && (localStorage.getItem('arkedo_g7v2_level') === '8' || Number(localStorage.getItem('arkedo_g7v2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_video_b') === 'true')) return true;
-      if (mId === 'g7_cloud_a' && (localStorage.getItem('arkedo_g7c1_level') === '8' || Number(localStorage.getItem('arkedo_g7c1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cloud_a') === 'true')) return true;
-      if (mId === 'g7_gis_b' && (localStorage.getItem('arkedo_g7g1_level') === '8' || Number(localStorage.getItem('arkedo_g7g1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_gis_b') === 'true')) return true;
-      if (mId === 'g7_cpp_a' && (localStorage.getItem('arkedo_g7cp1_level') === '8' || Number(localStorage.getItem('arkedo_g7cp1_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cpp_a') === 'true')) return true;
-      if (mId === 'g7_cpp_b' && (localStorage.getItem('arkedo_g7cp2_level') === '8' || Number(localStorage.getItem('arkedo_g7cp2_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_cpp_b') === 'true')) return true;
-      if (mId === 'g7_decision_a' && (localStorage.getItem('arkedo_g7dec_level') === '8' || Number(localStorage.getItem('arkedo_g7dec_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_decision_a') === 'true')) return true;
-      if (mId === 'g7_loop_b' && (localStorage.getItem('arkedo_g7loop_level') === '8' || Number(localStorage.getItem('arkedo_g7loop_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_loop_b') === 'true')) return true;
-      if (mId === 'g7_stem_a' && (localStorage.getItem('arkedo_g7stem_level') === '8' || Number(localStorage.getItem('arkedo_g7stem_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_stem_a') === 'true')) return true;
-      if (mId === 'g7_robot_b' && (localStorage.getItem('arkedo_g7robot_level') === '8' || Number(localStorage.getItem('arkedo_g7robot_score') || '0') >= 100 || localStorage.getItem('arkedo_completed_g7_robot_b') === 'true')) return true;
-      if (mId.startsWith('g8_')) {
-        const targetMax =
-          mId === 'g8_calc_a' ||
-          mId === 'g8_calc_b' ||
-          mId === 'g8_calc_c' ||
-          mId === 'g8_calc_d' ||
-          mId === 'g8_web_a' ||
-          mId === 'g8_web_b' ||
-          mId === 'g8_web_c' ||
-          mId === 'g8_algo_a' ||
-          mId === 'g8_algo_b' ||
-          mId === 'g8_algo_c' ||
-          mId === 'g8_algo_d' ||
-          mId === 'g8_algo_e' ||
-          mId === 'g8_robot_a' ||
-          mId === 'g8_robot_b'
-            ? '8'
-            : '6';
-        if (localStorage.getItem(`arkedo_${mId}_level`) === targetMax || Number(localStorage.getItem(`arkedo_${mId}_score`) || '0') >= 100 || localStorage.getItem(`arkedo_completed_${mId}`) === 'true') {
+      const prefixes = meta
+        ? [meta.localPrefix, ...(meta.legacyLocalPrefix ? [meta.legacyLocalPrefix] : [])]
+        : mId.startsWith('g8_')
+        ? [mId]
+        : [];
+      for (const prefix of prefixes) {
+        if (
+          localStorage.getItem(`arkedo_${prefix}_level`) === victoryLevelStr ||
+          Number(localStorage.getItem(`arkedo_${prefix}_score`) || '0') >= 100
+        ) {
           return true;
         }
       }
@@ -203,26 +159,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
     if (activeMissionId === mId && activeMissionLevel > getMaxPlayableLevels(mId)) return true;
     const activeStudent = getActiveStudent();
     if (activeStudent?.lessonsProgress) {
-      const lp = activeStudent.lessonsProgress;
-      const lessonKey =
-        mId === 'g6_presentation1'
-          ? 'presentation1'
-          : mId === 'g6_presentation2'
-          ? 'presentation2'
-          : mId === 'g6_paint3d'
-          ? 'model3d1'
-          : mId === 'g6_anim3d'
-          ? 'model3d2'
-          : mId === 'g6_malware'
-          ? 'cyber6a'
-          : mId === 'g6_email'
-          ? 'cyber6b'
-          : mId === 'g6_scratch1'
-          ? 'scratch6a'
-          : mId === 'g6_scratch2'
-          ? 'scratch6b'
-          : mId;
-      const lpRecord = lp as unknown as Record<string, { completed?: boolean; score?: number } | undefined>;
+      const lessonKey = meta?.lessonsKey ?? mId;
+      const lpRecord = activeStudent.lessonsProgress as unknown as Record<
+        string,
+        { completed?: boolean; score?: number } | undefined
+      >;
       if (lpRecord[lessonKey]?.completed || (lpRecord[lessonKey]?.score || 0) >= 100) {
         return true;
       }
@@ -277,6 +218,13 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   const [guardModalOpen, setGuardModalOpen] = useState<boolean>(false);
   const [pendingTargetMission, setPendingTargetMission] = useState<AllMissionId | null>(null);
   const [selectedCurriculaModule, setSelectedCurriculaModule] = useState<CurriculaModule | null>(null);
+  const [studentAssignments, setStudentAssignments] = useState<ClassAssignment[]>([]);
+
+  useEffect(() => {
+    getAssignmentsForStudent(activeAccount)
+      .then((list) => setStudentAssignments(list.filter((a) => a.status === 'active')))
+      .catch(() => {});
+  }, [activeAccount?.id, activeAccount?.classId, completedMissions]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1397,6 +1345,99 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
         </div>
       </section>
+
+      {/* CLASSROOM HOMEWORK & LIVE QUIZ STRIP */}
+      {(() => {
+        const classMeta = getStoredStudentClassMeta();
+        const evaluated = studentAssignments.map((a) =>
+          evaluateAssignmentForStudent(a, activeAccount, true)
+        );
+        const pendingEval = evaluated.find((ev) => !ev.isAllCompleted);
+        const nextTask = pendingEval?.taskStatuses.find((ts) => !ts.completed);
+
+        if (!pendingEval && !onOpenLiveQuiz) return null;
+
+        return (
+          <section className="rounded-2xl bg-slate-900/85 border border-slate-800 px-4 py-3 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-300 shrink-0">
+                <CalendarClock className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                {pendingEval ? (
+                  <>
+                    <div className="text-xs font-black text-white truncate">
+                      {classMeta?.className ? `${classMeta.className} · ` : ''}
+                      {pendingEval.assignment.title}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-400 truncate tabular-nums">
+                      {pendingEval.completedCount}/{pendingEval.totalCount}{' '}
+                      {lang === 'en' ? 'tasks done' : 'cerințe rezolvate'}
+                      {nextTask ? ` · ${nextTask.task.label}` : ''}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-xs font-black text-white truncate">
+                      {classMeta?.className
+                        ? `${classMeta.className} (${classMeta.classCode})`
+                        : lang === 'en'
+                        ? 'Classroom Live Arena & Homework'
+                        : 'Ora de TIC Live & Teme de Clasă'}
+                    </div>
+                    <div className="text-[11px] text-slate-400 truncate">
+                      {lang === 'en'
+                        ? 'Join a teacher-hosted Live Quiz with your 6-digit PIN.'
+                        : 'Intră cu codul PIN de pe tablă la Quiz Live sau verifică temele în Carnet.'}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              {pendingEval && nextTask && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    if (nextTask.task.type === 'mission' && nextTask.task.missionId) {
+                      handleAttemptStart(nextTask.task.missionId);
+                    } else if (nextTask.task.type === 'sandbox' && nextTask.task.challengeId && onOpenSandbox) {
+                      const ch = SANDBOX_CHALLENGES.find((c) => c.id === nextTask.task.challengeId);
+                      onOpenSandbox(ch?.language || 'cpp', nextTask.task.challengeId);
+                    } else if (nextTask.task.type === 'eval' && onOpenEvaluare) {
+                      onOpenEvaluare();
+                    } else if (nextTask.task.type === 'arcade' && onOpenArcade) {
+                      onOpenArcade();
+                    } else if (onOpenCarnet) {
+                      onOpenCarnet();
+                    }
+                  }}
+                  className="px-3.5 py-2 min-h-[38px] rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black inline-flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>{lang === 'en' ? 'Solve Homework' : 'Rezolvă Tema'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+
+              {onOpenLiveQuiz && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    onOpenLiveQuiz();
+                  }}
+                  className="px-3.5 py-2 min-h-[38px] rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border border-rose-500/40 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Radio className="w-3.5 h-3.5 text-rose-400" />
+                  <span>{lang === 'en' ? 'Live Quiz (PIN)' : 'Quiz Live (PIN)'}</span>
+                </button>
+              )}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* 2. QUICK EXPLORER STRIP (4 High-Clarity Tiles) */}
       <section aria-label={lang === 'en' ? 'Quick Platform Access' : 'Acces Rapid Platformă'}>

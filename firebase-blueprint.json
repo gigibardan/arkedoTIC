@@ -128,6 +128,83 @@
         "createdAt": { "type": "number" }
       },
       "required": ["name", "code"]
+    },
+    "ClasaGrupa": {
+      "title": "ClasaGrupa",
+      "description": "Clase și grupe de elevi create de profesor cu cod unic de alăturare",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "maxLength": 32 },
+        "name": { "type": "string", "maxLength": 100 },
+        "gradeNum": { "type": "number" },
+        "schoolId": { "type": "string", "maxLength": 80 },
+        "teacherName": { "type": "string", "maxLength": 100 },
+        "academicYear": { "type": "string", "maxLength": 24 },
+        "memberUsernames": { "type": "array" },
+        "memberIds": { "type": "array" },
+        "archived": { "type": "boolean" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["code", "name", "gradeNum", "schoolId", "teacherName"]
+    },
+    "TemaAssignment": {
+      "title": "TemaAssignment",
+      "description": "Teme și evaluări cu termen limită atribuite unei clase",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 140 },
+        "description": { "type": "string", "maxLength": 600 },
+        "classId": { "type": "string", "maxLength": 80 },
+        "className": { "type": "string", "maxLength": 100 },
+        "schoolId": { "type": "string", "maxLength": 80 },
+        "teacherName": { "type": "string", "maxLength": 100 },
+        "dueDate": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "enum": ["active", "closed"] },
+        "tasks": { "type": "array" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["title", "classId", "dueDate", "status", "tasks"]
+    },
+    "QuizLiveSession": {
+      "title": "QuizLiveSession",
+      "description": "Sesiune de quiz live în clasă sincronizată în timp real",
+      "type": "object",
+      "properties": {
+        "pin": { "type": "string", "maxLength": 12 },
+        "title": { "type": "string", "maxLength": 140 },
+        "classId": { "type": "string", "maxLength": 80 },
+        "className": { "type": "string", "maxLength": 100 },
+        "schoolId": { "type": "string", "maxLength": 80 },
+        "teacherName": { "type": "string", "maxLength": 100 },
+        "phase": { "type": "string", "enum": ["lobby", "question", "reveal", "leaderboard", "finished"] },
+        "currentQuestionIndex": { "type": "number" },
+        "questionStartedAt": { "type": "number" },
+        "secondsPerQuestion": { "type": "number" },
+        "questions": { "type": "array" },
+        "gradesLogged": { "type": "boolean" },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["pin", "title", "phase", "currentQuestionIndex", "secondsPerQuestion", "questions"]
+    },
+    "QuizLiveParticipant": {
+      "title": "QuizLiveParticipant",
+      "description": "Participant elev conectat la o sesiune Quiz Live",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 80 },
+        "avatar": { "type": "string", "maxLength": 16 },
+        "score": { "type": "number" },
+        "correctCount": { "type": "number" },
+        "streak": { "type": "number" },
+        "answers": { "type": "object" },
+        "joinedAt": { "type": "number" },
+        "lastSeenAt": { "type": "number" }
+      },
+      "required": ["name", "score", "correctCount"]
     }
   },
   "firestore": {
@@ -166,6 +243,22 @@
     "/scoli/{schoolId}": {
       "schema": "Scoala",
       "description": "Școli înregistrate pe platformă"
+    },
+    "/clase_grupe/{classId}": {
+      "schema": "ClasaGrupa",
+      "description": "Clase și grupe de elevi cu cod de alăturare"
+    },
+    "/teme_assignments/{assignmentId}": {
+      "schema": "TemaAssignment",
+      "description": "Teme și evaluări atribuite claselor cu termen limită"
+    },
+    "/quiz_live_sessions/{sessionId}": {
+      "schema": "QuizLiveSession",
+      "description": "Sesiuni de Quiz Live sincronizate în timp real"
+    },
+    "/quiz_live_sessions/{sessionId}/participants/{playerId}": {
+      "schema": "QuizLiveParticipant",
+      "description": "Participanții și răspunsurile unei sesiuni Quiz Live"
     }
   }
 }

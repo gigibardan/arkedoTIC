@@ -11,6 +11,7 @@ import {
   GraduationCap,
   History,
   Play,
+  Radio,
   RotateCcw,
   Sparkles,
   Trophy,
@@ -34,6 +35,7 @@ interface QuickEvalSimulatorProps {
   studentName: string;
   onBackToCatalog: () => void;
   onOpenCarnet?: () => void;
+  onOpenLiveQuiz?: () => void;
 }
 
 type SimulatorPhase = 'setup' | 'running' | 'review';
@@ -80,6 +82,7 @@ export const QuickEvalSimulator: React.FC<QuickEvalSimulatorProps> = ({
   studentName,
   onBackToCatalog,
   onOpenCarnet,
+  onOpenLiveQuiz,
 }) => {
   const { lang } = useLanguage();
   const isEn = lang === 'en';
@@ -251,19 +254,35 @@ export const QuickEvalSimulator: React.FC<QuickEvalSimulatorProps> = ({
           <span>{isEn ? 'Back to Courses' : 'Înapoi la Cursuri'}</span>
         </button>
 
-        {onOpenCarnet && (
-          <button
-            type="button"
-            onClick={() => {
-              sounds.playClick();
-              onOpenCarnet();
-            }}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 border border-amber-500/40 text-xs font-bold transition cursor-pointer min-h-[40px]"
-          >
-            <Award className="w-4 h-4 text-amber-400" />
-            <span>{isEn ? 'View Digital Portfolio' : 'Vezi în Carnetul Digital'}</span>
-          </button>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {onOpenLiveQuiz && (
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenLiveQuiz();
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-200 border border-rose-500/40 text-xs font-bold transition cursor-pointer min-h-[40px]"
+            >
+              <Radio className="w-4 h-4 text-rose-400" />
+              <span>{isEn ? 'Join Live Quiz (PIN)' : 'Intră la Quiz Live (PIN)'}</span>
+            </button>
+          )}
+
+          {onOpenCarnet && (
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenCarnet();
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 border border-amber-500/40 text-xs font-bold transition cursor-pointer min-h-[40px]"
+            >
+              <Award className="w-4 h-4 text-amber-400" />
+              <span>{isEn ? 'View Digital Portfolio' : 'Vezi în Carnetul Digital'}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ================= PHASE 1: SETUP ================= */}

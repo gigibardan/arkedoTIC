@@ -1329,7 +1329,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   <div>
                     <h4 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
                       <Gamepad2 className="w-4 h-4 text-cyan-400" />
-                      Scoruri Cele 19 Mini-Jocuri Arcade
+                      Scoruri Mini-Jocuri Arcade ({ARCADE_GAME_KEYS.length})
                     </h4>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                       {ARCADE_GAME_KEYS.map(gameKey => {

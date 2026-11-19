@@ -32,6 +32,7 @@ const GlossaryHub = lazy(() => import('./components/glossary/GlossaryHub').then(
 const CodeSandboxHub = lazy(() => import('./components/sandbox/CodeSandboxHub').then((m) => ({ default: m.CodeSandboxHub })));
 const DigitalCarnetHub = lazy(() => import('./components/carnet/DigitalCarnetHub').then((m) => ({ default: m.DigitalCarnetHub })));
 const QuickEvalSimulator = lazy(() => import('./components/evaluation/QuickEvalSimulator').then((m) => ({ default: m.QuickEvalSimulator })));
+const StudentLiveQuizPlayer = lazy(() => import('./components/evaluation/StudentLiveQuizPlayer').then((m) => ({ default: m.StudentLiveQuizPlayer })));
 
 export type AppView =
   | 'catalog'
@@ -45,7 +46,8 @@ export type AppView =
   | 'glossary'
   | 'sandbox'
   | 'carnet'
-  | 'evaluare';
+  | 'evaluare'
+  | 'livequiz';
 
 function parseBlogSlugFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -78,6 +80,7 @@ function resolveViewFromLocation(): AppView {
   if (pathname.startsWith('/sandbox') || hash.startsWith('#sandbox')) return 'sandbox';
   if (pathname.startsWith('/carnet') || hash.startsWith('#carnet')) return 'carnet';
   if (pathname.startsWith('/evaluare') || hash.startsWith('#evaluare')) return 'evaluare';
+  if (pathname.startsWith('/quiz-live') || hash.startsWith('#quiz-live')) return 'livequiz';
   return 'catalog';
 }
 
@@ -103,6 +106,7 @@ function GameContent() {
   const [blogSlug, setBlogSlug] = useState<string | null>(() => parseBlogSlugFromUrl());
   const [glossarySlug, setGlossarySlug] = useState<string | null>(() => parseGlossarySlugFromUrl());
   const [sandboxLang, setSandboxLang] = useState<'cpp' | 'python' | 'html'>('cpp');
+  const [sandboxChallengeId, setSandboxChallengeId] = useState<string | null>(null);
   const [view, setView] = useState<AppView>(() => resolveViewFromLocation());
 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
@@ -195,7 +199,7 @@ function GameContent() {
   // Prevent automatic PWA page reloads mid-session
   useEffect(() => {
     setAppSessionBusy(
-      view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox' || view === 'evaluare'
+      view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox' || view === 'evaluare' || view === 'livequiz'
     );
   }, [view]);
 
@@ -221,6 +225,7 @@ function GameContent() {
     else if (newView === 'city') window.history.pushState({}, '', '/oras');
     else if (newView === 'carnet') window.history.pushState({}, '', '/carnet');
     else if (newView === 'evaluare') window.history.pushState({}, '', '/evaluare');
+    else if (newView === 'livequiz') window.history.pushState({}, '', '/quiz-live');
     else if (newView === 'blog') {
       const basePath = lang === 'en' ? '/blog/en/' : '/blog/';
       window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
@@ -268,6 +273,7 @@ function GameContent() {
         onEditStudentName={() => navigateToView('catalog')}
         onNavigateToCarnet={() => navigateToView('carnet')}
         onNavigateToEvaluare={() => navigateToView('evaluare')}
+        onNavigateToLiveQuiz={() => navigateToView('livequiz')}
         onNavigateToTeacher={() => navigateToView('teacher')}
         onNavigateToSuperAdmin={() => navigateToView('superadmin')}
         onNavigateToArcade={() => navigateToView('arcade')}
@@ -275,10 +281,13 @@ function GameContent() {
         onNavigateToCity={() => navigateToView('city')}
         onNavigateToBlog={() => navigateToView('blog', null)}
         onNavigateToGlossary={() => navigateToView('glossary', null)}
-        onNavigateToSandbox={() => navigateToView('sandbox')}
+        onNavigateToSandbox={() => {
+          setSandboxChallengeId(null);
+          navigateToView('sandbox');
+        }}
       />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 flex flex-col gap-5 sm:gap-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-24 md:pb-8 flex flex-col gap-5 sm:gap-6 print:p-0 print:max-w-none">
         {view === 'catalog' ? (
           <CoursesCatalog
             studentName={studentName}
@@ -292,6 +301,7 @@ function GameContent() {
             onResetActiveMission={resetActiveMission}
             onOpenCarnet={() => navigateToView('carnet')}
             onOpenEvaluare={() => navigateToView('evaluare')}
+            onOpenLiveQuiz={() => navigateToView('livequiz')}
             onOpenTeacherPortal={() => navigateToView('teacher')}
             onOpenSuperAdmin={() => navigateToView('superadmin')}
             onOpenArcade={() => navigateToView('arcade')}
@@ -299,8 +309,9 @@ function GameContent() {
             onOpenCity={() => navigateToView('city')}
             onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
             onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
-            onOpenSandbox={(targetLang) => {
+            onOpenSandbox={(targetLang, challengeId) => {
               if (targetLang) setSandboxLang(targetLang);
+              setSandboxChallengeId(challengeId ?? null);
               navigateToView('sandbox');
             }}
           />
@@ -363,6 +374,7 @@ function GameContent() {
             ) : view === 'sandbox' ? (
               <CodeSandboxHub
                 initialLanguage={sandboxLang}
+                initialChallengeId={sandboxChallengeId}
                 onBackToHome={() => navigateToView('catalog')}
                 onSelectMission={handleSelectMission}
                 onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
@@ -377,8 +389,10 @@ function GameContent() {
                 onOpenDuel={() => navigateToView('duel')}
                 onOpenCity={() => navigateToView('city')}
                 onOpenEvaluare={() => navigateToView('evaluare')}
-                onOpenSandbox={(targetLang) => {
+                onOpenLiveQuiz={() => navigateToView('livequiz')}
+                onOpenSandbox={(targetLang, challengeId) => {
                   if (targetLang) setSandboxLang(targetLang);
+                  setSandboxChallengeId(challengeId ?? null);
                   navigateToView('sandbox');
                 }}
               />
@@ -387,6 +401,12 @@ function GameContent() {
                 studentName={studentName}
                 onBackToCatalog={() => navigateToView('catalog')}
                 onOpenCarnet={() => navigateToView('carnet')}
+                onOpenLiveQuiz={() => navigateToView('livequiz')}
+              />
+            ) : view === 'livequiz' ? (
+              <StudentLiveQuizPlayer
+                studentName={studentName}
+                onBack={() => navigateToView('catalog')}
               />
             ) : (
               <MissionStage
