@@ -35,6 +35,14 @@ import {
   AI_CURRICULUM_BRIDGES,
   AI_LAB_FAQS
 } from '../src/data/aiLabData';
+import {
+  ALGO_DEFINITIONS,
+  BINARY_PUZZLES,
+  CPU_PROGRAM_PRESETS,
+  LOGIC_TOPOLOGIES,
+  ALGO_CURRICULUM_BRIDGES,
+  ALGO_LAB_FAQS
+} from '../src/data/algoLabData';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -3550,6 +3558,9 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/laborator-ai/', priority: '0.97', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/laborator-ai/en/', priority: '0.94', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/laborator-ai-llm.txt', priority: '0.88', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/laborator-algoritmi/', priority: '0.97', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/laborator-algoritmi/en/', priority: '0.94', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/laborator-algoritmi-llm.txt', priority: '0.88', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/', priority: '0.93', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/', priority: '0.90', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/duel/', priority: '0.92', changefreq: 'weekly' },
@@ -4651,6 +4662,327 @@ ${commonStyles}
   console.log('Generated bilingual AI & Deepfake Lab (/laborator-ai/, /laborator-ai/en/) and public/laborator-ai-llm.txt.');
 }
 
+// 9D. GENERATE VISUAL ALGORITHMS, BINARY, VON NEUMANN CPU & LOGIC GATES LAB (/laborator-algoritmi/, /laborator-algoritmi/en/, & /laborator-algoritmi-llm.txt)
+function generateAlgoLabPages() {
+  const renderHub = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const outDir = isEn ? path.join(publicDir, 'laborator-algoritmi', 'en') : path.join(publicDir, 'laborator-algoritmi');
+    ensureDir(outDir);
+
+    const roUrl = 'https://www.arkyedu.com/laborator-algoritmi/';
+    const enUrl = 'https://www.arkyedu.com/laborator-algoritmi/en/';
+    const canonicalUrl = isEn ? enUrl : roUrl;
+    const altUrl = isEn ? roUrl : enUrl;
+
+    const title = isEn
+      ? 'Visual Algorithms, 8-Bit Binary, Von Neumann CPU & Logic Gates Lab | ArkyEdu'
+      : 'Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann & Porți Logice | ArkyEdu';
+    const description = isEn
+      ? 'Interactive browser Computer Science workbench (ages 10-15): step-by-step Bubble/Selection/Insertion Sort & Binary Search animator synced with C++, 8-bit LED Binary/Hex/RGB/Bitwise studio, Von Neumann Fetch-Decode-Execute CPU simulator, and Half-Adder Logic Gates.'
+      : 'Laborator interactiv de Informatică în browser pentru elevi 10–15 ani: animator pas-cu-pas Sortări (Bubble, Selection, Insertion) & Căutare Binară sincronizat cu C++, studio LED Binar pe 8 biți / Hex / RGB / Bitwise, simulator CPU Von Neumann (Fetch-Decode-Execute) și Porți Logice cu Semi-Sumator.';
+    const keywords = isEn
+      ? 'visual sorting algorithms simulator kids, binary search animation c++, 8-bit binary hex ascii rgb converter, von neumann cpu fetch decode execute simulator, half adder xor and logic gates lab, oji olympiad prep simulator'
+      : 'simulator vizual algoritmi sortare cautare binara, conversie binar zecimal hexazecimal 8 biti, arhitectura von neumann simulator cpu fetch decode execute, porti logice and or xor semi sumator elevi, laborator informatica gimnaziu';
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': ['LearningResource', 'SoftwareApplication'],
+          '@id': `${canonicalUrl}#algolab`,
+          name: isEn ? 'ArkyEdu Visual Algorithms, Binary & CPU Architecture Lab' : 'Laboratorul Vizual de Algoritmi, Binar & Arhitectură CPU ArkyEdu',
+          description,
+          url: canonicalUrl,
+          image: 'https://www.arkyedu.com/assets/algo-lab-hero.jpg',
+          applicationCategory: 'EducationalApplication',
+          educationalLevel: isEn ? 'Grades 5-8 (Ages 10-15)' : 'Clasele V-VIII (10-15 ani)',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: lang,
+          teaches: isEn
+            ? ['Bubble Sort, Selection Sort, Insertion Sort & Binary Search', '8-Bit Binary, Hexadecimal, ASCII, 24-Bit RGB & Bitwise Operators', 'Von Neumann Fetch-Decode-Execute CPU Cycle & Assembly RAM', 'Boolean Logic Gates (AND, OR, XOR, NAND) & Binary Half-Adder']
+            : ['Algoritmi de Sortare (Bubble, Selection, Insertion) și Căutare Binară O(log n)', 'Sistem Binar 8 biți, Hexazecimal, ASCII, RGB 24-biți și Operatori Bitwise', 'Arhitectura Von Neumann (Fetch-Decode-Execute) și Registre CPU', 'Porți Logice Booleene (AND, OR, XOR, NAND) și Semi-Sumator Binar'],
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+        },
+        {
+          '@type': 'ItemList',
+          name: isEn ? 'Animated Sorting & Searching Algorithms + Von Neumann CPU Presets' : 'Algoritmi Vizuali de Sortare/Căutare & Programe CPU Von Neumann',
+          itemListElement: [
+            ...ALGO_DEFINITIONS.map((algo, idx) => ({
+              '@type': 'ListItem',
+              position: idx + 1,
+              name: `${isEn ? algo.nameEn : algo.nameRo} (${algo.complexityWorst})`,
+              description: isEn ? algo.summaryEn : algo.summaryRo
+            })),
+            ...CPU_PROGRAM_PRESETS.map((prog, idx) => ({
+              '@type': 'ListItem',
+              position: ALGO_DEFINITIONS.length + idx + 1,
+              name: isEn ? prog.nameEn : prog.nameRo,
+              description: isEn ? prog.descriptionEn : prog.descriptionRo
+            }))
+          ]
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Acasă', item: 'https://www.arkyedu.com/' },
+            { '@type': 'ListItem', position: 2, name: isEn ? 'Algorithms & CPU Lab' : 'Laborator Algoritmi & CPU', item: canonicalUrl }
+          ]
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: ALGO_LAB_FAQS.map((f) => ({
+            '@type': 'Question',
+            name: isEn ? f.qEn : f.qRo,
+            acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo }
+          }))
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="keywords" content="${escapeHtmlText(keywords)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; CS Lab">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/algo-lab-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/algo-lab-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .evidence-img { width: 100%; border-radius: 0.75rem; border: 1px solid #334155; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1rem; }
+    .meta-line { font-size: 0.85rem; color: #34d399; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">⚙️</div>
+        <span class="logo-text">ArkyEdu <span style="color: #34d399;">ALGO &amp; CPU LAB</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">${isEn ? 'Courses' : 'Cursuri'}</a>
+        <a href="https://www.arkyedu.com/sandbox/">${isEn ? 'C++ Sandbox' : 'Sandbox C++'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary' : 'Glosar'}</a>
+        <a href="https://www.arkyedu.com/laborator-algoritmi-llm.txt">laborator-algoritmi-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/?view=algolab${isEn ? '&lang=en' : ''}" class="nav-cta">
+          <span>${isEn ? 'Launch Algo & CPU Lab' : 'Deschide Simulatorul'}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        ${isEn ? '4 Interactive CS Modules · Deterministic Browser Lab · Ages 10–15 · Free Forever' : '4 Laboratoare CS Interactive · 100% Determinist în Browser · Clasele V–VIII · 0 Lei'}
+      </div>
+      <h1>${isEn ? 'Visual Algorithms, 8-Bit Binary &amp; Von Neumann CPU Lab' : 'Laboratorul Vizual de Algoritmi, Binar &amp; Arhitectură CPU'}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?view=algolab${isEn ? '&lang=en' : ''}" class="btn-primary">
+          <span>${isEn ? 'Open Interactive Workbench →' : 'Deschide Simulatorul Interactiv →'}</span>
+        </a>
+        <a href="https://www.arkyedu.com/sandbox/" class="btn-secondary">
+          <span>${isEn ? 'C++ Visual Trace Debugger →' : 'Debugger C++ Visual Trace →'}</span>
+        </a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/cpu-processor/' : 'https://www.arkyedu.com/glosar/cpu-processor/'}" class="btn-secondary">
+          <span>${isEn ? 'CPU &amp; Binary Glossary →' : 'Glosar CPU &amp; Binar →'}</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/algo-lab-hero.jpg" alt="ArkyEdu Visual Algorithms, Binary Switchboard, Von Neumann CPU and Digital Logic Workbench" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        ${isEn ? '1. Sorting &amp; Searching Visual Arena (Synced Line-by-Line with C++)' : '1. Arena Vizuală de Sortare &amp; Căutare (Sincronizată linie cu linie cu C++)'}
+      </h2>
+      <div class="grid-3">
+        ${ALGO_DEFINITIONS.map((algo) => `
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? algo.gradeLabelEn : algo.gradeLabelRo)} · ${escapeHtmlText(algo.complexityWorst)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? algo.nameEn : algo.nameRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? algo.summaryEn : algo.summaryRo)}</p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        ${isEn ? '2. Von Neumann CPU Simulator &amp; 8-Bit Digital Logic Workbench' : '2. Simulator CPU Von Neumann &amp; Banc de Binar / Porți Logice'}
+      </h2>
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/cpu-von-neumann.jpg" alt="Von Neumann CPU Fetch-Decode-Execute Registers and 16-Cell RAM Architecture Diagram" class="evidence-img" loading="lazy">
+          <h3 class="card-title">${isEn ? 'Von Neumann Fetch–Decode–Execute CPU Cycle' : 'Ciclul CPU Fetch–Decode–Execute (Arhitectura Von Neumann)'}</h3>
+          <p class="card-desc">${isEn ? 'Step through live PC, IR, MAR, ACC, and ZERO_FLAG registers against editable 16-cell unified RAM using LOAD, ADD, SUB, STORE, JMP, JZ, OUT, and HALT.' : 'Execută pas cu pas registrele PC, IR, MAR, ACC și ZERO_FLAG pe memoria RAM unificată de 16 celule cu instrucțiuni Assembly (LOAD, ADD, SUB, STORE, JMP, JZ, OUT, HALT).'}</p>
+        </div>
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/logic-gates-board.jpg" alt="8-Bit Binary LED Switchboard, RGB Pixel Studio, and Half-Adder Logic Gate Circuit" class="evidence-img" loading="lazy">
+          <h3 class="card-title">${isEn ? '8-Bit Binary LED, Bitwise, RGB &amp; Logic Gates Studio' : 'Studio Binar 8 Biți, Bitwise, RGB 24-biți &amp; Porți Logice'}</h3>
+          <p class="card-desc">${isEn ? 'Toggle 8-bit powers of 2 (128..1) for live Base10/Hex/ASCII conversion, explore A &amp; B / A | B / A ^ B / shifts, and test AND, OR, XOR, NAND and the Binary Half-Adder.' : 'Comută LED-urile pe 8 biți (128..1) pentru conversii live Base10/Hex/ASCII, testează operatori bitwise (&amp;, |, ^, &lt;&lt;, &gt;&gt;) și verifică tabelele de adevăr AND, OR, XOR, NAND și Semi-Sumator.'}</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        ${CPU_PROGRAM_PRESETS.map((prog) => `
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +${prog.rewardCoins} ByteCoins</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? prog.nameEn : prog.nameRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? prog.descriptionEn : prog.descriptionRo)}</p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        ${isEn ? '3. Logic Gate Topologies &amp; National Curriculum Bridges (Grades 5–8)' : '3. Topologii Porți Logice &amp; Punți cu Programa Școlară TIC (Clasele V–VIII)'}
+      </h2>
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        ${LOGIC_TOPOLOGIES.map((gate) => `
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">${escapeHtmlText(gate.formula)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? gate.nameEn : gate.nameRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? gate.descriptionEn : gate.descriptionRo)}</p>
+          </div>
+        `).join('')}
+      </div>
+      <div class="grid-2">
+        ${ALGO_CURRICULUM_BRIDGES.map((br) => `
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? br.gradeEn : br.gradeRo)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? br.titleEn : br.titleRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? br.descriptionEn : br.descriptionRo)}</p>
+            <a href="https://www.arkyedu.com/cursuri/${br.missionId}/" class="card-link">${isEn ? 'Open Curriculum Lesson →' : 'Deschide Lecția TIC →'}</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">${isEn ? 'Frequently Asked Questions — Algorithms &amp; CPU Lab' : 'Întrebări Frecvente — Laborator Algoritmi, Binar &amp; CPU'}</h2>
+      ${ALGO_LAB_FAQS.map((f) => `
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">${escapeHtmlText(isEn ? f.qEn : f.qRo)}</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">${escapeHtmlText(isEn ? f.aEn : f.aRo)}</div>
+        </div>
+      `).join('')}
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · Visual Algorithms, Binary &amp; Von Neumann CPU Lab (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/laborator-algoritmi-llm.txt" style="color: #34d399;">laborator-algoritmi-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
+  };
+
+  renderHub('ro');
+  renderHub('en');
+
+  const llmLines: string[] = [
+    '# ArkyEdu Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann & Porți Logice (RO & EN)',
+    '',
+    '> Document structurat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Prezintă bancul de lucru interactiv ArkyEdu de Informatică & Arhitectură Calculatoare pentru elevi 10–15 ani (Clasele V–VIII): 100% determinist în browser, fără API-uri externe, conectat la Debugger-ul C++ Visual Trace.',
+    '',
+    '- Hub Română: https://www.arkyedu.com/laborator-algoritmi/',
+    '- Hub Engleză: https://www.arkyedu.com/laborator-algoritmi/en/',
+    '- Debugger C++ Visual Trace & Arena Olimpiadă: https://www.arkyedu.com/sandbox/',
+    '- Glosar CPU, Bit/Byte & Vectori C++: https://www.arkyedu.com/glosar/cpu-processor/',
+    '- Documentație completă platformă: https://www.arkyedu.com/llms.txt',
+    '',
+    '---',
+    '',
+    '## 1. Arena Vizuală de Sortare & Căutare (Sincronizată linie cu linie cu C++)',
+    '- **Controale live**: Vector personalizabil (până la 10 numere), presetări (Aproape sortat, Invers, Duplicat, Olimpiadă), viteză 0.5×–4×, contoare live de Comparații, Interschimbări (`swap`) și Citiri din vector.',
+    '- **Deep-Link C++**: Buton direct *Deschide în Debug C++* care încarcă algoritmul ales în Debugger-ul Visual Trace.',
+    ...ALGO_DEFINITIONS.map(
+      (algo, idx) =>
+        `${idx + 1}. **${algo.nameRo}** (${algo.gradeLabelRo} · Best ${algo.complexityBest} / Worst ${algo.complexityWorst}): ${algo.summaryRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 2. Studio Binar pe 8 Biți, Hex, ASCII, Pixel RGB 24-biți & Bitwise',
+    '- **Switchboard LED 8 Biți (`128, 64, 32, 16, 8, 4, 2, 1`)**: Conversie instantanee Base10, Base2, Hexazecimal (`0x..`) și caracter ASCII.',
+    '- **Bitwise Operator Playground**: Simulare live pentru `A & B`, `A | B`, `A ^ B` (XOR), `A << 1` (înmulțire cu 2) și `A >> 1` (împărțire întreagă la 2).',
+    '- **Studio Pixel RGB 24-biți**: Canale R, G, B (`0..255`) afișate binar pe câte 8 biți + cod HEX.',
+    '- **4 Misiuni Binar**:',
+    ...BINARY_PUZZLES.map(
+      (bp, idx) => `${idx + 1}. **${bp.promptRo}** (Țintă: \`${bp.targetDecimal}\` / +${bp.rewardCoins} ByteCoins) — *Indiciu*: ${bp.hintRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 3. Simulator CPU Von Neumann (Fetch–Decode–Execute & RAM 16 Celule)',
+    '- **Registre Live**: `PC` (Program Counter), `IR` (Instruction Register), `MAR` (Memory Address Register), `ACC` (Acumulator) și `ZERO_FLAG`.',
+    '- **Set Instrucțiuni RAM Unificată (`0x00..0x0F`)**: `LOAD`, `ADD`, `SUB`, `STORE`, `JMP`, `JZ`, `OUT`, `HALT`.',
+    '- **3 Programe Assembly Preîncărcate**:',
+    ...CPU_PROGRAM_PRESETS.map(
+      (cp, idx) => `${idx + 1}. **${cp.nameRo}** (+${cp.rewardCoins} ByteCoins): ${cp.descriptionRo} — *Obiectiv*: ${cp.expectedGoalRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 4. Banc de Porți Logice & Semi-Sumator Binar',
+    ...LOGIC_TOPOLOGIES.map(
+      (lt, idx) => `${idx + 1}. **${lt.nameRo}** (\`${lt.formula}\`): ${lt.descriptionRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 5. Punți cu Programa Școlară TIC (Clasele V–VIII)',
+    ...ALGO_CURRICULUM_BRIDGES.map(
+      (br) => `- **${br.gradeRo} · ${br.titleRo}**: ${br.descriptionRo} -> https://www.arkyedu.com/cursuri/${br.missionId}/`
+    ),
+    '',
+    '---',
+    '',
+    '## 6. Întrebări Frecvente (FAQ)',
+    ...ALGO_LAB_FAQS.flatMap((f) => [`**Î: ${f.qRo}**`, `R: ${f.aRo}`, ''])
+  ];
+
+  fs.writeFileSync(path.join(publicDir, 'laborator-algoritmi-llm.txt'), llmLines.join('\n'), 'utf-8');
+  console.log('Generated bilingual Visual Algorithms & CPU Lab (/laborator-algoritmi/, /laborator-algoritmi/en/) and public/laborator-algoritmi-llm.txt.');
+}
+
 // 10. GENERATE BILINGUAL WORKSHEETS, GRADED EXAMS & OLYMPIAD SHEETS (/fise/ & /fise/en/)
 function generateWorksheetsPages() {
   const fiseRoDir = path.join(publicDir, 'fise');
@@ -5062,6 +5394,7 @@ generateFeatureHubs();
 generateViceLeonidaSeoPages();
 generateLeonidaUniversePages();
 generateAiLabPages();
+generateAlgoLabPages();
 generateTechEducationPillar();
 generateBlogPages();
 generateGlossaryPages();

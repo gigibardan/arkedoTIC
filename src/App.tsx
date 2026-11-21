@@ -36,6 +36,7 @@ const StudentLiveQuizPlayer = lazy(() => import('./components/evaluation/Student
 const WorksheetsHub = lazy(() => import('./components/worksheets/WorksheetsHub').then((m) => ({ default: m.WorksheetsHub })));
 const LeonidaUniverseHub = lazy(() => import('./components/leonida/LeonidaUniverseHub').then((m) => ({ default: m.LeonidaUniverseHub })));
 const AiDeepfakeLabHub = lazy(() => import('./components/ailab/AiDeepfakeLabHub').then((m) => ({ default: m.AiDeepfakeLabHub })));
+const AlgoCpuLabHub = lazy(() => import('./components/algolab/AlgoCpuLabHub').then((m) => ({ default: m.AlgoCpuLabHub })));
 
 export type AppView =
   | 'catalog'
@@ -53,7 +54,8 @@ export type AppView =
   | 'livequiz'
   | 'fise'
   | 'leonida'
-  | 'ailab';
+  | 'ailab'
+  | 'algolab';
 
 function parseBlogSlugFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -97,6 +99,7 @@ function resolveViewFromLocation(): AppView {
   if (pathname.startsWith('/glosar') || hash.startsWith('#glosar')) return 'glossary';
   if (pathname.startsWith('/leonida') || hash.startsWith('#leonida')) return 'leonida';
   if (pathname.startsWith('/laborator-ai') || hash.startsWith('#laborator-ai') || params.get('view') === 'ailab') return 'ailab';
+  if (pathname.startsWith('/laborator-algoritmi') || hash.startsWith('#laborator-algoritmi') || params.get('view') === 'algolab') return 'algolab';
   if (pathname.startsWith('/fise') || hash.startsWith('#fise')) return 'fise';
   if (pathname.startsWith('/sandbox') || pathname.startsWith('/olimpiada') || hash.startsWith('#sandbox') || hash.startsWith('#olimpiada')) return 'sandbox';
   if (pathname.startsWith('/carnet') || hash.startsWith('#carnet')) return 'carnet';
@@ -260,7 +263,7 @@ function GameContent() {
   // Prevent automatic PWA page reloads mid-session
   useEffect(() => {
     setAppSessionBusy(
-      view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox' || view === 'evaluare' || view === 'livequiz' || view === 'leonida' || view === 'ailab'
+      view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox' || view === 'evaluare' || view === 'livequiz' || view === 'leonida' || view === 'ailab' || view === 'algolab'
     );
   }, [view]);
 
@@ -305,6 +308,8 @@ function GameContent() {
       window.history.pushState({}, '', lang === 'en' ? '/leonida/en/' : '/leonida/');
     } else if (newView === 'ailab') {
       window.history.pushState({}, '', lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/');
+    } else if (newView === 'algolab') {
+      window.history.pushState({}, '', lang === 'en' ? '/laborator-algoritmi/en/' : '/laborator-algoritmi/');
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
       clearCompletedActiveMission();
@@ -358,6 +363,7 @@ function GameContent() {
           navigateToView('leonida');
         }}
         onNavigateToAiLab={() => navigateToView('ailab')}
+        onNavigateToAlgoLab={() => navigateToView('algolab')}
         onNavigateToSandbox={() => {
           setSandboxChallengeId(null);
           setSandboxTracePayload(null);
@@ -394,6 +400,7 @@ function GameContent() {
               navigateToView('leonida');
             }}
             onOpenAiLab={() => navigateToView('ailab')}
+            onOpenAlgoLab={() => navigateToView('algolab')}
             onOpenSandbox={(targetLang, challengeId, tab) => {
               if (targetLang) setSandboxLang(targetLang);
               setSandboxChallengeId(challengeId ?? null);
@@ -556,6 +563,20 @@ function GameContent() {
                 }}
                 onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
               />
+            ) : view === 'algolab' ? (
+              <AlgoCpuLabHub
+                studentName={studentName}
+                onBackToCatalog={() => navigateToView('catalog')}
+                onSelectMission={handleSelectMission}
+                onOpenCppTrace={(code, stdin, label) => {
+                  setSandboxLang('cpp');
+                  setSandboxChallengeId(null);
+                  setSandboxTracePayload({ code, stdin, label });
+                  setSandboxTab('trace');
+                  navigateToView('sandbox');
+                }}
+                onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
+              />
             ) : (
               <MissionStage
                 missionId={activeMission || 'files'}
@@ -619,6 +640,7 @@ function GameContent() {
           navigateToView('leonida');
         }}
         onNavigateToAiLab={() => navigateToView('ailab')}
+        onNavigateToAlgoLab={() => navigateToView('algolab')}
       />
 
       <LegalModal

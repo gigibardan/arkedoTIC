@@ -31,6 +31,9 @@ Allow: /leonida-llm.txt
 Allow: /laborator-ai/
 Allow: /laborator-ai/*
 Allow: /laborator-ai-llm.txt
+Allow: /laborator-algoritmi/
+Allow: /laborator-algoritmi/*
+Allow: /laborator-algoritmi-llm.txt
 Allow: /sandbox/
 Allow: /sandbox/*
 Allow: /olimpiada

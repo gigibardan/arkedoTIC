@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann &amp; Porți Logice | ArkyEdu</title>
+  <meta name="description" content="Laborator interactiv de Informatică în browser pentru elevi 10–15 ani: animator pas-cu-pas Sortări (Bubble, Selection, Insertion) &amp; Căutare Binară sincronizat cu C++, studio LED Binar pe 8 biți / Hex / RGB / Bitwise, simulator CPU Von Neumann (Fetch-Decode-Execute) și Porți Logice cu Semi-Sumator.">
+  <meta name="keywords" content="simulator vizual algoritmi sortare cautare binara, conversie binar zecimal hexazecimal 8 biti, arhitectura von neumann simulator cpu fetch decode execute, porti logice and or xor semi sumator elevi, laborator informatica gimnaziu">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/laborator-algoritmi/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/laborator-algoritmi/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/laborator-algoritmi/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/laborator-algoritmi/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann &amp; Porți Logice | ArkyEdu">
+  <meta property="og:description" content="Laborator interactiv de Informatică în browser pentru elevi 10–15 ani: animator pas-cu-pas Sortări (Bubble, Selection, Insertion) &amp; Căutare Binară sincronizat cu C++, studio LED Binar pe 8 biți / Hex / RGB / Bitwise, simulator CPU Von Neumann (Fetch-Decode-Execute) și Porți Logice cu Semi-Sumator.">
+  <meta property="og:url" content="https://www.arkyedu.com/laborator-algoritmi/">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; CS Lab">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/algo-lab-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann &amp; Porți Logice | ArkyEdu">
+  <meta name="twitter:description" content="Laborator interactiv de Informatică în browser pentru elevi 10–15 ani: animator pas-cu-pas Sortări (Bubble, Selection, Insertion) &amp; Căutare Binară sincronizat cu C++, studio LED Binar pe 8 biți / Hex / RGB / Bitwise, simulator CPU Von Neumann (Fetch-Decode-Execute) și Porți Logice cu Semi-Sumator.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/algo-lab-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "LearningResource",
+        "SoftwareApplication"
+      ],
+      "@id": "https://www.arkyedu.com/laborator-algoritmi/#algolab",
+      "name": "Laboratorul Vizual de Algoritmi, Binar & Arhitectură CPU ArkyEdu",
+      "description": "Laborator interactiv de Informatică în browser pentru elevi 10–15 ani: animator pas-cu-pas Sortări (Bubble, Selection, Insertion) & Căutare Binară sincronizat cu C++, studio LED Binar pe 8 biți / Hex / RGB / Bitwise, simulator CPU Von Neumann (Fetch-Decode-Execute) și Porți Logice cu Semi-Sumator.",
+      "url": "https://www.arkyedu.com/laborator-algoritmi/",
+      "image": "https://www.arkyedu.com/assets/algo-lab-hero.jpg",
+      "applicationCategory": "EducationalApplication",
+      "educationalLevel": "Clasele V-VIII (10-15 ani)",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "ro",
+      "teaches": [
+        "Algoritmi de Sortare (Bubble, Selection, Insertion) și Căutare Binară O(log n)",
+        "Sistem Binar 8 biți, Hexazecimal, ASCII, RGB 24-biți și Operatori Bitwise",
+        "Arhitectura Von Neumann (Fetch-Decode-Execute) și Registre CPU",
+        "Porți Logice Booleene (AND, OR, XOR, NAND) și Semi-Sumator Binar"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Algoritmi Vizuali de Sortare/Căutare & Programe CPU Von Neumann",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Bubble Sort (Sortarea prin Bule) (O(n²))",
+          "description": "Compară elemente vecine și le interschimbă (Regula celor 3 Pahare) dacă sunt în ordine greșită. Valorile mari „urcă la suprafață” ca bulele."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Selection Sort (Sortare prin Selecție) (O(n²))",
+          "description": "La fiecare pas i, caută cel mai mic element din restul vectorului și îl aduce pe poziția i printr-o singură interschimbare."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Insertion Sort (Sortare prin Inserție) (O(n²))",
+          "description": "Funcționează ca aranjarea cărților de joc în mână: ia fiecare element și îl inserează la locul potrivit spre stânga."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Căutare Binară (Divide et Impera) (O(log₂ n))",
+          "description": "Pe un vector DEJA SORTAT, verifică mijlocul și elimină jumătate din elemente la fiecare pas! Pentru 1.000 de elemente face maxim 10 pași."
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Căutare Secvențială (Liniară) (O(n))",
+          "description": "Verifică elementele pe rând de la stânga la dreapta. Funcționează și pe vectori nesortați, dar poate verifica toate n elementele."
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Program 01 · Adunarea a 2 Numere (A + B)",
+          "description": "CPU citește numărul din RAM[14] (15), adună RAM[15] (27), salvează rezultatul în RAM[13] și îl afișează pe Output."
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Program 02 · Buclă Numărătoare Inversă (JZ & JMP)",
+          "description": "Pornește cu 3 în RAM[14], afișează și scade 1 la fiecare ciclu până când Zero Flag devine 1 și sare la HALT!"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "Program 03 · Dublare & Adunare Multiplă (ACC + ACC)",
+          "description": "CPU calculează 12 × 3 folosind doar adunări în Unitatea Aritmetico-Logică (ALU): ACC = 12 + 12 + 12 = 36."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Laborator Algoritmi & CPU",
+          "item": "https://www.arkyedu.com/laborator-algoritmi/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Cum funcționează Simulatorul Vizual de Algoritmi (Bubble Sort, Selection, Insertion & Căutare Binară)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fiecare pas este animat pe bare colorate codate dual (galben = comparare, roșu = schimb, verde = sortat, cyan = mijloc Binary Search) sincronizat linie-cu-linie cu codul C++ și contoare de comparații/schimburi, cu opțiunea de a deschide codul în Visual Trace Debugger."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "De ce este Căutarea Binară (O(log n)) mult mai rapidă decât Căutarea Liniară?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deoarece pe un vector sortat verifică elementul din mijloc și elimină automat jumătate din interval la fiecare pas. Pe 1.024 de numere, căutarea liniară poate face 1.024 de pași, iar cea binară maxim 10 pași."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce învață elevii în Simulatorul de CPU Von Neumann (Fetch–Decode–Execute)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Elevii văd în timp real cum instrucțiunile și datele coexistă în același RAM (0x00..0x0F) și cum Unitatea de Control parcurge ciclul Fetch (PC → IR), Decode și Execute (ALU + Accumulator + Zero Flag) pe programe reale de adunare și bucle."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce poți testa în Studioul Binar 8-Biți, RGB și Porți Logice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Poți comuta individual biții 128..1 pentru a vedea Zecimal, Hexazecimal, ASCII și operatori pe biți (&, |, ^, <<, >>), poți combina 24 de biți RGB pentru culori și poți construi porți AND, OR, XOR, NAND sau un Sumator Binar (Half-Adder) cu tabel de adevăr live."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Acordă Laboratorul de Algoritmi & CPU recompense reale elevilor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Da! Rezolvarea provocărilor de algoritmică (+30 ByteCoins), a puzzle-urilor binare (+25 ByteCoins), a întrebărilor CPU (+35 ByteCoins) și a circuitelor logice (+35 ByteCoins) adaugă ByteCoins direct în contul elevului."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .evidence-img { width: 100%; border-radius: 0.75rem; border: 1px solid #334155; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1rem; }
+    .meta-line { font-size: 0.85rem; color: #34d399; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">⚙️</div>
+        <span class="logo-text">ArkyEdu <span style="color: #34d399;">ALGO &amp; CPU LAB</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">Cursuri</a>
+        <a href="https://www.arkyedu.com/sandbox/">Sandbox C++</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar</a>
+        <a href="https://www.arkyedu.com/laborator-algoritmi-llm.txt">laborator-algoritmi-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/laborator-algoritmi/en/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">EN</a>
+        <a href="https://www.arkyedu.com/?view=algolab" class="nav-cta">
+          <span>Deschide Simulatorul</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        4 Laboratoare CS Interactive · 100% Determinist în Browser · Clasele V–VIII · 0 Lei
+      </div>
+      <h1>Laboratorul Vizual de Algoritmi, Binar &amp; Arhitectură CPU</h1>
+      <p class="lead-text">Laborator interactiv de Informatică în browser pentru elevi 10–15 ani: animator pas-cu-pas Sortări (Bubble, Selection, Insertion) &amp; Căutare Binară sincronizat cu C++, studio LED Binar pe 8 biți / Hex / RGB / Bitwise, simulator CPU Von Neumann (Fetch-Decode-Execute) și Porți Logice cu Semi-Sumator.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?view=algolab" class="btn-primary">
+          <span>Deschide Simulatorul Interactiv →</span>
+        </a>
+        <a href="https://www.arkyedu.com/sandbox/" class="btn-secondary">
+          <span>Debugger C++ Visual Trace →</span>
+        </a>
+        <a href="https://www.arkyedu.com/glosar/cpu-processor/" class="btn-secondary">
+          <span>Glosar CPU &amp; Binar →</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/algo-lab-hero.jpg" alt="ArkyEdu Visual Algorithms, Binary Switchboard, Von Neumann CPU and Digital Logic Workbench" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        1. Arena Vizuală de Sortare &amp; Căutare (Sincronizată linie cu linie cu C++)
+      </h2>
+      <div class="grid-3">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VII–VIII · Algoritmi pe Vectori · O(n²)</div>
+            <h3 class="card-title">Bubble Sort (Sortarea prin Bule)</h3>
+            <p class="card-desc">Compară elemente vecine și le interschimbă (Regula celor 3 Pahare) dacă sunt în ordine greșită. Valorile mari „urcă la suprafață” ca bulele.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VIII · Admitere &amp; OJI · O(n²)</div>
+            <h3 class="card-title">Selection Sort (Sortare prin Selecție)</h3>
+            <p class="card-desc">La fiecare pas i, caută cel mai mic element din restul vectorului și îl aduce pe poziția i printr-o singură interschimbare.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VIII · Vectori Sortați Aproape · O(n²)</div>
+            <h3 class="card-title">Insertion Sort (Sortare prin Inserție)</h3>
+            <p class="card-desc">Funcționează ca aranjarea cărților de joc în mână: ia fiecare element și îl inserează la locul potrivit spre stânga.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VIII · Eficiență Logaritmică · O(log₂ n)</div>
+            <h3 class="card-title">Căutare Binară (Divide et Impera)</h3>
+            <p class="card-desc">Pe un vector DEJA SORTAT, verifică mijlocul și elimină jumătate din elemente la fiecare pas! Pentru 1.000 de elemente face maxim 10 pași.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VII · Parcurgere Element cu Element · O(n)</div>
+            <h3 class="card-title">Căutare Secvențială (Liniară)</h3>
+            <p class="card-desc">Verifică elementele pe rând de la stânga la dreapta. Funcționează și pe vectori nesortați, dar poate verifica toate n elementele.</p>
+          </article>
+        
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        2. Simulator CPU Von Neumann &amp; Banc de Binar / Porți Logice
+      </h2>
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/cpu-von-neumann.jpg" alt="Von Neumann CPU Fetch-Decode-Execute Registers and 16-Cell RAM Architecture Diagram" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Ciclul CPU Fetch–Decode–Execute (Arhitectura Von Neumann)</h3>
+          <p class="card-desc">Execută pas cu pas registrele PC, IR, MAR, ACC și ZERO_FLAG pe memoria RAM unificată de 16 celule cu instrucțiuni Assembly (LOAD, ADD, SUB, STORE, JMP, JZ, OUT, HALT).</p>
+        </div>
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/logic-gates-board.jpg" alt="8-Bit Binary LED Switchboard, RGB Pixel Studio, and Half-Adder Logic Gate Circuit" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Studio Binar 8 Biți, Bitwise, RGB 24-biți &amp; Porți Logice</h3>
+          <p class="card-desc">Comută LED-urile pe 8 biți (128..1) pentru conversii live Base10/Hex/ASCII, testează operatori bitwise (&amp;, |, ^, &lt;&lt;, &gt;&gt;) și verifică tabelele de adevăr AND, OR, XOR, NAND și Semi-Sumator.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +35 ByteCoins</div>
+            <h3 class="card-title">Program 01 · Adunarea a 2 Numere (A + B)</h3>
+            <p class="card-desc">CPU citește numărul din RAM[14] (15), adună RAM[15] (27), salvează rezultatul în RAM[13] și îl afișează pe Output.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +35 ByteCoins</div>
+            <h3 class="card-title">Program 02 · Buclă Numărătoare Inversă (JZ &amp; JMP)</h3>
+            <p class="card-desc">Pornește cu 3 în RAM[14], afișează și scade 1 la fiecare ciclu până când Zero Flag devine 1 și sare la HALT!</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +35 ByteCoins</div>
+            <h3 class="card-title">Program 03 · Dublare &amp; Adunare Multiplă (ACC + ACC)</h3>
+            <p class="card-desc">CPU calculează 12 × 3 folosind doar adunări în Unitatea Aritmetico-Logică (ALU): ACC = 12 + 12 + 12 = 36.</p>
+          </article>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        3. Topologii Porți Logice &amp; Punți cu Programa Școlară TIC (Clasele V–VIII)
+      </h2>
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = A · B</div>
+            <h3 class="card-title">Poarta AND (ȘI Logic)</h3>
+            <p class="card-desc">Ieșirea este 1 (HIGH) DOAR când ambele intrări A și B sunt 1 simultan (exact ca operatorul `&amp;&amp;` din C++).</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = A + B</div>
+            <h3 class="card-title">Poarta OR (SAU Logic)</h3>
+            <p class="card-desc">Ieșirea este 1 dacă CEL PUȚIN o intrare (A sau B sau ambele) este 1 (echivalent `||` în C++).</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = A ⊕ B</div>
+            <h3 class="card-title">Poarta XOR (SAU Exclusiv)</h3>
+            <p class="card-desc">Ieșirea este 1 DOAR când intrările sunt DIFERITE (una 0 și una 1). Baza criptării și a adunării binare!</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = ¬(A · B)</div>
+            <h3 class="card-title">Poarta NAND (Poarta Universală)</h3>
+            <p class="card-desc">Opusul porții AND: ieșirea este 0 doar când A și B sunt ambele 1. Din porți NAND se construiesc procesoare întregi!</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">SUM = A ⊕ B · CARRY = A · B</div>
+            <h3 class="card-title">Sumator Binar (Half-Adder ALU)</h3>
+            <p class="card-desc">Adună doi biți în interiorul procesorului! Când A=1 și B=1, SUM=0 și CARRY=1 (adică 1 + 1 = 10 în binar = 2!).</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">SIREN = (A · B) + C</div>
+            <h3 class="card-title">Circuit Alarmă Smart Lab</h3>
+            <p class="card-desc">Sirena pornește dacă (Senzor Mișcare A AND Sistem Armat B) OR Buton Urgență C este activ.</p>
+          </div>
+        
+      </div>
+      <div class="grid-2">
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa V · Hardware Von Neumann</div>
+            <h3 class="card-title">De la CPU &amp; RAM la Ciclul Fetch–Decode–Execute</h3>
+            <p class="card-desc">Descoperă concret cum citește procesorul instrucțiunile din memoria RAM folosind registrele PC, IR și ALU.</p>
+            <a href="https://www.arkyedu.com/cursuri/hardware/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa V–VI · Bit, Byte &amp; RGB</div>
+            <h3 class="card-title">De ce 8 Biți = 1 Byte (0..255) și Cum Formează Culorile</h3>
+            <p class="card-desc">Fiecare pixel de pe ecran folosește 3 canale de câte 8 biți (Roșu, Verde, Albastru) între 0 și 255.</p>
+            <a href="https://www.arkyedu.com/cursuri/g6_paint3d/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VI–VII · Operatori Logici &amp; Decizii</div>
+            <h3 class="card-title">Porțile Logice AND/OR/XOR din spatele lui `if (A &amp;&amp; B)`</h3>
+            <p class="card-desc">Instrucțiunile condiționale din Scratch și C++ (`&amp;&amp;`, `||`, `!`) se execută fizic prin milioane de porți logice din siliciu.</p>
+            <a href="https://www.arkyedu.com/cursuri/g7_decision_a/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VIII · Vectori, Sortare &amp; Căutare Binară</div>
+            <h3 class="card-title">Pregătire Teză &amp; OJI: Bubble Sort vs. Căutare Binară</h3>
+            <p class="card-desc">Compară vizual complexitatea O(n²) vs O(log n) și trimite codul C++ direct în depanatorul Visual Trace.</p>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">Întrebări Frecvente — Laborator Algoritmi, Binar &amp; CPU</h2>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Cum funcționează Simulatorul Vizual de Algoritmi (Bubble Sort, Selection, Insertion &amp; Căutare Binară)?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Fiecare pas este animat pe bare colorate codate dual (galben = comparare, roșu = schimb, verde = sortat, cyan = mijloc Binary Search) sincronizat linie-cu-linie cu codul C++ și contoare de comparații/schimburi, cu opțiunea de a deschide codul în Visual Trace Debugger.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">De ce este Căutarea Binară (O(log n)) mult mai rapidă decât Căutarea Liniară?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Deoarece pe un vector sortat verifică elementul din mijloc și elimină automat jumătate din interval la fiecare pas. Pe 1.024 de numere, căutarea liniară poate face 1.024 de pași, iar cea binară maxim 10 pași.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Ce învață elevii în Simulatorul de CPU Von Neumann (Fetch–Decode–Execute)?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Elevii văd în timp real cum instrucțiunile și datele coexistă în același RAM (0x00..0x0F) și cum Unitatea de Control parcurge ciclul Fetch (PC → IR), Decode și Execute (ALU + Accumulator + Zero Flag) pe programe reale de adunare și bucle.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Ce poți testa în Studioul Binar 8-Biți, RGB și Porți Logice?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Poți comuta individual biții 128..1 pentru a vedea Zecimal, Hexazecimal, ASCII și operatori pe biți (&amp;, |, ^, &lt;&lt;, &gt;&gt;), poți combina 24 de biți RGB pentru culori și poți construi porți AND, OR, XOR, NAND sau un Sumator Binar (Half-Adder) cu tabel de adevăr live.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Acordă Laboratorul de Algoritmi &amp; CPU recompense reale elevilor?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Da! Rezolvarea provocărilor de algoritmică (+30 ByteCoins), a puzzle-urilor binare (+25 ByteCoins), a întrebărilor CPU (+35 ByteCoins) și a circuitelor logice (+35 ByteCoins) adaugă ByteCoins direct în contul elevului.</div>
+        </div>
+      
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · Visual Algorithms, Binary &amp; Von Neumann CPU Lab (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/laborator-algoritmi-llm.txt" style="color: #34d399;">laborator-algoritmi-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -237,6 +237,12 @@ function getContextualIdleQuotes(lang: 'ro' | 'en'): string[] {
         ? 'AI tip: zoom into wall banners, check camera EXIF, and never trust an urgent voice note asking for 2FA codes! 🤖🔍'
         : 'Pont AI: dă zoom pe bannerele din fundal, verifică EXIF-ul și nu da niciodată coduri 2FA la mesaje vocale urgente! 🤖🔍'
     );
+  } else if (path.includes('/laborator-algoritmi') || hash.includes('laborator-algoritmi')) {
+    extras.push(
+      isEn
+        ? 'Binary Search halves 1,024 sorted items in 10 steps! Watch the Von Neumann PC & ACC registers step through RAM! ⚙️💡'
+        : 'Căutarea Binară înjumătățește 1.024 de numere în doar 10 pași! Urmărește registrele PC și ACC în simulatorul CPU! ⚙️💡'
+    );
   }
 
   if (mission.includes('cpp') || mission.includes('algo') || mission.includes('loop') || mission.includes('decision')) {

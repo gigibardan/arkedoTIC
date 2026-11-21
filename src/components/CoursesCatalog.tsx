@@ -32,6 +32,7 @@ import {
   CalendarClock,
   Compass,
   BrainCircuit,
+  Cpu,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -113,6 +114,7 @@ interface CoursesCatalogProps {
   onOpenWorksheets?: (slug?: string | null) => void;
   onOpenLeonida?: (launchWorld?: boolean) => void;
   onOpenAiLab?: () => void;
+  onOpenAlgoLab?: () => void;
   byteCoins?: number;
 }
 
@@ -140,6 +142,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenWorksheets,
   onOpenLeonida,
   onOpenAiLab,
+  onOpenAlgoLab,
   byteCoins,
 }) => {
   const getMaxPlayableLevels = (mId: string): number => {
@@ -2295,34 +2298,30 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       </section>
 
-      {/* 6A-2. AI LITERACY & DEEPFAKE FORENSICS LAB */}
-      <section
-        aria-labelledby="catalog-ailab-heading"
-        className="bg-gradient-to-br from-slate-950 via-cyan-950/25 to-slate-950 border border-cyan-500/35 rounded-2xl p-5 sm:p-6 shadow-lg"
-      >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-3xl">
+      {/* 6A-2. FLAGSHIP INTERACTIVE CS LABS (AI & DEEPFAKE + ALGORITHMS & CPU) */}
+      <section aria-labelledby="catalog-ailab-heading" className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
+        <div className="bg-slate-950 border border-cyan-500/35 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-lg">
+          <div className="space-y-1.5">
             <div className="text-[11px] font-mono text-cyan-300 font-semibold">
               {lang === 'en'
-                ? 'AI Literacy · BPE Tokenizer · Softmax Temperature · Deepfake Forensics · C.R.I.F. Prompts'
-                : 'Literație AI · Tokenizator BPE · Temperatură Softmax · Detector Deepfake · Prompting C.R.I.F.'}
+                ? 'AI Literacy · Tokenizer · Softmax · Deepfake Forensics · C.R.I.F.'
+                : 'Literație AI · Tokenizator · Softmax · Detector Deepfake · C.R.I.F.'}
             </div>
-            <h2 id="catalog-ailab-heading" className="text-base sm:text-xl font-black text-white flex items-center gap-2 font-heading">
+            <h2 id="catalog-ailab-heading" className="text-base sm:text-lg font-black text-white flex items-center gap-2 font-heading">
               <BrainCircuit className="w-5 h-5 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>
                 {lang === 'en'
-                  ? 'AI Literacy & Deepfake Forensics Lab (Interactive Classroom Simulator)'
-                  : 'Laboratorul AI & Detector Deepfake (Simulator Sigur în Browser)'}
+                  ? 'AI Literacy & Deepfake Forensics Lab'
+                  : 'Laboratorul AI & Detector Deepfake'}
               </span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               {lang === 'en'
-                ? 'See how LLMs tokenize Romanian & English code, dial Softmax Temperature to trigger or stop hallucinations, inspect 6 photo/voice/video deepfake cases (+ByteCoins), and assemble ethical C.R.I.F. study prompts.'
-                : 'Descoperă cum împart modelele LLM textul în tokeni, reglează Temperatura Softmax pentru a observa halucinațiile, investighează 6 cazuri Deepfake foto/audio/video (+ByteCoins) și construiește prompturi C.R.I.F. responsabile.'}
+                ? 'See how LLMs tokenize text, dial Softmax Temperature to spot hallucinations, inspect 6 photo/voice/video deepfake cases (+ByteCoins), and assemble C.R.I.F. study prompts.'
+                : 'Vezi cum împart LLM-urile textul în tokeni, testează halucinațiile la Temperatură Softmax, investighează 6 cazuri Deepfake (+ByteCoins) și construiește prompturi C.R.I.F.'}
             </p>
           </div>
-
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               type="button"
               onClick={() => {
@@ -2345,7 +2344,56 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               }}
               className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-cyan-200 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
             >
-              <span>{lang === 'en' ? 'Forensics Guide & FAQ' : 'Ghid Deepfake & FAQ'}</span>
+              <span>{lang === 'en' ? 'Guide & FAQ' : 'Ghid & FAQ'}</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="bg-slate-950 border border-emerald-500/35 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-lg">
+          <div className="space-y-1.5">
+            <div className="text-[11px] font-mono text-emerald-300 font-semibold">
+              {lang === 'en'
+                ? 'Sorting & Binary Search · 8-Bit RGB · Von Neumann CPU · Logic Gates'
+                : 'Sortări & Căutare Binară · Binar 8-Biți · CPU Von Neumann · Porți Logice'}
+            </div>
+            <h2 className="text-base sm:text-lg font-black text-white flex items-center gap-2 font-heading">
+              <Cpu className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? 'Visual Algorithms, Binary & CPU Lab'
+                  : 'Laboratorul Algoritmi Vizuali, Binar & CPU'}
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {lang === 'en'
+                ? 'Animate Bubble Sort, Selection, Insertion & Binary Search alongside C++ lines, toggle 8-bit registers & 24-bit RGB pixels, step through a Von Neumann CPU and wire logic gates.'
+                : 'Animează Bubble Sort, Selection, Insertion & Căutare Binară sincronizate cu C++, comută biți 8-bit & culori RGB, execută cicluri CPU Von Neumann și porți logice.'}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenAlgoLab?.();
+              }}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            >
+              <span>{lang === 'en' ? 'Open Algorithms & CPU Lab' : 'Deschide Lab Algoritmi & CPU'}</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </button>
+            <a
+              href={lang === 'en' ? '/laborator-algoritmi/en/' : '/laborator-algoritmi/'}
+              onClick={(e) => {
+                if (onOpenAlgoLab) {
+                  e.preventDefault();
+                  sounds.playClick();
+                  onOpenAlgoLab();
+                }
+              }}
+              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/40 text-emerald-200 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            >
+              <span>{lang === 'en' ? 'CPU & Sorting Guide' : 'Ghid CPU & Sortări'}</span>
             </a>
           </div>
         </div>

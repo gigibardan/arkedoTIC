@@ -6,8 +6,9 @@ import { findWorksheetBySlug } from '../data/worksheets';
 
 import { LEONIDA_FAQS } from '../data/leonidaOpenWorldData';
 import { AI_LAB_FAQS } from '../data/aiLabData';
+import { ALGO_LAB_FAQS } from '../data/algoLabData';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz' | 'fise' | 'leonida' | 'ailab';
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz' | 'fise' | 'leonida' | 'ailab' | 'algolab';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -442,6 +443,40 @@ export function updateDynamicSeo(
         },
       ],
     };
+  } else if (view === 'algolab') {
+    title = isEn
+      ? 'Visual Algorithms, Binary 8-Bit & Von Neumann CPU Lab | ArkyEdu'
+      : 'Laborator Algoritmi Vizuali, Binar & CPU Von Neumann | ArkyEdu';
+    description = isEn
+      ? 'Animate Bubble Sort, Selection Sort, Insertion Sort & Binary Search live with C++, toggle 8-bit binary/RGB LEDs, step through a Von Neumann CPU and wire logic gates.'
+      : 'Animație pas-cu-pas Bubble Sort, Căutare Binară și cod C++, registru binar 8-biți / RGB, simulator CPU Von Neumann Fetch-Decode-Execute și porți logice.';
+    canonicalUrl = isEn ? `${BASE_URL}/laborator-algoritmi/en/` : `${BASE_URL}/laborator-algoritmi/`;
+    dynamicJsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': ['LearningResource', 'SoftwareApplication'],
+          name: isEn ? 'ArkyEdu Visual Algorithms, Binary & CPU Architecture Lab' : 'Laboratorul Vizual de Algoritmi, Binar & CPU ArkyEdu',
+          url: canonicalUrl,
+          description,
+          image: `${BASE_URL}/assets/algo-lab-hero.jpg`,
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: ['ro', 'en'],
+          educationalLevel: isEn ? 'Middle School (Grades 5–8)' : 'Gimnaziu (Clasele V–VIII)',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' },
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: ALGO_LAB_FAQS.map((f) => ({
+            '@type': 'Question',
+            name: isEn ? f.qEn : f.qRo,
+            acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo },
+          })),
+        },
+      ],
+    };
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);
@@ -459,6 +494,8 @@ export function updateDynamicSeo(
       ? `${BASE_URL}/assets/leonida-hero.jpg`
       : view === 'ailab'
       ? `${BASE_URL}/assets/ai-lab-hero.jpg`
+      : view === 'algolab'
+      ? `${BASE_URL}/assets/algo-lab-hero.jpg`
       : `${BASE_URL}/og-cover.png`;
 
   document.title = title;

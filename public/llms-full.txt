@@ -99,7 +99,7 @@ Hub Dueluri: https://www.arkyedu.com/duel/
 - **Frontend:** React 19 SPA, TypeScript, Tailwind CSS v4, Web Audio API sintetizat, Canvas 2D / WebGL.
 - **Backend & Cloud:** Firebase Firestore + Auth, sincronizare dueluri 1v1 în timp real, catalog digital multi-școală conform GDPR.
 - **PWA & Offline:** Instalabilă gratuit ca aplicație nativă pe Android, iOS, Windows, macOS și Linux.
-- **SEO & AI Discovery:** Schema.org JSON-LD (`WebSite` cu `SearchAction`, `WebApplication`, `EducationalOrganization`, `Course`, `LearningResource`, `VideoGame`, `Quiz`, `DefinedTerm`, `BlogPosting`, `FAQPage`, `HowTo`, `BreadcrumbList`), `hreflang` bilingv `ro`/`en`, sitemap XML cu 200+ URL-uri curate, feed RSS (`/rss.xml`), fișiere LLM (`/llms.txt`, `/llms-full.txt`, `/fise-llm.txt`, `/leonida-llm.txt`, `/laborator-ai-llm.txt`, `/ai-catalog.json`), protocol IndexNow (`/a7f4e9c281b54d3e9f6a0c4b2e8d1a5c.txt`), imagini OG `1200×630` (`/og-cover.png`), `robots.txt` deschis pentru crawlere AI (`OAI-SearchBot`, `GPTBot`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`).
+- **SEO & AI Discovery:** Schema.org JSON-LD (`WebSite` cu `SearchAction`, `WebApplication`, `EducationalOrganization`, `Course`, `LearningResource`, `VideoGame`, `Quiz`, `DefinedTerm`, `BlogPosting`, `FAQPage`, `HowTo`, `BreadcrumbList`), `hreflang` bilingv `ro`/`en`, sitemap XML cu 200+ URL-uri curate, feed RSS (`/rss.xml`), fișiere LLM (`/llms.txt`, `/llms-full.txt`, `/fise-llm.txt`, `/leonida-llm.txt`, `/laborator-ai-llm.txt`, `/laborator-algoritmi-llm.txt`, `/ai-catalog.json`), protocol IndexNow (`/a7f4e9c281b54d3e9f6a0c4b2e8d1a5c.txt`), imagini OG `1200×630` (`/og-cover.png`), `robots.txt` deschis pentru crawlere AI (`OAI-SearchBot`, `GPTBot`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`).
 
 ---
 
@@ -159,3 +159,12 @@ Fiecare fișă folosește structura oficială a testelor școlare din România: 
 - **Tokenizator BPE Live & Temperatură Softmax**: Simulator determinist 100% în browser (fără chat deschis sau API-uri externe) care arată împărțirea în sub-tokeni și efectul Temperaturii (`0.10–1.50`) asupra halucinațiilor LLM la C++ și Arduino.
 - **Investigație Criminalistică Deepfake (6 Cazuri)**: Fotografii AI vs autentice (cu zone clicabile, lupă 1.35× și inspector EXIF/C2PA), clonare vocală WhatsApp (protecție 2FA), video lip-sync și știri false (Citire Laterală), cu recompense ByteCoins.
 - **Arhitectul de Prompturi C.R.I.F.**: Constructor pe blocuri (*Context · Rol · Instrucțiune · Format + Guardrail*) cu scor live `/100` și previzualizare anti-plagiat.
+
+---
+
+## 11. Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann & Porți Logice (`/laborator-algoritmi/` & `/laborator-algoritmi/en/`)
+- **Hub Română**: https://www.arkyedu.com/laborator-algoritmi/ · **Hub Engleză**: https://www.arkyedu.com/laborator-algoritmi/en/ · **Markdown RAG**: https://www.arkyedu.com/laborator-algoritmi-llm.txt
+- **Arena de Sortare & Căutare C++**: Execuție animată pas-cu-pas (0.5×–4×) pentru Bubble Sort (early-exit), Selection Sort, Insertion Sort, Căutare Binară (`O(log n)` cu pointeri `L`, `M`, `R`) și Căutare Liniară, cu linie C++ evidențiată live, contoare de comparații/interschimbări/citiri, integrare directă cu `CodeSandboxHub` (`Visual Trace`) și 4 misiuni de complexitate (`+30 ByteCoins`).
+- **Studio Binar 8 Biți, Hex, ASCII, RGB 24-biți & Bitwise**: Switchboard interactiv pe 8 biți (`128..1`), operatori pe biți (`&`, `|`, `^`, `<<`, `>>`), mixer de culoare 24-bit RGB și 4 puzzle-uri de codificare (`+25 ByteCoins`).
+- **Simulator CPU Von Neumann (Fetch–Decode–Execute)**: Registre live (`PC`, `IR`, `MAR`, `ACC`, `ZERO_FLAG`), memorie RAM unificată de 16 celule editabile cu set complet de instrucțiuni (`LOAD`, `ADD`, `SUB`, `STORE`, `JMP`, `JZ`, `OUT`, `HALT`), consolă `OUT`, 3 programe preîncărcate (*Adunare A+B*, *Numărătoare inversă JZ/JMP*, *Înmulțire prin adunări repetate*) și 3 verificări CPU (`+35 ByteCoins`).
+- **Banc de Porți Logice & Semi-Sumator Binar**: Comutatoare `A`, `B`, `C` pe 6 topologii (`AND`, `OR`, `XOR`, `NAND`, `HALF_ADDER`, `CLASS_ALARM`), schemă SVG cu semnal live (`1 = HIGH` vs `0 = LOW`), Tabel de Adevăr sincronizat și 3 misiuni de circuite (`+35 ByteCoins`).

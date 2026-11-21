@@ -24,6 +24,7 @@ import {
   Award,
   ClipboardCheck,
   BrainCircuit,
+  Cpu,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { LegalTabType } from './LegalModal';
@@ -46,6 +47,7 @@ interface FooterProps {
   onNavigateToEvaluare?: () => void;
   onNavigateToLeonida?: () => void;
   onNavigateToAiLab?: () => void;
+  onNavigateToAlgoLab?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -64,6 +66,7 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToEvaluare,
   onNavigateToLeonida,
   onNavigateToAiLab,
+  onNavigateToAlgoLab,
 }) => {
   const { lang, t } = useLanguage();
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -222,6 +225,22 @@ export const Footer: React.FC<FooterProps> = ({
                 >
                   <BrainCircuit className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                   <span>{lang === 'en' ? 'AI & Deepfake Forensics Lab' : 'Laborator AI & Deepfake'}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={lang === 'en' ? '/laborator-algoritmi/en/' : '/laborator-algoritmi/'}
+                  onClick={(e) => {
+                    if (onNavigateToAlgoLab) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onNavigateToAlgoLab();
+                    }
+                  }}
+                  className="hover:text-emerald-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
+                >
+                  <Cpu className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{lang === 'en' ? 'Algorithms, Binary & CPU Lab' : 'Laborator Algoritmi & CPU'}</span>
                 </a>
               </li>
               <li>
@@ -658,6 +677,16 @@ export const Footer: React.FC<FooterProps> = ({
               title="Index structurat Laboratorul AI & Detectorul Deepfake pentru LLM"
             >
               laborator-ai-llm.txt
+            </a>
+            <span className="text-slate-600" aria-hidden="true">·</span>
+            <a
+              href="/laborator-algoritmi-llm.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-300 hover:text-emerald-200 transition-colors font-mono text-[11px] py-1.5 whitespace-nowrap"
+              title="Index structurat Laboratorul de Algoritmi, Binar & CPU pentru LLM"
+            >
+              laborator-algoritmi-llm.txt
             </a>
             <span className="text-slate-600" aria-hidden="true">·</span>
             <a

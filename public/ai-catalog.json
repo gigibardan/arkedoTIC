@@ -183,6 +183,27 @@
       ]
     },
     {
+      "identifier": "urn:air:arkyedu.com:lab:algorithms-cpu",
+      "displayName": "ArkyEdu Visual Algorithms, 8-Bit Binary & Von Neumann CPU Lab (/laborator-algoritmi/)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/laborator-algoritmi/",
+      "representativeQueries": [
+        "Simulator vizual algoritmi de sortare Bubble Selection Insertion si cautare binara C++ gimnaziu",
+        "Convertor binar 8 biti hex ASCII, simulator CPU Von Neumann Fetch-Decode-Execute si porti logice XOR semi-sumator",
+        "Interactive browser sorting algorithm visualizer, 8-bit binary switchboard, Von Neumann CPU simulator, and logic gates lab"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:llm:algorithms-cpu",
+      "displayName": "ArkyEdu Visual Algorithms & CPU Lab LLM Feed (/laborator-algoritmi-llm.txt)",
+      "type": "text/markdown",
+      "url": "https://www.arkyedu.com/laborator-algoritmi-llm.txt",
+      "representativeQueries": [
+        "Cum functioneaza ciclul Fetch-Decode-Execute Von Neumann, cautarea binara O(log n) si semi-sumatorul XOR/AND",
+        "Markdown structured CS curriculum guide for sorting visualizers, 8-bit binary/RGB/bitwise, Von Neumann RAM assembly, and logic gates"
+      ]
+    },
+    {
       "identifier": "urn:air:arkyedu.com:curriculum:metadata",
       "displayName": "ArkyEdu Application Metadata",
       "type": "application/json",

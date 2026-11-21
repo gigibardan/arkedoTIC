@@ -1,0 +1,78 @@
+# ArkyEdu Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann & Porți Logice (RO & EN)
+
+> Document structurat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Prezintă bancul de lucru interactiv ArkyEdu de Informatică & Arhitectură Calculatoare pentru elevi 10–15 ani (Clasele V–VIII): 100% determinist în browser, fără API-uri externe, conectat la Debugger-ul C++ Visual Trace.
+
+- Hub Română: https://www.arkyedu.com/laborator-algoritmi/
+- Hub Engleză: https://www.arkyedu.com/laborator-algoritmi/en/
+- Debugger C++ Visual Trace & Arena Olimpiadă: https://www.arkyedu.com/sandbox/
+- Glosar CPU, Bit/Byte & Vectori C++: https://www.arkyedu.com/glosar/cpu-processor/
+- Documentație completă platformă: https://www.arkyedu.com/llms.txt
+
+---
+
+## 1. Arena Vizuală de Sortare & Căutare (Sincronizată linie cu linie cu C++)
+- **Controale live**: Vector personalizabil (până la 10 numere), presetări (Aproape sortat, Invers, Duplicat, Olimpiadă), viteză 0.5×–4×, contoare live de Comparații, Interschimbări (`swap`) și Citiri din vector.
+- **Deep-Link C++**: Buton direct *Deschide în Debug C++* care încarcă algoritmul ales în Debugger-ul Visual Trace.
+1. **Bubble Sort (Sortarea prin Bule)** (Clasa VII–VIII · Algoritmi pe Vectori · Best O(n) / Worst O(n²)): Compară elemente vecine și le interschimbă (Regula celor 3 Pahare) dacă sunt în ordine greșită. Valorile mari „urcă la suprafață” ca bulele.
+2. **Selection Sort (Sortare prin Selecție)** (Clasa VIII · Admitere & OJI · Best O(n²) / Worst O(n²)): La fiecare pas i, caută cel mai mic element din restul vectorului și îl aduce pe poziția i printr-o singură interschimbare.
+3. **Insertion Sort (Sortare prin Inserție)** (Clasa VIII · Vectori Sortați Aproape · Best O(n) / Worst O(n²)): Funcționează ca aranjarea cărților de joc în mână: ia fiecare element și îl inserează la locul potrivit spre stânga.
+4. **Căutare Binară (Divide et Impera)** (Clasa VIII · Eficiență Logaritmică · Best O(1) / Worst O(log₂ n)): Pe un vector DEJA SORTAT, verifică mijlocul și elimină jumătate din elemente la fiecare pas! Pentru 1.000 de elemente face maxim 10 pași.
+5. **Căutare Secvențială (Liniară)** (Clasa VII · Parcurgere Element cu Element · Best O(1) / Worst O(n)): Verifică elementele pe rând de la stânga la dreapta. Funcționează și pe vectori nesortați, dar poate verifica toate n elementele.
+
+---
+
+## 2. Studio Binar pe 8 Biți, Hex, ASCII, Pixel RGB 24-biți & Bitwise
+- **Switchboard LED 8 Biți (`128, 64, 32, 16, 8, 4, 2, 1`)**: Conversie instantanee Base10, Base2, Hexazecimal (`0x..`) și caracter ASCII.
+- **Bitwise Operator Playground**: Simulare live pentru `A & B`, `A | B`, `A ^ B` (XOR), `A << 1` (înmulțire cu 2) și `A >> 1` (împărțire întreagă la 2).
+- **Studio Pixel RGB 24-biți**: Canale R, G, B (`0..255`) afișate binar pe câte 8 biți + cod HEX.
+- **4 Misiuni Binar**:
+1. **Setează biții din registrul de 8 biți pentru a forma numărul 42 (Răspunsul Universal TIC):** (Țintă: `42` / +25 ByteCoins) — *Indiciu*: Descompune în puteri ale lui 2: 32 + 8 + 2 = 42 → 00101010.
+2. **Codul ASCII al literei mari „A” este 65. Formează 65 pe placa de biți!** (Țintă: `65` / +25 ByteCoins) — *Indiciu*: 64 + 1 = 65 → doar bitul 6 (64) și bitul 0 (1) sunt 1.
+3. **Ce valoare zecimală maximă încape într-un singur Byte (8 biți = 0xFF)? Formează valoarea maximă!** (Țintă: `255` / +25 ByteCoins) — *Indiciu*: 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = 255 (toți cei 8 biți aprinși = 11111111).
+4. **În rețelistică, adresa IP se termină cu octetul 105. Aprinde LED-urile pentru 105!** (Țintă: `105` / +25 ByteCoins) — *Indiciu*: 64 + 32 + 8 + 1 = 105 (01101001).
+
+---
+
+## 3. Simulator CPU Von Neumann (Fetch–Decode–Execute & RAM 16 Celule)
+- **Registre Live**: `PC` (Program Counter), `IR` (Instruction Register), `MAR` (Memory Address Register), `ACC` (Acumulator) și `ZERO_FLAG`.
+- **Set Instrucțiuni RAM Unificată (`0x00..0x0F`)**: `LOAD`, `ADD`, `SUB`, `STORE`, `JMP`, `JZ`, `OUT`, `HALT`.
+- **3 Programe Assembly Preîncărcate**:
+1. **Program 01 · Adunarea a 2 Numere (A + B)** (+35 ByteCoins): CPU citește numărul din RAM[14] (15), adună RAM[15] (27), salvează rezultatul în RAM[13] și îl afișează pe Output. — *Obiectiv*: Output așteptat: 42 (salvat și în adresa RAM 0x0D).
+2. **Program 02 · Buclă Numărătoare Inversă (JZ & JMP)** (+35 ByteCoins): Pornește cu 3 în RAM[14], afișează și scade 1 la fiecare ciclu până când Zero Flag devine 1 și sare la HALT! — *Obiectiv*: Output așteptat: 3, 2, 1 (demonstrație reală a unei bucle `while` la nivel de procesor!).
+3. **Program 03 · Dublare & Adunare Multiplă (ACC + ACC)** (+35 ByteCoins): CPU calculează 12 × 3 folosind doar adunări în Unitatea Aritmetico-Logică (ALU): ACC = 12 + 12 + 12 = 36. — *Obiectiv*: Output așteptat: 36.
+
+---
+
+## 4. Banc de Porți Logice & Semi-Sumator Binar
+1. **Poarta AND (ȘI Logic)** (`OUT = A · B`): Ieșirea este 1 (HIGH) DOAR când ambele intrări A și B sunt 1 simultan (exact ca operatorul `&&` din C++).
+2. **Poarta OR (SAU Logic)** (`OUT = A + B`): Ieșirea este 1 dacă CEL PUȚIN o intrare (A sau B sau ambele) este 1 (echivalent `||` în C++).
+3. **Poarta XOR (SAU Exclusiv)** (`OUT = A ⊕ B`): Ieșirea este 1 DOAR când intrările sunt DIFERITE (una 0 și una 1). Baza criptării și a adunării binare!
+4. **Poarta NAND (Poarta Universală)** (`OUT = ¬(A · B)`): Opusul porții AND: ieșirea este 0 doar când A și B sunt ambele 1. Din porți NAND se construiesc procesoare întregi!
+5. **Sumator Binar (Half-Adder ALU)** (`SUM = A ⊕ B · CARRY = A · B`): Adună doi biți în interiorul procesorului! Când A=1 și B=1, SUM=0 și CARRY=1 (adică 1 + 1 = 10 în binar = 2!).
+6. **Circuit Alarmă Smart Lab** (`SIREN = (A · B) + C`): Sirena pornește dacă (Senzor Mișcare A AND Sistem Armat B) OR Buton Urgență C este activ.
+
+---
+
+## 5. Punți cu Programa Școlară TIC (Clasele V–VIII)
+- **Clasa V · Hardware Von Neumann · De la CPU & RAM la Ciclul Fetch–Decode–Execute**: Descoperă concret cum citește procesorul instrucțiunile din memoria RAM folosind registrele PC, IR și ALU. -> https://www.arkyedu.com/cursuri/hardware/
+- **Clasa V–VI · Bit, Byte & RGB · De ce 8 Biți = 1 Byte (0..255) și Cum Formează Culorile**: Fiecare pixel de pe ecran folosește 3 canale de câte 8 biți (Roșu, Verde, Albastru) între 0 și 255. -> https://www.arkyedu.com/cursuri/g6_paint3d/
+- **Clasa VI–VII · Operatori Logici & Decizii · Porțile Logice AND/OR/XOR din spatele lui `if (A && B)`**: Instrucțiunile condiționale din Scratch și C++ (`&&`, `||`, `!`) se execută fizic prin milioane de porți logice din siliciu. -> https://www.arkyedu.com/cursuri/g7_decision_a/
+- **Clasa VIII · Vectori, Sortare & Căutare Binară · Pregătire Teză & OJI: Bubble Sort vs. Căutare Binară**: Compară vizual complexitatea O(n²) vs O(log n) și trimite codul C++ direct în depanatorul Visual Trace. -> https://www.arkyedu.com/cursuri/g8_algo_d/
+
+---
+
+## 6. Întrebări Frecvente (FAQ)
+**Î: Cum funcționează Simulatorul Vizual de Algoritmi (Bubble Sort, Selection, Insertion & Căutare Binară)?**
+R: Fiecare pas este animat pe bare colorate codate dual (galben = comparare, roșu = schimb, verde = sortat, cyan = mijloc Binary Search) sincronizat linie-cu-linie cu codul C++ și contoare de comparații/schimburi, cu opțiunea de a deschide codul în Visual Trace Debugger.
+
+**Î: De ce este Căutarea Binară (O(log n)) mult mai rapidă decât Căutarea Liniară?**
+R: Deoarece pe un vector sortat verifică elementul din mijloc și elimină automat jumătate din interval la fiecare pas. Pe 1.024 de numere, căutarea liniară poate face 1.024 de pași, iar cea binară maxim 10 pași.
+
+**Î: Ce învață elevii în Simulatorul de CPU Von Neumann (Fetch–Decode–Execute)?**
+R: Elevii văd în timp real cum instrucțiunile și datele coexistă în același RAM (0x00..0x0F) și cum Unitatea de Control parcurge ciclul Fetch (PC → IR), Decode și Execute (ALU + Accumulator + Zero Flag) pe programe reale de adunare și bucle.
+
+**Î: Ce poți testa în Studioul Binar 8-Biți, RGB și Porți Logice?**
+R: Poți comuta individual biții 128..1 pentru a vedea Zecimal, Hexazecimal, ASCII și operatori pe biți (&, |, ^, <<, >>), poți combina 24 de biți RGB pentru culori și poți construi porți AND, OR, XOR, NAND sau un Sumator Binar (Half-Adder) cu tabel de adevăr live.
+
+**Î: Acordă Laboratorul de Algoritmi & CPU recompense reale elevilor?**
+R: Da! Rezolvarea provocărilor de algoritmică (+30 ByteCoins), a puzzle-urilor binare (+25 ByteCoins), a întrebărilor CPU (+35 ByteCoins) și a circuitelor logice (+35 ByteCoins) adaugă ByteCoins direct în contul elevului.

@@ -12,6 +12,8 @@ Platforma oferă educație tehnologică de performanță **100% GRATUIT (0 Lei)*
 - Index LLM Universul Vice Leonida (Markdown RAG): https://www.arkyedu.com/leonida-llm.txt
 - Laboratorul AI & Detector Deepfake (Tokenizator, Softmax, 6 Cazuri Deepfake, C.R.I.F.): https://www.arkyedu.com/laborator-ai/
 - Index LLM Laboratorul AI & Deepfake (Markdown RAG): https://www.arkyedu.com/laborator-ai-llm.txt
+- Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann & Porți Logice: https://www.arkyedu.com/laborator-algoritmi/
+- Index LLM Laboratorul Algoritmi & CPU (Markdown RAG): https://www.arkyedu.com/laborator-algoritmi-llm.txt
 - Ghid Părinți & Educație Tehnologie Copii: https://www.arkyedu.com/educatie-tehnologie-copii/
 - Comparație Cursuri Private vs ArkyEdu: https://www.arkyedu.com/comparatie-scoli-private/
 - Sitemap XML complet: https://www.arkyedu.com/sitemap.xml
@@ -193,5 +195,10 @@ Hub dedicat: https://www.arkyedu.com/duel/
 - **Debugger C++ Visual Trace**: Execuție pas-cu-pas cu inspector de memorie (variabile primitive, vectori, valori `cin`/`cout`, evidențierea liniei curente și detectarea erorilor clasice `=` vs `==` sau bucle infinite).
 - **Arena Olimpiadă & Pregătire OJI**: 12 probleme algoritmice graduate (de la ușor la concurs județean) cu teste automate ascunse și punctaj 0–100.
 
+---
 
-
+## 9. Laboratorul Vizual de Algoritmi, Binar, CPU Von Neumann & Porți Logice (`/laborator-algoritmi/`)
+- **Hub Română**: https://www.arkyedu.com/laborator-algoritmi/ · **Hub Engleză**: https://www.arkyedu.com/laborator-algoritmi/en/ · **Index RAG**: https://www.arkyedu.com/laborator-algoritmi-llm.txt
+- **Arena de Sortare & Căutare**: Animații sincronizate pas-cu-pas cu codul C++ pentru Bubble Sort, Selection Sort, Insertion Sort, Căutare Binară (`L`/`M`/`R`) și Căutare Liniară + buton direct către Debugger-ul C++ Visual Trace.
+- **Studio Binar 8 Biți, Hex, ASCII, RGB & Bitwise**: Switchboard LED `128..1`, operatori pe biți (`&`, `|`, `^`, `<<`, `>>`) și mixer RGB 24-biți.
+- **Simulator CPU Von Neumann & Porți Logice**: Ciclul `FETCH -> DECODE -> EXECUTE`, registre `PC`/`IR`/`MAR`/`ACC`/`ZERO_FLAG`, 16 celule RAM editabile și circuite interactive `AND`, `OR`, `XOR`, `NAND` și Semi-Sumator Binar.

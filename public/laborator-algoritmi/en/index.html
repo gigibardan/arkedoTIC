@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Algorithms, 8-Bit Binary, Von Neumann CPU &amp; Logic Gates Lab | ArkyEdu</title>
+  <meta name="description" content="Interactive browser Computer Science workbench (ages 10-15): step-by-step Bubble/Selection/Insertion Sort &amp; Binary Search animator synced with C++, 8-bit LED Binary/Hex/RGB/Bitwise studio, Von Neumann Fetch-Decode-Execute CPU simulator, and Half-Adder Logic Gates.">
+  <meta name="keywords" content="visual sorting algorithms simulator kids, binary search animation c++, 8-bit binary hex ascii rgb converter, von neumann cpu fetch decode execute simulator, half adder xor and logic gates lab, oji olympiad prep simulator">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/laborator-algoritmi/en/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/laborator-algoritmi/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/laborator-algoritmi/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/laborator-algoritmi/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Visual Algorithms, 8-Bit Binary, Von Neumann CPU &amp; Logic Gates Lab | ArkyEdu">
+  <meta property="og:description" content="Interactive browser Computer Science workbench (ages 10-15): step-by-step Bubble/Selection/Insertion Sort &amp; Binary Search animator synced with C++, 8-bit LED Binary/Hex/RGB/Bitwise studio, Von Neumann Fetch-Decode-Execute CPU simulator, and Half-Adder Logic Gates.">
+  <meta property="og:url" content="https://www.arkyedu.com/laborator-algoritmi/en/">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; CS Lab">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/algo-lab-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Visual Algorithms, 8-Bit Binary, Von Neumann CPU &amp; Logic Gates Lab | ArkyEdu">
+  <meta name="twitter:description" content="Interactive browser Computer Science workbench (ages 10-15): step-by-step Bubble/Selection/Insertion Sort &amp; Binary Search animator synced with C++, 8-bit LED Binary/Hex/RGB/Bitwise studio, Von Neumann Fetch-Decode-Execute CPU simulator, and Half-Adder Logic Gates.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/algo-lab-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "LearningResource",
+        "SoftwareApplication"
+      ],
+      "@id": "https://www.arkyedu.com/laborator-algoritmi/en/#algolab",
+      "name": "ArkyEdu Visual Algorithms, Binary & CPU Architecture Lab",
+      "description": "Interactive browser Computer Science workbench (ages 10-15): step-by-step Bubble/Selection/Insertion Sort & Binary Search animator synced with C++, 8-bit LED Binary/Hex/RGB/Bitwise studio, Von Neumann Fetch-Decode-Execute CPU simulator, and Half-Adder Logic Gates.",
+      "url": "https://www.arkyedu.com/laborator-algoritmi/en/",
+      "image": "https://www.arkyedu.com/assets/algo-lab-hero.jpg",
+      "applicationCategory": "EducationalApplication",
+      "educationalLevel": "Grades 5-8 (Ages 10-15)",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "en",
+      "teaches": [
+        "Bubble Sort, Selection Sort, Insertion Sort & Binary Search",
+        "8-Bit Binary, Hexadecimal, ASCII, 24-Bit RGB & Bitwise Operators",
+        "Von Neumann Fetch-Decode-Execute CPU Cycle & Assembly RAM",
+        "Boolean Logic Gates (AND, OR, XOR, NAND) & Binary Half-Adder"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Animated Sorting & Searching Algorithms + Von Neumann CPU Presets",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Bubble Sort (Swapping Adjacent Pairs) (O(n²))",
+          "description": "Repeatedly compares adjacent elements and swaps them if out of order. Larger values bubble up to the end of the array each pass."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Selection Sort (Minimum Pick) (O(n²))",
+          "description": "Finds the smallest remaining element in the unsorted tail and swaps it once into position i."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Insertion Sort (Playing Card Method) (O(n²))",
+          "description": "Works like sorting playing cards in your hand: picks each key and shifts larger sorted items rightward to insert it."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Binary Search (Divide & Conquer) (O(log₂ n))",
+          "description": "On a SORTED array, checks the middle index and halves the remaining search space every step—1,000 items take at most 10 checks!"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Linear Search (Sequential Scan) (O(n))",
+          "description": "Inspects items one by one from left to right. Works on unsorted arrays, but worst-case checks all n items."
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Program 01 · Add Two RAM Numbers (A + B)",
+          "description": "Fetches operand RAM[14] (15), adds RAM[15] (27), stores total in RAM[13], and prints via OUT."
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Program 02 · Countdown Loop (JZ & JMP)",
+          "description": "Starts from 3 in RAM[14], outputs and decrements by 1 each iteration until Zero Flag triggers JZ to HALT."
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "Program 03 · Multiply x3 via Repeated Addition",
+          "description": "Computes 12 × 3 using pure ALU additions: loads 12, adds 12 twice, and outputs 36."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Algorithms & CPU Lab",
+          "item": "https://www.arkyedu.com/laborator-algoritmi/en/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the Visual Algorithm Arena work for Bubble Sort, Selection, Insertion & Binary Search?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every step animates on dual-coded bars (amber = comparing, coral = swapping, green = sorted, cyan = Binary Search mid) synced line-by-line with C++ pseudocode and live operation counters."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is Binary Search O(log n) dramatically faster than Linear Search?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "On a sorted array it checks the midpoint and discards half of remaining items every step—1,024 elements take at most 10 checks instead of 1,024."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do students learn inside the Von Neumann CPU Simulator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Students watch instructions and data share unified RAM while the Control Unit runs Fetch (PC → IR), Decode, and Execute (ALU + Accumulator + Zero Flag) on live assembly programs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What can you build in the 8-Bit Binary, RGB & Digital Logic Gate Workbench?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Toggle individual 128..1 bits to inspect Decimal, Hex, ASCII, and bitwise operators (&, |, ^, <<, >>), mix 24-bit RGB colors, and test AND, OR, XOR, NAND & Binary Half-Adder truth tables live."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the Algorithm & CPU Lab award real ArkyEdu rewards?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Completing algorithm quizzes (+30 ByteCoins), binary LED puzzles (+25 ByteCoins), CPU checks (+35 ByteCoins), and logic circuit missions (+35 ByteCoins) awards real ByteCoins."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .evidence-img { width: 100%; border-radius: 0.75rem; border: 1px solid #334155; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1rem; }
+    .meta-line { font-size: 0.85rem; color: #34d399; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">⚙️</div>
+        <span class="logo-text">ArkyEdu <span style="color: #34d399;">ALGO &amp; CPU LAB</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">Courses</a>
+        <a href="https://www.arkyedu.com/sandbox/">C++ Sandbox</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary</a>
+        <a href="https://www.arkyedu.com/laborator-algoritmi-llm.txt">laborator-algoritmi-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/laborator-algoritmi/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">RO</a>
+        <a href="https://www.arkyedu.com/?view=algolab&lang=en" class="nav-cta">
+          <span>Launch Algo & CPU Lab</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        4 Interactive CS Modules · Deterministic Browser Lab · Ages 10–15 · Free Forever
+      </div>
+      <h1>Visual Algorithms, 8-Bit Binary &amp; Von Neumann CPU Lab</h1>
+      <p class="lead-text">Interactive browser Computer Science workbench (ages 10-15): step-by-step Bubble/Selection/Insertion Sort &amp; Binary Search animator synced with C++, 8-bit LED Binary/Hex/RGB/Bitwise studio, Von Neumann Fetch-Decode-Execute CPU simulator, and Half-Adder Logic Gates.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?view=algolab&lang=en" class="btn-primary">
+          <span>Open Interactive Workbench →</span>
+        </a>
+        <a href="https://www.arkyedu.com/sandbox/" class="btn-secondary">
+          <span>C++ Visual Trace Debugger →</span>
+        </a>
+        <a href="https://www.arkyedu.com/glosar/en/cpu-processor/" class="btn-secondary">
+          <span>CPU &amp; Binary Glossary →</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/algo-lab-hero.jpg" alt="ArkyEdu Visual Algorithms, Binary Switchboard, Von Neumann CPU and Digital Logic Workbench" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        1. Sorting &amp; Searching Visual Arena (Synced Line-by-Line with C++)
+      </h2>
+      <div class="grid-3">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grades 7–8 · Array Sorting · O(n²)</div>
+            <h3 class="card-title">Bubble Sort (Swapping Adjacent Pairs)</h3>
+            <p class="card-desc">Repeatedly compares adjacent elements and swaps them if out of order. Larger values bubble up to the end of the array each pass.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 8 · Minimum Selection · O(n²)</div>
+            <h3 class="card-title">Selection Sort (Minimum Pick)</h3>
+            <p class="card-desc">Finds the smallest remaining element in the unsorted tail and swaps it once into position i.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 8 · Incremental Sort · O(n²)</div>
+            <h3 class="card-title">Insertion Sort (Playing Card Method)</h3>
+            <p class="card-desc">Works like sorting playing cards in your hand: picks each key and shifts larger sorted items rightward to insert it.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 8 · Logarithmic Lookup · O(log₂ n)</div>
+            <h3 class="card-title">Binary Search (Divide &amp; Conquer)</h3>
+            <p class="card-desc">On a SORTED array, checks the middle index and halves the remaining search space every step—1,000 items take at most 10 checks!</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 7 · Sequential Loop · O(n)</div>
+            <h3 class="card-title">Linear Search (Sequential Scan)</h3>
+            <p class="card-desc">Inspects items one by one from left to right. Works on unsorted arrays, but worst-case checks all n items.</p>
+          </article>
+        
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        2. Von Neumann CPU Simulator &amp; 8-Bit Digital Logic Workbench
+      </h2>
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/cpu-von-neumann.jpg" alt="Von Neumann CPU Fetch-Decode-Execute Registers and 16-Cell RAM Architecture Diagram" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Von Neumann Fetch–Decode–Execute CPU Cycle</h3>
+          <p class="card-desc">Step through live PC, IR, MAR, ACC, and ZERO_FLAG registers against editable 16-cell unified RAM using LOAD, ADD, SUB, STORE, JMP, JZ, OUT, and HALT.</p>
+        </div>
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/logic-gates-board.jpg" alt="8-Bit Binary LED Switchboard, RGB Pixel Studio, and Half-Adder Logic Gate Circuit" class="evidence-img" loading="lazy">
+          <h3 class="card-title">8-Bit Binary LED, Bitwise, RGB &amp; Logic Gates Studio</h3>
+          <p class="card-desc">Toggle 8-bit powers of 2 (128..1) for live Base10/Hex/ASCII conversion, explore A &amp; B / A | B / A ^ B / shifts, and test AND, OR, XOR, NAND and the Binary Half-Adder.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +35 ByteCoins</div>
+            <h3 class="card-title">Program 01 · Add Two RAM Numbers (A + B)</h3>
+            <p class="card-desc">Fetches operand RAM[14] (15), adds RAM[15] (27), stores total in RAM[13], and prints via OUT.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +35 ByteCoins</div>
+            <h3 class="card-title">Program 02 · Countdown Loop (JZ &amp; JMP)</h3>
+            <p class="card-desc">Starts from 3 in RAM[14], outputs and decrements by 1 each iteration until Zero Flag triggers JZ to HALT.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">CPU ASSEMBLY PRESET · +35 ByteCoins</div>
+            <h3 class="card-title">Program 03 · Multiply x3 via Repeated Addition</h3>
+            <p class="card-desc">Computes 12 × 3 using pure ALU additions: loads 12, adds 12 twice, and outputs 36.</p>
+          </article>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        3. Logic Gate Topologies &amp; National Curriculum Bridges (Grades 5–8)
+      </h2>
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = A · B</div>
+            <h3 class="card-title">AND Gate</h3>
+            <p class="card-desc">Outputs 1 (HIGH) ONLY when both A and B are 1 simultaneously (same as `&amp;&amp;` in C++).</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = A + B</div>
+            <h3 class="card-title">OR Gate</h3>
+            <p class="card-desc">Outputs 1 whenever AT LEAST one input is 1 (same as `||` in C++).</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = A ⊕ B</div>
+            <h3 class="card-title">XOR Gate (Exclusive OR)</h3>
+            <p class="card-desc">Outputs 1 ONLY when A and B differ (one 0, one 1). Core building block of binary addition &amp; encryption!</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">OUT = ¬(A · B)</div>
+            <h3 class="card-title">NAND Gate (Universal Gate)</h3>
+            <p class="card-desc">Inverted AND: outputs 0 only when both inputs are 1. Any CPU circuit can be built purely from NAND gates!</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">SUM = A ⊕ B · CARRY = A · B</div>
+            <h3 class="card-title">Binary Half-Adder (ALU Core)</h3>
+            <p class="card-desc">Adds two binary bits inside the CPU! When A=1 &amp; B=1, SUM=0 and CARRY=1 (1 + 1 = 10 binary = 2!).</p>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#fbbf24;font-weight:700;margin-bottom:0.35rem;font-family:monospace;">SIREN = (A · B) + C</div>
+            <h3 class="card-title">Smart Lab Security Circuit</h3>
+            <p class="card-desc">Alarm rings if (Motion A AND Armed B) OR Emergency Panic C is pressed.</p>
+          </div>
+        
+      </div>
+      <div class="grid-2">
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 5 · Von Neumann Hardware</div>
+            <h3 class="card-title">From CPU &amp; RAM to the Fetch–Decode–Execute Cycle</h3>
+            <p class="card-desc">See firsthand how the CPU fetches instructions from RAM using PC, IR, and ALU registers.</p>
+            <a href="https://www.arkyedu.com/cursuri/hardware/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grades 5–6 · Bit, Byte &amp; RGB</div>
+            <h3 class="card-title">Why 8 Bits Equal 1 Byte (0–255) &amp; Encode RGB Colors</h3>
+            <p class="card-desc">Every screen pixel stores three 8-bit color channels (Red, Green, Blue) ranging from 0 to 255.</p>
+            <a href="https://www.arkyedu.com/cursuri/g6_paint3d/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grades 6–7 · Boolean Logic &amp; Branches</div>
+            <h3 class="card-title">AND, OR &amp; XOR Hardware Gates Behind `if (A &amp;&amp; B)`</h3>
+            <p class="card-desc">Conditional statements in Scratch &amp; C++ compile straight into silicon AND/OR/NOT logic gates.</p>
+            <a href="https://www.arkyedu.com/cursuri/g7_decision_a/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 8 · Arrays, Sorting &amp; Binary Search</div>
+            <h3 class="card-title">Olympiad &amp; Exam Prep: Sorting vs. Binary Search</h3>
+            <p class="card-desc">Visually compare O(n²) sorting vs O(log n) Binary Search and step through C++ code in Visual Trace.</p>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">Frequently Asked Questions — Algorithms &amp; CPU Lab</h2>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">How does the Visual Algorithm Arena work for Bubble Sort, Selection, Insertion &amp; Binary Search?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Every step animates on dual-coded bars (amber = comparing, coral = swapping, green = sorted, cyan = Binary Search mid) synced line-by-line with C++ pseudocode and live operation counters.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Why is Binary Search O(log n) dramatically faster than Linear Search?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">On a sorted array it checks the midpoint and discards half of remaining items every step—1,024 elements take at most 10 checks instead of 1,024.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">What do students learn inside the Von Neumann CPU Simulator?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Students watch instructions and data share unified RAM while the Control Unit runs Fetch (PC → IR), Decode, and Execute (ALU + Accumulator + Zero Flag) on live assembly programs.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">What can you build in the 8-Bit Binary, RGB &amp; Digital Logic Gate Workbench?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Toggle individual 128..1 bits to inspect Decimal, Hex, ASCII, and bitwise operators (&amp;, |, ^, &lt;&lt;, &gt;&gt;), mix 24-bit RGB colors, and test AND, OR, XOR, NAND &amp; Binary Half-Adder truth tables live.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Does the Algorithm &amp; CPU Lab award real ArkyEdu rewards?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Yes! Completing algorithm quizzes (+30 ByteCoins), binary LED puzzles (+25 ByteCoins), CPU checks (+35 ByteCoins), and logic circuit missions (+35 ByteCoins) awards real ByteCoins.</div>
+        </div>
+      
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · Visual Algorithms, Binary &amp; Von Neumann CPU Lab (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/laborator-algoritmi-llm.txt" style="color: #34d399;">laborator-algoritmi-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
