@@ -23,6 +23,7 @@ import { db, auth, isCloudConnected } from './firebase';
 import { School, Teacher, SuperAdminUser, StudentProfile, ArcadeScores, LessonsProgress } from '../types';
 import { computeTotalArcade, recalculateStudentXP, getAllStudents, deleteStudentAccount } from './studentAuthService';
 import { getStudentResults, deleteStudentResult, StudentResult } from './resultsService';
+import { verifySuperAdminRecoveryCredential } from './credentialHash';
 
 // Default designated Superadmin Email
 export const PRIMARY_SUPERADMIN_EMAIL = 'Gheorghe.Bardan@gmail.com';
@@ -121,11 +122,8 @@ export async function signInSuperAdmin(email: string, password: string): Promise
       return { isAuthenticated: true, user: adminUser };
     } catch (err: any) {
       console.error('[Superadmin Auth Error]', err);
-      // Emergency master recovery password if forgotten in Firebase Auth
-      if (
-        isAuthorizedSuperadminEmail(cleanEmail) && 
-        (password === 'Ark3do!' || password === 'SuperArkedo2026!')
-      ) {
+      // Fallback verification via SHA-256 digest when Firebase Auth account isn't seeded yet
+      if (isAuthorizedSuperadminEmail(cleanEmail) && (await verifySuperAdminRecoveryCredential(password))) {
         if (db) {
           try {
             await setDoc(doc(db, 'superadmins', 'superadmin_master_uid'), {
@@ -151,7 +149,7 @@ export async function signInSuperAdmin(email: string, password: string): Promise
       // If Firebase Auth throws auth/invalid-credential or similar, provide clear localized message
       let message = 'Autentificare eșuată. Verificați credențialele.';
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        message = 'Email sau parolă incorectă pentru Superadmin. Puteți folosi și parola master Ark3do! sau trimiteți link de resetare.';
+        message = 'Email sau parolă incorectă pentru Superadmin. Verificați parola sau folosiți resetarea pe email.';
       } else if (err.code === 'auth/too-many-requests') {
         message = 'Prea multe încercări eșuate. Vă rugăm să așteptați câteva minute.';
       }
@@ -159,8 +157,8 @@ export async function signInSuperAdmin(email: string, password: string): Promise
     }
   }
 
-  // Fallback mode for local dev or when Firebase credentials are not yet entered in environment variables
-  if (isAuthorizedSuperadminEmail(cleanEmail) && (password.length >= 6 || password === 'Ark3do!')) {
+  // Fallback mode for local dev or when Firebase credentials are not configured
+  if (isAuthorizedSuperadminEmail(cleanEmail) && (await verifySuperAdminRecoveryCredential(password))) {
     const adminUser: SuperAdminUser = {
       uid: 'superadmin_dev_uid',
       email: cleanEmail,
@@ -176,7 +174,7 @@ export async function signInSuperAdmin(email: string, password: string): Promise
   return {
     isAuthenticated: false,
     user: null,
-    error: 'Emailul specificat nu este recunoscut ca Superadmin autorizat.'
+    error: 'Email sau parolă incorectă pentru contul de Superadmin.'
   };
 }
 
@@ -203,7 +201,7 @@ export async function resetSuperAdminPassword(email: string): Promise<{ success:
       console.error('[Reset Password Error]', err);
       let msg = 'Eroare la trimiterea emailului de resetare.';
       if (err.code === 'auth/user-not-found') {
-        msg = `Contul ${cleanEmail} nu este înregistrat încă în Firebase Auth. Vă puteți conecta folosind parola master 'Ark3do!'.`;
+        msg = `Contul ${cleanEmail} nu este înregistrat încă în Firebase Auth. Conectați-vă cu parola de administrare.`;
       } else if (err.code === 'auth/too-many-requests') {
         msg = 'Prea multe cereri recente. Vă rugăm să așteptați câteva minute.';
       }
@@ -213,7 +211,7 @@ export async function resetSuperAdminPassword(email: string): Promise<{ success:
 
   return {
     success: true,
-    message: `Mod local: Puteți folosi parola master 'Ark3do!' pentru acces direct.`
+    message: `Mod local activat: autentificarea folosește verificarea securizată prin hash.`
   };
 }
 

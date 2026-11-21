@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 8 C++ Arrays, Sorting &amp; Binary Search Exam Rubric | ArkyEdu</title>
+  <meta name="description" content="100-point Grade 8 C++ exam paper with visual RAM array trace: 0-based array indexing, flag technique, adjacent loop bounds i &lt; n - 1, and O(log n) binary search.">
+  <meta name="keywords" content="grade 8 c++ arrays test rubric, binary search time complexity quiz, c++ array out of bounds flag technique">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/fise/subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/fise/subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Grade 8 C++ Arrays, Sorting &amp; Binary Search Exam Rubric | ArkyEdu">
+  <meta property="og:description" content="100-point Grade 8 C++ exam paper with visual RAM array trace: 0-based array indexing, flag technique, adjacent loop bounds i &lt; n - 1, and O(log n) binary search.">
+  <meta property="og:url" content="https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grade 8 C++ Arrays, Sorting &amp; Binary Search Exam Rubric | ArkyEdu">
+  <meta name="twitter:description" content="100-point Grade 8 C++ exam paper with visual RAM array trace: 0-based array indexing, flag technique, adjacent loop bounds i &lt; n - 1, and O(log n) binary search.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["LearningResource","Quiz"],"@id":"https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/#resource","name":"Grade 8 High-School CS Prep Exam with Rubric: 1D Arrays, Sorting & Binary Search (100 pts)","description":"High-school CS prep paper (100 pts): 0-based C++ array bounds (`0..n-1`), flag variable verification (`ok = 1`), adjacent pair loop limits `i < n - 1`, and binary search `O(log₂ n)` step bounds.","url":"https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/","inLanguage":"en","isAccessibleForFree":true,"educationalLevel":"Grade 8","learningResourceType":"Olympiad / Prep","timeRequired":"PT45M","datePublished":"2026-04-15","hasPart":[{"@type":"Question","name":"Given `int v[6] = {10, 20, 30, 40, 50, 60};`, what is `v[2] + v[5]`?","acceptedAnswer":{"@type":"Answer","text":"90 — C++ indexing starts at 0: `v[2]=30` and `v[5]=60`, so `30 + 60 = 90`."}},{"@type":"Question","name":"In a sorted array of `1,024` elements, roughly how many halving steps does Binary Search take at most?","acceptedAnswer":{"@type":"Answer","text":"10–11 steps (since 2¹⁰ = 1,024) — Since `2^10 = 1,024`, binary search halves the range in only 10–11 steps (`O(log₂ n)`)."}},{"@type":"Question","name":"What does the code below output for the 4-element array `a`?","acceptedAnswer":{"@type":"Answer","text":"20 — `m` updates 5 → 12 → 12 → 20, printing the array maximum `20`."}},{"@type":"Question","name":"True or False: Binary Search works accurately even on an unsorted array.","acceptedAnswer":{"@type":"Answer","text":"False — False! Binary Search strictly requires a sorted array so it knows which half to discard."}},{"@type":"Question","name":"When checking adjacent pairs `if (v[i] > v[i+1])` on a `0..n-1` array, what is the safe upper bound in `for (int i = 0; i < ...; i++)`?","acceptedAnswer":{"@type":"Answer","text":"n-1 — If `i` reached `n - 1`, `v[i + 1]` would read out-of-bounds `v[n]`. Stop strictly at `i < n - 1`."}}],"offers":{"@type":"Offer","price":"0","priceCurrency":"RON"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.arkyedu.com/"},{"@type":"ListItem","position":2,"name":"Worksheets","item":"https://www.arkyedu.com/fise/en/"},{"@type":"ListItem","position":3,"name":"G8 Prep Exam: C++ Arrays & Search","item":"https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the \"flag technique\" (`bool ok`) work in C++?","acceptedAnswer":{"@type":"Answer","text":"Assume the property holds (`int ok = 1;`). Inside the loop, flip `ok = 0` on any violation—never reset `ok` back to `1` inside the `else` branch!"}}]}]}</script>
+  <style>
+    
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .ws-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .ws-pre { background: #0b1220; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; overflow-x: auto; font-family: monospace; color: #bae6fd; margin: 0.75rem 0; font-size: 0.9rem; }
+    .ws-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.92rem; }
+    .ws-table th, .ws-table td { border-bottom: 1px solid #334155; padding: 0.6rem 0.5rem; text-align: left; }
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .ws-box { background: #fff !important; border: 1px solid #94a3b8 !important; color: #000 !important; page-break-inside: avoid; }
+      .ws-pre { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      .ws-table th, .ws-table td { border-color: #94a3b8 !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">📝</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">TIC</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/fise/en/">All 16 Worksheets</a>
+        <a href="https://www.arkyedu.com/cursuri/g8_algo_e/">Interactive Lesson</a>
+        <a href="https://www.arkyedu.com/sandbox/en/">Sandbox &amp; Trace C++</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/fise/subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">RO</a>
+        <a href="https://www.arkyedu.com/#fise/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam" class="nav-cta"><span>Solve Interactive</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2.5rem 1.5rem 4rem;">
+    <div style="font-size:0.85rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;">
+      Grade 8 · Olympiad / Prep · 45 min · 100p (10p ex officio)
+    </div>
+    <h1 style="font-size:2rem;line-height:1.25;margin-bottom:1rem;">Grade 8 High-School CS Prep Exam with Rubric: 1D Arrays, Sorting &amp; Binary Search (100 pts)</h1>
+    <div class="ws-box">
+      <strong>Quick Summary & Key Points:</strong>
+      <p style="margin-top:0.5rem;color:#cbd5e1;">High-school CS prep paper (100 pts): 0-based C++ array bounds (`0..n-1`), flag variable verification (`ok = 1`), adjacent pair loop limits `i &lt; n - 1`, and binary search `O(log₂ n)` step bounds.</p>
+      <p style="margin-top:0.6rem;font-size:0.92rem;color:#94a3b8;"><strong>Theory Snapshot:</strong> `int v[5]` has valid indices `0, 1, 2, 3, 4` (never touch `v[5]`). Comparing `v[i]` with `v[i+1]` requires `i &lt; n - 1`. Binary search requires a sorted array and runs in O(log₂ n) comparisons.</p>
+      <div class="no-print" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href="https://www.arkyedu.com/#fise/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam" class="btn-primary"><span>Solve & Auto-Grade (1–10)</span></a>
+        <button type="button" onclick="window.print()" class="btn-secondary" style="cursor:pointer;"><span>🖨️ Print A4 Sheet</span></button>
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-secondary"><span>🔬 Trace C++ Code</span></a>
+      </div>
+    </div>
+
+    
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>1. Part I · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Given `int v[6] = {10, 20, 30, 40, 50, 60};`, what is `v[2] + v[5]`?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> 70</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> 90</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> 80</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> 100</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) 90 — C++ indexing starts at 0: `v[2]=30` and `v[5]=60`, so `30 + 60 = 90`.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>2. Part I · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">In a sorted array of `1,024` elements, roughly how many halving steps does Binary Search take at most?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> 1,024 steps</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> 512 steps</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> 10–11 steps (since 2¹⁰ = 1,024)</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> 100 steps</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> C) 10–11 steps (since 2¹⁰ = 1,024) — Since `2^10 = 1,024`, binary search halves the range in only 10–11 steps (`O(log₂ n)`).
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>3. Part II · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">What does the code below output for the 4-element array `a`?</h2>
+        <pre class="ws-pre"><code>int a[4] = {5, 12, 8, 20};
+int m = a[0];
+for (int i = 1; i &lt; 4; i++) {
+    if (a[i] &gt; m) m = a[i];
+}
+cout &lt;&lt; m;</code></pre>
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> 20 — `m` updates 5 → 12 → 12 → 20, printing the array maximum `20`.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>4. Part II · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">True or False: Binary Search works accurately even on an unsorted array.</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> True</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> False</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) False — False! Binary Search strictly requires a sorted array so it knows which half to discard.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>5. Part III</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">When checking adjacent pairs `if (v[i] &gt; v[i+1])` on a `0..n-1` array, what is the safe upper bound in `for (int i = 0; i &lt; ...; i++)`?</h2>
+        
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> n-1 — If `i` reached `n - 1`, `v[i + 1]` would read out-of-bounds `v[n]`. Stop strictly at `i &lt; n - 1`.
+        </p>
+      </article>
+
+    <section class="ws-box">
+      <h2 style="font-size:1.3rem;margin-bottom:0.5rem;">Official 100-Point Grading Rubric (Grade 1–10)</h2>
+      <table class="ws-table">
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Evaluated Competency</th>
+            <th style="text-align:right;">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>Part I (2 × 18 pts)</td>
+              <td>0-based indexing &amp; O(log₂ n) binary search</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Part II (2 × 18 pts)</td>
+              <td>Array maximum trace &amp; sorted precondition</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Part III (18 pts)</td>
+              <td>Preventing out-of-bounds `v[i+1]` with `i &lt; n - 1`</td>
+              <td style="text-align:right;font-weight:700;">18p</td>
+            </tr>
+            <tr>
+              <td>Ex officio</td>
+              <td>Baseline points</td>
+              <td style="text-align:right;font-weight:700;">10p</td>
+            </tr>
+          <tr>
+            <td colspan="2"><strong>TOTAL (Grade = Score / 10)</strong></td>
+            <td style="text-align:right;font-weight:900;color:var(--accent);">100p</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ws-box no-print">
+      <h2 style="font-size:1.2rem;margin-bottom:0.75rem;">More Worksheets & Related Links</h2>
+      <div class="grid-3">
+        <a href="https://www.arkyedu.com/fise/en/grade-8-excel-formulas-sum-average-if-countif-absolute-errors-worksheet/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G8 Excel: Functions &amp; `$A$1`</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a><a href="https://www.arkyedu.com/fise/en/grade-8-html5-semantics-css-flexbox-https-dns-exam/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G8 Web Exam: HTML5, CSS &amp; HTTPS</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a><a href="https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G8 Project: Arduino Smart City</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border:none;">
+        <div>© 2026 ArkyEdu · OMEN 3393/2017 &amp; Admitere Liceu Mate-Info · Clasa a VIII-a · Vectori &amp; Sortare</div>
+        <div><a href="https://www.arkyedu.com/fise/" style="color:var(--accent);">All Worksheets</a> · <a href="https://www.arkyedu.com/fise-llm.txt" style="color:var(--accent);">fise-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

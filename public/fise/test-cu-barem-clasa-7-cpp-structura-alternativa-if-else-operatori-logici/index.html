@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test C++ Clasa 7 cu Barem: if/else, ==, &amp;&amp;, || și Maxim 3 Numere | ArkyEdu</title>
+  <meta name="description" content="Subiect de test C++ clasa a VII-a cu barem 100p și vizualizator Trace: structura alternativă if/else, operatori logici (&amp;&amp;, ||, !), capcana `if (x = 5);` și condiții de triunghi/paritate.">
+  <meta name="keywords" content="test c++ clasa 7 if else cu barem, operatori logici &amp;&amp; || c++ exercitii, capcana punct si virgula dupa if c++, maximul a trei numere c++ fisa">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/fise/en/grade-7-cpp-if-else-decisions-logical-operators-test/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Test C++ Clasa 7 cu Barem: if/else, ==, &amp;&amp;, || și Maxim 3 Numere | ArkyEdu">
+  <meta property="og:description" content="Subiect de test C++ clasa a VII-a cu barem 100p și vizualizator Trace: structura alternativă if/else, operatori logici (&amp;&amp;, ||, !), capcana `if (x = 5);` și condiții de triunghi/paritate.">
+  <meta property="og:url" content="https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Test C++ Clasa 7 cu Barem: if/else, ==, &amp;&amp;, || și Maxim 3 Numere | ArkyEdu">
+  <meta name="twitter:description" content="Subiect de test C++ clasa a VII-a cu barem 100p și vizualizator Trace: structura alternativă if/else, operatori logici (&amp;&amp;, ||, !), capcana `if (x = 5);` și condiții de triunghi/paritate.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["LearningResource","Quiz"],"@id":"https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/#resource","name":"Test cu Barem C++ Clasa a VII-a: Structura Alternativă `if/else` & Operatori Logici (100p)","description":"Test complet de 100p (90p + 10p oficiu) pe structura alternativă C++: diferența fatală între `x == 5` și `x = 5`, punct și virgulă pus greșit după `if (...)`, intervale cu `&&`, maximul a 3 numere și verificarea divizibilității.","url":"https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/","inLanguage":"ro","isAccessibleForFree":true,"educationalLevel":"Clasa a VII-a","learningResourceType":"Test cu Barem 1–10","timeRequired":"PT35M","datePublished":"2026-04-11","hasPart":[{"@type":"Question","name":"Cum se scrie CORECT în C++ condiția ca numărul `x` să aibă exact 2 cifre pozitive (între 10 și 99 inclusiv)?","acceptedAnswer":{"@type":"Answer","text":"if (x >= 10 && x <= 99) — Operatorul `&&` (ȘI logic) verifică simultan ambele capete ale intervalului. `||` ar fi adevărat pentru orice număr, iar `10 <= x <= 99` compară 0/1 cu 99!"}},{"@type":"Question","name":"Ce afișează codul: `int a = 3; if (a = 0) cout << \"DA\"; else cout << \"NU\";` (atenție la un singur `=`!) ?","acceptedAnswer":{"@type":"Answer","text":"NU / NO — `a = 0` îi atribuie lui `a` valoarea `0` (care în C++ înseamnă Fals!). De aceea se intră pe ramura `else` și se afișează NU / NO."}},{"@type":"Question","name":"Ce va afișa secvența C++ de mai jos pentru `x = 12` și `y = 5`?","acceptedAnswer":{"@type":"Answer","text":"17 — `12 % 3 == 0` este Adevărat, iar `5 % 2 == 1` (impar) este Adevărat. Ambele sunt adevărate ⇒ afișează `12 + 5 = 17`."}},{"@type":"Question","name":"Adevărat sau Fals: Trei numere strict pozitive `a, b, c` pot fi laturile unui triunghi dacă și numai dacă `a + b > c && a + c > b && b + c > a`.","acceptedAnswer":{"@type":"Answer","text":"Adevărat — Adevărat! Aceasta este inegalitatea triunghiului: suma oricăror două laturi trebuie să fie strict mai mare decât a treia."}},{"@type":"Question","name":"Atenție la capcana clasică din C++! Ce afișează secvența de mai jos (observă `;` după `if`)?","acceptedAnswer":{"@type":"Answer","text":"Salut — Punct și virgulă `;` imediat după `if (n > 10)` închide instrucțiunea `if` cu un corp gol, deci `cout << \"Salut\";` se execută NECONDIȚIONAT!"}}],"offers":{"@type":"Offer","price":"0","priceCurrency":"RON"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Acasă","item":"https://www.arkyedu.com/"},{"@type":"ListItem","position":2,"name":"Fișe & Teste","item":"https://www.arkyedu.com/fise/"},{"@type":"ListItem","position":3,"name":"Test C++ Cls. VII: if/else & Logici","item":"https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Cum verific dacă un an `an` este bisect în C++?","acceptedAnswer":{"@type":"Answer","text":"`if ((an % 4 == 0 && an % 100 != 0) || (an % 400 == 0))` — divizibil cu 4 și nu cu 100, sau divizibil cu 400."}}]}]}</script>
+  <style>
+    
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .ws-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .ws-pre { background: #0b1220; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; overflow-x: auto; font-family: monospace; color: #bae6fd; margin: 0.75rem 0; font-size: 0.9rem; }
+    .ws-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.92rem; }
+    .ws-table th, .ws-table td { border-bottom: 1px solid #334155; padding: 0.6rem 0.5rem; text-align: left; }
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .ws-box { background: #fff !important; border: 1px solid #94a3b8 !important; color: #000 !important; page-break-inside: avoid; }
+      .ws-pre { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      .ws-table th, .ws-table td { border-color: #94a3b8 !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">📝</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">TIC</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/fise/">Toate Fișele (16)</a>
+        <a href="https://www.arkyedu.com/cursuri/g7_decision_a/">Lecția Interactivă</a>
+        <a href="https://www.arkyedu.com/sandbox/">Sandbox &amp; Trace C++</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/fise/en/grade-7-cpp-if-else-decisions-logical-operators-test/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">EN</a>
+        <a href="https://www.arkyedu.com/#fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici" class="nav-cta"><span>Rezolvă Interactiv</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2.5rem 1.5rem 4rem;">
+    <div style="font-size:0.85rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;">
+      Clasa a VII-a · Test cu Barem 1–10 · 35 min · 100p (10p din oficiu)
+    </div>
+    <h1 style="font-size:2rem;line-height:1.25;margin-bottom:1rem;">Test cu Barem C++ Clasa a VII-a: Structura Alternativă `if/else` &amp; Operatori Logici (100p)</h1>
+    <div class="ws-box">
+      <strong>Rezumat Direct & Punctaj:</strong>
+      <p style="margin-top:0.5rem;color:#cbd5e1;">Test complet de 100p (90p + 10p oficiu) pe structura alternativă C++: diferența fatală între `x == 5` și `x = 5`, punct și virgulă pus greșit după `if (...)`, intervale cu `&amp;&amp;`, maximul a 3 numere și verificarea divizibilității.</p>
+      <p style="margin-top:0.6rem;font-size:0.92rem;color:#94a3b8;"><strong>Sinteză Teorie:</strong> În C++, intervalul matematic `10 ≤ x ≤ 99` NU se scrie `10 &lt;= x &lt;= 99` (care e mereu adevărat!), ci `(10 &lt;= x &amp;&amp; x &lt;= 99)`! De asemenea, pune mereu `==` pentru comparație și nu pune `;` după `if (...)`.</p>
+      <div class="no-print" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href="https://www.arkyedu.com/#fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici" class="btn-primary"><span>Rezolvă Online cu Notă Automată 1–10</span></a>
+        <button type="button" onclick="window.print()" class="btn-secondary" style="cursor:pointer;"><span>🖨️ Tipărește A4</span></button>
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-secondary"><span>🔬 Rulează în Trace C++</span></a>
+      </div>
+    </div>
+
+    
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>1. Subiectul I · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Cum se scrie CORECT în C++ condiția ca numărul `x` să aibă exact 2 cifre pozitive (între 10 și 99 inclusiv)?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> if (10 &lt;= x &lt;= 99)</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> if (x &gt;= 10 &amp;&amp; x &lt;= 99)</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> if (x &gt;= 10 || x &lt;= 99)</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> if (x = 10 &amp;&amp; 99)</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Rezolvare & Barem:</strong> B) if (x &gt;= 10 &amp;&amp; x &lt;= 99) — Operatorul `&amp;&amp;` (ȘI logic) verifică simultan ambele capete ale intervalului. `||` ar fi adevărat pentru orice număr, iar `10 &lt;= x &lt;= 99` compară 0/1 cu 99!
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>2. Subiectul I · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Ce afișează codul: `int a = 3; if (a = 0) cout &lt;&lt; &quot;DA&quot;; else cout &lt;&lt; &quot;NU&quot;;` (atenție la un singur `=`!) ?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> DA / YES</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> NU / NO</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> 0</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> Nimic</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Rezolvare & Barem:</strong> B) NU / NO — `a = 0` îi atribuie lui `a` valoarea `0` (care în C++ înseamnă Fals!). De aceea se intră pe ramura `else` și se afișează NU / NO.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>3. Subiectul II · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Ce va afișa secvența C++ de mai jos pentru `x = 12` și `y = 5`?</h2>
+        <pre class="ws-pre"><code>int x = 12, y = 5;
+if (x % 3 == 0 &amp;&amp; y % 2 == 1) {
+    cout &lt;&lt; x + y;
+} else {
+    cout &lt;&lt; x - y;
+}</code></pre>
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Rezolvare & Barem:</strong> 17 — `12 % 3 == 0` este Adevărat, iar `5 % 2 == 1` (impar) este Adevărat. Ambele sunt adevărate ⇒ afișează `12 + 5 = 17`.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>4. Subiectul II · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Adevărat sau Fals: Trei numere strict pozitive `a, b, c` pot fi laturile unui triunghi dacă și numai dacă `a + b &gt; c &amp;&amp; a + c &gt; b &amp;&amp; b + c &gt; a`.</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> Adevărat</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> Fals</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Rezolvare & Barem:</strong> A) Adevărat — Adevărat! Aceasta este inegalitatea triunghiului: suma oricăror două laturi trebuie să fie strict mai mare decât a treia.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>5. Subiectul III</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Atenție la capcana clasică din C++! Ce afișează secvența de mai jos (observă `;` după `if`)?</h2>
+        <pre class="ws-pre"><code>int n = 4;
+if (n &gt; 10);
+    cout &lt;&lt; &quot;Salut&quot;;</code></pre>
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Rezolvare & Barem:</strong> Salut — Punct și virgulă `;` imediat după `if (n &gt; 10)` închide instrucțiunea `if` cu un corp gol, deci `cout &lt;&lt; &quot;Salut&quot;;` se execută NECONDIȚIONAT!
+        </p>
+      </article>
+
+    <section class="ws-box">
+      <h2 style="font-size:1.3rem;margin-bottom:0.5rem;">Barem Oficial de Evaluare și Notare (100p → Nota 1–10)</h2>
+      <table class="ws-table">
+        <thead>
+          <tr>
+            <th>Subiect / Item</th>
+            <th>Competență Evaluată</th>
+            <th style="text-align:right;">Punctaj</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>Subiectul I (2 × 18p)</td>
+              <td>Condiții interval `&amp;&amp;` și capcana `=` în `if`</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Subiectul II (2 × 18p)</td>
+              <td>Evaluare expresii logice &amp; condiția triunghiului</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Subiectul III (18p)</td>
+              <td>Depanare punct-și-virgulă `;` pus greșit după `if`</td>
+              <td style="text-align:right;font-weight:700;">18p</td>
+            </tr>
+            <tr>
+              <td>Din oficiu</td>
+              <td>Punctaj de bază</td>
+              <td style="text-align:right;font-weight:700;">10p</td>
+            </tr>
+          <tr>
+            <td colspan="2"><strong>TOTAL (Nota = Punctaj / 10)</strong></td>
+            <td style="text-align:right;font-weight:900;color:var(--accent);">100p</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ws-box no-print">
+      <h2 style="font-size:1.2rem;margin-bottom:0.75rem;">Alte Fișe & Resurse Conectate</h2>
+      <div class="grid-3">
+        <a href="https://www.arkyedu.com/fise/fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">Fișă C++ Cls. VII: /, % &amp; 3 Pahare</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Deschide fișa →</div></a><a href="https://www.arkyedu.com/fise/fisa-oji-clasa-7-cpp-bucle-while-oglindit-palindrom-numar-prim/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">OJI Cls. VII: while, Oglindit &amp; Prim</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Deschide fișa →</div></a><a href="https://www.arkyedu.com/fise/fisa-practica-clasa-7-tehnoredactare-word-audio-wavepad-gis/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">Fișă Practică Cls. VII: Word, Audio &amp; GIS</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Deschide fișa →</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border:none;">
+        <div>© 2026 ArkyEdu · OMEN 3393/2017 · Clasa a VII-a · Structura Alternativă if / else</div>
+        <div><a href="https://www.arkyedu.com/fise/" style="color:var(--accent);">Toate Fișele</a> · <a href="https://www.arkyedu.com/fise-llm.txt" style="color:var(--accent);">fise-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

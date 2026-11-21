@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Literacy &amp; Deepfake Forensics Lab (Tokenizer, Softmax, C.R.I.F.) | ArkyEdu</title>
+  <meta name="description" content="Interactive school-safe AI &amp; Deepfake Forensics Lab in browser (ages 10-15): live BPE subword tokenizer, Softmax Temperature simulator, 6 AI photo/voice/video deepfake inspection cases, and C.R.I.F. prompt builder.">
+  <meta name="keywords" content="ai literacy lab students, deepfake detector game kids, bpe tokenizer simulator, softmax temperature hallucinations explained, c2pa exif image forensics, voice clone scam prevention, crif prompt engineering middle school">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/laborator-ai/en/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/laborator-ai/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/laborator-ai/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/laborator-ai/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AI Literacy &amp; Deepfake Forensics Lab (Tokenizer, Softmax, C.R.I.F.) | ArkyEdu">
+  <meta property="og:description" content="Interactive school-safe AI &amp; Deepfake Forensics Lab in browser (ages 10-15): live BPE subword tokenizer, Softmax Temperature simulator, 6 AI photo/voice/video deepfake inspection cases, and C.R.I.F. prompt builder.">
+  <meta property="og:url" content="https://www.arkyedu.com/laborator-ai/en/">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; AI Lab">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/ai-lab-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Literacy &amp; Deepfake Forensics Lab (Tokenizer, Softmax, C.R.I.F.) | ArkyEdu">
+  <meta name="twitter:description" content="Interactive school-safe AI &amp; Deepfake Forensics Lab in browser (ages 10-15): live BPE subword tokenizer, Softmax Temperature simulator, 6 AI photo/voice/video deepfake inspection cases, and C.R.I.F. prompt builder.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/ai-lab-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "LearningResource",
+        "SoftwareApplication"
+      ],
+      "@id": "https://www.arkyedu.com/laborator-ai/en/#ailab",
+      "name": "ArkyEdu AI Literacy & Deepfake Forensics Lab",
+      "description": "Interactive school-safe AI & Deepfake Forensics Lab in browser (ages 10-15): live BPE subword tokenizer, Softmax Temperature simulator, 6 AI photo/voice/video deepfake inspection cases, and C.R.I.F. prompt builder.",
+      "url": "https://www.arkyedu.com/laborator-ai/en/",
+      "image": "https://www.arkyedu.com/assets/ai-lab-hero.jpg",
+      "applicationCategory": "EducationalApplication",
+      "educationalLevel": "Grades 5-8 (Ages 10-15)",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "en",
+      "teaches": [
+        "Subword BPE Tokenization",
+        "Softmax Probability & AI Hallucinations",
+        "Deepfake Image EXIF/C2PA Forensics",
+        "Voice Clone & Lip-Sync Scam Prevention",
+        "C.R.I.F. Responsible Prompt Engineering"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "6 Interactive Deepfake & Media Forensics Cases",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Case 01 · Photo: \"National Robotics Fair Winner\"",
+          "description": "Correct verdict: AI-GENERATED IMAGE! Corrupted banner text, melted badge details, warped hand anatomy, and missing optical EXIF confirm synthetic creation."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Case 02 · Photo: \"Arduino Circuit Lab in Class\"",
+          "description": "Correct verdict: AUTHENTIC PHOTOGRAPH! Consistent window lighting, accurate hands/wires, and real camera EXIF confirm it is a genuine classroom photo."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Case 03 · WhatsApp Voice Note: \"Urgent from Parent\"",
+          "description": "Correct verdict: AI VOICE CLONE SCAM! Never share SMS 2FA codes over urgent voice notes—always call back the real saved number and use a family safe-word."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Case 04 · Viral Short: \"Creator Doubles Your Game Coins\"",
+          "description": "Correct verdict: LIP-SYNC VIDEO DEEPFAKE! Scammers re-animate the mouth and voice of a real creator on old footage to harvest gaming credentials."
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Case 05 · Shock News: \"Summer Break Canceled by AI Law!\"",
+          "description": "Correct verdict: AI-CRAFTED DISINFORMATION! Synthetic clickbait weaponizes fear and share-chains while omitting verifiable primary sources."
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Case 06 · Notice: \"Free ICT Olympiad Practice Sheets on ArkyEdu\"",
+          "description": "Correct verdict: AUTHENTIC & SAFE RESOURCE! Clean HTTPS domain, transparent claims, and zero pressure tactics confirm legitimacy."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "AI & Deepfake Lab",
+          "item": "https://www.arkyedu.com/laborator-ai/en/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the ArkyEdu AI & Deepfake Lab work safely with zero open chat or paid accounts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The lab runs 100% deterministically inside your browser with zero open unmoderated chat or paywalls: it includes a live BPE-style Tokenizer, interactive Softmax Temperature simulator, 6 image/audio/video/news deepfake forensic cases, and a block-based Prompt Architect."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is an AI token and why do LLMs sometimes hallucinate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "LLMs split text into numeric sub-word chunks called tokens and statistically predict the next token. When context is missing or Temperature is high, they may assemble plausible-sounding falsehoods known as hallucinations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can students and parents spot an AI Deepfake image or cloned voice scam?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In images: inspect background wall text for gibberish, hands/badges, shadow consistency, and camera EXIF/C2PA data. For audio/video: reject urgent requests for 2FA SMS codes, call back on saved contacts, and use an offline family safe-word."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How should students (ages 10–15) use AI ethically for Computer Science & ICT homework?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the C.R.I.F. framework (Context, Role, Instruction, Format + Guardrails): ask AI to explain why your code failed step-by-step with a dry-run trace and check question instead of writing homework for you, then test every snippet in a real compiler."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do students earn real ArkyEdu rewards for completing AI & Deepfake Lab cases?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Cracking Deepfake forensic cases, spotting hallucinations, and assembling high-scoring C.R.I.F. prompts award real ByteCoins directly to your student inventory."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .evidence-img { width: 100%; border-radius: 0.75rem; border: 1px solid #334155; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1rem; }
+    .meta-line { font-size: 0.85rem; color: #22d3ee; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🧠</div>
+        <span class="logo-text">ArkyEdu <span style="color: #22d3ee;">AI &amp; DEEPFAKE LAB</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">Courses</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary</a>
+        <a href="https://www.arkyedu.com/laborator-ai-llm.txt">laborator-ai-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/laborator-ai/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">RO</a>
+        <a href="https://www.arkyedu.com/?view=ailab&lang=en" class="nav-cta">
+          <span>Launch AI Lab</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        Zero Open Chatbot · 100% School-Safe · Ages 10–15 · Free Forever
+      </div>
+      <h1>AI Literacy &amp; Deepfake Forensics Lab</h1>
+      <p class="lead-text">Interactive school-safe AI &amp; Deepfake Forensics Lab in browser (ages 10-15): live BPE subword tokenizer, Softmax Temperature simulator, 6 AI photo/voice/video deepfake inspection cases, and C.R.I.F. prompt builder.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/laborator-ai/" onclick="window.location.href='/laborator-ai/';" class="btn-primary">
+          <span>Open Interactive Workbench →</span>
+        </a>
+        <a href="https://www.arkyedu.com/?game=detective&lang=en" class="btn-secondary">
+          <span>Play CyberSafe Phishing Arcade →</span>
+        </a>
+        <a href="https://www.arkyedu.com/glosar/en/llm-and-ai-hallucinations/" class="btn-secondary">
+          <span>LLM &amp; Hallucinations Glossary →</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/ai-lab-hero.jpg" alt="ArkyEdu AI Literacy and Deepfake Forensics Lab Workbench" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        1. Inside an LLM: Subword Tokenization, Softmax Temperature &amp; Hallucinations
+      </h2>
+      <div class="grid-2">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">Excel Formula (Grade 8)</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">Explain the Excel formula =COUNTIF(A1:A20, &quot;&gt;9&quot;) step by step!</h3>
+            <p class="card-desc">Notice how symbols like =, parentheses, and quotes become individual tokens separate from words.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">C++ Code (Grade 7)</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">int n = 2026; if (n % 2 == 0) cout &lt;&lt; &quot;even&quot;;</h3>
+            <p class="card-desc">C++ code splits into dense symbol tokens; operators like == and &lt;&lt; have distinct numeric IDs.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">Subwords &amp; Accents</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">Artificial intelligence predicts statistical subword probabilities without real awareness.</h3>
+            <p class="card-desc">Long or specialized words split into multiple sub-word chunks (e.g. &quot;statist&quot; + &quot;ical&quot;).</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">AI Safety Check</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">Verify official sources before trusting any viral synthetic voice clip!</h3>
+            <p class="card-desc">Domain fragments (.edu.ro, .gov.ro) act as structured context signals inside the prompt window.</p>
+          </article>
+        
+      </div>
+      <div class="grid-2" style="margin-top: 1.25rem;">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">C++ Programming (Grades 7–8)</div>
+            <h3 class="card-title">&quot;How do I sort a vector v[100] in standard middle-school C++?&quot;</h3>
+            <p class="card-desc">Classic code hallucination! Neither &lt;magic_autosort_header&gt; nor instant_rank() exist in C++. LLMs sometimes invent plausible library names—always verify code inside a real compiler or Sandbox!</p>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="card-link">Related Lesson →</a>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Excel Spreadsheets (Grade 8)</div>
+            <h3 class="card-title">&quot;How do I calculate the average only for grades above 7 in Excel?&quot;</h3>
+            <p class="card-desc">Excel returns a #NAME? error because =SMART_CLASS_MEAN_ONLY_GOOD is completely fabricated by the AI! Always double-check official spreadsheet syntax.</p>
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_c/" class="card-link">Related Lesson →</a>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Hardware &amp; Tech History</div>
+            <h3 class="card-title">&quot;Briefly explain the difference between RAM and an SSD.&quot;</h3>
+            <p class="card-desc">The AI blended a mechanical HDD (7200 RPM spinning platters) into the definition of an SSD (Solid-State Drive—zero moving parts)!</p>
+            <a href="https://www.arkyedu.com/cursuri/hardware/" class="card-link">Related Lesson →</a>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Web Safety &amp; Official Sources</div>
+            <h3 class="card-title">&quot;Where can I verify authentic Romanian ICT curriculum &amp; student security notices?&quot;</h3>
+            <p class="card-desc">Critical safety habit: chatbots sometimes fabricate broken or risky URLs (http://, .xyz, .exe)! Never download executables from unverified AI-cited links.</p>
+            <a href="https://www.arkyedu.com/cursuri/g6_malware/" class="card-link">Related Lesson →</a>
+          </article>
+        
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        2. Deepfake Forensics Lab: 6 Photo, Voice, Video &amp; News Investigations
+      </h2>
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/ai-evidence-fake.jpg" alt="Synthetic AI-generated school robotics fair photo with garbled text clues" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Visual Evidence A: Spot AI Artifacts (Garbled Text &amp; Anatomy)</h3>
+          <p class="card-desc">Notice the garbled "GGRLLB...SDFKJHS" banner text, melted badge details, and missing authentic camera EXIF.</p>
+        </div>
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/ai-evidence-real.jpg" alt="Authentic 35mm classroom Arduino electronics lab photograph" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Visual Evidence B: Authentic 35mm Classroom Arduino Photo</h3>
+          <p class="card-desc">Consistent daylight shadows, logical breadboard jumper wires, authentic hands, and verified camera capture telemetry.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              SYNTHETIC / DEEPFAKE · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Case 01 · Photo: &quot;National Robotics Fair Winner&quot;</h3>
+            <p class="card-desc">Correct verdict: AI-GENERATED IMAGE! Corrupted banner text, melted badge details, warped hand anatomy, and missing optical EXIF confirm synthetic creation.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">
+              AUTHENTIC VERIFIED · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Case 02 · Photo: &quot;Arduino Circuit Lab in Class&quot;</h3>
+            <p class="card-desc">Correct verdict: AUTHENTIC PHOTOGRAPH! Consistent window lighting, accurate hands/wires, and real camera EXIF confirm it is a genuine classroom photo.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              SYNTHETIC / DEEPFAKE · +50 ByteCoins
+            </div>
+            <h3 class="card-title">Case 03 · WhatsApp Voice Note: &quot;Urgent from Parent&quot;</h3>
+            <p class="card-desc">Correct verdict: AI VOICE CLONE SCAM! Never share SMS 2FA codes over urgent voice notes—always call back the real saved number and use a family safe-word.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              SYNTHETIC / DEEPFAKE · +50 ByteCoins
+            </div>
+            <h3 class="card-title">Case 04 · Viral Short: &quot;Creator Doubles Your Game Coins&quot;</h3>
+            <p class="card-desc">Correct verdict: LIP-SYNC VIDEO DEEPFAKE! Scammers re-animate the mouth and voice of a real creator on old footage to harvest gaming credentials.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              SYNTHETIC / DEEPFAKE · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Case 05 · Shock News: &quot;Summer Break Canceled by AI Law!&quot;</h3>
+            <p class="card-desc">Correct verdict: AI-CRAFTED DISINFORMATION! Synthetic clickbait weaponizes fear and share-chains while omitting verifiable primary sources.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">
+              AUTHENTIC VERIFIED · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Case 06 · Notice: &quot;Free ICT Olympiad Practice Sheets on ArkyEdu&quot;</h3>
+            <p class="card-desc">Correct verdict: AUTHENTIC &amp; SAFE RESOURCE! Clean HTTPS domain, transparent claims, and zero pressure tactics confirm legitimacy.</p>
+          </article>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        3. C.R.I.F. Prompt Engineering &amp; National Curriculum Bridges
+      </h2>
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        
+          <div class="card">
+            <h3 class="card-title">Mission 1 · Ethical C++ Loop Debugging</h3>
+            <p class="card-desc">Your C++ while loop runs forever (infinite loop). Build a prompt that helps you UNDERSTAND the bug instead of blindly copying homework!</p>
+          </div>
+        
+          <div class="card">
+            <h3 class="card-title">Mission 2 · Excel Formula Troubleshooting</h3>
+            <p class="card-desc">Your Excel class gradebook shows #NAME? or #VALUE!. Assemble the sharpest troubleshooting prompt.</p>
+          </div>
+        
+          <div class="card">
+            <h3 class="card-title">Mission 3 · Fact-Checking &amp; Source Guardrails</h3>
+            <p class="card-desc">You want an AI summary of a Hardware lesson with zero fabricated specs or numbers.</p>
+          </div>
+        
+      </div>
+      <div class="grid-2">
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 5 · Hardware &amp; Memory</div>
+            <h3 class="card-title">Why Do AI Models Need GPUs and High-Speed RAM?</h3>
+            <p class="card-desc">Tokens and probability matrices compute in parallel across thousands of GPU cores inside fast VRAM/RAM.</p>
+            <a href="https://www.arkyedu.com/cursuri/hardware/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grade 6 · Cyber Safety &amp; 2FA</div>
+            <h3 class="card-title">Defending Against AI Voice Clones &amp; Phishing</h3>
+            <p class="card-desc">Two-factor authentication (2FA), HTTPS domain checks, and family safe-words defeat voice-clone scams.</p>
+            <a href="https://www.arkyedu.com/cursuri/g6_malware/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Grades 7–8 · C++ Logic &amp; Testing</div>
+            <h3 class="card-title">Verifying AI Code Suggestions via Dry-Run Traces</h3>
+            <p class="card-desc">Never trust generated C++ snippets without dry-run tracing edge cases like n = 0 or negative values.</p>
+            <a href="https://www.arkyedu.com/cursuri/g7_decision_a/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Digital Literacy · C.R.I.F. Prompting</div>
+            <h3 class="card-title">Responsible Prompt Architecture (Context · Role · Format)</h3>
+            <p class="card-desc">Structured prompting reduces hallucinations and turns AI into a step-by-step tutor rather than a cheat machine.</p>
+            <a href="https://www.arkyedu.com/cursuri/internet2/" class="card-link">Open Curriculum Lesson →</a>
+          </div>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">Frequently Asked Questions — AI &amp; Deepfake Lab</h2>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">How does the ArkyEdu AI &amp; Deepfake Lab work safely with zero open chat or paid accounts?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">The lab runs 100% deterministically inside your browser with zero open unmoderated chat or paywalls: it includes a live BPE-style Tokenizer, interactive Softmax Temperature simulator, 6 image/audio/video/news deepfake forensic cases, and a block-based Prompt Architect.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">What is an AI token and why do LLMs sometimes hallucinate?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">LLMs split text into numeric sub-word chunks called tokens and statistically predict the next token. When context is missing or Temperature is high, they may assemble plausible-sounding falsehoods known as hallucinations.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">How can students and parents spot an AI Deepfake image or cloned voice scam?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">In images: inspect background wall text for gibberish, hands/badges, shadow consistency, and camera EXIF/C2PA data. For audio/video: reject urgent requests for 2FA SMS codes, call back on saved contacts, and use an offline family safe-word.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">How should students (ages 10–15) use AI ethically for Computer Science &amp; ICT homework?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Use the C.R.I.F. framework (Context, Role, Instruction, Format + Guardrails): ask AI to explain why your code failed step-by-step with a dry-run trace and check question instead of writing homework for you, then test every snippet in a real compiler.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Do students earn real ArkyEdu rewards for completing AI &amp; Deepfake Lab cases?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Yes! Cracking Deepfake forensic cases, spotting hallucinations, and assembling high-scoring C.R.I.F. prompts award real ByteCoins directly to your student inventory.</div>
+        </div>
+      
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · AI Literacy &amp; Deepfake Forensics Lab (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/laborator-ai-llm.txt" style="color: #22d3ee;">laborator-ai-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

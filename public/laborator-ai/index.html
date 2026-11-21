@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorul AI &amp; Detector Deepfake (Tokenizator, Halucinații, C.R.I.F.) | ArkyEdu</title>
+  <meta name="description" content="Laborator interactiv de Literație AI și Detecție Deepfake în browser pentru elevi 10–15 ani: Tokenizator BPE live, simulator Temperatură Softmax &amp; halucinații, 6 cazuri criminalistice Deepfake foto/audio/video și constructor prompturi C.R.I.F.">
+  <meta name="keywords" content="laborator ai elevi romania, detector deepfake copii, cum functioneaza chatgpt tokeni temperatura, halucinatii ai explicatii scoala, verificare poza ai exif c2pa, clona vocala whatsapp 2fa, prompt engineering metoda crif rccl">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/laborator-ai/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/laborator-ai/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/laborator-ai/en/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/laborator-ai/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Laboratorul AI &amp; Detector Deepfake (Tokenizator, Halucinații, C.R.I.F.) | ArkyEdu">
+  <meta property="og:description" content="Laborator interactiv de Literație AI și Detecție Deepfake în browser pentru elevi 10–15 ani: Tokenizator BPE live, simulator Temperatură Softmax &amp; halucinații, 6 cazuri criminalistice Deepfake foto/audio/video și constructor prompturi C.R.I.F.">
+  <meta property="og:url" content="https://www.arkyedu.com/laborator-ai/">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; AI Lab">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/ai-lab-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Laboratorul AI &amp; Detector Deepfake (Tokenizator, Halucinații, C.R.I.F.) | ArkyEdu">
+  <meta name="twitter:description" content="Laborator interactiv de Literație AI și Detecție Deepfake în browser pentru elevi 10–15 ani: Tokenizator BPE live, simulator Temperatură Softmax &amp; halucinații, 6 cazuri criminalistice Deepfake foto/audio/video și constructor prompturi C.R.I.F.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/ai-lab-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "LearningResource",
+        "SoftwareApplication"
+      ],
+      "@id": "https://www.arkyedu.com/laborator-ai/#ailab",
+      "name": "Laboratorul AI & Detector Deepfake ArkyEdu",
+      "description": "Laborator interactiv de Literație AI și Detecție Deepfake în browser pentru elevi 10–15 ani: Tokenizator BPE live, simulator Temperatură Softmax & halucinații, 6 cazuri criminalistice Deepfake foto/audio/video și constructor prompturi C.R.I.F.",
+      "url": "https://www.arkyedu.com/laborator-ai/",
+      "image": "https://www.arkyedu.com/assets/ai-lab-hero.jpg",
+      "applicationCategory": "EducationalApplication",
+      "educationalLevel": "Clasele V-VIII (10-15 ani)",
+      "operatingSystem": "All",
+      "isAccessibleForFree": true,
+      "inLanguage": "ro",
+      "teaches": [
+        "Tokenizare BPE",
+        "Probabilități Softmax și Halucinații LLM",
+        "Criminalistică EXIF/C2PA pentru Imagini Deepfake",
+        "Prevenție Clonare Vocală și Lip-Sync Scam",
+        "Inginerie Prompturi Etice C.R.I.F."
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "RON"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "6 Cazuri Interactive de Investigație Deepfake & Media",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Cazul 01 · Fotografie „Concurs Național de Robotică”",
+          "description": "Verdict corect: IMAGINE GENERATĂ AI (Deepfake)! Textul corupt de pe banner, ecusonul topit, anatomia imperfectă a mâinii și absența EXIF-ului de cameră confirmă o imagine sintetică."
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Cazul 02 · Fotografie „Proiect Arduino în Laboratorul TIC”",
+          "description": "Verdict corect: FOTOGRAFIE AUTENTICĂ! Detaliile fizice reale, consistența iluminării și datele EXIF ale camerei arată că este o poză reală din laborator."
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Cazul 03 · Mesaj Vocal WhatsApp „Urgent de la Părinte”",
+          "description": "Verdict corect: CLONĂ VOCALĂ AI (Deepfake Audio Scam)! Nu trimite NICIODATĂ coduri SMS 2FA la cereri vocale urgente. Sună persoana pe numărul real salvat în agendă și cere cuvântul-parolă stabilit cu familia."
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Cazul 04 · Clip Video Viral „Influencerul îți Dublează Robux-ul / ByteCoins”",
+          "description": "Verdict corect: VIDEO DEEPFAKE LIP-SYNC! Atacatorii iau un clip vechi cu un creator real și îi înlocuiesc doar mișcarea buzelor și vocea cu AI ca să fure conturi de gaming."
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Cazul 05 · Știre Șoc „Fără Vacanță de Vară în 2027 – Decizie AI!”",
+          "description": "Verdict corect: DEZINFORMARE SINTETICĂ AI! Știrile false generate cu AI folosesc furia/frica și cer redistribuirea rapidă fără să citeze nicio sursă oficială verificabilă."
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Cazul 06 · Anunț „Olimpiada Națională de TIC & Laborator ArkyEdu Gratuit”",
+          "description": "Verdict corect: RESURSĂ AUTENTICĂ ȘI SIGURĂ! Verificarea protocolului HTTPS, a domeniului curat și absența urgenței false confirmă că sursa este legitimă."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Laborator AI & Deepfake",
+          "item": "https://www.arkyedu.com/laborator-ai/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Cum funcționează Laboratorul AI & Deepfake de pe ArkyEdu fără chat nesigur sau cont cu plată?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Laboratorul rulează 100% determinist și sigur direct în browser, fără colectare de date și fără chat liber nesupravegheat: conține un Tokenizator BPE live, simulator matematic de Temperatură/Probabilități (Softmax), 6 cazuri vizuale/audio de detecție Deepfake și un constructor de prompturi pe blocuri (C.R.I.F.)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce este un „token” și de ce inventează (halucinează) uneori modelele AI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un LLM nu citește idei, ci sparge textul în bucăți numerice numite tokeni (cuvinte scurte, silabe sau semne) și calculează statistic care este cel mai probabil token următor. Când nu are context precis sau când temperatura este mare, modelul poate lega cuvinte care „sună convingător”, dar sunt false — fenomen numit halucinație."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Cum pot elevii și părinții să recunoască o imagine Deepfake sau o clonă vocală AI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La imagini: verifică textul de pe fundal (adesea distorsionat), detaliile mâinilor/emblemelor, umbrele și absența metadatelor EXIF/C2PA. La audio/video: atenție la cererile urgente de coduri SMS 2FA sau bani, interdicția de a suna înapoi și stabilește un cuvânt-parolă secret cu familia."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Cum trebuie să folosească elevii (10–15 ani) inteligența artificială etic la Informatică și TIC?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Folosește metoda C.R.I.F. (Context, Rol, Instrucțiune, Format + Guardrail): cere AI-ului să îți explice o eroare din codul tău pas cu pas cu un tabel de valori și o întrebare de verificare, fără să îți scrie tema gata de copiat, apoi testează întotdeauna codul în Sandbox."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Primește elevul recompense în ArkyEdu pentru finalizarea cazurilor din Laboratorul AI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Da! Rezolvarea cazurilor din Detectivul Deepfake, a testelor de halucinații și a misiunilor Prompt Architect acordă ByteCoins reali în contul elevului și salvează progresul automat în browser."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .evidence-img { width: 100%; border-radius: 0.75rem; border: 1px solid #334155; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1rem; }
+    .meta-line { font-size: 0.85rem; color: #22d3ee; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🧠</div>
+        <span class="logo-text">ArkyEdu <span style="color: #22d3ee;">AI &amp; DEEPFAKE LAB</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">Cursuri</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar</a>
+        <a href="https://www.arkyedu.com/laborator-ai-llm.txt">laborator-ai-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/laborator-ai/en/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">EN</a>
+        <a href="https://www.arkyedu.com/?view=ailab" class="nav-cta">
+          <span>Deschide Simulatorul</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        Fără Chat Nesupravegheat · 100% Sigur în Browser · Clasele V–VIII · 0 Lei
+      </div>
+      <h1>Laboratorul AI &amp; Detector Deepfake</h1>
+      <p class="lead-text">Laborator interactiv de Literație AI și Detecție Deepfake în browser pentru elevi 10–15 ani: Tokenizator BPE live, simulator Temperatură Softmax &amp; halucinații, 6 cazuri criminalistice Deepfake foto/audio/video și constructor prompturi C.R.I.F.</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/laborator-ai/" onclick="window.location.href='/laborator-ai/';" class="btn-primary">
+          <span>Deschide Simulatorul Interactiv →</span>
+        </a>
+        <a href="https://www.arkyedu.com/?game=detective" class="btn-secondary">
+          <span>Joacă Detectivul Phishing Arcade →</span>
+        </a>
+        <a href="https://www.arkyedu.com/glosar/llm-and-ai-hallucinations/" class="btn-secondary">
+          <span>Glosar LLM &amp; Halucinații →</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/ai-lab-hero.jpg" alt="ArkyEdu AI Literacy and Deepfake Forensics Lab Workbench" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        1. În interiorul unui LLM: Tokenizare, Temperatură Softmax &amp; Halucinații
+      </h2>
+      <div class="grid-2">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">Formulă Excel (Clasa VIII)</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">Explică formula =COUNTIF(A1:A20, &quot;&gt;9&quot;) pas cu pas!</h3>
+            <p class="card-desc">Observă cum semnele =, parantezele și ghilimelele consumă tokeni separați față de cuvinte.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">Cod C++ (Clasa VII)</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">int n = 2026; if (n % 2 == 0) cout &lt;&lt; &quot;par&quot;;</h3>
+            <p class="card-desc">Codul C++ are mulți tokeni scurți; operatorii == și &lt;&lt; au propriile ID-uri numerice.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">Diacritice Românești</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">Inteligența artificială nu înțelege cuvinte, ci calculează șiruri de numere.</h3>
+            <p class="card-desc">Cuvintele lungi sau cu diacritice românești (ă, î, â, ș, ț) sunt împărțite frecvent în mai mulți sub-tokeni.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">Verificare Siguranță</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">Verifică sursa oficială .edu.ro înainte să crezi un videoclip viral!</h3>
+            <p class="card-desc">Extensiile web (.edu.ro, .gov.ro) și cuvintele cheie devin ancore în contextul modelului.</p>
+          </article>
+        
+      </div>
+      <div class="grid-2" style="margin-top: 1.25rem;">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Informatică C++ (Clasa VII–VIII)</div>
+            <h3 class="card-title">„Cum sortez rapid un vector v[100] în C++ standard de gimnaziu?”</h3>
+            <p class="card-desc">Halucinație clasică de cod! Nu există nicio bibliotecă &lt;magic_autosort_ro&gt; sau funcție instant_rank_ro() în C++. AI-ul inventează uneori librării care sună convingător — testează mereu codul în Sandbox sau compilator!</p>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="card-link">Lecția Asociată →</a>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Calcul Tabelar Excel (Clasa VIII)</div>
+            <h3 class="card-title">„Cum aflu media doar pentru elevii cu nota peste 7 în Excel?”</h3>
+            <p class="card-desc">Excel returnează eroarea #NAME? pentru că =SMART_CLASS_MEAN_ONLY_GOOD este complet inventată de AI! Verifică întotdeauna numele exact al funcțiilor oficiale (AVERAGEIF, SUMIF, COUNTIF).</p>
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_c/" class="card-link">Lecția Asociată →</a>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Hardware &amp; Istoria Tehnologiei</div>
+            <h3 class="card-title">„Explică pe scurt diferența dintre memoria RAM și SSD.”</h3>
+            <p class="card-desc">AI-ul a amestecat descrierea unui HDD mecanic (discuri rotative la 7200 RPM) cu cea a unui SSD (Solid State Drive — zero piese în mișcare)!</p>
+            <a href="https://www.arkyedu.com/cursuri/hardware/" class="card-link">Lecția Asociată →</a>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">Siguranță Web &amp; Surse Oficiale</div>
+            <h3 class="card-title">„Unde găsesc programa oficială de TIC pentru gimnaziu?”</h3>
+            <p class="card-desc">Atenție critică: unele modele AI pot genera URL-uri inventate sau pot sugera domenii suspecte (http://, .xyz, .exe)! Nu accesa niciodată linkuri .exe sau domenii neoficiale din răspunsurile unui chatbot.</p>
+            <a href="https://www.arkyedu.com/cursuri/g6_malware/" class="card-link">Lecția Asociată →</a>
+          </article>
+        
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        2. Detectorul Deepfake: 6 Cazuri Criminalistice Foto, Audio, Video &amp; Știri
+      </h2>
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/ai-evidence-fake.jpg" alt="Synthetic AI-generated school robotics fair photo with garbled text clues" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Probă Vizuală A: Artefacte AI (Text Corupt &amp; Anatomie)</h3>
+          <p class="card-desc">Observă textul corupt de pe bannerul din perete („GGRLLB...SDFKJHS”), ecusonul topit și absența EXIF-ului real.</p>
+        </div>
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/ai-evidence-real.jpg" alt="Authentic 35mm classroom Arduino electronics lab photograph" class="evidence-img" loading="lazy">
+          <h3 class="card-title">Probă Vizuală B: Fotografie Autentică 35mm Arduino Uno</h3>
+          <p class="card-desc">Umbre consecvente spre fereastră, fire Arduino coerente, mâini naturale și metadate optice autentice.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              DEEPFAKE / SINTETIC · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Cazul 01 · Fotografie „Concurs Național de Robotică”</h3>
+            <p class="card-desc">Verdict corect: IMAGINE GENERATĂ AI (Deepfake)! Textul corupt de pe banner, ecusonul topit, anatomia imperfectă a mâinii și absența EXIF-ului de cameră confirmă o imagine sintetică.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">
+              AUTENTIC VERIFICAT · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Cazul 02 · Fotografie „Proiect Arduino în Laboratorul TIC”</h3>
+            <p class="card-desc">Verdict corect: FOTOGRAFIE AUTENTICĂ! Detaliile fizice reale, consistența iluminării și datele EXIF ale camerei arată că este o poză reală din laborator.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              DEEPFAKE / SINTETIC · +50 ByteCoins
+            </div>
+            <h3 class="card-title">Cazul 03 · Mesaj Vocal WhatsApp „Urgent de la Părinte”</h3>
+            <p class="card-desc">Verdict corect: CLONĂ VOCALĂ AI (Deepfake Audio Scam)! Nu trimite NICIODATĂ coduri SMS 2FA la cereri vocale urgente. Sună persoana pe numărul real salvat în agendă și cere cuvântul-parolă stabilit cu familia.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              DEEPFAKE / SINTETIC · +50 ByteCoins
+            </div>
+            <h3 class="card-title">Cazul 04 · Clip Video Viral „Influencerul îți Dublează Robux-ul / ByteCoins”</h3>
+            <p class="card-desc">Verdict corect: VIDEO DEEPFAKE LIP-SYNC! Atacatorii iau un clip vechi cu un creator real și îi înlocuiesc doar mișcarea buzelor și vocea cu AI ca să fure conturi de gaming.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#fb7185;font-weight:700;margin-bottom:0.35rem;">
+              DEEPFAKE / SINTETIC · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Cazul 05 · Știre Șoc „Fără Vacanță de Vară în 2027 – Decizie AI!”</h3>
+            <p class="card-desc">Verdict corect: DEZINFORMARE SINTETICĂ AI! Știrile false generate cu AI folosesc furia/frica și cer redistribuirea rapidă fără să citeze nicio sursă oficială verificabilă.</p>
+          </article>
+        
+          <article class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">
+              AUTENTIC VERIFICAT · +45 ByteCoins
+            </div>
+            <h3 class="card-title">Cazul 06 · Anunț „Olimpiada Națională de TIC &amp; Laborator ArkyEdu Gratuit”</h3>
+            <p class="card-desc">Verdict corect: RESURSĂ AUTENTICĂ ȘI SIGURĂ! Verificarea protocolului HTTPS, a domeniului curat și absența urgenței false confirmă că sursa este legitimă.</p>
+          </article>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        3. Constructor Prompturi C.R.I.F. &amp; Punți cu Programa Școlară TIC
+      </h2>
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        
+          <div class="card">
+            <h3 class="card-title">Misiunea 1 · Debug C++ fără să copiezi tema</h3>
+            <p class="card-desc">Ai o buclă while în C++ care nu se mai oprește (buclă infinită). Construiește un prompt care să te ajute să ÎNȚELEGI greșeala, nu să copiezi orbește rezolvarea!</p>
+          </div>
+        
+          <div class="card">
+            <h3 class="card-title">Misiunea 2 · Audit Formulă Excel (Clasa VIII)</h3>
+            <p class="card-desc">Ai primit #VALUE! sau #NAME? într-un catalog școlar Excel. Construiește promptul perfect pentru a depana formula.</p>
+          </div>
+        
+          <div class="card">
+            <h3 class="card-title">Misiunea 3 · Fact-Checking anti-Halucinații</h3>
+            <p class="card-desc">Vrei să folosești AI-ul ca să îți rezume o lecție de Hardware fără să inventeze cifre false.</p>
+          </div>
+        
+      </div>
+      <div class="grid-2">
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa V · Hardware &amp; Memorie</div>
+            <h3 class="card-title">De ce au modelele AI nevoie de GPU și RAM?</h3>
+            <p class="card-desc">Tokenii și matricile de probabilități se calculează simultan pe mii de nuclee GPU și stau în memoria rapidă VRAM/RAM.</p>
+            <a href="https://www.arkyedu.com/cursuri/hardware/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VI · Securitate &amp; Phishing</div>
+            <h3 class="card-title">Apărarea contra Clonării Vocale &amp; Linkurilor Deepfake</h3>
+            <p class="card-desc">Autentificarea în 2 pași (2FA), verificarea domeniului HTTPS și cuvântul-parolă de familie blochează escrocheriile AI.</p>
+            <a href="https://www.arkyedu.com/cursuri/g6_malware/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Clasa VII–VIII · Algoritmi C++</div>
+            <h3 class="card-title">Verificarea Codului Generat de AI cu Trace &amp; Teste</h3>
+            <p class="card-desc">Nu accepta niciodată cod C++ fără să îl urmărești pas cu pas pe valori de test (inclusiv cazuri limită n = 0).</p>
+            <a href="https://www.arkyedu.com/cursuri/g7_decision_a/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">Digital Literacy · Prompting C.R.I.F.</div>
+            <h3 class="card-title">Arhitectura Promptului Responsabil (Context · Rol · Format)</h3>
+            <p class="card-desc">Un prompt bine structurat previne halucinațiile și transformă AI-ul în meditator pas-cu-pas, nu în mașină de copiat.</p>
+            <a href="https://www.arkyedu.com/cursuri/internet2/" class="card-link">Deschide Lecția TIC →</a>
+          </div>
+        
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">Întrebări Frecvente — Laborator AI &amp; Deepfake</h2>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Cum funcționează Laboratorul AI &amp; Deepfake de pe ArkyEdu fără chat nesigur sau cont cu plată?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Laboratorul rulează 100% determinist și sigur direct în browser, fără colectare de date și fără chat liber nesupravegheat: conține un Tokenizator BPE live, simulator matematic de Temperatură/Probabilități (Softmax), 6 cazuri vizuale/audio de detecție Deepfake și un constructor de prompturi pe blocuri (C.R.I.F.).</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Ce este un „token” și de ce inventează (halucinează) uneori modelele AI?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Un LLM nu citește idei, ci sparge textul în bucăți numerice numite tokeni (cuvinte scurte, silabe sau semne) și calculează statistic care este cel mai probabil token următor. Când nu are context precis sau când temperatura este mare, modelul poate lega cuvinte care „sună convingător”, dar sunt false — fenomen numit halucinație.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Cum pot elevii și părinții să recunoască o imagine Deepfake sau o clonă vocală AI?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">La imagini: verifică textul de pe fundal (adesea distorsionat), detaliile mâinilor/emblemelor, umbrele și absența metadatelor EXIF/C2PA. La audio/video: atenție la cererile urgente de coduri SMS 2FA sau bani, interdicția de a suna înapoi și stabilește un cuvânt-parolă secret cu familia.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Cum trebuie să folosească elevii (10–15 ani) inteligența artificială etic la Informatică și TIC?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Folosește metoda C.R.I.F. (Context, Rol, Instrucțiune, Format + Guardrail): cere AI-ului să îți explice o eroare din codul tău pas cu pas cu un tabel de valori și o întrebare de verificare, fără să îți scrie tema gata de copiat, apoi testează întotdeauna codul în Sandbox.</div>
+        </div>
+      
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">Primește elevul recompense în ArkyEdu pentru finalizarea cazurilor din Laboratorul AI?</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">Da! Rezolvarea cazurilor din Detectivul Deepfake, a testelor de halucinații și a misiunilor Prompt Architect acordă ByteCoins reali în contul elevului și salvează progresul automat în browser.</div>
+        </div>
+      
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · AI Literacy &amp; Deepfake Forensics Lab (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/laborator-ai-llm.txt" style="color: #22d3ee;">laborator-ai-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

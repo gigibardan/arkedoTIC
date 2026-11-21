@@ -21,6 +21,8 @@ import {
   Award,
   ClipboardCheck,
   Radio,
+  Compass,
+  BrainCircuit,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
@@ -31,7 +33,7 @@ interface HeaderProps {
   maxScore: number;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz';
+  currentView: 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz' | 'fise' | 'leonida' | 'ailab';
   onNavigateToCatalog: () => void;
   studentName: string;
   elapsedSeconds: number;
@@ -49,6 +51,9 @@ interface HeaderProps {
   onNavigateToBlog?: () => void;
   onNavigateToGlossary?: () => void;
   onNavigateToSandbox?: () => void;
+  onNavigateToWorksheets?: () => void;
+  onNavigateToLeonida?: () => void;
+  onNavigateToAiLab?: () => void;
   onOpenShop?: () => void;
 }
 
@@ -74,6 +79,9 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateToBlog,
   onNavigateToGlossary,
   onNavigateToSandbox,
+  onNavigateToWorksheets,
+  onNavigateToLeonida,
+  onNavigateToAiLab,
   onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
@@ -155,6 +163,9 @@ export const Header: React.FC<HeaderProps> = ({
     if (currentView === 'carnet') return lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital';
     if (currentView === 'evaluare') return lang === 'en' ? 'Quick Eval Simulator' : 'Simulare Evaluare TIC';
     if (currentView === 'livequiz') return lang === 'en' ? 'Live Class Quiz (PIN)' : 'Quiz Live în Clasă';
+    if (currentView === 'fise') return lang === 'en' ? 'Worksheets & Rubrics' : 'Fișe & Teste cu Barem';
+    if (currentView === 'leonida') return lang === 'en' ? 'Vice Leonida · GTA 6 Hub' : 'Vice Leonida · Open-World GTA 6';
+    if (currentView === 'ailab') return lang === 'en' ? 'AI & Deepfake Lab' : 'Laborator AI & Deepfake';
     return 'ArkyEdu';
   };
 
@@ -171,6 +182,9 @@ export const Header: React.FC<HeaderProps> = ({
     currentView === 'evaluare' ||
     currentView === 'livequiz' ||
     currentView === 'sandbox' ||
+    currentView === 'fise' ||
+    currentView === 'leonida' ||
+    currentView === 'ailab' ||
     currentView === 'blog' ||
     currentView === 'glossary' ||
     currentView === 'teacher';
@@ -312,8 +326,8 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
-            {/* Resources & Tools Dropdown (Carnet, Evaluare, Sandbox, Blog, Glossary, Shop, Teacher) */}
-            {(onNavigateToCarnet || onNavigateToEvaluare || onNavigateToSandbox || onNavigateToBlog || onNavigateToGlossary || onNavigateToTeacher || onOpenShop) && (
+            {/* Resources & Tools Dropdown (Carnet, Evaluare, Fise, Leonida, AI Lab, Sandbox, Blog, Glossary, Shop, Teacher) */}
+            {(onNavigateToCarnet || onNavigateToEvaluare || onNavigateToWorksheets || onNavigateToLeonida || onNavigateToAiLab || onNavigateToSandbox || onNavigateToBlog || onNavigateToGlossary || onNavigateToTeacher || onOpenShop) && (
               <div className="relative" ref={resourcesDropdownRef}>
                 <button
                   type="button"
@@ -515,6 +529,96 @@ export const Header: React.FC<HeaderProps> = ({
                           </div>
                           <div className="text-[11px] text-slate-400 truncate">
                             {lang === 'en' ? '44 Essential Terms A–Z' : '44 Termeni Esențiali A–Z'}
+                          </div>
+                        </div>
+                      </a>
+                    )}
+
+                    {onNavigateToWorksheets && (
+                      <a
+                        href={lang === 'en' ? '/fise/en/' : '/fise/'}
+                        role="menuitem"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sounds.playClick();
+                          setIsResourcesOpen(false);
+                          onNavigateToWorksheets();
+                        }}
+                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                          currentView === 'fise'
+                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                          <ClipboardCheck className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white">
+                            {lang === 'en' ? 'Worksheets & Rubrics (16)' : 'Fișe & Teste cu Barem (16)'}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {lang === 'en' ? 'A4 Printable · OJI & 1–10 Keys' : 'A4 Imprimabile · Barem 1–10'}
+                          </div>
+                        </div>
+                      </a>
+                    )}
+
+                    {onNavigateToLeonida && (
+                      <a
+                        href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
+                        role="menuitem"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sounds.playClick();
+                          setIsResourcesOpen(false);
+                          onNavigateToLeonida();
+                        }}
+                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                          currentView === 'leonida'
+                            ? 'bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30'
+                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-fuchsia-500/15 border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 shrink-0">
+                          <Compass className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white">
+                            {lang === 'en' ? 'Vice Leonida (GTA 6 Open-World)' : 'Vice Leonida (Open-World GTA 6)'}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {lang === 'en' ? '6 Districts · 5 Rides · 3 Modes' : '6 Regiuni · 5 Vehicule · 3 Moduri'}
+                          </div>
+                        </div>
+                      </a>
+                    )}
+
+                    {onNavigateToAiLab && (
+                      <a
+                        href={lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/'}
+                        role="menuitem"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sounds.playClick();
+                          setIsResourcesOpen(false);
+                          onNavigateToAiLab();
+                        }}
+                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                          currentView === 'ailab'
+                            ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30'
+                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
+                          <BrainCircuit className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-white">
+                            {lang === 'en' ? 'AI & Deepfake Lab' : 'Laborator AI & Deepfake'}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {lang === 'en' ? 'Tokens · Forensics · Prompts' : 'Tokeni · Detectiv · Prompturi'}
                           </div>
                         </div>
                       </a>
@@ -872,6 +976,75 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="min-w-0">
                     <div className="font-bold truncate">{lang === 'en' ? 'ICT Glossary' : 'Glosar TIC'}</div>
                     <div className="text-[10px] text-cyan-200 truncate">{lang === 'en' ? '44 Terms A–Z' : '44 Termeni A–Z'}</div>
+                  </div>
+                </a>
+              )}
+
+              {onNavigateToWorksheets && (
+                <a
+                  href={lang === 'en' ? '/fise/en/' : '/fise/'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToWorksheets();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 min-h-[48px] ${
+                    currentView === 'fise'
+                      ? 'bg-emerald-600 text-white border-emerald-400'
+                      : 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 text-emerald-300'
+                  }`}
+                >
+                  <ClipboardCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">{lang === 'en' ? 'Worksheets & Rubrics (16)' : 'Fișe de Lucru & Teste cu Barem (16)'}</div>
+                    <div className="text-[10px] text-emerald-200 truncate">{lang === 'en' ? 'A4 Print + Interactive Grading 1–10' : 'Imprimabile A4 · Barem Oficial 1–10'}</div>
+                  </div>
+                </a>
+              )}
+
+              {onNavigateToLeonida && (
+                <a
+                  href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToLeonida();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 min-h-[48px] ${
+                    currentView === 'leonida'
+                      ? 'bg-fuchsia-600 text-white border-fuchsia-400'
+                      : 'bg-fuchsia-500/10 hover:bg-fuchsia-500/20 border-fuchsia-500/30 text-fuchsia-200'
+                  }`}
+                >
+                  <Compass className="w-4 h-4 text-fuchsia-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">{lang === 'en' ? 'Vice Leonida (GTA 6 Open-World)' : 'Vice Leonida (Open-World GTA 6)'}</div>
+                    <div className="text-[10px] text-fuchsia-200 truncate">{lang === 'en' ? '6 Districts · Lucia & Jason · 3 Modes' : '6 Regiuni · Lucia & Jason · 3 Moduri'}</div>
+                  </div>
+                </a>
+              )}
+
+              {onNavigateToAiLab && (
+                <a
+                  href={lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    sounds.playClick();
+                    setIsMobileMenuOpen(false);
+                    onNavigateToAiLab();
+                  }}
+                  className={`p-3 rounded-xl border font-bold text-xs flex items-center gap-2.5 transition text-left cursor-pointer col-span-2 min-h-[48px] ${
+                    currentView === 'ailab'
+                      ? 'bg-teal-600 text-white border-teal-400'
+                      : 'bg-teal-500/10 hover:bg-teal-500/20 border-teal-500/30 text-teal-200'
+                  }`}
+                >
+                  <BrainCircuit className="w-4 h-4 text-teal-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-bold truncate">{lang === 'en' ? 'AI & Deepfake Forensics Lab' : 'Laboratorul AI & Detector Deepfake'}</div>
+                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? 'Tokens · Voice/Photo Deepfakes · Prompting' : 'Tokeni LLM · Deepfake Foto/Voce · Prompturi'}</div>
                   </div>
                 </a>
               )}

@@ -72,6 +72,7 @@ import { CyberClashDuelGame } from './minigames/CyberClashDuelGame';
 import { SystemSabotageDuelGame } from './minigames/SystemSabotageDuelGame';
 import { FileDropAttackDuelGame } from './minigames/FileDropAttackDuelGame';
 import { CyberBattleshipDuelGame } from './minigames/CyberBattleshipDuelGame';
+import { ViceLeonidaDuelGame } from './minigames/ViceLeonidaDuelGame';
 import { recordStudentDuelResult } from '../lib/studentAuthService';
 import { isCloudConnected } from '../lib/firebase';
 import { useLanguage } from '../context/LanguageContext';
@@ -85,6 +86,7 @@ interface DuelArenaProps {
   studentAvatar?: string;
   currentStudentName?: string;
   currentStudentAvatar?: string;
+  initialMode?: DuelGameMode;
   onAwardXP?: (amount: number, reason: string) => void;
   onBack?: () => void;
   onClose?: () => void;
@@ -96,6 +98,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   studentAvatar: propStudentAvatar,
   currentStudentName,
   currentStudentAvatar,
+  initialMode,
   onAwardXP,
   onBack,
   onClose
@@ -126,7 +129,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const handleBack = onBack || onClose;
   // Navigation / Lobby States
   const [viewState, setViewState] = useState<'lobby' | 'room' | 'playing' | 'results'>('lobby');
-  const [selectedMode, setSelectedMode] = useState<DuelGameMode>('cyber_battleship');
+  const [selectedMode, setSelectedMode] = useState<DuelGameMode>(initialMode || 'vice_leonida_duel');
   const [activeCategory, setActiveCategory] = useState<'all' | 'precision' | 'speed' | 'algo' | 'hardware'>('all');
   const [mobileLobbyTab, setMobileLobbyTab] = useState<'create' | 'join'>('create');
   const [inputRoomCode, setInputRoomCode] = useState('');
@@ -134,6 +137,13 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
   const [isJoining, setIsJoining] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
+
+  useEffect(() => {
+    if (initialMode) {
+      setSelectedMode(initialMode);
+    }
+  }, [initialMode]);
+
   // Automatically scroll to top whenever entering room, playing, results or lobby
   useEffect(() => {
     forceScrollToTop();
@@ -148,7 +158,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
       return ['cyber_precision', 'mouse_duel', 'pixel_clash', 'roblox_clicker'].includes(modeKey);
     }
     if (cat === 'speed') {
-      return ['file_drop_attack', 'system_sabotage', 'cyber_sprint', 'quiz_blitz', 'binary_clash'].includes(modeKey);
+      return ['vice_leonida_duel', 'file_drop_attack', 'system_sabotage', 'cyber_sprint', 'quiz_blitz', 'binary_clash'].includes(modeKey);
     }
     if (cat === 'algo') {
       return ['block_coding', 'algo_race_cpp', 'speed_crafting'].includes(modeKey);
@@ -174,6 +184,21 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
     iconBg: string;
     selectedGradient: string;
   }[] = [
+    {
+      key: 'vice_leonida_duel',
+      titleRo: 'Vice Leonida 1v1 (GTA 6 Tech) 🌴⚡',
+      titleEn: 'Vice Leonida 1v1 (GTA 6 Tech) 🌴⚡',
+      badgeRo: 'NOU 🔥',
+      badgeEn: 'NEW 🔥',
+      badgeClass: 'bg-fuchsia-500/20 text-fuchsia-300',
+      subtitleRo: 'Cursa Cyber-Heist 1v1 · Lucia/Jason, Porți TIC & Sabotaje VCPD',
+      subtitleEn: '1v1 Cyber-Heist Race · Lucia/Jason, ICT Gates & VCPD Sabotages',
+      descRo: 'Primul la 2.500 Vault Points pe autostrada neon Vice Beach câștigă! Sparge Boost Gates cu întrebări Binar/C++ și trimite Drone VCPD 3★, Glitch Direcție sau Firewall 4-Bit rivalului!',
+      descEn: 'First to 2,500 Vault Points on the Vice Beach neon highway wins! Crack Binary/C++ Boost Gates and fire VCPD 3★ Drones, Steer Glitch or 4-Bit Firewall Locks at your rival!',
+      icon: <Flame className="w-4 h-4 text-white" />,
+      iconBg: 'bg-gradient-to-br from-fuchsia-500 to-amber-500 shadow-fuchsia-500/30',
+      selectedGradient: 'bg-gradient-to-br from-fuchsia-950/90 via-slate-900 to-amber-950/70 border-fuchsia-400 ring-2 ring-fuchsia-500/40 shadow-lg',
+    },
     {
       key: 'cyber_battleship',
       titleRo: 'Cyber Battleship 1v1 ⚓🚢',
@@ -1072,6 +1097,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
           return '🧱 File-Drop Attack (Pro 1v1 Matrix & Cyber Attacks)';
         case 'cyber_battleship':
           return '⚓ Cyber Battleship (10×10 Tactical Naval Warfare 1v1)';
+        case 'vice_leonida_duel':
+          return '🌴 Vice Leonida 1v1 (GTA 6 Cyber-Heist Showdown)';
         default:
           return '⚔️ ICT 1v1 Duel';
       }
@@ -1117,6 +1144,8 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
         return '🧱 File-Drop Attack (Matrice Pro & Atacuri Cyber 1v1)';
       case 'cyber_battleship':
         return '⚓ Cyber Battleship (Bătălie Navală 10×10 & Sonar 1v1)';
+      case 'vice_leonida_duel':
+        return '🌴 Vice Leonida 1v1 (Cursa GTA 6 Cyber-Heist)';
       default:
         return '⚔️ Duel 1v1 TIC';
     }
@@ -1185,7 +1214,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               }`}
             >
               <Swords className="w-4 h-4 shrink-0" />
-              <span>{lang === 'en' ? '1. Host a Duel (20 Modes)' : '1. Alege & Creează Meci'}</span>
+              <span>{lang === 'en' ? '1. Host a Duel (21 Modes)' : '1. Alege & Creează Meci'}</span>
             </button>
             <button
               type="button"
@@ -1261,9 +1290,9 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                     {lang === 'en' ? 'Filter:' : 'Filtru:'}
                   </span>
                   {[
-                    { id: 'all', labelRo: 'Toate (20)', labelEn: 'All (20)' },
+                    { id: 'all', labelRo: 'Toate (21)', labelEn: 'All (21)' },
                     { id: 'precision', labelRo: '🎯 Precizie & Mouse (4)', labelEn: '🎯 Precision & Mouse (4)' },
-                    { id: 'speed', labelRo: '⚡ Viteză, Sabotaj & Reacție (5)', labelEn: '⚡ Speed, Sabotage & Typing (5)' },
+                    { id: 'speed', labelRo: '⚡ Viteză, Sabotaj & Reacție (6)', labelEn: '⚡ Speed, Sabotage & Typing (6)' },
                     { id: 'algo', labelRo: '🧠 Algoritmi & Logică (3)', labelEn: '🧠 Algorithms & Logic (3)' },
                     { id: 'hardware', labelRo: '⚔️ Strategie, Cyber & Hardware (8)', labelEn: '⚔️ Strategy, Cyber & Hardware (8)' },
                   ].map(cat => (
@@ -1416,7 +1445,7 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
                       className="lg:hidden w-full min-h-[40px] mb-3 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer"
                     >
                       <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
-                      <span>{lang === 'en' ? 'Back to Mode Selection (20 Modes)' : 'Înapoi la Lista de Dueluri (20 Moduri)'}</span>
+                      <span>{lang === 'en' ? 'Back to Mode Selection (21 Modes)' : 'Înapoi la Lista de Dueluri (21 Moduri)'}</span>
                     </button>
                   )}
 
@@ -2425,6 +2454,27 @@ export const DuelArena: React.FC<DuelArenaProps> = ({
               onFinish={(_finalScore, won) => {
                 if (won) {
                   onAwardXP?.(350, lang === 'en' ? 'Admiral Victory in Cyber Battleship 1v1!' : 'Victorie Navală în Cyber Battleship 1v1!');
+                }
+              }}
+              onBack={() => {
+                if (currentRoom?.roomCode) {
+                  leaveDuelRoom(currentRoom.roomCode, isHost);
+                }
+                setViewState('lobby');
+              }}
+            />
+          )}
+
+          {/* MODE 16: VICE LEONIDA 1v1 (GTA 6 TECH SHOWDOWN) */}
+          {currentRoom.mode === 'vice_leonida_duel' && (
+            <ViceLeonidaDuelGame
+              roomData={currentRoom}
+              isHost={isHost}
+              studentName={resolvedStudentName}
+              studentAvatar={resolvedAvatar}
+              onFinish={(_finalScore, won) => {
+                if (won) {
+                  onAwardXP?.(360, lang === 'en' ? 'Victory in Vice Leonida 1v1!' : 'Victorie în Vice Leonida 1v1!');
                 }
               }}
               onBack={() => {

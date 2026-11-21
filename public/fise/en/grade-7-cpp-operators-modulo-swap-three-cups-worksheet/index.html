@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 7 C++ Operators &amp; Swap Worksheet with Rubric | ArkyEdu</title>
+  <meta name="description" content="Grade 7 C++ worksheet with 100-point rubric and visual RAM trace: integer division /, modulo %10, 3-cup swap with aux, and cin/cout expressions.">
+  <meta name="keywords" content="grade 7 c++ operators worksheet, modulo and integer division c++ quiz, swap two variables aux c++ exercises">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/fise/fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/fise/fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Grade 7 C++ Operators &amp; Swap Worksheet with Rubric | ArkyEdu">
+  <meta property="og:description" content="Grade 7 C++ worksheet with 100-point rubric and visual RAM trace: integer division /, modulo %10, 3-cup swap with aux, and cin/cout expressions.">
+  <meta property="og:url" content="https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grade 7 C++ Operators &amp; Swap Worksheet with Rubric | ArkyEdu">
+  <meta name="twitter:description" content="Grade 7 C++ worksheet with 100-point rubric and visual RAM trace: integer division /, modulo %10, 3-cup swap with aux, and cin/cout expressions.">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["LearningResource","Quiz"],"@id":"https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/#resource","name":"Grade 7 C++ Worksheet: Integer Division (`/`), Modulo (`%`) & 3-Cup Swap (with RAM Trace)","description":"Covers C++ linear basics (100 pts): integer division (`17 / 5 == 3`), last digit extraction via `% 10`, digit truncation via `/ 10`, assignment `=` vs equality `==`, and safe 3-variable swapping (`aux = a; a = b; b = aux;`).","url":"https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/","inLanguage":"en","isAccessibleForFree":true,"educationalLevel":"Grade 7","learningResourceType":"Worksheet","timeRequired":"PT30M","datePublished":"2026-04-10","hasPart":[{"@type":"Question","name":"Given `int a = 19, b = 4;`, what will `cout << a / b << \" \" << a % b;` print?","acceptedAnswer":{"@type":"Answer","text":"4 3 — Because both are `int`, `19 / 4` yields integer quotient `4`, and `19 % 4` yields remainder `3`."}},{"@type":"Question","name":"Which code snippet CORRECTLY swaps the values of `x` and `y`?","acceptedAnswer":{"@type":"Answer","text":"aux = x; x = y; y = aux; — Save `x` in `aux` first, copy `y` into `x`, then restore `aux` into `y`."}},{"@type":"Question","name":"Enter the exact output printed by the C++ snippet below:","acceptedAnswer":{"@type":"Answer","text":"16 — 385 / 100 = 3, 385 / 10 % 10 = 8, 385 % 10 = 5. Total sum = 3 + 8 + 5 = 16."}},{"@type":"Question","name":"True or False: Writing `int x = 5;` followed by `x = x + 3;` is an invalid statement in C++.","acceptedAnswer":{"@type":"Answer","text":"False — False! `=` is assignment: C++ evaluates the right side first (5 + 3 = 8) and stores 8 back into `x`."}},{"@type":"Question","name":"What does `cout << a << \" \" << b;` output after: `int a = 4, b = 9; a = a + b; b = a - b; a = a - b;`? (two integers separated by space)","acceptedAnswer":{"@type":"Answer","text":"9 4 — Arithmetic swap without `aux`: a=13, b=13-9=4, a=13-4=9. Output is `9 4`."}}],"offers":{"@type":"Offer","price":"0","priceCurrency":"RON"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.arkyedu.com/"},{"@type":"ListItem","position":2,"name":"Worksheets","item":"https://www.arkyedu.com/fise/en/"},{"@type":"ListItem","position":3,"name":"G7 C++ Sheet: /, % & Swap","item":"https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I extract the tens digit of an integer `n` in C++?","acceptedAnswer":{"@type":"Answer","text":"Drop the ones digit using `(n / 10)` then take `% 10`: `(n / 10) % 10`."}}]}]}</script>
+  <style>
+    
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .ws-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .ws-pre { background: #0b1220; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; overflow-x: auto; font-family: monospace; color: #bae6fd; margin: 0.75rem 0; font-size: 0.9rem; }
+    .ws-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.92rem; }
+    .ws-table th, .ws-table td { border-bottom: 1px solid #334155; padding: 0.6rem 0.5rem; text-align: left; }
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .ws-box { background: #fff !important; border: 1px solid #94a3b8 !important; color: #000 !important; page-break-inside: avoid; }
+      .ws-pre { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      .ws-table th, .ws-table td { border-color: #94a3b8 !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">📝</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">TIC</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/fise/en/">All 16 Worksheets</a>
+        <a href="https://www.arkyedu.com/cursuri/g7_cpp_b/">Interactive Lesson</a>
+        <a href="https://www.arkyedu.com/sandbox/en/">Sandbox &amp; Trace C++</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/fise/fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">RO</a>
+        <a href="https://www.arkyedu.com/#fise/grade-7-cpp-operators-modulo-swap-three-cups-worksheet" class="nav-cta"><span>Solve Interactive</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2.5rem 1.5rem 4rem;">
+    <div style="font-size:0.85rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;">
+      Grade 7 · Worksheet · 30 min · 100p (10p ex officio)
+    </div>
+    <h1 style="font-size:2rem;line-height:1.25;margin-bottom:1rem;">Grade 7 C++ Worksheet: Integer Division (`/`), Modulo (`%`) &amp; 3-Cup Swap (with RAM Trace)</h1>
+    <div class="ws-box">
+      <strong>Quick Summary & Key Points:</strong>
+      <p style="margin-top:0.5rem;color:#cbd5e1;">Covers C++ linear basics (100 pts): integer division (`17 / 5 == 3`), last digit extraction via `% 10`, digit truncation via `/ 10`, assignment `=` vs equality `==`, and safe 3-variable swapping (`aux = a; a = b; b = aux;`).</p>
+      <p style="margin-top:0.6rem;font-size:0.92rem;color:#94a3b8;"><strong>Theory Snapshot:</strong> For `int`: `n % 10` gives the last digit (`247 % 10 == 7`) and `n / 10` removes it (`247 / 10 == 24`). Never swap via `a = b; b = a;`—you lose the original `a` unless you save it in `aux` first.</p>
+      <div class="no-print" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href="https://www.arkyedu.com/#fise/grade-7-cpp-operators-modulo-swap-three-cups-worksheet" class="btn-primary"><span>Solve & Auto-Grade (1–10)</span></a>
+        <button type="button" onclick="window.print()" class="btn-secondary" style="cursor:pointer;"><span>🖨️ Print A4 Sheet</span></button>
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-secondary"><span>🔬 Trace C++ Code</span></a>
+      </div>
+    </div>
+
+    
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>1. Part I · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Given `int a = 19, b = 4;`, what will `cout &lt;&lt; a / b &lt;&lt; &quot; &quot; &lt;&lt; a % b;` print?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> 4.75 3</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> 4 3</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> 3 4</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> 4 1</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) 4 3 — Because both are `int`, `19 / 4` yields integer quotient `4`, and `19 % 4` yields remainder `3`.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>2. Part I · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Which code snippet CORRECTLY swaps the values of `x` and `y`?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> x = y; y = x;</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> aux = x; x = y; y = aux;</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> x = aux; aux = y; y = x;</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> aux = x; y = x; x = y;</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) aux = x; x = y; y = aux; — Save `x` in `aux` first, copy `y` into `x`, then restore `aux` into `y`.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>3. Part II · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Enter the exact output printed by the C++ snippet below:</h2>
+        <pre class="ws-pre"><code>int n = 385;
+int s = (n / 100) + (n / 10 % 10) + (n % 10);
+cout &lt;&lt; s;</code></pre>
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> 16 — 385 / 100 = 3, 385 / 10 % 10 = 8, 385 % 10 = 5. Total sum = 3 + 8 + 5 = 16.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>4. Part II · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">True or False: Writing `int x = 5;` followed by `x = x + 3;` is an invalid statement in C++.</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> True</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> False</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) False — False! `=` is assignment: C++ evaluates the right side first (5 + 3 = 8) and stores 8 back into `x`.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>5. Part III</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">What does `cout &lt;&lt; a &lt;&lt; &quot; &quot; &lt;&lt; b;` output after: `int a = 4, b = 9; a = a + b; b = a - b; a = a - b;`? (two integers separated by space)</h2>
+        
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> 9 4 — Arithmetic swap without `aux`: a=13, b=13-9=4, a=13-4=9. Output is `9 4`.
+        </p>
+      </article>
+
+    <section class="ws-box">
+      <h2 style="font-size:1.3rem;margin-bottom:0.5rem;">Official 100-Point Grading Rubric (Grade 1–10)</h2>
+      <table class="ws-table">
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Evaluated Competency</th>
+            <th style="text-align:right;">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>Part I (2 × 18 pts)</td>
+              <td>Integer division `/`, modulo `%`, and `aux` swap</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Part II (2 × 18 pts)</td>
+              <td>Digit extraction &amp; assignment semantics</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Part III (18 pts)</td>
+              <td>Tracing arithmetic swap sequence</td>
+              <td style="text-align:right;font-weight:700;">18p</td>
+            </tr>
+            <tr>
+              <td>Ex officio</td>
+              <td>Baseline points</td>
+              <td style="text-align:right;font-weight:700;">10p</td>
+            </tr>
+          <tr>
+            <td colspan="2"><strong>TOTAL (Grade = Score / 10)</strong></td>
+            <td style="text-align:right;font-weight:900;color:var(--accent);">100p</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ws-box no-print">
+      <h2 style="font-size:1.2rem;margin-bottom:0.75rem;">More Worksheets & Related Links</h2>
+      <div class="grid-3">
+        <a href="https://www.arkyedu.com/fise/en/grade-7-cpp-if-else-decisions-logical-operators-test/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G7 C++ Exam: if/else &amp; Logic</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a><a href="https://www.arkyedu.com/fise/en/grade-7-olympiad-cpp-while-loops-palindrome-prime-worksheet/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G7 OJI Sheet: while &amp; Primes</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a><a href="https://www.arkyedu.com/fise/en/grade-7-practical-sheet-word-typography-wavepad-audio-gis-maps/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G7 Practical: Word, Audio &amp; GIS</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border:none;">
+        <div>© 2026 ArkyEdu · OMEN 3393/2017 · Clasa a VII-a · Introducere C++ &amp; Operatori</div>
+        <div><a href="https://www.arkyedu.com/fise/" style="color:var(--accent);">All Worksheets</a> · <a href="https://www.arkyedu.com/fise-llm.txt" style="color:var(--accent);">fise-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

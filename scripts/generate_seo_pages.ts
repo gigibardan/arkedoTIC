@@ -11,6 +11,30 @@ import {
   getGlossaryTermsForModule
 } from '../src/data/glossary/index';
 import { SANDBOX_CHALLENGES } from '../src/data/sandboxChallenges';
+import { OLYMPIAD_PROBLEMS } from '../src/data/olympiadProblems';
+import {
+  WORKSHEETS_BANK,
+  WORKSHEET_GRADE_LABELS,
+  WORKSHEET_KIND_LABELS,
+  getRelatedWorksheets
+} from '../src/data/worksheets/index';
+import {
+  GTA6_FACTS_2026,
+  LEONIDA_REGIONS,
+  LEONIDA_CAST,
+  LEONIDA_VEHICLES,
+  LEONIDA_STORY_CHALLENGES,
+  LEONIDA_TECH_BRIDGES,
+  LEONIDA_FAQS
+} from '../src/data/leonidaOpenWorldData';
+import {
+  TOKENIZER_PRESETS,
+  HALLUCINATION_STRESS_TESTS,
+  DEEPFAKE_FORENSIC_CASES,
+  PROMPT_ARCHITECT_CHALLENGES,
+  AI_CURRICULUM_BRIDGES,
+  AI_LAB_FAQS
+} from '../src/data/aiLabData';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -600,8 +624,9 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-8/">Clasa a VIII-a</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
-        <a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade</a>
-        <a href="https://www.arkyedu.com/duel/">Duel 1v1 (20+)</a>
+        <a href="https://www.arkyedu.com/arcade/">30 Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/leonida/">Vice Leonida GTA 6</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1 (21+)</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Educație Tehnologie</a>
       </nav>
       <a href="${appDeepLink}" class="nav-cta">
@@ -755,8 +780,9 @@ ${commonStyles}
         <div class="footer-col">
           <h4>Arcade &amp; Competiții</h4>
           <ul>
-            <li><a href="https://www.arkyedu.com/arcade/">28 Jocuri Didactice Arcade</a></li>
-            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (20+ Moduri)</a></li>
+            <li><a href="https://www.arkyedu.com/arcade/">30 Jocuri Didactice Arcade</a></li>
+            <li><a href="https://www.arkyedu.com/leonida/">Vice Leonida GTA 6 Open-World</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (21+ Moduri)</a></li>
             <li><a href="https://www.arkyedu.com/profesor/">Portal Profesori &amp; Catalog</a></li>
             <li><a href="https://www.arkyedu.com/oras/">Arkedo Smart City IoT</a></li>
           </ul>
@@ -924,7 +950,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
         <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
       </nav>
@@ -1018,10 +1044,10 @@ ${commonStyles}
     <!-- VALUE PROPOSITION -->
     <div class="hero-section" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.5rem; padding: 3rem 1.5rem; margin-top: 2rem;">
       <h2 style="font-size: 1.85rem; margin-bottom: 1rem;">De Ce Învață Elevii Mai Bine cu ArkyEdu?</h2>
-      <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 28 de jocuri arcade, peste 20 de dueluri 1v1 și diplome de merit oficiale, 100% gratuit!</p>
+      <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 2rem;">Spre deosebire de cursurile private scumpe (care cer 400 - 600 lei/lună și folosesc platforme străine), ArkyEdu este creat de profesori din România exact pe manualele școlare aprobate de Ministerul Educației, oferind 30 de jocuri arcade, peste 21 de dueluri 1v1 și diplome de merit oficiale, 100% gratuit!</p>
       <div class="cta-group">
         <a href="${appGradeLink}" class="btn-primary">Exersează Acum Clasa a ${g.roman}-a</a>
-        <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">Vezi Cele 28 de Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">Vezi Cele 30 de Jocuri Arcade</a>
       </div>
     </div>
   </main>
@@ -1045,8 +1071,9 @@ ${commonStyles}
         <div class="footer-col">
           <h4>Arcade &amp; Duel</h4>
           <ul>
-            <li><a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade Didactice</a></li>
-            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (20+ Moduri)</a></li>
+            <li><a href="https://www.arkyedu.com/arcade/">30 Jocuri Arcade Didactice</a></li>
+            <li><a href="https://www.arkyedu.com/leonida/">Vice Leonida GTA 6 Open-World</a></li>
+            <li><a href="https://www.arkyedu.com/duel/">Arena Dueluri 1v1 (21+ Moduri)</a></li>
             <li><a href="https://www.arkyedu.com/blog/">Blog &amp; Ghiduri TIC (RO/EN)</a></li>
             <li><a href="https://www.arkyedu.com/glosar/">Glosar Bilingv TIC (44 Termeni A–Z)</a></li>
             <li><a href="https://www.arkyedu.com/sandbox/">Sandbox Cod Live (C++ / Python 3 / HTML5)</a></li>
@@ -1112,7 +1139,7 @@ function generateComparisonPage() {
             "name": "Ce tehnologii și limbaje de programare sunt incluse?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Platforma include Scratch 3.0, limbajul C++ (mediul Code::Blocks, sintaxă nativă, bucle while/for, algoritmi de numere prime, Fibonacci și vectori), HTML5 semantic, calcul tabelar avansat în Microsoft Excel & Google Sheets, simulatoare de circuite Arduino Uno cu senzori (LDR, PIR, Ultrasonic HC-SR04, Gaz MQ-2, ecran LCD 1602 I2C, servomotoare SG90), 28 de jocuri arcade didactice și 20+ dueluri 1v1."
+              "text": "Platforma include Scratch 3.0, limbajul C++ (mediul Code::Blocks, sintaxă nativă, bucle while/for, algoritmi de numere prime, Fibonacci și vectori), HTML5 semantic, calcul tabelar avansat în Microsoft Excel & Google Sheets, simulatoare de circuite Arduino Uno cu senzori (LDR, PIR, Ultrasonic HC-SR04, Gaz MQ-2, ecran LCD 1602 I2C, servomotoare SG90), 30 de jocuri arcade didactice (incl. Vice Leonida Open-World GTA 6) și 21+ dueluri 1v1."
             }
           },
           {
@@ -1186,7 +1213,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
-        <a href="https://www.arkyedu.com/arcade/">28 Jocuri Arcade</a>
+        <a href="https://www.arkyedu.com/arcade/">30 Jocuri Arcade</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
       <a href="https://www.arkyedu.com/" class="nav-cta">
@@ -1212,7 +1239,7 @@ ${commonStyles}
           <span>🚀 Începe Acum Gratuit — Fără Card Bancar</span>
         </a>
         <a href="https://www.arkyedu.com/arcade/" class="btn-secondary">
-          <span>🕹️ Descoperă Cele 28 Jocuri Arcade</span>
+          <span>🕹️ Descoperă Cele 30 Jocuri Arcade</span>
         </a>
       </div>
     </div>
@@ -1275,8 +1302,8 @@ ${commonStyles}
           <tr>
             <td><strong>Gamificare &amp; Imersiune</strong></td>
             <td>
-              <span class="check-icon">✓ 28 JOCURI RETRO ARCADE</span><br>
-              Cyber Pac-Man, Cyber Arkanoid, Cyber Frogger, Cyber Sokoban, Cyber Asteroids, Circuit Master 80s, Cyber Snake, Redstone Logic, Minecraft Voxel, Hacker vs Defender, PC Builder etc.
+              <span class="check-icon">✓ 30 JOCURI RETRO &amp; OPEN-WORLD ARCADE</span><br>
+              Vice Leonida Open-World Story (GTA 6), Cyber Runner, Cyber Pac-Man, Cyber Arkanoid, Cyber Frogger, Cyber Sokoban, Cyber Asteroids, Circuit Master 80s, Redstone Logic, PC Builder etc.
             </td>
             <td>
               <span class="cross-icon">✗ EXERCIȚII REPETITIVE DE BAZĂ</span><br>
@@ -1286,8 +1313,8 @@ ${commonStyles}
           <tr>
             <td><strong>Competiții Tehnologice &amp; Dueluri</strong></td>
             <td>
-              <span class="check-icon">✓ ARENĂ DUELURI 1V1 (20+ MODURI LIVE)</span><br>
-              Cyber Battleship 1v1, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash, Circuit Clash — confruntări multiplayer între elevi sau cu AI Cyber-Bot.
+              <span class="check-icon">✓ ARENĂ DUELURI 1V1 (21+ MODURI LIVE)</span><br>
+              Vice Leonida 1v1 (GTA 6), Cyber Battleship 1v1, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash, Circuit Clash — confruntări multiplayer între elevi sau cu AI Cyber-Bot.
             </td>
             <td>
               <span class="cross-icon">✗ CONCURSURI RARE CU TAXĂ</span><br>
@@ -1316,7 +1343,7 @@ ${commonStyles}
       <div class="faq-block">
         <div class="faq-question">1. Chiar este complet gratuit? Există vreo taxă ascunsă sau reclame?</div>
         <div class="faq-answer">
-          Absolut deloc! ArkyEdu este o inițiativă educațională deschisă non-profit. Nu există conturi premium plătite, nu există reclame și nu cerem niciodată date de card bancar. Toți elevii și profesorii au acces egal la toate cele 40 de module didactice, simulatoarele hardware, cele 28 de jocuri arcade și 20+ dueluri 1v1.
+          Absolut deloc! ArkyEdu este o inițiativă educațională deschisă non-profit. Nu există conturi premium plătite, nu există reclame și nu cerem niciodată date de card bancar. Toți elevii și profesorii au acces egal la toate cele 40 de module didactice, simulatoarele hardware, cele 30 de jocuri arcade și 21+ dueluri 1v1.
         </div>
       </div>
 
@@ -1382,15 +1409,17 @@ function generateFeatureHubs() {
   const hubs = [
     {
       dir: 'arcade',
-      title: 'Arcade TIC: 28 Jocuri Retro Didactice de Programare, Hardware & Securitate | ArkyEdu',
-      meta: 'Colecție completă de 28 mini-jocuri arcade retro gratuite pentru educație TIC și coding copii: Cyber Pac-Man, Cyber Arkanoid, Cyber Frogger, Cyber Sokoban, Cyber Asteroids, Circuit Master 80s, Redstone Logic Lab, PC Builder și tastare oarbă.',
-      keywords: 'jocuri arcade tic, jocuri educative programare copii, jocuri invatare informatica gimnaziu, cyber pacman tic, cyber arkanoid firewall, cyber frogger retea, cyber sokoban servere, circuit master 80s, redstone logic simulator, pc builder simulator',
-      h1: 'Arcade Didactic TIC: 28 de Jocuri Retro de Programare & Tehnologie',
+      title: 'Arcade TIC: 30 Jocuri Retro & GTA 6 Open-World | ArkyEdu',
+      meta: 'Colecție completă de 30 mini-jocuri arcade și open-world gratuite pentru educație TIC și coding copii: Vice Leonida Open-World Story (GTA 6), Cyber Runner, Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Circuit Master 80s & PC Builder.',
+      keywords: 'jocuri arcade tic, vice leonida gta 6 joc, gta 6 open world browser educativ, jocuri educative programare copii, cyber pacman tic, cyber arkanoid firewall, cyber frogger retea, cyber sokoban servere, circuit master 80s, redstone logic simulator, pc builder simulator',
+      h1: 'Arcade Didactic TIC: 30 de Jocuri Retro &amp; Vice Leonida Open-World (GTA 6)',
       appLink: 'https://www.arkyedu.com/#arcade',
-      sectionTitle: 'Catalog Complet: Cele 28 de Mini-Jocuri Educative Arcade',
+      sectionTitle: 'Catalog Complet: Cele 30 de Mini-Jocuri Educative Arcade',
       cards: [
+        { icon: '🗺️', title: 'Vice Leonida: Open-World Story (GTA 6 Sandbox 2D)', desc: 'Explorează liber toate cele 6 regiuni din Statul Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) cu Lucia & Jason, 5 vehicule + Hydro-Airboat, poliție VCPD 1★–5★ și misiuni TIC!', href: 'https://www.arkyedu.com/leonida/' },
+        { icon: '🌴', title: 'Vice Leonida VI: Cyber Runner (GTA 6 Tech)', desc: 'Traversează 4 sectoare din Statul Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat) cu Lucia Caminos & Jason Duval, Nitro, EMP și hack-uri binare pe 4 biți.', href: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/' },
         { icon: '🟡', title: 'Cyber Pac-Man: Labirintul Biților', desc: 'Colectează pachete de date pe placa de bază și activează scutul antivirus răspunzând fulger la întrebări TIC.' },
-        { icon: '🧱', title: 'Cyber Arkanoid: Firewall Breaker', desc: 'Distruge blocuri criptate cu lasere, capsule multi-ball și fizică 60 FPS pentru consolidarea logicii.' },
+        { icon: '🧱', title: 'Cyber Arkanoid: Firewall Breaker', desc: 'Distrugere blocuri criptate cu lasere, capsule multi-ball și fizică 60 FPS pentru consolidarea logicii.' },
         { icon: '🐸', title: 'Cyber Frogger: Traversarea Rețelei', desc: 'Navighează pachetele IP prin benzi de trafic LAN/WAN și canale de fibră optică fără coliziuni malware.' },
         { icon: '🤖', title: 'Cyber Sokoban: Inginerul de Servere', desc: 'Puzzle algoritmic de optimizare și împingere servere/baterii pe rack-uri în Data Center.' },
         { icon: '☄️', title: 'Cyber Asteroids: Reactorul Vectorial', desc: 'Pilotaj vectorial cu inerție și distrugere de meteoriți binari și viruși în spațiul cibernetic.' },
@@ -1401,19 +1430,20 @@ function generateFeatureHubs() {
         { icon: '⌨️', title: 'Tastare Rapidă (WPM), Mouse Pro & Binary', desc: 'Antrenament tastare oarbă QWERTY cu diacritice românești, dexteritate periferice și conversii binare.' }
       ],
       faqs: [
-        { q: 'Sunt cele 28 de jocuri arcade aliniate la materia școlară de TIC?', a: 'Da! Fiecare joc arcade consolidează noțiuni exacte din programa claselor V–VIII: biți și octeți, extensii de fișiere, porți logice, componente PC, securitate cibernetică, sintaxă C++ și robotică Arduino.' },
-        { q: 'Se pot juca gratuit pe telefon, tabletă sau calculator școlar?', a: 'Da, toate cele 28 de jocuri rulează direct în browser (desktop & touch mobil) fără instalare și fără reclame, fiind bilingve (Română și Engleză).' }
+        { q: 'Sunt cele 30 de jocuri arcade aliniate la materia școlară de TIC?', a: 'Da! Fiecare joc arcade consolidează noțiuni exacte din programa claselor V–VIII: biți și conversii binare pe 4/8 biți (inclusiv în Vice Leonida Open-World & Cyber Runner), extensii de fișiere, porți logice, componente PC, securitate cibernetică, sintaxă C++ și robotică Arduino.' },
+        { q: 'Se pot juca gratuit pe telefon, tabletă sau calculator școlar?', a: 'Da, toate cele 30 de jocuri rulează direct în browser (desktop & touch mobil) fără instalare și fără reclame, fiind bilingve (Română și Engleză).' }
       ]
     },
     {
       dir: 'duel',
-      title: 'Arena Dueluri TIC 1v1: 20+ Competiții Tehnologice, Coding Live & Circuite | ArkyEdu',
-      meta: 'Confruntări live multiplayer 1v1 între elevi sau cu AI Cyber-Bot: Cyber Battleship 1v1, File-Drop Attack Tetris Pro, System Sabotage (Among Us), Cyber Clash Royale, C++ Code Racer, Binary Clash și Circuit Clash Arduino.',
-      keywords: 'dueluri tic 1v1, competitii tehnologice scolare, cyber battleship 1v1, file drop attack tetris, system sabotage 1v1, binary clash 1v1, circuit clash arduino, c++ code racer, network packet racer, olimpiada tic live',
-      h1: 'Arena Dueluri TIC 1v1: Peste 20 de Competiții Tehnologice Live',
+      title: 'Arena Dueluri TIC 1v1: 21+ Competiții Live & Vice Leonida GTA 6 | ArkyEdu',
+      meta: 'Confruntări live multiplayer 1v1 între elevi sau cu AI Cyber-Bot: Vice Leonida 1v1 (GTA 6 Cyber-Heist), Cyber Battleship 1v1, File-Drop Attack Tetris Pro, System Sabotage, Cyber Clash Royale, C++ Code Racer & Binary Clash.',
+      keywords: 'dueluri tic 1v1, vice leonida 1v1 gta 6, cyber heist 1v1, competitii tehnologice scolare, cyber battleship 1v1, file drop attack tetris, system sabotage 1v1, binary clash 1v1, circuit clash arduino, c++ code racer',
+      h1: 'Arena Dueluri TIC 1v1: Peste 21 de Competiții Tehnologice Live',
       appLink: 'https://www.arkyedu.com/#duel',
       sectionTitle: 'Moduri Populare de Duel 1v1 (Live Cloud PvP & AI Cyber-Bot)',
       cards: [
+        { icon: '🌴', title: 'Vice Leonida 1v1: Cyber-Heist Showdown (GTA 6)', desc: 'Cursă competitivă până la 2.500 puncte Vault pe autostrada Vice Beach cu Lucia & Jason, Boost Gates TIC și 4 sabotaje live: Drone 3★, Glitch, Throttle și Firewall Lock.', href: 'https://www.arkyedu.com/duel/vice-leonida-1v1/' },
         { icon: '⚓', title: 'Cyber Battleship 1v1 (Bătălie Navală 10×10)', desc: '5 nave cibernetice + 2 Mine EMP, Railgun, Scanare Sonar 3×3, Bombă Cluster +, Torpile H/V și Nano-Reparație cu Scut.' },
         { icon: '🧱', title: 'File-Drop Attack 1v1 (Tetris Pro)', desc: 'SRS Wall-Kicks, T-Spin, Back-to-Back și atacuri live DDoS, Overclock x2.2, Scramble & Defrag Purge.' },
         { icon: '🛸', title: 'System Sabotage 1v1 (Stil Among Us)', desc: 'Repară 8 sisteme ale navei înaintea rivalului și declanșează sabotaje live: Stinge Lumina, Adware, Criogenare, Meltdown.' },
@@ -1562,7 +1592,8 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="https://www.arkyedu.com/leonida/">Vice Leonida GTA 6</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
         <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
       </nav>
@@ -1594,12 +1625,12 @@ ${commonStyles}
     <section aria-labelledby="hub-section-title">
       <h2 id="hub-section-title" style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">${h.sectionTitle}</h2>
       <div class="grid-2">
-        ${h.cards.map(c => `
+        ${h.cards.map((c: { icon: string; title: string; desc: string; href?: string }) => `
           <div class="card">
             <div class="card-icon">${c.icon}</div>
             <h3 class="card-title">${c.title}</h3>
             <p class="card-desc">${c.desc}</p>
-            <a href="${h.appLink}" class="card-link">Lansează în Aplicație →</a>
+            <a href="${c.href || h.appLink}" class="card-link">${c.href ? 'Detalii &amp; Lansează Jocul →' : 'Lansează în Aplicație →'}</a>
           </div>
         `).join('')}
       </div>
@@ -1700,7 +1731,7 @@ function generateTechEducationPillar() {
           {
             "@type": "Question",
             "name": "Cum contribuie jocurile educative și duelurile 1v1 la educația tehnologică a copiilor?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Cele 28 de jocuri arcade (Cyber Pac-Man, Cyber Arkanoid, Sokoban, Circuit Master 80s, Redstone Logic) și peste 20 de dueluri 1v1 transformă algoritmica, rețelele, securitatea cibernetică și electronica în provocări interactive cu feedback imediat." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Cele 30 de jocuri arcade (Vice Leonida Open-World Story & Cyber Runner GTA 6 Tech, Cyber Pac-Man, Cyber Arkanoid, Sokoban, Circuit Master 80s, Redstone Logic) și peste 21 de dueluri 1v1 transformă algoritmica, rețelele, securitatea cibernetică și electronica în provocări interactive cu feedback imediat." }
           }
         ]
       }
@@ -1760,7 +1791,8 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
         <a href="https://www.arkyedu.com/blog/">Blog TIC</a>
         <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="https://www.arkyedu.com/leonida/">Vice Leonida GTA 6</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
       <a href="https://www.arkyedu.com/" class="nav-cta">
@@ -1815,14 +1847,14 @@ ${commonStyles}
     <div class="grid-3">
       <div class="card">
         <div class="card-icon">🕹️</div>
-        <h3 class="card-title">28 Jocuri Arcade Retro</h3>
-        <p class="card-desc">Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Asteroids, Circuit Master 80s, Redstone Logic și PC Builder.</p>
+        <h3 class="card-title">29 Jocuri Arcade Retro</h3>
+        <p class="card-desc">Vice Leonida VI (GTA 6 Tech), Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Circuit Master 80s, Redstone Logic și PC Builder.</p>
         <a href="https://www.arkyedu.com/arcade/" class="card-link">Explorează Arcade →</a>
       </div>
       <div class="card">
         <div class="card-icon">⚔️</div>
-        <h3 class="card-title">Arena Dueluri 1v1 (20+ Moduri)</h3>
-        <p class="card-desc">Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer și Binary Clash live sau cu AI Bot.</p>
+        <h3 class="card-title">Arena Dueluri 1v1 (21+ Moduri)</h3>
+        <p class="card-desc">Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer și Binary Clash live sau cu AI Bot.</p>
         <a href="https://www.arkyedu.com/duel/" class="card-link">Intră în Arenă →</a>
       </div>
       <div class="card">
@@ -2203,7 +2235,7 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary (44)' : 'Glosar (44)'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/sandbox/en/' : 'https://www.arkyedu.com/sandbox/'}">Sandbox</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -2431,7 +2463,7 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary (44)' : 'Glosar (44)'}</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
         <a href="${alternateLangUrl}" class="lang-pill" title="${escapeHtmlText(other.title)}">${isEn ? 'RO' : 'EN'}</a>
@@ -2790,7 +2822,7 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
         <a href="${blogUrl}">${isEn ? 'Blog' : 'Blog TIC'}</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
         <a href="${isEn ? roIndexUrl : enIndexUrl}" class="lang-pill">${isEn ? 'RO' : 'EN'}</a>
@@ -3304,11 +3336,11 @@ function generateSandboxPages() {
     const altUrl = isEn ? roUrl : enUrl;
 
     const title = isEn
-      ? 'Interactive C++, Python 3 & HTML5 Code Sandbox (Grades 7–8) | ArkyEdu'
-      : 'Sandbox Cod Live: Editor C++ Code::Blocks, Python 3 & HTML5 în Browser | ArkyEdu';
+      ? 'C++ Step Debugger, Code Sandbox & ICT Olympiad Arena | ArkyEdu'
+      : 'Debug Vizual C++ Pas-cu-Pas, Sandbox Cod & Olimpiada TIC | ArkyEdu';
     const description = isEn
-      ? 'Free browser coding sandbox for middle school: compile and run C++17, Python 3, and semantic HTML5/CSS challenges with automated tests and instant feedback.'
-      : 'Rulează și verifică cod C++ (stil Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare: 9 provocări școlare cu teste automate și diagnostic instant.';
+      ? 'Step-by-step C++ RAM & array trace debugger with breakpoints, 12-problem ICT Olympiad Arena (5-test judge), Python 3 & HTML5/CSS directly in your browser.'
+      : 'Depanator vizual C++ pas-cu-pas cu memorie RAM și vectori, Arena Olimpiada TIC cu 12 probleme pe 5 teste, plus Python 3 și HTML5 direct în browser fără instalare.';
 
     const jsonLd = {
       "@context": "https://schema.org",
@@ -3422,7 +3454,7 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}">${isEn ? 'Blog' : 'Blog TIC'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary' : 'Glosar'}</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (28)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
         <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
@@ -3434,16 +3466,28 @@ ${commonStyles}
   <main class="container">
     <div class="hero-section">
       <div class="badge-bar">
-        <span class="badge badge-green">C++17 · Python 3 · HTML5 &amp; CSS</span>
-        <span class="badge badge-free">100% Gratuit în Browser</span>
-        <span class="badge">${SANDBOX_CHALLENGES.length} ${isEn ? 'Curriculum Challenges' : 'Provocări cu Teste Automate'}</span>
+        <span class="badge badge-green">Debug Vizual C++ · RAM &amp; Vectori</span>
+        <span class="badge badge-free">Arena Olimpiada TIC (${OLYMPIAD_PROBLEMS.length} Probleme)</span>
+        <span class="badge">C++17 · Python 3 · HTML5 (${SANDBOX_CHALLENGES.length} Teste)</span>
       </div>
-      <h1>${isEn ? 'Interactive C++, Python 3 & HTML5 Code Sandbox' : 'Sandbox Cod Live: Editor C++, Python 3 & HTML5 în Browser'}</h1>
+      <h1>${isEn ? 'C++ Visual Trace Debugger, Code Sandbox & ICT Olympiad' : 'Depanator Vizual C++ Pas-cu-Pas, Sandbox & Olimpiada TIC'}</h1>
       <p class="lead-text">${escapeHtmlText(description)}</p>
       <div class="cta-group">
-        <a href="https://www.arkyedu.com/#sandbox" class="btn-primary">💻 ${isEn ? 'Open Interactive Code Sandbox' : 'Lansează Sandbox-ul Interactiv'}</a>
-        <a href="${isEn ? 'https://www.arkyedu.com/blog/en/cpp-middle-school-top-10-errors-if-while-digits/' : 'https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/'}" class="btn-secondary">📘 ${isEn ? 'C++ Common Errors Guide' : 'Ghid Top 10 Erori C++ Gimnaziu'}</a>
+        <a href="https://www.arkyedu.com/#sandbox" class="btn-primary">💻 ${isEn ? 'Open Code Sandbox & C++ Trace' : 'Deschide Sandbox & Trace C++'}</a>
+        <a href="https://www.arkyedu.com/#olimpiada" class="btn-secondary">🏆 ${isEn ? 'Enter ICT Olympiad Arena' : 'Intră în Arena Olimpiada TIC'}</a>
       </div>
+    </div>
+
+    <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; text-align: center;">${isEn ? '12 Progressive ICT Olympiad Problems (OJI & National)' : '12 Probleme Progresive în Arena Olimpiada TIC (OJI & Național)'}</h2>
+    <div class="grid-3" style="margin-bottom: 3rem;">
+      ${OLYMPIAD_PROBLEMS.map((op) => `
+        <div class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--brand-amber);margin-bottom:0.35rem;text-transform:uppercase;">${escapeHtmlText(isEn ? op.gradeLabelEn : op.gradeLabelRo)} · ${escapeHtmlText(op.complexityTarget)}</div>
+          <h3 class="card-title" style="font-size:1.05rem;">${String(op.number).padStart(2, '0')}. ${escapeHtmlText(isEn ? op.titleEn : op.titleRo)}</h3>
+          <p class="card-desc" style="font-size:0.86rem;">${escapeHtmlText((isEn ? op.statementEn : op.statementRo).slice(0, 140))}...</p>
+          <a href="https://www.arkyedu.com/#olimpiada" class="card-link">${isEn ? 'Solve & Trace →' : 'Rezolvă & Debug →'}</a>
+        </div>
+      `).join('')}
     </div>
 
     <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; text-align: center;">${isEn ? '9 Built-In Curriculum Challenges + Free Playground' : '9 Provocări Curriculare cu Verificare Automată + Mod Liber'}</h2>
@@ -3500,13 +3544,39 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/clasa-8/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/comparatie-scoli-private/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/arcade/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/leonida/', priority: '0.97', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/leonida/en/', priority: '0.94', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/leonida-llm.txt', priority: '0.88', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/laborator-ai/', priority: '0.97', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/laborator-ai/en/', priority: '0.94', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/laborator-ai-llm.txt', priority: '0.88', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/', priority: '0.93', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/', priority: '0.90', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/duel/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/', priority: '0.93', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/', priority: '0.90', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/profesor/', priority: '0.88', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/oras/', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/llms.txt', priority: '0.85', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/llms-full.txt', priority: '0.8', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/fise/', priority: '0.96', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/fise/en/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/llms.txt', priority: '0.88', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/llms-full.txt', priority: '0.85', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/fise-llm.txt', priority: '0.85', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/ai-catalog.json', priority: '0.75', changefreq: 'weekly' }
   ];
+
+  const worksheetUrls = WORKSHEETS_BANK.flatMap((ws) => [
+    {
+      loc: `https://www.arkyedu.com/fise/${ws.ro.slug}/`,
+      priority: '0.92',
+      changefreq: 'weekly'
+    },
+    {
+      loc: `https://www.arkyedu.com/fise/en/${ws.en.slug}/`,
+      priority: '0.88',
+      changefreq: 'weekly'
+    }
+  ]);
 
   const blogUrls = BLOG_ARTICLES.flatMap((art) => [
     {
@@ -3540,7 +3610,7 @@ function generateSitemap() {
     changefreq: 'weekly'
   }));
 
-  const allUrls = [...staticUrls, ...blogUrls, ...glossaryUrls, ...courseUrls];
+  const allUrls = [...staticUrls, ...worksheetUrls, ...blogUrls, ...glossaryUrls, ...courseUrls];
 
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -3602,16 +3672,1402 @@ ${items.join('\n')}
   console.log(`Generated rss.xml with ${BLOG_ARTICLES.length * 2} bilingual guide entries.`);
 }
 
+// 9. GENERATE DEDICATED BILINGUAL SEO LANDING PAGES FOR VICE LEONIDA VI (ARCADE & 1V1 DUEL)
+function generateViceLeonidaSeoPages() {
+  interface VicePageSpec {
+    subPath: string;
+    lang: 'ro' | 'en';
+    kind: 'arcade' | 'duel';
+    roUrl: string;
+    enUrl: string;
+    canonicalUrl: string;
+    appLaunchUrl: string;
+    siblingUrl: string;
+    siblingLabel: string;
+    title: string;
+    meta: string;
+    keywords: string;
+    badgeHero: string;
+    h1: string;
+    lead: string;
+    ctaLabel: string;
+    highlightsTitle: string;
+    highlights: Array<{ icon: string; title: string; desc: string }>;
+    guideTitle: string;
+    guideSteps: string[];
+    faqs: Array<{ q: string; a: string }>;
+  }
+
+  const specs: VicePageSpec[] = [
+    {
+      subPath: path.join('arcade', 'vice-leonida-gta6'),
+      lang: 'ro',
+      kind: 'arcade',
+      roUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/',
+      enUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/',
+      canonicalUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/',
+      appLaunchUrl: 'https://www.arkyedu.com/?game=vice_leonida',
+      siblingUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/',
+      siblingLabel: '⚔️ Încearcă Varianta Multiplayer 1v1 →',
+      title: 'Vice Leonida VI: Cyber Runner – Joc Arcade GTA 6 TIC | ArkyEdu',
+      meta: 'Joacă gratuit Vice Leonida VI: Cyber Runner direct în browser! Joc arcade inspirat din GTA 6 (Lucia Caminos & Jason Duval) în Statul Leonida: Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat și hack-uri binare TIC.',
+      keywords: 'vice leonida gta 6, joc gta 6 browser educativ, lucia caminos jason duval joc tic, vice beach venetian causeway grassrivers, joc arcade binar clasa 5 8, arkyedu vice leonida',
+      badgeHero: 'Ediție Specială GTA 6 Tech · Arcade TIC #01',
+      h1: 'Vice Leonida VI: Cyber Runner — Joc Arcade Tehnologic Inspirat din GTA 6',
+      lead: 'Explorează 4 sectoare futuriste din Statul Leonida cu protagoniștii Lucia Caminos și Jason Duval! Evită dronele VCPD 1★–5★, transformă mașina în Cyber Airboat în Grassrivers și sparge Relay Vault-uri prin conversii binare pe 4 biți și întrebări TIC.',
+      ctaLabel: '🌴 Joacă Vice Leonida VI Acum (0 Lei)',
+      highlightsTitle: 'Sisteme Tehnologice &amp; Mecanici Autentice din Leonida',
+      highlights: [
+        { icon: '👯', title: 'Swap Live: Lucia Caminos &amp; Jason Duval (Tasta Q)', desc: 'Lucia oferă +35% regenerare Nitro, +25% puncte Data Shard și +3s la hack-uri. Jason aduce viraj precis și Kinetic Auto-Shield care absoarbe 1 coliziune la fiecare 20s.' },
+        { icon: '🗺️', title: '4 Sectoare Leonida + Transformare Airboat', desc: 'Vice Beach Neon Strip → Venetian Causeway → Port Gellhorn Cyber Docks → Grassrivers Digital Swamp, unde vehiculul se transformă automat în Cyber Airboat!' },
+        { icon: '🔐', title: 'Relay Vault Breach: Binar 4-Bit &amp; Întrebări TIC', desc: 'Deblochează seifurile digitale convertind coduri binare 8-4-2-1 sau răspunzând fulger la întrebări de rețelistică (HTTPS 443, DNS), porți logice și C++.' },
+        { icon: '🚨', title: 'Wanted Heat 1★–5★, Nitro &amp; Undă EMP (Tasta E)', desc: 'Drone VCPD Interceptor, scannere laser, reflectoare de elicopter la 3★+ și impuls EMP care dezactivează dronele din apropiere.' }
+      ],
+      guideTitle: 'Cum Să Domini Clasamentul în Vice Leonida VI (Clasele V–VIII)',
+      guideSteps: [
+        'Folosește A/D sau săgețile Stânga/Dreapta (sau butoanele tactile pe mobil) pentru a schimba banda pe cele 4 șosele neon.',
+        'Apasă Space / Shift pentru Nitro Boost când colectezi baterii albastre, și E pentru impulsul EMP împotriva dronelor VCPD.',
+        'Comută live între Lucia și Jason cu Q: folosește-l pe Jason în zonele aglomerate pentru scutul cinetic și pe Lucia la colectarea Data Shard-urilor.',
+        'La fiecare 750 de puncte (sau la activarea unui Relay Vault) rezolvă rapid provocarea binară 8-4-2-1 pentru +300 XP și scăderea nivelului Wanted Heat!'
+      ],
+      faqs: [
+        { q: 'Este Vice Leonida VI sigur și potrivit pentru elevii de gimnaziu (10–15 ani)?', a: 'Da! Deși este inspirat din estetica și geografia autentică GTA 6 (State of Leonida, Vice Beach, Port Gellhorn, Grassrivers, Lucia & Jason), jocul este 100% adaptat educațional fără arme reale sau violență — toate obstacolele sunt drone tech, lasere firewall și provocări de informatică.' },
+        { q: 'Cum se salvează recordul și punctele XP?', a: 'Scorul maxim se salvează automat local și în Cloud în Carnetul Digital al elevului (până la 3.000 XP bonus pentru Arcade).' }
+      ]
+    },
+    {
+      subPath: path.join('arcade', 'vice-leonida-gta6', 'en'),
+      lang: 'en',
+      kind: 'arcade',
+      roUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/',
+      enUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/',
+      canonicalUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/',
+      appLaunchUrl: 'https://www.arkyedu.com/?game=vice_leonida&lang=en',
+      siblingUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/',
+      siblingLabel: '⚔️ Try 1v1 Multiplayer Showdown →',
+      title: 'Vice Leonida VI: Cyber Runner – GTA 6 Tech Arcade Game | ArkyEdu',
+      meta: 'Play Vice Leonida VI: Cyber Runner free in your browser! GTA 6-inspired cyber arcade game with Lucia Caminos & Jason Duval across Vice Beach, Venetian Causeway, Port Gellhorn & Grassrivers Airboat.',
+      keywords: 'vice leonida gta 6 game, gta 6 browser educational game, lucia caminos jason duval arcade, binary puzzle game kids, vice beach cyber runner, arkyedu arcade',
+      badgeHero: 'GTA 6 Tech Special Edition · Arcade #01',
+      h1: 'Vice Leonida VI: Cyber Runner — GTA 6 Inspired Tech Arcade Game',
+      lead: 'Speed through 4 futuristic State of Leonida sectors with dual protagonists Lucia Caminos & Jason Duval! Outrun 1★–5★ VCPD drones, morph into a Grassrivers Cyber Airboat, and crack 4-bit binary & CS Relay Vaults.',
+      ctaLabel: '🌴 Play Vice Leonida VI Free Now',
+      highlightsTitle: 'Authentic Leonida Tech Systems &amp; Mechanics',
+      highlights: [
+        { icon: '👯', title: 'Live Swap: Lucia Caminos &amp; Jason Duval (Q Key)', desc: 'Lucia brings +35% Nitro regen, +25% Data Shard scoring, and +3s vault breach time. Jason delivers sharper steering and a Kinetic Auto-Shield absorbing 1 crash every 20s.' },
+        { icon: '🗺️', title: '4 Leonida Sectors + Grassrivers Airboat Morph', desc: 'Race from Vice Beach Neon Strip through Venetian Causeway and Port Gellhorn Cyber Docks into Grassrivers Digital Swamp — where your car morphs into a Cyber Airboat!' },
+        { icon: '🔐', title: '4-Bit Binary &amp; ICT Relay Vault Breaches', desc: 'Hack secure cyber vaults by converting 8-4-2-1 binary nibbles and answering fast CS quizzes on HTTPS (Port 443), logic gates, DNS, and C++.' },
+        { icon: '🚨', title: 'Wanted Heat 1★–5★, Nitro &amp; EMP Shockwave (E)', desc: 'Dodge VCPD Interceptor Drones, laser scanners, and 3★+ chopper spotlights, or trigger an EMP pulse to clear drones in range.' }
+      ],
+      guideTitle: 'How to Master Vice Leonida VI',
+      guideSteps: [
+        'Use A/D or Left/Right arrows (or mobile touch buttons) to weave smoothly across 4 neon lanes.',
+        'Hold Space / Shift for Nitro Boost and press E to fire an EMP Shockwave when surrounded by VCPD drones.',
+        'Press Q anytime to swap between Lucia and Jason: switch to Jason when you need the Kinetic Shield, and Lucia when farming Data Shards.',
+        'Solve 4-bit binary vault breaches quickly to earn +300 bonus points and cool down your Wanted Heat stars.'
+      ],
+      faqs: [
+        { q: 'Is Vice Leonida VI safe and age-appropriate for students aged 10–15?', a: 'Yes! Inspired by the State of Leonida setting and dual protagonists Lucia & Jason, the game contains zero real weapons or violence — replacing them with cyber drones, EMP pulses, and real CS/binary challenges.' },
+        { q: 'Does it work on both desktop and mobile browsers?', a: 'Yes, it runs at 60 FPS with keyboard controls on desktop and dedicated touch controls on phones and tablets.' }
+      ]
+    },
+    {
+      subPath: path.join('duel', 'vice-leonida-1v1'),
+      lang: 'ro',
+      kind: 'duel',
+      roUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/',
+      enUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/',
+      canonicalUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/',
+      appLaunchUrl: 'https://www.arkyedu.com/?mode=vice_leonida_duel',
+      siblingUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/',
+      siblingLabel: '🌴 Joacă Varianta Arcade Solo →',
+      title: 'Vice Leonida 1v1: Duel GTA 6 Cyber-Heist Live & AI Bot | ArkyEdu',
+      meta: 'Competiție 1v1 live în Vice Beach inspirată din GTA 6! Întrece-te până la 2.500 puncte Vault contra unui coleg sau Cyber-Bot Leonida AI cu Boost Gates TIC și 4 sabotaje în timp real.',
+      keywords: 'vice leonida 1v1, duel gta 6 multiplayer, cyber heist 1v1 browser, duel tic 1v1, arkyedu duel vice leonida, cyber bot ai 1v1',
+      badgeHero: 'Arena 1v1 Multiplayer &amp; AI Cyber-Bot · GTA 6 Edition',
+      h1: 'Vice Leonida 1v1: Cyber-Heist Showdown Live &amp; AI Bot',
+      lead: 'Cursă head-to-head până la 2.500 Vault Points pe autostrada neon Vice Beach! Intră prin porțile mov Boost Gate pentru întrebări TIC (+250 pts + 1 Attack Charge) și lansează 4 atacuri cibernetice directe asupra rivalului.',
+      ctaLabel: '⚔️ Intră în Duelul Vice Leonida 1v1',
+      highlightsTitle: 'Tactică PvP Live &amp; Sabotaje Cibernetice în Timp Real',
+      highlights: [
+        { icon: '🤝', title: 'Live Cloud PvP (Cod 4 Caractere) sau AI Bot', desc: 'Creează o cameră privată sincronizată prin Firestore pentru a te întrece cu un coleg, sau provoacă instant Cyber-Bot Leonida AI în antrenament solo.' },
+        { icon: '⚡', title: 'Boost Gates TIC (+250 Vault Pts &amp; Attack Charge)', desc: 'Intră pe banda porții violet din cursă pentru o întrebare rapidă de informatică (HTTPS, binar, C++, porți logice) și încarcă-ți arsenalul de atac.' },
+        { icon: '🚨', title: '4 Atacuri Live Asupra Rivalului', desc: 'Declanșează Drone VCPD 3★ (roadblock), Steer Glitch (inversează comenzile 4s), Bandwidth Throttle (curățat cu Flush Cache) sau Firewall Lock pe 4 biți!' },
+        { icon: '🏆', title: 'Cursă de 90s / 2.500 Puncte cu XP &amp; Trofee', desc: 'Fiecare victorie adaugă puncte XP oficiale și victorii în statisticile de duel ale Carnetului Digital.' }
+      ],
+      guideTitle: 'Strategia de Victorie în Vice Leonida 1v1',
+      guideSteps: [
+        'Alege Lucia (punctaj +15% pe Data Shards) sau Jason (scut defensiv automat) în lobby înainte de start.',
+        'Țintește porțile mov Boost Gate imediat ce apar pe cele 4 benzi pentru salturi de +250 puncte și încărcare Attack Charge.',
+        'Păstrează un atac Firewall Lock sau Steer Glitch pentru ultimii 500 de metri ai rivalului pentru a-i opri avansul!',
+        'Dacă primești Bandwidth Throttle, apasă imediat butonul Flush Cache pentru a-ți recăpăta viteza maximă.'
+      ],
+      faqs: [
+        { q: 'Cum invit un coleg la un duel Vice Leonida 1v1?', a: 'Apasă „Creează Cameră PvP”, trimite colegului codul unic de 4 caractere, iar când amândoi sunteți pregătiți cursa începe simultan în timp real.' },
+        { q: 'Pot juca și singur fără alt jucător online?', a: 'Da! Modul „VS AI Bot (Cyber-Bot Leonida)” simulează un adversar inteligent care colectează puncte și lansează sabotaje realiste.' }
+      ]
+    },
+    {
+      subPath: path.join('duel', 'vice-leonida-1v1', 'en'),
+      lang: 'en',
+      kind: 'duel',
+      roUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/',
+      enUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/',
+      canonicalUrl: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/',
+      appLaunchUrl: 'https://www.arkyedu.com/?mode=vice_leonida_duel&lang=en',
+      siblingUrl: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/',
+      siblingLabel: '🌴 Play Solo Arcade Edition →',
+      title: 'Vice Leonida 1v1: GTA 6 Cyber-Heist Live Showdown | ArkyEdu',
+      meta: 'Compete live 1v1 in Vice Leonida Cyber-Heist Showdown! Race to 2,500 Vault Points against friends or Cyber-Bot Leonida AI with ICT Boost Gates & 4 real-time cyber attacks.',
+      keywords: 'vice leonida 1v1, gta 6 multiplayer browser duel, cyber heist showdown 1v1, educational 1v1 racing game, arkyedu duel',
+      badgeHero: '1v1 Live Multiplayer &amp; AI Cyber-Bot · GTA 6 Edition',
+      h1: 'Vice Leonida 1v1: Cyber-Heist Showdown (Live PvP &amp; AI Bot)',
+      lead: 'Race head-to-head to 2,500 Vault Points across neon Vice Beach! Hit purple Boost Gates for fast ICT challenges (+250 pts + 1 Attack Charge) and deploy 4 live cyber sabotages against your opponent.',
+      ctaLabel: '⚔️ Launch Vice Leonida 1v1 Duel',
+      highlightsTitle: 'Real-Time PvP Tactics &amp; 4 Live Cyber Sabotages',
+      highlights: [
+        { icon: '🤝', title: 'Live Firestore PvP Room or Cyber-Bot AI', desc: 'Host a 4-character room code to battle classmates in real time, or jump straight into solo duel practice against Cyber-Bot Leonida AI.' },
+        { icon: '⚡', title: 'ICT Boost Gates (+250 Pts &amp; Attack Charge)', desc: 'Steer through purple highway gates to answer quick CS questions and charge your offensive sabotage bar.' },
+        { icon: '🚨', title: '4 Live Sabotage Attacks', desc: 'Send VCPD 3★ Interceptor Drones, 4-second Steer Glitch, Bandwidth Throttle (cleared via Flush Cache), or a 4-bit Binary Firewall Lock.' },
+        { icon: '🏆', title: '90-Second / 2,500-Point Dash with XP Rewards', desc: 'Every win logs XP and Vice Leonida 1v1 victory stats directly to your student profile.' }
+      ],
+      guideTitle: 'Winning Tactics for Vice Leonida 1v1',
+      guideSteps: [
+        'Pick Lucia for +15% shard scoring or Jason for passive crash absorption before entering the highway.',
+        'Prioritize purple Boost Gates whenever they spawn — solving one grants +250 Vault Points and +1 Attack Charge.',
+        'Save Firewall Lock or Steer Glitch for when your rival passes 1,800 points to swing the finish line!',
+        'Click Flush Cache immediately whenever hit by Bandwidth Throttle to restore full top speed.'
+      ],
+      faqs: [
+        { q: 'Do both players need accounts on the same computer?', a: 'No! You can duel across separate computers, phones, or school lab PCs simply by entering the 4-character room code.' },
+        { q: 'Can I practice solo before challenging a friend?', a: 'Yes, choose the Cyber-Bot Leonida AI mode anytime for instant 1v1 practice.' }
+      ]
+    }
+  ];
+
+  specs.forEach((p) => {
+    const outDir = path.join(publicDir, p.subPath);
+    ensureDir(outDir);
+    const isEn = p.lang === 'en';
+    const altUrl = isEn ? p.roUrl : p.enUrl;
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'VideoGame',
+          '@id': `${p.canonicalUrl}#game`,
+          name: p.kind === 'arcade' ? 'Vice Leonida VI: Cyber Runner' : 'Vice Leonida 1v1: Cyber-Heist Showdown',
+          description: p.meta,
+          url: p.canonicalUrl,
+          genre: p.kind === 'arcade' ? ['Arcade', 'Educational', 'Cyberpunk Runner'] : ['Multiplayer 1v1', 'Arcade Racing', 'Educational'],
+          playMode: p.kind === 'arcade' ? 'SinglePlayer' : ['MultiPlayer', 'SinglePlayer'],
+          gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
+          applicationCategory: 'Game',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: p.lang,
+          character: [
+            { '@type': 'Person', name: 'Lucia Caminos' },
+            { '@type': 'Person', name: 'Jason Duval' }
+          ],
+          gameLocation: {
+            '@type': 'Place',
+            name: 'State of Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers)'
+          },
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+        },
+        {
+          '@type': 'SoftwareApplication',
+          name: p.title,
+          applicationCategory: 'GameApplication',
+          operatingSystem: 'Web',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Acasă', item: 'https://www.arkyedu.com/' },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              name: p.kind === 'arcade' ? 'Arcade (30)' : 'Duel 1v1 (21+)',
+              item: p.kind === 'arcade' ? 'https://www.arkyedu.com/arcade/' : 'https://www.arkyedu.com/duel/'
+            },
+            { '@type': 'ListItem', position: 3, name: p.h1, item: p.canonicalUrl }
+          ]
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: p.faqs.map((f) => ({
+            '@type': 'Question',
+            name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a }
+          }))
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${p.lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(p.title)}</title>
+  <meta name="description" content="${escapeHtmlText(p.meta)}">
+  <meta name="keywords" content="${escapeHtmlText(p.keywords)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${p.canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${p.roUrl}">
+  <link rel="alternate" hreflang="en" href="${p.enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${p.roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(p.title)}">
+  <meta property="og:description" content="${escapeHtmlText(p.meta)}">
+  <meta property="og:url" content="${p.canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(p.title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(p.meta)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🌴</div>
+        <span class="logo-text">ArkyEdu <span style="color: #ec4899;">LEONIDA VI</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="${isEn ? 'https://www.arkyedu.com/leonida/en/' : 'https://www.arkyedu.com/leonida/'}">${isEn ? 'Open-World Hub' : 'Open-World Hub'}</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="https://www.arkyedu.com/duel/">Duel 1v1 (21+)</a>
+        <a href="https://www.arkyedu.com/arcade/vice-leonida-gta6/">Vice Leonida Arcade</a>
+        <a href="https://www.arkyedu.com/duel/vice-leonida-1v1/">Vice Leonida 1v1</a>
+        <a href="https://www.arkyedu.com/sandbox/">Sandbox Cod</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="${p.appLaunchUrl}" class="nav-cta">
+          <span>${isEn ? 'Play Live' : 'Joacă Live'}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="badge-bar">
+        <span class="badge badge-green">${p.badgeHero}</span>
+        <span class="badge badge-free">${isEn ? '100% Free · Zero Ads' : '100% Gratuit · Fără Reclame'}</span>
+        <span class="badge">Lucia Caminos &amp; Jason Duval</span>
+      </div>
+      <h1>${p.h1}</h1>
+      <p class="lead-text">${p.lead}</p>
+      <div class="cta-group">
+        <a href="${p.appLaunchUrl}" class="btn-primary">
+          <span>${p.ctaLabel}</span>
+        </a>
+        <a href="${p.siblingUrl}" class="btn-secondary">
+          <span>${p.siblingLabel}</span>
+        </a>
+      </div>
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.5rem; text-align: center;">${p.highlightsTitle}</h2>
+      <div class="grid-2">
+        ${p.highlights.map((h) => `
+          <div class="card">
+            <div class="card-icon">${h.icon}</div>
+            <h3 class="card-title">${h.title}</h3>
+            <p class="card-desc">${h.desc}</p>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.45rem; margin-bottom: 1rem;">🎮 ${p.guideTitle}</h2>
+      <ol style="padding-left: 1.35rem; color: var(--text-secondary); line-height: 1.7;">
+        ${p.guideSteps.map((s) => `<li style="margin-bottom: 0.65rem;">${escapeHtmlText(s)}</li>`).join('')}
+      </ol>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.45rem; margin-bottom: 1.25rem;">❓ ${isEn ? 'Frequently Asked Questions' : 'Întrebări Frecvente'}</h2>
+      ${p.faqs.map((f) => `
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">${escapeHtmlText(f.q)}</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">${escapeHtmlText(f.a)}</div>
+        </div>
+      `).join('')}
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · State of Leonida Tech Edition (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent); text-decoration: none;">arkyedu.com</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
+  });
+
+  console.log('Generated bilingual Vice Leonida GTA 6 SEO pages (/arcade/vice-leonida-gta6/ & /duel/vice-leonida-1v1/).');
+}
+
+// 9B. GENERATE FLAGSHIP VICE LEONIDA OPEN-WORLD HUB (/leonida/, /leonida/en/, & /leonida-llm.txt)
+function generateLeonidaUniversePages() {
+  const renderHub = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const outDir = isEn ? path.join(publicDir, 'leonida', 'en') : path.join(publicDir, 'leonida');
+    ensureDir(outDir);
+
+    const roUrl = 'https://www.arkyedu.com/leonida/';
+    const enUrl = 'https://www.arkyedu.com/leonida/en/';
+    const canonicalUrl = isEn ? enUrl : roUrl;
+    const altUrl = isEn ? roUrl : enUrl;
+
+    const title = isEn
+      ? 'Vice Leonida: GTA 6 Open-World Game & State of Leonida CS Hub | ArkyEdu'
+      : 'Vice Leonida: Joc Open-World GTA 6 & Universul Leonida TIC | ArkyEdu';
+    const description = isEn
+      ? 'Play Vice Leonida Open-World 2D free in browser! Explore all 6 State of Leonida GTA 6 districts (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) with Lucia Caminos & Jason Duval, 5 vehicles, 5-star chases & CS challenges.'
+      : 'Joacă gratuit Vice Leonida Open-World 2D direct în browser! Explorează cele 6 regiuni din GTA 6 Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) cu Lucia Caminos & Jason Duval, 5 vehicule + Airboat și misiuni TIC.';
+    const keywords = isEn
+      ? 'gta 6 open world browser game, vice leonida open world, state of leonida 6 regions, lucia caminos jason duval game, gta 6 november 19 2026 tech breakdown, educational gta 6 coding game'
+      : 'joc open world gta 6 browser, vice leonida open world, statul leonida 6 regiuni gta 6, lucia caminos jason duval joc tic, data lansare gta 6 19 noiembrie 2026, joc educativ gta 6 copii';
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': ['VideoGame', 'SoftwareApplication', 'LearningResource'],
+          '@id': `${canonicalUrl}#openworld`,
+          name: 'Vice Leonida: Open-World Story & State of Leonida Universe',
+          alternateName: ['Vice Leonida Open-World GTA 6', 'State of Leonida CS Hub'],
+          description,
+          url: canonicalUrl,
+          image: 'https://www.arkyedu.com/assets/leonida-hero.jpg',
+          genre: ['Open-World', 'Educational', 'Action Adventure', 'Computer Science'],
+          playMode: ['SinglePlayer', 'MultiPlayer'],
+          gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
+          applicationCategory: 'GameApplication',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: lang,
+          character: LEONIDA_CAST.map((c) => ({ '@type': 'Person', name: c.name })),
+          gameLocation: LEONIDA_REGIONS.map((r) => ({
+            '@type': 'Place',
+            name: isEn ? r.nameEn : r.nameRo,
+            description: isEn ? r.descriptionEn : r.descriptionRo
+          })),
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+        },
+        {
+          '@type': 'ItemList',
+          name: isEn ? '6 Confirmed State of Leonida Regions' : 'Cele 6 Regiuni din Statul Leonida',
+          itemListElement: LEONIDA_REGIONS.map((r, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            name: isEn ? r.nameEn : r.nameRo,
+            description: isEn ? r.curriculumTopicEn : r.curriculumTopicRo
+          }))
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Acasă', item: 'https://www.arkyedu.com/' },
+            { '@type': 'ListItem', position: 2, name: 'Arcade (30)', item: 'https://www.arkyedu.com/arcade/' },
+            { '@type': 'ListItem', position: 3, name: isEn ? 'Vice Leonida Open-World' : 'Vice Leonida Open-World', item: canonicalUrl }
+          ]
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: LEONIDA_FAQS.map((f) => ({
+            '@type': 'Question',
+            name: isEn ? f.qEn : f.qRo,
+            acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo }
+          }))
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="keywords" content="${escapeHtmlText(keywords)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; Arcade">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/leonida-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/leonida-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .meta-line { font-size: 0.85rem; color: #f472b6; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🗺️</div>
+        <span class="logo-text">ArkyEdu <span style="color: #ec4899;">LEONIDA OPEN-WORLD</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/' : 'https://www.arkyedu.com/arcade/vice-leonida-gta6/'}">Cyber Runner</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/' : 'https://www.arkyedu.com/duel/vice-leonida-1v1/'}">Duel 1v1</a>
+        <a href="https://www.arkyedu.com/leonida-llm.txt">leonida-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/?game=vice_leonida_world${isEn ? '&lang=en' : ''}" class="nav-cta">
+          <span>${isEn ? 'Play Open-World' : 'Joacă Open-World'}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        GTA 6 (${GTA6_FACTS_2026.releaseDateEn}) · ${GTA6_FACTS_2026.platforms} · State of Leonida · 100% Free
+      </div>
+      <h1>${isEn ? 'Vice Leonida: Open-World Story &amp; GTA 6 CS Hub' : 'Vice Leonida: Open-World Story &amp; Universul GTA 6 TIC'}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/?game=vice_leonida_world${isEn ? '&lang=en' : ''}" class="btn-primary">
+          <span>${isEn ? 'Play 2D Open-World Engine (0 Lei)' : 'Pornește Lumea Open-World 2D (0 Lei)'}</span>
+        </a>
+        <a href="${isEn ? 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/' : 'https://www.arkyedu.com/arcade/vice-leonida-gta6/'}" class="btn-secondary">
+          <span>${isEn ? 'Play Cyber Runner Arcade →' : 'Joacă Cyber Runner Arcade →'}</span>
+        </a>
+        <a href="${isEn ? 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/' : 'https://www.arkyedu.com/duel/vice-leonida-1v1/'}" class="btn-secondary">
+          <span>${isEn ? 'Enter 1v1 Live Duel →' : 'Duel Live 1v1 →'}</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/leonida-hero.jpg" alt="Vice Leonida Open-World GTA 6 Illustration" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        ${isEn ? '6 Confirmed State of Leonida Regions &amp; ICT Quests' : 'Cele 6 Regiuni Confirmate din Statul Leonida &amp; Misiuni TIC'}
+      </h2>
+      <img src="https://www.arkyedu.com/assets/leonida-map.jpg" alt="State of Leonida Tactical Radar Map" class="hero-img" style="margin-bottom: 1.5rem; margin-top: 0;" loading="lazy">
+      <div class="grid-3">
+        ${LEONIDA_REGIONS.map((r) => `
+          <article class="card">
+            <div style="font-size:0.78rem;color:#38bdf8;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? r.subtitleEn : r.subtitleRo)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? r.nameEn : r.nameRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? r.descriptionEn : r.descriptionRo)}</p>
+            <div style="font-size:0.8rem;color:#34d399;font-weight:700;margin-top:0.5rem;">${escapeHtmlText(isEn ? r.curriculumTopicEn : r.curriculumTopicRo)}</div>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        ${isEn ? 'Lucia Caminos, Jason Duval &amp; Verified GTA 6 Cast Roster' : 'Lucia Caminos, Jason Duval &amp; Personajele Oficiale din Leonida'}
+      </h2>
+      <img src="https://www.arkyedu.com/assets/leonida-duo.jpg" alt="Lucia Caminos and Jason Duval Cyber Agents" class="hero-img" style="margin-bottom: 1.5rem; margin-top: 0;" loading="lazy">
+      <div class="grid-2">
+        ${LEONIDA_CAST.map((c) => `
+          <div class="card">
+            <h3 class="card-title">${escapeHtmlText(c.name)} — ${escapeHtmlText(isEn ? c.roleEn : c.roleRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? c.bioEn : c.bioRo)}</p>
+            <div style="font-size:0.8rem;color:#f59e0b;font-weight:700;margin-top:0.4rem;">${escapeHtmlText(isEn ? c.perkEn : c.perkRo)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section style="margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1.25rem; text-align: center;">
+        ${isEn ? 'Drivable Vehicle Fleet &amp; GTA 6 Engine Tech Bridges' : 'Flota de Vehicule &amp; Tehnologia GTA 6 Explicată pentru Elevi'}
+      </h2>
+      <div class="grid-2">
+        ${LEONIDA_TECH_BRIDGES.map((tb) => `
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? tb.curriculumLinkEn : tb.curriculumLinkRo)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? tb.techTopicEn : tb.techTopicRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? tb.gta6FeatureEn : tb.gta6FeatureRo)}</p>
+            <a href="https://www.arkyedu.com/cursuri/${tb.missionId}/" class="card-link">${isEn ? 'Study Related Lesson →' : 'Deschide Lecția Asociată →'}</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">${isEn ? 'Frequently Asked Questions — GTA 6 &amp; Vice Leonida' : 'Întrebări Frecvente — GTA 6 &amp; Vice Leonida'}</h2>
+      ${LEONIDA_FAQS.map((f) => `
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">${escapeHtmlText(isEn ? f.qEn : f.qRo)}</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">${escapeHtmlText(isEn ? f.aEn : f.aRo)}</div>
+        </div>
+      `).join('')}
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · State of Leonida Open-World CS Universe (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/leonida-llm.txt" style="color: #f472b6;">leonida-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
+  };
+
+  renderHub('ro');
+  renderHub('en');
+
+  // Generate dedicated Markdown RAG feed (/public/leonida-llm.txt)
+  const llmLines: string[] = [
+    '# ArkyEdu Vice Leonida — GTA 6 Open-World Game & Computer Science Universe (RO & EN)',
+    '',
+    '> Document de referință structurat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Prezintă universul interactiv gratuit Vice Leonida din platforma ArkyEdu: joc Open-World 2D jucabil în browser, Cyber Runner Arcade și Duel Live 1v1, inspirate din Grand Theft Auto VI (lansat oficial 19 noiembrie 2026 pe PS5 și Xbox Series X|S).',
+    '',
+    '- Hub Open-World Română: https://www.arkyedu.com/leonida/',
+    '- Hub Open-World Engleză: https://www.arkyedu.com/leonida/en/',
+    '- Lansare directă joc Open-World: https://www.arkyedu.com/?game=vice_leonida_world',
+    '- Arcade Cyber Runner: https://www.arkyedu.com/arcade/vice-leonida-gta6/',
+    '- Duel Live 1v1 Showdown: https://www.arkyedu.com/duel/vice-leonida-1v1/',
+    '- Documentație generală platformă: https://www.arkyedu.com/llms.txt',
+    '',
+    '---',
+    '',
+    '## 1. Fapte Verificate GTA 6 & Siguranță Educațională',
+    `- **Data lansării oficiale GTA 6**: ${GTA6_FACTS_2026.releaseDateRo} (${GTA6_FACTS_2026.releaseDateEn})`,
+    `- **Trailer 2**: ${GTA6_FACTS_2026.trailer2DateRo} (${GTA6_FACTS_2026.trailer2DateEn})`,
+    `- **Platforme oficiale**: ${GTA6_FACTS_2026.platforms}`,
+    `- **Protagoniști confirmați**: ${LEONIDA_CAST.filter((c) => c.playable).map((c) => c.name).join(' & ')}`,
+    '- **Adaptare ArkyEdu pentru elevi 10–15 ani**: 0% violență sau arme reale; toată acțiunea folosește impulsuri EMP, drone de scanare VCPD, condus tactic în 5 vehicule + Hydro-Airboat și 6 misiuni de poveste TIC (Binar, C++, Excel, Arduino IoT, Securitate HTTPS/2FA).',
+    '',
+    '---',
+    '',
+    '## 2. Cele 6 Regiuni ale Statului Leonida (Hartă Open-World 2600×1800)',
+    ...LEONIDA_REGIONS.map(
+      (r, idx) =>
+        `${idx + 1}. **${r.nameRo}** (${r.subtitleRo}): ${r.descriptionRo} — *Temă TIC*: ${r.curriculumTopicRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 3. Distribuția Oficială (Personaje din Leonida)',
+    ...LEONIDA_CAST.map(
+      (c) => `- **${c.name}** (${c.roleRo} · ${c.homeDistrict}): ${c.bioRo} — *Bonus joc*: ${c.perkRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 4. Flota Conducibilă în Open-World (5 Vehicule)',
+    ...LEONIDA_VEHICLES.map(
+      (v) => `- **${v.nameRo}** (${v.categoryRo}): Viteză max ${v.maxSpeed} px/s, Armură ${v.armor} HP${v.canWater ? ' [Amfibiu — navighează pe apele Grassrivers]' : ''}`
+    ),
+    '',
+    '---',
+    '',
+    '## 5. Cele 6 Misiuni de Poveste TIC (Open-World Story Challenges)',
+    ...LEONIDA_STORY_CHALLENGES.map(
+      (ch, idx) => `${idx + 1}. **${ch.titleRo}** (${ch.curriculumTagRo}): ${ch.briefingRo} — Recompensă: +${ch.rewardCash}$ / +${ch.rewardXP} XP / +${ch.rewardCoins} ByteCoins`
+    ),
+    '',
+    '---',
+    '',
+    '## 6. Punți Tehnologice GTA 6 -> Programa Școlară TIC (Clasele V–VIII)',
+    ...LEONIDA_TECH_BRIDGES.map(
+      (tb) => `- **${tb.techTopicRo}** (${tb.curriculumLinkRo}): ${tb.gta6FeatureRo} -> https://www.arkyedu.com/cursuri/${tb.missionId}/`
+    ),
+    '',
+    '---',
+    '',
+    '## 7. Întrebări Frecvente (FAQ)',
+    ...LEONIDA_FAQS.flatMap((f) => [`**Î: ${f.qRo}**`, `R: ${f.aRo}`, ''])
+  ];
+
+  fs.writeFileSync(path.join(publicDir, 'leonida-llm.txt'), llmLines.join('\n'), 'utf-8');
+  console.log('Generated flagship bilingual Leonida Universe Hub (/leonida/, /leonida/en/) and public/leonida-llm.txt.');
+}
+
+// 9C. GENERATE AI LITERACY & DEEPFAKE FORENSICS LAB (/laborator-ai/, /laborator-ai/en/, & /laborator-ai-llm.txt)
+function generateAiLabPages() {
+  const renderHub = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const outDir = isEn ? path.join(publicDir, 'laborator-ai', 'en') : path.join(publicDir, 'laborator-ai');
+    ensureDir(outDir);
+
+    const roUrl = 'https://www.arkyedu.com/laborator-ai/';
+    const enUrl = 'https://www.arkyedu.com/laborator-ai/en/';
+    const canonicalUrl = isEn ? enUrl : roUrl;
+    const altUrl = isEn ? roUrl : enUrl;
+
+    const title = isEn
+      ? 'AI Literacy & Deepfake Forensics Lab (Tokenizer, Softmax, C.R.I.F.) | ArkyEdu'
+      : 'Laboratorul AI & Detector Deepfake (Tokenizator, Halucinații, C.R.I.F.) | ArkyEdu';
+    const description = isEn
+      ? 'Interactive school-safe AI & Deepfake Forensics Lab in browser (ages 10-15): live BPE subword tokenizer, Softmax Temperature simulator, 6 AI photo/voice/video deepfake inspection cases, and C.R.I.F. prompt builder.'
+      : 'Laborator interactiv de Literație AI și Detecție Deepfake în browser pentru elevi 10–15 ani: Tokenizator BPE live, simulator Temperatură Softmax & halucinații, 6 cazuri criminalistice Deepfake foto/audio/video și constructor prompturi C.R.I.F.';
+    const keywords = isEn
+      ? 'ai literacy lab students, deepfake detector game kids, bpe tokenizer simulator, softmax temperature hallucinations explained, c2pa exif image forensics, voice clone scam prevention, crif prompt engineering middle school'
+      : 'laborator ai elevi romania, detector deepfake copii, cum functioneaza chatgpt tokeni temperatura, halucinatii ai explicatii scoala, verificare poza ai exif c2pa, clona vocala whatsapp 2fa, prompt engineering metoda crif rccl';
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': ['LearningResource', 'SoftwareApplication'],
+          '@id': `${canonicalUrl}#ailab`,
+          name: isEn ? 'ArkyEdu AI Literacy & Deepfake Forensics Lab' : 'Laboratorul AI & Detector Deepfake ArkyEdu',
+          description,
+          url: canonicalUrl,
+          image: 'https://www.arkyedu.com/assets/ai-lab-hero.jpg',
+          applicationCategory: 'EducationalApplication',
+          educationalLevel: isEn ? 'Grades 5-8 (Ages 10-15)' : 'Clasele V-VIII (10-15 ani)',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: lang,
+          teaches: isEn
+            ? ['Subword BPE Tokenization', 'Softmax Probability & AI Hallucinations', 'Deepfake Image EXIF/C2PA Forensics', 'Voice Clone & Lip-Sync Scam Prevention', 'C.R.I.F. Responsible Prompt Engineering']
+            : ['Tokenizare BPE', 'Probabilități Softmax și Halucinații LLM', 'Criminalistică EXIF/C2PA pentru Imagini Deepfake', 'Prevenție Clonare Vocală și Lip-Sync Scam', 'Inginerie Prompturi Etice C.R.I.F.'],
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+        },
+        {
+          '@type': 'ItemList',
+          name: isEn ? '6 Interactive Deepfake & Media Forensics Cases' : '6 Cazuri Interactive de Investigație Deepfake & Media',
+          itemListElement: DEEPFAKE_FORENSIC_CASES.map((c, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            name: isEn ? c.titleEn : c.titleRo,
+            description: isEn ? c.verdictExplanationEn : c.verdictExplanationRo
+          }))
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Acasă', item: 'https://www.arkyedu.com/' },
+            { '@type': 'ListItem', position: 2, name: isEn ? 'AI & Deepfake Lab' : 'Laborator AI & Deepfake', item: canonicalUrl }
+          ]
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: AI_LAB_FAQS.map((f) => ({
+            '@type': 'Question',
+            name: isEn ? f.qEn : f.qRo,
+            acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo }
+          }))
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="keywords" content="${escapeHtmlText(keywords)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ArkyEdu TIC &amp; AI Lab">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/ai-lab-hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/ai-lab-hero.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+${JSON.stringify(jsonLd, null, 2)}
+  </script>
+  <style>
+${commonStyles}
+    .hero-img { width: 100%; border-radius: 1rem; border: 1px solid #334155; margin-top: 1.5rem; aspect-ratio: 16/9; object-fit: cover; }
+    .evidence-img { width: 100%; border-radius: 0.75rem; border: 1px solid #334155; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1rem; }
+    .meta-line { font-size: 0.85rem; color: #22d3ee; font-weight: 700; margin-bottom: 0.65rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🧠</div>
+        <span class="logo-text">ArkyEdu <span style="color: #22d3ee;">AI &amp; DEEPFAKE LAB</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">${isEn ? 'Courses' : 'Cursuri'}</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary' : 'Glosar'}</a>
+        <a href="https://www.arkyedu.com/laborator-ai-llm.txt">laborator-ai-llm.txt</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/?view=ailab${isEn ? '&lang=en' : ''}" class="nav-cta">
+          <span>${isEn ? 'Launch AI Lab' : 'Deschide Simulatorul'}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero-section">
+      <div class="meta-line">
+        ${isEn ? 'Zero Open Chatbot · 100% School-Safe · Ages 10–15 · Free Forever' : 'Fără Chat Nesupravegheat · 100% Sigur în Browser · Clasele V–VIII · 0 Lei'}
+      </div>
+      <h1>${isEn ? 'AI Literacy &amp; Deepfake Forensics Lab' : 'Laboratorul AI &amp; Detector Deepfake'}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/laborator-ai/" onclick="window.location.href='/laborator-ai/';" class="btn-primary">
+          <span>${isEn ? 'Open Interactive Workbench →' : 'Deschide Simulatorul Interactiv →'}</span>
+        </a>
+        <a href="https://www.arkyedu.com/?game=detective${isEn ? '&lang=en' : ''}" class="btn-secondary">
+          <span>${isEn ? 'Play CyberSafe Phishing Arcade →' : 'Joacă Detectivul Phishing Arcade →'}</span>
+        </a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/llm-and-ai-hallucinations/' : 'https://www.arkyedu.com/glosar/llm-and-ai-hallucinations/'}" class="btn-secondary">
+          <span>${isEn ? 'LLM &amp; Hallucinations Glossary →' : 'Glosar LLM &amp; Halucinații →'}</span>
+        </a>
+      </div>
+      <img src="https://www.arkyedu.com/assets/ai-lab-hero.jpg" alt="ArkyEdu AI Literacy and Deepfake Forensics Lab Workbench" class="hero-img" loading="eager">
+    </div>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        ${isEn ? '1. Inside an LLM: Subword Tokenization, Softmax Temperature &amp; Hallucinations' : '1. În interiorul unui LLM: Tokenizare, Temperatură Softmax &amp; Halucinații'}
+      </h2>
+      <div class="grid-2">
+        ${TOKENIZER_PRESETS.map((tp) => `
+          <article class="card">
+            <div style="font-size:0.78rem;color:#22d3ee;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? tp.labelEn : tp.labelRo)}</div>
+            <h3 class="card-title" style="font-family:monospace;font-size:0.95rem;">${escapeHtmlText(isEn ? tp.textEn : tp.textRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? tp.noteEn : tp.noteRo)}</p>
+          </article>
+        `).join('')}
+      </div>
+      <div class="grid-2" style="margin-top: 1.25rem;">
+        ${HALLUCINATION_STRESS_TESTS.map((ht) => `
+          <article class="card">
+            <div style="font-size:0.78rem;color:#f59e0b;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? ht.subjectEn : ht.subjectRo)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? ht.promptEn : ht.promptRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? ht.correctionEn : ht.correctionRo)}</p>
+            <a href="https://www.arkyedu.com/cursuri/${ht.relatedMissionId}/" class="card-link">${isEn ? 'Related Lesson →' : 'Lecția Asociată →'}</a>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 1.25rem; text-align: center;">
+        ${isEn ? '2. Deepfake Forensics Lab: 6 Photo, Voice, Video &amp; News Investigations' : '2. Detectorul Deepfake: 6 Cazuri Criminalistice Foto, Audio, Video &amp; Știri'}
+      </h2>
+      <div class="grid-2" style="margin-bottom: 1.5rem;">
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/ai-evidence-fake.jpg" alt="Synthetic AI-generated school robotics fair photo with garbled text clues" class="evidence-img" loading="lazy">
+          <h3 class="card-title">${isEn ? 'Visual Evidence A: Spot AI Artifacts (Garbled Text &amp; Anatomy)' : 'Probă Vizuală A: Artefacte AI (Text Corupt &amp; Anatomie)'}</h3>
+          <p class="card-desc">${isEn ? 'Notice the garbled "GGRLLB...SDFKJHS" banner text, melted badge details, and missing authentic camera EXIF.' : 'Observă textul corupt de pe bannerul din perete („GGRLLB...SDFKJHS”), ecusonul topit și absența EXIF-ului real.'}</p>
+        </div>
+        <div class="card">
+          <img src="https://www.arkyedu.com/assets/ai-evidence-real.jpg" alt="Authentic 35mm classroom Arduino electronics lab photograph" class="evidence-img" loading="lazy">
+          <h3 class="card-title">${isEn ? 'Visual Evidence B: Authentic 35mm Classroom Arduino Photo' : 'Probă Vizuală B: Fotografie Autentică 35mm Arduino Uno'}</h3>
+          <p class="card-desc">${isEn ? 'Consistent daylight shadows, logical breadboard jumper wires, authentic hands, and verified camera capture telemetry.' : 'Umbre consecvente spre fereastră, fire Arduino coerente, mâini naturale și metadate optice autentice.'}</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        ${DEEPFAKE_FORENSIC_CASES.map((dc) => `
+          <article class="card">
+            <div style="font-size:0.78rem;color:${dc.isDeepfake ? '#fb7185' : '#34d399'};font-weight:700;margin-bottom:0.35rem;">
+              ${escapeHtmlText(dc.isDeepfake ? (isEn ? 'SYNTHETIC / DEEPFAKE' : 'DEEPFAKE / SINTETIC') : (isEn ? 'AUTHENTIC VERIFIED' : 'AUTENTIC VERIFICAT'))} · +${dc.rewardCoins} ByteCoins
+            </div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? dc.titleEn : dc.titleRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? dc.verdictExplanationEn : dc.verdictExplanationRo)}</p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2.5rem;">
+      <h2 style="font-size: 1.55rem; margin-bottom: 1rem;">
+        ${isEn ? '3. C.R.I.F. Prompt Engineering &amp; National Curriculum Bridges' : '3. Constructor Prompturi C.R.I.F. &amp; Punți cu Programa Școlară TIC'}
+      </h2>
+      <div class="grid-3" style="margin-bottom: 1.5rem;">
+        ${PROMPT_ARCHITECT_CHALLENGES.map((ch) => `
+          <div class="card">
+            <h3 class="card-title">${escapeHtmlText(isEn ? ch.titleEn : ch.titleRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? ch.goalEn : ch.goalRo)}</p>
+          </div>
+        `).join('')}
+      </div>
+      <div class="grid-2">
+        ${AI_CURRICULUM_BRIDGES.map((br) => `
+          <div class="card">
+            <div style="font-size:0.78rem;color:#34d399;font-weight:700;margin-bottom:0.35rem;">${escapeHtmlText(isEn ? br.gradeEn : br.gradeRo)}</div>
+            <h3 class="card-title">${escapeHtmlText(isEn ? br.titleEn : br.titleRo)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? br.descriptionEn : br.descriptionRo)}</p>
+            <a href="https://www.arkyedu.com/cursuri/${br.missionId}/" class="card-link">${isEn ? 'Open Curriculum Lesson →' : 'Deschide Lecția TIC →'}</a>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="content-box" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">${isEn ? 'Frequently Asked Questions — AI &amp; Deepfake Lab' : 'Întrebări Frecvente — Laborator AI &amp; Deepfake'}</h2>
+      ${AI_LAB_FAQS.map((f) => `
+        <div class="faq-block" style="margin-bottom: 1rem;">
+          <div class="faq-question" style="font-weight: 800; margin-bottom: 0.35rem;">${escapeHtmlText(isEn ? f.qEn : f.qRo)}</div>
+          <div class="faq-answer" style="color: var(--text-secondary);">${escapeHtmlText(isEn ? f.aEn : f.aRo)}</div>
+        </div>
+      `).join('')}
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 ArkyEdu · AI Literacy &amp; Deepfake Forensics Lab (Ages 10–15)</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">arkyedu.com</a> · <a href="https://www.arkyedu.com/laborator-ai-llm.txt" style="color: #22d3ee;">laborator-ai-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
+  };
+
+  renderHub('ro');
+  renderHub('en');
+
+  const llmLines: string[] = [
+    '# ArkyEdu Laboratorul AI & Detector Deepfake (RO & EN — School-Safe Browser Lab)',
+    '',
+    '> Document structurat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Prezintă Laboratorul interactiv AI & Deepfake ArkyEdu pentru elevi 10–15 ani (Clasele V–VIII): 100% determinist în browser, fără chatbot deschis nesupravegheat, fără chei API și gratuit.',
+    '',
+    '- Hub Română: https://www.arkyedu.com/laborator-ai/',
+    '- Hub Engleză: https://www.arkyedu.com/laborator-ai/en/',
+    '- Glosar LLM & Halucinații: https://www.arkyedu.com/glosar/llm-and-ai-hallucinations/',
+    '- Arcade Detectiv CyberSafe Phishing: https://www.arkyedu.com/?game=detective',
+    '- Documentație platformă: https://www.arkyedu.com/llms.txt',
+    '',
+    '---',
+    '',
+    '## 1. Simulare Internă LLM (Tokenizare BPE, Temperatură Softmax & Halucinații)',
+    '- **Tokenizator BPE Live**: Arată cum cuvintele lungi, diacriticele românești (ă, î, â, ș, ț), numerele și operatorii C++/Excel (`==`, `<<`, `=COUNTIF`) devin ID-uri numerice de sub-tokeni.',
+    '- **Slider Temperatură Softmax (0.10 – 1.50)**: Elevii ajustează temperatura în timp real și observă distribuția probabilităților Next-Token pentru C++ (`%` modulo), Robotică Arduino (`220 ohmi`) și scriere creativă.',
+    '- **Detector de Halucinații (4 Teste Practice)**:',
+    ...HALLUCINATION_STRESS_TESTS.map(
+      (ht, idx) => `${idx + 1}. **${ht.subjectRo}** — Prompt: ${ht.promptRo} -> *Explicație*: ${ht.correctionRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 2. Detectivul Deepfake (6 Cazuri Criminalistice: Foto, Audio, Video & Știri)',
+    ...DEEPFAKE_FORENSIC_CASES.map(
+      (dc, idx) =>
+        `${idx + 1}. **${dc.titleRo}** [${dc.isDeepfake ? 'DEEPFAKE / SINTETIC' : 'AUTENTIC'}] (+${dc.rewardCoins} ByteCoins): ${dc.verdictExplanationRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 3. Arhitectul de Prompturi Responsabile (Metoda C.R.I.F.)',
+    ...PROMPT_ARCHITECT_CHALLENGES.map(
+      (ch, idx) => `${idx + 1}. **${ch.titleRo}**: ${ch.goalRo} — *Rezultat optim*: ${ch.goodPreviewRo}`
+    ),
+    '',
+    '---',
+    '',
+    '## 4. Punți cu Programa Școlară TIC (Clasele V–VIII)',
+    ...AI_CURRICULUM_BRIDGES.map(
+      (br) => `- **${br.gradeRo} · ${br.titleRo}**: ${br.descriptionRo} -> https://www.arkyedu.com/cursuri/${br.missionId}/`
+    ),
+    '',
+    '---',
+    '',
+    '## 5. Întrebări Frecvente (FAQ)',
+    ...AI_LAB_FAQS.flatMap((f) => [`**Î: ${f.qRo}**`, `R: ${f.aRo}`, ''])
+  ];
+
+  fs.writeFileSync(path.join(publicDir, 'laborator-ai-llm.txt'), llmLines.join('\n'), 'utf-8');
+  console.log('Generated bilingual AI & Deepfake Lab (/laborator-ai/, /laborator-ai/en/) and public/laborator-ai-llm.txt.');
+}
+
+// 10. GENERATE BILINGUAL WORKSHEETS, GRADED EXAMS & OLYMPIAD SHEETS (/fise/ & /fise/en/)
+function generateWorksheetsPages() {
+  const fiseRoDir = path.join(publicDir, 'fise');
+  const fiseEnDir = path.join(fiseRoDir, 'en');
+  ensureDir(fiseRoDir);
+  ensureDir(fiseEnDir);
+
+  const renderHub = (lang: 'ro' | 'en') => {
+    const isEn = lang === 'en';
+    const canonicalUrl = isEn ? 'https://www.arkyedu.com/fise/en/' : 'https://www.arkyedu.com/fise/';
+    const roUrl = 'https://www.arkyedu.com/fise/';
+    const enUrl = 'https://www.arkyedu.com/fise/en/';
+    const title = isEn
+      ? 'ICT Worksheets, Graded Exams (1–10) & C++ Olympiad Bank | ArkyEdu'
+      : 'Fișe de Lucru, Teste cu Barem 1–10 & Subiecte OJI TIC (V–VIII) | ArkyEdu';
+    const description = isEn
+      ? '16 free interactive and A4 printable ICT, Scratch, C++, Excel, HTML5 & Arduino Smart City worksheets with official 100-point rubrics for Grades 5–8.'
+      : '16 fișe de lucru și teste cu barem oficial 1–10 (100p) pentru clasele V–VIII: Hardware, Scratch, C++ (cu Trace RAM), Excel, HTML5 & Arduino Smart City. Tipărire A4 gratuită.';
+
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          name: title,
+          description,
+          url: canonicalUrl,
+          inLanguage: isEn ? 'en' : 'ro',
+          isAccessibleForFree: true
+        },
+        {
+          '@type': 'ItemList',
+          numberOfItems: WORKSHEETS_BANK.length,
+          itemListElement: WORKSHEETS_BANK.map((w, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            name: isEn ? w.en.title : w.ro.title,
+            url: isEn ? `https://www.arkyedu.com/fise/en/${w.en.slug}/` : `https://www.arkyedu.com/fise/${w.ro.slug}/`
+          }))
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Acasă', item: 'https://www.arkyedu.com/' },
+            { '@type': 'ListItem', position: 2, name: isEn ? 'Worksheets & Exams' : 'Fișe & Teste cu Barem', item: canonicalUrl }
+          ]
+        }
+      ]
+    };
+
+    const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(title)}</title>
+  <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtmlText(title)}">
+  <meta property="og:description" content="${escapeHtmlText(description)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(title)}">
+  <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <style>${commonStyles}</style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">📝</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">${isEn ? 'WORKSHEETS' : 'FIȘE & BAREME'}</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/">${isEn ? 'Courses' : 'Cursuri'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/fise/en/' : 'https://www.arkyedu.com/fise/'}">${isEn ? 'Worksheets (16)' : 'Fișe & Teste (16)'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/sandbox/en/' : 'https://www.arkyedu.com/sandbox/'}">Sandbox &amp; Trace C++</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}">Blog TIC</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary' : 'Glosar'}</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${isEn ? roUrl : enUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/#fise" class="nav-cta"><span>${isEn ? 'Interactive Mode' : 'Mod Interactiv'}</span></a>
+      </div>
+    </div>
+  </header>
+  <main class="container" style="padding: 3rem 1.5rem 4rem;">
+    <div class="hero-section" style="padding-top: 1rem;">
+      <h1>${isEn ? 'ICT Worksheets, Graded Exams (1–10) &amp; Olympiad Practice (Grades 5–8)' : 'Fișe de Lucru, Teste cu Barem 1–10 &amp; Subiecte OJI / Admitere (Clasele V–VIII)'}</h1>
+      <p class="lead-text">${escapeHtmlText(description)}</p>
+      <div class="cta-group">
+        <a href="https://www.arkyedu.com/#fise" class="btn-primary"><span>${isEn ? 'Solve Online for +35 ByteCoins' : 'Rezolvă Online cu Notare 1–10'}</span></a>
+        <a href="https://www.arkyedu.com/fise-llm.txt" class="btn-secondary"><span>LLM Markdown Index (/fise-llm.txt)</span></a>
+      </div>
+    </div>
+    <div class="grid-3">
+      ${WORKSHEETS_BANK.map((w) => {
+        const wLoc = isEn ? w.en : w.ro;
+        const href = isEn ? `https://www.arkyedu.com/fise/en/${w.en.slug}/` : `https://www.arkyedu.com/fise/${w.ro.slug}/`;
+        const gLabel = WORKSHEET_GRADE_LABELS[w.grade][lang];
+        const kLabel = WORKSHEET_KIND_LABELS[w.kind][lang];
+        return `
+        <article class="card">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--accent);margin-bottom:0.4rem;">${escapeHtmlText(gLabel)} · ${escapeHtmlText(kLabel)} · ${w.maxPoints}p</div>
+          <h2 class="card-title" style="font-size:1.05rem;">${escapeHtmlText(wLoc.title)}</h2>
+          <p class="card-desc" style="font-size:0.86rem;">${escapeHtmlText(wLoc.directAnswerSummary)}</p>
+          <a href="${href}" class="card-link">${isEn ? 'Open Sheet & Rubric →' : 'Deschide Fișa & Baremul →'}</a>
+        </article>`;
+      }).join('')}
+    </div>
+  </main>
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border:none;">
+        <div>© 2026 ArkyEdu · ${isEn ? '100% Free National ICT Curriculum Library.' : 'Bibliotecă Gratuită de Evaluare TIC V–VIII.'}</div>
+        <div><a href="https://www.arkyedu.com/llms.txt" style="color:var(--accent);">llms.txt</a> · <a href="https://www.arkyedu.com/fise-llm.txt" style="color:var(--accent);">fise-llm.txt</a> · <a href="https://www.arkyedu.com/sitemap.xml" style="color:var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+    fs.writeFileSync(path.join(isEn ? fiseEnDir : fiseRoDir, 'index.html'), html, 'utf-8');
+  };
+
+  renderHub('ro');
+  renderHub('en');
+
+  WORKSHEETS_BANK.forEach((ws) => {
+    (['ro', 'en'] as const).forEach((lang) => {
+      const isEn = lang === 'en';
+      const loc = isEn ? ws.en : ws.ro;
+      const outDir = path.join(isEn ? fiseEnDir : fiseRoDir, loc.slug);
+      ensureDir(outDir);
+
+      const roUrl = `https://www.arkyedu.com/fise/${ws.ro.slug}/`;
+      const enUrl = `https://www.arkyedu.com/fise/en/${ws.en.slug}/`;
+      const canonicalUrl = isEn ? enUrl : roUrl;
+      const altUrl = isEn ? roUrl : enUrl;
+      const gLabel = WORKSHEET_GRADE_LABELS[ws.grade][lang];
+      const kLabel = WORKSHEET_KIND_LABELS[ws.kind][lang];
+      const related = getRelatedWorksheets(ws.id, 3);
+
+      const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': ['LearningResource', 'Quiz'],
+            '@id': `${canonicalUrl}#resource`,
+            name: loc.title,
+            description: loc.directAnswerSummary,
+            url: canonicalUrl,
+            inLanguage: lang,
+            isAccessibleForFree: true,
+            educationalLevel: gLabel,
+            learningResourceType: kLabel,
+            timeRequired: `PT${ws.estimatedMinutes}M`,
+            datePublished: ws.publishedAt,
+            hasPart: ws.questions.map((q) => {
+              const opts = isEn ? q.optionsEn : q.optionsRo;
+              const ansText =
+                (q.type === 'mcq' || q.type === 'true-false') && opts
+                  ? `${opts[Number(q.correctAnswer)]} — ${isEn ? q.solutionStepEn : q.solutionStepRo}`
+                  : `${String(q.correctAnswer)} — ${isEn ? q.solutionStepEn : q.solutionStepRo}`;
+              return {
+                '@type': 'Question',
+                name: isEn ? q.promptEn : q.promptRo,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: ansText
+                }
+              };
+            }),
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: isEn ? 'Home' : 'Acasă', item: 'https://www.arkyedu.com/' },
+              { '@type': 'ListItem', position: 2, name: isEn ? 'Worksheets' : 'Fișe & Teste', item: isEn ? 'https://www.arkyedu.com/fise/en/' : 'https://www.arkyedu.com/fise/' },
+              { '@type': 'ListItem', position: 3, name: loc.breadcrumbLabel, item: canonicalUrl }
+            ]
+          },
+          ...(ws.faqs.length > 0
+            ? [
+                {
+                  '@type': 'FAQPage',
+                  mainEntity: ws.faqs.map((f) => ({
+                    '@type': 'Question',
+                    name: isEn ? f.qEn : f.qRo,
+                    acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo }
+                  }))
+                }
+              ]
+            : [])
+        ]
+      };
+
+      const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtmlText(loc.metaTitle)}</title>
+  <meta name="description" content="${escapeHtmlText(loc.metaDescription)}">
+  <meta name="keywords" content="${escapeHtmlText(loc.keywords.join(', '))}">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roUrl}">
+  <link rel="alternate" hreflang="en" href="${enUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roUrl}">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="${escapeHtmlText(loc.metaTitle)}">
+  <meta property="og:description" content="${escapeHtmlText(loc.metaDescription)}">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtmlText(loc.metaTitle)}">
+  <meta name="twitter:description" content="${escapeHtmlText(loc.metaDescription)}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+  <style>
+    ${commonStyles}
+    .ws-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .ws-pre { background: #0b1220; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; overflow-x: auto; font-family: monospace; color: #bae6fd; margin: 0.75rem 0; font-size: 0.9rem; }
+    .ws-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.92rem; }
+    .ws-table th, .ws-table td { border-bottom: 1px solid #334155; padding: 0.6rem 0.5rem; text-align: left; }
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .ws-box { background: #fff !important; border: 1px solid #94a3b8 !important; color: #000 !important; page-break-inside: avoid; }
+      .ws-pre { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      .ws-table th, .ws-table td { border-color: #94a3b8 !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">📝</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">TIC</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="${isEn ? 'https://www.arkyedu.com/fise/en/' : 'https://www.arkyedu.com/fise/'}">${isEn ? 'All 16 Worksheets' : 'Toate Fișele (16)'}</a>
+        <a href="https://www.arkyedu.com/cursuri/${ws.relatedModuleId}/">${isEn ? 'Interactive Lesson' : 'Lecția Interactivă'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/sandbox/en/' : 'https://www.arkyedu.com/sandbox/'}">Sandbox &amp; Trace C++</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="${altUrl}" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">${isEn ? 'RO' : 'EN'}</a>
+        <a href="https://www.arkyedu.com/#fise/${encodeURIComponent(loc.slug)}" class="nav-cta"><span>${isEn ? 'Solve Interactive' : 'Rezolvă Interactiv'}</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2.5rem 1.5rem 4rem;">
+    <div style="font-size:0.85rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;">
+      ${escapeHtmlText(gLabel)} · ${escapeHtmlText(kLabel)} · ${ws.estimatedMinutes} min · ${ws.maxPoints}p (${ws.exOfficioPoints}p ${isEn ? 'ex officio' : 'din oficiu'})
+    </div>
+    <h1 style="font-size:2rem;line-height:1.25;margin-bottom:1rem;">${escapeHtmlText(loc.title)}</h1>
+    <div class="ws-box">
+      <strong>${isEn ? 'Quick Summary & Key Points:' : 'Rezumat Direct & Punctaj:'}</strong>
+      <p style="margin-top:0.5rem;color:#cbd5e1;">${escapeHtmlText(loc.directAnswerSummary)}</p>
+      <p style="margin-top:0.6rem;font-size:0.92rem;color:#94a3b8;"><strong>${isEn ? 'Theory Snapshot:' : 'Sinteză Teorie:'}</strong> ${escapeHtmlText(loc.theorySnapshot)}</p>
+      <div class="no-print" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href="https://www.arkyedu.com/#fise/${encodeURIComponent(loc.slug)}" class="btn-primary"><span>${isEn ? 'Solve & Auto-Grade (1–10)' : 'Rezolvă Online cu Notă Automată 1–10'}</span></a>
+        <button type="button" onclick="window.print()" class="btn-secondary" style="cursor:pointer;"><span>🖨️ ${isEn ? 'Print A4 Sheet' : 'Tipărește A4'}</span></button>
+        ${ws.optionalCppTraceCode ? `<a href="https://www.arkyedu.com/#sandbox" class="btn-secondary"><span>🔬 ${isEn ? 'Trace C++ Code' : 'Rulează în Trace C++'}</span></a>` : ''}
+      </div>
+    </div>
+
+    ${ws.questions.map((q, idx) => {
+      const opts = isEn ? q.optionsEn : q.optionsRo;
+      const ansLabel =
+        (q.type === 'mcq' || q.type === 'true-false') && opts
+          ? `${String.fromCharCode(65 + Number(q.correctAnswer))}) ${opts[Number(q.correctAnswer)]}`
+          : String(q.correctAnswer);
+      return `
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>${idx + 1}. ${escapeHtmlText(isEn ? q.partLabelEn : q.partLabelRo)}</span>
+          <span>(${q.points}p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">${escapeHtmlText(isEn ? q.promptEn : q.promptRo)}</h2>
+        ${q.codeSnippet ? `<pre class="ws-pre"><code>${escapeHtmlText(q.codeSnippet)}</code></pre>` : ''}
+        ${opts ? `<ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;">${opts.map((o, i) => `<li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>${String.fromCharCode(65 + i)})</strong> ${escapeHtmlText(o)}</li>`).join('')}</ul>` : ''}
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>${isEn ? 'Answer & Explanation:' : 'Rezolvare & Barem:'}</strong> ${escapeHtmlText(ansLabel)} — ${escapeHtmlText(isEn ? q.solutionStepEn : q.solutionStepRo)}
+        </p>
+      </article>`;
+    }).join('')}
+
+    <section class="ws-box">
+      <h2 style="font-size:1.3rem;margin-bottom:0.5rem;">${isEn ? 'Official 100-Point Grading Rubric (Grade 1–10)' : 'Barem Oficial de Evaluare și Notare (100p → Nota 1–10)'}</h2>
+      <table class="ws-table">
+        <thead>
+          <tr>
+            <th>${isEn ? 'Section' : 'Subiect / Item'}</th>
+            <th>${isEn ? 'Evaluated Competency' : 'Competență Evaluată'}</th>
+            <th style="text-align:right;">${isEn ? 'Points' : 'Punctaj'}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ws.rubricRows.map((r) => `
+            <tr>
+              <td>${escapeHtmlText(isEn ? r.itemEn : r.itemRo)}</td>
+              <td>${escapeHtmlText(isEn ? r.competencyEn : r.competencyRo)}</td>
+              <td style="text-align:right;font-weight:700;">${r.points}p</td>
+            </tr>`).join('')}
+          <tr>
+            <td colspan="2"><strong>TOTAL (${isEn ? 'Grade = Score / 10' : 'Nota = Punctaj / 10'})</strong></td>
+            <td style="text-align:right;font-weight:900;color:var(--accent);">${ws.maxPoints}p</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ws-box no-print">
+      <h2 style="font-size:1.2rem;margin-bottom:0.75rem;">${isEn ? 'More Worksheets & Related Links' : 'Alte Fișe & Resurse Conectate'}</h2>
+      <div class="grid-3">
+        ${related.map((r) => {
+          const rLoc = isEn ? r.en : r.ro;
+          const rHref = isEn ? `https://www.arkyedu.com/fise/en/${r.en.slug}/` : `https://www.arkyedu.com/fise/${r.ro.slug}/`;
+          return `<a href="${rHref}" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">${escapeHtmlText(rLoc.breadcrumbLabel)}</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">${isEn ? 'Open sheet →' : 'Deschide fișa →'}</div></a>`;
+        }).join('')}
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border:none;">
+        <div>© 2026 ArkyEdu · ${escapeHtmlText(ws.curriculumRef)}</div>
+        <div><a href="https://www.arkyedu.com/fise/" style="color:var(--accent);">${isEn ? 'All Worksheets' : 'Toate Fișele'}</a> · <a href="https://www.arkyedu.com/fise-llm.txt" style="color:var(--accent);">fise-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>`;
+
+      fs.writeFileSync(path.join(outDir, 'index.html'), html, 'utf-8');
+    });
+  });
+
+  console.log(`Generated ${WORKSHEETS_BANK.length * 2 + 2} bilingual worksheet & rubric SEO pages (/fise/ & /fise/en/).`);
+}
+
+// 11. GENERATE DEDICATED LLM CHEAT-SHEET FOR WORKSHEETS, RUBRICS & OLYMPIAD (/fise-llm.txt)
+function generateFiseLlmIndex() {
+  const lines: string[] = [
+    '# ArkyEdu — Index Structurat Fișe de Lucru, Teste cu Barem 1–10 & Olimpiadă TIC (Clasele V–VIII)',
+    '',
+    '> Document de referință optimizat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Conține toate cele 16 fișe și teste bilingve cu bareme oficiale pe 100 de puncte, rezolvări explicate, plus cele 12 probleme din Arena Olimpiada TIC.',
+    '',
+    '- Hub principal Română: https://www.arkyedu.com/fise/',
+    '- Hub principal Engleză: https://www.arkyedu.com/fise/en/',
+    '- Debug Vizual C++ & Olimpiadă: https://www.arkyedu.com/sandbox/',
+    '- Documentație generală platformă: https://www.arkyedu.com/llms.txt',
+    '',
+    '---',
+    '',
+    '## 1. Biblioteca de Fișe, Teste cu Barem 100p & Subiecte OJI / Admitere (16 Resurse RO/EN)',
+    '',
+  ];
+
+  WORKSHEETS_BANK.forEach((ws, idx) => {
+    lines.push(`### ${idx + 1}. ${ws.ro.title}`);
+    lines.push(`- URL RO: https://www.arkyedu.com/fise/${ws.ro.slug}/`);
+    lines.push(`- URL EN: https://www.arkyedu.com/fise/en/${ws.en.slug}/`);
+    lines.push(`- Clasă & Tip: ${WORKSHEET_GRADE_LABELS[ws.grade].ro} | ${WORKSHEET_KIND_LABELS[ws.kind].ro} | ${ws.maxPoints}p (${ws.exOfficioPoints}p oficiu) | ${ws.estimatedMinutes} min`);
+    lines.push(`- Rezumat: ${ws.ro.directAnswerSummary}`);
+    lines.push(`- Teorie cheie: ${ws.ro.theorySnapshot}`);
+    lines.push('- Itemi & Barem Oficial:');
+    ws.questions.forEach((q, qIdx) => {
+      const ans =
+        (q.type === 'mcq' || q.type === 'true-false') && q.optionsRo
+          ? q.optionsRo[Number(q.correctAnswer)]
+          : String(q.correctAnswer);
+      lines.push(`  ${qIdx + 1}. [${q.points}p] ${q.promptRo} -> Răspuns corect: "${ans}" (${q.solutionStepRo})`);
+    });
+    lines.push('');
+  });
+
+  lines.push('---', '', '## 2. Arena Olimpiada TIC (12 Probleme C++ Progresive cu 5 Teste Automate)', '');
+  OLYMPIAD_PROBLEMS.forEach((op) => {
+    lines.push(`- **${String(op.number).padStart(2, '0')}. ${op.titleRo}** (${op.gradeLabelRo} · ${op.complexityTarget}): ${op.statementRo}`);
+  });
+
+  fs.writeFileSync(path.join(publicDir, 'fise-llm.txt'), lines.join('\n'), 'utf-8');
+  console.log('Generated public/fise-llm.txt for LLM citation & RAG indexing.');
+}
+
 // EXECUTE ALL GENERATORS
 console.log('--- STARTING SEO PAGES GENERATION ---');
 generateModulePages();
 generateGradeHubs();
 generateComparisonPage();
 generateFeatureHubs();
+generateViceLeonidaSeoPages();
+generateLeonidaUniversePages();
+generateAiLabPages();
 generateTechEducationPillar();
 generateBlogPages();
 generateGlossaryPages();
 generateSandboxPages();
+generateWorksheetsPages();
+generateFiseLlmIndex();
 generateSitemap();
 generateRssFeed();
 console.log('--- ALL SEO ASSETS GENERATED SUCCESSFULLY ---');

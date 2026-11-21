@@ -2,8 +2,12 @@ import { AllMissionId, Language } from '../types';
 import { CURRICULA_MODULES } from '../data/curriculaData';
 import { findBlogArticleBySlug } from '../data/blog';
 import { findGlossaryTermBySlug } from '../data/glossary';
+import { findWorksheetBySlug } from '../data/worksheets';
 
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz';
+import { LEONIDA_FAQS } from '../data/leonidaOpenWorldData';
+import { AI_LAB_FAQS } from '../data/aiLabData';
+
+export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz' | 'fise' | 'leonida' | 'ailab';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -50,12 +54,31 @@ function upsertLink(rel: string, href: string) {
   el.setAttribute('href', href);
 }
 
+function upsertJsonLd(id: string, data: Record<string, unknown> | null) {
+  if (typeof document === 'undefined') return;
+  const existing = document.getElementById(id);
+  if (!data) {
+    if (existing) existing.remove();
+    return;
+  }
+  const script = existing instanceof HTMLScriptElement ? existing : document.createElement('script');
+  script.id = id;
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(data);
+  if (!existing) {
+    document.head.appendChild(script);
+  }
+}
+
 export function updateDynamicSeo(
   view: AppSeoView,
   lang: Language,
   activeMission: AllMissionId | null,
   blogSlug: string | null = null,
-  glossarySlug: string | null = null
+  glossarySlug: string | null = null,
+  arcadeGame: string | null = null,
+  duelMode: string | null = null,
+  worksheetSlug: string | null = null
 ): void {
   if (typeof document === 'undefined') return;
 
@@ -67,11 +90,12 @@ export function updateDynamicSeo(
     : 'ArkyEdu – Educație TIC, Coding & Robotică Copii (V–VIII)';
 
   let description = isEn
-    ? '100% free interactive ICT, C++, Scratch, Excel & Arduino IoT learning platform for students aged 10-15, featuring 40 lessons, 28 arcade games & 20+ 1v1 duels.'
-    : 'Platformă 100% gratuită de educație TIC, programare C++/Scratch, Excel și robotică Arduino pentru copii (clasele V–VIII), 28 jocuri arcade și 20+ dueluri 1v1.';
+    ? '100% free interactive ICT, C++, Scratch, Excel & Arduino IoT learning platform for students aged 10-15, featuring 40 lessons, 30 arcade games & 21+ 1v1 duels.'
+    : 'Platformă 100% gratuită de educație TIC, programare C++/Scratch, Excel și robotică Arduino pentru copii (clasele V–VIII), 30 jocuri arcade și 21+ dueluri 1v1.';
 
   let canonicalUrl = `${BASE_URL}/`;
   let robotsContent = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+  let dynamicJsonLd: Record<string, unknown> | null = null;
 
   if (view === 'superadmin') {
     title = isEn ? 'School Admin Panel | ArkyEdu' : 'Administrare Școli & Clase | ArkyEdu';
@@ -86,21 +110,133 @@ export function updateDynamicSeo(
       : 'Instrument gratuit pentru profesorii de TIC: catalog digital, evaluare automată pe bareme 1–10, export condică și fișe conforme programei naționale.';
     canonicalUrl = `${BASE_URL}/profesor/`;
   } else if (view === 'arcade') {
-    title = isEn
-      ? 'ICT Educational Arcade: 28 Retro Coding & Tech Games | ArkyEdu'
-      : 'Arcade TIC: 28 Jocuri Educative Programare & Hardware | ArkyEdu';
-    description = isEn
-      ? 'Play 28 free educational retro games: Cyber Pac-Man, Cyber Arkanoid, Cyber Frogger, Sokoban, Circuit Master, Redstone Logic & PC Builder.'
-      : '28 mini-jocuri arcade gratuite pentru educație digitală: Cyber Pac-Man, Arkanoid, Frogger, Sokoban, Circuit Master 80s, Redstone Logic & PC Builder.';
-    canonicalUrl = `${BASE_URL}/arcade/`;
+    if (arcadeGame === 'vice_leonida') {
+      title = isEn
+        ? 'Vice Leonida VI: Cyber Runner – GTA 6 Tech Arcade Game | ArkyEdu'
+        : 'Vice Leonida VI: Cyber Runner – Joc Arcade GTA 6 TIC | ArkyEdu';
+      description = isEn
+        ? 'Play Vice Leonida VI: Cyber Runner free in browser! Swap Lucia Caminos & Jason Duval across Vice Beach, Venetian Causeway, Port Gellhorn & Grassrivers Airboat.'
+        : 'Joacă gratuit Vice Leonida VI: Cyber Runner, joc arcade inspirat din GTA 6 cu Lucia Caminos & Jason Duval, 4 sectoare din Leonida, Airboat și hack-uri binare TIC.';
+      canonicalUrl = isEn ? `${BASE_URL}/arcade/vice-leonida-gta6/en/` : `${BASE_URL}/arcade/vice-leonida-gta6/`;
+      dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'VideoGame',
+            name: 'Vice Leonida VI: Cyber Runner',
+            alternateName: ['Vice Leonida GTA 6 Tech Arcade', 'GTA 6 Leonida Educational Runner'],
+            url: canonicalUrl,
+            description,
+            genre: ['Arcade', 'Educational', 'Cyberpunk Racing'],
+            gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
+            applicationCategory: 'Game',
+            operatingSystem: 'All',
+            isAccessibleForFree: true,
+            inLanguage: ['ro', 'en'],
+            character: [
+              { '@type': 'Person', name: 'Lucia Caminos' },
+              { '@type': 'Person', name: 'Jason Duval' }
+            ],
+            gameLocation: {
+              '@type': 'Place',
+              name: 'State of Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers)'
+            },
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: isEn ? 'How do you play Vice Leonida VI: Cyber Runner?' : 'Cum se joacă Vice Leonida VI: Cyber Runner (stil GTA 6)?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: isEn
+                    ? 'Drive across 4 State of Leonida sectors, swap live between Lucia Caminos (Nitro & Data Shards) and Jason Duval (Steering & Kinetic Shield) with Q, trigger EMP with E, morph into a Cyber Airboat in Grassrivers, and solve 4-bit binary & ICT vault breaches.'
+                    : 'Traversezi 4 sectoare din Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat), schimbi live între Lucia Caminos și Jason Duval cu Q, folosești Nitro și EMP (E) și rezolvi hack-uri binare pe 4 biți și întrebări TIC.'
+                }
+              }
+            ]
+          }
+        ]
+      };
+    } else {
+      title = isEn
+        ? 'ICT Educational Arcade: 30 Retro Coding & Tech Games | ArkyEdu'
+        : 'Arcade TIC: 30 Jocuri Educative Programare & Hardware | ArkyEdu';
+      description = isEn
+        ? 'Play 30 free educational retro & open-world games: Vice Leonida Open-World (GTA 6), Cyber Runner, Cyber Pac-Man, Arkanoid, Frogger, Sokoban & PC Builder.'
+        : '30 mini-jocuri arcade gratuite pentru educație digitală: Vice Leonida Open-World (GTA 6), Cyber Runner, Pac-Man, Arkanoid, Frogger, Sokoban & PC Builder.';
+      canonicalUrl = `${BASE_URL}/arcade/`;
+      dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: title,
+        description,
+        url: canonicalUrl,
+        inLanguage: ['ro', 'en']
+      };
+    }
   } else if (view === 'duel') {
-    title = isEn
-      ? '1v1 Live Tech & Coding Duels Arena (20+ Modes) | ArkyEdu'
-      : 'Arena Dueluri TIC 1v1 Live: 20+ Competiții Coding | ArkyEdu';
-    description = isEn
-      ? 'Compete live 1v1 in Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash & Circuit Duel with AI Bot or friends.'
-      : 'Confruntări live 1v1 pentru elevi: Cyber Battleship, File-Drop Attack, System Sabotage, C++ Code Racer, Binary Clash și Circuit Clash Arduino.';
-    canonicalUrl = `${BASE_URL}/duel/`;
+    if (duelMode === 'vice_leonida_duel') {
+      title = isEn
+        ? 'Vice Leonida 1v1: GTA 6 Cyber-Heist Live Showdown | ArkyEdu'
+        : 'Vice Leonida 1v1: Duel GTA 6 Cyber-Heist Live & AI Bot | ArkyEdu';
+      description = isEn
+        ? 'Compete 1v1 in Vice Leonida Cyber-Heist Showdown! Race to 2,500 Vault Points with Lucia & Jason, hit ICT Boost Gates, and launch live cyber sabotages.'
+        : 'Duel multiplayer 1v1 inspirat din GTA 6! Întrece-te până la 2.500 puncte Vault în Vice Beach cu Boost Gates TIC și sabotaje live: Drone 3★, Glitch și Firewall Lock.';
+      canonicalUrl = isEn ? `${BASE_URL}/duel/vice-leonida-1v1/en/` : `${BASE_URL}/duel/vice-leonida-1v1/`;
+      dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'VideoGame',
+            name: 'Vice Leonida 1v1: Cyber-Heist Showdown',
+            url: canonicalUrl,
+            description,
+            genre: ['Multiplayer 1v1', 'Arcade Racing', 'Educational'],
+            playMode: ['MultiPlayer', 'SinglePlayer'],
+            gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
+            applicationCategory: 'Game',
+            operatingSystem: 'All',
+            isAccessibleForFree: true,
+            inLanguage: ['ro', 'en'],
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: isEn ? 'Can I play Vice Leonida 1v1 against friends or AI Bot?' : 'Pot juca Vice Leonida 1v1 contra unui coleg sau contra AI Bot?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: isEn
+                    ? 'Yes! Create a 4-character live Firestore room to race a friend in real time, or select Cyber-Bot Leonida AI for instant solo 1v1 practice.'
+                    : 'Da! Poți crea o cameră live cu cod din 4 caractere pentru duel în timp real cu un coleg sau poți alege antrenament instant contra Cyber-Bot Leonida AI.'
+                }
+              }
+            ]
+          }
+        ]
+      };
+    } else {
+      title = isEn
+        ? '1v1 Live Tech & Coding Duels Arena (21+ Modes) | ArkyEdu'
+        : 'Arena Dueluri TIC 1v1 Live: 21+ Competiții Coding | ArkyEdu';
+      description = isEn
+        ? 'Compete live 1v1 in Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash & Circuit Duel.'
+        : 'Confruntări live 1v1 pentru elevi: Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack, System Sabotage, C++ Code Racer, Binary Clash și Circuit Clash.';
+      canonicalUrl = `${BASE_URL}/duel/`;
+      dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: title,
+        description,
+        url: canonicalUrl,
+        inLanguage: ['ro', 'en']
+      };
+    }
   } else if (view === 'city') {
     title = isEn
       ? 'Arkedo Smart City: Arduino IoT & Robotics Lab | ArkyEdu'
@@ -141,13 +277,66 @@ export function updateDynamicSeo(
         : '44 de termeni esențiali de Informatică și TIC explicați clar pentru gimnaziu: CPU, RAM, modulo %, Excel IF, Phishing 2FA, Arduino millis() și AI.';
       canonicalUrl = isEn ? `${BASE_URL}/glosar/en/` : `${BASE_URL}/glosar/`;
     }
+  } else if (view === 'fise') {
+    const foundWs = findWorksheetBySlug(worksheetSlug).worksheet;
+    if (foundWs) {
+      const wLoc = isEn ? foundWs.en : foundWs.ro;
+      title = wLoc.metaTitle;
+      description = wLoc.metaDescription.slice(0, 158);
+      canonicalUrl = isEn ? `${BASE_URL}/fise/en/${foundWs.en.slug}/` : `${BASE_URL}/fise/${foundWs.ro.slug}/`;
+      dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': ['LearningResource', 'Quiz'],
+            name: wLoc.title,
+            description: wLoc.directAnswerSummary,
+            url: canonicalUrl,
+            inLanguage: isEn ? 'en' : 'ro',
+            isAccessibleForFree: true,
+            educationalLevel: isEn ? `Grade ${foundWs.grade}` : `Clasa a ${foundWs.grade}-a`,
+            learningResourceType: foundWs.kind,
+            timeRequired: `PT${foundWs.estimatedMinutes}M`,
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' },
+          },
+          ...(foundWs.faqs.length > 0
+            ? [
+                {
+                  '@type': 'FAQPage',
+                  mainEntity: foundWs.faqs.map((f) => ({
+                    '@type': 'Question',
+                    name: isEn ? f.qEn : f.qRo,
+                    acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo },
+                  })),
+                },
+              ]
+            : []),
+        ],
+      };
+    } else {
+      title = isEn
+        ? 'ICT Worksheets, Graded Exams (1–10) & C++ Olympiad Bank | ArkyEdu'
+        : 'Fișe de Lucru, Teste cu Barem 1–10 & Subiecte OJI TIC (V–VIII) | ArkyEdu';
+      description = isEn
+        ? '16 printable A4 and interactive ICT & C++ worksheets, graded exams with 100-point rubrics, Scratch, Excel & Arduino IoT project sheets for Grades 5–8.'
+        : '16 fișe de lucru și teste cu barem oficial 1–10 (100p) pentru clasele V–VIII: C++, Scratch, Excel, Word, HTML5, Securitate & Arduino Smart City. Tipărire A4 gratuită.';
+      canonicalUrl = isEn ? `${BASE_URL}/fise/en/` : `${BASE_URL}/fise/`;
+      dynamicJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: title,
+        description,
+        url: canonicalUrl,
+        inLanguage: ['ro', 'en'],
+      };
+    }
   } else if (view === 'sandbox') {
     title = isEn
-      ? 'Interactive C++, Python & HTML5 Code Sandbox Lab | ArkyEdu'
-      : 'Sandbox Cod Live: Editor C++, Python & HTML5 în Browser | ArkyEdu';
+      ? 'C++ Step Debugger, Code Sandbox & ICT Olympiad Arena | ArkyEdu'
+      : 'Debug Vizual C++ Pas-cu-Pas, Sandbox & Olimpiada TIC | ArkyEdu';
     description = isEn
-      ? 'Run C++ (Code::Blocks style), Python 3, and HTML5/CSS code directly in your browser with automated curriculum tests and instant Arky diagnostics.'
-      : 'Rulează cod C++ (Code::Blocks), Python 3 și HTML5/CSS direct în browser fără instalare, cu verificare automată a testelor școlare și diagnostic Arky.';
+      ? 'Step-by-step C++ RAM & array trace debugger with breakpoints, 12-problem ICT Olympiad Arena, Python 3 & HTML5 live sandbox in your browser.'
+      : 'Depanator vizual C++ pas-cu-pas cu memorie RAM și vectori, Arena Olimpiada TIC cu 12 probleme pe 5 teste, plus Python 3 și HTML5 direct în browser.';
     canonicalUrl = isEn ? `${BASE_URL}/sandbox/en/` : `${BASE_URL}/sandbox/`;
   } else if (view === 'carnet') {
     title = isEn
@@ -175,6 +364,84 @@ export function updateDynamicSeo(
       : 'Participă în timp real la concursul Quiz Live din ora de TIC introducând codul PIN de pe tablă.';
     robotsContent = 'noindex, nofollow';
     canonicalUrl = `${BASE_URL}/quiz-live`;
+  } else if (view === 'leonida') {
+    title = isEn
+      ? 'Vice Leonida: GTA 6 Open-World Game & State of Leonida Tech Hub | ArkyEdu'
+      : 'Vice Leonida: Joc Open-World GTA 6 & Universul Leonida TIC | ArkyEdu';
+    description = isEn
+      ? 'Play Vice Leonida Open-World 2D free in browser! Explore 6 GTA 6 State of Leonida districts with Lucia Caminos & Jason Duval, drive 5 vehicles, evade 5-star VCPD chases & crack CS quests.'
+      : 'Joacă gratuit Vice Leonida Open-World 2D direct în browser! Explorează toate cele 6 regiuni din GTA 6 Leonida cu Lucia Caminos & Jason Duval, condu 5 vehicule + Airboat și sparge misiuni TIC.';
+    canonicalUrl = isEn ? `${BASE_URL}/leonida/en/` : `${BASE_URL}/leonida/`;
+    dynamicJsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': ['VideoGame', 'SoftwareApplication', 'LearningResource'],
+          name: 'Vice Leonida: Open-World Story & State of Leonida Hub',
+          alternateName: ['Vice Leonida GTA 6 Open-World', 'GTA 6 Leonida Educational Game'],
+          url: canonicalUrl,
+          description,
+          image: `${BASE_URL}/assets/leonida-hero.jpg`,
+          genre: ['Open-World', 'Educational', 'Action Adventure', 'Computer Science'],
+          gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
+          applicationCategory: 'GameApplication',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: ['ro', 'en'],
+          character: [
+            { '@type': 'Person', name: 'Lucia Caminos' },
+            { '@type': 'Person', name: 'Jason Duval' },
+          ],
+          gameLocation: {
+            '@type': 'Place',
+            name: 'State of Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia)',
+          },
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' },
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: LEONIDA_FAQS.map((f) => ({
+            '@type': 'Question',
+            name: isEn ? f.qEn : f.qRo,
+            acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo },
+          })),
+        },
+      ],
+    };
+  } else if (view === 'ailab') {
+    title = isEn
+      ? 'AI Literacy & Deepfake Detector Lab for Students (Ages 10–15) | ArkyEdu'
+      : 'Laborator AI & Detector Deepfake pentru Elevi (Clasele V–VIII) | ArkyEdu';
+    description = isEn
+      ? 'Explore free interactive LLM tokenizers, Softmax Temperature & hallucinations, 6 Deepfake photo/voice forensics cases & C.R.I.F. Prompt Architect.'
+      : 'Simulator gratuit pentru elevi: Tokenizator LLM, Temperatură & Halucinații AI, 6 cazuri de detecție Deepfake foto/audio/știri și Prompt Architect C.R.I.F.';
+    canonicalUrl = isEn ? `${BASE_URL}/laborator-ai/en/` : `${BASE_URL}/laborator-ai/`;
+    dynamicJsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': ['LearningResource', 'SoftwareApplication'],
+          name: isEn ? 'ArkyEdu AI Literacy & Deepfake Forensics Lab' : 'Laboratorul AI & Detectorul de Deepfake ArkyEdu',
+          url: canonicalUrl,
+          description,
+          image: `${BASE_URL}/assets/ai-lab-hero.jpg`,
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'All',
+          isAccessibleForFree: true,
+          inLanguage: ['ro', 'en'],
+          educationalLevel: isEn ? 'Middle School (Grades 5–8)' : 'Gimnaziu (Clasele V–VIII)',
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' },
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: AI_LAB_FAQS.map((f) => ({
+            '@type': 'Question',
+            name: isEn ? f.qEn : f.qRo,
+            acceptedAnswer: { '@type': 'Answer', text: isEn ? f.aEn : f.aRo },
+          })),
+        },
+      ],
+    };
   } else if (view === 'lesson' && activeMission) {
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);
@@ -187,6 +454,13 @@ export function updateDynamicSeo(
     }
   }
 
+  const socialImage =
+    view === 'leonida'
+      ? `${BASE_URL}/assets/leonida-hero.jpg`
+      : view === 'ailab'
+      ? `${BASE_URL}/assets/ai-lab-hero.jpg`
+      : `${BASE_URL}/og-cover.png`;
+
   document.title = title;
   upsertMeta('name', 'description', description);
   upsertMeta('name', 'robots', robotsContent);
@@ -194,9 +468,10 @@ export function updateDynamicSeo(
   upsertMeta('property', 'og:description', description);
   upsertMeta('property', 'og:url', canonicalUrl);
   upsertMeta('property', 'og:locale', isEn ? 'en_US' : 'ro_RO');
-  upsertMeta('property', 'og:image', `${BASE_URL}/og-cover.png`);
+  upsertMeta('property', 'og:image', socialImage);
   upsertMeta('name', 'twitter:title', title);
   upsertMeta('name', 'twitter:description', description);
-  upsertMeta('name', 'twitter:image', `${BASE_URL}/og-cover.png`);
+  upsertMeta('name', 'twitter:image', socialImage);
   upsertLink('canonical', canonicalUrl);
+  upsertJsonLd('arky-dynamic-jsonld', dynamicJsonLd);
 }

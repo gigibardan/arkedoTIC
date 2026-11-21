@@ -53,13 +53,12 @@ import { TeacherClassroomsTab } from './teacher/TeacherClassroomsTab';
 import { TeacherAssignmentsTab } from './teacher/TeacherAssignmentsTab';
 import { TeacherLiveQuizHost } from './teacher/TeacherLiveQuizHost';
 import { TeacherExportCenter } from './teacher/TeacherExportCenter';
+import { verifyTeacherCredential } from '../lib/credentialHash';
 
 interface TeacherPortalProps {
   onBackToHome: () => void;
   onOpenSuperAdmin?: () => void;
 }
-
-const TEACHER_HARDCODED_PASSWORD = 'Ark3do!';
 
 export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOpenSuperAdmin }) => {
   const { t, lang } = useLanguage();
@@ -119,9 +118,10 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({ onBackToHome, onOp
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === TEACHER_HARDCODED_PASSWORD) {
+    const isValid = await verifyTeacherCredential(passwordInput);
+    if (isValid) {
       setIsAuthenticated(true);
       setAuthError(false);
       sessionStorage.setItem('arkedo_teacher_auth', 'true');

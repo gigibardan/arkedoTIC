@@ -30,6 +30,8 @@ import {
   ClipboardCheck,
   Radio,
   CalendarClock,
+  Compass,
+  BrainCircuit,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
@@ -40,6 +42,7 @@ import { CourseCurriculaModal } from './CourseCurriculaModal';
 import { CURRICULA_MODULES, CurriculaModule } from '../data/curriculaData';
 import { BLOG_ARTICLES } from '../data/blog';
 import { GLOSSARY_TERMS } from '../data/glossary';
+import { WORKSHEETS_BANK, WORKSHEET_GRADE_LABELS, WORKSHEET_KIND_LABELS } from '../data/worksheets';
 import { ARKY_IMAGES } from '../assets/arkyImages';
 import { LeaderboardSection } from './LeaderboardSection';
 import { AuthModal } from './AuthModal';
@@ -99,10 +102,17 @@ interface CoursesCatalogProps {
   onOpenShop?: () => void;
   onOpenBlog?: (slug?: string | null) => void;
   onOpenGlossary?: (slug?: string | null) => void;
-  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html', challengeId?: string) => void;
+  onOpenSandbox?: (
+    lang?: 'cpp' | 'python' | 'html',
+    challengeId?: string,
+    tab?: 'editor' | 'trace' | 'olympiad'
+  ) => void;
   onOpenCarnet?: () => void;
   onOpenEvaluare?: () => void;
   onOpenLiveQuiz?: () => void;
+  onOpenWorksheets?: (slug?: string | null) => void;
+  onOpenLeonida?: (launchWorld?: boolean) => void;
+  onOpenAiLab?: () => void;
   byteCoins?: number;
 }
 
@@ -127,6 +137,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
   onOpenCarnet,
   onOpenEvaluare,
   onOpenLiveQuiz,
+  onOpenWorksheets,
+  onOpenLeonida,
+  onOpenAiLab,
   byteCoins,
 }) => {
   const getMaxPlayableLevels = (mId: string): number => {
@@ -1479,7 +1492,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </div>
               <div className="min-w-0">
                 <div className="text-xs sm:text-sm font-extrabold text-white truncate">
-                  {lang === 'en' ? 'Arcade (28)' : 'Arcade (28)'}
+                  {lang === 'en' ? 'Arcade (30)' : 'Arcade (30)'}
                 </div>
                 <div className="text-[11px] text-slate-400 truncate">
                   {lang === 'en' ? 'ICT mini-games' : 'Jocuri educative'}
@@ -2113,36 +2126,71 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   : 'Scrie, rulează și verifică instantaneu cod C++ (Code::Blocks), Python 3 și HTML5/CSS cu teste automate și recompense ByteCoins.'}
               </p>
             </div>
-            <a
-              href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
-              onClick={(e) => {
-                if (onOpenSandbox) {
-                  e.preventDefault();
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
                   sounds.playClick();
-                  onOpenSandbox('cpp');
-                }
-              }}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 self-start sm:self-center shadow-sm min-h-[40px]"
-            >
-              <Code2 className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>{lang === 'en' ? 'Open Code Sandbox' : 'Deschide Sandbox Cod'}</span>
-              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-            </a>
+                  onOpenSandbox?.('cpp', undefined, 'trace');
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-colors min-h-[40px] cursor-pointer whitespace-nowrap"
+              >
+                <span>{lang === 'en' ? 'C++ Visual Debugger' : 'Debug Vizual C++ (Trace RAM)'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  onOpenSandbox?.('cpp', undefined, 'olympiad');
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition-colors min-h-[40px] cursor-pointer whitespace-nowrap"
+              >
+                <Trophy className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>{lang === 'en' ? 'ICT Olympiad (12)' : 'Arena Olimpiada TIC (12)'}</span>
+              </button>
+              <a
+                href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
+                onClick={(e) => {
+                  if (onOpenSandbox) {
+                    e.preventDefault();
+                    sounds.playClick();
+                    onOpenSandbox('cpp', undefined, 'editor');
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 shadow-sm min-h-[40px] whitespace-nowrap"
+              >
+                <Code2 className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>{lang === 'en' ? 'Open Code Sandbox' : 'Deschide Sandbox Cod'}</span>
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               {
                 langKey: 'cpp' as const,
-                titleRo: 'C++17 (Stil Code::Blocks)',
-                titleEn: 'C++17 (Code::Blocks Style)',
-                descRo: 'Regula celor 3 pahare, suma cifrelor cu %10 și /10, număr prim, maximul în vectori — cu cin/cout real.',
-                descEn: 'Three-glasses swap, digit sum with %10 and /10, prime check, and array max with real cin/cout.',
-                ctaRo: 'Rulează C++',
-                ctaEn: 'Run C++',
+                tabKey: 'trace' as const,
+                titleRo: 'Debug Vizual C++ (Trace RAM)',
+                titleEn: 'C++ Step-by-Step Trace & RAM',
+                descRo: 'Execuție pas-cu-pas cu Breakpoints, valori în RAM, bare animate pe vectori (Bubble Sort, Căutare Binară) și Tabel de Urmărire.',
+                descEn: 'Step-by-step execution with Breakpoints, live RAM inspector, animated array bars & clickable Trace Table.',
+                ctaRo: 'Deschide Trace C++',
+                ctaEn: 'Launch C++ Trace',
+              },
+              {
+                langKey: 'cpp' as const,
+                tabKey: 'olympiad' as const,
+                titleRo: 'Arena Olimpiada TIC (12 Probleme)',
+                titleEn: 'ICT Olympiad Arena (12 Problems)',
+                descRo: '4 niveluri (Inițiere → Național), Evaluator pe 5 teste, Problema Zilei (+50 BC), Quiz-uri OJI și ranguri până la Maestru AlgoriX.',
+                descEn: '4 progressive tiers, 5-test automated judge, Daily Spotlight (+50 BC), OJI dry-run quizzes & competitive ranks.',
+                ctaRo: 'Intră în Arena OJI',
+                ctaEn: 'Enter Olympiad Arena',
               },
               {
                 langKey: 'python' as const,
+                tabKey: 'editor' as const,
                 titleRo: 'Python 3 Educațional',
                 titleEn: 'Python 3 Curriculum Lab',
                 descRo: 'Liste, f-strings, bucle for/range și medie școlară cu input() și verificare automată pe 3 cazuri de test.',
@@ -2152,6 +2200,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               },
               {
                 langKey: 'html' as const,
+                tabKey: 'editor' as const,
                 titleRo: 'HTML5 Semantic & CSS Live',
                 titleEn: 'Semantic HTML5 & CSS Preview',
                 descRo: 'Construiește carduri responsive cu Flexbox și verifică automat structura DOM (<main>, <h1>, stiluri CSS).',
@@ -2161,11 +2210,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               },
             ].map((item) => (
               <button
-                key={item.langKey}
+                key={`${item.langKey}-${item.tabKey}`}
                 type="button"
                 onClick={() => {
                   sounds.playClick();
-                  onOpenSandbox?.(item.langKey);
+                  onOpenSandbox?.(item.langKey, undefined, item.tabKey);
                 }}
                 className="group text-left rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5 cursor-pointer min-h-[120px]"
               >
@@ -2189,6 +2238,202 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
       {/* 6. INTERACTIVE KNOWLEDGE PILLS */}
       <KnowledgePills />
+
+      {/* 6A. VICE LEONIDA OPEN-WORLD (GTA 6 TECH UNIVERSE) */}
+      <section
+        aria-labelledby="catalog-leonida-heading"
+        className="bg-gradient-to-br from-slate-950 via-fuchsia-950/25 to-slate-950 border border-fuchsia-500/35 rounded-2xl p-5 sm:p-6 shadow-lg"
+      >
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-3xl">
+            <div className="text-[11px] font-mono text-fuchsia-300 font-semibold">
+              {lang === 'en'
+                ? 'GTA 6 Universe · State of Leonida · Open-World + Arcade + 1v1'
+                : 'Univers GTA 6 · Statul Leonida · Open-World 2D + Arcade + Duel 1v1'}
+            </div>
+            <h2 id="catalog-leonida-heading" className="text-base sm:text-xl font-black text-white flex items-center gap-2 font-heading">
+              <Compass className="w-5 h-5 text-fuchsia-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? 'Vice Leonida: Open-World Story & GTA 6 Computer Science Hub'
+                  : 'Vice Leonida: Open-World Story & Universul Tehnologic GTA 6'}
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {lang === 'en'
+                ? 'Roam 6 interactive Leonida regions with Lucia Caminos & Jason Duval, pilot 5 vehicles + Grassrivers Airboat, outrun 5-star VCPD chases, and master binary, C++, Excel, and cybersecurity challenges.'
+                : 'Explorează liber toate cele 6 regiuni din Leonida cu Lucia Caminos & Jason Duval, condu 5 vehicule + Hydro-Airboat, scapă de urmăririle VCPD 5★ și rezolvă misiuni reale de Binar, C++, Excel și Arduino.'}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenLeonida?.(true);
+              }}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-fuchsia-600 to-rose-500 hover:from-fuchsia-500 hover:to-rose-400 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            >
+              <span>{lang === 'en' ? 'Play Open-World 2D' : 'Joacă Open-World 2D'}</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </button>
+            <a
+              href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
+              onClick={(e) => {
+                if (onOpenLeonida) {
+                  e.preventDefault();
+                  sounds.playClick();
+                  onOpenLeonida(false);
+                }
+              }}
+              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-fuchsia-500/40 text-fuchsia-200 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            >
+              <span>{lang === 'en' ? 'Explore Leonida Atlas' : 'Vezi Atlasul Leonida'}</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 6A-2. AI LITERACY & DEEPFAKE FORENSICS LAB */}
+      <section
+        aria-labelledby="catalog-ailab-heading"
+        className="bg-gradient-to-br from-slate-950 via-cyan-950/25 to-slate-950 border border-cyan-500/35 rounded-2xl p-5 sm:p-6 shadow-lg"
+      >
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-3xl">
+            <div className="text-[11px] font-mono text-cyan-300 font-semibold">
+              {lang === 'en'
+                ? 'AI Literacy · BPE Tokenizer · Softmax Temperature · Deepfake Forensics · C.R.I.F. Prompts'
+                : 'Literație AI · Tokenizator BPE · Temperatură Softmax · Detector Deepfake · Prompting C.R.I.F.'}
+            </div>
+            <h2 id="catalog-ailab-heading" className="text-base sm:text-xl font-black text-white flex items-center gap-2 font-heading">
+              <BrainCircuit className="w-5 h-5 text-cyan-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? 'AI Literacy & Deepfake Forensics Lab (Interactive Classroom Simulator)'
+                  : 'Laboratorul AI & Detector Deepfake (Simulator Sigur în Browser)'}
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {lang === 'en'
+                ? 'See how LLMs tokenize Romanian & English code, dial Softmax Temperature to trigger or stop hallucinations, inspect 6 photo/voice/video deepfake cases (+ByteCoins), and assemble ethical C.R.I.F. study prompts.'
+                : 'Descoperă cum împart modelele LLM textul în tokeni, reglează Temperatura Softmax pentru a observa halucinațiile, investighează 6 cazuri Deepfake foto/audio/video (+ByteCoins) și construiește prompturi C.R.I.F. responsabile.'}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                onOpenAiLab?.();
+              }}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            >
+              <span>{lang === 'en' ? 'Open AI & Deepfake Lab' : 'Deschide Laboratorul AI'}</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </button>
+            <a
+              href={lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/'}
+              onClick={(e) => {
+                if (onOpenAiLab) {
+                  e.preventDefault();
+                  sounds.playClick();
+                  onOpenAiLab();
+                }
+              }}
+              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-cyan-200 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            >
+              <span>{lang === 'en' ? 'Forensics Guide & FAQ' : 'Ghid Deepfake & FAQ'}</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 6B. PRINTABLE & INTERACTIVE WORKSHEETS & GRADED EXAMS HUB */}
+      <section
+        aria-labelledby="catalog-worksheets-heading"
+        className="bg-slate-950/75 border border-emerald-500/35 rounded-2xl p-5 sm:p-6 space-y-4 shadow-lg"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+          <div className="space-y-1">
+            <h2 id="catalog-worksheets-heading" className="text-base sm:text-lg font-extrabold text-white flex items-center gap-2 font-heading">
+              <ClipboardCheck className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
+              <span>
+                {lang === 'en'
+                  ? `Printable A4 Worksheets, Graded Exams (1–10) & Olympiad Bank (${WORKSHEETS_BANK.length})`
+                  : `Fișe de Lucru, Teste cu Barem 1–10 & Subiecte OJI / Admitere (${WORKSHEETS_BANK.length})`}
+              </span>
+            </h2>
+            <p className="text-xs text-slate-300">
+              {lang === 'en'
+                ? 'Interactive student mode (+35 ByteCoins & auto 1–10 grading), C++ RAM Trace links, and 1-click A4 print (blank student copy or full answer key).'
+                : 'Rezolvă interactiv cu notare 1–10 (+35 ByteCoins), deschide codul în Trace C++ sau tipărește A4 curat (varianta elev fără răspunsuri sau varianta profesor cu barem).'}
+            </p>
+          </div>
+          <a
+            href={lang === 'en' ? '/fise/en/' : '/fise/'}
+            onClick={(e) => {
+              if (onOpenWorksheets) {
+                e.preventDefault();
+                sounds.playClick();
+                onOpenWorksheets(null);
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 self-start sm:self-center min-h-[40px] whitespace-nowrap"
+          >
+            <span>{lang === 'en' ? `Open All ${WORKSHEETS_BANK.length} Sheets` : `Deschide Toate cele ${WORKSHEETS_BANK.length} Fișe`}</span>
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          {[
+            WORKSHEETS_BANK.find((w) => w.id === 'ws-g5-test-algoritmi-scratch'),
+            WORKSHEETS_BANK.find((w) => w.id === 'ws-g6-test-securitate-email'),
+            WORKSHEETS_BANK.find((w) => w.id === 'ws-g7-oji-while-cifre'),
+            WORKSHEETS_BANK.find((w) => w.id === 'ws-g8-teza-admitere-vectori'),
+          ]
+            .filter((w): w is NonNullable<typeof w> => Boolean(w))
+            .map((ws) => {
+              const loc = lang === 'en' ? ws.en : ws.ro;
+              const gradeTxt = WORKSHEET_GRADE_LABELS[ws.grade][lang === 'en' ? 'en' : 'ro'];
+              const kindTxt = WORKSHEET_KIND_LABELS[ws.kind][lang === 'en' ? 'shortEn' : 'shortRo'];
+              const href = lang === 'en' ? `/fise/en/${ws.en.slug}/` : `/fise/${ws.ro.slug}/`;
+              return (
+                <a
+                  key={ws.id}
+                  href={href}
+                  onClick={(e) => {
+                    if (onOpenWorksheets) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onOpenWorksheets(loc.slug);
+                    }
+                  }}
+                  className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5"
+                >
+                  <div className="space-y-1">
+                    <div className="text-[11px] font-mono text-emerald-300 font-semibold">
+                      {gradeTxt} · {kindTxt} · {ws.maxPoints}p
+                    </div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors line-clamp-2">
+                      {loc.breadcrumbLabel}
+                    </h3>
+                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                      {loc.directAnswerSummary}
+                    </p>
+                  </div>
+                  <span className="text-[11px] font-bold text-emerald-300 inline-flex items-center gap-1">
+                    <span>{lang === 'en' ? 'Solve / Print A4' : 'Rezolvă / Tipărește A4'}</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                  </span>
+                </a>
+              );
+            })}
+        </div>
+      </section>
 
       {/* 7. STUDY GUIDES (BLOG) & BILINGUAL GLOSSARY */}
       <section
@@ -2377,8 +2622,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               </h3>
               <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
                 {lang === 'en'
-                  ? 'Get complete curriculum-aligned ICT education for Grades 5-8 with C++, Arduino IoT, 28 Arcade Games, 1v1 Live Duels, and official diplomas — completely free, 24/7!'
-                  : 'Educație digitală de înaltă performanță pentru clasele 5-8 conform programei oficiale a Ministerului Educației (OMEN 3393/2017 & OM 5420/2024), C++, Arduino IoT, 28 jocuri arcade și diplome oficiale — 100% gratuit, non-profit!'}
+                  ? 'Get complete curriculum-aligned ICT education for Grades 5-8 with C++, Arduino IoT, 30 Arcade Games, 1v1 Live Duels, and official diplomas — completely free, 24/7!'
+                  : 'Educație digitală de înaltă performanță pentru clasele 5-8 conform programei oficiale a Ministerului Educației (OMEN 3393/2017 & OM 5420/2024), C++, Arduino IoT, 30 jocuri arcade și diplome oficiale — 100% gratuit, non-profit!'}
               </p>
             </div>
           </div>

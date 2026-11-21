@@ -1,0 +1,237 @@
+# ArkyEdu — Index Structurat Fișe de Lucru, Teste cu Barem 1–10 & Olimpiadă TIC (Clasele V–VIII)
+
+> Document de referință optimizat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Conține toate cele 16 fișe și teste bilingve cu bareme oficiale pe 100 de puncte, rezolvări explicate, plus cele 12 probleme din Arena Olimpiada TIC.
+
+- Hub principal Română: https://www.arkyedu.com/fise/
+- Hub principal Engleză: https://www.arkyedu.com/fise/en/
+- Debug Vizual C++ & Olimpiadă: https://www.arkyedu.com/sandbox/
+- Documentație generală platformă: https://www.arkyedu.com/llms.txt
+
+---
+
+## 1. Biblioteca de Fișe, Teste cu Barem 100p & Subiecte OJI / Admitere (16 Resurse RO/EN)
+
+### 1. Fișă de Lucru Clasa a V-a: Arhitectura PC, Memorie RAM vs ROM & Unități de Măsură
+- URL RO: https://www.arkyedu.com/fise/fisa-de-lucru-clasa-5-hardware-ram-rom-unitati-masura/
+- URL EN: https://www.arkyedu.com/fise/en/grade-5-hardware-ram-rom-storage-units-worksheet/
+- Clasă & Tip: Clasa a V-a | Fișă de Lucru | 100p (10p oficiu) | 25 min
+- Rezumat: Fișa acoperă 5 itemi esențiali (90p + 10p oficiu): diferența RAM (volatilă) vs ROM (nevolatilă), clasificarea perifericelor de intrare/ieșire/I-O, conversii exacte pe scara 1 Byte = 8 biți și 1 KB = 1024 B, rolul CPU și regula ergonomică 20-20-20.
+- Teorie cheie: Reține rapid: CPU execută instrucțiunile (frecvență în GHz); RAM este memoria de lucru rapidă și volatilă (se golește la oprirea PC-ului); ROM păstrează firmware-ul de pornire BIOS/UEFI; SSD/HDD stochează fișierele permanent. 1 Byte = 8 biți, 1 KB = 1024 Bytes, 1 MB = 1024 KB.
+- Itemi & Barem Oficial:
+  1. [18p] Care memorie este VOLATILĂ (își pierde conținutul când se întrerupe alimentarea cu energie electrică)? -> Răspuns corect: "Memoria RAM" (Memoria RAM (Random Access Memory) stochează temporar programele deschise; fără curent electric datele dispar.)
+  2. [18p] Care dintre următoarele grupe conține EXCLUSIV dispozitive periferice de IEȘIRE (Output)? -> Răspuns corect: "Monitor, Imprimantă, Căști audio" (Monitorul, imprimanta și căștile scot informație din calculator către utilizator. Touchscreen-ul este I/O (intrare și ieșire).)
+  3. [18p] Câți biți ocupă un fișier text cu lungimea de exact 4 Bytes? Scrie doar numărul. -> Răspuns corect: "32" (1 Byte = 8 biți ⇒ 4 Bytes × 8 biți = 32 biți.)
+  4. [18p] Adevărat sau Fals: Unitatea Centrală de Prelucrare (CPU / procesorul) conține Unitatea Aritmetico-Logică (UAL) și Unitatea de Comandă și Control (UCC). -> Răspuns corect: "Adevărat" (Adevărat. UAL execută operațiile matematice/logice, iar UCC coordonează și decodifică instrucțiunile.)
+  5. [18p] O fotografie ocupă 2.048 KB. Câți MB (Megabytes binari, 1 MB = 1.024 KB) ocupă această fotografie? -> Răspuns corect: "2 MB" (2048 KB / 1024 = 2 MB.)
+
+### 2. Fișă de Lucru Clasa a V-a: Sisteme de Operare, Arbore Directoare & Extensii Fișiere
+- URL RO: https://www.arkyedu.com/fise/fisa-de-lucru-clasa-5-sisteme-operare-arbore-extensii-fisiere/
+- URL EN: https://www.arkyedu.com/fise/en/grade-5-operating-systems-folder-tree-extensions-worksheet/
+- Clasă & Tip: Clasa a V-a | Fișă de Lucru | 100p (10p oficiu) | 25 min
+- Rezumat: Fișa exersează diferența dintre sistem de operare și aplicație, scrierea corectă a căilor ierarhice în Windows (C:\Folder\Fisier.ext), caracterele rezervate interzise (\ / : * ? " < > |) și asocierea extensiilor (.docx, .png, .mp3, .exe, .pdf).
+- Teorie cheie: Un fișier are forma Nume.extensie (ex: referat.pdf). Calea completă pornește de la partiția rădăcină (ex: D:\Clasa5\TIC\poza.png). Ștergerea obișnuită (Delete) mută în Recycle Bin; Shift+Delete șterge direct.
+- Itemi & Barem Oficial:
+  1. [18p] Care dintre următoarele variante reprezintă un SISTEM DE OPERARE (nu o simplă aplicație)? -> Răspuns corect: "Windows 11 / Linux Ubuntu" (Windows 11 și Linux Ubuntu gestionează resursele hardware și permit rularea tuturor aplicațiilor.)
+  2. [18p] Care extensie indică un document portabil cu aspect fix, destinat citirii și tipăririi? -> Răspuns corect: ".pdf" (.pdf (Portable Document Format) păstrează intacte fonturile și paginarea pe orice dispozitiv.)
+  3. [18p] Privind calea D:\Scoala\Informatica\proiect.docx, scrie numele exact al subdirectorului în care se află fișierul proiect.docx. -> Răspuns corect: "Informatica" (În D:\Scoala\Informatica\proiect.docx, ultimul director dinaintea numelui fișierului este Informatica (sau Informatics).)
+  4. [18p] Adevărat sau Fals: În Windows este permis să denumești un fișier „Tema?.txt” folosind semnul întrebării. -> Răspuns corect: "Fals" (Fals. Caracterele \ / : * ? " < > | sunt rezervate de sistemul de operare și nu pot apărea în nume.)
+  5. [18p] Ce combinație de taste copiază fișierul selectat în Clipboard fără să îl șteargă din folderul inițial? -> Răspuns corect: "Ctrl + C" (Ctrl + C = Copy (copiere); Ctrl + X = Cut (mutare); Ctrl + V = Paste (lipire).)
+
+### 3. Test de Evaluare cu Barem Clasa a V-a: Algoritmi Liniari, Scheme Logice & Scratch 3.0 (100p)
+- URL RO: https://www.arkyedu.com/fise/test-evaluare-barem-clasa-5-algoritmi-scheme-logice-scratch/
+- URL EN: https://www.arkyedu.com/fise/en/grade-5-assessment-algorithms-flowcharts-scratch-rubric/
+- Clasă & Tip: Clasa a V-a | Test cu Barem 1–10 | 100p (10p oficiu) | 30 min
+- Rezumat: Test complet de 100 puncte (90p + 10p oficiu) pentru semestrul II la Clasa a V-a: proprietățile fundamentale ale algoritmului, simbolurile schemelor logice, urmărirea unei variabile prin pași liniari și sistemul de coordonate Scratch (-240..240 pe X, -180..180 pe Y).
+- Teorie cheie: Scena Scratch are centrul la (x=0, y=0). X variază de la -240 (stânga) la +240 (dreapta); Y variază de la -180 (jos) la +180 (sus). În scheme logice: Oval = Start/Stop, Paralelogram = Citire/Scriere, Dreptunghi = Atribuire/Calcul, Romb = Decizie.
+- Itemi & Barem Oficial:
+  1. [18p] Ce proprietate garantează că un algoritm se termină după un număr finit de pași? -> Răspuns corect: "Finitudinea" (Finitudinea asigură oprirea algoritmului cu un rezultat clar; claritatea evită ambiguitatea; generalitatea acoperă toate datele valide.)
+  2. [18p] Într-o schemă logică, ce figură geometrică este folosită pentru CITIREA sau AFIȘAREA datelor? -> Răspuns corect: "Paralelogramul" (Paralelogramul marchează operațiile de intrare/ieșire (citește / scrie).)
+  3. [18p] Urmărește algoritmul de mai jos și scrie valoarea finală a lui S: -> Răspuns corect: "17" (Respectând ordinea operațiilor: b * 2 = 5 * 2 = 10, apoi S = 7 + 10 = 17.)
+  4. [18p] Un personaj Scratch pleacă din centrul scenei (x=0, y=0). Execută „modifică x cu 60”, apoi „modifică y cu -40”. Care este noua coordonată X? (scrie doar numărul) -> Răspuns corect: "60" (Din x = 0, „modifică x cu 60” mută personajul la dreapta la x = 60 (iar y devine -40).)
+  5. [18p] Care bloc Scratch face personajul să înainteze în total 100 de pași folosind o buclă repetitivă? -> Răspuns corect: "repetă (4) [ mergi (25) pași ]" (4 repetiții × 25 pași = 100 de pași parcurși în linie dreaptă.)
+
+### 4. Ghid Proiect & Evaluare Clasa a V-a: Referat Corect în Word (Diacritice, A4) & Siguranță Online
+- URL RO: https://www.arkyedu.com/fise/fisa-proiect-clasa-5-referat-word-diacritice-siguranta-internet/
+- URL EN: https://www.arkyedu.com/fise/en/grade-5-word-document-formatting-https-safety-project/
+- Clasă & Tip: Clasa a V-a | Ghid Proiect & Evaluare | 100p (10p oficiu) | 25 min
+- Rezumat: Fișa verifică regulile de aur ale tehnoredactării românești (fără spațiu înainte de virgulă/punct, cu spațiu după, diacritice Standard ă î â ș ț cu virgulă dedesubt, aliniere Justify pentru corp și format A4) plus regulile HTTPS și protecția parolelor.
+- Teorie cheie: Regula punctuației: „Text, continuare.” — niciodată spațiu înainte de , . ! ? ; și întotdeauna un spațiu după! Folosește tastatura Romanian (Standard) cu AltGr + a/i/q/s/t pentru ă î â ș ț.
+- Itemi & Barem Oficial:
+  1. [18p] Care propoziție respectă corect regulile de tehnoredactare a semnelor de punctuație? -> Răspuns corect: "Salut, azi învățăm TIC." (Nu se pune spațiu înainte de virgulă sau punct, iar după virgulă se lasă obligatoriu un singur spațiu.)
+  2. [18p] Ce aliniere face ca ambele margini (stânga și dreapta) ale paragrafului să fie perfect drepte, ca într-un manual tipărit? -> Răspuns corect: "Justify (Stânga-Dreapta)" (Justify aliniază uniform textul între marginea stângă și cea dreaptă.)
+  3. [18p] Cum se numește protocolul web criptat indicat de lacătul din bara de adresă (cu „S” de la Secure la final)? -> Răspuns corect: "HTTPS" (HTTPS (HyperText Transfer Protocol Secure) criptează comunicarea dintre browser și server cu certificat SSL/TLS.)
+  4. [18p] Adevărat sau Fals: Este sigur să publici adresa de acasă și numărul de telefon într-un profil public de joc dacă ai poză cu avatar. -> Răspuns corect: "Fals" (Fals. Adresa, școala, telefonul și CNP-ul sunt date cu caracter personal și nu se publică niciodată online.)
+  5. [18p] Pe tastatura „Romanian (Standard)”, ce tastă ții apăsată împreună cu „a” pentru a scrie litera „ă”? -> Răspuns corect: "AltGr (Alt dreapta)" (Pe layout-ul Romanian (Standard), AltGr + a produce ă, AltGr + q -> â, AltGr + i -> î, AltGr + s -> ș, AltGr + t -> ț.)
+
+### 5. Fișă de Lucru Clasa a VI-a: PowerPoint (Regula 6×6, Tranziții) & Grafică RGB / Paint 3D
+- URL RO: https://www.arkyedu.com/fise/fisa-de-lucru-clasa-6-powerpoint-regula-6x6-paint-3d-rgb/
+- URL EN: https://www.arkyedu.com/fise/en/grade-6-powerpoint-6x6-rule-transitions-rgb-paint3d-worksheet/
+- Clasă & Tip: Clasa a VI-a | Fișă de Lucru | 100p (10p oficiu) | 25 min
+- Rezumat: Fișa explică și testează regula 6×6 pentru diapozitive clare (max. 6 rânduri × 6 cuvinte), diferența dintre tranziție (între slide-uri) și animație (pe obiecte), plus amestecul aditiv RGB (Roșu-Verde-Albastru) unde (255,255,255) = Alb și (0,0,0) = Negru.
+- Teorie cheie: Tranziția apare la trecerea dintre două diapozitive; Animația mișcă un obiect (titlu, imagine) din interiorul diapozitivului. În RGB aditiv: (255,0,0)=Roșu pur, (0,255,0)=Verde, (255,255,255)=Alb.
+- Itemi & Barem Oficial:
+  1. [18p] Ce prevede „Regula 6×6” pentru un diapozitiv PowerPoint reușit? -> Răspuns corect: "Maximum 6 rânduri scurte (idei) a câte maximum 6 cuvinte fiecare pe slide" (Regula 6×6 păstrează slide-urile aerisite (max. 6 puncte × 6 cuvinte), astfel încât publicul să asculte vorbitorul, nu să citească ziduri de text.)
+  2. [18p] Care afirmație explică corect diferența dintre o TRANZIȚIE și o ANIMAȚIE? -> Răspuns corect: "Tranziția se aplică între două diapozitive; animația se aplică unui element din interiorul diapozitivului" (Tranzițiile animă trecerea de la un slide la următorul; animațiile controlează apariția/accentul/ieșirea obiectelor de pe slide.)
+  3. [18p] În modelul aditiv RGB (0–255), ce culoare obținem prin codul RGB(255, 255, 255)? Scrie numele culorii. -> Răspuns corect: "Alb" (Lumina roșie, verde și albastră la intensitate maximă (255, 255, 255) se combină în lumină ALBĂ. (0, 0, 0) este Negru.)
+  4. [18p] Adevărat sau Fals: O imagine bitmap (raster) este formată dintr-o grilă de puncte numite pixeli și se poate vedea „în pătrățele” dacă o mărim exagerat. -> Răspuns corect: "Adevărat" (Adevărat. Imaginile bitmap (.png, .jpg) au o rezoluție fixă în pixeli, spre deosebire de grafica vectorială.)
+  5. [18p] În Paint 3D (sau orice editor 3D), câte axe de coordonate sunt necesare pentru a roti și poziționa un cub în spațiu? -> Răspuns corect: "3 axe (X, Y și Z)" (Spațiul tridimensional (3D) folosește 3 axe: X (lățime), Y (înălțime) și Z (adâncime).)
+
+### 6. Test Semestrial cu Barem Clasa a VI-a: Securitate Cibernetică, Phishing, 2FA & E-mail CC/BCC (100p)
+- URL RO: https://www.arkyedu.com/fise/test-cu-barem-clasa-6-securitate-cibernetica-phishing-2fa-email-bcc/
+- URL EN: https://www.arkyedu.com/fise/en/grade-6-cybersecurity-phishing-2fa-email-bcc-exam/
+- Clasă & Tip: Clasa a VI-a | Test cu Barem 1–10 | 100p (10p oficiu) | 30 min
+- Rezumat: Test complet cu barem 100p: deosebirea între Ransomware, Trojan și Phishing; protecția conturilor cu 2FA; diferența de confidențialitate dintre CC (Carbon Copy vizibil) și BCC (Blind Carbon Copy ascuns); regula backup 3-2-1 și apelul 119 pentru cyberbullying.
+- Teorie cheie: Folosește BCC (Blind Carbon Copy) când trimiți un mesaj către mulți destinatari care nu trebuie să își vadă adresele între ei (GDPR). 2FA adaugă un al doilea cod pe lângă parolă.
+- Itemi & Barem Oficial:
+  1. [18p] Trimiți un e-mail informativ către 25 de părinți fără ca aceștia să își vadă reciproc adresele de e-mail. În ce câmp pui adresele? -> Răspuns corect: "BCC (Blind Carbon Copy)" (BCC (Copie Oarbă / Ascunsă) ascunde lista destinatarilor între ei și protejează datele personale.)
+  2. [18p] Ce tip de malware criptează toate fișierele de pe disc și cere o sumă de bani (răscumpărare) pentru deblocare? -> Răspuns corect: "Ransomware" (Ransomware blochează accesul la date prin criptare și cere răscumpărare; apărarea principală este backup-ul offline 3-2-1.)
+  3. [18p] Ce număr unic gratuit din România pot apela copiii și părinții pentru ajutor în caz de cyberbullying, abuz sau hărțuire online? -> Răspuns corect: "119" (Numărul național gratuit pentru protecția copilului (inclusiv cyberbullying) este 119.)
+  4. [18p] Adevărat sau Fals: Un mesaj pe Discord care promite „10.000 Robux gratis dacă introduci parola pe acest link ciudat” este o tentativă de Phishing. -> Răspuns corect: "Adevărat" (Adevărat. Phishing-ul folosește promisiuni false sau urgență artificială pentru a fura parole și conturi.)
+  5. [18p] Care variantă descrie corect regula profesională de Backup „3-2-1”? -> Răspuns corect: "3 copii ale datelor, pe 2 tipuri de medii diferite, dintre care 1 copie stocată extern/offline" (Regula 3-2-1 = 3 copii, pe 2 tipuri de medii (ex: PC + SSD extern/Cloud), cu 1 copie izolată extern/offline.)
+
+### 7. Fișă de Lucru Clasa a VI-a: Structura Dacă-Altfel, Operatori Logici & Bucle Condiționate în Scratch
+- URL RO: https://www.arkyedu.com/fise/fisa-de-lucru-clasa-6-scratch-daca-altfel-bucle-conditionate-operatori/
+- URL EN: https://www.arkyedu.com/fise/en/grade-6-scratch-if-else-logic-operators-conditional-loops-worksheet/
+- Clasă & Tip: Clasa a VI-a | Fișă de Lucru | 100p (10p oficiu) | 25 min
+- Rezumat: Fișa consolidează structura alternativă Dacă...Atunci...Altfel, evaluarea condițiilor compuse cu ȘI (ambele adevărate), SAU (cel puțin una adevărată), NU (negare) și diferența dintre „repetă (n)” și „repetă până când <condiție>”.
+- Teorie cheie: În Scratch: „repetă până când <condiție>” se OPREȘTE în momentul în care condiția devine ADEVĂRATĂ (invers față de `while` din C++ care continuă cât timp condiția e adevărată!).
+- Itemi & Barem Oficial:
+  1. [18p] Fie Scor = 12 și Vieți = 0. Ce valoare are expresia logică: (Scor > 10) ȘI (Vieți > 0)? -> Răspuns corect: "Fals" (Scor > 10 este Adevărat, dar Vieți > 0 este Fals. Operatorul ȘI cere ca AMBELE condiții să fie adevărate ⇒ Fals.)
+  2. [18p] Pentru aceleași valori (Scor = 12, Vieți = 0), ce valoare are expresia: (Scor > 10) SAU (Vieți > 0)? -> Răspuns corect: "Adevărat" (Operatorul SAU este Adevărat dacă cel puțin o condiție este adevărată (12 > 10 este Adevărat).)
+  3. [18p] Care este valoarea finală a variabilei `n` după executarea blocurilor Scratch de mai jos? -> Răspuns corect: "11" (n pornește de la 2 → 5 → 8 → 11. Când n = 11, condiția 11 > 10 devine Adevărată și bucla se oprește!)
+  4. [18p] Adevărat sau Fals: În blocul „dacă <condiție> atunci [A] altfel [B]”, se pot executa simultan atât ramura [A] cât și ramura [B] la o singură verificare. -> Răspuns corect: "Fals" (Fals. Cele două ramuri se exclud reciproc: ori se execută A (condiție adevărată), ori B (condiție falsă).)
+  5. [18p] Vrei ca un personaj să spună „Ai câștigat!” exact în clipa în care atinge steagul verde. Ce bloc folosești cel mai natural? -> Răspuns corect: "la nesfârșit [ dacă <atinge [Steag]> atunci spune "Ai câștigat!" ]" (Verificarea continuă (forever) cu „dacă <atinge [Steag]>” reacționează instantaneu la coliziune.)
+
+### 8. Evaluare Finală cu Barem Clasa a VI-a: Algoritmi cu Contor, Clonare & Netichetă (100p)
+- URL RO: https://www.arkyedu.com/fise/evaluare-finala-barem-clasa-6-algoritmi-contor-scratch-netiquette/
+- URL EN: https://www.arkyedu.com/fise/en/grade-6-final-exam-counter-algorithms-clones-netiquette/
+- Clasă & Tip: Clasa a VI-a | Test cu Barem 1–10 | 100p (10p oficiu) | 35 min
+- Rezumat: Evaluare sumativă completă de sfârșit de an pentru Clasa a VI-a (100p): trasarea algoritmului cu variabilă contor și sumă cumulată, calculul pașilor în bucle imbricate, clonarea eficientă în Scratch și reguli de netichetă.
+- Teorie cheie: Un contor pornește de obicei de la 0 (`setează contor la 0`) și crește cu +1 când o condiție este îndeplinită. Două bucle imbricate `repetă (A)` în interiorul `repetă (B)` execută corpul interior de A × B ori.
+- Itemi & Barem Oficial:
+  1. [18p] Calculează valoarea finală a variabilei `contor` după rularea pseudocodului de mai jos: -> Răspuns corect: "3" (Numerele pare între 1 și 6 sunt 2, 4 și 6 — adică exact 3 numere. Contorul devine 3.)
+  2. [18p] De câte ori se va executa blocul „mergi 10 pași” dacă se află în bucla: repetă (4) [ repetă (5) [ mergi 10 pași ] ]? -> Răspuns corect: "20" (Bucle imbricate: 4 repetiții exterioare × 5 repetiții interioare = 20 de execuții.)
+  3. [18p] Într-un joc Scratch cu meteoriți creați prin „creează o clonă a mea”, ce bloc trebuie pus obligatoriu când meteoritul atinge marginea de jos pentru a nu bloca jocul? -> Răspuns corect: "șterge această clonă" (Scratch are o limită de 300 de clone active simultan; „șterge această clonă” eliberează memoria imediat.)
+  4. [18p] Adevărat sau Fals: Scrierea unui întreg mesaj școlar cu LITERE MARI (CAPS LOCK) este considerată în netichetă echivalentul țipatului și este nepoliticoasă. -> Răspuns corect: "Adevărat" (Adevărat. În comunicarea digitală, CAPS LOCK exprimă furie sau strigăt și îngreunează citirea.)
+  5. [18p] Ce va afișa la final algoritmul cu acumulator de sumă de mai jos? -> Răspuns corect: "10" (S = 0 + 1 + 2 + 3 + 4 = 10.)
+
+### 9. Fișă de Lucru C++ Clasa a VII-a: Operatori (`/`, `%`) & Regula celor 3 Pahare (cu Trace RAM)
+- URL RO: https://www.arkyedu.com/fise/fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare/
+- URL EN: https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/
+- Clasă & Tip: Clasa a VII-a | Fișă de Lucru | 100p (10p oficiu) | 30 min
+- Rezumat: Fișa consolidează structura liniară C++ (100p): împărțirea întreagă la `int` (`17 / 5 == 3`), extragerea ultimei cifre cu `% 10`, tăierea ultimei cifre cu `/ 10`, diferența `=` (atribuire) vs `==` (egalitate) și interschimbarea corectă folosind `aux` (Regula celor 3 pahare).
+- Teorie cheie: La numere întregi (`int`): `n % 10` dă ultima cifră (ex: `247 % 10 = 7`), iar `n / 10` elimină ultima cifră (`247 / 10 = 24`). Pentru `swap(a, b)`, scriem mereu `aux = a; a = b; b = aux;` — dacă scrii direct `a = b; b = a;`, valoarea inițială a lui `a` se pierde!
+- Itemi & Barem Oficial:
+  1. [18p] Fie variabilele `int a = 19, b = 4;`. Ce valori vor fi afișate de `cout << a / b << " " << a % b;`? -> Răspuns corect: "4 3" (Deoarece `a` și `b` sunt `int`, `19 / 4` dă câtul întreg `4`, iar `19 % 4` dă restul `3` (4×4 + 3 = 19).)
+  2. [18p] Care secvență de cod interschimbă CORECT valorile variabilelor `x` și `y`? -> Răspuns corect: "aux = x; x = y; y = aux;" (Salvăm întâi pe `x` în paharul gol `aux`, mutăm `y` în `x`, apoi punem valoarea salvată din `aux` în `y`.)
+  3. [18p] Scrie exact ce va afișa programul C++ de mai jos: -> Răspuns corect: "16" (385 / 100 = 3 (sute), 385 / 10 % 10 = 38 % 10 = 8 (zeci), 385 % 10 = 5 (unități). Suma = 3 + 8 + 5 = 16.)
+  4. [18p] Adevărat sau Fals: Dacă scrii `int x = 5;` și apoi `x = x + 3;`, instrucțiunea este invalidă matematic în C++. -> Răspuns corect: "Fals" (Fals! Semnul `=` este operator de ATRIBUIRE: calculează mai întâi partea dreaptă (5 + 3 = 8) și stochează rezultatul în `x`.)
+  5. [18p] Ce afișează `cout << a << " " << b;` după secvența: `int a = 4, b = 9; a = a + b; b = a - b; a = a - b;`? (scrie cele două numere separate prin spațiu) -> Răspuns corect: "9 4" (Interschimbare fără `aux`: a devine 13, b devine 13 - 9 = 4, a devine 13 - 4 = 9. Deci se afișează `9 4`.)
+
+### 10. Test cu Barem C++ Clasa a VII-a: Structura Alternativă `if/else` & Operatori Logici (100p)
+- URL RO: https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/
+- URL EN: https://www.arkyedu.com/fise/en/grade-7-cpp-if-else-decisions-logical-operators-test/
+- Clasă & Tip: Clasa a VII-a | Test cu Barem 1–10 | 100p (10p oficiu) | 35 min
+- Rezumat: Test complet de 100p (90p + 10p oficiu) pe structura alternativă C++: diferența fatală între `x == 5` și `x = 5`, punct și virgulă pus greșit după `if (...)`, intervale cu `&&`, maximul a 3 numere și verificarea divizibilității.
+- Teorie cheie: În C++, intervalul matematic `10 ≤ x ≤ 99` NU se scrie `10 <= x <= 99` (care e mereu adevărat!), ci `(10 <= x && x <= 99)`! De asemenea, pune mereu `==` pentru comparație și nu pune `;` după `if (...)`.
+- Itemi & Barem Oficial:
+  1. [18p] Cum se scrie CORECT în C++ condiția ca numărul `x` să aibă exact 2 cifre pozitive (între 10 și 99 inclusiv)? -> Răspuns corect: "if (x >= 10 && x <= 99)" (Operatorul `&&` (ȘI logic) verifică simultan ambele capete ale intervalului. `||` ar fi adevărat pentru orice număr, iar `10 <= x <= 99` compară 0/1 cu 99!)
+  2. [18p] Ce afișează codul: `int a = 3; if (a = 0) cout << "DA"; else cout << "NU";` (atenție la un singur `=`!) ? -> Răspuns corect: "NU / NO" (`a = 0` îi atribuie lui `a` valoarea `0` (care în C++ înseamnă Fals!). De aceea se intră pe ramura `else` și se afișează NU / NO.)
+  3. [18p] Ce va afișa secvența C++ de mai jos pentru `x = 12` și `y = 5`? -> Răspuns corect: "17" (`12 % 3 == 0` este Adevărat, iar `5 % 2 == 1` (impar) este Adevărat. Ambele sunt adevărate ⇒ afișează `12 + 5 = 17`.)
+  4. [18p] Adevărat sau Fals: Trei numere strict pozitive `a, b, c` pot fi laturile unui triunghi dacă și numai dacă `a + b > c && a + c > b && b + c > a`. -> Răspuns corect: "Adevărat" (Adevărat! Aceasta este inegalitatea triunghiului: suma oricăror două laturi trebuie să fie strict mai mare decât a treia.)
+  5. [18p] Atenție la capcana clasică din C++! Ce afișează secvența de mai jos (observă `;` după `if`)? -> Răspuns corect: "Salut" (Punct și virgulă `;` imediat după `if (n > 10)` închide instrucțiunea `if` cu un corp gol, deci `cout << "Salut";` se execută NECONDIȚIONAT!)
+
+### 11. Fișă OJI & Evaluare C++ Clasa a VII-a: Bucle `while`, Oglindit, Palindrom & Număr Prim
+- URL RO: https://www.arkyedu.com/fise/fisa-oji-clasa-7-cpp-bucle-while-oglindit-palindrom-numar-prim/
+- URL EN: https://www.arkyedu.com/fise/en/grade-7-olympiad-cpp-while-loops-palindrome-prime-worksheet/
+- Clasă & Tip: Clasa a VII-a | Subiect OJI / Admitere | 100p (10p oficiu) | 40 min
+- Rezumat: Fișă de performanță (100p) pentru clasa a VII-a și pregătire OJI: construirea oglinditului (`og = og * 10 + n % 10`), salvarea lui `copie = n` înainte de `while` pentru testul de palindrom, algoritmul lui Euclid prin împărțiri repetate și verificarea numerelor prime până la √n.
+- Teorie cheie: Șablon Palindrom în C++: 1) Salvezi `copie = n`; 2) În `while (n > 0)` construiești `og = og * 10 + n % 10; n /= 10;`; 3) Compari `copie == og` (NICIOADATĂ `n == og`, pentru că `n` a devenit `0`!).
+- Itemi & Barem Oficial:
+  1. [18p] De ce testul `if (n == og)` pus DUPĂ `while (n > 0) { og = og * 10 + n % 10; n /= 10; }` eșuează pentru aproape toate numerele? -> Răspuns corect: "Pentru că la ieșirea din `while`, variabila `n` a devenit `0`, deci se compară `0 == og` în loc de numărul inițial" (La finalul buclei `while (n > 0)`, `n` este exact `0`. Trebuie salvat dinainte `int copie = n;` și verificat `copie == og`.)
+  2. [18p] Ce va afișa algoritmul următor pentru `n = 4072`? -> Răspuns corect: "3" (Cifrele lui 4072 sunt 2 (pară), 7 (impară), 0 (pară: 0 % 2 == 0!) și 4 (pară). Total = 3 cifre pare!)
+  3. [18p] Care este cel mai mare divizor comun `cmmdc(48, 18)` calculat prin algoritmul lui Euclid? -> Răspuns corect: "6" (48 % 18 = 12 → 18 % 12 = 6 → 12 % 6 = 0 ⇒ cmmdc = 6.)
+  4. [18p] Adevărat sau Fals: Numărul 1 este considerat număr prim în matematică și informatică. -> Răspuns corect: "Fals" (Fals! Un număr prim are EXACT 2 divizori naturali distincți (1 și el însuși). 1 are un singur divizor, deci NU este prim; cel mai mic număr prim este 2.)
+  5. [18p] Câte cifre numără un program care folosește `while (n > 0) { cnt++; n /= 10; }` dacă utilizatorul introduce `n = 0`? -> Răspuns corect: "0 cifre (pentru că 0 > 0 este Fals de la început; ar trebui do...while)" (Pentru `n = 0`, condiția `while (n > 0)` e falsă din start și `cnt` rămâne `0`. Folosind `do { cnt++; n /= 10; } while (n > 0);`, `0` are corect 1 cifră.)
+
+### 12. Fișă Practică Clasa a VII-a: Tehnoredactare Avansată Word, Acustică WavePad & Hărți GIS
+- URL RO: https://www.arkyedu.com/fise/fisa-practica-clasa-7-tehnoredactare-word-audio-wavepad-gis/
+- URL EN: https://www.arkyedu.com/fise/en/grade-7-practical-sheet-word-typography-wavepad-audio-gis-maps/
+- Clasă & Tip: Clasa a VII-a | Ghid Proiect & Evaluare | 100p (10p oficiu) | 25 min
+- Rezumat: Fișă practică interdisciplinară pentru primul semestru de Clasa a VII-a (100p): generarea automată a Cuprinsului cu stiluri Heading 1/2, formatarea Antet/Subsol, frecvența de eșantionare audio 44.1 kHz, piste VideoPad (Green Screen) și straturi vectoriale/raster în GIS.
+- Teorie cheie: Un Cuprins Automat funcționează doar dacă aplici stiluri ierarhice (Heading 1, Heading 2), nu doar mărind manual fontul! În GIS, straturile (Layers) suprapun hărți satelitare (raster) cu rute și clădiri (vector).
+- Itemi & Barem Oficial:
+  1. [18p] Ce trebuie aplicat titlurilor de capitole în Word / Google Docs pentru a putea genera automat un Cuprins (Table of Contents)? -> Răspuns corect: "Stiluri de titlu (Heading 1, Heading 2)" (Generatorul de cuprins caută exclusiv paragrafele marcate cu stiluri ierarhice Heading 1, Heading 2, Heading 3.)
+  2. [18p] Care format audio este NECOMPRIMAT (calitate de studio fără pierderi, dar fișier foarte mare), spre deosebire de MP3? -> Răspuns corect: ".wav" (WAV păstrează forma de undă audio necomprimată; MP3 aplică compresie cu pierderi pentru a ocupa de ~10 ori mai puțin spațiu.)
+  3. [18p] Ce culoare de fundal este folosită cel mai des la filmare pentru efectul „Chroma Key” (înlocuirea fundalului cu un decor virtual în VideoPad)? -> Răspuns corect: "Verde" (Verde (Green Screen) — deoarece culoarea verde aprins contrastează puternic cu tonurile pielii umane.)
+  4. [18p] Adevărat sau Fals: Într-un sistem GIS (ex: Google My Maps), un traseu de autobuz și punctele de stație sunt reprezentate ca date VECTORIALE, iar imaginea din satelit ca strat RASTER. -> Răspuns corect: "Adevărat" (Adevărat. GIS combină straturi vectoriale (puncte, linii, poligoane) peste straturi raster (fotografii aeriene/satelitare).)
+  5. [18p] Unde introduci numărul automat al paginii ca să apară consecvent în josul fiecărei pagini dintr-un proiect de 20 de pagini? -> Răspuns corect: "În zona de Subsol (Footer) → Insert Page Number" (Inserarea în Footer (Subsol) actualizează automat numerotarea chiar dacă adaugi sau ștergi pagini ulterioare.)
+
+### 13. Fișă de Lucru Excel Clasa a VIII-a: `SUM`, `AVERAGE`, `IF`, `COUNTIF`, `$A$1` & Erori (`#NAME?`, `#DIV/0!`)
+- URL RO: https://www.arkyedu.com/fise/fisa-de-lucru-clasa-8-excel-sum-average-if-countif-referinta-absoluta-erori/
+- URL EN: https://www.arkyedu.com/fise/en/grade-8-excel-formulas-sum-average-if-countif-absolute-errors-worksheet/
+- Clasă & Tip: Clasa a VIII-a | Fișă de Lucru | 100p (10p oficiu) | 30 min
+- Rezumat: Fișă practică Excel de 100p pentru Clasa a VIII-a: începerea oricărei formule cu `=`, diferența dintre `A1:A5` (domeniu) și `A1;A5` (celule izolate), funcțiile `SUM`/`AVERAGE`/`IF`/`COUNTIF`, fixarea TVA-ului cu referință absolută `$B$1` și diagnosticul erorilor `#NAME?`, `#VALUE!`, `#DIV/0!`, `###`.
+- Teorie cheie: Orice formulă începe cu `=`! `$B$1` îngheață atât coloana B cât și rândul 1 când tragi formula în jos cu AutoFill. Erori: `#DIV/0!` = împărțire la 0; `#NAME?` = nume funcție scris greșit (ex: `SUMA` în loc de `SUM`); `#VALUE!` = aduni text cu număr; `####` = coloana este prea îngustă.
+- Itemi & Barem Oficial:
+  1. [18p] Fie notele elevilor în celulele `B2:B6` = `{8, 10, 4, 9, 7}`. Ce returnează formula `=COUNTIF(B2:B6; ">=8")` (sau `, ">=8"`)? -> Răspuns corect: "3 (numărul notelor mai mari sau egale cu 8)" (COUNTIF numără celulele care respectă condiția `>=8`: acestea sunt 8, 10 și 9 — adică exact 3 celule.)
+  2. [18p] Ai scris `=SUM(A1:A5)` în B1, dar Excel afișează eroarea `####` în celulă. Care este cauza? -> Răspuns corect: "Coloana este prea îngustă pentru a afișa numărul complet (lărgește coloana)" (`####` nu este o eroare de calcul — înseamnă doar că lățimea coloanei este prea mică pentru a afișa numărul formatat.)
+  3. [18p] În celula `D1` se află cursul valutar EUR (fix pentru tot tabelul). Cum scrii adresa celulei `D1` cu referință ABSOLUTĂ pentru a o bloca la AutoFill? -> Răspuns corect: "$D$1" (Semnul `$` pus înaintea coloanei și a rândului (`$D$1`) blochează adresa la copierea formulelor cu AutoFill.)
+  4. [18p] Adevărat sau Fals: Eroarea `#NAME?` apare de obicei atunci când ai scris greșit numele unei funcții (de ex. `=SUMA(A1:A5)` în loc de `=SUM(A1:A5)`). -> Răspuns corect: "Adevărat" (Adevărat. `#NAME?` semnalează că Excel nu recunoaște numele funcției sau al unui domeniu.)
+  5. [18p] Ce va afișa formula `=IF(AVERAGE(4; 6) >= 5; "PROMOVAT"; "RESPINS")`? -> Răspuns corect: "PROMOVAT / PASSED" (AVERAGE(4, 6) = (4 + 6) / 2 = 5. Condiția `5 >= 5` este Adevărată ⇒ returnează ramura „PROMOVAT / PASSED”.)
+
+### 14. Subiect Teză & Admitere Mate-Info C++ Clasa a VIII-a: Vectori 1D, Sortare & Căutare Binară (100p)
+- URL RO: https://www.arkyedu.com/fise/subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara/
+- URL EN: https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/
+- Clasă & Tip: Clasa a VIII-a | Subiect OJI / Admitere | 100p (10p oficiu) | 45 min
+- Rezumat: Subiect tip Teză & Admitere Mate-Info (100p): indexarea corectă `0..n-1` (evitând Out-Of-Bounds), verificarea sortării cu variabila semafor `ok = 1`, parcurgerea comparativă până la `i < n - 1`, complexitatea căutării binare `O(log₂ n)` și numărul maxim de comparații pe 1.024 elemente.
+- Teorie cheie: Un vector `int v[5]` are indicii `0, 1, 2, 3, 4` (`v[5]` NU există!). Când compari elemente vecine `v[i]` și `v[i + 1]`, bucla merge până la `i < n - 1`. Căutarea binară funcționează DOAR pe vectori sortați și găsește ținta în cel mult ⌊log₂(n)⌋ + 1 pași!
+- Itemi & Barem Oficial:
+  1. [18p] Fie declarația `int v[6] = {10, 20, 30, 40, 50, 60};`. Ce valoare are `v[2] + v[5]`? -> Răspuns corect: "90" (Indexarea începe de la 0: `v[0]=10, v[1]=20, v[2]=30, v[3]=40, v[4]=50, v[5]=60`. Deci `30 + 60 = 90`.)
+  2. [18p] Într-un vector sortat crescător cu `1.024` elemente, de cel mult câți pași (împărțiri la 2) are nevoie Căutarea Binară (Binary Search)? -> Răspuns corect: "10–11 pași (pentru că 2¹⁰ = 1024)" (Deoarece `2^10 = 1024`, căutarea binară înjumătățește intervalul de cel mult 10–11 ori (`O(log₂ n)`), față de 1.024 la căutarea liniară.)
+  3. [18p] Ce va afișa algoritmul următor pe vectorul `a` cu 4 elemente? -> Răspuns corect: "20" (Inițial `m = 5`; la i=1 devine 12; la i=2 rămâne 12 (8 > 12 e fals); la i=3 devine 20. Afișează maximul `20`.)
+  4. [18p] Adevărat sau Fals: Căutarea Binară funcționează corect și dacă vectorul NU este sortat în prealabil. -> Răspuns corect: "Fals" (Fals! Căutarea binară presupune obligatoriu ca elementele să fie sortate (crescător sau descrescător) pentru a ști ce jumătate să elimine.)
+  5. [18p] Pentru un vector indexat `0..n-1` în care verifici perechi vecine `if (v[i] > v[i+1])`, care este limita superioară corectă în `for (int i = 0; i < ...; i++)`? Scrie expresia fără spații (ex: `n-1`). -> Răspuns corect: "n-1" (Dacă `i` ar ajunge la `n - 1`, `v[i + 1]` ar accesa `v[n]` în afara vectorului! Limita sigură este `n - 1` (`i < n - 1`).)
+
+### 15. Test cu Barem Clasa a VIII-a: Anatomia Paginii Web HTML5 Semantică, CSS Flexbox & HTTPS (100p)
+- URL RO: https://www.arkyedu.com/fise/test-cu-barem-clasa-8-web-design-html5-semantic-css-https/
+- URL EN: https://www.arkyedu.com/fise/en/grade-8-html5-semantics-css-flexbox-https-dns-exam/
+- Clasă & Tip: Clasa a VIII-a | Test cu Barem 1–10 | 100p (10p oficiu) | 25 min
+- Rezumat: Test complet HTML5 & Web (100p): rolul etichetelor semantice (`<header>`, `<nav>`, `<main>`, `<footer>`), atributul de accesibilitate `alt` pe `<img>`, diferența dintre structura HTML și stilizarea CSS, plus funcția DNS și HTTPS (port 443).
+- Teorie cheie: HTML5 definește structura și conținutul; CSS definește aspectul (culori, Flexbox, fonturi). DNS funcționează ca „agenda telefonică” a Internetului: traduce `www.arkyedu.com` în adresa IP a serverului.
+- Itemi & Barem Oficial:
+  1. [18p] Care etichetă HTML5 semantică trebuie folosită pentru a încadra CONȚINUTUL PRINCIPAL unic al paginii web? -> Răspuns corect: "<main>" (`<main>` marchează conținutul central al paginii (distinct de `<header>`, `<nav>` și `<footer>`). `<head>` conține metadate invizibile!)
+  2. [18p] Ce rol are atributul `alt="..."` în eticheta `<img src="robot.png" alt="Robot Arduino">`? -> Răspuns corect: "Oferă text descriptiv pentru cititoarele de ecran (nevăzători) și apare dacă imaginea nu se încarcă" (Atributul `alt` este obligatoriu pentru accesibilitate web, cititoare de ecran și SEO pe imagini.)
+  3. [18p] Cum se numește sistemul Internetului (3 litere) care traduce un nume ușor de reținut precum `www.arkyedu.com` în adresa IP numerică a serverului? -> Răspuns corect: "DNS" (DNS = Domain Name System (Sistemul Numelor de Domeniu).)
+  4. [18p] Adevărat sau Fals: Proprietatea CSS `display: flex;` permite aranjarea ușoară a cardurilor pe rânduri sau coloane responsive. -> Răspuns corect: "Adevărat" (Adevărat. Flexbox (`display: flex;`) este sistemul standard modern de aliniere pe o axă în CSS3.)
+  5. [18p] Care variantă creează corect un hyperlink HTML care trimite elevul către `https://www.arkyedu.com`? -> Răspuns corect: "<a href="https://www.arkyedu.com">ArkyEdu</a>" (Hyperlink-urile vizibile se definesc cu eticheta ancoră `<a>` și atributul `href="..."`.)
+
+### 16. Fișă Proiect Smart City Clasa a VIII-a: Arduino Uno, Senzori PIR/HC-SR04/MQ-2, Ohm & `millis()`
+- URL RO: https://www.arkyedu.com/fise/fisa-proiect-clasa-8-arduino-uno-smart-city-senzori-ohm-millis/
+- URL EN: https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/
+- Clasă & Tip: Clasa a VIII-a | Ghid Proiect & Evaluare | 100p (10p oficiu) | 30 min
+- Rezumat: Fișă practică integrată conform manualului Art Klett 2025 (100p): identificarea pinilor PWM `~` (`3, 5, 6, 9, 10, 11`) pe Arduino Uno, formula distanței la senzorul ultrasonic `HC-SR04` (`durata * 0.034 / 2`), alegerea senzorilor `PIR` (mișcare) și `MQ-2` (gaz), calculul rezistorului prin Legea lui Ohm (`220 Ω`) și multitasking fără blocare cu `millis()`.
+- Teorie cheie: Pe Arduino Uno: pini PWM (`~`): `3, 5, 6, 9, 10, 11` (`analogWrite(pin, 0..255)`); pini analogici intrare: `A0–A5` (`analogRead` returnează `0..1023`). Formula HC-SR04: `distanta = durata * 0.034 / 2`. Folosim rezistor ~220 Ω în serie cu LED-ul!
+- Itemi & Barem Oficial:
+  1. [18p] Care senzor din kitul Smart City măsoară distanța până la o mașină în fața barierei folosind unde sonore de înaltă frecvență? -> Răspuns corect: "Senzorul ultrasonic HC-SR04" (HC-SR04 emite un impuls ultrasonic pe pinul TRIG și măsoară pe ECHO timpul până la întoarcerea ecoului (`dist = durata * 0.034 / 2`).)
+  2. [18p] De ce trebuie conectat un rezistor (de obicei 220 Ω – 330 Ω) în serie cu un LED la pinul de 5V al plăcii Arduino Uno? -> Răspuns corect: "Pentru a limita curentul electric (Legea lui Ohm I = U / R) și a preveni arderea LED-ului și a pinului" (Fără rezistor, LED-ul prezintă rezistență aproape nulă și trage un curent periculos de mare care arde joncțiunea LED-ului și microcontrollerul.)
+  3. [18p] Pe Arduino Uno, funcția `analogRead(A0)` citește tensiunea de la un senzor foto-rezistor (LDR) pe 10 biți. Care este valoarea MAXIMĂ returnată de `analogRead` (când intrarea e la 5V)? -> Răspuns corect: "1023" (Pe 10 biți există `2^10 = 1024` niveluri, numerotate de la `0` (0V) la `1023` (5V).)
+  4. [18p] Adevărat sau Fals: Spre deosebire de `delay(5000)`, care îngheață complet placa Arduino timp de 5 secunde, tehnica bazată pe `millis()` permite citirea continuă a senzorilor de gaz și barieră în paralel. -> Răspuns corect: "Adevărat" (Adevărat! `millis()` măsoară timpul scurs fără a bloca bucla `loop()`, fiind esențial pentru alarme Smart Home.)
+  5. [18p] Un impuls ultrasonic `HC-SR04` are durata `1000` microsecunde. Folosind formula `durata * 0.034 / 2`, ce distanță în centimetri măsoară senzorul? -> Răspuns corect: "17 cm" (`1000 * 0.034 = 34 cm` (dus-întors!), împărțit la `2` (doar dus) = `17 cm`.)
+
+---
+
+## 2. Arena Olimpiada TIC (12 Probleme C++ Progresive cu 5 Teste Automate)
+
+- **01. Analiza Cifrelor & Paritate** (Inițiere · Cls V–VI · O(log₁₀ n)): Se citește un număr natural nenul n. Să se calculeze suma cifrelor pare ale lui n și numărul total de cifre ale lui n, separate printr-un spațiu.
+- **02. Triunghi Valid & Tipul Lui** (Inițiere · Cls V–VI · O(1)): Se citesc trei lungimi întregi pozitive a, b, c. Dacă pot forma un triunghi valid, afișați "ECHILATERAL", "ISOSCEL" sau "SCALEN" (oarecare). Altfel afișați "INVALID".
+- **03. Oglindit & Verificare Palindrom** (Școlar · Cls VII · O(log₁₀ n)): Se citește un număr natural n. Să se construiască oglinditul (răsturnatul) lui n și să se afișeze pe prima linie oglinditul, iar pe a doua linie "DA" dacă n este palindrom sau "NU" în caz contrar.
+- **04. Cifra Maximă și Numărul de Apariții** (Școlar · Cls VII · O(log₁₀ n)): Pentru un număr natural n dat (n >= 0), găsește cifra maximă din scrierea lui zecimală și de câte ori apare aceasta.
+- **05. CMMDC & CMMMC prin Algoritmul lui Euclid** (Școlar · Cls VII · O(log min(a, b))): Se dau două numere naturale nenule a și b. Folosind algoritmul eficient al lui Euclid (cu împărțiri repetate), determină Cel Mai Mare Divizor Comun (CMMDC) și Cel Mai Mic Multiplu Comun (CMMMC).
+- **06. Număr Divizori & Test Prim O(√n)** (Județean OJI · Cls VIII · O(√n)): Se citește un număr natural n >= 1. Afișează pe o singură linie numărul total de divizori pozitivi ai lui n, urmat de un spațiu și de mesajul "PRIM" dacă n este prim sau "COMPUS" (inclusiv pentru n=1 -> "NEPRIM"). Pentru n=1 afișează "1 NEPRIM".
+- **07. Cea Mai Lungă Secvență Strict Crescătoare** (Județean OJI · Cls VIII · O(n)): Se citește n, urmat de n numere întregi. Determină lungimea maximă a unei secvențe de elemente alăturate strict crescătoare (v[i] > v[i-1]).
+- **08. Sortare Vector (Bubble Sort) & Element Median** (Județean OJI · Cls VIII · O(n²)): Se citesc n (număr impar) și n numere întregi într-un vector v. Sortează vectorul crescător și afișează pe prima linie elementele sortate separate prin spațiu, iar pe a doua linie elementul din mijloc (mediana).
+- **09. Căutare Binară în Vector Sortat** (Județean OJI · Cls VIII · O(log n)): Se citesc n, apoi n numere întregi sortate strict crescător (indexate de la 0), urmate de valoarea căutată x. Afișează poziția lui x în vector (0..n-1) folosind căutare binară O(log n), sau -1 dacă nu există.
+- **10. Ciurul lui Eratostene & Numărul de Prime <= N** (Național · Admitere Mate-Info · O(n log log n)): Se citește un număr natural n (2 <= n <= 400). Folosind Ciurul lui Eratostene într-un vector caracteristic, numără câte numere prime există în intervalul [2, n] și afișează și cel mai mare număr prim <= n.
+- **11. Subsecvența de Sumă Maximă (Algoritmul Kadane)** (Național · Admitere Mate-Info · O(n)): Se citesc n și un șir de n numere întregi (care pot fi și negative). Găsește suma maximă a unei subsecvențe nevide de elemente alăturate, în complexitate O(n).
+- **12. Rotire Circulară Vector cu K Poziții O(n)** (Național · Admitere Mate-Info · O(n)): Se citesc n, k și apoi n numere întregi. Rotește circular vectorul la DREAPTA cu k poziții în timp O(n) (folosind tripla inversare sau indexare modulară, ținând cont că k poate fi mai mare decât n!). Afișează vectorul rotit separat prin spații.

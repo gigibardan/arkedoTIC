@@ -23,6 +23,7 @@ import {
   UserCheck,
   Award,
   ClipboardCheck,
+  BrainCircuit,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { LegalTabType } from './LegalModal';
@@ -40,8 +41,11 @@ interface FooterProps {
   onNavigateToBlog?: () => void;
   onNavigateToGlossary?: () => void;
   onNavigateToSandbox?: () => void;
+  onNavigateToWorksheets?: () => void;
   onNavigateToCarnet?: () => void;
   onNavigateToEvaluare?: () => void;
+  onNavigateToLeonida?: () => void;
+  onNavigateToAiLab?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -55,8 +59,11 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToBlog,
   onNavigateToGlossary,
   onNavigateToSandbox,
+  onNavigateToWorksheets,
   onNavigateToCarnet,
   onNavigateToEvaluare,
+  onNavigateToLeonida,
+  onNavigateToAiLab,
 }) => {
   const { lang, t } = useLanguage();
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -182,11 +189,40 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-amber-300 text-slate-300 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                 >
                   <Gamepad2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span>{lang === 'en' ? 'Arcade Hub (28 Games)' : 'Sala Arcade (28 Mini-jocuri)'}</span>
-                  <span className="text-[10px] text-emerald-300 font-semibold ml-auto whitespace-nowrap">
-                    Pac-Man
-                  </span>
+                  <span>{lang === 'en' ? 'Arcade Hub (30 Games)' : 'Sala Arcade (30 Mini-jocuri)'}</span>
                 </button>
+              </li>
+              <li>
+                <a
+                  href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
+                  onClick={(e) => {
+                    if (onNavigateToLeonida) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onNavigateToLeonida();
+                    }
+                  }}
+                  className="hover:text-fuchsia-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-fuchsia-400 shrink-0" />
+                  <span>{lang === 'en' ? 'Vice Leonida (GTA 6 Open-World)' : 'Vice Leonida (Open-World GTA 6)'}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/'}
+                  onClick={(e) => {
+                    if (onNavigateToAiLab) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onNavigateToAiLab();
+                    }
+                  }}
+                  className="hover:text-teal-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
+                >
+                  <BrainCircuit className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                  <span>{lang === 'en' ? 'AI & Deepfake Forensics Lab' : 'Laborator AI & Deepfake'}</span>
+                </a>
               </li>
               <li>
                 <button
@@ -197,7 +233,7 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-cyan-300 text-slate-300 transition-colors flex items-center gap-2 text-left w-full group py-1 cursor-pointer"
                 >
                   <Swords className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>{lang === 'en' ? '1v1 Duel Arena (20+ Modes)' : 'Arena Duel 1v1 (20+ Moduri)'}</span>
+                  <span>{lang === 'en' ? '1v1 Duel Arena (21+ Modes)' : 'Arena Duel 1v1 (21+ Moduri)'}</span>
                 </button>
               </li>
               {onNavigateToCity && (
@@ -214,6 +250,22 @@ export const Footer: React.FC<FooterProps> = ({
                   </button>
                 </li>
               )}
+              <li>
+                <a
+                  href={lang === 'en' ? '/fise/en/' : '/fise/'}
+                  onClick={(e) => {
+                    if (onNavigateToWorksheets) {
+                      e.preventDefault();
+                      sounds.playClick();
+                      onNavigateToWorksheets();
+                    }
+                  }}
+                  className="hover:text-emerald-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
+                >
+                  <ClipboardCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{lang === 'en' ? 'Worksheets & Rubrics (16)' : 'Fișe & Teste cu Barem (16)'}</span>
+                </a>
+              </li>
               <li>
                 <a
                   href={lang === 'en' ? '/blog/en/' : '/blog/'}
@@ -289,7 +341,7 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-emerald-300 text-slate-200 transition-colors flex items-center gap-2 text-left w-full group py-1 font-semibold"
                 >
                   <FileCode className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>{lang === 'en' ? 'Code Sandbox (C++ / Python / HTML)' : 'Sandbox Cod C++ / Python / HTML5'}</span>
+                  <span>{lang === 'en' ? 'Code Sandbox & C++ Trace' : 'Sandbox Cod & Trace C++'}</span>
                 </a>
               </li>
               <li>
@@ -576,6 +628,36 @@ export const Footer: React.FC<FooterProps> = ({
               title="Documentație completă pentru modele de limbaj"
             >
               llms-full.txt
+            </a>
+            <span className="text-slate-600" aria-hidden="true">·</span>
+            <a
+              href="/fise-llm.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-300 hover:text-amber-200 transition-colors font-mono text-[11px] py-1.5 whitespace-nowrap"
+              title="Index structurat Fișe, Bareme & Olimpiadă pentru LLM"
+            >
+              fise-llm.txt
+            </a>
+            <span className="text-slate-600" aria-hidden="true">·</span>
+            <a
+              href="/leonida-llm.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-fuchsia-300 hover:text-fuchsia-200 transition-colors font-mono text-[11px] py-1.5 whitespace-nowrap"
+              title="Index structurat Universul Vice Leonida (GTA 6 & TIC) pentru LLM"
+            >
+              leonida-llm.txt
+            </a>
+            <span className="text-slate-600" aria-hidden="true">·</span>
+            <a
+              href="/laborator-ai-llm.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-teal-300 hover:text-teal-200 transition-colors font-mono text-[11px] py-1.5 whitespace-nowrap"
+              title="Index structurat Laboratorul AI & Detectorul Deepfake pentru LLM"
+            >
+              laborator-ai-llm.txt
             </a>
             <span className="text-slate-600" aria-hidden="true">·</span>
             <a

@@ -36,23 +36,63 @@
       ]
     },
     {
-      "identifier": "urn:air:arkyedu.com:pillar:arcade-28",
-      "displayName": "28 Jocuri Educative Arcade Retro TIC & Coding",
+      "identifier": "urn:air:arkyedu.com:pillar:arcade-30",
+      "displayName": "30 Jocuri Educative Arcade & Open-World TIC & Coding",
       "type": "text/html",
       "url": "https://www.arkyedu.com/arcade/",
       "representativeQueries": [
         "Jocuri educative TIC și programare pentru copii clasa 5-8",
-        "Educational retro coding arcade games Cyber Pac-Man and Sokoban"
+        "Educational retro coding & open-world games Vice Leonida GTA 6, Cyber Pac-Man and Sokoban"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:universe:vice-leonida-open-world",
+      "displayName": "Vice Leonida Open-World Story — GTA 6 Browser Sandbox & CS Universe (/leonida/)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/leonida/",
+      "representativeQueries": [
+        "Joc open-world GTA 6 gratis în browser cu toate cele 6 regiuni din Leonida, Lucia Caminos și Jason Duval",
+        "Vice Leonida GTA 6 release date November 19 2026 map regions interactive educational browser game"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:llm:vice-leonida",
+      "displayName": "Vice Leonida Open-World & GTA 6 Tech LLM Knowledge Feed (/leonida-llm.txt)",
+      "type": "text/markdown",
+      "url": "https://www.arkyedu.com/leonida-llm.txt",
+      "representativeQueries": [
+        "State of Leonida GTA 6 6 regions cast Lucia Caminos Jason Duval vehicles hardware tech curriculum",
+        "Markdown structured lore, hardware ray tracing breakdown, and interactive missions for Vice Leonida"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:arcade:vice-leonida-gta6",
+      "displayName": "Vice Leonida VI: Cyber Runner — GTA 6 Tech Arcade Game",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/arcade/vice-leonida-gta6/",
+      "representativeQueries": [
+        "Joc arcade inspirat din GTA 6 cu Lucia Caminos si Jason Duval in browser",
+        "Vice Leonida GTA 6 educational cyber runner binary coding game for kids"
       ]
     },
     {
       "identifier": "urn:air:arkyedu.com:pillar:duels-1v1",
-      "displayName": "Arena Dueluri Tehnologice 1v1 Live (20+ Moduri)",
+      "displayName": "Arena Dueluri Tehnologice 1v1 Live (21+ Moduri)",
       "type": "text/html",
       "url": "https://www.arkyedu.com/duel/",
       "representativeQueries": [
         "Dueluri educaționale 1v1 TIC și algoritmică în timp real",
         "Multiplayer coding and ICT classroom 1v1 challenge games"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:duel:vice-leonida-1v1",
+      "displayName": "Vice Leonida 1v1 — GTA 6 Cyber-Heist Showdown (PvP & AI Bot)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/duel/vice-leonida-1v1/",
+      "representativeQueries": [
+        "Joc multiplayer 1v1 stil GTA 6 Vice Leonida Cyber Heist cu AI Bot",
+        "Vice Leonida 1v1 live PvP tech heist racing game browser"
       ]
     },
     {
@@ -92,12 +132,54 @@
     },
     {
       "identifier": "urn:air:arkyedu.com:lab:code-sandbox",
-      "displayName": "ArkyEdu Browser Code Sandbox (C++, Python 3 & HTML5)",
+      "displayName": "ArkyEdu Browser Code Sandbox, C++ Visual Trace & Olympiad Arena",
       "type": "text/html",
       "url": "https://www.arkyedu.com/sandbox/",
       "representativeQueries": [
-        "Ruleaza cod C++ Code::Blocks online in browser gratuit pentru gimnaziu",
-        "Interactive browser Python 3 and HTML5 coding sandbox with automated tests for kids"
+        "Ruleaza cod C++ Code::Blocks online in browser cu debugger pas cu pas Visual Trace pentru gimnaziu",
+        "Interactive browser C++, Python 3, HTML5 coding sandbox and 12-problem Olympiad Arena for middle school"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:assessment:fise-worksheets",
+      "displayName": "ArkyEdu Bilingual Worksheets, Graded Exams (1-10) & C++ Olympiad Bank (/fise/)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/fise/",
+      "representativeQueries": [
+        "Fise de lucru TIC si teste cu barem 1-10 printabile A4 clasele 5 6 7 8 cu raspunsuri",
+        "Subiecte OJI C++ clasa 7 while cifre si teza admitere liceu vectori cu barem pe 100 puncte",
+        "Printable A4 Romanian and English middle school computer science worksheets and auto-graded exams"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:llm:fise-worksheets",
+      "displayName": "ArkyEdu Worksheets, Graded Exams & Rubrics LLM Markdown Feed (/fise-llm.txt)",
+      "type": "text/markdown",
+      "url": "https://www.arkyedu.com/fise-llm.txt",
+      "representativeQueries": [
+        "Bareme complete 100 puncte si raspunsuri explicate pentru teste TIC si informatica gimnaziu",
+        "Markdown structured bank of 16 Romanian & English middle school ICT exams, rubrics, and C++ solutions"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:lab:ai-deepfake",
+      "displayName": "ArkyEdu AI Literacy & Deepfake Forensics Lab (/laborator-ai/)",
+      "type": "text/html",
+      "url": "https://www.arkyedu.com/laborator-ai/",
+      "representativeQueries": [
+        "Laborator interactiv AI si detector deepfake pentru copii si elevi gimnaziu in romana",
+        "Cum functioneaza tokenizarea, temperatura softmax, halucinatiile LLM si verificarea pozelor AI EXIF C2PA",
+        "School-safe browser AI literacy simulator, deepfake forensics workbench, and C.R.I.F. prompt builder"
+      ]
+    },
+    {
+      "identifier": "urn:air:arkyedu.com:llm:ai-deepfake",
+      "displayName": "ArkyEdu AI Literacy & Deepfake Forensics LLM Feed (/laborator-ai-llm.txt)",
+      "type": "text/markdown",
+      "url": "https://www.arkyedu.com/laborator-ai-llm.txt",
+      "representativeQueries": [
+        "Cum recunosti imagini deepfake, clone vocale WhatsApp si halucinatii ChatGPT la scoala",
+        "Markdown structured curriculum guide for BPE tokenization, Softmax temperature, EXIF/C2PA forensics, and C.R.I.F. prompting"
       ]
     },
     {

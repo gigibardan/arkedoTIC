@@ -33,6 +33,9 @@ const CodeSandboxHub = lazy(() => import('./components/sandbox/CodeSandboxHub').
 const DigitalCarnetHub = lazy(() => import('./components/carnet/DigitalCarnetHub').then((m) => ({ default: m.DigitalCarnetHub })));
 const QuickEvalSimulator = lazy(() => import('./components/evaluation/QuickEvalSimulator').then((m) => ({ default: m.QuickEvalSimulator })));
 const StudentLiveQuizPlayer = lazy(() => import('./components/evaluation/StudentLiveQuizPlayer').then((m) => ({ default: m.StudentLiveQuizPlayer })));
+const WorksheetsHub = lazy(() => import('./components/worksheets/WorksheetsHub').then((m) => ({ default: m.WorksheetsHub })));
+const LeonidaUniverseHub = lazy(() => import('./components/leonida/LeonidaUniverseHub').then((m) => ({ default: m.LeonidaUniverseHub })));
+const AiDeepfakeLabHub = lazy(() => import('./components/ailab/AiDeepfakeLabHub').then((m) => ({ default: m.AiDeepfakeLabHub })));
 
 export type AppView =
   | 'catalog'
@@ -47,7 +50,10 @@ export type AppView =
   | 'sandbox'
   | 'carnet'
   | 'evaluare'
-  | 'livequiz';
+  | 'livequiz'
+  | 'fise'
+  | 'leonida'
+  | 'ailab';
 
 function parseBlogSlugFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -67,9 +73,21 @@ function parseGlossarySlugFromUrl(): string | null {
   return null;
 }
 
+function parseWorksheetSlugFromUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  const match = window.location.pathname.match(/^\/fise(?:\/en)?\/([^/]+)\/?$/i);
+  if (match?.[1]) return decodeURIComponent(match[1]);
+  const hashMatch = window.location.hash.match(/^#fise\/(.+)$/i);
+  if (hashMatch?.[1]) return decodeURIComponent(hashMatch[1]);
+  return null;
+}
+
 function resolveViewFromLocation(): AppView {
   if (typeof window === 'undefined') return 'catalog';
-  const { pathname, hash } = window.location;
+  const { pathname, hash, search } = window.location;
+  const params = new URLSearchParams(search);
+  if (params.get('game') || params.get('arcade')) return 'arcade';
+  if (params.get('mode') || params.get('duel')) return 'duel';
   if (pathname.includes('/superadmin') || hash.includes('superadmin')) return 'superadmin';
   if (pathname.includes('/profesor') || hash.includes('profesor')) return 'teacher';
   if (pathname.includes('/arcade') || hash.includes('arcade')) return 'arcade';
@@ -77,11 +95,43 @@ function resolveViewFromLocation(): AppView {
   if (pathname.includes('/city') || pathname.includes('/oras') || hash.includes('city') || hash.includes('oras')) return 'city';
   if (pathname.startsWith('/blog') || hash.startsWith('#blog')) return 'blog';
   if (pathname.startsWith('/glosar') || hash.startsWith('#glosar')) return 'glossary';
-  if (pathname.startsWith('/sandbox') || hash.startsWith('#sandbox')) return 'sandbox';
+  if (pathname.startsWith('/leonida') || hash.startsWith('#leonida')) return 'leonida';
+  if (pathname.startsWith('/laborator-ai') || hash.startsWith('#laborator-ai') || params.get('view') === 'ailab') return 'ailab';
+  if (pathname.startsWith('/fise') || hash.startsWith('#fise')) return 'fise';
+  if (pathname.startsWith('/sandbox') || pathname.startsWith('/olimpiada') || hash.startsWith('#sandbox') || hash.startsWith('#olimpiada')) return 'sandbox';
   if (pathname.startsWith('/carnet') || hash.startsWith('#carnet')) return 'carnet';
   if (pathname.startsWith('/evaluare') || hash.startsWith('#evaluare')) return 'evaluare';
   if (pathname.startsWith('/quiz-live') || hash.startsWith('#quiz-live')) return 'livequiz';
   return 'catalog';
+}
+
+function parseSandboxTabFromUrl(): 'editor' | 'trace' | 'olympiad' {
+  if (typeof window === 'undefined') return 'editor';
+  const { pathname, hash, search } = window.location;
+  const params = new URLSearchParams(search);
+  const tab = params.get('tab');
+  if (tab === 'trace' || tab === 'olympiad') return tab;
+  if (pathname.includes('/olimpiada') || hash.includes('olimpiada')) return 'olympiad';
+  if (pathname.includes('/trace') || hash.includes('trace')) return 'trace';
+  return 'editor';
+}
+
+function parseArcadeGameFromUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const qGame = params.get('game') || params.get('arcade');
+  if (qGame) return qGame;
+  if (window.location.pathname.includes('vice-leonida')) return 'vice_leonida';
+  return null;
+}
+
+function parseDuelModeFromUrl(): string | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const qMode = params.get('mode') || params.get('duel');
+  if (qMode) return qMode;
+  if (window.location.pathname.includes('vice-leonida')) return 'vice_leonida_duel';
+  return null;
 }
 
 function loadInitialStudentName(): string {
@@ -105,8 +155,17 @@ function GameContent() {
   const { lang, t } = useLanguage();
   const [blogSlug, setBlogSlug] = useState<string | null>(() => parseBlogSlugFromUrl());
   const [glossarySlug, setGlossarySlug] = useState<string | null>(() => parseGlossarySlugFromUrl());
+  const [worksheetSlug, setWorksheetSlug] = useState<string | null>(() => parseWorksheetSlugFromUrl());
+  const [initialArcadeGame, setInitialArcadeGame] = useState<string | null>(() => parseArcadeGameFromUrl());
+  const [initialDuelMode] = useState<string | null>(() => parseDuelModeFromUrl());
   const [sandboxLang, setSandboxLang] = useState<'cpp' | 'python' | 'html'>('cpp');
   const [sandboxChallengeId, setSandboxChallengeId] = useState<string | null>(null);
+  const [sandboxTab, setSandboxTab] = useState<'editor' | 'trace' | 'olympiad'>(() => parseSandboxTabFromUrl());
+  const [sandboxTracePayload, setSandboxTracePayload] = useState<{ code: string; stdin: string; label: string } | null>(null);
+  const [leonidaAutoLaunch, setLeonidaAutoLaunch] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return new URLSearchParams(window.location.search).get('play') === '1';
+  });
   const [view, setView] = useState<AppView>(() => resolveViewFromLocation());
 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
@@ -174,6 +233,8 @@ function GameContent() {
       const next = resolveViewFromLocation();
       if (next === 'blog') setBlogSlug(parseBlogSlugFromUrl());
       else if (next === 'glossary') setGlossarySlug(parseGlossarySlugFromUrl());
+      else if (next === 'fise') setWorksheetSlug(parseWorksheetSlugFromUrl());
+      else if (next === 'sandbox') setSandboxTab(parseSandboxTabFromUrl());
       if (next !== 'catalog' || window.location.pathname === '/') {
         setView(next);
       }
@@ -193,13 +254,13 @@ function GameContent() {
 
   // Synchronize bilingual SEO titles, descriptions, OpenGraph & canonical tags
   useEffect(() => {
-    updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug);
-  }, [view, lang, activeMission, blogSlug, glossarySlug]);
+    updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug);
+  }, [view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug]);
 
   // Prevent automatic PWA page reloads mid-session
   useEffect(() => {
     setAppSessionBusy(
-      view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox' || view === 'evaluare' || view === 'livequiz'
+      view === 'lesson' || view === 'duel' || view === 'arcade' || view === 'sandbox' || view === 'evaluare' || view === 'livequiz' || view === 'leonida' || view === 'ailab'
     );
   }, [view]);
 
@@ -216,17 +277,23 @@ function GameContent() {
     setView(newView);
     if (newView === 'blog') setBlogSlug(nextSlug);
     else if (newView === 'glossary') setGlossarySlug(nextSlug);
+    else if (newView === 'fise') setWorksheetSlug(nextSlug);
     forceScrollToTop();
 
     if (newView === 'superadmin') window.history.pushState({}, '', '/superadmin');
     else if (newView === 'teacher') window.history.pushState({}, '', '/profesor');
-    else if (newView === 'arcade') window.history.pushState({}, '', '/arcade');
-    else if (newView === 'duel') window.history.pushState({}, '', '/duel');
+    else if (newView === 'arcade') {
+      setInitialArcadeGame(null);
+      window.history.pushState({}, '', '/arcade');
+    } else if (newView === 'duel') window.history.pushState({}, '', '/duel');
     else if (newView === 'city') window.history.pushState({}, '', '/oras');
     else if (newView === 'carnet') window.history.pushState({}, '', '/carnet');
     else if (newView === 'evaluare') window.history.pushState({}, '', '/evaluare');
     else if (newView === 'livequiz') window.history.pushState({}, '', '/quiz-live');
-    else if (newView === 'blog') {
+    else if (newView === 'fise') {
+      const basePath = lang === 'en' ? '/fise/en/' : '/fise/';
+      window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
+    } else if (newView === 'blog') {
       const basePath = lang === 'en' ? '/blog/en/' : '/blog/';
       window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
     } else if (newView === 'glossary') {
@@ -234,6 +301,10 @@ function GameContent() {
       window.history.pushState({}, '', nextSlug ? `${basePath}${nextSlug}/` : basePath);
     } else if (newView === 'sandbox') {
       window.history.pushState({}, '', lang === 'en' ? '/sandbox/en/' : '/sandbox/');
+    } else if (newView === 'leonida') {
+      window.history.pushState({}, '', lang === 'en' ? '/leonida/en/' : '/leonida/');
+    } else if (newView === 'ailab') {
+      window.history.pushState({}, '', lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/');
     } else if (newView === 'catalog') {
       window.history.pushState({}, '', '/');
       clearCompletedActiveMission();
@@ -281,8 +352,16 @@ function GameContent() {
         onNavigateToCity={() => navigateToView('city')}
         onNavigateToBlog={() => navigateToView('blog', null)}
         onNavigateToGlossary={() => navigateToView('glossary', null)}
+        onNavigateToWorksheets={() => navigateToView('fise', null)}
+        onNavigateToLeonida={() => {
+          setLeonidaAutoLaunch(false);
+          navigateToView('leonida');
+        }}
+        onNavigateToAiLab={() => navigateToView('ailab')}
         onNavigateToSandbox={() => {
           setSandboxChallengeId(null);
+          setSandboxTracePayload(null);
+          setSandboxTab('editor');
           navigateToView('sandbox');
         }}
       />
@@ -309,9 +388,17 @@ function GameContent() {
             onOpenCity={() => navigateToView('city')}
             onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
             onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
-            onOpenSandbox={(targetLang, challengeId) => {
+            onOpenWorksheets={(slug) => navigateToView('fise', slug ?? null)}
+            onOpenLeonida={(launchWorld) => {
+              setLeonidaAutoLaunch(Boolean(launchWorld));
+              navigateToView('leonida');
+            }}
+            onOpenAiLab={() => navigateToView('ailab')}
+            onOpenSandbox={(targetLang, challengeId, tab) => {
               if (targetLang) setSandboxLang(targetLang);
               setSandboxChallengeId(challengeId ?? null);
+              setSandboxTracePayload(null);
+              setSandboxTab(tab ?? 'editor');
               navigateToView('sandbox');
             }}
           />
@@ -341,12 +428,22 @@ function GameContent() {
             ) : view === 'arcade' ? (
               <ArcadeHub
                 studentName={studentName}
+                initialGame={
+                  initialArcadeGame === 'vice_leonida_world'
+                    ? 'vice_leonida_world'
+                    : initialArcadeGame === 'vice_leonida'
+                    ? 'vice_leonida'
+                    : initialArcadeGame === 'detective'
+                    ? 'detective'
+                    : undefined
+                }
                 onBackToCatalog={() => navigateToView('catalog')}
                 onOpenDuel={() => navigateToView('duel')}
               />
             ) : view === 'duel' ? (
               <DuelArena
                 studentName={studentName}
+                initialMode={initialDuelMode === 'vice_leonida_duel' ? 'vice_leonida_duel' : undefined}
                 onBack={() => navigateToView('catalog')}
               />
             ) : view === 'city' ? (
@@ -371,10 +468,30 @@ function GameContent() {
                 onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
                 onNavigateToView={(target) => navigateToView(target)}
               />
+            ) : view === 'fise' ? (
+              <WorksheetsHub
+                activeSlug={worksheetSlug}
+                onSelectWorksheet={(slug) => navigateToView('fise', slug)}
+                onBackToHome={() => navigateToView('catalog')}
+                onSelectMission={handleSelectMission}
+                onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
+                onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
+                onOpenTraceWithCode={(code, stdin, label) => {
+                  setSandboxLang('cpp');
+                  setSandboxChallengeId(null);
+                  setSandboxTracePayload({ code, stdin, label });
+                  setSandboxTab('trace');
+                  navigateToView('sandbox');
+                }}
+              />
             ) : view === 'sandbox' ? (
               <CodeSandboxHub
                 initialLanguage={sandboxLang}
                 initialChallengeId={sandboxChallengeId}
+                initialTab={sandboxTab}
+                initialTraceCode={sandboxTracePayload?.code ?? null}
+                initialTraceStdin={sandboxTracePayload?.stdin ?? null}
+                initialTraceLabel={sandboxTracePayload?.label ?? null}
                 onBackToHome={() => navigateToView('catalog')}
                 onSelectMission={handleSelectMission}
                 onOpenBlog={(slug) => navigateToView('blog', slug ?? null)}
@@ -390,9 +507,12 @@ function GameContent() {
                 onOpenCity={() => navigateToView('city')}
                 onOpenEvaluare={() => navigateToView('evaluare')}
                 onOpenLiveQuiz={() => navigateToView('livequiz')}
-                onOpenSandbox={(targetLang, challengeId) => {
+                onOpenWorksheets={() => navigateToView('fise', null)}
+                onOpenSandbox={(targetLang, challengeId, tab) => {
                   if (targetLang) setSandboxLang(targetLang);
                   setSandboxChallengeId(challengeId ?? null);
+                  setSandboxTracePayload(null);
+                  setSandboxTab(tab ?? 'editor');
                   navigateToView('sandbox');
                 }}
               />
@@ -407,6 +527,34 @@ function GameContent() {
               <StudentLiveQuizPlayer
                 studentName={studentName}
                 onBack={() => navigateToView('catalog')}
+              />
+            ) : view === 'leonida' ? (
+              <LeonidaUniverseHub
+                studentName={studentName}
+                initialLaunchWorld={leonidaAutoLaunch}
+                onBackToCatalog={() => navigateToView('catalog')}
+                onOpenCyberRunner={() => {
+                  setInitialArcadeGame('vice_leonida');
+                  window.history.pushState({}, '', '/arcade?game=vice_leonida');
+                  setView('arcade');
+                }}
+                onOpenLeonidaDuel={() => {
+                  window.history.pushState({}, '', '/duel?mode=vice_leonida_duel');
+                  setView('duel');
+                }}
+                onSelectMission={handleSelectMission}
+              />
+            ) : view === 'ailab' ? (
+              <AiDeepfakeLabHub
+                studentName={studentName}
+                onBackToCatalog={() => navigateToView('catalog')}
+                onSelectMission={handleSelectMission}
+                onOpenCyberSafeDetective={() => {
+                  setInitialArcadeGame('detective');
+                  window.history.pushState({}, '', '/arcade?game=detective');
+                  setView('arcade');
+                }}
+                onOpenGlossary={(slug) => navigateToView('glossary', slug ?? null)}
               />
             ) : (
               <MissionStage
@@ -462,9 +610,15 @@ function GameContent() {
         onNavigateToSuperAdmin={() => navigateToView('superadmin')}
         onNavigateToBlog={() => navigateToView('blog', null)}
         onNavigateToGlossary={() => navigateToView('glossary', null)}
+        onNavigateToWorksheets={() => navigateToView('fise', null)}
         onNavigateToSandbox={() => navigateToView('sandbox')}
         onNavigateToCarnet={() => navigateToView('carnet')}
         onNavigateToEvaluare={() => navigateToView('evaluare')}
+        onNavigateToLeonida={() => {
+          setLeonidaAutoLaunch(false);
+          navigateToView('leonida');
+        }}
+        onNavigateToAiLab={() => navigateToView('ailab')}
       />
 
       <LegalModal

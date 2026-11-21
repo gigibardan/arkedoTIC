@@ -55,12 +55,14 @@ import {
   getLocalClassGrade,
   getStoredDailyQuests,
   getStoredDailyStreak,
+  getStoredSandboxProgress,
   getStudentDiplomas,
   recordDailyActivityAndStreak,
   refreshActiveStudentFromCloud,
   syncStudentBadges,
   updateStudentClassGrade,
 } from '../../lib/studentAuthService';
+import { getOlympiadRank, OLYMPIAD_PROBLEMS } from '../../data/olympiadProblems';
 import { getResultsByStudentName, StudentResult } from '../../lib/resultsService';
 import { getSchoolById } from '../../lib/schoolService';
 import { getCyberCityData } from '../../lib/cyberCityService';
@@ -97,9 +99,14 @@ interface DigitalCarnetHubProps {
   onOpenArcade?: () => void;
   onOpenDuel?: () => void;
   onOpenCity?: () => void;
-  onOpenSandbox?: (lang?: 'cpp' | 'python' | 'html', challengeId?: string) => void;
+  onOpenSandbox?: (
+    lang?: 'cpp' | 'python' | 'html',
+    challengeId?: string,
+    tab?: 'editor' | 'trace' | 'olympiad'
+  ) => void;
   onOpenEvaluare?: () => void;
   onOpenLiveQuiz?: () => void;
+  onOpenWorksheets?: () => void;
 }
 
 type CarnetTab = 'overview' | 'grades' | 'diplomas' | 'achievements';
@@ -119,6 +126,7 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
   onOpenSandbox,
   onOpenEvaluare,
   onOpenLiveQuiz,
+  onOpenWorksheets,
 }) => {
   const { lang } = useLanguage();
   const isEn = lang === 'en';
@@ -764,6 +772,20 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
               <span>{isEn ? 'Cyber Shop' : 'Magazin Cyber'}</span>
             </button>
 
+            {onOpenWorksheets && (
+              <button
+                type="button"
+                onClick={() => {
+                  sounds.playClick();
+                  onOpenWorksheets();
+                }}
+                className="px-3.5 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-200 border border-emerald-500/40 text-xs font-bold transition cursor-pointer inline-flex items-center gap-2 min-h-[42px] whitespace-nowrap"
+              >
+                <ClipboardCheck className="w-4 h-4 text-emerald-300" />
+                <span>{isEn ? 'Worksheets (16)' : 'Fișe & Teste (16)'}</span>
+              </button>
+            )}
+
             {onOpenCity && (
               <button
                 type="button"
@@ -1331,14 +1353,16 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
                 type="button"
                 onClick={() => {
                   sounds.playClick();
-                  onOpenSandbox('cpp');
+                  onOpenSandbox('cpp', undefined, 'olympiad');
                 }}
                 className="p-4 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 hover:border-teal-500/40 text-left transition cursor-pointer space-y-1"
               >
                 <Code2 className="w-5 h-5 text-teal-400" />
-                <div className="text-sm font-black text-white font-heading">Code Sandbox</div>
+                <div className="text-sm font-black text-white font-heading">
+                  {isEn ? 'Sandbox & Olympiad' : 'Sandbox & Olimpiadă'}
+                </div>
                 <div className="text-xs text-slate-400 tabular-nums">
-                  {sandboxSolvedCount} {isEn ? 'challenges solved' : 'exerciții rezolvate'}
+                  {sandboxSolvedCount} {isEn ? 'solved total' : 'rezolvate total'}
                 </div>
               </button>
             )}
@@ -1957,32 +1981,64 @@ export const DigitalCarnetHub: React.FC<DigitalCarnetHubProps> = ({
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <h3 className="text-sm font-black text-white font-heading flex items-center gap-2">
                   <Code2 className="w-4 h-4 text-teal-400" />
-                  <span>Code Sandbox</span>
+                  <span>{isEn ? 'Code Sandbox & Olympiad' : 'Code Sandbox & Olimpiada TIC'}</span>
                 </h3>
                 {onOpenSandbox && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      sounds.playClick();
-                      onOpenSandbox('cpp');
-                    }}
-                    className="text-xs font-bold text-teal-300 hover:text-teal-200 cursor-pointer"
-                  >
-                    {isEn ? 'Code →' : 'Deschide →'}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        onOpenSandbox('cpp', undefined, 'trace');
+                      }}
+                      className="text-xs font-bold text-cyan-300 hover:text-cyan-200 cursor-pointer whitespace-nowrap"
+                    >
+                      {isEn ? 'Trace C++' : 'Trace C++'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        sounds.playClick();
+                        onOpenSandbox('cpp', undefined, 'olympiad');
+                      }}
+                      className="text-xs font-bold text-amber-300 hover:text-amber-200 cursor-pointer whitespace-nowrap"
+                    >
+                      {isEn ? 'Olympiad →' : 'Olimpiadă →'}
+                    </button>
+                  </div>
                 )}
               </div>
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-                <span className="text-xs text-slate-300">
-                  {isEn ? 'Solved coding challenges' : 'Provocări rezolvate (C++ / Python / HTML)'}
-                </span>
-                <strong className="text-lg font-black text-teal-300 font-heading">
-                  {sandboxSolvedCount}
-                </strong>
-              </div>
+              {(() => {
+                const allSolved = getStoredSandboxProgress().solvedIds;
+                const ojiCount = allSolved.filter((id) => OLYMPIAD_PROBLEMS.some((p) => p.id === id)).length;
+                const ojiRank = getOlympiadRank(ojiCount, isEn);
+                return (
+                  <div className="space-y-2 tabular-nums">
+                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                      <span className="text-xs text-slate-300">
+                        {isEn ? 'Total coding challenges solved' : 'Total provocări coding rezolvate'}
+                      </span>
+                      <strong className="text-lg font-black text-teal-300 font-heading">
+                        {sandboxSolvedCount}
+                      </strong>
+                    </div>
+                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-2">
+                      <div className="text-xs text-slate-300">
+                        <div>{isEn ? 'Olympiad Arena (OJI)' : 'Arena Olimpiada TIC'}</div>
+                        <div className={`text-[11px] font-bold ${ojiRank.current.colorClass}`}>
+                          {ojiRank.title}
+                        </div>
+                      </div>
+                      <strong className="text-sm font-black text-amber-300 font-mono">
+                        {ojiCount} / {OLYMPIAD_PROBLEMS.length}
+                      </strong>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </section>
 

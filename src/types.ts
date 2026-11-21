@@ -64,6 +64,8 @@ export interface ArcadeScores {
   cyber_frogger?: number;
   cyber_sokoban?: number;
   cyber_asteroids?: number;
+  vice_leonida?: number;
+  vice_leonida_world?: number;
   totalArcade: number;
 }
 
@@ -187,6 +189,7 @@ export interface DuelStats {
   systemSabotageWins?: number;
   fileDropAttackWins?: number;
   cyberBattleshipWins?: number;
+  viceLeonidaWins?: number;
 }
 
 export type ShopCategory = 'arky_skin' | 'theme' | 'title' | 'avatar_frame';

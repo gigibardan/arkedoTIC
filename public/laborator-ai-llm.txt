@@ -1,0 +1,63 @@
+# ArkyEdu Laboratorul AI & Detector Deepfake (RO & EN — School-Safe Browser Lab)
+
+> Document structurat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Prezintă Laboratorul interactiv AI & Deepfake ArkyEdu pentru elevi 10–15 ani (Clasele V–VIII): 100% determinist în browser, fără chatbot deschis nesupravegheat, fără chei API și gratuit.
+
+- Hub Română: https://www.arkyedu.com/laborator-ai/
+- Hub Engleză: https://www.arkyedu.com/laborator-ai/en/
+- Glosar LLM & Halucinații: https://www.arkyedu.com/glosar/llm-and-ai-hallucinations/
+- Arcade Detectiv CyberSafe Phishing: https://www.arkyedu.com/?game=detective
+- Documentație platformă: https://www.arkyedu.com/llms.txt
+
+---
+
+## 1. Simulare Internă LLM (Tokenizare BPE, Temperatură Softmax & Halucinații)
+- **Tokenizator BPE Live**: Arată cum cuvintele lungi, diacriticele românești (ă, î, â, ș, ț), numerele și operatorii C++/Excel (`==`, `<<`, `=COUNTIF`) devin ID-uri numerice de sub-tokeni.
+- **Slider Temperatură Softmax (0.10 – 1.50)**: Elevii ajustează temperatura în timp real și observă distribuția probabilităților Next-Token pentru C++ (`%` modulo), Robotică Arduino (`220 ohmi`) și scriere creativă.
+- **Detector de Halucinații (4 Teste Practice)**:
+1. **Informatică C++ (Clasa VII–VIII)** — Prompt: „Cum sortez rapid un vector v[100] în C++ standard de gimnaziu?” -> *Explicație*: Halucinație clasică de cod! Nu există nicio bibliotecă <magic_autosort_ro> sau funcție instant_rank_ro() în C++. AI-ul inventează uneori librării care sună convingător — testează mereu codul în Sandbox sau compilator!
+2. **Calcul Tabelar Excel (Clasa VIII)** — Prompt: „Cum aflu media doar pentru elevii cu nota peste 7 în Excel?” -> *Explicație*: Excel returnează eroarea #NAME? pentru că =SMART_CLASS_MEAN_ONLY_GOOD este complet inventată de AI! Verifică întotdeauna numele exact al funcțiilor oficiale (AVERAGEIF, SUMIF, COUNTIF).
+3. **Hardware & Istoria Tehnologiei** — Prompt: „Explică pe scurt diferența dintre memoria RAM și SSD.” -> *Explicație*: AI-ul a amestecat descrierea unui HDD mecanic (discuri rotative la 7200 RPM) cu cea a unui SSD (Solid State Drive — zero piese în mișcare)!
+4. **Siguranță Web & Surse Oficiale** — Prompt: „Unde găsesc programa oficială de TIC pentru gimnaziu?” -> *Explicație*: Atenție critică: unele modele AI pot genera URL-uri inventate sau pot sugera domenii suspecte (http://, .xyz, .exe)! Nu accesa niciodată linkuri .exe sau domenii neoficiale din răspunsurile unui chatbot.
+
+---
+
+## 2. Detectivul Deepfake (6 Cazuri Criminalistice: Foto, Audio, Video & Știri)
+1. **Cazul 01 · Fotografie „Concurs Național de Robotică”** [DEEPFAKE / SINTETIC] (+45 ByteCoins): Verdict corect: IMAGINE GENERATĂ AI (Deepfake)! Textul corupt de pe banner, ecusonul topit, anatomia imperfectă a mâinii și absența EXIF-ului de cameră confirmă o imagine sintetică.
+2. **Cazul 02 · Fotografie „Proiect Arduino în Laboratorul TIC”** [AUTENTIC] (+45 ByteCoins): Verdict corect: FOTOGRAFIE AUTENTICĂ! Detaliile fizice reale, consistența iluminării și datele EXIF ale camerei arată că este o poză reală din laborator.
+3. **Cazul 03 · Mesaj Vocal WhatsApp „Urgent de la Părinte”** [DEEPFAKE / SINTETIC] (+50 ByteCoins): Verdict corect: CLONĂ VOCALĂ AI (Deepfake Audio Scam)! Nu trimite NICIODATĂ coduri SMS 2FA la cereri vocale urgente. Sună persoana pe numărul real salvat în agendă și cere cuvântul-parolă stabilit cu familia.
+4. **Cazul 04 · Clip Video Viral „Influencerul îți Dublează Robux-ul / ByteCoins”** [DEEPFAKE / SINTETIC] (+50 ByteCoins): Verdict corect: VIDEO DEEPFAKE LIP-SYNC! Atacatorii iau un clip vechi cu un creator real și îi înlocuiesc doar mișcarea buzelor și vocea cu AI ca să fure conturi de gaming.
+5. **Cazul 05 · Știre Șoc „Fără Vacanță de Vară în 2027 – Decizie AI!”** [DEEPFAKE / SINTETIC] (+45 ByteCoins): Verdict corect: DEZINFORMARE SINTETICĂ AI! Știrile false generate cu AI folosesc furia/frica și cer redistribuirea rapidă fără să citeze nicio sursă oficială verificabilă.
+6. **Cazul 06 · Anunț „Olimpiada Națională de TIC & Laborator ArkyEdu Gratuit”** [AUTENTIC] (+45 ByteCoins): Verdict corect: RESURSĂ AUTENTICĂ ȘI SIGURĂ! Verificarea protocolului HTTPS, a domeniului curat și absența urgenței false confirmă că sursa este legitimă.
+
+---
+
+## 3. Arhitectul de Prompturi Responsabile (Metoda C.R.I.F.)
+1. **Misiunea 1 · Debug C++ fără să copiezi tema**: Ai o buclă while în C++ care nu se mai oprește (buclă infinită). Construiește un prompt care să te ajute să ÎNȚELEGI greșeala, nu să copiezi orbește rezolvarea! — *Rezultat optim*: „În interiorul buclei lipsește actualizarea variabilei n (`n = n / 10;`), deci `n` rămâne mereu 42 > 0 la infinit. Pas 1: `s = 0 + 2 = 2`, apoi `n` devine `4`. Pas 2: `s = 2 + 4 = 6`, apoi `n` devine `0` și bucla se oprește. Întrebare de test: ce ar afișa programul pentru n = 105?”
+2. **Misiunea 2 · Audit Formulă Excel (Clasa VIII)**: Ai primit #VALUE! sau #NAME? într-un catalog școlar Excel. Construiește promptul perfect pentru a depana formula. — *Rezultat optim*: „Eroarea #NAME? apare deoarece în Excel cu interfață în engleză funcția trebuie scrisă `=IF(B2>=5, "Admis", "Respins")`, nu tradusă `=DACĂ`. Dacă setările regionale sunt pe Română, folosește `;` între argumente. Exemplu: pentru B2 = 8, rezultatul este Admis.”
+3. **Misiunea 3 · Fact-Checking anti-Halucinații**: Vrei să folosești AI-ul ca să îți rezume o lecție de Hardware fără să inventeze cifre false. — *Rezultat optim*: Tabel curat cu CPU (Creierul care execută instrucțiuni · Neaplicabil · GHz), RAM (Masă de lucru temporară · Volatilă · Foarte rapidă) și SSD (Arhivă permanentă · Nevolatilă · Rapidă flash), 100% fidel notițelor tale.
+
+---
+
+## 4. Punți cu Programa Școlară TIC (Clasele V–VIII)
+- **Clasa V · Hardware & Memorie · De ce au modelele AI nevoie de GPU și RAM?**: Tokenii și matricile de probabilități se calculează simultan pe mii de nuclee GPU și stau în memoria rapidă VRAM/RAM. -> https://www.arkyedu.com/cursuri/hardware/
+- **Clasa VI · Securitate & Phishing · Apărarea contra Clonării Vocale & Linkurilor Deepfake**: Autentificarea în 2 pași (2FA), verificarea domeniului HTTPS și cuvântul-parolă de familie blochează escrocheriile AI. -> https://www.arkyedu.com/cursuri/g6_malware/
+- **Clasa VII–VIII · Algoritmi C++ · Verificarea Codului Generat de AI cu Trace & Teste**: Nu accepta niciodată cod C++ fără să îl urmărești pas cu pas pe valori de test (inclusiv cazuri limită n = 0). -> https://www.arkyedu.com/cursuri/g7_decision_a/
+- **Digital Literacy · Prompting C.R.I.F. · Arhitectura Promptului Responsabil (Context · Rol · Format)**: Un prompt bine structurat previne halucinațiile și transformă AI-ul în meditator pas-cu-pas, nu în mașină de copiat. -> https://www.arkyedu.com/cursuri/internet2/
+
+---
+
+## 5. Întrebări Frecvente (FAQ)
+**Î: Cum funcționează Laboratorul AI & Deepfake de pe ArkyEdu fără chat nesigur sau cont cu plată?**
+R: Laboratorul rulează 100% determinist și sigur direct în browser, fără colectare de date și fără chat liber nesupravegheat: conține un Tokenizator BPE live, simulator matematic de Temperatură/Probabilități (Softmax), 6 cazuri vizuale/audio de detecție Deepfake și un constructor de prompturi pe blocuri (C.R.I.F.).
+
+**Î: Ce este un „token” și de ce inventează (halucinează) uneori modelele AI?**
+R: Un LLM nu citește idei, ci sparge textul în bucăți numerice numite tokeni (cuvinte scurte, silabe sau semne) și calculează statistic care este cel mai probabil token următor. Când nu are context precis sau când temperatura este mare, modelul poate lega cuvinte care „sună convingător”, dar sunt false — fenomen numit halucinație.
+
+**Î: Cum pot elevii și părinții să recunoască o imagine Deepfake sau o clonă vocală AI?**
+R: La imagini: verifică textul de pe fundal (adesea distorsionat), detaliile mâinilor/emblemelor, umbrele și absența metadatelor EXIF/C2PA. La audio/video: atenție la cererile urgente de coduri SMS 2FA sau bani, interdicția de a suna înapoi și stabilește un cuvânt-parolă secret cu familia.
+
+**Î: Cum trebuie să folosească elevii (10–15 ani) inteligența artificială etic la Informatică și TIC?**
+R: Folosește metoda C.R.I.F. (Context, Rol, Instrucțiune, Format + Guardrail): cere AI-ului să îți explice o eroare din codul tău pas cu pas cu un tabel de valori și o întrebare de verificare, fără să îți scrie tema gata de copiat, apoi testează întotdeauna codul în Sandbox.
+
+**Î: Primește elevul recompense în ArkyEdu pentru finalizarea cazurilor din Laboratorul AI?**
+R: Da! Rezolvarea cazurilor din Detectivul Deepfake, a testelor de halucinații și a misiunilor Prompt Architect acordă ByteCoins reali în contul elevului și salvează progresul automat în browser.

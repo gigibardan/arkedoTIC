@@ -16,9 +16,11 @@ Acest document furnizează contextul educațional, curricular, tehnic și compet
 - **Model Financiar:** 100% GRATUIT (0 Lei), non-profit, fără abonamente, fără reclame, sigur pentru minori (GDPR).
 - **Cadrul de reglementare:** Ordinul Ministrului Educației Naționale nr. 3393/28.02.2017 & OM 5420/2024 privind programele școlare pentru Informatică și TIC (manualele aprobate Art Klett 2025, Litera, EDP) și Cadrul European DigComp.
 - **Scară și Conținut Verificabil:**
-  - **40 module curriculare interactive** (cu teorie, glosar, laborator practic în browser, examen pe barem 1–10 și Diplomă Oficială de Merit);
-  - **28 mini-jocuri arcade retro educaționale** (de la *Cyber Pac-Man*, *Cyber Arkanoid*, *Cyber Frogger*, *Cyber Sokoban* și *Cyber Asteroids* până la *Circuit Master 80s*, *Redstone Logic* și *PC Builder*);
-  - **20+ moduri de duel multiplayer 1v1 în timp real** (inclusiv *Cyber Battleship 1v1*, *File-Drop Attack 1v1*, *System Sabotage 1v1*, *Cyber Clash Royale*, *Binary Clash*, *Circuit Clash* și *C++ Code Racer*), jucabile live cu colegii sau contra unui **AI Cyber-Bot**.
+  - **40 module curriculare interactive (44 lecții și misiuni)** (cu teorie, glosar, laborator practic în browser, examen pe barem 1–10 și Diplomă Oficială de Merit);
+  - **16 fișe de lucru, teste cu barem 1–10, subiecte OJI & proiecte printabile A4** (`/fise/` & `/fise-llm.txt` — 34 de pagini statice bilingve cu auto-corectare, barem 100p și integrare C++ Visual Trace);
+  - **30 mini-jocuri arcade & open-world educaționale** (de la *Vice Leonida: Open-World Story GTA 6 Sandbox*, *Vice Leonida VI: Cyber Runner*, *Cyber Pac-Man*, *Cyber Arkanoid*, *Cyber Frogger*, *Cyber Sokoban* și *Cyber Asteroids* până la *Circuit Master 80s*, *Redstone Logic* și *PC Builder*);
+  - **21+ moduri de duel multiplayer 1v1 în timp real** (inclusiv *Vice Leonida 1v1*, *Cyber Battleship 1v1*, *File-Drop Attack 1v1*, *System Sabotage 1v1*, *Cyber Clash Royale*, *Binary Clash*, *Circuit Clash* și *C++ Code Racer*), jucabile live cu colegii sau contra unui **AI Cyber-Bot**;
+  - **Sandbox C++/Python/HTML5, Debugger Visual Trace & Arena Olimpiadă (12 probleme)** cu testare automată pe cazuri de test și vizualizare pas-cu-pas a variabilelor.
 
 ---
 
@@ -74,20 +76,20 @@ Acest document furnizează contextul educațional, curricular, tehnic și compet
 
 ---
 
-## 3. Arcade Didactic TIC (28 Jocuri Complete în Browser)
-Hub Arcade: https://www.arkyedu.com/arcade/
+## 3. Arcade Didactic TIC (30 Jocuri Complete în Browser)
+Hub Arcade: https://www.arkyedu.com/arcade/ · Hub Univers Vice Leonida (GTA 6): https://www.arkyedu.com/leonida/
 
-- **Retro & Logică Computațională**: `Cyber Pac-Man`, `Cyber Arkanoid`, `Cyber Frogger`, `Cyber Sokoban`, `Cyber Asteroids`, `Cyber Invaders`, `Cyber Dino Rush`, `Cyber Snake`.
+- **Flagship & Open-World GTA 6**: `Vice Leonida: Open-World Story` (Sandbox 2D cu 6 regiuni din Statul Leonida, 5 vehicule + Hydro-Airboat, VCPD 1★–5★, Lucia Caminos & Jason Duval — https://www.arkyedu.com/leonida/), `Vice Leonida VI: Cyber Runner` (GTA 6 Tech Edition — https://www.arkyedu.com/arcade/vice-leonida-gta6/), `Cyber Pac-Man`, `Cyber Arkanoid`, `Cyber Frogger`, `Cyber Sokoban`, `Cyber Asteroids`, `Cyber Invaders`, `Cyber Dino Rush`, `Cyber Snake`.
 - **Hardware, Electronică & Robotică**: `Circuit Master 80s`, `PC Builder Pro`, `Redstone Logic Lab`, `Minecraft Voxel Architect`.
 - **Algoritmi, Binar & Web**: `Binary Factory`, `2048 Bitwise Edition`, `Algorithm Maze`, `RGB Pixel Master`, `Byte Slider`, `PageCraft`, `Roblox Blox Clicker`.
 - **Securitate Cibernetică & Birotică**: `Hacker vs. Defender`, `Firewall Defender`, `Virus Sweeper`, `Cyber Detective`, `Folder Tree Architect`, `File-Drop (Tetris Extensii)`, `Typing Speed Master (WPM)`, `Mouse Reflex Master v1`, `Mouse Master Pro 2.0`.
 
 ---
 
-## 4. Arena Dueluri 1v1 Multiplayer & AI Cyber-Bot (20+ Moduri Live)
+## 4. Arena Dueluri 1v1 Multiplayer & AI Cyber-Bot (21+ Moduri Live)
 Hub Dueluri: https://www.arkyedu.com/duel/
 
-- **Strategie & Tactici Cyber**: `Cyber Battleship 1v1` (grilă 10×10, Sonar 3×3, Torpile H/V, Mine EMP, Nano-Scut), `File-Drop Attack 1v1` (Tetris cu SRS Wall-Kicks, T-Spin & atacuri DDoS/Overclock), `System Sabotage 1v1` (8 sisteme de reparat + sabotaje stil Among Us), `Cyber Clash Royale 1v1`.
+- **Flagship, Strategie & Tactici Cyber**: `Vice Leonida 1v1` (GTA 6 Cyber-Heist Showdown — https://www.arkyedu.com/duel/vice-leonida-1v1/), `Cyber Battleship 1v1` (grilă 10×10, Sonar 3×3, Torpile H/V, Mine EMP, Nano-Scut), `File-Drop Attack 1v1` (Tetris cu SRS Wall-Kicks, T-Spin & atacuri DDoS/Overclock), `System Sabotage 1v1` (8 sisteme de reparat + sabotaje stil Among Us), `Cyber Clash Royale 1v1`.
 - **Coding, Hardware & Rețelistică**: `C++ Code Racer 1v1`, `Binary Clash 1v1`, `Circuit Clash Arduino`, `Circuit Overdrive`, `Network Packet Racer 1v1`, `Hacker vs Defender 1v1`, `Block Coding Scratch Duel`, `PC Hardware Rush`, `Pixel Art Sprite Clash`, `Cyber Shield`, `File Organizer Battle`.
 - **Viteză & Cultură Digitală**: `Quiz Blitz TIC`, `Speed Crafting`, `Cyber Sprint`, `Cyber Precision`, `Cyber Cursor Clash`, `Roblox Blox Clicker Duel`.
 
@@ -97,7 +99,7 @@ Hub Dueluri: https://www.arkyedu.com/duel/
 - **Frontend:** React 19 SPA, TypeScript, Tailwind CSS v4, Web Audio API sintetizat, Canvas 2D / WebGL.
 - **Backend & Cloud:** Firebase Firestore + Auth, sincronizare dueluri 1v1 în timp real, catalog digital multi-școală conform GDPR.
 - **PWA & Offline:** Instalabilă gratuit ca aplicație nativă pe Android, iOS, Windows, macOS și Linux.
-- **SEO & AI Discovery:** Schema.org JSON-LD (`WebSite` cu `SearchAction`, `WebApplication`, `EducationalOrganization`, `Course`, `LearningResource`, `BlogPosting`, `FAQPage`, `HowTo`, `BreadcrumbList`), `hreflang` bilingv `ro`/`en`, sitemap XML cu 80+ URL-uri curate, feed RSS (`/rss.xml`), protocol IndexNow (`/a7f4e9c281b54d3e9f6a0c4b2e8d1a5c.txt`), imagini OG `1200×630` (`/og-cover.png`), `robots.txt` deschis pentru crawlere AI (`OAI-SearchBot`, `GPTBot`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`).
+- **SEO & AI Discovery:** Schema.org JSON-LD (`WebSite` cu `SearchAction`, `WebApplication`, `EducationalOrganization`, `Course`, `LearningResource`, `VideoGame`, `Quiz`, `DefinedTerm`, `BlogPosting`, `FAQPage`, `HowTo`, `BreadcrumbList`), `hreflang` bilingv `ro`/`en`, sitemap XML cu 200+ URL-uri curate, feed RSS (`/rss.xml`), fișiere LLM (`/llms.txt`, `/llms-full.txt`, `/fise-llm.txt`, `/leonida-llm.txt`, `/laborator-ai-llm.txt`, `/ai-catalog.json`), protocol IndexNow (`/a7f4e9c281b54d3e9f6a0c4b2e8d1a5c.txt`), imagini OG `1200×630` (`/og-cover.png`), `robots.txt` deschis pentru crawlere AI (`OAI-SearchBot`, `GPTBot`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`).
 
 ---
 
@@ -130,3 +132,30 @@ Acoperă **44 de concepte fundamentale din programa OMEN 3393/2017 & OM 5420/202
 - **Robotică & Arduino IoT (6)**: Arduino Uno, Pini Digitali/Analogici/PWM (`~`), Legea lui Ohm & Rezistoare LED (`220 Ω`), Senzor Ultrasonic HC-SR04 (`* 0.034 / 2`), Senzori Smart Home (`PIR`, `MQ-2`, `DHT11`), Multitasking `millis()` vs `delay()`.
 - **AI, Cloud & Multimedia (5)**: LLM & Halucinații AI, Inginerie Prompturi Metoda R.C.C.L., Cloud Computing & Permisiuni, Cartografie Digitală GIS, Audio-Video Multitrack & Keyframe.
 
+---
+
+## 8. Biblioteca de Fișe de Lucru, Teste cu Barem 1–10 & Subiecte OJI / Admitere (16 Materiale — 34 Pagini Statice RO & EN)
+- **Index Română**: https://www.arkyedu.com/fise/
+- **Index Engleză**: https://www.arkyedu.com/fise/en/
+- **Feed Markdown complet pentru LLM-uri (conține toate cerințele, răspunsurile corecte, explicațiile și baremele pe 100p)**: https://www.arkyedu.com/fise-llm.txt
+
+Fiecare fișă folosește structura oficială a testelor școlare din România: **90 de puncte pentru itemi (grilă, adevărat/fals, completare cod/formulă) + 10 puncte din oficiu = 100p (Nota 1–10)**, suportă auto-evaluare instantanee în aplicație (`+35 ByteCoins`), **tipărire curată A4** în două moduri (*Foaia Elevului fără răspunsuri* vs. *Barem Complet Profesor*), markup `Schema.org LearningResource + Quiz + FAQPage + BreadcrumbList`, și buton **„Deschide Codul în Trace C++”** pentru problemele de algoritmică:
+- **Clasa a V-a (4 fișe/teste)**: Hardware & RAM/ROM (`fisa-de-lucru-clasa-5-hardware-ram-rom-unitati-masura`), Sisteme de Operare & Fișiere (`fisa-de-lucru-clasa-5-sisteme-operare-arbore-extensii-fisiere`), Test Algoritmi & Scratch (`test-evaluare-barem-clasa-5-algoritmi-scheme-logice-scratch`), Proiect Word & Siguranță (`fisa-proiect-clasa-5-referat-word-diacritice-siguranta-internet`).
+- **Clasa a VI-a (4 fișe/teste)**: PowerPoint 6×6 & Paint 3D (`fisa-de-lucru-clasa-6-powerpoint-regula-6x6-paint-3d-rgb`), Test Securitate & E-mail (`test-cu-barem-clasa-6-securitate-cibernetica-phishing-2fa-email-bcc`), Bucle & Decizii Scratch (`fisa-de-lucru-clasa-6-scratch-daca-altfel-bucle-conditionate-operatori`), Evaluare Finală TIC (`evaluare-finala-barem-clasa-6-algoritmi-contor-scratch-netiquette`).
+- **Clasa a VII-a (4 fișe/teste)**: C++ Operatori `%` & 3 Pahare (`fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare`), Test C++ `if`/`else` (`test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici`), Subiect OJI `while` & Cifre (`fisa-oji-clasa-7-cpp-bucle-while-oglindit-palindrom-numar-prim`), Word, WavePad & GIS (`fisa-practica-clasa-7-tehnoredactare-word-audio-wavepad-gis`).
+- **Clasa a VIII-a (4 fișe/teste)**: Excel `IF`, `COUNTIF`, `$A$1` & Erori (`fisa-de-lucru-clasa-8-excel-sum-average-if-countif-referinta-absoluta-erori`), Teză Admitere Liceu Vectori C++ (`subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara`), Evaluare HTML5 & HTTPS (`test-cu-barem-clasa-8-web-design-html5-semantic-css-https`), Proiect Arduino Smart City `millis()` (`fisa-proiect-clasa-8-arduino-uno-smart-city-senzori-ohm-millis`).
+
+---
+
+## 9. Browser Code Sandbox, Debugger C++ Visual Trace & Arena Olimpiadă (`/sandbox/` & `/olimpiada`)
+- **Code Sandbox (C++, Python 3, HTML5)**: Rulează programe direct în browser fără instalarea Code::Blocks, cu șabloane de clasă, input personalizat `stdin` și testare instantanee.
+- **Debugger C++ Visual Trace**: Vizualizare pas-cu-pas a execuției instrucțiunilor C++, evoluției variabilelor/vectorilor în memorie și ieșirii `cout`, conectată direct la fișele C++ de pe `/fise/`.
+- **Arena Olimpiadă (`/olimpiada`)**: 12 probleme algoritmice cu grad crescător de dificultate și suite automate de testare pentru pregătirea OJI și a admiterii la licee cu profil Matematică-Informatică.
+
+---
+
+## 10. Laboratorul AI & Detector Deepfake (`/laborator-ai/` & `/laborator-ai/en/`)
+- **Hub Română**: https://www.arkyedu.com/laborator-ai/ · **Hub Engleză**: https://www.arkyedu.com/laborator-ai/en/ · **Markdown RAG**: https://www.arkyedu.com/laborator-ai-llm.txt
+- **Tokenizator BPE Live & Temperatură Softmax**: Simulator determinist 100% în browser (fără chat deschis sau API-uri externe) care arată împărțirea în sub-tokeni și efectul Temperaturii (`0.10–1.50`) asupra halucinațiilor LLM la C++ și Arduino.
+- **Investigație Criminalistică Deepfake (6 Cazuri)**: Fotografii AI vs autentice (cu zone clicabile, lupă 1.35× și inspector EXIF/C2PA), clonare vocală WhatsApp (protecție 2FA), video lip-sync și știri false (Citire Laterală), cu recompense ByteCoins.
+- **Arhitectul de Prompturi C.R.I.F.**: Constructor pe blocuri (*Context · Rol · Instrucțiune · Format + Guardrail*) cu scor live `/100` și previzualizare anti-plagiat.

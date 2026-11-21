@@ -231,6 +231,12 @@ function getContextualIdleQuotes(lang: 'ro' | 'en'): string[] {
         ? 'Smart City telemetry online! Watch those Arduino PWM pins and gas sensors! 🏙️🤖'
         : 'Telemetria Smart City este activă! Ai grijă de pinii PWM și senzorii Arduino ai orașului! 🏙️🤖'
     );
+  } else if (path.includes('/laborator-ai') || hash.includes('laborator-ai')) {
+    extras.push(
+      isEn
+        ? 'AI tip: zoom into wall banners, check camera EXIF, and never trust an urgent voice note asking for 2FA codes! 🤖🔍'
+        : 'Pont AI: dă zoom pe bannerele din fundal, verifică EXIF-ul și nu da niciodată coduri 2FA la mesaje vocale urgente! 🤖🔍'
+    );
   }
 
   if (mission.includes('cpp') || mission.includes('algo') || mission.includes('loop') || mission.includes('decision')) {

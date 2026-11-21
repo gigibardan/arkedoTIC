@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 8 Arduino Smart City IoT Project &amp; Rubric | ArkyEdu</title>
+  <meta name="description" content="Grade 8 Arduino Smart City project sheet with 100-point rubric: PWM (~) pins, HC-SR04 ultrasonic formula (* 0.034 / 2), PIR &amp; MQ-2 sensors, 220 Ω LED resistor, and millis() vs delay().">
+  <meta name="keywords" content="grade 8 arduino smart city project worksheet, hc-sr04 ultrasonic distance formula arduino, millis vs delay non blocking arduino quiz">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/fise/fisa-proiect-clasa-8-arduino-uno-smart-city-senzori-ohm-millis/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/fise/fisa-proiect-clasa-8-arduino-uno-smart-city-senzori-ohm-millis/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Grade 8 Arduino Smart City IoT Project &amp; Rubric | ArkyEdu">
+  <meta property="og:description" content="Grade 8 Arduino Smart City project sheet with 100-point rubric: PWM (~) pins, HC-SR04 ultrasonic formula (* 0.034 / 2), PIR &amp; MQ-2 sensors, 220 Ω LED resistor, and millis() vs delay().">
+  <meta property="og:url" content="https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grade 8 Arduino Smart City IoT Project &amp; Rubric | ArkyEdu">
+  <meta name="twitter:description" content="Grade 8 Arduino Smart City project sheet with 100-point rubric: PWM (~) pins, HC-SR04 ultrasonic formula (* 0.034 / 2), PIR &amp; MQ-2 sensors, 220 Ω LED resistor, and millis() vs delay().">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["LearningResource","Quiz"],"@id":"https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/#resource","name":"Grade 8 Smart City Project Sheet: Arduino Uno, PIR/HC-SR04/MQ-2 Sensors, Ohm’s Law & `millis()`","description":"Hands-on Grade 8 IoT rubric (100 pts): Arduino Uno PWM `~` pins (`3,5,6,9,10,11`), 10-bit ADC (`0–1023`), HC-SR04 distance math (`duration * 0.034 / 2`), PIR motion & MQ-2 gas sensing, 220 Ω LED current limiting, and `millis()` multitasking.","url":"https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/","inLanguage":"en","isAccessibleForFree":true,"educationalLevel":"Grade 8","learningResourceType":"Project & Rubric","timeRequired":"PT30M","datePublished":"2026-04-17","hasPart":[{"@type":"Question","name":"Which Smart City sensor measures distance to an approaching vehicle using high-frequency sound waves?","acceptedAnswer":{"@type":"Answer","text":"HC-SR04 Ultrasonic Sensor — HC-SR04 fires an ultrasonic pulse on TRIG and measures echo return time on ECHO (`dist = duration * 0.034 / 2`)."}},{"@type":"Question","name":"Why must a resistor (typically 220 Ω – 330 Ω) be wired in series with an LED on an Arduino Uno 5V pin?","acceptedAnswer":{"@type":"Answer","text":"To limit current via Ohm’s Law (I = V / R) so neither the LED nor the pin burns out — Without a current-limiting resistor, excess current immediately damages the LED and Arduino output driver."}},{"@type":"Question","name":"On Arduino Uno, `analogRead(A0)` uses a 10-bit ADC. What is the MAXIMUM integer returned by `analogRead` (at 5V)?","acceptedAnswer":{"@type":"Answer","text":"1023 — A 10-bit ADC provides `2^10 = 1024` steps ranging from `0` (0V) to `1023` (5V)."}},{"@type":"Question","name":"True or False: Unlike `delay(5000)`, which freezes the Arduino CPU for 5 seconds, non-blocking `millis()` timing lets gas and gate sensors keep updating concurrently.","acceptedAnswer":{"@type":"Answer","text":"True — True! `millis()` tracks elapsed milliseconds without stalling `loop()`, critical for real-time IoT alerts."}},{"@type":"Question","name":"An `HC-SR04` echo pulse lasts `1000` microseconds. Using `duration * 0.034 / 2`, what distance in centimeters is measured?","acceptedAnswer":{"@type":"Answer","text":"17 cm — `1000 * 0.034 = 34 cm` round-trip; divided by `2` yields `17 cm` one-way distance."}}],"offers":{"@type":"Offer","price":"0","priceCurrency":"RON"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.arkyedu.com/"},{"@type":"ListItem","position":2,"name":"Worksheets","item":"https://www.arkyedu.com/fise/en/"},{"@type":"ListItem","position":3,"name":"G8 Project: Arduino Smart City","item":"https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/"}]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do we divide by 2 in `duration * 0.034 / 2`?","acceptedAnswer":{"@type":"Answer","text":"Because the sound wave travels twice: from the transmitter to the object and back to the echo receiver."}}]}]}</script>
+  <style>
+    
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+    .ws-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .ws-pre { background: #0b1220; border: 1px solid #334155; border-radius: 0.75rem; padding: 1rem; overflow-x: auto; font-family: monospace; color: #bae6fd; margin: 0.75rem 0; font-size: 0.9rem; }
+    .ws-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.92rem; }
+    .ws-table th, .ws-table td { border-bottom: 1px solid #334155; padding: 0.6rem 0.5rem; text-align: left; }
+    @media print {
+      header, footer, .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .ws-box { background: #fff !important; border: 1px solid #94a3b8 !important; color: #000 !important; page-break-inside: avoid; }
+      .ws-pre { background: #f8fafc !important; color: #000 !important; border: 1px solid #cbd5e1 !important; }
+      .ws-table th, .ws-table td { border-color: #94a3b8 !important; color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">📝</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">TIC</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="https://www.arkyedu.com/fise/en/">All 16 Worksheets</a>
+        <a href="https://www.arkyedu.com/cursuri/g8_robot_b/">Interactive Lesson</a>
+        <a href="https://www.arkyedu.com/sandbox/en/">Sandbox &amp; Trace C++</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/fise/fisa-proiect-clasa-8-arduino-uno-smart-city-senzori-ohm-millis/" style="color:#94a3b8;text-decoration:none;font-weight:700;font-size:0.85rem;padding:0.4rem 0.7rem;border:1px solid #334155;border-radius:0.6rem;">RO</a>
+        <a href="https://www.arkyedu.com/#fise/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project" class="nav-cta"><span>Solve Interactive</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2.5rem 1.5rem 4rem;">
+    <div style="font-size:0.85rem;color:var(--accent);font-weight:700;margin-bottom:0.5rem;">
+      Grade 8 · Project &amp; Rubric · 30 min · 100p (10p ex officio)
+    </div>
+    <h1 style="font-size:2rem;line-height:1.25;margin-bottom:1rem;">Grade 8 Smart City Project Sheet: Arduino Uno, PIR/HC-SR04/MQ-2 Sensors, Ohm’s Law &amp; `millis()`</h1>
+    <div class="ws-box">
+      <strong>Quick Summary & Key Points:</strong>
+      <p style="margin-top:0.5rem;color:#cbd5e1;">Hands-on Grade 8 IoT rubric (100 pts): Arduino Uno PWM `~` pins (`3,5,6,9,10,11`), 10-bit ADC (`0–1023`), HC-SR04 distance math (`duration * 0.034 / 2`), PIR motion &amp; MQ-2 gas sensing, 220 Ω LED current limiting, and `millis()` multitasking.</p>
+      <p style="margin-top:0.6rem;font-size:0.92rem;color:#94a3b8;"><strong>Theory Snapshot:</strong> Arduino Uno PWM pins (`~`): `3, 5, 6, 9, 10, 11` (`0..255`). Analog inputs `A0–A5` return `0..1023`. HC-SR04 distance: `duration * 0.034 / 2`. Always wire a ~220 Ω resistor in series with LEDs.</p>
+      <div class="no-print" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+        <a href="https://www.arkyedu.com/#fise/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project" class="btn-primary"><span>Solve & Auto-Grade (1–10)</span></a>
+        <button type="button" onclick="window.print()" class="btn-secondary" style="cursor:pointer;"><span>🖨️ Print A4 Sheet</span></button>
+        
+      </div>
+    </div>
+
+    
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>1. Part I · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Which Smart City sensor measures distance to an approaching vehicle using high-frequency sound waves?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> MQ-2 Gas Sensor</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> HC-SR04 Ultrasonic Sensor</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> LDR Photoresistor</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> DHT11 Humidity Sensor</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) HC-SR04 Ultrasonic Sensor — HC-SR04 fires an ultrasonic pulse on TRIG and measures echo return time on ECHO (`dist = duration * 0.034 / 2`).
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>2. Part I · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">Why must a resistor (typically 220 Ω – 330 Ω) be wired in series with an LED on an Arduino Uno 5V pin?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> To limit current via Ohm’s Law (I = V / R) so neither the LED nor the pin burns out</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> To change the LED color from red to blue</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> To convert digital signals into Wi-Fi</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> It is optional because LEDs never draw excess current</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> A) To limit current via Ohm’s Law (I = V / R) so neither the LED nor the pin burns out — Without a current-limiting resistor, excess current immediately damages the LED and Arduino output driver.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>3. Part II · 1</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">On Arduino Uno, `analogRead(A0)` uses a 10-bit ADC. What is the MAXIMUM integer returned by `analogRead` (at 5V)?</h2>
+        
+        
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> 1023 — A 10-bit ADC provides `2^10 = 1024` steps ranging from `0` (0V) to `1023` (5V).
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>4. Part II · 2</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">True or False: Unlike `delay(5000)`, which freezes the Arduino CPU for 5 seconds, non-blocking `millis()` timing lets gas and gate sensors keep updating concurrently.</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> True</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> False</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> A) True — True! `millis()` tracks elapsed milliseconds without stalling `loop()`, critical for real-time IoT alerts.
+        </p>
+      </article>
+      <article class="ws-box">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--brand-cyan);font-weight:700;margin-bottom:0.4rem;">
+          <span>5. Part III</span>
+          <span>(18p)</span>
+        </div>
+        <h2 style="font-size:1.08rem;margin-bottom:0.65rem;">An `HC-SR04` echo pulse lasts `1000` microseconds. Using `duration * 0.034 / 2`, what distance in centimeters is measured?</h2>
+        
+        <ul style="list-style:none;padding-left:0;margin:0.5rem 0 0.75rem;"><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>A)</strong> 34 cm</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>B)</strong> 17 cm</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>C)</strong> 8.5 cm</li><li style="margin-bottom:0.35rem;color:#e2e8f0;"><strong>D)</strong> 68 cm</li></ul>
+        <p style="margin-top:0.6rem;font-size:0.9rem;color:#86efac;">
+          <strong>Answer & Explanation:</strong> B) 17 cm — `1000 * 0.034 = 34 cm` round-trip; divided by `2` yields `17 cm` one-way distance.
+        </p>
+      </article>
+
+    <section class="ws-box">
+      <h2 style="font-size:1.3rem;margin-bottom:0.5rem;">Official 100-Point Grading Rubric (Grade 1–10)</h2>
+      <table class="ws-table">
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Evaluated Competency</th>
+            <th style="text-align:right;">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>Part I (2 × 18 pts)</td>
+              <td>HC-SR04 ultrasonic sensing &amp; Ohm’s Law LED protection</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Part II (2 × 18 pts)</td>
+              <td>10-bit ADC range (0–1023) &amp; non-blocking `millis()`</td>
+              <td style="text-align:right;font-weight:700;">36p</td>
+            </tr>
+            <tr>
+              <td>Part III (18 pts)</td>
+              <td>Ultrasonic distance formula (`duration * 0.034 / 2`)</td>
+              <td style="text-align:right;font-weight:700;">18p</td>
+            </tr>
+            <tr>
+              <td>Ex officio</td>
+              <td>Baseline points</td>
+              <td style="text-align:right;font-weight:700;">10p</td>
+            </tr>
+          <tr>
+            <td colspan="2"><strong>TOTAL (Grade = Score / 10)</strong></td>
+            <td style="text-align:right;font-weight:900;color:var(--accent);">100p</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ws-box no-print">
+      <h2 style="font-size:1.2rem;margin-bottom:0.75rem;">More Worksheets & Related Links</h2>
+      <div class="grid-3">
+        <a href="https://www.arkyedu.com/fise/en/grade-8-excel-formulas-sum-average-if-countif-absolute-errors-worksheet/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G8 Excel: Functions &amp; `$A$1`</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a><a href="https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G8 Prep Exam: C++ Arrays &amp; Search</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a><a href="https://www.arkyedu.com/fise/en/grade-8-html5-semantics-css-flexbox-https-dns-exam/" class="card" style="text-decoration:none;"><div style="font-weight:700;color:#fff;font-size:0.95rem;">G8 Web Exam: HTML5, CSS &amp; HTTPS</div><div style="font-size:0.8rem;color:var(--accent);margin-top:0.35rem;">Open sheet →</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border:none;">
+        <div>© 2026 ArkyEdu · OM 5420/2024 &amp; Manual Art Klett 2025 · Clasa a VIII-a · Arduino Smart City IoT</div>
+        <div><a href="https://www.arkyedu.com/fise/" style="color:var(--accent);">All Worksheets</a> · <a href="https://www.arkyedu.com/fise-llm.txt" style="color:var(--accent);">fise-llm.txt</a></div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

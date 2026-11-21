@@ -3,21 +3,25 @@ import {
   AlertTriangle,
   ArrowLeft,
   BookOpen,
+  Bug,
   CheckCircle2,
   ChevronRight,
   Cloud,
   Code2,
   Coins,
+  Cpu,
   HelpCircle,
   Home,
   Play,
   RotateCcw,
   Save,
   Terminal,
+  Trophy,
   XCircle,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useArky } from '../../context/ArkyContext';
+import { OLYMPIAD_PROBLEMS } from '../../data/olympiadProblems';
 import { SANDBOX_CHALLENGES, SandboxChallenge } from '../../data/sandboxChallenges';
 import {
   addByteCoins,
@@ -36,10 +40,18 @@ import {
   SandboxExecutionResult,
   SandboxLanguage,
 } from '../../utils/sandboxRunner';
+import { CppTraceVisualizer } from './CppTraceVisualizer';
+import { OlympiadArena } from './OlympiadArena';
+
+export type SandboxWorkspaceTab = 'editor' | 'trace' | 'olympiad';
 
 interface CodeSandboxHubProps {
   initialLanguage?: SandboxLanguage;
   initialChallengeId?: string | null;
+  initialTab?: SandboxWorkspaceTab;
+  initialTraceCode?: string | null;
+  initialTraceStdin?: string | null;
+  initialTraceLabel?: string | null;
   onBackToHome: () => void;
   onSelectMission: (missionId: AllMissionId) => void;
   onOpenBlog?: (slug?: string | null) => void;
@@ -107,6 +119,10 @@ h1 { margin: 0 0 8px; color: #0f172a; font-size: 1.4rem; }`,
 export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   initialLanguage = 'cpp',
   initialChallengeId = null,
+  initialTab = 'editor',
+  initialTraceCode = null,
+  initialTraceStdin = null,
+  initialTraceLabel = null,
   onBackToHome,
   onSelectMission,
   onOpenBlog,
@@ -114,6 +130,23 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
   const { lang } = useLanguage();
   const isEn = lang === 'en';
   const arky = useArky();
+
+  const [workspaceMode, setWorkspaceMode] = useState<SandboxWorkspaceTab>(initialTab);
+  const [traceExternalCode, setTraceExternalCode] = useState<string | null>(initialTraceCode);
+  const [traceExternalStdin, setTraceExternalStdin] = useState<string | null>(initialTraceStdin);
+  const [traceExternalLabel, setTraceExternalLabel] = useState<string | null>(initialTraceLabel);
+
+  useEffect(() => {
+    setWorkspaceMode(initialTab);
+  }, [initialTab]);
+
+  useEffect(() => {
+    if (initialTraceCode) {
+      setTraceExternalCode(initialTraceCode);
+      setTraceExternalStdin(initialTraceStdin ?? '');
+      setTraceExternalLabel(initialTraceLabel ?? null);
+    }
+  }, [initialTraceCode, initialTraceStdin, initialTraceLabel]);
 
   const initialMatchedChallenge = initialChallengeId
     ? SANDBOX_CHALLENGES.find((c) => c.id === initialChallengeId) || null
@@ -391,6 +424,14 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
 
   const totalChallenges = SANDBOX_CHALLENGES.length;
   const solvedCount = solvedIds.filter((id) => SANDBOX_CHALLENGES.some((c) => c.id === id)).length;
+  const olympiadSolvedCount = solvedIds.filter((id) => OLYMPIAD_PROBLEMS.some((p) => p.id === id)).length;
+
+  const openInTraceVisualizer = (nextCode: string, nextStdin: string, label: string) => {
+    setTraceExternalCode(nextCode);
+    setTraceExternalStdin(nextStdin);
+    setTraceExternalLabel(label);
+    setWorkspaceMode('trace');
+  };
 
   return (
     <div className="space-y-6">
@@ -411,20 +452,26 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
             </button>
             <ChevronRight className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
             <span className="text-emerald-300 font-medium">
-              {isEn ? 'Code Sandbox (C++, Python & HTML5)' : 'Sandbox Coding (C++, Python & HTML5)'}
+              {isEn ? 'Code Sandbox, C++ Trace & Olympiad' : 'Sandbox Coding, Debug C++ & Olimpiadă TIC'}
             </span>
           </nav>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight text-balance">
             {isEn
-              ? 'Interactive Code Sandbox: C++, Python & HTML5'
-              : 'Laborator Sandbox: C++, Python & HTML5 în Browser'}
+              ? 'Code Sandbox: C++ Trace Debugger & Olympiad Arena'
+              : 'Laborator Coding: Depanator C++, Sandbox & Olimpiada TIC'}
           </h1>
 
           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300 tabular-nums">
-            <span>{isEn ? 'Grades 6–8 Curriculum' : 'Programa Clasele VI–VIII'}</span>
+            <span>{isEn ? 'Grades 6–8 & OJI Track' : 'Programa VI–VIII & Pregătire OJI'}</span>
             <span aria-hidden="true">·</span>
-            <span>{isEn ? `${solvedCount}/${totalChallenges} Challenges Solved` : `${solvedCount}/${totalChallenges} Provocări Rezolvate`}</span>
+            <span>{isEn ? `${solvedCount}/${totalChallenges} Sandbox` : `${solvedCount}/${totalChallenges} Sandbox`}</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-amber-300 font-semibold">
+              {isEn
+                ? `${olympiadSolvedCount}/${OLYMPIAD_PROBLEMS.length} Olympiad`
+                : `${olympiadSolvedCount}/${OLYMPIAD_PROBLEMS.length} Olimpiadă`}
+            </span>
             <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1 text-emerald-300">
               <Cloud className="w-3.5 h-3.5" aria-hidden="true" />
@@ -446,6 +493,87 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
         </button>
       </div>
 
+      {/* Top Workspace Mode Switcher */}
+      <div
+        role="tablist"
+        aria-label={isEn ? 'Sandbox workspace modes' : 'Moduri laborator coding'}
+        className="inline-flex items-center gap-1.5 p-1 rounded-xl bg-slate-950 border border-slate-800 overflow-x-auto max-w-full"
+      >
+        {(
+          [
+            {
+              id: 'editor',
+              icon: Code2,
+              labelRo: 'Editor & Teste (C++ / Python / HTML5)',
+              labelEn: 'Editor & Tests (C++ / Python / HTML5)',
+              activeClass: 'bg-emerald-600 text-white',
+            },
+            {
+              id: 'trace',
+              icon: Cpu,
+              labelRo: 'Debug Vizual C++ (Trace RAM)',
+              labelEn: 'C++ Visual Trace Debugger',
+              activeClass: 'bg-cyan-600 text-white',
+            },
+            {
+              id: 'olympiad',
+              icon: Trophy,
+              labelRo: `Olimpiada TIC (${olympiadSolvedCount}/${OLYMPIAD_PROBLEMS.length})`,
+              labelEn: `ICT Olympiad (${olympiadSolvedCount}/${OLYMPIAD_PROBLEMS.length})`,
+              activeClass: 'bg-amber-600 text-white',
+            },
+          ] as const
+        ).map((tab) => {
+          const Icon = tab.icon;
+          const active = workspaceMode === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => {
+                sounds.playClick();
+                setWorkspaceMode(tab.id);
+              }}
+              className={`inline-flex items-center gap-2 px-4 py-2 min-h-[40px] rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                active ? tab.activeClass : 'text-slate-300 hover:text-white hover:bg-slate-900'
+              }`}
+            >
+              <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>{isEn ? tab.labelEn : tab.labelRo}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {workspaceMode === 'trace' && (
+        <CppTraceVisualizer
+          externalCode={traceExternalCode}
+          externalStdin={traceExternalStdin}
+          externalLabel={traceExternalLabel}
+          onSendToEditor={(nextCode, nextStdin) => {
+            setSelectedLang('cpp');
+            setSelectedChallengeId('free');
+            setCode(nextCode);
+            setStdinValue(nextStdin);
+            setExecResult(null);
+            setTestResults(null);
+            setWorkspaceMode('editor');
+          }}
+        />
+      )}
+
+      {workspaceMode === 'olympiad' && (
+        <OlympiadArena
+          solvedIds={solvedIds}
+          onSolvedIdsChange={(next) => setSolvedIds(next)}
+          onDebugInTrace={openInTraceVisualizer}
+        />
+      )}
+
+      {workspaceMode === 'editor' && (
+        <>
       {/* Workspace Controls Bar: Language Switcher + Challenge Picker */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         {/* Language Segmented Control */}
@@ -672,6 +800,30 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
                 <span>{isEn ? 'Reset' : 'Resetează'}</span>
               </button>
 
+              {selectedLang === 'cpp' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    sounds.playClick();
+                    openInTraceVisualizer(
+                      code,
+                      stdinValue,
+                      activeChallenge
+                        ? `${isEn ? 'Tracing: ' : 'Urmărire pas-cu-pas: '}${
+                            isEn ? activeChallenge.titleEn : activeChallenge.titleRo
+                          }`
+                        : isEn
+                        ? 'Custom C++ Playground Trace'
+                        : 'Urmărire Cod C++ Mod Liber'
+                    );
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 border border-cyan-500/40 text-xs font-semibold text-cyan-200 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                >
+                  <Bug className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                  <span>{isEn ? 'Step-by-Step Debug' : 'Debug Pas-cu-Pas'}</span>
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={handleRunOnly}
@@ -895,6 +1047,8 @@ export const CodeSandboxHub: React.FC<CodeSandboxHubProps> = ({
           )}
         </section>
       </div>
+        </>
+      )}
     </div>
   );
 };

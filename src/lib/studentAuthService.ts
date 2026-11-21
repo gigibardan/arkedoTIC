@@ -724,7 +724,8 @@ export async function recordStudentDuelResult(
     cyberClashWins: (prevStats.cyberClashWins || 0) + (isWinner && mode === 'cyber_clash' ? 1 : 0),
     systemSabotageWins: (prevStats.systemSabotageWins || 0) + (isWinner && mode === 'system_sabotage' ? 1 : 0),
     fileDropAttackWins: (prevStats.fileDropAttackWins || 0) + (isWinner && mode === 'file_drop_attack' ? 1 : 0),
-    cyberBattleshipWins: (prevStats.cyberBattleshipWins || 0) + (isWinner && mode === 'cyber_battleship' ? 1 : 0)
+    cyberBattleshipWins: (prevStats.cyberBattleshipWins || 0) + (isWinner && mode === 'cyber_battleship' ? 1 : 0),
+    viceLeonidaWins: (prevStats.viceLeonidaWins || 0) + (isWinner && mode === 'vice_leonida_duel' ? 1 : 0)
   };
 
   const totalXP = (current.totalXP || 0) + awardAmount;

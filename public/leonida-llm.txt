@@ -1,0 +1,84 @@
+# ArkyEdu Vice Leonida — GTA 6 Open-World Game & Computer Science Universe (RO & EN)
+
+> Document de referință structurat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Prezintă universul interactiv gratuit Vice Leonida din platforma ArkyEdu: joc Open-World 2D jucabil în browser, Cyber Runner Arcade și Duel Live 1v1, inspirate din Grand Theft Auto VI (lansat oficial 19 noiembrie 2026 pe PS5 și Xbox Series X|S).
+
+- Hub Open-World Română: https://www.arkyedu.com/leonida/
+- Hub Open-World Engleză: https://www.arkyedu.com/leonida/en/
+- Lansare directă joc Open-World: https://www.arkyedu.com/?game=vice_leonida_world
+- Arcade Cyber Runner: https://www.arkyedu.com/arcade/vice-leonida-gta6/
+- Duel Live 1v1 Showdown: https://www.arkyedu.com/duel/vice-leonida-1v1/
+- Documentație generală platformă: https://www.arkyedu.com/llms.txt
+
+---
+
+## 1. Fapte Verificate GTA 6 & Siguranță Educațională
+- **Data lansării oficiale GTA 6**: 19 Noiembrie 2026 (November 19, 2026)
+- **Trailer 2**: 6 Mai 2025 (May 6, 2025)
+- **Platforme oficiale**: PlayStation 5 & Xbox Series X|S
+- **Protagoniști confirmați**: Lucia Caminos & Jason Duval
+- **Adaptare ArkyEdu pentru elevi 10–15 ani**: 0% violență sau arme reale; toată acțiunea folosește impulsuri EMP, drone de scanare VCPD, condus tactic în 5 vehicule + Hydro-Airboat și 6 misiuni de poveste TIC (Binar, C++, Excel, Arduino IoT, Securitate HTTPS/2FA).
+
+---
+
+## 2. Cele 6 Regiuni ale Statului Leonida (Hartă Open-World 2600×1800)
+1. **Vice City · Ocean Drive** (Metropola Neon & Turnurile Fibra Optică): Inima strălucitoare a statului Leonida, inspirată din Miami: hoteluri Art Deco pastelate, bulevarde cu palmieri și noduri de date de mare viteză pe Ocean Beach. — *Temă TIC*: Cod Binar (8-4-2-1) & Arhitectura CPU/RAM
+2. **Leonida Keys · Coral Bridge** (Arhipelagul Tropical & Cablul Submarin): Lanț de insule tropicale legate prin poduri lungi peste ape turcoaz, inspirat din Florida Keys, unde locuiesc pescari și curieri de date. — *Temă TIC*: Securitate HTTPS, Phishing & Autentificare 2FA
+3. **Port Gellhorn · Terminale Cargo** (Portul Industrial & Macarale Automate): Oraș portuar industrial de pe coasta de vest, plin de containere maritime, macarale automatizate și camere de supraveghere VCPD. — *Temă TIC*: Programare C++: Structura if/else & Modulo %
+4. **Grassrivers · Mlaștinile Digitale** (Canale Everglades & Pilotaj Hydro-Airboat): Întindere vastă de mlaștini și canale inspirată din Everglades, navigabilă optim cu Hydro-Airboat-ul printre relee ascunse. — *Temă TIC*: Coordonate X/Y & Bucle Repetitive while
+5. **Mount Kalaga · Observatorul Național** (Păduri Montane & Rețea Senzori Arduino): Parcul național din nordul statului Leonida, cu trasee montane 4x4, păduri de pini și o antenă meteo-observator controlată prin microcontrollere. — *Temă TIC*: Robotică Arduino Uno, HC-SR04 & millis()
+6. **Ambrosia · Rafinăria & Seiful Central** (Zona Industrială & Marele Finale 5★): Oraș industrial din centrul statului cu rafinării și autostrăzi drepte, găzduind serverul central și testul suprem de algoritmică. — *Temă TIC*: Excel ($A$1, COUNTIF) & Vectori C++ Admitere
+
+---
+
+## 3. Distribuția Oficială (Personaje din Leonida)
+- **Lucia Caminos** (Protagonistă · Specialistă Decriptare & Binar · vice_city): Originară cu rădăcini în Liberty City și eliberată din penitenciarul Leonida, Lucia îmbină determinarea cu stăpânirea algoritmilor de criptare și viteza pe șoselele din Vice City. — *Bonus joc*: +30% ByteCoins & Cash · +2s la terminalele de hack
+- **Jason Duval** (Protagonist · Pilot Tactic & Rețele Securizate · leonida_keys): Fost militar staționat în Leonida Keys, Jason stăpânește conducerea defensivă, navigația prin Grassrivers și protejarea rețelelor împotriva interceptorilor VCPD. — *Bonus joc*: +30 Armură Vehicul · Rază Radar +35%
+- **Cal Hampton** (Contact Tech · Analist Radio & Securitate Web · leonida_keys): Prietenul atent la frecvențele radio ale Pazei de Coastă din Keys; în ArkyEdu coordonează misiunile de detectare phishing și configurare 2FA. — *Bonus joc*: Scanează pachetele HTTPS vs HTTP pe Leonida Keys
+- **Raul Bautista** (Contact Logistic · Rutare Cargo & C++ · port_gellhorn): Veteran experimentat al operațiunilor din Leonida; în laboratorul Port Gellhorn coordonează algoritmii de sortare și condițiile C++. — *Bonus joc*: Oferă indicii la structurile if/else din Port Gellhorn
+- **Dre'Quan Priest** (Producător Audio · Studio & Multimedia · vice_city): Fondator al studioului Only Raw Records din Vice City; conectează lumea muzicală a orașului cu lecțiile de acustică digitală și montaj audio. — *Bonus joc*: Alimentează stația radio Synthwave din Vice City
+- **Boobie Ike** (Antreprenor Local · Infrastructură Cloud & Excel · ambrosia): Antreprenor influent în imobiliare și studio-uri din Vice City și Ambrosia; misiunile sale pun accent pe bugete, Excel COUNTIF și referințe absolute. — *Bonus joc*: Coordonează auditul de date din Ambrosia
+
+---
+
+## 4. Flota Conducibilă în Open-World (5 Vehicule)
+- **Banshee GT Neon** (Supercar Stradal): Viteză max 540 px/s, Armură 100 HP
+- **VCPD Cyber Cruiser** (Interceptor Blindat): Viteză max 495 px/s, Armură 155 HP
+- **Kalaga 4x4 Trail** (Off-Road Montan): Viteză max 445 px/s, Armură 140 HP
+- **Grassrivers Hydro-Airboat** (Amfibie Canale & Apă): Viteză max 470 px/s, Armură 115 HP [Amfibiu — navighează pe apele Grassrivers]
+- **Leonida Cyber Moto** (Motocicletă Agilă): Viteză max 525 px/s, Armură 75 HP
+
+---
+
+## 5. Cele 6 Misiuni de Poveste TIC (Open-World Story Challenges)
+1. **Operațiunea Ocean Drive: Deblocare Binară 8-4-2-1** (Clasa V · Hardware & Cod Binar 4-Bit): Turnul de fibră de pe Ocean Beach cere codul binar pe 4 biți (ponderi 8 · 4 · 2 · 1) egal cu numărul zecimal 13 pentru a deschide nodul Vice City. — Recompensă: +450$ / +240 XP / +40 ByteCoins
+2. **Interceptare Coral Bridge: Scutul HTTPS & Phishing** (Clasa VI · Securitate Cibernetică & 2FA): Cal Hampton a interceptat 4 link-uri de autentificare pe cablul submarin din Keys. Care este SINGURUL link autentic și criptat HTTPS? — Recompensă: +550$ / +280 XP / +45 ByteCoins
+3. **Cod Cargo Port Gellhorn: Ce afișează programul C++?** (Clasa VII · C++ if/else & Operator Modulo %): Macaraua automată din Port Gellhorn rulează secvența de mai jos pentru containerul cod=27. Scrie exact valoarea afișată de cout: — Recompensă: +650$ / +320 XP / +50 ByteCoins
+4. **Releul Grassrivers: Suma Cifrelor cu Bucla while** (Clasa VII · Algoritmi C++ pe Cifre (while)): Baliza din mlaștină decodează ID-ul 4092 folosind bucla while clasică din Clasa a VII-a. Care este valoarea finală afișată pentru s? — Recompensă: +750$ / +360 XP / +55 ByteCoins
+5. **Observatorul Mount Kalaga: Multitasking fără delay()** (Clasa VIII · Arduino Uno, HC-SR04 & millis()): Radarul din Mount Kalaga trebuie să citească senzorul ultrasonic HC-SR04 și să trimită date radio SIMULTAN, fără blocarea microcontrollerului Arduino Uno. Ce funcție folosești? — Recompensă: +850$ / +400 XP / +60 ByteCoins
+6. **Marele Seif din Ambrosia: Referință Absolută & Vectori** (Clasa VIII · Excel ($A$1, IF/COUNTIF) & Vectori): Pentru a bloca cursul de schimb din celula B1 astfel încât să nu se modifice la copierea formulei pe 100 de rânduri în Excel, cum scrii referința absolută? — Recompensă: +1200$ / +500 XP / +80 ByteCoins
+
+---
+
+## 6. Punți Tehnologice GTA 6 -> Programa Școlară TIC (Clasele V–VIII)
+- **Streaming Asset-uri & SSD NVMe** (Clasa a V-a · Hardware: SSD vs HDD, RAM & Bus de Date): Harta uriașă din Leonida încarcă instantaneu clădirile din Vice City și vegetația din Grassrivers fără ecrane de încărcare datorită vitezelor de citire de peste 5.000 MB/s. -> https://www.arkyedu.com/cursuri/hardware/
+- **Grafică 3D, Pixeli RGB & Iluminare Neon** (Clasa a VI-a · Paint 3D, Pixeli, Rezoluție & RGB): Reflexiile apusului pe asfaltul umed din Ocean Drive combină canale RGB (0–255) și calcul vectorial în timp real pe placa video (GPU). -> https://www.arkyedu.com/cursuri/g6_paint3d/
+- **Algoritmi Pathfinding & Decizii if/else pentru Trafic** (Clasa a VII-a · C++ Decizii if/else & Bucle while): Fiecare mașină VCPD și ambarcațiune din Leonida evaluează distanța, semafoarele și poziția jucătorului în bucle rapide cu condiții logice (&&, ||). -> https://www.arkyedu.com/cursuri/g7_decision_a/
+- **Sincronizare Rețea, DNS & Securitate Cont** (Clasa a VI-a & VIII · HTTPS, Rețele & Siguranță 2FA): Sesiunile online și duelurile 1v1 sincronizează pozițiile la fiecare cadru prin conexiuni securizate și protejează profilurile cu 2FA anti-phishing. -> https://www.arkyedu.com/cursuri/g8_web_a/
+
+---
+
+## 7. Întrebări Frecvente (FAQ)
+**Î: Ce este Vice Leonida Open World pe ArkyEdu și cum are legătură cu GTA 6 (2026)?**
+R: Lansat chiar după debutul oficial Grand Theft Auto VI (19 noiembrie 2026), Vice Leonida Open World este un joc educațional 2D gratuit în browser, inspirat din harta oficială a statului Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) și protagoniștii Lucia Caminos & Jason Duval — transformând explorarea, condusul auto/airboat și urmăririle VCPD în misiuni reale de Informatică și TIC pentru clasele V–VIII.
+
+**Î: Cum intru și ies din mașini sau din Airboat în Vice Leonida Open World?**
+R: Apropie-te pe jos de orice vehicul parcat sau din trafic și apasă tasta E (sau F / butonul „Intră/Ieși Vehicul” pe telefon). În mlaștinile Grassrivers și spre Leonida Keys poți pilota amfibia Hydro-Airboat direct pe apă!
+
+**Î: Este sigur pentru copii de 10–15 ani și funcționează fără instalare?**
+R: Da, este 100% sigur, fără violență sau arme reale (folosește scannere cyber, impulsuri EMP și provocări binare/C++/Excel/Arduino), complet gratuit (0 lei, fără reclame) și rulează la 60 FPS în orice browser pe PC, laptop de școală, tabletă sau telefon.
+
+**Î: Care sunt toate cele 3 moduri GTA 6 Vice Leonida disponibile pe ArkyEdu?**
+R: 1) Vice Leonida: Open World Story (/leonida/) — hartă liberă 2600×1800 cu 6 regiuni, 5 vehicule pilotabile, minimap GPS și 6 misiuni TIC; 2) Vice Leonida VI: Cyber Runner (/arcade/vice-leonida-gta6/) — arcade rapid pe 4 benzi cu hack-uri binare; 3) Vice Leonida 1v1 (/duel/vice-leonida-1v1/) — cursă multiplayer PvP cu sabotaje live sau contra AI Cyber-Bot.
+
+**Î: Cum primesc puncte XP și ByteCoins pentru Carnetul Digital?**
+R: Fiecare misiune de district finalizată în Vice Leonida Open World și scorul total de explorare/contracte salvează recordul în Carnetul Digital (până la 3.500 XP Arcade) și adaugă ByteCoins reali pentru upgrade-urile din Magazinul Cyber.

@@ -32,7 +32,16 @@ export type DuelGameMode =
   | 'cyber_clash'
   | 'system_sabotage'
   | 'file_drop_attack'
-  | 'cyber_battleship';
+  | 'cyber_battleship'
+  | 'vice_leonida_duel';
+
+export type ViceLeonidaAttackType = 'roadblock' | 'glitch' | 'throttle' | 'firewall_lock';
+
+export interface ViceLeonidaSyncEvent {
+  id: string;
+  kind: ViceLeonidaAttackType;
+  createdAt: number;
+}
 
 export type BattleshipWeaponType = 'railgun' | 'sonar' | 'cluster' | 'torpedo_h' | 'torpedo_v';
 
@@ -215,6 +224,8 @@ export interface DuelRoomData {
   guestFileDropEvents?: FileDropSyncEvent[]; // Live attacks & snapshots from Guest in File-Drop Attack 1v1
   hostBattleshipEvents?: BattleshipSyncEvent[]; // Live fleet deployment, shots & outcomes from Host
   guestBattleshipEvents?: BattleshipSyncEvent[]; // Live fleet deployment, shots & outcomes from Guest
+  hostViceEvents?: ViceLeonidaSyncEvent[]; // Live cyber heist sabotage attacks from Host
+  guestViceEvents?: ViceLeonidaSyncEvent[]; // Live cyber heist sabotage attacks from Guest
   winnerId?: string | 'tie';
   winnerName?: string;
   createdAt: number;
@@ -1134,6 +1145,43 @@ export async function sendBattleshipEvent(
   const cleanCode = roomCode.trim().toUpperCase();
   const fieldName = isHost ? 'hostBattleshipEvents' : 'guestBattleshipEvents';
   const trimmed = recentEvents.slice(-36);
+
+  if (db) {
+    try {
+      const roomRef = doc(db, 'duel_rooms', cleanCode);
+      await updateDoc(roomRef, {
+        [fieldName]: trimmed,
+        updatedAt: Date.now()
+      });
+    } catch (err: any) {
+      const errMsg = err?.message || String(err);
+      if (err?.code === 'resource-exhausted' || errMsg.includes('quota')) {
+        isFirestoreQuotaExhausted = true;
+      }
+    }
+  } else {
+    try {
+      const raw = localStorage.getItem('arkedo_local_duel_room_' + cleanCode);
+      if (raw) {
+        const parsed = JSON.parse(raw) as DuelRoomData;
+        (parsed as any)[fieldName] = trimmed;
+        parsed.updatedAt = Date.now();
+        localStorage.setItem('arkedo_local_duel_room_' + cleanCode, JSON.stringify(parsed));
+      }
+    } catch {}
+  }
+}
+
+// Broadcast real-time Vice Leonida 1v1 Cyber Heist sabotage attacks
+export async function sendViceLeonidaEvent(
+  roomCode: string,
+  isHost: boolean,
+  recentEvents: ViceLeonidaSyncEvent[]
+): Promise<void> {
+  if (isFirestoreQuotaExhausted || !roomCode) return;
+  const cleanCode = roomCode.trim().toUpperCase();
+  const fieldName = isHost ? 'hostViceEvents' : 'guestViceEvents';
+  const trimmed = recentEvents.slice(-24);
 
   if (db) {
     try {

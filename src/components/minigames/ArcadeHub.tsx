@@ -29,6 +29,8 @@ import { CyberArkanoidGame } from './CyberArkanoidGame';
 import { CyberFroggerGame } from './CyberFroggerGame';
 import { CyberSokobanGame } from './CyberSokobanGame';
 import { CyberAsteroidsGame } from './CyberAsteroidsGame';
+import { ViceLeonidaCyberRun } from './ViceLeonidaCyberRun';
+import { ViceLeonidaOpenWorld } from './ViceLeonidaOpenWorld';
 import { GameLockedModal } from '../common/GameLockedModal';
 import { forceScrollToTop } from '../../utils/scrollHelper';
 import {
@@ -76,14 +78,17 @@ import {
 
 interface ArcadeHubProps {
   studentName?: string;
+  initialGame?: ActiveGame;
   onBackToCatalog: () => void;
   onOpenDuel?: () => void;
 }
 
-type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master' | 'cyber_invaders' | 'cyber_pacman' | 'cyber_arkanoid' | 'cyber_frogger' | 'cyber_sokoban' | 'cyber_asteroids';
+export type ActiveGame = 'hub' | 'typing' | 'mouse' | 'mouse_v2' | '2048' | 'pcbuilder' | 'detective' | 'files' | 'binary_factory' | 'maze' | 'firewall' | 'rgb_pixel' | 'byte_slider' | 'file_drop' | 'virus_sweeper' | 'cyber_dino' | 'redstone_lab' | 'voxel_architect' | 'roblox_clicker' | 'page_craft' | 'hacker_defense' | 'cyber_snake' | 'circuit_master' | 'cyber_invaders' | 'cyber_pacman' | 'cyber_arkanoid' | 'cyber_frogger' | 'cyber_sokoban' | 'cyber_asteroids' | 'vice_leonida' | 'vice_leonida_world';
 type ArcadeCategory = 'all' | 'retro' | 'logic' | 'cyber' | 'agility';
 
 const ARCADE_CARD_META: Record<Exclude<ActiveGame, 'hub'>, { cat: Exclude<ArcadeCategory, 'all'>; search: string }> = {
+  vice_leonida_world: { cat: 'cyber', search: 'gta 6 gta6 vice leonida open world sandbox car driving lucia jason vcpd keys mount kalaga ambrosia grassrivers airboat' },
+  vice_leonida: { cat: 'cyber', search: 'gta 6 gta6 vice leonida city lucia jason beach port gellhorn grassrivers airboat binary' },
   cyber_asteroids: { cat: 'retro', search: 'asteroids 1979 vector space ship boss ozn' },
   cyber_sokoban: { cat: 'retro', search: 'sokoban 1982 server crates portals logic' },
   cyber_frogger: { cat: 'retro', search: 'frogger 1981 network hopper trojan server' },
@@ -114,14 +119,20 @@ const ARCADE_CARD_META: Record<Exclude<ActiveGame, 'hub'>, { cat: Exclude<Arcade
   page_craft: { cat: 'agility', search: 'pagecraft word layout tabele revista a4' },
 };
 
-export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatalog, onOpenDuel }) => {
+export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, initialGame = 'hub', onBackToCatalog, onOpenDuel }) => {
   const { lang } = useLanguage();
-  const [activeGame, setActiveGame] = useState<ActiveGame>('hub');
+  const [activeGame, setActiveGame] = useState<ActiveGame>(initialGame);
   const [arcadeCategory, setArcadeCategory] = useState<ArcadeCategory>('all');
   const [arcadeSearch, setArcadeSearch] = useState('');
   const [gameSettings, setGameSettings] = useState<GameSettings>(DEFAULT_GAME_SETTINGS);
   const [lockedModalInfo, setLockedModalInfo] = useState<{ id: string; title: string } | null>(null);
   const [allTimeRecords, setAllTimeRecords] = useState<Record<string, GameRecord>>({});
+
+  useEffect(() => {
+    if (initialGame && initialGame !== 'hub') {
+      setActiveGame(initialGame);
+    }
+  }, [initialGame]);
 
   const isArcadeCardVisible = (gameId: Exclude<ActiveGame, 'hub'>) => {
     const meta = ARCADE_CARD_META[gameId];
@@ -214,6 +225,8 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
   const cyberFroggerHighScore = readHighScore('arkedo_highscore_cyber_frogger');
   const cyberSokobanHighScore = readHighScore('arkedo_highscore_cyber_sokoban');
   const cyberAsteroidsHighScore = readHighScore('arkedo_highscore_cyber_asteroids');
+  const viceLeonidaHighScore = readHighScore('arkedo_highscore_vice_leonida');
+  const viceLeonidaWorldHighScore = readHighScore('arkedo_highscore_vice_leonida_world');
 
   const avatar = (() => {
     try {
@@ -282,6 +295,25 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
           customMessage={gameSettings.customMessage}
         />
       </div>
+    );
+  }
+
+  if (activeGame === 'vice_leonida_world') {
+    return (
+      <ViceLeonidaOpenWorld
+        studentName={studentName || 'Leonida Explorer'}
+        onBack={() => setActiveGame('hub')}
+      />
+    );
+  }
+
+  if (activeGame === 'vice_leonida') {
+    return (
+      <ViceLeonidaCyberRun
+        studentName={studentName || 'Leonida Courier'}
+        studentAvatar={avatar}
+        onBack={() => setActiveGame('hub')}
+      />
     );
   }
 
@@ -649,10 +681,10 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
         <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 lg:pb-0">
           {(
             [
-              { id: 'all', ro: '🎮 Toate (28)', en: '🎮 All (28)' },
+              { id: 'all', ro: '🎮 Toate (30)', en: '🎮 All (30)' },
               { id: 'retro', ro: '🕹️ Retro Arcade (7)', en: '🕹️ Retro Arcade (7)' },
               { id: 'logic', ro: '🧠 Logică & Cod (6)', en: '🧠 Logic & Code (6)' },
-              { id: 'cyber', ro: '🛡️ Cyber & Hardware (7)', en: '🛡️ Cyber & Hardware (7)' },
+              { id: 'cyber', ro: '🛡️ Cyber & Hardware (9)', en: '🛡️ Cyber & Hardware (9)' },
               { id: 'agility', ro: '⚡ Viteză & Creativ (8)', en: '⚡ Agility & Creative (8)' },
             ] as const
           ).map((cat) => (
@@ -680,7 +712,7 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
             type="text"
             value={arcadeSearch}
             onChange={(e) => setArcadeSearch(e.target.value)}
-            placeholder={lang === 'en' ? 'Search mini-game (e.g. Pac-Man, Mouse)...' : 'Caută un mini-joc (ex: Pac-Man, Binar)...'}
+            placeholder={lang === 'en' ? 'Search mini-game (e.g. GTA 6, Pac-Man)...' : 'Caută un mini-joc (ex: GTA 6, Pac-Man)...'}
             className="w-full min-h-[40px] pl-9 pr-9 py-2 rounded-xl bg-slate-950 border border-slate-700 focus:border-indigo-500 text-xs text-white placeholder-slate-500 outline-none transition"
           />
           {arcadeSearch && (
@@ -698,6 +730,108 @@ export const ArcadeHub: React.FC<ArcadeHubProps> = ({ studentName, onBackToCatal
 
       {/* Mini-Games Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Flagship Open-World Game: Vice Leonida: Open-World Story (GTA 6 Sandbox) */}
+        {isArcadeCardVisible('vice_leonida_world') && (
+        <div className={`bg-gradient-to-br from-slate-900 via-amber-950/35 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'vice_leonida_world') ? 'border-amber-400/80 hover:border-amber-300 shadow-amber-500/20' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/15 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-fuchsia-600 border border-amber-300/50 flex items-center justify-center text-white shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">🗺️</span>
+              </div>
+              <div className="flex flex-col items-end gap-1 min-w-0">
+                {renderCardLockBadge('vice_leonida_world')}
+                {renderScoreBadges('vice_leonida_world', viceLeonidaWorldHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[10px] font-mono font-black uppercase tracking-wider border border-amber-400/30">
+                {lang === 'en' ? 'OPEN-WORLD 2D · GTA 6' : 'OPEN-WORLD 2D · GTA 6'}
+              </span>
+              <span className="text-[10px] font-mono text-cyan-300 font-bold">
+                {lang === 'en' ? '6 DISTRICTS · 5 RIDES' : '6 REGIUNI · 5 VEHICULE'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-amber-300 transition-colors">
+              {lang === 'en' ? 'Vice Leonida: Open-World Story 🗺️🚗' : 'Vice Leonida: Open-World Story 🗺️🚗'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Roam freely across all 6 State of Leonida regions! Enter/exit 5 vehicles (+ Airboat), escape 1★–5★ VCPD chases, customize in safehouses, and solve ICT story breaches!'
+                : 'Explorează liber toate cele 6 regiuni din Leonida! Urci/cobori din 5 vehicule (+ Airboat), scapi de VCPD 1★–5★ și spargi misiuni TIC de poveste!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
+            <span className="text-[11px] text-amber-300 font-mono font-bold">🌆 Free-Roam Sandbox</span>
+            {renderGameActionButton(
+              'vice_leonida_world',
+              'Vice Leonida: Open-World Story',
+              'Vice Leonida: Open-World Story',
+              'Explorează Orașul 🗺️',
+              'Enter Open-World 🗺️',
+              'bg-gradient-to-r from-amber-500 via-orange-500 to-fuchsia-600 hover:from-amber-400 hover:to-fuchsia-500 shadow-amber-500/25'
+            )}
+          </div>
+        </div>
+        )}
+
+        {/* Featured Game: Vice Leonida VI: Cyber Runner (GTA 6 Tech Edition) */}
+        {isArcadeCardVisible('vice_leonida') && (
+        <div className={`bg-gradient-to-br from-slate-900 via-fuchsia-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
+          isGameOpen(gameSettings, 'vice_leonida') ? 'border-fuchsia-400/80 hover:border-fuchsia-300 shadow-fuchsia-500/20' : 'border-rose-500/40 opacity-95'
+        }`}>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-fuchsia-500/15 rounded-full blur-2xl pointer-events-none" />
+          <div>
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-fuchsia-500 via-rose-500 to-amber-500 border border-fuchsia-300/50 flex items-center justify-center text-white shadow-lg shadow-fuchsia-500/30 group-hover:scale-110 transition-transform shrink-0">
+                <span className="text-2xl select-none">🌴</span>
+              </div>
+              <div className="flex flex-col items-end gap-1 min-w-0">
+                {renderCardLockBadge('vice_leonida')}
+                {renderScoreBadges('vice_leonida', viceLeonidaHighScore, 'pts')}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="px-2.5 py-0.5 rounded-md bg-fuchsia-500/20 text-fuchsia-300 text-[10px] font-mono font-black uppercase tracking-wider border border-fuchsia-400/30">
+                {lang === 'en' ? 'NEW 🔥 GTA 6 TECH' : 'NOU 🔥 GTA 6 TECH'}
+              </span>
+              <span className="text-[10px] font-mono text-amber-300 font-bold">
+                {lang === 'en' ? 'LUCIA & JASON · 4 SECTORS' : 'LUCIA & JASON · 4 SECTOARE'}
+              </span>
+            </div>
+
+            <h3 className="text-lg font-black text-white font-heading group-hover:text-fuchsia-300 transition-colors">
+              {lang === 'en' ? 'Vice Leonida VI: Cyber Runner 🌴⚡' : 'Vice Leonida VI: Cyber Runner 🌴⚡'}
+            </h3>
+
+            <p className="text-slate-300 text-xs mt-1.5 leading-relaxed">
+              {lang === 'en'
+                ? 'Swap live between Lucia & Jason across Vice Beach, Venetian Causeway, Port Gellhorn & Grassrivers Airboat while cracking Binary, Logic Gates & C++ Relay Vaults!'
+                : 'Schimbă live între Lucia și Jason prin Vice Beach, Venetian Causeway, Port Gellhorn și Grassrivers (Airboat!), spărgând Relay Vaults cu Binar, Porți Logice și C++!'}
+            </p>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
+            <span className="text-[11px] text-fuchsia-300 font-mono font-bold">🌴 Leonida Cyber Grid</span>
+            {renderGameActionButton(
+              'vice_leonida',
+              'Vice Leonida VI: Cyber Runner',
+              'Vice Leonida VI: Cyber Runner',
+              'Pornește Cursa 🌴',
+              'Launch Run 🌴',
+              'bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-500 hover:from-fuchsia-500 hover:to-amber-400 shadow-fuchsia-500/25'
+            )}
+          </div>
+        </div>
+        )}
+
         {/* Featured Game: Cyber Asteroids (NEW 1979 Vector Space Shooter) */}
         {isArcadeCardVisible('cyber_asteroids') && (
         <div className={`bg-gradient-to-br from-slate-900 via-sky-950/50 to-slate-900 border-2 rounded-3xl p-5 shadow-2xl flex flex-col justify-between gap-4 transition-all duration-300 group hover:-translate-y-1 relative overflow-hidden ${
