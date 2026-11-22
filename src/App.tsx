@@ -14,6 +14,9 @@ import { Footer } from './components/Footer';
 import { LegalModal, LegalTabType } from './components/LegalModal';
 import { CookieBanner } from './components/CookieBanner';
 import { UpdateToast } from './components/pwa/UpdateToast';
+import { ReportIssueProvider, useReportIssue } from './context/ReportIssueContext';
+import { ReportIssueModal } from './components/ReportIssueModal';
+import { ReportIssueButton } from './components/ReportIssueButton';
 import { useMissionProgress } from './hooks/useMissionProgress';
 import { recordDailyActivityAndStreak } from './lib/studentAuthService';
 import { sounds } from './utils/audio';
@@ -175,6 +178,7 @@ function GameContent() {
   const [studentName, setStudentName] = useState<string>(() => loadInitialStudentName());
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalTab, setLegalTab] = useState<LegalTabType>('about');
+  const { syncPageState } = useReportIssue();
 
   const maxScore = 100;
 
@@ -259,6 +263,18 @@ function GameContent() {
   useEffect(() => {
     updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug);
   }, [view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug]);
+
+  // Keep global ReportIssueContext synchronized with current view/mission/level
+  useEffect(() => {
+    syncPageState({
+      view,
+      activeMission: view === 'lesson' ? activeMission : null,
+      currentLevel,
+      currentScore,
+      studentName,
+      lang,
+    });
+  }, [syncPageState, view, activeMission, currentLevel, currentScore, studentName, lang]);
 
   // Prevent automatic PWA page reloads mid-session
   useEffect(() => {
@@ -621,6 +637,14 @@ function GameContent() {
         </div>
       )}
 
+      {/* Global Visible Issue Report Strip (present on every view above Footer) */}
+      <section
+        aria-label={lang === 'en' ? 'Report an issue on this page' : 'Raportează o problemă de pe această pagină'}
+        className="print:hidden max-w-6xl w-full mx-auto px-3 sm:px-6 lg:px-8 pb-4"
+      >
+        <ReportIssueButton variant="card" />
+      </section>
+
       <Footer
         onOpenLegal={openLegalModal}
         onNavigateToCatalog={() => navigateToView('catalog')}
@@ -675,10 +699,13 @@ export default function App() {
       <LanguageProvider>
         <HintProvider>
           <ArkyProvider>
-            <GameContent />
-            <MascotaArky />
-            <OfflineIndicator />
-            <UpdateToast />
+            <ReportIssueProvider>
+              <GameContent />
+              <ReportIssueModal />
+              <MascotaArky />
+              <OfflineIndicator />
+              <UpdateToast />
+            </ReportIssueProvider>
           </ArkyProvider>
         </HintProvider>
       </LanguageProvider>

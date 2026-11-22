@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaming Educativ &amp; Vice Leonida GTA 6 Tech: TIC &amp; C++ | ArkyEdu</title>
+  <meta name="description" content="Cum explici copiilor și părinților tehnologia din jocurile Open-World (GTA 6, Leonida): FPS, coordonate, AI pathfinding, binar, C++ &amp; Excel prin universul sigur ArkyEdu Vice Leonida.">
+  <meta name="keywords" content="gta 6 vice leonida joc educativ copii, cum inveti programare prin jocuri, tehnologia din spatele jocurilor open world, gaming educativ vs scroll pasiv, vice leonida arkyedu tic">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/blog/en/gta-6-educational-gaming-vice-leonida-cs-coding-guide/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:modified_time" content="2026-11-22">
+  <meta property="article:section" content="Gaming &amp; Educație Tech">
+  <meta property="og:title" content="Gaming Educativ &amp; Vice Leonida GTA 6 Tech: TIC &amp; C++ | ArkyEdu">
+  <meta property="og:description" content="Cum explici copiilor și părinților tehnologia din jocurile Open-World (GTA 6, Leonida): FPS, coordonate, AI pathfinding, binar, C++ &amp; Excel prin universul sigur ArkyEdu Vice Leonida.">
+  <meta property="og:url" content="https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gaming Educativ &amp; Vice Leonida GTA 6 Tech: TIC &amp; C++ | ArkyEdu">
+  <meta name="twitter:description" content="Cum explici copiilor și părinților tehnologia din jocurile Open-World (GTA 6, Leonida): FPS, coordonate, AI pathfinding, binar, C++ &amp; Excel prin universul sigur ArkyEdu Vice Leonida.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/#article",
+      "headline": "GTA 6, Universul Vice Leonida & Tehnologia din spatele jocurilor: Cum transformi pasiunea pentru gaming în Binar, C++, Excel și Robotică",
+      "description": "Cum explici copiilor și părinților tehnologia din jocurile Open-World (GTA 6, Leonida): FPS, coordonate, AI pathfinding, binar, C++ & Excel prin universul sigur ArkyEdu Vice Leonida.",
+      "keywords": "gta 6 vice leonida joc educativ copii, cum inveti programare prin jocuri, tehnologia din spatele jocurilor open world, gaming educativ vs scroll pasiv, vice leonida arkyedu tic",
+      "articleSection": "Gaming & Educație Tech",
+      "inLanguage": "ro",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "isAccessibleForFree": true,
+      "mainEntityOfPage": "https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/",
+      "isPartOf": {
+        "@id": "https://www.arkyedu.com/blog/#blog"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ArkyEdu — Educație TIC & Coding România",
+        "url": "https://www.arkyedu.com/"
+      },
+      "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.arkyedu.com/pwa-512x512.png"
+        }
+      },
+      "image": "https://www.arkyedu.com/og-cover.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog & Ghiduri TIC",
+          "item": "https://www.arkyedu.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Gaming Educativ & Vice Leonida",
+          "item": "https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Este sigur jocul Vice Leonida de pe ArkyEdu pentru copiii de 10–15 ani?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Da, 100%. Este o adaptare educațională originală, fără violență, fără reclame și fără achiziții cu bani reali, axată exclusiv pe provocări TIC (Binar, C++, Excel, HTML5, Arduino)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Trebuie descărcat sau instalat ceva pe calculator pentru a juca Vice Leonida?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nu! Rulează direct în browser (desktop, laptop, tabletă sau telefon) la 60 FPS în Canvas HTML5."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce învață concret un elev în Universul Vice Leonida?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Exersează conversii binare pe 4 biți, logică de algoritmi C++, formule Excel (IF/SUM), concepte de rețelistică HTTPS și senzori Arduino, în timp ce explorează cele 6 regiuni și își salvează progresul."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Se poate juca Vice Leonida și în 2 jucători (1v1)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Da! În Arena Dueluri 1v1 există modul Vice Leonida 1v1 (contra unui prieten prin cod de cameră sau contra AI Cyber-Bot-ului), unde viteza și răspunsurile corecte TIC decid câștigătorul."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "De ce este mai bun gamingul educativ decât scroll-ul pe social media?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Gamingul educativ implică atenție activă, luare de decizii, rezolvare de probleme matematice/logice și feedback imediat, spre deosebire de consumul pasiv de clipuri scurte."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Gaming Educativ & Vice Leonida",
+      "description": "Copiii sunt fascinați în 2026 de lumi Open-World precum GTA 6 (Statul Leonida, Lucia & Jason), Roblox sau Minecraft. În loc de interdicții oarbe sau „scroll pasiv”, aceleași mecanici captivante (hartă GPS, coordonate X/Y, misiuni pe regiuni, vehicule, sistem Heat 1★–5★ și Economy) pot fi folosite pozitiv pentru a preda Binar, C++, formule Excel, HTML5 și Arduino IoT — exact cum face hub-ul sigur și 100% non-violent Vice Leonida de pe ArkyEdu.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "text": "Vice City / Vice Beach (Binar & Securitate): Deblocarea firewall-urilor și a porților de viteză prin conversii rapide pe 4 biți (0000–1111) și detecție phishing."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "text": "Leonida Keys (Excel & Calcul Tabelar): Optimizarea rutelor maritime și a resurselor folosind formule SUM, AVERAGE, IF și referințe $A$1."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "text": "Port Gellhorn (Sisteme de Operare & Rețele): Sortarea pachetelor de date, extensii de fișiere (.cpp, .html, .ino) și protecția traficului HTTPS."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "text": "Grassrivers (Robotică Arduino & Senzori): Pilotaj Hydro-Airboat cu senzori ultrasonici HC-SR04 și bucle non-blocante millis()."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "text": "Mount Kalaga & Ambrosia (Algoritmi C++ & Web HTML5): Rezolvarea problemelor de logică if/while și asamblarea structurilor HTML5 semantice."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigare Principală">
+        <a href="https://www.arkyedu.com/blog/">Blog & Ghiduri TIC</a>
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/blog/en/gta-6-educational-gaming-vice-leonida-cs-coding-guide/" class="lang-pill" title="GTA 6, Vice Leonida &amp; Game Engineering: How Educational Gaming Teaches Binary, C++, Excel &amp; Robotics">EN</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">Intră în Platformă</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">Acasă</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://www.arkyedu.com/blog/">Blog & Ghiduri TIC</a>
+        <span aria-hidden="true">/</span>
+        <span>Gaming &amp; Educație Tech</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Gaming Educativ &amp; Vice Leonida</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">Gaming &amp; Educație Tech</span>
+          <span aria-hidden="true">·</span>
+          <span>Clasele V–VIII · Părinți</span>
+          <span aria-hidden="true">·</span>
+          <span>11 min citire</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-22">Actualizat 2026-11-22</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">GTA 6, Universul Vice Leonida &amp; Tehnologia din spatele jocurilor: Cum transformi pasiunea pentru gaming în Binar, C++, Excel și Robotică</h1>
+        <p class="article-intro" itemprop="description">Întrebarea #1 a părinților din 2026 nu mai este „Cum ascund tehnologia de copil?”, ci „Cum transform timpul la ecran din consum pasiv în creativitate, logică și informatică?”. Când un elev vede că sistemul de coordonate dintr-un Open-World este exact planul cartezian din Scratch și C++, iar radarul GPS este un algoritm pe grafuri, școala încetează să mai pară teoretică.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=GTA%206%2C%20Universul%20Vice%20Leonida%20%26%20Tehnologia%20din%20spatele%20jocurilor%3A%20Cum%20transformi%20pasiunea%20pentru%20gaming%20%C3%AEn%20Binar%2C%20C%2B%2B%2C%20Excel%20%C8%99i%20Robotic%C4%83%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fgta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copiază link ghid</button>
+          <a href="https://www.arkyedu.com/blog/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← Blog & Ghiduri TIC</a>
+        </div>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">Răspuns Rapid (TL;DR)</div>
+          <p class="tldr-text">Copiii sunt fascinați în 2026 de lumi Open-World precum GTA 6 (Statul Leonida, Lucia &amp; Jason), Roblox sau Minecraft. În loc de interdicții oarbe sau „scroll pasiv”, aceleași mecanici captivante (hartă GPS, coordonate X/Y, misiuni pe regiuni, vehicule, sistem Heat 1★–5★ și Economy) pot fi folosite pozitiv pentru a preda Binar, C++, formule Excel, HTML5 și Arduino IoT — exact cum face hub-ul sigur și 100% non-violent Vice Leonida de pe ArkyEdu.</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">Cuprinsul articolului</div>
+          <ol class="toc-list">
+            <li><a href="#consum-pasiv-vs-gaming-educativ">1. Scroll pasiv vs. Gaming activ &amp; Construcție digitală: Diferența uriașă pentru creier</a></li>
+            <li><a href="#ce-tehnologii-tic-stau-sub-capota-open-world">2. Sub capota unui Open-World modern: 5 concepte reale de Informatică</a></li>
+            <li><a href="#universul-vice-leonida-pe-regiuni-curriculare">3. Cum devine fiecare regiune din Vice Leonida (ArkyEdu) o misiune TIC reală</a></li>
+            <li><a href="#reguli-sanatoase-pentru-parinti-acasa">4. Regula practică pentru părinți: Echilibrul 40 + 15 și curiozitatea tehnică</a></li>
+            <li><a href="#checklist-h">Checklist pentru părinți și elevi: Gaming inteligent</a></li>
+            <li><a href="#labs-h">Intră în Universul Vice Leonida &amp; Laboratoarele ArkyEdu</a></li>
+            <li><a href="#faq-h">Întrebări frecvente (FAQ)</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          
+          <section class="art-section" id="consum-pasiv-vs-gaming-educativ">
+            <h2>1. Scroll pasiv vs. Gaming activ &amp; Construcție digitală: Diferența uriașă pentru creier</h2>
+            <p>Nu toate „minutele de ecran” au același efect asupra atenției copilului. Urmărirea continuă de clipuri scurte de 15 secunde (scroll pasiv) antrenează nerăbdarea, pe când rezolvarea de puzzle-uri logice, codarea unui comportament în Scratch/C++ sau navigarea într-o misiune interactivă antrenează memoria de lucru și gândirea cauză-efect (starea de Flow).</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Comparație: Consum pasiv de conținut vs. Gaming Educativ &amp; Laboratoare TIC</caption>
+                      <thead><tr><th>Criteriu</th><th>Scroll Pasiv (Clipuri scurte)</th><th>Jocuri Open-World Violente fără ghidaj</th><th>Gaming Educativ TIC (Modelul Vice Leonida)</th></tr></thead>
+                      <tbody><tr><td>Rolul copilului</td><td>Spectator pasiv</td><td>Consumator de acțiune repetitivă</td><td>Navigator, programator și depanator activ</td></tr><tr><td>Ce abilități antrenează</td><td>Aproape zero gândire algoritmică</td><td>Reflexe vizuale, dar conținut nerecomandat minorilor</td><td>Binar, C++, Excel IF/SUM, HTML5, Arduino &amp; GDPR</td></tr><tr><td>Siguranță minori</td><td>Risc de algoritmi adictivi și fake news</td><td>Violență explicită (PEGI 18)</td><td>100% sigur, tematică Cyber-Tech (0% violență)</td></tr><tr><td>Legătura cu școala</td><td>Scade concentrarea la teme</td><td>Deconectat de programa școlară</td><td>Aliniat direct cu clasele V–VIII (OMEN 3393/2017)</td></tr></tbody>
+                    </table>
+                  </div>
+            
+          </section>
+
+          <section class="art-section" id="ce-tehnologii-tic-stau-sub-capota-open-world">
+            <h2>2. Sub capota unui Open-World modern: 5 concepte reale de Informatică</h2>
+            <p>Fiecare metru parcurs într-o hartă digitală precum Statul Leonida rulează matematică și algoritmică pură de 60 de ori pe secundă (60 FPS):</p>
+            
+            <ul><li>Motorul de randare &amp; FPS (60 Hz): La fiecare 16,6 milisecunde, bucla principală de joc (Game Loop) recalculează fizica, coliziunile și desenează Canvas-ul HTML5 / WebGL.</li><li>Coordonate X/Y și Vectori de Viteză: Poziția jucătorului, direcția mașinii sau a bărcii Airboat se actualizează cu formule matematice exacte: x += cos(unghi) * viteza.</li><li>State Machines (Mașini cu Stări Finite): Sistemul Heat 1★–5★, schimbarea între Lucia și Jason sau ciclul zi/noapte sunt implementate cu variabile de stare și structuri if/else/switch!</li><li>AI Pathfinding &amp; Steering: Dronele de patrulare VCPD și traficul folosesc vectori de direcție și distanță euclidiană √(dx² + dy²) pentru a urmări sau evita obstacole.</li><li>Stocare locală (JSON / localStorage): Progresul de misiuni, vehiculele deblocate și scorurile se serializează în format JSON.</li></ul>
+            
+            
+            
+          </section>
+
+          <section class="art-section" id="universul-vice-leonida-pe-regiuni-curriculare">
+            <h2>3. Cum devine fiecare regiune din Vice Leonida (ArkyEdu) o misiune TIC reală</h2>
+            <p>În Hub-ul Vice Leonida de pe ArkyEdu (/leonida/), elevii explorează gratuit toate cele 6 regiuni celebre în versiune educațională 100% sigură (fără instalare, direct în browser), unde fiecare district deblochează o competență școlară concretă:</p>
+            <ol><li>Vice City / Vice Beach (Binar &amp; Securitate): Deblocarea firewall-urilor și a porților de viteză prin conversii rapide pe 4 biți (0000–1111) și detecție phishing.</li><li>Leonida Keys (Excel &amp; Calcul Tabelar): Optimizarea rutelor maritime și a resurselor folosind formule SUM, AVERAGE, IF și referințe $A$1.</li><li>Port Gellhorn (Sisteme de Operare &amp; Rețele): Sortarea pachetelor de date, extensii de fișiere (.cpp, .html, .ino) și protecția traficului HTTPS.</li><li>Grassrivers (Robotică Arduino &amp; Senzori): Pilotaj Hydro-Airboat cu senzori ultrasonici HC-SR04 și bucle non-blocante millis().</li><li>Mount Kalaga &amp; Ambrosia (Algoritmi C++ &amp; Web HTML5): Rezolvarea problemelor de logică if/while și asamblarea structurilor HTML5 semantice.</li></ol>
+            
+            
+            
+            
+          </section>
+
+          <section class="art-section" id="reguli-sanatoase-pentru-parinti-acasa">
+            <h2>4. Regula practică pentru părinți: Echilibrul 40 + 15 și curiozitatea tehnică</h2>
+            <p>Când copiii vorbesc cu entuziasm despre GTA 6, Roblox sau Minecraft, cea mai bună reacție a părintelui este să le pună întrebarea inginerească: „Cum crezi că au programat harta asta? Hai să vedem cum poți construi sau testa ceva asemănător în browser!”</p>
+            <p>Combinând 25–30 de minute de lecții interactive + 15 minute de recompensă în Arcade / Vice Leonida Open-World sau Duel 1v1 cu AI Cyber-Bot, copilul obține motivația jocului exact în direcția materiei de la clasă.</p>
+            
+            
+            
+            
+            <div class="callout-tip">
+                    <div class="callout-title">3 Moduri Vice Leonida gata de jucat gratuit în browser</div>
+                    <p style="margin:0;">Pe ArkyEdu găsești atât Vice Leonida Open-World 2D (6 regiuni, 5 vehicule + barcă Airboat, Safehouse și misiuni TIC), cât și Vice Leonida VI: Cyber Runner în Arcade și Duelul competitiv Vice Leonida 1v1 Live!</p>
+                  </div>
+          </section>
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box" id="checklist-h">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ Checklist pentru părinți și elevi: Gaming inteligent</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            <li>Transformăm interesul pentru jocuri populare în întrebări reale despre cod, coordonate, FPS și rețele.</li>
+            <li>Separăm jocurile 18+ de versiunile educaționale 100% sigure și fără reclame (ArkyEdu).</li>
+            <li>Păstrăm pauzele regulate (regula 20-20-20 pentru ochi și mișcare fizică între sesiuni).</li>
+            <li>Alternăm misiunile curriculare cu jocurile educative Arcade și Duel 1v1 pentru consolidare.</li>
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box" id="labs-h">
+          <h2 style="font-size:1.25rem;color:#fff;">Intră în Universul Vice Leonida &amp; Laboratoarele ArkyEdu</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/leonida/" class="link-card">
+                <div class="link-card-title">Hub Vice Leonida Open-World (6 Regiuni) →</div>
+                <div class="link-card-desc">Explorează Open-World-ul 2D cu Lucia &amp; Jason, 5 vehicule, Safehouse și misiuni de poveste TIC.</div>
+              </a>
+            <a href="https://www.arkyedu.com/arcade/vice-leonida-gta6/" class="link-card">
+                <div class="link-card-title">Vice Leonida VI: Cyber Runner (Arcade) →</div>
+                <div class="link-card-desc">Cursă arcade cu swap instantaneu Lucia/Jason, Nitro, EMP și hack-uri binare pe 4 biți.</div>
+              </a>
+            <a href="https://www.arkyedu.com/duel/vice-leonida-1v1/" class="link-card">
+                <div class="link-card-title">Vice Leonida 1v1 Showdown (Duel Live) →</div>
+                <div class="link-card-desc">Duel competitiv în timp real până la 2.500 puncte Vault contra prietenilor sau AI Cyber-Bot.</div>
+              </a>
+            <a href="https://www.arkyedu.com/cursuri/scratch/" class="link-card">
+                <div class="link-card-title">Scratch 3.0 &amp; Coordonate X/Y (Clasele V–VI) →</div>
+                <div class="link-card-desc">Învață să construiești chiar tu coordonatele, mișcarea și variabilele din spatele unui joc 2D.</div>
+              </a>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ Întrebări frecvente (FAQ)</h2>
+          <div class="faq-block">
+              <div class="faq-question">Este sigur jocul Vice Leonida de pe ArkyEdu pentru copiii de 10–15 ani?</div>
+              <div class="faq-answer">Da, 100%. Este o adaptare educațională originală, fără violență, fără reclame și fără achiziții cu bani reali, axată exclusiv pe provocări TIC (Binar, C++, Excel, HTML5, Arduino).</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Trebuie descărcat sau instalat ceva pe calculator pentru a juca Vice Leonida?</div>
+              <div class="faq-answer">Nu! Rulează direct în browser (desktop, laptop, tabletă sau telefon) la 60 FPS în Canvas HTML5.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Ce învață concret un elev în Universul Vice Leonida?</div>
+              <div class="faq-answer">Exersează conversii binare pe 4 biți, logică de algoritmi C++, formule Excel (IF/SUM), concepte de rețelistică HTTPS și senzori Arduino, în timp ce explorează cele 6 regiuni și își salvează progresul.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Se poate juca Vice Leonida și în 2 jucători (1v1)?</div>
+              <div class="faq-answer">Da! În Arena Dueluri 1v1 există modul Vice Leonida 1v1 (contra unui prieten prin cod de cameră sau contra AI Cyber-Bot-ului), unde viteza și răspunsurile corecte TIC decid câștigătorul.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">De ce este mai bun gamingul educativ decât scroll-ul pe social media?</div>
+              <div class="faq-answer">Gamingul educativ implică atenție activă, luare de decizii, rezolvare de probleme matematice/logice și feedback imediat, spre deosebire de consumul pasiv de clipuri scurte.</div>
+            </div>
+        </section>
+
+        <!-- Glossary Terms Explained in This Guide -->
+        
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">Citește și alte ghiduri TIC</h2>
+            <a href="https://www.arkyedu.com/blog/" class="card-link">← Înapoi la Indexul Blogului</a>
+          </div>
+          <div class="links-grid">
+            <a href="/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/" class="link-card">
+                  <div class="link-card-title">Alegere Laptop / PC Școală →</div>
+                  <div class="link-card-desc">Ghid practic pentru părinți și elevi (V–VIII): cum alegi un laptop sau PC bun pentru TIC, Code::Blocks C++, Scratch, Excel și proiecte școlare fără să plătești inutil pe marketing.</div>
+                </a>
+            <a href="/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/" class="link-card">
+                  <div class="link-card-title">Coding Gratuit vs. Școli Private →</div>
+                  <div class="link-card-desc">Comparație sinceră pentru părinți: cum învață copiii de 10–15 ani Scratch, C++, Excel, securitate cibernetică și robotică Arduino gratuit pe programa oficială vs. abonamente de 4.000–6.000 lei/an.</div>
+                </a>
+            <a href="/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/" class="link-card">
+                  <div class="link-card-title">Playbook Profesor TIC &amp; Olimpiadă →</div>
+                  <div class="link-card-desc">Cum organizezi ore interactive de TIC în laboratorul școlar (clasele V–VIII) conform OMEN 3393/2017 și OM 5420/2024: simulatoare fără instalări, evaluare 1–10 GDPR, dueluri la clasă și pregătire ONTIC/Olimpiadă.</div>
+                </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Educație TIC & Coding 100% Gratuită.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  
+    <div data-arky-report-bar="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">Ai observat o eroare sau o problemă pe această pagină?</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; Raportează o problemă
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Link copiat!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -27,9 +27,11 @@ import {
   Cpu,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useReportIssue } from '../context/ReportIssueContext';
 import { LegalTabType } from './LegalModal';
 import { sounds } from '../utils/audio';
 import { clearCachesAndReloadLatest } from '../utils/appUpdater';
+import { ReportIssueButton } from './ReportIssueButton';
 
 interface FooterProps {
   onOpenLegal: (tab: LegalTabType) => void;
@@ -69,6 +71,7 @@ export const Footer: React.FC<FooterProps> = ({
   onNavigateToAlgoLab,
 }) => {
   const { lang, t } = useLanguage();
+  const { openReportModal } = useReportIssue();
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const handleCopyEmail = (e: React.MouseEvent) => {
@@ -557,6 +560,8 @@ export const Footer: React.FC<FooterProps> = ({
                 <Mail className="w-3.5 h-3.5" />
                 <span>{lang === 'en' ? 'Send Form Message' : 'Deschide Formular Contact'}</span>
               </button>
+
+              <ReportIssueButton variant="footer" />
             </div>
 
             <div className="flex items-center gap-1.5 text-xs text-slate-300">
@@ -627,6 +632,17 @@ export const Footer: React.FC<FooterProps> = ({
               className="text-teal-300 hover:text-teal-200 transition-colors font-medium py-1.5 cursor-pointer whitespace-nowrap"
             >
               Contact
+            </button>
+            <span className="text-slate-600" aria-hidden="true">·</span>
+            <button
+              type="button"
+              onClick={() => {
+                sounds.playClick();
+                openReportModal();
+              }}
+              className="text-amber-300 hover:text-amber-200 transition-colors font-semibold py-1.5 cursor-pointer whitespace-nowrap"
+            >
+              {lang === 'en' ? 'Report an Issue' : 'Raportează o problemă'}
             </button>
             <span className="text-slate-600" aria-hidden="true">·</span>
             <a

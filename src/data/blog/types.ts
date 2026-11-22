@@ -39,7 +39,7 @@ export interface BlogInternalLink {
   label: string;
   url: string;
   missionId?: string;
-  targetView?: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher';
+  targetView?: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher' | 'sandbox' | 'ailab' | 'algolab' | 'leonida' | 'fise' | 'glossary';
   description: string;
 }
 

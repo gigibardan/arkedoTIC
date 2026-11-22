@@ -2515,14 +2515,15 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             }}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/40 text-teal-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center min-h-[40px]"
           >
-            <span>{lang === 'en' ? 'All 12 Guides' : 'Vezi toate cele 12 ghiduri'}</span>
+            <span>{lang === 'en' ? `All ${BLOG_ARTICLES.length} Guides` : `Vezi toate cele ${BLOG_ARTICLES.length} ghiduri`}</span>
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {BLOG_ARTICLES.filter((a) => a.featured)
-            .slice(0, 6)
+            .slice(-6)
+            .reverse()
             .map((article) => {
               const c = lang === 'en' ? article.en : article.ro;
               const gradeLabel = lang === 'en' ? article.gradeTagEn : article.gradeTagRo;

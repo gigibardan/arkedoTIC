@@ -24,10 +24,14 @@ import {
   Compass,
   BrainCircuit,
   Cpu,
+  Flag,
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useReportIssue } from '../context/ReportIssueContext';
 import { sounds } from '../utils/audio';
 import { PWAInstallButton } from './pwa/PWAInstallButton';
+import { ReportIssueButton } from './ReportIssueButton';
+import { BLOG_ARTICLES } from '../data/blog';
 
 interface HeaderProps {
   score: number;
@@ -88,6 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenShop,
 }) => {
   const { lang, setLang, t } = useLanguage();
+  const { openReportModal } = useReportIssue();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const resourcesDropdownRef = useRef<HTMLDivElement>(null);
@@ -504,7 +509,7 @@ export const Header: React.FC<HeaderProps> = ({
                               {lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC'}
                             </div>
                             <div className="text-[11px] text-slate-400 truncate">
-                              {lang === 'en' ? '12 step-by-step guides' : '12 ghiduri practice V–VIII'}
+                              {lang === 'en' ? `${BLOG_ARTICLES.length} step-by-step guides` : `${BLOG_ARTICLES.length} ghiduri practice V–VIII`}
                             </div>
                           </div>
                         </a>
@@ -689,7 +694,7 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
 
                     {onNavigateToTeacher && (
-                      <div className="mt-1.5 pt-1.5 border-t border-slate-800">
+                      <div className="mt-1.5 pt-1.5 border-t border-slate-800 space-y-1">
                         <button
                           type="button"
                           role="menuitem"
@@ -713,6 +718,29 @@ export const Header: React.FC<HeaderProps> = ({
                             </div>
                             <div className="text-[11px] text-slate-400 truncate">
                               {lang === 'en' ? 'Gradebook & Class Codes' : 'Catalog Elevi & Coduri'}
+                            </div>
+                          </div>
+                        </button>
+
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            openReportModal();
+                          }}
+                          className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-rose-500/10 text-amber-200 border border-transparent transition cursor-pointer text-left"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
+                            <Flag className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white">
+                              {lang === 'en' ? 'Report an Issue' : 'Raportează o problemă'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? 'Attach page URL automatically' : 'Trimite eroarea cu linkul paginii'}
                             </div>
                           </div>
                         </button>
@@ -793,6 +821,9 @@ export const Header: React.FC<HeaderProps> = ({
                 EN
               </button>
             </div>
+
+            {/* Report an Issue quick button (md+ desktop/tablet) */}
+            <ReportIssueButton variant="header" />
 
             {/* Audio Sound Toggle */}
             <button
@@ -989,7 +1020,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <FileText className="w-4 h-4 text-teal-400 shrink-0" />
                   <div className="min-w-0">
                     <div className="font-bold truncate">{lang === 'en' ? 'ICT Blog' : 'Blog TIC'}</div>
-                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? '12 Guides' : '12 Ghiduri'}</div>
+                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? `${BLOG_ARTICLES.length} Guides` : `${BLOG_ARTICLES.length} Ghiduri`}</div>
                   </div>
                 </a>
               )}
@@ -1150,6 +1181,14 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </button>
               )}
+            </div>
+
+            {/* Report Issue Quick Card in Mobile Drawer */}
+            <div className="pt-1">
+              <ReportIssueButton
+                variant="drawer"
+                onAfterClick={() => setIsMobileMenuOpen(false)}
+              />
             </div>
 
             {/* PWA Install in Mobile Drawer */}

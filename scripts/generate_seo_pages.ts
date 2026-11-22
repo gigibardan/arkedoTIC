@@ -715,7 +715,7 @@ ${commonStyles}
     <div class="content-box">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
         <h2 style="margin-bottom: 0;">📚 Ghiduri Practice &amp; Rezolvări Erori (Blog TIC)</h2>
-        <a href="https://www.arkyedu.com/blog/" class="card-link">Vezi toate cele 12 ghiduri →</a>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Vezi toate cele ${BLOG_ARTICLES.length} ghiduri →</a>
       </div>
       <div class="terms-grid">
         ${relatedBlogGuides.map(art => `
@@ -1008,7 +1008,7 @@ ${commonStyles}
     <section aria-label="Ghiduri Practice din Blog pentru Clasa a ${g.roman}-a" style="margin-top: 2.5rem;">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
         <h2 style="font-size: 1.45rem;">📚 Ghiduri Practice &amp; Rezolvări din Blog pentru Clasa a ${g.roman}-a</h2>
-        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele 12 ghiduri →</a>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele ${BLOG_ARTICLES.length} ghiduri →</a>
       </div>
       <div class="grid-2">
         ${BLOG_ARTICLES.filter(art =>
@@ -1647,7 +1647,7 @@ ${commonStyles}
     <section style="margin-bottom: 2.5rem;">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
         <h2 style="font-size: 1.4rem;">📚 Ghiduri Practice din Blog Conectate cu ${h.dir.toUpperCase()}</h2>
-        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele 12 ghiduri →</a>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele ${BLOG_ARTICLES.length} ghiduri →</a>
       </div>
       <div class="grid-2">
         ${(h.dir === 'profesor'
@@ -1876,10 +1876,10 @@ ${commonStyles}
     <section style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
         <h2 style="font-size: 1.55rem;">📖 Ghiduri Esențiale din Blogul ArkyEdu (RO &amp; EN)</h2>
-        <a href="https://www.arkyedu.com/blog/" class="card-link">Deschide toate cele 12 ghiduri →</a>
+        <a href="https://www.arkyedu.com/blog/" class="card-link">Deschide toate cele ${BLOG_ARTICLES.length} ghiduri →</a>
       </div>
       <div class="grid-2">
-        ${BLOG_ARTICLES.filter(a => a.featured).slice(0, 4).map(art => `
+        ${BLOG_ARTICLES.filter(a => a.featured).slice(-6).reverse().map(art => `
           <div class="card">
             <h3 class="card-title" style="font-size: 1.1rem;">${escapeHtmlText(art.ro.breadcrumbLabel)}</h3>
             <p class="card-desc">${escapeHtmlText(art.ro.metaDescription)}</p>
@@ -2525,6 +2525,8 @@ ${blogBaseStyles}
           <div class="toc-title" id="toc-h">${isEn ? 'Table of Contents' : 'Cuprinsul articolului'}</div>
           <ol class="toc-list">
             ${c.sections.map((s) => `<li><a href="#${s.id}">${escapeHtmlText(s.heading)}</a></li>`).join('\n            ')}
+            <li><a href="#checklist-h">${escapeHtmlText(c.checklistTitle)}</a></li>
+            <li><a href="#labs-h">${escapeHtmlText(c.internalLinksTitle)}</a></li>
             <li><a href="#faq-h">${isEn ? 'Frequently Asked Questions (FAQ)' : 'Întrebări frecvente (FAQ)'}</a></li>
           </ol>
         </nav>
@@ -2582,7 +2584,7 @@ ${blogBaseStyles}
         </div>
 
         <!-- Checklist -->
-        <section class="check-box">
+        <section class="check-box" id="checklist-h">
           <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ ${escapeHtmlText(c.checklistTitle)}</h2>
           <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
             ${c.checklist.map((item) => `<li>${escapeHtmlText(item)}</li>`).join('\n            ')}
@@ -2590,7 +2592,7 @@ ${blogBaseStyles}
         </section>
 
         <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
-        <section class="links-box">
+        <section class="links-box" id="labs-h">
           <h2 style="font-size:1.25rem;color:#fff;">${escapeHtmlText(c.internalLinksTitle)}</h2>
           <div class="links-grid">
             ${c.internalLinks
@@ -5385,6 +5387,52 @@ function generateFiseLlmIndex() {
   console.log('Generated public/fise-llm.txt for LLM citation & RAG indexing.');
 }
 
+function injectReportIssueLinksIntoStaticPages() {
+  const walkHtml = (dir: string, out: string[] = []): string[] => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walkHtml(fullPath, out);
+      } else if (entry.isFile() && entry.name.endsWith('.html')) {
+        out.push(fullPath);
+      }
+    }
+    return out;
+  };
+
+  const marker = 'data-arky-report-bar';
+  const htmlFiles = walkHtml(publicDir);
+  let updatedCount = 0;
+
+  for (const filePath of htmlFiles) {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    if (content.includes(marker) || !content.includes('</footer>')) continue;
+
+    const isEn =
+      filePath.includes(`${path.sep}en${path.sep}`) ||
+      content.includes('<html lang="en"');
+
+    const snippet = `
+    <div ${marker}="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">${
+        isEn
+          ? 'Spotted an error or broken link on this page?'
+          : 'Ai observat o eroare sau o problemă pe această pagină?'
+      }</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; ${isEn ? 'Report an Issue' : 'Raportează o problemă'}
+      </a>
+    </div>
+  </footer>`;
+
+    const updated = content.replace('</footer>', snippet);
+    fs.writeFileSync(filePath, updated, 'utf-8');
+    updatedCount++;
+  }
+
+  console.log(`Injected Report an Issue footer bar into ${updatedCount} static SEO HTML pages.`);
+}
+
 // EXECUTE ALL GENERATORS
 console.log('--- STARTING SEO PAGES GENERATION ---');
 generateModulePages();
@@ -5401,6 +5449,7 @@ generateGlossaryPages();
 generateSandboxPages();
 generateWorksheetsPages();
 generateFiseLlmIndex();
+injectReportIssueLinksIntoStaticPages();
 generateSitemap();
 generateRssFeed();
 console.log('--- ALL SEO ASSETS GENERATED SUCCESSFULLY ---');

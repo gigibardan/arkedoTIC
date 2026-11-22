@@ -22,8 +22,8 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
-import { db, isCloudConnected } from '../lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { submitContactOrReport } from '../lib/contactReportService';
+import { ReportIssueButton } from './ReportIssueButton';
 
 export type LegalTabType = 'about' | 'privacy' | 'cookies' | 'terms' | 'contact';
 
@@ -97,12 +97,6 @@ export const LegalModal: React.FC<LegalModalProps> = ({
     }
   };
 
-  const encode = (data: Record<string, string>) => {
-    return Object.keys(data)
-      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-      .join('&');
-  };
-
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formMessage.trim()) return;
@@ -110,90 +104,14 @@ export const LegalModal: React.FC<LegalModalProps> = ({
     sounds.playClick();
     setFormStatus('submitting');
 
-    const cleanName = formName.trim() || 'Anonim';
-    const cleanEmail = formEmail.trim() || 'fara-email@arkyedu.com';
-    const cleanSubject = formSubject.trim() || 'Mesaj Platformă ArkyEdu';
-    const cleanMessage = formMessage.trim();
-
-    const newContactDoc = {
-      id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-      name: cleanName,
-      email: cleanEmail,
+    await submitContactOrReport({
+      kind: 'contact',
+      name: formName,
+      email: formEmail,
       role: formRole,
-      subject: cleanSubject,
-      message: cleanMessage,
-      createdAt: new Date().toISOString(),
-      status: 'unread' as const
-    };
-
-    // 1. Salvare sigură în LocalStorage pentru a nu pierde niciodată mesajul
-    try {
-      const existing = localStorage.getItem('arkyedu_local_contact_messages');
-      const list = existing ? JSON.parse(existing) : [];
-      list.unshift(newContactDoc);
-      localStorage.setItem('arkyedu_local_contact_messages', JSON.stringify(list.slice(0, 50)));
-    } catch {}
-
-    // 2. Salvare în colecția Firestore contact_messages (accesibilă în Panoul Superadmin / Profesor)
-    if (isCloudConnected && db) {
-      try {
-        await addDoc(collection(db, 'contact_messages'), {
-          name: cleanName,
-          email: cleanEmail,
-          role: formRole,
-          subject: cleanSubject,
-          message: cleanMessage,
-          createdAt: newContactDoc.createdAt,
-          status: 'unread'
-        });
-      } catch (fErr) {
-        console.warn('Firestore backup contact failed:', fErr);
-      }
-    }
-
-    // 3. Expediere reală prin FormSubmit.co către contact@arkyedu.com și CC către gheorghe.bardan@gmail.com
-    try {
-      const emailPayload = {
-        name: cleanName,
-        email: cleanEmail,
-        role: formRole,
-        subject: cleanSubject,
-        message: cleanMessage,
-        _subject: `[ArkyEdu Contact] ${cleanSubject} - de la ${cleanName} (${formRole})`,
-        _cc: 'gheorghe.bardan@gmail.com',
-        _replyto: cleanEmail,
-        _captcha: 'false',
-        _template: 'table'
-      };
-
-      await fetch('https://formsubmit.co/ajax/contact@arkyedu.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(emailPayload)
-      });
-    } catch (e) {
-      console.warn('FormSubmit network notice:', e);
-    }
-
-    // 4. Fallback Netlify static crawler form
-    try {
-      const params = new URLSearchParams();
-      params.append('form-name', 'contact');
-      params.append('name', cleanName);
-      params.append('email', cleanEmail);
-      params.append('role', formRole);
-      params.append('subject', cleanSubject);
-      params.append('message', cleanMessage);
-      params.append('bot-field', '');
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      });
-    } catch {}
+      subject: formSubject,
+      message: formMessage,
+    });
 
     sounds.playSuccess();
     setFormStatus('success');
@@ -733,6 +651,11 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   </a>
                 </div>
               </div>
+
+              <ReportIssueButton
+                variant="card"
+                onAfterClick={onClose}
+              />
 
               {/* Netlify & FormSubmit Form */}
               <form

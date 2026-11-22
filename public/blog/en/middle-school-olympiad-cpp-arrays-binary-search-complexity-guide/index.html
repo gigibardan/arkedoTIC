@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Middle School C++ Olympiad Guide: Arrays &amp; Binary Search | ArkyEdu</title>
+  <meta name="description" content="Complete C++ algorithms guide for grades 7–8: Big-O time limits, O(√n) primality &amp; Sieve of Eratosthenes, frequency arrays, bug-free binary search &amp; Visual Trace.">
+  <meta name="keywords" content="middle school c++ olympiad preparation, frequency array c++ explained, bug free binary search c++, prime number algorithm O(sqrt(n)), time complexity table beginners, c++ visual trace debugger">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:modified_time" content="2026-11-22">
+  <meta property="article:section" content="C++ &amp; Algorithms">
+  <meta property="og:title" content="Middle School C++ Olympiad Guide: Arrays &amp; Binary Search | ArkyEdu">
+  <meta property="og:description" content="Complete C++ algorithms guide for grades 7–8: Big-O time limits, O(√n) primality &amp; Sieve of Eratosthenes, frequency arrays, bug-free binary search &amp; Visual Trace.">
+  <meta property="og:url" content="https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Middle School C++ Olympiad Guide: Arrays &amp; Binary Search | ArkyEdu">
+  <meta name="twitter:description" content="Complete C++ algorithms guide for grades 7–8: Big-O time limits, O(√n) primality &amp; Sieve of Eratosthenes, frequency arrays, bug-free binary search &amp; Visual Trace.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/#article",
+      "headline": "Competitive C++ for Grades 7–8 (Olympiad & High-School Prep): Time Complexity, O(√n) Primes, Frequency Arrays & Binary Search",
+      "description": "Complete C++ algorithms guide for grades 7–8: Big-O time limits, O(√n) primality & Sieve of Eratosthenes, frequency arrays, bug-free binary search & Visual Trace.",
+      "keywords": "middle school c++ olympiad preparation, frequency array c++ explained, bug free binary search c++, prime number algorithm O(sqrt(n)), time complexity table beginners, c++ visual trace debugger",
+      "articleSection": "C++ & Algorithms",
+      "inLanguage": "en",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "isAccessibleForFree": true,
+      "mainEntityOfPage": "https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/",
+      "isPartOf": {
+        "@id": "https://www.arkyedu.com/blog/en/#blog"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ArkyEdu — Educație TIC & Coding România",
+        "url": "https://www.arkyedu.com/"
+      },
+      "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.arkyedu.com/pwa-512x512.png"
+        }
+      },
+      "image": "https://www.arkyedu.com/og-cover.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ICT Blog & Guides",
+          "item": "https://www.arkyedu.com/blog/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "C++ Olympiad & Binary Search",
+          "item": "https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why should large C++ arrays be declared globally outside main()?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The local function stack is small (often 1–8 MB), whereas global static memory holds tens or hundreds of megabytes and automatically initializes all elements to zero."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I pick a frequency array instead of sorting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use a frequency array whenever values are non-negative integers within a small range (e.g., 0 to 1,000,000). Use standard sorting when values can be negative or up to 10^9."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why write mid = left + (right - left) / 2 instead of (left + right) / 2?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If left and right are huge integers, adding them can overflow signed 32-bit int into a negative index. Subtracting first completely prevents overflow."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can students visually trace arrays and loop variables line by line?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Open the ArkyEdu C++ Visual Trace Debugger (/sandbox/?tab=trace) to step through any C++ code line by line while inspecting variable and array states live."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are there automated Olympiad practice problems on ArkyEdu?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! The ArkyEdu Olympiad Arena (/sandbox/?tab=olympiad) provides 12 progressive C++ problems with hidden automated test suites and instant grading."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "C++ Olympiad & Binary Search",
+      "description": "The gap between a 40-point Time Limit Exceeded and a 100-point Olympiad submission comes down to four core C++ habits: matching your algorithm’s Big-O complexity to N (~10^7–10^8 ops/sec), checking primality in O(√n) with d*d <= n, counting values in O(n) with frequency arrays fr[x]++, and writing bug-free binary search (left <= right, mid = left + (right - left)/2).",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "text": "Check numeric bounds first: if a running sum or product can exceed 2·10^9, declare it long long immediately."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "text": "Dry-run edge cases on paper: verify N = 0, N = 1, all elements equal, and target smaller/larger than every element."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "text": "Keep large arrays global with a small safety buffer (+10 slots above the stated max N)."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "text": "Step through the first 3 iterations manually (or in ArkyEdu C++ Visual Trace) to watch indices and loop exits."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "text": "Never leave prompt text like \"Enter N: \" in cout—automated judges compare raw output tokens strictly."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="https://www.arkyedu.com/blog/en/">ICT Blog & Guides</a>
+        <a href="https://www.arkyedu.com/clasa-5/">Grade 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Grade 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Grade 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Grade 8</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary (44)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/" class="lang-pill" title="Pregătire OJI &amp; Admitere Mate-Info (VII–VIII): Complexitate O(n)/O(log n), Primalitate O(√n), Vectori de Frecvență &amp; Căutare Binară în C++">RO</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">Open App</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://www.arkyedu.com/blog/en/">ICT Blog & Guides</a>
+        <span aria-hidden="true">/</span>
+        <span>C++ &amp; Algorithms</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">C++ Olympiad &amp; Binary Search</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">C++ &amp; Algorithms</span>
+          <span aria-hidden="true">·</span>
+          <span>Grades 7–8 · Olympiad</span>
+          <span aria-hidden="true">·</span>
+          <span>14 min read</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-22">Updated 2026-11-22</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">Competitive C++ for Grades 7–8 (Olympiad &amp; High-School Prep): Time Complexity, O(√n) Primes, Frequency Arrays &amp; Binary Search</h1>
+        <p class="article-intro" itemprop="description">Stepping up from beginner while loops to competitive programming contests and high-school entrance exams requires moving from „code that passes 10 sample numbers” to „clean algorithms handling 100,000 elements in under 0.1 seconds.” Here is the reference playbook with battle-tested C++ templates.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=Competitive%20C%2B%2B%20for%20Grades%207%E2%80%938%20(Olympiad%20%26%20High-School%20Prep)%3A%20Time%20Complexity%2C%20O(%E2%88%9An)%20Primes%2C%20Frequency%20Arrays%20%26%20Binary%20Search%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fen%2Fmiddle-school-olympiad-cpp-arrays-binary-search-complexity-guide%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copy guide link</button>
+          <a href="https://www.arkyedu.com/blog/en/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← ICT Blog & Guides</a>
+        </div>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">Quick Answer (TL;DR)</div>
+          <p class="tldr-text">The gap between a 40-point Time Limit Exceeded and a 100-point Olympiad submission comes down to four core C++ habits: matching your algorithm’s Big-O complexity to N (~10^7–10^8 ops/sec), checking primality in O(√n) with d*d &lt;= n, counting values in O(n) with frequency arrays fr[x]++, and writing bug-free binary search (left &lt;= right, mid = left + (right - left)/2).</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#time-complexity-and-n-limits">1. Estimating Time Complexity Before Writing Line One</a></li>
+            <li><a href="#primality-and-sieve">2. O(√N) Primality Testing &amp; The Sieve of Eratosthenes</a></li>
+            <li><a href="#frequency-arrays">3. Frequency Arrays: Turning Nested Loops into Linear O(N) Speed</a></li>
+            <li><a href="#bug-free-binary-search">4. O(log N) Binary Search Without Infinite Loops</a></li>
+            <li><a href="#contest-strategy-visual-trace">5. The 5-Step Contest Habit &amp; Visual Trace Debugging</a></li>
+            <li><a href="#checklist-h">Pre-Submission Contest C++ Checklist</a></li>
+            <li><a href="#labs-h">Train for Coding Olympiads on ArkyEdu</a></li>
+            <li><a href="#faq-h">Frequently Asked Questions (FAQ)</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          
+          <section class="art-section" id="time-complexity-and-n-limits">
+            <h2>1. Estimating Time Complexity Before Writing Line One</h2>
+            <p>Online judges (including the ArkyEdu Olympiad Arena) execute roughly 10^7 to 10^8 simple operations per second. Before picking an approach, always inspect the maximum constraint on N!</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Maximum safe time complexity by input size N</caption>
+                      <thead><tr><th>Input Constraint N</th><th>Target Complexity</th><th>Typical C++ Pattern</th><th>Example Algorithm</th></tr></thead>
+                      <tbody><tr><td>N ≤ 1,000</td><td>O(N²)</td><td>Two nested for loops</td><td>Bubble Sort, Selection Sort, checking all pairs (i, j)</td></tr><tr><td>N ≤ 100,000</td><td>O(N log N) or O(N)</td><td>Fast sorting, Binary Search, Sieve</td><td>M binary-search queries, Sieve of Eratosthenes</td></tr><tr><td>N ≤ 1,000,000</td><td>O(N)</td><td>Single linear scan</td><td>Min/Max tracking, Frequency arrays, Prefix sums</td></tr><tr><td>N ≤ 10⁹ or 10¹²</td><td>O(√N), O(log N), or O(1)</td><td>Math, divisors up to √N, Gauss sum</td><td>O(√N) primality, Euclidean GCD, arithmetic series</td></tr></tbody>
+                    </table>
+                  </div>
+            <div class="callout-warn">
+                    <div class="callout-title">Beware of 32-bit int Overflow in d * d &lt;= n!</div>
+                    <p style="margin:0;">If n is near 2 billion (2·10^9) and your loop writes for (int d = 3; d * d &lt;= n; d += 2), d * d can overflow 32-bit signed int (max 2,147,483,647) and wrap negative! Always use long long d or 1LL * d * d &lt;= n.</p>
+                  </div>
+          </section>
+
+          <section class="art-section" id="primality-and-sieve">
+            <h2>2. O(√N) Primality Testing &amp; The Sieve of Eratosthenes</h2>
+            <p>Beginners test primality by dividing n by every number up to n - 1, taking a million steps when n = 10^6. Because divisors always come in pairs (d, n/d), at least one factor must be ≤ √n—cutting the work down to ~1,000 steps.</p>
+            <p>When asked to check tens of thousands of numbers up to 1,000,000, precomputing the Sieve of Eratosthenes answers every single query in O(1) instant lookup!</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">C++ Template: O(√n) isPrime() + Sieve of Eratosthenes</div>
+                    <pre><code>bool isPrime(long long n) {
+    if (n &lt; 2) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    for (long long d = 3; d * d &lt;= n; d += 2) {
+        if (n % d == 0) return false;
+    }
+    return true;
+}
+
+// Precompute primes up to 100,000 for instant O(1) queries
+const int MAXV = 100000;
+bool isComposite[MAXV + 1]; // global =&gt; zero-initialized (false)
+void buildSieve() {
+    isComposite[0] = isComposite[1] = true;
+    for (int i = 2; i * i &lt;= MAXV; i++) {
+        if (!isComposite[i]) {
+            for (int j = i * i; j &lt;= MAXV; j += i) {
+                isComposite[j] = true;
+            }
+        }
+    }
+}</code></pre>
+                    <div class="code-cap">Starting the inner sieve loop at i * i skips multiples already crossed out by smaller primes.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="frequency-arrays">
+            <h2>3. Frequency Arrays: Turning Nested Loops into Linear O(N) Speed</h2>
+            <p>A classic contest task asks: „Given N integers between 0 and 1,000 (or digits 0..9), print the most frequent value or output them sorted.”</p>
+            <p>Instead of O(N²) comparisons, use each input value x directly as the array index in a global counter array: freq[x]++. You get instant counting and sorted traversal in linear time!</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">C++ Example: Most Frequent Value with a Frequency Array</div>
+                    <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int freq[1001]; // global =&gt; automatically initialized to 0!
+
+int main() {
+    int n, x;
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; i++) {
+        cin &gt;&gt; x;
+        if (x &gt;= 0 &amp;&amp; x &lt;= 1000) freq[x]++;
+    }
+    int bestVal = 0, maxCount = -1;
+    for (int v = 0; v &lt;= 1000; v++) {
+        if (freq[v] &gt; maxCount) {
+            maxCount = freq[v];
+            bestVal = v;
+        }
+    }
+    cout &lt;&lt; bestVal &lt;&lt; &quot; appears &quot; &lt;&lt; maxCount &lt;&lt; &quot; times\n&quot;;
+    return 0;
+}</code></pre>
+                    <div class="code-cap">Declaring large arrays outside main() zeroes all slots automatically and avoids stack overflow.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="bug-free-binary-search">
+            <h2>4. O(log N) Binary Search Without Infinite Loops</h2>
+            <p>Binary search requires a sorted array and cuts the search range in half every step—finding any target among 1,000,000 numbers in at most 20 comparisons.</p>
+            <p>Most bugs happen when students write left = mid or right = mid instead of mid + 1 / mid - 1, trapping a 2-element window in an infinite loop.</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Standard C++ Binary Search &amp; First Occurrence (Lower Bound)</div>
+                    <pre><code>// Returns index of x in sorted array a[1..n], or -1 if absent
+int binarySearch(int a[], int n, int x) {
+    int left = 1, right = n;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2; // prevents overflow
+        if (a[mid] == x) return mid;
+        if (a[mid] &lt; x) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}
+
+// First index where a[idx] &gt;= x
+int lowerBoundIdx(int a[], int n, int x) {
+    int left = 1, right = n, ans = -1;
+    while (left &lt;= right) {
+        int mid = left + (right - left) / 2;
+        if (a[mid] &gt;= x) {
+            ans = mid;
+            right = mid - 1; // keep searching to the left!
+        } else {
+            left = mid + 1;
+        }
+    }
+    return ans;
+}</code></pre>
+                    <div class="code-cap">Watch left, mid, and right move live in the ArkyEdu Visual Algorithms Lab and C++ Trace Debugger.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="contest-strategy-visual-trace">
+            <h2>5. The 5-Step Contest Habit &amp; Visual Trace Debugging</h2>
+            <p>Even great algorithms lose points on edge cases (N = 1, x = 0, duplicate numbers, or integer overflow). Build these five contest habits early:</p>
+            <ol><li>Check numeric bounds first: if a running sum or product can exceed 2·10^9, declare it long long immediately.</li><li>Dry-run edge cases on paper: verify N = 0, N = 1, all elements equal, and target smaller/larger than every element.</li><li>Keep large arrays global with a small safety buffer (+10 slots above the stated max N).</li><li>Step through the first 3 iterations manually (or in ArkyEdu C++ Visual Trace) to watch indices and loop exits.</li><li>Never leave prompt text like &quot;Enter N: &quot; in cout—automated judges compare raw output tokens strictly.</li></ol>
+            
+            
+            
+            
+          </section>
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box" id="checklist-h">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ Pre-Submission Contest C++ Checklist</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            <li>Large sums and products use long long so 32-bit int cannot overflow.</li>
+            <li>Large arrays are declared globally above main(), never on the function stack.</li>
+            <li>All edge cases (N = 1, 0, duplicates, missing target) were tested without extra cout prompts.</li>
+            <li>Worst-case operation count fits comfortably under ~10^7 operations.</li>
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box" id="labs-h">
+          <h2 style="font-size:1.25rem;color:#fff;">Train for Coding Olympiads on ArkyEdu</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/sandbox/?tab=olympiad" class="link-card">
+                <div class="link-card-title">Olympiad Arena &amp; C++ Visual Trace →</div>
+                <div class="link-card-desc">Solve 12 progressive Olympiad challenges in your browser with automated test cases and live memory trace.</div>
+              </a>
+            <a href="https://www.arkyedu.com/laborator-algoritmi/" class="link-card">
+                <div class="link-card-title">Visual Sorting &amp; Binary Search Lab →</div>
+                <div class="link-card-desc">Animate Bubble, Selection, Insertion Sort, and Binary Search (L/M/R pointers) step by step.</div>
+              </a>
+            <a href="https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-entrance-arrays-sorting-binary-search/" class="link-card">
+                <div class="link-card-title">Grade 8 Arrays &amp; Binary Search Worksheet →</div>
+                <div class="link-card-desc">Full 100-point rubric exam sheet with instant launch into C++ Visual Trace.</div>
+              </a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="link-card">
+                <div class="link-card-title">Arrays &amp; Vector Processing in C++ (Grade 8) →</div>
+                <div class="link-card-desc">Interactive mission covering array traversal, filtering, and counting.</div>
+              </a>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ Frequently Asked Questions</h2>
+          <div class="faq-block">
+              <div class="faq-question">Why should large C++ arrays be declared globally outside main()?</div>
+              <div class="faq-answer">The local function stack is small (often 1–8 MB), whereas global static memory holds tens or hundreds of megabytes and automatically initializes all elements to zero.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">When should I pick a frequency array instead of sorting?</div>
+              <div class="faq-answer">Use a frequency array whenever values are non-negative integers within a small range (e.g., 0 to 1,000,000). Use standard sorting when values can be negative or up to 10^9.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Why write mid = left + (right - left) / 2 instead of (left + right) / 2?</div>
+              <div class="faq-answer">If left and right are huge integers, adding them can overflow signed 32-bit int into a negative index. Subtracting first completely prevents overflow.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">How can students visually trace arrays and loop variables line by line?</div>
+              <div class="faq-answer">Open the ArkyEdu C++ Visual Trace Debugger (/sandbox/?tab=trace) to step through any C++ code line by line while inspecting variable and array states live.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Are there automated Olympiad practice problems on ArkyEdu?</div>
+              <div class="faq-answer">Yes! The ArkyEdu Olympiad Arena (/sandbox/?tab=olympiad) provides 12 progressive C++ problems with hidden automated test suites and instant grading.</div>
+            </div>
+        </section>
+
+        <!-- Glossary Terms Explained in This Guide -->
+        
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">More Study Guides</h2>
+            <a href="https://www.arkyedu.com/blog/en/" class="card-link">← Back to Blog Index</a>
+          </div>
+          <div class="links-grid">
+            <a href="/blog/en/middle-school-cpp-common-errors-if-while-digits/" class="link-card">
+                  <div class="link-card-title">Top 10 C++ Errors Fixed →</div>
+                  <div class="link-card-desc">Troubleshoot the 10 most common C++ mistakes in Grades 7–8 (Code::Blocks): = vs ==, stray semicolons after if/while, infinite loops, 5/2 integer division, and n = 0.</div>
+                </a>
+            <a href="/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/" class="link-card">
+                  <div class="link-card-title">Scratch 3.0: First Game &amp; Coordinates →</div>
+                  <div class="link-card-desc">Hands-on Scratch 3.0 guide for Grades 5–6 students: understand the 480x360 coordinate grid (-240..240 X, -180..180 Y), Forever &amp; Repeat Until loops, variables, cloning, and debugging.</div>
+                </a>
+            <a href="/blog/en/binary-ascii-rgb-logic-gates-von-neumann-cpu-architecture/" class="link-card">
+                  <div class="link-card-title">Binary, RGB, Gates &amp; CPU →</div>
+                  <div class="link-card-desc">Complete visual guide for students: how decimal converts to binary, how bits encode text (ASCII) and colors (RGB), AND/OR/XOR logic gates, and Fetch-Decode-Execute.</div>
+                </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Free ICT & Coding Education.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Home</a> • <a href="https://www.arkyedu.com/blog/en/" style="color: var(--accent);">ICT Blog & Guides</a> • <a href="https://www.arkyedu.com/glosar/en/" style="color: var(--accent);">Glossary (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  
+    <div data-arky-report-bar="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">Spotted an error or broken link on this page?</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; Report an Issue
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -3,6 +3,8 @@ import { AllMissionId } from '../types';
 import { MISSION_META_BY_ID } from '../lib/carnetService';
 import { ProgressBar } from './ProgressBar';
 import { VictoryScreen } from './VictoryScreen';
+import { useLanguage } from '../context/LanguageContext';
+import { ReportIssueButton } from './ReportIssueButton';
 
 export interface FlowLevelComponentProps {
   currentLevel: number;
@@ -161,8 +163,13 @@ export const MissionStage: React.FC<MissionStageProps> = ({
   onResetMission,
   onBackToCatalog,
 }) => {
+  const { lang } = useLanguage();
   const meta = MISSION_META_BY_ID[missionId];
   const maxPlayable = meta?.maxLevels ?? 7;
+  const missionTitle = meta ? (lang === 'en' ? meta.titleEn : meta.titleRo) : missionId;
+  const missionContextLabel = meta
+    ? `${meta.emoji} ${lang === 'en' ? meta.gradeLabelEn : meta.gradeLabelRo} · ${missionTitle} (${lang === 'en' ? 'Level' : 'Nivel'} ${currentLevel})`
+    : undefined;
 
   const renderVictory = () => (
     <VictoryScreen
@@ -265,6 +272,23 @@ export const MissionStage: React.FC<MissionStageProps> = ({
   return (
     <>
       <ProgressBar currentLevel={currentLevel} courseId={missionId || 'files'} />
+      <div className="print:hidden flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/75 border border-slate-800/90 text-xs">
+        <div className="flex items-center gap-2 min-w-0 text-slate-300">
+          {meta && (
+            <span className="font-mono font-bold text-emerald-300 shrink-0">
+              {meta.emoji} {meta.moduleCode}
+            </span>
+          )}
+          <span className="truncate font-semibold text-slate-200">{missionTitle}</span>
+        </div>
+        <ReportIssueButton
+          variant="mission"
+          missionId={missionId}
+          level={currentLevel}
+          score={currentScore}
+          contextLabel={missionContextLabel}
+        />
+      </div>
       {renderMissionBody()}
     </>
   );

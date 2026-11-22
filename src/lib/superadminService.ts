@@ -697,6 +697,10 @@ export interface ContactMessage {
   message: string;
   createdAt: string;
   status: 'unread' | 'read' | 'replied';
+  kind?: 'contact' | 'bug_report';
+  sourceUrl?: string;
+  pageContext?: string;
+  issueCategory?: string;
 }
 
 export async function getAllContactMessages(): Promise<ContactMessage[]> {
@@ -724,6 +728,10 @@ export async function getAllContactMessages(): Promise<ContactMessage[]> {
         message: data.message || '',
         createdAt: data.createdAt || new Date().toISOString(),
         status: data.status || 'unread',
+        kind: data.kind,
+        sourceUrl: data.sourceUrl,
+        pageContext: data.pageContext,
+        issueCategory: data.issueCategory,
       });
     });
     return messages.length > 0 ? messages : localList;

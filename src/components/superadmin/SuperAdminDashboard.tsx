@@ -1601,10 +1601,32 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                           </span>
                         </div>
 
-                        <div className="py-3 space-y-1.5">
-                          <h4 className="text-xs font-bold text-amber-300">
-                            Subiect: {msg.subject}
-                          </h4>
+                        <div className="py-3 space-y-2">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="text-xs font-bold text-amber-300">
+                              Subiect: {msg.subject}
+                            </h4>
+                            {msg.kind === 'bug_report' && (
+                              <span className="text-[10px] px-2 py-0.5 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 font-bold">
+                                Raport Problemă{msg.issueCategory ? ` · ${msg.issueCategory}` : ''}
+                              </span>
+                            )}
+                          </div>
+                          {msg.sourceUrl && (
+                            <div className="text-[11px] font-mono bg-slate-950/70 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center justify-between gap-2 flex-wrap">
+                              <span className="text-slate-400">
+                                Pagină{msg.pageContext ? ` (${msg.pageContext})` : ''}:
+                              </span>
+                              <a
+                                href={msg.sourceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-cyan-300 hover:text-cyan-200 underline break-all"
+                              >
+                                {msg.sourceUrl}
+                              </a>
+                            </div>
+                          )}
                           <p className="text-xs sm:text-sm text-slate-200 whitespace-pre-wrap leading-relaxed bg-slate-950/40 p-3 rounded-xl border border-slate-800/60 font-sans">
                             {msg.message}
                           </p>

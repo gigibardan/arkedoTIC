@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OJI Gimnaziu &amp; Admitere Mate-Info C++: Vectori &amp; Binară | ArkyEdu</title>
+  <meta name="description" content="Ghid complet de performanță C++ pentru clasele VII–VIII (OJI și admitere mate-info): complexități, primalitate O(√n), vectori de frecvență, căutare binară fără bug-uri și Visual Trace.">
+  <meta name="keywords" content="pregatire olimpiada informatica gimnaziu c++, admitere liceu mate info subiecte c++, vectori de frecventa c++ clasa 8, cautare binara c++ explicata pas cu pas, numar prim eficient O(sqrt(n)), visual trace c++">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:modified_time" content="2026-11-22">
+  <meta property="article:section" content="C++ &amp; Olimpiadă">
+  <meta property="og:title" content="OJI Gimnaziu &amp; Admitere Mate-Info C++: Vectori &amp; Binară | ArkyEdu">
+  <meta property="og:description" content="Ghid complet de performanță C++ pentru clasele VII–VIII (OJI și admitere mate-info): complexități, primalitate O(√n), vectori de frecvență, căutare binară fără bug-uri și Visual Trace.">
+  <meta property="og:url" content="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OJI Gimnaziu &amp; Admitere Mate-Info C++: Vectori &amp; Binară | ArkyEdu">
+  <meta name="twitter:description" content="Ghid complet de performanță C++ pentru clasele VII–VIII (OJI și admitere mate-info): complexități, primalitate O(√n), vectori de frecvență, căutare binară fără bug-uri și Visual Trace.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/#article",
+      "headline": "Pregătire OJI & Admitere Mate-Info (VII–VIII): Complexitate O(n)/O(log n), Primalitate O(√n), Vectori de Frecvență & Căutare Binară în C++",
+      "description": "Ghid complet de performanță C++ pentru clasele VII–VIII (OJI și admitere mate-info): complexități, primalitate O(√n), vectori de frecvență, căutare binară fără bug-uri și Visual Trace.",
+      "keywords": "pregatire olimpiada informatica gimnaziu c++, admitere liceu mate info subiecte c++, vectori de frecventa c++ clasa 8, cautare binara c++ explicata pas cu pas, numar prim eficient O(sqrt(n)), visual trace c++",
+      "articleSection": "C++ & Olimpiadă",
+      "inLanguage": "ro",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "isAccessibleForFree": true,
+      "mainEntityOfPage": "https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/",
+      "isPartOf": {
+        "@id": "https://www.arkyedu.com/blog/#blog"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ArkyEdu — Educație TIC & Coding România",
+        "url": "https://www.arkyedu.com/"
+      },
+      "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.arkyedu.com/pwa-512x512.png"
+        }
+      },
+      "image": "https://www.arkyedu.com/og-cover.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog & Ghiduri TIC",
+          "item": "https://www.arkyedu.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "OJI & Admitere Mate-Info C++",
+          "item": "https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "De ce este recomandat să declari vectorii mari global, în afara funcției main()?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Memoria stivă (stack) alocată în interiorul lui main() este limitată (uneori la doar 1–8 MB), în timp ce variabilele globale stau în zona statică de date (zeci/sute de MB) și sunt inițializate automat cu 0 de compilator."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Când folosesc vector de frecvență și când sortez vectorul clasic?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Folosești vector de frecvență când valorile numerelor sunt mici și pozitive (de ex. 0..1.000.000). Dacă valorile pot fi până la 10^9 sau negative, sortezi vectorul."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "De ce se scrie mij = st + (dr - st) / 2 în loc de (st + dr) / 2?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Dacă st și dr sunt apropiate de 1,5 miliarde, suma st + dr depășește limita lui int și devine negativă (overflow). Scăderea (dr - st) evită complet această eroare."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Cum exersez urmărirea variabilelor și vectorilor în timpul execuției?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pe ArkyEdu poți folosi Debugger-ul C++ Visual Trace (/sandbox/?tab=trace) care execută codul linie cu linie și afișează live valorile tuturor variabilelor și elementelor din vectori."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Există probleme de tip OJI cu teste automate ascunse pe ArkyEdu?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Da! În Arena Olimpiada TIC (/sandbox/?tab=olympiad) și în secțiunea Fișe (/fise/) ai 12 probleme progresive și subiecte OJI / admitere cu teste automate și barem 1–10."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "OJI & Admitere Mate-Info C++",
+      "description": "Diferența dintre 40 de puncte (Time Limit Exceeded) și 100 de puncte la OJI sau la testarea de admitere mate-info ține de 4 tehnici C++ esențiale: calculul corect al complexității (max ~10^7–10^8 operații/secundă), testul de primalitate în O(√n) cu d*d <= n, vectorii de frecvență fr[x] în O(n) în loc de două bucle O(n^2) și căutarea binară fără buclă infinită (left <= right, mid = left + (right - left)/2).",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "text": "Citește restricțiile cu atenție: verifică tipul maxim (dacă suma poate trece de 2·10^9, folosește long long din start) și dacă fișierele cer cin/cout sau ifstream/ofstream."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "text": "Verifică cazurile limită pe hârtie: ce face codul tău pentru n = 0, n = 1, valoare minimă sau toate numerele identice?"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "text": "Declararea vectorilor: declară vectorii mari (ex: int v[100005];) global, deasupra lui int main(), cu 5–10 poziții în plus față de maximul din enunț."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "text": "Urmărește primele 2–3 iterații pas cu pas (Trace Table): notează valorile lui i, st, dr, s pe hârtie sau rulează-le în Debugger-ul C++ Visual Trace."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "text": "Nu lăsa instrucțiuni de debug sau mesaje text necerute (gen \"Introduceti n: \") în cout — evaluatorul compară strict numerele din ieșire!"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigare Principală">
+        <a href="https://www.arkyedu.com/blog/">Blog & Ghiduri TIC</a>
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/" class="lang-pill" title="Competitive C++ for Grades 7–8 (Olympiad &amp; High-School Prep): Time Complexity, O(√n) Primes, Frequency Arrays &amp; Binary Search">EN</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">Intră în Platformă</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">Acasă</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://www.arkyedu.com/blog/">Blog & Ghiduri TIC</a>
+        <span aria-hidden="true">/</span>
+        <span>C++ &amp; Olimpiadă</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">OJI &amp; Admitere Mate-Info C++</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">C++ &amp; Olimpiadă</span>
+          <span aria-hidden="true">·</span>
+          <span>Clasele VII–VIII · OJI</span>
+          <span aria-hidden="true">·</span>
+          <span>14 min citire</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-22">Actualizat 2026-11-22</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">Pregătire OJI &amp; Admitere Mate-Info (VII–VIII): Complexitate O(n)/O(log n), Primalitate O(√n), Vectori de Frecvență &amp; Căutare Binară în C++</h1>
+        <p class="article-intro" itemprop="description">Trecerea de la exercițiile simple cu while din clasa a VII-a la problemele de concurs județean (OJI), tezele de clasa a VIII-a și admiterile la liceele de profil matematică-informatică presupune saltul de la „cod care merge pe 10 numere” la „algoritm eficient pe 100.000 de numere în sub 0,1 secunde”. Iată manualul condensat cu șabloanele verificate care aduc punctaj maxim.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=Preg%C4%83tire%20OJI%20%26%20Admitere%20Mate-Info%20(VII%E2%80%93VIII)%3A%20Complexitate%20O(n)%2FO(log%20n)%2C%20Primalitate%20O(%E2%88%9An)%2C%20Vectori%20de%20Frecven%C8%9B%C4%83%20%26%20C%C4%83utare%20Binar%C4%83%20%C3%AEn%20C%2B%2B%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fadmitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copiază link ghid</button>
+          <a href="https://www.arkyedu.com/blog/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← Blog & Ghiduri TIC</a>
+        </div>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">Răspuns Rapid (TL;DR)</div>
+          <p class="tldr-text">Diferența dintre 40 de puncte (Time Limit Exceeded) și 100 de puncte la OJI sau la testarea de admitere mate-info ține de 4 tehnici C++ esențiale: calculul corect al complexității (max ~10^7–10^8 operații/secundă), testul de primalitate în O(√n) cu d*d &lt;= n, vectorii de frecvență fr[x] în O(n) în loc de două bucle O(n^2) și căutarea binară fără buclă infinită (left &lt;= right, mid = left + (right - left)/2).</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">Cuprinsul articolului</div>
+          <ol class="toc-list">
+            <li><a href="#complexitate-timp-si-limite-oji">1. Cum estimezi complexitatea în timp înainte să scrii prima linie de cod</a></li>
+            <li><a href="#primalitate-ciur-eratostene">2. Testul de primalitate în O(√N) și Ciurul lui Eratostene pentru intervale mari</a></li>
+            <li><a href="#vectori-de-frecventa-si-stergeri">3. Vectori de frecvență (Counting Sort): Cum înlocuiești 2 bucle cu 1 singură parcurgere</a></li>
+            <li><a href="#cautare-binara-fara-bucle-infinite">4. Căutarea Binară în O(log N): Cele 3 reguli ca să nu blochezi niciodată bucla while</a></li>
+            <li><a href="#strategie-concurs-si-visual-trace">5. Strategia celor 5 pași în sala de concurs &amp; Debugging în Visual Trace</a></li>
+            <li><a href="#checklist-h">Checklist înainte să trimiți soluția C++ la OJI / Evaluare</a></li>
+            <li><a href="#labs-h">Antrenează-te pentru OJI &amp; Admitere Mate-Info pe ArkyEdu</a></li>
+            <li><a href="#faq-h">Întrebări frecvente (FAQ)</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          
+          <section class="art-section" id="complexitate-timp-si-limite-oji">
+            <h2>1. Cum estimezi complexitatea în timp înainte să scrii prima linie de cod</h2>
+            <p>Evaluatoarele automate (inclusiv Arena Olimpiada TIC din ArkyEdu și PbInfo/OJI) rulează în jur de 10^7 – 10^8 operații elementare pe secundă. Înainte să alegi algoritmul, uită-te la restricția lui N din enunț!</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Ghid rapid: Ce complexitate maximă este permisă în funcție de valoarea lui N</caption>
+                      <thead><tr><th>Restricție N din enunț</th><th>Complexitate țintă</th><th>Tehnică tipică în C++</th><th>Exemplu algoritm</th></tr></thead>
+                      <tbody><tr><td>N ≤ 1.000</td><td>O(N²)</td><td>Două bucle for imbricate</td><td>Bubble Sort, Selection Sort, perechi (i, j)</td></tr><tr><td>N ≤ 100.000</td><td>O(N log N) sau O(N)</td><td>Sortare eficientă, Căutare Binară, Frecvență</td><td>Căutare binară pe M interogări, Ciurul lui Eratostene</td></tr><tr><td>N ≤ 1.000.000</td><td>O(N)</td><td>O singură parcurgere liniară</td><td>Minim/Maxim, Vector de frecvență, Sume parțiale</td></tr><tr><td>N ≤ 10⁹ sau 10¹²</td><td>O(√N) sau O(log N) sau O(1)</td><td>Matematică, divizori până la √N, formula lui Gauss</td><td>Test primalitate d*d &lt;= n, CMMDC Euclid, sumă 1..N</td></tr></tbody>
+                    </table>
+                  </div>
+            <div class="callout-warn">
+                    <div class="callout-title">Atenție la capcana i*i &lt;= n cu int pe 32 de biți!</div>
+                    <p style="margin:0;">Dacă n se apropie de 2 miliarde (2·10^9) și verifici primalitatea cu for (int d = 3; d * d &lt;= n; d += 2), produsul d * d poate depăși limita lui int (2.147.483.647) și produce overflow! Folosește 1LL * d * d &lt;= n sau tipul long long.</p>
+                  </div>
+          </section>
+
+          <section class="art-section" id="primalitate-ciur-eratostene">
+            <h2>2. Testul de primalitate în O(√N) și Ciurul lui Eratostene pentru intervale mari</h2>
+            <p>Un elev începător verifică dacă n este prim împărțind la toți divizorii de la 2 la n - 1 — ceea ce face 1.000.000 de pași pentru n = 10^6. Însă orice divizor mai mare decât √n are un „pereche” mai mic sau egal cu √n! Prin urmare, este suficient să verificăm până la d*d &lt;= n (doar ~1.000 de pași!).</p>
+            <p>Dacă problema cere să verifici 100.000 de numere diferite până la 1.000.000, precalcularea cu Ciurul lui Eratostene (vector boolean ciur[MAX]) îți dă răspunsul pentru fiecare număr în O(1) instantaneu!</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Șablon C++: Funcție optimă estePrim(n) în O(√n) + Ciurul lui Eratostene</div>
+                    <pre><code>bool estePrim(long long n) {
+    if (n &lt; 2) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    for (long long d = 3; d * d &lt;= n; d += 2) {
+        if (n % d == 0) return false;
+    }
+    return true;
+}
+
+// Pentru interogari multiple (ex: prime pana la 100000):
+const int MAXV = 100000;
+bool compus[MAXV + 1]; // implicit false (global)
+void construiesteCiur() {
+    compus[0] = compus[1] = true;
+    for (int i = 2; i * i &lt;= MAXV; i++) {
+        if (!compus[i]) {
+            for (int j = i * i; j &lt;= MAXV; j += i) {
+                compus[j] = true;
+            }
+        }
+    }
+}</code></pre>
+                    <div class="code-cap">Observă că al doilea for din Ciur pornește direct de la i * i, economisind operații redundante.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="vectori-de-frecventa-si-stergeri">
+            <h2>3. Vectori de frecvență (Counting Sort): Cum înlocuiești 2 bucle cu 1 singură parcurgere</h2>
+            <p>Una dintre cele mai des întâlnite cerințe la clasa a VIII-a și OJI este: „Se dau N numere cuprinse între 0 și 1.000 (sau cifre 0..9). Să se afișeze în ordine crescătoare / cel mai frecvent element.”</p>
+            <p>În loc să sortezi vectorul în O(N²) sau să numeri pentru fiecare element de câte ori apare cu două bucle, folosești valoarea citită x direct ca INDICE într-un vector de frecvență global: fr[x]++. Astfel obții soluția în timp liniar O(N + VAL_MAX)!</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Exemplu C++: Cea mai frecventă cifră / valoare cu vector de frecvență</div>
+                    <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int fr[1001]; // declarat global =&gt; toate elementele sunt 0 automat!
+
+int main() {
+    int n, x;
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; i++) {
+        cin &gt;&gt; x;
+        if (x &gt;= 0 &amp;&amp; x &lt;= 1000) fr[x]++;
+    }
+    int bestVal = 0, maxAparitii = -1;
+    for (int v = 0; v &lt;= 1000; v++) {
+        if (fr[v] &gt; maxAparitii) {
+            maxAparitii = fr[v];
+            bestVal = v;
+        }
+    }
+    cout &lt;&lt; bestVal &lt;&lt; &quot; apare de &quot; &lt;&lt; maxAparitii &lt;&lt; &quot; ori\n&quot;;
+    return 0;
+}</code></pre>
+                    <div class="code-cap">Declararea vectorului mare în afara funcției main() îl inițializează cu 0 și previne eroarea Stack Overflow.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="cautare-binara-fara-bucle-infinite">
+            <h2>4. Căutarea Binară în O(log N): Cele 3 reguli ca să nu blochezi niciodată bucla while</h2>
+            <p>Căutarea binară funcționează EXCLUSIV pe un șir ordonat (crescător sau descrescător) și înjumătățește spațiul de căutare la fiecare pas. Pentru 1.000.000 de elemente, găsește răspunsul în cel mult 20 de comparații!</p>
+            <p>Majoritatea bug-urilor apar atunci când elevii scriu left = mid sau right = mid în loc de mid + 1 / mid - 1, lăsând intervalul [mid, mid + 1] blocat la infinit.</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Șablon standard C++ pentru Căutare Binară exactă + Prima apariție (Lower Bound)</div>
+                    <pre><code>// Returneaza pozitia lui x in vectorul v[1..n] sortat crescator, sau -1 daca lipseste
+int cautareBinara(int v[], int n, int x) {
+    int st = 1, dr = n;
+    while (st &lt;= dr) {
+        int mij = st + (dr - st) / 2; // previne overflow fata de (st + dr) / 2
+        if (v[mij] == x) return mij;
+        if (v[mij] &lt; x) st = mij + 1;
+        else dr = mij - 1;
+    }
+    return -1;
+}
+
+// Prima pozitie cu v[poz] &gt;= x (utila la probleme de optimizare / admitere)
+int primaPozitie(int v[], int n, int x) {
+    int st = 1, dr = n, ans = -1;
+    while (st &lt;= dr) {
+        int mij = st + (dr - st) / 2;
+        if (v[mij] &gt;= x) {
+            ans = mij;
+            dr = mij - 1; // continuam sa cautam mai la stanga!
+        } else {
+            st = mij + 1;
+        }
+    }
+    return ans;
+}</code></pre>
+                    <div class="code-cap">Testează pas cu pas modificarea indicilor st, mij și dr în Laboratorul de Algoritmi &amp; Visual Trace de pe ArkyEdu.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="strategie-concurs-si-visual-trace">
+            <h2>5. Strategia celor 5 pași în sala de concurs &amp; Debugging în Visual Trace</h2>
+            <p>Chiar și algoritmii perfecți pot pierde puncte la teste de margine (N = 1, număr = 0, toate elementele egale, sume care depășesc int). Aplică această rutină disciplinată la fiecare problemă:</p>
+            <ol><li>Citește restricțiile cu atenție: verifică tipul maxim (dacă suma poate trece de 2·10^9, folosește long long din start) și dacă fișierele cer cin/cout sau ifstream/ofstream.</li><li>Verifică cazurile limită pe hârtie: ce face codul tău pentru n = 0, n = 1, valoare minimă sau toate numerele identice?</li><li>Declararea vectorilor: declară vectorii mari (ex: int v[100005];) global, deasupra lui int main(), cu 5–10 poziții în plus față de maximul din enunț.</li><li>Urmărește primele 2–3 iterații pas cu pas (Trace Table): notează valorile lui i, st, dr, s pe hârtie sau rulează-le în Debugger-ul C++ Visual Trace.</li><li>Nu lăsa instrucțiuni de debug sau mesaje text necerute (gen &quot;Introduceti n: &quot;) în cout — evaluatorul compară strict numerele din ieșire!</li></ol>
+            
+            
+            
+            
+          </section>
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box" id="checklist-h">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ Checklist înainte să trimiți soluția C++ la OJI / Evaluare</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            <li>Am verificat dacă sumele sau produsele depășesc tipul int și am folosit long long unde este nevoie.</li>
+            <li>Vectorii cu peste 1.000 de elemente sunt declarați global, nu în interiorul lui main().</li>
+            <li>Nu există mesaje extra în cout (fără „Dati n=” sau pause/system) și fiecare caz limită (0, 1, duplicat) a fost testat.</li>
+            <li>Complexitatea algoritmului încape confortabil sub 10^7 operații pentru valoarea maximă a lui N.</li>
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box" id="labs-h">
+          <h2 style="font-size:1.25rem;color:#fff;">Antrenează-te pentru OJI &amp; Admitere Mate-Info pe ArkyEdu</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/sandbox/?tab=olympiad" class="link-card">
+                <div class="link-card-title">Arena Olimpiada TIC &amp; Visual Trace C++ →</div>
+                <div class="link-card-desc">Rezolvă 12 probleme progresive în browser cu 5 teste automate și execuție pas-cu-pas în debugger.</div>
+              </a>
+            <a href="https://www.arkyedu.com/laborator-algoritmi/" class="link-card">
+                <div class="link-card-title">Laboratorul Vizual de Sortare &amp; Căutare Binară →</div>
+                <div class="link-card-desc">Vezi animația live pentru Bubble Sort, Insertion Sort și pointerii st/mij/dr din Căutarea Binară.</div>
+              </a>
+            <a href="https://www.arkyedu.com/fise/subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara/" class="link-card">
+                <div class="link-card-title">Subiect Teză Admitere Mate-Info (Clasa VIII) →</div>
+                <div class="link-card-desc">Fișă completă cu barem oficial pe 100p și lansare directă a codului în Visual Trace.</div>
+              </a>
+            <a href="https://www.arkyedu.com/cursuri/g8_algo_d/" class="link-card">
+                <div class="link-card-title">Vectori &amp; Prelucrări în C++ (Clasa VIII) →</div>
+                <div class="link-card-desc">Misiune interactivă de parcurgere, filtrare și calcul pe tablouri unidimensionale.</div>
+              </a>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ Întrebări frecvente (FAQ)</h2>
+          <div class="faq-block">
+              <div class="faq-question">De ce este recomandat să declari vectorii mari global, în afara funcției main()?</div>
+              <div class="faq-answer">Memoria stivă (stack) alocată în interiorul lui main() este limitată (uneori la doar 1–8 MB), în timp ce variabilele globale stau în zona statică de date (zeci/sute de MB) și sunt inițializate automat cu 0 de compilator.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Când folosesc vector de frecvență și când sortez vectorul clasic?</div>
+              <div class="faq-answer">Folosești vector de frecvență când valorile numerelor sunt mici și pozitive (de ex. 0..1.000.000). Dacă valorile pot fi până la 10^9 sau negative, sortezi vectorul.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">De ce se scrie mij = st + (dr - st) / 2 în loc de (st + dr) / 2?</div>
+              <div class="faq-answer">Dacă st și dr sunt apropiate de 1,5 miliarde, suma st + dr depășește limita lui int și devine negativă (overflow). Scăderea (dr - st) evită complet această eroare.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Cum exersez urmărirea variabilelor și vectorilor în timpul execuției?</div>
+              <div class="faq-answer">Pe ArkyEdu poți folosi Debugger-ul C++ Visual Trace (/sandbox/?tab=trace) care execută codul linie cu linie și afișează live valorile tuturor variabilelor și elementelor din vectori.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Există probleme de tip OJI cu teste automate ascunse pe ArkyEdu?</div>
+              <div class="faq-answer">Da! În Arena Olimpiada TIC (/sandbox/?tab=olympiad) și în secțiunea Fișe (/fise/) ai 12 probleme progresive și subiecte OJI / admitere cu teste automate și barem 1–10.</div>
+            </div>
+        </section>
+
+        <!-- Glossary Terms Explained in This Guide -->
+        
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">Citește și alte ghiduri TIC</h2>
+            <a href="https://www.arkyedu.com/blog/" class="card-link">← Înapoi la Indexul Blogului</a>
+          </div>
+          <div class="links-grid">
+            <a href="/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/" class="link-card">
+                  <div class="link-card-title">Top 10 erori C++ gimnaziu →</div>
+                  <div class="link-card-desc">Rezolvare rapidă pentru cele mai frecvente erori C++ din clasele VII–VIII în Code::Blocks: = vs ==, punct și virgulă după if/while, n%10, n/10, 5/2 și cazul n=0.</div>
+                </a>
+            <a href="/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/" class="link-card">
+                  <div class="link-card-title">Scratch 3.0: Primul joc &amp; Coordonate →</div>
+                  <div class="link-card-desc">Tutorial practic Scratch 3.0 pentru clasele V–VI: cum funcționează scena cu axe X (-240..240) și Y (-180..180), bucle La infinit, Dacă...Atunci, variabile Scor/Vieți și clonare.</div>
+                </a>
+            <a href="/blog/sistem-binar-ascii-rgb-porti-logice-arhitectura-von-neumann/" class="link-card">
+                  <div class="link-card-title">Binar, RGB, Porți &amp; CPU →</div>
+                  <div class="link-card-desc">Ghid vizual complet pentru gimnaziu: cum transformi în binar, cum devin 0 și 1 litere (ASCII), culori (RGB), porți logice (AND/OR/XOR) și ciclul Fetch-Decode-Execute.</div>
+                </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Educație TIC & Coding 100% Gratuită.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  
+    <div data-arky-report-bar="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">Ai observat o eroare sau o problemă pe această pagină?</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; Raportează o problemă
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Link copiat!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
+</body>
+</html>

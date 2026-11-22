@@ -32,7 +32,7 @@ interface BlogHubProps {
   onSelectArticle: (slug: string | null) => void;
   onBackToHome: () => void;
   onSelectMission: (missionId: AllMissionId) => void;
-  onNavigateToView: (view: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher' | 'sandbox') => void;
+  onNavigateToView: (view: 'catalog' | 'arcade' | 'duel' | 'city' | 'teacher' | 'sandbox' | 'ailab' | 'algolab' | 'leonida' | 'fise' | 'glossary') => void;
 }
 
 export const BlogHub: React.FC<BlogHubProps> = ({
@@ -311,6 +311,24 @@ export const BlogHub: React.FC<BlogHubProps> = ({
             <li>
               <button
                 type="button"
+                onClick={() => scrollToSection('checklist-section')}
+                className="text-left text-slate-300 hover:text-teal-300 transition-colors underline-offset-4 hover:underline cursor-pointer"
+              >
+                {content.checklistTitle}
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => scrollToSection('labs-section')}
+                className="text-left text-slate-300 hover:text-teal-300 transition-colors underline-offset-4 hover:underline cursor-pointer"
+              >
+                {content.internalLinksTitle}
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
                 onClick={() => scrollToSection('faq-section')}
                 className="text-left text-slate-300 hover:text-teal-300 transition-colors underline-offset-4 hover:underline cursor-pointer"
               >
@@ -449,7 +467,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
         </div>
 
         {/* Checklist */}
-        <section className="rounded-xl bg-slate-800/40 border border-slate-700/80 p-5 sm:p-6 space-y-3">
+        <section id="checklist-section" className="rounded-xl bg-slate-800/40 border border-slate-700/80 p-5 sm:p-6 space-y-3 scroll-mt-24">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
             <span>{content.checklistTitle}</span>
@@ -465,7 +483,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
         </section>
 
         {/* Contextual Internal Links to ArkyEdu Courses / Games */}
-        <section className="rounded-xl bg-slate-900/75 border border-teal-500/30 p-5 sm:p-6 space-y-4">
+        <section id="labs-section" className="rounded-xl bg-slate-900/75 border border-teal-500/30 p-5 sm:p-6 space-y-4 scroll-mt-24">
           <div className="space-y-1">
             <h2 className="text-lg sm:text-xl font-bold text-white">{content.internalLinksTitle}</h2>
             <p className="text-xs sm:text-sm text-slate-300">

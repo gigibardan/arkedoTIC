@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How LLMs Work: Tokens, Softmax &amp; Hallucinations | ArkyEdu</title>
+  <meta name="description" content="Clear technical guide for students and teachers: how text turns into tokens, how Softmax &amp; Temperature drive word prediction, why AI hallucinates &amp; 5 prompt templates.">
+  <meta name="keywords" content="how chatgpt works explained for students, what are llm tokens, why do ai models hallucinate, softmax temperature language models, educational prompt templates teachers">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/blog/cum-functioneaza-llm-tokeni-softmax-halucinatii-ai-scoala/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/blog/cum-functioneaza-llm-tokeni-softmax-halucinatii-ai-scoala/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:modified_time" content="2026-11-22">
+  <meta property="article:section" content="Artificial Intelligence">
+  <meta property="og:title" content="How LLMs Work: Tokens, Softmax &amp; Hallucinations | ArkyEdu">
+  <meta property="og:description" content="Clear technical guide for students and teachers: how text turns into tokens, how Softmax &amp; Temperature drive word prediction, why AI hallucinates &amp; 5 prompt templates.">
+  <meta property="og:url" content="https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How LLMs Work: Tokens, Softmax &amp; Hallucinations | ArkyEdu">
+  <meta name="twitter:description" content="Clear technical guide for students and teachers: how text turns into tokens, how Softmax &amp; Temperature drive word prediction, why AI hallucinates &amp; 5 prompt templates.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/#article",
+      "headline": "How ChatGPT & LLMs Really Work (Tokens, Softmax & AI Hallucinations): A Practical Guide for Students & Teachers",
+      "description": "Clear technical guide for students and teachers: how text turns into tokens, how Softmax & Temperature drive word prediction, why AI hallucinates & 5 prompt templates.",
+      "keywords": "how chatgpt works explained for students, what are llm tokens, why do ai models hallucinate, softmax temperature language models, educational prompt templates teachers",
+      "articleSection": "Artificial Intelligence",
+      "inLanguage": "en",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "isAccessibleForFree": true,
+      "mainEntityOfPage": "https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/",
+      "isPartOf": {
+        "@id": "https://www.arkyedu.com/blog/en/#blog"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ArkyEdu — Educație TIC & Coding România",
+        "url": "https://www.arkyedu.com/"
+      },
+      "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.arkyedu.com/pwa-512x512.png"
+        }
+      },
+      "image": "https://www.arkyedu.com/og-cover.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ICT Blog & Guides",
+          "item": "https://www.arkyedu.com/blog/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "LLMs: Tokens & Hallucinations",
+          "item": "https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a token in ChatGPT or Gemini?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A token is the basic text unit fed into the model—typically a short word, word fragment, or punctuation mark (~3–4 characters in English)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why can the same prompt produce slightly different AI answers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When Temperature is above zero, the model samples probabilistically from the Softmax distribution instead of always picking the exact #1 token."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I reduce AI hallucinations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Paste the reference text directly into your prompt, tell the model to say „I don’t know” when uncertain, avoid leading false premises, and double-check facts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does ArkyEdu have a live tokenizer and Softmax simulator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Visit the ArkyEdu AI & Deepfake Lab (/laborator-ai/) to type any text and inspect color-coded tokens, adjust Softmax Temperature, and test prompt structures."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is using AI safe for middle-school homework?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes—when used as an interactive tutor for step-by-step hints and practice examples without sharing personal data."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "LLMs: Tokens & Hallucinations",
+      "description": "A Large Language Model (LLM) does NOT think like a human or look up verified encyclopedia facts. It splits text into numeric chunks called tokens (~3–4 characters each) and predicts the most statistically probable next token using Softmax and a Temperature setting. Because it optimizes linguistic plausibility rather than ground truth, an LLM can invent false citations or math answers convincingly (AI hallucinations).",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "text": "Invented page numbers & book quotes: Asking „Which exact page covers Topic X?” without uploading the textbook often produces a plausible-sounding fake number."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "text": "Dead 404 URLs: LLMs guess web links that look grammatically realistic rather than checking live pages."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "text": "Mental multi-digit arithmetic: Without an attached Python or calculator tool, large multiplication is only approximated."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "text": "Leading false questions: Asking „Explain why Nikola Tesla invented Wi-Fi in 1995” can nudge weak models into playing along with the false premise."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="https://www.arkyedu.com/blog/en/">ICT Blog & Guides</a>
+        <a href="https://www.arkyedu.com/clasa-5/">Grade 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Grade 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Grade 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Grade 8</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary (44)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/blog/cum-functioneaza-llm-tokeni-softmax-halucinatii-ai-scoala/" class="lang-pill" title="Cum funcționează ChatGPT și LLM-urile (Tokeni, Softmax &amp; Halucinații AI): Ghid tehnic pe înțelesul elevilor și profesorilor">RO</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">Open App</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://www.arkyedu.com/blog/en/">ICT Blog & Guides</a>
+        <span aria-hidden="true">/</span>
+        <span>Artificial Intelligence</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">LLMs: Tokens &amp; Hallucinations</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">Artificial Intelligence</span>
+          <span aria-hidden="true">·</span>
+          <span>Grades 6–8 · Teachers</span>
+          <span aria-hidden="true">·</span>
+          <span>12 min read</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-22">Updated 2026-11-22</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">How ChatGPT &amp; LLMs Really Work (Tokens, Softmax &amp; AI Hallucinations): A Practical Guide for Students &amp; Teachers</h1>
+        <p class="article-intro" itemprop="description">Millions of students use AI assistants for study help, coding explanations, and translations—yet few know what actually happens inside the „black box” after pressing Enter. Understanding tokenization, next-token probability, and hallucinations turns students from passive copy-pasters into sharp critical thinkers.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=How%20ChatGPT%20%26%20LLMs%20Really%20Work%20(Tokens%2C%20Softmax%20%26%20AI%20Hallucinations)%3A%20A%20Practical%20Guide%20for%20Students%20%26%20Teachers%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fen%2Fhow-llms-work-tokens-softmax-ai-hallucinations-school-guide%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copy guide link</button>
+          <a href="https://www.arkyedu.com/blog/en/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← ICT Blog & Guides</a>
+        </div>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">Quick Answer (TL;DR)</div>
+          <p class="tldr-text">A Large Language Model (LLM) does NOT think like a human or look up verified encyclopedia facts. It splits text into numeric chunks called tokens (~3–4 characters each) and predicts the most statistically probable next token using Softmax and a Temperature setting. Because it optimizes linguistic plausibility rather than ground truth, an LLM can invent false citations or math answers convincingly (AI hallucinations).</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#subword-tokenization">1. Step One: How LLMs Slice Sentences Into Tokens (Not Whole Words)</a></li>
+            <li><a href="#softmax-and-temperature">2. Next-Token Prediction: Softmax Probabilities &amp; Temperature</a></li>
+            <li><a href="#anatomy-of-ai-hallucinations">3. Why AI Hallucinations Happen (Top 4 Homework Traps)</a></li>
+            <li><a href="#four-question-verification">4. The 60-Second Anti-Hallucination Check</a></li>
+            <li><a href="#five-educational-prompt-templates">5. Five High-Impact Educational Prompt Templates</a></li>
+            <li><a href="#checklist-h">Smart LLM Usage Checklist</a></li>
+            <li><a href="#labs-h">Explore Tokens, Softmax &amp; Prompting Live on ArkyEdu</a></li>
+            <li><a href="#faq-h">Frequently Asked Questions (FAQ)</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          
+          <section class="art-section" id="subword-tokenization">
+            <h2>1. Step One: How LLMs Slice Sentences Into Tokens (Not Whole Words)</h2>
+            <p>Neural networks cannot multiply letters—they only process numbers. Before your prompt enters a Transformer model, a Tokenizer breaks the text into common character chunks called tokens and maps each chunk to an integer ID.</p>
+            <p>In English, 1 token averages roughly 4 characters (~0.75 words). Unusual names, code punctuation, and accented characters split into multiple smaller tokens—meaning longer prompts consume more of the model’s context window.</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Real subword tokenization examples</caption>
+                      <thead><tr><th>Input Text</th><th>How the LLM Tokenizes It</th><th>Token Count</th><th>Key Takeaway</th></tr></thead>
+                      <tbody><tr><td>&quot;algorithm&quot;</td><td>[&quot;algorithm&quot;]</td><td>1 token</td><td>Common English word -&gt; single token ID</td></tr><tr><td>&quot;algorithmic&quot;</td><td>[&quot;algorithm&quot;, &quot;ic&quot;]</td><td>2 tokens</td><td>Prefixes/suffixes split cleanly</td></tr><tr><td>&quot;for(int i=0;i&lt;n;i++)&quot;</td><td>[&quot;for&quot;, &quot;(&quot;, &quot;int&quot;, &quot; i&quot;, &quot;=&quot;, &quot;0&quot;, &quot;;&quot;, &quot;i&quot;, &quot;&lt;&quot;, &quot;n&quot;, &quot;;&quot;, &quot;i&quot;, &quot;++)&quot;]</td><td>13 tokens</td><td>Operators and brackets consume tokens individually</td></tr><tr><td>&quot;9.11 &gt; 9.9?&quot;</td><td>[&quot;9&quot;, &quot;.&quot;, &quot;11&quot;, &quot; &gt;&quot;, &quot; &quot;, &quot;9&quot;, &quot;.&quot;, &quot;9&quot;, &quot;?&quot;]</td><td>9 tokens</td><td>The model sees separate text tokens &quot;9&quot; and &quot;11&quot;, not a decimal value!</td></tr></tbody>
+                    </table>
+                  </div>
+            <div class="callout-tip">
+                    <div class="callout-title">Why LLMs Sometimes Fail „How Many R’s Are in Strawberry?”</div>
+                    <p style="margin:0;">The model never sees individual letters s-t-r-a-w-b-e-r-r-y—it receives two or three integer token IDs like [&quot;str&quot;, &quot;aw&quot;, &quot;berry&quot;]. Unless it spells the word out step by step, it has to guess from patterns!</p>
+                  </div>
+          </section>
+
+          <section class="art-section" id="softmax-and-temperature">
+            <h2>2. Next-Token Prediction: Softmax Probabilities &amp; Temperature</h2>
+            <p>After passing tokens through Transformer attention layers, the model scores every ~100,000 tokens in its vocabulary and applies the Softmax function to convert scores into percentages summing to 100%.</p>
+            <p>For „The capital of Romania is...”, „Bucharest” might get 98.5%. The Temperature dial adjusts how strictly or creatively the model picks from those percentages:</p>
+            
+            <ul><li>Temperature = 0.0–0.2 (Deterministic): Almost always picks the #1 token. Best for C++ debugging, Excel formulas, translations, and factual summaries.</li><li>Temperature = 0.7 (Balanced): Allows natural phrasing variety—the typical default for everyday chat.</li><li>Temperature = 1.2+ (Creative / Risky): Flattens Softmax probabilities, boosting creative stories while raising hallucination risk.</li></ul>
+            
+            
+            
+          </section>
+
+          <section class="art-section" id="anatomy-of-ai-hallucinations">
+            <h2>3. Why AI Hallucinations Happen (Top 4 Homework Traps)</h2>
+            <p>An AI hallucination occurs when a chatbot states fabricated information in a confident, polished tone. It happens because LLMs are trained to generate smooth, fluent completions even when they lack verified data:</p>
+            <ol><li>Invented page numbers &amp; book quotes: Asking „Which exact page covers Topic X?” without uploading the textbook often produces a plausible-sounding fake number.</li><li>Dead 404 URLs: LLMs guess web links that look grammatically realistic rather than checking live pages.</li><li>Mental multi-digit arithmetic: Without an attached Python or calculator tool, large multiplication is only approximated.</li><li>Leading false questions: Asking „Explain why Nikola Tesla invented Wi-Fi in 1995” can nudge weak models into playing along with the false premise.</li></ol>
+            
+            
+            
+            
+          </section>
+
+          <section class="art-section" id="four-question-verification">
+            <h2>4. The 60-Second Anti-Hallucination Check</h2>
+            <p>Before trusting any AI output in an essay, lab report, or coding assignment, run these four quick checks:</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Zero-Hallucination Verification Protocol</div>
+                    <pre><code>1. Can I confirm proper names, dates, and definitions in a primary source (textbook / official site)?
+2. For C++ code or Excel formulas, did I actually run them on 3 test inputs (including edge cases)?
+3. Did I explicitly give the AI permission to reply &quot;I cannot verify this&quot;?
+4. Can I explain every claim out loud in 30 seconds without reading off the screen?</code></pre>
+                    <div class="code-cap">Test real hallucination stress-test scenarios interactively inside the ArkyEdu AI &amp; Deepfake Lab.</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="five-educational-prompt-templates">
+            <h2>5. Five High-Impact Educational Prompt Templates</h2>
+            <p>Better prompts give clear Role, Context, Task, and Guardrails. Try these five study-safe templates:</p>
+            
+            <ul><li>1. Socratic Tutor (No Spoilers): „Act as a 7th-grade CS teacher. Do not write the full solution—give me only one hint for why my while loop never ends.”</li><li>2. Trace Table Debugger: „Walk through my C++ snippet on input n = 2040 using a step-by-step variable trace table.”</li><li>3. Kid-Friendly Analogy: „Explain RAM vs. SSD to an 11-year-old using the analogy of a desk and a filing cabinet.”</li><li>4. Teacher Quiz Builder: „Create 5 multiple-choice questions on Excel SUM, AVERAGE, and IF for Grade 8, including one trap involving absolute reference $A$1.”</li><li>5. Self-Critique Check: „List 3 assumptions or potential inaccuracies in your answer above.”</li></ul>
+            
+            
+            
+          </section>
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box" id="checklist-h">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ Smart LLM Usage Checklist</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            <li>I remember LLMs predict statistical tokens rather than verifying objective truth.</li>
+            <li>I always test generated code and verify names, dates, and links against primary sources.</li>
+            <li>I ask AI for hints, analogies, and error traces rather than raw copy-paste answers.</li>
+            <li>I never enter personal IDs, passwords, addresses, or private photos into public AI chats.</li>
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box" id="labs-h">
+          <h2 style="font-size:1.25rem;color:#fff;">Explore Tokens, Softmax &amp; Prompting Live on ArkyEdu</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/laborator-ai/" class="link-card">
+                <div class="link-card-title">AI &amp; Deepfake Lab (Tokenizer &amp; Softmax) →</div>
+                <div class="link-card-desc">Split live text into colored tokens, tune Softmax Temperature sliders, and run hallucination stress tests.</div>
+              </a>
+            <a href="https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/" class="link-card">
+                <div class="link-card-title">AI &amp; ChatGPT Without Plagiarism (R.C.R.L. Method) →</div>
+                <div class="link-card-desc">Companion guide on ethical study habits and structured R.C.R.L. prompts.</div>
+              </a>
+            <a href="https://www.arkyedu.com/glosar/en/prompt-engineering-rccl/" class="link-card">
+                <div class="link-card-title">ICT Glossary: Prompt Engineering →</div>
+                <div class="link-card-desc">Quick definition and template for writing clear prompts.</div>
+              </a>
+            <a href="https://www.arkyedu.com/sandbox/en/" class="link-card">
+                <div class="link-card-title">Live Code Sandbox (Verify AI Code!) →</div>
+                <div class="link-card-desc">Run and debug C++, Python 3, or HTML5 snippets before submitting schoolwork.</div>
+              </a>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ Frequently Asked Questions</h2>
+          <div class="faq-block">
+              <div class="faq-question">What is a token in ChatGPT or Gemini?</div>
+              <div class="faq-answer">A token is the basic text unit fed into the model—typically a short word, word fragment, or punctuation mark (~3–4 characters in English).</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Why can the same prompt produce slightly different AI answers?</div>
+              <div class="faq-answer">When Temperature is above zero, the model samples probabilistically from the Softmax distribution instead of always picking the exact #1 token.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">How can I reduce AI hallucinations?</div>
+              <div class="faq-answer">Paste the reference text directly into your prompt, tell the model to say „I don’t know” when uncertain, avoid leading false premises, and double-check facts.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Does ArkyEdu have a live tokenizer and Softmax simulator?</div>
+              <div class="faq-answer">Yes! Visit the ArkyEdu AI &amp; Deepfake Lab (/laborator-ai/) to type any text and inspect color-coded tokens, adjust Softmax Temperature, and test prompt structures.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Is using AI safe for middle-school homework?</div>
+              <div class="faq-answer">Yes—when used as an interactive tutor for step-by-step hints and practice examples without sharing personal data.</div>
+            </div>
+        </section>
+
+        <!-- Glossary Terms Explained in This Guide -->
+        
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">More Study Guides</h2>
+            <a href="https://www.arkyedu.com/blog/en/" class="card-link">← Back to Blog Index</a>
+          </div>
+          <div class="links-grid">
+            <a href="/blog/en/ai-chatgpt-middle-school-homework-guide/" class="link-card">
+                  <div class="link-card-title">AI &amp; ChatGPT at School →</div>
+                  <div class="link-card-desc">Practical bilingual guide for Grades 5–8 students, parents, and ICT teachers: learn the R.C.R.L. prompting method, fact-checking AI hallucinations, and privacy rules.</div>
+                </a>
+            <a href="/blog/en/middle-school-cpp-common-errors-if-while-digits/" class="link-card">
+                  <div class="link-card-title">Top 10 C++ Errors Fixed →</div>
+                  <div class="link-card-desc">Troubleshoot the 10 most common C++ mistakes in Grades 7–8 (Code::Blocks): = vs ==, stray semicolons after if/while, infinite loops, 5/2 integer division, and n = 0.</div>
+                </a>
+            <a href="/blog/en/excel-formulas-middle-school-sum-if-countif-errors/" class="link-card">
+                  <div class="link-card-title">Excel Formulas &amp; Error Fixes →</div>
+                  <div class="link-card-desc">Complete Grade 8 spreadsheet guide for Excel &amp; Google Sheets: master SUM, AVERAGE, IF, COUNTIF, absolute references ($A$1), semicolon vs comma syntax, and #VALUE! / #NAME? fixes.</div>
+                </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Free ICT & Coding Education.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Home</a> • <a href="https://www.arkyedu.com/blog/en/" style="color: var(--accent);">ICT Blog & Guides</a> • <a href="https://www.arkyedu.com/glosar/en/" style="color: var(--accent);">Glossary (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  
+    <div data-arky-report-bar="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">Spotted an error or broken link on this page?</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; Report an Issue
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
+</body>
+</html>
