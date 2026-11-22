@@ -523,14 +523,22 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
   const handleTriggerSideContract = useCallback(() => {
     const s = simRef.current;
-    if (gameStateRef.current !== 'PLAYING' || s.contractCooldown > 0) return;
+    if (gameStateRef.current !== 'PLAYING') return;
+    if (s.contractCooldown > 0) {
+      setStatusBanner(
+        isEn
+          ? `Contract radio recharging (${Math.ceil(s.contractCooldown)}s)...`
+          : `Radio contracte se reîncarcă (${Math.ceil(s.contractCooldown)}s)...`
+      );
+      return;
+    }
     const idx = Math.floor(Math.random() * LEONIDA_SIDE_CONTRACTS.length);
     setActiveContractIdx(idx);
     setActiveChallenge(null);
     setChallengeFeedback(null);
     setGameState('CHALLENGE');
     sounds.playClick();
-  }, []);
+  }, [isEn]);
 
   // Keyboard listener
   useEffect(() => {
@@ -573,11 +581,21 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
       keysRef.current[e.key.toLowerCase()] = false;
     };
 
+    const onBlur = () => {
+      keysRef.current = {};
+      touchInputRef.current.dx = 0;
+      touchInputRef.current.dy = 0;
+      touchInputRef.current.accel = false;
+      touchInputRef.current.brake = false;
+    };
+
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', onBlur);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('blur', onBlur);
     };
   }, [handleOpenNearestChallenge, handleToggleEnterExit, handleTriggerEmp]);
 
@@ -1598,8 +1616,10 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                 type="button"
                 onPointerDown={() => (touchInputRef.current.dx = -1)}
                 onPointerUp={() => (touchInputRef.current.dx = 0)}
+                onPointerCancel={() => (touchInputRef.current.dx = 0)}
                 onPointerLeave={() => (touchInputRef.current.dx = 0)}
-                className="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold select-none min-h-[44px] min-w-[44px]"
+                className="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[44px]"
+                aria-label={isEn ? 'Steer left' : 'Viraj stânga'}
               >
                 ◀
               </button>
@@ -1607,8 +1627,9 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                 type="button"
                 onPointerDown={() => (touchInputRef.current.accel = true)}
                 onPointerUp={() => (touchInputRef.current.accel = false)}
+                onPointerCancel={() => (touchInputRef.current.accel = false)}
                 onPointerLeave={() => (touchInputRef.current.accel = false)}
-                className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold select-none min-h-[44px]"
+                className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold select-none touch-none min-h-[44px]"
               >
                 {isEn ? 'Gas ▲' : 'Gaz ▲'}
               </button>
@@ -1616,8 +1637,10 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                 type="button"
                 onPointerDown={() => (touchInputRef.current.brake = true)}
                 onPointerUp={() => (touchInputRef.current.brake = false)}
+                onPointerCancel={() => (touchInputRef.current.brake = false)}
                 onPointerLeave={() => (touchInputRef.current.brake = false)}
-                className="px-3 py-2 rounded-xl bg-rose-700 text-white text-xs font-bold select-none min-h-[44px]"
+                className="px-3 py-2 rounded-xl bg-rose-700 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[44px]"
+                aria-label={isEn ? 'Brake / Reverse' : 'Frână / Marșarier'}
               >
                 ▼
               </button>
@@ -1625,8 +1648,10 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                 type="button"
                 onPointerDown={() => (touchInputRef.current.dx = 1)}
                 onPointerUp={() => (touchInputRef.current.dx = 0)}
+                onPointerCancel={() => (touchInputRef.current.dx = 0)}
                 onPointerLeave={() => (touchInputRef.current.dx = 0)}
-                className="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold select-none min-h-[44px] min-w-[44px]"
+                className="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[44px]"
+                aria-label={isEn ? 'Steer right' : 'Viraj dreapta'}
               >
                 ▶
               </button>
@@ -1670,38 +1695,71 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
               {/* Map with Interactive Pins */}
-              <div className="lg:col-span-7 relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
-                <img
-                  src={leonidaMapImg}
-                  alt="State of Leonida Map"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-auto block"
-                />
-                {LEONIDA_REGIONS.map((reg) => {
-                  const ch = LEONIDA_STORY_CHALLENGES.find((c) => c.districtId === reg.id);
-                  const isDone = ch ? completedMissions.includes(ch.id) : false;
-                  const isSelected = gpsTargetId === reg.id;
-                  return (
-                    <button
-                      key={reg.id}
-                      type="button"
-                      onClick={() => {
-                        sounds.playClick();
-                        setGpsTargetId(reg.id);
-                      }}
-                      style={{ left: `${reg.mapPctX}%`, top: `${reg.mapPctY}%` }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg text-[11px] font-black shadow-lg border cursor-pointer transition-transform ${
-                        isSelected
-                          ? 'bg-amber-400 text-slate-950 border-white scale-110 z-10'
-                          : isDone
-                          ? 'bg-emerald-600 text-white border-emerald-300'
-                          : 'bg-slate-950/90 text-white border-fuchsia-400 hover:scale-105'
-                      }`}
-                    >
-                      {isDone ? '✓ ' : ''}{reg.nameRo.split('·')[0].trim()}
-                    </button>
-                  );
-                })}
+              <div className="lg:col-span-7 space-y-2.5">
+                <div className="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
+                  <img
+                    src={leonidaMapImg}
+                    alt="State of Leonida Map"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-auto block"
+                  />
+                  {LEONIDA_REGIONS.map((reg, idx) => {
+                    const ch = LEONIDA_STORY_CHALLENGES.find((c) => c.districtId === reg.id);
+                    const isDone = ch ? completedMissions.includes(ch.id) : false;
+                    const isSelected = gpsTargetId === reg.id;
+                    return (
+                      <button
+                        key={reg.id}
+                        type="button"
+                        aria-label={isEn ? reg.nameEn : reg.nameRo}
+                        onClick={() => {
+                          sounds.playClick();
+                          setGpsTargetId(reg.id);
+                        }}
+                        style={{ left: `${reg.mapPctX}%`, top: `${reg.mapPctY}%` }}
+                        className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 sm:w-auto sm:h-auto sm:px-2.5 sm:py-1 rounded-full sm:rounded-lg text-[11px] font-black shadow-lg border cursor-pointer transition-transform flex items-center justify-center gap-1 whitespace-nowrap ${
+                          isSelected
+                            ? 'bg-amber-400 text-slate-950 border-white scale-110 z-10'
+                            : isDone
+                            ? 'bg-emerald-600 text-white border-emerald-300'
+                            : 'bg-slate-950/90 text-white border-fuchsia-400 hover:scale-105'
+                        }`}
+                      >
+                        <span className="sm:hidden font-mono">{isDone ? '✓' : idx + 1}</span>
+                        <span className="hidden sm:inline">{isDone ? '✓ ' : ''}{reg.nameRo.split('·')[0].trim()}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Quick GPS Target Strip on Mobile (< sm) */}
+                <div className="grid grid-cols-2 sm:hidden gap-1.5">
+                  {LEONIDA_REGIONS.map((reg, idx) => {
+                    const ch = LEONIDA_STORY_CHALLENGES.find((c) => c.districtId === reg.id);
+                    const isDone = ch ? completedMissions.includes(ch.id) : false;
+                    const isSelected = gpsTargetId === reg.id;
+                    return (
+                      <button
+                        key={reg.id}
+                        type="button"
+                        onClick={() => {
+                          sounds.playClick();
+                          setGpsTargetId(reg.id);
+                        }}
+                        className={`px-2.5 py-2 rounded-lg border text-left text-[11px] font-bold flex items-center gap-1.5 cursor-pointer ${
+                          isSelected
+                            ? 'bg-amber-400 text-slate-950 border-white'
+                            : isDone
+                            ? 'bg-emerald-950/50 text-emerald-200 border-emerald-500/40'
+                            : 'bg-slate-950 text-slate-200 border-slate-800'
+                        }`}
+                      >
+                        <span className="font-mono shrink-0">{isDone ? '✓' : `0${idx + 1}`}</span>
+                        <span className="truncate">{reg.nameRo.split('·')[0].trim()}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Right Column: District Info & Instant Vehicle Delivery */}

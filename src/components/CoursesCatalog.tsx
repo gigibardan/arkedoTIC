@@ -1996,10 +1996,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       )}
 
-      {/* 5. INTERACTIVE LABS HUB: ARCADE (28), DUEL 1v1, CYBER CITY & CODE SANDBOX */}
+      {/* 5. INTERACTIVE LABS HUB: ARCADE (30), DUEL 1v1, CYBER CITY & CODE SANDBOX */}
       <section aria-label={lang === 'en' ? 'Interactive Labs & Competitions' : 'Laboratoare Practice & Jocuri'} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Card 1: Arcade Lab (28 Mini-Games) */}
+          {/* Card 1: Arcade Lab (30 Mini-Games) */}
           <div className="rounded-2xl bg-slate-950/80 border border-indigo-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
             <div>
               <div className="flex items-center gap-3 mb-3">
@@ -2008,7 +2008,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                 </div>
                 <div>
                   <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-indigo-400">
-                    {lang === 'en' ? 'Digital Skills Arcade · 28 Games' : 'Laborator Arcade · 28 Mini-Jocuri'}
+                    {lang === 'en' ? 'Digital Skills Arcade · 30 Games' : 'Laborator Arcade · 30 Mini-Jocuri'}
                   </div>
                   <h3 className="text-base font-black text-white font-heading">
                     {lang === 'en' ? 'PageCraft, Roblox & Minecraft Redstone' : 'PageCraft, Roblox & Minecraft Redstone'}
@@ -2030,7 +2030,7 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               className="w-full px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] min-h-[42px]"
             >
               <Gamepad2 className="w-4 h-4 shrink-0" />
-              <span>{lang === 'en' ? 'Open Arcade (28 Games)' : 'Deschide Jocuri Arcade'}</span>
+              <span>{lang === 'en' ? 'Open Arcade (30 Games)' : 'Deschide Jocuri Arcade (30)'}</span>
               <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
           </div>

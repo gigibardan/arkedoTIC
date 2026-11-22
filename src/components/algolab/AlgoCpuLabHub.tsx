@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -112,25 +112,43 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
 
   const [activeTab, setActiveTab] = useState<AlgoLabTab>('algorithms');
   const [progress, setProgress] = useState<AlgoLabProgress>(() => loadAlgoProgress());
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
+  const [cpuImgFailed, setCpuImgFailed] = useState(false);
+  const [logicImgFailed, setLogicImgFailed] = useState(false);
 
-  const rewardOnce = (
-    bucket: 'solvedAlgoQuizzes' | 'solvedBinaryPuzzles' | 'solvedCpuQuizzes' | 'solvedLogicMissions',
-    id: string,
-    coins: number,
-    reason: string
-  ) => {
-    setProgress((prev) => {
-      if (prev[bucket].includes(id)) return prev;
-      addByteCoins(coins, reason);
-      const next: AlgoLabProgress = {
-        ...prev,
-        [bucket]: [...prev[bucket], id],
-        earnedCoins: prev.earnedCoins + coins,
-      };
-      saveAlgoProgress(next);
-      return next;
-    });
-  };
+  const rewardedKeysRef = useRef<Set<string>>(
+    new Set([
+      ...progress.solvedAlgoQuizzes.map((id) => `solvedAlgoQuizzes:${id}`),
+      ...progress.solvedBinaryPuzzles.map((id) => `solvedBinaryPuzzles:${id}`),
+      ...progress.solvedCpuQuizzes.map((id) => `solvedCpuQuizzes:${id}`),
+      ...progress.solvedLogicMissions.map((id) => `solvedLogicMissions:${id}`),
+    ])
+  );
+
+  const rewardOnce = useCallback(
+    (
+      bucket: 'solvedAlgoQuizzes' | 'solvedBinaryPuzzles' | 'solvedCpuQuizzes' | 'solvedLogicMissions',
+      id: string,
+      coins: number,
+      reason: string
+    ) => {
+      const key = `${bucket}:${id}`;
+      if (rewardedKeysRef.current.has(key)) return;
+      rewardedKeysRef.current.add(key);
+      void addByteCoins(coins, reason);
+      setProgress((prev) => {
+        if (prev[bucket].includes(id)) return prev;
+        const next: AlgoLabProgress = {
+          ...prev,
+          [bucket]: [...prev[bucket], id],
+          earnedCoins: prev.earnedCoins + coins,
+        };
+        saveAlgoProgress(next);
+        return next;
+      });
+    },
+    []
+  );
 
   // ============================================================================
   // TAB 1 STATE: ALGORITHMS VISUALIZER
@@ -148,13 +166,16 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
   const [algoSpeedMs, setAlgoSpeedMs] = useState<number>(550);
   const [algoQuizChoice, setAlgoQuizChoice] = useState<Record<string, number>>({});
 
-  const parsedArray = useMemo(() => {
+  const { parsedArray, rawParsedCount } = useMemo(() => {
     const nums = arrayInputText
       .split(/[\s,;]+/)
       .map((s) => Number(s.trim()))
       .filter((n) => Number.isFinite(n) && n >= 1 && n <= 99)
       .slice(0, 14);
-    return nums.length >= 3 ? nums : currentAlgoDef.defaultArray;
+    return {
+      parsedArray: nums.length >= 3 ? nums : currentAlgoDef.defaultArray,
+      rawParsedCount: nums.length,
+    };
   }, [arrayInputText, currentAlgoDef]);
 
   const algoSteps = useMemo(
@@ -225,7 +246,7 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
           : `Registru binar corect pe ${currentBinaryPuzzle.targetDecimal}! +${currentBinaryPuzzle.rewardCoins} ByteCoins!`
       );
     }
-  }, [byteValue, activeTab, currentBinaryPuzzle, progress.solvedBinaryPuzzles, isEn, triggerSuccess]);
+  }, [byteValue, activeTab, currentBinaryPuzzle, progress.solvedBinaryPuzzles, isEn, triggerSuccess, rewardOnce]);
 
   const bitwiseResult = useMemo(() => {
     switch (bitwiseOp) {
@@ -281,9 +302,19 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
     setCpuLogMessage(isEn ? 'CPU Reset. Press Clock Step or Run.' : 'CPU resetat. Apasă Pas Ceas sau Rulează.');
   };
 
-  const stepCpuClock = () => {
-    if (cpuPhase === 'HALTED' || cpuStepCount > 90) {
+  const stepCpuClock = useCallback(() => {
+    if (cpuPhase === 'HALTED') {
       setCpuRunning(false);
+      return;
+    }
+    if (cpuStepCount >= 90) {
+      setCpuPhase('HALTED');
+      setCpuRunning(false);
+      setCpuLogMessage(
+        isEn
+          ? 'SAFETY HALT: Cycle limit (90) reached to protect against infinite loop.'
+          : 'OPRIRE DE SIGURANȚĂ: Limita de 90 cicluri atinsă (protecție buclă infinită).'
+      );
       return;
     }
 
@@ -305,15 +336,17 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
       );
     } else if (cpuPhase === 'DECODE') {
       const cell = cpuRam[cpuPc];
-      setCpuMar(cell.arg);
+      const safeAddr = ((cell.arg % 16) + 16) % 16;
+      setCpuMar(safeAddr);
       setCpuPhase('EXECUTE');
       setCpuLogMessage(
         isEn
-          ? `DECODE: Control Unit decodes ${cell.op} with operand/address ${cell.arg}.`
-          : `DECODE: Unitatea de Control decodifică operația ${cell.op} cu operandul ${cell.arg}.`
+          ? `DECODE: Control Unit decodes ${cell.op} with operand/address ${safeAddr}.`
+          : `DECODE: Unitatea de Control decodifică operația ${cell.op} cu operandul ${safeAddr}.`
       );
     } else if (cpuPhase === 'EXECUTE') {
       const cell = cpuRam[cpuPc];
+      const safeAddr = ((cell.arg % 16) + 16) % 16;
       let nextPc = (cpuPc + 1) % 16;
       let nextAcc = cpuAcc;
       let nextHalted = false;
@@ -321,58 +354,50 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
 
       switch (cell.op) {
         case 'LOAD': {
-          nextAcc = nextRam[cell.arg]?.arg ?? 0;
+          nextAcc = nextRam[safeAddr]?.arg ?? 0;
           setCpuLogMessage(
-            isEn
-              ? `EXECUTE LOAD: ACC <- RAM[${cell.arg}] (${nextAcc}).`
-              : `EXECUTE LOAD: ACC <- RAM[${cell.arg}] (${nextAcc}).`
+            `EXECUTE LOAD: ACC <- RAM[${safeAddr}] (${nextAcc}).`
           );
           break;
         }
         case 'ADD': {
-          const val = nextRam[cell.arg]?.arg ?? 0;
+          const val = nextRam[safeAddr]?.arg ?? 0;
           nextAcc = cpuAcc + val;
           setCpuLogMessage(
-            isEn
-              ? `EXECUTE ADD (ALU): ACC = ${cpuAcc} + ${val} = ${nextAcc}.`
-              : `EXECUTE ADD (ALU): ACC = ${cpuAcc} + ${val} = ${nextAcc}.`
+            `EXECUTE ADD (ALU): ACC = ${cpuAcc} + ${val} = ${nextAcc}.`
           );
           break;
         }
         case 'SUB': {
-          const val = nextRam[cell.arg]?.arg ?? 0;
+          const val = nextRam[safeAddr]?.arg ?? 0;
           nextAcc = cpuAcc - val;
           setCpuLogMessage(
-            isEn
-              ? `EXECUTE SUB (ALU): ACC = ${cpuAcc} - ${val} = ${nextAcc}.`
-              : `EXECUTE SUB (ALU): ACC = ${cpuAcc} - ${val} = ${nextAcc}.`
+            `EXECUTE SUB (ALU): ACC = ${cpuAcc} - ${val} = ${nextAcc}.`
           );
           break;
         }
         case 'STORE': {
-          if (nextRam[cell.arg]) {
-            nextRam[cell.arg] = { addr: cell.arg, op: 'DATA', arg: cpuAcc };
+          if (nextRam[safeAddr]) {
+            nextRam[safeAddr] = { addr: safeAddr, op: 'DATA', arg: cpuAcc };
           }
           setCpuRam(nextRam);
           setCpuLogMessage(
-            isEn
-              ? `EXECUTE STORE: RAM[${cell.arg}] <- ACC (${cpuAcc}).`
-              : `EXECUTE STORE: RAM[${cell.arg}] <- ACC (${cpuAcc}).`
+            `EXECUTE STORE: RAM[${safeAddr}] <- ACC (${cpuAcc}).`
           );
           break;
         }
         case 'JMP': {
-          nextPc = cell.arg;
+          nextPc = safeAddr;
           setCpuLogMessage(
-            isEn ? `EXECUTE JMP: PC jumps to address ${cell.arg}.` : `EXECUTE JMP: Salt necondiționat la adresa ${cell.arg}.`
+            isEn ? `EXECUTE JMP: PC jumps to address ${safeAddr}.` : `EXECUTE JMP: Salt necondiționat la adresa ${safeAddr}.`
           );
           break;
         }
         case 'JZ': {
           if (cpuAcc === 0) {
-            nextPc = cell.arg;
+            nextPc = safeAddr;
             setCpuLogMessage(
-              isEn ? `EXECUTE JZ: ZERO FLAG is 1 -> Jump to ${cell.arg}!` : `EXECUTE JZ: ZERO FLAG = 1 -> Salt la ${cell.arg}!`
+              isEn ? `EXECUTE JZ: ZERO FLAG is 1 -> Jump to ${safeAddr}!` : `EXECUTE JZ: ZERO FLAG = 1 -> Salt la ${safeAddr}!`
             );
           } else {
             setCpuLogMessage(
@@ -408,9 +433,13 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
         setCpuPhase('FETCH');
       }
     }
-  };
+  }, [cpuPhase, cpuStepCount, cpuRam, cpuPc, cpuAcc, isEn]);
 
   useEffect(() => {
+    if (activeTab !== 'cpu' && cpuRunning) {
+      setCpuRunning(false);
+      return;
+    }
     if (!cpuRunning) return;
     if (cpuPhase === 'HALTED') {
       setCpuRunning(false);
@@ -420,7 +449,7 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
       stepCpuClock();
     }, 360);
     return () => window.clearTimeout(timer);
-  });
+  }, [activeTab, cpuRunning, cpuPhase, stepCpuClock]);
 
   // ============================================================================
   // TAB 4 STATE: LOGIC GATES & CURRICULUM BRIDGES
@@ -460,7 +489,7 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
         );
       }
     }
-  }, [activeTab, logicTopologyId, inputA, inputB, inputC, progress.solvedLogicMissions, isEn, triggerSuccess]);
+  }, [activeTab, logicTopologyId, inputA, inputB, inputC, progress.solvedLogicMissions, isEn, triggerSuccess, rewardOnce]);
 
   const totalMasteryCount =
     progress.solvedAlgoQuizzes.length +
@@ -537,7 +566,11 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                 type="button"
                 onClick={() => {
                   sounds.playClick();
-                  onOpenCppTrace(currentAlgoDef.fullCppForSandbox, currentAlgoDef.defaultStdinForSandbox, currentAlgoDef.nameRo);
+                  onOpenCppTrace(
+                    currentAlgoDef.fullCppForSandbox,
+                    currentAlgoDef.defaultStdinForSandbox,
+                    isEn ? currentAlgoDef.nameEn : currentAlgoDef.nameRo
+                  );
                 }}
                 className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-200 text-xs font-bold inline-flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
               >
@@ -549,12 +582,20 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
 
           <div className="lg:col-span-5">
             <div className="rounded-xl overflow-hidden border border-slate-800 bg-slate-900 h-full">
-              <img
-                src={algoLabHeroImg}
-                alt={isEn ? 'Visual Algorithms, Von Neumann CPU and 8-Bit Logic Lab' : 'Ilustrație Laborator Algoritmi Vizuali, CPU Von Neumann și Biți'}
-                referrerPolicy="no-referrer"
-                className="w-full h-full min-h-[190px] object-cover aspect-video lg:aspect-auto"
-              />
+              {!heroImgFailed ? (
+                <img
+                  src={algoLabHeroImg}
+                  alt={isEn ? 'Visual Algorithms, Von Neumann CPU and 8-Bit Logic Lab' : 'Ilustrație Laborator Algoritmi Vizuali, CPU Von Neumann și Biți'}
+                  referrerPolicy="no-referrer"
+                  onError={() => setHeroImgFailed(true)}
+                  className="w-full h-full min-h-[190px] object-cover aspect-video lg:aspect-auto"
+                />
+              ) : (
+                <div className="w-full h-full min-h-[190px] flex flex-col items-center justify-center p-6 text-emerald-300 gap-2">
+                  <Cpu className="w-10 h-10" />
+                  <span className="text-xs font-bold text-white">Algorithms &amp; CPU Lab</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -647,53 +688,60 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
 
               {/* BAR VISUALIZATION STAGE */}
               <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4">
-                <div className="h-56 flex items-end justify-center gap-1.5 sm:gap-2.5 pt-6">
-                  {activeStep.array.map((val, idx) => {
-                    const isSwapping = activeStep.swapping.includes(idx);
-                    const isComparing = activeStep.comparing.includes(idx);
-                    const isSorted = activeStep.sorted.includes(idx);
-                    const isEliminated = activeStep.eliminated.includes(idx);
-                    const isMid = activeStep.mid === idx;
-
-                    let barClass = 'bg-sky-500/80 border-sky-400/50';
-                    let stateTag = '';
-                    if (isSwapping) {
-                      barClass = 'bg-rose-500 border-rose-300';
-                      stateTag = 'SWAP';
-                    } else if (isMid) {
-                      barClass = 'bg-cyan-400 border-cyan-200';
-                      stateTag = 'MID';
-                    } else if (isComparing) {
-                      barClass = 'bg-amber-400 border-amber-200';
-                      stateTag = 'CMP';
-                    } else if (isSorted) {
-                      barClass = 'bg-emerald-500 border-emerald-300';
-                      stateTag = 'OK';
-                    } else if (isEliminated) {
-                      barClass = 'bg-slate-700/40 border-slate-700 opacity-45';
-                    }
-
-                    const heightPct = Math.max(14, Math.min(100, val));
-
+                <div className="overflow-x-auto pb-1">
+                  {(() => {
+                    const maxBarVal = Math.max(...activeStep.array, 10);
                     return (
-                      <div key={idx} className="flex-1 max-w-[48px] h-full flex flex-col items-center justify-end gap-1">
-                        <span className="text-[10px] font-mono font-bold text-slate-300 tabular-nums h-4">
-                          {stateTag}
-                        </span>
-                        <div
-                          className={`w-full rounded-t-lg border transition-all duration-200 flex items-end justify-center pb-1 ${barClass}`}
-                          style={{ height: `${heightPct}%` }}
-                        >
-                          <span className="text-[11px] font-mono font-black text-slate-950 tabular-nums">{val}</span>
-                        </div>
-                        <span className="text-[10px] font-mono text-slate-400 tabular-nums">
-                          {activeStep.low === idx ? 'L·' : ''}
-                          {activeStep.high === idx ? 'R·' : ''}
-                          [{idx}]
-                        </span>
+                      <div className="h-56 min-w-fit flex items-end justify-center gap-1.5 sm:gap-2.5 pt-6 mx-auto">
+                        {activeStep.array.map((val, idx) => {
+                          const isSwapping = activeStep.swapping.includes(idx);
+                          const isComparing = activeStep.comparing.includes(idx);
+                          const isSorted = activeStep.sorted.includes(idx);
+                          const isEliminated = activeStep.eliminated.includes(idx);
+                          const isMid = activeStep.mid === idx;
+
+                          let barClass = 'bg-sky-500/80 border-sky-400/50';
+                          let stateTag = '';
+                          if (isSwapping) {
+                            barClass = 'bg-rose-500 border-rose-300';
+                            stateTag = 'SWAP';
+                          } else if (isMid) {
+                            barClass = 'bg-cyan-400 border-cyan-200';
+                            stateTag = 'MID';
+                          } else if (isComparing) {
+                            barClass = 'bg-amber-400 border-amber-200';
+                            stateTag = 'CMP';
+                          } else if (isSorted) {
+                            barClass = 'bg-emerald-500 border-emerald-300';
+                            stateTag = 'OK';
+                          } else if (isEliminated) {
+                            barClass = 'bg-slate-700/40 border-slate-700 opacity-45';
+                          }
+
+                          const heightPct = Math.max(18, Math.round((val / maxBarVal) * 100));
+
+                          return (
+                            <div key={idx} className="flex-1 min-w-[26px] max-w-[48px] h-full flex flex-col items-center justify-end gap-1">
+                              <span className="text-[10px] font-mono font-bold text-slate-300 tabular-nums h-4 whitespace-nowrap">
+                                {stateTag}
+                              </span>
+                              <div
+                                className={`w-full rounded-t-lg border transition-all duration-200 flex items-end justify-center pb-1 ${barClass}`}
+                                style={{ height: `${heightPct}%` }}
+                              >
+                                <span className="text-[11px] font-mono font-black text-slate-950 tabular-nums">{val}</span>
+                              </div>
+                              <span className="text-[10px] font-mono text-slate-400 tabular-nums whitespace-nowrap">
+                                {activeStep.low === idx ? 'L·' : ''}
+                                {activeStep.high === idx ? 'R·' : ''}
+                                [{idx}]
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
                     );
-                  })}
+                  })()}
                 </div>
 
                 {/* LEGEND (DUAL CODED) */}
@@ -787,7 +835,7 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                       key={spd.label}
                       type="button"
                       onClick={() => setAlgoSpeedMs(spd.ms)}
-                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold cursor-pointer whitespace-nowrap shrink-0 ${
+                      className={`px-2.5 py-1.5 min-h-[36px] rounded-lg text-[11px] font-mono font-bold cursor-pointer whitespace-nowrap shrink-0 ${
                         algoSpeedMs === spd.ms ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'
                       }`}
                     >
@@ -835,6 +883,13 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                     onChange={(e) => setArrayInputText(e.target.value)}
                     className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono text-white focus:outline-none focus:border-emerald-400"
                   />
+                  {rawParsedCount < 3 && (
+                    <p className="text-[11px] text-amber-300 font-medium">
+                      {isEn
+                        ? 'Enter at least 3 numbers (1–99) separated by commas or spaces — showing default array meanwhile.'
+                        : 'Introdu minim 3 numere între 1 și 99 separate prin virgulă sau spațiu (altfel se folosește vectorul implicit).'}
+                    </p>
+                  )}
                   <div className="flex flex-wrap gap-1.5">
                     {ALGO_ARRAY_PRESETS.map((preset) => (
                       <button
@@ -997,13 +1052,13 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                       key={bitPos}
                       type="button"
                       onClick={() => toggleBit(bitPos)}
-                      className={`p-3 rounded-xl border flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                      className={`p-2 sm:p-3 rounded-xl border flex flex-col items-center justify-center gap-1 transition-colors cursor-pointer ${
                         isOn
                           ? 'bg-emerald-950/70 border-emerald-400 text-white'
                           : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-600'
                       }`}
                     >
-                      <span className="text-[11px] font-mono tabular-nums text-slate-400">2^{bitPos} ({weight})</span>
+                      <span className="text-[10px] sm:text-[11px] font-mono tabular-nums text-slate-400 whitespace-nowrap">2^{bitPos} ({weight})</span>
                       <span className={`text-xl font-mono font-black tabular-nums ${isOn ? 'text-emerald-300' : 'text-slate-500'}`}>
                         {isOn ? '1' : '0'}
                       </span>
@@ -1188,8 +1243,11 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                   </div>
                 </div>
 
-                <div className="text-[11px] font-mono text-slate-400 tabular-nums">
-                  24-bit: {rgbR.toString(2).padStart(8, '0')} · {rgbG.toString(2).padStart(8, '0')} · {rgbB.toString(2).padStart(8, '0')}
+                <div className="text-[11px] font-mono text-slate-400 tabular-nums flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                  <span>24-bit:</span>
+                  <span>{rgbR.toString(2).padStart(8, '0')}</span>
+                  <span>· {rgbG.toString(2).padStart(8, '0')}</span>
+                  <span>· {rgbB.toString(2).padStart(8, '0')}</span>
                 </div>
               </div>
             </div>
@@ -1255,7 +1313,7 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
               </div>
 
               {/* CPU REGISTERS GRID */}
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 tabular-nums">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 tabular-nums">
                 <div className={`p-3 rounded-xl border ${cpuPhase === 'FETCH' ? 'bg-cyan-950/60 border-cyan-400' : 'bg-slate-900 border-slate-800'}`}>
                   <div className="text-[11px] font-mono text-slate-400">PC (Addr)</div>
                   <div className="text-lg font-mono font-black text-white">0x{cpuPc.toString(16).toUpperCase().padStart(2, '0')} ({cpuPc})</div>
@@ -1399,12 +1457,20 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
 
               {/* ARCHITECTURE VISUAL */}
               <div className="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden">
-                <img
-                  src={cpuDiagramImg}
-                  alt="Von Neumann CPU Control Unit, ALU, Registers and RAM Bus Diagram"
-                  referrerPolicy="no-referrer"
-                  className="w-full aspect-[4/3] object-cover"
-                />
+                {!cpuImgFailed ? (
+                  <img
+                    src={cpuDiagramImg}
+                    alt="Von Neumann CPU Control Unit, ALU, Registers and RAM Bus Diagram"
+                    referrerPolicy="no-referrer"
+                    onError={() => setCpuImgFailed(true)}
+                    className="w-full aspect-[4/3] object-cover"
+                  />
+                ) : (
+                  <div className="w-full aspect-[4/3] flex flex-col items-center justify-center p-6 text-cyan-300 gap-2 bg-slate-900">
+                    <Cpu className="w-10 h-10" />
+                    <span className="text-xs font-bold text-white">Von Neumann Architecture</span>
+                  </div>
+                )}
               </div>
 
               {/* CPU QUESTION */}
@@ -1496,9 +1562,9 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
               </p>
 
               {/* INTERACTIVE GATE SVG & INPUT TOGGLES */}
-              <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+              <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 {/* INPUT SWITCHES */}
-                <div className="sm:col-span-4 space-y-2.5">
+                <div className="md:col-span-4 space-y-2.5">
                   {[
                     {
                       label: isEn ? activeTopology.inputALabelEn : activeTopology.inputALabelRo,
@@ -1527,20 +1593,20 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                         sounds.playClick();
                         sw.toggle();
                       }}
-                      className={`w-full px-3 py-2.5 rounded-xl border flex items-center justify-between text-xs font-bold cursor-pointer ${
+                      className={`w-full px-3 py-2.5 rounded-xl border flex items-center justify-between gap-2 text-xs font-bold cursor-pointer ${
                         sw.val
                           ? 'bg-emerald-950/70 border-emerald-400 text-emerald-200'
                           : 'bg-slate-950 border-slate-700 text-slate-300'
                       }`}
                     >
-                      <span className="truncate">{sw.label}</span>
-                      <span className="font-mono tabular-nums">{sw.val ? '1 (HIGH)' : '0 (LOW)'}</span>
+                      <span className="truncate min-w-0">{sw.label}</span>
+                      <span className="font-mono tabular-nums shrink-0 whitespace-nowrap">{sw.val ? '1 (HIGH)' : '0 (LOW)'}</span>
                     </button>
                   ))}
                 </div>
 
                 {/* SVG GATE WIRE SCHEMATIC */}
-                <div className="sm:col-span-4 flex justify-center">
+                <div className="md:col-span-4 flex justify-center">
                   <svg viewBox="0 0 220 140" className="w-full max-w-[220px]" aria-label="Digital logic gate signal diagram">
                     <line x1="10" y1="40" x2="80" y2="40" stroke={inputA ? '#34d399' : '#475569'} strokeWidth="4" strokeLinecap="round" />
                     <line x1="10" y1="85" x2="80" y2="85" stroke={inputB ? '#34d399' : '#475569'} strokeWidth="4" strokeLinecap="round" />
@@ -1559,7 +1625,7 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                 </div>
 
                 {/* OUTPUT LEDS */}
-                <div className="sm:col-span-4 space-y-2.5">
+                <div className="md:col-span-4 space-y-2.5">
                   <div
                     className={`p-3 rounded-xl border text-center ${
                       logicResult.primary ? 'bg-emerald-950/70 border-emerald-400 text-emerald-200' : 'bg-slate-950 border-slate-800 text-slate-400'
@@ -1635,12 +1701,20 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
             {/* RIGHT: HARDWARE BOARD VISUAL + CIRCUIT MISSIONS */}
             <div className="lg:col-span-5 space-y-4">
               <div className="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden">
-                <img
-                  src={logicBoardImg}
-                  alt="Digital 8-bit LED breadboard with IC logic chips and DIP toggle switches"
-                  referrerPolicy="no-referrer"
-                  className="w-full aspect-[4/3] object-cover"
-                />
+                {!logicImgFailed ? (
+                  <img
+                    src={logicBoardImg}
+                    alt="Digital 8-bit LED breadboard with IC logic chips and DIP toggle switches"
+                    referrerPolicy="no-referrer"
+                    onError={() => setLogicImgFailed(true)}
+                    className="w-full aspect-[4/3] object-cover"
+                  />
+                ) : (
+                  <div className="w-full aspect-[4/3] flex flex-col items-center justify-center p-6 text-emerald-300 gap-2 bg-slate-900">
+                    <CircuitBoard className="w-10 h-10" />
+                    <span className="text-xs font-bold text-white">Digital Logic Gates</span>
+                  </div>
+                )}
               </div>
 
               <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3">
@@ -1657,6 +1731,11 @@ export const AlgoCpuLabHub: React.FC<AlgoCpuLabHubProps> = ({
                         type="button"
                         onClick={() => {
                           sounds.playClick();
+                          if (!done) {
+                            setInputA(!ch.targetA);
+                            setInputB(!ch.targetB);
+                            setInputC(ch.targetC !== undefined ? !ch.targetC : false);
+                          }
                           setLogicTopologyId(ch.topology);
                         }}
                         className={`w-full text-left p-3 rounded-xl border text-xs space-y-1 cursor-pointer ${

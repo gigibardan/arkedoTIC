@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -95,6 +95,13 @@ export const AiDeepfakeLabHub: React.FC<AiDeepfakeLabHubProps> = ({
   const [activeTab, setActiveTab] = useState<LabTabId>('llm');
   const [progress, setProgress] = useState<AiLabProgressState>(() => loadLabProgress());
   const [heroImgFailed, setHeroImgFailed] = useState(false);
+  const awardedKeysRef = useRef<Set<string>>(
+    new Set([
+      ...progress.solvedDeepfakes.map((id) => `solvedDeepfakes:${id}`),
+      ...progress.solvedHallucinations.map((id) => `solvedHallucinations:${id}`),
+      ...progress.solvedPrompts.map((id) => `solvedPrompts:${id}`),
+    ])
+  );
 
   // Sync progress to localStorage
   useEffect(() => {
@@ -188,9 +195,12 @@ export const AiDeepfakeLabHub: React.FC<AiDeepfakeLabHubProps> = ({
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
 
   const awardOnce = (bucket: 'solvedDeepfakes' | 'solvedHallucinations' | 'solvedPrompts', id: string, coins: number, reason: string) => {
+    const key = `${bucket}:${id}`;
+    if (awardedKeysRef.current.has(key)) return;
+    awardedKeysRef.current.add(key);
+    void addByteCoins(coins, reason);
     setProgress((prev) => {
       if (prev[bucket].includes(id)) return prev;
-      void addByteCoins(coins, reason);
       return {
         ...prev,
         [bucket]: [...prev[bucket], id],
@@ -347,45 +357,49 @@ export const AiDeepfakeLabHub: React.FC<AiDeepfakeLabHubProps> = ({
           </div>
 
           <div className="relative rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 aspect-[4/3]">
-            {!evidenceImgFailed ? (
-              <img
-                src={imgSrc}
-                alt={isEn ? activeCase.titleEn : activeCase.titleRo}
-                referrerPolicy="no-referrer"
-                onError={() => setEvidenceImgFailed(true)}
-                className={`w-full h-full object-cover transition-transform duration-300 ${
-                  loupeZoom ? 'scale-[1.35]' : 'scale-100'
-                }`}
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-slate-300 gap-2">
-                <ImageIcon className="w-10 h-10 text-teal-400" />
-                <div className="text-sm font-bold">{isEn ? activeCase.titleEn : activeCase.titleRo}</div>
-              </div>
-            )}
+            <div
+              className={`relative w-full h-full transition-transform duration-300 ${
+                loupeZoom ? 'scale-[1.35]' : 'scale-100'
+              }`}
+            >
+              {!evidenceImgFailed ? (
+                <img
+                  src={imgSrc}
+                  alt={isEn ? activeCase.titleEn : activeCase.titleRo}
+                  referrerPolicy="no-referrer"
+                  onError={() => setEvidenceImgFailed(true)}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-slate-300 gap-2">
+                  <ImageIcon className="w-10 h-10 text-teal-400" />
+                  <div className="text-sm font-bold">{isEn ? activeCase.titleEn : activeCase.titleRo}</div>
+                </div>
+              )}
 
-            {activeCase.hotspots?.map((spot, sIdx) => {
-              const isSelected = spot.id === (activeHotspot?.id ?? '');
-              return (
-                <button
-                  key={spot.id}
-                  type="button"
-                  onClick={() => {
-                    sounds.playClick();
-                    setSelectedHotspotId(spot.id);
-                  }}
-                  style={{ top: `${spot.yPct}%`, left: `${spot.xPct}%`, transform: 'translate(-50%, -50%)' }}
-                  aria-label={isEn ? spot.labelEn : spot.labelRo}
-                  className={`absolute w-8 h-8 rounded-full font-mono text-xs font-bold flex items-center justify-center cursor-pointer transition-transform shadow-lg ${
-                    isSelected
-                      ? 'bg-amber-400 text-slate-950 scale-110 ring-2 ring-white z-20'
-                      : 'bg-slate-950/90 text-white border border-teal-400 hover:scale-105 z-10'
-                  }`}
-                >
-                  {sIdx + 1}
-                </button>
-              );
-            })}
+              {activeCase.hotspots?.map((spot, sIdx) => {
+                const isSelected = spot.id === (activeHotspot?.id ?? '');
+                return (
+                  <button
+                    key={spot.id}
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedHotspotId(spot.id);
+                    }}
+                    style={{ top: `${spot.yPct}%`, left: `${spot.xPct}%`, transform: 'translate(-50%, -50%)' }}
+                    aria-label={isEn ? spot.labelEn : spot.labelRo}
+                    className={`absolute w-9 h-9 rounded-full font-mono text-xs font-bold flex items-center justify-center cursor-pointer transition-transform shadow-lg ${
+                      isSelected
+                        ? 'bg-amber-400 text-slate-950 scale-110 ring-2 ring-white z-20'
+                        : 'bg-slate-950/90 text-white border border-teal-400 hover:scale-105 z-10'
+                    }`}
+                  >
+                    {sIdx + 1}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {activeHotspot && (
@@ -562,7 +576,7 @@ export const AiDeepfakeLabHub: React.FC<AiDeepfakeLabHubProps> = ({
       <div
         role="tablist"
         aria-label={isEn ? 'AI Lab Modules' : 'Module Laborator AI'}
-        className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-950 border border-slate-800 rounded-2xl"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 p-1.5 bg-slate-950 border border-slate-800 rounded-2xl"
       >
         {(
           [
@@ -603,14 +617,14 @@ export const AiDeepfakeLabHub: React.FC<AiDeepfakeLabHubProps> = ({
                 sounds.playClick();
                 setActiveTab(tab.id);
               }}
-              className={`px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors inline-flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 min-h-[42px] ${
+              className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-colors inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap min-h-[42px] max-w-full ${
                 isActive
                   ? 'bg-teal-500 text-slate-950 shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-slate-900'
               }`}
             >
               {tab.icon}
-              <span>{isEn ? tab.en : tab.ro}</span>
+              <span className="truncate">{isEn ? tab.en : tab.ro}</span>
             </button>
           );
         })}
@@ -1045,10 +1059,10 @@ export const AiDeepfakeLabHub: React.FC<AiDeepfakeLabHubProps> = ({
               {/* Technical EXIF / Provenance Inspection Table */}
               <div className="rounded-xl bg-slate-950 border border-slate-800 divide-y divide-slate-800/80 text-xs">
                 {activeCase.metadataRows.map((row) => (
-                  <div key={row.keyEn} className="p-2.5 flex items-center justify-between gap-2">
+                  <div key={row.keyEn} className="p-2.5 flex items-start justify-between gap-3">
                     <span className="text-slate-400 shrink-0">{isEn ? row.keyEn : row.keyRo}</span>
                     <span
-                      className={`font-mono text-right font-semibold ${
+                      className={`font-mono text-right font-semibold break-words min-w-0 ${
                         row.suspicious ? 'text-amber-300' : 'text-emerald-300'
                       }`}
                     >

@@ -360,331 +360,333 @@ export const Header: React.FC<HeaderProps> = ({
                 {isResourcesOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-72 rounded-2xl bg-slate-900/98 backdrop-blur-xl border border-slate-700/90 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                    className="absolute right-0 mt-2 w-72 lg:w-[36rem] max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-2xl bg-slate-900/98 backdrop-blur-xl border border-slate-700/90 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   >
-                    {onNavigateToCarnet && (
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={() => {
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToCarnet();
-                        }}
-                        className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
-                          currentView === 'carnet'
-                            ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-                          <Award className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? 'Grades, Diplomas & Streak' : 'Note 1–10, Diplome & Trofee'}
-                          </div>
-                        </div>
-                      </button>
-                    )}
-
-                    {onNavigateToEvaluare && (
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={() => {
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToEvaluare();
-                        }}
-                        className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
-                          currentView === 'evaluare'
-                            ? 'bg-cyan-500/15 text-cyan-200 border border-cyan-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-                          <ClipboardCheck className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'Quick Eval Simulator' : 'Simulare Evaluare (Test)'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? 'Timed Quizzes · Grades 5–8' : 'Test Cronometrat · Nota 1–10'}
-                          </div>
-                        </div>
-                      </button>
-                    )}
-
-                    {onNavigateToLiveQuiz && (
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={() => {
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToLiveQuiz();
-                        }}
-                        className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
-                          currentView === 'livequiz'
-                            ? 'bg-rose-500/15 text-rose-200 border border-rose-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
-                          <Radio className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'Live Class Quiz (PIN)' : 'Quiz Live în Clasă (PIN)'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? 'Join teacher session live' : 'Intră cu codul PIN de pe tablă'}
-                          </div>
-                        </div>
-                      </button>
-                    )}
-
-                    {onNavigateToSandbox && (
-                      <a
-                        href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToSandbox();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'sandbox'
-                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                          <Code2 className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'Code Sandbox Lab' : 'Sandbox Cod Live'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            C++ · Python 3 · HTML5
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onNavigateToBlog && (
-                      <a
-                        href={lang === 'en' ? '/blog/en/' : '/blog/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToBlog();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'blog'
-                            ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? '12 step-by-step guides' : '12 ghiduri practice V–VIII'}
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onNavigateToGlossary && (
-                      <a
-                        href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToGlossary();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'glossary'
-                            ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-                          <BookOpen className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'ICT & CS Glossary' : 'Glosar Informatică & TIC'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? '44 Essential Terms A–Z' : '44 Termeni Esențiali A–Z'}
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onNavigateToWorksheets && (
-                      <a
-                        href={lang === 'en' ? '/fise/en/' : '/fise/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToWorksheets();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'fise'
-                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                          <ClipboardCheck className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'Worksheets & Rubrics (16)' : 'Fișe & Teste cu Barem (16)'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? 'A4 Printable · OJI & 1–10 Keys' : 'A4 Imprimabile · Barem 1–10'}
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onNavigateToLeonida && (
-                      <a
-                        href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToLeonida();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'leonida'
-                            ? 'bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-fuchsia-500/15 border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 shrink-0">
-                          <Compass className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'Vice Leonida (GTA 6 Open-World)' : 'Vice Leonida (Open-World GTA 6)'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? '6 Districts · 5 Rides · 3 Modes' : '6 Regiuni · 5 Vehicule · 3 Moduri'}
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onNavigateToAiLab && (
-                      <a
-                        href={lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToAiLab();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'ailab'
-                            ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
-                          <BrainCircuit className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'AI & Deepfake Lab' : 'Laborator AI & Deepfake'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? 'Tokens · Forensics · Prompts' : 'Tokeni · Detectiv · Prompturi'}
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onNavigateToAlgoLab && (
-                      <a
-                        href={lang === 'en' ? '/laborator-algoritmi/en/' : '/laborator-algoritmi/'}
-                        role="menuitem"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onNavigateToAlgoLab();
-                        }}
-                        className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
-                          currentView === 'algolab'
-                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                            : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
-                        }`}
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                          <Cpu className="w-4 h-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="text-xs font-bold text-white">
-                            {lang === 'en' ? 'Algorithms & CPU Lab' : 'Laborator Algoritmi & CPU'}
-                          </div>
-                          <div className="text-[11px] text-slate-400 truncate">
-                            {lang === 'en' ? 'Sorting · Binary · Von Neumann · Logic' : 'Sortări · Binar · CPU · Porți Logice'}
-                          </div>
-                        </div>
-                      </a>
-                    )}
-
-                    {onOpenShop && (
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={() => {
-                          sounds.playClick();
-                          setIsResourcesOpen(false);
-                          onOpenShop();
-                        }}
-                        className="w-full flex items-center justify-between gap-3 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-200 transition cursor-pointer text-left"
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
-                            <ShoppingBag className="w-4 h-4" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-1">
+                      {onNavigateToCarnet && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToCarnet();
+                          }}
+                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
+                            currentView === 'carnet'
+                              ? 'bg-amber-500/15 text-amber-200 border border-amber-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                            <Award className="w-4 h-4" />
                           </div>
                           <div className="min-w-0">
-                            <div className="text-xs font-bold text-white">
-                              {lang === 'en' ? 'Cyber Shop' : 'Magazin Cyber'}
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'My Digital Portfolio' : 'Carnetul meu Digital'}
                             </div>
                             <div className="text-[11px] text-slate-400 truncate">
-                              {typeof byteCoins === 'number' ? `${byteCoins} ByteCoins` : (lang === 'en' ? 'Avatars & Upgrades' : 'Avataruri & Bonusuri')}
+                              {lang === 'en' ? 'Grades, Diplomas & Streak' : 'Note 1–10, Diplome & Trofee'}
                             </div>
                           </div>
-                        </div>
-                      </button>
-                    )}
+                        </button>
+                      )}
+
+                      {onNavigateToEvaluare && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToEvaluare();
+                          }}
+                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
+                            currentView === 'evaluare'
+                              ? 'bg-cyan-500/15 text-cyan-200 border border-cyan-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                            <ClipboardCheck className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'Quick Eval Simulator' : 'Simulare Evaluare (Test)'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? 'Timed Quizzes · Grades 5–8' : 'Test Cronometrat · Nota 1–10'}
+                            </div>
+                          </div>
+                        </button>
+                      )}
+
+                      {onNavigateToLiveQuiz && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToLiveQuiz();
+                          }}
+                          className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer text-left ${
+                            currentView === 'livequiz'
+                              ? 'bg-rose-500/15 text-rose-200 border border-rose-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0">
+                            <Radio className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'Live Class Quiz (PIN)' : 'Quiz Live în Clasă (PIN)'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? 'Join teacher session live' : 'Intră cu codul PIN de pe tablă'}
+                            </div>
+                          </div>
+                        </button>
+                      )}
+
+                      {onNavigateToSandbox && (
+                        <a
+                          href={lang === 'en' ? '/sandbox/en/' : '/sandbox/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToSandbox();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'sandbox'
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                            <Code2 className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'Code Sandbox Lab' : 'Sandbox Cod Live'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              C++ · Python 3 · HTML5
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onNavigateToBlog && (
+                        <a
+                          href={lang === 'en' ? '/blog/en/' : '/blog/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToBlog();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'blog'
+                              ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
+                            <FileText className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? '12 step-by-step guides' : '12 ghiduri practice V–VIII'}
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onNavigateToGlossary && (
+                        <a
+                          href={lang === 'en' ? '/glosar/en/' : '/glosar/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToGlossary();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'glossary'
+                              ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+                            <BookOpen className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'ICT & CS Glossary' : 'Glosar Informatică & TIC'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? '44 Essential Terms A–Z' : '44 Termeni Esențiali A–Z'}
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onNavigateToWorksheets && (
+                        <a
+                          href={lang === 'en' ? '/fise/en/' : '/fise/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToWorksheets();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'fise'
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                            <ClipboardCheck className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'Worksheets & Rubrics (16)' : 'Fișe & Teste cu Barem (16)'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? 'A4 Printable · OJI & 1–10 Keys' : 'A4 Imprimabile · Barem 1–10'}
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onNavigateToLeonida && (
+                        <a
+                          href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToLeonida();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'leonida'
+                              ? 'bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-fuchsia-500/15 border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 shrink-0">
+                            <Compass className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'Vice Leonida (GTA 6 Open-World)' : 'Vice Leonida (Open-World GTA 6)'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? '6 Districts · 5 Rides · 3 Modes' : '6 Regiuni · 5 Vehicule · 3 Moduri'}
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onNavigateToAiLab && (
+                        <a
+                          href={lang === 'en' ? '/laborator-ai/en/' : '/laborator-ai/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToAiLab();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'ailab'
+                              ? 'bg-teal-500/15 text-teal-300 border border-teal-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0">
+                            <BrainCircuit className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'AI & Deepfake Lab' : 'Laborator AI & Deepfake'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? 'Tokens · Forensics · Prompts' : 'Tokeni · Detectiv · Prompturi'}
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onNavigateToAlgoLab && (
+                        <a
+                          href={lang === 'en' ? '/laborator-algoritmi/en/' : '/laborator-algoritmi/'}
+                          role="menuitem"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onNavigateToAlgoLab();
+                          }}
+                          className={`flex items-center gap-3 p-2.5 rounded-xl transition cursor-pointer ${
+                            currentView === 'algolab'
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'hover:bg-slate-800/80 text-slate-200 border border-transparent'
+                          }`}
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                            <Cpu className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-white truncate">
+                              {lang === 'en' ? 'Algorithms & CPU Lab' : 'Laborator Algoritmi & CPU'}
+                            </div>
+                            <div className="text-[11px] text-slate-400 truncate">
+                              {lang === 'en' ? 'Sorting · Binary · Von Neumann · Logic' : 'Sortări · Binar · CPU · Porți Logice'}
+                            </div>
+                          </div>
+                        </a>
+                      )}
+
+                      {onOpenShop && (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            sounds.playClick();
+                            setIsResourcesOpen(false);
+                            onOpenShop();
+                          }}
+                          className="w-full flex items-center justify-between gap-3 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-200 transition cursor-pointer text-left"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+                              <ShoppingBag className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold text-white truncate">
+                                {lang === 'en' ? 'Cyber Shop' : 'Magazin Cyber'}
+                              </div>
+                              <div className="text-[11px] text-slate-400 truncate">
+                                {typeof byteCoins === 'number' ? `${byteCoins} ByteCoins` : (lang === 'en' ? 'Avatars & Upgrades' : 'Avataruri & Bonusuri')}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      )}
+                    </div>
 
                     {onNavigateToTeacher && (
                       <div className="mt-1.5 pt-1.5 border-t border-slate-800">

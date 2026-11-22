@@ -66,6 +66,9 @@ export const LeonidaUniverseHub: React.FC<LeonidaUniverseHubProps> = ({
   const [playingOpenWorld, setPlayingOpenWorld] = useState<boolean>(initialLaunchWorld);
   const [selectedDistrict, setSelectedDistrict] = useState<LeonidaDistrictId>('vice_city');
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
+  const [mapImgFailed, setMapImgFailed] = useState(false);
+  const [duoImgFailed, setDuoImgFailed] = useState(false);
 
   const activeRegion = LEONIDA_REGIONS.find((r) => r.id === selectedDistrict) || LEONIDA_REGIONS[0];
   const activeChallenge = LEONIDA_STORY_CHALLENGES.find((c) => c.districtId === selectedDistrict);
@@ -184,15 +187,23 @@ export const LeonidaUniverseHub: React.FC<LeonidaUniverseHubProps> = ({
           </div>
 
           <div className="lg:col-span-5 relative min-h-[260px] lg:min-h-full bg-slate-900">
-            <img
-              src={leonidaHeroImg}
-              alt={
-                isEn
-                  ? 'Vice Leonida Open World sunset highway skyline inspired by GTA 6'
-                  : 'Vice Leonida Open World apus neon pe autostrada inspirată din GTA 6'
-              }
-              className="w-full h-full object-cover"
-            />
+            {!heroImgFailed ? (
+              <img
+                src={leonidaHeroImg}
+                alt={
+                  isEn
+                    ? 'Vice Leonida Open World sunset highway skyline inspired by GTA 6'
+                    : 'Vice Leonida Open World apus neon pe autostrada inspirată din GTA 6'
+                }
+                onError={() => setHeroImgFailed(true)}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-fuchsia-300 gap-2">
+                <Compass className="w-12 h-12" />
+                <span className="text-sm font-bold text-white">State of Leonida · Vice City</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-slate-950/30 via-transparent to-slate-950/90 pointer-events-none" />
           </div>
         </div>
@@ -330,37 +341,72 @@ export const LeonidaUniverseHub: React.FC<LeonidaUniverseHubProps> = ({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Interactive Map Canvas */}
-          <div className="lg:col-span-7 relative rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 aspect-[16/10]">
-            <img
-              src={leonidaMapImg}
-              alt={isEn ? 'Tactical neon GPS map of State of Leonida' : 'Hartă tactică GPS a Statului Leonida'}
-              className="w-full h-full object-cover opacity-90"
-            />
-            <div className="absolute inset-0 bg-slate-950/30 pointer-events-none" />
+          <div className="lg:col-span-7 space-y-2.5">
+            <div className="relative rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 aspect-[16/10]">
+              {!mapImgFailed ? (
+                <img
+                  src={leonidaMapImg}
+                  alt={isEn ? 'Tactical neon GPS map of State of Leonida' : 'Hartă tactică GPS a Statului Leonida'}
+                  onError={() => setMapImgFailed(true)}
+                  className="w-full h-full object-cover opacity-90"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-400 text-xs font-mono">
+                  LEONIDA GPS TACTICAL MAP
+                </div>
+              )}
+              <div className="absolute inset-0 bg-slate-950/30 pointer-events-none" />
 
-            {LEONIDA_REGIONS.map((region, idx) => {
-              const pos = PIN_POSITIONS[region.id];
-              const isSelected = region.id === selectedDistrict;
-              return (
-                <button
-                  key={region.id}
-                  type="button"
-                  onClick={() => {
-                    sounds.playClick();
-                    setSelectedDistrict(region.id);
-                  }}
-                  style={{ top: pos.top, left: pos.left, transform: 'translate(-50%, -50%)' }}
-                  className={`absolute px-2.5 py-1.5 rounded-xl font-bold text-[11px] sm:text-xs transition-all cursor-pointer shadow-lg flex items-center gap-1.5 whitespace-nowrap ${
-                    isSelected
-                      ? 'bg-amber-400 text-slate-950 scale-110 ring-2 ring-white z-20'
-                      : 'bg-slate-950/90 hover:bg-slate-800 text-white border border-slate-600 z-10'
-                  }`}
-                >
-                  <span className="font-mono">{String(idx + 1).padStart(2, '0')}</span>
-                  <span>{region.nameRo.split('·')[0].trim()}</span>
-                </button>
-              );
-            })}
+              {LEONIDA_REGIONS.map((region, idx) => {
+                const pos = PIN_POSITIONS[region.id];
+                const isSelected = region.id === selectedDistrict;
+                return (
+                  <button
+                    key={region.id}
+                    type="button"
+                    aria-label={isEn ? region.nameEn : region.nameRo}
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedDistrict(region.id);
+                    }}
+                    style={{ top: pos.top, left: pos.left, transform: 'translate(-50%, -50%)' }}
+                    className={`absolute w-8 h-8 sm:w-auto sm:h-auto sm:px-2.5 sm:py-1.5 rounded-full sm:rounded-xl font-bold text-[11px] sm:text-xs transition-all cursor-pointer shadow-lg flex items-center justify-center gap-1.5 whitespace-nowrap ${
+                      isSelected
+                        ? 'bg-amber-400 text-slate-950 scale-110 ring-2 ring-white z-20'
+                        : 'bg-slate-950/90 hover:bg-slate-800 text-white border border-slate-600 z-10'
+                    }`}
+                  >
+                    <span className="font-mono">{String(idx + 1).padStart(2, '0')}</span>
+                    <span className="hidden sm:inline">{region.nameRo.split('·')[0].trim()}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Quick District Bar for Mobile (< sm) where map pins show compact numbers */}
+            <div className="grid grid-cols-2 sm:hidden gap-1.5">
+              {LEONIDA_REGIONS.map((region, idx) => {
+                const isSelected = region.id === selectedDistrict;
+                return (
+                  <button
+                    key={region.id}
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedDistrict(region.id);
+                    }}
+                    className={`px-2.5 py-2 rounded-xl border text-left text-[11px] font-bold flex items-center gap-1.5 cursor-pointer min-h-[38px] ${
+                      isSelected
+                        ? 'bg-amber-400 text-slate-950 border-amber-300'
+                        : 'bg-slate-900 text-slate-200 border-slate-800'
+                    }`}
+                  >
+                    <span className="font-mono shrink-0">{String(idx + 1).padStart(2, '0')}</span>
+                    <span className="truncate">{region.nameRo.split('·')[0].trim()}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Selected Region Telemetry Dossier */}
@@ -427,11 +473,19 @@ export const LeonidaUniverseHub: React.FC<LeonidaUniverseHubProps> = ({
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         <div className="lg:col-span-5 rounded-3xl overflow-hidden border border-slate-800 bg-slate-950 flex flex-col">
           <div className="aspect-[16/10] bg-slate-900 overflow-hidden">
-            <img
-              src={leonidaDuoImg}
-              alt={isEn ? 'Lucia Caminos and Jason Duval cyber agents in Vice Leonida' : 'Lucia Caminos și Jason Duval agenți cyber în Vice Leonida'}
-              className="w-full h-full object-cover"
-            />
+            {!duoImgFailed ? (
+              <img
+                src={leonidaDuoImg}
+                alt={isEn ? 'Lucia Caminos and Jason Duval cyber agents in Vice Leonida' : 'Lucia Caminos și Jason Duval agenți cyber în Vice Leonida'}
+                onError={() => setDuoImgFailed(true)}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-fuchsia-300 gap-2">
+                <Users className="w-10 h-10" />
+                <span className="text-xs font-bold text-white">Lucia Caminos &amp; Jason Duval</span>
+              </div>
+            )}
           </div>
           <div className="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
             <div className="space-y-2">
