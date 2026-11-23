@@ -5,7 +5,7 @@
   <link>https://www.arkyedu.com/blog/</link>
   <description>Ghiduri practice bilingve pentru elevi (clasele V–VIII), părinți și profesori de TIC: C++, Excel, Scratch 3.0, Word, HTML5, Arduino Smart Home IoT și siguranță online.</description>
   <language>ro</language>
-  <lastBuildDate>Sun, 22 Nov 2026 20:20:55 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 22 Nov 2026 20:51:40 GMT</lastBuildDate>
   <atom:link href="https://www.arkyedu.com/rss.xml" rel="self" type="application/rss+xml" />
   <item>
     <title>Inteligența Artificială &amp; ChatGPT la școală (V–VIII): Cum folosești AI-ul corect la teme fără plagiat</title>
@@ -294,6 +294,102 @@
     <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
     <category>Coding &amp; Career</category>
     <description>C++ excels in competitive programming (IOI/Olympiads), robotics (Arduino), and teaching how memory and types really work—and is the standard across Romanian middle/high schools. Python is easier to read on day one and dominates AI, data science, and automation. You don’t have to pick only one: start with Scratch in Grades 5–6, master core C++ in Grades 7–8, and use Python alongside it in the Sandbox for AI and fast scripting.</description>
+  </item>
+  <item>
+    <title>Algoritmi de Sortare în C++ pentru Gimnaziu &amp; Olimpiadă: Bubble Sort, Selection Sort, Insertion Sort &amp; std::sort() explicate pas cu pas</title>
+    <link>https://www.arkyedu.com/blog/algoritmi-de-sortare-cpp-bubble-selection-insertion-std-sort/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/algoritmi-de-sortare-cpp-bubble-selection-insertion-std-sort/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>C++ &amp; Algoritmi</category>
+    <description>În gimnaziu (N &lt;= 1.000), algoritmii de sortare pătratici O(n²) — Bubble Sort cu oprire timpurie, Selection Sort și Insertion Sort — sunt esențiali pentru înțelegerea logicii de interschimbare și a testelor de clasă. Pentru Olimpiadă și N &gt;= 10.000 de elemente, folosește exclusiv std::sort(v, v + n) din &lt;algorithm&gt;, care rulează în O(n log n) și sortează 100.000 de numere în sub 0,03 secunde.</description>
+  </item>
+  <item>
+    <title>C++ Sorting Algorithms for Middle School &amp; Olympiads: Bubble Sort, Selection Sort, Insertion Sort &amp; std::sort() Explained</title>
+    <link>https://www.arkyedu.com/blog/en/cpp-sorting-algorithms-bubble-selection-insertion-std-sort/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/cpp-sorting-algorithms-bubble-selection-insertion-std-sort/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>C++ &amp; Algorithms</category>
+    <description>For classroom benchmarks (N &lt;= 1,000), quadratic O(n²) sorts—early-exit Bubble Sort, Selection Sort, and Insertion Sort—build essential loop and swap intuition. For contests and N &gt;= 10,000, always use std::sort(v, v + n) from &lt;algorithm&gt;, which runs in guaranteed O(n log n) and sorts 100,000 numbers in under 0.03 seconds.</description>
+  </item>
+  <item>
+    <title>Cum funcționează Internetul în 2026: IP, DNS, TCP vs. UDP (de ce ai Ping mare în jocuri), Porturi &amp; Wi-Fi 6/7</title>
+    <link>https://www.arkyedu.com/blog/cum-functioneaza-internetul-ip-dns-tcp-udp-ping-wifi-router/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/cum-functioneaza-internetul-ip-dns-tcp-udp-ping-wifi-router/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Rețele &amp; Securitate</category>
+    <description>Internetul transportă informația împărțită în pachete mici numerotate: DNS traduce numele ușor de reținut (arkyedu.com) în adresa IP numerică a serverului; TCP garantează că pachetele ajung intacte și în ordine (ideal pentru pagini web HTTPS port 443 și descărcări), iar UDP trimite pachetele fără confirmare pentru latență minimă (ideal pentru jocuri online, apeluri video și streaming). Pentru ping mic și stabil în jocuri, cablul Ethernet sau Wi-Fi pe 5/6 GHz bate întotdeauna banda aglomerată de 2.4 GHz.</description>
+  </item>
+  <item>
+    <title>How the Internet Works in 2026: IP, DNS, TCP vs. UDP (Why Gaming Ping Spikes), Ports &amp; Wi-Fi 6/7</title>
+    <link>https://www.arkyedu.com/blog/en/how-the-internet-works-ip-dns-tcp-udp-gaming-ping-wifi-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/how-the-internet-works-ip-dns-tcp-udp-gaming-ping-wifi-guide/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Networks &amp; Safety</category>
+    <description>The Internet moves data in numbered packets: DNS translates human domain names (arkyedu.com) into numeric IP addresses; TCP guarantees reliable, in-order delivery (websites on HTTPS port 443, downloads), while UDP skips acknowledgments for lowest possible latency (multiplayer gaming, voice/video calls, live streams). For low, steady ping, Ethernet or 5/6 GHz Wi-Fi always beats congested 2.4 GHz.</description>
+  </item>
+  <item>
+    <title>Excel Avansat &amp; Google Sheets (Clasa VIII &amp; Proiecte): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Grafice Smart</title>
+    <link>https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Excel &amp; Birotică</category>
+    <description>După ce stăpânești SUM, AVERAGE și IF, următoarele 4 unelte transformă orice foaie de calcul într-un sistem inteligent: VLOOKUP(val; tabel; col; FALSE) sau modernul XLOOKUP() caută automat date între tabele (ex: prețul unui produs după cod), SUMIFS/COUNTIFS adună și numără pe multiple condiții simultan, Tabelele Pivot rezumă mii de rânduri în 10 secunde fără formule scrise manual, iar Graficele Smart (Bar vs Line vs Scatter) fac tiparele vizibile instant.</description>
+  </item>
+  <item>
+    <title>Advanced Excel &amp; Google Sheets (Grade 8 &amp; Projects): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Smart Charts</title>
+    <link>https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Excel &amp; Office</category>
+    <description>Once you master SUM, AVERAGE, and IF, four power tools turn any spreadsheet into an automated system: VLOOKUP(val, table, col, FALSE) or modern XLOOKUP() pulls matching records across sheets, SUMIFS/COUNTIFS aggregate across multiple filters at once, Pivot Tables summarize thousands of rows in 10 seconds with zero manual formulas, and matching chart types (Bar vs Line vs Scatter) make trends immediately clear.</description>
+  </item>
+  <item>
+    <title>Robotică &amp; IoT pentru Elevi (2026): Arduino Uno vs. ESP32 vs. Micro:bit, PWM, I2C &amp; 7 Greșeli pe Breadboard</title>
+    <link>https://www.arkyedu.com/blog/robotica-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-proiecte/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/robotica-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-proiecte/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Robotică &amp; IoT</category>
+    <description>Pentru primii pași în clasele V–VI, BBC Micro:bit are senzori integrați și programare pe blocuri fără fire fragile. Pentru gimnaziu (VII–VIII) și breadboard clasic cu C++, Arduino Uno este regele robusteții pe 5V. Dacă vrei proiecte IoT conectate la Wi-Fi/Bluetooth (stație meteo pe telefon, Smart City live), treci la ESP32 — dar atenție critică: ESP32 lucrează strict pe 3.3V, nu pe 5V!</description>
+  </item>
+  <item>
+    <title>Robotics &amp; IoT for Students (2026): Arduino Uno vs. ESP32 vs. Micro:bit, PWM, I2C &amp; 7 Breadboard Mistakes</title>
+    <link>https://www.arkyedu.com/blog/en/robotics-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-projects/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/robotics-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-projects/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Robotics &amp; IoT</category>
+    <description>For Grades 5–6 beginners, BBC Micro:bit provides built-in sensors and block coding without fragile jumper wires. For middle/high school breadboard C++ projects, Arduino Uno is the rugged 5V classroom standard. When you are ready for Wi-Fi/Bluetooth IoT dashboards, upgrade to ESP32—just remember the golden rule: ESP32 GPIO pins run strictly at 3.3V, never 5V!</description>
+  </item>
+  <item>
+    <title>Passkeys (FIDO2), Manageri de Parole, Scam-uri Discord/Steam &amp; Backup 3-2-1: Ghid Complet de Securitate Digitală 2026</title>
+    <link>https://www.arkyedu.com/blog/passkeys-fido2-manager-parole-scam-discord-steam-backup-321/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/passkeys-fido2-manager-parole-scam-discord-steam-backup-321/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Securitate Online</category>
+    <description>Parolele scurte reciclate sunt principala cauză a furtului de conturi. În 2026, cele mai sigure trei măsuri gratuite sunt: (1) activarea Passkeys (FIDO2) pe conturile Google/Microsoft/Apple — imposibil de furat prin phishing pentru că sunt legate criptografic de domeniu; (2) folosirea unui manager de parole gratuit (ex: Bitwarden) + Authenticator TOTP în locul SMS-urilor; și (3) aplicarea regulii de backup 3-2-1 pentru proiectele școlare și pozele familiei.</description>
+  </item>
+  <item>
+    <title>Passkeys (FIDO2), Password Managers, Discord/Steam Scams &amp; 3-2-1 Backups: The Complete 2026 Security Guide</title>
+    <link>https://www.arkyedu.com/blog/en/passkeys-fido2-password-managers-discord-steam-scams-backup-321/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/passkeys-fido2-password-managers-discord-steam-scams-backup-321/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Cyber Safety</category>
+    <description>Reused short passwords cause most account takeovers. In 2026, three free upgrades eliminate 99% of risks: (1) enable FIDO2 Passkeys on Google/Microsoft/Apple—mathematically immune to phishing because keys bind strictly to domains; (2) use a free zero-knowledge password manager (e.g., Bitwarden) + Authenticator app TOTP instead of SMS; and (3) follow the 3-2-1 backup rule for schoolwork and family photos.</description>
+  </item>
+  <item>
+    <title>Competențe Digitale, Agenți AI, RAG &amp; Carierele Viitorului (2026–2030): Cum pregătești un elev de gimnaziu să nu fie înlocuit de AI</title>
+    <link>https://www.arkyedu.com/blog/competente-digitale-agenti-ai-rag-cariere-viitor-elevi-2026/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/competente-digitale-agenti-ai-rag-cariere-viitor-elevi-2026/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>Inteligență Artificială</category>
+    <description>În 2026, simpla scriere de cod mecanic sau rezumarea unor texte este deja automatizată. Elevii care vor câștiga în următorul deceniu sunt cei care înțeleg arhitectura din spatele uneltelor moderne — Chatbot clasic vs. RAG (răspunsuri ancorate în documente reale) vs. Agenți AI (planificare și apelare de unelte) — și își construiesc 3 abilități greu de înlocuit: gândire algoritmică și debugging, verificare critică a surselor și un portofoliu digital real demonstrabil până la finalul clasei a VIII-a.</description>
+  </item>
+  <item>
+    <title>Digital Literacy, AI Agents, RAG &amp; Future Tech Careers (2026–2030): Preparing Students to Lead AI Instead of Being Replaced</title>
+    <link>https://www.arkyedu.com/blog/en/digital-skills-ai-agents-rag-future-tech-careers-students-2026/</link>
+    <guid isPermaLink="true">https://www.arkyedu.com/blog/en/digital-skills-ai-agents-rag-future-tech-careers-students-2026/</guid>
+    <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+    <category>AI &amp; Literacy</category>
+    <description>By 2026, boilerplate code and generic summaries are commoditized. Students who thrive over the next decade understand how modern AI systems differ—Chatbots vs. RAG (answers grounded in verified docs) vs. AI Agents (planning + tool execution)—and build three irreplaceable human pillars: algorithmic debugging, source verification, and a real Grade 8 portfolio of working projects.</description>
   </item>
 </channel>
 </rss>

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Excel Guide: XLOOKUP, VLOOKUP, SUMIFS &amp; Pivot Tables | ArkyEdu</title>
+  <meta name="description" content="Practical spreadsheet guide: VLOOKUP vs XLOOKUP, multi-criteria SUMIFS/COUNTIFS, 4-step Pivot Tables, choosing the right chart type, and fixing #N/A errors.">
+  <meta name="keywords" content="vlookup vs xlookup explained simply, sumifs and countifs tutorial, how to create a pivot table in excel, choosing the right chart type excel, fix vlookup na error, grade 8 spreadsheets project">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:modified_time" content="2026-11-22">
+  <meta property="article:section" content="Excel &amp; Office">
+  <meta property="og:title" content="Advanced Excel Guide: XLOOKUP, VLOOKUP, SUMIFS &amp; Pivot Tables | ArkyEdu">
+  <meta property="og:description" content="Practical spreadsheet guide: VLOOKUP vs XLOOKUP, multi-criteria SUMIFS/COUNTIFS, 4-step Pivot Tables, choosing the right chart type, and fixing #N/A errors.">
+  <meta property="og:url" content="https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ro_RO">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Advanced Excel Guide: XLOOKUP, VLOOKUP, SUMIFS &amp; Pivot Tables | ArkyEdu">
+  <meta name="twitter:description" content="Practical spreadsheet guide: VLOOKUP vs XLOOKUP, multi-criteria SUMIFS/COUNTIFS, 4-step Pivot Tables, choosing the right chart type, and fixing #N/A errors.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/#article",
+      "headline": "Advanced Excel & Google Sheets (Grade 8 & Projects): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables & Smart Charts",
+      "description": "Practical spreadsheet guide: VLOOKUP vs XLOOKUP, multi-criteria SUMIFS/COUNTIFS, 4-step Pivot Tables, choosing the right chart type, and fixing #N/A errors.",
+      "keywords": "vlookup vs xlookup explained simply, sumifs and countifs tutorial, how to create a pivot table in excel, choosing the right chart type excel, fix vlookup na error, grade 8 spreadsheets project",
+      "articleSection": "Excel & Office",
+      "inLanguage": "en",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "isAccessibleForFree": true,
+      "mainEntityOfPage": "https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/",
+      "isPartOf": {
+        "@id": "https://www.arkyedu.com/blog/en/#blog"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ArkyEdu — Educație TIC & Coding România",
+        "url": "https://www.arkyedu.com/"
+      },
+      "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.arkyedu.com/pwa-512x512.png"
+        }
+      },
+      "image": "https://www.arkyedu.com/og-cover.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "ICT Blog & Guides",
+          "item": "https://www.arkyedu.com/blog/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Advanced Excel: XLOOKUP, SUMIFS, Pivot",
+          "item": "https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the main advantage of XLOOKUP over VLOOKUP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "XLOOKUP searches in any direction, does not break when columns are inserted, defaults to exact match, and lets you supply a custom not-found message."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why must I add $ signs to the table range in VLOOKUP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Without $ absolute anchors, dragging the formula down shifts the lookup table reference down too, causing top rows to be skipped and triggering #N/A errors."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I pick a Pivot Table instead of SUMIFS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use Pivot Tables for fast interactive grouping and exploration; use SUMIFS when building fixed formatted dashboards."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I practice Grade 8 spreadsheets interactively?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Try the ArkyEdu Grade 8 Spreadsheet missions and auto-graded 100-point rubric worksheets at /fise/en/."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Advanced Excel: XLOOKUP, SUMIFS, Pivot",
+      "description": "Once you master SUM, AVERAGE, and IF, four power tools turn any spreadsheet into an automated system: VLOOKUP(val, table, col, FALSE) or modern XLOOKUP() pulls matching records across sheets, SUMIFS/COUNTIFS aggregate across multiple filters at once, Pivot Tables summarize thousands of rows in 10 seconds with zero manual formulas, and matching chart types (Bar vs Line vs Scatter) make trends immediately clear.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "text": "Ensure row 1 has clean, unique column headers with no blank rows inside the table."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "text": "Click inside your data → Insert → PivotTable → OK."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "text": "Drag your grouping column (e.g., Grade or Category) into Rows."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "text": "Drag your numeric metric (e.g., Score or Amount) into Values and pick Sum, Average, or Count."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="https://www.arkyedu.com/blog/en/">ICT Blog & Guides</a>
+        <a href="https://www.arkyedu.com/clasa-5/">Grade 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Grade 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Grade 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Grade 8</a>
+        <a href="https://www.arkyedu.com/glosar/en/">Glossary (44)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/" class="lang-pill" title="Excel Avansat &amp; Google Sheets (Clasa VIII &amp; Proiecte): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Grafice Smart">RO</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">Open App</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://www.arkyedu.com/blog/en/">ICT Blog & Guides</a>
+        <span aria-hidden="true">/</span>
+        <span>Excel &amp; Office</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Advanced Excel: XLOOKUP, SUMIFS, Pivot</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">Excel &amp; Office</span>
+          <span aria-hidden="true">·</span>
+          <span>Grade 8 · Projects</span>
+          <span aria-hidden="true">·</span>
+          <span>13 min read</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-22">Updated 2026-11-22</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">Advanced Excel &amp; Google Sheets (Grade 8 &amp; Projects): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Smart Charts</h1>
+        <p class="article-intro" itemprop="description">Whether tracking a class budget, analyzing Arduino sensor logs, or acing Grade 8 ICT projects, Excel and Google Sheets remain some of the highest-leverage skills you can learn. Here is how to level up from basic tables to dynamic, error-proof reports.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=Advanced%20Excel%20%26%20Google%20Sheets%20(Grade%208%20%26%20Projects)%3A%20XLOOKUP%20%2F%20VLOOKUP%2C%20SUMIFS%2C%20Pivot%20Tables%20%26%20Smart%20Charts%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fen%2Fadvanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copy guide link</button>
+          <a href="https://www.arkyedu.com/blog/en/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← ICT Blog & Guides</a>
+        </div>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">Quick Answer (TL;DR)</div>
+          <p class="tldr-text">Once you master SUM, AVERAGE, and IF, four power tools turn any spreadsheet into an automated system: VLOOKUP(val, table, col, FALSE) or modern XLOOKUP() pulls matching records across sheets, SUMIFS/COUNTIFS aggregate across multiple filters at once, Pivot Tables summarize thousands of rows in 10 seconds with zero manual formulas, and matching chart types (Bar vs Line vs Scatter) make trends immediately clear.</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">Table of Contents</div>
+          <ol class="toc-list">
+            <li><a href="#vlookup-vs-xlookup">1. Cross-Table Lookups: VLOOKUP(..., FALSE) vs. Modern XLOOKUP</a></li>
+            <li><a href="#sumifs-and-countifs">2. Multi-Criteria Formulas: SUMIFS and COUNTIFS</a></li>
+            <li><a href="#pivot-tables-four-steps">3. Pivot Tables in 4 Clicks: Instant Summaries Without Formulas</a></li>
+            <li><a href="#choosing-the-right-chart">4. Choosing the Right Chart Type (Visual Clarity Matrix)</a></li>
+            <li><a href="#checklist-h">A+ Spreadsheet Project Checklist</a></li>
+            <li><a href="#labs-h">Practice Excel &amp; Rubrics on ArkyEdu</a></li>
+            <li><a href="#faq-h">Frequently Asked Questions (FAQ)</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          
+          <section class="art-section" id="vlookup-vs-xlookup">
+            <h2>1. Cross-Table Lookups: VLOOKUP(..., FALSE) vs. Modern XLOOKUP</h2>
+            <p>Classic VLOOKUP forces the lookup key to be the leftmost column and silently gives wrong approximate matches unless you specify FALSE (0). Modern XLOOKUP (Excel 365 / 2021+ / Google Sheets) removes both traps:</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>VLOOKUP vs. XLOOKUP quick comparison</caption>
+                      <thead><tr><th>Function</th><th>Standard Syntax (EN comma separator)</th><th>Pros &amp; Gotchas</th></tr></thead>
+                      <tbody><tr><td>VLOOKUP</td><td>=VLOOKUP(A2, $F$2:$H$50, 3, FALSE)</td><td>Universal compatibility; always lock $F$2:$H$50 and include FALSE!</td></tr><tr><td>XLOOKUP</td><td>=XLOOKUP(A2, $F$2:$F$50, $H$2:$H$50, &quot;Not found&quot;)</td><td>Works left or right, survives inserted columns, built-in fallback text.</td></tr></tbody>
+                    </table>
+                  </div>
+            <div class="callout-warn">
+                    <div class="callout-title">Why #N/A Happens Even When the Value Looks Identical</div>
+                    <p style="margin:0;">Three culprits cause 90% of #N/A errors: trailing spaces (&quot;Alex &quot; vs &quot;Alex&quot;), numbers stored as text, or an unlocked lookup range sliding down when dragged.</p>
+                  </div>
+          </section>
+
+          <section class="art-section" id="sumifs-and-countifs">
+            <h2>2. Multi-Criteria Formulas: SUMIFS and COUNTIFS</h2>
+            <p>Adding an „S” lets you filter by 2 or more columns simultaneously. Remember that in SUMIFS, the sum_range goes FIRST, unlike single-criterion SUMIF:</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Copy-ready SUMIFS, COUNTIFS, and IFERROR templates (EN syntax)</div>
+                    <pre><code>// 1. Total spending for &quot;Books&quot; in &quot;November&quot;
+=SUMIFS(D2:D100, B2:B100, &quot;Books&quot;, C2:C100, &quot;November&quot;)
+
+// 2. Count students in class &quot;8A&quot; scoring &gt;= 90
+=COUNTIFS(B2:B35, &quot;8A&quot;, E2:E35, &quot;&gt;=90&quot;)
+
+// 3. Safe price lookup with friendly fallback
+=IFERROR(VLOOKUP(A2, Catalog!$A$2:$C$50, 3, FALSE), &quot;Missing SKU&quot;)</code></pre>
+                    <div class="code-cap">Note: European/Romanian Excel locales use semicolons (;) instead of commas (,).</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="pivot-tables-four-steps">
+            <h2>3. Pivot Tables in 4 Clicks: Instant Summaries Without Formulas</h2>
+            <p>When analyzing hundreds of rows of grades, sales, or sensor data, Pivot Tables summarize everything without writing nested formulas:</p>
+            <ol><li>Ensure row 1 has clean, unique column headers with no blank rows inside the table.</li><li>Click inside your data → Insert → PivotTable → OK.</li><li>Drag your grouping column (e.g., Grade or Category) into Rows.</li><li>Drag your numeric metric (e.g., Score or Amount) into Values and pick Sum, Average, or Count.</li></ol>
+            
+            
+            
+            
+          </section>
+
+          <section class="art-section" id="choosing-the-right-chart">
+            <h2>4. Choosing the Right Chart Type (Visual Clarity Matrix)</h2>
+            <p>Picking the wrong chart hides insights and costs points on projects. Match your chart to your data structure:</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Chart selection cheat sheet</caption>
+                      <thead><tr><th>Chart Type</th><th>Best Used For</th><th>Avoid When</th></tr></thead>
+                      <tbody><tr><td>Column / Bar Chart</td><td>Comparing discrete categories side by side</td><td>Displaying 30+ crowded bars</td></tr><tr><td>Line Chart</td><td>Continuous change over time (daily temp, progress)</td><td>Categories have no natural time order</td></tr><tr><td>Pie / Donut Chart</td><td>Parts of a 100% whole with AT MOST 4–5 slices</td><td>More than 6 slices or negative numbers</td></tr><tr><td>XY Scatter Plot</td><td>Correlation between two numeric variables</td><td>Categorical text labels</td></tr></tbody>
+                    </table>
+                  </div>
+            
+          </section>
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box" id="checklist-h">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ A+ Spreadsheet Project Checklist</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            <li>Locked lookup ranges with absolute $A$1:$C$50 references before dragging formulas.</li>
+            <li>Used exact-match FALSE (0) in VLOOKUP and wrapped lookups in IFERROR.</li>
+            <li>Added descriptive titles and units to every chart.</li>
+            <li>Verified locale formula separator (, vs ;).</li>
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box" id="labs-h">
+          <h2 style="font-size:1.25rem;color:#fff;">Practice Excel &amp; Rubrics on ArkyEdu</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_b/" class="link-card">
+                <div class="link-card-title">Excel Formulas &amp; Functions (Grade 8) →</div>
+                <div class="link-card-desc">Interactive Grade 8 mission covering SUM, IF, COUNTIF &amp; $A$1.</div>
+              </a>
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_c/" class="link-card">
+                <div class="link-card-title">2D/3D Charts &amp; Data Visualization (Grade 8) →</div>
+                <div class="link-card-desc">Build clean charts and interpret datasets.</div>
+              </a>
+            <a href="https://www.arkyedu.com/fise/en/grade-8-excel-formulas-sum-average-if-countif-absolute-errors-worksheet/" class="link-card">
+                <div class="link-card-title">Grade 8 Excel Worksheet &amp; 100-Pt Rubric →</div>
+                <div class="link-card-desc">Interactive auto-graded exam sheet and A4 print view.</div>
+              </a>
+            <a href="https://www.arkyedu.com/glosar/en/excel-cell-range-absolute/" class="link-card">
+                <div class="link-card-title">Glossary: Relative vs. Absolute References ($A$1) →</div>
+                <div class="link-card-desc">Quick formula syntax &amp; common test errors.</div>
+              </a>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ Frequently Asked Questions</h2>
+          <div class="faq-block">
+              <div class="faq-question">What is the main advantage of XLOOKUP over VLOOKUP?</div>
+              <div class="faq-answer">XLOOKUP searches in any direction, does not break when columns are inserted, defaults to exact match, and lets you supply a custom not-found message.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Why must I add $ signs to the table range in VLOOKUP?</div>
+              <div class="faq-answer">Without $ absolute anchors, dragging the formula down shifts the lookup table reference down too, causing top rows to be skipped and triggering #N/A errors.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">When should I pick a Pivot Table instead of SUMIFS?</div>
+              <div class="faq-answer">Use Pivot Tables for fast interactive grouping and exploration; use SUMIFS when building fixed formatted dashboards.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Where can I practice Grade 8 spreadsheets interactively?</div>
+              <div class="faq-answer">Try the ArkyEdu Grade 8 Spreadsheet missions and auto-graded 100-point rubric worksheets at /fise/en/.</div>
+            </div>
+        </section>
+
+        <!-- Glossary Terms Explained in This Guide -->
+        
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">More Study Guides</h2>
+            <a href="https://www.arkyedu.com/blog/en/" class="card-link">← Back to Blog Index</a>
+          </div>
+          <div class="links-grid">
+            <a href="/blog/en/excel-formulas-middle-school-sum-if-countif-errors/" class="link-card">
+                  <div class="link-card-title">Excel Formulas &amp; Error Fixes →</div>
+                  <div class="link-card-desc">Complete Grade 8 spreadsheet guide for Excel &amp; Google Sheets: master SUM, AVERAGE, IF, COUNTIF, absolute references ($A$1), semicolon vs comma syntax, and #VALUE! / #NAME? fixes.</div>
+                </a>
+            <a href="/blog/en/word-google-docs-school-reports-margins-headers-pdf/" class="link-card">
+                  <div class="link-card-title">Formatting Papers in Word &amp; Docs →</div>
+                  <div class="link-card-desc">Step-by-step middle school formatting guide for Word &amp; Google Docs: A4 margins, hiding page 1 header numbers, deleting blank trailing pages, automatic TOC, and PDF export.</div>
+                </a>
+            <a href="/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/" class="link-card">
+                  <div class="link-card-title">PowerPoint &amp; The 6×6 Rule →</div>
+                  <div class="link-card-desc">How to design crisp school presentations in PowerPoint or Google Slides: the 6x6 rule, minimum 24 pt font sizing, high-contrast palettes, clean transitions, Presenter View, and 3D models.</div>
+                </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Free ICT & Coding Education.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Home</a> • <a href="https://www.arkyedu.com/blog/en/" style="color: var(--accent);">ICT Blog & Guides</a> • <a href="https://www.arkyedu.com/glosar/en/" style="color: var(--accent);">Glossary (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  
+    <div data-arky-report-bar="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">Spotted an error or broken link on this page?</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; Report an Issue
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
+</body>
+</html>

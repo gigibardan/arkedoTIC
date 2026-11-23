@@ -1,0 +1,389 @@
+# ArkyEdu — Index Structurat Blog & Ghiduri Practice TIC (24 Articole Bilingve — 48 Pagini RO & EN)
+
+> Document de referință optimizat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Centralizează toate cele 24 ghiduri ample bilingve de Informatică, TIC, Programare C++/Python, Excel, AI, Securitate Online și Robotică IoT.
+
+- Index Blog Română: https://www.arkyedu.com/blog/
+- Index Blog Engleză: https://www.arkyedu.com/blog/en/
+- Feed RSS 2.0: https://www.arkyedu.com/rss.xml
+- Documentație generală platformă: https://www.arkyedu.com/llms.txt
+- Documentație tehnică exhaustivă: https://www.arkyedu.com/llms-full.txt
+
+---
+
+## 1. Index Tematic pe Categorii
+
+### AI & Competențe / AI & Literacy (3)
+- [AI & ChatGPT la școală](https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/) · [EN: AI & ChatGPT at School](https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/) (Clasele V–VIII)
+- [LLM: Tokeni & Halucinații AI](https://www.arkyedu.com/blog/cum-functioneaza-llm-tokeni-softmax-halucinatii-ai-scoala/) · [EN: LLMs: Tokens & Hallucinations](https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/) (Clasele VI–VIII · Profesori)
+- [Agenți AI, RAG & Cariere 2026–2030](https://www.arkyedu.com/blog/competente-digitale-agenti-ai-rag-cariere-viitor-elevi-2026/) · [EN: AI Agents, RAG & Future Careers](https://www.arkyedu.com/blog/en/digital-skills-ai-agents-rag-future-tech-careers-students-2026/) (Clasele VII–VIII · Viitor)
+
+### C++ & Algoritmi / C++ & Algorithms (6)
+- [Top 10 erori C++ gimnaziu](https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/) · [EN: Top 10 C++ Errors Fixed](https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/) (Clasele VII–VIII)
+- [Scratch 3.0: Primul joc & Coordonate](https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/) · [EN: Scratch 3.0: First Game & Coordinates](https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/) (Clasele V–VI)
+- [OJI & Admitere Mate-Info C++](https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/) · [EN: C++ Olympiad & Binary Search](https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/) (Clasele VII–VIII · OJI)
+- [Binar, RGB, Porți & CPU](https://www.arkyedu.com/blog/sistem-binar-ascii-rgb-porti-logice-arhitectura-von-neumann/) · [EN: Binary, RGB, Gates & CPU](https://www.arkyedu.com/blog/en/binary-ascii-rgb-logic-gates-von-neumann-cpu-architecture/) (Clasele V–VIII · Fundamente)
+- [Python vs. C++ pentru Copii](https://www.arkyedu.com/blog/python-vs-cpp-pentru-copii-gimnaziu-comparatie-primul-program/) · [EN: Python vs. C++ for Kids](https://www.arkyedu.com/blog/en/python-vs-cpp-for-kids-middle-school-comparison-first-language/) (Clasele V–VIII · Părinți)
+- [Sortări C++: Bubble, Selection, std::sort](https://www.arkyedu.com/blog/algoritmi-de-sortare-cpp-bubble-selection-insertion-std-sort/) · [EN: C++ Sorting: Bubble, Selection, std::sort](https://www.arkyedu.com/blog/en/cpp-sorting-algorithms-bubble-selection-insertion-std-sort/) (Clasele VII–VIII · OJI)
+
+### Excel & Birotică / Excel & Office (4)
+- [Formule Excel & Rezolvare Erori](https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/) · [EN: Excel Formulas & Error Fixes](https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/) (Clasa a VIII-a)
+- [Referate corecte în Word & Docs](https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/) · [EN: Formatting Papers in Word & Docs](https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/) (Clasele V–VII)
+- [Prezentări PowerPoint & Regula 6×6](https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/) · [EN: PowerPoint & The 6×6 Rule](https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/) (Clasele V–VII)
+- [Excel Avansat: XLOOKUP, SUMIFS & Pivot](https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/) · [EN: Advanced Excel: XLOOKUP, SUMIFS, Pivot](https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/) (Clasa a VIII-a · Proiecte)
+
+### Siguranță Online / Cyber Safety (4)
+- [Siguranța pe TikTok, Roblox & Discord](https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/) · [EN: Online Safety: TikTok, Roblox & Discord](https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/) (Clasele V–VIII & Părinți)
+- [Deepfake & Voice Cloning (2026)](https://www.arkyedu.com/blog/deepfake-ai-voice-cloning-detectare-stiri-false-2026/) · [EN: Deepfakes & Voice Cloning (2026)](https://www.arkyedu.com/blog/en/deepfake-ai-voice-cloning-detection-guide-2026/) (Clasele V–VIII · Părinți)
+- [Internet: IP, DNS, TCP/UDP & Wi-Fi](https://www.arkyedu.com/blog/cum-functioneaza-internetul-ip-dns-tcp-udp-ping-wifi-router/) · [EN: Internet: IP, DNS, TCP/UDP & Wi-Fi](https://www.arkyedu.com/blog/en/how-the-internet-works-ip-dns-tcp-udp-gaming-ping-wifi-guide/) (Clasele V–VIII · Rețele)
+- [Passkeys, Scam Discord/Steam & 3-2-1](https://www.arkyedu.com/blog/passkeys-fido2-manager-parole-scam-discord-steam-backup-321/) · [EN: Passkeys, Scams & 3-2-1 Backups](https://www.arkyedu.com/blog/en/passkeys-fido2-password-managers-discord-steam-scams-backup-321/) (Clasele VI–VIII · Părinți)
+
+### Robotică & IoT / Robotics & IoT (3)
+- [HTML5, HTTPS & Google Sites (VIII)](https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/) · [EN: HTML5, HTTPS & Google Sites](https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/) (Clasa a VIII-a)
+- [Proiect Arduino Smart Home & millis()](https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/) · [EN: Arduino Smart Home & millis()](https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/) (Clasele VII–VIII)
+- [Robotică IoT: Arduino vs ESP32 & PWM](https://www.arkyedu.com/blog/robotica-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-proiecte/) · [EN: IoT Robotics: Arduino vs ESP32 & PWM](https://www.arkyedu.com/blog/en/robotics-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-projects/) (Clasele VII–VIII · IoT)
+
+### Părinți & Profesori / Parents & Teachers (4)
+- [Alegere Laptop / PC Școală](https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/) · [EN: Student Laptop & PC Specs](https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/) (Clasele V–VIII · Părinți)
+- [Coding Gratuit vs. Școli Private](https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/) · [EN: Free Coding vs. Paid Academies](https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/) (Părinți · 10–15 ani)
+- [Playbook Profesor TIC & Olimpiadă](https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/) · [EN: ICT Teacher Playbook & Contests](https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/) (Profesori TIC · V–VIII)
+- [Gaming Educativ & Vice Leonida](https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/) · [EN: Educational Gaming & Leonida](https://www.arkyedu.com/blog/en/gta-6-educational-gaming-vice-leonida-cs-coding-guide/) (Clasele V–VIII · Părinți)
+
+---
+
+## 2. Rezumate Answer-First, Cuprins & FAQ (24 Ghiduri Complete)
+
+### 1. Inteligența Artificială & ChatGPT la școală (V–VIII): Cum folosești AI-ul corect la teme fără plagiat
+- **EN Title**: AI & ChatGPT for Middle School (Grades 5–8): How to Learn Smarter Without Plagiarism
+- **URL RO**: https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/
+- **URL EN**: https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/
+- **Categorie & Nivel**: AI & Competențe Digitale | Clasele V–VIII | 8 min citire
+- **Răspuns Rapid (TL;DR RO)**: Elevii de gimnaziu pot folosi ChatGPT sau Gemini ca pe un meditator digital, nu ca pe un automat de copiat teme. Formula câștigătoare este metoda în 4 pași (Rol + Context + Cerință + Limită): cere explicații pas cu pas și indicii, verifică mereu datele din manual și nu introduce niciodată date personale sau poze cu colegii.
+- **Quick Answer (TL;DR EN)**: Middle school students should use ChatGPT or Gemini as an interactive tutor rather than a copy-paste homework machine. Use the 4-part prompt method (Role + Context + Request + Limit) to ask for hints and step-by-step explanations, verify every fact against school textbooks, and never enter personal data.
+- **Cuprins Capitole RO**: 1. Cum gândește un model AI și de ce poate greși sigur pe el · 2. Metoda R.C.C.L.: Cum scrii un prompt care chiar te ajută să înveți · 3. Copy-paste vs. Învățare activă: Comparație pe materii (V–VIII) · 4. Cele 5 reguli de siguranță și confidențialitate când folosești un chatbot AI
+- **Checklist**: Am scris ideile și codul final cu mâna mea, după ce am înțeles fiecare pas. | Am verificat toate datele, formulele și definițiile cu manualul sau lecția de la clasă. | Am eliminat orice dată personală din conversația cu asistentul AI. | Pot explica fără foaie în față logica soluției în fața profesorului.
+- **Întrebări Cheie (FAQ)**:
+  - *Este interzis să folosești ChatGPT sau Gemini la teme în gimnaziu?* → Nu este interzis să îl folosești ca instrument de explicație, exercițiu și verificare, exact cum folosești un dicționar sau o culegere. Problema apare doar când elevul predă textul sau codul generat de AI ca fiind munca lui proprie fără să înțeleagă conținutul (plagiat).
+  - *Cum își dă seama profesorul că o temă a fost copiată din AI?* → Textele AI au adesea o structură foarte șablonată, folosesc termeni peste nivelul clasei respective, nu respectă cerințele specifice predate la clasă sau conțin detalii inventate. O singură întrebare orală la tablă arată imediat dacă elevul a înțeles materialul.
+  - *Ce date nu trebuie să scriu niciodată în ChatGPT?* → Nu introduce niciodată numele complet, adresa de acasă, numele școlii, parole, numere de telefon, CNP, fotografii personale sau datele altor persoane.
+
+### 2. C++ pentru gimnaziu (Code::Blocks, clasele VII–VIII): Top 10 erori la if, while și algoritmi pe cifre
+- **EN Title**: Middle School C++ Guide (Grades 7–8): Fixing Top 10 Errors in if, while & Digit Algorithms
+- **URL RO**: https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/
+- **URL EN**: https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/
+- **Categorie & Nivel**: Programare C++ & Algoritmică | Clasele VII–VIII | 10 min citire
+- **Răspuns Rapid (TL;DR RO)**: Majoritatea problemelor C++ la gimnaziu provin din 5 capcane clasice: scrierea lui = (atribuire) în loc de == (egalitate) în if, punerea unui ; chiar după paranteza if(...) sau while(...), uitarea actualizării lui n = n / 10 în buclă (buclă infinită), neinițializarea sumei s = 0 și netratarea cazului special n = 0 la algoritmii pe cifre.
+- **Quick Answer (TL;DR EN)**: Nine out of ten middle school C++ bugs come from five traps: writing = instead of == inside if(), placing a stray semicolon right after if(...) or while(...), forgetting n = n / 10 inside a digit loop (infinite loop), leaving sums uninitialized instead of int s = 0, and skipping the edge case n = 0.
+- **Cuprins Capitole RO**: 1. Tabel de diagnostic rapid: De ce nu merge codul meu în C++? · 2. Capcanele structurii if / else: = vs ==, intervale și acolade · 3. Algoritmii pe cifre (suma, oglinditul, palindromul și cazul n = 0) · 4. Împărțirea întreagă vs. reală și interschimbarea (Regula celor 3 pahare)
+- **Checklist**: Am verificat fiecare if și while să nu aibă ; imediat după paranteza închisă ). | Toate comparațiile folosesc == (două semne egal), nu =. | Fiecare sumă începe de la 0 (s = 0), iar fiecare produs începe de la 1 (p = 1). | În fiecare buclă while, variabila din condiție se modifică spre oprire (n = n / 10). | Am testat programul și pentru cazuri limită: n = 0, numere negative și numere de 1 cifră.
+- **Întrebări Cheie (FAQ)**:
+  - *De ce îmi afișează programul C++ doar numere ciudate mari (ex: 4199040)?* → Ai declarat o variabilă (de exemplu int suma;) fără să o inițializezi cu 0 (int suma = 0;). În C++, variabilele locale neinițializate păstrează date reziduale aleatorii din memoria RAM.
+  - *Cum rezolv eroarea de compilare când Code::Blocks indică o linie care pare corectă?* → În C++, lipsa punctului și virgulei (;) la finalul unei instrucțiuni determină compilatorul să raporteze eroarea pe linia URMĂTOARE. Verifică întotdeauna linia de deasupra celei subliniate cu roșu.
+  - *Care este diferența dintre % și / în C++?* → Operatorul / oferă câtul împărțirii întregi (de exemplu 247 / 10 = 24, elimină ultima cifră), iar operatorul % (modulo) oferă restul împărțirii (247 % 10 = 7, extrage ultima cifră).
+
+### 3. Excel pe înțelesul elevilor (Clasa a VIII-a): Formulele SUM, AVERAGE, IF, COUNTIF, $A$1 și rezolvarea erorilor
+- **EN Title**: Excel Formulas for Middle School (Grade 8): Mastering SUM, AVERAGE, IF, COUNTIF, $A$1 & Error Fixes
+- **URL RO**: https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/
+- **URL EN**: https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/
+- **Categorie & Nivel**: Excel & Calcul Tabelar | Clasa a VIII-a | 9 min citire
+- **Răspuns Rapid (TL;DR RO)**: Orice formulă Excel începe obligatoriu cu semnul =. În România (setări regionale RO), argumentele din funcții precum =IF(B2>=5; "Admis"; "Respins") se separă prin punct și virgulă (;), nu prin virgulă. Pentru a bloca o celulă când tragi formula în jos (Autofill), apasă F4 pentru a obține referința absolută $A$1.
+- **Quick Answer (TL;DR EN)**: Every spreadsheet formula must start with =. Depending on your computer’s regional settings, function arguments are separated by a comma (US/UK) or semicolon (many European locales). Press F4 to turn A1 into an absolute reference ($A$1) so Autofill keeps pointing to the exact same cell.
+- **Cuprins Capitole RO**: 1. De ce formula corectă din manual îți dă eroare? Misterul lui ; vs , · 2. Cele 6 funcții esențiale de clasa a VIII-a (cu exemple reale de catalog) · 3. Referințe relative (A1) vs. absolute ($A$1): Secretul Autofill-ului fără greșeli · 4. Cum repari cele 5 erori clasice din Excel (#NAME?, #VALUE!, #DIV/0!, #REF!, ###)
+- **Checklist**: Fiecare calcul este realizat prin formulă cu =, nu calculat manual „în cap”. | Celulele fixe (TVA, curs valutar, punctaj maxim) sunt blocate cu $ ($F$1). | Nu există nicio celulă cu erori (#NAME?, #VALUE!, #DIV/0!) sau coloane trunchiate (###). | Diagrama aleasă are titlu clar și tip potrivit (Coloane pentru comparații, Pie pentru procente din total).
+- **Întrebări Cheie (FAQ)**:
+  - *De ce formulele mele din Excel nu calculează și rămân scrise ca text?* → Fie ai uitat semnul = la începutul celulei (obligatoriu înainte de SUM, IF, AVERAGE), fie celula a fost formatată anterior ca Text. Schimbă formatul pe General, dă dublu-click în celulă și apasă Enter.
+  - *Cum aleg corect între Diagramă Coloane (Column), Linii (Line) și Plăcintă (Pie)?* → Folosește Coloane/Bare când compari valori între categorii (ex: note pe elevi), Linii când arăți evoluția în timp (ex: temperaturi pe luni) și Pie (Plăcintă) exclusiv când împarți un singur total de 100% în câteva felii.
+  - *Care este diferența dintre COUNT și COUNTA sau COUNTIF?* → COUNT numără doar celulele cu numere, COUNTA numără toate celulele nevide (inclusiv text), iar COUNTIF numără doar celulele care îndeplinesc o condiție dată de tine (de exemplu >= 5).
+
+### 4. Siguranța copiilor pe TikTok, Roblox, Discord și WhatsApp: Cum oprești scam-urile, phishing-ul și cyberbullying-ul
+- **EN Title**: Kids Online Safety on TikTok, Roblox, Discord & WhatsApp: Stopping Scams, Phishing & Cyberbullying
+- **URL RO**: https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/
+- **URL EN**: https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/
+- **Categorie & Nivel**: Securitate Cibernetică | Clasele V–VIII & Părinți | 9 min citire
+- **Răspuns Rapid (TL;DR RO)**: Cele mai multe conturi de Roblox, TikTok sau WhatsApp ale elevilor se pierd prin inginerie socială și phishing (site-uri de „Free Robux”, mesaje false de vot pe WhatsApp sau fișiere pe Discord), nu prin spargeri complexe. Activează autentificarea în 2 pași (2FA), verifică domeniul exact din bara de adresă și folosește fraze-parolă unice. În caz de hărțuire sau șantaj online, salvează capturi de ecran și sună gratuit la 119.
+- **Quick Answer (TL;DR EN)**: Most student accounts on Roblox, Discord, or WhatsApp are hijacked through social engineering—fake "Free Robux" pages, compromised WhatsApp "vote for my cousin" links, or shady Discord game downloads—not complex hacking. Turn on 2-Factor Authentication (2FA), inspect the exact domain before signing in, use unique passphrases, and save screenshots if cyberbullying occurs.
+- **Cuprins Capitole RO**: 1. Top 4 capcane digitale care vizează elevii din România în 2025–2026 · 2. Regula de 10 secunde: Cum verifici orice link înainte să dai click sau să te loghezi · 3. Parole imposibil de ghicit + Autentificarea în 2 Pași (2FA) · 4. Ce faci în caz de cyberbullying, șantaj sau cont spart (Ghid + Numărul 119)
+- **Checklist**: Conturile importante (Google, Roblox, Discord, TikTok) au 2FA (autentificare în 2 pași) activat. | Profilurile sociale ale minorilor sunt setate pe Privat, cu mesajele blocate de la necunoscuți. | Parola de la e-mail este unică și lungă (minim 12–14 caractere). | Copilul știe că nu dă nimănui coduri SMS, poze personale sau parole pentru „premii gratis”.
+- **Întrebări Cheie (FAQ)**:
+  - *Chiar există site-uri legitime de „Free Robux” sau diamante gratuite?* → Nu! Nicio aplicație sau site extern nu poate genera monedă gratuită în Roblox, Brawl Stars sau Fortnite. Toate paginile care promit resurse gratuite în schimbul login-ului sau al unui sondaj sunt capcane de phishing sau adware.
+  - *Dacă un site are lacătul HTTPS înseamnă că este 100% sigur?* → Nu. HTTPS garantează doar că traficul este criptat pe drum, nu că proprietarul site-ului este cinstit. Verifică întotdeauna numele exact al domeniului (de exemplu roblox.com, nu roblox-bonus.xyz).
+  - *Ce este mai bun: o parolă scurtă cu simboluri sau o frază lungă?* → O frază-parolă lungă (14+ caractere cu cuvinte nelegate + cifre și simbol) este mult mai rezistentă la atacuri brute-force și mult mai ușor de ținut minte fără să o scrii pe bilet.
+
+### 5. Cum scrii corect un referat în Word sau Google Docs (V–VII): Diacritice românești, margini, numerotare pagini și cuprins automat
+- **EN Title**: How to Format School Reports in Word & Google Docs (Grades 5–7): Margins, Page Numbers, TOC & PDF Export
+- **URL RO**: https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/
+- **URL EN**: https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/
+- **Categorie & Nivel**: Word & Tehnoredactare | Clasele V–VII | 9 min citire
+- **Răspuns Rapid (TL;DR RO)**: Un referat școlar de nota 10 folosește tastatura „Română (Standard)” pentru ș și ț cu virgulă (nu cu sedilă), aliniere Justify (Stânga-Dreapta), font lizibil de 12 pt (Calibri, Arial sau Times New Roman), spațiu DUPĂ semnele de punctuație (niciodată înainte) și stiluri Heading 1/2 pentru cuprins automat și export curat în format PDF.
+- **Quick Answer (TL;DR EN)**: An A+ school paper uses A4 margins (2.5 cm / 1 inch), a consistent 12 pt font (Calibri, Arial, or Times New Roman), Justify paragraph alignment, Heading 1/2 styles for an automatic Table of Contents, "Different First Page" to hide the cover page number, and a final PDF export so layout never shifts.
+- **Cuprins Capitole RO**: 1. Tastatura corectă: Română (Standard) vs. Română (Legacy) — ș și ț cu virgulă · 2. Setările standard pentru un referat școlar A4 (și cum oprești imaginile care „fug”) · 3. Cum ascunzi numărul de pe pagina de titlu și cum ștergi pagina goală de la final · 4. Cuprins automat în 3 click-uri + De ce predai proiectul ca PDF (nu doar .docx)
+- **Checklist**: Am verificat cu ¶ pornit să nu am spații duble sau zeci de Enter-uri goale între pagini. | Toate diacriticele sunt corecte (ă, â, î, ș, ț) și punctuația nu are spațiu înainte. | Am folosit Ctrl+A pentru un singur font unitar (12 pt) și aliniere Justify. | Nu există pagini goale la final și am salvat versiunea finală și ca PDF.
+- **Întrebări Cheie (FAQ)**:
+  - *Cum elimin fundalul colorat sau fontul ciudat când copiez un citat?* → Nu folosi Ctrl+V simplu! Folosește Ctrl + Shift + V (Paste Text Only / Keep Text Only) sau alege din click dreapta pictograma cu „A” (Keep Text Only) pentru ca textul să preia formatarea documentului tău.
+  - *De ce nu pot șterge ultima pagină goală din Word?* → Word pune obligatoriu un paragraf după un tabel sau un Page Break. Activează simbolul ¶ (Home -> Show/Hide), micșorează acel ultim paragraf la font 1 pt sau șterge manual simbolul Page Break de deasupra lui.
+  - *Ce diferență este între .docx și .pdf când predau un proiect?* → Fișierul .docx este editabil și poate arăta diferit pe alte calculatoare dacă lipsesc fonturile. Fișierul .pdf îngheață aspectul paginilor exact cum l-ai creat, fiind ideal pentru predare sau imprimare.
+
+### 6. Scratch 3.0 pentru începători (Clasele V–VI): Coordonatele X/Y, bucle, variabile și primul tău joc în 15 minute
+- **EN Title**: Scratch 3.0 for Beginners (Grades 5–6): X/Y Coordinates, Loops, Variables & Your First Game in 15 Minutes
+- **URL RO**: https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/
+- **URL EN**: https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/
+- **Categorie & Nivel**: Programare Vizuală Scratch | Clasele V–VI | 10 min citire
+- **Răspuns Rapid (TL;DR RO)**: Scena din Scratch 3.0 are lățimea de 480 de pași (X de la -240 la +240) și înălțimea de 360 de pași (Y de la -180 la +180), cu centrul în (0, 0). Un joc complet are nevoie de 4 elemente: inițializare la „Când se dă click pe steag verde”, buclă „La infinit” pentru mișcare, condiție „Dacă atinge...” pentru coliziuni și o variabilă „Scor” care se resetează mereu la 0 la început.
+- **Quick Answer (TL;DR EN)**: The Scratch 3.0 stage spans 480 steps wide (X from -240 to +240) and 360 steps tall (Y from -180 to +180), centered at (0, 0). Every working game follows four building blocks: reset variables and positions under "When green flag clicked", wrap controls in a "Forever" loop, check collisions with "If touching...", and delete clones when they leave the stage.
+- **Cuprins Capitole RO**: 1. Secretul scenei Scratch: Harta coordonatelor X și Y (-240..240 și -180..180) · 2. Construiește în 15 minute jocul „Prinde Stelele!” (pas cu pas) · 3. Bucle condiționate și Clonare (Nivel avansat Clasa a VI-a) · 4. Cele mai frecvente 4 greșeli din proiectele Scratch (și cum le repari)
+- **Checklist**: La click pe steagul verde, Scorul revine la 0, Viețile la 3 și toate personajele merg la pozițiile de start. | Fiecare condiție „Dacă” pentru taste sau coliziuni stă în interiorul unei bucle „La infinit” sau „Repetă până când”. | Fiecare clonă creată are un bloc „Șterge această clonă” când iese de pe ecran. | Jocul are un mesaj clar de „Ai câștigat!” sau „Game Over” cu „Oprește tot”.
+- **Întrebări Cheie (FAQ)**:
+  - *Care sunt limitele coordonatelor X și Y pe scena din Scratch 3.0?* → Axa X (orizontală) variază de la -240 în stânga la +240 în dreapta (total 480 pixeli). Axa Y (verticală) variază de la -180 jos la +180 sus (total 360 pixeli). Centrul scenei este (0, 0).
+  - *De ce personajul meu nu se mișcă atunci când apăs tastele săgeți?* → Verifică dacă blocul „Dacă tasta ... apăsată?” se află în interiorul unei bucle „La infinit” pornită de steagul verde. Fără buclă, condiția este verificată o singură dată la pornire.
+  - *De ce crește scorul cu mai multe puncte la o singură atingere?* → Bucla „La infinit” rulează de aproximativ 30 de ori pe secundă, așa că dacă cele două personaje rămân suprapuse timp de 0,3 secunde, scorul crește de 9 ori. Mută imediat obiectul colectat sau șterge clona după ce aduni +1 la Scor.
+
+### 7. Primul tău site web în Clasa a VIII-a: Structura HTML5, HTTPS și publicare sigură în Google Sites
+- **EN Title**: Building Your First School Website (Grade 8): Semantic HTML5, HTTPS & Safe Google Sites Publishing
+- **URL RO**: https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/
+- **URL EN**: https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/
+- **Categorie & Nivel**: Web Design & Tehnologii Web | Clasa a VIII-a | 9 min citire
+- **Răspuns Rapid (TL;DR RO)**: Orice pagină web modernă se bazează pe HTML5 semantic (<!DOCTYPE html>, <head> pentru metadate și <body> pentru conținut vizibil cu <header>, <nav>, <main>, <footer>). În clasa a VIII-a poți construi atât pagini scrise direct în HTML5 cu Notepad++/VS Code, cât și site-uri multipage publice pe HTTPS prin Google Sites, respectând ierarhia de titluri H1–H3 și descrieri alt pentru imagini.
+- **Quick Answer (TL;DR EN)**: Every modern webpage starts with semantic HTML5 (<!DOCTYPE html>, <head> for metadata like UTF-8 charset and title, and <body> with <header>, <nav>, <main>, and <footer>). Whether coding from scratch or launching a multipage project in Google Sites, verify HTTPS security, use one clear <h1> per page, add alt descriptions to images, and preview mobile responsiveness.
+- **Cuprins Capitole RO**: 1. Anatomia completă a unei pagini HTML5 (pe care trebuie să o știi pe de rost) · 2. HTTP vs. HTTPS, URL-uri și legături relative vs. absolute · 3. Cum publici un site curat cu mai multe pagini în Google Sites · 4. Reguli de aur de SEO și siguranță GDPR pentru site-uri școlare
+- **Checklist**: Fiecare pagină HTML are <!DOCTYPE html>, <meta charset="utf-8"> și un <title> descriptiv. | Toate linkurile din meniu merg corect între pagini fără erori 404. | Fiecare imagine are atribut alt completat și se încarcă rapid. | Site-ul nu conține date personale sensibile și arată lizibil atât pe PC, cât și pe mobil.
+- **Întrebări Cheie (FAQ)**:
+  - *Care este diferența dintre HTML și CSS?* → HTML definește structura și conținutul paginii (titluri, paragrafe, imagini, linkuri — „scheletul”), iar CSS controlează designul vizual (culori, fonturi, spațieri, așezare pe coloane).
+  - *De ce apar caractere ciudate (Ã®n loc de ă, ș, ț) într-o pagină HTML?* → Lipsește eticheta <meta charset="utf-8"> din zona <head> sau fișierul HTML nu a fost salvat cu codificare UTF-8 în editorul de text.
+  - *Este gratuit să public un proiect școlar în Google Sites?* → Da, Google Sites este complet gratuit cu un cont Google/școlar și include automat găzduire securizată prin HTTPS.
+
+### 8. Proiect Smart Home cu Arduino Uno pentru gimnaziu (VII–VIII): Senzori PIR, Ultrasonic HC-SR04, MQ-2 și millis()
+- **EN Title**: Arduino Uno Smart Home School Project (Grades 7–8): PIR, HC-SR04 Ultrasonic, MQ-2 & Non-Blocking millis()
+- **URL RO**: https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/
+- **URL EN**: https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/
+- **Categorie & Nivel**: Robotică Arduino & IoT | Clasele VII–VIII | 11 min citire
+- **Răspuns Rapid (TL;DR RO)**: Un proiect Smart Home cu Arduino Uno (conform programei și manualului Art Klett clasa a VIII-a) combină citirea senzorilor pe pini digitali (PIR mișcare, HC-SR04 ultrasonic) sau analogici A0–A5 (fotorezistor LDR, senzor gaz MQ-2) cu actuatori (LED cu rezistor de 220 Ω, servomotor SG90 pe PWM ~). Folosește millis() în locul lui delay() ca alerta de gaz să răspundă instant chiar când bariera se mișcă.
+- **Quick Answer (TL;DR EN)**: A reliable middle school Arduino Uno Smart Home reads digital sensors (PIR motion, HC-SR04 ultrasonic) and analog A0–A5 inputs (LDR photoresistor, MQ-2 gas sensor) to drive actuators (220 Ω resistor-protected LEDs, PWM ~ SG90 servo gates). Replace blocking delay() calls with millis() timers so emergency alarms always trigger immediately.
+- **Cuprins Capitole RO**: 1. Harta plăcii Arduino Uno: Pini digitali, analogici A0–A5, PWM (~) și rezistorul de 220 Ω · 2. Greșeala #1 a începătorilor: delay() blochează tot sistemul vs. Multitasking cu millis() · 3. Cum depanezi rapid un circuit Arduino care nu răspunde
+- **Checklist**: Fiecare LED este protejat cu un rezistor în serie de 220 Ω–330 Ω. | Toate firele de masă (GND) sunt conectate în aceeași linie comună pe breadboard. | Am folosit millis() pentru temporizări astfel încât senzorii de urgență (MQ-2, PIR) să nu fie blocați de delay(). | Am testat pragurile senzorilor în Serial Monitor la lumina reală din încăpere.
+- **Întrebări Cheie (FAQ)**:
+  - *De ce trebuie să pun un rezistor de 220 Ω în serie cu fiecare LED pe Arduino?* → Un LED consumă în jur de 2V și suportă ~20 mA. Pinul Arduino scoate 5V; fără rezistor, conform Legii lui Ohm, curentul devine mult prea mare și arde instantaneu LED-ul sau pinul microcontrollerului.
+  - *Care este diferența dintre pinii digitali și pinii analogici A0–A5?* → Pinii digitali citesc sau trimit doar două stări (HIGH = 5V, LOW = 0V), fiind perfecți pentru butoane, PIR sau relee. Pinii analogici A0–A5 citesc o gamă întreagă de valori între 0 și 1023, necesară pentru fotorezistoare LDR, senzori de temperatură sau MQ-2.
+  - *De ce este recomandat millis() în locul lui delay() la proiectul Smart Home?* → Funcția delay() oprește complet execuția programului pe durata pauzei, făcând Arduino surd la senzori critici (cum ar fi alarma de gaz MQ-2). Cu millis(), cronometrezi non-blocant și toate subsistemele funcționează simultan.
+
+### 9. Ce laptop sau PC alegi pentru școală în gimnaziu (V–VIII): Procesor, RAM, SSD NVMe, placă video & ergonomie
+- **EN Title**: Choosing a Student Laptop or PC for Middle School (Grades 5–8): CPU, RAM, NVMe SSD & Ergonomics
+- **URL RO**: https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/
+- **URL EN**: https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/
+- **Categorie & Nivel**: Hardware & Părinți | Clasele V–VIII · Părinți | 10 min citire
+- **Răspuns Rapid (TL;DR RO)**: Pentru gimnaziu (Word, Excel, PowerPoint, browser cu 15 tab-uri, Scratch 3.0, C++ în Code::Blocks și Arduino IDE), specificația optimă în 2026 este: procesor Intel Core i3/i5 (gen. 12+) sau AMD Ryzen 3/5 (seria 5000/7000+), minimum 16 GB RAM (sau 8 GB cu posibilitate de upgrade), stocare SSD NVMe de 512 GB (fără HDD mecanic!), ecran IPS Full HD mat (1920×1080) și tastatură cu layout complet.
+- **Quick Answer (TL;DR EN)**: For middle school ICT and coding (Docs, Excel, browser research, Scratch 3.0, C++, and Arduino IDE), the sweet-spot spec is an Intel Core i3/i5 (12th gen+) or AMD Ryzen 3/5 (5000/7000+), 16 GB RAM (or upgradeable 8 GB), a 512 GB NVMe SSD (avoid mechanical HDDs), a matte 1080p IPS display, and standard USB/HDMI ports.
+- **Cuprins Capitole RO**: 1. Cele 4 componente care decid viteza reală a calculatorului (CPU, RAM, SSD, Ecran) · 2. Laptop vs. Desktop PC + Porturi necesare pentru robotică și școală · 3. Ergonomia postului de lucru (Clasa a V-a): Postură, lumină și regula 20-20-20 · 4. Recapitulare rapidă TIC: Unități de măsură (bit, Byte, KB, MB, GB, TB)
+- **Checklist**: Are minimum 16 GB RAM (sau 8 GB cu slot liber de upgrade) și SSD NVMe (niciodată doar HDD mecanic). | Ecranul este Full HD (1920×1080) cu strat anti-reflexie (mat), nu rezoluție HD 1366×768. | Include port HDMI și USB compatibile pentru proiectorul de la școală și cabluri Arduino. | Copilul are un mouse separat (ideal ergonomic) și o postură corectă la birou, fără stat cocoșat.
+- **Întrebări Cheie (FAQ)**:
+  - *Ajung 8 GB RAM sau merită 16 GB RAM pentru un elev de gimnaziu?* → Dacă bugetul permite, 16 GB RAM sunt investiția cea mai înțeleaptă pentru 4–5 ani (clasele V–VIII și început de liceu). Sistemele moderne, browserul cu mai multe tab-uri și aplicațiile educaționale depășesc ușor 8 GB RAM în utilizarea zilnică.
+  - *Are nevoie copilul de laptop scump de gaming pentru informatică și TIC?* → Nu. Pentru programa de gimnaziu (Scratch, Code::Blocks C++, Word, Excel, PowerPoint, HTML5, Arduino IDE și platforma ArkyEdu), o placă video integrată modernă (Intel Iris Xe / AMD Radeon) este complet suficientă și oferă baterie mai bună și greutate mai mică în ghiozdan.
+  - *Ce este mai important la viteză: procesorul scump sau SSD-ul?* → Diferența de la HDD mecanic la SSD NVMe este uriașă (pornire în 10 secunde vs. 2 minute). Nu cumpăra niciun calculator fără SSD, indiferent ce procesor scrie pe etichetă.
+
+### 10. Prezentări PowerPoint & Google Slides de nota 10 (Clasa a VI-a): Regula 6×6, contrast, animații și modele 3D
+- **EN Title**: A+ PowerPoint & Google Slides Presentations (Grades 5–7): The 6×6 Rule, Contrast, Animations & 3D Models
+- **URL RO**: https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/
+- **URL EN**: https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/
+- **Categorie & Nivel**: Prezentări & Grafică 3D | Clasele V–VII | 8 min citire
+- **Răspuns Rapid (TL;DR RO)**: O prezentare școlară reușită respectă Regula 6×6 (maximum 6 idei scurte pe diapozitiv, maximum 6 cuvinte pe rând), folosește un font mare (minim 24 pt pentru text, 36–44 pt pentru titlu), asigură contrast puternic între fundal și text, folosește o singură tranziție discretă (Fade/Push) și nu pune pe slide-uri tot discursul — slide-ul susține prezentatorul, nu îl citește în locul lui.
+- **Quick Answer (TL;DR EN)**: An A+ school deck follows the 6×6 Rule (no more than 6 bullets per slide, roughly 6 words per line), enforces large readable type (24 pt+ body, 36–44 pt titles), uses high text-to-background contrast, sticks to one subtle transition (Fade/Morph), and keeps spoken details inside Speaker Notes instead of crowding slides.
+- **Cuprins Capitole RO**: 1. Regula 6×6 și regula fontului de 24 pt: De ce „mai puțin text = notă mai mare” · 2. Structura ideală în 6 diapozitive pentru orice proiect școlar · 3. Integrarea modelelor Paint 3D și trucul „Presenter View” (Notele vorbitorului)
+- **Checklist**: Fiecare slide respectă Regula 6×6 și are font de cel puțin 22–24 pt. | Am verificat contrastul textului de la 3 metri distanță față de ecran. | Nicio imagine nu este turtită și am citat sursele pe ultimul slide. | Am salvat prezentarea și ca PDF de rezervă pe stick/Cloud în caz că pe calculatorul clasei lipsește PowerPoint.
+- **Întrebări Cheie (FAQ)**:
+  - *Ce înseamnă Regula 6×6 într-o prezentare PowerPoint?* → Regula 6×6 recomandă să nu depășești 6 puncte (bullet points) pe un singur slide și maximum 6 cuvinte pe fiecare rând, pentru ca publicul să scaneze rapid ideea principală și să te asculte pe tine.
+  - *Care este diferența dintre tranziții și animații în PowerPoint?* → Tranzițiile controlează efectul vizual la trecerea de la un slide la altul, în timp ce animațiile controlează cum intră, se evidențiază sau ies elementele individuale (texte, poze, forme) de pe același slide.
+  - *De ce este recomandat să păstrez o copie PDF a prezentării?* → Dacă pe calculatorul din clasă este altă versiune de Office sau LibreOffice Impress, fonturile și animațiile se pot decala. Exportul PDF garantează că poți derula prezentarea curat pe orice sistem.
+
+### 11. Educație digitală și programare pentru copii în România (10–15 ani): Ghidul părinților 0 lei/an vs. școli private de 5.000 lei/an
+- **EN Title**: Free Kids Coding & Digital Literacy vs. $1,000/Year Private Academies: A Practical Parents’ Guide
+- **URL RO**: https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/
+- **URL EN**: https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/
+- **Categorie & Nivel**: Ghid Părinți & Economii | Părinți · 10–15 ani | 11 min citire
+- **Răspuns Rapid (TL;DR RO)**: Un copil de 10–15 ani NU are nevoie de un abonament de 4.000–6.000 lei/an la o academie privată ca să devină pasionat de programare și tehnologie. Cu 2 sesiuni a câte 30 de minute pe săptămână pe ArkyEdu (100% gratuit, aliniat programei OMEN 3393/2017 & OM 5420/2024), elevul parcurge progresiv Scratch 3.0, C++, Excel, HTML5, securitate cibernetică și robotică Arduino IoT — cu diplome 1–10 și 28 jocuri arcade.
+- **Quick Answer (TL;DR EN)**: Parents do not need $1,000+/year private coding subscriptions to raise tech-fluent kids. With two focused 30-minute sessions per week on ArkyEdu (100% free, zero ads, bilingual EN/RO), students ages 10–15 progress systematically from Scratch 3.0 to real C++, Excel formulas, HTML5, cybersecurity, and Arduino IoT—reinforced by 28 retro arcade games and live 1v1 duels.
+- **Cuprins Capitole RO**: 1. Tabel comparativ onest: Școli private de coding vs. ArkyEdu (0 lei/an) · 2. Harta competențelor digitale recomandate pe vârste (10–15 ani) · 3. Cum transformi timpul pe calculator din „stat pe TikTok” în 2×30 minute de creație pe săptămână
+- **Checklist**: Alege împreună cu copilul hub-ul corespunzător clasei lui (V, VI, VII sau VIII) pe ArkyEdu. | Stabiliți două intervale fixe de 30 de minute pe săptămână (ex: Marți și Sâmbătă dimineața). | Încurajează-l să exerseze jocurile din Arcade care antrenează exact materia curentă (PC Builder, File-Drop, Circuit Master 80s). | Verificați împreună diplomele de merit obținute și comparați progresul fără niciun cost lunar.
+- **Întrebări Cheie (FAQ)**:
+  - *Este ArkyEdu într-adevăr 100% gratuită fără abonamente ascunse după 7 zile?* → Da. Toate cele 40 de module curriculare, cele 28 de jocuri arcade, duelurile 1v1, simulatoarele și diplomele sunt 100% gratuite (0 lei), fără reclame și fără limitări de tip trial.
+  - *Ce primește copilul în plus față de un curs plătit la o școală privată?* → Aliniere 100% cu programa oficială de TIC și Informatică de la școală (V–VIII), practică reală pe C++ Code::Blocks, Excel, HTML5 și Arduino IoT, evaluare pe baremul 1–10, acces 24/7 și interfață bilingvă RO/EN.
+  - *De la ce vârstă poate folosi copilul platforma singur?* → De la 9–10 ani (clasa a IV-a/a V-a) fără ajutor, datorită instrucțiunilor pas cu pas, simulatoarelor vizuale și sistemului de feedback instant.
+
+### 12. Playbook pentru Profesorul de Informatică și TIC (V–VIII): Laboratoare fără instalare, catalog digital 1–10 & pregătire Olimpiadă
+- **EN Title**: ICT Teacher Playbook (Grades 5–8): Zero-Install Browser Labs, 1–10 Gradebook & Olympiad Prep
+- **URL RO**: https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/
+- **URL EN**: https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/
+- **Categorie & Nivel**: Profesori & Olimpiadă | Profesori TIC · V–VIII | 10 min citire
+- **Răspuns Rapid (TL;DR RO)**: În laboratoarele școlare cu calculatoare eterogene și timp limitat la 50 de minute, ArkyEdu elimină blocajele de instalare (Code::Blocks, Excel, Arduino IDE rulează direct în browser), aliniază toate cele 40 de module la programa OMEN 3393/2017 & OM 5420/2024, oferă Portal Profesor cu catalog digital pe bareme 1–10 (izolare multi-școală GDPR + export PDF/CSV) și transformă ultimele 10 minute ale orei în recapitulare prin dueluri 1v1.
+- **Quick Answer (TL;DR EN)**: In school labs with mixed hardware and tight 50-minute periods, ArkyEdu removes installation bottlenecks (C++, Excel, Scratch, HTML5, and Arduino labs run directly in the browser), provides a free Teacher Portal with automated 1–10 rubric grading and multi-school GDPR isolation, and turns the final 10 minutes into high-energy review via 4-character-code 1v1 duels.
+- **Cuprins Capitole RO**: 1. Structura optimă a unei ore de TIC de 50 de minute (Modelul 10 + 25 + 10 + 5) · 2. Portalul Profesorului: Evaluare automată pe bareme 1–10 și protecție GDPR · 3. Pregătirea elevilor performanți pentru Olimpiada de TIC (ONTIC) & Liceu
+- **Checklist**: Am testat linkul platformei pe browserul calculatoarelor din laborator (merge fără cont de admin). | Am accesat Portalul Profesorului (/profesor/) pentru gestionarea claselor și exportul notelor 1–10. | Am pregătit o cameră de Duel 1v1 (cod 4 caractere) ca premiu educațional pentru ultimele 10 minute ale orei. | Le-am oferit părinților ghidurile gratuite din Blog pentru consolidarea temelor acasă.
+- **Întrebări Cheie (FAQ)**:
+  - *Este Portalul Profesorului gratuit pentru școlile de stat și profesorii din România?* → Da, Portalul Profesorului și toate cele 40 de module curriculare sunt 100% gratuite pentru toate școlile și cadrele didactice, fără limite de elevi sau abonamente.
+  - *La ce programe școlare sunt aliniate lecțiile de pe ArkyEdu?* → Conținutul respectă integral programa oficială OMEN nr. 3393/2017 și actualizările OM 5420/2024 pentru Informatică și TIC (clasele V–VIII), precum și structura manualelor aprobate (Art Klett 2025, Litera, EDP).
+  - *Cum folosesc Duelurile 1v1 în clasă fără haos?* → Profesorul proiectează provocarea tematică în ultimele 8–10 minute ale orei; elevii intră în camere pereche cu cod scurt din 4 caractere (sau joacă individual contra AI Cyber-Bot dacă numărul de elevi e impar).
+
+### 13. Deepfake, Voice Cloning & Poze False AI în 2026: Cum recunoști un fals în 30 de secunde și metoda C.R.I.F.
+- **EN Title**: Deepfakes, AI Voice Cloning & Fake Photos in 2026: Spot Fakes in 30 Seconds with C.R.I.F.
+- **URL RO**: https://www.arkyedu.com/blog/deepfake-ai-voice-cloning-detectare-stiri-false-2026/
+- **URL EN**: https://www.arkyedu.com/blog/en/deepfake-ai-voice-cloning-detection-guide-2026/
+- **Categorie & Nivel**: Siguranță AI & Media | Clasele V–VIII · Părinți | 12 min citire
+- **Răspuns Rapid (TL;DR RO)**: În 2026, un deepfake audio sau video convingător poate fi generat din doar 3–5 secunde de voce sau o singură fotografie. Nu te baza pe „ochiul liber” sau pe un singur detector automat: aplică metoda C.R.I.F. (Context, Resurse/Sursă, Indicii tehnice, Fapte verificate în 3 locuri) și stabilește în familie un cuvânt-cheie secret pentru apelurile de urgență.
+- **Quick Answer (TL;DR EN)**: In 2026, convincing fake audio or video can be generated from just 3–5 seconds of someone’s voice or a single selfie. Never rely on intuition alone or one automated detector: use the C.R.I.F. method (Context, Resource/Source, Indicators, Fact-check across 3 outlets) and set up a secret family safe-word for urgent phone calls.
+- **Cuprins Capitole RO**: 1. Anatomia unui Deepfake: Cum fabrică AI-ul fețe, clipuri și voci sintetice · 2. Metoda C.R.I.F. în 4 pași: Protocolul de verificare de 30 de secunde · 3. Top 7 artefacte vizuale și audio care dau de gol un Deepfake · 4. De ce greșesc „detectoarele automate de AI” și ce poți verifica tehnic · 5. Ce faci dacă cineva creează o imagine sau un clip fals cu tine ori cu un coleg
+- **Checklist**: Am verificat sursa originală în cel puțin 3 locuri independente înainte să dau Share. | Am inspectat ochii, mâinile, umbrele, textul din fundal și tranzițiile din jurul feței. | La orice apel sau mesaj vocal urgent care cere bani/coduri, am confirmat pe alt canal folosind parola de familie. | Nu am publicat filmări lungi frontale sau eșantioane clare de voce pe conturi publice fără restricții de confidențialitate.
+- **Întrebări Cheie (FAQ)**:
+  - *Câte secunde de voce îi trebuie unui AI în 2026 ca să cloneze vocea cuiva?* → Modelele moderne zero-shot pot sintetiza o clonă vocală recognoscibilă din doar 3–10 secunde de vorbire clară extrasă dintr-un TikTok, Reel sau mesaj vocal public.
+  - *Sunt 100% sigure site-urile care „detectează” dacă o poză sau o temă e făcută cu AI?* → Nu. Detectoarele automate dau atât alarme false (marcând poze reale comprimate drept AI), cât și rateuri pe imagini editate. Ele sunt doar un indiciu orientativ, niciodată o dovadă singură.
+  - *Ce înseamnă prescurtarea C.R.I.F. în educația media?* → C = Contextul postării, R = Resursa și sursa primară, I = Indicii tehnice (artefacte vizuale/audio), F = Fapte confirmate din surse independente sau pe alt canal de comunicare.
+
+### 14. Pregătire OJI & Admitere Mate-Info (VII–VIII): Complexitate O(n)/O(log n), Primalitate O(√n), Vectori de Frecvență & Căutare Binară în C++
+- **EN Title**: Competitive C++ for Grades 7–8 (Olympiad & High-School Prep): Time Complexity, O(√n) Primes, Frequency Arrays & Binary Search
+- **URL RO**: https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/
+- **URL EN**: https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/
+- **Categorie & Nivel**: C++ & Olimpiadă | Clasele VII–VIII · OJI | 14 min citire
+- **Răspuns Rapid (TL;DR RO)**: Diferența dintre 40 de puncte (Time Limit Exceeded) și 100 de puncte la OJI sau la testarea de admitere mate-info ține de 4 tehnici C++ esențiale: calculul corect al complexității (max ~10^7–10^8 operații/secundă), testul de primalitate în O(√n) cu d*d <= n, vectorii de frecvență fr[x] în O(n) în loc de două bucle O(n^2) și căutarea binară fără buclă infinită (left <= right, mid = left + (right - left)/2).
+- **Quick Answer (TL;DR EN)**: The gap between a 40-point Time Limit Exceeded and a 100-point Olympiad submission comes down to four core C++ habits: matching your algorithm’s Big-O complexity to N (~10^7–10^8 ops/sec), checking primality in O(√n) with d*d <= n, counting values in O(n) with frequency arrays fr[x]++, and writing bug-free binary search (left <= right, mid = left + (right - left)/2).
+- **Cuprins Capitole RO**: 1. Cum estimezi complexitatea în timp înainte să scrii prima linie de cod · 2. Testul de primalitate în O(√N) și Ciurul lui Eratostene pentru intervale mari · 3. Vectori de frecvență (Counting Sort): Cum înlocuiești 2 bucle cu 1 singură parcurgere · 4. Căutarea Binară în O(log N): Cele 3 reguli ca să nu blochezi niciodată bucla while · 5. Strategia celor 5 pași în sala de concurs & Debugging în Visual Trace
+- **Checklist**: Am verificat dacă sumele sau produsele depășesc tipul int și am folosit long long unde este nevoie. | Vectorii cu peste 1.000 de elemente sunt declarați global, nu în interiorul lui main(). | Nu există mesaje extra în cout (fără „Dati n=” sau pause/system) și fiecare caz limită (0, 1, duplicat) a fost testat. | Complexitatea algoritmului încape confortabil sub 10^7 operații pentru valoarea maximă a lui N.
+- **Întrebări Cheie (FAQ)**:
+  - *De ce este recomandat să declari vectorii mari global, în afara funcției main()?* → Memoria stivă (stack) alocată în interiorul lui main() este limitată (uneori la doar 1–8 MB), în timp ce variabilele globale stau în zona statică de date (zeci/sute de MB) și sunt inițializate automat cu 0 de compilator.
+  - *Când folosesc vector de frecvență și când sortez vectorul clasic?* → Folosești vector de frecvență când valorile numerelor sunt mici și pozitive (de ex. 0..1.000.000). Dacă valorile pot fi până la 10^9 sau negative, sortezi vectorul.
+  - *De ce se scrie mij = st + (dr - st) / 2 în loc de (st + dr) / 2?* → Dacă st și dr sunt apropiate de 1,5 miliarde, suma st + dr depășește limita lui int și devine negativă (overflow). Scăderea (dr - st) evită complet această eroare.
+
+### 15. De la 0 și 1 la Procesor: Sistemul Binar, Codul ASCII, Culorile RGB, Porțile Logice și Arhitectura Von Neumann
+- **EN Title**: From 0 and 1 to a Working CPU: Binary, ASCII, RGB Colors, Logic Gates & Von Neumann Architecture
+- **URL RO**: https://www.arkyedu.com/blog/sistem-binar-ascii-rgb-porti-logice-arhitectura-von-neumann/
+- **URL EN**: https://www.arkyedu.com/blog/en/binary-ascii-rgb-logic-gates-von-neumann-cpu-architecture/
+- **Categorie & Nivel**: Algoritmi & Arhitectură | Clasele V–VIII · Fundamente | 13 min citire
+- **Răspuns Rapid (TL;DR RO)**: Orice calculator înțelege doar două stări electrice: 0 (Oprit / 0V) și 1 (Pornit / +5V), numite biți. Grupați câte 8 biți formează 1 Byte (0–255), suficient pentru o literă ASCII sau o componentă de culoare RGB. Milioane de porți logice (AND, OR, NOT, XOR) construite din tranzistori calculează adunări și decizii în interiorul CPU-ului prin ciclul infinit Fetch → Decode → Execute.
+- **Quick Answer (TL;DR EN)**: Computers only understand two voltage states—0 (OFF) and 1 (ON)—called bits. Eight bits make 1 Byte (0–255), enough for an ASCII letter or one RGB color channel. Millions of transistor logic gates (AND, OR, NOT, XOR) add numbers inside the ALU while the CPU runs the endless Fetch → Decode → Execute loop.
+- **Cuprins Capitole RO**: 1. Sistemul Binar (baza 2) & Hexazecimal (baza 16): Metoda puterilor lui 2 · 2. Cum devin biții litere (ASCII / UTF-8) și culori pe ecran (RGB 24 biți) · 3. Porțile Logice (AND, OR, NOT, XOR) și Semi-Sumatorul: Cum „gândește” siliciul · 4. Arhitectura Von Neumann & Ciclul CPU: Fetch → Decode → Execute · 5. Operatori pe biți în C++ (&, |, ^, <<, >>) folosiți la concursuri și robotică
+- **Checklist**: Știu puterile lui 2 de la 2^0 = 1 până la 2^10 = 1.024 fără calculator. | Înțeleg că 1 Byte = 8 biți = valori 0..255 (1 caracter ASCII sau 1 canal RGB). | Pot construi tabelele de adevăr pentru AND, OR, NOT și XOR și știu cum formează un Semi-Sumator. | Pot explica cele 3 etape ale ciclului CPU: Fetch → Decode → Execute și rolul registrelor PC, IR, ACC.
+- **Întrebări Cheie (FAQ)**:
+  - *Care este diferența dintre bit (b) și Byte / octet (B)?* → Un bit (b mic) este unitatea elementară cu o singură valoare: 0 sau 1. Un Byte (B mare) sau octet este format din 8 biți grupați și poate reprezenta 2^8 = 256 de combinații distincte (0..255).
+  - *De ce este 1 Kilobyte egal cu 1.024 Bytes și nu 1.000?* → Pentru că arhitectura calculatoarelor este bazată pe puterile lui 2, iar 2^10 = 1.024 este cea mai apropiată putere a lui 2 de 1.000.
+  - *Ce face mai exact poarta XOR și de ce e specială?* → Poarta XOR returnează 1 doar când cele două intrări sunt diferite (0 și 1 sau 1 și 0). Este singura poartă care calculează suma binară a doi biți fără transport, stând la baza unității aritmetice din CPU.
+
+### 16. Cum funcționează ChatGPT și LLM-urile (Tokeni, Softmax & Halucinații AI): Ghid tehnic pe înțelesul elevilor și profesorilor
+- **EN Title**: How ChatGPT & LLMs Really Work (Tokens, Softmax & AI Hallucinations): A Practical Guide for Students & Teachers
+- **URL RO**: https://www.arkyedu.com/blog/cum-functioneaza-llm-tokeni-softmax-halucinatii-ai-scoala/
+- **URL EN**: https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/
+- **Categorie & Nivel**: Inteligență Artificială | Clasele VI–VIII · Profesori | 12 min citire
+- **Răspuns Rapid (TL;DR RO)**: Un Model Lingvistic Mare (LLM — ChatGPT, Gemini, Claude) NU gândește ca un om și nu caută într-o bază de date cu fapte garantate. El sparge textul în bucăți numerice numite tokeni (~3–4 caractere fiecare) și prezice statistic următorul token cel mai probabil folosind funcția Softmax și parametrul Temperature. Tocmai pentru că optimizează „plauzibilitatea stilistică”, nu adevărul, LLM-ul poate inventa convingător citări sau formule false (halucinații AI).
+- **Quick Answer (TL;DR EN)**: A Large Language Model (LLM) does NOT think like a human or look up verified encyclopedia facts. It splits text into numeric chunks called tokens (~3–4 characters each) and predicts the most statistically probable next token using Softmax and a Temperature setting. Because it optimizes linguistic plausibility rather than ground truth, an LLM can invent false citations or math answers convincingly (AI hallucinations).
+- **Cuprins Capitole RO**: 1. Primul pas: Cum taie LLM-ul propozițiile în Tokeni (nu în cuvinte!) · 2. Predicția următorului token: Probabilități Softmax și parametrul „Temperature” · 3. De ce apar Halucinațiile AI (și top 4 capcane la teme) · 4. Regula verificării în 4 întrebări înainte să pui ceva în referat sau cod · 5. 5 Șabloane de Prompturi Inteligente pentru TIC, Matematică și Profesori
+- **Checklist**: Știu că LLM-ul prezice statistic tokeni, nu „gândește” și nu verifică automat adevărul. | Pentru cod, cifre exacte și date istorice am nevoie mereu de temperatură mică și verificare externă. | Folosesc AI-ul pentru indicii, analogii și explicarea erorilor, nu pentru copiere brută (copy-paste). | Nu introduc niciodată CNP, parole, adrese sau poze personale în chat-uri AI publice.
+- **Întrebări Cheie (FAQ)**:
+  - *Ce este exact un token într-un model precum ChatGPT sau Gemini?* → Este unitatea de bază în care este segmentat textul înainte de procesare: de obicei un cuvânt scurt, o parte de cuvânt (silabă/sufix) sau un semn de punctuație (~3–4 caractere).
+  - *De ce un LLM oferă răspunsuri ușor diferite la aceeași întrebare?* → Din cauza eșantionării probabilistice controlate de parametrul Temperature (> 0), care alege aleatoriu ponderat între cei mai probabili tokeni următori din distribuția Softmax.
+  - *Cum poți reduce riscul de halucinații când folosești un chatbot AI?* → Oferă-i contextul/textul sursă direct în prompt, cere-i să nu inventeze date dacă nu apar în text, evită întrebările care presupun ceva fals și verifică mereu faptele în manual sau surse oficiale.
+
+### 17. GTA 6, Universul Vice Leonida & Tehnologia din spatele jocurilor: Cum transformi pasiunea pentru gaming în Binar, C++, Excel și Robotică
+- **EN Title**: GTA 6, Vice Leonida & Game Engineering: How Educational Gaming Teaches Binary, C++, Excel & Robotics
+- **URL RO**: https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/
+- **URL EN**: https://www.arkyedu.com/blog/en/gta-6-educational-gaming-vice-leonida-cs-coding-guide/
+- **Categorie & Nivel**: Gaming & Educație Tech | Clasele V–VIII · Părinți | 11 min citire
+- **Răspuns Rapid (TL;DR RO)**: Copiii sunt fascinați în 2026 de lumi Open-World precum GTA 6 (Statul Leonida, Lucia & Jason), Roblox sau Minecraft. În loc de interdicții oarbe sau „scroll pasiv”, aceleași mecanici captivante (hartă GPS, coordonate X/Y, misiuni pe regiuni, vehicule, sistem Heat 1★–5★ și Economy) pot fi folosite pozitiv pentru a preda Binar, C++, formule Excel, HTML5 și Arduino IoT — exact cum face hub-ul sigur și 100% non-violent Vice Leonida de pe ArkyEdu.
+- **Quick Answer (TL;DR EN)**: Students in 2026 are naturally excited about open-world games like GTA 6 (Leonida, Lucia & Jason), Roblox, and Minecraft. Instead of passive short-video scrolling or blanket bans, the exact same mechanics—tactical maps, X/Y coordinates, vehicle physics, Heat state machines, and resource hubs—can teach Binary, C++, Excel, HTML5, and Arduino IoT inside ArkyEdu’s 100% safe, non-violent Vice Leonida Hub.
+- **Cuprins Capitole RO**: 1. Scroll pasiv vs. Gaming activ & Construcție digitală: Diferența uriașă pentru creier · 2. Sub capota unui Open-World modern: 5 concepte reale de Informatică · 3. Cum devine fiecare regiune din Vice Leonida (ArkyEdu) o misiune TIC reală · 4. Regula practică pentru părinți: Echilibrul 40 + 15 și curiozitatea tehnică
+- **Checklist**: Transformăm interesul pentru jocuri populare în întrebări reale despre cod, coordonate, FPS și rețele. | Separăm jocurile 18+ de versiunile educaționale 100% sigure și fără reclame (ArkyEdu). | Păstrăm pauzele regulate (regula 20-20-20 pentru ochi și mișcare fizică între sesiuni). | Alternăm misiunile curriculare cu jocurile educative Arcade și Duel 1v1 pentru consolidare.
+- **Întrebări Cheie (FAQ)**:
+  - *Este sigur jocul Vice Leonida de pe ArkyEdu pentru copiii de 10–15 ani?* → Da, 100%. Este o adaptare educațională originală, fără violență, fără reclame și fără achiziții cu bani reali, axată exclusiv pe provocări TIC (Binar, C++, Excel, HTML5, Arduino).
+  - *Trebuie descărcat sau instalat ceva pe calculator pentru a juca Vice Leonida?* → Nu! Rulează direct în browser (desktop, laptop, tabletă sau telefon) la 60 FPS în Canvas HTML5.
+  - *Ce învață concret un elev în Universul Vice Leonida?* → Exersează conversii binare pe 4 biți, logică de algoritmi C++, formule Excel (IF/SUM), concepte de rețelistică HTTPS și senzori Arduino, în timp ce explorează cele 6 regiuni și își salvează progresul.
+
+### 18. Python vs. C++ pentru copii în gimnaziu și liceu (2026): Pe care îl înveți primul? Sintaxă în paralel, capcane și ghid complet
+- **EN Title**: Python vs. C++ for Kids & Middle Schoolers (2026): Which Should They Learn First? Side-by-Side Code & Roadmap
+- **URL RO**: https://www.arkyedu.com/blog/python-vs-cpp-pentru-copii-gimnaziu-comparatie-primul-program/
+- **URL EN**: https://www.arkyedu.com/blog/en/python-vs-cpp-for-kids-middle-school-comparison-first-language/
+- **Categorie & Nivel**: Programare & Carieră | Clasele V–VIII · Părinți | 12 min citire
+- **Răspuns Rapid (TL;DR RO)**: În România, programa oficială de gimnaziu (VII–VIII), Olimpiada de Informatică (OJI) și Bacalaureatul folosesc C++ datorită vitezei de execuție și înțelegerii exacte a memoriei și tipurilor de date. Python este mai ușor de citit la început și domină inteligența artificială și automatizările. Soluția optimă nu este „ori unul, ori altul”: V–VI Scratch vizual, VII–VIII C++ pentru școală + bazele Python în Sandbox pentru proiecte AI și scripting.
+- **Quick Answer (TL;DR EN)**: C++ excels in competitive programming (IOI/Olympiads), robotics (Arduino), and teaching how memory and types really work—and is the standard across Romanian middle/high schools. Python is easier to read on day one and dominates AI, data science, and automation. You don’t have to pick only one: start with Scratch in Grades 5–6, master core C++ in Grades 7–8, and use Python alongside it in the Sandbox for AI and fast scripting.
+- **Cuprins Capitole RO**: 1. De ce predă școala din România C++, iar în lume domină Python? · 2. Același algoritm scris în paralel: Suma cifrelor unui număr în Python vs. C++ · 3. Top 5 diferențe de sintaxă pe care să le reții dacă înveți ambele limbaje · 4. Parcursul optim pe clase (V–VIII): Cum le combini fără suprasolicitare
+- **Checklist**: Elevul stăpânește mai întâi logica (condiții, bucle, variabile) înainte să memoreze sintaxă. | Pentru școală, OJI și Arduino prioritatea în clasele VII–VIII este C++. | Python este introdus ca al doilea limbaj ușor de citit, ideal pentru proiecte AI și automatizări. | Elevul exersează ambele limbaje direct în browser în Sandbox-ul gratuit, fără bătăi de cap cu instalarea compilatoarelor.
+- **Întrebări Cheie (FAQ)**:
+  - *Ce limbaj este mai bun pentru un copil de 10–11 ani (Clasa a V-a)?* → Scratch 3.0 (programare vizuală pe blocuri) este startul ideal la 10–11 ani, deoarece construiește 100% gândirea algoritmică fără frustrările erorilor de tastare.
+  - *Dacă copilul învață doar Python, va avea probleme la Informatică în liceu?* → La examenul de Bacalaureat, Olimpiada de Informatică și majoritatea orelor de profil mate-info din România se folosește C++. Ideal este să stăpânească C++ pentru școală — iar cu acea bază, Python devine extrem de ușor.
+  - *Care este cea mai mare greșeală când un elev trece de la C++ la Python?* → Folosirea împărțirii cu un singur slash (n / 10) în loc de dublu-slash (n // 10) pentru împărțire întreagă, respectiv uitarea că range(1, n) se oprește la n - 1.
+
+### 19. Algoritmi de Sortare în C++ pentru Gimnaziu & Olimpiadă: Bubble Sort, Selection Sort, Insertion Sort & std::sort() explicate pas cu pas
+- **EN Title**: C++ Sorting Algorithms for Middle School & Olympiads: Bubble Sort, Selection Sort, Insertion Sort & std::sort() Explained
+- **URL RO**: https://www.arkyedu.com/blog/algoritmi-de-sortare-cpp-bubble-selection-insertion-std-sort/
+- **URL EN**: https://www.arkyedu.com/blog/en/cpp-sorting-algorithms-bubble-selection-insertion-std-sort/
+- **Categorie & Nivel**: C++ & Algoritmi | Clasele VII–VIII · OJI | 14 min citire
+- **Răspuns Rapid (TL;DR RO)**: În gimnaziu (N <= 1.000), algoritmii de sortare pătratici O(n²) — Bubble Sort cu oprire timpurie, Selection Sort și Insertion Sort — sunt esențiali pentru înțelegerea logicii de interschimbare și a testelor de clasă. Pentru Olimpiadă și N >= 10.000 de elemente, folosește exclusiv std::sort(v, v + n) din <algorithm>, care rulează în O(n log n) și sortează 100.000 de numere în sub 0,03 secunde.
+- **Quick Answer (TL;DR EN)**: For classroom benchmarks (N <= 1,000), quadratic O(n²) sorts—early-exit Bubble Sort, Selection Sort, and Insertion Sort—build essential loop and swap intuition. For contests and N >= 10,000, always use std::sort(v, v + n) from <algorithm>, which runs in guaranteed O(n log n) and sorts 100,000 numbers in under 0.03 seconds.
+- **Cuprins Capitole RO**: 1. Tabel Comparativ: Bubble vs. Selection vs. Insertion vs. std::sort() · 2. Trasare Pas cu Pas pe vectorul v = [7, 2, 9, 1, 5] · 3. Implementări C++ curate: Bubble (optimizat), Selection & Insertion Sort · 4. Arma secretă de Olimpiadă: std::sort() și comparatori personalizați
+- **Checklist**: Am verificat dacă N ≤ 1.000 (merge O(n²)) sau N > 10.000 (obligatoriu std::sort() sau vector de frecvență). | Am respectat indexarea corectă în limitele buclelor (0..n-1 sau 1..n) fără a accesa v[n] în afara tabloului. | La comparatorul custom cmp(a, b) am folosit strict < / > și niciodată <= / >=. | Am urmărit cel puțin un test mic în Debugger-ul Visual Trace C++ înainte de evaluare.
+- **Întrebări Cheie (FAQ)**:
+  - *Care este cel mai rapid algoritm de sortare din C++ pentru N = 100.000?* → Funcția standard std::sort(v, v + n) din biblioteca <algorithm> (complexitate garantată O(n log n)), sau Counting Sort / vector de frecvență în O(n + maxVal) dacă numerele sunt întregi pozitive mici.
+  - *Ce înseamnă că un algoritm de sortare este „stabil”?* → Un algoritm stabil (ex: Insertion Sort, Merge Sort, std::stable_sort) păstrează ordinea relativă inițială a elementelor cu valori egale. De exemplu, dacă sortezi elevi după clasă, elevii din aceeași clasă rămân în ordinea inițială.
+  - *De ce este Bubble Sort mai lent decât Insertion Sort chiar dacă ambele sunt O(n²)?* → Bubble Sort face o interschimbare completă (3 atribuiri cu variabilă auxiliară) la aproape fiecare comparație inversată, în timp ce Insertion Sort doar deplasează elementele cu o singură atribuire și scrie valoarea o dată la final.
+
+### 20. Cum funcționează Internetul în 2026: IP, DNS, TCP vs. UDP (de ce ai Ping mare în jocuri), Porturi & Wi-Fi 6/7
+- **EN Title**: How the Internet Works in 2026: IP, DNS, TCP vs. UDP (Why Gaming Ping Spikes), Ports & Wi-Fi 6/7
+- **URL RO**: https://www.arkyedu.com/blog/cum-functioneaza-internetul-ip-dns-tcp-udp-ping-wifi-router/
+- **URL EN**: https://www.arkyedu.com/blog/en/how-the-internet-works-ip-dns-tcp-udp-gaming-ping-wifi-guide/
+- **Categorie & Nivel**: Rețele & Securitate | Clasele V–VIII · Rețele | 13 min citire
+- **Răspuns Rapid (TL;DR RO)**: Internetul transportă informația împărțită în pachete mici numerotate: DNS traduce numele ușor de reținut (arkyedu.com) în adresa IP numerică a serverului; TCP garantează că pachetele ajung intacte și în ordine (ideal pentru pagini web HTTPS port 443 și descărcări), iar UDP trimite pachetele fără confirmare pentru latență minimă (ideal pentru jocuri online, apeluri video și streaming). Pentru ping mic și stabil în jocuri, cablul Ethernet sau Wi-Fi pe 5/6 GHz bate întotdeauna banda aglomerată de 2.4 GHz.
+- **Quick Answer (TL;DR EN)**: The Internet moves data in numbered packets: DNS translates human domain names (arkyedu.com) into numeric IP addresses; TCP guarantees reliable, in-order delivery (websites on HTTPS port 443, downloads), while UDP skips acknowledgments for lowest possible latency (multiplayer gaming, voice/video calls, live streams). For low, steady ping, Ethernet or 5/6 GHz Wi-Fi always beats congested 2.4 GHz.
+- **Cuprins Capitole RO**: 1. Călătoria unei cereri Web în 5 pași (DNS → IP → TCP → TLS → HTML) · 2. TCP vs. UDP: De ce folosește un site TCP și un joc online UDP? · 3. Wi-Fi 2.4 GHz vs. 5 GHz vs. 6 GHz (Wi-Fi 6E/7) & Diagnosticare Lag · 4. IPv4 vs. IPv6 și 5 setări obligatorii de securitate pe routerul de acasă
+- **Checklist**: Conectez PC-ul / consola pentru jocuri sau concursuri pe cablu Ethernet sau Wi-Fi 5/6 GHz. | Am verificat cu ping că latența până la router este ≤ 3 ms și zero packet loss. | Routerul folosește WPA2-AES sau WPA3 cu o parolă puternică diferită de parola Wi-Fi. | Recunosc diferența dintre HTTP (necriptat, port 80) și HTTPS (criptat TLS, port 443).
+- **Întrebări Cheie (FAQ)**:
+  - *Ce este DNS-ul și de ce uneori schimbarea lui în 1.1.1.1 rezolvă site-urile care nu se încarcă?* → DNS (Domain Name System) traduce numele de domenii în adrese IP. Dacă serverul DNS al furnizorului este supraîncărcat, schimbarea către un resolver rapid precum 1.1.1.1 (Cloudflare) sau 8.8.8.8 (Google) rezolvă instant căutările.
+  - *Ce reprezintă Ping-ul măsurat în milisecunde (ms)?* → Ping-ul (RTT — Round Trip Time) este timpul total necesar unui pachet mic să ajungă de la dispozitivul tău la server și să se întoarcă. Sub 30 ms este excelent pentru gaming, peste 120 ms apare lag vizibil.
+  - *De ce este adresa 192.168.1.1 folosită aproape în toate casele din lume?* → 192.168.0.0/16 este un interval rezervat exclusiv rețelelor locale private (RFC 1918). Routerul folosește NAT pentru a împărți un singur IP public între toate telefoanele și laptopurile din casă.
+
+### 21. Excel Avansat & Google Sheets (Clasa VIII & Proiecte): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables & Grafice Smart
+- **EN Title**: Advanced Excel & Google Sheets (Grade 8 & Projects): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables & Smart Charts
+- **URL RO**: https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/
+- **URL EN**: https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/
+- **Categorie & Nivel**: Excel & Birotică | Clasa a VIII-a · Proiecte | 13 min citire
+- **Răspuns Rapid (TL;DR RO)**: După ce stăpânești SUM, AVERAGE și IF, următoarele 4 unelte transformă orice foaie de calcul într-un sistem inteligent: VLOOKUP(val; tabel; col; FALSE) sau modernul XLOOKUP() caută automat date între tabele (ex: prețul unui produs după cod), SUMIFS/COUNTIFS adună și numără pe multiple condiții simultan, Tabelele Pivot rezumă mii de rânduri în 10 secunde fără formule scrise manual, iar Graficele Smart (Bar vs Line vs Scatter) fac tiparele vizibile instant.
+- **Quick Answer (TL;DR EN)**: Once you master SUM, AVERAGE, and IF, four power tools turn any spreadsheet into an automated system: VLOOKUP(val, table, col, FALSE) or modern XLOOKUP() pulls matching records across sheets, SUMIFS/COUNTIFS aggregate across multiple filters at once, Pivot Tables summarize thousands of rows in 10 seconds with zero manual formulas, and matching chart types (Bar vs Line vs Scatter) make trends immediately clear.
+- **Cuprins Capitole RO**: 1. Căutarea între tabele: VLOOKUP(..., FALSE) vs. modernul XLOOKUP · 2. Analiză pe condiții multiple: SUMIFS și COUNTIFS · 3. Tabele Pivot (Pivot Tables) în 4 clicuri: Rezumate fără nicio formulă · 4. Cum alegi graficul corect la examen și prezentări (Regula Visual Clarity)
+- **Checklist**: Am blocat cu $A$1:$C$50 tabelele de referință în VLOOKUP/SUMIFS înainte de tragerea formulei în jos. | Am folosit potrivirea exactă FALSE (0) în VLOOKUP și am tratat erorile cu IFERROR. | Fiecare grafic are Titlu clar, etichete de axe cu unități de măsură și zero felii ilizibile. | Am verificat separatorul regional corect (; pe RO vs , pe EN).
+- **Întrebări Cheie (FAQ)**:
+  - *Care este diferența principală dintre VLOOKUP și XLOOKUP?* → VLOOKUP poate căuta doar în prima coloană din stânga a tabelului și are nevoie de numărul coloanei și FALSE. XLOOKUP caută în orice direcție (stânga/dreapta), nu se strică dacă inserezi coloane noi și permite un mesaj personalizat când valoarea lipsește.
+  - *De ce trebuie să pun $ în formula =VLOOKUP(A2; $E$2:$G$20; 3; FALSE)?* → Fără semnul $ (referință absolută), când copiezi formula pe rândurile de dedesubt, tabelul $E$2:$G$20 alunecă în E3:G21, E4:G22 etc., pierzând primele înregistrări și generând erori #N/A.
+  - *Ce este mai rapid pentru un raport cu 5 categorii: SUMIFS sau Pivot Table?* → Pentru un dashboard fix cu design strict, SUMIFS îți dă control pixel-cu-pixel; pentru explorare rapidă și grupare din mers pe mii de rânduri, Pivot Table este de 10 ori mai rapid.
+
+### 22. Robotică & IoT pentru Elevi (2026): Arduino Uno vs. ESP32 vs. Micro:bit, PWM, I2C & 7 Greșeli pe Breadboard
+- **EN Title**: Robotics & IoT for Students (2026): Arduino Uno vs. ESP32 vs. Micro:bit, PWM, I2C & 7 Breadboard Mistakes
+- **URL RO**: https://www.arkyedu.com/blog/robotica-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-proiecte/
+- **URL EN**: https://www.arkyedu.com/blog/en/robotics-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-projects/
+- **Categorie & Nivel**: Robotică & IoT | Clasele VII–VIII · IoT | 14 min citire
+- **Răspuns Rapid (TL;DR RO)**: Pentru primii pași în clasele V–VI, BBC Micro:bit are senzori integrați și programare pe blocuri fără fire fragile. Pentru gimnaziu (VII–VIII) și breadboard clasic cu C++, Arduino Uno este regele robusteții pe 5V. Dacă vrei proiecte IoT conectate la Wi-Fi/Bluetooth (stație meteo pe telefon, Smart City live), treci la ESP32 — dar atenție critică: ESP32 lucrează strict pe 3.3V, nu pe 5V!
+- **Quick Answer (TL;DR EN)**: For Grades 5–6 beginners, BBC Micro:bit provides built-in sensors and block coding without fragile jumper wires. For middle/high school breadboard C++ projects, Arduino Uno is the rugged 5V classroom standard. When you are ready for Wi-Fi/Bluetooth IoT dashboards, upgrade to ESP32—just remember the golden rule: ESP32 GPIO pins run strictly at 3.3V, never 5V!
+- **Cuprins Capitole RO**: 1. Arduino Uno vs. ESP32 vs. BBC Micro:bit: Ce placă alegi în 2026? · 2. PWM (Pulse Width Modulation) și I2C explicat pe înțelesul tuturor · 3. Exemplu complet: Iluminat stradal inteligent (LDR + PWM + millis()) · 4. Top 7 greșeli fatale pe breadboard care ard LED-uri, senzori sau placa
+- **Checklist**: Fiecare LED are rezistor în serie de 220 Ω–330 Ω (Legea lui Ohm: R = (V_sursă − V_LED) / I). | Toate sursele de alimentare (USB, baterii motoare) împart același fir de masă (GND comun). | Dacă folosesc ESP32 (3.3V), niciun senzor de 5V nu intră direct pe GPIO fără divizor de tensiune. | Am testat logica algoritmului întâi în Arkedo Smart City (/oras/) și în misiunile Arduino.
+- **Întrebări Cheie (FAQ)**:
+  - *Ce aleg pentru un elev în clasa a VII-a: Arduino Uno sau ESP32?* → Începe cu Arduino Uno (sau kit compatibil) pentru că tolerează mai ușor micile erori pe 5V și se aliniază 100% manualelor românești. După ce stăpânești senzorii și millis(), treci la ESP32 pentru proiecte Wi-Fi/IoT.
+  - *De ce are ESP32 nevoie de atenție la tensiunea de 3.3V?* → Logica internă a cipului ESP32 funcționează la 3.3V. Aplicarea unei tensiuni de 5V de la un senzor clasic direct pe un pin GPIO al ESP32 poate distruge definitiv pinul respectiv.
+  - *Pe ce pini ai plăcii Arduino Uno funcționează analogWrite() pentru PWM?* → Pe Arduino Uno R3, PWM hardware este disponibil exclusiv pe cei 6 pini marcați cu tilda (~): 3, 5, 6, 9, 10 și 11.
+
+### 23. Passkeys (FIDO2), Manageri de Parole, Scam-uri Discord/Steam & Backup 3-2-1: Ghid Complet de Securitate Digitală 2026
+- **EN Title**: Passkeys (FIDO2), Password Managers, Discord/Steam Scams & 3-2-1 Backups: The Complete 2026 Security Guide
+- **URL RO**: https://www.arkyedu.com/blog/passkeys-fido2-manager-parole-scam-discord-steam-backup-321/
+- **URL EN**: https://www.arkyedu.com/blog/en/passkeys-fido2-password-managers-discord-steam-scams-backup-321/
+- **Categorie & Nivel**: Securitate Online | Clasele VI–VIII · Părinți | 12 min citire
+- **Răspuns Rapid (TL;DR RO)**: Parolele scurte reciclate sunt principala cauză a furtului de conturi. În 2026, cele mai sigure trei măsuri gratuite sunt: (1) activarea Passkeys (FIDO2) pe conturile Google/Microsoft/Apple — imposibil de furat prin phishing pentru că sunt legate criptografic de domeniu; (2) folosirea unui manager de parole gratuit (ex: Bitwarden) + Authenticator TOTP în locul SMS-urilor; și (3) aplicarea regulii de backup 3-2-1 pentru proiectele școlare și pozele familiei.
+- **Quick Answer (TL;DR EN)**: Reused short passwords cause most account takeovers. In 2026, three free upgrades eliminate 99% of risks: (1) enable FIDO2 Passkeys on Google/Microsoft/Apple—mathematically immune to phishing because keys bind strictly to domains; (2) use a free zero-knowledge password manager (e.g., Bitwarden) + Authenticator app TOTP instead of SMS; and (3) follow the 3-2-1 backup rule for schoolwork and family photos.
+- **Cuprins Capitole RO**: 1. Ce sunt Passkeys (FIDO2) și de ce sunt imunizate matematic la Phishing? · 2. Anatomia celor mai frecvente 4 scam-uri pe Discord, Steam și WhatsApp · 3. Cum funcționează un Manager de Parole și de ce „4 cuvinte aleatorii” bat „P@r0l@12!” · 4. Regula de Backup 3-2-1: Cum nu mai pierzi niciodată proiectele sau pozele
+- **Checklist**: Am activat Passkey sau 2FA prin aplicație (nu doar SMS) pe Google, Microsoft, Discord și Steam. | Nu folosesc aceeași parolă pe două site-uri diferite (am verificat cu un Manager de Parole). | Nu scanez niciodată coduri QR trimise de alți utilizatori pentru „premii” sau „verificări”. | Proiectele școlare au backup activ în Cloud (regula 3-2-1).
+- **Întrebări Cheie (FAQ)**:
+  - *Dacă îmi pierd telefonul, mai pot intra în conturile cu Passkey?* → Da! Passkey-urile moderne se sincronizează criptat prin contul tău principal (Google Password Manager, Apple iCloud Keychain sau Bitwarden) sau pot fi recuperate prin codurile de rezervă tipărite.
+  - *Sunt sigure managerii de parole dacă păstrează toate parolele într-un singur loc?* → Da, cu condiția să folosești un manager reputat cu criptare Zero-Knowledge (cum este Bitwarden): datele sunt criptate local cu Master Password-ul tău, iar serverul nu îți poate citi niciodată seiful.
+  - *Cum recunosc imediat o tentativă de furt pe Discord sau Steam?* → Orice mesaj care invocă o urgență („ai fost raportat greșit”), promite Nitro/Skin-uri gratuite pe un link extern sau îți cere să descarci un .zip/.exe pentru „testare beta” este o capcană.
+
+### 24. Competențe Digitale, Agenți AI, RAG & Carierele Viitorului (2026–2030): Cum pregătești un elev de gimnaziu să nu fie înlocuit de AI
+- **EN Title**: Digital Literacy, AI Agents, RAG & Future Tech Careers (2026–2030): Preparing Students to Lead AI Instead of Being Replaced
+- **URL RO**: https://www.arkyedu.com/blog/competente-digitale-agenti-ai-rag-cariere-viitor-elevi-2026/
+- **URL EN**: https://www.arkyedu.com/blog/en/digital-skills-ai-agents-rag-future-tech-careers-students-2026/
+- **Categorie & Nivel**: Inteligență Artificială | Clasele VII–VIII · Viitor | 13 min citire
+- **Răspuns Rapid (TL;DR RO)**: În 2026, simpla scriere de cod mecanic sau rezumarea unor texte este deja automatizată. Elevii care vor câștiga în următorul deceniu sunt cei care înțeleg arhitectura din spatele uneltelor moderne — Chatbot clasic vs. RAG (răspunsuri ancorate în documente reale) vs. Agenți AI (planificare și apelare de unelte) — și își construiesc 3 abilități greu de înlocuit: gândire algoritmică și debugging, verificare critică a surselor și un portofoliu digital real demonstrabil până la finalul clasei a VIII-a.
+- **Quick Answer (TL;DR EN)**: By 2026, boilerplate code and generic summaries are commoditized. Students who thrive over the next decade understand how modern AI systems differ—Chatbots vs. RAG (answers grounded in verified docs) vs. AI Agents (planning + tool execution)—and build three irreplaceable human pillars: algorithmic debugging, source verification, and a real Grade 8 portfolio of working projects.
+- **Cuprins Capitole RO**: 1. Evoluția AI în 2026: Chatbot Clasic vs. RAG vs. Agenți AI · 2. Harta Competențelor 2026–2030: Ce face AI-ul vs. Ce face Omul Pregătit · 3. Portofoliul Digital al Elevului în 5 piese reale (Clasele V–VIII)
+- **Checklist**: Elevul știe diferența dintre un Chatbot simplu, un sistem RAG cu surse reale și un Agent AI. | Verifică fiecare bucată de cod generată de AI pe cazuri limită (N=0, N=1, numere mari 10^9). | Aplică regulile de confidențialitate: zero nume reale, CNP, parole sau poze personale încărcate în AI-uri publice. | Construiește proiecte proprii verificabile în Carnetul Digital și Laboratoarele ArkyEdu.
+- **Întrebări Cheie (FAQ)**:
+  - *Ce este RAG (Retrieval-Augmented Generation) pe scurt?* → RAG este tehnica prin care un model AI caută mai întâi informații exacte într-o bibliotecă de documente verificate (manuale, baze de cunoștințe) înainte să răspundă, reducând dramatic halucinațiile și oferind citări reale.
+  - *Mai are rost să învețe copiii C++ dacă AI-ul scrie cod automat?* → Da! AI-ul este un generator rapid de ciorne, dar fără gândire algoritmică nu poți verifica dacă soluția pică pe cazuri limită, depășește timpul de execuție sau introduce bug-uri de securitate.
+  - *Care sunt cele 5 zone ale cadrului european DigComp pentru elevi?* → Alfa-betizare informațională și date, Comunicare și colaborare, Creare de conținut digital, Siguranță cibernetică și Rezolvare de probleme — toate acoperite integral de cele 40 de module ArkyEdu.

@@ -107,19 +107,17 @@
     },
     {
       "identifier": "urn:air:arkyedu.com:blog:guides",
-      "displayName": "ArkyEdu Bilingual ICT & Coding Blog Guides (RO & EN)",
+      "displayName": "ArkyEdu Bilingual ICT & Coding Blog Index (24 Guides RO & EN)",
       "type": "text/html",
       "url": "https://www.arkyedu.com/blog/",
+      "markdownDigestUrl": "https://www.arkyedu.com/blog-llm.txt",
       "representativeQueries": [
-        "Rezolvare erori C++ if while gimnaziu Code::Blocks și formule Excel IF COUNTIF",
-        "Cum fac un referat corect în Word cu diacritice și proiect Scratch 3.0 sau Arduino Uno Smart Home millis()",
-        "Ce laptop aleg pentru școală gimnaziu 16 GB RAM SSD NVMe, regula 6x6 PowerPoint și programare copii gratuit vs Logiscool",
-        "How middle school students can use ChatGPT safely without plagiarism and stay safe on Roblox and TikTok",
-        "Scratch 3.0 coordinates game tutorial, HTML5 Google Sites grade 8, and Arduino HC-SR04 millis() school guide",
-        "Best student laptop specs grades 5-8, PowerPoint 6x6 rule, free kids coding vs paid academies, and ICT teacher playbook",
-        "Cum recunosti un deepfake AI sau voice cloning 2026, cum functioneaza tokenii si halucinatiile ChatGPT LLM",
-        "Pregatire OJI C++ vectori de frecventa cautare binara, sistem binar ASCII RGB porti logice Von Neumann, Python vs C++ copii, GTA 6 Vice Leonida gaming educativ",
-        "How to spot AI deepfakes, how LLM tokens and Softmax work, binary Von Neumann CPU architecture, and Python vs C++ for kids"
+        "Rezolvare erori C++ if while gimnaziu Code::Blocks, Bubble/Selection/Insertion Sort și std::sort",
+        "Cum fac un referat corect în Word, Excel XLOOKUP VLOOKUP SUMIFS Pivot Tables și proiect Arduino Uno vs ESP32 PWM I2C",
+        "Cum funcționează internetul IP DNS TCP vs UDP ping mare în jocuri, Passkeys FIDO2, manager parole și backup 3-2-1",
+        "Cum recunosti un deepfake AI 2026, cum functioneaza tokenii ChatGPT LLM, diferenta RAG vs AI Agents",
+        "Pregatire OJI C++ vectori de frecventa cautare binara, sistem binar ASCII RGB porti logice Von Neumann, Python vs C++ copii, GTA 6 Vice Leonida",
+        "How to spot AI deepfakes, LLM tokens and RAG vs AI Agents, C++ sorting algorithms, Arduino vs ESP32, Passkeys, and Excel XLOOKUP guide"
       ]
     },
     {

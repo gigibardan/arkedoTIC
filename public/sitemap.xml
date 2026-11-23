@@ -22,13 +22,19 @@
     <loc>https://www.arkyedu.com/blog/</loc>
     <lastmod>2026-11-22</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <priority>0.96</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/</loc>
     <lastmod>2026-11-22</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.92</priority>
+    <priority>0.93</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog-llm.txt</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/</loc>
@@ -620,6 +626,78 @@
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/python-vs-cpp-for-kids-middle-school-comparison-first-language/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/algoritmi-de-sortare-cpp-bubble-selection-insertion-std-sort/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/en/cpp-sorting-algorithms-bubble-selection-insertion-std-sort/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/cum-functioneaza-internetul-ip-dns-tcp-udp-ping-wifi-router/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/en/how-the-internet-works-ip-dns-tcp-udp-gaming-ping-wifi-guide/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/robotica-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-proiecte/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/en/robotics-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-projects/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/passkeys-fido2-manager-parole-scam-discord-steam-backup-321/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/en/passkeys-fido2-password-managers-discord-steam-scams-backup-321/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/competente-digitale-agenti-ai-rag-cariere-viitor-elevi-2026/</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/blog/en/digital-skills-ai-agents-rag-future-tech-careers-students-2026/</loc>
     <lastmod>2026-11-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>

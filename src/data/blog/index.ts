@@ -4,6 +4,8 @@ import { BLOG_BATCH_2 } from './batch2';
 import { BLOG_BATCH_3 } from './batch3';
 import { BLOG_BATCH_4 } from './batch4';
 import { BLOG_BATCH_5 } from './batch5';
+import { BLOG_BATCH_6 } from './batch6';
+import { BLOG_BATCH_7 } from './batch7';
 
 export type {
   BlogArticle,
@@ -23,6 +25,8 @@ export const BLOG_ARTICLES: BlogArticle[] = [
   ...BLOG_BATCH_3,
   ...BLOG_BATCH_4,
   ...BLOG_BATCH_5,
+  ...BLOG_BATCH_6,
+  ...BLOG_BATCH_7,
 ];
 
 export const BLOG_CATEGORIES: { id: BlogCategoryId | 'all'; labelRo: string; labelEn: string }[] = [

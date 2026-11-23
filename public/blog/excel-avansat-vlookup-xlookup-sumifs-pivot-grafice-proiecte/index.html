@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excel Avansat: XLOOKUP, VLOOKUP, SUMIFS &amp; Pivot Tables | ArkyEdu</title>
+  <meta name="description" content="Ghid practic de calcul tabelar avansat: diferența VLOOKUP vs XLOOKUP, sume multicriteriu SUMIFS/COUNTIFS, Tabele Pivot în 4 pași, alegerea graficului corect și formatare condiționată.">
+  <meta name="keywords" content="excel avansat vlookup explicat simplu, xlookup vs vlookup exemple, functie sumifs countifs excel, cum faci un pivot table in excel, ce grafic alegi in excel clasa 8, google sheets proiect scoala">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/">
+  <link rel="alternate" hreflang="ro" href="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/">
+  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/">
+  <link rel="alternate" hreflang="x-default" href="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/">
+  <meta name="theme-color" content="#090d16">
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2026-11-22">
+  <meta property="article:modified_time" content="2026-11-22">
+  <meta property="article:section" content="Excel &amp; Birotică">
+  <meta property="og:title" content="Excel Avansat: XLOOKUP, VLOOKUP, SUMIFS &amp; Pivot Tables | ArkyEdu">
+  <meta property="og:description" content="Ghid practic de calcul tabelar avansat: diferența VLOOKUP vs XLOOKUP, sume multicriteriu SUMIFS/COUNTIFS, Tabele Pivot în 4 pași, alegerea graficului corect și formatare condiționată.">
+  <meta property="og:url" content="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/">
+  <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
+  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Excel Avansat: XLOOKUP, VLOOKUP, SUMIFS &amp; Pivot Tables | ArkyEdu">
+  <meta name="twitter:description" content="Ghid practic de calcul tabelar avansat: diferența VLOOKUP vs XLOOKUP, sume multicriteriu SUMIFS/COUNTIFS, Tabele Pivot în 4 pași, alegerea graficului corect și formatare condiționată.">
+  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/#article",
+      "headline": "Excel Avansat & Google Sheets (Clasa VIII & Proiecte): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables & Grafice Smart",
+      "description": "Ghid practic de calcul tabelar avansat: diferența VLOOKUP vs XLOOKUP, sume multicriteriu SUMIFS/COUNTIFS, Tabele Pivot în 4 pași, alegerea graficului corect și formatare condiționată.",
+      "keywords": "excel avansat vlookup explicat simplu, xlookup vs vlookup exemple, functie sumifs countifs excel, cum faci un pivot table in excel, ce grafic alegi in excel clasa 8, google sheets proiect scoala",
+      "articleSection": "Excel & Birotică",
+      "inLanguage": "ro",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "isAccessibleForFree": true,
+      "mainEntityOfPage": "https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/",
+      "isPartOf": {
+        "@id": "https://www.arkyedu.com/blog/#blog"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "ArkyEdu — Educație TIC & Coding România",
+        "url": "https://www.arkyedu.com/"
+      },
+      "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "ArkyEdu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.arkyedu.com/pwa-512x512.png"
+        }
+      },
+      "image": "https://www.arkyedu.com/og-cover.png"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Acasă",
+          "item": "https://www.arkyedu.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog & Ghiduri TIC",
+          "item": "https://www.arkyedu.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Excel Avansat: XLOOKUP, SUMIFS & Pivot",
+          "item": "https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Care este diferența principală dintre VLOOKUP și XLOOKUP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "VLOOKUP poate căuta doar în prima coloană din stânga a tabelului și are nevoie de numărul coloanei și FALSE. XLOOKUP caută în orice direcție (stânga/dreapta), nu se strică dacă inserezi coloane noi și permite un mesaj personalizat când valoarea lipsește."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "De ce trebuie să pun $ în formula =VLOOKUP(A2; $E$2:$G$20; 3; FALSE)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fără semnul $ (referință absolută), când copiezi formula pe rândurile de dedesubt, tabelul $E$2:$G$20 alunecă în E3:G21, E4:G22 etc., pierzând primele înregistrări și generând erori #N/A."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ce este mai rapid pentru un raport cu 5 categorii: SUMIFS sau Pivot Table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pentru un dashboard fix cu design strict, SUMIFS îți dă control pixel-cu-pixel; pentru explorare rapidă și grupare din mers pe mii de rânduri, Pivot Table este de 10 ori mai rapid."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Cum exersez Excel cu corectare automată pentru Clasa a VIII-a?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pe ArkyEdu ai 4 misiuni interactive dedicate calculului tabelar în Clasa a VIII-a și fișa completă cu barem oficial de 100p la /fise/."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Excel Avansat: XLOOKUP, SUMIFS & Pivot",
+      "description": "După ce stăpânești SUM, AVERAGE și IF, următoarele 4 unelte transformă orice foaie de calcul într-un sistem inteligent: VLOOKUP(val; tabel; col; FALSE) sau modernul XLOOKUP() caută automat date între tabele (ex: prețul unui produs după cod), SUMIFS/COUNTIFS adună și numără pe multiple condiții simultan, Tabelele Pivot rezumă mii de rânduri în 10 secunde fără formule scrise manual, iar Graficele Smart (Bar vs Line vs Scatter) fac tiparele vizibile instant.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "text": "Curăță tabelul sursă: fiecare coloană trebuie să aibă un titlu unic pe primul rând și niciun rând complet gol la mijloc."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "text": "Selectează o celulă din tabel → Insert (Inserare) → PivotTable → OK (în foaie nouă)."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "text": "Trage câmpul de grupare (ex: „Clasă” sau „Categorie”) în zona Rows (Rânduri)."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "text": "Trage câmpul numeric (ex: „Sumă RON” sau „Punctaj”) în zona Values (Valori) și alege Sum, Average sau Count."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <style>
+
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: #111827;
+    --card-border: #1f2937;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --brand-cyan: #06b6d4;
+    --brand-blue: #3b82f6;
+    --brand-purple: #8b5cf6;
+    --brand-amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  /* HEADER */
+  header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+  .logo-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #fff;
+  }
+  .logo-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: #fff;
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff !important;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO & MAIN */
+  .hero-section {
+    padding: 3.5rem 0 2.5rem;
+    text-align: center;
+  }
+  .badge-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #1e293b;
+    color: var(--brand-cyan);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  .badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.35);
+  }
+  .badge-free {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (min-width: 768px) {
+    h1 { font-size: 3rem; }
+  }
+  .lead-text {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+  .cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  }
+  .btn-secondary {
+    background: #1e293b;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 1.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-secondary:hover {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  /* CARDS GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .card-link {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .card-link:hover {
+    text-decoration: underline;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrapper {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    margin: 2rem 0 3rem;
+  }
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  table.comp-table th {
+    padding: 1.25rem 1.5rem;
+    background: #0f172a;
+    font-weight: 800;
+    border-bottom: 2px solid var(--card-border);
+  }
+  table.comp-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+    vertical-align: top;
+  }
+  table.comp-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .check-icon { color: #34d399; font-weight: 900; }
+  .cross-icon { color: #f87171; font-weight: 900; }
+
+  /* ACCORDION FAQ */
+  .faq-block {
+    margin-bottom: 1.25rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-question {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 0.5rem;
+  }
+  .faq-answer {
+    font-size: 0.925rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #070a12;
+    border-top: 1px solid var(--card-border);
+    padding: 3.5rem 0 2rem;
+    margin-top: 5rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-col h4 {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-col ul {
+    list-style: none;
+  }
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+  }
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #1e293b;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin: 1.5rem 0 1.25rem;
+    }
+    .breadcrumb a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .article-wrap { max-width: 860px; margin: 0 auto; padding-bottom: 3rem; }
+    .meta-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.85rem; }
+    .meta-accent { color: #5eead4; font-weight: 700; }
+    .article-h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      background: none;
+      -webkit-text-fill-color: #ffffff;
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .article-h1 { font-size: 2.45rem; } }
+    .article-intro { font-size: 1.08rem; color: #cbd5e1; line-height: 1.7; margin-bottom: 1.75rem; }
+    .tldr-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(45, 212, 191, 0.4);
+      border-radius: 0.9rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-title { font-size: 0.9rem; font-weight: 800; color: #5eead4; margin-bottom: 0.45rem; }
+    .tldr-text { font-size: 0.98rem; color: #f1f5f9; line-height: 1.65; }
+    .toc-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .toc-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .toc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.5rem 1.25rem; padding-left: 1.2rem; font-size: 0.9rem; }
+    .toc-list a { color: #cbd5e1; text-decoration: none; }
+    .toc-list a:hover { color: #5eead4; text-decoration: underline; }
+    .art-section { margin-bottom: 2.5rem; scroll-margin-top: 5.5rem; }
+    .art-section h2 { font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.3; }
+    .art-section p { font-size: 1rem; color: #e2e8f0; line-height: 1.72; margin-bottom: 0.85rem; }
+    .art-section ul, .art-section ol { padding-left: 1.4rem; margin-bottom: 1rem; color: #e2e8f0; line-height: 1.7; }
+    .art-section li { margin-bottom: 0.45rem; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.85rem;
+      overflow: hidden;
+      margin: 1.15rem 0;
+    }
+    .code-head { padding: 0.65rem 1rem; background: #0f172a; border-bottom: 1px solid #1e293b; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .code-box pre { padding: 1rem; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.86rem; line-height: 1.6; color: #a7f3d0; }
+    .code-cap { padding: 0.55rem 1rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #cbd5e1; background: rgba(15, 23, 42, 0.5); }
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 0.85rem; margin: 1.15rem 0; background: #0f172a; }
+    table.seo-tbl { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    table.seo-tbl caption { padding: 0.7rem 1rem; text-align: left; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; border-bottom: 1px solid #1e293b; }
+    table.seo-tbl th { padding: 0.75rem 1rem; font-weight: 700; color: #ffffff; background: rgba(2, 6, 23, 0.7); border-bottom: 1px solid #1e293b; }
+    table.seo-tbl td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(30, 41, 59, 0.7); vertical-align: top; }
+    .callout-tip, .callout-warn {
+      border-radius: 0.85rem;
+      padding: 1.1rem 1.25rem;
+      margin: 1rem 0;
+    }
+    .callout-tip { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(45, 212, 191, 0.35); }
+    .callout-warn { background: rgba(69, 26, 3, 0.25); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .callout-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .callout-tip .callout-title { color: #5eead4; }
+    .callout-warn .callout-title { color: #fcd34d; }
+    .check-box, .links-box, .faq-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin-top: 1rem; }
+    .link-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: #2dd4bf; }
+    .link-card-title { font-size: 0.95rem; font-weight: 700; color: #5eead4; margin-bottom: 0.3rem; }
+    .link-card-desc { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .filter-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-btn.active { background: #14b8a6; color: #020617; border-color: #14b8a6; font-weight: 800; }
+    .lang-pill {
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+    }
+    .lang-pill:hover { border-color: #5eead4; color: #5eead4; }
+    .glos-search-wrap {
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    .glos-search-input {
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.85rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+    .glos-search-input:focus {
+      outline: 2px solid #2dd4bf;
+      border-color: #2dd4bf;
+    }
+    .alpha-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 1.75rem;
+    }
+    .alpha-btn {
+      min-width: 2rem;
+      height: 2rem;
+      padding: 0 0.45rem;
+      border-radius: 0.45rem;
+      border: 1px solid #334155;
+      background: #0f172a;
+      color: #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .alpha-btn.active {
+      background: #06b6d4;
+      color: #020617;
+      border-color: #06b6d4;
+    }
+    .alpha-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .glos-panel {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 0.9rem;
+      padding: 1.15rem 1.25rem;
+    }
+    .copy-code-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      border-radius: 0.45rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-code-btn:hover { border-color: #5eead4; color: #5eead4; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <a href="https://www.arkyedu.com/" class="logo-box">
+        <div class="logo-icon">🚀</div>
+        <span class="logo-text">ArkyEdu <span style="color: var(--accent);">BLOG TIC</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navigare Principală">
+        <a href="https://www.arkyedu.com/blog/">Blog & Ghiduri TIC</a>
+        <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
+        <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
+        <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
+        <a href="https://www.arkyedu.com/clasa-8/">Clasa 8</a>
+        <a href="https://www.arkyedu.com/glosar/">Glosar (44)</a>
+        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <a href="https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/" class="lang-pill" title="Advanced Excel &amp; Google Sheets (Grade 8 &amp; Projects): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Smart Charts">EN</a>
+        <a href="https://www.arkyedu.com/" class="nav-cta">Intră în Platformă</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="article-wrap">
+      <!-- Breadcrumbs returning straight back to Blog Index & Home -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.arkyedu.com/">Acasă</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://www.arkyedu.com/blog/">Blog & Ghiduri TIC</a>
+        <span aria-hidden="true">/</span>
+        <span>Excel &amp; Birotică</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Excel Avansat: XLOOKUP, SUMIFS &amp; Pivot</span>
+      </nav>
+
+      <article itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="meta-line">
+          <span class="meta-accent">Excel &amp; Birotică</span>
+          <span aria-hidden="true">·</span>
+          <span>Clasa a VIII-a · Proiecte</span>
+          <span aria-hidden="true">·</span>
+          <span>13 min citire</span>
+          <span aria-hidden="true">·</span>
+          <time datetime="2026-11-22">Actualizat 2026-11-22</time>
+        </div>
+
+        <h1 class="article-h1" itemprop="headline">Excel Avansat &amp; Google Sheets (Clasa VIII &amp; Proiecte): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Grafice Smart</h1>
+        <p class="article-intro" itemprop="description">De la gestionarea unui buget personal sau a notelor pe materii până la analize de laborator și concursuri TIC de Clasa a VIII-a, Excel și Google Sheets sunt printre cele mai căutate competențe din lumea reală. Hai să vedem cum treci de la tabele simple la rapoarte dinamice profesioniste.</p>
+
+        <!-- Compact Share Bar (WhatsApp & Copy Link) -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:center;margin-bottom:1.5rem;">
+          <a href="https://wa.me/?text=Excel%20Avansat%20%26%20Google%20Sheets%20(Clasa%20VIII%20%26%20Proiecte)%3A%20XLOOKUP%20%2F%20VLOOKUP%2C%20SUMIFS%2C%20Pivot%20Tables%20%26%20Grafice%20Smart%20%E2%80%94%20https%3A%2F%2Fwww.arkyedu.com%2Fblog%2Fexcel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte%2F" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:rgba(16,185,129,0.16);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;font-size:0.82rem;font-weight:700;text-decoration:none;">💬 WhatsApp</a>
+          <button type="button" id="copy-share-btn" data-url="https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.85rem;border-radius:0.55rem;background:#1e293b;border:1px solid #334155;color:#e2e8f0;font-size:0.82rem;font-weight:600;cursor:pointer;">🔗 Copiază link ghid</button>
+          <a href="https://www.arkyedu.com/blog/" style="font-size:0.82rem;color:#5eead4;text-decoration:none;font-weight:600;margin-left:0.25rem;">← Blog & Ghiduri TIC</a>
+        </div>
+
+        <!-- Answer-First TL;DR for Google Featured Snippets & AI Engines -->
+        <section class="tldr-box" aria-labelledby="tldr-h">
+          <div class="tldr-title" id="tldr-h">Răspuns Rapid (TL;DR)</div>
+          <p class="tldr-text">După ce stăpânești SUM, AVERAGE și IF, următoarele 4 unelte transformă orice foaie de calcul într-un sistem inteligent: VLOOKUP(val; tabel; col; FALSE) sau modernul XLOOKUP() caută automat date între tabele (ex: prețul unui produs după cod), SUMIFS/COUNTIFS adună și numără pe multiple condiții simultan, Tabelele Pivot rezumă mii de rânduri în 10 secunde fără formule scrise manual, iar Graficele Smart (Bar vs Line vs Scatter) fac tiparele vizibile instant.</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc-box" aria-labelledby="toc-h">
+          <div class="toc-title" id="toc-h">Cuprinsul articolului</div>
+          <ol class="toc-list">
+            <li><a href="#vlookup-vs-xlookup-fara-erori">1. Căutarea între tabele: VLOOKUP(..., FALSE) vs. modernul XLOOKUP</a></li>
+            <li><a href="#sumifs-countifs-multicriteriu">2. Analiză pe condiții multiple: SUMIFS și COUNTIFS</a></li>
+            <li><a href="#pivot-tables-in-4-pasi">3. Tabele Pivot (Pivot Tables) în 4 clicuri: Rezumate fără nicio formulă</a></li>
+            <li><a href="#alegerea-graficului-corect">4. Cum alegi graficul corect la examen și prezentări (Regula Visual Clarity)</a></li>
+            <li><a href="#checklist-h">Checklist pentru o foaie Excel / Sheets de nota 10</a></li>
+            <li><a href="#labs-h">Simulatoare Excel &amp; Fișe cu Barem pe ArkyEdu</a></li>
+            <li><a href="#faq-h">Întrebări frecvente (FAQ)</a></li>
+          </ol>
+        </nav>
+
+        <div itemprop="articleBody">
+          
+          <section class="art-section" id="vlookup-vs-xlookup-fara-erori">
+            <h2>1. Căutarea între tabele: VLOOKUP(..., FALSE) vs. modernul XLOOKUP</h2>
+            <p>De câte ori ai avut un tabel cu „Cod produs” și ai vrut să aduci automat numele sau prețul din alt tabel? VLOOKUP este funcția clasică, dar ascunde două capcane uriașe: coloana căutată trebuie să fie PRIMA din stânga, iar ultimul argument trebuie să fie obligatoriu FALSE (0) pentru potrivire exactă! XLOOKUP (disponibil în Excel 365, Excel 2021+ și Google Sheets) elimină ambele limitări:</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Comparație VLOOKUP vs. XLOOKUP pentru elevi și proiecte</caption>
+                      <thead><tr><th>Funcție</th><th>Sintaxă uzuală (Excel RO cu ;)</th><th>Avantaje &amp; Capcane</th></tr></thead>
+                      <tbody><tr><td>VLOOKUP</td><td>=VLOOKUP(A2; $F$2:$H$50; 3; FALSE)</td><td>Funcționează peste tot; atenție la $F$2:$H$50 (blocat cu $) și la FALSE obligatoriu!</td></tr><tr><td>XLOOKUP</td><td>=XLOOKUP(A2; $F$2:$F$50; $H$2:$H$50; &quot;Lipsă&quot;)</td><td>Caută și spre stânga, nu se strică dacă inserezi o coloană, are mesaj propriu dacă lipsește valoarea.</td></tr></tbody>
+                    </table>
+                  </div>
+            <div class="callout-warn">
+                    <div class="callout-title">De ce apare #N/A la VLOOKUP chiar dacă valoarea există?</div>
+                    <p style="margin:0;">De obicei din 3 motive: (1) un spațiu invizibil la final (&quot;Ana &quot; vs &quot;Ana&quot;), (2) un cod stocat ca text vs număr, sau (3) ai uitat semnul $ la tabel și intervalul a alunecat în jos la copierea formulei!</p>
+                  </div>
+          </section>
+
+          <section class="art-section" id="sumifs-countifs-multicriteriu">
+            <h2>2. Analiză pe condiții multiple: SUMIFS și COUNTIFS</h2>
+            <p>Dacă IF și COUNTIF verifică o singură condiție, variantele cu S la final (SUMIFS, COUNTIFS, AVERAGEIFS) filtrează simultan după 2, 3 sau mai multe coloane. Atenție la ordinea argumentelor: la SUMIFS, intervalul de adunat este PRIMUL!</p>
+            
+            
+            <div class="code-box">
+                    <div class="code-head">Formule gata de copiat pentru un tabel de Cheltuieli / Note (Separator ; pentru RO / , pentru EN)</div>
+                    <pre><code>// 1. Total cheltuieli pentru categoria &quot;Cărți&quot; în luna &quot;Noiembrie&quot;
+=SUMIFS(D2:D100; B2:B100; &quot;Cărți&quot;; C2:C100; &quot;Noiembrie&quot;)
+
+// 2. Câți elevi din Clasa &quot;8A&quot; au media &gt;= 9.00
+=COUNTIFS(B2:B35; &quot;8A&quot;; E2:E35; &quot;&gt;=9&quot;)
+
+// 3. Căutare exactă preț după cod produs + mesaj curat la eroare
+=IFERROR(VLOOKUP(A2; Catalog!$A$2:$C$50; 3; FALSE); &quot;Cod inexistent&quot;)</code></pre>
+                    <div class="code-cap">Dacă Excel-ul tău este configurat în engleză (US), înlocuiește punct și virgulă (;) cu virgulă (,).</div>
+                  </div>
+            
+            
+          </section>
+
+          <section class="art-section" id="pivot-tables-in-4-pasi">
+            <h2>3. Tabele Pivot (Pivot Tables) în 4 clicuri: Rezumate fără nicio formulă</h2>
+            <p>Când ai 500 de rânduri cu vânzări, note sau măsurători de senzori Arduino, nu trebuie să scrii 20 de formule SUMIFS. Un Tabel Pivot agregă automat datele în câteva secunde:</p>
+            <ol><li>Curăță tabelul sursă: fiecare coloană trebuie să aibă un titlu unic pe primul rând și niciun rând complet gol la mijloc.</li><li>Selectează o celulă din tabel → Insert (Inserare) → PivotTable → OK (în foaie nouă).</li><li>Trage câmpul de grupare (ex: „Clasă” sau „Categorie”) în zona Rows (Rânduri).</li><li>Trage câmpul numeric (ex: „Sumă RON” sau „Punctaj”) în zona Values (Valori) și alege Sum, Average sau Count.</li></ol>
+            
+            
+            
+            
+          </section>
+
+          <section class="art-section" id="alegerea-graficului-corect">
+            <h2>4. Cum alegi graficul corect la examen și prezentări (Regula Visual Clarity)</h2>
+            <p>O diagramă frumoasă dar nepotrivită tipului de date scade punctajul la proiecte. Folosește această matrice rapidă pentru a alege diagrama optimă:</p>
+            
+            
+            
+            <div class="table-wrap">
+                    <table class="seo-tbl">
+                      <caption>Matricea de selecție a graficelor în Excel &amp; Google Sheets</caption>
+                      <thead><tr><th>Tip de grafic</th><th>Când îl folosești</th><th>Când să îl EVIȚI</th></tr></thead>
+                      <tbody><tr><td>Column / Bar Chart (Bare)</td><td>Compararea valorilor între categorii discrete (ex: note pe materii)</td><td>Când ai 30+ categorii înghesuite</td></tr><tr><td>Line Chart (Linie)</td><td>Evoluție continuă în timp (temperaturi orare, progres zilnic)</td><td>Pentru categorii fără ordine cronologică</td></tr><tr><td>Pie / Donut Chart (Structură)</td><td>Procente din 100% cu MAXIMUM 4–5 felii clare</td><td>Când ai 10 felii aproape egale sau valori negative!</td></tr><tr><td>XY Scatter (Dispersie)</td><td>Relația matematică dintre 2 variabile numerice (ex: ore studiu vs punctaj)</td><td>Pentru etichete text</td></tr></tbody>
+                    </table>
+                  </div>
+            
+          </section>
+        </div>
+
+        <!-- Checklist -->
+        <section class="check-box" id="checklist-h">
+          <h2 style="font-size:1.2rem;margin-bottom:0.75rem;color:#fff;">✅ Checklist pentru o foaie Excel / Sheets de nota 10</h2>
+          <ul style="padding-left:1.35rem;color:#e2e8f0;line-height:1.7;">
+            <li>Am blocat cu $A$1:$C$50 tabelele de referință în VLOOKUP/SUMIFS înainte de tragerea formulei în jos.</li>
+            <li>Am folosit potrivirea exactă FALSE (0) în VLOOKUP și am tratat erorile cu IFERROR.</li>
+            <li>Fiecare grafic are Titlu clar, etichete de axe cu unități de măsură și zero felii ilizibile.</li>
+            <li>Am verificat separatorul regional corect (; pe RO vs , pe EN).</li>
+          </ul>
+        </section>
+
+        <!-- Deep Internal Links into ArkyEdu Interactive Labs & Arcade -->
+        <section class="links-box" id="labs-h">
+          <h2 style="font-size:1.25rem;color:#fff;">Simulatoare Excel &amp; Fișe cu Barem pe ArkyEdu</h2>
+          <div class="links-grid">
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_b/" class="link-card">
+                <div class="link-card-title">Funcții &amp; Formule Excel (Clasa a VIII-a) →</div>
+                <div class="link-card-desc">Misiune interactivă cu formule SUM, AVERAGE, IF, COUNTIF și referințe absolute.</div>
+              </a>
+            <a href="https://www.arkyedu.com/cursuri/g8_calc_c/" class="link-card">
+                <div class="link-card-title">Diagrame 2D/3D &amp; Analiză Date (Clasa VIII) →</div>
+                <div class="link-card-desc">Construirea și interpretarea graficelor corecte pe date reale.</div>
+              </a>
+            <a href="https://www.arkyedu.com/fise/fisa-de-lucru-clasa-8-excel-sum-average-if-countif-referinta-absoluta-erori/" class="link-card">
+                <div class="link-card-title">Fișă Excel cu Barem 1–10 (Clasa VIII) →</div>
+                <div class="link-card-desc">Antrenament auto-corectat și tipăribil A4 pentru evaluare.</div>
+              </a>
+            <a href="https://www.arkyedu.com/glosar/referinte-relative-absolute-excel/" class="link-card">
+                <div class="link-card-title">Glosar: Referințe Relative vs. Absolute ($A$1) →</div>
+                <div class="link-card-desc">Explicație rapidă și capcane frecvente la test.</div>
+              </a>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-wrap" id="faq-h">
+          <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ Întrebări frecvente (FAQ)</h2>
+          <div class="faq-block">
+              <div class="faq-question">Care este diferența principală dintre VLOOKUP și XLOOKUP?</div>
+              <div class="faq-answer">VLOOKUP poate căuta doar în prima coloană din stânga a tabelului și are nevoie de numărul coloanei și FALSE. XLOOKUP caută în orice direcție (stânga/dreapta), nu se strică dacă inserezi coloane noi și permite un mesaj personalizat când valoarea lipsește.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">De ce trebuie să pun $ în formula =VLOOKUP(A2; $E$2:$G$20; 3; FALSE)?</div>
+              <div class="faq-answer">Fără semnul $ (referință absolută), când copiezi formula pe rândurile de dedesubt, tabelul $E$2:$G$20 alunecă în E3:G21, E4:G22 etc., pierzând primele înregistrări și generând erori #N/A.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Ce este mai rapid pentru un raport cu 5 categorii: SUMIFS sau Pivot Table?</div>
+              <div class="faq-answer">Pentru un dashboard fix cu design strict, SUMIFS îți dă control pixel-cu-pixel; pentru explorare rapidă și grupare din mers pe mii de rânduri, Pivot Table este de 10 ori mai rapid.</div>
+            </div>
+          <div class="faq-block">
+              <div class="faq-question">Cum exersez Excel cu corectare automată pentru Clasa a VIII-a?</div>
+              <div class="faq-answer">Pe ArkyEdu ai 4 misiuni interactive dedicate calculului tabelar în Clasa a VIII-a și fișa completă cu barem oficial de 100p la /fise/.</div>
+            </div>
+        </section>
+
+        <!-- Glossary Terms Explained in This Guide -->
+        
+
+        <!-- Related Articles + Back to Blog Index Link -->
+        <section style="border-top:1px solid #1e293b;padding-top:1.75rem;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+            <h2 style="font-size:1.25rem;color:#fff;">Citește și alte ghiduri TIC</h2>
+            <a href="https://www.arkyedu.com/blog/" class="card-link">← Înapoi la Indexul Blogului</a>
+          </div>
+          <div class="links-grid">
+            <a href="/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/" class="link-card">
+                  <div class="link-card-title">Formule Excel &amp; Rezolvare Erori →</div>
+                  <div class="link-card-desc">Ghid complet de Calcul Tabelar (Excel &amp; Google Sheets) pentru clasa a VIII-a: sintaxa SUM, AVERAGE, IF, COUNTIF, referințe absolute $A$1, separatorul ; vs , și erorile #VALUE! / #NAME?.</div>
+                </a>
+            <a href="/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/" class="link-card">
+                  <div class="link-card-title">Referate corecte în Word &amp; Docs →</div>
+                  <div class="link-card-desc">Ghid complet de tehnoredactare pentru referate și proiecte școlare (V–VII): tastatura Română Standard (ș, ț cu virgulă), margini A4, numerotare fără pagina 1, ștergere pagină goală și export PDF.</div>
+                </a>
+            <a href="/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/" class="link-card">
+                  <div class="link-card-title">Prezentări PowerPoint &amp; Regula 6×6 →</div>
+                  <div class="link-card-desc">Cum faci o prezentare PowerPoint sau Google Slides profesionistă la școală (V–VII): regula 6×6, ierarhia vizuală, contrast WCAG, tranziții curate și integrare modele 3D.</div>
+                </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom" style="border: none;">
+        <div>© 2026 ArkyEdu — Educație TIC & Coding 100% Gratuită.</div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog & Ghiduri TIC</a> • <a href="https://www.arkyedu.com/glosar/" style="color: var(--accent);">Glosar TIC (44)</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+      </div>
+    </div>
+  
+    <div data-arky-report-bar="1" style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #1e293b;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.75rem;font-size:0.85rem;">
+      <span style="color:#94a3b8;">Ai observat o eroare sau o problemă pe această pagină?</span>
+      <a href="https://www.arkyedu.com/?report=1" onclick="this.href='/?report=1&from='+encodeURIComponent(window.location.href)+'&ctx='+encodeURIComponent(document.title);" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:0.65rem;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;font-weight:700;text-decoration:none;">
+        &#9873; Raportează o problemă
+      </a>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('copy-share-btn');
+      if (!btn || !navigator.clipboard) return;
+      btn.addEventListener('click', function() {
+        var u = btn.getAttribute('data-url') || window.location.href;
+        navigator.clipboard.writeText(u).then(function() {
+          var orig = btn.textContent;
+          btn.textContent = '✓ Link copiat!';
+          setTimeout(function() { btn.textContent = orig; }, 2000);
+        }).catch(function() {});
+      });
+    })();
+  </script>
+</body>
+</html>

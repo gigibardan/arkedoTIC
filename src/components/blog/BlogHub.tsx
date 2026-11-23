@@ -636,29 +636,39 @@ export const BlogHub: React.FC<BlogHubProps> = ({
           <div className="space-y-2 max-w-3xl">
             <p className="text-xs font-semibold text-teal-300">
               {isEn
-                ? 'ArkyEdu Knowledge Hub · Grades 5–8 · Bilingual RO / EN'
-                : 'Resurse TIC & Programare Gimnaziu · Clasele V–VIII · Bilingv RO / EN'}
+                ? `ArkyEdu Knowledge Hub · ${BLOG_ARTICLES.length} Complete Guides · Grades 5–8 · Bilingual RO / EN`
+                : `Centrul de Resurse ArkyEdu · ${BLOG_ARTICLES.length} Ghiduri Ample · Clasele V–VIII · Bilingv RO / EN`}
             </p>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight text-balance">
               {isEn
                 ? 'ICT, Coding & Tech Guides That Solve Real School Problems'
-                : 'Ghiduri practice de TIC, C++, Excel, AI și Siguranță Online'}
+                : 'Index & Ghiduri Practice de TIC, C++, Python, Excel, AI și Siguranță Online'}
             </h1>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
               {isEn
-                ? 'Step-by-step tutorials built for Google and AI discovery—helping students fix Code::Blocks bugs, write Excel formulas, use ChatGPT safely, and stay secure online.'
-                : 'Articole ample, scrise clar pentru elevi de gimnaziu, părinți și profesori: rezolvări de erori C++, formule Excel, prompturi AI corecte și siguranță digitală, conectate direct cu laboratoarele ArkyEdu.'}
+                ? 'Step-by-step tutorials built for Google and AI discovery—helping students master C++ & Python, Excel XLOOKUP, ChatGPT/LLM tokens, Arduino/ESP32 IoT, Passkeys, and online safety.'
+                : 'Articole ample cu tabele, cod verificat, cuprins rapid și FAQ-uri pentru elevi, părinți și profesori: C++ OJI, Python vs C++, Excel XLOOKUP, Tokeni & Agenți AI, Deepfake, Arduino/ESP32 IoT, Passkeys și Rețele.'}
             </p>
           </div>
-          <a
-            href={isEn ? '/blog/en/' : '/blog/'}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors shrink-0 whitespace-nowrap"
-          >
-            <BookOpen className="w-4 h-4 text-teal-300" aria-hidden="true" />
-            <span>{isEn ? 'Static SEO Index' : 'Versiune HTML Statică'}</span>
-          </a>
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <a
+              href={isEn ? '/blog/en/' : '/blog/'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 min-h-[38px] rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-700 transition-colors whitespace-nowrap"
+            >
+              <BookOpen className="w-4 h-4 text-teal-300" aria-hidden="true" />
+              <span>{isEn ? 'Static SEO Index' : 'Index HTML Static SEO'}</span>
+            </a>
+            <a
+              href="/blog-llm.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-teal-500/15 hover:bg-teal-500/25 text-teal-200 text-xs font-semibold border border-teal-500/35 transition-colors whitespace-nowrap"
+            >
+              <span>blog-llm.txt</span>
+            </a>
+          </div>
         </div>
 
         {/* Search + Interactive Category Filter Tabs */}
@@ -666,6 +676,10 @@ export const BlogHub: React.FC<BlogHubProps> = ({
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none sm:flex-wrap bg-slate-950/70 p-1 rounded-xl border border-slate-800 max-w-full">
             {activeCategoriesWithCount.map((cat) => {
               const active = selectedCategory === cat.id;
+              const count =
+                cat.id === 'all'
+                  ? BLOG_ARTICLES.length
+                  : BLOG_ARTICLES.filter((a) => a.category === cat.id).length;
               return (
                 <button
                   key={cat.id}
@@ -680,7 +694,7 @@ export const BlogHub: React.FC<BlogHubProps> = ({
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                   }`}
                 >
-                  {isEn ? cat.labelEn : cat.labelRo}
+                  {isEn ? cat.labelEn : cat.labelRo} ({count})
                 </button>
               );
             })}
@@ -692,11 +706,82 @@ export const BlogHub: React.FC<BlogHubProps> = ({
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={isEn ? 'Search C++, Excel, AI, Roblox...' : 'Caută C++, Excel, AI, Roblox...'}
+              placeholder={isEn ? 'Search C++, Python, Excel, AI...' : 'Caută C++, Python, Excel, AI...'}
               aria-label={isEn ? 'Search blog articles' : 'Caută articole în blog'}
               className="w-full min-h-[40px] pl-9 pr-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:border-teal-400"
             />
           </div>
+        </div>
+      </section>
+
+      {/* Structured Quick Topic Directory / Master Blog Index */}
+      <section
+        aria-labelledby="blog-directory-heading"
+        className="rounded-2xl bg-slate-900/60 border border-slate-800/90 p-5 sm:p-6 space-y-4"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 id="blog-directory-heading" className="text-base sm:text-lg font-bold text-white">
+              {isEn ? `Quick Topic Index (All ${BLOG_ARTICLES.length} Study Guides)` : `Index Tematic Rapid (Toate cele ${BLOG_ARTICLES.length} ghiduri)`}
+            </h2>
+            <p className="text-xs text-slate-400">
+              {isEn
+                ? 'Jump straight to any article by subject cluster or filter cards below.'
+                : 'Alege direct ghidul dorit pe domenii de studiu sau filtrează mai jos.'}
+            </p>
+          </div>
+          <span className="text-xs font-semibold text-teal-300 tabular-nums">
+            {filteredArticles.length} / {BLOG_ARTICLES.length} {isEn ? 'shown' : 'afișate'}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          {BLOG_CATEGORIES.filter((c) => c.id !== 'all').map((cat) => {
+            const items = BLOG_ARTICLES.filter((a) => a.category === cat.id);
+            if (items.length === 0) return null;
+            return (
+              <div
+                key={cat.id}
+                className="rounded-xl bg-slate-950/65 border border-slate-800 p-4 space-y-2.5"
+              >
+                <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedCategory(cat.id);
+                    }}
+                    className="text-xs font-bold text-teal-300 hover:text-teal-200 transition-colors cursor-pointer text-left"
+                  >
+                    {isEn ? cat.labelEn : cat.labelRo}
+                  </button>
+                  <span className="text-[11px] font-semibold text-slate-400 tabular-nums">
+                    {items.length}
+                  </span>
+                </div>
+                <ul className="space-y-1.5 text-xs">
+                  {items.map((art) => {
+                    const c = isEn ? art.en : art.ro;
+                    return (
+                      <li key={art.id}>
+                        <a
+                          href={isEn ? `/blog/en/${art.en.slug}/` : `/blog/${art.ro.slug}/`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleOpenArticle(art);
+                          }}
+                          className="text-slate-300 hover:text-white hover:underline underline-offset-4 transition-colors block truncate"
+                          title={c.title}
+                        >
+                          → {c.breadcrumbLabel}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </section>
 

@@ -2135,15 +2135,48 @@ function generateBlogPages() {
     const enIndexUrl = 'https://www.arkyedu.com/blog/en/';
 
     const title = isEn
-      ? 'ICT, Coding & Tech Study Guides Blog (Grades 5–8) | ArkyEdu'
-      : 'Blog & Ghiduri TIC Gimnaziu: C++, Excel, AI & Siguranță Online | ArkyEdu';
+      ? `ICT, Coding, AI & Robotics Study Guides (${BLOG_ARTICLES.length} Bilingual Guides) | ArkyEdu`
+      : `Index Blog & Ghiduri TIC Gimnaziu (${BLOG_ARTICLES.length} Articole Bilingve) | ArkyEdu`;
     const description = isEn
-      ? 'Free bilingual ICT study guides solving real student & parent problems: C++ troubleshooting, Excel formulas, safe AI homework habits, and online safety on TikTok & Roblox.'
-      : 'Articole ample și ghiduri gratuite de TIC pentru clasele V–VIII: top erori C++, formule Excel, AI & ChatGPT la școală și siguranța copiilor pe TikTok, Roblox și Discord.';
+      ? `${BLOG_ARTICLES.length} comprehensive free ICT & Computer Science guides (Grades 5–8): C++ Olympiad & Sorting, Python vs C++, Excel XLOOKUP/IF, LLM Tokens & AI Agents, Deepfake Defense, Arduino/ESP32 IoT, Passkeys & Networking.`
+      : `${BLOG_ARTICLES.length} ghiduri ample și gratuite de Informatică & TIC (V–VIII): C++ OJI & Sortări, Python vs C++, Excel XLOOKUP/IF, Tokeni LLM & Agenți AI, Deepfake, Arduino/ESP32 IoT, Passkeys & Rețele.`;
+    const keywords = isEn
+      ? 'middle school ict guides, c++ sorting binary search guide, python vs c++ for kids, advanced excel xlookup sumifs, how llm tokens work, deepfake detection guide, arduino vs esp32 pwm i2c, passkeys 3-2-1 backup, arkyedu blog'
+      : 'ghiduri tic gimnaziu, pregatire oji admitere c++, python vs c++ copii, excel xlookup sumifs clasa 8, cum functioneaza tokenii chatgpt llm, detectare deepfake 2026, arduino uno vs esp32 pwm i2c, passkeys securitate retea, blog arkyedu';
 
     const usedCategories = BLOG_CATEGORIES.filter(
       (cat) => cat.id === 'all' || BLOG_ARTICLES.some((a) => a.category === cat.id)
     );
+
+    const indexFaqs = isEn
+      ? [
+          {
+            q: `How many ICT & coding study guides are included in the ArkyEdu Blog Index?`,
+            a: `The index currently catalogs ${BLOG_ARTICLES.length} in-depth bilingual guides (${BLOG_ARTICLES.length * 2} static RO/EN pages), organized into 6 domains: AI & Literacy, C++ & Algorithms, Excel & Office, Cyber Safety & Networking, Robotics & IoT, and Parents & Teachers.`
+          },
+          {
+            q: 'Are the guides connected to interactive simulators and grading rubrics?',
+            a: 'Yes! Every guide links directly into ArkyEdu’s browser-based C++ Visual Trace Debugger (/sandbox/), Visual Sorting & CPU Lab (/laborator-algoritmi/), AI & Deepfake Lab (/laborator-ai/), Arkedo Smart City (/oras/), and 100-point A4 worksheets (/fise/).'
+          },
+          {
+            q: 'Does ArkyEdu provide a clean Markdown RAG file for AI search engines (ChatGPT, Perplexity, Gemini)?',
+            a: 'Yes! The complete structured Markdown digest of all blog guides—including TL;DR summaries, section outlines, and Q&A pairs—is published at https://www.arkyedu.com/blog-llm.txt and syndicated via RSS at /rss.xml.'
+          }
+        ]
+      : [
+          {
+            q: `Câte ghiduri ample sunt indexate în Blogul Educațional ArkyEdu?`,
+            a: `Indexul cuprinde ${BLOG_ARTICLES.length} ghiduri complete bilingve (${BLOG_ARTICLES.length * 2} pagini statice RO & EN), grupate în 6 domenii principale: AI & Competențe, C++ & Algoritmi, Excel & Birotică, Siguranță Online & Rețele, Robotică & IoT și Ghiduri pentru Părinți & Profesori.`
+          },
+          {
+            q: 'Sunt articolele conectate la simulatoare practice și fișe cu barem 1–10?',
+            a: 'Da! Fiecare ghid are trimiteri directe către Sandbox-ul C++/Python cu Debugger Visual Trace (/sandbox/), Laboratorul de Sortări & CPU Von Neumann (/laborator-algoritmi/), Laboratorul AI & Deepfake (/laborator-ai/), Arkedo Smart City (/oras/) și Fișele tipăribile A4 (/fise/).'
+          },
+          {
+            q: 'Există un index dedicat pentru motoare AI și sisteme RAG (ChatGPT Search, Perplexity, Gemini)?',
+            a: 'Da! Întregul catalog al blogului — cu rezumate Answer-First, structură pe capitole, cod și FAQ — este disponibil în format curat la https://www.arkyedu.com/blog-llm.txt și prin feed-ul RSS (/rss.xml).'
+          }
+        ];
 
     const jsonLd = {
       "@context": "https://schema.org",
@@ -2182,6 +2215,32 @@ function generateBlogPages() {
           })
         },
         {
+          "@type": "ItemList",
+          "@id": `${canonicalUrl}#itemlist`,
+          "name": isEn ? `All ${BLOG_ARTICLES.length} ArkyEdu Study Guides` : `Toate cele ${BLOG_ARTICLES.length} Ghiduri ArkyEdu`,
+          "numberOfItems": BLOG_ARTICLES.length,
+          "itemListElement": BLOG_ARTICLES.map((art, idx) => {
+            const c = isEn ? art.en : art.ro;
+            const artUrl = isEn
+              ? `https://www.arkyedu.com/blog/en/${art.en.slug}/`
+              : `https://www.arkyedu.com/blog/${art.ro.slug}/`;
+            return {
+              "@type": "ListItem",
+              "position": idx + 1,
+              "name": c.title,
+              "url": artUrl
+            };
+          })
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": indexFaqs.map((f) => ({
+            "@type": "Question",
+            "name": f.q,
+            "acceptedAnswer": { "@type": "Answer", "text": f.a }
+          }))
+        },
+        {
           "@type": "BreadcrumbList",
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": "https://www.arkyedu.com/" },
@@ -2198,6 +2257,7 @@ function generateBlogPages() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtmlText(title)}</title>
   <meta name="description" content="${escapeHtmlText(description)}">
+  <meta name="keywords" content="${escapeHtmlText(keywords)}">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
   <link rel="alternate" hreflang="ro" href="${roIndexUrl}">
@@ -2227,6 +2287,13 @@ ${JSON.stringify(jsonLd, null, 2)}
   <style>
 ${commonStyles}
 ${blogBaseStyles}
+    .dir-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
+    .dir-card { background: rgba(15, 23, 42, 0.85); border: 1px solid #1e293b; border-radius: 1rem; padding: 1.1rem 1.2rem; }
+    .dir-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 0.55rem; margin-bottom: 0.65rem; font-weight: 800; color: #5eead4; font-size: 0.92rem; }
+    .dir-list { list-style: none; padding: 0; margin: 0; font-size: 0.85rem; line-height: 1.65; }
+    .dir-list a { color: #cbd5e1; text-decoration: none; }
+    .dir-list a:hover { color: #ffffff; text-decoration: underline; }
+    .search-box { width: 100%; max-width: 340px; padding: 0.6rem 0.95rem; border-radius: 0.65rem; border: 1px solid #334155; background: #0f172a; color: #f8fafc; font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -2241,10 +2308,10 @@ ${blogBaseStyles}
         <a href="https://www.arkyedu.com/clasa-6/">${isEn ? 'Grade 6' : 'Clasa 6'}</a>
         <a href="https://www.arkyedu.com/clasa-7/">${isEn ? 'Grade 7' : 'Clasa 7'}</a>
         <a href="https://www.arkyedu.com/clasa-8/">${isEn ? 'Grade 8' : 'Clasa 8'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/fise/en/' : 'https://www.arkyedu.com/fise/'}">${isEn ? 'Worksheets' : 'Fișe (16)'}</a>
         <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}">${isEn ? 'Glossary (44)' : 'Glosar (44)'}</a>
-        <a href="${isEn ? 'https://www.arkyedu.com/sandbox/en/' : 'https://www.arkyedu.com/sandbox/'}">Sandbox</a>
-        <a href="https://www.arkyedu.com/arcade/">Arcade (29)</a>
-        <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/laborator-algoritmi/en/' : 'https://www.arkyedu.com/laborator-algoritmi/'}">${isEn ? 'Algo Lab' : 'Lab Algoritmi'}</a>
+        <a href="${isEn ? 'https://www.arkyedu.com/laborator-ai/en/' : 'https://www.arkyedu.com/laborator-ai/'}">${isEn ? 'AI Lab' : 'Lab AI'}</a>
       </nav>
       <div style="display:flex;align-items:center;gap:0.6rem;">
         <a href="${isEn ? roIndexUrl : enIndexUrl}" class="lang-pill">${isEn ? 'RO' : 'EN'}</a>
@@ -2257,21 +2324,70 @@ ${blogBaseStyles}
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="https://www.arkyedu.com/">${isEn ? 'Home' : 'Acasă'}</a>
       <span aria-hidden="true">/</span>
-      <span aria-current="page">${isEn ? 'ICT Blog & Study Guides' : 'Blog & Ghiduri TIC'}</span>
+      <span aria-current="page">${isEn ? 'ICT Blog & Study Guides' : 'Index Blog & Ghiduri TIC'}</span>
     </nav>
 
     <div class="hero-section" style="padding-top:1.5rem;">
-      <h1>${isEn ? 'ICT, Coding & Tech Study Guides (Grades 5–8)' : 'Blog & Ghiduri Practice TIC pentru Gimnaziu (V–VIII)'}</h1>
+      <div class="badge-bar">
+        <span class="badge badge-green">${BLOG_ARTICLES.length} ${isEn ? 'Comprehensive Guides' : 'Ghiduri Ample Documentate'}</span>
+        <span class="badge">${BLOG_ARTICLES.length * 2} ${isEn ? 'Bilingual Pages (RO/EN)' : 'Pagini Bilingve (RO/EN)'}</span>
+        <span class="badge badge-free">100% ${isEn ? 'Free · Zero Ads' : 'Gratuit · Fără Reclame'}</span>
+      </div>
+      <h1>${isEn ? `ICT, Coding, AI &amp; Robotics Study Guides Index (${BLOG_ARTICLES.length} Guides)` : `Index Complet Blog &amp; Ghiduri TIC (${BLOG_ARTICLES.length} Articole Bilingve)`}</h1>
       <p class="lead-text">${escapeHtmlText(description)}</p>
+      <div class="cta-group">
+        <a href="#topic-index" class="btn-primary">📚 ${isEn ? 'Browse Topic Index' : 'Vezi Indexul Tematic Rapid'}</a>
+        <a href="https://www.arkyedu.com/blog-llm.txt" class="btn-secondary">🤖 ${isEn ? 'LLM / RAG Markdown Index (blog-llm.txt)' : 'Index RAG pentru AI (blog-llm.txt)'}</a>
+      </div>
     </div>
 
-    <div class="filter-bar" role="group" aria-label="${isEn ? 'Filter articles by topic' : 'Filtrează articolele după subiect'}">
-      ${usedCategories
-        .map(
-          (cat, idx) =>
-            `<button type="button" class="filter-btn${idx === 0 ? ' active' : ''}" data-cat="${cat.id}">${escapeHtmlText(isEn ? cat.labelEn : cat.labelRo)}</button>`
-        )
-        .join('\n      ')}
+    <!-- Answer-First Summary for Google & AI Search Engines -->
+    <section class="tldr-box" aria-labelledby="hub-tldr-h">
+      <div class="tldr-title" id="hub-tldr-h">${isEn ? 'Knowledge Hub Overview (Answer-First Index)' : 'Sinteză Rapidă (Index Documentat pentru Elevi, Părinți & Motoare AI)'}</div>
+      <p class="tldr-text">${isEn
+        ? `This master index catalogs all ${BLOG_ARTICLES.length} ArkyEdu study guides aligned with the national ICT & Computer Science curriculum (Grades 5–8) and modern 2026 tech skills: competitive C++ (O(√n), Sieve, Sorting, Binary Search), Python vs. C++, Binary/RGB/Von Neumann CPU, Excel XLOOKUP & SUMIFS, LLM Tokens/Softmax/Agents, Deepfake C.R.I.F. defense, Arduino vs. ESP32 IoT, Passkeys & Networking.`
+        : `Acest index centralizează toate cele ${BLOG_ARTICLES.length} ghiduri ample ArkyEdu aliniate programei de Informatică și TIC (V–VIII) și competențelor digitale din 2026: C++ OJI & Sortări, Python vs. C++, Binar/RGB/Procesor Von Neumann, Excel XLOOKUP & SUMIFS, Tokeni LLM/Agenți/RAG, Deepfake C.R.I.F., Robotică Arduino/ESP32, Passkeys, Rețele TCP/UDP și Vice Leonida Gaming Educativ.`}</p>
+    </section>
+
+    <!-- Structured 6-Category Topic Index -->
+    <section id="topic-index" aria-labelledby="topic-index-h" style="margin:2rem 0;">
+      <h2 id="topic-index-h" style="font-size:1.35rem;color:#fff;margin-bottom:0.4rem;">📑 ${isEn ? 'Structured Directory by Subject Cluster' : 'Cuprins Tematic pe Domenii (Acces Direct)'}</h2>
+      <p style="font-size:0.88rem;color:#94a3b8;margin-bottom:1rem;">${isEn ? 'Every guide includes tables, runnable code, checklists, FAQPage Schema, and direct ArkyEdu lab links.' : 'Fiecare articol include cuprins intern, tabele comparative, blocuri de cod, checklist, FAQ și legături către laboratoarele interactive.'}</p>
+      <div class="dir-grid">
+        ${BLOG_CATEGORIES.filter((cat) => cat.id !== 'all')
+          .map((cat) => {
+            const items = BLOG_ARTICLES.filter((a) => a.category === cat.id);
+            if (items.length === 0) return '';
+            return `<div class="dir-card">
+              <div class="dir-head">
+                <span>${escapeHtmlText(isEn ? cat.labelEn : cat.labelRo)}</span>
+                <span style="font-size:0.75rem;color:#94a3b8;">${items.length}</span>
+              </div>
+              <ul class="dir-list">
+                ${items
+                  .map((art) => {
+                    const c = isEn ? art.en : art.ro;
+                    const artUrl = isEn ? `/blog/en/${art.en.slug}/` : `/blog/${art.ro.slug}/`;
+                    return `<li><a href="${artUrl}">→ ${escapeHtmlText(c.breadcrumbLabel)}</a></li>`;
+                  })
+                  .join('\n                ')}
+              </ul>
+            </div>`;
+          })
+          .join('\n        ')}
+      </div>
+    </section>
+
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.25rem;">
+      <div class="filter-bar" role="group" aria-label="${isEn ? 'Filter articles by topic' : 'Filtrează articolele după subiect'}" style="margin:0;">
+        ${usedCategories
+          .map((cat, idx) => {
+            const count = cat.id === 'all' ? BLOG_ARTICLES.length : BLOG_ARTICLES.filter((a) => a.category === cat.id).length;
+            return `<button type="button" class="filter-btn${idx === 0 ? ' active' : ''}" data-cat="${cat.id}">${escapeHtmlText(isEn ? cat.labelEn : cat.labelRo)} (${count})</button>`;
+          })
+          .join('\n        ')}
+      </div>
+      <input type="search" id="blog-search" class="search-box" placeholder="${isEn ? 'Filter by keyword (C++, Excel, AI...)' : 'Caută în index (C++, Excel, AI...)'}" aria-label="${isEn ? 'Filter blog index by keyword' : 'Filtrează indexul blogului după cuvânt cheie'}">
     </div>
 
     <section class="grid-2" id="blog-grid" aria-label="${isEn ? 'Blog Articles' : 'Articole Blog'}">
@@ -2279,8 +2395,9 @@ ${blogBaseStyles}
         const c = isEn ? art.en : art.ro;
         const gradeTag = isEn ? art.gradeTagEn : art.gradeTagRo;
         const artUrl = isEn ? `/blog/en/${art.en.slug}/` : `/blog/${art.ro.slug}/`;
+        const searchBlob = `${c.title} ${c.keywords} ${c.tldr} ${gradeTag}`.toLowerCase();
         return `
-        <article class="card blog-card" data-cat="${art.category}" style="display:flex;flex-direction:column;justify-content:space-between;gap:1rem;">
+        <article class="card blog-card" data-cat="${art.category}" data-search="${escapeHtmlText(searchBlob)}" style="display:flex;flex-direction:column;justify-content:space-between;gap:1rem;">
           <div>
             <div class="meta-line">
               <span class="meta-accent">${escapeHtmlText(c.categoryLabel)}</span>
@@ -2289,17 +2406,29 @@ ${blogBaseStyles}
               <span aria-hidden="true">·</span>
               <span>${escapeHtmlText(c.readTime)}</span>
             </div>
-            <h2 class="card-title" style="font-size:1.25rem;margin-bottom:0.6rem;">
+            <h2 class="card-title" style="font-size:1.2rem;margin-bottom:0.6rem;">
               <a href="${artUrl}" style="color:#ffffff;text-decoration:none;">${escapeHtmlText(c.title)}</a>
             </h2>
             <p class="card-desc" style="color:#cbd5e1;">${escapeHtmlText(c.tldr)}</p>
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.75rem;border-top:1px solid #1e293b;">
-            <span style="font-size:0.8rem;color:#94a3b8;">${c.faqs.length} FAQ · ${c.internalLinks.length} ${isEn ? 'Labs' : 'Laboratoare'}</span>
+            <span style="font-size:0.8rem;color:#94a3b8;">${c.sections.length} ${isEn ? 'sections' : 'capitole'} · ${c.faqs.length} FAQ · ${c.internalLinks.length} ${isEn ? 'Labs' : 'Laboratoare'}</span>
             <a href="${artUrl}" class="card-link">${isEn ? 'Read Full Guide →' : 'Citește ghidul complet →'}</a>
           </div>
         </article>`;
       }).join('\n')}
+    </section>
+
+    <section class="faq-wrap" id="faq-blog-index" style="margin-top:2.5rem;">
+      <h2 style="font-size:1.35rem;margin-bottom:1.1rem;color:#fff;">❓ ${isEn ? 'Blog Index Frequently Asked Questions' : 'Întrebări frecvente despre Ghidurile & Indexul Blogului'}</h2>
+      ${indexFaqs
+        .map(
+          (f) => `<div class="faq-block">
+          <div class="faq-question">${escapeHtmlText(f.q)}</div>
+          <div class="faq-answer">${escapeHtmlText(f.a)}</div>
+        </div>`
+        )
+        .join('\n      ')}
     </section>
   </main>
 
@@ -2307,7 +2436,7 @@ ${blogBaseStyles}
     <div class="container">
       <div class="footer-bottom" style="border: none;">
         <div>© 2026 ArkyEdu (arkyedu.com) — ${isEn ? 'Free Bilingual ICT & Coding Platform.' : 'Platformă Gratuită de Educație TIC & Coding.'}</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="${isEn ? 'https://www.arkyedu.com/glosar/en/' : 'https://www.arkyedu.com/glosar/'}" style="color: var(--accent);">${isEn ? 'ICT Glossary (44)' : 'Glosar TIC (44)'}</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">${isEn ? 'Tech Education Hub' : 'Educație Tehnologie Copii'}</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> • <a href="https://www.arkyedu.com/blog-llm.txt" style="color: var(--accent);">blog-llm.txt</a> • <a href="https://www.arkyedu.com/llms.txt" style="color: var(--accent);">llms.txt</a> • <a href="https://www.arkyedu.com/rss.xml" style="color: var(--accent);">RSS</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
       </div>
     </div>
   </footer>
@@ -2316,16 +2445,27 @@ ${blogBaseStyles}
     (function() {
       var btns = document.querySelectorAll('.filter-btn');
       var cards = document.querySelectorAll('.blog-card');
+      var searchInput = document.getElementById('blog-search');
+      var activeCat = 'all';
+      function applyFilters() {
+        var q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        cards.forEach(function(card) {
+          var matchCat = (activeCat === 'all' || card.getAttribute('data-cat') === activeCat);
+          var matchSearch = (!q || (card.getAttribute('data-search') || '').indexOf(q) !== -1);
+          card.style.display = (matchCat && matchSearch) ? 'flex' : 'none';
+        });
+      }
       btns.forEach(function(btn) {
         btn.addEventListener('click', function() {
-          var cat = btn.getAttribute('data-cat');
+          activeCat = btn.getAttribute('data-cat') || 'all';
           btns.forEach(function(b) { b.classList.remove('active'); });
           btn.classList.add('active');
-          cards.forEach(function(card) {
-            card.style.display = (cat === 'all' || card.getAttribute('data-cat') === cat) ? 'flex' : 'none';
-          });
+          applyFilters();
         });
       });
+      if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+      }
     })();
   </script>
 </body>
@@ -3543,8 +3683,9 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/', priority: '1.0', changefreq: 'daily' },
     { loc: 'https://www.arkyedu.com/sandbox/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/sandbox/en/', priority: '0.90', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/blog/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/blog/', priority: '0.96', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.93', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/blog-llm.txt', priority: '0.88', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/glosar/', priority: '0.95', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/glosar/en/', priority: '0.92', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/educatie-tehnologie-copii/', priority: '0.98', changefreq: 'weekly' },
@@ -5387,6 +5528,60 @@ function generateFiseLlmIndex() {
   console.log('Generated public/fise-llm.txt for LLM citation & RAG indexing.');
 }
 
+// 11B. GENERATE DEDICATED LLM & AI SEARCH RAG DIGEST FOR ALL BLOG ARTICLES (/blog-llm.txt)
+function generateBlogLlmIndex() {
+  const lines: string[] = [
+    `# ArkyEdu — Index Structurat Blog & Ghiduri Practice TIC (${BLOG_ARTICLES.length} Articole Bilingve — ${BLOG_ARTICLES.length * 2} Pagini RO & EN)`,
+    '',
+    `> Document de referință optimizat pentru motoare de răspuns AI (ChatGPT Search, Perplexity, Gemini, Claude). Centralizează toate cele ${BLOG_ARTICLES.length} ghiduri ample bilingve de Informatică, TIC, Programare C++/Python, Excel, AI, Securitate Online și Robotică IoT.`,
+    '',
+    '- Index Blog Română: https://www.arkyedu.com/blog/',
+    '- Index Blog Engleză: https://www.arkyedu.com/blog/en/',
+    '- Feed RSS 2.0: https://www.arkyedu.com/rss.xml',
+    '- Documentație generală platformă: https://www.arkyedu.com/llms.txt',
+    '- Documentație tehnică exhaustivă: https://www.arkyedu.com/llms-full.txt',
+    '',
+    '---',
+    '',
+    '## 1. Index Tematic pe Categorii',
+    '',
+  ];
+
+  BLOG_CATEGORIES.filter((c) => c.id !== 'all').forEach((cat) => {
+    const items = BLOG_ARTICLES.filter((a) => a.category === cat.id);
+    if (items.length === 0) return;
+    lines.push(`### ${cat.labelRo} / ${cat.labelEn} (${items.length})`);
+    items.forEach((art) => {
+      lines.push(`- [${art.ro.breadcrumbLabel}](https://www.arkyedu.com/blog/${art.ro.slug}/) · [EN: ${art.en.breadcrumbLabel}](https://www.arkyedu.com/blog/en/${art.en.slug}/) (${art.gradeTagRo})`);
+    });
+    lines.push('');
+  });
+
+  lines.push('---', '', `## 2. Rezumate Answer-First, Cuprins & FAQ (${BLOG_ARTICLES.length} Ghiduri Complete)`, '');
+
+  BLOG_ARTICLES.forEach((art, idx) => {
+    lines.push(`### ${idx + 1}. ${art.ro.title}`);
+    lines.push(`- **EN Title**: ${art.en.title}`);
+    lines.push(`- **URL RO**: https://www.arkyedu.com/blog/${art.ro.slug}/`);
+    lines.push(`- **URL EN**: https://www.arkyedu.com/blog/en/${art.en.slug}/`);
+    lines.push(`- **Categorie & Nivel**: ${art.ro.categoryLabel} | ${art.gradeTagRo} | ${art.ro.readTime}`);
+    lines.push(`- **Răspuns Rapid (TL;DR RO)**: ${art.ro.tldr}`);
+    lines.push(`- **Quick Answer (TL;DR EN)**: ${art.en.tldr}`);
+    lines.push(`- **Cuprins Capitole RO**: ${art.ro.sections.map((s) => s.heading).join(' · ')}`);
+    lines.push(`- **Checklist**: ${art.ro.checklist.join(' | ')}`);
+    if (art.ro.faqs.length > 0) {
+      lines.push('- **Întrebări Cheie (FAQ)**:');
+      art.ro.faqs.slice(0, 3).forEach((f) => {
+        lines.push(`  - *${f.question}* → ${f.answer}`);
+      });
+    }
+    lines.push('');
+  });
+
+  fs.writeFileSync(path.join(publicDir, 'blog-llm.txt'), lines.join('\n'), 'utf-8');
+  console.log(`Generated public/blog-llm.txt covering all ${BLOG_ARTICLES.length} bilingual blog guides.`);
+}
+
 function injectReportIssueLinksIntoStaticPages() {
   const walkHtml = (dir: string, out: string[] = []): string[] => {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -5445,6 +5640,7 @@ generateAiLabPages();
 generateAlgoLabPages();
 generateTechEducationPillar();
 generateBlogPages();
+generateBlogLlmIndex();
 generateGlossaryPages();
 generateSandboxPages();
 generateWorksheetsPages();
