@@ -26,6 +26,125 @@
   to = "https://www.arkyedu.com/:splat"
   status = 301
 
+# Redirect 301 de la vechile URL-uri ?lang=en (daca au fost indexate in Google) catre /en/
+[[redirects]]
+  from = "/"
+  to = "/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/index.html"
+  to = "/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/blog/"
+  to = "/blog/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/blog"
+  to = "/blog/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/glosar/"
+  to = "/glosar/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/glosar"
+  to = "/glosar/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/fise/"
+  to = "/fise/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/fise"
+  to = "/fise/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/sandbox/"
+  to = "/sandbox/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/sandbox"
+  to = "/sandbox/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/leonida/"
+  to = "/leonida/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/leonida"
+  to = "/leonida/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/laborator-ai/"
+  to = "/laborator-ai/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/laborator-ai"
+  to = "/laborator-ai/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/laborator-algoritmi/"
+  to = "/laborator-algoritmi/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/laborator-algoritmi"
+  to = "/laborator-algoritmi/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+# Alias conform specificatiei llmstxt.org (.well-known/llms.txt)
+[[redirects]]
+  from = "/.well-known/llms.txt"
+  to = "/llms.txt"
+  status = 200
+
 # SPA Fallback routing
 [[redirects]]
   from = "/*"

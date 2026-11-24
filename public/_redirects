@@ -10,10 +10,28 @@ http://arkedotic.netlify.app/*    https://www.arkyedu.com/:splat   301!
 https://arkyedu.com/*             https://www.arkyedu.com/:splat   301
 http://arkyedu.com/*              https://www.arkyedu.com/:splat   301
 
+# Redirect 301 de la vechile link-uri cu ?lang=en (daca sunt indexate in Google) catre /en/
+/                                 lang=en   /en/                      301!
+/index.html                       lang=en   /en/                      301!
+/blog/                            lang=en   /blog/en/                 301!
+/blog                             lang=en   /blog/en/                 301!
+/glosar/                          lang=en   /glosar/en/               301!
+/glosar                           lang=en   /glosar/en/               301!
+/fise/                            lang=en   /fise/en/                 301!
+/fise                             lang=en   /fise/en/                 301!
+/sandbox/                         lang=en   /sandbox/en/              301!
+/sandbox                          lang=en   /sandbox/en/              301!
+/leonida/                         lang=en   /leonida/en/              301!
+/leonida                          lang=en   /leonida/en/              301!
+/laborator-ai/                    lang=en   /laborator-ai/en/         301!
+/laborator-ai                     lang=en   /laborator-ai/en/         301!
+/laborator-algoritmi/             lang=en   /laborator-algoritmi/en/  301!
+/laborator-algoritmi              lang=en   /laborator-algoritmi/en/  301!
+
 # Alias conform specificatiei llmstxt.org (.well-known/llms.txt)
-/.well-known/llms.txt             /llms.txt                        200
+/.well-known/llms.txt             /llms.txt                           200
 
 # Regula obligatorie de fallback pentru aplicatii SPA (React / Vite)
-# Nota: Paginile fizice existente (ex: /cursuri/hardware/index.html, /llms.txt) sunt servite
+# Nota: Paginile fizice existente (ex: /en/index.html, /cursuri/hardware/index.html, /llms.txt) sunt servite
 # direct cu status 200 de catre CDN-ul Netlify, fallback-ul aplicandu-se doar rutelor SPA virtuale.
-/*                                /index.html                      200
+/*                                /index.html                         200

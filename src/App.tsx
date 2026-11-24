@@ -259,6 +259,39 @@ function GameContent() {
     };
   }, []);
 
+  // Clean up redundant ?lang=en / ?lang=ro query parameters (e.g. after Netlify 301 passthrough)
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href);
+      const qLang = url.searchParams.get('lang')?.toLowerCase();
+      if (!qLang) return;
+
+      const isExplicitEnPath =
+        /^\/en(\/|$)/i.test(url.pathname) ||
+        /\/en(\/|$)/i.test(url.pathname);
+      const isRootPath = url.pathname === '/' || url.pathname === '/index.html';
+      const hasDeepLinkParam = ['view', 'game', 'arcade', 'mode', 'duel', 'lesson', 'post'].some((k) =>
+        url.searchParams.has(k)
+      );
+
+      if (isExplicitEnPath && qLang === 'en') {
+        url.searchParams.delete('lang');
+        const nextSearch = url.searchParams.toString();
+        window.history.replaceState(null, '', `${url.pathname}${nextSearch ? `?${nextSearch}` : ''}${url.hash}`);
+      } else if (isRootPath && qLang === 'ro') {
+        url.searchParams.delete('lang');
+        const nextSearch = url.searchParams.toString();
+        window.history.replaceState(null, '', `/${nextSearch ? `?${nextSearch}` : ''}${url.hash}`);
+      } else if (isRootPath && qLang === 'en' && !hasDeepLinkParam) {
+        url.searchParams.delete('lang');
+        const nextSearch = url.searchParams.toString();
+        window.history.replaceState(null, '', `/en/${nextSearch ? `?${nextSearch}` : ''}${url.hash}`);
+      }
+    } catch {
+      // Ignore malformed URL edge cases
+    }
+  }, []);
+
   // Scroll to top when switching views
   useEffect(() => {
     forceScrollToTop();
