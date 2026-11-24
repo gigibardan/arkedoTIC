@@ -1508,6 +1508,9 @@ function generateFeatureHubs() {
     ensureDir(hubDir);
 
     const canonicalUrl = `https://www.arkyedu.com/${h.dir}/`;
+    const hubOgImage = (h.dir === 'arcade' || h.dir === 'duel')
+      ? 'https://www.arkyedu.com/assets/og-arcade-duel.jpg'
+      : 'https://www.arkyedu.com/og-cover.png';
 
     const jsonLd = {
       "@context": "https://schema.org",
@@ -1518,6 +1521,7 @@ function generateFeatureHubs() {
           "name": h.title,
           "description": h.meta,
           "url": canonicalUrl,
+          "image": hubOgImage,
           "inLanguage": ["ro", "en"],
           "isPartOf": { "@id": "https://www.arkyedu.com/#website" }
         },
@@ -1568,13 +1572,12 @@ function generateFeatureHubs() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="ro_RO">
-  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image" content="${hubOgImage}">
+  ${hubOgImage.endsWith('og-cover.png') ? '<meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">' : ''}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${h.title}">
   <meta name="twitter:description" content="${h.meta}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:image" content="${hubOgImage}">
   <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2270,13 +2273,11 @@ function generateBlogPages() {
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
-  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/og-blog.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(title)}">
   <meta name="twitter:description" content="${escapeHtmlText(description)}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/og-blog.jpg">
   <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2521,7 +2522,7 @@ ${blogBaseStyles}
             "name": "ArkyEdu",
             "logo": { "@type": "ImageObject", "url": "https://www.arkyedu.com/pwa-512x512.png" }
           },
-          "image": "https://www.arkyedu.com/og-cover.png"
+          "image": "https://www.arkyedu.com/assets/og-blog.jpg"
         },
         {
           "@type": "BreadcrumbList",
@@ -2578,13 +2579,11 @@ ${blogBaseStyles}
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
   <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
-  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/og-blog.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(c.metaTitle)}">
   <meta name="twitter:description" content="${escapeHtmlText(c.metaDescription)}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/og-blog.jpg">
   <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3675,77 +3674,128 @@ ${commonStyles}
   console.log('Generated bilingual Sandbox landing pages (/sandbox/ and /sandbox/en/).');
 }
 
-// 7. GENERATE COMPLETE SITEMAP.XML
+// 7. GENERATE COMPLETE SITEMAP.XML (WITH IMAGE SITEMAP EXTENSION)
 function generateSitemap() {
   const currentDate = new Date().toISOString().split('T')[0];
 
-  const staticUrls = [
-    { loc: 'https://www.arkyedu.com/', priority: '1.0', changefreq: 'daily' },
-    { loc: 'https://www.arkyedu.com/sandbox/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/sandbox/en/', priority: '0.90', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/blog/', priority: '0.96', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.93', changefreq: 'weekly' },
+  interface SitemapImageEntry {
+    loc: string;
+    title: string;
+  }
+
+  interface SitemapUrlEntry {
+    loc: string;
+    priority: string;
+    changefreq: string;
+    images?: SitemapImageEntry[];
+  }
+
+  const staticUrls: SitemapUrlEntry[] = [
+    {
+      loc: 'https://www.arkyedu.com/',
+      priority: '1.0',
+      changefreq: 'daily',
+      images: [
+        { loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu — Platformă Gratuită de Educație TIC, Coding & Robotică (V–VIII)' },
+        { loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida Open-World GTA 6 Sandbox 2D Educativ' }
+      ]
+    },
+    { loc: 'https://www.arkyedu.com/sandbox/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Sandbox Cod Live C++17, Python 3 & HTML5' }] },
+    { loc: 'https://www.arkyedu.com/sandbox/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu Live Browser Code Sandbox' }] },
+    { loc: 'https://www.arkyedu.com/blog/', priority: '0.96', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-blog.jpg', title: 'Index Blog & Ghiduri Practice TIC, C++, Excel, AI și Robotică' }] },
+    { loc: 'https://www.arkyedu.com/blog/en/', priority: '0.93', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-blog.jpg', title: 'ArkyEdu ICT, Coding, AI & Robotics Study Guides' }] },
     { loc: 'https://www.arkyedu.com/blog-llm.txt', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/glosar/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/glosar/en/', priority: '0.92', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/educatie-tehnologie-copii/', priority: '0.98', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/clasa-5/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/clasa-6/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/clasa-7/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/clasa-8/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/comparatie-scoli-private/', priority: '0.95', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/arcade/', priority: '0.92', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/leonida/', priority: '0.97', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/leonida/en/', priority: '0.94', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/glosar/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Glosar Bilingv Informatică & TIC (44 Termeni)' }] },
+    { loc: 'https://www.arkyedu.com/glosar/en/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu Bilingual Computer Science Glossary' }] },
+    { loc: 'https://www.arkyedu.com/educatie-tehnologie-copii/', priority: '0.98', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Educație Tehnologie & Digitală pentru Copii (10–15 ani)' }] },
+    { loc: 'https://www.arkyedu.com/clasa-5/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'TIC Clasa a V-a — Hardware, Word & Scratch 3.0' }] },
+    { loc: 'https://www.arkyedu.com/clasa-6/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'TIC Clasa a VI-a — PowerPoint, Securitate & Algoritmi' }] },
+    { loc: 'https://www.arkyedu.com/clasa-7/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'TIC Clasa a VII-a — C++, Audio-Video & Robotică' }] },
+    { loc: 'https://www.arkyedu.com/clasa-8/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'TIC Clasa a VIII-a — Excel, HTML5, C++ & Arduino Smart Home' }] },
+    { loc: 'https://www.arkyedu.com/comparatie-scoli-private/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu vs Școli Private de Coding — 100% Gratuit' }] },
+    { loc: 'https://www.arkyedu.com/arcade/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-arcade-duel.jpg', title: 'Arcade Didactic TIC: 30 Jocuri Retro & Vice Leonida' }] },
+    {
+      loc: 'https://www.arkyedu.com/leonida/',
+      priority: '0.97',
+      changefreq: 'weekly',
+      images: [
+        { loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida Open-World Story (GTA 6 Educativ)' },
+        { loc: 'https://www.arkyedu.com/assets/leonida-map.jpg', title: 'Harta Statului Leonida — 6 Regiuni Open-World' },
+        { loc: 'https://www.arkyedu.com/assets/leonida-duo.jpg', title: 'Lucia Caminos & Jason Duval — Vice Leonida Tech Missions' }
+      ]
+    },
+    { loc: 'https://www.arkyedu.com/leonida/en/', priority: '0.94', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida Open-World 2D Sandbox (GTA 6 Tech)' }] },
     { loc: 'https://www.arkyedu.com/leonida-llm.txt', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/laborator-ai/', priority: '0.97', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/laborator-ai/en/', priority: '0.94', changefreq: 'weekly' },
+    {
+      loc: 'https://www.arkyedu.com/laborator-ai/',
+      priority: '0.97',
+      changefreq: 'weekly',
+      images: [
+        { loc: 'https://www.arkyedu.com/assets/ai-lab-hero.jpg', title: 'Laborator Interactiv AI & Deepfake ArkyEdu' },
+        { loc: 'https://www.arkyedu.com/assets/ai-evidence-real.jpg', title: 'Analiză Forensic AI — Fotografie Autentică' },
+        { loc: 'https://www.arkyedu.com/assets/ai-evidence-fake.jpg', title: 'Analiză Forensic AI — Detecție Artefacte Deepfake' }
+      ]
+    },
+    { loc: 'https://www.arkyedu.com/laborator-ai/en/', priority: '0.94', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/ai-lab-hero.jpg', title: 'Interactive AI & Deepfake Literacy Lab' }] },
     { loc: 'https://www.arkyedu.com/laborator-ai-llm.txt', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/laborator-algoritmi/', priority: '0.97', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/laborator-algoritmi/en/', priority: '0.94', changefreq: 'weekly' },
+    {
+      loc: 'https://www.arkyedu.com/laborator-algoritmi/',
+      priority: '0.97',
+      changefreq: 'weekly',
+      images: [
+        { loc: 'https://www.arkyedu.com/assets/algo-lab-hero.jpg', title: 'Laborator Vizual Algoritmi, Binar & CPU Von Neumann' },
+        { loc: 'https://www.arkyedu.com/assets/cpu-von-neumann.jpg', title: 'Arhitectură CPU Von Neumann — Fetch Decode Execute' },
+        { loc: 'https://www.arkyedu.com/assets/logic-gates-board.jpg', title: 'Porți Logice AND, OR, XOR & Circuit Hardware' }
+      ]
+    },
+    { loc: 'https://www.arkyedu.com/laborator-algoritmi/en/', priority: '0.94', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/algo-lab-hero.jpg', title: 'Visual Algorithms, Binary & Von Neumann CPU Lab' }] },
     { loc: 'https://www.arkyedu.com/laborator-algoritmi-llm.txt', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/', priority: '0.93', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/', priority: '0.90', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/duel/', priority: '0.92', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/', priority: '0.93', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/', priority: '0.90', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/profesor/', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/oras/', priority: '0.88', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/fise/', priority: '0.96', changefreq: 'weekly' },
-    { loc: 'https://www.arkyedu.com/fise/en/', priority: '0.92', changefreq: 'weekly' },
+    { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/', priority: '0.93', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida VI: Cyber Runner (GTA 6 Arcade)' }] },
+    { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida VI: Cyber Runner English Edition' }] },
+    { loc: 'https://www.arkyedu.com/duel/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-arcade-duel.jpg', title: 'Arena Dueluri TIC 1v1 Live & Cyber-Bot' }] },
+    { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/', priority: '0.93', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida 1v1: Cyber-Heist Showdown' }] },
+    { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida 1v1 Showdown English Edition' }] },
+    { loc: 'https://www.arkyedu.com/profesor/', priority: '0.88', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Portal Profesor TIC — Catalog Digital & Bareme 1–10' }] },
+    { loc: 'https://www.arkyedu.com/oras/', priority: '0.88', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Arkedo Smart City — Laborator IoT & Robotică Arduino' }] },
+    { loc: 'https://www.arkyedu.com/fise/', priority: '0.96', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-worksheets.jpg', title: 'Fișe de Lucru, Teste cu Barem 1–10 & Olimpiadă TIC' }] },
+    { loc: 'https://www.arkyedu.com/fise/en/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-worksheets.jpg', title: 'Bilingual ICT Worksheets, Exams & Grading Rubrics' }] },
     { loc: 'https://www.arkyedu.com/llms.txt', priority: '0.88', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/llms-full.txt', priority: '0.85', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/fise-llm.txt', priority: '0.85', changefreq: 'weekly' },
     { loc: 'https://www.arkyedu.com/ai-catalog.json', priority: '0.75', changefreq: 'weekly' }
   ];
 
-  const worksheetUrls = WORKSHEETS_BANK.flatMap((ws) => [
+  const worksheetUrls: SitemapUrlEntry[] = WORKSHEETS_BANK.flatMap((ws) => [
     {
       loc: `https://www.arkyedu.com/fise/${ws.ro.slug}/`,
       priority: '0.92',
-      changefreq: 'weekly'
+      changefreq: 'weekly',
+      images: [{ loc: 'https://www.arkyedu.com/assets/og-worksheets.jpg', title: ws.ro.title }]
     },
     {
       loc: `https://www.arkyedu.com/fise/en/${ws.en.slug}/`,
       priority: '0.88',
-      changefreq: 'weekly'
+      changefreq: 'weekly',
+      images: [{ loc: 'https://www.arkyedu.com/assets/og-worksheets.jpg', title: ws.en.title }]
     }
   ]);
 
-  const blogUrls = BLOG_ARTICLES.flatMap((art) => [
+  const blogUrls: SitemapUrlEntry[] = BLOG_ARTICLES.flatMap((art) => [
     {
       loc: `https://www.arkyedu.com/blog/${art.ro.slug}/`,
       priority: '0.90',
-      changefreq: 'weekly'
+      changefreq: 'weekly',
+      images: [{ loc: 'https://www.arkyedu.com/assets/og-blog.jpg', title: art.ro.title }]
     },
     {
       loc: `https://www.arkyedu.com/blog/en/${art.en.slug}/`,
       priority: '0.88',
-      changefreq: 'weekly'
+      changefreq: 'weekly',
+      images: [{ loc: 'https://www.arkyedu.com/assets/og-blog.jpg', title: art.en.title }]
     }
   ]);
 
-  const glossaryUrls = GLOSSARY_TERMS.flatMap((gt) => [
+  const glossaryUrls: SitemapUrlEntry[] = GLOSSARY_TERMS.flatMap((gt) => [
     {
       loc: `https://www.arkyedu.com/glosar/${gt.ro.slug}/`,
       priority: '0.88',
@@ -3758,7 +3808,7 @@ function generateSitemap() {
     }
   ]);
 
-  const courseUrls = CURRICULA_MODULES.map(m => ({
+  const courseUrls: SitemapUrlEntry[] = CURRICULA_MODULES.map(m => ({
     loc: `https://www.arkyedu.com/cursuri/${m.id}/`,
     priority: m.grade === 'Clasa a VIII-a' ? '0.9' : m.grade === 'Clasa a VII-a' ? '0.88' : '0.85',
     changefreq: 'weekly'
@@ -3767,18 +3817,24 @@ function generateSitemap() {
   const allUrls = [...staticUrls, ...worksheetUrls, ...blogUrls, ...glossaryUrls, ...courseUrls];
 
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allUrls.map(u => `  <url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${allUrls.map(u => {
+  const imageXml = (u.images || [])
+    .map(img => `    <image:image>\n      <image:loc>${img.loc}</image:loc>\n      <image:title>${escapeHtmlText(img.title)}</image:title>\n    </image:image>`)
+    .join('\n');
+  return `  <url>
     <loc>${u.loc}</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
-    <priority>${u.priority}</priority>
-  </url>`).join('\n')}
+    <priority>${u.priority}</priority>${imageXml ? `\n${imageXml}` : ''}
+  </url>`;
+}).join('\n')}
 </urlset>
 `;
 
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), xmlContent, 'utf-8');
-  console.log(`Generated sitemap.xml with ${allUrls.length} clean indexable URLs.`);
+  console.log(`Generated sitemap.xml with ${allUrls.length} clean indexable URLs and image metadata.`);
 }
 
 // 8. GENERATE RSS 2.0 FEED (/rss.xml) FOR ALL BILINGUAL BLOG ARTICLES
@@ -4083,13 +4139,11 @@ function generateViceLeonidaSeoPages() {
   <meta property="og:site_name" content="ArkyEdu TIC &amp; Arcade">
   <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
   <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
-  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/leonida-hero.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(p.title)}">
   <meta name="twitter:description" content="${escapeHtmlText(p.meta)}">
-  <meta name="twitter:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/leonida-hero.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -5193,10 +5247,11 @@ function generateWorksheetsPages() {
   <meta property="og:title" content="${escapeHtmlText(title)}">
   <meta property="og:description" content="${escapeHtmlText(description)}">
   <meta property="og:url" content="${canonicalUrl}">
-  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/og-worksheets.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(title)}">
   <meta name="twitter:description" content="${escapeHtmlText(description)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/og-worksheets.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
   <style>${commonStyles}</style>
@@ -5351,10 +5406,11 @@ function generateWorksheetsPages() {
   <meta property="og:title" content="${escapeHtmlText(loc.metaTitle)}">
   <meta property="og:description" content="${escapeHtmlText(loc.metaDescription)}">
   <meta property="og:url" content="${canonicalUrl}">
-  <meta property="og:image" content="https://www.arkyedu.com/og-cover.png">
+  <meta property="og:image" content="https://www.arkyedu.com/assets/og-worksheets.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtmlText(loc.metaTitle)}">
   <meta name="twitter:description" content="${escapeHtmlText(loc.metaDescription)}">
+  <meta name="twitter:image" content="https://www.arkyedu.com/assets/og-worksheets.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
   <style>
@@ -5628,8 +5684,165 @@ function injectReportIssueLinksIntoStaticPages() {
   console.log(`Injected Report an Issue footer bar into ${updatedCount} static SEO HTML pages.`);
 }
 
+function syncCatalogPreviews() {
+  const targetPath = path.resolve(__dirname, '../src/data/catalogPreviews.ts');
+  const featuredBlogs = BLOG_ARTICLES.filter((a) => a.featured).slice(-6).reverse().map((a) => ({
+    id: a.id,
+    gradeTagRo: a.gradeTagRo,
+    gradeTagEn: a.gradeTagEn,
+    ro: {
+      slug: a.ro.slug,
+      categoryLabel: a.ro.categoryLabel,
+      breadcrumbLabel: a.ro.breadcrumbLabel,
+      metaDescription: a.ro.metaDescription
+    },
+    en: {
+      slug: a.en.slug,
+      categoryLabel: a.en.categoryLabel,
+      breadcrumbLabel: a.en.breadcrumbLabel,
+      metaDescription: a.en.metaDescription
+    }
+  }));
+
+  const preferredGlossaryIds = [
+    'cpu-processor',
+    'modulo-integer-division',
+    'excel-if-countif',
+    'phishing-social-engineering',
+    'arduino-millis',
+    'prompt-engineering-rccl'
+  ];
+  const featuredGlossarySource = preferredGlossaryIds
+    .map((id) => GLOSSARY_TERMS.find((g) => g.id === id))
+    .filter((g): g is GlossaryTerm => Boolean(g));
+  const glossaryList = (featuredGlossarySource.length === preferredGlossaryIds.length
+    ? featuredGlossarySource
+    : GLOSSARY_TERMS.slice(0, 6)
+  ).map((g) => ({
+    id: g.id,
+    gradeTagRo: g.gradeTagRo,
+    gradeTagEn: g.gradeTagEn,
+    ro: { slug: g.ro.slug, term: g.ro.term, shortAnswer: g.ro.shortAnswer },
+    en: { slug: g.en.slug, term: g.en.term, shortAnswer: g.en.shortAnswer }
+  }));
+
+  const preferredWorksheetIds = [
+    'ws-g5-test-algoritmi-scratch',
+    'ws-g6-test-securitate-email',
+    'ws-g7-oji-while-cifre',
+    'ws-g8-teza-admitere-vectori'
+  ];
+  const featuredWorksheetSource = preferredWorksheetIds
+    .map((id) => WORKSHEETS_BANK.find((w) => w.id === id))
+    .filter((w): w is (typeof WORKSHEETS_BANK)[number] => Boolean(w));
+  const worksheetList = (featuredWorksheetSource.length === preferredWorksheetIds.length
+    ? featuredWorksheetSource
+    : WORKSHEETS_BANK.slice(0, 4)
+  ).map((w) => ({
+    id: w.id,
+    maxPoints: w.maxPoints,
+    gradeRo: WORKSHEET_GRADE_LABELS[w.grade].ro,
+    gradeEn: WORKSHEET_GRADE_LABELS[w.grade].en,
+    kindRo: WORKSHEET_KIND_LABELS[w.kind].ro,
+    kindEn: WORKSHEET_KIND_LABELS[w.kind].en,
+    ro: {
+      slug: w.ro.slug,
+      breadcrumbLabel: w.ro.breadcrumbLabel,
+      directAnswerSummary: w.ro.directAnswerSummary
+    },
+    en: {
+      slug: w.en.slug,
+      breadcrumbLabel: w.en.breadcrumbLabel,
+      directAnswerSummary: w.en.directAnswerSummary
+    }
+  }));
+
+  const sandboxLangMap: Record<string, 'cpp' | 'python' | 'html'> = {};
+  SANDBOX_CHALLENGES.forEach((ch) => {
+    sandboxLangMap[ch.id] = ch.language;
+  });
+
+  const nextContent = `// Lightweight homepage catalog summaries & counts (auto-synced during SEO build).
+// Keeps ~850 KB of full blog articles, glossary entries, and worksheet items out of the initial JS bundle.
+
+export interface CatalogBlogPreview {
+  id: string;
+  gradeTagRo: string;
+  gradeTagEn: string;
+  ro: {
+    slug: string;
+    categoryLabel: string;
+    breadcrumbLabel: string;
+    metaDescription: string;
+  };
+  en: {
+    slug: string;
+    categoryLabel: string;
+    breadcrumbLabel: string;
+    metaDescription: string;
+  };
+}
+
+export interface CatalogGlossaryPreview {
+  id: string;
+  gradeTagRo: string;
+  gradeTagEn: string;
+  ro: {
+    slug: string;
+    term: string;
+    shortAnswer: string;
+  };
+  en: {
+    slug: string;
+    term: string;
+    shortAnswer: string;
+  };
+}
+
+export interface CatalogWorksheetPreview {
+  id: string;
+  maxPoints: number;
+  gradeRo: string;
+  gradeEn: string;
+  kindRo: string;
+  kindEn: string;
+  ro: {
+    slug: string;
+    breadcrumbLabel: string;
+    directAnswerSummary: string;
+  };
+  en: {
+    slug: string;
+    breadcrumbLabel: string;
+    directAnswerSummary: string;
+  };
+}
+
+export const CATALOG_COUNTS = {
+  blog: ${BLOG_ARTICLES.length},
+  glossary: ${GLOSSARY_TERMS.length},
+  worksheets: ${WORKSHEETS_BANK.length},
+};
+
+export const SANDBOX_LANG_BY_ID: Record<string, 'cpp' | 'python' | 'html'> = ${JSON.stringify(sandboxLangMap, null, 2)};
+
+export const FEATURED_BLOG_PREVIEWS: CatalogBlogPreview[] = ${JSON.stringify(featuredBlogs, null, 2)};
+
+export const FEATURED_GLOSSARY_PREVIEWS: CatalogGlossaryPreview[] = ${JSON.stringify(glossaryList, null, 2)};
+
+export const FEATURED_WORKSHEET_PREVIEWS: CatalogWorksheetPreview[] = ${JSON.stringify(worksheetList, null, 2)};
+`;
+
+  const prevContent = fs.existsSync(targetPath) ? fs.readFileSync(targetPath, 'utf-8') : '';
+  if (prevContent !== nextContent) {
+    fs.writeFileSync(targetPath, nextContent, 'utf-8');
+    console.log('Synced src/data/catalogPreviews.ts with live blog/glossary/worksheets counts.');
+  }
+}
+
 // EXECUTE ALL GENERATORS
 console.log('--- STARTING SEO PAGES GENERATION ---');
+syncCatalogPreviews();
 generateModulePages();
 generateGradeHubs();
 generateComparisonPage();

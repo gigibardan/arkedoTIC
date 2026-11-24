@@ -8,15 +8,17 @@ import { ThemeProvider } from './context/ThemeContext';
 import { MascotaArky } from './components/MascotaArky';
 import { Header } from './components/Header';
 import { CoursesCatalog } from './components/CoursesCatalog';
-import { MissionStage } from './components/MissionStage';
 import { OfflineIndicator } from './components/pwa/OfflineIndicator';
 import { Footer } from './components/Footer';
-import { LegalModal, LegalTabType } from './components/LegalModal';
+import type { LegalTabType } from './components/LegalModal';
 import { CookieBanner } from './components/CookieBanner';
 import { UpdateToast } from './components/pwa/UpdateToast';
 import { ReportIssueProvider, useReportIssue } from './context/ReportIssueContext';
-import { ReportIssueModal } from './components/ReportIssueModal';
 import { ReportIssueButton } from './components/ReportIssueButton';
+
+const MissionStage = lazy(() => import('./components/MissionStage').then((m) => ({ default: m.MissionStage })));
+const LegalModal = lazy(() => import('./components/LegalModal').then((m) => ({ default: m.LegalModal })));
+const ReportIssueModal = lazy(() => import('./components/ReportIssueModal').then((m) => ({ default: m.ReportIssueModal })));
 import { useMissionProgress } from './hooks/useMissionProgress';
 import { recordDailyActivityAndStreak } from './lib/studentAuthService';
 import { sounds } from './utils/audio';
@@ -261,7 +263,7 @@ function GameContent() {
 
   // Synchronize bilingual SEO titles, descriptions, OpenGraph & canonical tags
   useEffect(() => {
-    updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug);
+    void updateDynamicSeo(view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug);
   }, [view, lang, activeMission, blogSlug, glossarySlug, initialArcadeGame, initialDuelMode, worksheetSlug]);
 
   // Keep global ReportIssueContext synchronized with current view/mission/level
@@ -667,26 +669,30 @@ function GameContent() {
         onNavigateToAlgoLab={() => navigateToView('algolab')}
       />
 
-      <LegalModal
-        isOpen={legalModalOpen}
-        initialTab={legalTab}
-        onClose={() => {
-          setLegalModalOpen(false);
-          try {
-            if (
-              window.location.hash.startsWith('#despre') ||
-              window.location.hash.startsWith('#about') ||
-              window.location.hash.startsWith('#privacy') ||
-              window.location.hash.startsWith('#gdpr') ||
-              window.location.hash.startsWith('#cookies') ||
-              window.location.hash.startsWith('#termeni') ||
-              window.location.hash.startsWith('#contact')
-            ) {
-              window.history.replaceState(null, '', ' ');
-            }
-          } catch {}
-        }}
-      />
+      {legalModalOpen && (
+        <Suspense fallback={null}>
+          <LegalModal
+            isOpen={legalModalOpen}
+            initialTab={legalTab}
+            onClose={() => {
+              setLegalModalOpen(false);
+              try {
+                if (
+                  window.location.hash.startsWith('#despre') ||
+                  window.location.hash.startsWith('#about') ||
+                  window.location.hash.startsWith('#privacy') ||
+                  window.location.hash.startsWith('#gdpr') ||
+                  window.location.hash.startsWith('#cookies') ||
+                  window.location.hash.startsWith('#termeni') ||
+                  window.location.hash.startsWith('#contact')
+                ) {
+                  window.history.replaceState(null, '', ' ');
+                }
+              } catch {}
+            }}
+          />
+        </Suspense>
+      )}
 
       <CookieBanner onOpenCookiePolicy={() => openLegalModal('cookies')} />
     </div>
@@ -701,7 +707,9 @@ export default function App() {
           <ArkyProvider>
             <ReportIssueProvider>
               <GameContent />
-              <ReportIssueModal />
+              <Suspense fallback={null}>
+                <ReportIssueModal />
+              </Suspense>
               <MascotaArky />
               <OfflineIndicator />
               <UpdateToast />

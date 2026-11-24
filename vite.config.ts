@@ -141,7 +141,8 @@ export default defineConfig(({ command }) => {
           ],
         },
         devOptions: {
-          enabled: process.env.DISABLE_HMR !== 'true',
+          // Keep dev SW disabled so vite-plugin-pwa does not call import.meta.hot.send() before Vite 6 WS connects
+          enabled: false,
           type: 'module',
         },
       }),
@@ -171,6 +172,9 @@ export default defineConfig(({ command }) => {
               }
               if (id.includes('lucide-react')) {
                 return 'vendor-icons';
+              }
+              if (id.includes('motion') || id.includes('framer-motion')) {
+                return 'vendor-motion';
               }
               if (id.includes('react') || id.includes('scheduler')) {
                 return 'vendor-react';

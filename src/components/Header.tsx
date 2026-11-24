@@ -31,7 +31,7 @@ import { useReportIssue } from '../context/ReportIssueContext';
 import { sounds } from '../utils/audio';
 import { PWAInstallButton } from './pwa/PWAInstallButton';
 import { ReportIssueButton } from './ReportIssueButton';
-import { BLOG_ARTICLES } from '../data/blog';
+import { CATALOG_COUNTS } from '../data/catalogPreviews';
 
 interface HeaderProps {
   score: number;
@@ -509,7 +509,7 @@ export const Header: React.FC<HeaderProps> = ({
                               {lang === 'en' ? 'ICT Blog & Guides' : 'Blog & Ghiduri TIC'}
                             </div>
                             <div className="text-[11px] text-slate-400 truncate">
-                              {lang === 'en' ? `${BLOG_ARTICLES.length} step-by-step guides` : `${BLOG_ARTICLES.length} ghiduri practice V–VIII`}
+                              {lang === 'en' ? `${CATALOG_COUNTS.blog} step-by-step guides` : `${CATALOG_COUNTS.blog} ghiduri practice V–VIII`}
                             </div>
                           </div>
                         </a>
@@ -1020,7 +1020,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <FileText className="w-4 h-4 text-teal-400 shrink-0" />
                   <div className="min-w-0">
                     <div className="font-bold truncate">{lang === 'en' ? 'ICT Blog' : 'Blog TIC'}</div>
-                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? `${BLOG_ARTICLES.length} Guides` : `${BLOG_ARTICLES.length} Ghiduri`}</div>
+                    <div className="text-[10px] text-teal-200 truncate">{lang === 'en' ? `${CATALOG_COUNTS.blog} Guides` : `${CATALOG_COUNTS.blog} Ghiduri`}</div>
                   </div>
                 </a>
               )}

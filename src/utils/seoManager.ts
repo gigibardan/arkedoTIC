@@ -1,14 +1,23 @@
 import { AllMissionId, Language } from '../types';
-import { CURRICULA_MODULES } from '../data/curriculaData';
-import { findBlogArticleBySlug } from '../data/blog';
-import { findGlossaryTermBySlug } from '../data/glossary';
-import { findWorksheetBySlug } from '../data/worksheets';
 
-import { LEONIDA_FAQS } from '../data/leonidaOpenWorldData';
-import { AI_LAB_FAQS } from '../data/aiLabData';
-import { ALGO_LAB_FAQS } from '../data/algoLabData';
-
-export type AppSeoView = 'catalog' | 'lesson' | 'teacher' | 'arcade' | 'duel' | 'city' | 'superadmin' | 'blog' | 'glossary' | 'sandbox' | 'carnet' | 'evaluare' | 'livequiz' | 'fise' | 'leonida' | 'ailab' | 'algolab';
+export type AppSeoView =
+  | 'catalog'
+  | 'lesson'
+  | 'teacher'
+  | 'arcade'
+  | 'duel'
+  | 'city'
+  | 'superadmin'
+  | 'blog'
+  | 'glossary'
+  | 'sandbox'
+  | 'carnet'
+  | 'evaluare'
+  | 'livequiz'
+  | 'fise'
+  | 'leonida'
+  | 'ailab'
+  | 'algolab';
 
 const BASE_URL = 'https://www.arkyedu.com';
 
@@ -71,7 +80,9 @@ function upsertJsonLd(id: string, data: Record<string, unknown> | null) {
   }
 }
 
-export function updateDynamicSeo(
+let activeSeoRequestToken = 0;
+
+export async function updateDynamicSeo(
   view: AppSeoView,
   lang: Language,
   activeMission: AllMissionId | null,
@@ -80,9 +91,10 @@ export function updateDynamicSeo(
   arcadeGame: string | null = null,
   duelMode: string | null = null,
   worksheetSlug: string | null = null
-): void {
+): Promise<void> {
   if (typeof document === 'undefined') return;
 
+  const requestToken = ++activeSeoRequestToken;
   const isEn = lang === 'en';
   document.documentElement.lang = isEn ? 'en' : 'ro';
 
@@ -128,6 +140,7 @@ export function updateDynamicSeo(
             alternateName: ['Vice Leonida GTA 6 Tech Arcade', 'GTA 6 Leonida Educational Runner'],
             url: canonicalUrl,
             description,
+            image: `${BASE_URL}/assets/leonida-hero.jpg`,
             genre: ['Arcade', 'Educational', 'Cyberpunk Racing'],
             gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
             applicationCategory: 'Game',
@@ -136,13 +149,13 @@ export function updateDynamicSeo(
             inLanguage: ['ro', 'en'],
             character: [
               { '@type': 'Person', name: 'Lucia Caminos' },
-              { '@type': 'Person', name: 'Jason Duval' }
+              { '@type': 'Person', name: 'Jason Duval' },
             ],
             gameLocation: {
               '@type': 'Place',
-              name: 'State of Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers)'
+              name: 'State of Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers)',
             },
-            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' },
           },
           {
             '@type': 'FAQPage',
@@ -154,12 +167,12 @@ export function updateDynamicSeo(
                   '@type': 'Answer',
                   text: isEn
                     ? 'Drive across 4 State of Leonida sectors, swap live between Lucia Caminos (Nitro & Data Shards) and Jason Duval (Steering & Kinetic Shield) with Q, trigger EMP with E, morph into a Cyber Airboat in Grassrivers, and solve 4-bit binary & ICT vault breaches.'
-                    : 'Traversezi 4 sectoare din Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat), schimbi live între Lucia Caminos și Jason Duval cu Q, folosești Nitro și EMP (E) și rezolvi hack-uri binare pe 4 biți și întrebări TIC.'
-                }
-              }
-            ]
-          }
-        ]
+                    : 'Traversezi 4 sectoare din Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat), schimbi live între Lucia Caminos și Jason Duval cu Q, folosești Nitro și EMP (E) și rezolvi hack-uri binare pe 4 biți și întrebări TIC.',
+                },
+              },
+            ],
+          },
+        ],
       };
     } else {
       title = isEn
@@ -175,7 +188,8 @@ export function updateDynamicSeo(
         name: title,
         description,
         url: canonicalUrl,
-        inLanguage: ['ro', 'en']
+        image: `${BASE_URL}/assets/og-arcade-duel.jpg`,
+        inLanguage: ['ro', 'en'],
       };
     }
   } else if (view === 'duel') {
@@ -195,6 +209,7 @@ export function updateDynamicSeo(
             name: 'Vice Leonida 1v1: Cyber-Heist Showdown',
             url: canonicalUrl,
             description,
+            image: `${BASE_URL}/assets/leonida-hero.jpg`,
             genre: ['Multiplayer 1v1', 'Arcade Racing', 'Educational'],
             playMode: ['MultiPlayer', 'SinglePlayer'],
             gamePlatform: ['Web Browser', 'Desktop', 'Mobile'],
@@ -202,7 +217,7 @@ export function updateDynamicSeo(
             operatingSystem: 'All',
             isAccessibleForFree: true,
             inLanguage: ['ro', 'en'],
-            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' }
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'RON' },
           },
           {
             '@type': 'FAQPage',
@@ -214,12 +229,12 @@ export function updateDynamicSeo(
                   '@type': 'Answer',
                   text: isEn
                     ? 'Yes! Create a 4-character live Firestore room to race a friend in real time, or select Cyber-Bot Leonida AI for instant solo 1v1 practice.'
-                    : 'Da! Poți crea o cameră live cu cod din 4 caractere pentru duel în timp real cu un coleg sau poți alege antrenament instant contra Cyber-Bot Leonida AI.'
-                }
-              }
-            ]
-          }
-        ]
+                    : 'Da! Poți crea o cameră live cu cod din 4 caractere pentru duel în timp real cu un coleg sau poți alege antrenament instant contra Cyber-Bot Leonida AI.',
+                },
+              },
+            ],
+          },
+        ],
       };
     } else {
       title = isEn
@@ -235,7 +250,8 @@ export function updateDynamicSeo(
         name: title,
         description,
         url: canonicalUrl,
-        inLanguage: ['ro', 'en']
+        image: `${BASE_URL}/assets/og-arcade-duel.jpg`,
+        inLanguage: ['ro', 'en'],
       };
     }
   } else if (view === 'city') {
@@ -247,6 +263,8 @@ export function updateDynamicSeo(
       : 'Simulator interactiv Smart City IoT pentru gimnaziu: iluminat PWM, senzori ultrasonici HC-SR04, alarmă gaz MQ-2 și microcontroller Arduino Uno.';
     canonicalUrl = `${BASE_URL}/oras/`;
   } else if (view === 'blog') {
+    const { findBlogArticleBySlug } = await import('../data/blog');
+    if (requestToken !== activeSeoRequestToken) return;
     const article = findBlogArticleBySlug(blogSlug);
     if (article) {
       const content = isEn ? article.en : article.ro;
@@ -263,6 +281,8 @@ export function updateDynamicSeo(
       canonicalUrl = isEn ? `${BASE_URL}/blog/en/` : `${BASE_URL}/blog/`;
     }
   } else if (view === 'glossary') {
+    const { findGlossaryTermBySlug } = await import('../data/glossary');
+    if (requestToken !== activeSeoRequestToken) return;
     const found = findGlossaryTermBySlug(glossarySlug).term;
     if (found) {
       const c = isEn ? found.en : found.ro;
@@ -279,6 +299,8 @@ export function updateDynamicSeo(
       canonicalUrl = isEn ? `${BASE_URL}/glosar/en/` : `${BASE_URL}/glosar/`;
     }
   } else if (view === 'fise') {
+    const { findWorksheetBySlug } = await import('../data/worksheets');
+    if (requestToken !== activeSeoRequestToken) return;
     const foundWs = findWorksheetBySlug(worksheetSlug).worksheet;
     if (foundWs) {
       const wLoc = isEn ? foundWs.en : foundWs.ro;
@@ -293,6 +315,7 @@ export function updateDynamicSeo(
             name: wLoc.title,
             description: wLoc.directAnswerSummary,
             url: canonicalUrl,
+            image: `${BASE_URL}/assets/og-worksheets.jpg`,
             inLanguage: isEn ? 'en' : 'ro',
             isAccessibleForFree: true,
             educationalLevel: isEn ? `Grade ${foundWs.grade}` : `Clasa a ${foundWs.grade}-a`,
@@ -328,6 +351,7 @@ export function updateDynamicSeo(
         name: title,
         description,
         url: canonicalUrl,
+        image: `${BASE_URL}/assets/og-worksheets.jpg`,
         inLanguage: ['ro', 'en'],
       };
     }
@@ -366,6 +390,8 @@ export function updateDynamicSeo(
     robotsContent = 'noindex, nofollow';
     canonicalUrl = `${BASE_URL}/quiz-live`;
   } else if (view === 'leonida') {
+    const { LEONIDA_FAQS } = await import('../data/leonidaOpenWorldData');
+    if (requestToken !== activeSeoRequestToken) return;
     title = isEn
       ? 'Vice Leonida: GTA 6 Open-World Game & State of Leonida Tech Hub | ArkyEdu'
       : 'Vice Leonida: Joc Open-World GTA 6 & Universul Leonida TIC | ArkyEdu';
@@ -410,6 +436,8 @@ export function updateDynamicSeo(
       ],
     };
   } else if (view === 'ailab') {
+    const { AI_LAB_FAQS } = await import('../data/aiLabData');
+    if (requestToken !== activeSeoRequestToken) return;
     title = isEn
       ? 'AI Literacy & Deepfake Detector Lab for Students (Ages 10–15) | ArkyEdu'
       : 'Laborator AI & Detector Deepfake pentru Elevi (Clasele V–VIII) | ArkyEdu';
@@ -444,6 +472,8 @@ export function updateDynamicSeo(
       ],
     };
   } else if (view === 'algolab') {
+    const { ALGO_LAB_FAQS } = await import('../data/algoLabData');
+    if (requestToken !== activeSeoRequestToken) return;
     title = isEn
       ? 'Visual Algorithms, Binary 8-Bit & Von Neumann CPU Lab | ArkyEdu'
       : 'Laborator Algoritmi Vizuali, Binar & CPU Von Neumann | ArkyEdu';
@@ -478,6 +508,8 @@ export function updateDynamicSeo(
       ],
     };
   } else if (view === 'lesson' && activeMission) {
+    const { CURRICULA_MODULES } = await import('../data/curriculaData');
+    if (requestToken !== activeSeoRequestToken) return;
     const mappedId = MISSION_ID_MAP[activeMission] || activeMission;
     const mod = CURRICULA_MODULES.find((m) => m.id === mappedId || m.missionId === activeMission);
     if (mod) {
@@ -490,12 +522,20 @@ export function updateDynamicSeo(
   }
 
   const socialImage =
-    view === 'leonida'
+    view === 'leonida' ||
+    (view === 'arcade' && arcadeGame === 'vice_leonida') ||
+    (view === 'duel' && duelMode === 'vice_leonida_duel')
       ? `${BASE_URL}/assets/leonida-hero.jpg`
       : view === 'ailab'
       ? `${BASE_URL}/assets/ai-lab-hero.jpg`
       : view === 'algolab'
       ? `${BASE_URL}/assets/algo-lab-hero.jpg`
+      : view === 'blog'
+      ? `${BASE_URL}/assets/og-blog.jpg`
+      : view === 'fise'
+      ? `${BASE_URL}/assets/og-worksheets.jpg`
+      : view === 'arcade' || view === 'duel'
+      ? `${BASE_URL}/assets/og-arcade-duel.jpg`
       : `${BASE_URL}/og-cover.png`;
 
   document.title = title;

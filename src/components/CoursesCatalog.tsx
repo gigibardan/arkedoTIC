@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import {
   School,
   BookOpen,
@@ -37,16 +37,15 @@ import {
 import { useLanguage } from '../context/LanguageContext';
 import { useArky } from '../context/ArkyContext';
 import { sounds } from '../utils/audio';
-import { KnowledgePills } from './hardware/KnowledgePills';
-import { MissionGuardModal } from './MissionGuardModal';
-import { CourseCurriculaModal } from './CourseCurriculaModal';
-import { CURRICULA_MODULES, CurriculaModule } from '../data/curriculaData';
-import { BLOG_ARTICLES } from '../data/blog';
-import { GLOSSARY_TERMS } from '../data/glossary';
-import { WORKSHEETS_BANK, WORKSHEET_GRADE_LABELS, WORKSHEET_KIND_LABELS } from '../data/worksheets';
+import type { CurriculaModule } from '../data/curriculaData';
+import {
+  CATALOG_COUNTS,
+  FEATURED_BLOG_PREVIEWS,
+  FEATURED_GLOSSARY_PREVIEWS,
+  FEATURED_WORKSHEET_PREVIEWS,
+  SANDBOX_LANG_BY_ID,
+} from '../data/catalogPreviews';
 import { ARKY_IMAGES } from '../assets/arkyImages';
-import { LeaderboardSection } from './LeaderboardSection';
-import { AuthModal } from './AuthModal';
 import {
   getActiveStudent,
   logoutStudent,
@@ -58,13 +57,10 @@ import {
 } from '../lib/studentAuthService';
 import { getCyberCityData } from '../lib/cyberCityService';
 import { calculateCityMetrics } from '../lib/cyberCityCatalog';
-import { Grade7CatalogSection } from './grade7/Grade7CatalogSection';
-import { Grade7InteractiveSimulators } from './grade7/Grade7InteractiveSimulators';
-import { Grade8CatalogSection } from './grade8/Grade8CatalogSection';
-import { Grade8InteractiveSimulators } from './grade8/Grade8InteractiveSimulators';
 import { AllMissionId, ClassAssignment } from '../types';
 import { forceScrollToTop } from '../utils/scrollHelper';
 import { MissionCard } from './catalog/MissionCard';
+import { ShowcaseCanvasPreview } from './catalog/ShowcaseCanvasPreview';
 import { GRADE5_MISSIONS, GRADE6_MISSIONS } from './catalog/gradeMissionsData';
 import { MISSION_META_BY_ID } from '../data/missionsRegistry';
 import {
@@ -72,7 +68,16 @@ import {
   getAssignmentsForStudent,
   getStoredStudentClassMeta,
 } from '../lib/classroomService';
-import { SANDBOX_CHALLENGES } from '../data/sandboxChallenges';
+
+const KnowledgePills = lazy(() => import('./hardware/KnowledgePills').then((m) => ({ default: m.KnowledgePills })));
+const MissionGuardModal = lazy(() => import('./MissionGuardModal').then((m) => ({ default: m.MissionGuardModal })));
+const CourseCurriculaModal = lazy(() => import('./CourseCurriculaModal').then((m) => ({ default: m.CourseCurriculaModal })));
+const LeaderboardSection = lazy(() => import('./LeaderboardSection').then((m) => ({ default: m.LeaderboardSection })));
+const AuthModal = lazy(() => import('./AuthModal').then((m) => ({ default: m.AuthModal })));
+const Grade7CatalogSection = lazy(() => import('./grade7/Grade7CatalogSection').then((m) => ({ default: m.Grade7CatalogSection })));
+const Grade7InteractiveSimulators = lazy(() => import('./grade7/Grade7InteractiveSimulators').then((m) => ({ default: m.Grade7InteractiveSimulators })));
+const Grade8CatalogSection = lazy(() => import('./grade8/Grade8CatalogSection').then((m) => ({ default: m.Grade8CatalogSection })));
+const Grade8InteractiveSimulators = lazy(() => import('./grade8/Grade8InteractiveSimulators').then((m) => ({ default: m.Grade8InteractiveSimulators })));
 
 const AVATARS = [
   { emoji: '🎓', labelRo: 'Elev', labelEn: 'Student' },
@@ -244,10 +249,11 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const checkCurriculaHash = () => {
+    const checkCurriculaHash = async () => {
       const hash = window.location.hash;
       if (hash && hash.startsWith('#curricula-')) {
         const rawId = hash.replace('#curricula-', '').toLowerCase();
+        const { CURRICULA_MODULES } = await import('../data/curriculaData');
         const found = CURRICULA_MODULES.find(
           (m) => m.id === rawId || m.missionId === rawId || m.slug === rawId || rawId.includes(m.id)
         );
@@ -256,13 +262,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         }
       }
     };
-    checkCurriculaHash();
-    window.addEventListener('hashchange', checkCurriculaHash);
-    return () => window.removeEventListener('hashchange', checkCurriculaHash);
+    void checkCurriculaHash();
+    const onHash = () => {
+      void checkCurriculaHash();
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  const openCurriculaModal = (targetId: string) => {
+  const openCurriculaModal = async (targetId: string) => {
     sounds.playClick();
+    const { CURRICULA_MODULES } = await import('../data/curriculaData');
     const found = CURRICULA_MODULES.find(
       (m) => m.id === targetId || m.missionId === targetId || m.slug.includes(targetId) || targetId.includes(m.id)
     );
@@ -1420,8 +1430,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                     if (nextTask.task.type === 'mission' && nextTask.task.missionId) {
                       handleAttemptStart(nextTask.task.missionId);
                     } else if (nextTask.task.type === 'sandbox' && nextTask.task.challengeId && onOpenSandbox) {
-                      const ch = SANDBOX_CHALLENGES.find((c) => c.id === nextTask.task.challengeId);
-                      onOpenSandbox(ch?.language || 'cpp', nextTask.task.challengeId);
+                      const targetSandboxLang = SANDBOX_LANG_BY_ID[nextTask.task.challengeId] || 'cpp';
+                      onOpenSandbox(targetSandboxLang, nextTask.task.challengeId);
                     } else if (nextTask.task.type === 'eval' && onOpenEvaluare) {
                       onOpenEvaluare();
                     } else if (nextTask.task.type === 'arcade' && onOpenArcade) {
@@ -1913,96 +1923,112 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       )}
 
       {selectedGrade === 'grade7' && (
-        <div className="flex flex-col gap-8">
-          <Grade7CatalogSection
-            onOpenCurriculaModal={openCurriculaModal}
-            onLaunchInteractiveLab={(mId) => {
-              if (
-                mId === 'g7_word_a' ||
-                mId === 'g7_word_b' ||
-                mId === 'g7_audio_a' ||
-                mId === 'g7_video_b' ||
-                mId === 'g7_cloud_a' ||
-                mId === 'g7_gis_b' ||
-                mId === 'g7_cpp_a' ||
-                mId === 'g7_cpp_b' ||
-                mId === 'g7_decision_a' ||
-                mId === 'g7_loop_b' ||
-                mId === 'g7_stem_a' ||
-                mId === 'g7_robot_b'
-              ) {
-                handleAttemptStart(mId);
-              } else {
-                openCurriculaModal(mId);
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-8 text-center text-xs font-mono text-slate-400">
+              {lang === 'en' ? 'Loading Grade 7 labs...' : 'Se încarcă laboratoarele Clasa a VII-a...'}
+            </div>
+          }
+        >
+          <div className="flex flex-col gap-8">
+            <Grade7CatalogSection
+              onOpenCurriculaModal={openCurriculaModal}
+              onLaunchInteractiveLab={(mId) => {
+                if (
+                  mId === 'g7_word_a' ||
+                  mId === 'g7_word_b' ||
+                  mId === 'g7_audio_a' ||
+                  mId === 'g7_video_b' ||
+                  mId === 'g7_cloud_a' ||
+                  mId === 'g7_gis_b' ||
+                  mId === 'g7_cpp_a' ||
+                  mId === 'g7_cpp_b' ||
+                  mId === 'g7_decision_a' ||
+                  mId === 'g7_loop_b' ||
+                  mId === 'g7_stem_a' ||
+                  mId === 'g7_robot_b'
+                ) {
+                  handleAttemptStart(mId);
+                } else {
+                  void openCurriculaModal(mId);
+                }
+              }}
+              completedMissions={
+                activeAccount?.lessonsProgress
+                  ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
+                      const lState = (activeAccount.lessonsProgress as Record<string, { completed?: boolean }>)[k];
+                      if (lState?.completed) acc[k] = true;
+                      return acc;
+                    }, {} as Record<string, boolean>)
+                  : {}
               }
-            }}
-            completedMissions={
-              activeAccount?.lessonsProgress
-                ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
-                    const lState = (activeAccount.lessonsProgress as Record<string, { completed?: boolean }>)[k];
-                    if (lState?.completed) acc[k] = true;
-                    return acc;
-                  }, {} as Record<string, boolean>)
-                : {}
-            }
-          />
+            />
 
-          <div id="simulatoare-interactive-clasa-7" className="scroll-mt-20">
-            <Grade7InteractiveSimulators />
+            <div id="simulatoare-interactive-clasa-7" className="scroll-mt-20">
+              <Grade7InteractiveSimulators />
+            </div>
           </div>
-        </div>
+        </Suspense>
       )}
 
       {selectedGrade === 'grade8' && (
-        <div className="flex flex-col gap-8">
-          <Grade8CatalogSection
-            onOpenCurriculaModal={openCurriculaModal}
-            onLaunchInteractiveLab={(mId) => {
-              if (
-                mId === 'g8_calc_a' ||
-                mId === 'g8_calc_b' ||
-                mId === 'g8_calc_c' ||
-                mId === 'g8_calc_d' ||
-                mId === 'g8_web_a' ||
-                mId === 'g8_web_b' ||
-                mId === 'g8_web_c' ||
-                mId === 'g8_algo_a' ||
-                mId === 'g8_algo_b' ||
-                mId === 'g8_algo_c' ||
-                mId === 'g8_algo_d' ||
-                mId === 'g8_algo_e' ||
-                mId === 'g8_robot_a' ||
-                mId === 'g8_robot_b'
-              ) {
-                handleAttemptStart(mId as AllMissionId);
-              } else {
-                openCurriculaModal(mId);
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-8 text-center text-xs font-mono text-slate-400">
+              {lang === 'en' ? 'Loading Grade 8 labs...' : 'Se încarcă laboratoarele Clasa a VIII-a...'}
+            </div>
+          }
+        >
+          <div className="flex flex-col gap-8">
+            <Grade8CatalogSection
+              onOpenCurriculaModal={openCurriculaModal}
+              onLaunchInteractiveLab={(mId) => {
+                if (
+                  mId === 'g8_calc_a' ||
+                  mId === 'g8_calc_b' ||
+                  mId === 'g8_calc_c' ||
+                  mId === 'g8_calc_d' ||
+                  mId === 'g8_web_a' ||
+                  mId === 'g8_web_b' ||
+                  mId === 'g8_web_c' ||
+                  mId === 'g8_algo_a' ||
+                  mId === 'g8_algo_b' ||
+                  mId === 'g8_algo_c' ||
+                  mId === 'g8_algo_d' ||
+                  mId === 'g8_algo_e' ||
+                  mId === 'g8_robot_a' ||
+                  mId === 'g8_robot_b'
+                ) {
+                  handleAttemptStart(mId as AllMissionId);
+                } else {
+                  void openCurriculaModal(mId);
+                }
+              }}
+              completedMissions={
+                activeAccount?.lessonsProgress
+                  ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
+                      const lState = (activeAccount.lessonsProgress as Record<string, { completed?: boolean }>)[k];
+                      if (lState?.completed) acc[k] = true;
+                      return acc;
+                    }, {} as Record<string, boolean>)
+                  : {}
               }
-            }}
-            completedMissions={
-              activeAccount?.lessonsProgress
-                ? Object.keys(activeAccount.lessonsProgress).reduce((acc, k) => {
-                    const lState = (activeAccount.lessonsProgress as Record<string, { completed?: boolean }>)[k];
-                    if (lState?.completed) acc[k] = true;
-                    return acc;
-                  }, {} as Record<string, boolean>)
-                : {}
-            }
-          />
+            />
 
-          <div id="simulatoare-interactive-clasa-8" className="scroll-mt-20">
-            <Grade8InteractiveSimulators />
+            <div id="simulatoare-interactive-clasa-8" className="scroll-mt-20">
+              <Grade8InteractiveSimulators />
+            </div>
           </div>
-        </div>
+        </Suspense>
       )}
 
       {/* 5. INTERACTIVE LABS HUB: ARCADE (30), DUEL 1v1, CYBER CITY & CODE SANDBOX */}
       <section aria-label={lang === 'en' ? 'Interactive Labs & Competitions' : 'Laboratoare Practice & Jocuri'} className="flex flex-col gap-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Card 1: Arcade Lab (30 Mini-Games) */}
-          <div className="rounded-2xl bg-slate-950/80 border border-indigo-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
+          <div className="group rounded-2xl bg-slate-950/80 border border-indigo-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 shrink-0">
                   <Gamepad2 className="w-5 h-5" />
                 </div>
@@ -2015,6 +2041,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   </h3>
                 </div>
               </div>
+              <ShowcaseCanvasPreview
+                variant="arcade"
+                label={lang === 'en' ? '30 Playable Games' : '30 Jocuri Live'}
+              />
               <p className="text-xs text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Master document layout in PageCraft, compete in Roblox Blox Clicker, build Minecraft Redstone circuits & Voxel PCs, sprint in Cyber Dino, and sort files in Tetris drop!'
@@ -2036,9 +2066,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
 
           {/* Card 2: Duel Arena 1v1 */}
-          <div className="rounded-2xl bg-slate-950/80 border border-rose-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
+          <div className="group rounded-2xl bg-slate-950/80 border border-rose-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
                   <Swords className="w-5 h-5" />
                 </div>
@@ -2051,6 +2081,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   </h3>
                 </div>
               </div>
+              <ShowcaseCanvasPreview
+                variant="duel"
+                label={lang === 'en' ? '21+ 1v1 Modes' : '21+ Moduri 1v1'}
+              />
               <p className="text-xs text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Create a game room with a 4-letter code or join your classmate’s challenge! Block Coding Scratch Duel, Cyber Sprint typing race, and Quiz Blitz live competition.'
@@ -2072,9 +2106,9 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           </div>
 
           {/* Card 3: Cyber City Builder */}
-          <div className="rounded-2xl bg-slate-950/80 border border-cyan-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
+          <div className="group rounded-2xl bg-slate-950/80 border border-cyan-500/35 p-5 flex flex-col justify-between gap-4 shadow-lg">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shrink-0">
                   <Building2 className="w-5 h-5" />
                 </div>
@@ -2087,6 +2121,10 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
                   </h3>
                 </div>
               </div>
+              <ShowcaseCanvasPreview
+                variant="city"
+                label={lang === 'en' ? 'IoT & 5G City' : 'Oraș IoT & 5G'}
+              />
               <p className="text-xs text-slate-300 leading-relaxed">
                 {lang === 'en'
                   ? 'Use ByteCoins earned in lessons to construct Cloud Data Centers, AI Labs, 5G Towers & Fusion Reactors. Boost your computing power and become a Galactic Architect!'
@@ -2240,15 +2278,17 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
       </section>
 
       {/* 6. INTERACTIVE KNOWLEDGE PILLS */}
-      <KnowledgePills />
+      <Suspense fallback={null}>
+        <KnowledgePills />
+      </Suspense>
 
       {/* 6A. VICE LEONIDA OPEN-WORLD (GTA 6 TECH UNIVERSE) */}
       <section
         aria-labelledby="catalog-leonida-heading"
-        className="bg-gradient-to-br from-slate-950 via-fuchsia-950/25 to-slate-950 border border-fuchsia-500/35 rounded-2xl p-5 sm:p-6 shadow-lg"
+        className="bg-gradient-to-br from-slate-950 via-fuchsia-950/25 to-slate-950 border border-fuchsia-500/35 rounded-2xl p-5 sm:p-6 shadow-lg space-y-4"
       >
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-3xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <div className="lg:col-span-7 space-y-1.5">
             <div className="text-[11px] font-mono text-fuchsia-300 font-semibold">
               {lang === 'en'
                 ? 'GTA 6 Universe · State of Leonida · Open-World + Arcade + 1v1'
@@ -2269,31 +2309,37 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <button
-              type="button"
-              onClick={() => {
-                sounds.playClick();
-                onOpenLeonida?.(true);
-              }}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-fuchsia-600 to-rose-500 hover:from-fuchsia-500 hover:to-rose-400 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
-            >
-              <span>{lang === 'en' ? 'Play Open-World 2D' : 'Joacă Open-World 2D'}</span>
-              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-            </button>
-            <a
-              href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
-              onClick={(e) => {
-                if (onOpenLeonida) {
-                  e.preventDefault();
+          <div className="lg:col-span-5 space-y-3">
+            <ShowcaseCanvasPreview
+              variant="leonida"
+              label={lang === 'en' ? '6 Open-World Regions' : '6 Regiuni Open-World'}
+            />
+            <div className="flex flex-wrap items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
                   sounds.playClick();
-                  onOpenLeonida(false);
-                }
-              }}
-              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-fuchsia-500/40 text-fuchsia-200 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
-            >
-              <span>{lang === 'en' ? 'Explore Leonida Atlas' : 'Vezi Atlasul Leonida'}</span>
-            </a>
+                  onOpenLeonida?.(true);
+                }}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-fuchsia-600 to-rose-500 hover:from-fuchsia-500 hover:to-rose-400 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+              >
+                <span>{lang === 'en' ? 'Play Open-World 2D' : 'Joacă Open-World 2D'}</span>
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </button>
+              <a
+                href={lang === 'en' ? '/leonida/en/' : '/leonida/'}
+                onClick={(e) => {
+                  if (onOpenLeonida) {
+                    e.preventDefault();
+                    sounds.playClick();
+                    onOpenLeonida(false);
+                  }
+                }}
+                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-fuchsia-500/40 text-fuchsia-200 text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+              >
+                <span>{lang === 'en' ? 'Explore Leonida Atlas' : 'Vezi Atlasul Leonida'}</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -2410,8 +2456,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               <ClipboardCheck className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
               <span>
                 {lang === 'en'
-                  ? `Printable A4 Worksheets, Graded Exams (1–10) & Olympiad Bank (${WORKSHEETS_BANK.length})`
-                  : `Fișe de Lucru, Teste cu Barem 1–10 & Subiecte OJI / Admitere (${WORKSHEETS_BANK.length})`}
+                  ? `Printable A4 Worksheets, Graded Exams (1–10) & Olympiad Bank (${CATALOG_COUNTS.worksheets})`
+                  : `Fișe de Lucru, Teste cu Barem 1–10 & Subiecte OJI / Admitere (${CATALOG_COUNTS.worksheets})`}
               </span>
             </h2>
             <p className="text-xs text-slate-300">
@@ -2431,55 +2477,48 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             }}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shrink-0 self-start sm:self-center min-h-[40px] whitespace-nowrap"
           >
-            <span>{lang === 'en' ? `Open All ${WORKSHEETS_BANK.length} Sheets` : `Deschide Toate cele ${WORKSHEETS_BANK.length} Fișe`}</span>
+            <span>{lang === 'en' ? `Open All ${CATALOG_COUNTS.worksheets} Sheets` : `Deschide Toate cele ${CATALOG_COUNTS.worksheets} Fișe`}</span>
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          {[
-            WORKSHEETS_BANK.find((w) => w.id === 'ws-g5-test-algoritmi-scratch'),
-            WORKSHEETS_BANK.find((w) => w.id === 'ws-g6-test-securitate-email'),
-            WORKSHEETS_BANK.find((w) => w.id === 'ws-g7-oji-while-cifre'),
-            WORKSHEETS_BANK.find((w) => w.id === 'ws-g8-teza-admitere-vectori'),
-          ]
-            .filter((w): w is NonNullable<typeof w> => Boolean(w))
-            .map((ws) => {
-              const loc = lang === 'en' ? ws.en : ws.ro;
-              const gradeTxt = WORKSHEET_GRADE_LABELS[ws.grade][lang === 'en' ? 'en' : 'ro'];
-              const kindTxt = WORKSHEET_KIND_LABELS[ws.kind][lang === 'en' ? 'shortEn' : 'shortRo'];
-              const href = lang === 'en' ? `/fise/en/${ws.en.slug}/` : `/fise/${ws.ro.slug}/`;
-              return (
-                <a
-                  key={ws.id}
-                  href={href}
-                  onClick={(e) => {
-                    if (onOpenWorksheets) {
-                      e.preventDefault();
-                      sounds.playClick();
-                      onOpenWorksheets(loc.slug);
-                    }
-                  }}
-                  className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5"
-                >
-                  <div className="space-y-1">
-                    <div className="text-[11px] font-mono text-emerald-300 font-semibold">
-                      {gradeTxt} · {kindTxt} · {ws.maxPoints}p
-                    </div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors line-clamp-2">
-                      {loc.breadcrumbLabel}
-                    </h3>
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                      {loc.directAnswerSummary}
-                    </p>
+          {FEATURED_WORKSHEET_PREVIEWS.map((ws) => {
+            const loc = lang === 'en' ? ws.en : ws.ro;
+            const gradeTxt = lang === 'en' ? ws.gradeEn : ws.gradeRo;
+            const kindTxt = lang === 'en' ? ws.kindEn : ws.kindRo;
+            const href = lang === 'en' ? `/fise/en/${ws.en.slug}/` : `/fise/${ws.ro.slug}/`;
+            return (
+              <a
+                key={ws.id}
+                href={href}
+                onClick={(e) => {
+                  if (onOpenWorksheets) {
+                    e.preventDefault();
+                    sounds.playClick();
+                    onOpenWorksheets(loc.slug);
+                  }
+                }}
+                className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-emerald-400/50 transition-colors flex flex-col justify-between gap-2.5"
+              >
+                <div className="space-y-1">
+                  <div className="text-[11px] font-mono text-emerald-300 font-semibold">
+                    {gradeTxt} · {kindTxt} · {ws.maxPoints}p
                   </div>
-                  <span className="text-[11px] font-bold text-emerald-300 inline-flex items-center gap-1">
-                    <span>{lang === 'en' ? 'Solve / Print A4' : 'Rezolvă / Tipărește A4'}</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
-                  </span>
-                </a>
-              );
-            })}
+                  <h3 className="text-sm font-bold text-white group-hover:text-emerald-200 transition-colors line-clamp-2">
+                    {loc.breadcrumbLabel}
+                  </h3>
+                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                    {loc.directAnswerSummary}
+                  </p>
+                </div>
+                <span className="text-[11px] font-bold text-emerald-300 inline-flex items-center gap-1">
+                  <span>{lang === 'en' ? 'Solve / Print A4' : 'Rezolvă / Tipărește A4'}</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                </span>
+              </a>
+            );
+          })}
         </div>
       </section>
 
@@ -2515,50 +2554,47 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
             }}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/40 text-teal-300 text-xs font-bold transition-colors shrink-0 self-start sm:self-center min-h-[40px]"
           >
-            <span>{lang === 'en' ? `All ${BLOG_ARTICLES.length} Guides` : `Vezi toate cele ${BLOG_ARTICLES.length} ghiduri`}</span>
+            <span>{lang === 'en' ? `All ${CATALOG_COUNTS.blog} Guides` : `Vezi toate cele ${CATALOG_COUNTS.blog} ghiduri`}</span>
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {BLOG_ARTICLES.filter((a) => a.featured)
-            .slice(-6)
-            .reverse()
-            .map((article) => {
-              const c = lang === 'en' ? article.en : article.ro;
-              const gradeLabel = lang === 'en' ? article.gradeTagEn : article.gradeTagRo;
-              const href = lang === 'en' ? `/blog/en/${article.en.slug}/` : `/blog/${article.ro.slug}/`;
-              return (
-                <a
-                  key={article.id}
-                  href={href}
-                  onClick={(e) => {
-                    if (onOpenBlog) {
-                      e.preventDefault();
-                      sounds.playClick();
-                      onOpenBlog(c.slug);
-                    }
-                  }}
-                  className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-teal-400/50 transition-colors flex flex-col justify-between gap-2.5"
-                >
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
-                      <span className="font-semibold text-teal-300">{c.categoryLabel}</span>
-                      <span aria-hidden="true">·</span>
-                      <span>{gradeLabel}</span>
-                    </div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-teal-200 transition-colors line-clamp-2">
-                      {c.breadcrumbLabel}
-                    </h3>
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{c.metaDescription}</p>
+          {FEATURED_BLOG_PREVIEWS.map((article) => {
+            const c = lang === 'en' ? article.en : article.ro;
+            const gradeLabel = lang === 'en' ? article.gradeTagEn : article.gradeTagRo;
+            const href = lang === 'en' ? `/blog/en/${article.en.slug}/` : `/blog/${article.ro.slug}/`;
+            return (
+              <a
+                key={article.id}
+                href={href}
+                onClick={(e) => {
+                  if (onOpenBlog) {
+                    e.preventDefault();
+                    sounds.playClick();
+                    onOpenBlog(c.slug);
+                  }
+                }}
+                className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-teal-400/50 transition-colors flex flex-col justify-between gap-2.5"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-300">
+                    <span className="font-semibold text-teal-300">{c.categoryLabel}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{gradeLabel}</span>
                   </div>
-                  <span className="text-[11px] font-bold text-teal-300 inline-flex items-center gap-1">
-                    <span>{lang === 'en' ? 'Read guide' : 'Citește ghidul'}</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
-                  </span>
-                </a>
-              );
-            })}
+                  <h3 className="text-sm font-bold text-white group-hover:text-teal-200 transition-colors line-clamp-2">
+                    {c.breadcrumbLabel}
+                  </h3>
+                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{c.metaDescription}</p>
+                </div>
+                <span className="text-[11px] font-bold text-teal-300 inline-flex items-center gap-1">
+                  <span>{lang === 'en' ? 'Read guide' : 'Citește ghidul'}</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                </span>
+              </a>
+            );
+          })}
         </div>
       </section>
 
@@ -2572,8 +2608,8 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
               <Binary className="w-5 h-5 text-cyan-400 shrink-0" aria-hidden="true" />
               <span>
                 {lang === 'en'
-                  ? `Bilingual ICT & CS Glossary (${GLOSSARY_TERMS.length} Essential Terms, Grades 5–8)`
-                  : `Glosar Bilingv Informatică & TIC (${GLOSSARY_TERMS.length} Termeni Esențiali, Clasele V–VIII)`}
+                  ? `Bilingual ICT & CS Glossary (${CATALOG_COUNTS.glossary} Essential Terms, Grades 5–8)`
+                  : `Glosar Bilingv Informatică & TIC (${CATALOG_COUNTS.glossary} Termeni Esențiali, Clasele V–VIII)`}
               </span>
             </h2>
             <p className="text-xs text-slate-300">
@@ -2595,55 +2631,45 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
           >
             <span>
               {lang === 'en'
-                ? `Open Full Glossary (${GLOSSARY_TERMS.length} terms)`
-                : `Deschide Glosarul Complet (${GLOSSARY_TERMS.length} termeni)`}
+                ? `Open Full Glossary (${CATALOG_COUNTS.glossary} terms)`
+                : `Deschide Glosarul Complet (${CATALOG_COUNTS.glossary} termeni)`}
             </span>
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </a>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {[
-            'cpu-processor',
-            'modulo-integer-division',
-            'excel-if-countif',
-            'phishing-social-engineering',
-            'arduino-millis',
-            'prompt-engineering-rccl',
-          ]
-            .map((id) => GLOSSARY_TERMS.find((item) => item.id === id))
-            .filter((item): item is NonNullable<typeof item> => Boolean(item))
-            .map((termItem) => {
-              const loc = lang === 'en' ? termItem.en : termItem.ro;
-              const gradeLabel = lang === 'en' ? termItem.gradeTagEn : termItem.gradeTagRo;
-              const href = lang === 'en' ? `/glosar/en/${termItem.en.slug}/` : `/glosar/${termItem.ro.slug}/`;
-              return (
-                <a
-                  key={termItem.id}
-                  href={href}
-                  onClick={(e) => {
-                    if (onOpenGlossary) {
-                      e.preventDefault();
-                      sounds.playClick();
-                      onOpenGlossary(loc.slug);
-                    }
-                  }}
-                  className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-cyan-400/50 transition-colors flex flex-col justify-between gap-2"
-                >
-                  <div className="space-y-1">
-                    <div className="text-[11px] font-mono font-semibold text-cyan-300">{gradeLabel}</div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors line-clamp-1">
-                      {loc.term}
-                    </h3>
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{loc.shortAnswer}</p>
-                  </div>
-                  <span className="text-[11px] font-bold text-cyan-300 inline-flex items-center gap-1">
-                    <span>{lang === 'en' ? 'View definition & example' : 'Vezi definiția și exemplul'}</span>
-                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
-                  </span>
-                </a>
-              );
-            })}
+          {FEATURED_GLOSSARY_PREVIEWS.map((termItem) => {
+            const loc = lang === 'en' ? termItem.en : termItem.ro;
+            const gradeLabel = lang === 'en' ? termItem.gradeTagEn : termItem.gradeTagRo;
+            const href = lang === 'en' ? `/glosar/en/${termItem.en.slug}/` : `/glosar/${termItem.ro.slug}/`;
+            return (
+              <a
+                key={termItem.id}
+                href={href}
+                onClick={(e) => {
+                  if (onOpenGlossary) {
+                    e.preventDefault();
+                    sounds.playClick();
+                    onOpenGlossary(loc.slug);
+                  }
+                }}
+                className="group rounded-xl p-4 bg-slate-900/75 hover:bg-slate-900 border border-slate-800 hover:border-cyan-400/50 transition-colors flex flex-col justify-between gap-2"
+              >
+                <div className="space-y-1">
+                  <div className="text-[11px] font-mono font-semibold text-cyan-300">{gradeLabel}</div>
+                  <h3 className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors line-clamp-1">
+                    {loc.term}
+                  </h3>
+                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{loc.shortAnswer}</p>
+                </div>
+                <span className="text-[11px] font-bold text-cyan-300 inline-flex items-center gap-1">
+                  <span>{lang === 'en' ? 'View definition & example' : 'Vezi definiția și exemplul'}</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                </span>
+              </a>
+            );
+          })}
         </div>
       </section>
 
@@ -2690,14 +2716,16 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
 
       {/* 9. PUBLIC CLASSROOM LEADERBOARD */}
       <div id="sectiune-clasamente" className="scroll-mt-20">
-        <LeaderboardSection
-          currentStudentName={studentName}
-          onOpenArcade={onOpenArcade}
-          onOpenLoginModal={() => {
-            setAuthModalMode('login');
-            setAuthModalOpen(true);
-          }}
-        />
+        <Suspense fallback={null}>
+          <LeaderboardSection
+            currentStudentName={studentName}
+            onOpenArcade={onOpenArcade}
+            onOpenLoginModal={() => {
+              setAuthModalMode('login');
+              setAuthModalOpen(true);
+            }}
+          />
+        </Suspense>
       </div>
 
       {/* 10. TEACHER & SUPERADMIN LINKS */}
@@ -2735,71 +2763,81 @@ export const CoursesCatalog: React.FC<CoursesCatalogProps> = ({
         </div>
       )}
 
-      {/* Modals */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        onAuthSuccess={handleAuthSuccess}
-        initialMode={authModalMode}
-      />
+      {/* Modals (lazy-loaded on open) */}
+      {authModalOpen && (
+        <Suspense fallback={null}>
+          <AuthModal
+            isOpen={authModalOpen}
+            onClose={() => setAuthModalOpen(false)}
+            onAuthSuccess={handleAuthSuccess}
+            initialMode={authModalMode}
+          />
+        </Suspense>
+      )}
 
-      <MissionGuardModal
-        isOpen={guardModalOpen}
-        activeMissionTitle={getMissionTitle(activeMissionId)}
-        activeLevel={activeMissionLevel}
-        activeScore={activeScore(activeMissionLevel, activeMissionId)}
-        elapsedSeconds={elapsedSeconds}
-        targetMissionTitle={getMissionTitle(pendingTargetMission)}
-        onResumeActive={() => {
-          setGuardModalOpen(false);
-          if (activeMissionId) {
-            onSelectMission(activeMissionId);
-          }
-        }}
-        onAbandonAndStartNew={() => {
-          setGuardModalOpen(false);
-          onResetActiveMission();
-          if (pendingTargetMission) {
-            onSelectMission(pendingTargetMission);
-          }
-        }}
-        onCancel={() => {
-          setGuardModalOpen(false);
-          setPendingTargetMission(null);
-        }}
-      />
+      {guardModalOpen && (
+        <Suspense fallback={null}>
+          <MissionGuardModal
+            isOpen={guardModalOpen}
+            activeMissionTitle={getMissionTitle(activeMissionId)}
+            activeLevel={activeMissionLevel}
+            activeScore={activeScore(activeMissionLevel, activeMissionId)}
+            elapsedSeconds={elapsedSeconds}
+            targetMissionTitle={getMissionTitle(pendingTargetMission)}
+            onResumeActive={() => {
+              setGuardModalOpen(false);
+              if (activeMissionId) {
+                onSelectMission(activeMissionId);
+              }
+            }}
+            onAbandonAndStartNew={() => {
+              setGuardModalOpen(false);
+              onResetActiveMission();
+              if (pendingTargetMission) {
+                onSelectMission(pendingTargetMission);
+              }
+            }}
+            onCancel={() => {
+              setGuardModalOpen(false);
+              setPendingTargetMission(null);
+            }}
+          />
+        </Suspense>
+      )}
 
       {selectedCurriculaModule && (
-        <CourseCurriculaModal
-          module={selectedCurriculaModule}
-          onClose={() => {
-            setSelectedCurriculaModule(null);
-            try {
-              if (window.location.hash.startsWith('#curricula-')) {
-                window.history.replaceState(null, '', ' ');
-              }
-            } catch {}
-          }}
-          onStartMission={(mId) => {
-            const mappedMission =
-              mId === 'g6p1'
-                ? 'g6_presentation1'
-                : mId === 'g6p2'
-                ? 'g6_presentation2'
-                : mId === 'g6paint3d'
-                ? 'g6_paint3d'
-                : mId === 'g6anim3d' || mId === 'g6_anim3d'
-                ? 'g6_anim3d'
-                : mId === 'g6malware' || mId === 'g6_malware'
-                ? 'g6_malware'
-                : mId === 'g6email' || mId === 'g6_email'
-                ? 'g6_email'
-                : mId === 'g6scratch1' || mId === 'g6_scratch1'
-                ? 'g6_scratch1'
-                : mId;
-            handleAttemptStart(mappedMission as AllMissionId);
-          }}
-        />
+        <Suspense fallback={null}>
+          <CourseCurriculaModal
+            module={selectedCurriculaModule}
+            onClose={() => {
+              setSelectedCurriculaModule(null);
+              try {
+                if (window.location.hash.startsWith('#curricula-')) {
+                  window.history.replaceState(null, '', ' ');
+                }
+              } catch {}
+            }}
+            onStartMission={(mId) => {
+              const mappedMission =
+                mId === 'g6p1'
+                  ? 'g6_presentation1'
+                  : mId === 'g6p2'
+                  ? 'g6_presentation2'
+                  : mId === 'g6paint3d'
+                  ? 'g6_paint3d'
+                  : mId === 'g6anim3d' || mId === 'g6_anim3d'
+                  ? 'g6_anim3d'
+                  : mId === 'g6malware' || mId === 'g6_malware'
+                  ? 'g6_malware'
+                  : mId === 'g6email' || mId === 'g6_email'
+                  ? 'g6_email'
+                  : mId === 'g6scratch1' || mId === 'g6_scratch1'
+                  ? 'g6_scratch1'
+                  : mId;
+              handleAttemptStart(mappedMission as AllMissionId);
+            }}
+          />
+        </Suspense>
       )}
     </div>
   );
